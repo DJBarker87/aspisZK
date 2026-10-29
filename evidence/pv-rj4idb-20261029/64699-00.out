@@ -1,0 +1,238 @@
+R1Z.PV_RJDec_CommonCases.complete_pair [ProverRwFull.ExternalTypes] {CH Aux Coins NA LA CA NB LB CB : Type}
+  (a : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)
+  (b : R1Z.PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)
+  (project : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA → R1Z.PV_RunJoin_UnifiedRetry.State NB LB CB)
+  (h : R0Z.ZkStatement.HonestProver R1Z.PrivacyR1AcctBasis.K) (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (w : h.Instance)
+  (entropy_step :
+    ∀ (index : ℕ) (s : R1Z.PV_RunJoin_UnifiedRetry.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2))
+          (R1Z.PV_RunJoin_UnifiedRetry.entropy a.account index s) =
+        R1Z.PV_RunJoin_UnifiedRetry.entropy b.account index (project s))
+  (body_step :
+    ∀ (secret : R1Z.ProverRwRetryModel.Secret) (s : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+      R1Z.ProverCommitSemanticTransport26.mapR (fun out => (out.1, project out.2)) (a.body h x w secret s) =
+        b.body h x w secret (project s))
+  (initial :
+    ∀ (c : Coins), project (R1Z.PV_RunJoin_Deployed.initialState a c) = R1Z.PV_RunJoin_Deployed.initialState b c)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CH → R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (adv : R1Z.GamesR1.R1Adv R1Z.PrivacyR1AcctBasis.K CH Aux)
+  (disclosed_ok :
+    ∀ (value : R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published R1Z.ProverRwRetryModel.Proof))
+      (state : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+      a.disclosed adv x (Aeneas.Std.Result.ok (value, state)) =
+        b.disclosed adv x (Aeneas.Std.Result.ok (value, project state)))
+  (disclosed_fail :
+    ∀ (error : Aeneas.Std.Error),
+      a.disclosed adv x (Aeneas.Std.Result.fail error) = b.disclosed adv x (Aeneas.Std.Result.fail error))
+  (disclosed_div : a.disclosed adv x Aeneas.Std.Result.div = b.disclosed adv x Aeneas.Std.Result.div)
+  (oracle_ok :
+    ∀ (value : R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published R1Z.ProverRwRetryModel.Proof))
+      (state : R1Z.PV_RunJoin_Deployed.State NA LA CA),
+      a.observerOracle adv x (Aeneas.Std.Result.ok (value, state)) =
+        b.observerOracle adv x (Aeneas.Std.Result.ok (value, project state)))
+  (oracle_fail :
+    ∀ (error : Aeneas.Std.Error),
+      a.observerOracle adv x (Aeneas.Std.Result.fail error) = b.observerOracle adv x (Aeneas.Std.Result.fail error))
+  (oracle_div : a.observerOracle adv x Aeneas.Std.Result.div = b.observerOracle adv x Aeneas.Std.Result.div)
+  (c : Coins) :
+  (have v :=
+      (R1Z.PV_RunJoin_Deployed.rust a).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+        (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState a) c);
+    (v, (R1Z.PV_RunJoin_Deployed.rust a).observe adv v)) =
+    have v :=
+      (R1Z.PV_RunJoin_Deployed.rust b).real h R1Z.PrivacyR1AcctBasis.basis outputs adv x w
+        (R1Z.PV_RunJoin_FiniteGraph.create (R1Z.PV_RunJoin_Deployed.initialState b) c);
+    (v, (R1Z.PV_RunJoin_Deployed.rust b).observe adv v)
+'R1Z.PV_RJDec_CommonCases.complete_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RJDec_ResultCases.fibres_iff {W C A V : Type} (reachable : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → Prop)
+  (observe : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A → V) :
+  R1Z.PV_RJDec_Factor.Fibres reachable observe ↔
+    (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (a : A),
+        reachable l →
+          reachable r →
+            l.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+              r.outcome = R1Z.PV_W_Threading.Outcome.ok a → l.world = r.world → observe l = observe r) ∧
+      (∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A) (e : Aeneas.Std.Error),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.fail e →
+                r.outcome = R1Z.PV_W_Threading.Outcome.fail e → observe l = observe r) ∧
+        ∀ (l r : R1Z.PV_W_Threading.Run W C Aeneas.Std.Error A),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.div →
+                r.outcome = R1Z.PV_W_Threading.Outcome.div → observe l = observe r
+'R1Z.PV_RJDec_ResultCases.fibres_iff' depends on axioms: [propext, Quot.sound]
+R1Z.PV_RJDec_V047Native.consume {CH : Type} (actual : R0Z.ZkStatement.Statement R1Z.PrivacyR1AcctBasis.K CH)
+  (native_handle : CH) (native_identification : actual = AspisR1.PV_2TNV_PublicEncoding.x native_handle) :
+  ∃ w, R1Z.PV_RJDec_V047.H.public w = actual.1
+'R1Z.PV_RJDec_V047Native.consume' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RJ4IDB_NativePowers.deployed_installation [ProverRwFull.ExternalTypes] (ops : ProverRwFull.ExternalFuns) :
+  R1Z.PV_RJ4IDB_NativePowers.installed ops =
+    { op0 := @ProverRwFull.ExternalFuns.op0 inst✝ ops, op1 := @ProverRwFull.ExternalFuns.op1 inst✝ ops,
+      op2 := ProverRwFull.ExternalFuns.op2, op3 := @ProverRwFull.ExternalFuns.op3 inst✝ ops,
+      op4 := @ProverRwFull.ExternalFuns.op4 inst✝ ops, op5 := @ProverRwFull.ExternalFuns.op5 inst✝ ops,
+      op6 := @ProverRwFull.ExternalFuns.op6 inst✝ ops, op7 := @ProverRwFull.ExternalFuns.op7 inst✝ ops,
+      op8 := @ProverRwFull.ExternalFuns.op8 inst✝ ops, op9 := @ProverRwFull.ExternalFuns.op9 inst✝ ops,
+      op10 := ProverRwFull.ExternalFuns.op10, op11 := @ProverRwFull.ExternalFuns.op11 inst✝ ops,
+      op12 := @ProverRwFull.ExternalFuns.op12 inst✝ ops, op13 := ProverRwFull.ExternalFuns.op13,
+      op14 := @ProverRwFull.ExternalFuns.op14 inst✝ ops, op15 := ProverRwFull.ExternalFuns.op15,
+      op16 := @ProverRwFull.ExternalFuns.op16 inst✝ ops, op17 := ProverRwFull.ExternalFuns.op17,
+      op18 := ProverRwFull.ExternalFuns.op18, op19 := ProverRwFull.ExternalFuns.op19,
+      op20 := ProverRwFull.ExternalFuns.op20, op21 := ProverRwFull.ExternalFuns.op21,
+      op22 := @ProverRwFull.ExternalFuns.op22 inst✝ ops, op23 := ProverRwFull.ExternalFuns.op23,
+      op24 := ProverRwFull.ExternalFuns.op24, op25 := ProverRwFull.ExternalFuns.op25,
+      op26 := @ProverRwFull.ExternalFuns.op26 inst✝ ops, op27 := ProverRwFull.ExternalFuns.op27,
+      op28 := ProverRwFull.ExternalFuns.op28, op29 := ProverRwFull.ExternalFuns.op29,
+      op30 := ProverRwFull.ExternalFuns.op30, op31 := ProverRwFull.ExternalFuns.op31,
+      op32 := @ProverRwFull.ExternalFuns.op32 inst✝ ops, op33 := @ProverRwFull.ExternalFuns.op33 inst✝ ops,
+      op34 := @ProverRwFull.ExternalFuns.op34 inst✝ ops, op35 := ProverRwFull.ExternalFuns.op35,
+      op36 := @ProverRwFull.ExternalFuns.op36 inst✝ ops, op37 := ProverRwFull.ExternalFuns.op37,
+      op38 := ProverRwFull.ExternalFuns.op38, op39 := ProverRwFull.ExternalFuns.op39,
+      op40 := ProverRwFull.ExternalFuns.op40, op41 := ProverRwFull.ExternalFuns.op41,
+      op42 := ProverRwFull.ExternalFuns.op42, op43 := ProverRwFull.ExternalFuns.op43,
+      op44 := ProverRwFull.ExternalFuns.op44, op45 := ProverRwFull.ExternalFuns.op45,
+      op46 := ProverRwFull.ExternalFuns.op46, op47 := ProverRwFull.ExternalFuns.op47,
+      op48 := ProverRwFull.ExternalFuns.op48, op49 := ProverRwFull.ExternalFuns.op49,
+      op50 := ProverRwFull.ExternalFuns.op50, op51 := ProverRwFull.ExternalFuns.op51,
+      op52 := ProverRwFull.ExternalFuns.op52, op53 := ProverRwFull.ExternalFuns.op53,
+      op54 := ProverRwFull.ExternalFuns.op54, op55 := ProverRwFull.ExternalFuns.op55,
+      op56 := ProverRwFull.ExternalFuns.op56, op57 := ProverRwFull.ExternalFuns.op57,
+      op58 := ProverRwFull.ExternalFuns.op58, op59 := ProverRwFull.ExternalFuns.op59,
+      op60 := ProverRwFull.ExternalFuns.op60, op61 := ProverRwFull.ExternalFuns.op61,
+      op62 := ProverRwFull.ExternalFuns.op62, op63 := ProverRwFull.ExternalFuns.op63,
+      op64 := ProverRwFull.ExternalFuns.op64, op65 := ProverRwFull.ExternalFuns.op65,
+      op66 := ProverRwFull.ExternalFuns.op66, op67 := ProverRwFull.ExternalFuns.op67,
+      op68 := ProverRwFull.ExternalFuns.op68, op69 := ProverRwFull.ExternalFuns.op69,
+      op70 := ProverRwFull.ExternalFuns.op70, op71 := ProverRwFull.ExternalFuns.op71,
+      op72 := ProverRwFull.ExternalFuns.op72, op73 := ProverRwFull.ExternalFuns.op73,
+      op74 := ProverRwFull.ExternalFuns.op74, op75 := ProverRwFull.ExternalFuns.op75,
+      op76 := ProverRwFull.ExternalFuns.op76, op77 := @ProverRwFull.ExternalFuns.op77 inst✝ ops,
+      op78 := @ProverRwFull.ExternalFuns.op78 inst✝ ops, op79 := @ProverRwFull.ExternalFuns.op79 inst✝ ops,
+      op80 := @ProverRwFull.ExternalFuns.op80 inst✝ ops, op81 := @ProverRwFull.ExternalFuns.op81 inst✝ ops,
+      op82 := ProverRwFull.ExternalFuns.op82, op83 := ProverRwFull.ExternalFuns.op83,
+      op84 := ProverRwFull.ExternalFuns.op84, op85 := ProverRwFull.ExternalFuns.op85,
+      op86 := ProverRwFull.ExternalFuns.op86, op87 := ProverRwFull.ExternalFuns.op87,
+      op88 := ProverRwFull.ExternalFuns.op88, op89 := ProverRwFull.ExternalFuns.op89,
+      op90 := ProverRwFull.ExternalFuns.op90, op91 := ProverRwFull.ExternalFuns.op91,
+      op92 := ProverRwFull.ExternalFuns.op92, op93 := ProverRwFull.ExternalFuns.op93,
+      op94 := ProverRwFull.ExternalFuns.op94, op95 := ProverRwFull.ExternalFuns.op95,
+      op96 := ProverRwFull.ExternalFuns.op96, op97 := ProverRwFull.ExternalFuns.op97,
+      op98 := ProverRwFull.ExternalFuns.op98, op99 := ProverRwFull.ExternalFuns.op99,
+      op100 := ProverRwFull.ExternalFuns.op100, op101 := ProverRwFull.ExternalFuns.op101,
+      op102 := ProverRwFull.ExternalFuns.op102, op103 := ProverRwFull.ExternalFuns.op103,
+      op104 := ProverRwFull.ExternalFuns.op104, op105 := ProverRwFull.ExternalFuns.op105,
+      op106 := ProverRwFull.ExternalFuns.op106, op107 := ProverRwFull.ExternalFuns.op107,
+      op108 := ProverRwFull.ExternalFuns.op108, op109 := ProverRwFull.ExternalFuns.op109,
+      op110 := ProverRwFull.ExternalFuns.op110, op111 := ProverRwFull.ExternalFuns.op111,
+      op112 := ProverRwFull.ExternalFuns.op112, op113 := ProverRwFull.ExternalFuns.op113,
+      op114 := ProverRwFull.ExternalFuns.op114, op115 := ProverRwFull.ExternalFuns.op115,
+      op116 := ProverRwFull.ExternalFuns.op116, op117 := ProverRwFull.ExternalFuns.op117,
+      op118 := ProverRwFull.ExternalFuns.op118, op119 := ProverRwFull.ExternalFuns.op119,
+      op120 := ProverRwFull.ExternalFuns.op120, op121 := ProverRwFull.ExternalFuns.op121,
+      op122 := @ProverRwFull.ExternalFuns.op122 inst✝ ops, op123 := @ProverRwFull.ExternalFuns.op123 inst✝ ops,
+      op124 := @ProverRwFull.ExternalFuns.op124 inst✝ ops, op125 := @ProverRwFull.ExternalFuns.op125 inst✝ ops,
+      op126 := @ProverRwFull.ExternalFuns.op126 inst✝ ops, op127 := @ProverRwFull.ExternalFuns.op127 inst✝ ops,
+      op128 := @ProverRwFull.ExternalFuns.op128 inst✝ ops, op129 := ProverRwFull.ExternalFuns.op129,
+      op130 := @ProverRwFull.ExternalFuns.op130 inst✝ ops, op131 := @ProverRwFull.ExternalFuns.op131 inst✝ ops,
+      op132 := ProverRwFull.ExternalFuns.op132, op133 := ProverRwFull.ExternalFuns.op133,
+      op134 := ProverRwFull.ExternalFuns.op134, op135 := @ProverRwFull.ExternalFuns.op135 inst✝ ops,
+      op136 := @ProverRwFull.ExternalFuns.op136 inst✝ ops, op137 := @ProverRwFull.ExternalFuns.op137 inst✝ ops,
+      op138 := @ProverRwFull.ExternalFuns.op138 inst✝ ops, op139 := @ProverRwFull.ExternalFuns.op139 inst✝ ops,
+      op140 := @ProverRwFull.ExternalFuns.op140 inst✝ ops, op141 := @ProverRwFull.ExternalFuns.op141 inst✝ ops,
+      op142 := @ProverRwFull.ExternalFuns.op142 inst✝ ops, op143 := @ProverRwFull.ExternalFuns.op143 inst✝ ops,
+      op144 := @ProverRwFull.ExternalFuns.op144 inst✝ ops, op145 := @ProverRwFull.ExternalFuns.op145 inst✝ ops,
+      op146 := @ProverRwFull.ExternalFuns.op146 inst✝ ops, op147 := @ProverRwFull.ExternalFuns.op147 inst✝ ops,
+      op148 := @ProverRwFull.ExternalFuns.op148 inst✝ ops, op149 := @ProverRwFull.ExternalFuns.op149 inst✝ ops,
+      op150 := @ProverRwFull.ExternalFuns.op150 inst✝ ops, op151 := @ProverRwFull.ExternalFuns.op151 inst✝ ops,
+      op152 := @ProverRwFull.ExternalFuns.op152 inst✝ ops, op153 := @ProverRwFull.ExternalFuns.op153 inst✝ ops,
+      op154 := @ProverRwFull.ExternalFuns.op154 inst✝ ops, op155 := @ProverRwFull.ExternalFuns.op155 inst✝ ops,
+      op156 := @ProverRwFull.ExternalFuns.op156 inst✝ ops, op157 := @ProverRwFull.ExternalFuns.op157 inst✝ ops,
+      op158 := @ProverRwFull.ExternalFuns.op158 inst✝ ops, op159 := @ProverRwFull.ExternalFuns.op159 inst✝ ops,
+      op160 := @ProverRwFull.ExternalFuns.op160 inst✝ ops, op161 := @ProverRwFull.ExternalFuns.op161 inst✝ ops,
+      op162 := @ProverRwFull.ExternalFuns.op162 inst✝ ops, op163 := ProverRwFull.ExternalFuns.op163,
+      op164 := ProverRwFull.ExternalFuns.op164, op165 := ProverRwFull.ExternalFuns.op165,
+      op166 := ProverRwFull.ExternalFuns.op166, op167 := ProverRwFull.ExternalFuns.op167,
+      op168 := ProverRwFull.ExternalFuns.op168, op169 := ProverRwFull.ExternalFuns.op169,
+      op170 := ProverRwFull.ExternalFuns.op170, op171 := ProverRwFull.ExternalFuns.op171,
+      op172 := ProverRwFull.ExternalFuns.op172, op173 := ProverRwFull.ExternalFuns.op173,
+      op174 := ProverRwFull.ExternalFuns.op174, op175 := ProverRwFull.ExternalFuns.op175,
+      op176 := ProverRwFull.ExternalFuns.op176, op177 := ProverRwFull.ExternalFuns.op177,
+      op178 := ProverRwFull.ExternalFuns.op178, op179 := ProverRwFull.ExternalFuns.op179,
+      op180 := ProverRwFull.ExternalFuns.op180, op181 := ProverRwFull.ExternalFuns.op181,
+      op182 := ProverRwFull.ExternalFuns.op182, op183 := ProverRwFull.ExternalFuns.op183,
+      op184 := ProverRwFull.ExternalFuns.op184, op185 := @ProverRwFull.ExternalFuns.op185 inst✝ ops,
+      op186 := @ProverRwFull.ExternalFuns.op186 inst✝ ops, op187 := @ProverRwFull.ExternalFuns.op187 inst✝ ops,
+      op188 := ProverRwFull.ExternalFuns.op188, op189 := ProverRwFull.ExternalFuns.op189,
+      op190 := ProverRwFull.ExternalFuns.op190, op191 := ProverRwFull.ExternalFuns.op191,
+      op192 := ProverRwFull.ExternalFuns.op192, op193 := ProverRwFull.ExternalFuns.op193,
+      op194 := ProverRwFull.ExternalFuns.op194, op195 := @ProverRwFull.ExternalFuns.op195 inst✝ ops,
+      op196 := ProverRwFull.ExternalFuns.op196, op197 := ProverRwFull.ExternalFuns.op197,
+      op198 := ProverRwFull.ExternalFuns.op198, op199 := ProverRwFull.ExternalFuns.op199,
+      op200 := ProverRwFull.ExternalFuns.op200, op201 := ProverRwFull.ExternalFuns.op201,
+      op202 := ProverRwFull.ExternalFuns.op202, op203 := ProverRwFull.ExternalFuns.op203,
+      op204 := ProverRwFull.ExternalFuns.op204, op205 := ProverRwFull.ExternalFuns.op205,
+      op206 := ProverRwFull.ExternalFuns.op206, op207 := ProverRwFull.ExternalFuns.op207,
+      op208 := ProverRwFull.ExternalFuns.op208, op209 := @ProverRwFull.ExternalFuns.op209 inst✝ ops,
+      op210 := ProverRwFull.ExternalFuns.op210, op211 := @ProverRwFull.ExternalFuns.op211 inst✝ ops,
+      op212 := @ProverRwFull.ExternalFuns.op212 inst✝ ops, op213 := @ProverRwFull.ExternalFuns.op213 inst✝ ops,
+      op214 := @ProverRwFull.ExternalFuns.op214 inst✝ ops, op215 := @ProverRwFull.ExternalFuns.op215 inst✝ ops,
+      op216 := @ProverRwFull.ExternalFuns.op216 inst✝ ops, op217 := @ProverRwFull.ExternalFuns.op217 inst✝ ops,
+      op218 := @ProverRwFull.ExternalFuns.op218 inst✝ ops, op219 := @ProverRwFull.ExternalFuns.op219 inst✝ ops,
+      op220 := @ProverRwFull.ExternalFuns.op220 inst✝ ops, op221 := ProverRwFull.ExternalFuns.op221,
+      op222 := ProverRwFull.ExternalFuns.op222, op223 := ProverRwFull.ExternalFuns.op223,
+      op224 := ProverRwFull.ExternalFuns.op224, op225 := ProverRwFull.ExternalFuns.op225,
+      op226 := ProverRwFull.ExternalFuns.op226, op227 := ProverRwFull.ExternalFuns.op227,
+      op228 := ProverRwFull.ExternalFuns.op228, op229 := ProverRwFull.ExternalFuns.op229,
+      op230 := ProverRwFull.ExternalFuns.op230, op231 := ProverRwFull.ExternalFuns.op231,
+      op232 := ProverRwFull.ExternalFuns.op232, op233 := ProverRwFull.ExternalFuns.op233,
+      op234 := ProverRwFull.ExternalFuns.op234, op235 := ProverRwFull.ExternalFuns.op235,
+      op236 := ProverRwFull.ExternalFuns.op236, op237 := ProverRwFull.ExternalFuns.op237,
+      op238 := ProverRwFull.ExternalFuns.op238, op239 := ProverRwFull.ExternalFuns.op239,
+      op240 := ProverRwFull.ExternalFuns.op240, op241 := ProverRwFull.ExternalFuns.op241,
+      op242 := ProverRwFull.ExternalFuns.op242, op243 := ProverRwFull.ExternalFuns.op243,
+      op244 := ProverRwFull.ExternalFuns.op244, op245 := ProverRwFull.ExternalFuns.op245,
+      op246 := @ProverRwFull.ExternalFuns.op246 inst✝ ops, op247 := ProverRwFull.ExternalFuns.op247,
+      op248 := ProverRwFull.ExternalFuns.op248, op249 := ProverRwFull.ExternalFuns.op249,
+      op250 := ProverRwFull.ExternalFuns.op250, op251 := ProverRwFull.ExternalFuns.op251,
+      op252 := ProverRwFull.ExternalFuns.op252, op253 := ProverRwFull.ExternalFuns.op253,
+      op254 := R1Z.ProverRwP6PowersInstall.powers ops, op255 := @ProverRwFull.ExternalFuns.op255 inst✝ ops,
+      op256 := ProverRwFull.ExternalFuns.op256, op257 := @ProverRwFull.ExternalFuns.op257 inst✝ ops,
+      op258 := ProverRwFull.ExternalFuns.op258, op259 := ProverRwFull.ExternalFuns.op259,
+      op260 := ProverRwFull.ExternalFuns.op260, op261 := ProverRwFull.ExternalFuns.op261 }
+'R1Z.PV_RJ4IDB_NativePowers.deployed_installation' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RJ4IDB_CallerSemantic.caller_to_transfer13 {CH : Type} (native_handle : CH) :
+  R1Z.PV_RJ4IDB_CallerSemantic.caller native_handle = AspisR1.PV_2TNV_PublicEncoding.x native_handle
+'R1Z.PV_RJ4IDB_CallerSemantic.caller_to_transfer13' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RJ4IDB_CallerSemantic.consume {CH : Type} (native_handle : CH) :
+  ∃ w, R1Z.PV_RJDec_V047.H.public w = (R1Z.PV_RJ4IDB_CallerSemantic.caller native_handle).1
+'R1Z.PV_RJ4IDB_CallerSemantic.consume' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_RJ4IDB.native_factorization {A : Type} (t : PV_RJ4IDB.NativeTrace A) :
+  PV_RJ4IDB.nativeObservation t = PV_RJ4IDB.decoder (PV_RJ4IDB.modelTrace t)
+'PV_RJ4IDB.native_factorization' depends on axioms: [propext]
+PV_RJ4IDB.all_prefixes {I A : Type} (family : I → PV_RJ4IDB.NativeTrace A) (i : I) :
+  PV_RJ4IDB.nativeObservation (family i) = PV_RJ4IDB.decoder (PV_RJ4IDB.modelTrace (family i))
+'PV_RJ4IDB.all_prefixes' depends on axioms: [propext]
+PV_RJ4IDB.result_fibres_exact {W A : Type}
+  (reachable : R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A → Prop)
+  (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes) :
+  R1Z.PV_RJDec_Factor.Fibres reachable (PV_RJ4IDB.actualObservation render) ↔
+    (∀ (l r : R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A) (a : A),
+        reachable l →
+          reachable r →
+            l.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+              r.outcome = R1Z.PV_W_Threading.Outcome.ok a →
+                l.world = r.world → List.map Prod.snd l.calls = List.map Prod.snd r.calls) ∧
+      (∀ (l r : R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A) (e : Aeneas.Std.Error),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.fail e →
+                r.outcome = R1Z.PV_W_Threading.Outcome.fail e → List.map Prod.snd l.calls = List.map Prod.snd r.calls) ∧
+        ∀ (l r : R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A),
+          reachable l →
+            reachable r →
+              l.outcome = R1Z.PV_W_Threading.Outcome.div →
+                r.outcome = R1Z.PV_W_Threading.Outcome.div → List.map Prod.snd l.calls = List.map Prod.snd r.calls
+'PV_RJ4IDB.result_fibres_exact' depends on axioms: [propext, Quot.sound]

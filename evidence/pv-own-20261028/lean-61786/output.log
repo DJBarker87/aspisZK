@@ -1,0 +1,111 @@
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:15: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:16:80: error: unsolved goals
+S X E A : Type
+primitive : Request → S → Outcome E (Option Nat) × S
+r : Request
+owner : Nat
+abort : Action S X E A
+next : Token → Action S X E A
+w : State S X
+s : S
+h : primitive r w.allocator = (Outcome.ok none, s)
+⊢ PV_W_Threading.bind
+      (emit (Event.allocate r.size r.alignment) fun w =>
+        match (primitive r w.allocator).fst with
+        | Outcome.fail e =>
+          (Outcome.fail e, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.div =>
+          (Outcome.div, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.ok none =>
+          (Outcome.ok none, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.ok (some p) =>
+          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),
+            {
+              memory :=
+                { heap := put w.memory.heap p (some (emptyCell r.size r.alignment owner)),
+                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,
+                  slots := fun s =>
+                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                    else w.memory.slots s,
+                  loans := w.memory.loans },
+              allocator := (primitive r w.allocator).snd, extra := w.extra }))
+      (fun result =>
+        match result with
+        | none => abort
+        | some token => next token)
+      w =
+    { outcome := (abort { memory := w.memory, allocator := s, extra := w.extra }).outcome,
+      world := (abort { memory := w.memory, allocator := s, extra := w.extra }).world,
+      calls :=
+        (w, Event.allocate r.size r.alignment) ::
+          (abort { memory := w.memory, allocator := s, extra := w.extra }).calls }
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:29: warning: This simp argument is unused:
+  emit
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵e̵q̵u̵e̵s̵t̵,̵b̵i̵n̵d̵,̵a̵l̵l̵o̵c̵a̵t̵e̵,̵e̵m̵i̵t̵,̵h̵]̵[̲r̲e̲q̲u̲e̲s̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲a̲l̲l̲o̲c̲a̲t̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:34: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [request, ̲bind, ̲allocate, ̲emit,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:15: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:23:70: error: unsolved goals
+S X E A : Type
+primitive : Request → S → Outcome E (Option Nat) × S
+r : Request
+owner : Nat
+abort : Action S X E A
+next : Token → Action S X E A
+w : State S X
+s : S
+h : primitive r w.allocator = (Outcome.div, s)
+⊢ PV_W_Threading.bind
+      (emit (Event.allocate r.size r.alignment) fun w =>
+        match (primitive r w.allocator).fst with
+        | Outcome.fail e =>
+          (Outcome.fail e, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.div =>
+          (Outcome.div, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.ok none =>
+          (Outcome.ok none, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })
+        | Outcome.ok (some p) =>
+          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),
+            {
+              memory :=
+                { heap := put w.memory.heap p (some (emptyCell r.size r.alignment owner)),
+                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,
+                  slots := fun s =>
+                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                    else w.memory.slots s,
+                  loans := w.memory.loans },
+              allocator := (primitive r w.allocator).snd, extra := w.extra }))
+      (fun result =>
+        match result with
+        | none => abort
+        | some token => next token)
+      w =
+    { outcome := Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },
+      calls := [(w, Event.allocate r.size r.alignment)] }
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:29: warning: This simp argument is unused:
+  emit
+
+Hint: Omit it from the simp argument list.
+  simp [̵r̵e̵q̵u̵e̵s̵t̵,̵b̵i̵n̵d̵,̵a̵l̵l̵o̵c̵a̵t̵e̵,̵e̵m̵i̵t̵,̵h̵]̵[̲r̲e̲q̲u̲e̲s̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲a̲l̲l̲o̲c̲a̲t̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:34: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [request, ̲bind, ̲allocate, ̲emit,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWN_AllocationAbort.null' depends on axioms: [sorryAx, Quot.sound]
+'R1Z.PV_OWN_AllocationAbort.divergence' depends on axioms: [sorryAx, Quot.sound]

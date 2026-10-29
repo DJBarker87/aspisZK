@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "124dca3b72357a919b393ccfe24223a91ca07123",
+  "runner_sha256": "3c7e60bbf361f9cd2d35da7d18226dbeac506270d3e98250e17d50b3cd58f1d5",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG8_World",
+  "attempt": 66082,
+  "source_sha256": "da39cda0adaf1d36655ea95766e58dd468969c403df6d6a1418afcac7169ba8f",
+  "environment_sha256": "e73713c1c398a0e9c9ff1c6a20624b254a464244ac4a3566c93bc9053b16028d",
+  "dependency_objects": {
+    "PV_DIAG8_Messages": {
+      "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects/PV_DIAG8_Messages.olean": "07e29ddbb3b88cf7245394adbf24dd6d4905c7f5ed7847ca3c5c9d86545e532e"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/lean66082-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects/PV_DIAG8_World.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources/PV_DIAG8_World.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 1.5795273780822754,
+  "peak_rss_kib": "3310728",
+  "swaps": "0",
+  "gnu_wall": "0:01.54",
+  "print_axioms": "'PV_DIAG8.world_empty' does not depend on any axioms\n'PV_DIAG8.world_cons' does not depend on any axioms\n'PV_DIAG8.world_history_length' depends on axioms: [propext, Quot.sound]\n'PV_DIAG8.world_failure_length' depends on axioms: [propext]\n'PV_DIAG8.world_same_history' does not depend on any axioms\n'PV_DIAG8.world_same_requests' does not depend on any axioms\n'PV_DIAG8.world_failure_event_public' does not depend on any axioms\n'PV_DIAG8.world_reached_failure_public' does not depend on any axioms\n'PV_DIAG8.world_prefix_requests' does not depend on any axioms\n'PV_DIAG8.world_error_not_success_erasure' depends on axioms: [propext]\n'PV_DIAG8.world_request_size_retained' depends on axioms: [propext]\n'PV_DIAG8.world_64_byte_draw' does not depend on any axioms\n'PV_DIAG8.world_nonce_file_fields' does not depend on any axioms\n/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources/PV_DIAG8_World.lean:64:326: error: No goals to be solved\n/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources/PV_DIAG8_World.lean:64:255: error: unsolved goals\nA : Type\nworld : History \u2192 Request \u2192 Reply\nnative : A \u2192 History \u2192 Request \u2192 Reply\nblind : \u2200 (a : A) (h : History) (q : Request), native a h q = world h q\na : A\nqs : List Request\nh : History\nhe : native a = world\n\u22a2 replay (native a) h qs = replay world h qs\n'PV_DIAG8.world_byte_blind_transport' depends on axioms: [sorryAx]\n",
+  "object_sha256": "f576e230484ae3449d10f557862bd559e6bee9b3f519c5cb1807241ed89d8c36"
+}

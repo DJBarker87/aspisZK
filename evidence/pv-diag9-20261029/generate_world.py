@@ -1,0 +1,148 @@
+from pathlib import Path
+import json
+D=Path(__file__).parent;m='PV_DIAG9_World'
+s='''import PV_DIAG9_Result
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Adaptive option-B criterion. Request metadata includes every fault-relevant
+field; payloads are distinct and byte blindness is an explicit P obligation.
+Policy may stop or change its next operation after every public reply. -/
+structure FaultRequest where
+ operation : Nat
+ target : List Nat
+ offset : Nat
+ size : Nat
+ alignment : Nat
+ addressClass : Nat
+ retryState : Nat
+ deriving DecidableEq
+structure FaultReply where
+ failed : Bool
+ code : Nat
+ transferred : Nat
+ deriving DecidableEq
+abbrev FaultHistory := List (FaultRequest × FaultReply)
+def adaptive {B : Type} (policy : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) : Nat → FaultHistory → FaultHistory
+ | 0,h => h
+ | n+1,h => match policy h with
+   | none => h
+   | some (q,b) => adaptive policy world n (h++[(q,world h q b)])
+def failureBits (h : FaultHistory) := h.map (fun e => e.2.failed)
+def failureEvent (h : FaultHistory) : Prop := true ∈ failureBits h
+'''
+steps=[('adaptive_zero','''theorem adaptive_zero {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (h : FaultHistory) :
+ adaptive p world 0 h=h := rfl'''),
+('adaptive_stop','''theorem adaptive_stop {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (hp : p h=none) : adaptive p world (n+1) h=h := by rw [adaptive,hp]'''),
+('adaptive_step','''theorem adaptive_step {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (q : FaultRequest) (b : B) (hp : p h=some (q,b)) :
+ adaptive p world (n+1) h=adaptive p world n (h++[(q,world h q b)]) := by rw [adaptive,hp]'''),
+('adaptive_prefix_retained','''theorem adaptive_prefix_retained {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory) :
+ ∃ suffix, adaptive p world n h=h++suffix := by
+ induction n generalizing h with
+ | zero => exact ⟨[],(List.append_nil h).symm⟩
+ | succ n ih =>
+   cases hp : p h with
+   | none => exact ⟨[],by rw [adaptive,hp]; exact (List.append_nil h).symm⟩
+   | some pair =>
+     rcases pair with ⟨q,b⟩
+     obtain ⟨suffix,hs⟩ := ih (h++[(q,world h q b)])
+     refine ⟨(q,world h q b)::suffix,?_⟩
+     rw [adaptive_step p world n h q b hp,hs,List.append_assoc]
+     rfl'''),
+('adaptive_count_bound','''theorem adaptive_count_bound {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory) :
+ (adaptive p world n h).length≤h.length+n := by
+ induction n generalizing h with
+ | zero => change h.length≤h.length+0; omega
+ | succ n ih =>
+   cases hp : p h with
+   | none => rw [adaptive_stop p world n h hp]; omega
+   | some pair =>
+     rcases pair with ⟨q,b⟩
+     rw [adaptive_step p world n h q b hp]
+     have bound := ih (h++[(q,world h q b)])
+     simp only [List.length_append,List.length_singleton] at bound
+     omega'''),
+('adaptive_coupling','''theorem adaptive_coupling {B C : Type}
+ (p : FaultHistory → Option (FaultRequest × B)) (q : FaultHistory → Option (FaultRequest × C))
+ (left : FaultHistory → FaultRequest → B → FaultReply)
+ (right : FaultHistory → FaultRequest → C → FaultReply)
+ (stepCoupling : ∀ h,
+   (p h=none ∧ q h=none) ∨
+   ∃ request b c, p h=some (request,b) ∧ q h=some (request,c) ∧
+     left h request b=right h request c)
+ (n : Nat) (h : FaultHistory) : adaptive p left n h=adaptive q right n h := by
+ induction n generalizing h with
+ | zero => rfl
+ | succ n ih =>
+   rcases stepCoupling h with ⟨hp,hq⟩ | ⟨request,b,c,hp,hq,hr⟩
+   · rw [adaptive_stop p left n h hp,adaptive_stop q right n h hq]
+   · rw [adaptive_step p left n h request b hp,adaptive_step q right n h request c hq,hr]
+     exact ih _'''),
+('byte_blind_public_replay','''theorem byte_blind_public_replay {B : Type}
+ (p : FaultHistory → Option (FaultRequest × B))
+ (publicPolicy : FaultHistory → Option FaultRequest)
+ (world : FaultHistory → FaultRequest → B → FaultReply)
+ (publicWorld : FaultHistory → FaultRequest → FaultReply)
+ (requestLaw : ∀ h, (p h).map Prod.fst=publicPolicy h)
+ (blind : ∀ h request b, world h request b=publicWorld h request)
+ (n : Nat) (h : FaultHistory) :
+ adaptive p world n h=adaptive (fun h => (publicPolicy h).map (fun q => (q,())))
+  (fun h q _ => publicWorld h q) n h := by
+ apply adaptive_coupling
+ intro history
+ cases hp : p history with
+ | none =>
+   have hq : publicPolicy history=none := (requestLaw history).symm.trans (by rw [hp]; rfl)
+   exact Or.inl ⟨rfl,by rw [hq];rfl⟩
+ | some pair =>
+   rcases pair with ⟨request,b⟩
+   have hq : publicPolicy history=some request := (requestLaw history).symm.trans (by rw [hp];rfl)
+   exact Or.inr ⟨request,b,(),rfl,by rw [hq];rfl,blind history request b⟩'''),
+('failure_bits_transport','''theorem failure_bits_transport (a b : FaultHistory) (h : a=b) : failureBits a=failureBits b :=
+ congrArg failureBits h'''),
+('failure_event_transport','''theorem failure_event_transport (a b : FaultHistory) (h : a=b) : failureEvent a ↔ failureEvent b := by
+ cases h; rfl'''),
+('metadata_and_partial_delivery_retained','''theorem metadata_and_partial_delivery_retained (h : FaultHistory) (q : FaultRequest) (r : FaultReply) :
+ (h++[(q,r)]).getLast?=some (q,r) := by simp'''),
+('reply_failure_retained','''theorem reply_failure_retained (h : FaultHistory) (q : FaultRequest) (r : FaultReply) :
+ failureBits (h++[(q,r)])=failureBits h++[r.failed] := by simp [failureBits]'''),
+('public_history_failure_law','''theorem public_history_failure_law {I P : Type} (pub : I → P) (history : I → FaultHistory)
+ (binding : ∀ i j, pub i=pub j → history i=history j) (i j : I) (h : pub i=pub j) :
+ failureEvent (history i) ↔ failureEvent (history j) := failure_event_transport _ _ (binding i j h)'''),
+('same_size_not_same_failure','''theorem same_size_not_same_failure :
+ let q : FaultRequest := ⟨0,[],0,64,1,0,0⟩
+ let r : FaultRequest := ⟨1,[],0,64,1,0,0⟩
+ q.size=r.size ∧
+ ¬ (failureEvent [(q,⟨false,0,64⟩)] ↔ failureEvent [(r,⟨true,5,0⟩)]) := by
+ unfold failureEvent failureBits
+ decide'''),
+('payload_blindness_not_implied_by_size','''theorem payload_blindness_not_implied_by_size :
+ let q : FaultRequest := ⟨0,[],0,64,1,0,0⟩
+ let world := fun (_ : FaultHistory) (_ : FaultRequest) (payload : Bool) => FaultReply.mk payload 0 0
+ (world [] q false).failed ≠ (world [] q true).failed := by decide'''),
+('event_equality_weaker_than_history','''theorem event_equality_weaker_than_history :
+ let q : FaultRequest := ⟨0,[],0,64,1,0,0⟩
+ let a := [(q,FaultReply.mk true 5 0)]
+ let b := [(q,FaultReply.mk true 13 0)]
+ (failureEvent a ↔ failureEvent b) ∧ a≠b := by
+ unfold failureEvent failureBits
+ decide'''),
+('adaptive_no_fixed_request_count','''theorem adaptive_no_fixed_request_count :
+ let world := fun (_ : FaultHistory) (_ : FaultRequest) (_ : Unit) => FaultReply.mk false 0 0
+ let request : FaultRequest := ⟨0,[],0,64,1,0,0⟩
+ (adaptive (fun _ => none) world 1 []).length=0 ∧
+ (adaptive (fun _ => some (request,())) world 1 []).length=1 := by decide'''),
+('public_joint_history_decoder','''theorem public_joint_history_decoder {I P O : Type} (pub : I → P)
+ (history : I → FaultHistory) (binding : ∀ i j, pub i=pub j → history i=history j)
+ (decode : P → FaultHistory → O) (i j : I) (h : pub i=pub j) :
+ decode (pub i) (history i)=decode (pub j) (history j) := by rw [h,binding i j h]''')]
+cs=[]
+for n,d in steps:s+=d+'\n#print axioms '+n+'\n';cs.append(s+'end PV_DIAG9\n')
+j=json.loads((D/'plans.json').read_text());j[m]=cs;(D/'plans.json').write_text(json.dumps(j,indent=2)+'\n');(D/(m+'.lean')).write_text(cs[-1])

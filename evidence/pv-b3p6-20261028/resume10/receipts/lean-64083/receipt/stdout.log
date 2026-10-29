@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DigitPair100227.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_B3P_Ordered227.fold (digit_source_step10 openings.z none)
+    ([0#usize, 1#usize, 2#usize, 3#usize, 4#usize] ++ [5#usize, 6#usize, 7#usize, 8#usize, 9#usize]) range
+in the target expression
+  (do
+      let next ←
+        PV_B3P_Ordered227.fold (digit_source_step10 openings.z none) [0#usize, 1#usize, 2#usize, 3#usize, 4#usize] range
+      let next ←
+        PV_B3P_Ordered227.fold (digit_source_step10 openings.z none) [5#usize, 6#usize, 7#usize, 8#usize, 9#usize] next
+      Result.ok (selector, next)) =
+    do
+    let next ←
+      PV_B3P_Ordered227.fold (digit_source_step10 openings.z none)
+          [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize] range
+    Result.ok (selector, next)
+
+packed : Std.Array aspis_core.field.QM31 24#usize
+openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings
+selectors : reference_copy_terminal.Selectors
+selector : aspis_core.field.QM31
+range : DigitRange10
+⊢ (do
+      let next ←
+        PV_B3P_Ordered227.fold (digit_source_step10 openings.z none) [0#usize, 1#usize, 2#usize, 3#usize, 4#usize] range
+      let next ←
+        PV_B3P_Ordered227.fold (digit_source_step10 openings.z none) [5#usize, 6#usize, 7#usize, 8#usize, 9#usize] next
+      Result.ok (selector, next)) =
+    do
+    let next ←
+      PV_B3P_Ordered227.fold (digit_source_step10 openings.z none)
+          [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize] range
+    Result.ok (selector, next)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3P_Binding10227.digit_pair_loop_binding10_0' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

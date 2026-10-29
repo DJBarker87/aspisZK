@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62876/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62876/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_SourceIdentity.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_SourceIdentity.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.17",
+  "peak_rss_kib": "484700",
+  "swap": "0",
+  "source_revision": "02bb23a6ef133a0daa8f1fac26b38add8f894cc0",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_SourceIdentity.lean:13:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal\n\nHint: If you meant to destruct this conjunction, use the `cases` tactic instead\n\nHint: Use `set_option trace.split.failure true` to display additional diagnostic information\n\nkeep : Link \u2192 Bool\nq : Cursor\n\u22a2 (have tmp := q.source q.read;\n        have bytes := PV_OWNB_ReadSnapshot.bytes q;\n        have advanced := advance q;\n        if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).owner =\n      q.owner \u2227\n    (have tmp := q.source q.read;\n          have bytes := PV_OWNB_ReadSnapshot.bytes q;\n          have advanced := advance q;\n          if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).token =\n        q.token \u2227\n      (have tmp := q.source q.read;\n              have bytes := PV_OWNB_ReadSnapshot.bytes q;\n              have advanced := advance q;\n              if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).memory.slots =\n          q.memory.slots \u2227\n        (have tmp := q.source q.read;\n              have bytes := PV_OWNB_ReadSnapshot.bytes q;\n              have advanced := advance q;\n              if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).memory.generations =\n          q.memory.generations\n'R1Z.PV_OWNC_SourceIdentity.step' depends on axioms: [sorryAx]\n'R1Z.PV_OWNC_SourceIdentity.loop' depends on axioms: [sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62876,
+  "module": "R1Z/PV_OWNC_SourceIdentity",
+  "source_blob": "e637f983640ac1fd9f095919d894850c17e6d498",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNC_SourceIdentity.lean",
+  "source_sha256": "9ee9ee8cdab2b29dd909ca73f58e4ef3a8bb3eee37c07b761e8ea9e0e507ff97",
+  "imports": [
+    "R1Z.PV_OWNC_Unwind"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNC_Unwind": "1e0a9095a88ce77d00f5ab8bee9e88465b929e8cdae9eea6b10205a7a6bf4759"
+  },
+  "deps_fingerprint": "e1181ce62043494a00108b5f9f0fcfcc20c815b4e0c7e03c33d602fd9bb08ec3"
+}

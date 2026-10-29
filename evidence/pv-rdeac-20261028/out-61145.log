@@ -1,0 +1,98 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullAppend.lean:28:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+tail : List U8
+w : World S F
+⊢ erase
+      (let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w;
+      match h : e.returned with
+      | Except.error a => e
+      | Except.ok PUnit.unit =>
+        have b' :=
+          { address := e.buffer.address, capacity := e.buffer.capacity, values := e.buffer.values ++ tail, fits := ⋯ };
+        { returned := Except.ok (), buffer := b',
+          world :=
+            have __src := e.world;
+            { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+              deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+              successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+              memory := writeTail e.buffer.address e.buffer.values.length tail e.world.memory, live := __src.live,
+              frame := __src.frame } }) =
+    let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w;
+    match h : e.returned with
+    | Except.error err => (Except.error err, e.world)
+    | Except.ok PUnit.unit =>
+      have b' :=
+        { address := e.buffer.address, capacity := e.buffer.capacity, values := e.buffer.values ++ tail, fits := ⋯ };
+      (Except.ok b',
+        have __src := e.world;
+        { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+          deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+          successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+          memory := writeTail e.buffer.address e.buffer.values.length tail e.world.memory, live := __src.live,
+          frame := __src.frame })
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FullAppend.lean:37:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  (let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w;
+      match h : e.returned with
+      | Except.error a => e
+      | Except.ok PUnit.unit =>
+        have b' :=
+          { address := e.buffer.address, capacity := e.buffer.capacity, values := e.buffer.values ++ tail, fits := ⋯ };
+        { returned := Except.ok (), buffer := b',
+          world :=
+            have __src := e.world;
+            { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+              deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+              successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+              memory := writeTail e.buffer.address e.buffer.values.length tail e.world.memory, live := __src.live,
+              frame := __src.frame } }).returned =
+    Except.error err
+of `h`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+S F : Type
+step : Request → S → Option ℕ × S
+shape : Shape
+b : Buffer U8
+tail : List U8
+w : World S F
+err : PV_RDB1_V183_ReserveWorld.Error
+h :
+  (let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w;
+      match h : e.returned with
+      | Except.error a => e
+      | Except.ok PUnit.unit =>
+        have b' :=
+          { address := e.buffer.address, capacity := e.buffer.capacity, values := e.buffer.values ++ tail, fits := ⋯ };
+        { returned := Except.ok (), buffer := b',
+          world :=
+            have __src := e.world;
+            { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+              deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+              successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+              memory := writeTail e.buffer.address e.buffer.values.length tail e.world.memory, live := __src.live,
+              frame := __src.frame } }).returned =
+    Except.error err
+⊢ (let e := reserve step 18446744073709551615 9223372036854775807 shape b tail.length w;
+      match h : e.returned with
+      | Except.error a => e
+      | Except.ok PUnit.unit =>
+        have b' :=
+          { address := e.buffer.address, capacity := e.buffer.capacity, values := e.buffer.values ++ tail, fits := ⋯ };
+        { returned := Except.ok (), buffer := b',
+          world :=
+            have __src := e.world;
+            { allocator := __src.allocator, allocCalls := __src.allocCalls, reallocCalls := __src.reallocCalls,
+              deallocCalls := __src.deallocCalls, successfulAlloc := __src.successfulAlloc,
+              successfulRealloc := __src.successfulRealloc, drops := __src.drops, history := __src.history,
+              memory := writeTail e.buffer.address e.buffer.values.length tail e.world.memory, live := __src.live,
+              frame := __src.frame } }).buffer =
+    b
+'R1Z.PV_RDEAC_FullAppend.projection' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_FullAppend.failed_header' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,38 @@
+{
+  "deviations": [
+    {
+      "event": "early sampler preflight retry",
+      "refusal_utc": "2026-10-28T22:14:08.567895+00:00",
+      "retry_utc": "2026-10-28T22:14:36+00:00",
+      "required_cooldown_seconds": 180,
+      "actual_seconds": 28,
+      "scope": "read-only hash preflight",
+      "compiler_started": false,
+      "exit": 0,
+      "wall": "0:00.13",
+      "peak_rss_kib": 31448,
+      "swap": 0,
+      "correction": "task-local cooldown.py guard runs before uploads and scope admission; no host launcher, reservation script or caps changed"
+    },
+    {
+      "event": "historical prerequisite review was late",
+      "files": [
+        "LOG.md D42-D68",
+        "t2b2b/build-integration/run-joint.sh.txt",
+        "t2b2b/build-integration/joint-drive.py.txt",
+        "manifest-2.json",
+        "joint-attempts-5000-5531.jsonl"
+      ],
+      "effect": "Reviewed during final preparation rather than before work; standing common/host rules had been read before launches; no historical 7G cap or old ID range used. Current h4-h7 source/object authorities and 6G/8G/swap0 rules used."
+    },
+    {
+      "event": "native read-only/cleanup helper scripts committed after execution",
+      "scopes": [
+        "rdb2d-preflight",
+        "rdb2d-sampler-preflight",
+        "rdb2d-cleanup"
+      ],
+      "effect": "All Lean sources were committed before upload. Receipt execution source_revision retained; each helper now has exact script SHA, git blob and committed source revision supplement. The initial forest native fixture was committed while its first scope ran; its recorded source revision contains those source bytes. Cleanup only hashed and removed rebuildable caches."
+    }
+  ]
+}

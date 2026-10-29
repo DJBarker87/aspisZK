@@ -1,0 +1,82 @@
+import PV_DIAG2_Effects
+/-! rust-src 1.94.1 Backtrace::enabled control. The incoming atomic-load value
+and public environment-read results are inputs. The optional Nat denotes a
+requested atomic store, not a claim about final memory under concurrent races.
+Environment read effects/failures are bound separately in CaptureControl. -/
+set_option autoImplicit false
+namespace PV_DIAG2
+inductive EnvRead where
+ | value : String → EnvRead
+ | absent | nonUnicode
+ deriving DecidableEq, Repr
+
+def envFlag : EnvRead → Bool
+ | .value s => s != "0"
+ | _ => false
+
+def chooseEnv (library fallback : EnvRead) : Bool :=
+ match library with
+ | .value s => s != "0"
+ | _ => envFlag fallback
+
+def cacheCode (enabled : Bool) : Nat := if enabled then 2 else 1
+
+def enableStep (cache : Nat) (library fallback : EnvRead) : Bool × Option Nat :=
+ match cache with
+ | 0 => let b := chooseEnv library fallback; (b,some (cacheCode b))
+ | 1 => (false,none)
+ | _+2 => (true,none)
+
+
+theorem lib_zero_suppresses (back : EnvRead) : chooseEnv (.value "0") back = false := by simp [chooseEnv]
+#print axioms lib_zero_suppresses
+
+theorem lib_nonzero_enables (s : String) (h : s ≠ "0") (back : EnvRead) : chooseEnv (.value s) back = true := by simp [chooseEnv,h]
+#print axioms lib_nonzero_enables
+
+theorem absent_lib_falls_back (back : EnvRead) : chooseEnv .absent back = envFlag back := rfl
+#print axioms absent_lib_falls_back
+
+theorem nonunicode_lib_falls_back (back : EnvRead) : chooseEnv .nonUnicode back = envFlag back := rfl
+#print axioms nonunicode_lib_falls_back
+
+theorem absent_back_disables : envFlag .absent = false := rfl
+#print axioms absent_back_disables
+
+theorem nonunicode_back_disables : envFlag .nonUnicode = false := rfl
+#print axioms nonunicode_back_disables
+
+theorem zero_back_disables : envFlag (.value "0") = false := by simp [envFlag]
+#print axioms zero_back_disables
+
+theorem initial_cache_request (lib back : EnvRead) : enableStep 0 lib back = (chooseEnv lib back,some (cacheCode (chooseEnv lib back))) := rfl
+#print axioms initial_cache_request
+
+theorem cached_off_ignores_environment (lib back : EnvRead) : enableStep 1 lib back = (false,none) := rfl
+#print axioms cached_off_ignores_environment
+
+theorem cached_on_ignores_environment (n : Nat) (lib back : EnvRead) : enableStep (n+2) lib back = (true,none) := rfl
+#print axioms cached_on_ignores_environment
+
+theorem cache_code_range (b : Bool) : cacheCode b = 1 ∨ cacheCode b = 2 := by cases b <;> simp [cacheCode]
+#print axioms cache_code_range
+
+theorem requested_store_range (cache : Nat) (lib back : EnvRead) (n : Nat)
+ (h : (enableStep cache lib back).2 = some n) : n = 1 ∨ n = 2 := by
+ cases cache with
+ | zero => have hn : cacheCode (chooseEnv lib back) = n := by simpa [enableStep] using h
+           rw [← hn]; exact cache_code_range _
+ | succ n => cases n <;> simp [enableStep] at h
+#print axioms requested_store_range
+
+theorem public_enablement (cache : Nat) (lib back : EnvRead) (otherLib otherBack : EnvRead)
+ (hl : lib = otherLib) (hb : back = otherBack) : enableStep cache lib back = enableStep cache otherLib otherBack := by rw [hl,hb]
+#print axioms public_enablement
+
+theorem unicode_lib_ignores_back (cache : Nat) (s : String) (a b : EnvRead) :
+ enableStep cache (.value s) a = enableStep cache (.value s) b := by
+ cases cache with
+ | zero => rfl
+ | succ n => cases n <;> rfl
+#print axioms unicode_lib_ignores_back
+end PV_DIAG2

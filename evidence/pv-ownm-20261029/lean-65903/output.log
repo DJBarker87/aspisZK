@@ -1,0 +1,179 @@
+/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_V239.lean:159:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map List.length left.columns
+in the target expression
+  List.flatMap (fun p => List.map (fun c => (p, c.length)) left.columns) (wirePoints right.point) =
+    List.flatMap (fun p => List.map (fun c => (p, c.length)) right.columns) (wirePoints right.point)
+
+K W : Type
+inst✝ : Field K
+decode : Q → K
+zero : Q
+source222 : List Q → List Q → Result (Option Q)
+wirePoints : List Q → List (List Q)
+isBoolean : Q → Bool
+reconstruct879 reconstruct890 : Public → List Q
+native : Input → ℕ → Execution K W
+owned : Input → ℕ → Result (Option K) → Execution K W
+failures : List Bool
+left right : Input
+inputL : PV_OWNM_Link_ActualInput wirePoints left
+inputR : PV_OWNM_Link_ActualInput wirePoints right
+commute : PV_OWNM_Link_SourceDense decode zero source222
+cbL : PV_OWNM_Link_Transcript879 reconstruct879 left
+cbR : PV_OWNM_Link_Transcript879 reconstruct879 right
+finalL : PV_OWNM_Link_Transcript890 reconstruct890 left
+finalR : PV_OWNM_Link_Transcript890 reconstruct890 right
+ownedL : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures left
+ownedR : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures right
+samePublic : left.pubData = right.pubData
+sameSite : left.site = right.site
+sameLengths : List.map List.length left.columns = List.map List.length right.columns
+wireSelf : ∀ (p : List Q), p ∈ wirePoints p
+points : left.point = right.point
+valueL :
+  ∀ (lane : ℕ) (c : List Q),
+    left.columns[lane]? = some c →
+      native left lane = owned left lane (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c)))
+valueR :
+  ∀ (lane : ℕ) (c : List Q),
+    right.columns[lane]? = some c →
+      native right lane =
+        owned right lane (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c)))
+laneL laneR : ℕ
+cL cR : List Q
+hcL : left.columns[laneL]? = some cL
+hcR : right.columns[laneR]? = some cR
+⊢ List.flatMap (fun p => List.map (fun c => (p, c.length)) left.columns) (wirePoints right.point) =
+    List.flatMap (fun p => List.map (fun c => (p, c.length)) right.columns) (wirePoints right.point)
+/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_V239.lean:158:19: warning: This simp argument is unused:
+  ← List.map_map
+
+Hint: Omit it from the simp argument list.
+  simp only [calls,̵←̵ ̵L̵i̵s̵t̵.̵m̵a̵p̵_̵m̵a̵p̵]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem R1Z.PV_OWNM_V239.restore : ∀ {K W : Type} [inst : Field K] (decode : Q → K) (zero : Q)
+  (source222 : List Q → List Q → Result (Option Q)) (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
+  (reconstruct879 reconstruct890 : Public → List Q) (native : Input → ℕ → Execution K W)
+  (owned : Input → ℕ → Result (Option K) → Execution K W) (failures : List Bool) (left right : Input),
+  PV_OWNM_Link_ActualInput wirePoints left →
+    PV_OWNM_Link_ActualInput wirePoints right →
+      PV_OWNM_Link_SourceDense decode zero source222 →
+        PV_OWNM_Link_Transcript879 reconstruct879 left →
+          PV_OWNM_Link_Transcript879 reconstruct879 right →
+            PV_OWNM_Link_Transcript890 reconstruct890 left →
+              PV_OWNM_Link_Transcript890 reconstruct890 right →
+                PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures left →
+                  PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures right →
+                    left.pubData = right.pubData →
+                      left.site = right.site →
+                        List.map List.length left.columns = List.map List.length right.columns →
+                          (∀ (p : List Q), p ∈ wirePoints p) →
+                            (∀ (lane : ℕ) (c : List Q),
+                                left.columns[lane]? = some c →
+                                  native left lane =
+                                    owned left lane
+                                      (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c)))) ∧
+                              (∀ (lane : ℕ) (c : List Q),
+                                  right.columns[lane]? = some c →
+                                    native right lane =
+                                      owned right lane
+                                        (ok
+                                          (if c.length ≠ 1024 then none else some (dense decode zero right.point c)))) ∧
+                                ∀ (laneL laneR : ℕ) (cL cR : List Q),
+                                  left.columns[laneL]? = some cL →
+                                    right.columns[laneR]? = some cR →
+                                      (native left laneL).trace = (native right laneR).trace :=
+fun {K W} [Field K] decode zero source222 wirePoints isBoolean reconstruct879 reconstruct890 native owned failures left
+    right inputL inputR commute cbL cbR finalL finalR ownedL ownedR samePublic sameSite sameLengths wireSelf =>
+  have points :=
+    Site.casesOn (motive := fun t => left.site = t → left.point = right.point) left.site
+      (fun h =>
+        Eq.ndrec (motive := fun x => left.site = x → left.point = right.point)
+          (fun hs =>
+            have hr := Eq.trans (Eq.symm sameSite) hs;
+            Eq.mpr (id (congrArg (fun _a => _a = right.point) (cbL hs)))
+              (Eq.mpr (id (congrArg (fun _a => reconstruct879 left.pubData = _a) (cbR hr)))
+                (Eq.mpr (id (congrArg (fun _a => reconstruct879 _a = reconstruct879 right.pubData) samePublic))
+                  (Eq.refl (reconstruct879 right.pubData)))))
+          (Eq.symm h) (Eq.refl left.site))
+      (fun h =>
+        Eq.ndrec (motive := fun x => left.site = x → left.point = right.point)
+          (fun hs =>
+            have hr := Eq.trans (Eq.symm sameSite) hs;
+            Eq.mpr (id (congrArg (fun _a => _a = right.point) (finalL hs)))
+              (Eq.mpr (id (congrArg (fun _a => reconstruct890 left.pubData = _a) (finalR hr)))
+                (Eq.mpr (id (congrArg (fun _a => reconstruct890 _a = reconstruct890 right.pubData) samePublic))
+                  (Eq.refl (reconstruct890 right.pubData)))))
+          (Eq.symm h) (Eq.refl left.site))
+      (Eq.refl left.site);
+  have valueL := fun lane c hc =>
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = owned left lane (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c))))
+          (ownedL.left lane c hc)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              owned left lane _a =
+                owned left lane (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c))))
+            (commute left.point c inputL.left (inputL.right.left left.point (wireSelf left.point)).right
+              (inputL.right.right c (List.mem_of_getElem? hc)))))
+        (Eq.refl (owned left lane (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c))))));
+  have valueR := fun lane c hc =>
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = owned right lane (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c))))
+          (ownedR.left lane c hc)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              owned right lane _a =
+                owned right lane (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c))))
+            (commute right.point c inputR.left (inputR.right.left right.point (wireSelf right.point)).right
+              (inputR.right.right c (List.mem_of_getElem? hc)))))
+        (Eq.refl (owned right lane (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c))))));
+  ⟨valueL,
+    ⟨valueR, fun laneL laneR cL cR hcL hcR =>
+      Eq.mpr (id (congrArg (fun _a => _a.trace = (native right laneR).trace) (ownedL.left laneL cL hcL)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (owned left laneL do
+                      let v ← source222 left.point cL
+                      ok (Option.map decode v)).trace =
+                  _a.trace)
+              (ownedR.left laneR cR hcR)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a =
+                    (owned right laneR do
+                        let v ← source222 right.point cR
+                        ok (Option.map decode v)).trace)
+                (ownedL.right laneL do
+                  let v ← source222 left.point cL
+                  ok (Option.map decode v))))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => plan isBoolean (calls wirePoints left) failures = _a)
+                  (ownedR.right laneR do
+                    let v ← source222 right.point cR
+                    ok (Option.map decode v))))
+              (have callEq := sorry;
+              Eq.mpr
+                (id
+                  (congrArg (fun _a => plan isBoolean _a failures = plan isBoolean (calls wirePoints right) failures)
+                    callEq))
+                (Eq.refl (plan isBoolean (calls wirePoints right) failures))))))⟩⟩
+'R1Z.PV_OWNM_V239.restore' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

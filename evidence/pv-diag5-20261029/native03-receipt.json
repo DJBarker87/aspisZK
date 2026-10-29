@@ -1,0 +1,48 @@
+{
+  "kind": "native",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "b02602fa2399d513db5fbdf755ac01f7c3d15bb3",
+  "runner_sha256": "658817df6b2273da4ab7bfdc8b2af056a44647bdf00198c3a2f09a1d65946482",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "input_artifacts": {
+    "/home/dombarker/project-offloads/codex-pv-diag5-20261029/final-check.py": {
+      "sha256": "6f3d9e4e8ea5af984b34f8e2f79c2e899c4f185245bca0b4a1a25063ae44f84b",
+      "bytes": 2754,
+      "snapshot": "/home/dombarker/project-offloads/codex-pv-diag5-20261029/native03-input-final-check.py.txt"
+    }
+  },
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag5-20261029/native03-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-diag5-20261029/final-check.py"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.8354640007019043,
+  "peak_rss_kib": "39184",
+  "swaps": "0",
+  "gnu_wall": "0:00.80",
+  "print_axioms": "N/A: native source/control evidence"
+}

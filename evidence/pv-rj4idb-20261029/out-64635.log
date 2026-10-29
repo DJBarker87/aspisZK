@@ -1,0 +1,265 @@
+START 64635 PV_RJ4IDB_NativeChannels
+DONE 64635 PV_RJ4IDB_NativeChannels exit 1 wall 1.0 RSS 499130368
+ none)
+      es
+
+case cons.rejection
+es : List NativeEvent
+ih : rejections (List.map translateEvent es) = nativeRejections es
+attempt✝ : Nat
+⊢ attempt✝ ::
+      List.filterMap
+        (fun e =>
+          match e with
+          | Event.rejected n => some n
+          | x => none)
+        (List.map translateEvent es) =
+    attempt✝ ::
+      List.filterMap
+        (fun e =>
+          match e with
+          | NativeEvent.rejection n => some n
+          | x => none)
+        es
+
+case cons.side
+es : List NativeEvent
+ih : rejections (List.map translateEvent es) = nativeRejections es
+name✝ payload✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.rejected n => some n
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.rejection n => some n
+        | x => none)
+      es
+/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/sources/PV_RJ4IDB_NativeChannels.lean:74:103: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, ̲rejections, ̲nativeRejections, ̲List.filterMap_cons,
+  ̲ ̲ ̲ ̲ ̲ ̲translateEvent,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_RJ4IDB.nativeRejections_translation' depends on axioms: [propext, sorryAx]
+/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/sources/PV_RJ4IDB_NativeChannels.lean:81:16: error: unsolved goals
+case cons.proofWrite
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+path✝ requested✝ delivered✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.statementWrite
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+path✝ requested✝ delivered✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.otherFile
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+op✝ : FileOp
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.returned
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+json✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.printed
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+requested✝ delivered✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.diag2
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+effect✝ : PV_DIAG2.Effect
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.diag3
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+effect✝ : PV_DIAG3.Event
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.count
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+attempts✝ : Nat
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.wall
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+serializedSeconds✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.oracle
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+address✝ answer✝ : Bytes
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.rejection
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+attempt✝ : Nat
+⊢ List.filterMap
+      (fun e =>
+        match e with
+        | Event.retained a b => some (a, b)
+        | x => none)
+      (List.map translateEvent es) =
+    List.filterMap
+      (fun e =>
+        match e with
+        | NativeEvent.side a b => some (a, b)
+        | x => none)
+      es
+
+case cons.side
+es : List NativeEvent
+ih : sideChannels (List.map translateEvent es) = nativeSide es
+name✝ payload✝ : Bytes
+⊢ (name✝, payload✝) ::
+      List.filterMap
+        (fun e =>
+          match e with
+          | Event.retained a b => some (a, b)
+          | x => none)
+        (List.map translateEvent es) =
+    (name✝, payload✝) ::
+      List.filterMap
+        (fun e =>
+          match e with
+          | NativeEvent.side a b => some (a, b)
+          | x => none)
+        es
+/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/sources/PV_RJ4IDB_NativeChannels.lean:82:99: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only [List.map_cons, ̲sideChannels, ̲nativeSide, ̲List.filterMap_cons,
+  ̲ ̲ ̲ ̲ ̲ ̲translateEvent,̵i̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_RJ4IDB.nativeSide_translation' depends on axioms: [propext, sorryAx]
+

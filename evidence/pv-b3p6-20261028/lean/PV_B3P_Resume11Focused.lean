@@ -1,0 +1,18 @@
+import PV_B3P_Resume11Axioms
+-- One frozen focused manifest, no endpoint replay claim.
+#check PV_B3P_Binding11227.full_round_source_fold11
+#print axioms PV_B3P_Binding11227.full_round_source_fold11
+#check PV_B3P_Binding11227.full_round_packed_source_fold11
+#print axioms PV_B3P_Binding11227.full_round_packed_source_fold11
+#check PV_B3P_Binding11227.full_round_m31_constants_source_fold11
+#print axioms PV_B3P_Binding11227.full_round_m31_constants_source_fold11
+#check PV_B3P_Binding11227.full_round_m31_constants_packed_source_fold11
+#print axioms PV_B3P_Binding11227.full_round_m31_constants_packed_source_fold11
+#check PV_B3P_Binding11227.add_value_scaling_binding11
+#print axioms PV_B3P_Binding11227.add_value_scaling_binding11
+#check PV_B3P_Binding11227.scale_loop_frame11
+#print axioms PV_B3P_Binding11227.scale_loop_frame11
+#check PV_B3P_Binding11227.public_digest_source_loop_binding11
+#print axioms PV_B3P_Binding11227.public_digest_source_loop_binding11
+#check PV_B3P_Binding11227.digest_store_fold11
+#print axioms PV_B3P_Binding11227.digest_store_fold11

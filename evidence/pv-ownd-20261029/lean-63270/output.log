@@ -1,0 +1,80 @@
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:22: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:13:67: error: unsolved goals
+S X E : Type
+prim : Request → S → Outcome E (Option Nat) × S
+owner p : Nat
+oom : Action S X E (Buffer Link)
+payload : Nat → Link → PV_OWN_Bytes.Bytes
+w : State S X
+s : S
+h : prim { size := 1016, alignment := 2 } w.allocator = (Outcome.ok (some p), s)
+⊢ PV_W_Threading.bind
+      (emit (Event.allocate 1016 2) fun w =>
+        match (prim { size := 1016, alignment := 2 } w.allocator).fst with
+        | Outcome.fail e =>
+          (Outcome.fail e,
+            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+              extra := w.extra })
+        | Outcome.div =>
+          (Outcome.div,
+            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+              extra := w.extra })
+        | Outcome.ok none =>
+          (Outcome.ok none,
+            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+              extra := w.extra })
+        | Outcome.ok (some p) =>
+          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),
+            {
+              memory :=
+                { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),
+                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,
+                  slots := fun s =>
+                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                    else w.memory.slots s,
+                  loans := w.memory.loans },
+              allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd, extra := w.extra }))
+      (fun t =>
+        match t with
+        | none => oom
+        | some t => stores t owner payload)
+      w =
+    {
+      outcome :=
+        Outcome.ok
+          (PV_OWND_ActualBytes.initialized
+            { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),
+              generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,
+              slots := fun s =>
+                if s = owner then some { address := p, generation := w.memory.generations p + 1 } else w.memory.slots s,
+              loans := w.memory.loans }
+            { address := p, generation := w.memory.generations p + 1 } owner payload),
+      world :=
+        {
+          memory :=
+            (PV_OWND_ActualBytes.initialized
+                { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),
+                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,
+                  slots := fun s =>
+                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                    else w.memory.slots s,
+                  loans := w.memory.loans }
+                { address := p, generation := w.memory.generations p + 1 } owner payload).memory,
+          allocator := s, extra := w.extra },
+      calls := [(w, Event.allocate 1016 2)] }
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:43: warning: This simp argument is unused:
+  stores
+
+Hint: Omit it from the simp argument list.
+  simp only [construct, ̲bind, ̲allocate, ̲emit, ̲h,s̵t̵o̵r̵e̵s̵,̵ ̲List.append_nil]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:50: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵n̵s̵t̵r̵u̵c̵t̵,̵b̵i̵n̵d̵,̵a̵l̵l̵o̵c̵a̵t̵e̵,̵e̵m̵i̵t̵,̵h̵,̵s̵t̵o̵r̵e̵s̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲c̲o̲n̲s̲t̲r̲u̲c̲t̲,̲ ̲b̲i̲n̲d̲,̲ ̲a̲l̲l̲o̲c̲a̲t̲e̲,̲ ̲e̲m̲i̲t̲,̲ ̲h̲,̲ ̲s̲t̲o̲r̲e̲s̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWND_InitialSuccess.complete' depends on axioms: [propext, sorryAx, Quot.sound]

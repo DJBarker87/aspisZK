@@ -1,0 +1,22 @@
+import PV_DIAG6_Native
+/-! Lossless-prefix obligations for the EXISTING PV_RJ4IDB.diagTrace decoder.
+No decoder is implemented here. `recover` is its existing errorsStderr3
+projection; its universal law is supplied by PV_RJ4IDB.diag_events after merge.
+A family quantifies over every finite prefix of an emitting divergence. -/
+set_option autoImplicit false
+namespace PV_DIAG6
+open PV_DIAG3
+variable {S A B : Type}
+def EventPrefix (before after : List Event) : Prop := ∃ tail, after = before ++ tail
+structure PrefixFamily (S A : Type) where
+ sample : Nat → Execution S A
+ coherent : ∀ i j, i ≤ j → EventPrefix (sample i).events (sample j).events
+theorem event_prefix_refl (es : List Event) : EventPrefix es es := ⟨[],(List.append_nil es).symm⟩
+#print axioms event_prefix_refl
+theorem event_prefix_trans (a b c : List Event) (hab : EventPrefix a b)
+ (hbc : EventPrefix b c) : EventPrefix a c := by
+ rcases hab with ⟨xs,rfl⟩
+ rcases hbc with ⟨ys,rfl⟩
+ exact ⟨xs++ys,List.append_assoc a xs ys⟩
+#print axioms event_prefix_trans
+end PV_DIAG6

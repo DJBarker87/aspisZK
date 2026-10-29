@@ -1,0 +1,15 @@
+R1Z.PV_DL_CtSelected.selected_native (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (s : R1Z.PV_DL_ArrayShape.Shape) {T OutN O N0 A0 Nout K N1 A1 O0 O1 O2 : Type}
+  (vc :
+    ProverRwFull.digest.core_api.VariableOutputCore T N0 A0 Nout (R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 5)
+      K N1 A1 O0)
+  (al : ProverRwFull.generic_array.ArrayLength OutN Aeneas.Std.U8 (R1Z.PV_DL_ArrayShape.Carrier Aeneas.Std.U8 s))
+  (le : ProverRwFull.typenum.type_operators.IsLessOrEqual OutN Nout O1)
+  (nz : ProverRwFull.typenum.marker_traits.NonZero O1)
+  (less : ProverRwFull.typenum.type_operators.IsLess N0 (R1Z.PV_DL_DefaultCallback.Limit base) O2)
+  (nz1 : ProverRwFull.typenum.marker_traits.NonZero O2) (self : R1Z.PV_CBL_LibraryShapes.CtWrapper T)
+  (buffer : R1Z.PV_CBL_LibraryShapes.Buffer A0) (out : R1Z.PV_DL_CtCarrier.Output OutN s) :
+  ProverRwFull.ExternalFuns.op219 vc al le nz less nz1 self buffer out =
+    R1Z.PV_DL_CtCarrier.value (R1Z.PV_DL_CtSelected.finisher base vc) (R1Z.PV_DL_CtSelected.direction base vc) s self
+      buffer
+'R1Z.PV_DL_CtSelected.selected_native' depends on axioms: [propext, Classical.choice, Quot.sound]

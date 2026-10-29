@@ -1,0 +1,58 @@
+import PV_DIAG7_Write
+/-! Decoder-facing laws. Instantiating a public Program from the deployed
+client is an explicit remaining source obligation. The theorem does not
+hide that obligation in V400, T, the signal, or a weakened observer. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+variable {W P C O : Type}
+/-- One function retains all ordered diagnostic events, exposed state,
+terminal, existing public L1 count and the actual selected call history. -/
+def DIAG_inputs (count : Nat) (x : Execution State Reply) (history : List Request) :=
+ (count,x.events,x.state,x.exit,history)
+/-- reserve_fallible resets its diagnostic slot; reserve stores only a
+failure kind. This is the complete wrapper result, not filesystem contents. -/
+def reserveResult (signal : Signal) (operation cursor : Nat) : Bool × Option OsError :=
+ match signal.file operation cursor with
+ | none => (signal.reserved operation cursor,none)
+ | some e => (false,some e)
+theorem nonce_failure_retained (signal : Signal) (op n : Nat) (e : OsError)
+ (h : signal.file op n = some e) : reserveResult signal op n = (false,some e) := by
+ simp only [reserveResult,h]
+#print axioms nonce_failure_retained
+theorem nonce_success_resets_error (signal : Signal) (op n : Nat)
+ (h : signal.file op n = none) : reserveResult signal op n = (signal.reserved op n,none) := by
+ simp only [reserveResult,h]
+#print axioms nonce_success_resets_error
+theorem nonce_last_error_kind {K : Type} (kind : OsError → K) (signal : Signal)
+ (op n : Nat) (e : OsError) (h : signal.file op n = some e) :
+ ((reserveResult signal op n).2).map kind = some (kind e) := by
+ rw [nonce_failure_retained signal op n e h]; rfl
+#print axioms nonce_last_error_kind
+theorem nonce_wrapper_public (a b : Signal) (op n : Nat) (h : a = b) :
+ reserveResult a op n = reserveResult b op n := by cases h; rfl
+#print axioms nonce_wrapper_public
+/-- Named conditional law for pv-rj4idb's DIAG_* inputs. At every finite
+prefix coordinate, occurrence, order, content, retained last_error and exit
+are a function of the public program/data and option-B signal. The supplied
+programs must denote real prefixes, not a fuel-based truncation. -/
+theorem DIAG_public_given_optionB
+ (pub : W → P) (coins : W → C) (environment : W → Signal)
+ (V400 : V400_OptionB_P pub coins environment)
+ (program : P → C → Nat → Program) (initial : P → C → State)
+ (existingL1Count : P → C → Nat) (w u : W)
+ (hp : pub w = pub u) (hc : coins w = coins u) :
+ (fun n => DIAG_inputs (existingL1Count (pub w) (coins w))
+   (run (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w)))
+   (calls (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w)))) =
+ (fun n => DIAG_inputs (existingL1Count (pub u) (coins u))
+   (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u)))
+   (calls (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u)))) := by
+ have he := V400 w u hp hc
+ rw [he,hp,hc]
+#print axioms DIAG_public_given_optionB
+theorem DIAG_complete_decoder
+ (decode : Execution State Reply → O) (a b : Signal) (p : Program) (s : State)
+ (h : a = b) : decode (run a p s) = decode (run b p s) := by cases h; rfl
+#print axioms DIAG_complete_decoder
+end PV_DIAG7

@@ -1,0 +1,315 @@
+{
+  "bindings": [
+    {
+      "source": {
+        "path": "crates/aspis-prover/src/state_only_entropy.rs",
+        "span": [
+          805,
+          841
+        ],
+        "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+        "body_sha256": "f52e68c5667bb11e7c372c67f134b1e087b2f795898044c9ba699aa6128a097d",
+        "ordered_checks": [
+          "word: 8",
+          "fn next_word",
+          "if self.word == 8",
+          "self.block = profile21_source_expander_block",
+          "self.counter = self.counter.wrapping_add(1)",
+          "self.word = 0",
+          "let start = 4 * self.word",
+          "self.word += 1",
+          "self.block[start..start + 4]"
+        ]
+      },
+      "model": "cursorRun/slot/nextCursor",
+      "laws": [
+        "cursor_invariant",
+        "cursor_panic_guard_false",
+        "array_all_cursor_bytes_safe"
+      ],
+      "steps": [
+        "new initializes cursor 8 and block32",
+        "refill returns block32; counter wraps separately, never used in slice index",
+        "reset cursor before computing start",
+        "increment cursor once; index uses saved start",
+        "four-byte slice converts to array4; fixed-size conversion cannot fail"
+      ],
+      "retained": [
+        "hash/callback normal-return, destructor/allocator/runtime association and V370",
+        "other caller mutation of this private state must follow the same methods"
+      ],
+      "class_": "own-1 local index/control binding; not a whole-source refinement"
+    },
+    {
+      "source": {
+        "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+        "span": [
+          37,
+          59
+        ],
+        "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+        "body_sha256": "86bb9dc24c6fb7e51b78941936545c470a17ca2a8f6aadff98db99d077c7d467",
+        "ordered_checks": [
+          "assert_eq!(q.len(),w.len())",
+          "while d<q.len()/4",
+          "while s<4",
+          "while t<4",
+          "let at=s+PERM[t]",
+          "c[at]",
+          "q[4*d+s]",
+          "w[4*d+t]"
+        ]
+      },
+      "laws": [
+        "round_query_bound",
+        "round_weight_bound",
+        "round_coeff_bound",
+        "round_equal_shape"
+      ],
+      "retained": [
+        "actual caller q/w length equality; fixed shape is not derived merely from canonical field values"
+      ]
+    },
+    {
+      "source": {
+        "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+        "span": [
+          27,
+          33
+        ],
+        "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+        "body_sha256": "889d08025486baae6c6a4eefa6fda0ef733bc78c6d533792ac500c79f1c7340f",
+        "ordered_checks": [
+          "pub fn nonce",
+          "assert_eq!(k, self.entered",
+          "self.keys[k]",
+          "self.entered += 1"
+        ]
+      },
+      "laws": [
+        "publication_callback_bound",
+        "publication_callback_order"
+      ],
+      "retained": [
+        "callback sequence 0..entered after retained earlier-attempt effects; native adapter association and cap8"
+      ]
+    }
+  ],
+  "constants": {
+    "SPLIT": {
+      "value": "10",
+      "file_sha256": "adcd99bdedda8ecdb250fb810ad9bcd263ce80a2c6cb6e7d2d3777587dabb9b7",
+      "path": "crates/aspis-r1-cost-probe/src/compact.rs"
+    },
+    "PERM": {
+      "value": "[0,3,2,1]",
+      "file_sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b",
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs"
+    },
+    "reservation_writes": [
+      16,
+      32,
+      32
+    ]
+  },
+  "literal_sites": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 14,
+      "text": "ensure!(q.get(\"proof_account\").is_none(), \"legacy proof_account input is unsupported\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 15,
+      "text": "let list = q[\"proof_accounts\"].as_array().ok_or_else(|| anyhow!(\"proof_accounts must be eight public keys\"))?;",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 16,
+      "text": "ensure!(list.len() == CAP, \"proof_accounts must contain eight public keys\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 19,
+      "text": "let text = value.as_str().ok_or_else(|| anyhow!(\"proof account must be a string\"))?;",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 21,
+      "text": "ensure!(key.to_string() == text && key != Pubkey::default(), \"noncanonical/zero proof account\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 22,
+      "text": "ensure!(!keys[..i].contains(&key), \"duplicate proof account\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 38,
+      "text": "ensure!(settlement.len() == 10, \"unexpected settlement proof-account position\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 46,
+      "text": "ensure!((1..=CAP).contains(&attempts) && attempts == self.entered, \"invalid successful attempt count\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 21,
+      "text": "fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!(\"{e:?}\")}",
+      "format_placeholders": true,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 68,
+      "text": "ensure!(lane.master==master.to_bytes()&&lane.tree.next_leaf_index==after.next_pair_index&&lane.tree.root==after.next_root&&lane.tree.frontier==after.next_frontier,\"settled lane differs from proved afterstate\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 69,
+      "text": "ensure!(marker.pool==master.to_bytes()&&marker.deployment_domain==[5;32]&&marker.nullifier==pool_v1_nullifier(&k,&salt),\"consumed marker identity differs\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 73,
+      "text": "_=>Err(anyhow!(\"unknown action\"))",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 77,
+      "text": "fn prove(_: &Value,_:Pubkey,_:Pubkey,_:&[Pubkey],_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey)->Result<Value>{Err(anyhow!(\"build with --features r1p-check\"))}",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 88,
+      "text": "ensure!(lane.master==master.to_bytes()&&lane.lane_id==output_lane,\"wrong live output lane\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 90,
+      "text": "ensure!(cp.master==master.to_bytes(),\"checkpoint master mismatch\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 97,
+      "text": "ensure!(roots[0]==cp.global_root,\"deposits do not reconstruct finalized anchor\");",
+      "format_placeholders": false,
+      "classification": "literal text only when no placeholders; guard occurrence/native format execution still required"
+    }
+  ],
+  "logger": {
+    "targets": [
+      {
+        "symbol": "litesvm-c339480ea3697acb.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECsa5w292omlZ7_7litesvm",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "_RNvXs0_NtCs3vEjZnuJg6H_3log13___private_apiNtB5_12GlobalLoggerNtB7_3Log3log",
+        "name": "<log::__private_api::GlobalLogger as log::Log>::log",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "_RNvCs3vEjZnuJg6H_3log6logger",
+        "name": "log::logger",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "_RNvXs0_NtCs3vEjZnuJg6H_3log13___private_apiNtB5_12GlobalLoggerNtB7_3Log5flush",
+        "name": "<log::__private_api::GlobalLogger as log::Log>::flush",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "_RNvXs0_NtCs3vEjZnuJg6H_3log13___private_apiNtB5_12GlobalLoggerNtB7_3Log7enabled",
+        "name": "<log::__private_api::GlobalLogger as log::Log>::enabled",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "log-63de565935581dd6.ll::_RNvXsk_Cs3vEjZnuJg6H_3logNtB5_9NopLoggerNtB5_3Log3log",
+        "name": "<log::NopLogger as log::Log>::log",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "log-63de565935581dd6.ll::_RNvXsk_Cs3vEjZnuJg6H_3logNtB5_9NopLoggerNtB5_3Log7enabled",
+        "name": "<log::NopLogger as log::Log>::enabled",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "solana_bpf_loader_program-f557111c781b068d.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECs1cXvqqvHieg_25solana_bpf_loader_program",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "solana_program_runtime-c5d5a19bb5adb29e.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECsj4mXX0jusuM_22solana_program_runtime",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "solana_system_program-75d012333b711cb8.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECsgdJ6cfE79KH_21solana_system_program",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "solana_vote_program-ea0700febd7f50c5.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECs1XaEtxDg7CF_19solana_vote_program",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      },
+      {
+        "symbol": "solana_zk_elgamal_proof_program-f217fccf750caba8.ll::_RINvNtCs3vEjZnuJg6H_3log13___private_api3loguNtB2_12GlobalLoggerECs56QZzNq41LY_31solana_zk_elgamal_proof_program",
+        "name": "log::__private_api::log::<(), log::__private_api::GlobalLogger>",
+        "reachable": false,
+        "linked": false
+      }
+    ],
+    "machine_logger_entries": [],
+    "graph_sha256": "c734e36a64a1d48a28ce82d1a31ea79f67bca82400305c12b3dcb93d5efaac7d",
+    "ir_graph_sha256": "8aff25e2adcc7e77bfee42512ee6942cb6054ee13f89e897b23728dd90a1337d",
+    "honest_reachability_proved": false,
+    "remaining": "No direct reached log target in inherited graph does not exclude inlined macros or indirect/native callbacks. Each logger-ir-sites entry remains an exact candidate; operand law depends on complete reached-cone binding."
+  },
+  "source_files_checked": 530,
+  "source_sites": 18450,
+  "class_": "own-1 local guard dataflow association, partial",
+  "compiler_boundary": "V370 / D381 / D386 retained",
+  "new_trust": 0
+}

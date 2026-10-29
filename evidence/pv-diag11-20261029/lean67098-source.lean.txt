@@ -1,0 +1,12 @@
+import PV_DIAG11_Public
+import PV_DIAG11_Requests
+#print axioms PV_DIAG11.unit_error_operand_link
+#print axioms PV_DIAG11.logger_initial_disabled
+#print axioms PV_DIAG11.logger_not_initialized
+#print axioms PV_DIAG11.write_request_size
+#print axioms PV_DIAG11.write_slice_length
+#print axioms PV_DIAG11.write_progress_offset
+#print axioms PV_DIAG11.write_interrupted_preserves_buffer
+#print axioms PV_DIAG11.write_request_from_public_cursor
+#print axioms PV_DIAG11.writeAll_same_length_metadata
+#print axioms PV_DIAG11.writeAll_metadata_public

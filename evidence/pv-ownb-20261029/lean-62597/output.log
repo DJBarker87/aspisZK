@@ -1,0 +1,555 @@
+R1Z.PV_OWNB_ActualComplete.complete (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (copy :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (bytes i v)) :
+  have final := R1Z.PV_OWNB_ActualFold.run keep bytes (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧ final.read = final.length
+R1Z.PV_OWNB_ActualFilter.valid (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (more : q.read < q.length)
+  (copy :
+    R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode (q.source q.read)) (bytes q.read (q.source q.read))) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_ActualFilter.step keep bytes q)
+R1Z.PV_OWNB_ActualFilter.advances (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFilter.step keep bytes q).read = q.read + 1
+R1Z.PV_OWNB_ActualFilter.source (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFilter.step keep bytes q).source = q.source
+R1Z.PV_OWNB_ActualFold.advances (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFold.run keep bytes n q).read = q.read + n
+R1Z.PV_OWNB_ActualFold.length (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFold.run keep bytes n q).length = q.length
+R1Z.PV_OWNB_ActualFold.valid (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (enough : q.read + n ≤ q.length)
+  (copy :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (bytes i v)) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_ActualFold.run keep bytes n q)
+R1Z.PV_OWNB_ActualIdentity.step_generation (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFilter.step keep bytes q).token = q.token ∧
+    (R1Z.PV_OWNB_ActualFilter.step keep bytes q).memory.generations = q.memory.generations
+R1Z.PV_OWNB_ActualIdentity.generation (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_ActualFold.run keep bytes n q).token = q.token ∧
+    (R1Z.PV_OWNB_ActualFold.run keep bytes n q).memory.generations = q.memory.generations
+R1Z.PV_OWNB_ActualPrefix.sink (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_ActualSink.sink q v actual) = R1Z.PV_OWNB_Prefix.values q ++ [v]
+R1Z.PV_OWNB_ActualResult.complete (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (copy :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (bytes i v)) :
+  have final := R1Z.PV_OWNB_ActualFold.run keep bytes (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧
+    final.read = final.length ∧
+      final.token = q.token ∧
+        final.memory.generations = q.memory.generations ∧
+          R1Z.PV_OWNB_Prefix.values final =
+            R1Z.PV_OWNB_Prefix.values q ++
+              List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read))
+R1Z.PV_OWNB_ActualSink.ownership (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  R1Z.PV_OWN_Heap.Writable (R1Z.PV_OWNB_ActualSink.sink q v actual).memory q.owner q.token
+    (R1Z.PV_OWNB_ActualSink.sink q v actual).cell
+R1Z.PV_OWNB_ActualSink.generation (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) :
+  (R1Z.PV_OWNB_ActualSink.sink q v actual).memory.generations = q.memory.generations ∧
+    (R1Z.PV_OWNB_ActualSink.sink q v actual).token = q.token
+R1Z.PV_OWNB_ActualSinkNew.initialized (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q) (room : q.written < q.read)
+  (bytes : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) actual) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_ActualSink.sink q v actual).cell (q.written * 8) v
+R1Z.PV_OWNB_ActualSinkPrefix.frame (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q) (i : Nat) (hi : i < q.written) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_ActualSink.sink q v actual).cell (i * 8) (q.output i)
+R1Z.PV_OWNB_ActualSinkUnread.frame (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q) (room : q.written < q.read) (i : Nat)
+  (lo : q.read ≤ i) (hi : i < q.length) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_ActualSink.sink q v actual).cell (i * 8) (q.source i)
+R1Z.PV_OWNB_ActualSinkValid.valid (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Cursor.Valid q) (room : q.written < q.read)
+  (bytes : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) actual) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_ActualSink.sink q v actual)
+R1Z.PV_OWNB_ActualValues.step (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_ActualFilter.step keep bytes q) =
+    R1Z.PV_OWNB_Prefix.values q ++ if keep (q.source q.read) = true then [q.source q.read] else []
+R1Z.PV_OWNB_ActualValues.values (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_ActualFold.run keep bytes n q) =
+    R1Z.PV_OWNB_Prefix.values q ++ R1Z.PV_OWNB_ValueFold.selected keep q.source q.read n
+R1Z.PV_OWNB_CleanupConsumed.consumed {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) :
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world.memory.slots
+      q.owner =
+    none
+R1Z.PV_OWNB_CleanupRetired.dead {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) (nz : q.cell.size ≠ 0) :
+  have after :=
+    (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world.memory;
+  ∀ (c : R1Z.PV_OWN_Heap.Cell), after.heap q.token.address = some c → ¬R1Z.PV_OWN_Heap.Live after q.token c
+R1Z.PV_OWNB_CursorCleanup.gate {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) :
+  R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x } =
+    R1Z.PV_OWN_Operations.dropVecPod dealloc q.token q.cell
+      { memory := R1Z.PV_OWN_Operations.take q.owner q.memory, allocator := s, extra := x }
+R1Z.PV_OWNB_CursorCleanup.zero {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) (z : q.cell.size = 0) :
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).calls = []
+R1Z.PV_OWNB_CursorCleanup.positive {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) (nz : q.cell.size ≠ 0) :
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).calls =
+    [({ memory := R1Z.PV_OWN_Operations.take q.owner q.memory, allocator := s, extra := x },
+        R1Z.PV_OWN_Operations.Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+R1Z.PV_OWNB_CursorExit.error_success {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X)
+  (h : (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.ok ()) :
+  R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+    { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+      calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }
+R1Z.PV_OWNB_CursorExit.error_failure {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e f : E) (w : R1Z.PV_OWN_Operations.State S X)
+  (h : (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.fail f) :
+  R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+    { outcome := R1Z.PV_W_Threading.Outcome.fail f, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+      calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }
+R1Z.PV_OWNB_CursorExit.error_divergence {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X)
+  (h : (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.div) :
+  R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+    { outcome := R1Z.PV_W_Threading.Outcome.div, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+      calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }
+R1Z.PV_OWNB_CursorExit.abort_exact {S X E A : Type} (handler : R1Z.PV_OWN_Operations.Action S X E A)
+  (w : R1Z.PV_OWN_Operations.State S X) : R1Z.PV_OWNB_CursorExit.abort handler w = handler w
+R1Z.PV_OWNB_CursorRead.read (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (notEnd : q.read < q.length) : R1Z.PV_OWNB_LinkCodec.NativeView q.cell (q.read * 8) (q.source q.read)
+R1Z.PV_OWNB_CursorRead.advance (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (notEnd : q.read < q.length) : R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_Cursor.advance q)
+R1Z.PV_OWNB_CursorStart.valid (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (c : R1Z.PV_OWN_Heap.Cell) (len cap : Nat) (values : Nat → R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWN_Heap.Writable m owner t c) (size : c.size = cap * 8) (align : c.alignment = 2) (bound : len ≤ cap)
+  (initialized : ∀ (i : Nat), i < len → R1Z.PV_OWNB_LinkCodec.NativeView c (i * 8) (values i)) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_CursorStart.start m t owner c len cap values)
+R1Z.PV_OWNB_CursorTransfer.owned (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (dst : Nat)
+  (empty : q.memory.slots dst = none) (distinct : dst ≠ q.owner) :
+  R1Z.PV_OWN_Heap.Owned (R1Z.PV_OWN_CheckedMove.execute (R1Z.PV_OWNB_CursorTransfer.command q h dst empty distinct)) dst
+    q.token
+    (have __src := q.cell;
+    { size := __src.size, alignment := __src.alignment, capacity := __src.capacity, contents := __src.contents,
+      owner := dst, live := __src.live })
+R1Z.PV_OWNB_CursorTransfer.source_consumed (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (dst : Nat)
+  (empty : q.memory.slots dst = none) (distinct : dst ≠ q.owner) :
+  (R1Z.PV_OWN_CheckedMove.execute (R1Z.PV_OWNB_CursorTransfer.command q h dst empty distinct)).slots q.owner = none
+R1Z.PV_OWNB_FilterComplete.complete (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  have final := R1Z.PV_OWNB_FilterFold.run keep (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧ final.read = final.length
+R1Z.PV_OWNB_FilterFold.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterFold.run keep n q).read = q.read + n
+R1Z.PV_OWNB_FilterFold.length (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterFold.run keep n q).length = q.length
+R1Z.PV_OWNB_FilterFold.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (enough : q.read + n ≤ q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_FilterFold.run keep n q)
+R1Z.PV_OWNB_FilterIdentity.source (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterFold.run keep n q).source = q.source
+R1Z.PV_OWNB_FilterIdentity.generation (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterFold.run keep n q).token = q.token ∧
+    (R1Z.PV_OWNB_FilterFold.run keep n q).memory.generations = q.memory.generations
+R1Z.PV_OWNB_FilterResult.complete (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  have final := R1Z.PV_OWNB_FilterFold.run keep (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧
+    final.read = final.length ∧
+      final.token = q.token ∧
+        final.memory.generations = q.memory.generations ∧
+          R1Z.PV_OWNB_Prefix.values final =
+            R1Z.PV_OWNB_Prefix.values q ++
+              List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read))
+R1Z.PV_OWNB_FilterStep.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (more : q.read < q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_FilterStep.step keep q)
+R1Z.PV_OWNB_FilterStep.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterStep.step keep q).read = q.read + 1
+R1Z.PV_OWNB_FilterStep.generation (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterStep.step keep q).token = q.token ∧
+    (R1Z.PV_OWNB_FilterStep.step keep q).memory.generations = q.memory.generations
+R1Z.PV_OWNB_FilterValues.step (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_FilterStep.step keep q) =
+    R1Z.PV_OWNB_Prefix.values q ++ if keep (q.source q.read) = true then [q.source q.read] else []
+R1Z.PV_OWNB_FilterValues.source (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_FilterStep.step keep q).source = q.source
+R1Z.PV_OWNB_Kind00.read (raw : Nat → Option UInt8) (a b : UInt8) (h0 : raw 0 = some 0) (h1 : raw 1 = some a)
+  (h2 : raw 2 = some b) : R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.spongeCarry a b)
+R1Z.PV_OWNB_Kind01.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 1) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.ownerOutput
+R1Z.PV_OWNB_Kind02.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 2) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.nullifierKey
+R1Z.PV_OWNB_Kind03.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 3) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.inputSaltHead
+R1Z.PV_OWNB_Kind04.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 4) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.inputSaltTail
+R1Z.PV_OWNB_Kind05.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 5) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.privatePathCurrent a)
+R1Z.PV_OWNB_Kind06.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 6) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.privatePathLeft a)
+R1Z.PV_OWNB_Kind07.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 7) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.privatePathRight a)
+R1Z.PV_OWNB_Kind08.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 8) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.valueSource a)
+R1Z.PV_OWNB_Kind09.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 9) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.conservationInput
+R1Z.PV_OWNB_Kind10.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 10) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.conservationRecipient
+R1Z.PV_OWNB_Kind11.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 11) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.conservationChange
+R1Z.PV_OWNB_Kind12.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 12) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.conservationPartial
+R1Z.PV_OWNB_Kind13.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 13) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.inputSecondCommitment
+R1Z.PV_OWNB_Kind14.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 14) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.inputSelectedSide
+R1Z.PV_OWNB_Kind15.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 15) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.outputSecondCommitment
+R1Z.PV_OWNB_Kind16.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 16) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.outputPairFirst
+R1Z.PV_OWNB_Kind17.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 17) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.outputPairFirstWithdrawal
+R1Z.PV_OWNB_Kind18.read (raw : Nat → Option UInt8) (h0 : raw 0 = some 18) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some R1Z.PV_OWN_Link.Kind.outputPairSecond
+R1Z.PV_OWNB_Kind19.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 19) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.appendCurrentLeft a)
+R1Z.PV_OWNB_Kind20.read (raw : Nat → Option UInt8) (a : UInt8) (h0 : raw 0 = some 20) (h1 : raw 1 = some a) :
+  R1Z.PV_OWNB_KindCodec.decode raw = some (R1Z.PV_OWN_Link.Kind.appendCurrentRight a)
+R1Z.PV_OWNB_KindAgreement.read (k : R1Z.PV_OWN_Link.Kind) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (h : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_KindCodec.encode k) raw) : R1Z.PV_OWNB_KindCodec.decode raw = some k
+R1Z.PV_OWNB_KindAgreement.unique (a b : R1Z.PV_OWN_Link.Kind) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (ha : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_KindCodec.encode a) raw)
+  (hb : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_KindCodec.encode b) raw) : a = b
+R1Z.PV_OWNB_KindBound.bounded (k : R1Z.PV_OWN_Link.Kind) (i : Nat) (b : UInt8)
+  (h : R1Z.PV_OWNB_KindCodec.encode k i = some b) : i < 3
+R1Z.PV_OWNB_KindCodec.roundtrip (k : R1Z.PV_OWN_Link.Kind) :
+  R1Z.PV_OWNB_KindCodec.decode (R1Z.PV_OWNB_KindCodec.encode k) = some k
+R1Z.PV_OWNB_LinkBound.bounded (v : R1Z.PV_OWN_Link.Link) (i : Nat) (b : UInt8)
+  (h : R1Z.PV_OWNB_LinkBytes.encode v i = some b) : i < 8
+R1Z.PV_OWNB_LinkBytes.producer (v : R1Z.PV_OWN_Link.Link) (i : Nat) (h : i < 2) :
+  R1Z.PV_OWNB_LinkBytes.encode v i = R1Z.PV_OWN_U16.encode v.producer i
+R1Z.PV_OWNB_LinkBytes.consumer (v : R1Z.PV_OWN_Link.Link) (i : Nat) (h : i < 2) :
+  R1Z.PV_OWNB_LinkBytes.encode v (2 + i) = R1Z.PV_OWN_U16.encode v.consumer i
+R1Z.PV_OWNB_LinkBytes.kind (v : R1Z.PV_OWN_Link.Link) (i : Nat) (h : i < 3) :
+  R1Z.PV_OWNB_LinkBytes.encode v (4 + i) = R1Z.PV_OWNB_KindCodec.encode v.kind i
+R1Z.PV_OWNB_LinkBytes.trailing_padding (v : R1Z.PV_OWN_Link.Link) (i : Nat) (h : 7 ≤ i) :
+  R1Z.PV_OWNB_LinkBytes.encode v i = none
+R1Z.PV_OWNB_LinkCodec.injective (a b : R1Z.PV_OWN_Link.Link)
+  (h : ∀ (i : Nat), i < 8 → R1Z.PV_OWNB_LinkBytes.encode a i = R1Z.PV_OWNB_LinkBytes.encode b i) : a = b
+R1Z.PV_OWNB_LinkCodec.unique (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (a b : R1Z.PV_OWN_Link.Link)
+  (ha : R1Z.PV_OWNB_LinkCodec.NativeView c s a) (hb : R1Z.PV_OWNB_LinkCodec.NativeView c s b) : a = b
+R1Z.PV_OWNB_LinkCodec.exact_to_native (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWN_View.Represents R1Z.PV_OWNB_LinkCodec.codec c s v) : R1Z.PV_OWNB_LinkCodec.NativeView c s v
+R1Z.PV_OWNB_LinkFields.producer (v : R1Z.PV_OWN_Link.Link) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (h : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) raw) :
+  R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode v.producer) fun i => raw i
+R1Z.PV_OWNB_LinkFields.consumer (v : R1Z.PV_OWN_Link.Link) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (h : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) raw) :
+  R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode v.consumer) fun i => raw (2 + i)
+R1Z.PV_OWNB_LinkFields.kind (v : R1Z.PV_OWN_Link.Link) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (h : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) raw) :
+  R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_KindCodec.encode v.kind) fun i => raw (4 + i)
+R1Z.PV_OWNB_LinkUnique.unique (a b : R1Z.PV_OWN_Link.Link) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (ha : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode a) raw)
+  (hb : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode b) raw) : a = b
+R1Z.PV_OWNB_NoDoubleCleanup.no_second_call {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) :
+  have first := R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x };
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q first.world).calls = []
+R1Z.PV_OWNB_Padding.refl (a : R1Z.PV_OWN_Bytes.Bytes) : R1Z.PV_OWNB_Padding.Agrees a a
+R1Z.PV_OWNB_Padding.trans (a b c : R1Z.PV_OWN_Bytes.Bytes) (hab : R1Z.PV_OWNB_Padding.Agrees a b)
+  (hbc : R1Z.PV_OWNB_Padding.Agrees b c) : R1Z.PV_OWNB_Padding.Agrees a c
+R1Z.PV_OWNB_Padding.normalization (a b : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Padding.Agrees a b) :
+  R1Z.PV_OWNB_Padding.normalize a b = a
+R1Z.PV_OWNB_Padding.of_normalization (a b : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNB_Padding.normalize a b = a) :
+  R1Z.PV_OWNB_Padding.Agrees a b
+R1Z.PV_OWNB_PaddingBridge.exact (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWN_View.Represents R1Z.PV_OWNB_LinkCodec.codec (R1Z.PV_OWNB_PaddingBridge.abstractCell c s v) s v
+R1Z.PV_OWNB_PaddingBridge.header (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) :
+  (R1Z.PV_OWNB_PaddingBridge.abstractCell c s v).size = c.size ∧
+    (R1Z.PV_OWNB_PaddingBridge.abstractCell c s v).alignment = c.alignment ∧
+      (R1Z.PV_OWNB_PaddingBridge.abstractCell c s v).owner = c.owner ∧
+        (R1Z.PV_OWNB_PaddingBridge.abstractCell c s v).live = c.live
+R1Z.PV_OWNB_PaddingStore.written (required actual : R1Z.PV_OWN_Bytes.Bytes) (width : Nat) (c : R1Z.PV_OWN_Heap.Cell)
+  (start : Nat) (fits : R1Z.PV_OWN_Bytes.Fits c start width)
+  (bounded : ∀ (i : Nat) (b : UInt8), required i = some b → i < width)
+  (h : R1Z.PV_OWNB_Padding.Agrees required actual) :
+  R1Z.PV_OWNB_PaddingStore.Represents required width (R1Z.PV_OWN_Bytes.store c start width actual) start
+R1Z.PV_OWNB_PaddingStore.canonical (required : R1Z.PV_OWN_Bytes.Bytes) (width : Nat) (c : R1Z.PV_OWN_Heap.Cell)
+  (start : Nat) (fits : R1Z.PV_OWN_Bytes.Fits c start width)
+  (bounded : ∀ (i : Nat) (b : UInt8), required i = some b → i < width) :
+  R1Z.PV_OWNB_PaddingStore.Represents required width (R1Z.PV_OWN_Bytes.store c start width required) start
+R1Z.PV_OWNB_Prefix.length (q : R1Z.PV_OWNB_Cursor.Cursor) : (R1Z.PV_OWNB_Prefix.values q).length = q.written
+R1Z.PV_OWNB_Prefix.advance (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_Cursor.advance q) = R1Z.PV_OWNB_Prefix.values q
+R1Z.PV_OWNB_Prefix.sink (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_Cursor.sink q v) = R1Z.PV_OWNB_Prefix.values q ++ [v]
+R1Z.PV_OWNB_ReadSnapshot.represented (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (more : q.read < q.length) :
+  R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode (q.source q.read)) (R1Z.PV_OWNB_ReadSnapshot.bytes q)
+R1Z.PV_OWNB_RegionFrame.disjoint (required value : R1Z.PV_OWN_Bytes.Bytes) (c : R1Z.PV_OWN_Heap.Cell) (s n t m : Nat)
+  (h : R1Z.PV_OWNB_PaddingStore.Represents required n c s)
+  (bound : ∀ (i : Nat) (b : UInt8), required i = some b → i < n) (apart : s + n ≤ t ∨ t + m ≤ s) :
+  R1Z.PV_OWNB_PaddingStore.Represents required n (R1Z.PV_OWN_Bytes.store c t m value) s
+R1Z.PV_OWNB_Relocate.write (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) (p q : UInt16)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_Relocate.cell c s p q) s (R1Z.PV_OWN_Link.relocate v p q)
+R1Z.PV_OWNB_Relocate.pad (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (p q : UInt16) (i : Nat) (hi : 4 ≤ i) :
+  (R1Z.PV_OWNB_Relocate.cell c s p q).contents (s + i) = c.contents (s + i)
+R1Z.PV_OWNB_SinkNew.initialized (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (room : q.written < q.read) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_Cursor.sink q v).cell (q.written * 8) v
+R1Z.PV_OWNB_SinkOwnership.owned (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  R1Z.PV_OWN_Heap.Writable (R1Z.PV_OWNB_Cursor.sink q v).memory q.owner q.token (R1Z.PV_OWNB_Cursor.sink q v).cell
+R1Z.PV_OWNB_SinkOwnership.generation (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) :
+  (R1Z.PV_OWNB_Cursor.sink q v).memory.generations = q.memory.generations ∧
+    (R1Z.PV_OWNB_Cursor.sink q v).token = q.token
+R1Z.PV_OWNB_SinkPrefix.frame (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (i : Nat) (hi : i < q.written) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_Cursor.sink q v).cell (i * 8) (q.output i)
+R1Z.PV_OWNB_SinkUnread.frame (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (room : q.written < q.read) (i : Nat) (lo : q.read ≤ i) (hi : i < q.length) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNB_Cursor.sink q v).cell (i * 8) (q.source i)
+R1Z.PV_OWNB_SinkValid.valid (q : R1Z.PV_OWNB_Cursor.Cursor) (v : R1Z.PV_OWN_Link.Link) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (room : q.written < q.read) : R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_Cursor.sink q v)
+R1Z.PV_OWNB_SnapshotFold.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (enough : q.read + n ≤ q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_SnapshotFold.run keep n q)
+R1Z.PV_OWNB_SnapshotFold.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotFold.run keep n q).read = q.read + n
+R1Z.PV_OWNB_SnapshotResult.complete (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  have final := R1Z.PV_OWNB_SnapshotFold.run keep (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid final ∧
+    final.read = q.length ∧
+      R1Z.PV_OWNB_Prefix.values final =
+        R1Z.PV_OWNB_Prefix.values q ++
+          List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read))
+R1Z.PV_OWNB_SnapshotStep.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (more : q.read < q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNB_SnapshotStep.step keep q)
+R1Z.PV_OWNB_SnapshotStep.advances (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).read = q.read + 1
+R1Z.PV_OWNB_SnapshotStep.length (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).length = q.length
+R1Z.PV_OWNB_SnapshotValues.step (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_SnapshotStep.step keep q) =
+    R1Z.PV_OWNB_Prefix.values q ++ if keep (q.source q.read) = true then [q.source q.read] else []
+R1Z.PV_OWNB_SnapshotValues.source (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNB_SnapshotStep.step keep q).source = q.source
+R1Z.PV_OWNB_SnapshotValues.values (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_SnapshotFold.run keep n q) =
+    R1Z.PV_OWNB_Prefix.values q ++ R1Z.PV_OWNB_ValueFold.selected keep q.source q.read n
+R1Z.PV_OWNB_U16Agreement.unique (a b : UInt16) (raw : R1Z.PV_OWN_Bytes.Bytes)
+  (ha : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode a) raw)
+  (hb : R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWN_U16.encode b) raw) : a = b
+R1Z.PV_OWNB_ValueFold.filter (keep : R1Z.PV_OWN_Link.Link → Bool) (source : Nat → R1Z.PV_OWN_Link.Link)
+  (start n : Nat) :
+  R1Z.PV_OWNB_ValueFold.selected keep source start n = List.filter keep (R1Z.PV_OWNB_ValueFold.input source start n)
+R1Z.PV_OWNB_ValueFold.values (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNB_Prefix.values (R1Z.PV_OWNB_FilterFold.run keep n q) =
+    R1Z.PV_OWNB_Prefix.values q ++ R1Z.PV_OWNB_ValueFold.selected keep q.source q.read n
+R1Z.PV_OWNB_WriteConsumer.write (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) (p : UInt16)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWN_Bytes.store c (s + 2) 2 (R1Z.PV_OWN_U16.encode p)) s
+    { kind := v.kind, producer := v.producer, consumer := p }
+R1Z.PV_OWNB_WriteProducer.write (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link) (p : UInt16)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWN_Bytes.store c s 2 (R1Z.PV_OWN_U16.encode p)) s
+    { kind := v.kind, producer := p, consumer := v.consumer }
+theorem R1Z.PV_OWNB_ActualResult.complete : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (bytes : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    (∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (bytes i v)) →
+      have final := R1Z.PV_OWNB_ActualFold.run keep bytes (q.length - q.read) q;
+      R1Z.PV_OWNB_Cursor.Valid final ∧
+        final.read = final.length ∧
+          final.token = q.token ∧
+            final.memory.generations = q.memory.generations ∧
+              R1Z.PV_OWNB_Prefix.values final =
+                R1Z.PV_OWNB_Prefix.values q ++
+                  List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)) :=
+fun q keep bytes h copy =>
+  And.casesOn (R1Z.PV_OWNB_ActualComplete.complete keep bytes q h copy) fun hv hd =>
+    And.casesOn (R1Z.PV_OWNB_ActualIdentity.generation keep bytes (q.length - q.read) q) fun ht hg =>
+      ⟨hv,
+        ⟨hd,
+          ⟨ht,
+            ⟨hg,
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      _a =
+                        R1Z.PV_OWNB_Prefix.values q ++
+                          List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+                    (R1Z.PV_OWNB_ActualValues.values keep bytes (q.length - q.read) q)))
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        R1Z.PV_OWNB_Prefix.values q ++ _a =
+                          R1Z.PV_OWNB_Prefix.values q ++
+                            List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+                      (R1Z.PV_OWNB_ValueFold.filter keep q.source q.read (q.length - q.read))))
+                  (Eq.refl
+                    (R1Z.PV_OWNB_Prefix.values q ++
+                      List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))))⟩⟩⟩⟩
+'R1Z.PV_OWNB_ActualResult.complete' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_SnapshotResult.complete : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    have final := R1Z.PV_OWNB_SnapshotFold.run keep (q.length - q.read) q;
+    R1Z.PV_OWNB_Cursor.Valid final ∧
+      final.read = q.length ∧
+        R1Z.PV_OWNB_Prefix.values final =
+          R1Z.PV_OWNB_Prefix.values q ++
+            List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)) :=
+fun q keep h =>
+  have hv := h;
+  ⟨R1Z.PV_OWNB_SnapshotFold.valid keep (q.length - q.read) q hv
+      (Decidable.byContradiction fun a => R1Z.PV_OWNB_SnapshotResult.complete._proof_1 q h a),
+    ⟨Eq.mpr (id (congrArg (fun _a => _a = q.length) (R1Z.PV_OWNB_SnapshotFold.advances keep (q.length - q.read) q)))
+        (have le := h.right.right.right.right.left;
+        Decidable.byContradiction fun a => R1Z.PV_OWNB_SnapshotResult.complete._proof_2 q h a),
+      Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a =
+                R1Z.PV_OWNB_Prefix.values q ++
+                  List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+            (R1Z.PV_OWNB_SnapshotValues.values keep (q.length - q.read) q)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                R1Z.PV_OWNB_Prefix.values q ++ _a =
+                  R1Z.PV_OWNB_Prefix.values q ++
+                    List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))
+              (R1Z.PV_OWNB_ValueFold.filter keep q.source q.read (q.length - q.read))))
+          (Eq.refl
+            (R1Z.PV_OWNB_Prefix.values q ++
+              List.filter keep (R1Z.PV_OWNB_ValueFold.input q.source q.read (q.length - q.read)))))⟩⟩
+'R1Z.PV_OWNB_SnapshotResult.complete' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_LinkCodec.unique : ∀ (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (a b : R1Z.PV_OWN_Link.Link),
+  R1Z.PV_OWNB_LinkCodec.NativeView c s a → R1Z.PV_OWNB_LinkCodec.NativeView c s b → a = b :=
+fun c s a b ha hb => R1Z.PV_OWNB_LinkUnique.unique a b (fun i => c.contents (s + i)) ha.right hb.right
+'R1Z.PV_OWNB_LinkCodec.unique' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNB_CursorExit.error_success : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.ok () →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e w h =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b :=
+                    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) x
+                      (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world;
+                  { outcome := b.outcome, world := b.world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e,
+                    world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div,
+                    world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+                    calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls })
+              h)
+            (congrArg
+              (R1Z.PV_W_Threading.Run.mk (R1Z.PV_W_Threading.Outcome.fail e)
+                (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world)
+              (List.append_nil (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls))))
+        { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+          calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls })
+      (eq_self
+        { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+          calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }))
+'R1Z.PV_OWNB_CursorExit.error_success' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_CursorExit.error_failure : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e f : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.fail f →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.fail f, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e f w h =>
+  R1Z.PV_W_Threading.bind_fail (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q)
+    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) w f h
+'R1Z.PV_OWNB_CursorExit.error_failure' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_CursorExit.error_divergence : ∀ {S X E A : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (e : E) (w : R1Z.PV_OWN_Operations.State S X),
+  (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = R1Z.PV_W_Threading.Outcome.div →
+    R1Z.PV_OWNB_CursorExit.error dealloc q e w =
+      { outcome := R1Z.PV_W_Threading.Outcome.div, world := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
+        calls := (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w).calls } :=
+fun {S X E A} dealloc q e w h =>
+  R1Z.PV_W_Threading.bind_div (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q)
+    (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail e)) w h
+'R1Z.PV_OWNB_CursorExit.error_divergence' depends on axioms: [propext]
+theorem R1Z.PV_OWNB_NoDoubleCleanup.no_second_call : ∀ {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    ∀ (s : S) (x : X),
+      have first := R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x };
+      (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q first.world).calls = [] :=
+fun {S X E} dealloc q h s x =>
+  have consumed := R1Z.PV_OWNB_CleanupConsumed.consumed dealloc q h s x;
+  have empty := fun w hz =>
+    of_eq_true
+      (Eq.trans
+        (congrFun'
+          (congrArg Eq
+            (congrArg R1Z.PV_W_Threading.Run.calls
+              (congrArg
+                (fun x =>
+                  match x with
+                  | none =>
+                    { outcome := R1Z.PV_W_Threading.Outcome.ok (),
+                      world :=
+                        { memory := R1Z.PV_OWN_Operations.take q.owner w.memory, allocator := w.allocator,
+                          extra := w.extra },
+                      calls := [] }
+                  | some t =>
+                    (fun t => R1Z.PV_OWN_Operations.dropVecPod dealloc t q.cell) t
+                      { memory := R1Z.PV_OWN_Operations.take q.owner w.memory, allocator := w.allocator,
+                        extra := w.extra })
+                hz)))
+          [])
+        (eq_self []));
+  empty (R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world consumed
+'R1Z.PV_OWNB_NoDoubleCleanup.no_second_call' depends on axioms: [propext]

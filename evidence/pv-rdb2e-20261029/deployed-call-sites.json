@@ -1,0 +1,123 @@
+{
+  "source_revision": "26c7d5f66d649f52032ff65ad7346b7eefed657b",
+  "rows": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/lib.rs",
+      "source_sha256": "5bc994bdd1cb9b6dbff95222e59ade14d83c4adaf46b7011f126156c88957245",
+      "blob": "8238667ed62141b80fcf7e924789a3ee6697e5ff",
+      "sites": [
+        {
+          "line": 4,
+          "text": "pub mod sampler;"
+        },
+        {
+          "line": 18,
+          "text": "pub mod transcript;"
+        },
+        {
+          "line": 36,
+          "text": "#[cfg(feature=\"prover\")] mod host_transcript;"
+        },
+        {
+          "line": 70,
+          "text": "#[cfg(feature=\"prover\")] mod host_sampler;"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/sampler.rs",
+      "source_sha256": "d7bd77dd4956e262cc21c381ec7eb5e855106375ed71326287d8fadf756425d0",
+      "blob": "50b7fca7d0809e147cf4965d1d4c479e944daf3c",
+      "sites": [
+        {
+          "line": 102,
+          "text": "pub fn ordinary_sample(block: &[u8; 32]) -> WideExact {"
+        },
+        {
+          "line": 111,
+          "text": "pub fn gamma_sample(block: &[u8; 32]) -> WideExact {"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_sampler.rs",
+      "source_sha256": "93ea9e14bafd8b54ae93e399c7ef7622940bb925218d86935b5aa940983817a2",
+      "blob": "cc76579dbb35793ff7040a55df5570db7fccbcf8",
+      "sites": [
+        {
+          "line": 52,
+          "text": "pub fn ordinary_sample(block: &[u8; 32]) -> WideExact {"
+        },
+        {
+          "line": 61,
+          "text": "pub fn gamma_sample(block: &[u8; 32]) -> WideExact {"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/transcript.rs",
+      "source_sha256": "927150f49e13feecd85ae83a46cca3f3ffdfb670346ff1846df928a6b6102889",
+      "blob": "52186fb6893f92155936147aa1c79e9b47bc2109",
+      "sites": [
+        {
+          "line": 25,
+          "text": "        let out=if nonzero {crate::sampler::gamma_sample(&block)} else {crate::sampler::ordinary_sample(&block)};"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_transcript.rs",
+      "source_sha256": "69b38d721e7037d3bb9d6c9ff97bd1ce6b48847681fedd28be7fba6d330a7d7c",
+      "blob": "eaa1e323386d4baafda77b0c1bbecf5601579e95",
+      "sites": [
+        {
+          "line": 25,
+          "text": "        let out=if nonzero {crate::host_sampler::gamma_sample(&block)} else {crate::host_sampler::ordinary_sample(&block)};"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "source_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "blob": "dd3eb01f466f2b7f8c04f51c525ae7663484a24e",
+      "sites": [
+        {
+          "line": 7,
+          "text": "use crate::{transport::Variant,verifier::{Error},host_weights::{Weights,QUARTER,PERM},host_transcript::Transcript,host_commitment::{Commitment,CommitmentTime,EncodingDomain,PrivateSalts},host_semantic::{BuiltSemantics,Commitments},r1_wire::Error as SError};"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+      "source_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
+      "blob": "d8e2588d332cdb0e4fd1279e6cf3b810958a35e0",
+      "sites": [
+        {
+          "line": 6,
+          "text": "use crate::{transport::Variant,weights::{Weights,field,powers,QUARTER},transcript::Transcript};"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/dense.rs",
+      "source_sha256": "119af6c6982e352f5103c454775b390d1e1a1f1b239d3fb99fe328084973d88d",
+      "blob": "04aaa5912630b09c41e70a0c0f7a7246cbea7fde",
+      "sites": [
+        {
+          "line": 22,
+          "text": "    let x=if nonzero {crate::host_sampler::gamma_sample(&block)}else{crate::host_sampler::ordinary_sample(&block)};trace::value(4,row as usize,x);x"
+        }
+      ]
+    }
+  ],
+  "deployed_features": [
+    "r1p-check",
+    "aspis-r1-cost-probe/ct-host-prover"
+  ],
+  "profile": "release",
+  "toolchain": "rustc1.94.1",
+  "original_route": "verifier.rs uses transcript::Transcript::scalar \u2192 sampler::{gamma_sample,ordinary_sample}; original iterator/from_fn body. Both branches traced by nonzero bool.",
+  "host_route": "prover.rs uses host_transcript::Transcript::scalar \u2192 host_sampler::{gamma_sample,ordinary_sample}; dense.rs also calls host_sampler. Indexed source is distinct.",
+  "proof_credit": "source inventory and exact caller distinction; not an assertion of runtime reachability of every call in the complete deployment",
+  "remaining": "universal original raw mutable references/array construction \u2192 offset/current-store model and actual consuming verifier call law; do not substitute host callback merely because outputs agree on finite inputs"
+}

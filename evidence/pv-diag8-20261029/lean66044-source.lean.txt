@@ -1,0 +1,10 @@
+import PV_DIAG8_Round
+set_option autoImplicit false
+namespace PV_DIAG8
+def publishedIndex (attempts : Nat) : Nat := attempts - 1
+/-! Only exact guard implications are claimed until native constructor,
+query and publication invariants are associated on the honest family. -/
+
+theorem publication_selected_index (a : Nat) (h : 1 ≤ a ∧ a ≤ 8) : publishedIndex a < 8 := by unfold publishedIndex; omega
+#print axioms publication_selected_index
+end PV_DIAG8

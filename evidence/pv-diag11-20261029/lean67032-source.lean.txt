@@ -1,0 +1,32 @@
+import PV_DIAG11_Execution
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Explicit cleanup on ordinary Rust Result return. Abnormal leaf traces
+already include any unwind/abort cleanup; this function never invents it.
+The drop primitive is a Run, so its effects, panic, OOM and divergence survive. -/
+def dropReturned {V E A : Type} (r : Run V E A) (drop : Run V E Unit) : Run V E A :=
+ match r.exit with
+ | .ok a => pre r.events (seq drop (fun _ => ret a))
+ | .error e => pre r.events (seq drop (fun _ => ⟨[],.error e⟩))
+ | .panic => r | .oom => r | .abort => r | .diverge => r
+
+theorem drop_ok {V E A : Type} (es : List V) (a : A) (d : Run V E Unit) : dropReturned ⟨es,.ok a⟩ d=pre es (seq d (fun _ => ret a)) := rfl
+#print axioms drop_ok
+theorem drop_error {V E A : Type} (es : List V) (e : E) (d : Run V E Unit) : dropReturned (⟨es,.error e⟩ : Run V E A) d=pre es (seq d (fun _ => ⟨[],.error e⟩)) := rfl
+#print axioms drop_error
+theorem drop_normal_ok {V E A : Type} (es ds : List V) (a : A) : dropReturned (⟨es,.ok a⟩ : Run V E A) ⟨ds,.ok ()⟩=⟨es++ds,.ok a⟩ := by simp only [dropReturned,seq,ret,pre,List.append_nil]
+#print axioms drop_normal_ok
+theorem drop_normal_error {V E A : Type} (es ds : List V) (e : E) : dropReturned (⟨es,.error e⟩ : Run V E A) ⟨ds,.ok ()⟩=⟨es++ds,.error e⟩ := by simp only [dropReturned,seq,pre,List.append_nil]
+#print axioms drop_normal_error
+theorem drop_panics_after_ok {V E A : Type} (es ds : List V) (a : A) : dropReturned (⟨es,.ok a⟩ : Run V E A) ⟨ds,.panic⟩=⟨es++ds,.panic⟩ := rfl
+#print axioms drop_panics_after_ok
+theorem drop_panics_after_error {V E A : Type} (es ds : List V) (e : E) : dropReturned (⟨es,.error e⟩ : Run V E A) ⟨ds,.panic⟩=⟨es++ds,.panic⟩ := rfl
+#print axioms drop_panics_after_error
+theorem drop_abnormal_panic {V E A : Type} (es : List V) (d : Run V E Unit) : dropReturned (⟨es,.panic⟩ : Run V E A) d=⟨es,.panic⟩ := rfl
+#print axioms drop_abnormal_panic
+theorem drop_abnormal_oom {V E A : Type} (es : List V) (d : Run V E Unit) : dropReturned (⟨es,.oom⟩ : Run V E A) d=⟨es,.oom⟩ := rfl
+#print axioms drop_abnormal_oom
+theorem drop_abnormal_abort {V E A : Type} (es : List V) (d : Run V E Unit) : dropReturned (⟨es,.abort⟩ : Run V E A) d=⟨es,.abort⟩ := rfl
+#print axioms drop_abnormal_abort
+end PV_DIAG11

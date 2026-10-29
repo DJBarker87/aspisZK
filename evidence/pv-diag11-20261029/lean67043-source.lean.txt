@@ -1,0 +1,33 @@
+import PV_DIAG11_WriteAll
+import PV_DIAG11_Cleanup
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! std::fs::write::inner: File::create(path)?.write_all(contents),
+then the returned File temporary is dropped on ordinary Ok/Err. Path/content
+AsRef conversions and their evaluation precede this inner function. -/
+def fileWrite {V F : Type} (create : Run V IoError F)
+ (write : F → Run V IoError Unit) (close : F → Run V IoError Unit) : Run V IoError Unit :=
+ seq create (fun f => dropReturned (write f) (close f))
+
+theorem file_create_error {V F : Type} (es : List V) (e : IoError) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.error e⟩ w c=⟨es,.error e⟩ := rfl
+#print axioms file_create_error
+theorem file_created {V F : Type} (es : List V) (f : F) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.ok f⟩ w c=pre es (dropReturned (w f) (c f)) := rfl
+#print axioms file_created
+theorem file_success_order {V F : Type} (es ws cs : List V) (f : F) : fileWrite (⟨es,.ok f⟩ : Run V IoError F) (fun _ => ⟨ws,.ok ()⟩) (fun _ => ⟨cs,.ok ()⟩)=⟨es++(ws++cs),.ok ()⟩ := by simp only [fileWrite,seq,dropReturned,ret,pre,List.append_nil]
+#print axioms file_success_order
+theorem file_write_error_closes {V F : Type} (es ws cs : List V) (f : F) (e : IoError) : fileWrite (⟨es,.ok f⟩ : Run V IoError F) (fun _ => ⟨ws,.error e⟩) (fun _ => ⟨cs,.ok ()⟩)=⟨es++(ws++cs),.error e⟩ := by simp only [fileWrite,seq,dropReturned,pre,List.append_nil]
+#print axioms file_write_error_closes
+theorem file_create_panic {V F : Type} (es : List V) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.panic⟩ w c=⟨es,.panic⟩ := rfl
+#print axioms file_create_panic
+theorem file_create_oom {V F : Type} (es : List V) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.oom⟩ w c=⟨es,.oom⟩ := rfl
+#print axioms file_create_oom
+theorem file_create_abort {V F : Type} (es : List V) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.abort⟩ w c=⟨es,.abort⟩ := rfl
+#print axioms file_create_abort
+theorem file_create_diverge {V F : Type} (es : List V) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.diverge⟩ w c=⟨es,.diverge⟩ := rfl
+#print axioms file_create_diverge
+theorem file_write_panic_keeps_leaf_cleanup {V F : Type} (es ws : List V) (f : F) (c : F → Run V IoError Unit) : fileWrite ⟨es,.ok f⟩ (fun _ => ⟨ws,.panic⟩) c=⟨es++ws,.panic⟩ := rfl
+#print axioms file_write_panic_keeps_leaf_cleanup
+theorem file_write_prefix {V F : Type} (openFile : Run V IoError F) (w c : F → Run V IoError Unit) : ∃ xs, (fileWrite openFile w c).events=openFile.events++xs := seq_prefix openFile _
+#print axioms file_write_prefix
+end PV_DIAG11

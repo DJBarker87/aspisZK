@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62562/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62562/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_CursorExit.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorExit.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.19",
+  "peak_rss_kib": "487004",
+  "swap": "0",
+  "source_revision": "91bf38fef15e64827d35dde50f450260f7b670b5",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorExit.lean:20:13: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorExit.lean:19:55: error: unsolved goals\nS X E A : Type\ndealloc : Nat \u2192 Request \u2192 S \u2192 Outcome E Unit \u00d7 S\nq : Cursor\ne : E\nw : State S X\nh : (PV_OWNB_CursorCleanup.cleanup dealloc q w).outcome = Outcome.ok ()\n\u22a2 PV_W_Threading.bind (PV_OWNB_CursorCleanup.cleanup dealloc q) (fun x => lift (Outcome.fail e)) w =\n    { outcome := Outcome.fail e, world := (PV_OWNB_CursorCleanup.cleanup dealloc q w).world,\n      calls := (PV_OWNB_CursorCleanup.cleanup dealloc q w).calls }\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorExit.lean:20:18: warning: This simp argument is unused:\n  h\n\nHint: Omit it from the simp argument list.\n  simp [error, \u0332bind,h\u0335,\u0335 \u0332lift]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorExit.lean:20:20: warning: This simp argument is unused:\n  lift\n\nHint: Omit it from the simp argument list.\n  simp [\u0335e\u0335r\u0335r\u0335o\u0335r\u0335,\u0335b\u0335i\u0335n\u0335d\u0335,\u0335h\u0335,\u0335l\u0335i\u0335f\u0335t\u0335]\u0335[\u0332e\u0332r\u0332r\u0332o\u0332r\u0332,\u0332 \u0332b\u0332i\u0332n\u0332d\u0332,\u0332 \u0332h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWNB_CursorExit.error_success' depends on axioms: [sorryAx]\n'R1Z.PV_OWNB_CursorExit.error_failure' depends on axioms: [propext]\n'R1Z.PV_OWNB_CursorExit.error_divergence' depends on axioms: [propext]\n'R1Z.PV_OWNB_CursorExit.abort_exact' does not depend on any axioms\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62562,
+  "module": "R1Z/PV_OWNB_CursorExit",
+  "source_blob": "2ef7a48568a5ba9132dab92591c2d744bf0c1b2c",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNB_CursorExit.lean",
+  "source_sha256": "0f81f6def9b289e5badd9515f9bee5b79aac5562bb409aabfee53b16f98bb3a5",
+  "imports": [
+    "R1Z.PV_OWNB_CursorCleanup"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNB_CursorCleanup": "af340011c9655661bfcde8fe376c4ad73c8164e631fd190135f5d7ba9cd9dca1"
+  },
+  "deps_fingerprint": "e50b13c52db7454ceed75244f1ecf454e03cef1d498d3c6468397ed1274fd8c9"
+}

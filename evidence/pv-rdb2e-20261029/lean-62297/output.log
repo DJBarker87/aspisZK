@@ -1,0 +1,1548 @@
+theorem R1Z.PV_RDB2E_ShaHandles.complete_typed : ∀
+  (compress : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (f : R1Z.PV_RDB2E_ShaHandles.Frame) (valid : ↑(R1Z.PV_RDB2E_ShaHandles.position f) < 64),
+  (do
+      let after ← R1Z.PV_RDB2E_ShaHandles.finalize compress f valid
+      Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.forget after)) =
+    R1Z.PV_RDB2D_SHAState.finalize compress f.core f.buffer (R1Z.PV_RDB2E_ShaHandles.position f) f.output :=
+fun compress f valid =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (do
+              let after ← R1Z.PV_RDB2E_ShaHandles.finalize compress f valid
+              Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.forget after)) =
+            _a)
+        (R1Z.PV_RDB2D_SHAState.all_mutable_fields compress f.core f.buffer (R1Z.PV_RDB2E_ShaHandles.position f) f.output
+          valid)))
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Eq.trans
+              (Aeneas.Std.bind_assoc_eq
+                (R1Z.PV_DL_CompressionTrace.run compress
+                  (R1Z.PV_CBL_PaddingModel.blocks ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                    ↑(R1Z.PV_DL_LengthEncoding.suffix
+                        (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)))
+                  f.core.state)
+                (fun after =>
+                  Aeneas.Std.Result.ok
+                    { core := { state := after, block_len := f.core.block_len },
+                      buffer :=
+                        ⟨R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                            ↑(R1Z.PV_DL_LengthEncoding.suffix
+                                (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f)
+                                  f.core.block_len)),
+                          id
+                              (Eq.refl
+                                (R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                                  ↑(R1Z.PV_DL_LengthEncoding.suffix
+                                      (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f)
+                                        f.core.block_len)))) ▸
+                            R1Z.PV_RDB2E_ShaHandles.first._proof_3 f valid⟩,
+                      pos := 0#u8, output := R1Z.PV_DL_ShaSerialize.array after })
+                fun after =>
+                Aeneas.Std.Result.ok
+                  { core := after.core, buffer := ↑after.buffer, cursor := ↑after.pos, output := ↑after.output })
+              (congrArg
+                (bind
+                  (R1Z.PV_DL_CompressionTrace.run compress
+                    (R1Z.PV_CBL_PaddingModel.blocks ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                      ↑(R1Z.PV_DL_LengthEncoding.suffix
+                          (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)))
+                    f.core.state))
+                (funext fun x =>
+                  Aeneas.Std.bind_tc_ok
+                    { core := { state := x, block_len := f.core.block_len },
+                      buffer :=
+                        ⟨R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                            ↑(R1Z.PV_DL_LengthEncoding.suffix
+                                (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f)
+                                  f.core.block_len)),
+                          id
+                              (Eq.refl
+                                (R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                                  ↑(R1Z.PV_DL_LengthEncoding.suffix
+                                      (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f)
+                                        f.core.block_len)))) ▸
+                            R1Z.PV_RDB2E_ShaHandles.first._proof_3 f valid⟩,
+                      pos := 0#u8, output := R1Z.PV_DL_ShaSerialize.array x }
+                    fun y =>
+                    Aeneas.Std.Result.ok
+                      { core := y.core, buffer := ↑y.buffer, cursor := ↑y.pos, output := ↑y.output }))))
+          do
+          let after ←
+            R1Z.PV_DL_CompressionTrace.run compress
+                (R1Z.PV_CBL_PaddingModel.blocks ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                  ↑(R1Z.PV_DL_LengthEncoding.suffix
+                      (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)))
+                f.core.state
+          Aeneas.Std.Result.ok
+              { core := { state := after, block_len := f.core.block_len },
+                buffer :=
+                  R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                    ↑(R1Z.PV_DL_LengthEncoding.suffix
+                        (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)),
+                cursor := 0, output := ↑(R1Z.PV_DL_ShaSerialize.array after) }))
+      (Eq.refl do
+        let x ←
+          R1Z.PV_DL_CompressionTrace.run compress
+              (R1Z.PV_CBL_PaddingModel.blocks ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                ↑(R1Z.PV_DL_LengthEncoding.suffix
+                    (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)))
+              f.core.state
+        Aeneas.Std.Result.ok
+            { core := { state := x, block_len := f.core.block_len },
+              buffer :=
+                R1Z.PV_CBL_PaddingModel.first ↑f.buffer ↑(R1Z.PV_RDB2E_ShaHandles.position f)
+                  ↑(R1Z.PV_DL_LengthEncoding.suffix
+                      (R1Z.PV_CBL_ShaBitLength.bitLength (R1Z.PV_RDB2E_ShaHandles.position f) f.core.block_len)),
+              cursor := ↑0#u8, output := ↑(R1Z.PV_DL_ShaSerialize.array x) }))
+'R1Z.PV_RDB2E_ShaHandles.complete_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_ShaHandles.callback_run : ∀
+  (compress : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (blocks : List (List Aeneas.Std.U8)) (current : R1Z.PV_RDB2E_ShaHandles.Frame),
+  R1Z.PV_RDB2E_ShaHandles.callbackRun compress blocks current = do
+    let s ← R1Z.PV_DL_CompressionTrace.run compress blocks current.core.state
+    Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s) :=
+fun compress blocks current =>
+  List.rec (motive := fun blocks =>
+    ∀ (current : R1Z.PV_RDB2E_ShaHandles.Frame),
+      R1Z.PV_RDB2E_ShaHandles.callbackRun compress blocks current = do
+        let s ← R1Z.PV_DL_CompressionTrace.run compress blocks current.core.state
+        Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s))
+    (fun current => Eq.refl (R1Z.PV_RDB2E_ShaHandles.callbackRun compress [] current))
+    (fun block tail ih current =>
+      Eq.mpr
+        (id
+          (congr
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq (compress current.core.state block)
+                  (fun s => Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s)) fun after =>
+                  R1Z.PV_RDB2E_ShaHandles.callbackRun compress tail after)
+                (congrArg (bind (compress current.core.state block))
+                  (funext fun x =>
+                    Aeneas.Std.bind_tc_ok (R1Z.PV_RDB2E_ShaHandles.putState current x)
+                      (R1Z.PV_RDB2E_ShaHandles.callbackRun compress tail)))))
+            (Aeneas.Std.bind_assoc_eq (compress current.core.state block)
+              (fun next => R1Z.PV_DL_CompressionTrace.run compress tail next) fun s =>
+              Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s))))
+        ((Aeneas.Std.bind_eq_iff (compress current.core.state block)
+              (fun x => R1Z.PV_RDB2E_ShaHandles.callbackRun compress tail (R1Z.PV_RDB2E_ShaHandles.putState current x))
+              fun x => do
+              let s ← R1Z.PV_DL_CompressionTrace.run compress tail x
+              Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s)).mpr
+          fun s hs =>
+          Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  _a = do
+                    let s ← R1Z.PV_DL_CompressionTrace.run compress tail s
+                    Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s))
+                (ih (R1Z.PV_RDB2E_ShaHandles.putState current s))))
+            (Eq.refl do
+              let s_1 ←
+                R1Z.PV_DL_CompressionTrace.run compress tail (R1Z.PV_RDB2E_ShaHandles.putState current s).core.state
+              Aeneas.Std.Result.ok
+                  (R1Z.PV_RDB2E_ShaHandles.putState (R1Z.PV_RDB2E_ShaHandles.putState current s) s_1))))
+    blocks current
+'R1Z.PV_RDB2E_ShaHandles.callback_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_Dispatch.full_dispatch : ∀ (backend : R1Z.PV_RDB2E_Dispatch.Backend)
+  (soft shani : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (f : R1Z.PV_RDB2E_ShaHandles.Frame) (valid : ↑(R1Z.PV_RDB2E_ShaHandles.position f) < 64),
+  (do
+      let after ← R1Z.PV_RDB2E_ShaHandles.finalize (R1Z.PV_RDB2E_Dispatch.select backend soft shani) f valid
+      Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.forget after)) =
+    R1Z.PV_RDB2D_SHAState.finalize (R1Z.PV_RDB2E_Dispatch.select backend soft shani) f.core f.buffer
+      (R1Z.PV_RDB2E_ShaHandles.position f) f.output :=
+fun backend soft shani f valid =>
+  R1Z.PV_RDB2E_ShaHandles.complete_typed (R1Z.PV_RDB2E_Dispatch.select backend soft shani) f valid
+'R1Z.PV_RDB2E_Dispatch.full_dispatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_CBL_FallbackBlockTotal.total : ∀ (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (input : Aeneas.Std.Array Aeneas.Std.U32 16#usize),
+  R1Z.PV_CBL_FallbackTotal.Total (PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state input) :=
+fun state input =>
+  id
+    (id
+      (R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 0#usize)
+        (fun i => do
+          let i1 ← state.index_usize 1#usize
+          let i2 ← state.index_usize 4#usize
+          let i3 ← state.index_usize 5#usize
+          let i4 ← state.index_usize 2#usize
+          let i5 ← state.index_usize 3#usize
+          let i6 ← state.index_usize 6#usize
+          let i7 ← state.index_usize 7#usize
+          let i8 ← input.index_usize 3#usize
+          let i9 ← input.index_usize 2#usize
+          let i10 ← input.index_usize 1#usize
+          let i11 ← input.index_usize 0#usize
+          let i12 ← input.index_usize 7#usize
+          let i13 ← input.index_usize 6#usize
+          let i14 ← input.index_usize 5#usize
+          let i15 ← input.index_usize 4#usize
+          let i16 ← input.index_usize 11#usize
+          let i17 ← input.index_usize 10#usize
+          let i18 ← input.index_usize 9#usize
+          let i19 ← input.index_usize 8#usize
+          let i20 ← input.index_usize 15#usize
+          let i21 ← input.index_usize 14#usize
+          let i22 ← input.index_usize 13#usize
+          let i23 ← input.index_usize 12#usize
+          let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+          let a1 ← a.index_usize 0#usize
+          let t1 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.add
+                (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                a1
+          let cdgh ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                t1
+          let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+          let abef ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                cdgh t2
+          let a2 ← a.index_usize 1#usize
+          let t11 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.add
+                (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                a2
+          let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+          let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+          let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+          let a3 ← a.index_usize 2#usize
+          let t12 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.add
+                (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                a3
+          let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+          let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+          let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+          let a4 ← a.index_usize 3#usize
+          let t13 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.add
+                (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                a4
+          let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+          let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+          let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+          let w4 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+          let a5 ← a.index_usize 4#usize
+          let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+          let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+          let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+          let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+          let w0 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                w4
+          let a6 ← a.index_usize 5#usize
+          let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+          let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+          let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+          let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+          let w1 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                w4 w0
+          let a7 ← a.index_usize 6#usize
+          let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+          let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+          let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+          let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+          let w2 ←
+            PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                  (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                w4 w0 w1
+          let a8 ← a.index_usize 7#usize
+          let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+          let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+          let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+          let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+          let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+          let a9 ← a.index_usize 8#usize
+          let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+          let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+          let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+          let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+          let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+          let a10 ← a.index_usize 9#usize
+          let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+          let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+          let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+          let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+          let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+          let a11 ← a.index_usize 10#usize
+          let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+          let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+          let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+          let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+          let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+          let a12 ← a.index_usize 11#usize
+          let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+          let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+          let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+          let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+          let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+          let a13 ← a.index_usize 12#usize
+          let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+          let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+          let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+          let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+          let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+          let a14 ← a.index_usize 13#usize
+          let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+          let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+          let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+          let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+          let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+          let a15 ← a.index_usize 14#usize
+          let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+          let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+          let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+          let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+          let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+          let a16 ← a.index_usize 15#usize
+          let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+          let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+          let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+          let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+          let a17 ← abef15.index_usize 0#usize
+          let b ← abef15.index_usize 1#usize
+          let e ← abef15.index_usize 2#usize
+          let f ← abef15.index_usize 3#usize
+          let c ← cdgh15.index_usize 0#usize
+          let d ← cdgh15.index_usize 1#usize
+          let g ← cdgh15.index_usize 2#usize
+          let h ← cdgh15.index_usize 3#usize
+          let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i a17)
+          let state1 ← state.update 0#usize i24
+          let i25 ← state1.index_usize 1#usize
+          let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i25 b)
+          let state2 ← state1.update 1#usize i26
+          let i27 ← state2.index_usize 2#usize
+          let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i27 c)
+          let state3 ← state2.update 2#usize i28
+          let i29 ← state3.index_usize 3#usize
+          let i30 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i29 d)
+          let state4 ← state3.update 3#usize i30
+          let i31 ← state4.index_usize 4#usize
+          let i32 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i31 e)
+          let state5 ← state4.update 4#usize i32
+          let i33 ← state5.index_usize 5#usize
+          let i34 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i33 f)
+          let state6 ← state5.update 5#usize i34
+          let i35 ← state6.index_usize 6#usize
+          let i36 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i35 g)
+          let state7 ← state6.update 6#usize i36
+          let i37 ← state7.index_usize 7#usize
+          let i38 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i37 h)
+          state7.update 7#usize i38)
+        (R1Z.PV_CBL_FallbackTotal.read state 0#usize (of_decide_eq_true (id (Eq.refl true)))) fun i =>
+        R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 1#usize)
+          (fun i1 => do
+            let i2 ← state.index_usize 4#usize
+            let i3 ← state.index_usize 5#usize
+            let i4 ← state.index_usize 2#usize
+            let i5 ← state.index_usize 3#usize
+            let i6 ← state.index_usize 6#usize
+            let i7 ← state.index_usize 7#usize
+            let i8 ← input.index_usize 3#usize
+            let i9 ← input.index_usize 2#usize
+            let i10 ← input.index_usize 1#usize
+            let i11 ← input.index_usize 0#usize
+            let i12 ← input.index_usize 7#usize
+            let i13 ← input.index_usize 6#usize
+            let i14 ← input.index_usize 5#usize
+            let i15 ← input.index_usize 4#usize
+            let i16 ← input.index_usize 11#usize
+            let i17 ← input.index_usize 10#usize
+            let i18 ← input.index_usize 9#usize
+            let i19 ← input.index_usize 8#usize
+            let i20 ← input.index_usize 15#usize
+            let i21 ← input.index_usize 14#usize
+            let i22 ← input.index_usize 13#usize
+            let i23 ← input.index_usize 12#usize
+            let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+            let a1 ← a.index_usize 0#usize
+            let t1 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.add
+                  (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                  a1
+            let cdgh ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                  (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                  (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                  t1
+            let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+            let abef ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                  (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                  cdgh t2
+            let a2 ← a.index_usize 1#usize
+            let t11 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.add
+                  (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                  a2
+            let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+            let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+            let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+            let a3 ← a.index_usize 2#usize
+            let t12 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.add
+                  (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                  a3
+            let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+            let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+            let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+            let a4 ← a.index_usize 3#usize
+            let t13 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.add
+                  (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                  a4
+            let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+            let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+            let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+            let w4 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                  (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                  (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                  (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                  (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+            let a5 ← a.index_usize 4#usize
+            let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+            let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+            let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+            let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+            let w0 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                  (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                  (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                  (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                  w4
+            let a6 ← a.index_usize 5#usize
+            let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+            let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+            let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+            let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+            let w1 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                  (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                  (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                  w4 w0
+            let a7 ← a.index_usize 6#usize
+            let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+            let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+            let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+            let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+            let w2 ←
+              PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                  (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                    (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                  w4 w0 w1
+            let a8 ← a.index_usize 7#usize
+            let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+            let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+            let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+            let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+            let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+            let a9 ← a.index_usize 8#usize
+            let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+            let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+            let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+            let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+            let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+            let a10 ← a.index_usize 9#usize
+            let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+            let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+            let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+            let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+            let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+            let a11 ← a.index_usize 10#usize
+            let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+            let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+            let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+            let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+            let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+            let a12 ← a.index_usize 11#usize
+            let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+            let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+            let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+            let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+            let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+            let a13 ← a.index_usize 12#usize
+            let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+            let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+            let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+            let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+            let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+            let a14 ← a.index_usize 13#usize
+            let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+            let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+            let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+            let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+            let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+            let a15 ← a.index_usize 14#usize
+            let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+            let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+            let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+            let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+            let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+            let a16 ← a.index_usize 15#usize
+            let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+            let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+            let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+            let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+            let a17 ← abef15.index_usize 0#usize
+            let b ← abef15.index_usize 1#usize
+            let e ← abef15.index_usize 2#usize
+            let f ← abef15.index_usize 3#usize
+            let c ← cdgh15.index_usize 0#usize
+            let d ← cdgh15.index_usize 1#usize
+            let g ← cdgh15.index_usize 2#usize
+            let h ← cdgh15.index_usize 3#usize
+            let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i a17)
+            let state1 ← state.update 0#usize i24
+            let i25 ← state1.index_usize 1#usize
+            let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i25 b)
+            let state2 ← state1.update 1#usize i26
+            let i27 ← state2.index_usize 2#usize
+            let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i27 c)
+            let state3 ← state2.update 2#usize i28
+            let i29 ← state3.index_usize 3#usize
+            let i30 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i29 d)
+            let state4 ← state3.update 3#usize i30
+            let i31 ← state4.index_usize 4#usize
+            let i32 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i31 e)
+            let state5 ← state4.update 4#usize i32
+            let i33 ← state5.index_usize 5#usize
+            let i34 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i33 f)
+            let state6 ← state5.update 5#usize i34
+            let i35 ← state6.index_usize 6#usize
+            let i36 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i35 g)
+            let state7 ← state6.update 6#usize i36
+            let i37 ← state7.index_usize 7#usize
+            let i38 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i37 h)
+            state7.update 7#usize i38)
+          (R1Z.PV_CBL_FallbackTotal.read state 1#usize (of_decide_eq_true (id (Eq.refl true)))) fun i1 =>
+          R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 4#usize)
+            (fun i2 => do
+              let i3 ← state.index_usize 5#usize
+              let i4 ← state.index_usize 2#usize
+              let i5 ← state.index_usize 3#usize
+              let i6 ← state.index_usize 6#usize
+              let i7 ← state.index_usize 7#usize
+              let i8 ← input.index_usize 3#usize
+              let i9 ← input.index_usize 2#usize
+              let i10 ← input.index_usize 1#usize
+              let i11 ← input.index_usize 0#usize
+              let i12 ← input.index_usize 7#usize
+              let i13 ← input.index_usize 6#usize
+              let i14 ← input.index_usize 5#usize
+              let i15 ← input.index_usize 4#usize
+              let i16 ← input.index_usize 11#usize
+              let i17 ← input.index_usize 10#usize
+              let i18 ← input.index_usize 9#usize
+              let i19 ← input.index_usize 8#usize
+              let i20 ← input.index_usize 15#usize
+              let i21 ← input.index_usize 14#usize
+              let i22 ← input.index_usize 13#usize
+              let i23 ← input.index_usize 12#usize
+              let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+              let a1 ← a.index_usize 0#usize
+              let t1 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.add
+                    (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                    a1
+              let cdgh ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                    (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                    (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                    t1
+              let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+              let abef ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                    (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                    cdgh t2
+              let a2 ← a.index_usize 1#usize
+              let t11 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.add
+                    (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                    a2
+              let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+              let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+              let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+              let a3 ← a.index_usize 2#usize
+              let t12 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.add
+                    (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                    a3
+              let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+              let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+              let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+              let a4 ← a.index_usize 3#usize
+              let t13 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.add
+                    (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                    a4
+              let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+              let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+              let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+              let w4 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                    (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                    (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                    (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                    (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+              let a5 ← a.index_usize 4#usize
+              let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+              let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+              let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+              let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+              let w0 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                    (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                    (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                    (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                    w4
+              let a6 ← a.index_usize 5#usize
+              let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+              let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+              let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+              let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+              let w1 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                    (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                    (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                    w4 w0
+              let a7 ← a.index_usize 6#usize
+              let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+              let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+              let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+              let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+              let w2 ←
+                PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                    (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                      (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                    w4 w0 w1
+              let a8 ← a.index_usize 7#usize
+              let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+              let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+              let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+              let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+              let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+              let a9 ← a.index_usize 8#usize
+              let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+              let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+              let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+              let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+              let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+              let a10 ← a.index_usize 9#usize
+              let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+              let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+              let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+              let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+              let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+              let a11 ← a.index_usize 10#usize
+              let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+              let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+              let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+              let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+              let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+              let a12 ← a.index_usize 11#usize
+              let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+              let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+              let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+              let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+              let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+              let a13 ← a.index_usize 12#usize
+              let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+              let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+              let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+              let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+              let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+              let a14 ← a.index_usize 13#usize
+              let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+              let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+              let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+              let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+              let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+              let a15 ← a.index_usize 14#usize
+              let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+              let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+              let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+              let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+              let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+              let a16 ← a.index_usize 15#usize
+              let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+              let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+              let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+              let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+              let a17 ← abef15.index_usize 0#usize
+              let b ← abef15.index_usize 1#usize
+              let e ← abef15.index_usize 2#usize
+              let f ← abef15.index_usize 3#usize
+              let c ← cdgh15.index_usize 0#usize
+              let d ← cdgh15.index_usize 1#usize
+              let g ← cdgh15.index_usize 2#usize
+              let h ← cdgh15.index_usize 3#usize
+              let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i a17)
+              let state1 ← state.update 0#usize i24
+              let i25 ← state1.index_usize 1#usize
+              let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i25 b)
+              let state2 ← state1.update 1#usize i26
+              let i27 ← state2.index_usize 2#usize
+              let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i27 c)
+              let state3 ← state2.update 2#usize i28
+              let i29 ← state3.index_usize 3#usize
+              let i30 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i29 d)
+              let state4 ← state3.update 3#usize i30
+              let i31 ← state4.index_usize 4#usize
+              let i32 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i31 e)
+              let state5 ← state4.update 4#usize i32
+              let i33 ← state5.index_usize 5#usize
+              let i34 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i33 f)
+              let state6 ← state5.update 5#usize i34
+              let i35 ← state6.index_usize 6#usize
+              let i36 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i35 g)
+              let state7 ← state6.update 6#usize i36
+              let i37 ← state7.index_usize 7#usize
+              let i38 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i37 h)
+              state7.update 7#usize i38)
+            (R1Z.PV_CBL_FallbackTotal.read state 4#usize (of_decide_eq_true (id (Eq.refl true)))) fun i2 =>
+            R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 5#usize)
+              (fun i3 => do
+                let i4 ← state.index_usize 2#usize
+                let i5 ← state.index_usize 3#usize
+                let i6 ← state.index_usize 6#usize
+                let i7 ← state.index_usize 7#usize
+                let i8 ← input.index_usize 3#usize
+                let i9 ← input.index_usize 2#usize
+                let i10 ← input.index_usize 1#usize
+                let i11 ← input.index_usize 0#usize
+                let i12 ← input.index_usize 7#usize
+                let i13 ← input.index_usize 6#usize
+                let i14 ← input.index_usize 5#usize
+                let i15 ← input.index_usize 4#usize
+                let i16 ← input.index_usize 11#usize
+                let i17 ← input.index_usize 10#usize
+                let i18 ← input.index_usize 9#usize
+                let i19 ← input.index_usize 8#usize
+                let i20 ← input.index_usize 15#usize
+                let i21 ← input.index_usize 14#usize
+                let i22 ← input.index_usize 13#usize
+                let i23 ← input.index_usize 12#usize
+                let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+                let a1 ← a.index_usize 0#usize
+                let t1 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.add
+                      (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                      a1
+                let cdgh ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                      (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                      (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                      t1
+                let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+                let abef ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                      (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                      cdgh t2
+                let a2 ← a.index_usize 1#usize
+                let t11 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.add
+                      (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                      a2
+                let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+                let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+                let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+                let a3 ← a.index_usize 2#usize
+                let t12 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.add
+                      (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                      a3
+                let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+                let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+                let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+                let a4 ← a.index_usize 3#usize
+                let t13 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.add
+                      (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                      a4
+                let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+                let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+                let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+                let w4 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                      (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                      (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                      (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                      (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                let a5 ← a.index_usize 4#usize
+                let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+                let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+                let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+                let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+                let w0 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                      (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                      (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                      (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                      w4
+                let a6 ← a.index_usize 5#usize
+                let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+                let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+                let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+                let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+                let w1 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                      (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                      (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                      w4 w0
+                let a7 ← a.index_usize 6#usize
+                let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+                let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+                let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+                let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+                let w2 ←
+                  PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                      (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                        (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                      w4 w0 w1
+                let a8 ← a.index_usize 7#usize
+                let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+                let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+                let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+                let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+                let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+                let a9 ← a.index_usize 8#usize
+                let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+                let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+                let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+                let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+                let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+                let a10 ← a.index_usize 9#usize
+                let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+                let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+                let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+                let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+                let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+                let a11 ← a.index_usize 10#usize
+                let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+                let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+                let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+                let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+                let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+                let a12 ← a.index_usize 11#usize
+                let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+                let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+                let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+                let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+                let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+                let a13 ← a.index_usize 12#usize
+                let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+                let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+                let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+                let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+                let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+                let a14 ← a.index_usize 13#usize
+                let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+                let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+                let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+                let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+                let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+                let a15 ← a.index_usize 14#usize
+                let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+                let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+                let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+                let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+                let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+                let a16 ← a.index_usize 15#usize
+                let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+                let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+                let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+                let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+                let a17 ← abef15.index_usize 0#usize
+                let b ← abef15.index_usize 1#usize
+                let e ← abef15.index_usize 2#usize
+                let f ← abef15.index_usize 3#usize
+                let c ← cdgh15.index_usize 0#usize
+                let d ← cdgh15.index_usize 1#usize
+                let g ← cdgh15.index_usize 2#usize
+                let h ← cdgh15.index_usize 3#usize
+                let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i a17)
+                let state1 ← state.update 0#usize i24
+                let i25 ← state1.index_usize 1#usize
+                let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i25 b)
+                let state2 ← state1.update 1#usize i26
+                let i27 ← state2.index_usize 2#usize
+                let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i27 c)
+                let state3 ← state2.update 2#usize i28
+                let i29 ← state3.index_usize 3#usize
+                let i30 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i29 d)
+                let state4 ← state3.update 3#usize i30
+                let i31 ← state4.index_usize 4#usize
+                let i32 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i31 e)
+                let state5 ← state4.update 4#usize i32
+                let i33 ← state5.index_usize 5#usize
+                let i34 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i33 f)
+                let state6 ← state5.update 5#usize i34
+                let i35 ← state6.index_usize 6#usize
+                let i36 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i35 g)
+                let state7 ← state6.update 6#usize i36
+                let i37 ← state7.index_usize 7#usize
+                let i38 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i37 h)
+                state7.update 7#usize i38)
+              (R1Z.PV_CBL_FallbackTotal.read state 5#usize (of_decide_eq_true (id (Eq.refl true)))) fun i3 =>
+              R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 2#usize)
+                (fun i4 => do
+                  let i5 ← state.index_usize 3#usize
+                  let i6 ← state.index_usize 6#usize
+                  let i7 ← state.index_usize 7#usize
+                  let i8 ← input.index_usize 3#usize
+                  let i9 ← input.index_usize 2#usize
+                  let i10 ← input.index_usize 1#usize
+                  let i11 ← input.index_usize 0#usize
+                  let i12 ← input.index_usize 7#usize
+                  let i13 ← input.index_usize 6#usize
+                  let i14 ← input.index_usize 5#usize
+                  let i15 ← input.index_usize 4#usize
+                  let i16 ← input.index_usize 11#usize
+                  let i17 ← input.index_usize 10#usize
+                  let i18 ← input.index_usize 9#usize
+                  let i19 ← input.index_usize 8#usize
+                  let i20 ← input.index_usize 15#usize
+                  let i21 ← input.index_usize 14#usize
+                  let i22 ← input.index_usize 13#usize
+                  let i23 ← input.index_usize 12#usize
+                  let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+                  let a1 ← a.index_usize 0#usize
+                  let t1 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.add
+                        (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                        a1
+                  let cdgh ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                        (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                        (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                        t1
+                  let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+                  let abef ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                        (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                        cdgh t2
+                  let a2 ← a.index_usize 1#usize
+                  let t11 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.add
+                        (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                        a2
+                  let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+                  let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+                  let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+                  let a3 ← a.index_usize 2#usize
+                  let t12 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.add
+                        (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                        a3
+                  let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+                  let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+                  let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+                  let a4 ← a.index_usize 3#usize
+                  let t13 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.add
+                        (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                        a4
+                  let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+                  let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+                  let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+                  let w4 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                        (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                        (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                        (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                        (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                  let a5 ← a.index_usize 4#usize
+                  let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+                  let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+                  let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+                  let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+                  let w0 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                        (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                        (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                        (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                        w4
+                  let a6 ← a.index_usize 5#usize
+                  let t15 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w0 a6
+                  let cdgh5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh4 abef4 t15
+                  let t25 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t15
+                  let abef5 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef4 cdgh5 t25
+                  let w1 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                        (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                        (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                        w4 w0
+                  let a7 ← a.index_usize 6#usize
+                  let t16 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w1 a7
+                  let cdgh6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh5 abef5 t16
+                  let t26 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t16
+                  let abef6 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef5 cdgh6 t26
+                  let w2 ←
+                    PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                        (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                          (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                        w4 w0 w1
+                  let a8 ← a.index_usize 7#usize
+                  let t17 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w2 a8
+                  let cdgh7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh6 abef6 t17
+                  let t27 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t17
+                  let abef7 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef6 cdgh7 t27
+                  let w3 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w4 w0 w1 w2
+                  let a9 ← a.index_usize 8#usize
+                  let t18 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w3 a9
+                  let cdgh8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh7 abef7 t18
+                  let t28 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t18
+                  let abef8 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef7 cdgh8 t28
+                  let w41 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w0 w1 w2 w3
+                  let a10 ← a.index_usize 9#usize
+                  let t19 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w41 a10
+                  let cdgh9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh8 abef8 t19
+                  let t29 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t19
+                  let abef9 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef8 cdgh9 t29
+                  let w01 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w1 w2 w3 w41
+                  let a11 ← a.index_usize 10#usize
+                  let t110 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w01 a11
+                  let cdgh10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh9 abef9 t110
+                  let t210 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t110
+                  let abef10 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef9 cdgh10 t210
+                  let w11 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w2 w3 w41 w01
+                  let a12 ← a.index_usize 11#usize
+                  let t111 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w11 a12
+                  let cdgh11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh10 abef10 t111
+                  let t211 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t111
+                  let abef11 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef10 cdgh11 t211
+                  let w21 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w3 w41 w01 w11
+                  let a13 ← a.index_usize 12#usize
+                  let t112 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w21 a13
+                  let cdgh12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh11 abef11 t112
+                  let t212 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t112
+                  let abef12 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef11 cdgh12 t212
+                  let w31 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w41 w01 w11 w21
+                  let a14 ← a.index_usize 13#usize
+                  let t113 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w31 a14
+                  let cdgh13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh12 abef12 t113
+                  let t213 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t113
+                  let abef13 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef12 cdgh13 t213
+                  let w42 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w01 w11 w21 w31
+                  let a15 ← a.index_usize 14#usize
+                  let t114 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w42 a15
+                  let cdgh14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh13 abef13 t114
+                  let t214 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t114
+                  let abef14 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef13 cdgh14 t214
+                  let w02 ← PV_CBL_FallbackBlock.sha_fallback_reference.schedule w11 w21 w31 w42
+                  let a16 ← a.index_usize 15#usize
+                  let t115 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w02 a16
+                  let cdgh15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh14 abef14 t115
+                  let t215 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t115
+                  let abef15 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef14 cdgh15 t215
+                  let a17 ← abef15.index_usize 0#usize
+                  let b ← abef15.index_usize 1#usize
+                  let e ← abef15.index_usize 2#usize
+                  let f ← abef15.index_usize 3#usize
+                  let c ← cdgh15.index_usize 0#usize
+                  let d ← cdgh15.index_usize 1#usize
+                  let g ← cdgh15.index_usize 2#usize
+                  let h ← cdgh15.index_usize 3#usize
+                  let i24 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i a17)
+                  let state1 ← state.update 0#usize i24
+                  let i25 ← state1.index_usize 1#usize
+                  let i26 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i25 b)
+                  let state2 ← state1.update 1#usize i26
+                  let i27 ← state2.index_usize 2#usize
+                  let i28 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i27 c)
+                  let state3 ← state2.update 2#usize i28
+                  let i29 ← state3.index_usize 3#usize
+                  let i30 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i29 d)
+                  let state4 ← state3.update 3#usize i30
+                  let i31 ← state4.index_usize 4#usize
+                  let i32 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i31 e)
+                  let state5 ← state4.update 4#usize i32
+                  let i33 ← state5.index_usize 5#usize
+                  let i34 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i33 f)
+                  let state6 ← state5.update 5#usize i34
+                  let i35 ← state6.index_usize 6#usize
+                  let i36 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i35 g)
+                  let state7 ← state6.update 6#usize i36
+                  let i37 ← state7.index_usize 7#usize
+                  let i38 ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.wrapping_add i37 h)
+                  state7.update 7#usize i38)
+                (R1Z.PV_CBL_FallbackTotal.read state 2#usize (of_decide_eq_true (id (Eq.refl true)))) fun i4 =>
+                R1Z.PV_CBL_FallbackTotal.bind (state.index_usize 3#usize)
+                  (fun i5 => do
+                    let i6 ← state.index_usize 6#usize
+                    let i7 ← state.index_usize 7#usize
+                    let i8 ← input.index_usize 3#usize
+                    let i9 ← input.index_usize 2#usize
+                    let i10 ← input.index_usize 1#usize
+                    let i11 ← input.index_usize 0#usize
+                    let i12 ← input.index_usize 7#usize
+                    let i13 ← input.index_usize 6#usize
+                    let i14 ← input.index_usize 5#usize
+                    let i15 ← input.index_usize 4#usize
+                    let i16 ← input.index_usize 11#usize
+                    let i17 ← input.index_usize 10#usize
+                    let i18 ← input.index_usize 9#usize
+                    let i19 ← input.index_usize 8#usize
+                    let i20 ← input.index_usize 15#usize
+                    let i21 ← input.index_usize 14#usize
+                    let i22 ← input.index_usize 13#usize
+                    let i23 ← input.index_usize 12#usize
+                    let a ← PV_CBL_FallbackBlock.sha_fallback_consts.K32X4
+                    let a1 ← a.index_usize 0#usize
+                    let t1 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.add
+                          (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                          a1
+                    let cdgh ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                          (Aeneas.Std.Array.make 4#usize [i4, i5, i6, i7]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i4 i5 i6 i7))
+                          (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                          t1
+                    let t2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t1
+                    let abef ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2
+                          (Aeneas.Std.Array.make 4#usize [i, i1, i2, i3]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i i1 i2 i3))
+                          cdgh t2
+                    let a2 ← a.index_usize 1#usize
+                    let t11 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.add
+                          (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                          a2
+                    let cdgh1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh abef t11
+                    let t21 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t11
+                    let abef1 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef cdgh1 t21
+                    let a3 ← a.index_usize 2#usize
+                    let t12 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.add
+                          (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                          a3
+                    let cdgh2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh1 abef1 t12
+                    let t22 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t12
+                    let abef2 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef1 cdgh2 t22
+                    let a4 ← a.index_usize 3#usize
+                    let t13 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.add
+                          (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                          a4
+                    let cdgh3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh2 abef2 t13
+                    let t23 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t13
+                    let abef3 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef2 cdgh3 t23
+                    let w4 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.schedule
+                          (Aeneas.Std.Array.make 4#usize [i8, i9, i10, i11]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i8 i9 i10 i11))
+                          (Aeneas.Std.Array.make 4#usize [i12, i13, i14, i15]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i12 i13 i14 i15))
+                          (Aeneas.Std.Array.make 4#usize [i16, i17, i18, i19]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i16 i17 i18 i19))
+                          (Aeneas.Std.Array.make 4#usize [i20, i21, i22, i23]
+                            (PV_CBL_FallbackBlock.sha_fallback_consts.K32X4._proof_65 i20 i21 i22 i23))
+                    let a5 ← a.index_usize 4#usize
+                    let t14 ← PV_CBL_FallbackBlock.sha_fallback_reference.add w4 a5
+                    let cdgh4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 cdgh3 abef3 t14
+                    let t24 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256swap t14
+                    let abef4 ← PV_CBL_FallbackBlock.sha_fallback_reference.sha256_digest_round_x2 abef3 cdgh4 t24
+                    let w0 ←
+                      PV_CBL_FallbackBlock.sha_fallback_reference.schedule (Aeneas.Std.Array.make ⋯#usize ⋯ ⋯) ⋯ ⋯ ⋯
+                    let a6 ← ⋯
+                    let t15 ← ⋯
+                    let cdgh5 ← ⋯
+                    let t25 ← ⋯
+                    let abef5 ← ⋯
+                    let w1 ← ⋯
+                    let a7 ← ⋯
+                    let t16 ← ⋯
+                    let cdgh6 ← ⋯
+                    let t26 ← ⋯
+                    let abef6 ← ⋯
+                    let w2 ← ⋯
+                    let a8 ← ⋯
+                    let t17 ← ⋯
+                    let cdgh7 ← ⋯
+                    let t27 ← ⋯
+                    let abef7 ← ⋯
+                    let w3 ← ⋯
+                    let a9 ← ⋯
+                    let t18 ← ⋯
+                    let cdgh8 ← ⋯
+                    let t28 ← ⋯
+                    let abef8 ← ⋯
+                    let w41 ← ⋯
+                    let a10 ← ⋯
+                    let t19 ← ⋯
+                    let cdgh9 ← ⋯
+                    let t29 ← ⋯
+                    let abef9 ← ⋯
+                    let w01 ← ⋯
+                    let a11 ← ⋯
+                    let t110 ← ⋯
+                    let cdgh10 ← ⋯
+                    let t210 ← ⋯
+                    let abef10 ← ⋯
+                    let w11 ← ⋯
+                    let a12 ← ⋯
+                    let t111 ← ⋯
+                    let cdgh11 ← ⋯
+                    let t211 ← ⋯
+                    let abef11 ← ⋯
+                    let w21 ← ⋯
+                    let a13 ← ⋯
+                    let t112 ← ⋯
+                    let cdgh12 ← ⋯
+                    let t212 ← ⋯
+                    let abef12 ← ⋯
+                    let w31 ← ⋯
+                    let a14 ← ⋯
+                    let t113 ← ⋯
+                    let cdgh13 ← ⋯
+                    let t213 ← ⋯
+                    let abef13 ← ⋯
+                    let w42 ← ⋯
+                    let a15 ← ⋯
+                    let t114 ← ⋯
+                    let cdgh14 ← ⋯
+                    let t214 ← ⋯
+                    let abef14 ← ⋯
+                    let w02 ← ⋯
+                    let a16 ← ⋯
+                    let t115 ← ⋯
+                    let cdgh15 ← ⋯
+                    let t215 ← ⋯
+                    let abef15 ← ⋯
+                    let a17 ← ⋯
+                    let b ← ⋯
+                    let e ← ⋯
+                    let f ← ⋯
+                    let c ← ⋯
+                    let d ← ⋯
+                    let g ← ⋯
+                    let h ← ⋯
+                    let i24 ← ⋯
+                    let state1 ← ⋯
+                    let i25 ← ⋯
+                    let i26 ← ⋯
+                    let state2 ← ⋯
+                    let i27 ← ⋯
+                    let i28 ← ⋯
+                    let state3 ← ⋯
+                    let i29 ← ⋯
+                    let i30 ← ⋯
+                    let state4 ← ⋯
+                    let i31 ← ⋯
+                    let i32 ← ⋯
+                    let state5 ← ⋯
+                    let i33 ← ⋯
+                    let i34 ← ⋯
+                    let state6 ← ⋯
+                    let i35 ← ⋯
+                    let i36 ← ⋯
+                    let state7 ← ⋯
+                    let i37 ← ⋯
+                    let i38 ← ⋯
+                    ⋯)
+                  ⋯ ⋯))
+'R1Z.PV_CBL_FallbackBlockTotal.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_PointerOffsets.nonempty : ∀ (base front back : ℕ),
+  front ≤ back →
+    (R1Z.PV_RDB2E_PointerOffsets.address base front ≠ R1Z.PV_RDB2E_PointerOffsets.address base back ↔ front < back) :=
+fun base front back h =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a ↔ front < back)
+        (ne_eq (R1Z.PV_RDB2E_PointerOffsets.address base front) (R1Z.PV_RDB2E_PointerOffsets.address base back))))
+    (Eq.mpr
+      (id (congrArg (fun _a => ¬_a ↔ front < back) (propext (R1Z.PV_RDB2E_PointerOffsets.injective base front back))))
+      (Decidable.byContradiction fun a => R1Z.PV_RDB2E_PointerOffsets.nonempty._proof_1 front back h a))
+'R1Z.PV_RDB2E_PointerOffsets.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_FromFn.length : ∀ {S A : Type} (f : ℕ → S → Aeneas.Std.Result (A × S)) (n i : ℕ) (s after : S)
+  (out : List A), R1Z.PV_RDB2E_FromFn.build f n i s = Aeneas.Std.Result.ok (out, after) → out.length = n :=
+fun {S A} f n i s after out h =>
+  Nat.recAux (motive := fun n =>
+    ∀ (i : ℕ) (s after : S) (out : List A),
+      R1Z.PV_RDB2E_FromFn.build f n i s = Aeneas.Std.Result.ok (out, after) → out.length = n)
+    (fun i s after out h =>
+      Eq.mpr
+        (id
+          (congrArg (fun _a => _a.length = 0)
+            (Eq.symm
+              (Eq.mp (Eq.trans (Aeneas.Std.Result.ok.injEq ([], s) (out, after)) (Prod.mk.injEq [] s out after))
+                  h).left)))
+        (Eq.refl [].length))
+    (fun n ih i s after out h =>
+      Aeneas.Std.Result.casesOn (motive := fun t => f i s = t → out.length = n + 1) (f i s)
+        (fun result h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              let ⟨a, s1, hf⟩ := result
+              Aeneas.Std.Result.casesOn (motive := fun t =>
+                R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = t → out.length = n + 1)
+                (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)
+                (fun result h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      let ⟨tail, s2, hb⟩ := result
+                      have e :=
+                        congrArg Prod.fst
+                          (Aeneas.Std.Result.ok.inj
+                            (Eq.mp
+                              (congrFun'
+                                (congrArg Eq
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                    hb))
+                                (Aeneas.Std.Result.ok (out, after)))
+                              (Eq.mp
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                        | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                        | Aeneas.Std.Result.ok (a, s1) =>
+                                          match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                          | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                          | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                          | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                      hf))
+                                  (Aeneas.Std.Result.ok (out, after)))
+                                h)));
+                      Eq.mpr (id (congrArg (fun _a => _a.length = n + 1) (Eq.symm e)))
+                        (congrArg Nat.succ (ih (i + 1) s1 s2 tail hb)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (fun e h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hb))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                          (Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (a, s1) =>
+                                      match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hf))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            h)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (fun h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hb))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                          (Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (a, s1) =>
+                                      match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hf))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            h)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (fun e h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                            | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                            | Aeneas.Std.Result.ok (a, s1) =>
+                              match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                              | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                              | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                              | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                          hf))
+                      (Aeneas.Std.Result.ok (out, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                  h))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (fun h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                            | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                            | Aeneas.Std.Result.ok (a, s1) =>
+                              match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                              | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                              | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                              | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                          hf))
+                      (Aeneas.Std.Result.ok (out, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                  h))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (Eq.refl (f i s)))
+    n i s after out h
+'R1Z.PV_RDB2E_FromFn.length' depends on axioms: [propext]

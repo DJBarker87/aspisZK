@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_InclusiveLoop12227.lean:25:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (if _a then do
+        let next ← step state.1 state.2
+        Result.ok (ControlFlow.cont (next, state.2.wrapping_add 1#usize))
+      else Result.ok (ControlFlow.done state.1)) =
+      if state.2 < last.wrapping_add 1#usize then do
+        let next ← step state.1 state.2
+        let i ← lift (state.2.wrapping_add 1#usize)
+        Result.ok (ControlFlow.cont (next, i))
+      else Result.ok (ControlFlow.done state.1)
+Error: Application type mismatch: The argument
+  UScalarDecidableLE UScalarTy.Usize state.2 last
+has type
+  Decidable ((fun x1 x2 => x1 ≤ x2) state.2 last)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite (Result (ControlFlow (α × Usize) α)) _a (UScalarDecidableLE UScalarTy.Usize state.2 last)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+α : Type
+step : α → Usize → Result α
+last : Usize
+hl : ↑last < 24
+state : α × Usize
+hv : ↑(last.wrapping_add 1#usize) = ↑last + 1
+hg : (state.2 ≤ last) = (state.2 < last.wrapping_add 1#usize)
+⊢ (if state.2 ≤ last then do
+      let next ← step state.1 state.2
+      Result.ok (ControlFlow.cont (next, state.2.wrapping_add 1#usize))
+    else Result.ok (ControlFlow.done state.1)) =
+    if state.2 < last.wrapping_add 1#usize then do
+      let next ← step state.1 state.2
+      let i ← lift (state.2.wrapping_add 1#usize)
+      Result.ok (ControlFlow.cont (next, i))
+    else Result.ok (ControlFlow.done state.1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3P_Binding12227.inclusive_body_binding12' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Binding12227.inclusive_loop_fold12' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

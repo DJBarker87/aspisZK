@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:17:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s' ←
+      match h : List.mapM (fun x => ok x) ↑s with
+        | ok v => ok ⟨v, ⋯⟩
+        | fail e => fail e
+        | div => div
+    ok ⟨↑s', ⋯⟩
+is not definitionally equal to the right-hand side
+  ok s
+
+s : Slice U8
+⊢ (do
+      let s' ←
+        match h : List.mapM (fun x => ok x) ↑s with
+          | ok v => ok ⟨v, ⋯⟩
+          | fail e => fail e
+          | div => div
+      ok ⟨↑s', ⋯⟩) =
+    ok s
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:38: warning: This simp argument is unused:
+  map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, m̵a̵p̵_̵o̵k̵,̵ ̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:16:46: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [Slice.clone, List.clone, map_ok,̵ ̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_AppendSimulation.lean:26:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a =>
+    (do
+        let v ←
+          match h' : _a with
+            | ok s' => ok ⟨encodeList s ++ ↑s', ⋯⟩
+            | fail e => fail e
+            | div => div
+        decode v) =
+      decode ⟨encodeList s ++ ↑t, ⋯⟩
+Error: Application type mismatch: The argument
+  h'
+has type
+  _a = ok s'
+but is expected to have type
+  Slice.clone core.clone.CloneU8.clone t = ok s'
+in the application
+  alloc.vec.Vec.extend_from_slice._proof_1 core.clone.CloneU8 ⟨encodeList s, input⟩ t
+    (Eq.mpr_prop (Eq.refl (alloc.vec.Vec.length ⟨encodeList s, input⟩ + Slice.length t ≤ Usize.max))
+      (Eq.mpr_prop (Eq.refl (alloc.vec.Vec.length ⟨encodeList s, input⟩ + Slice.length t ≤ Usize.max)) bound))
+    s' h'
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+s : String
+t : Str
+bound : (encodeList s).length + (↑t).length ≤ Usize.max
+input : (encodeList s).length ≤ Usize.max
+⊢ (do
+      let v ←
+        match h' : Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) t with
+          | ok s' => ok ⟨encodeList s ++ ↑s', ⋯⟩
+          | fail e => fail e
+          | div => div
+      decode v) =
+    decode ⟨encodeList s ++ ↑t, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    t
+  has type
+    Str
+  but is expected to have type
+    Slice U8
+  in the application
+    Slice.clone (liftFun1 core.clone.impls.CloneU8.clone) t
+'R1Z.PV_RDEAC_AppendSimulation.map_ok' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.clone_bytes' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.callback_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_AppendSimulation.empty_represents' depends on axioms: [propext]

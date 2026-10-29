@@ -1,0 +1,61 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "a763cf225d059d595f8384f9efb67cd13acd7497",
+  "runner_sha256": "ead2badc24328c1c4fdddf99146c49fc4d2fa489a71e93e3c1868c9ad58e2b55",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG11_Print",
+  "attempt": 67044,
+  "source_sha256": "f5e6c32443848c5cc4416ace87493c3c49fdbb62bad88d68b02fb0c31ed8e5a0",
+  "environment_sha256": "f7b84df58c7f60a46049373cddb37d30e7369e217ef4889b9e157d2565b792d0",
+  "dependency_objects": {
+    "PV_DIAG11_Cleanup": {
+      "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_Cleanup.olean": "491f8a60519d4ee863958419b44f172070d089fb31b4e144b4d0c9ca81f69d45"
+    },
+    "PV_DIAG11_WriteAll": {
+      "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_WriteAll.olean": "2559c0fcd481f6053e67adc586e23c8b9269cf10aeee633bc4d53850ce484a08"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/lean67044-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_Print.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_Print.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 0.2053661346435547,
+  "peak_rss_kib": "479328",
+  "swaps": "0",
+  "gnu_wall": "0:00.18",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_Print.lean:21:210: error: Tactic `rfl` failed: The left-hand side\n  { events := es ++ (if True then { events := [], exit := Exit.ok () } else printGlobal g p).events,\n    exit := (if True then { events := [], exit := Exit.ok () } else printGlobal g p).exit }\nis not definitionally equal to the right-hand side\n  { events := es, exit := Exit.ok () }\n\nV : Type\nes : List V\ng : Run V IoError Unit\np : IoError \u2192 Run V IoError Unit\n\u22a2 { events := es ++ (if True then { events := [], exit := Exit.ok () } else printGlobal g p).events,\n      exit := (if True then { events := [], exit := Exit.ok () } else printGlobal g p).exit } =\n    { events := es, exit := Exit.ok () }\n/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_Print.lean:21:192: warning: This simp argument is unused:\n  List.append_nil\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335p\u0335r\u0335i\u0335n\u0335t\u0335T\u0335o\u0335,\u0335s\u0335e\u0335q\u0335,\u0335p\u0335r\u0335e\u0335,\u0335r\u0335e\u0335t\u0335,\u0335L\u0335i\u0335s\u0335t\u0335.\u0335a\u0335p\u0335p\u0335e\u0335n\u0335d\u0335_\u0335n\u0335i\u0335l\u0335]\u0335[\u0332p\u0332r\u0332i\u0332n\u0332t\u0332T\u0332o\u0332,\u0332\n  \u0332 \u0332 \u0332s\u0332e\u0332q\u0332,\u0332 \u0332p\u0332r\u0332e\u0332,\u0332 \u0332r\u0332e\u0332t\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG11.print_capture_returns' depends on axioms: [propext, sorryAx]\n",
+  "object_sha256": null
+}

@@ -1,0 +1,13 @@
+theorem R1Z.PV_OWN_FocusedReplay.checked_store : ∀ {T : Type} (codec : Codec T) (m : Memory)
+  (cmd : PV_OWN_CheckedStore.Command codec m),
+  View codec (PV_OWN_CheckedStore.execute cmd) cmd.token cmd.offset cmd.value ∧
+    Writable (PV_OWN_CheckedStore.execute cmd) cmd.owner cmd.token
+      (store cmd.cell cmd.offset codec.width (codec.encode cmd.value)) :=
+fun {T} codec m cmd =>
+  ⟨PV_OWN_CheckedStore.representation cmd,
+    PV_OWN_Laws.InitWritable codec cmd.token cmd.cell cmd.owner cmd.offset cmd.value m cmd.writable⟩
+'R1Z.PV_OWN_FocusedReplay.checked_store' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWN_Reserve.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWN_Reserve.typed_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWN_CollectorFrame.unread' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWN_Containers.zero_capacity' depends on axioms: [propext, Quot.sound]

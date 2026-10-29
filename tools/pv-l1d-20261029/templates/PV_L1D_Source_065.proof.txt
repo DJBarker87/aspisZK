@@ -1,0 +1,8 @@
+  unfold produce
+  conv_rhs => unfold host_semantic.claims_at_point
+  simp only [erase_bind,erase_observe,erase_lift,Aeneas.Std.bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro zero hz
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  rintro ⟨claims,pending⟩ hr
+  cases pending <;> rfl

@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_CopyActiveSource11227.lean:32:2: error: unsolved goals
+case pos
+selectors : reference_copy_terminal.Selectors
+block : Usize
+sum : aspis_core.field.QM31
+hb : ↑block < 64
+hlen : ↑block < (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS).length
+mask : U16 := (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+hm : MaskAllowed mask
+hread :
+  reference_copy_terminal.constants.ACTIVE_ROW_MASKS.index_usize block =
+    Result.ok (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+binding : reference_copy_terminal.selector_mask_sum_16 selectors.low mask = source_mask11 selectors.low mask
+hz : (mask != 0#u16) = true
+⊢ (do
+      let q ← selectors.high.index_usize block
+      let q1 ←
+        reference_copy_terminal.selector_mask_sum_16 selectors.low
+            (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+      let q2 ← q.mul q1
+      sum.add q2) =
+    do
+    let high ← selectors.high.index_usize block
+    let low ← source_mask11 selectors.low (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+    let q2 ← high.mul low
+    sum.add q2
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_CopyActiveSource11227.lean:33:2: error: unsolved goals
+case neg
+selectors : reference_copy_terminal.Selectors
+block : Usize
+sum : aspis_core.field.QM31
+hb : ↑block < 64
+hlen : ↑block < (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS).length
+mask : U16 := (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+hm : MaskAllowed mask
+hread :
+  reference_copy_terminal.constants.ACTIVE_ROW_MASKS.index_usize block =
+    Result.ok (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+binding : reference_copy_terminal.selector_mask_sum_16 selectors.low mask = source_mask11 selectors.low mask
+hz : ¬(mask != 0#u16) = true
+⊢ (if false = true then do
+      let q ← selectors.high.index_usize block
+      let q1 ←
+        reference_copy_terminal.selector_mask_sum_16 selectors.low
+            (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+      let q2 ← q.mul q1
+      sum.add q2
+    else Result.ok sum) =
+    if false = true then do
+      let high ← selectors.high.index_usize block
+      let low ← source_mask11 selectors.low (↑reference_copy_terminal.constants.ACTIVE_ROW_MASKS)[↑block]
+      let q2 ← high.mul low
+      sum.add q2
+    else Result.ok sum
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_CopyActiveSource11227.lean:32:29: warning: This simp argument is unused:
+  binding
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵z̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵b̵i̵n̵d̵i̵n̵g̵]̵[̲h̲z̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_CopyActiveSource11227.lean:33:18: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [hz,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Binding11227.active_block_source_binding11' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

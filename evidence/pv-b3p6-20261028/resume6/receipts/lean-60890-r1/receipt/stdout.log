@@ -1,0 +1,114 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:9:36: error: unexpected identifier; expected '}'
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:20:78: error: unsolved goals
+p : reference_terminal.SemanticPublic
+hcapacity : ¬0#u64 ≥ 1048576#u64
+hloop : reference_terminal.validate_transition_loop 0#u64 empty_frontier empty_frontier 0#usize 0#usize = Result.ok none
+⊢ (do
+      let b ← core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 p.transition.live_snapshot.pool p.pool
+      if b = true then
+          Result.ok
+            (core.result.Result.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+        else do
+          let b1 ←
+            core.array.equality.PartialEqArray.ne core.cmp.PartialEqU8 p.transition.live_snapshot.deployment_domain
+                p.deployment_domain
+          if b1 = true then
+              Result.ok
+                (core.result.Result.Err
+                  reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+            else
+              if (p.transition.live_snapshot.sequence != p.transition.live_snapshot.next_pair_index) = true then
+                Result.ok
+                  (core.result.Result.Err
+                    reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+              else
+                if p.transition.live_snapshot.next_pair_index ≥ 1048576#u64 then
+                  Result.ok
+                    (core.result.Result.Err
+                      reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+                else do
+                  let b2 ←
+                    reference_terminal.checked_next227 p.transition.live_snapshot.next_pair_index
+                        p.transition.candidate_afterstate.next_pair_index
+                  if b2 = true then
+                      Result.ok
+                        (core.result.Result.Err
+                          reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidAppendTransition)
+                    else do
+                      let carry ← reference_terminal.bounded_append_carry p.transition.live_snapshot.next_pair_index
+                      let pending_return ←
+                        reference_terminal.validate_transition_loop p.transition.live_snapshot.next_pair_index
+                            p.transition.live_snapshot.frontier p.transition.candidate_afterstate.next_frontier carry
+                            0#usize
+                      match pending_return with
+                        | none => Result.ok (core.result.Result.Ok ())
+                        | some r => Result.ok r) =
+    Result.ok (core.result.Result.Ok ())
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:24:26: warning: This simp argument is unused:
+  bytes_ne_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵i̵d̵_̵p̵u̵b̵l̵i̵c̵,̵b̵y̵t̵e̵s̵_̵n̵e̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵c̵a̵p̵a̵c̵i̵t̵y̵_̵r̵e̵s̵u̵l̵t̵,̵h̵c̵a̵p̵a̵c̵i̵t̵y̵,̵c̵h̵e̵c̵k̵e̵d̵_̵n̵e̵x̵t̵_̵z̵e̵r̵o̵,̵c̵a̵r̵r̵y̵_̵z̵e̵r̵o̵,̵h̵l̵o̵o̵p̵]̵[̲v̲a̲l̲i̲d̲_̲p̲u̲b̲l̲i̲c̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲a̲p̲a̲c̲i̲t̲y̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲h̲c̲a̲p̲a̲c̲i̲t̲y̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲_̲n̲e̲x̲t̲_̲z̲e̲r̲o̲,̲ ̲c̲a̲r̲r̲y̲_̲z̲e̲r̲o̲,̲ ̲h̲l̲o̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:24:51: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵i̵d̵_̵p̵u̵b̵l̵i̵c̵,̵b̵y̵t̵e̵s̵_̵n̵e̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵c̵a̵p̵a̵c̵i̵t̵y̵_̵r̵e̵s̵u̵l̵t̵,̵h̵c̵a̵p̵a̵c̵i̵t̵y̵,̵c̵h̵e̵c̵k̵e̵d̵_̵n̵e̵x̵t̵_̵z̵e̵r̵o̵,̵c̵a̵r̵r̵y̵_̵z̵e̵r̵o̵,̵h̵l̵o̵o̵p̵]̵[̲v̲a̲l̲i̲d̲_̲p̲u̲b̲l̲i̲c̲,̲ ̲b̲y̲t̲e̲s̲_̲n̲e̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲a̲p̲a̲c̲i̲t̲y̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲h̲c̲a̲p̲a̲c̲i̲t̲y̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲_̲n̲e̲x̲t̲_̲z̲e̲r̲o̲,̲ ̲c̲a̲r̲r̲y̲_̲z̲e̲r̲o̲,̲ ̲h̲l̲o̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:24:70: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵v̵a̵l̵i̵d̵_̵p̵u̵b̵l̵i̵c̵,̵b̵y̵t̵e̵s̵_̵n̵e̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵c̵a̵p̵a̵c̵i̵t̵y̵_̵r̵e̵s̵u̵l̵t̵,̵h̵c̵a̵p̵a̵c̵i̵t̵y̵,̵c̵h̵e̵c̵k̵e̵d̵_̵n̵e̵x̵t̵_̵z̵e̵r̵o̵,̵c̵a̵r̵r̵y̵_̵z̵e̵r̵o̵,̵h̵l̵o̵o̵p̵]̵[̲v̲a̲l̲i̲d̲_̲p̲u̲b̲l̲i̲c̲,̲ ̲b̲y̲t̲e̲s̲_̲n̲e̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲b̲n̲e̲_̲s̲e̲l̲f̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲c̲a̲p̲a̲c̲i̲t̲y̲_̲r̲e̲s̲u̲l̲t̲,̲ ̲h̲c̲a̲p̲a̲c̲i̲t̲y̲,̲ ̲c̲h̲e̲c̲k̲e̲d̲_̲n̲e̲x̲t̲_̲z̲e̲r̲o̲,̲ ̲c̲a̲r̲r̲y̲_̲z̲e̲r̲o̲,̲ ̲h̲l̲o̲o̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:25:4: warning: This simp argument is unused:
+  bne_self_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [valid_public, ̲bytes_ne_self, ̲bind_tc_ok, ̲Bool.false_eq_true, ̲↓reduceIte,
+      b̵n̵e̵_̵s̵e̵l̵f̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵capacity_result, ̲hcapacity, ̲checked_next_zero, ̲carry_zero, ̲hloop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:25:38: warning: This simp argument is unused:
+  hcapacity
+
+Hint: Omit it from the simp argument list.
+  simp only [valid_public, ̲bytes_ne_self, ̲bind_tc_ok, ̲Bool.false_eq_true, ̲↓reduceIte,
+      bne_self_eq_false, ̲capacity_result,h̵ ̲ca̵p̵a̵c̵i̵t̵y̵,̵c̵hecked_next_zero, ̲carry_zero, ̲hloop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:25:48: warning: This simp argument is unused:
+  checked_next_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [valid_public, ̲bytes_ne_self, ̲bind_tc_ok, ̲Bool.false_eq_true, ̲↓reduceIte,
+      bne_self_eq_false, ̲capacity_result, ̲hcapacity, ̲ch̵e̵c̵k̵e̵d̵_̵n̵e̵x̵t̵_̵z̵e̵r̵o̵,̵c̵arry_zero, ̲hloop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:25:66: warning: This simp argument is unused:
+  carry_zero
+
+Hint: Omit it from the simp argument list.
+  simp only [valid_public, ̲bytes_ne_self, ̲bind_tc_ok, ̲Bool.false_eq_true, ̲↓reduceIte,
+      bne_self_eq_false, ̲capacity_result, ̲hcapacity, ̲checked_next_zero,c̵a̵r̵r̵y̵_̵z̵e̵r̵o̵,̵ ̲hloop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PublicSuccess227.lean:25:77: warning: This simp argument is unused:
+  hloop
+
+Hint: Omit it from the simp argument list.
+  simp only [valid_public, ̲bytes_ne_self, ̲bind_tc_ok, ̲Bool.false_eq_true, ̲↓reduceIte,
+      bne_self_eq_false, ̲capacity_result, ̲hcapacity, ̲checked_next_zero, ̲carry_zero,̵h̵l̵o̵o̵p̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Success227.public_transition_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

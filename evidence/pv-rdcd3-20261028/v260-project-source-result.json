@@ -1,0 +1,117 @@
+{
+  "source_revision": "39a9add9031fcffcd93e1eaeb0558af06e7ec075",
+  "source_input_sha256": "10169c4d8edc3a4d17f8557f5656a3521f887b2634642431b52f4415a42b84fb",
+  "bodies": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+      "source_sha256": "ab55509e54218a2bfe7dd2d5e1b14216e3303961c16c181ce2e03d40f6b7678b",
+      "context": "impl Weights {",
+      "body": "pub fn raw(&self,kind:usize,j:usize)->K {\n        match kind {\n            0=>if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO},\n            4=>if j<56 { self.extra[j/28].pow((j%28) as u64) } else {K::ZERO},\n            1..=3 if self.variant==Variant::D => {\n                let r=self.variant.row(j);\n                (0..10).fold(K::ONE,|v,b|v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}))\n            },\n            _=> {\n                let k=if kind<4 {kind-1}else{kind-2};\n                (0..5).fold(K::ONE,|v,d|v.mul(self.factors[k][d][(j>>(2*d))&3]))\n            }\n        }\n    }",
+      "expected_body": "pub fn raw(&self,kind:usize,j:usize)->K {\n match kind {\n  0=>if aspis_core::r0::opening::inactive(self.variant.row(j)).unwrap() {K::ONE} else {K::ZERO},\n  4=>if j<56 {self.extra[j/28].pow((j%28) as u64)} else {K::ZERO},\n  1..=3 if self.variant==Variant::D => {\n   let r=self.variant.row(j);\n   (0..10).fold(K::ONE,|v,b|v.mul(if r&(1<<b)==0 {K::ONE.sub(self.points[kind-1][9-b])}else{self.points[kind-1][9-b]}))\n  },\n  _=>{\n   let k=if kind<4 {kind-1}else{kind-2};\n   (0..5).fold(K::ONE,|v,d|v.mul(self.factors[k][d][(j>>(2*d))&3]))\n  }\n }\n}",
+      "law": "R1Z.PV_RDCD3_V260Exact.source; V260Folds tensor_loop/point_loop/point_read_order",
+      "differences": [
+        "Rust match guards versus nested conditions: V260Owned.source/variant_eq",
+        "Source range/fold versus exact owned loop: Range194 and RangeLoop; fixed five/ten specialization: OrderedFold",
+        "Immutable reads and copied values: Index194.frame and ReadHoist; complete failures/divergence retained",
+        "Scalar/shift/cast bounds: V260Bounds and Word194",
+        "No field arithmetic callee is replaced; both Rust bodies call the same aspis_core::field::QM31 methods"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/transport.rs",
+      "source_sha256": "34af7f077fdae8147ebd79a44e7acb38395ec440115109c8fbfc654cb2c1e8c7",
+      "context": "impl Variant {",
+      "body": "pub fn row(self, j:usize) -> usize {\n        if self == Self::D { return aspis_core::r0::transport::COEFFICIENT_TO_ROW[j] as usize; }\n        let mut out=0;\n        for d in 0..5 { out |= ((j>>(2*d))&3) << (2*TAU[d]); }\n        out\n    }",
+      "expected_body": "pub fn row(self,j:usize)->usize {\n if self==Self::D {return aspis_core::r0::transport::COEFFICIENT_TO_ROW[j] as usize;}\n let mut out=0;\n for d in 0..5 {out|=((j>>(2*d))&3)<<(2*TAU[d]);}\n out\n}",
+      "law": "V260RowSource/V260RowRange/V260RowResult; Range194",
+      "differences": [
+        "for Range<usize> versus owned counter: next-state projection and fixed five source steps",
+        "D table is bound entry-for-entry by v260-constants; all invalid indices retain the first array error"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-core/src/r0/opening.rs",
+      "source_sha256": "349dc999c1165e9e3be07a840ce99dc7a0b567c7a0545088baea80894476ee7d",
+      "context": "pub fn inactive(",
+      "body": "pub fn inactive(r: usize) -> Result<bool, Error> {\n    if r >= 1024 {\n        return Err(Error::IndexOutOfRange);\n    }\n    Ok((COPY_ACTIVE_ROW_MASKS[r / 16] >> (r % 16)) & 1 == 0)\n}",
+      "expected_body": "pub fn inactive(r:usize)->Result<bool,Error> {\n if r>=1024 {return Err(Error::IndexOutOfRange);}\n Ok((COPY_ACTIVE_ROW_MASKS[r/16]>>(r%16))&1==0)\n}",
+      "law": "V260RowResult.complete/inactive_indices; V260Exact.inactive_refactor",
+      "differences": [
+        "Native Err/unwrap panic path is retained in the exact reference and proved unreachable after a successful row lookup",
+        "Earlier D table error propagates before inactive is called; no admitted-index hypothesis is added"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "source_sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "context": "fn host_row(",
+      "body": "fn host_row(variant:Variant,j:usize)->usize {\n    if let Variant::D=variant {\n        return HOST_COEFFICIENT_TO_ROW[j] as usize;\n    }\n    let mut out=0usize;\n    let mut d=0usize;\n    while d<5 {\n        out|=((j>>((2*d) as u32))&3) << ((2*crate::transport::TAU[d]) as u32);\n        d+=1;\n    }\n    out\n}",
+      "expected_body": "fn host_row(variant:Variant,j:usize)->usize {\n if let Variant::D=variant {return HOST_COEFFICIENT_TO_ROW[j] as usize;}\n let mut out=0usize;let mut d=0usize;\n while d<5 {\n  out|=((j>>((2*d) as u32))&3)<<((2*crate::transport::TAU[d]) as u32);\n  d+=1;\n }\n out\n}",
+      "law": "V260RowSource source0/S1/S2; V260RowResult.complete",
+      "differences": [
+        "Both counts are below ten: casts to u32 retain values; no overflow or oversized shift",
+        "Host table, native table and Lean table must all match"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "source_sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "context": "fn raw_value(",
+      "body": "fn raw_value(weights:Weights,kind:usize,j:usize)->K {\n        if kind==0 {\n            let r=host_row(weights.variant,j);\n            return if (aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS[r/16]>>(r%16))&1==0 {K::ONE}else{K::ZERO};\n        }\n        if kind==4 {\n            if j<56 { return weights.extra[j/28].pow((j%28) as u64); }\n            return K::ZERO;\n        }\n        if kind>=1 && kind<=3 && weights.variant==Variant::D {\n            let r=host_row(weights.variant,j);\n            return point_raw(weights.points[kind-1],r);\n        }\n        let k=if kind<4 {kind-1}else{kind-2};\n        tensor_raw(weights.factors[k],j)\n}",
+      "expected_body": "fn raw_value(weights:Weights,kind:usize,j:usize)->K {\n if kind==0 {\n  let r=host_row(weights.variant,j);\n  return if (aspis_core::r0::opening::COPY_ACTIVE_ROW_MASKS[r/16]>>(r%16))&1==0 {K::ONE}else{K::ZERO};\n }\n if kind==4 {\n  if j<56 {return weights.extra[j/28].pow((j%28) as u64);}\n  return K::ZERO;\n }\n if kind>=1 && kind<=3 && weights.variant==Variant::D {\n  let r=host_row(weights.variant,j);\n  return point_raw(weights.points[kind-1],r);\n }\n let k=if kind<4 {kind-1}else{kind-2};\n tensor_raw(weights.factors[k],j)\n}",
+      "law": "V260Owned.source; V260Exact.refactor/source",
+      "differences": [
+        "Fixed Copy storage is projected field-for-field; this is a value/Result law, not binary/world refinement",
+        "Hoisting does not erase invalid-dimension failures: ReadHoist.loop_nonempty at five/ten iterations"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "source_sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "context": "fn point_factor(",
+      "body": "fn point_factor(point:K,r:usize,b:u32)->K {\n    if r&(1usize<<b)==0 {K::ONE.sub(point)}else{point}\n}",
+      "expected_body": "fn point_factor(point:K,r:usize,b:u32)->K {\n if r&(1usize<<b)==0 {K::ONE.sub(point)}else{point}\n}",
+      "law": "V260Folds.point_read_order; Word194.boundedShl",
+      "differences": [
+        "The bit guard is pure; either source branch reads the same point; both field error and divergence are retained"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "source_sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "context": "fn point_raw(",
+      "body": "fn point_raw(points:[K;10],r:usize)->K {\n    let mut v=K::ONE;\n    v=v.mul(point_factor(points[9],r,0));\n    v=v.mul(point_factor(points[8],r,1));\n    v=v.mul(point_factor(points[7],r,2));\n    v=v.mul(point_factor(points[6],r,3));\n    v=v.mul(point_factor(points[5],r,4));\n    v=v.mul(point_factor(points[4],r,5));\n    v=v.mul(point_factor(points[3],r,6));\n    v=v.mul(point_factor(points[2],r,7));\n    v=v.mul(point_factor(points[1],r,8));\n    v=v.mul(point_factor(points[0],r,9));\n    v\n}",
+      "expected_body": "fn point_raw(points:[K;10],r:usize)->K {let mut v=K::ONE;v=v.mul(point_factor(points[9],r,0));v=v.mul(point_factor(points[8],r,1));v=v.mul(point_factor(points[7],r,2));v=v.mul(point_factor(points[6],r,3));v=v.mul(point_factor(points[5],r,4));v=v.mul(point_factor(points[4],r,5));v=v.mul(point_factor(points[3],r,6));v=v.mul(point_factor(points[2],r,7));v=v.mul(point_factor(points[1],r,8));v=v.mul(point_factor(points[0],r,9));v}",
+      "law": "V260Folds.point_loop",
+      "differences": [
+        "Exactly ten calls, point indices 9 down to 0 and bit positions 0 through 9; no omitted/reordered field call"
+      ],
+      "negative_control": "changed complete body rejected"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_weights.rs",
+      "source_sha256": "f34c93324e91a1055aa8a2f27c3bc672eac96517a2d6edb72ed3960832856a7d",
+      "context": "fn tensor_raw(",
+      "body": "fn tensor_raw(factors:[[K;4];5],j:usize)->K {\n    let mut v=K::ONE;\n    v=v.mul(factors[0][(j>>0u32)&3]);\n    v=v.mul(factors[1][(j>>2u32)&3]);\n    v=v.mul(factors[2][(j>>4u32)&3]);\n    v=v.mul(factors[3][(j>>6u32)&3]);\n    v=v.mul(factors[4][(j>>8u32)&3]);\n    v\n}",
+      "expected_body": "fn tensor_raw(factors:[[K;4];5],j:usize)->K {let mut v=K::ONE;v=v.mul(factors[0][(j>>0u32)&3]);v=v.mul(factors[1][(j>>2u32)&3]);v=v.mul(factors[2][(j>>4u32)&3]);v=v.mul(factors[3][(j>>6u32)&3]);v=v.mul(factors[4][(j>>8u32)&3]);v}",
+      "law": "V260Folds.tensor_loop",
+      "differences": [
+        "Exactly five calls, rows 0 through 4 and shifts 0,2,4,6,8; all inner indices are masked to two bits"
+      ],
+      "negative_control": "changed complete body rejected"
+    }
+  ],
+  "shared_field_callees": "Original and copy both call aspis_core::field::QM31; the pinned Aeneas reference uses the same deployed ct helpers. Reliance on Aeneas agreeing with Rust semantics is reclassification within existing tool trust, never premise removal.",
+  "status": "BODY PATTERNS CHECKED ONLY; whole-row credit requires all named proof receipts, complete concrete library disposition, static data and finite native association",
+  "original_checker": "Not recovered; no pin/projection generator relabelled as an original checker",
+  "feature_graph_sha256": "3bf8d1033e906315b76cab9576db009197c18bc8e969e62b5aae21fecfd61dad",
+  "endpoint_premises_removed": [],
+  "endpoint_premises_added": [],
+  "endpoint_premises_changed": []
+}

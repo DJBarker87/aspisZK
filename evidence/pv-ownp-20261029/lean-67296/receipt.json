@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67296/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67296/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects/R1Z/PV_OWNP_SampleCarrier.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.07",
+  "peak_rss_kib": "2628300",
+  "swap": "0",
+  "source_revision": "225a70b08c5cae33f1f1854e77a718db6c465d9d",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean:15:1: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  c \u2265 0\n  b - c \u2265 1\n  0 \u2264 a \u2264 2147483646\n  4294967296*a + c \u2265 18446744073709551616\nwhere\n a := \u2191\u2191r\n b := \u21912 ^ UScalarTy.U32.numBits\n c := \u2191\u2191w\n/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean:25:1: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  d \u2265 4294967296\n  c \u2265 0\n  0 \u2264 c - 2147483647*d \u2264 2147483646\n  0 \u2264 a \u2264 2147483646\n  4294967296*a - c \u2264 0\n  4294967296*a + b - c \u2265 1\nwhere\n a := \u2191\u2191r\n b := \u21912 ^ UScalarTy.U32.numBits\n c := \u2191\u2191(dividend r w)\n d := \u2191(\u2191r * 4294967296 + \u2191w) / 2147483647\n'R1Z.PV_OWNP_SampleCarrier.dividend_exact' depends on axioms: [propext, sorryAx]\n'R1Z.PV_OWNP_SampleCarrier.quotient_exact' depends on axioms: [propext, sorryAx]\n'R1Z.PV_OWNP_SampleCarrier.remainder_exact' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_OWNP_SampleCarrier.truncate_exact' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_OWNP_SampleCarrier.step_words' does not depend on any axioms\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 67296,
+  "module": "R1Z/PV_OWNP_SampleCarrier",
+  "source_blob": "e9c5635c1341cc8f19b7664a6b36f16393a9a9d5",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNP_SampleCarrier.lean",
+  "source_sha256": "135c788d0d9428ac48b2c27a7c020b655731b609bd9109f5c22bf37b873ec9da",
+  "imports": [
+    "R1Z.PV_OWNO_SampleEight"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNO_SampleEight": "8739bf7e20fc8f829e425c624eff08323c7a330b340ecdb5f79c9a4a202fc4f3"
+  },
+  "deps_fingerprint": "cfaaccf8a21743182c7cdbc3f0db36dc0d060c563a758dcd2fe323bae1440ed5"
+}

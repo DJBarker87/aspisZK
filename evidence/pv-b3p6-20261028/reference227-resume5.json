@@ -1,0 +1,39 @@
+{
+  "candidate_only": true,
+  "source": "host_terminal.rs",
+  "source_sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+  "reference": "reference_terminal.rs",
+  "reference_sha256": "a48187aed2325f97cedd5e5476775b3fdb7f9e6068524b61af6ea0dd934c6f56",
+  "edits": [
+    {
+      "before": "    for range in ranges {\n        for block in range.clone() {\n            sum = sum.add(selectors.high[block]);\n        }\n    }",
+      "after": "    let mut range_index = 0usize;\n    while range_index < ranges.len() {\n        let mut block = ranges[range_index].start;\n        while block < ranges[range_index].end {\n            sum = sum.add(selectors.high[block]);\n            block += 1;\n        }\n        range_index += 1;\n    }"
+    },
+    {
+      "before": "        for residual in &mut range {\n            *residual = range_selector.mul(*residual);\n        }",
+      "after": "        let mut residual_index = 0usize;\n        while residual_index < 33 {\n            range[residual_index] = range_selector.mul(range[residual_index]);\n            residual_index += 1;\n        }"
+    }
+  ],
+  "remaining": "prove loop equivalences in Lean and complete Result law; native validation; source correspondence not yet established",
+  "entry_change": "owned SemanticPublic, owned immutable claims/alpha/Challenges; same selected84 fill and terminal_parts Result mapping; conversion law outstanding",
+  "array_read_change": "semantic/poseidon reverse-Horner loop reads via owned-copy read227; read identity law outstanding",
+  "equality_read_change": "ten equality factors unrolled in original order; loop/unroll law outstanding",
+  "range_change": "level/lane/group range iteration replaced by increasing index while; increments before body preserve continue; fixed reached bounds; laws outstanding",
+  "sum_change": "three fixed range lists specialized to ordered sum_interval227 calls with previous sum threaded; no reassociation",
+  "value_read_change": "value lane loop reads through owned-array read227; mutation order unchanged",
+  "value_loop_change": "three length10 value residual loops and length33 weighting loop unrolled in increasing order; no field reassociation; laws outstanding",
+  "digest_loop_change": "public_digest_lanes fixed20 loop unrolled with branch/selector/call order preserved; law outstanding",
+  "digest_state_change": "digest helper threads owned output value and immutable copied opened/expected values; public digest copies openings/selectors; all same calls/order and branch guards; state/value law outstanding",
+  "constructor_change": "fixed16/fixed4 qm31_array arms unrolled in exact index order; generic arm unchanged; law outstanding",
+  "initial_state_change": "semantic_initial_and_absorption copies immutable openings/selectors and reads via owned-array helper",
+  "initial_branch_change": "scalar initial_lane227 helper isolates identical lane<RATE branch, preserving selected multiplication",
+  "lane_loop_change": "all fixed8 source lane loops unrolled in increasing order; paths/occupancy/digest output writes preserved",
+  "reconstruct_change": "reconstruct_10 reverse loop unrolled for indices8 through0 in unchanged order",
+  "digest_branch_change": "scalar tweak227 helper isolates same right_tweak/lane guard and optional M31 addition",
+  "copy_helper_change": "use owned reference_copy_terminal; see reference-copy227-resume5.json",
+  "selection_change": "factor unchanged owned select84 loop into select227 for a focused complete selection proof",
+  "absorption_change": "scalar absorption_lane227 isolates unchanged three-way lane branch and arithmetic chain",
+  "option_change": "checked_next227 explicitly matches checked_add result instead of Option inequality; scalar law outstanding",
+  "poseidon_change": "owned projected Poseidon copy; source and structural change records in reference-poseidon227-resume5.json and reference-field227-resume5.json",
+  "native_entry": "copy public.semantic/claims/alpha/challenges into owned entry; semantic visibility only widened within parent"
+}

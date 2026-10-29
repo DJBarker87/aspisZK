@@ -1,0 +1,90 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:40:52: error: unsolved goals
+base path : Slice U8
+positive : 0 < (↑path).length
+first : (↑path)[0] ≠ 47#u8
+bound : (↑base).length + 1 + (↑path).length ≤ Usize.max
+ppos : path.len > 0#usize
+bp : 0 < (↑base).length
+bpos : base.len > 0#usize
+⊢ (↑base)[(↑base).length - 1] = (↑base)[(↑base).length - 1]?.getD 0#u8
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:46:28: error: 'change' tactic failed, pattern
+  (↑base).length + (↑path).length ≤ ?m.258
+is not definitionally equal to target
+  (↑⟨[], alloc.vec.Vec.new._proof_1⟩).length + (↑path).length ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:48:4: error: unsolved goals
+case neg
+base path : Slice U8
+positive : 0 < (↑path).length
+first : (↑path)[0] ≠ 47#u8
+bound : (↑base).length + 1 + (↑path).length ≤ Usize.max
+ppos : path.len > 0#usize
+bp : 0 < (↑base).length
+bpos : base.len > 0#usize
+last : (↑base)[↑(base.len.wrapping_sub 1#usize)] = (↑base)[(↑base).length - 1]?.getD 0#u8
+slash : ¬(↑base)[(↑base).length - 1]?.getD 0#u8 = 47#u8
+⊢ (if (↑path)[↑0#usize] = 47#u8 then ok ⟨↑⟨[], alloc.vec.Vec.new._proof_1⟩ ++ ↑path, ⋯⟩
+    else do
+      let out2 ←
+        if ((↑base)[(↑base).length - 1]?.getD 0#u8 != 47#u8) = true then ok ⟨↑base ++ [47#u8], ⋯⟩ else ok ⟨↑base, ⋯⟩
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 path) =
+    ok ⟨↑base ++ [47#u8] ++ ↑path, ⋯⟩
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:59:26: error: 'change' tactic failed, pattern
+  (↑base).length + (↑path).length ≤ ?m.339
+is not definitionally equal to target
+  (↑⟨[], alloc.vec.Vec.new._proof_1⟩).length + (↑path).length ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:53:2: error: unsolved goals
+case neg
+base path : Slice U8
+positive : 0 < (↑path).length
+first : (↑path)[0] ≠ 47#u8
+bound : (↑base).length + 1 + (↑path).length ≤ Usize.max
+ppos : path.len > 0#usize
+bp : ¬0 < (↑base).length
+bnot : ¬base.len > 0#usize
+⊢ (if (↑path)[↑0#usize] = 47#u8 then ok ⟨↑⟨[], alloc.vec.Vec.new._proof_1⟩ ++ ↑path, ⋯⟩
+    else alloc.vec.Vec.extend_from_slice core.clone.CloneU8 ⟨↑base, ⋯⟩ path) =
+    ok ⟨↑base ++ ↑path, ⋯⟩
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:28:24: warning: This simp argument is unused:
+  first
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵i̵r̵s̵t̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:28:30: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵f̵i̵r̵s̵t̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲f̲i̲r̲s̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:41:37: warning: This simp argument is unused:
+  List.getElem?_eq_getElem (by omega)
+
+Hint: Omit it from the simp argument list.
+  simp only [predecessor base b̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵ ̵(̵b̵y̵ ̵o̵m̵e̵g̵a̵)̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵b̲p̲,̲ ̲O̲p̲t̲i̲o̲n̲.̲g̲e̲t̲D̲_̲s̲o̲m̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:41:73: warning: This simp argument is unused:
+  Option.getD_some
+
+Hint: Omit it from the simp argument list.
+  simp only [predecessor base b̵p̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵e̵q̵_̵g̵e̵t̵E̵l̵e̵m̵b̲p̲,̲ ̲L̲i̲s̲t̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲e̲q̲_̲g̲e̲t̲E̲l̲e̲m̲ (by o̵m̵e̵g̵a̵)̵,̵O̵p̵t̵i̵o̵n̵.̵g̵e̵t̵D̵_̵s̵o̵m̵e̵]̵o̲m̲e̲g̲a̲)̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:52:39: warning: This simp argument is unused:
+  List.length_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵n̵i̵l̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:52:58: warning: This simp argument is unused:
+  List.length_cons
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵a̵p̵p̵e̵n̵d̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵n̵i̵l̵]̵[̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲n̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDEAC_JoinValue.length_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_JoinValue.relative' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-64784/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-64784/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-objects/R1Z/PV_OWNJ_ScalarDecode.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.73",
+  "peak_rss_kib": "2639852",
+  "swap": "0",
+  "source_revision": "4dfa52484f2cbe7bcf085534f50af689dd73b9c4",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean:23:29: warning: This simp argument is unused:\n  if_neg\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335h\u0335,\u0335d\u0335e\u0335c\u0335i\u0335d\u0335e\u0335_\u0335f\u0335a\u0335l\u0335s\u0335e\u0335,\u0335i\u0335f\u0335_\u0335n\u0335e\u0335g\u0335]\u0335[\u0332h\u0332,\u0332 \u0332d\u0332e\u0332c\u0332i\u0332d\u0332e\u0332_\u0332f\u0332a\u0332l\u0332s\u0332e\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean:46:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  \u2191(a.wrapping_add b)\nin the target expression\n  \u2191(core.num.U32.wrapping_add a b) < 4294967294\n\na b : U32\nha : \u2191a < 2147483647\nhb : \u2191b < 2147483647\nhv : \u2191(a.wrapping_add b) = \u2191a + \u2191b\n\u22a2 \u2191(core.num.U32.wrapping_add a b) < 4294967294\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean:46:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  \u2191(a.wrapping_add b)\nin the target expression\n  \u2191(core.num.U32.wrapping_add a b) % 2147483647 = (\u2191a + \u2191b) % 2147483647\n\na b : U32\nha : \u2191a < 2147483647\nhb : \u2191b < 2147483647\nhv : \u2191(a.wrapping_add b) = \u2191a + \u2191b\n\u22a2 \u2191(core.num.U32.wrapping_add a b) % 2147483647 = (\u2191a + \u2191b) % 2147483647\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean:55:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  \u2191((a.wrapping_add P).wrapping_sub b)\nin the target expression\n  \u2191(core.num.U32.wrapping_sub (core.num.U32.wrapping_add a PV_B2_FieldValue.aspis_core.field.P) b) < 4294967294\n\na b : U32\nha : \u2191a < 2147483647\nhb : \u2191b < 2147483647\nhv : \u2191((a.wrapping_add P).wrapping_sub b) = \u2191a + 2147483647 - \u2191b\n\u22a2 \u2191(core.num.U32.wrapping_sub (core.num.U32.wrapping_add a PV_B2_FieldValue.aspis_core.field.P) b) < 4294967294\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_ScalarDecode.lean:55:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  \u2191((a.wrapping_add P).wrapping_sub b)\nin the target expression\n  \u2191(core.num.U32.wrapping_sub (core.num.U32.wrapping_add a PV_B2_FieldValue.aspis_core.field.P) b) % 2147483647 =\n    (\u2191a + 2147483647 - \u2191b) % 2147483647\n\na b : U32\nha : \u2191a < 2147483647\nhb : \u2191b < 2147483647\nhv : \u2191((a.wrapping_add P).wrapping_sub b) = \u2191a + 2147483647 - \u2191b\n\u22a2 \u2191(core.num.U32.wrapping_sub (core.num.U32.wrapping_add a PV_B2_FieldValue.aspis_core.field.P) b) % 2147483647 =\n    (\u2191a + 2147483647 - \u2191b) % 2147483647\n'R1Z.PV_OWNJ_ScalarDecode.sub_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_ScalarDecode.subtract_shape' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_ScalarDecode.subtract_decode' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_ScalarDecode.add_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_ScalarDecode.sub_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 64784,
+  "module": "R1Z/PV_OWNJ_ScalarDecode",
+  "source_blob": "862d55a107bf21c1fadf6ba9a305f74605329fe1",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNJ_ScalarDecode.lean",
+  "source_sha256": "4775daf5ec0cf7a1281bc190a2d538d769833c812e6a8d6f1285b996671df59a",
+  "imports": [
+    "R1Z.PV_OWNI_RawOps"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNI_RawOps": "17db5dd26c76adba5ad274f1c0dfb261126b750cf426e559c4ba7e5e478c3c22"
+  },
+  "deps_fingerprint": "5217e6cf0a5aa90001a7e6819ecf27b1072918471a22a97954da6480e0a93054"
+}

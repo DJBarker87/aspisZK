@@ -1,0 +1,180 @@
+be6e0:	push   %rbp
+be6e1:	push   %r15
+be6e3:	push   %r14
+be6e5:	push   %r13
+be6e7:	push   %r12
+be6e9:	push   %rbx
+be6ea:	sub    $0x268,%rsp
+be6f1:	mov    %rsi,0x8(%rsp)
+be6f6:	mov    %rdi,%r14
+be6f9:	lea    0x34(%rsp),%rbp
+be6fe:	xor    %ebx,%ebx
+be700:	mov    $0x1c0,%edx
+be705:	xor    %esi,%esi
+be707:	call   *0x162963(%rip)        # 221070 <memset@GLIBC_2.2.5>
+be70d:	pxor   %xmm0,%xmm0
+be711:	lea    0xa8(%rsp),%r12
+be719:	mov    0x162470(%rip),%r13        # 220b90 <memcpy@GLIBC_2.14>
+be720:	movdqu %xmm0,0x5c(%rbp)
+be725:	movdqu %xmm0,0x50(%rbp)
+be72a:	movdqu %xmm0,0x40(%rbp)
+be72f:	movdqu %xmm0,0x30(%rbp)
+be734:	movdqu %xmm0,0x20(%rbp)
+be739:	movdqu %xmm0,0x10(%rbp)
+be73e:	movdqu %xmm0,0x0(%rbp)
+be743:	movl   $0x1,0x30(%rsp)
+be74b:	mov    %r12,%rdi
+be74e:	lea    0x30(%rsp),%rsi
+be753:	mov    $0x1,%edx
+be758:	xor    %ecx,%ecx
+be75a:	mov    %rbx,%r8
+be75d:	xor    %r9d,%r9d
+be760:	call   bea30 <aspis_r1_cost_probe::host_sumcheck::interpolation_basis_steps>
+be765:	movups 0x108(%rsp),%xmm0
+be76d:	movaps %xmm0,0x90(%rsp)
+be775:	movups 0xf8(%rsp),%xmm0
+be77d:	movaps %xmm0,0x80(%rsp)
+be785:	movups 0xe8(%rsp),%xmm0
+be78d:	movaps %xmm0,0x70(%rsp)
+be792:	movups 0xa8(%rsp),%xmm0
+be79a:	movups 0xb8(%rsp),%xmm1
+be7a2:	movups 0xc8(%rsp),%xmm2
+be7aa:	movups 0xd8(%rsp),%xmm3
+be7b2:	movaps %xmm3,0x60(%rsp)
+be7b7:	movaps %xmm2,0x50(%rsp)
+be7bc:	movaps %xmm1,0x40(%rsp)
+be7c1:	movaps %xmm0,0x30(%rsp)
+be7c6:	mov    0x118(%rsp),%edi
+be7cd:	mov    %rbx,%r15
+be7d0:	shl    $0x4,%r15
+be7d4:	call   *0x162ac6(%rip)        # 2212a0 <_DYNAMIC+0x990>
+be7da:	mov    0x8(%rsp),%rcx
+be7df:	movdqu (%rcx,%r15,1),%xmm0
+be7e5:	pshufd $0xf6,%xmm0,%xmm1
+be7ea:	pshufd $0xd4,%xmm0,%xmm0
+be7ef:	movd   %eax,%xmm2
+be7f3:	pshufd $0x44,%xmm2,%xmm2
+be7f8:	pmuludq %xmm2,%xmm0
+be7fc:	pmuludq %xmm2,%xmm1
+be800:	movdqa %xmm1,%xmm2
+be804:	movdqa -0x95aec(%rip),%xmm4        # 28d20 <GCC_except_table365+0xdc>
+be80c:	pand   %xmm4,%xmm2
+be810:	movdqa %xmm0,%xmm3
+be814:	pand   %xmm4,%xmm3
+be818:	psrlq  $0x1f,%xmm1
+be81d:	paddq  %xmm2,%xmm1
+be821:	psrlq  $0x1f,%xmm0
+be826:	paddq  %xmm3,%xmm0
+be82a:	movdqa %xmm1,%xmm2
+be82e:	pand   %xmm4,%xmm2
+be832:	movdqa %xmm0,%xmm3
+be836:	pand   %xmm4,%xmm3
+be83a:	psrlq  $0x1f,%xmm1
+be83f:	paddq  %xmm2,%xmm1
+be843:	psrlq  $0x1f,%xmm0
+be848:	paddq  %xmm3,%xmm0
+be84c:	movdqa %xmm1,%xmm2
+be850:	movdqa -0x94ec8(%rip),%xmm5        # 29990 <GCC_except_table365+0xd4c>
+be858:	pxor   %xmm5,%xmm2
+be85c:	pshufd $0xf5,%xmm2,%xmm3
+be861:	movdqa -0x955d9(%rip),%xmm6        # 29290 <GCC_except_table365+0x64c>
+be869:	pcmpgtd %xmm6,%xmm2
+be86d:	pxor   %xmm4,%xmm4
+be871:	pcmpeqd %xmm4,%xmm3
+be875:	pand   %xmm2,%xmm3
+be879:	pshufd $0xf5,%xmm2,%xmm7
+be87e:	por    %xmm3,%xmm7
+be882:	movdqa %xmm0,%xmm2
+be886:	pxor   %xmm5,%xmm2
+be88a:	pshufd $0xf5,%xmm2,%xmm3
+be88f:	pcmpgtd %xmm6,%xmm2
+be893:	pcmpeqd %xmm4,%xmm3
+be897:	pand   %xmm2,%xmm3
+be89b:	pshufd $0xf5,%xmm2,%xmm4
+be8a0:	por    %xmm3,%xmm4
+be8a4:	movdqa -0x94eec(%rip),%xmm2        # 299c0 <GCC_except_table365+0xd7c>
+be8ac:	pand   %xmm2,%xmm4
+be8b0:	pand   %xmm2,%xmm7
+be8b4:	paddq  %xmm1,%xmm7
+be8b8:	movdqa %xmm7,0x20(%rsp)
+be8be:	paddq  %xmm0,%xmm4
+be8c2:	movdqa %xmm4,0x10(%rsp)
+be8c8:	mov    $0x1c0,%edx
+be8cd:	mov    %r12,%rdi
+be8d0:	mov    %r14,%rsi
+be8d3:	call   *%r13
+be8d6:	movdqa 0x10(%rsp),%xmm12
+be8dd:	movdqa 0x20(%rsp),%xmm11
+be8e4:	movdqa -0x9565d(%rip),%xmm8        # 29290 <GCC_except_table365+0x64c>
+be8ed:	movdqa -0x94f65(%rip),%xmm7        # 29990 <GCC_except_table365+0xd4c>
+be8f5:	movdqa -0x95bdd(%rip),%xmm6        # 28d20 <GCC_except_table365+0xdc>
+be8fd:	pxor   %xmm5,%xmm5
+be901:	xor    %eax,%eax
+be903:	movaps -0x953bb(%rip),%xmm9        # 29550 <GCC_except_table365+0x90c>
+be90b:	movdqa -0x95074(%rip),%xmm10        # 298a0 <GCC_except_table365+0xc5c>
+be914:	data16 data16 cs nopw 0x0(%rax,%rax,1)
+be920:	movdqu 0xa8(%rsp,%rax,4),%xmm2
+be929:	movd   0x30(%rsp,%rax,1),%xmm0
+be92f:	pshufd $0x44,%xmm0,%xmm0
+be934:	movdqa %xmm11,%xmm1
+be939:	pmuludq %xmm0,%xmm1
+be93d:	pmuludq %xmm12,%xmm0
+be942:	movdqa %xmm0,%xmm3
+be946:	pand   %xmm6,%xmm3
+be94a:	movdqa %xmm1,%xmm4
+be94e:	pand   %xmm6,%xmm4
+be952:	psrlq  $0x1f,%xmm0
+be957:	paddq  %xmm3,%xmm0
+be95b:	psrlq  $0x1f,%xmm1
+be960:	paddq  %xmm4,%xmm1
+be964:	movdqa %xmm0,%xmm3
+be968:	pand   %xmm6,%xmm3
+be96c:	movdqa %xmm1,%xmm4
+be970:	pand   %xmm6,%xmm4
+be974:	psrlq  $0x1f,%xmm0
+be979:	paddq  %xmm3,%xmm0
+be97d:	psrlq  $0x1f,%xmm1
+be982:	paddq  %xmm4,%xmm1
+be986:	movdqa %xmm0,%xmm3
+be98a:	shufps $0x88,%xmm1,%xmm3
+be98e:	paddd  %xmm2,%xmm3
+be992:	pxor   %xmm7,%xmm1
+be996:	pxor   %xmm7,%xmm0
+be99a:	movdqa %xmm0,%xmm2
+be99e:	shufps $0xdd,%xmm1,%xmm0
+be9a2:	pcmpgtd %xmm8,%xmm1
+be9a7:	pcmpgtd %xmm8,%xmm2
+be9ac:	movdqa %xmm2,%xmm4
+be9b0:	shufps $0x88,%xmm1,%xmm4
+be9b4:	pcmpeqd %xmm5,%xmm0
+be9b8:	pand   %xmm4,%xmm0
+be9bc:	shufps $0xdd,%xmm1,%xmm2
+be9c0:	orps   %xmm0,%xmm2
+be9c3:	andps  %xmm9,%xmm2
+be9c7:	paddd  %xmm3,%xmm2
+be9cb:	movdqa %xmm2,%xmm0
+be9cf:	pxor   %xmm10,%xmm0
+be9d4:	pcmpeqd %xmm1,%xmm1
+be9d8:	pcmpgtd %xmm0,%xmm1
+be9dc:	pandn  %xmm9,%xmm1
+be9e1:	paddd  %xmm2,%xmm1
+be9e5:	movdqu %xmm1,0xa8(%rsp,%rax,4)
+be9ee:	add    $0x4,%rax
+be9f2:	cmp    $0x70,%rax
+be9f6:	jne    be920 <aspis_r1_cost_probe::host_sumcheck::interpolate+0x240>
+be9fc:	mov    $0x1c0,%edx
+bea01:	mov    %r14,%rdi
+bea04:	mov    %r12,%rsi
+bea07:	call   *%r13
+bea0a:	pxor   %xmm0,%xmm0
+bea0e:	inc    %rbx
+bea11:	cmp    $0x1c,%rbx
+bea15:	jne    be720 <aspis_r1_cost_probe::host_sumcheck::interpolate+0x40>
+bea1b:	add    $0x268,%rsp
+bea22:	pop    %rbx
+bea23:	pop    %r12
+bea25:	pop    %r13
+bea27:	pop    %r14
+bea29:	pop    %r15
+bea2b:	pop    %rbp
+bea2c:	ret

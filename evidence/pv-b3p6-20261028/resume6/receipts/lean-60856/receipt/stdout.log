@@ -1,0 +1,195 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:28:83: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  2*d - e ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:30:98: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  2*d - e ≥ -1
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:31:63: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - d ≤ 0
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:34:43: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - 2*d ≤ 0
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:35:46: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - 2*d ≤ 1
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:37:4: error: unsolved goals
+case pos.refine_1
+N : Usize
+weights : Std.Array aspis_core.field.QM31 N
+prepared : host_terminal_field.PreparedQm31Multiplier
+index : Usize
+hi : 2 * ↑index ≤ ↑N
+w : Std.Array aspis_core.field.QM31 N
+i : Usize
+hbound : 2 * ↑(w, i).2 ≤ ↑N
+hp : 0 < ↑i
+hb : i > 0#usize
+j : Usize := i.wrapping_sub 1#usize
+hj : ↑j = ↑i - 1
+hN : ↑N < UScalar.size UScalarTy.Usize
+k : Usize := Usize.wrapping_mul 2#usize j
+hk : ↑k = 2 * ↑j
+k1 : Usize := k.wrapping_add 1#usize
+hk1 : ↑k1 = ↑k + 1
+parent : aspis_core.field.QM31
+hparent : w.index_usize j = Result.ok parent
+right : aspis_core.field.QM31
+hright : prepared.mul parent = Result.ok right
+left : aspis_core.field.QM31
+hleft : parent.sub right = Result.ok left
+w1 : Std.Array aspis_core.field.QM31 N
+hw1 : w.update k left = Result.ok w1
+w2 : Std.Array aspis_core.field.QM31 N
+hw2 : w1.update k1 right = Result.ok w2
+⊢ (do
+      let parent ← w.index_usize (i.wrapping_sub 1#usize)
+      let right ← prepared.mul parent
+      let q ← parent.sub right
+      let weights1 ← w.update (Usize.wrapping_mul 2#usize (i.wrapping_sub 1#usize)) q
+      let weights2 ← weights1.update ((Usize.wrapping_mul 2#usize (i.wrapping_sub 1#usize)).wrapping_add 1#usize) right
+      Result.ok (ControlFlow.cont (weights2, i.wrapping_sub 1#usize))) =
+    Result.ok (ControlFlow.cont (w2, j))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:40:6: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  d ≥ 0
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - 2*b ≥ 0
+  a - 2*c ≥ 0
+  a - 2*d ≤ -1
+  a - e ≤ -1
+where
+ a := ↑↑N
+ b := ↑↑index
+ c := ↑↑(w, i).2
+ d := ↑(↑i - 1)
+ e := ↑(UScalar.size UScalarTy.Usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:38:35: warning: This simp argument is unused:
+  hparent
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵_̵c̵o̵p̵y̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵S̵e̵l̵e̵c̵t̵o̵r̵s̵.̵e̵x̵p̵a̵n̵d̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵h̵b̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵p̵a̵r̵e̵n̵t̵,̵h̵r̵i̵g̵h̵t̵,̵h̵l̵e̵f̵t̵,̵h̵w̵1̵,̵h̵w̵2̵]̵[̲r̲e̲f̲e̲r̲e̲n̲c̲e̲_̲c̲o̲p̲y̲_̲t̲e̲r̲m̲i̲n̲a̲l̲.̲S̲e̲l̲e̲c̲t̲o̲r̲s̲.̲e̲x̲p̲a̲n̲d̲_̲l̲o̲o̲p̲0̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲h̲b̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲i̲g̲h̲t̲,̲ ̲h̲l̲e̲f̲t̲,̲ ̲h̲w̲1̲,̲ ̲h̲w̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:38:43: warning: This simp argument is unused:
+  hright
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵f̵e̵r̵e̵n̵c̵e̵_̵c̵o̵p̵y̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵S̵e̵l̵e̵c̵t̵o̵r̵s̵.̵e̵x̵p̵a̵n̵d̵_̵l̵o̵o̵p̵0̵_̵l̵o̵o̵p̵0̵.̵b̵o̵d̵y̵,̵h̵b̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵p̵a̵r̵e̵n̵t̵,̵h̵r̵i̵g̵h̵t̵,̵h̵l̵e̵f̵t̵,̵h̵w̵1̵,̵h̵w̵2̵]̵[̲r̲e̲f̲e̲r̲e̲n̲c̲e̲_̲c̲o̲p̲y̲_̲t̲e̲r̲m̲i̲n̲a̲l̲.̲S̲e̲l̲e̲c̲t̲o̲r̲s̲.̲e̲x̲p̲a̲n̲d̲_̲l̲o̲o̲p̲0̲_̲l̲o̲o̲p̲0̲.̲b̲o̲d̲y̲,̲ ̲h̲b̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲p̲a̲r̲e̲n̲t̲,̲ ̲h̲l̲e̲f̲t̲,̲ ̲h̲w̲1̲,̲ ̲h̲w̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:38:50: warning: This simp argument is unused:
+  hleft
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body, ̲hb,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵↓reduceIte, ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲hparent, ̲hright, ̲hl̵e̵f̵t̵,̵h̵w1, ̲hw2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:38:56: warning: This simp argument is unused:
+  hw1
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body, ̲hb,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵↓reduceIte, ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲hparent, ̲hright, ̲hleft, ̲hw1̵,̵h̵w̵2]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandInnerSuccess227.lean:38:60: warning: This simp argument is unused:
+  hw2
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_copy_terminal.Selectors.expand_loop0_loop0.body, ̲hb,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵↓reduceIte, ̲lift,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲bind_tc_ok, ̲hparent, ̲hright, ̲hleft, ̲hw1,̵h̵w̵2̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Success227.usize_mul_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Success227.expand_inner_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

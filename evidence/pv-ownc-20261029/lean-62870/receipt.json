@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62870/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62870/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_GuardCleanup.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.20",
+  "peak_rss_kib": "488380",
+  "swap": "0",
+  "source_revision": "d29bbef689be88a029a77194740c26dbf5a52dfa",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:47: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:1: error: Type mismatch: After simplification, term\n  PV_OWNB_CursorCleanup.positive dealloc q h s x nz\n has type\n  @Eq (List (State S X \u00d7 Event))\n    (PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).calls\n    [({ memory := take q.owner q.memory, allocator := s, extra := x },\n        Event.deallocate q.token.address q.cell.size q.cell.alignment)]\nbut is expected to have type\n  @Eq (List (State S X \u00d7 Event))\n    (PV_W_Threading.bind (lift (Outcome.ok ())) (fun x => PV_OWNB_CursorCleanup.cleanup dealloc q)\n        { memory := q.memory, allocator := s, extra := x }).calls\n    [({ memory := take q.owner q.memory, allocator := s, extra := x },\n        Event.deallocate q.token.address q.cell.size q.cell.alignment)]\n'R1Z.PV_OWNC_GuardCleanup.prefix_empty' does not depend on any axioms\n'R1Z.PV_OWNC_GuardCleanup.original_layout' depends on axioms: [propext, sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62870,
+  "module": "R1Z/PV_OWNC_GuardCleanup",
+  "source_blob": "9a25a80a817c13c996ee6198958252a6ebed7d35",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNC_GuardCleanup.lean",
+  "source_sha256": "2261465298127d78c8a2b1b14f98937af90f33f48b9c729ac0f3204c253fb17d",
+  "imports": [
+    "R1Z.PV_OWNC_GuardValid"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNC_GuardValid": "595104b0423f969b075ed44820cc852704292f8b1b756bf7893156dee45f6cfa"
+  },
+  "deps_fingerprint": "f8108cd95f3af14dc4fff55c5ee433b899e2a42489fb3fbcf056d5eea3d631db"
+}

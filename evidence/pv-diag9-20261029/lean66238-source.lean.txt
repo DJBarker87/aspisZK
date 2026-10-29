@@ -1,0 +1,49 @@
+import PV_DIAG9_Result
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Normal call/return stack restoration. Internal captures are retained.
+A native association must establish these are normal returns at the selected
+map_err call, and that PCs/inlining/unwinder state implement this stack. -/
+inductive LivePath
+ | done
+ | capture (enabled : Bool)
+ | seq (first second : LivePath)
+ | call (frame : Nat) (body : LivePath)
+ deriving DecidableEq
+abbrev Stack := List Nat
+abbrev Captures := List Stack
+def pathRun : LivePath → Stack → Captures × Stack
+ | .done,s => ([],s)
+ | .capture enabled,s => (if enabled then [s] else [],s)
+ | .seq first second,s =>
+   let a := pathRun first s
+   let b := pathRun second a.2
+   (a.1++b.1,b.2)
+ | .call f body,s =>
+   let a := pathRun body (f::s)
+   (a.1,a.2.tail)
+def afterReturn (body : LivePath) (callee : Nat) (caller : Stack) (enabled : Bool) :=
+ pathRun (.seq (.call callee body) (.capture enabled)) caller
+theorem normal_return_restores (path : LivePath) (s : Stack) :
+ (pathRun path s).2=s := by
+ induction path generalizing s with
+ | done => rfl
+ | capture enabled => rfl
+ | seq first second ih1 ih2 =>
+   change (pathRun second (pathRun first s).2).2=s
+   rw [ih2,ih1]
+ | call f body ih =>
+   change (pathRun body (f::s)).2.tail=s
+   rw [ih]; rfl
+#print axioms normal_return_restores
+theorem caller_capture_after_return (body : LivePath) (f : Nat) (s : Stack) (enabled : Bool) :
+ (afterReturn body f s enabled).1 =
+ (pathRun body (f::s)).1 ++ (if enabled then [s] else []) := by
+ change (pathRun body (f::s)).1 ++ (if enabled then [(pathRun body (f::s)).2.tail] else []) = _
+ rw [normal_return_restores]
+ rfl
+#print axioms caller_capture_after_return
+theorem callee_frames_not_live_after_return (body : LivePath) (f : Nat) (s : Stack) :
+ (pathRun (.call f body) s).2=s := normal_return_restores _ _
+#print axioms callee_frames_not_live_after_return
+end PV_DIAG9

@@ -1,0 +1,56 @@
+R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [Fintype R] [Nonempty R] [Fintype S] [Nonempty S] [Fintype Env] [Nonempty Env]
+  [Fintype N] [Nonempty N] (rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x)
+  (links : R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt) :
+  (∀ (adv : PV_EVH_Core.Observer Signal A)
+      (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input).Instance),
+      (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input).public w = x.1 →
+        |(R0Z.mean fun r =>
+                R0Z.FsStatement.bit
+                  (adv.decide (R1Z.PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w r))) -
+              R0Z.mean fun r =>
+                R0Z.FsStatement.bit
+                  (adv.decide (R1Z.PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv r))| ≤
+          PV_EVH_Core.bound template outputs x) ∧
+    PV_EVH_Core.bound template outputs x ≤
+        1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+              R1Z.QueryScanFreshUnion.freshBudget
+                (8 *
+                    R1Z.GamesR1PBin.n1
+                      (R1Z.PhaseProtocolInstanceBin.wire (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                      (R1Z.PhaseProtocolInstanceBin.prover
+                          (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                          ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                          (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                          R1Z.PrivacyR1AcctBasis.basis outputs x
+                          (R1Z.PrivacyR1AcctModel.seed
+                            (R1Z.PhaseProtocolInstanceBin.wire
+                                (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                                R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                            R1Z.PrivacyR1HeadlineDeployedEvents.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                            R1Z.PhaseWireLog2Bin.opens)).toProver +
+                  1) +
+            2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+          2 * R1Z.ProverCommitFuelMass22.charge ∧
+      PV_EVH_Core.bound template outputs x < 1 / 2 ^ 100
+PV_EVH_ClosedModel.all_links_satisfiable {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) :
+  ∃ rt, R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt
+'R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PV_EVH_ClosedModel.all_links_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]

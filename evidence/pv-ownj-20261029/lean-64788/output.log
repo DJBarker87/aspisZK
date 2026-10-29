@@ -1,0 +1,64 @@
+/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:35:7: error: unsolved goals
+case nil
+p : List Q
+after : List (List Q)
+bad : List Q
+h : bad.length ≠ 1024
+⊢ (do
+      let q ← none
+      let rest ← lanes p after
+      some (q :: rest)) =
+    none
+/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:35:66: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵,̵l̵a̵n̵e̵s̵,̵e̵v̵a̵l̵u̵a̵t̵e̵_̵w̵r̵o̵n̵g̵[̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲,̲ ̲l̲a̲n̲e̲s̲,̲ ̲e̲v̲a̲l̲u̲a̲t̲e̲_̲w̲r̲o̲n̲g̲ p bad h̵,̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]̵h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:41:79: error: unsolved goals
+point : List Q
+before after : List (List Q)
+bad : List Q
+h : bad.length ≠ 1024
+⊢ (do
+      let claim ← none
+      let rest ←
+        do
+          let claim ← lanes (successor point) (before ++ bad :: after)
+          let rest ←
+            do
+              let claim ← lanes (xor12 point) (before ++ bad :: after)
+              let rest ← some []
+              some (claim :: rest)
+          some (claim :: rest)
+      some (claim :: rest)) =
+    none
+/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:43:2: warning: This simp argument is unused:
+  Option.bind_none
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵o̵i̵n̵t̵_̵c̵l̵a̵i̵m̵s̵,̵s̵t̵a̵t̵e̵m̵e̵n̵t̵_̵p̵o̵i̵n̵t̵s̵,̵p̵o̵i̵n̵t̵s̵,̵l̵a̵n̵e̵s̵_̵f̵i̵r̵s̵t̵_̵w̵r̵o̵n̵g̵[̲p̲o̲i̲n̲t̲_̲c̲l̲a̲i̲m̲s̲,̲ ̲s̲t̲a̲t̲e̲m̲e̲n̲t̲_̲p̲o̲i̲n̲t̲s̲,̲ ̲p̲o̲i̲n̲t̲s̲,̲ ̲l̲a̲n̲e̲s̲_̲f̲i̲r̲s̲t̲_̲w̲r̲o̲n̲g̲ point before after bad h̵,̵
+  ̵ ̵ ̵O̵p̵t̵i̵o̵n̵.̵b̵i̵n̵d̵_̵n̵o̵n̵e̵]̵h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:55:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.eq_replicate_of_mem`
+  ?l = List.replicate (List.length ?l) ?a
+with the goal
+  List.map List.length base = List.replicate base.length 1024
+
+Note: The full type of `@List.eq_replicate_of_mem` is
+  ∀ {α : Type ?u.57} {a : α} {l : List α}, (∀ b ∈ l, b = a) → l = List.replicate l.length a
+
+base : List (List Q)
+h1 g d : List Q
+hb : base.length = 26
+hc : ∀ c ∈ base, c.length = 1024
+hh : h1.length = 1024
+hg : g.length = 1024
+hd : d.length = 1024
+⊢ List.map List.length base = List.replicate base.length 1024
+'R1Z.PV_OWNJ_Claims.evaluate_wrong' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNJ_Claims.lanes_first_wrong' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNJ_Claims.point_claims_wrong' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNJ_Claims.built_lengths' depends on axioms: [propext, sorryAx]

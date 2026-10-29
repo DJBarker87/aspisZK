@@ -1,0 +1,174 @@
+{
+  "revision": "2f5799d410e6f751d978f8bd0080ae3212a7a347",
+  "runjoin_read_only_revision": "908c552a4ebd76c73a07e2572eae0b00561bbf04",
+  "source_records": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs",
+      "sha256": "4e209947ac75532af1c7d79f339050aab6b57379fc3962e1df9ff5602087787e"
+    }
+  ],
+  "caller_statements_in_order": [
+    {
+      "token": "let started=Instant::now()",
+      "line": 84
+    },
+    {
+      "token": "let live=",
+      "line": 99
+    },
+    {
+      "token": "let compiled=match payment",
+      "line": 105
+    },
+    {
+      "token": "let common=",
+      "line": 106
+    },
+    {
+      "token": "let statement=",
+      "line": 107
+    },
+    {
+      "token": "let recovery=",
+      "line": 112
+    },
+    {
+      "token": "file.write_all",
+      "line": 113
+    },
+    {
+      "token": "file.sync_all",
+      "line": 113
+    },
+    {
+      "token": "let public=",
+      "line": 114
+    },
+    {
+      "token": "DurableStateOnlyMaskNonceStore::open",
+      "line": 115
+    },
+    {
+      "token": "RealR1_client::prove_for_proof_accounts",
+      "line": 116
+    },
+    {
+      "token": "accounts.selected(result.attempts)",
+      "line": 117
+    },
+    {
+      "token": "proof.extend_from_slice(&result.proof)",
+      "line": 118
+    },
+    {
+      "token": "fs::write(dir.join(\"proof.bin\")",
+      "line": 119
+    },
+    {
+      "token": "fs::write(dir.join(\"statement.bin\")",
+      "line": 119
+    },
+    {
+      "token": "let request=",
+      "line": 120
+    },
+    {
+      "token": "accounts.publication",
+      "line": 126
+    },
+    {
+      "token": "Ok(json!({\"client_route\"",
+      "line": 129
+    }
+  ],
+  "semantic_transfer_projection": {
+    "source": "fn private_public<'a>(\n    public: &PoolV1PrivateTransferPublicV1,\n    transition: &'a PoolV1PairLatePublicStatementV1,\n) -> SemanticPublic<'a> {\n    SemanticPublic {\n        variant: CompiledVariant::PrivateTransfer,\n        pool: public.pool,\n        deployment_domain: public.deployment_domain,\n        anchor: public.anchor_root,\n        nullifier: public.nullifier,\n        asset_id: public.asset_id,\n        recipient: Some(public.recipient_commitment),\n        change: public.change_commitment,\n        withdrawal_amount: None,\n        transition,\n    }\n}\n",
+    "sha256": "c711f69415980ff72c928a7484e3988245c44ec89268a43e56ba6ecb198fa64c",
+    "ordered_fields": [
+      "variant: CompiledVariant::PrivateTransfer",
+      "pool: public.pool",
+      "deployment_domain: public.deployment_domain",
+      "anchor: public.anchor_root",
+      "nullifier: public.nullifier",
+      "asset_id: public.asset_id",
+      "recipient: Some(public.recipient_commitment)",
+      "change: public.change_commitment",
+      "withdrawal_amount: None",
+      "transition,"
+    ],
+    "lean": "PV_RJ4IDB_CallerSemantic.semanticPublic / typed_projection / caller_to_transfer13",
+    "scope": "source projection at byte-pinned transfer/lane/output records"
+  },
+  "channels": [
+    {
+      "channel": "published proof and afterstate",
+      "producer": "plan.rs:118",
+      "model": "PublicationInput.afterstate ++ PublicationInput.publish_compact",
+      "owner": "runjoin",
+      "status": "OPEN native publication and afterstate equations"
+    },
+    {
+      "channel": "ordered file trace",
+      "producer": "plan.rs:109-119",
+      "model": "NativeTrace otherFile/proofWrite/statementWrite",
+      "owner": "diag",
+      "status": "OPEN native leaves, errors, recovery/ledger trace"
+    },
+    {
+      "channel": "returned/stdout JSON",
+      "producer": "plan.rs:129; devnet_spend.rs:13",
+      "model": "NativeTrace returned/printed",
+      "owner": "diag",
+      "status": "OPEN native JSON/format/print leaves"
+    },
+    {
+      "channel": "errors/stderr",
+      "producer": "plan::err, std::Termination and PV_DIAG2/PV_DIAG3",
+      "model": "diag2/diag3 full events and abnormal continuations",
+      "owner": "diag",
+      "status": "partial source models consumed; native joint leaf law OPEN"
+    },
+    {
+      "channel": "counts",
+      "producer": "plan.rs:117,126,129",
+      "model": "ReturnedOutput plus prefix counts",
+      "owner": "L1",
+      "status": "returned count source law consumed; full joint law OPEN"
+    },
+    {
+      "channel": "prove_wall_seconds",
+      "producer": "plan.rs:84,129",
+      "model": "NativeTrace.wall exact serialized bytes",
+      "owner": "L1",
+      "status": "OPEN native clock and same-coupling law"
+    },
+    {
+      "channel": "oracle/rejection/final-world and retained physical/durable effects",
+      "producer": "retry/source world and native runtime",
+      "model": "NativeTrace oracle/rejection/side; diagWithState explicit visible-state projector",
+      "owner": "L1/diag",
+      "status": "OPEN complete producer and fibres"
+    }
+  ],
+  "c_status": "OPEN deployed live-record/native-handle association; PROVED byte-pinned typed source projection and V047 fibre",
+  "c_native_validation": "native-statement-result.json: all 1455 semantic bytes match, transfer13, finite fixture validation only",
+  "FixturePdaRuntime": "not used by mathematical source projection; retained unproved for any joint wrapper",
+  "not_a_privacy_counterexample": true,
+  "source_to_code": "V370 pending owner D381/D386 retained"
+}

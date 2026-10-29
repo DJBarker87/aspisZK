@@ -1,0 +1,49 @@
+import PV_DIAG8_Messages
+set_option autoImplicit false
+namespace PV_DIAG8
+/-! Sufficient request-discipline criterion for V400, not an instance of it.
+Requests retain operation, route/name, offset and size. Payload is separate:
+byte blindness must be proved for the deployed filesystem/allocator world. -/
+structure Request where
+ op : Nat
+ route : List Nat
+ offset : Nat
+ size : Nat
+ deriving DecidableEq
+structure Reply where
+ failed : Bool
+ code : Nat
+ count : Nat
+ deriving DecidableEq
+abbrev History := List (Request × Reply)
+def replay (world : History → Request → Reply) : History → List Request → History
+ | h, [] => h
+ | h, q::qs => replay world (h ++ [(q,world h q)]) qs
+def failures (h : History) : List Bool := h.map (fun x => x.2.failed)
+def appendReq (h : History) (q : Request) (r : Reply) : History := h ++ [(q,r)]
+
+theorem world_empty (world : History → Request → Reply) (h : History) : replay world h [] = h := rfl
+#print axioms world_empty
+theorem world_cons (world : History → Request → Reply) (h : History) (q : Request) (qs : List Request) : replay world h (q::qs) = replay world (appendReq h q (world h q)) qs := rfl
+#print axioms world_cons
+theorem world_history_length (world : History → Request → Reply) (qs : List Request) (h : History) : (replay world h qs).length=h.length+qs.length := by induction qs generalizing h with | nil => simp [replay] | cons q qs ih => rw [replay,ih]; simp; omega
+#print axioms world_history_length
+theorem world_failure_length (h : History) : (failures h).length=h.length := by simp [failures]
+#print axioms world_failure_length
+theorem world_same_history (world : History → Request → Reply) (h h' : History) (eqh : h=h') (q q' : Request) (eqq : q=q') : world h q=world h' q' := by cases eqh; cases eqq; rfl
+#print axioms world_same_history
+theorem world_same_requests (world : History → Request → Reply) (h : History) (a b : List Request) (he : a=b) : replay world h a=replay world h b := congrArg (replay world h) he
+#print axioms world_same_requests
+theorem world_failure_event_public {P W : Type} (world : History → Request → Reply) (requests : P → List Request) (initial : P → History) (p : P) (w w' : W) : (fun _ : W => failures (replay world (initial p) (requests p))) w = (fun _ : W => failures (replay world (initial p) (requests p))) w' := rfl
+#print axioms world_failure_event_public
+theorem world_reached_failure_public {P W : Type} (world : History → Request → Reply) (requests : P → List Request) (p : P) (w w' : W) : (fun _ : W => true ∈ failures (replay world [] (requests p))) w ↔ (fun _ : W => true ∈ failures (replay world [] (requests p))) w' := Iff.rfl
+#print axioms world_reached_failure_public
+theorem world_prefix_requests (world : History → Request → Reply) (a b : List Request) (h : History) : replay world h (a++b)=replay world (replay world h a) b := by induction a generalizing h with | nil => rfl | cons q a ih => simpa only [List.cons_append,replay] using ih (h++[(q,world h q)])
+#print axioms world_prefix_requests
+theorem world_error_not_success_erasure (h : History) (q : Request) (r : Reply) : failures (appendReq h q r)=failures h ++ [r.failed] := by simp [failures,appendReq]
+#print axioms world_error_not_success_erasure
+theorem world_request_size_retained (h : History) (q : Request) (r : Reply) : (appendReq h q r).getLast?=some (q,r) := by simp [appendReq]
+#print axioms world_request_size_retained
+theorem world_64_byte_draw (op : Nat) (route : List Nat) (offset : Nat) : (Request.mk op route offset 64).size = 64 := rfl
+#print axioms world_64_byte_draw
+end PV_DIAG8

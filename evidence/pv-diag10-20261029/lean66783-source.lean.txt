@@ -1,0 +1,50 @@
+import PV_DIAG10_Attempt
+set_option autoImplicit false
+namespace PV_DIAG10
+open Aeneas Aeneas.Std R1Z ProverCommitRetry34
+/-! Only states actually reached by a retry require an attempt producer.
+Returned errors and completed attempts terminate the chain. -/
+inductive RetryReach {S P : Type} (attempt : Attempt S P) (start : Nat) (initial : S) : Nat → S → Prop
+ | initial : RetryReach attempt start initial start initial
+ | retry {k : Nat} {before after : S} : RetryReach attempt start initial k before →
+     attempt k before=.ok (.retry,after) → RetryReach attempt start initial (k+1) after
+def PV_DIAG10_Link_ReachedAttempt {S P : Type} (attempt : Attempt S P)
+ (start : Nat) (initial : S) : Prop :=
+ ∀ k state, RetryReach attempt start initial k state → ∃ out, attempt k state=.ok out
+theorem reached_retry_terminates {S P : Type} (attempt : Attempt S P)
+ (start : Nat) (initial : S) (producer : PV_DIAG10_Link_ReachedAttempt attempt start initial)
+ (fuel k : Nat) (state : S) (reached : RetryReach attempt start initial k state) :
+ ∃ out, run attempt fuel k state=.ok out := by
+ induction fuel generalizing k state with
+ | zero => exact ⟨_,rfl⟩
+ | succ n ih =>
+   obtain ⟨⟨step,after⟩,h⟩ := producer k state reached
+   rw [run,h]
+   cases step with
+   | done proof => exact ⟨_,rfl⟩
+   | stop error => exact ⟨_,rfl⟩
+   | retry => exact ih (k+1) after (.retry reached h)
+#print axioms reached_retry_terminates
+theorem reached_retry_no_panic {S P : Type} (attempt : Attempt S P)
+ (start : Nat) (initial : S) (producer : PV_DIAG10_Link_ReachedAttempt attempt start initial)
+ (fuel k : Nat) (state : S) (reached : RetryReach attempt start initial k state) :
+ run attempt fuel k state ≠ .fail .panic :=
+ PV_DIAG9.terminating_excludes_panic (reached_retry_terminates attempt start initial producer fuel k state reached)
+#print axioms reached_retry_no_panic
+theorem reached_retry_no_divergence {S P : Type} (attempt : Attempt S P)
+ (start : Nat) (initial : S) (producer : PV_DIAG10_Link_ReachedAttempt attempt start initial)
+ (fuel k : Nat) (state : S) (reached : RetryReach attempt start initial k state) :
+ run attempt fuel k state ≠ .div := by
+ obtain ⟨out,h⟩ := reached_retry_terminates attempt start initial producer fuel k state reached
+ exact PV_DIAG9.ok_excludes_div h
+#print axioms reached_retry_no_divergence
+theorem universal_producer_suffices {S P : Type} (attempt : Attempt S P)
+ (start : Nat) (initial : S) (producer : ∀ k state, ∃ out, attempt k state=.ok out) :
+ PV_DIAG10_Link_ReachedAttempt attempt start initial := fun k state _ => producer k state
+#print axioms universal_producer_suffices
+theorem cap8_reached_panic_exclusion {S P : Type} (attempt : Attempt S P)
+ (initial : S) (producer : PV_DIAG10_Link_ReachedAttempt attempt 0 initial) :
+ eight attempt initial ≠ .fail .panic :=
+ reached_retry_no_panic attempt 0 initial producer 8 0 initial .initial
+#print axioms cap8_reached_panic_exclusion
+end PV_DIAG10

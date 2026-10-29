@@ -1,0 +1,45 @@
+import PV_DIAG3_Joint
+/-! Borrowed, finite formatting loops of Backtrace::Display. A formatter
+error terminates the loop at exactly that frame/symbol; panic/abort/diverge
+retain their native prefix. Leaf print operations include actual formatting,
+write, errors and cleanup. This supplies no public law for those leaves. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S A B : Type}
+def tryThen (first : Op S (Except Unit Unit)) (next : Op S (Except Unit Unit)) :
+ Op S (Except Unit Unit) := sequence first (fun r => match r with
+ | .ok () => next
+ | .error () => PV_DIAG3.pure (.error ()))
+def emitEach (emit : A → Op S (Except Unit Unit)) : List A → Op S (Except Unit Unit)
+ | [] => PV_DIAG3.pure (.ok ())
+ | a::as => tryThen (emit a) (emitEach emit as)
+structure ResolvedFrame (A B : Type) where
+ raw : A
+ symbols : List B
+
+def emitFrame (raw : A → Op S (Except Unit Unit))
+ (symbol : A → B → Op S (Except Unit Unit)) (f : ResolvedFrame A B) :
+ Op S (Except Unit Unit) :=
+ if f.symbols.isEmpty then raw f.raw else emitEach (symbol f.raw) f.symbols
+theorem emit_empty (emit : A → Op S (Except Unit Unit)) :
+ emitEach emit [] = PV_DIAG3.pure (.ok ()) := rfl
+#print axioms emit_empty
+theorem emit_cons (emit : A → Op S (Except Unit Unit)) (a : A) (as : List A) :
+ emitEach emit (a::as) = tryThen (emit a) (emitEach emit as) := rfl
+#print axioms emit_cons
+theorem try_success (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (h : first s = ⟨es,t,.value (.ok ())⟩) :
+ tryThen first next s = prepend es (next t) := by
+ simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_success
+theorem try_error_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (h : first s = ⟨es,t,.value (.error ())⟩) :
+ tryThen first next s = ⟨es,t,.value (.error ())⟩ := by
+ simp [tryThen,sequence,h,PV_DIAG3.bind,prepend,PV_DIAG3.pure]
+#print axioms try_error_no_suffix
+theorem try_panic_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (p : Panic) (h : first s = ⟨es,t,.panic p⟩) :
+ tryThen first next s = ⟨es,t,.panic p⟩ := by simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_panic_no_suffix
+end PV_DIAG5

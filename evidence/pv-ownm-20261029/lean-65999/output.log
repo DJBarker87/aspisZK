@@ -1,0 +1,83 @@
+R1Z.PV_OWNM_DenseRows.high_bit (w t : ℕ) (a : Fin (2 ^ w)) (b : Fin (2 ^ t)) (i : Fin w) :
+  R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b)) (Fin.castAdd t i) =
+    R1Z.PV_OWNL_RowEnumeration.tail w a i
+R1Z.PV_OWNM_DenseRows.low_bit (w t : ℕ) (a : Fin (2 ^ w)) (b : Fin (2 ^ t)) (i : Fin t) :
+  R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b)) (Fin.natAdd w i) =
+    R1Z.PV_OWNL_RowEnumeration.tail t b i
+R1Z.PV_OWNM_DenseRows.joined_weight {K : Type} [Field K] (w t : ℕ) (p : Fin (w + t) → K) (a : Fin (2 ^ w))
+  (b : Fin (2 ^ t)) :
+  R1Z.PV_OWNI_DensePrune.weight p
+      (R1Z.PV_OWNL_RowEnumeration.tail (w + t) (R1Z.PV_OWNL_RowEnumeration.join w t (a, b))) =
+    R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.castAdd t i)) (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+      R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.natAdd w i)) (R1Z.PV_OWNL_RowEnumeration.tail t b)
+R1Z.PV_OWNM_DenseRows.full_dense_sparse {K : Type} [Field K] (w t : ℕ) (p : Fin (w + t) → K) (suffix : Fin (2 ^ t))
+  (column : Fin (2 ^ (w + t)) → K)
+  (hs : ∀ (i : Fin t), p (Fin.natAdd w i) = if R1Z.PV_OWNL_RowEnumeration.tail t suffix i = true then 1 else 0) :
+  R1Z.PV_OWNM_DenseRows.fullDense (w + t) p column =
+    ∑ a,
+      R1Z.PV_OWNI_DensePrune.weight (fun i => p (Fin.castAdd t i)) (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+        column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix))
+R1Z.PV_OWNM_FoldSum.fold_sum {K : Type} [Field K] {A : Type} (xs : List A) (f : A → K) (initial : K) :
+  List.foldl (fun sum x => sum + f x) initial xs = initial + (List.map f xs).sum
+R1Z.PV_OWNM_FoldSum.range_sum {K : Type} [Field K] (n : ℕ) (f : ℕ → K) : (List.map f (List.range n)).sum = ∑ i, f ↑i
+R1Z.PV_OWNM_FoldSum.sparse_sum {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K)
+  (point column : List R1Z.PV_OWNI_RawOps.Q) :
+  R1Z.PV_OWNJ_ValueBridge.sparse decode point column =
+    ∑ a,
+      decode
+          (List.foldl (R1Z.PV_OWNI_WeightTotal.step (R1Z.PV_OWNI_Scanner.width point) ↑a)
+              (R1Z.PV_OWNI_RawOps.ops.one, 0) (List.take (R1Z.PV_OWNI_Scanner.width point) point)).1 *
+        decode
+          (column[R1Z.PV_RDB2D_SparseAddress.row (↑a) (R1Z.PV_OWNI_Scanner.trailing point)
+                  (R1Z.PV_OWNI_Scanner.suffix point)]?.getD
+            R1Z.PV_OWNI_RawOps.zero)
+R1Z.PV_OWNM_FoldSum.prefix_product {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K)
+  (D : R1Z.PV_OWNJ_DecodeFold.Decoder decode) (point : List R1Z.PV_OWNI_RawOps.Q) (width pref : ℕ)
+  (hc : ∀ q ∈ point, R1Z.PV_OWNJ_DecodeFold.Canon q) :
+  decode
+      (List.foldl (R1Z.PV_OWNI_WeightTotal.step width pref) (R1Z.PV_OWNI_RawOps.ops.one, 0) (List.take width point)).1 =
+    ∏ i,
+      if pref.testBit (width - 1 - ↑i) = true then (List.map decode (List.take width point)).get i
+      else 1 - (List.map decode (List.take width point)).get i
+R1Z.PV_OWNM_V239.ready_value {K W : Type} (world : W) (trace : List R1Z.PV_OWNM_V239.Action)
+  (value : Aeneas.Std.Result (Option K)) :
+  (R1Z.PV_OWNM_V239.attach (R1Z.PV_OWNM_V239.ResourceExit.ready world trace) value).result = value
+R1Z.PV_OWNM_V239.restore {K W : Type} [Field K] (decode : R1Z.PV_OWNM_V239.Q → K) (zero : R1Z.PV_OWNM_V239.Q)
+  (source222 : List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q))
+  (wirePoints : List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) (isBoolean : R1Z.PV_OWNM_V239.Q → Bool)
+  (reconstruct879 reconstruct890 : R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q)
+  (native : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W)
+  (resource : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W)
+  (failures : List Bool) (left right : R1Z.PV_OWNM_V239.Input)
+  (inputL : R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints left)
+  (inputR : R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints right)
+  (commute : R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense decode zero source222)
+  (cbL : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 left)
+  (cbR : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 right)
+  (finalL : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 left)
+  (finalR : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 right)
+  (ownedL :
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures left)
+  (ownedR :
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures right)
+  (samePublic : left.pubData = right.pubData) (sameSite : left.site = right.site)
+  (sameLengths : List.map List.length left.columns = List.map List.length right.columns) :
+  (∀ p ∈ wirePoints left.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        left.columns[lane]? = some c →
+          native left p lane =
+            R1Z.PV_OWNM_V239.attach (resource left p lane)
+              (Aeneas.Std.Result.ok
+                (if c.length ≠ 1024 then none else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+    (∀ p ∈ wirePoints right.point,
+        ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+          right.columns[lane]? = some c →
+            native right p lane =
+              R1Z.PV_OWNM_V239.attach (resource right p lane)
+                (Aeneas.Std.Result.ok
+                  (if c.length ≠ 1024 then none else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+      ∀ pL ∈ wirePoints left.point,
+        ∀ pR ∈ wirePoints right.point,
+          ∀ (laneL laneR : ℕ) (cL cR : List R1Z.PV_OWNM_V239.Q),
+            left.columns[laneL]? = some cL →
+              right.columns[laneR]? = some cR → (native left pL laneL).trace = (native right pR laneR).trace

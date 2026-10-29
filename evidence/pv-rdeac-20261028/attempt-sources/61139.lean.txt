@@ -1,0 +1,31 @@
+import R1Z.PV_RDEAC_VectorProjection
+import R1Z.PV_CBL_JoinAdapter
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_RDEAC_PathPrimitives
+
+theorem push (v : alloc.vec.Vec U8) (b : U8) (bound : v.val.length+1≤Usize.max) :
+    alloc.vec.Vec.push v b=ok ⟨v.val++[b],by rw [List.length_append];exact bound⟩ := by
+  unfold alloc.vec.Vec.push
+  simp only [bound,decide_true,Bool.or_true,dif_pos,List.concat_eq_append]
+  rfl
+
+theorem index {A : Type} (s : Slice A) (i : Usize) (h : i.val<s.val.length) :
+    Slice.index_usize s i=ok (s.val[i.val]'h) := by
+  unfold Slice.index_usize
+  simp only [Slice.getElem?_Usize_eq,List.getElem?_eq_getElem h]
+
+theorem predecessor (s : Slice U8) (positive : 0<s.val.length) :
+    (Usize.wrapping_sub (Slice.len s) 1#usize).val=s.val.length-1 := by
+  rw [Usize.wrapping_sub_val_eq,Slice.len_val]
+  simp only [UScalar.ofNatCore_val_eq,Slice.length]
+  have size : 1<UScalar.size .Usize := by have h := (1#usize).hSize; simpa only [UScalar.ofNatCore_val_eq] using h
+  have large := (Slice.len s).hSize
+  rw [Slice.len_val] at large
+  change s.val.length<UScalar.size .Usize at large
+  have add : s.val.length+(UScalar.size .Usize-1)=(s.val.length-1)+UScalar.size .Usize := by omega
+  rw [add,Nat.add_mod_right,Nat.mod_eq_of_lt (by omega)]
+
+#print axioms push
+#print axioms index
+#print axioms predecessor
+end R1Z.PV_RDEAC_PathPrimitives

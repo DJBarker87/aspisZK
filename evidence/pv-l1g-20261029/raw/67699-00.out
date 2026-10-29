@@ -1,0 +1,121 @@
+PV_L1G_BodyBind.bind_at {W C E A B : Type} (m m' : R1Z.PV_W_Threading.M W C E A)
+  (k k' : A → R1Z.PV_W_Threading.M W C E B) (w : W) (first : m w = m' w)
+  (next : ∀ (a : A), (m w).outcome = R1Z.PV_W_Threading.Outcome.ok a → k a (m w).world = k' a (m w).world) :
+  R1Z.PV_W_Threading.bind m k w = R1Z.PV_W_Threading.bind m' k' w
+PV_L1G_CountPrefixes.append (a b : List PV_RJ4IDB.Event) :
+  PV_L1G_CountPrefixes.channels (a ++ b) =
+    (PV_RJ4IDB.counts a ++ PV_RJ4IDB.counts b, PV_RJ4IDB.rejections a ++ PV_RJ4IDB.rejections b)
+PV_L1G_CountPrefixes.success {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W) (a : A)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.ok a) :
+  PV_L1G_CountPrefixes.channels (PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w)) =
+    (PV_RJ4IDB.counts (PV_L1G_WorldCapture.word encode (m w)) ++
+        PV_RJ4IDB.counts (PV_L1G_WorldCapture.word encode (k a (m w).world)),
+      PV_RJ4IDB.rejections (PV_L1G_WorldCapture.word encode (m w)) ++
+        PV_RJ4IDB.rejections (PV_L1G_WorldCapture.word encode (k a (m w).world)))
+PV_L1G_CountPrefixes.failed {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W) (e : E)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.fail e) :
+  PV_L1G_CountPrefixes.channels (PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w)) =
+    PV_L1G_CountPrefixes.channels (PV_L1G_WorldCapture.word encode (m w))
+PV_L1G_CountPrefixes.divergent {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.div) :
+  PV_L1G_CountPrefixes.channels (PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w)) =
+    PV_L1G_CountPrefixes.channels (PV_L1G_WorldCapture.word encode (m w))
+PV_L1G_OriginalRetry.original_retry {I A W S P : Type} (a : I → PV_L1G_WorldRetry.Attempt W S P)
+  (owner : I → R1Z.SideChannelL1AttemptRecord.Owner (W × S) P) (initial : I → W × S) (fuel index : I → ℕ)
+  (body : I → PV_RJ4IDB.Trace A)
+  (decode :
+    I →
+      PV_L1D_Logged.Logged (R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published P) × W × S) →
+        PV_RJ4IDB.Trace A)
+  (adapt : I → R1Z.SideChannelL1AttemptRecord.Run P × W × S → PV_RJ4IDB.Trace A)
+  (leaf :
+    ∀ (i : I), PV_L1F_ReachedJoin.ReachedOwner (PV_L1G_WorldRetry.stateAttempt (a i)) (owner i) (index i) (initial i))
+  (bodyLaw :
+    ∀ (i : I),
+      body i =
+        decode i
+          (PV_L1G_WorldRetry.stateLog (PV_L1G_WorldRetry.run (a i) (fuel i) (index i) (initial i).2 (initial i).1)))
+  (client :
+    ∀ (i : I) (r : R1Z.SideChannelL1AttemptRecord.Run P × W × S),
+      decode i
+          { events := R1Z.SideChannelL1AttemptRecord.events r.1, result := Aeneas.Std.Result.ok (r.1.result, r.2) } =
+        adapt i r) :
+  PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry body owner initial fuel index adapt
+PV_L1G_SourcePublication.actual_count_with_prefix {W C E A : Type} [ProverRwFull.ExternalTypes]
+  [ProverRwFull.ExternalFuns] (encode : W × C → List PV_RJ4IDB.Event) (prior : R1Z.PV_W_Threading.Run W C E A)
+  (out :
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result ProverRwFull.prover.RetriedProof ProverRwFull.verifier.Error ×
+        R1Z.ProverRwRetryModel.Store)) :
+  PV_L1G_CountPrefixes.channels
+      (PV_L1G_WorldCapture.word encode prior ++
+        PV_L1F_ReturnedPrefix.suffix
+          (R1Z.ProverCommitSemanticTransport26.mapR R1Z.ProverRwRetryModel.sourceOutput out)) =
+    (PV_RJ4IDB.counts (PV_L1G_WorldCapture.word encode prior) ++ (PV_L1F_ReturnedCount.sourceRead out).toList,
+      PV_RJ4IDB.rejections (PV_L1G_WorldCapture.word encode prior))
+PV_L1G_WorldCapture.bind_ok {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W) (a : A)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.ok a) :
+  PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w) =
+    PV_L1G_WorldCapture.word encode (m w) ++ PV_L1G_WorldCapture.word encode (k a (m w).world)
+PV_L1G_WorldCapture.bind_fail {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W) (e : E)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.fail e) :
+  PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w) = PV_L1G_WorldCapture.word encode (m w)
+PV_L1G_WorldCapture.bind_div {W C E A B : Type} (encode : W × C → List PV_RJ4IDB.Event)
+  (m : R1Z.PV_W_Threading.M W C E A) (k : A → R1Z.PV_W_Threading.M W C E B) (w : W)
+  (h : (m w).outcome = R1Z.PV_W_Threading.Outcome.div) :
+  PV_L1G_WorldCapture.word encode (R1Z.PV_W_Threading.bind m k w) = PV_L1G_WorldCapture.word encode (m w)
+PV_L1G_WorldRetry.reached_congr {W S P : Type} (a b : PV_L1G_WorldRetry.Attempt W S P) (start : ℕ) (initial : S)
+  (world : W)
+  (leaves : ∀ (k : ℕ) (s : S) (w : W), PV_L1G_WorldRetry.Reach a start initial world k s w → a k s w = b k s w)
+  (n k : ℕ) (s : S) (w : W) (reached : PV_L1G_WorldRetry.Reach a start initial world k s w) :
+  PV_L1G_WorldRetry.run a n k s w = PV_L1G_WorldRetry.run b n k s w
+PV_L1G_WorldRetry.logged_join {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P) (n k : ℕ) (s : S) (w : W) :
+  PV_L1G_WorldRetry.stateLog (PV_L1G_WorldRetry.run a n k s w) =
+    PV_L1D_RetryFold.run (PV_L1G_WorldRetry.stateAttempt a) n k (w, s)
+PV_L1G_WorldRetry.retry_calls {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P) (n k : ℕ) (s after : S) (w : W)
+  (h : (a k s w).outcome = R1Z.PV_W_Threading.Outcome.ok (R1Z.ProverCommitRetry34.Step.retry, after)) :
+  (PV_L1G_WorldRetry.run a (n + 1) k s w).calls =
+    (a k s w).calls ++ (PV_L1G_WorldRetry.run a n (k + 1) after (a k s w).world).calls
+PV_L1G_WorldRetry.retry_world {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P) (n k : ℕ) (s after : S) (w : W)
+  (h : (a k s w).outcome = R1Z.PV_W_Threading.Outcome.ok (R1Z.ProverCommitRetry34.Step.retry, after)) :
+  (PV_L1G_WorldRetry.run a (n + 1) k s w).world = (PV_L1G_WorldRetry.run a n (k + 1) after (a k s w).world).world
+PV_L1G_WorldRetry.original_logged {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P)
+  (owner : R1Z.SideChannelL1AttemptRecord.Owner (W × S) P) (start : ℕ) (initial : W × S)
+  (link : PV_L1F_ReachedJoin.ReachedOwner (PV_L1G_WorldRetry.stateAttempt a) owner start initial) (n k : ℕ) (s : S)
+  (w : W)
+  (reached : PV_DIAG10.RetryReach (fun j ws => (PV_L1G_WorldRetry.stateAttempt a j ws).result) start initial k (w, s)) :
+  PV_L1G_WorldRetry.stateLog (PV_L1G_WorldRetry.run a n k s w) =
+    { events := R1Z.SideChannelL1AttemptRecord.events (R1Z.SideChannelL1AttemptRecord.run owner n k (w, s)).1,
+      result :=
+        Aeneas.Std.Result.ok
+          ((R1Z.SideChannelL1AttemptRecord.run owner n k (w, s)).1.result,
+            (R1Z.SideChannelL1AttemptRecord.run owner n k (w, s)).2) }
+PV_L1G_WorldRetry.failure_prefix {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P) (n k : ℕ) (s : S) (w : W)
+  (e : Aeneas.Std.Error) (h : (a k s w).outcome = R1Z.PV_W_Threading.Outcome.fail e) :
+  PV_L1G_WorldRetry.run a (n + 1) k s w =
+    { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := (a k s w).world, calls := (a k s w).calls }
+PV_L1G_WorldRetry.divergence_prefix {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P) (n k : ℕ) (s : S) (w : W)
+  (h : (a k s w).outcome = R1Z.PV_W_Threading.Outcome.div) :
+  PV_L1G_WorldRetry.run a (n + 1) k s w =
+    { outcome := R1Z.PV_W_Threading.Outcome.div, world := (a k s w).world, calls := (a k s w).calls }
+PV_L1G_WorldRetry.valid_run {W S P : Type} (a : PV_L1G_WorldRetry.Attempt W S P)
+  (step : W → PV_L1G_WorldRetry.Event → W → Prop) (leaves : ∀ (k : ℕ) (s : S), R1Z.PV_W_Threading.Valid step (a k s))
+  (n k : ℕ) (s : S) : R1Z.PV_W_Threading.Valid step (PV_L1G_WorldRetry.run a n k s)
+PV_L1G_Statements.combined {I A S P C : Type} (actualCount : I → List ℕ × List ℕ) (native : I → PV_RJ4IDB.NativeTrace A)
+  (sourceWorld bodyWorld : I → PV_RJ4IDB.Trace A) (owner : I → R1Z.SideChannelL1AttemptRecord.Owner S P)
+  (initial : I → S) (fuel index : I → ℕ) (adapt : I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A)
+  (context : I → C) (calls : I → PV_DIAG9.DiagnosticCall)
+  (acquisition : PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition actualCount sourceWorld)
+  (body : PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper sourceWorld bodyWorld)
+  (retry : PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry bodyWorld owner initial fuel index adapt)
+  (coupling : PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 native owner initial fuel index adapt)
+  (sites : PV_DIAG10.PV_DIAG10_Link_Sites context calls) :
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native ∧
+    PV_DIAG10.PV_DIAG10_Link_Sites context calls ∧
+      ∀ (i : I), PV_RJ4IDB.nativeObservation (native i) = PV_RJ4IDB.decoder (PV_RJ4IDB.modelTrace (native i))
+'PV_L1G_Statements.combined' depends on axioms: [propext]

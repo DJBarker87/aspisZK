@@ -1,0 +1,15 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_ActualRound.lean:29:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RDEAC_ActualRound.bind_return`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+def Aeneas.Std.U8.wrapping_shr : U8 → U32 → U8 :=
+fun x s => UScalar.wrapping_shr x s
+def Aeneas.Std.UScalar.cast : {src_ty : UScalarTy} → (tgt_ty : UScalarTy) → UScalar src_ty → UScalar tgt_ty :=
+fun {src_ty} tgt_ty x => BitVec.zeroExtend tgt_ty.numBits x.bv#uscalar
+def Aeneas.Std.UScalar.and : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv &&& y.bv)#uscalar
+'R1Z.PV_RDEAC_ActualRound.bind_return' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_ActualRound.factor' depends on axioms: [propext, Classical.choice, Quot.sound]

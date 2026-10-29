@@ -1,0 +1,24 @@
+import PV_DIAG5_Output
+import PV_DIAG5_Cleanup
+import PV_DIAG5_Callback
+/-! Conditional composition on the original L1 coordinates. No fresh coins,
+experiment or bad-event budget. The concrete native operation laws and
+raw-frame/return/failure joint law are still P; this is not their discharge. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S A P C W R : Type}
+theorem honest_client_pieces
+ (honest : W → Prop) (pub : W → P) (coins : W → R → C)
+ (actual : W → R → ClientOutput S A) (publicCount : P → C → Nat)
+ (publicEvents : P → C → List Event) (publicTerminal : P → C → Exit A)
+ (existingL1Count : ∀ w r, honest w → (actual w r).attemptCount = publicCount (pub w) (coins w r))
+ (nativeDiagnosticLaw : ∀ w r, honest w → clientEvents (actual w r) = publicEvents (pub w) (coins w r))
+ (nativeTerminalLaw : ∀ w r, honest w → clientTerminal (actual w r) = publicTerminal (pub w) (coins w r))
+ (w : W) (r : R) (hw : honest w) :
+ clientPieces (actual w r) =
+ (publicCount (pub w) (coins w r),publicEvents (pub w) (coins w r),publicTerminal (pub w) (coins w r)) := by
+ unfold clientPieces
+ rw [existingL1Count w r hw,nativeDiagnosticLaw w r hw,nativeTerminalLaw w r hw]
+#print axioms honest_client_pieces
+end PV_DIAG5

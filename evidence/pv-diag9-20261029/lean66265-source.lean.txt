@@ -1,0 +1,43 @@
+import PV_DIAG9_Result
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Adaptive option-B criterion. Request metadata includes every fault-relevant
+field; payloads are distinct and byte blindness is an explicit P obligation.
+Policy may stop or change its next operation after every public reply. -/
+structure FaultRequest where
+ operation : Nat
+ target : List Nat
+ offset : Nat
+ size : Nat
+ alignment : Nat
+ addressClass : Nat
+ retryState : Nat
+ deriving DecidableEq
+structure FaultReply where
+ failed : Bool
+ code : Nat
+ transferred : Nat
+ deriving DecidableEq
+abbrev FaultHistory := List (FaultRequest × FaultReply)
+def adaptive {B : Type} (policy : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) : Nat → FaultHistory → FaultHistory
+ | 0,h => h
+ | n+1,h => match policy h with
+   | none => h
+   | some (q,b) => adaptive policy world n (h++[(q,world h q b)])
+def failureBits (h : FaultHistory) := h.map (fun e => e.2.failed)
+def failureEvent (h : FaultHistory) : Prop := true ∈ failureBits h
+theorem adaptive_zero {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (h : FaultHistory) :
+ adaptive p world 0 h=h := rfl
+#print axioms adaptive_zero
+theorem adaptive_stop {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (hp : p h=none) : adaptive p world (n+1) h=h := by rw [adaptive,hp]
+#print axioms adaptive_stop
+theorem adaptive_step {B : Type} (p : FaultHistory → Option (FaultRequest × B))
+ (world : FaultHistory → FaultRequest → B → FaultReply) (n : Nat) (h : FaultHistory)
+ (q : FaultRequest) (b : B) (hp : p h=some (q,b)) :
+ adaptive p world (n+1) h=adaptive p world n (h++[(q,world h q b)]) := by rw [adaptive,hp]
+#print axioms adaptive_step
+end PV_DIAG9

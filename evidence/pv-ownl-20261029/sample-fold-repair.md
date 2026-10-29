@@ -1,0 +1,1 @@
+65659 hit Lean -M7000 at pass_canonical despite isolated word lemmas (which compiled at 65658); RSS7168560 KiB, swaps0. Replace the recursive pair projection with a state fold, prove step_bound and fold_bound first, and mark word arithmetic locally irreducible. Quotient writes remain in State.words. No cap change or unchanged retry.

@@ -1,0 +1,111 @@
+{
+  "classification": "structural source-controller binding (K-1 substitute scope); complete-Result law plus finite controller validation, production callee effects not discharged",
+  "source_rows": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 635,
+      "body": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> {\n    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }\n    let attempt=next_attempt(k)?;\n    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),\n        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),\n        Err(e)=>Err(e),\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "line": 20,
+      "body": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> {\n    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {\n        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)\n    })\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "line": 21,
+      "body": "fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!(\"{e:?}\")}"
+    }
+  ],
+  "steps": [
+    [
+      "k>=ATTEMPT_CAP",
+      "runEffects/run fuel=0",
+      "Err AttemptsExhausted, unchanged store; drop callback on return"
+    ],
+    [
+      "next_attempt(k)?",
+      "ProverRwRetryModel.attempt entropy branch",
+      "callback state retained; entropy Err aborts immediately, even if hypothetical callback returned Rejected"
+    ],
+    [
+      "generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)",
+      "clientEntropyStep/clientEntropy",
+      "proof-account callback first, then generator; any generator Err becomes Entropy; neither stage is declared silent"
+    ],
+    [
+      "prove_masked_attempt(...,attempt,nonce_store)",
+      "attempt body branch",
+      "all leaf Results and effects remain inputs; moved attempt cleanup belongs to body"
+    ],
+    [
+      "Ok((proof,audit))",
+      "done Published(proof,audit,k+1)",
+      "count and state preserved; no published projection used"
+    ],
+    [
+      "Err(Error::Rejected)",
+      "retry; runEffects append/recurse",
+      "all rejection prefix effects retained; closure moved into recursive call; no direct formatter call"
+    ],
+    [
+      "Err(e)",
+      "stop e",
+      "other variant, state and errors retained; callback drop retained as native leaf"
+    ],
+    [
+      "recursive Err AttemptsExhausted",
+      "cap_requested_text / last_rejection_reports",
+      "normal returned content fixed; no honest exhaustion exclusion or joint-law claim"
+    ],
+    [
+      "returned Rejected to plan::err",
+      "source_client_no_rejected / client_observed_api_not_rejected / rejected_not_in_report_suffix",
+      "NOT REACHED on concrete mapped-client normal-return path, for all inputs; proving panic/oom/drops remain distinct sinks"
+    ]
+  ],
+  "source_laws": [
+    "ProverRwRetryModel.retry",
+    "source_client_no_rejected",
+    "client_observed_api_not_rejected",
+    "retry_sink_exact"
+  ],
+  "finite_validation": {
+    "path": "retry-control-validation.json",
+    "sha256": "9c0f1bf52745599145d3d119121d73168f08b51ca076b0eee0149b000967c79d"
+  },
+  "source_models": {
+    "PV_DIAG2_Exhaustion.lean": "ce43fb9204172039e341ba3cb457dd5e355ec10ee6ee4edf84c03d8889b40488",
+    "PV_DIAG2_SemanticMapper.lean": "e12dd4cddda4a21c1cf85d9d85ca04b7b5f43afd127cd72efcce08d807469aaa",
+    "PV_DIAG2_AnyhowDebugControl.lean": "afdb2b64edd48ddbd3267f1ca6ccfc7fa0c265e9c2d33fbb41a63657fc0e653a",
+    "PV_DIAG2_Effects.lean": "ebb52a9e9e90cbfda56dbb6b9b6dd97550fc1d2993e59e4100dcf147cc346b9d",
+    "PV_DIAG2_Rejection.lean": "79ec4f722a0457e8cab6d5fdb725fcda924984f0a9c2d509f1da096c95ed19b5",
+    "PV_DIAG2_ApiSink.lean": "79a40679885981c868720e99b2d2fd593e3846a30c925d0a54ce44a28a8658e8",
+    "PV_DIAG2_Termination.lean": "fdd4e2b5d071ae297514557861a699e075fc3eff38942ac05f86a8e9dd49bff4",
+    "PV_DIAG2_MaskMapper.lean": "9b31a0540fe70af5dd8fb59ef503194efbba509c1fa50dfe83bc397e9036dc97",
+    "PV_DIAG2_ClientRetry.lean": "5de30c512252740f9248688f100e2d2d2fc70c8b61e25431548220983421f378",
+    "PV_DIAG2_ReturnFrames.lean": "5cabd761c1c8c8d06219d6e7779b26817c40ef6f8c375539be2f2544ee73db7a",
+    "PV_DIAG2_Process.lean": "157a66d75409a5f9de8d564e7e97fe5920d16257775da4a72025be6c79433584",
+    "PV_DIAG2_Retry.lean": "967d03bfddb7e46ac412a57611c54c7b0e73290b4be96e9ee2bebe5a3e74e225",
+    "PV_DIAG2_Sinks.lean": "0cd2818950c79bc255a76081cc0c44364ec2b806b1b380990f44ee6302ba578c",
+    "PV_DIAG2_ErrorText.lean": "0b791d36e48564e5cc2bbfcde5ad936d9cce73bd90ef64922865bbcb3b6b5e7b",
+    "PV_DIAG2_WireEquality.lean": "38959ed2ee40b6ce6c38528900b5f6de769907e6f3b792970d765cbc19ddc8c9",
+    "PV_DIAG2_CaptureControl.lean": "45e0b170f13b0e99d16c98f2e7437f964ace4ae282a0087ef8b90b75b3dd5940",
+    "PV_DIAG2_Audit.lean": "1c446868d168cdd90b66e5d2568c9d5ea3ab099cf2d64c0588453d5d9eecbfee",
+    "PV_DIAG2_Exit.lean": "a8fde00dfc527642b4327225d021529d23ece9a15d898955ad6ca3f38d46ceda",
+    "PV_DIAG2_ComposeSinks.lean": "16bf3b9d583d76251ce2a574239057c186c1d089fd6416e828d552a85c0c2202",
+    "PV_DIAG2_BacktraceFlags.lean": "b4baf3ef2cec10954e77d15a9b3f7196cec359ace301f9dc39548ed81fe1001a",
+    "PV_DIAG2_LogControl.lean": "e03696abab5173017ab108e71326f1e70e419373fb0a1d848af9dc04c8e0bd46",
+    "PV_DIAG2_PrintControl.lean": "8be81ec4538ff0d16fd9e2c81fcc90d21325cfdf79d48777c2374a4f716951c3"
+  },
+  "compiler_boundary": "V370 / owner pending D381/D386; no machine-code equality silently assumed",
+  "open": [
+    "all native leaf/drop/unwind execution effects",
+    "L1 V347-V351 joint occurrence/variant/history law including ActivePole",
+    "entropy failure witness independence under option B",
+    "all post-prover plan/main errors and captures"
+  ]
+}

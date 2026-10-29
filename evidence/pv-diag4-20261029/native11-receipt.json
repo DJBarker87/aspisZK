@@ -1,0 +1,60 @@
+{
+  "kind": "native",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "5a2df9074cba63cefb74c97d989d527a1fa48471",
+  "runner_sha256": "18b5e1a81769036f1557d51b4163ceedb6c3ce323e92730bc8dce0d5cc0be057",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "input_artifacts": {
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/PV_DIAG4_NativeControls.rs": {
+      "sha256": "98cf0dd7cbf6bb163b4c5117ea7f872493ab1d4b53b17186a5831f803ba57dfc",
+      "bytes": 2995,
+      "snapshot": "/home/dombarker/project-offloads/codex-pv-diag4-20261029/native11-input-PV_DIAG4_NativeControls.rs.txt"
+    }
+  },
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/native11-time.log",
+    "timeout",
+    "900",
+    "/home/dombarker/.cargo/bin/rustc",
+    "+1.94.1",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "debug-assertions=no",
+    "-C",
+    "overflow-checks=no",
+    "-C",
+    "panic=unwind",
+    "--edition=2021",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/PV_DIAG4_NativeControls.rs",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/native-controls"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.1812458038330078,
+  "peak_rss_kib": "121012",
+  "swaps": "0",
+  "gnu_wall": "0:00.15",
+  "print_axioms": "N/A: native source/control evidence"
+}

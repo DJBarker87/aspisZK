@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources/R1Z/PV_RDB2F_FromFnGuard.lean:27:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  guarded f n ?i ?filled ?s
+in the target expression
+  (let (item, current) := (item, current)
+    guarded f n (i + 1) (filled ++ [item]) current) =
+    do
+    let (tail, after) ←
+      match PV_RDB2E_FromFn.build f n (i + 1) current with
+        | fail e => fail e
+        | div => div
+        | ok (tail, s2) => ok (item :: tail, s2)
+    ok (filled ++ tail, after)
+
+case succ.ok
+S A : Type
+f : ℕ → S → Result (A × S)
+n : ℕ
+ih :
+  ∀ (i : ℕ) (filled : List A) (s : S),
+    guarded f n i filled s = do
+      let (tail, after) ← PV_RDB2E_FromFn.build f n i s
+      ok (filled ++ tail, after)
+i : ℕ
+filled : List A
+s : S
+item : A
+current : S
+hf : f i s = ok (item, current)
+⊢ (let (item, current) := (item, current)
+    guarded f n (i + 1) (filled ++ [item]) current) =
+    do
+    let (tail, after) ←
+      match PV_RDB2E_FromFn.build f n (i + 1) current with
+        | fail e => fail e
+        | div => div
+        | ok (tail, s2) => ok (item :: tail, s2)
+    ok (filled ++ tail, after)
+'R1Z.PV_RDB2F_FromFnGuard.initialized_prefix' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RDB2F_FromFnGuard.complete_capture' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RDB2F_FromFnGuard.store_before_increment' depends on axioms: [propext]

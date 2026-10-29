@@ -1,0 +1,179 @@
+theorem R1Z.PV_OWNP_BuilderShape.accepted_lengths : ∀ (base : List (List Aeneas.Std.U32)),
+  R1Z.PV_OWNO_Builder.acceptedBase base = true → ∀ c ∈ base, c.length = 1024 :=
+⋯
+theorem R1Z.PV_OWNP_BuilderShape.successful_lengths : ∀ {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (out : List (List R1Z.PV_OWNK_TowerCanon.Q)),
+  R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok out →
+    List.map List.length out = List.replicate 29 1024 :=
+⋯
+theorem R1Z.PV_OWNP_BuilderShape.at_array_execution : ∀ {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (columns : List (List R1Z.PV_OWNK_TowerCanon.Q)),
+  R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok columns →
+    ∀ (pub : R1Z.PV_OWNM_V239.Public) (site : R1Z.PV_OWNM_V239.Site)
+      (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64) (writes : List R1Z.PV_OWNO_PointStores.Write),
+      R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput R1Z.PV_OWNJ_Points.statement_points
+          { pubData := pub, site := site, point := ↑(R1Z.PV_OWNP_PointArray.run combine writes), columns := columns } ∧
+        List.map List.length columns = List.replicate 29 1024 :=
+⋯
+theorem R1Z.PV_OWNP_PointArray.index_bound : ∀ (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10), ↑i < (↑p).length :=
+⋯
+@[defeq] theorem R1Z.PV_OWNP_PointArray.store_view : ∀ (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10)
+  (q : R1Z.PV_OWNK_TowerCanon.Q), ↑(R1Z.PV_OWNP_PointArray.store p i q) = (↑p).set (↑i) q :=
+⋯
+theorem R1Z.PV_OWNP_PointArray.step_view : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (p : R1Z.PV_OWNP_PointArray.Point) (w : R1Z.PV_OWNO_PointStores.Write),
+  ↑(R1Z.PV_OWNP_PointArray.step combine p w) = R1Z.PV_OWNO_PointStores.store combine (↑p) w :=
+⋯
+theorem R1Z.PV_OWNP_PointArray.fold_view : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (p : R1Z.PV_OWNP_PointArray.Point),
+  ↑(List.foldl (R1Z.PV_OWNP_PointArray.step combine) p writes) =
+    List.foldl (R1Z.PV_OWNO_PointStores.store combine) (↑p) writes :=
+⋯
+theorem R1Z.PV_OWNP_PointArray.run_view : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write),
+  ↑(R1Z.PV_OWNP_PointArray.run combine writes) = R1Z.PV_OWNO_PointStores.run combine writes :=
+⋯
+theorem R1Z.PV_OWNP_PointArray.run_canonical : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write),
+  ∀ q ∈ ↑(R1Z.PV_OWNP_PointArray.run combine writes), R1Z.PV_OWNK_TowerCanon.Canon q :=
+⋯
+theorem R1Z.PV_OWNP_QueryStores.suffix_bounds : ∀ (round : Fin 10) (offset : Fin (9 - ↑round)),
+  ↑round < ↑(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) ∧
+    ↑(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) < 10 :=
+⋯
+theorem R1Z.PV_OWNP_QueryStores.query_count : ∀ (rank : Fin 10 → List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28)
+  (assignment : ℕ), (R1Z.PV_OWNP_QueryStores.queryWrites rank round sample assignment).length = 10 :=
+⋯
+theorem R1Z.PV_OWNP_QueryStores.terminal_count : ∀ (rank : Fin 10 → List Aeneas.Std.U32),
+  (R1Z.PV_OWNP_QueryStores.finalWrites rank).length = 10 :=
+⋯
+theorem R1Z.PV_OWNP_QueryStores.callback_canonical : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : Fin 10 → List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28) (assignment : ℕ),
+  ∀ q ∈ ↑(R1Z.PV_OWNP_QueryStores.callback combine rank round sample assignment), R1Z.PV_OWNK_TowerCanon.Canon q :=
+⋯
+theorem R1Z.PV_OWNP_QueryStores.terminal_canonical : ∀ (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : Fin 10 → List Aeneas.Std.U32),
+  ∀ q ∈ ↑(R1Z.PV_OWNP_QueryStores.terminal combine rank), R1Z.PV_OWNK_TowerCanon.Canon q :=
+⋯
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput : (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun wirePoints i =>
+  i.point.length = 10 ∧
+    (∀ p ∈ wirePoints i.point, p.length = 10 ∧ ∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) ∧
+      ∀ c ∈ i.columns, ∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense : {K : Type} →
+  [Field K] →
+    (R1Z.PV_OWNM_V239.Q → K) →
+      R1Z.PV_OWNM_V239.Q →
+        (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) → Prop :=
+fun {K} [Field K] decode zero source222 =>
+  ∀ (p c : List R1Z.PV_OWNM_V239.Q),
+    p.length = 10 →
+      (∀ q ∈ p, R1Z.PV_OWNM_V239.Canon q) →
+        (∀ q ∈ c, R1Z.PV_OWNM_V239.Canon q) →
+          (do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) =
+            Aeneas.Std.Result.ok (if c.length ≠ 1024 then none else some (R1Z.PV_OWNM_V239.dense decode zero p c))
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct879 i => i.site = R1Z.PV_OWNM_V239.Site.callback879 → i.point = reconstruct879 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 : (R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q) →
+  R1Z.PV_OWNM_V239.Input → Prop :=
+fun reconstruct890 i => i.site = R1Z.PV_OWNM_V239.Site.final890 → i.point = reconstruct890 i.pubData
+def R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan : {K W : Type} →
+  (R1Z.PV_OWNM_V239.Q → K) →
+    (List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q)) →
+      (List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) →
+        (R1Z.PV_OWNM_V239.Q → Bool) →
+          (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W) →
+            (R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W) →
+              List Bool → R1Z.PV_OWNM_V239.Input → Prop :=
+fun {K W} decode source222 wirePoints isBoolean native resource failures i =>
+  (∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          native i p lane =
+            R1Z.PV_OWNM_V239.attach (resource i p lane) do
+              let v ← source222 p c
+              Aeneas.Std.Result.ok (Option.map decode v)) ∧
+    ∀ p ∈ wirePoints i.point,
+      ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+        i.columns[lane]? = some c →
+          (R1Z.PV_OWNM_V239.attach (resource i p lane) do
+                let v ← source222 p c
+                Aeneas.Std.Result.ok (Option.map decode v)).trace =
+            R1Z.PV_OWNM_V239.plan isBoolean (R1Z.PV_OWNM_V239.calls wirePoints i) failures
+inductive R1Z.PV_OWNM_V239.ResourceExit : Type → Type
+number of parameters: 1
+constructors:
+R1Z.PV_OWNM_V239.ResourceExit.ready : {W : Type} → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+R1Z.PV_OWNM_V239.ResourceExit.failed : {W : Type} →
+  Aeneas.Std.Error → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+R1Z.PV_OWNM_V239.ResourceExit.diverged : {W : Type} → W → List R1Z.PV_OWNM_V239.Action → R1Z.PV_OWNM_V239.ResourceExit W
+def R1Z.PV_OWNM_V239.attach : {K W : Type} →
+  R1Z.PV_OWNM_V239.ResourceExit W → Aeneas.Std.Result (Option K) → R1Z.PV_OWNM_V239.Execution K W :=
+fun {K W} exit value =>
+  match exit with
+  | R1Z.PV_OWNM_V239.ResourceExit.ready world trace => { result := value, world := world, trace := trace }
+  | R1Z.PV_OWNM_V239.ResourceExit.failed error world trace =>
+    { result := Aeneas.Std.Result.fail error, world := world, trace := trace }
+  | R1Z.PV_OWNM_V239.ResourceExit.diverged world trace =>
+    { result := Aeneas.Std.Result.div, world := world, trace := trace }
+theorem R1Z.PV_OWNM_V239.restore : ∀ {K W : Type} [inst : Field K] (decode : R1Z.PV_OWNM_V239.Q → K)
+  (zero : R1Z.PV_OWNM_V239.Q)
+  (source222 : List R1Z.PV_OWNM_V239.Q → List R1Z.PV_OWNM_V239.Q → Aeneas.Std.Result (Option R1Z.PV_OWNM_V239.Q))
+  (wirePoints : List R1Z.PV_OWNM_V239.Q → List (List R1Z.PV_OWNM_V239.Q)) (isBoolean : R1Z.PV_OWNM_V239.Q → Bool)
+  (reconstruct879 reconstruct890 : R1Z.PV_OWNM_V239.Public → List R1Z.PV_OWNM_V239.Q)
+  (native : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.Execution K W)
+  (resource : R1Z.PV_OWNM_V239.Input → List R1Z.PV_OWNM_V239.Q → ℕ → R1Z.PV_OWNM_V239.ResourceExit W)
+  (failures : List Bool) (left right : R1Z.PV_OWNM_V239.Input),
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints left →
+    R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints right →
+      R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense decode zero source222 →
+        R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 left →
+          R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 right →
+            R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 left →
+              R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 right →
+                R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource
+                    failures left →
+                  R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource
+                      failures right →
+                    left.pubData = right.pubData →
+                      left.site = right.site →
+                        List.map List.length left.columns = List.map List.length right.columns →
+                          (∀ p ∈ wirePoints left.point,
+                              ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+                                left.columns[lane]? = some c →
+                                  native left p lane =
+                                    R1Z.PV_OWNM_V239.attach (resource left p lane)
+                                      (Aeneas.Std.Result.ok
+                                        (if c.length ≠ 1024 then none
+                                        else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+                            (∀ p ∈ wirePoints right.point,
+                                ∀ (lane : ℕ) (c : List R1Z.PV_OWNM_V239.Q),
+                                  right.columns[lane]? = some c →
+                                    native right p lane =
+                                      R1Z.PV_OWNM_V239.attach (resource right p lane)
+                                        (Aeneas.Std.Result.ok
+                                          (if c.length ≠ 1024 then none
+                                          else some (R1Z.PV_OWNM_V239.dense decode zero p c)))) ∧
+                              ∀ pL ∈ wirePoints left.point,
+                                ∀ pR ∈ wirePoints right.point,
+                                  ∀ (laneL laneR : ℕ) (cL cR : List R1Z.PV_OWNM_V239.Q),
+                                    left.columns[laneL]? = some cL →
+                                      right.columns[laneR]? = some cR →
+                                        (native left pL laneL).trace = (native right pR laneR).trace :=
+⋯
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67297/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67297/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects/R1Z/PV_OWNP_StatementsAudit.olean", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_StatementsAudit.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.10", "peak_rss_kib": "2640252", "swap": "0", "source_revision": "4f9aedf7c9d032eef21353d480ef5afea881ef57", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

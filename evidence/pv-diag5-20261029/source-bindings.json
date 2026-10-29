@@ -1,0 +1,123 @@
+{
+  "classification": "own-1 statement-level structural association; callee obligations explicitly retained",
+  "bindings": [
+    {
+      "name": "disabled",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 319,
+        "text": "pub const fn disabled() -> Backtrace {\n        Backtrace { inner: Inner::Disabled }\n    }"
+      },
+      "model": "PV_DIAG5.disabledTrace",
+      "statement_mapping": [
+        "return Inner::Disabled; no frame ownership, allocation, callee, drop or external reads"
+      ],
+      "retained_P": [
+        "V370"
+      ]
+    },
+    {
+      "name": "capture",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 292,
+        "text": "pub fn capture() -> Backtrace {\n        if !Backtrace::enabled() {\n            return Backtrace { inner: Inner::Disabled };\n        }\n        Backtrace::create(Backtrace::capture as fn() -> Backtrace as usize)\n    }"
+      },
+      "model": "PV_DIAG5.captureTrace",
+      "statement_mapping": [
+        "call Backtrace::enabled complete native operation",
+        "normal false: construct disabled; no create",
+        "normal true: call create with capture function address",
+        "all abnormal prefixes retained"
+      ],
+      "retained_P": [
+        "enablement cache/env/TLS and complete create association; V370"
+      ]
+    },
+    {
+      "name": "force_capture",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 311,
+        "text": "pub fn force_capture() -> Backtrace {\n        Backtrace::create(Backtrace::force_capture as fn() -> Backtrace as usize)\n    }"
+      },
+      "model": "PV_DIAG5.forceTrace",
+      "statement_mapping": [
+        "call create with force_capture function address, unconditionally",
+        "function address is not an arbitrary common constant"
+      ],
+      "retained_P": [
+        "complete create association and address identity; V370"
+      ]
+    },
+    {
+      "name": "create",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 325,
+        "text": "fn create(ip: usize) -> Backtrace {\n        let _lock = lock();\n        let mut frames = Vec::new();\n        let mut actual_start = None;\n        set_image_base();\n        unsafe {\n            backtrace_rs::trace_unsynchronized(|frame| {\n                frames.push(BacktraceFrame {\n                    frame: RawFrame::Actual(frame.clone()),\n                    symbols: Vec::new(),\n                });\n                if frame.symbol_address().addr() == ip && actual_start.is_none() {\n                    actual_start = Some(frames.len());\n                }\n                true\n            });\n        }\n\n        // If no frames came out assume that this is an unsupported platform\n        // since `backtrace` doesn't provide a way of learning this right now,\n        // and this should be a good enough approximation.\n        let inner = if frames.is_empty() {\n            Inner::Unsupported\n        } else {\n            Inner::Captured(LazyLock::new(lazy_resolve(Capture {\n                actual_start: actual_start.unwrap_or(0),\n                frames,\n            })))\n        };\n\n        Backtrace { inner }\n    }"
+      },
+      "model": "PV_DIAG5.callback / capturedFrames / actual_display_slice_valid",
+      "statement_mapping": [
+        "lock guard acquired before frame vector; Vec::new and None initialize state",
+        "set_image_base retains complete effects; foreign trace driver selects raw frame sequence",
+        "each callback: clone original raw frame; build RawFrame::Actual and zero-capacity symbols Vec; push with allocation/drop/error effects",
+        "query symbol_address on ORIGINAL borrowed frame after push, then compare addr with ip",
+        "only when equal AND actual_start None: assign Some(POST-PUSH length); return true normally",
+        "finite normally completed callbacks give frame order and start bound by proved list induction",
+        "empty frames => unsupported; nonempty moves capture into lazy_resolve then LazyLock",
+        "actual lock/frame/closure drops and failed move ownership retained in explicit native state; these are not proved silent"
+      ],
+      "retained_P": [
+        "lock,image base,unwinder,clone/push/address/package/drop/unwind native operation laws; raw-frame joint distribution; V370"
+      ]
+    },
+    {
+      "name": "display",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 382,
+        "text": "impl fmt::Display for Backtrace {\n    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {\n        let capture = match &self.inner {\n            Inner::Unsupported => return fmt.write_str(\"unsupported backtrace\"),\n            Inner::Disabled => return fmt.write_str(\"disabled backtrace\"),\n            Inner::Captured(c) => &**c,\n        };\n\n        let full = fmt.alternate();\n        let (frames, style) = if full {\n            (&capture.frames[..], backtrace_rs::PrintFmt::Full)\n        } else {\n            (&capture.frames[capture.actual_start..], backtrace_rs::PrintFmt::Short)\n        };\n\n        // When printing paths we try to strip the cwd if it exists, otherwise\n        // we just print the path as-is. Note that we also only do this for the\n        // short format, because if it's full we presumably want to print\n        // everything.\n        let cwd = crate::env::current_dir();\n        let mut print_path = move |fmt: &mut fmt::Formatter<'_>, path: BytesOrWideString<'_>| {\n            output_filename(fmt, path, style, cwd.as_ref().ok())\n        };\n\n        let mut f = backtrace_rs::BacktraceFmt::new(fmt, style, &mut print_path);\n        f.add_context()?;\n        for frame in frames {\n            if frame.symbols.is_empty() {\n                f.frame().print_raw(frame.frame.ip(), None, None, None)?;\n            } else {\n                for symbol in frame.symbols.iter() {\n                    f.frame().print_raw_with_column(\n                        frame.frame.ip(),\n                        symbol.name.as_ref().map(|b| backtrace_rs::SymbolName::new(b)),\n                        symbol.filename.as_ref().map(|b| match b {\n                            BytesOrWide::Bytes(w) => BytesOrWideString::Bytes(w),\n                            BytesOrWide::Wide(w) => BytesOrWideString::Wide(w),\n                        }),\n                        symbol.lineno,\n                        symbol.colno,\n                    )?;\n                }\n            }\n        }\n        f.finish()?;\n        Ok(())\n    }\n}"
+      },
+      "model": "PV_DIAG5.emitFrame / displayTrace",
+      "statement_mapping": [
+        "borrow unsupported/disabled => write corresponding literal and RETURN its full formatter Result",
+        "captured => force LazyLock; read alternate; full uses all frames and Full style; short uses actual_start suffix and Short style",
+        "actual_display_slice_valid discharges short slice panic for states made by finite normally completed create callbacks",
+        "current_dir executed even for full; move cwd Result into closure; failed cwd is not propagated as formatting failure",
+        "BacktraceFmt new; add_context ?; iterate selected borrowed frames in order",
+        "empty symbols => print_raw(ip,None,None,None) ?; else each symbol print_raw_with_column(ip,name,filename,line,column) ?",
+        "finish ?; return Ok; guard/formatter/cwd cleanup on normal and unwind, abort does not unwind"
+      ],
+      "retained_P": [
+        "lazy resolve/current_dir/formatter/write/drop full operation laws and joint native occurrence/content; V370"
+      ]
+    },
+    {
+      "name": "lazy_resolve",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "line": 436,
+        "text": "pub(super) fn lazy_resolve(mut capture: Capture) -> LazyResolve {\n        move || {\n            // Use the global backtrace lock to synchronize this as it's a\n            // requirement of the `backtrace` crate, and then actually resolve\n            // everything.\n            let _lock = lock();\n            for frame in capture.frames.iter_mut() {\n                let symbols = &mut frame.symbols;\n                let frame = match &frame.frame {\n                    RawFrame::Actual(frame) => frame,\n                    #[cfg(test)]\n                    RawFrame::Fake => unimplemented!(),\n                };\n                unsafe {\n                    backtrace_rs::resolve_frame_unsynchronized(frame, |symbol| {\n                        symbols.push(BacktraceSymbol {\n                            name: symbol.name().map(|m| m.as_bytes().to_vec()),\n                            filename: symbol.filename_raw().map(|b| match b {\n                                BytesOrWideString::Bytes(b) => BytesOrWide::Bytes(b.to_owned()),\n                                BytesOrWideString::Wide(b) => BytesOrWide::Wide(b.to_owned()),\n                            }),\n                            lineno: symbol.lineno(),\n                            colno: symbol.colno(),\n                        });\n                    });\n                }\n            }\n\n            capture\n        }\n    }"
+      },
+      "model": "retained native obligation",
+      "statement_mapping": [
+        "closure owns capture; acquire global backtrace lock when FORCED, not when constructed",
+        "mutable iteration resolves each frame and PUSHES every symbol including copied name,filename,line,column",
+        "all writes through mutable borrowed frame/symbol vector must be retained; no Aeneas iterator-restoration credit claimed",
+        "normal return MOVES capture; drop guard unlocks; panic has actual closure/frame/vector/lock cleanup"
+      ],
+      "retained_P": [
+        "complete resolver foreign/cache/image/debug-file and allocation/writeback law; V370"
+      ]
+    }
+  ],
+  "source_to_machine": "V370 / pending D381/D386",
+  "whole_native_joint_law": false
+}

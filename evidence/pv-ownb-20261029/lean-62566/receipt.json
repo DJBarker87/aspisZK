@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62566/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62566/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_Relocate.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_Relocate.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.44",
+  "peak_rss_kib": "483592",
+  "swap": "0",
+  "source_revision": "6e664f52b3e1ef1a81314518bd05ce0735f921bd",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_Relocate.lean:17:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  overwrite ?m.17 ?m.19 ?m.20 ?m.18 ?m.21\nin the target expression\n  {\n          size :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.size,\n          alignment :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                live := c.live }.alignment,\n          capacity :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.capacity,\n          contents :=\n            overwrite\n              { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                  contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                  live := c.live }.contents\n              (s + 2) 2 (PV_OWN_U16.encode q),\n          owner :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.owner,\n          live :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                live := c.live }.live }.contents\n      (s + i) =\n    c.contents (s + i)\n\nc : Cell\ns : Nat\np q : UInt16\ni : Nat\nhi : 4 \u2264 i\n\u22a2 {\n          size :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.size,\n          alignment :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                live := c.live }.alignment,\n          capacity :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.capacity,\n          contents :=\n            overwrite\n              { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                  contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                  live := c.live }.contents\n              (s + 2) 2 (PV_OWN_U16.encode q),\n          owner :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.owner,\n          live :=\n            { size := c.size, alignment := c.alignment, capacity := c.capacity,\n                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,\n                live := c.live }.live }.contents\n      (s + i) =\n    c.contents (s + i)\n'R1Z.PV_OWNB_Relocate.write' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNB_Relocate.pad' depends on axioms: [sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62566,
+  "module": "R1Z/PV_OWNB_Relocate",
+  "source_blob": "274cbd7a4240beef6ecdf760fc2ca08d31b19111",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNB_Relocate.lean",
+  "source_sha256": "7a240703fee0cad9e440ba01d9df979a44f24e7927559d814c760de55a220696",
+  "imports": [
+    "R1Z.PV_OWNB_WriteProducer",
+    "R1Z.PV_OWNB_WriteConsumer"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNB_WriteProducer": "0a97368c7c5b288d7b3a07d715058f858de10ada36237983129c5df30588e785",
+    "R1Z.PV_OWNB_WriteConsumer": "92e345a5855ee001578e31375860f0a32e45b4d289d801d11ec2aafe2003c64a"
+  },
+  "deps_fingerprint": "0561a973d3504c86f549da7714ed5940e23ceaf334e60a433831858828c0178f"
+}

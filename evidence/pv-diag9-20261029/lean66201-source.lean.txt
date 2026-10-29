@@ -1,0 +1,13 @@
+import Aeneas
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result
+
+theorem ok_excludes_panic {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .fail .panic := by rw [h]; intro e; cases e
+#print axioms ok_excludes_panic
+theorem ok_excludes_div {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .div := by rw [h]; intro e; cases e
+#print axioms ok_excludes_div
+end PV_DIAG9

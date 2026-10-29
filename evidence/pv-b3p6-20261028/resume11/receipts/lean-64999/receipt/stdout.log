@@ -1,0 +1,68 @@
+PV_B3P_Binding11227.full_round_source_fold11 (state : PV_B3P_Binding10227.RoundState10)
+  (constants1 : Aeneas.Std.Array PV_B3P_227.aspis_core.field.QM31 16#usize) :
+  PV_B3P_227.reference_poseidon.full_round state constants1 =
+    PV_B3P_Ordered227.fold (PV_B3P_Binding10227.round_q_step10 constants1)
+        [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize, 10#usize, 11#usize,
+          12#usize, 13#usize, 14#usize, 15#usize]
+        state >>=
+      PV_B3P_227.reference_poseidon.external_linear_lazy
+'PV_B3P_Binding11227.full_round_source_fold11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.full_round_packed_source_fold11 (state : PV_B3P_Binding10227.RoundState10)
+  (constants1 : Aeneas.Std.Array PV_B3P_227.aspis_core.field.QM31 16#usize) :
+  PV_B3P_227.reference_poseidon.full_round_packed state constants1 =
+    PV_B3P_Ordered227.fold (PV_B3P_Binding10227.round_q_step10 constants1)
+        [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize, 10#usize, 11#usize,
+          12#usize, 13#usize, 14#usize, 15#usize]
+        state >>=
+      PV_B3P_227.reference_poseidon.external_linear_packed
+'PV_B3P_Binding11227.full_round_packed_source_fold11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.full_round_m31_constants_source_fold11 (state : PV_B3P_Binding10227.RoundState10)
+  (constants1 : Aeneas.Std.Array Aeneas.Std.U32 16#usize) :
+  PV_B3P_227.reference_poseidon.full_round_m31_constants state constants1 =
+    PV_B3P_Ordered227.fold (PV_B3P_Binding10227.round_m_step10 constants1)
+        [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize, 10#usize, 11#usize,
+          12#usize, 13#usize, 14#usize, 15#usize]
+        state >>=
+      PV_B3P_227.reference_poseidon.external_linear_lazy
+'PV_B3P_Binding11227.full_round_m31_constants_source_fold11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.full_round_m31_constants_packed_source_fold11 (state : PV_B3P_Binding10227.RoundState10)
+  (constants1 : Aeneas.Std.Array Aeneas.Std.U32 16#usize) :
+  PV_B3P_227.reference_poseidon.full_round_m31_constants_packed state constants1 =
+    PV_B3P_Ordered227.fold (PV_B3P_Binding10227.round_m_step10 constants1)
+        [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize, 8#usize, 9#usize, 10#usize, 11#usize,
+          12#usize, 13#usize, 14#usize, 15#usize]
+        state >>=
+      PV_B3P_227.reference_poseidon.external_linear_packed
+'PV_B3P_Binding11227.full_round_m31_constants_packed_source_fold11' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+PV_B3P_Binding11227.add_value_scaling_binding11 (packed : Aeneas.Std.Array PV_B3P_227.aspis_core.field.QM31 24#usize)
+  (openings : PV_B3P_227.aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+  (selectors : PV_B3P_227.reference_copy_terminal.Selectors) :
+  PV_B3P_227.reference_terminal.add_value_lanes packed openings selectors =
+    PV_B3P_Binding11227.value_scaling_source11 packed openings selectors
+'PV_B3P_Binding11227.add_value_scaling_binding11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.scale_loop_frame11 (selector : PV_B3P_227.aspis_core.field.QM31)
+  (range : PV_B3P_Binding11227.ScaleRange11) :
+  Aeneas.Std.loop (PV_B3P_Binding9227.usize_body PV_B3P_Binding11227.scale_frame11 33#usize)
+      ((selector, range), 0#usize) =
+    do
+    let next ←
+      Aeneas.Std.loop (PV_B3P_Binding9227.usize_body (PV_B3P_Binding11227.scale_cell11 selector) 33#usize)
+          (range, 0#usize)
+    Aeneas.Std.Result.ok (selector, next)
+'PV_B3P_Binding11227.scale_loop_frame11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.public_digest_source_loop_binding11 (public1 : PV_B3P_227.reference_terminal.SemanticPublic)
+  (openings : PV_B3P_227.aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+  (selectors : PV_B3P_227.reference_copy_terminal.Selectors) :
+  PV_B3P_227.reference_terminal.public_digest_lanes public1 openings selectors =
+    PV_B3P_Binding11227.public_digest_source_loop11 public1 openings selectors
+'PV_B3P_Binding11227.public_digest_source_loop_binding11' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_B3P_Binding11227.digest_store_fold11 (output : Aeneas.Std.Array PV_B3P_227.aspis_core.field.QM31 8#usize)
+  (selector : PV_B3P_227.aspis_core.field.QM31) (opened : Aeneas.Std.Array PV_B3P_227.aspis_core.field.QM31 16#usize)
+  (start : Aeneas.Std.Usize) (expected : Aeneas.Std.Array PV_B3P_227.aspis_core.field.M31 8#usize)
+  (right_tweak : Bool) :
+  PV_B3P_227.reference_terminal.add_digest_binding output selector opened start expected right_tweak =
+    PV_B3P_Ordered227.fold (PV_B3P_Binding11227.digest_store_cell11 selector opened start expected right_tweak)
+      [0#usize, 1#usize, 2#usize, 3#usize, 4#usize, 5#usize, 6#usize, 7#usize] output
+'PV_B3P_Binding11227.digest_store_fold11' depends on axioms: [propext, Classical.choice, Quot.sound]

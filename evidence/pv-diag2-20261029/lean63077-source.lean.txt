@@ -1,0 +1,18 @@
+import PV_DIAG2_Sinks
+import PV_DIAG2_Termination
+set_option autoImplicit false
+namespace PV_DIAG2
+open Aeneas Aeneas.Std Result
+open R1Z ProverCommitRetry34
+
+def sampleAttempt (events : List Effect) : Nat → Unit → Observed (Step Unit × Unit) :=
+ fun _ _ => ⟨events,ok (.done (),())⟩
+
+
+theorem sink_append (sink : Sink) (a b : List Effect) : atSink sink (a++b) = atSink sink a ++ atSink sink b := by simp [atSink,List.filter_append]
+#print axioms sink_append
+
+theorem sink_prepend {A : Type} (sink : Sink) (prior : List Effect) (x : Execution A) :
+ atSink sink (prepend prior x).effects = atSink sink prior ++ atSink sink x.effects := sink_append sink prior x.effects
+#print axioms sink_prepend
+end PV_DIAG2

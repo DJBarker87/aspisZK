@@ -1,0 +1,40 @@
+import PV_DIAG9_World
+set_option autoImplicit false
+namespace PV_DIAG10
+open PV_DIAG9
+/-! context is the original joint public input/L1 coins/retained prefix AND
+option-B world. chargedBad MUST be the original headline's charged union.
+These sufficient couplings introduce no new bad event, error charge or T field. -/
+def PV_DIAG10_Link_Request {I P B : Type} (context : I → P)
+ (chargedBad : I → Prop) (policy : I → FaultHistory → Option (FaultRequest × B)) : Prop :=
+ ∀ i j, ¬ chargedBad i → ¬ chargedBad j → context i=context j →
+ ∀ h, (policy i h).map Prod.fst=(policy j h).map Prod.fst
+def PV_DIAG10_Link_WorldBlind {I P B : Type} (context : I → P)
+ (world : I → FaultHistory → FaultRequest → B → FaultReply)
+ (publicWorld : P → FaultHistory → FaultRequest → FaultReply) : Prop :=
+ ∀ i h q b, world i h q b=publicWorld (context i) h q
+def PV_DIAG10_Link_ExecutionHistory {I B : Type} (actual : I → FaultHistory)
+ (policy : I → FaultHistory → Option (FaultRequest × B))
+ (world : I → FaultHistory → FaultRequest → B → FaultReply) (fuel : Nat) : Prop :=
+ ∀ i, actual i=adaptive (policy i) (world i) fuel []
+def PV_DIAG10_Link_ChargedBad {I : Type} (chargedBad headlineBad : I → Prop) : Prop :=
+ ∀ i, chargedBad i ↔ headlineBad i
+theorem request_coupling_off_bad {I P B : Type} (context : I → P)
+ (chargedBad : I → Prop) (policy : I → FaultHistory → Option (FaultRequest × B))
+ (world : I → FaultHistory → FaultRequest → B → FaultReply)
+ (publicWorld : P → FaultHistory → FaultRequest → FaultReply)
+ (requests : PV_DIAG10_Link_Request context chargedBad policy)
+ (blind : PV_DIAG10_Link_WorldBlind context world publicWorld)
+ (i j : I) (hi : ¬ chargedBad i) (hj : ¬ chargedBad j) (hc : context i=context j)
+ (fuel : Nat) (history : FaultHistory) :
+ adaptive (policy i) (world i) fuel history=adaptive (policy j) (world j) fuel history := by
+ let publicPolicy := fun h => (policy i h).map Prod.fst
+ have left := byte_blind_public_replay (policy i) publicPolicy (world i)
+   (publicWorld (context i)) (fun _ => rfl) (blind i) fuel history
+ have right := byte_blind_public_replay (policy j) publicPolicy (world j)
+   (publicWorld (context j)) (fun h => (requests i j hi hj hc h).symm)
+   (blind j) fuel history
+ rw [hc] at left
+ exact left.trans right.symm
+#print axioms request_coupling_off_bad
+end PV_DIAG10

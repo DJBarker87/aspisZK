@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_Attempt.lean:31:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.prove_masked_attempt pub compiled variant hash secret s.2
+in the target expression
+  ∃ out,
+    (let (r, after) := (core.result.Result.Ok secret, after)
+      match r with
+      | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, s.2)
+      | core.result.Result.Ok secret => do
+        let (r1, store) ← prover.prove_masked_attempt pub compiled variant hash secret s.2
+        match r1 with
+          | core.result.Result.Ok p => ok (ProverCommitRetry34.Step.done p, after, store)
+          | core.result.Result.Err verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, after, store)
+          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, store)) =
+      ok out
+
+case Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+C : Type
+entropy : ProverRwRetryModel.Entropy C
+pub : ProverRwRetryModel.Pub
+compiled : ProverRwRetryModel.Compiled
+variant : transport.Variant
+hash : ProverRwRetryModel.Hash
+he : PV_DIAG10_Link_Entropy entropy
+hm✝ : PV_DIAG10_Link_MaskedAttempt pub compiled variant hash
+k : ℕ
+s : C × ProverRwRetryModel.Store
+after : C
+secret : ProverRwRetryModel.Secret
+hs : entropy.call_mut s.1 (ProverCommitRetrySource34.word k) = ok (core.result.Result.Ok secret, after)
+status : core.result.Result (alloc.vec.Vec U8 × prover.MaskedFixtureAudit) verifier.Error
+store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+hm : prover.prove_masked_attempt pub compiled variant hash secret s.2 = ok (status, store)
+⊢ ∃ out,
+    (let (r, after) := (core.result.Result.Ok secret, after)
+      match r with
+      | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, s.2)
+      | core.result.Result.Ok secret => do
+        let (r1, store) ← prover.prove_masked_attempt pub compiled variant hash secret s.2
+        match r1 with
+          | core.result.Result.Ok p => ok (ProverCommitRetry34.Step.done p, after, store)
+          | core.result.Result.Err verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, after, store)
+          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, store)) =
+      ok out
+'PV_DIAG10.attempt_from_complete_producers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

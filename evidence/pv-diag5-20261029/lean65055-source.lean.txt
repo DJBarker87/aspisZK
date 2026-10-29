@@ -1,0 +1,80 @@
+import PV_DIAG3_Joint
+/-! Borrowed, finite formatting loops of Backtrace::Display. A formatter
+error terminates the loop at exactly that frame/symbol; panic/abort/diverge
+retain their native prefix. Leaf print operations include actual formatting,
+write, errors and cleanup. This supplies no public law for those leaves. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S A B : Type}
+def tryThen (first : Op S (Except Unit Unit)) (next : Op S (Except Unit Unit)) :
+ Op S (Except Unit Unit) := sequence first (fun r => match r with
+ | .ok () => next
+ | .error () => PV_DIAG3.pure (.error ()))
+def emitEach (emit : A → Op S (Except Unit Unit)) : List A → Op S (Except Unit Unit)
+ | [] => PV_DIAG3.pure (.ok ())
+ | a::as => tryThen (emit a) (emitEach emit as)
+structure ResolvedFrame (A B : Type) where
+ raw : A
+ symbols : List B
+
+def emitFrame (raw : A → Op S (Except Unit Unit))
+ (symbol : A → B → Op S (Except Unit Unit)) (f : ResolvedFrame A B) :
+ Op S (Except Unit Unit) :=
+ if f.symbols.isEmpty then raw f.raw else emitEach (symbol f.raw) f.symbols
+theorem emit_empty (emit : A → Op S (Except Unit Unit)) :
+ emitEach emit [] = PV_DIAG3.pure (.ok ()) := rfl
+#print axioms emit_empty
+theorem emit_cons (emit : A → Op S (Except Unit Unit)) (a : A) (as : List A) :
+ emitEach emit (a::as) = tryThen (emit a) (emitEach emit as) := rfl
+#print axioms emit_cons
+theorem try_success (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (h : first s = ⟨es,t,.value (.ok ())⟩) :
+ tryThen first next s = prepend es (next t) := by
+ simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_success
+theorem try_error_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (h : first s = ⟨es,t,.value (.error ())⟩) :
+ tryThen first next s = ⟨es,t,.value (.error ())⟩ := by
+ simp [tryThen,sequence,h,PV_DIAG3.bind,prepend,PV_DIAG3.pure]
+#print axioms try_error_no_suffix
+theorem try_panic_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (p : Panic) (h : first s = ⟨es,t,.panic p⟩) :
+ tryThen first next s = ⟨es,t,.panic p⟩ := by simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_panic_no_suffix
+theorem try_abort_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (p : Crash) (h : first s = ⟨es,t,.abort p⟩) :
+ tryThen first next s = ⟨es,t,.abort p⟩ := by simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_abort_no_suffix
+theorem try_diverge_no_suffix (first next : Op S (Except Unit Unit)) (s t : S)
+ (es : List Event) (h : first s = ⟨es,t,.diverge⟩) :
+ tryThen first next s = ⟨es,t,.diverge⟩ := by simp [tryThen,sequence,h,PV_DIAG3.bind]
+#print axioms try_diverge_no_suffix
+theorem frame_no_symbols_raw (raw : A → Op S (Except Unit Unit))
+ (sym : A → B → Op S (Except Unit Unit)) (f : A) :
+ emitFrame raw sym ⟨f,[]⟩ = raw f := rfl
+#print axioms frame_no_symbols_raw
+theorem frame_symbols_order (raw : A → Op S (Except Unit Unit))
+ (sym : A → B → Op S (Except Unit Unit)) (f : A) (b : B) (bs : List B) :
+ emitFrame raw sym ⟨f,b::bs⟩ = emitEach (sym f) (b::bs) := rfl
+#print axioms frame_symbols_order
+theorem try_coupled (rel : S → S → Prop) (a b c d : Op S (Except Unit Unit))
+ (s t : S) (h : Coupled rel (a s) (b t))
+ (hk : ∀ u v, rel u v → Coupled rel (c u) (d v)) :
+ Coupled rel (tryThen a c s) (tryThen b d t) := by
+ apply coupled_bind rel (a s) (b t) _ _ h
+ intro out u v huv
+ cases out with
+ | ok unit => cases unit; exact hk u v huv
+ | error unit => cases unit; exact coupled_pure rel (Except.error () : Except Unit Unit) u v huv
+#print axioms try_coupled
+theorem emit_coupled (rel : S → S → Prop)
+ (left right : A → Op S (Except Unit Unit)) (as : List A) (s t : S)
+ (h : rel s t) (leaf : ∀ a u v, rel u v → Coupled rel (left a u) (right a v)) :
+ Coupled rel (emitEach left as s) (emitEach right as t) := by
+ induction as generalizing s t with
+ | nil => exact coupled_pure rel (Except.ok () : Except Unit Unit) s t h
+ | cons a as ih => exact try_coupled rel _ _ _ _ s t (leaf a s t h)
+    (fun u v huv => ih u v huv)
+#print axioms emit_coupled
+end PV_DIAG5

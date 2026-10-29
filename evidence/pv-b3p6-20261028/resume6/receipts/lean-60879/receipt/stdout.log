@@ -1,0 +1,68 @@
+'PV_B3P_Success227.bool_not' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.34 = ?m.34 then ?m.36 else ?m.37
+in the target expression
+  (do
+      let b ←
+        if True then
+            List.allM
+              (fun x => do
+                let b ← cmp.ne x.1 x.2
+                Result.ok !b)
+              ((↑a).zip ↑a)
+          else Result.ok false
+      Result.ok !b) =
+    Result.ok false
+
+T : Type
+n : Usize
+cmp : core.cmp.PartialEq T T
+hn : ∀ (x : T), cmp.ne x x = Result.ok false
+a : Std.Array T n
+⊢ (do
+      let b ←
+        if True then
+            List.allM
+              (fun x => do
+                let b ← cmp.ne x.1 x.2
+                Result.ok !b)
+              ((↑a).zip ↑a)
+          else Result.ok false
+      Result.ok !b) =
+    Result.ok false
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array T n
+  but is expected to have type
+    { l // l.length = ↑n }
+  in the application
+    ↑a
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:35:13: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.trait_default
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲ aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq, d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵e̵q̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]̵d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲e̲q̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:36:4: warning: This simp argument is unused:
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵M̵3̵1̵,̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq, d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵e̵q̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵]̵d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲e̲q̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Success227.list_self' depends on axioms: [propext, Quot.sound]
+'PV_B3P_Success227.array_ne_self' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_B3P_Success227.byte_ne_self' depends on axioms: [propext]
+'PV_B3P_Success227.word_ne_self' depends on axioms: [propext]
+'PV_B3P_Success227.bytes_ne_self' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_B3P_Success227.digest_ne_self' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

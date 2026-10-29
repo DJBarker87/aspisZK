@@ -1,0 +1,100 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:46:23: error(lean.unknownIdentifier): Unknown identifier `bne_self`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:48:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 ?m.260 path
+in the target expression
+  (do
+      let out2 ← if (47#u8 != 47#u8) = true then alloc.vec.Vec.push ⟨↑base, ⋯⟩ 47#u8 else ok ⟨↑base, ⋯⟩
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 path) =
+    ok ⟨↑base ++ [] ++ ↑path, ⋯⟩
+
+case pos
+base path : Slice U8
+positive : 0 < (↑path).length
+first : (↑path)[0] ≠ 47#u8
+bound : (↑base).length + 1 + (↑path).length ≤ Usize.max
+ppos : path.len > 0#usize
+bp : 0 < (↑base).length
+bpos : base.len > 0#usize
+last : (↑base)[↑(base.len.wrapping_sub 1#usize)] = (↑base)[(↑base).length - 1]?.getD 0#u8
+slash : (↑base)[(↑base).length - 1]?.getD 0#u8 = 47#u8
+⊢ (do
+      let out2 ← if (47#u8 != 47#u8) = true then alloc.vec.Vec.push ⟨↑base, ⋯⟩ 47#u8 else ok ⟨↑base, ⋯⟩
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 path) =
+    ok ⟨↑base ++ [] ++ ↑path, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (47 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:55:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 ?m.349 path
+in the target expression
+  (do
+      let out2 ←
+        if ((↑base)[(↑base).length - 1]?.getD 0#u8 != 47#u8) = true then ok ⟨↑base ++ [47#u8], ⋯⟩ else ok ⟨↑base, ⋯⟩
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 path) =
+    ok ⟨↑base ++ [47#u8] ++ ↑path, ⋯⟩
+
+case neg
+base path : Slice U8
+positive : 0 < (↑path).length
+first : (↑path)[0] ≠ 47#u8
+bound : (↑base).length + 1 + (↑path).length ≤ Usize.max
+ppos : path.len > 0#usize
+bp : 0 < (↑base).length
+bpos : base.len > 0#usize
+last : (↑base)[↑(base.len.wrapping_sub 1#usize)] = (↑base)[(↑base).length - 1]?.getD 0#u8
+slash : ¬(↑base)[(↑base).length - 1]?.getD 0#u8 = 47#u8
+bne : ((↑base)[(↑base).length - 1]?.getD 0#u8 != 47#u8) = true
+⊢ (do
+      let out2 ←
+        if ((↑base)[(↑base).length - 1]?.getD 0#u8 != 47#u8) = true then ok ⟨↑base ++ [47#u8], ⋯⟩ else ok ⟨↑base, ⋯⟩
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 path) =
+    ok ⟨↑base ++ [47#u8] ++ ↑path, ⋯⟩
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    base
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑base
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:55:28: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    ?m.349
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑?m.349
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:30:24: warning: This simp argument is unused:
+  alloc.vec.Vec.new
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵n̵e̵w̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_JoinValue.lean:51:23: warning: This simp argument is unused:
+  bne
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵l̵a̵s̵h̵,̵b̵n̵e̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵j̵o̵i̵n̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵n̵e̵e̵d̵s̵S̵e̵p̵a̵r̵a̵t̵o̵r̵,̵b̵p̵,̵B̵o̵o̵l̵.̵t̵r̵u̵e̵_̵a̵n̵d̵]̵[̲s̲l̲a̲s̲h̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲j̲o̲i̲n̲e̲d̲,̲ ̲n̲e̲e̲d̲s̲S̲e̲p̲a̲r̲a̲t̲o̲r̲,̲ ̲b̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲t̲r̲u̲e̲_̲a̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDEAC_JoinValue.length_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_JoinValue.relative' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

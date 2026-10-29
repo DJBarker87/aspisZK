@@ -1,0 +1,57 @@
+import PV_DIAG9_Frames
+import PV_DIAG9_Operands
+import PV_DIAG9_World
+import PV_DIAG9_Handoff
+#print axioms PV_DIAG9.normal_return_restores
+#print axioms PV_DIAG9.caller_capture_after_return
+#print axioms PV_DIAG9.callee_frames_not_live_after_return
+#print axioms PV_DIAG9.returned_error_frames
+#print axioms PV_DIAG9.different_retry_paths_same_live_stack
+#print axioms PV_DIAG9.selected_capture_public_after_return
+#print axioms PV_DIAG9.earlier_captures_retained
+#print axioms PV_DIAG9.disabled_selected_capture_retains_prefix
+#print axioms PV_DIAG9.capture_free_done
+#print axioms PV_DIAG9.capture_free_call
+#print axioms PV_DIAG9.capture_free_seq
+#print axioms PV_DIAG9.normal_returns_do_not_erase_internal_captures
+#print axioms PV_DIAG9.public_selected_capture_decoder
+#print axioms PV_DIAG9.complete_capture_transport
+#print axioms PV_DIAG9.format_operands_transport
+#print axioms PV_DIAG9.format_operand_byte_lengths
+#print axioms PV_DIAG9.formatter_capacity_transport
+#print axioms PV_DIAG9.formatter_effects_transport
+#print axioms PV_DIAG9.returned_error_callsite_frames
+#print axioms PV_DIAG9.logger_same_invocation
+#print axioms PV_DIAG9.logger_same_public_state
+#print axioms PV_DIAG9.logger_trace_transport
+#print axioms PV_DIAG9.logger_order_retained
+#print axioms PV_DIAG9.logger_failure_not_erased
+#print axioms PV_DIAG9.logger_config_alone_insufficient
+#print axioms PV_DIAG9.diagnostic_public_invocations
+#print axioms PV_DIAG9.adaptive_zero
+#print axioms PV_DIAG9.adaptive_stop
+#print axioms PV_DIAG9.adaptive_step
+#print axioms PV_DIAG9.adaptive_prefix_retained
+#print axioms PV_DIAG9.adaptive_count_bound
+#print axioms PV_DIAG9.adaptive_coupling
+#print axioms PV_DIAG9.byte_blind_public_replay
+#print axioms PV_DIAG9.failure_bits_transport
+#print axioms PV_DIAG9.failure_event_transport
+#print axioms PV_DIAG9.metadata_and_partial_delivery_retained
+#print axioms PV_DIAG9.reply_failure_retained
+#print axioms PV_DIAG9.public_history_failure_law
+#print axioms PV_DIAG9.same_size_not_same_failure
+#print axioms PV_DIAG9.payload_blindness_not_implied_by_size
+#print axioms PV_DIAG9.event_equality_weaker_than_history
+#print axioms PV_DIAG9.adaptive_no_fixed_request_count
+#print axioms PV_DIAG9.public_joint_history_decoder
+#print axioms PV_DIAG9.file_acquisition_public
+#print axioms PV_DIAG9.json_stdout_acquisition_public
+#print axioms PV_DIAG9.error_stderr_acquisition_public
+#print axioms PV_DIAG9.DIAG9_inputs_given_native_binding
+#print axioms PV_DIAG9.decoder_given_complete_native_binding
+#print axioms PV_DIAG9.native_factorization_retained
+#print axioms PV_DIAG9.prefix_files_retained
+#print axioms PV_DIAG9.prefix_diagnostics_retained
+#print axioms PV_DIAG9.partial_stdout_delivery_retained
+#print axioms PV_DIAG9.terminal_not_supplied_by_three_channels

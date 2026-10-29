@@ -1,0 +1,15 @@
+import PV_DIAG11_WriteAll
+import PV_DIAG11_Cleanup
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! std::fs::write::inner: File::create(path)?.write_all(contents),
+then the returned File temporary is dropped on ordinary Ok/Err. Path/content
+AsRef conversions and their evaluation precede this inner function. -/
+def fileWrite {V F : Type} (create : Run V IoError F)
+ (write : F → Run V IoError Unit) (close : F → Run V IoError Unit) : Run V IoError Unit :=
+ seq create (fun f => dropReturned (write f) (close f))
+
+theorem file_create_error {V F : Type} (es : List V) (e : IoError) (w c : F → Run V IoError Unit) : fileWrite ⟨es,.error e⟩ w c=⟨es,.error e⟩ := rfl
+#print axioms file_create_error
+end PV_DIAG11

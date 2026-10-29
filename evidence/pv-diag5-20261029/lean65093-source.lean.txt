@@ -1,0 +1,63 @@
+import PV_DIAG5_Output
+import PV_DIAG5_Cleanup
+import PV_DIAG5_Callback
+/-! Conditional composition on the original L1 coordinates. No fresh coins,
+experiment or bad-event budget. The concrete native operation laws and
+raw-frame/return/failure joint law are still P; this is not their discharge. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S A P C W R : Type}
+theorem honest_client_pieces
+ (honest : W → Prop) (pub : W → P) (coins : W → R → C)
+ (actual : W → R → ClientOutput S A) (publicCount : P → C → Nat)
+ (publicEvents : P → C → List Event) (publicTerminal : P → C → Exit A)
+ (existingL1Count : ∀ w r, honest w → (actual w r).attemptCount = publicCount (pub w) (coins w r))
+ (nativeDiagnosticLaw : ∀ w r, honest w → clientEvents (actual w r) = publicEvents (pub w) (coins w r))
+ (nativeTerminalLaw : ∀ w r, honest w → clientTerminal (actual w r) = publicTerminal (pub w) (coins w r))
+ (w : W) (r : R) (hw : honest w) :
+ clientPieces (actual w r) =
+ (publicCount (pub w) (coins w r),publicEvents (pub w) (coins w r),publicTerminal (pub w) (coins w r)) := by
+ unfold clientPieces
+ rw [existingL1Count w r hw,nativeDiagnosticLaw w r hw,nativeTerminalLaw w r hw]
+#print axioms honest_client_pieces
+theorem joint_capture_callback_bound (ip : Nat) (frames : List Frame) :
+ (capturedFrames ip frames).frames = frames ∧
+ (capturedFrames ip frames).actualStart.getD 0 ≤ frames.length :=
+ ⟨captured_frames_exact ip frames,actual_display_slice_valid ip frames⟩
+#print axioms joint_capture_callback_bound
+theorem joint_frame_emission (rel : S → S → Prop)
+ (raw raw' : A → Op S (Except Unit Unit))
+ (symbol symbol' : A → P → Op S (Except Unit Unit))
+ (frames : List (ResolvedFrame A P)) (s t : S) (h : rel s t)
+ (hr : ∀ a u v, rel u v → Coupled rel (raw a u) (raw' a v))
+ (hs : ∀ a b u v, rel u v → Coupled rel (symbol a b u) (symbol' a b v)) :
+ Coupled rel (emitEach (emitFrame raw symbol) frames s)
+ (emitEach (emitFrame raw' symbol') frames t) :=
+ emit_coupled rel _ _ frames s t h (fun f u v huv => frame_coupled rel raw raw' symbol symbol' f u v huv hr hs)
+#print axioms joint_frame_emission
+theorem coupled_scope_normal_cleanup (rel : S → S → Prop)
+ (a b : A) (s t : S) (es fs : List Event)
+ (dropLeft dropRight : Op S Unit)
+ (he : es = fs) (ha : a = b)
+ (hd : Coupled rel (dropLeft s) (dropRight t)) :
+ Coupled rel (prepend es (PV_DIAG3.bind (dropLeft s) (fun _ => PV_DIAG3.pure a)))
+ (prepend fs (PV_DIAG3.bind (dropRight t) (fun _ => PV_DIAG3.pure b))) := by
+ cases he; cases ha
+ apply coupled_prepend rel es
+ exact coupled_bind rel _ _ _ _ hd (fun _ x y hxy => coupled_pure rel a x y hxy)
+#print axioms coupled_scope_normal_cleanup
+theorem joint_delivered_request_and_frames (x y : ClientOutput S A)
+ (h : clientPieces x = clientPieces y) :
+ clientDelivered x = clientDelivered y ∧ clientRequested x = clientRequested y ∧
+ clientFrames x = clientFrames y :=
+ ⟨pieces_determine_delivery x y h,congrArg requestedBytes (pieces_determine_events x y h),pieces_determine_frames x y h⟩
+#print axioms joint_delivered_request_and_frames
+theorem common_prefix_does_not_erase_suffix (before left right : List Event)
+ (h : before ++ left = before ++ right) : left = right := List.append_cancel_left h
+#print axioms common_prefix_does_not_erase_suffix
+theorem ordered_events_preserve_occurrence (x y : ClientOutput S A)
+ (h : clientPieces x = clientPieces y) :
+ (clientEvents x = []) ↔ (clientEvents y = []) := by rw [pieces_determine_events x y h]
+#print axioms ordered_events_preserve_occurrence
+end PV_DIAG5

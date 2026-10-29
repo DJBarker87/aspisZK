@@ -1,0 +1,32 @@
+{
+  "target": "four exact source sampler helper bodies vs list-style arithmetic reference",
+  "revision": "efc026533cd7a87436961420c1112ed6957a7708",
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=pv-l2e-sampler-native",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-l2e-20261029/evidence/time-sampler-native.log",
+    "sh",
+    "/home/dombarker/project-offloads/codex-pv-l2e-20261029/sampler-native.sh"
+  ],
+  "expected_time": "optimized standalone rustc compilation, followed by 76304 finite full-state checks; no large elimination",
+  "evidence_class": "finite native validation",
+  "profile": "rustc 1.94.1 -O, debug assertions off, overflow checks off",
+  "features": "standalone bodies: no cfg alternatives or dependencies; no full deployed-crate or ELF credit",
+  "axioms": "N/A: native validation",
+  "source_sha256": "e76cef4cf43501b5089da3c0bd1a389cc70f56662de83fc85d8cbb31a0670764",
+  "raw_source_sha256": "a141397a4da30398b8d00f44c09a6e9031748045dc3ccde54c6dcddf3658c95b"
+}

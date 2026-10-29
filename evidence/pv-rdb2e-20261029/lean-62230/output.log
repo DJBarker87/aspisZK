@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_Dispatch.lean:26:24: error: Tactic `rfl` failed: The left-hand side
+  (Backend.shani, Cache.cold).1
+is not definitionally equal to the right-hand side
+  if all cpu = true then Backend.shani else Backend.soft
+
+case isTrue
+cpu : Features
+h✝ : false = true
+⊢ (Backend.shani, Cache.cold).1 = if all cpu = true then Backend.shani else Backend.soft
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_Dispatch.lean:26:24: error: Tactic `rfl` failed: The left-hand side
+  (match Cache.cold with
+    | Cache.yes => (Backend.shani, Cache.yes)
+    | Cache.no => (Backend.soft, Cache.no)
+    | Cache.cold => if all cpu = true then (Backend.shani, Cache.yes) else (Backend.soft, Cache.no)).1
+is not definitionally equal to the right-hand side
+  if all cpu = true then Backend.shani else Backend.soft
+
+case isFalse
+cpu : Features
+h✝ : ¬false = true
+⊢ (match Cache.cold with
+      | Cache.yes => (Backend.shani, Cache.yes)
+      | Cache.no => (Backend.soft, Cache.no)
+      | Cache.cold => if all cpu = true then (Backend.shani, Cache.yes) else (Backend.soft, Cache.no)).1 =
+    if all cpu = true then Backend.shani else Backend.soft
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_Dispatch.lean:37:24: error: Tactic `decide` proved that the proposition
+  (Backend.shani, Cache.cold).2 ≠ Cache.cold
+is false
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_Dispatch.lean:37:24: error: Expected type must not contain free variables
+  (match Cache.cold with
+      | Cache.yes => (Backend.shani, Cache.yes)
+      | Cache.no => (Backend.soft, Cache.no)
+      | Cache.cold => if all cpu = true then (Backend.shani, Cache.yes) else (Backend.soft, Cache.no)).2 ≠
+    Cache.cold
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+'R1Z.PV_RDB2E_Dispatch.cache_range' depends on axioms: [propext]
+'R1Z.PV_RDB2E_Dispatch.cold_rule' depends on axioms: [sorryAx]
+'R1Z.PV_RDB2E_Dispatch.compiled_rule' does not depend on any axioms
+'R1Z.PV_RDB2E_Dispatch.no_rule' does not depend on any axioms
+'R1Z.PV_RDB2E_Dispatch.yes_rule' does not depend on any axioms
+'R1Z.PV_RDB2E_Dispatch.cache_initialized' depends on axioms: [sorryAx]
+'R1Z.PV_RDB2E_Dispatch.both_reachable' does not depend on any axioms

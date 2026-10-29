@@ -1,0 +1,280 @@
+et w2 ← ⋯
+                    let a8 ← ⋯
+                    let t17 ← ⋯
+                    let cdgh7 ← ⋯
+                    let t27 ← ⋯
+                    let abef7 ← ⋯
+                    let w3 ← ⋯
+                    let a9 ← ⋯
+                    let t18 ← ⋯
+                    let cdgh8 ← ⋯
+                    let t28 ← ⋯
+                    let abef8 ← ⋯
+                    let w41 ← ⋯
+                    let a10 ← ⋯
+                    let t19 ← ⋯
+                    let cdgh9 ← ⋯
+                    let t29 ← ⋯
+                    let abef9 ← ⋯
+                    let w01 ← ⋯
+                    let a11 ← ⋯
+                    let t110 ← ⋯
+                    let cdgh10 ← ⋯
+                    let t210 ← ⋯
+                    let abef10 ← ⋯
+                    let w11 ← ⋯
+                    let a12 ← ⋯
+                    let t111 ← ⋯
+                    let cdgh11 ← ⋯
+                    let t211 ← ⋯
+                    let abef11 ← ⋯
+                    let w21 ← ⋯
+                    let a13 ← ⋯
+                    let t112 ← ⋯
+                    let cdgh12 ← ⋯
+                    let t212 ← ⋯
+                    let abef12 ← ⋯
+                    let w31 ← ⋯
+                    let a14 ← ⋯
+                    let t113 ← ⋯
+                    let cdgh13 ← ⋯
+                    let t213 ← ⋯
+                    let abef13 ← ⋯
+                    let w42 ← ⋯
+                    let a15 ← ⋯
+                    let t114 ← ⋯
+                    let cdgh14 ← ⋯
+                    let t214 ← ⋯
+                    let abef14 ← ⋯
+                    let w02 ← ⋯
+                    let a16 ← ⋯
+                    let t115 ← ⋯
+                    let cdgh15 ← ⋯
+                    let t215 ← ⋯
+                    let abef15 ← ⋯
+                    let a17 ← ⋯
+                    let b ← ⋯
+                    let e ← ⋯
+                    let f ← ⋯
+                    let c ← ⋯
+                    let d ← ⋯
+                    let g ← ⋯
+                    let h ← ⋯
+                    let i24 ← ⋯
+                    let state1 ← ⋯
+                    let i25 ← ⋯
+                    let i26 ← ⋯
+                    let state2 ← ⋯
+                    let i27 ← ⋯
+                    let i28 ← ⋯
+                    let state3 ← ⋯
+                    let i29 ← ⋯
+                    let i30 ← ⋯
+                    let state4 ← ⋯
+                    let i31 ← ⋯
+                    let i32 ← ⋯
+                    let state5 ← ⋯
+                    let i33 ← ⋯
+                    let i34 ← ⋯
+                    let state6 ← ⋯
+                    let i35 ← ⋯
+                    let i36 ← ⋯
+                    let state7 ← ⋯
+                    let i37 ← ⋯
+                    let i38 ← ⋯
+                    ⋯)
+                  ⋯ ⋯))
+'R1Z.PV_CBL_FallbackBlockTotal.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_PointerOffsets.nonempty : ∀ (base front back : ℕ),
+  front ≤ back →
+    (R1Z.PV_RDB2E_PointerOffsets.address base front ≠ R1Z.PV_RDB2E_PointerOffsets.address base back ↔ front < back) :=
+fun base front back h =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a ↔ front < back)
+        (ne_eq (R1Z.PV_RDB2E_PointerOffsets.address base front) (R1Z.PV_RDB2E_PointerOffsets.address base back))))
+    (Eq.mpr
+      (id (congrArg (fun _a => ¬_a ↔ front < back) (propext (R1Z.PV_RDB2E_PointerOffsets.injective base front back))))
+      (Decidable.byContradiction fun a => R1Z.PV_RDB2E_PointerOffsets.nonempty._proof_1 front back h a))
+'R1Z.PV_RDB2E_PointerOffsets.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2E_FromFn.length : ∀ {S A : Type} (f : ℕ → S → Aeneas.Std.Result (A × S)) (n i : ℕ) (s after : S)
+  (out : List A), R1Z.PV_RDB2E_FromFn.build f n i s = Aeneas.Std.Result.ok (out, after) → out.length = n :=
+fun {S A} f n i s after out h =>
+  Nat.recAux (motive := fun n =>
+    ∀ (i : ℕ) (s after : S) (out : List A),
+      R1Z.PV_RDB2E_FromFn.build f n i s = Aeneas.Std.Result.ok (out, after) → out.length = n)
+    (fun i s after out h =>
+      Eq.mpr
+        (id
+          (congrArg (fun _a => _a.length = 0)
+            (Eq.symm
+              (Eq.mp (Eq.trans (Aeneas.Std.Result.ok.injEq ([], s) (out, after)) (Prod.mk.injEq [] s out after))
+                  h).left)))
+        (Eq.refl [].length))
+    (fun n ih i s after out h =>
+      Aeneas.Std.Result.casesOn (motive := fun t => f i s = t → out.length = n + 1) (f i s)
+        (fun result h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              let ⟨a, s1, hf⟩ := result
+              Aeneas.Std.Result.casesOn (motive := fun t =>
+                R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = t → out.length = n + 1)
+                (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)
+                (fun result h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      let ⟨tail, s2, hb⟩ := result
+                      have e :=
+                        congrArg Prod.fst
+                          (Aeneas.Std.Result.ok.inj
+                            (Eq.mp
+                              (congrFun'
+                                (congrArg Eq
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                    hb))
+                                (Aeneas.Std.Result.ok (out, after)))
+                              (Eq.mp
+                                (congrFun'
+                                  (congrArg Eq
+                                    (congrArg
+                                      (fun x =>
+                                        match x with
+                                        | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                        | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                        | Aeneas.Std.Result.ok (a, s1) =>
+                                          match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                          | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                          | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                          | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                      hf))
+                                  (Aeneas.Std.Result.ok (out, after)))
+                                h)));
+                      Eq.mpr (id (congrArg (fun _a => _a.length = n + 1) (Eq.symm e)))
+                        (congrArg Nat.succ (ih (i + 1) s1 s2 tail hb)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (fun e h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hb))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                          (Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (a, s1) =>
+                                      match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hf))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            h)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (fun h_2 =>
+                  Eq.ndrec (motive := fun x => R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 = x → out.length = n + 1)
+                    (fun hb =>
+                      False.elim
+                        (Eq.mp
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hb))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                          (Eq.mp
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                    | Aeneas.Std.Result.ok (a, s1) =>
+                                      match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                                      | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                                      | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                                      | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                                  hf))
+                              (Aeneas.Std.Result.ok (out, after)))
+                            h)))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+                (Eq.refl (R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1)))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (fun e h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                            | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                            | Aeneas.Std.Result.ok (a, s1) =>
+                              match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                              | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                              | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                              | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                          hf))
+                      (Aeneas.Std.Result.ok (out, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                  h))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (fun h_1 =>
+          Eq.ndrec (motive := fun x => f i s = x → out.length = n + 1)
+            (fun hf =>
+              False.elim
+                (Eq.mp
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                            | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                            | Aeneas.Std.Result.ok (a, s1) =>
+                              match R1Z.PV_RDB2E_FromFn.build f n (i + 1) s1 with
+                              | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                              | Aeneas.Std.Result.div => Aeneas.Std.Result.div
+                              | Aeneas.Std.Result.ok (tail, s2) => Aeneas.Std.Result.ok (a :: tail, s2))
+                          hf))
+                      (Aeneas.Std.Result.ok (out, after)))
+                    (eq_false' fun h => False.elim (noConfusion_of_Nat Aeneas.Std.Result.ctorIdx h)))
+                  h))
+            (Eq.symm h_1) (Eq.refl (f i s)))
+        (Eq.refl (f i s)))
+    n i s after out h
+'R1Z.PV_RDB2E_FromFn.length' depends on axioms: [propext]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62297/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62297/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects/R1Z/PV_RDB2E_StatementAudit.olean", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_StatementAudit.lean", "7000"], "exit": 0, "wall": "0:01.35", "peak_rss_kib": "2639260", "swap": "0", "source_revision": "8d0898f43dc0efcde6e4a71a5d9d009a64fc85e5", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

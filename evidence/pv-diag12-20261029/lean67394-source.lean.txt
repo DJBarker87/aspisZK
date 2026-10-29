@@ -1,0 +1,35 @@
+import PV_DIAG12_JSONStdout
+namespace PV_DIAG12
+set_option autoImplicit false
+
+theorem bindB_assoc {A B C : Type} (r : BRun A)
+ (f : A → Buffer → Cursor → BRun B) (g : B → Buffer → Cursor → BRun C) :
+ bindB (bindB r f) g=bindB r (fun a b c => bindB (f a b c) g) := by
+ cases r with
+ | mk ex b c =>
+  cases ex with
+  | mk es re =>
+   cases re with
+   | ok a =>
+    cases h : f a b c with
+    | mk fex fb fc =>
+     cases fex with
+     | mk fs fre => cases fre <;> simp only [bindB,h,List.append_assoc]
+   | error e => rfl
+   | cut => rfl
+#print axioms bindB_assoc
+
+theorem jsonStream_append (sig : Signal) (fuel : Nat) (xs ys : List Span) :
+ ∀ b c, jsonStream sig fuel (xs++ys) b c=
+ bindB (jsonStream sig fuel xs b c) (fun _ b c => jsonStream sig fuel ys b c) := by
+ induction xs with
+ | nil => intro b c; simp only [List.nil_append,jsonStream,bindB_pure]
+ | cons s xs ih =>
+  intro b c
+  simp only [List.cons_append,jsonStream,bindB_assoc]
+  apply congrArg (bindB (lineAll 1 sig fuel s b c))
+  funext u b c
+  exact ih b c
+#print axioms jsonStream_append
+
+end PV_DIAG12

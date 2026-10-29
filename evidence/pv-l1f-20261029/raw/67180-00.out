@@ -1,0 +1,11 @@
+theorem PV_L1E_OriginalCountSkeleton.original_count_trace : ∀ {I A S P : Type} (actualCount : I → List ℕ × List ℕ)
+  (native : I → NativeTrace A) (sourceWorld bodyWorld : I → Trace A) (owner : I → Owner S P) (initial : I → S)
+  (fuel index : I → ℕ) (adapt : I → Run P × S → Trace A),
+  PV_L1E_Link_CountAcquisition actualCount sourceWorld →
+    PV_L1E_Link_BodyWrapper sourceWorld bodyWorld →
+      PV_L1E_Link_OriginalRetry bodyWorld owner initial fuel index adapt →
+        PV_L1E_Link_NativeD163 native owner initial fuel index adapt → OpenInputs.L1_COUNT_TRACE actualCount native :=
+fun {I A S P} actualCount native sourceWorld bodyWorld owner initial fuel index adapt acquisition body retry coupling =>
+  count_trace actualCount native sourceWorld bodyWorld (fun i => adapt i (run (owner i) (fuel i) (index i) (initial i)))
+    acquisition body retry coupling
+'PV_L1E_OriginalCountSkeleton.original_count_trace' depends on axioms: [propext]

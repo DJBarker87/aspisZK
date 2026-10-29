@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:27:50: error: Application type mismatch: The argument
+  hk
+has type
+  ↑channel < 3
+but is expected to have type
+  ↑channel < ↑?m.91
+in the application
+  PV_B3P_SelectIndex227.index_value ?m.92 channel hk
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:23:101: error: unsolved goals
+left right : Channels12
+component channel : Usize
+hc : ↑component < 3
+hk : ↑channel < 3
+sums : Matrix3x3
+⊢ (do
+      let l ← (↑left)[↑component].index_usize channel
+      let rrow ← Array.index_usize right component
+      let r ← rrow.index_usize channel
+      matrix_cell sums component channel l r) =
+    matrix_cell sums component channel (↑(↑left)[↑component])[↑channel] (↑(↑right)[↑component])[↑channel]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:40:64: error(lean.unknownIdentifier): Unknown identifier `PV_B3P_Binding9227.result_right`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:38:26: error: unsolved goals
+α : Type
+step : α → Usize → Result α
+state : α
+⊢ (do
+      let next ← step state 0#usize
+      let next ← step next (Usize.wrapping_add 0#usize 1#usize)
+      let next ← step next ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize)
+      ok next) =
+    do
+    let s0 ← step state 0#usize
+    let s1 ← step s0 1#usize
+    step s1 2#usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:40:24: warning: This simp argument is unused:
+  PV_B3P_Ordered227.bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵u̵s̵i̵z̵e̵_̵p̵l̵a̵n̵,̵P̵V̵_̵B̵3̵P̵_̵O̵r̵d̵e̵r̵e̵d̵2̵2̵7̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵B̵3̵P̵_̵B̵i̵n̵d̵i̵n̵g̵9̵2̵2̵7̵.̵r̵e̵s̵u̵l̵t̵_̵r̵i̵g̵h̵t̵]̵[̲u̲s̲i̲z̲e̲_̲p̲l̲a̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲P̲V̲_̲B̲3̲P̲_̲B̲i̲n̲d̲i̲n̲g̲9̲2̲2̲7̲.̲r̲e̲s̲u̲l̲t̲_̲r̲i̲g̲h̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixNested12227.lean:40:53: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [usize_plan, ̲PV_B3P_Ordered227.bind_assoc,b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵ ̲PV_B3P_Binding9227.result_right]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Binding12227.source_channel_binding12' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Binding12227.three_loop12' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

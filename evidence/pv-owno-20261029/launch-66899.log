@@ -1,0 +1,108 @@
+R1Z.PV_OWNO_Builder.base_canonical (base : List (List Aeneas.Std.U32))
+  (h : R1Z.PV_OWNO_Builder.acceptedBase base = true) (c : List Aeneas.Std.U32) : c ∈ base → ∀ x ∈ c, ↑x < 2147483647
+R1Z.PV_OWNO_Builder.extensions_canonical (d g : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNO_Builder.acceptedExtensions d g = true) :
+  (∀ q ∈ d, R1Z.PV_OWNK_TowerCanon.Canon q) ∧ ∀ q ∈ g, R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_Builder.successful_canonical {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (out : List (List R1Z.PV_OWNK_TowerCanon.Q))
+  (h : R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok out)
+  (c : List R1Z.PV_OWNK_TowerCanon.Q) : c ∈ out → ∀ q ∈ c, R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_HelperArrays.slotsView_length (values : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 2#usize)
+  (weights : Aeneas.Std.Array Aeneas.Std.U32 2#usize) : (R1Z.PV_OWNO_HelperArrays.slotsView values weights).length = 2
+R1Z.PV_OWNO_HelperArrays.row_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (r : R1Z.PV_OWNO_HelperArrays.CopyRow) (out : R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNO_HelperResult.rowResult inverse chi index (R1Z.PV_OWNO_HelperArrays.view r) = Except.ok out) :
+  R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNO_HelperPush.successful_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (rs : List R1Z.PV_OWNO_HelperArrays.CopyRow)
+  (acc out : List R1Z.PV_OWNK_TowerCanon.Q) (ha : ∀ q ∈ acc, R1Z.PV_OWNK_TowerCanon.Canon q)
+  (h : R1Z.PV_OWNO_HelperPush.run inverse chi index rs acc = Except.ok out) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_HelperPush.successful_length (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (rs : List R1Z.PV_OWNO_HelperArrays.CopyRow)
+  (acc out : List R1Z.PV_OWNK_TowerCanon.Q) (h : R1Z.PV_OWNO_HelperPush.run inverse chi index rs acc = Except.ok out) :
+  out.length = acc.length + rs.length
+R1Z.PV_OWNO_HelperResult.slot_erasure (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (producer : Bool) (s : R1Z.PV_OWNL_HelperSlots.Slot)
+  (acc : R1Z.PV_OWNK_TowerCanon.Q) :
+  R1Z.PV_OWNO_HelperResult.erase (R1Z.PV_OWNO_HelperResult.slotResult inverse chi index producer s acc) =
+    R1Z.PV_OWNL_HelperSlots.slot inverse chi producer s acc
+R1Z.PV_OWNO_HelperResult.slots_erasure (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (producer : Bool) (ss : List R1Z.PV_OWNL_HelperSlots.Slot)
+  (acc : R1Z.PV_OWNK_TowerCanon.Q) :
+  R1Z.PV_OWNO_HelperResult.erase (R1Z.PV_OWNO_HelperResult.slotsResult inverse chi index producer ss acc) =
+    R1Z.PV_OWNL_HelperSlots.slots inverse chi producer ss acc
+R1Z.PV_OWNO_HelperResult.successful_slots (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (producer : Bool) (ss : List R1Z.PV_OWNL_HelperSlots.Slot)
+  (acc out : R1Z.PV_OWNK_TowerCanon.Q) (hc : R1Z.PV_OWNK_TowerCanon.Canon acc)
+  (h : R1Z.PV_OWNO_HelperResult.slotsResult inverse chi index producer ss acc = Except.ok out) :
+  R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNO_HelperResult.successful_row (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (r : R1Z.PV_OWNO_HelperResult.Row) (out : R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNO_HelperResult.rowResult inverse chi index r = Except.ok out) : R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNO_HelperResult.successful_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ) (rs : List R1Z.PV_OWNO_HelperResult.Row)
+  (out : List R1Z.PV_OWNK_TowerCanon.Q) (h : R1Z.PV_OWNO_HelperResult.vectorResult inverse chi index rs = Except.ok out)
+  (q : R1Z.PV_OWNK_TowerCanon.Q) : q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_HelperResult.selected_success_canonical {E : Type} (imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q) (chi : R1Z.PV_OWNK_TowerCanon.Q)
+  (rows : Except E (List R1Z.PV_OWNO_HelperResult.Row)) (out : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNO_HelperResult.selectedHelper imbalance inverse chi rows = Except.ok out)
+  (q : R1Z.PV_OWNK_TowerCanon.Q) : q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_HelperSelect.successful_canonical {E : Type} (imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q) (chi : R1Z.PV_OWNK_TowerCanon.Q)
+  (rows : Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow)) (out : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNO_HelperSelect.selected imbalance inverse chi rows = Except.ok out) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_PointStores.value_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (w : R1Z.PV_OWNO_PointStores.Write) : R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNO_PointStores.value combine w)
+R1Z.PV_OWNO_PointStores.store_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (point : List R1Z.PV_OWNK_TowerCanon.Q) (w : R1Z.PV_OWNO_PointStores.Write)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_TowerCanon.Canon q) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ R1Z.PV_OWNO_PointStores.store combine point w → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_PointStores.fold_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (point : List R1Z.PV_OWNK_TowerCanon.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNK_TowerCanon.Canon q) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ List.foldl (R1Z.PV_OWNO_PointStores.store combine) point writes → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_PointStores.run_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ R1Z.PV_OWNO_PointStores.run combine writes → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNO_PointStores.fold_length (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (point : List R1Z.PV_OWNK_TowerCanon.Q) :
+  (List.foldl (R1Z.PV_OWNO_PointStores.store combine) point writes).length = point.length
+R1Z.PV_OWNO_PointStores.run_length (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) : (R1Z.PV_OWNO_PointStores.run combine writes).length = 10
+R1Z.PV_OWNO_PointStores.canon_transport (q : R1Z.PV_OWNK_TowerCanon.Q) (h : R1Z.PV_OWNK_TowerCanon.Canon q) :
+  R1Z.PV_OWNM_V239.Canon q
+R1Z.PV_OWNO_PointStores.of_builder_execution {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (columns : List (List R1Z.PV_OWNK_TowerCanon.Q))
+  (built :
+    R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok columns)
+  (pub : R1Z.PV_OWNM_V239.Public) (site : R1Z.PV_OWNM_V239.Site)
+  (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64) (writes : List R1Z.PV_OWNO_PointStores.Write) :
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput R1Z.PV_OWNJ_Points.statement_points
+    (R1Z.PV_OWNO_PointStores.input pub site combine writes columns)
+R1Z.PV_OWNO_SampleEight.fold_bound (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : List Aeneas.Std.U32) (s : R1Z.PV_OWNO_SampleEight.State) (hr : ↑s.remainder < 2147483647) :
+  ↑(List.foldl (R1Z.PV_OWNO_SampleEight.step combine) s rank).remainder < 2147483647
+R1Z.PV_OWNO_SampleEight.pass_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : List Aeneas.Std.U32) : R1Z.PV_OWNK_ScalarOps.Canon (R1Z.PV_OWNO_SampleEight.pass combine rank).2
+R1Z.PV_OWNO_SampleEight.digits_length (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64) (n : ℕ)
+  (rank : List Aeneas.Std.U32) : (R1Z.PV_OWNO_SampleEight.digits combine n rank).length = n
+R1Z.PV_OWNO_SampleEight.digits_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64) (n : ℕ)
+  (rank : List Aeneas.Std.U32) (x : Aeneas.Std.U32) :
+  x ∈ R1Z.PV_OWNO_SampleEight.digits combine n rank → R1Z.PV_OWNK_ScalarOps.Canon x
+R1Z.PV_OWNO_SampleEight.sample_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : List Aeneas.Std.U32) : R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNO_SampleEight.sample combine rank)
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-66899/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-66899/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-owno-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-objects/R1Z/PV_OWNO_FocusedReplay.olean", "/home/dombarker/project-offloads/codex-pv-owno-20261029/lean-sources/R1Z/PV_OWNO_FocusedReplay.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.09", "peak_rss_kib": "2639744", "swap": "0", "source_revision": "7e70f59db6ad643274a226af8d0bd68628cbe036", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

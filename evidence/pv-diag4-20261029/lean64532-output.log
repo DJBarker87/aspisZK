@@ -1,0 +1,51 @@
+'PV_DIAG4.os_interrupted_exact' does not depend on any axioms
+'PV_DIAG4.os_interrupted_no_effect' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:26:64: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → Execution x_0 x_1 → (x_1 → Op x_0 x_2) → Execution x_0 x_2
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:24:46: error: unsolved goals
+S C : Type
+code : Fin (2 ^ 32)
+h : ↑code = 4
+drop : C → Op S Unit
+retry : Op S (Except (Fin (2 ^ 32)) Unit)
+s : S
+⊢ (PV_DIAG3.bind { events := [], state := s, exit := Exit.value true } fun interrupted =>
+      if interrupted = true then sequence (PV_DIAG3.pure ()) fun x => retry else PV_DIAG3.pure (Except.error code)) =
+    retry s
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:26:83: warning: This simp argument is unused:
+  prepend
+
+Hint: Omit it from the simp argument list.
+  simp [osErrorAfterWrite, ̲osInterrupted, ̲h, ̲sequence, ̲PV_DIAG3.pure, ̲bind, ̲errorReprDrop,̵p̵r̵e̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG4.interrupted_drop_then_retry' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:64: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 : Type) → Execution x_0 x_1 → (x_1 → Op x_0 x_2) → Execution x_0 x_2
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:30:68: error: unsolved goals
+S C : Type
+code : Fin (2 ^ 32)
+h : ↑code ≠ 4
+drop : C → Op S Unit
+retry : Op S (Except (Fin (2 ^ 32)) Unit)
+s : S
+⊢ (PV_DIAG3.bind { events := [], state := s, exit := Exit.value (↑code == 4) } fun interrupted =>
+      if interrupted = true then sequence (errorReprDrop drop (ValidErrorRepr.os code)) fun x => retry
+      else PV_DIAG3.pure (Except.error code)) =
+    { events := [], state := s, exit := Exit.value (Except.error code) }
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:39: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp [osErrorAfterWrite, ̲osInterrupted,h̵,̵ ̲sequence, ̲PV_DIAG3.pure, ̲bind, ̲prepend]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_Interrupted.lean:32:69: warning: This simp argument is unused:
+  prepend
+
+Hint: Omit it from the simp argument list.
+  simp [osErrorAfterWrite, ̲osInterrupted, ̲h, ̲sequence, ̲PV_DIAG3.pure, ̲bind,̵p̵r̵e̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG4.noninterrupted_moves_error' depends on axioms: [sorryAx, Quot.sound]
+'PV_DIAG4.interrupted_keeps_retry_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

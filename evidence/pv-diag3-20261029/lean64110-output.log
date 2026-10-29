@@ -1,0 +1,39 @@
+'PV_DIAG3.prepend_nil' does not depend on any axioms
+'PV_DIAG3.prepend_append' depends on axioms: [propext]
+'PV_DIAG3.bind_value' does not depend on any axioms
+'PV_DIAG3.bind_panic' does not depend on any axioms
+'PV_DIAG3.bind_abort' does not depend on any axioms
+'PV_DIAG3.bind_diverge' does not depend on any axioms
+'PV_DIAG3.pure_bind' depends on axioms: [propext]
+'PV_DIAG3.bind_pure' depends on axioms: [propext]
+'PV_DIAG3.bind_prepend' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-diag3-20261029/sources/PV_DIAG3_Execution.lean:95:14: error: unsolved goals
+case mk.value
+S A B C : Type
+f : A → Op S B
+g : B → Op S C
+es : List Event
+s : S
+a✝ : A
+⊢ (match (prepend es (f a✝ s)).exit with
+    | Exit.value a => prepend (prepend es (f a✝ s)).events (g a (prepend es (f a✝ s)).state)
+    | Exit.panic p =>
+      { events := (prepend es (f a✝ s)).events, state := (prepend es (f a✝ s)).state, exit := Exit.panic p }
+    | Exit.abort c =>
+      { events := (prepend es (f a✝ s)).events, state := (prepend es (f a✝ s)).state, exit := Exit.abort c }
+    | Exit.diverge =>
+      { events := (prepend es (f a✝ s)).events, state := (prepend es (f a✝ s)).state, exit := Exit.diverge }) =
+    prepend es
+      (match (f a✝ s).exit with
+      | Exit.value a => prepend (f a✝ s).events (g a (f a✝ s).state)
+      | Exit.panic p => { events := (f a✝ s).events, state := (f a✝ s).state, exit := Exit.panic p }
+      | Exit.abort c => { events := (f a✝ s).events, state := (f a✝ s).state, exit := Exit.abort c }
+      | Exit.diverge => { events := (f a✝ s).events, state := (f a✝ s).state, exit := Exit.diverge })
+/home/dombarker/project-offloads/codex-pv-diag3-20261029/sources/PV_DIAG3_Execution.lean:95:41: warning: This simp argument is unused:
+  bind_prepend
+
+Hint: Omit it from the simp argument list.
+  simp [bind,̵b̵i̵n̵d̵_̵p̵r̵e̵p̵e̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG3.bind_assoc' depends on axioms: [sorryAx]

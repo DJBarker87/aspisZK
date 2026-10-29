@@ -1,0 +1,26 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=rj4idb-native-powers",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/evidence/native-powers-time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/native-host.py",
+    "powers"
+  ],
+  "expected_phase": "optimized compilation, then powers finite differential; no extraction",
+  "source_revision": "a0b32961faa5a48bf55df2c0a04481a56409b8ee"
+}

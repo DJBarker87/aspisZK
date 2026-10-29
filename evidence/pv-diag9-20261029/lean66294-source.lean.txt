@@ -1,0 +1,12 @@
+import PV_DIAG9_Honest
+import PV_DIAG9_Retry
+import R1Z.ProverRwRetryModel
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result R1Z
+theorem map_result_panic_reflection {A B : Type} (f : A → B) (r : Result A)
+ (h : ProverCommitSemanticTransport26.mapR f r ≠ .fail .panic) : r ≠ .fail .panic := by
+ intro hr; apply h; rw [hr]; rfl
+#print axioms map_result_panic_reflection
+end PV_DIAG9

@@ -1,0 +1,248 @@
+p.run
+    (List.map (fun x => ↑x) ↑PV_B3P_Install133.value) R1Z.PV_RDB2D_MasksValue.initial =
+  R1Z.PV_RDB2D_MasksValue.value :=
+Eq.mpr
+  (id
+    (congrArg (fun _a => R1Z.PV_RDB2D_MasksLoop.run _a R1Z.PV_RDB2D_MasksValue.initial = R1Z.PV_RDB2D_MasksValue.value)
+      PV_B3P_Closure133.value_nat))
+  (Eq.mpr (id (congrArg (fun _a => _a = R1Z.PV_RDB2D_MasksValue.value) R1Z.PV_RDB2D_MasksValue.concrete))
+    (Eq.refl R1Z.PV_RDB2D_MasksValue.value))
+'R1Z.PV_RDB2D_MasksValue.native_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_MasksWorld.complete : ∀ {S F : Type} (allocate : R1Z.PV_RDB2D_CollectorTrace.Allocator S)
+  (deallocate : ℕ → ℕ → ℕ → S → Aeneas.Std.Result S) (handler : R1Z.PV_RDB2D_CollectorProgram.Handler S F)
+  (state : R1Z.PV_RDB2D_CollectorTrace.State S F),
+  R1Z.PV_RDB2D_MasksWorld.source allocate deallocate handler state =
+    R1Z.PV_RDB2D_MasksWorld.reference allocate deallocate handler state :=
+fun {S F} allocate deallocate handler state =>
+  id
+    (id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a >>= R1Z.PV_RDB2D_MasksWorld.loopAndDrop deallocate =
+                R1Z.PV_RDB2D_CollectorProgram.reference allocate deallocate handler state >>=
+                  R1Z.PV_RDB2D_MasksWorld.loopAndDrop deallocate)
+            (R1Z.PV_RDB2D_CollectorProgram.complete allocate deallocate handler state)))
+        (Eq.refl
+          (R1Z.PV_RDB2D_CollectorProgram.reference allocate deallocate handler state >>=
+            R1Z.PV_RDB2D_MasksWorld.loopAndDrop deallocate))))
+'R1Z.PV_RDB2D_MasksWorld.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SamplerRestoration.gamma_complete : ∀ (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  R1Z.PV_RDB2D_SamplerRestoration.gamma block = PV_B2_C_Sampler.host_sampler.gamma_sample block :=
+fun block =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congr (congrArg bind (R1Z.PV_RDB2D_SamplerRestoration.low_complete block))
+            (congrArg Aeneas.Std.uncurry
+              (funext fun ds =>
+                funext fun q =>
+                  congrArg (bind (Aeneas.Std.lift (q.wrapping_add 1#u32)))
+                    (funext fun n =>
+                      congr (congrArg bind (R1Z.PV_RDB2D_SamplerRestoration.carry_complete ds n))
+                        (congrArg Aeneas.Std.uncurry
+                          (funext fun wrapped =>
+                            funext fun ds1 =>
+                              congrFun'
+                                (congrArg bind
+                                  (ite_congr (Eq.refl (wrapped = true))
+                                    (fun a =>
+                                      congrFun'
+                                        (congrArg bind (R1Z.PV_RDB2D_SamplerRestoration.carry_complete ds1 1#u32))
+                                        (Aeneas.Std.uncurry fun _ ds2 => Aeneas.Std.Result.ok ds2))
+                                    fun a => Eq.refl (Aeneas.Std.Result.ok ds1)))
+                                fun ds2 => PV_B2_C_Sampler.host_sampler.decode8 ds2)))))))
+        do
+        let (digits, quotient) ← PV_B2_C_Sampler.host_sampler.low_base_p_digits block
+        let i ← Aeneas.Std.lift (quotient.wrapping_add 1#u32)
+        let (wrapped, digits1) ← PV_B2_C_Sampler.host_sampler.add_small_base_p digits i
+        let digits2 ←
+          if wrapped = true then do
+              let (_, digits3) ← PV_B2_C_Sampler.host_sampler.add_small_base_p digits1 1#u32
+              Aeneas.Std.Result.ok digits3
+            else Aeneas.Std.Result.ok digits1
+        PV_B2_C_Sampler.host_sampler.decode8 digits2)
+      (eq_self do
+        let (ds, q) ← PV_B2_C_Sampler.host_sampler.low_base_p_digits block
+        let n ← Aeneas.Std.lift (q.wrapping_add 1#u32)
+        let (wrapped, ds1) ← PV_B2_C_Sampler.host_sampler.add_small_base_p ds n
+        let ds2 ←
+          if wrapped = true then do
+              let (_, ds2) ← PV_B2_C_Sampler.host_sampler.add_small_base_p ds1 1#u32
+              Aeneas.Std.Result.ok ds2
+            else Aeneas.Std.Result.ok ds1
+        PV_B2_C_Sampler.host_sampler.decode8 ds2))
+'R1Z.PV_RDB2D_SamplerRestoration.gamma_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SamplerRestoration.ordinary_complete : ∀ (block : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  R1Z.PV_RDB2D_SamplerRestoration.ordinary block = PV_B2_C_Sampler.host_sampler.ordinary_sample block :=
+fun block =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrFun' (congrArg bind (R1Z.PV_RDB2D_SamplerRestoration.low_complete block))
+            (Aeneas.Std.uncurry fun ds _ => PV_B2_C_Sampler.host_sampler.decode8 ds)))
+        do
+        let (digits, _) ← PV_B2_C_Sampler.host_sampler.low_base_p_digits block
+        PV_B2_C_Sampler.host_sampler.decode8 digits)
+      (eq_self do
+        let (ds, _) ← PV_B2_C_Sampler.host_sampler.low_base_p_digits block
+        PV_B2_C_Sampler.host_sampler.decode8 ds))
+'R1Z.PV_RDB2D_SamplerRestoration.ordinary_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SamplerNative.gamma_with_caller : ∀ [inst : ProverRwFull.ExternalTypes] {A : Type}
+  (ops : ProverRwFull.ExternalFuns) (b : PV_B2_E_OrdinaryOriginal.Bytes)
+  (caller : PV_B2_E_OrdinaryOriginal.Native → Aeneas.Std.Result A),
+  PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2D_SamplerRestoration.gamma b) >>=
+      caller =
+    ProverRwFull.ExternalFuns.op249 b >>= caller :=
+fun [ProverRwFull.ExternalTypes] {A} ops b caller =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a >>= caller = ProverRwFull.ExternalFuns.op249 b >>= caller)
+        (R1Z.PV_RDB2D_SamplerNative.gamma_callback ops b)))
+    (Eq.refl (ProverRwFull.ExternalFuns.op249 b >>= caller))
+'R1Z.PV_RDB2D_SamplerNative.gamma_with_caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SamplerNative.ordinary_with_caller : ∀ [inst : ProverRwFull.ExternalTypes] {A : Type}
+  (ops : ProverRwFull.ExternalFuns) (b : PV_B2_E_OrdinaryOriginal.Bytes)
+  (caller : PV_B2_E_OrdinaryOriginal.Native → Aeneas.Std.Result A),
+  PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2D_SamplerRestoration.ordinary b) >>=
+      caller =
+    ProverRwFull.ExternalFuns.op250 b >>= caller :=
+fun [ProverRwFull.ExternalTypes] {A} ops b caller =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a >>= caller = ProverRwFull.ExternalFuns.op250 b >>= caller)
+        (R1Z.PV_RDB2D_SamplerNative.ordinary_callback ops b)))
+    (Eq.refl (ProverRwFull.ExternalFuns.op250 b >>= caller))
+'R1Z.PV_RDB2D_SamplerNative.ordinary_with_caller' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SHAState.all_mutable_fields : ∀
+  (compress : R1Z.PV_RDB2D_SHAState.HashState → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2D_SHAState.HashState)
+  (core : R1Z.PV_RDB2D_SHAState.Core) (buffer : Aeneas.Std.Array Aeneas.Std.U8 64#usize) (pos : Aeneas.Std.Usize)
+  (out : Aeneas.Std.Array Aeneas.Std.U8 32#usize),
+  ↑pos < 64 →
+    R1Z.PV_RDB2D_SHAState.finalize compress core buffer pos out =
+      R1Z.PV_RDB2D_SHAState.completeState compress core buffer pos :=
+fun compress core buffer pos out h =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let (core, buffer, cursor, out) ← _a
+                Aeneas.Std.Result.ok { core := core, buffer := buffer, cursor := cursor, output := out }) =
+              R1Z.PV_RDB2D_SHAState.completeState compress core buffer pos)
+          (R1Z.PV_DL_ShaFinal.source_reference compress core buffer pos h)))
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Aeneas.Std.bind_assoc_eq
+                  (R1Z.PV_DL_CompressionTrace.run compress
+                    (R1Z.PV_CBL_PaddingModel.blocks ↑buffer ↑pos
+                      ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)))
+                    core.state)
+                  (fun state =>
+                    Aeneas.Std.Result.ok
+                      ({ state := state, block_len := core.block_len },
+                        R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+                          ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)),
+                        0, ↑(R1Z.PV_DL_ShaSerialize.array state)))
+                  (Aeneas.Std.uncurry fun core =>
+                    Aeneas.Std.uncurry fun buffer =>
+                      Aeneas.Std.uncurry fun cursor out =>
+                        Aeneas.Std.Result.ok { core := core, buffer := buffer, cursor := cursor, output := out }))
+                (congrArg
+                  (bind
+                    (R1Z.PV_DL_CompressionTrace.run compress
+                      (R1Z.PV_CBL_PaddingModel.blocks ↑buffer ↑pos
+                        ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)))
+                      core.state))
+                  (funext fun x =>
+                    Aeneas.Std.bind_tc_ok
+                      ({ state := x, block_len := core.block_len },
+                        R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+                          ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)),
+                        0, ↑(R1Z.PV_DL_ShaSerialize.array x))
+                      (Aeneas.Std.uncurry fun core =>
+                        Aeneas.Std.uncurry fun buffer =>
+                          Aeneas.Std.uncurry fun cursor out =>
+                            Aeneas.Std.Result.ok
+                              { core := core, buffer := buffer, cursor := cursor, output := out })))))
+            do
+            let after ←
+              R1Z.PV_DL_CompressionTrace.run compress
+                  (R1Z.PV_CBL_PaddingModel.blocks ↑buffer ↑pos
+                    ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)))
+                  core.state
+            Aeneas.Std.Result.ok
+                { core := { state := after, block_len := core.block_len },
+                  buffer :=
+                    R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+                      ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)),
+                  cursor := 0, output := ↑(R1Z.PV_DL_ShaSerialize.array after) }))
+        (Eq.refl do
+          let x ←
+            R1Z.PV_DL_CompressionTrace.run compress
+                (R1Z.PV_CBL_PaddingModel.blocks ↑buffer ↑pos
+                  ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)))
+                core.state
+          let (core, buffer, cursor, out) :=
+              ({ state := x, block_len := core.block_len },
+                R1Z.PV_CBL_PaddingModel.first ↑buffer ↑pos
+                  ↑(R1Z.PV_DL_LengthEncoding.suffix (R1Z.PV_CBL_ShaBitLength.bitLength pos core.block_len)),
+                0, ↑(R1Z.PV_DL_ShaSerialize.array x))
+            Aeneas.Std.Result.ok { core := core, buffer := buffer, cursor := cursor, output := out })))
+'R1Z.PV_RDB2D_SHAState.all_mutable_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDB2D_SparseFold.arbitrary_column : ∀ {K : Type} (ops : R1Z.PV_RDB2D_SparseFold.Ops K) (column : List K)
+  (entries : List (R1Z.PV_RDB2D_SparseFold.Entry K)) (acc : K),
+  R1Z.PV_RDB2D_SparseFold.source ops column entries acc = R1Z.PV_RDB2D_SparseFold.reference ops column entries acc :=
+fun {K} ops column entries acc =>
+  List.rec (motive := fun entries =>
+    ∀ (acc : K),
+      R1Z.PV_RDB2D_SparseFold.source ops column entries acc = R1Z.PV_RDB2D_SparseFold.reference ops column entries acc)
+    (fun acc => Eq.refl (R1Z.PV_RDB2D_SparseFold.source ops column [] acc))
+    (fun entry tail ih acc =>
+      Eq.mpr
+        (id
+          (congrArg
+            (Eq do
+              let next ← R1Z.PV_RDB2D_SparseFold.term ops column acc entry
+              R1Z.PV_RDB2D_SparseFold.source ops column tail next)
+            List.foldlM_cons))
+        ((Aeneas.Std.bind_eq_iff (R1Z.PV_RDB2D_SparseFold.term ops column acc entry)
+              (fun next => R1Z.PV_RDB2D_SparseFold.source ops column tail next) fun init =>
+              List.foldlM (R1Z.PV_RDB2D_SparseFold.term ops column) init tail).mpr
+          fun next a => ih next))
+    entries acc
+'R1Z.PV_RDB2D_SparseFold.arbitrary_column' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_RDB2D_SparsePublic.point_transport : ∀ {P H K : Type} (sourcePoint : P → H → List K)
+  (publicPoint : P → List K),
+  (∀ (p : P) (h : H), sourcePoint p h = publicPoint p) →
+    ∀ (isBoolean : K → Bool) (p : P) (left right : H),
+      R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p left)) =
+        R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p right)) :=
+fun {P H K} sourcePoint publicPoint hpublic isBoolean p left right =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean _a) =
+            R1Z.PV_RDB2D_CollectorTrace.publicRequest
+              (R1Z.PV_RDB2D_SparseLayout.request isBoolean (sourcePoint p right)))
+        (hpublic p left)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean (publicPoint p)) =
+              R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean _a))
+          (hpublic p right)))
+      (Eq.refl
+        (R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_SparseLayout.request isBoolean (publicPoint p)))))
+'R1Z.PV_RDB2D_SparsePublic.point_transport' depends on axioms: [propext]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-61097/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-61097/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-objects/R1Z/PV_RDB2D_StatementAudit.olean", "/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_StatementAudit.lean", "7000"], "exit": 0, "wall": "0:02.39", "peak_rss_kib": "3860788", "swap": "0", "source_revision": "8dbacd53321583ec1687135f58d38e1bf0c72149", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

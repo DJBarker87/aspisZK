@@ -1,0 +1,831 @@
+{
+  "source_inputs_checked": 551,
+  "deployed": {
+    "toolchain": "1.94.1",
+    "profile": "release",
+    "features": [
+      "r1p-check",
+      "aspis-r1-cost-probe/ct-host-prover"
+    ],
+    "dependency_lock": {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/Cargo.lock",
+      "sha256": "8f9334eb99bad527e191e545def30f103640fbcb28100abb3da9edae4fa6af43"
+    },
+    "feature_resolution_authority": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/build-source-pins.json"
+  },
+  "rows": [
+    {
+      "name": "Write::write_all",
+      "source": "source-io.rs.txt",
+      "file_sha256": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+      "body_sha256": "ae64832cfc9f2041c89cfb35db0b3110479b6c9cebbb05656ba880bf6ff3a611",
+      "start_line": 1875,
+      "end_line": 1887,
+      "steps": [
+        {
+          "rust": "while !buf.is_empty()",
+          "model": "writeAll empty/nonempty split"
+        },
+        {
+          "rust": "match self.write(buf)",
+          "model": "write primitive Run"
+        },
+        {
+          "rust": "Ok(0)",
+          "model": "writeAll_zero"
+        },
+        {
+          "rust": "Err(Error::WRITE_ALL_EOF)",
+          "model": "IoError.writeZero"
+        },
+        {
+          "rust": "Ok(n) => buf = &buf[n..]",
+          "model": "writeAll_progress/oversize"
+        },
+        {
+          "rust": "Err(ref e) if e.is_interrupted() => {}",
+          "model": "writeAll_interrupted and explicit dropInterrupted"
+        },
+        {
+          "rust": "Err(e) => return Err(e)",
+          "model": "writeAll_other_error"
+        },
+        {
+          "rust": "Ok(())",
+          "model": "writeAll_empty"
+        }
+      ],
+      "unbound": [
+        "write primitive/native syscall, error representation and is_interrupted",
+        "ordinary/destructor effects on Interrupted",
+        "slicing borrow restoration / panic hook on invalid Write contract",
+        "finite fuel is a prefix cut, not proof of native divergence or termination"
+      ],
+      "complete_native_binding": false
+    },
+    {
+      "name": "fs::write",
+      "source": "source-fs.rs.txt",
+      "file_sha256": "b5737fd7f7733ba33166bb9a5cdb373778763acc633d50960ad01b447e57a647",
+      "body_sha256": "c81ef7f262955c5fc4b068974360b489a988e9485950a5b903b37552c2a19bf1",
+      "start_line": 419,
+      "end_line": 424,
+      "steps": [
+        {
+          "rust": "File::create(path)?",
+          "model": "file_created/file_create_error and abnormal cases"
+        },
+        {
+          "rust": ".write_all(contents)",
+          "model": "writeAll producer call"
+        },
+        {
+          "rust": "inner(path.as_ref(), contents.as_ref())",
+          "model": "AsRef path then contents before inner"
+        }
+      ],
+      "unbound": [
+        "AsRef conversions and ownership cleanup before/after inner",
+        "File::create/OpenOptions backend, Write for File forwarding",
+        "File temporary Drop on returned Ok/Err; unwinding on panic/abort",
+        "file primitive event readout and actual fd/path association"
+      ],
+      "complete_native_binding": false
+    },
+    {
+      "name": "stdio::print_to",
+      "source": "source-stdio.rs.txt",
+      "file_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "body_sha256": "5861862a261e53ce82e4db781d910ca63f2c270f3e2fd1531064b00ed8b3a475",
+      "start_line": 1155,
+      "end_line": 1169,
+      "steps": [
+        {
+          "rust": "if print_to_buffer_if_capture_used(args)",
+          "model": "print_capture_returns/print_fallback"
+        },
+        {
+          "rust": "return;",
+          "model": "ret () after capture"
+        },
+        {
+          "rust": "if let Err(e) = global_s().write_fmt(args)",
+          "model": "printGlobal"
+        },
+        {
+          "rust": "panic!(\"failed printing to {label}: {e}\")",
+          "model": "print_error_invokes_hook; complete panic Run"
+        }
+      ],
+      "unbound": [
+        "OUTPUT_CAPTURE_USED/TLS capture helper, mutex poison recovery, TLS restore/drop",
+        "stdout/LineWriter/write_fmt/formatter/global locking, hooks/unwind",
+        "source error destructor and native frame association"
+      ],
+      "complete_native_binding": false
+    },
+    {
+      "name": "attempt_print_to_stderr",
+      "source": "source-stdio.rs.txt",
+      "file_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "body_sha256": "4a95867a22ed9da9fddc075b0639a90115e24e8ebe0326f04badf30b4e872f4a",
+      "start_line": 1185,
+      "end_line": 1193,
+      "steps": [
+        {
+          "rust": "if print_to_buffer_if_capture_used(args)",
+          "model": "stderr_capture_returns/stderr_fallback"
+        },
+        {
+          "rust": "return;",
+          "model": "capture normal return"
+        },
+        {
+          "rust": "let _ = stderr().write_fmt(args);",
+          "model": "ignoreIoError with explicit error Drop"
+        }
+      ],
+      "unbound": [
+        "complete capture, stderr and Debug formatter calls",
+        "io::Error drop body and all abnormal prefixes"
+      ],
+      "complete_native_binding": false
+    },
+    {
+      "name": "Result::Termination",
+      "source": "source-process.rs.txt",
+      "file_sha256": "6384b820420b1488380a289554f230640acc44e8db81d356db50ee7bd6c8a1fa",
+      "body_sha256": "f237cd697bc4343c3a430b426dcf25cd6a2654f4c84a0206e6a7699106d1d9f7",
+      "start_line": 2609,
+      "end_line": 2619,
+      "steps": [
+        {
+          "rust": "match self",
+          "model": "report Result split"
+        },
+        {
+          "rust": "Ok(val) => val.report()",
+          "model": "report_ok"
+        },
+        {
+          "rust": "io::attempt_print_to_stderr(format_args_nl!(\"Error: {err:?}\"));",
+          "model": "report_err/debugStderr primitive"
+        },
+        {
+          "rust": "ExitCode::FAILURE",
+          "model": "report_error_failure_exit; returned err Drop explicit"
+        }
+      ],
+      "unbound": [
+        "E::Debug/anyhow formatter, stderr and destructor body binding",
+        "format_args_nl compiler lowering V370",
+        "native PCs, panic/OOM, unwind/drop glue"
+      ],
+      "complete_native_binding": false
+    }
+  ],
+  "client": {
+    "plan_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+    "main_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+    "tail_order": [
+      "fs::write(dir.join(\"proof.bin\"),&proof)?",
+      "fs::write(dir.join(\"statement.bin\"),public)?",
+      "let request=",
+      "let hints=",
+      "let data=",
+      "let page=",
+      "let marker=",
+      "let mut a=",
+      "let stage1_accounts=",
+      "if withdrawal{a.extend",
+      "a.push(ro(pk(q,\"verifier_checkpoint\")))",
+      "Ok(json!({\"client_route\""
+    ],
+    "model": "clientTail/actionMain",
+    "unbound": [
+      "every intervening post-write call, returned values, allocation/drop/error branch is part of the json tail Run; no claim it is an atomic serialization",
+      "all earlier stdin/JSON parsing, recovery dir/file and nonce-store calls",
+      "actual native event producer, readout, drop/unwind for every terminal"
+    ]
+  },
+  "io_sites": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 14,
+      "source": "let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;",
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 15,
+      "source": "if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}",
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 16,
+      "source": "let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();",
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 22,
+      "source": "println!(\"{}\",serde_json::json!({\"hex\":hex(&b),\"signature\":tx.signatures[0].to_string(),\"bytes\":b.len()}));Ok(())",
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 83,
+      "source": "use aspis_prover::{HOST_HASH,state_only_entropy::DurableStateOnlyMaskNonceStore};",
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 109,
+      "source": "{use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}",
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 113,
+      "source": "{use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 115,
+      "source": "let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\"))?;",
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 119,
+      "source": "fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 7,
+      "source": "use std::fs::{self, File, OpenOptions};",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 12,
+      "source": "use std::os::unix::fs::OpenOptionsExt;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 929,
+      "source": "pub struct DurableStateOnlyMaskNonceStore {",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 934,
+      "source": "impl DurableStateOnlyMaskNonceStore {",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 936,
+      "source": "fs::create_dir_all(directory.as_ref())?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 937,
+      "source": "let metadata = fs::metadata(directory.as_ref())?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 984,
+      "source": "file.write_all(RESERVATION_MAGIC)?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 985,
+      "source": "file.write_all(&statement_digest)?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 986,
+      "source": "file.write_all(&mask_nonce)?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 987,
+      "source": "file.sync_all()?;",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1007,
+      "source": "impl StateOnlyMaskNonceStore for DurableStateOnlyMaskNonceStore {",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1021,
+      "source": "File::open(directory)?.sync_all()",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1276,
+      "source": "let mut first = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1281,
+      "source": "let mut reopened = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1285,
+      "source": "fs::remove_dir_all(directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1291,
+      "source": "fs::create_dir_all(&directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1298,
+      "source": "let mut store = DurableStateOnlyMaskNonceStore::open(directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1310,
+      "source": "fs::remove_dir_all(directory).unwrap();",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    }
+  ],
+  "operand_sites": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 21,
+      "source": "fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!(\"{e:?}\")}",
+      "kinds": [
+        "anyhow!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 49,
+      "source": "let activate=ix(registry,vec![rw(reg),rw(entry),meta(gov,true,false)],aspis_registry::encode_simple_mutation_v2(aspis_registry::RegistryMutationOpcodeV1::Activate,1).map_err(err)?);",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 50,
+      "source": "let freeze=ix(registry,vec![rw(reg),meta(gov,true,false)],aspis_registry::encode_simple_mutation_v2(aspis_registry::RegistryMutationOpcodeV1::Freeze,2).map_err(err)?);",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 51,
+      "source": "Ok(json!({\"master\":master.to_string(),\"lanes\":lanes.iter().map(ToString::to_string).collect::<Vec<_>>(),\"vault\":vault.to_string(),\"vault_authority\":authority.to_string(),\"registry_account\":reg.to_string(),\"entry\":entry.to_string(),\"initialize\":ix(pool,a,encode_pair_forest_initialize_instruction_v1(&init).map_err(err)?),\"registry_initialize\":reginit,\"schedule\":schedule,\"activate\":activate,\"freeze\":freeze}))",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 54,
+      "source": "let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 58,
+      "source": "let d=encode_pair_forest_deposit_instruction_v1(&DepositRequestV1{owner_key:derive_owner_key(&k),amount:1000,salt,encrypted_note_payload:&[]}).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 59,
+      "source": "let nf=pool_v1_nullifier(&k,&salt);let out=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 64,
+      "source": "let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,\"lane_bytes\"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 65,
+      "source": "let marker=decode_pool_v1_nullifier_marker(&bytes(q,\"marker_bytes\")).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 66,
+      "source": "let after=decode_pool_v1_pair_verified_afterstate_v1(&bytes(q,\"candidate_bytes\")).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 68,
+      "source": "ensure!(lane.master==master.to_bytes()&&lane.tree.next_leaf_index==after.next_pair_index&&lane.tree.root==after.next_root&&lane.tree.frontier==after.next_frontier,\"settled lane differs from proved afterstate\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 69,
+      "source": "ensure!(marker.pool==master.to_bytes()&&marker.deployment_domain==[5;32]&&marker.nullifier==pool_v1_nullifier(&k,&salt),\"consumed marker identity differs\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 73,
+      "source": "_=>Err(anyhow!(\"unknown action\"))",
+      "kinds": [
+        "anyhow!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 77,
+      "source": "fn prove(_: &Value,_:Pubkey,_:Pubkey,_:&[Pubkey],_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey)->Result<Value>{Err(anyhow!(\"build with --features r1p-check\"))}",
+      "kinds": [
+        "anyhow!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 85,
+      "source": "let input_lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)? as usize;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 86,
+      "source": "let output_lane=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 87,
+      "source": "let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,\"lane_bytes\"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 88,
+      "source": "ensure!(lane.master==master.to_bytes()&&lane.lane_id==output_lane,\"wrong live output lane\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 89,
+      "source": "let cp=decode_pool_v1_pair_forest_checkpoint_v1(&bytes(q,\"checkpoint_bytes\")).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 90,
+      "source": "ensure!(cp.master==master.to_bytes(),\"checkpoint master mismatch\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 92,
+      "source": "for j in 0..2{let(_,_,c)=note(j);let l=pool_v1_pair_forest_deposit_lane_v1(&c).map_err(err)? as usize;if j==n{input_index=leafs[l].len() as u64;}leafs[l].push(PoolV1PairLeafWitnessV1::single_output(c).map_err(err)?.leaf_digest().map_err(err)?);}",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 97,
+      "source": "ensure!(roots[0]==cp.global_root,\"deposits do not reconstruct finalized anchor\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 98,
+      "source": "let input=PoolV1PairForestInputNoteWitnessV1{pair:PoolV1PairInputNoteWitnessV1{nullifier_key:k,salt,value:1000,pair_leaf:PoolV1PairLeafWitnessV1::single_output(cm).map_err(err)?,selected_second:false,membership:PoolV1MembershipWitnessV1{siblings,index:input_index as u32}},super_root_siblings:supers,super_root_directions:directions};",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 105,
+      "source": "let compiled=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&p,&PoolV1PairForestPrivateTransferWitnessV1{input,recipient,change},context,live),PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(&p,&PoolV1PairForestWithdrawalWitnessV1{input,change},context,live)}.map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 114,
+      "source": "let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 116,
+      "source": "let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 118,
+      "source": "let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 122,
+      "source": "let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);",
+      "kinds": [
+        ".map_err(err)"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "source": "Ok(json!({\"client_route\":\"selected64-proof-account-v1\",\"proof_account\":proof_account.to_string(),\"attempt_index\":attempt_index,\"prove_wall_seconds\":started.elapsed().as_secs_f64(),\"attempts\":result.attempts,\"p_r1\":true,\"mask_audit\":format!(\"{:?}\",result.audit),\"proof_bytes\":proof.len(),\"proof_upload_count\":proof.len().div_ceil(3763),\"statement_upload_count\":1,\"marker\":marker.to_string(),\"output_lane\":lanes[output_lane as usize].to_string(),\"page\":page.to_string(),\"needs_zero_page\":lane.tree.next_leaf_index==0,\"settle\":ix(pool,a,data),\"stage1\":ix(pk(q,\"verifier\"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))",
+      "kinds": [
+        "format!"
+      ],
+      "file_sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 15,
+      "source": "if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}",
+      "kinds": [
+        "println!"
+      ],
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 21,
+      "source": "let b=wincode::serialize(&tx)?;ensure!(b.len()<=4096,\"TxV1 exceeds 4096 bytes\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 22,
+      "source": "println!(\"{}\",serde_json::json!({\"hex\":hex(&b),\"signature\":tx.signatures[0].to_string(),\"bytes\":b.len()}));Ok(())",
+      "kinds": [
+        "println!"
+      ],
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 25,
+      "source": "fn hex(b:&[u8])->String{b.iter().map(|b|format!(\"{b:02x}\")).collect()}",
+      "kinds": [
+        "format!"
+      ],
+      "file_sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 14,
+      "source": "ensure!(q.get(\"proof_account\").is_none(), \"legacy proof_account input is unsupported\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 15,
+      "source": "let list = q[\"proof_accounts\"].as_array().ok_or_else(|| anyhow!(\"proof_accounts must be eight public keys\"))?;",
+      "kinds": [
+        "anyhow!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 16,
+      "source": "ensure!(list.len() == CAP, \"proof_accounts must contain eight public keys\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 19,
+      "source": "let text = value.as_str().ok_or_else(|| anyhow!(\"proof account must be a string\"))?;",
+      "kinds": [
+        "anyhow!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 21,
+      "source": "ensure!(key.to_string() == text && key != Pubkey::default(), \"noncanonical/zero proof account\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 22,
+      "source": "ensure!(!keys[..i].contains(&key), \"duplicate proof account\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 38,
+      "source": "ensure!(settlement.len() == 10, \"unexpected settlement proof-account position\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 46,
+      "source": "ensure!((1..=CAP).contains(&attempts) && attempts == self.entered, \"invalid successful attempt count\");",
+      "kinds": [
+        "ensure!"
+      ],
+      "file_sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "status": "selected content/operands only; occurrence and delivery require original joint L1/option-B/native binding"
+    }
+  ],
+  "logger": {
+    "version": "0.4.34",
+    "sha256": "f6633a72e77e5039ef767189116986ba12a57e43304b40eebb466959e03b9a92",
+    "initial": {
+      "STATE": 0,
+      "MAX_LOG_LEVEL_FILTER": 0,
+      "LOGGER": "NopLogger"
+    },
+    "mutations": [
+      {
+        "line": 1387,
+        "source": "MAX_LOG_LEVEL_FILTER.store(level as usize, Ordering::Relaxed);"
+      },
+      {
+        "line": 1414,
+        "source": "MAX_LOG_LEVEL_FILTER.store(level as usize, Ordering::Relaxed);"
+      },
+      {
+        "line": 1522,
+        "source": "match STATE.compare_exchange("
+      },
+      {
+        "line": 1530,
+        "source": "LOGGER = make_logger();"
+      },
+      {
+        "line": 1532,
+        "source": "STATE.store(INITIALIZED, Ordering::Release);"
+      },
+      {
+        "line": 1567,
+        "source": "LOGGER = logger;"
+      },
+      {
+        "line": 1568,
+        "source": "STATE.store(INITIALIZED, Ordering::Release);"
+      }
+    ],
+    "status": "initialization and selection branch identified; exhaustive absence/publicity of every reached setter/constructor/indirect call remains OPEN"
+  },
+  "source_control_evidence": "own-1 statement association for listed outer control only; not complete transitive source binding",
+  "compiler": "V370 pending D381/D386 retained",
+  "endpoint_premises_removed": 0,
+  "new_trust": 0
+}

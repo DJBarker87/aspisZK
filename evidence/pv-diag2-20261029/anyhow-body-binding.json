@@ -1,0 +1,105 @@
+{
+  "family": "anyhow",
+  "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
+  "sources": [
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/fmt.rs",
+      "file_sha256": "2cca8c7f3cab636fdb17433ca2b1fda0e8d28bb20d4647b87c991dacd8f06cdf",
+      "line": 20,
+      "body": "    pub(crate) unsafe fn debug(this: Ref<Self>, f: &mut fmt::Formatter) -> fmt::Result {\n        let error = unsafe { Self::error(this) };\n\n        if f.alternate() {\n            return Debug::fmt(error, f);\n        }\n\n        write!(f, \"{}\", error)?;\n\n        if let Some(cause) = error.source() {\n            write!(f, \"\\n\\nCaused by:\")?;\n            let multiple = cause.source().is_some();\n            for (n, error) in Chain::new(cause).enumerate() {\n                writeln!(f)?;\n                let mut indented = Indented {\n                    inner: f,\n                    number: if multiple { Some(n) } else { None },\n                    started: false,\n                };\n                write!(indented, \"{}\", error)?;\n            }\n        }\n\n        #[cfg(feature = \"std\")]\n        {\n            use alloc::string::ToString;\n            use std::backtrace::BacktraceStatus;\n\n            let backtrace = unsafe { Self::backtrace(this) };\n            if let BacktraceStatus::Captured = backtrace.status() {\n                let mut backtrace = backtrace.to_string();\n                write!(f, \"\\n\\n\")?;\n                if backtrace.starts_with(\"stack backtrace:\") {\n                    // Capitalize to match \"Caused by:\"\n                    backtrace.replace_range(0..1, \"S\");\n                } else {\n                    // \"stack backtrace:\" prefix was removed in\n                    // https://github.com/rust-lang/backtrace-rs/pull/286\n                    writeln!(f, \"Stack backtrace:\")?;\n                }\n                backtrace.truncate(backtrace.trim_end().len());\n                write!(f, \"{}\", backtrace)?;\n            }\n        }\n\n        Ok(())\n    }"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs",
+      "file_sha256": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+      "line": 707,
+      "body": "impl Debug for Error {\n    fn fmt(&self, formatter: &mut fmt::Formatter) -> fmt::Result {\n        unsafe { ErrorImpl::debug(self.inner.by_ref(), formatter) }\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs",
+      "file_sha256": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+      "line": 167,
+      "body": "    pub(crate) fn construct_from_adhoc<M>(message: M, backtrace: Option<Backtrace>) -> Self\n    where\n        M: Display + Debug + Send + Sync + 'static,\n    {\n        use crate::wrapper::MessageError;\n        let error: MessageError<M> = MessageError(message);\n        let vtable = &ErrorVTable {\n            object_drop: object_drop::<MessageError<M>>,\n            object_ref: object_ref::<MessageError<M>>,\n            #[cfg(any(feature = \"std\", not(anyhow_no_core_error)))]\n            object_boxed: object_boxed::<MessageError<M>>,\n            #[cfg(any(feature = \"std\", not(anyhow_no_core_error)))]\n            object_reallocate_boxed: object_reallocate_boxed::<MessageError<M>>,\n            object_downcast: object_downcast::<M>,\n            object_drop_rest: object_drop_front::<M>,\n            #[cfg(all(not(error_generic_member_access), feature = \"std\"))]\n            object_backtrace: no_backtrace,\n        };\n\n        // Safety: MessageError is repr(transparent) so it is okay for the\n        // vtable to allow casting the MessageError<M> to M.\n        unsafe { Error::construct(error, vtable, backtrace) }\n    }"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs",
+      "file_sha256": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+      "line": 713,
+      "body": "impl Drop for Error {\n    fn drop(&mut self) {\n        unsafe {\n            // Invoke the vtable's drop behavior.\n            (vtable(self.inner.ptr).object_drop)(self.inner);\n        }\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/wrapper.rs",
+      "file_sha256": "079218e1d8c9374f52311b1c7971f7fbdeba4d7af1b0749c0d535010f1232697",
+      "line": 13,
+      "body": "impl<M> Debug for MessageError<M>\nwhere\n    M: Display + Debug,\n{\n    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {\n        Debug::fmt(&self.0, f)\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/wrapper.rs",
+      "file_sha256": "079218e1d8c9374f52311b1c7971f7fbdeba4d7af1b0749c0d535010f1232697",
+      "line": 22,
+      "body": "impl<M> Display for MessageError<M>\nwhere\n    M: Display + Debug,\n{\n    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {\n        Display::fmt(&self.0, f)\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/error.rs",
+      "file_sha256": "563f6020633356191df9f6c0c4c0c68328bedafa112d322b129eb1d0c1e70295",
+      "line": 111,
+      "body": "    fn source(&self) -> Option<&(dyn Error + 'static)> {\n        None\n    }"
+    }
+  ],
+  "models": {
+    "PV_DIAG2_AnyhowDebugControl": "afdb2b64edd48ddbd3267f1ca6ccfc7fa0c265e9c2d33fbb41a63657fc0e653a",
+    "PV_DIAG2_ErrorText": "0b791d36e48564e5cc2bbfcde5ad936d9cce73bd90ef64922865bbcb3b6b5e7b",
+    "PV_DIAG2_Termination": "fdd4e2b5d071ae297514557861a699e075fc3eff38942ac05f86a8e9dd49bff4"
+  },
+  "steps": [
+    [
+      "Error Debug forwards to ErrorImpl::debug",
+      "messageDebug",
+      "anyhow pointer/formatter state supplied by S; compiler and memory/source association remain named"
+    ],
+    [
+      "alternate => Debug::fmt(error)",
+      "MessageDebugOps.alternate",
+      "underlying quoted String or str Debug execution; never conflated with ordinary Debug"
+    ],
+    [
+      "ordinary write Display(error)?",
+      "MessageDebugOps.display / writerBind",
+      "mutable formatter state retained even on returned fmt::Error; partial effects kept"
+    ],
+    [
+      "MessageError<String/str> source() is default None",
+      "specialized no-cause control",
+      "literal format_err Error::msg constructs MessageError, not a contextual cause chain; other anyhow constructors not covered"
+    ],
+    [
+      "read backtrace/status",
+      "MessageDebugOps.getBacktrace",
+      "includes missing-backtrace expect panic if reached; no assumed successful getter"
+    ],
+    [
+      "Captured branch to_string/newlines/starts_with/replace_range/trim/truncate/write/drop",
+      "MessageDebugOps.captured",
+      "whole branch explicitly supplied with mutated state, errors, OOM, panic, actual PCs/symbolization and string drops"
+    ],
+    [
+      "noncaptured return Ok(())",
+      "debug_not_captured",
+      "message Display leaf is still needed for actual delivered bytes"
+    ],
+    [
+      "object Drop via vtable",
+      "terminateOwned.dropError/unwindError",
+      "owned message/backtrace frees and panic cleanup are not declared silent"
+    ]
+  ],
+  "open_native_obligations": [
+    "String formatter/allocator/partial writes and state refinement",
+    "captured branch symbolization/cache/unwinder/cleanup effects",
+    "construct_from_adhoc allocation/vtable/memory source law and error Drop",
+    "normal fixed requested text is not a full stderr failure/frame law"
+  ],
+  "toolchain": "rustc 1.94.1 sources; no extractor/toolchain substitution",
+  "profile": "deployed release opt3 overflow/debug assertions off panic unwind",
+  "compiler_boundary": "V370 at owner pending D381/D386; no LLVM or machine equality silently assumed",
+  "new_trust_fields": 0
+}

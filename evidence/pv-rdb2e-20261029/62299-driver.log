@@ -1,0 +1,36 @@
+R1Z.PV_RDB2E_ShaHandles.complete_typed
+  (compress : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (f : R1Z.PV_RDB2E_ShaHandles.Frame) (valid : ↑(R1Z.PV_RDB2E_ShaHandles.position f) < 64) :
+  (do
+      let after ← R1Z.PV_RDB2E_ShaHandles.finalize compress f valid
+      Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.forget after)) =
+    R1Z.PV_RDB2D_SHAState.finalize compress f.core f.buffer (R1Z.PV_RDB2E_ShaHandles.position f) f.output
+'R1Z.PV_RDB2E_ShaHandles.complete_typed' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDB2E_ShaHandles.callback_run
+  (compress : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (blocks : List (List Aeneas.Std.U8)) (current : R1Z.PV_RDB2E_ShaHandles.Frame) :
+  R1Z.PV_RDB2E_ShaHandles.callbackRun compress blocks current = do
+    let s ← R1Z.PV_DL_CompressionTrace.run compress blocks current.core.state
+    Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.putState current s)
+'R1Z.PV_RDB2E_ShaHandles.callback_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDB2E_Dispatch.full_dispatch (backend : R1Z.PV_RDB2E_Dispatch.Backend)
+  (soft shani : R1Z.PV_RDB2E_ShaHandles.State → List Aeneas.Std.U8 → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State)
+  (f : R1Z.PV_RDB2E_ShaHandles.Frame) (valid : ↑(R1Z.PV_RDB2E_ShaHandles.position f) < 64) :
+  (do
+      let after ← R1Z.PV_RDB2E_ShaHandles.finalize (R1Z.PV_RDB2E_Dispatch.select backend soft shani) f valid
+      Aeneas.Std.Result.ok (R1Z.PV_RDB2E_ShaHandles.forget after)) =
+    R1Z.PV_RDB2D_SHAState.finalize (R1Z.PV_RDB2E_Dispatch.select backend soft shani) f.core f.buffer
+      (R1Z.PV_RDB2E_ShaHandles.position f) f.output
+'R1Z.PV_RDB2E_Dispatch.full_dispatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_CBL_FallbackBlockTotal.total (state : Aeneas.Std.Array Aeneas.Std.U32 8#usize)
+  (input : Aeneas.Std.Array Aeneas.Std.U32 16#usize) :
+  R1Z.PV_CBL_FallbackTotal.Total (PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state input)
+'R1Z.PV_CBL_FallbackBlockTotal.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDB2E_PointerOffsets.nonempty (base front back : ℕ) (h : front ≤ back) :
+  R1Z.PV_RDB2E_PointerOffsets.address base front ≠ R1Z.PV_RDB2E_PointerOffsets.address base back ↔ front < back
+'R1Z.PV_RDB2E_PointerOffsets.nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+R1Z.PV_RDB2E_FromFn.length {S A : Type} (f : ℕ → S → Aeneas.Std.Result (A × S)) (n i : ℕ) (s after : S) (out : List A)
+  (h : R1Z.PV_RDB2E_FromFn.build f n i s = Aeneas.Std.Result.ok (out, after)) : out.length = n
+'R1Z.PV_RDB2E_FromFn.length' depends on axioms: [propext]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62299/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62299/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects/R1Z/PV_RDB2E_FocusedReplay.olean", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_FocusedReplay.lean", "7000"], "exit": 0, "wall": "0:01.15", "peak_rss_kib": "2636420", "swap": "0", "source_revision": "61e3fc7eda55dd3533f705e4e95000d83f688fb3", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

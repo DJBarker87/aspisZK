@@ -1,0 +1,393 @@
+{
+  "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+  "runjoin_read_only_revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+  "records": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "c28b8ab39881fa953d4698442b6abfd424a6977a",
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "lines": [
+        {
+          "line": 15,
+          "text": " if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}"
+        }
+      ]
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "3db2162a8dac177da5af21b48fd60c1338578b4b",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "lines": [
+        {
+          "line": 6,
+          "text": "use std::{str::FromStr,fs,path::Path,time::Instant};"
+        },
+        {
+          "line": 84,
+          "text": " let started=Instant::now();let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);"
+        },
+        {
+          "line": 99,
+          "text": " let live=PoolV1PairLiveSnapshotV1{pool:master.to_bytes(),deployment_domain:[5;32],sequence:lane.tree.next_leaf_index,next_pair_index:lane.tree.next_leaf_index,current_root:lane.tree.root,frontier:lane.tree.frontier};"
+        },
+        {
+          "line": 100,
+          "text": " let context=PoolV1PaymentRelationContextV1{runtime_binding:PoolV1PaymentRuntimeBindingV1{pool:master.to_bytes(),deployment_domain:[5;32],anchor_sequence:cp.checkpoint_sequence,anchor_root:cp.global_root,asset_id:M31(77)},spent_nullifiers:&[]};"
+        },
+        {
+          "line": 107,
+          "text": " let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};"
+        },
+        {
+          "line": 114,
+          "text": " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;"
+        },
+        {
+          "line": 116,
+          "text": " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;"
+        },
+        {
+          "line": 119,
+          "text": " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;"
+        },
+        {
+          "line": 129,
+          "text": " Ok(json!({\"client_route\":\"selected64-proof-account-v1\",\"proof_account\":proof_account.to_string(),\"attempt_index\":attempt_index,\"prove_wall_seconds\":started.elapsed().as_secs_f64(),\"attempts\":result.attempts,\"p_r1\":true,\"mask_audit\":format!(\"{:?}\",result.audit),\"proof_bytes\":proof.len(),\"proof_upload_count\":proof.len().div_ceil(3763),\"statement_upload_count\":1,\"marker\":marker.to_string(),\"output_lane\":lanes[output_lane as usize].to_string(),\"page\":page.to_string(),\"needs_zero_page\":lane.tree.next_leaf_index==0,\"settle\":ix(pool,a,data),\"stage1\":ix(pk(q,\"verifier\"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))"
+        }
+      ]
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "ca4493ae70d4dc637bee62462319db2bc4640a62",
+      "sha256": "4fdd62aa82b52f08ff986fcf8b7488ca7991497e89667f64e8d50603a1c10c39",
+      "lines": [
+        {
+          "line": 93,
+          "text": "        assert_eq!(planner.matches(\"RealR1_client::prove_for_proof_accounts(\").count(), 1);"
+        },
+        {
+          "line": 95,
+          "text": "            for forbidden in [\"prove_masked_retrying(\", \"prove_masked_retrying_with(\","
+        },
+        {
+          "line": 100,
+          "text": "        assert!(runner.contains(\"plan::run(&q)?\"));"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "163040bfdd1c18a73572e5a845ca7b0cbf6a6757",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "lines": [
+        {
+          "line": 19,
+          "text": "/// cap are exactly those of `prove_masked_retrying_with`."
+        },
+        {
+          "line": 20,
+          "text": "pub fn prove_for_proof_accounts("
+        },
+        {
+          "line": 27,
+          "text": "    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {"
+        },
+        {
+          "line": 28,
+          "text": "        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "dd3eb01f466f2b7f8c04f51c525ae7663484a24e",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "lines": [
+        {
+          "line": 325,
+          "text": "    let y1=opening_claim_bytes(&coefficients,z1);"
+        },
+        {
+          "line": 328,
+          "text": "    let q=opening_batch(&coefficients,gamma);"
+        },
+        {
+          "line": 350,
+          "text": "fn opening_claim_bytes(coefficients:&[Message<E>],z1:Point<E>)->Vec<u8> {"
+        },
+        {
+          "line": 354,
+          "text": "        let value=r0::encoder::eval_message(&coefficients[lane],z1);"
+        },
+        {
+          "line": 359,
+          "text": "fn opening_batch(coefficients:&[Message<E>],gamma:E)->Vec<E> {"
+        },
+        {
+          "line": 360,
+          "text": "    let gp=crate::prover_powers::powers::<29>(gamma);"
+        },
+        {
+          "line": 564,
+          "text": "    #[cfg(not(feature=\"ct-host-prover\"))] static CHECK_TIMES: core::cell::RefCell<Vec<R1CheckTimes>> = const { core::cell::RefCell::new(Vec::new()) };"
+        },
+        {
+          "line": 571,
+          "text": "    #[cfg(not(feature=\"ct-host-prover\"))] { CHECK_TIMES.with(|v| core::mem::take(&mut *v.borrow_mut())) } #[cfg(feature=\"ct-host-prover\")] { Vec::new() }"
+        },
+        {
+          "line": 586,
+          "text": "    #[cfg(not(feature=\"ct-host-prover\"))] CHECK_TIMES.with(|v| v.borrow_mut().push(times)); #[cfg(feature=\"ct-host-prover\")] let _ = times;"
+        },
+        {
+          "line": 603,
+          "text": "    prove_masked_retrying_with(public,compiled,variant,hash,nonce_store,|_|StateOnlyAttemptSecrets::generate().map_err(|_|Error::Entropy))"
+        },
+        {
+          "line": 623,
+          "text": "pub fn prove_masked_retrying_with("
+        },
+        {
+          "line": 632,
+          "text": "    retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,0)"
+        },
+        {
+          "line": 635,
+          "text": "fn retry_attempt("
+        },
+        {
+          "line": 648,
+          "text": "        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover_powers.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "949100ed8bf8679916e72facfb08e670cff90150",
+      "sha256": "966c7af71e730b3832c46efee1210f63861db5952b5965b1a94c6c23cfbc2379",
+      "lines": []
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/lib.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "8238667ed62141b80fcf7e924789a3ee6697e5ff",
+      "sha256": "5bc994bdd1cb9b6dbff95222e59ade14d83c4adaf46b7011f126156c88957245",
+      "lines": [
+        {
+          "line": 52,
+          "text": "#[cfg(all(feature = \"ct-host-prover\", feature = \"program-build\"))]"
+        },
+        {
+          "line": 53,
+          "text": "compile_error!(\"ct-host-prover is host-prover only, incompatible with program-build\");"
+        },
+        {
+          "line": 55,
+          "text": "#[cfg(feature = \"ct-host-prover\")]"
+        },
+        {
+          "line": 59,
+          "text": "#[cfg(feature=\"ct-host-prover\")]"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-core/src/r0/encoder.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "57e0c5226477af5527a6b048b310b7b0476492ad",
+      "sha256": "6e34b6b2b264573e63f963fe2879d05eaed4f767e105bf7ca0c79d5b6dfc5c88",
+      "lines": [
+        {
+          "line": 28,
+          "text": "pub fn eval_message<E: CodeField>(q: &Message<E>, z: Point<E>) -> E {"
+        },
+        {
+          "line": 34,
+          "text": "    eval_message(q, domain::stored_point(i))"
+        }
+      ]
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "cb6ef3e4d5fc2419477837ef5f2b8d42c05e5d41",
+      "sha256": "060eaa71de4d736fad4019a0445d75345709d3fdd695ff0c0320508a3444e8e8",
+      "lines": [
+        {
+          "line": 120,
+          "text": "    pub fn semantic_public(&self) -> super::pair_forest_semantic_terminal::r0::Public<'_> {"
+        },
+        {
+          "line": 164,
+          "text": "    /// Runtime withdrawal destination account. Canonically zero for transfers."
+        },
+        {
+          "line": 843,
+          "text": "            PoolV1PaymentRelationContextV1, PoolV1PaymentRuntimeBindingV1, VerifierPolicyV1,"
+        },
+        {
+          "line": 881,
+          "text": "            next_pair_index: index,"
+        },
+        {
+          "line": 941,
+          "text": "            runtime_binding: PoolV1PaymentRuntimeBindingV1 {"
+        }
+      ]
+    },
+    {
+      "path": "tools/r1-cost-probe/Cargo.toml",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "c6007f8887e8057476b44a5e3b531857e21ff37a",
+      "sha256": "9c0dbf8f43676670f325dc3a3fada9bc50c73c02340af9663ea038d11bcbf6e3",
+      "lines": []
+    },
+    {
+      "path": "tools/r1-cost-probe/Cargo.lock",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "fe4eb91f9d089cdacfc96616834feaceb6bca6ef",
+      "sha256": "8f9334eb99bad527e191e545def30f103640fbcb28100abb3da9edae4fa6af43",
+      "lines": []
+    },
+    {
+      "path": "tools/r1-cost-probe/rust-toolchain.toml",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "4d4a8e2d79687693aaa5d970663c051a3ab0fb89",
+      "sha256": "c2072e3e11843e8321fc0cd0fc3bbc0f3bb54485117b4252c12dc3dbe67e6344",
+      "lines": []
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/Cargo.toml",
+      "revision": "cfc758ab875c64c6ec67ce551e4aa7c7befc9989",
+      "git_blob": "05f52a27bdff43cffddf432c87ce815dda34b043",
+      "sha256": "1c0710ca8f433bc88f21a3f336a45b3f509d8f2821815b612b752af2335eba7c",
+      "lines": [
+        {
+          "line": 10,
+          "text": "public-work-trace = [\"ct-host-prover\"]"
+        },
+        {
+          "line": 12,
+          "text": "ct-host-prover = [\"r1p-check\", \"aspis-prover/ct-host-prover\", \"aspis-core/ct-host-prover\"]"
+        },
+        {
+          "line": 105,
+          "text": "required-features = [\"ct-host-prover\"]"
+        }
+      ]
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_Deployed.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "30be60d9663cd2106d60adc2d01562476fff094c",
+      "sha256": "75aeaeb06592a63dbc97ec3bff6a27260a06141591be54f6813a438b9310f4d6",
+      "text": "import R1Z.PV_RunJoin_CompletedWorld\nimport R1Z.PV_RunJoin_UnifiedRetry\nimport R1Z.PrivacyR1HeadlineDeployedReal\n/-! Effect-interpreted client instance. The initializer, source-body handler,\nand observer decoder are DATA, whose native association remains explicit.\nNo native correctness follows merely from the name `rust`. -/\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_Deployed\nopen Aeneas Aeneas.Std Result ProverRwRngCaller\nopen R0Z R0Z.JointView R0Z.FsStatement\nopen R1Z.GamesR1 R1Z.Batched\nlocal instance : NativeTypes := PV_RunJoin_CallerWorld.nativeTypes\nlocal instance : ErasureFns := \u27e8fun _ value => .ok value,fun _ value => .ok value\u27e9\nlocal notation \"K\" => PrivacyR1AcctBasis.K\nlocal notation \"F\" => PrivacyR1AcctBasis.F\nvariable [ProverRwFull.ExternalTypes]\n\nabbrev State := PV_RunJoin_UnifiedRetry.State\nabbrev Output (N L C : Type) :=\n  ProverCommitRetry34.Step (ProverCommitRetry34.Published ProverRwRetryModel.Proof) \u00d7 State N L C\n\nstructure Runtime (CommitHandle Aux Coins N L C : Type) where\n  world : PV_RunJoin_CompletedWorld.Data Coins N L C\n  account : ProverRwEffectCallback.Account (State N L C)\n  body : (h : HonestProver K) \u2192 Statement K CommitHandle \u2192 h.Instance \u2192\n    PV_RunJoin_UnifiedRetry.Body (State N L C)\n  disclosed : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n    Result (Output N L C) \u2192 View K CommitHandle Aux R1Bat\n  observerOracle : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n    Result (Output N L C) \u2192 List (Bytes \u00d7 OracleAnswer)\n  ideal : (Challenges K \u2192 R0Z.JointView.Tape K F \u2192 View K CommitHandle Aux R1Bat) \u2192\n    R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192 ROMView K CommitHandle Aux R1Bat\n\nvariable {CommitHandle Aux Coins N L C : Type}\nvariable (runtime : Runtime CommitHandle Aux Coins N L C)\n\ndef initialState (r : Coins) : State N L C :=\n  \u27e8PV_RunJoin_CompletedWorld.provider runtime.world r,\n    runtime.world.policy r,runtime.world.ledger r,runtime.world.body r\u27e9\n\nabbrev World := PV_RunJoin_FiniteGraph.World (initialState runtime)\n\ndef coordinates : World runtime \u2243 Coins :=\n  PV_RunJoin_FiniteGraph.coordinates (initialState runtime)\n\ndef execute (h : HonestProver K) (x : Statement K CommitHandle) (w : h.Instance)\n    (r : World runtime) : Result (Output N L C) :=\n  PV_RunJoin_UnifiedRetry.client runtime.account (runtime.body h x w) r.state\n\ndef rust : FSExperiments K CommitHandle Aux R1Bat F where\n  Adversary := R1Adv K CommitHandle Aux\n  RealRand := World runtime\n  IdealRand := Unit\n  real := fun h _ _ adv x w r =>\n    let out := execute runtime h x w r\n    \u27e8runtime.disclosed adv x out,runtime.observerOracle adv x out\u27e9\n  ideal := fun sim adv x _ => runtime.ideal sim adv x\n  observe := fun adv view => adv.decide view\n\ninstance finite [Fintype Coins] : Fintype (rust runtime).RealRand :=\n  inferInstanceAs (Fintype (World runtime))\ninstance nonempty [Nonempty Coins] : Nonempty (rust runtime).RealRand :=\n  inferInstanceAs (Nonempty (World runtime))\n\ndef observer_program : (rust runtime).Adversary \u2192 View K CommitHandle Aux R1Bat \u2192\n    List (Bytes \u00d7 OracleAnswer) \u2192 OProg := fun adv => adv.prog\n\ntheorem complete_decision (adv : (rust runtime).Adversary) (view : ROMView K CommitHandle Aux R1Bat) :\n    (rust runtime).observe adv view = adv.decide view := rfl\n\ntheorem observer_exact (adv : (rust runtime).Adversary) :\n    RomObserverBin.observerMap (rust runtime) (observer_program runtime) adv = adv := by\n  cases adv\n  rfl\n\n#print axioms initialState\n#print axioms coordinates\n#print axioms execute\n#print axioms rust\n#print axioms finite\n#print axioms nonempty\n#print axioms complete_decision\n#print axioms observer_exact\nend R1Z.PV_RunJoin_Deployed\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_SourceConstructor.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "8581568881819ce1b224394ef8378a023c5fd2fd",
+      "sha256": "2e1556d5bbe9245ed24312b56013bb8f63668057e7ce97dfc1743b9f2809450a",
+      "text": "import R1Z.PV_RunJoin_Deployed\nimport R1Z.PV_RunJoin_PureSourceLift\nimport R1Z.PV_RunJoin_SourceAccount\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_SourceConstructor\nopen Aeneas Aeneas.Std Result\nopen R0P R0Z R0Z.JointView R0Z.FsStatement R1Z.GamesR1 R1Z.Batched\nlocal notation \"K\" => PrivacyR1AcctBasis.K\nlocal notation \"F\" => PrivacyR1AcctBasis.F\nlocal instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes\nlocal instance : ProverRwRngCaller.ErasureFns := \u27e8fun _ value => .ok value,fun _ value => .ok value\u27e9\nvariable [ProverRwFull.ExternalTypes]\nvariable {CommitHandle Aux Coins N C : Type}\nabbrev State (N C : Type) := PV_RunJoin_UnifiedRetry.State N ProverRwRetryModel.Store C\n\n/-- Partially constructed operational runtime. All remaining DATA parameters\nare deliberately explicit: world initialization, account policy, native\ndictionary/public/compiled/hash inputs, both complete observer decoders and\nthe ideal handler. Giving this function a name does not remove those inputs.\nThe body is the actual full emitted prove_masked_attempt; filesystem/oracle\neffect adequacy of its pure dictionary is still unproved. -/\ndef runtime\n    (world : PV_RunJoin_CompletedWorld.Data Coins N ProverRwRetryModel.Store C)\n    (policy : ProverRwEffectCallback.Account N)\n    (inputs : (h : HonestProver K) \u2192 (x : Statement K CommitHandle) \u2192 h.Instance \u2192\n      PV_RunJoin_PureSourceLift.Inputs N C)\n    (disclosed : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store C) \u2192 View K CommitHandle Aux R1Bat)\n    (oracle : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N ProverRwRetryModel.Store C) \u2192 List (Bytes \u00d7 OracleAnswer))\n    (ideal : (Challenges K \u2192 R0Z.JointView.Tape K F \u2192 View K CommitHandle Aux R1Bat) \u2192\n      R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192 ROMView K CommitHandle Aux R1Bat) :\n    PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N ProverRwRetryModel.Store C where\n  world := world\n  account := PV_RunJoin_SourceAccount.account policy\n  body := fun h x w => PV_RunJoin_PureSourceLift.body (inputs h x w)\n  disclosed := disclosed\n  observerOracle := oracle\n  ideal := ideal\n\ntheorem source_body\n    (inputs : (h : HonestProver K) \u2192 (x : Statement K CommitHandle) \u2192 h.Instance \u2192\n      PV_RunJoin_PureSourceLift.Inputs N C)\n    (h : HonestProver K) (x : Statement K CommitHandle) (w : h.Instance) :\n    PV_RunJoin_UnifiedRetry.BodySourceLaw\n      (PV_RunJoin_PureSourceLift.sourceBody (inputs h x w))\n      (PV_RunJoin_PureSourceLift.body (inputs h x w)) :=\n  PV_RunJoin_PureSourceLift.source_law (inputs h x w)\n\n#print axioms source_body\nend R1Z.PV_RunJoin_SourceConstructor\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_LedgerConstructor.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "3b9eaa547dbb33e97c571cf4ee8c64462306030d",
+      "sha256": "163448488401668c56c72adea0be98a0c45907564a705bff06abe2a14b44c3b0",
+      "text": "import R1Z.PV_RunJoin_Deployed\nimport R1Z.PV_RunJoin_LedgerSourceBody\nimport R1Z.PV_RunJoin_SourceAccount\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_LedgerConstructor\nopen Aeneas Aeneas.Std Result\nopen R0P R0Z R0Z.JointView R0Z.FsStatement R1Z.GamesR1 R1Z.Batched\nlocal notation \"K\" => PrivacyR1AcctBasis.K\nlocal notation \"F\" => PrivacyR1AcctBasis.F\nlocal instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes\nlocal instance : ProverRwRngCaller.ErasureFns := \u27e8fun _ value => .ok value,fun _ value => .ok value\u27e9\nvariable [ProverRwFull.ExternalTypes]\nvariable {CommitHandle Aux Coins N C : Type}\nabbrev State (N C : Type) := PV_RunJoin_UnifiedRetry.State N PV_RunJoin_LedgerWorld.World C\n\n/-- Partially constructed operational runtime. All remaining DATA parameters\nare deliberately explicit: world initialization, account policy, native\ndictionary/public/compiled/hash inputs, both complete observer decoders and\nthe ideal handler. Giving this function a name does not remove those inputs.\nThe generic body projects to the full emitted prove_masked_attempt under its installed op12 law; filesystem/oracle\neffect adequacy of its pure dictionary is still unproved. -/\ndef runtime\n    (schedule : ProverCommitLedger36.Schedule) (unix : Bool) (address : PV_RunJoin_LedgerWorld.Address)\n    (world : PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C)\n    (policy : ProverRwEffectCallback.Account N)\n    (inputs : (h : HonestProver K) \u2192 (x : Statement K CommitHandle) \u2192 h.Instance \u2192\n      PV_RunJoin_LedgerBody.Inputs N C)\n    (disclosed : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) \u2192 View K CommitHandle Aux R1Bat)\n    (oracle : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) \u2192 List (Bytes \u00d7 OracleAnswer))\n    (ideal : (Challenges K \u2192 R0Z.JointView.Tape K F \u2192 View K CommitHandle Aux R1Bat) \u2192\n      R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192 ROMView K CommitHandle Aux R1Bat) :\n    PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N PV_RunJoin_LedgerWorld.World C where\n  world := world\n  account := PV_RunJoin_SourceAccount.account policy\n  body := fun h x w => PV_RunJoin_LedgerBody.body schedule unix address (inputs h x w)\n  disclosed := disclosed\n  observerOracle := oracle\n  ideal := ideal\n\n#print runtime\nend R1Z.PV_RunJoin_LedgerConstructor\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_InstalledEndpoint.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "b60f31ab37a6971d1f7c52956e3d4c63c6f80a3d",
+      "sha256": "130836f3c1336e1d139c49f9d711e89eb135d2a495917700751879a90e1293d4",
+      "text": "import R1Z.PV_RunJoin_InstalledFamily\nimport R1Z.PV_RunJoin_LedgerBoundary\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_InstalledEndpoint\nopen Aeneas Aeneas.Std Result ProverRwFull\nopen R0P R0Z R0Z.FsStatement R0Z.JointView R1Z.GamesR1 R1Z.Batched\nlocal notation \"K\" => PrivacyR1AcctBasis.K\nlocal notation \"F\" => PrivacyR1AcctBasis.F\nlocal instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes\nlocal instance : ProverRwRngCaller.ErasureFns := \u27e8fun _ value => .ok value,fun _ value => .ok value\u27e9\nvariable {CommitHandle Aux Coins N C : Type}\n\n/-- Dictionary/input-specialized candidate Runtime. The initializer, actual\nselected family and complete observer/ideal handlers remain explicit DATA.\nThis function is not an installed native binary interpretation. -/\ndef runtime (base : ExternalTypes)\n    (ops : PV_RunJoin_NativeSelectedInputs.LedgerState base N C \u2192 @ExternalFuns (PDict_CodecDictionary.native base))\n    (hash : Statement K CommitHandle \u2192 Slice (Slice U8) \u2192 Result (Array U8 32#usize))\n    (selection : PV_RunJoin_InstalledFamily.Selection CommitHandle)\n    (schedule : ProverCommitLedger36.Schedule) (unix : Bool) (address : PV_RunJoin_LedgerWorld.Address) :\n    letI : ExternalTypes := PDict_CodecDictionary.native base\n    (world : PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C) \u2192\n    (policy : ProverRwEffectCallback.Account N) \u2192\n    (disclosed : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) \u2192 View K CommitHandle Aux R1Bat) \u2192\n    (oracle : R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192\n      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) \u2192 List (Bytes \u00d7 OracleAnswer)) \u2192\n    (ideal : (Challenges K \u2192 Tape K F \u2192 View K CommitHandle Aux R1Bat) \u2192\n      R1Adv K CommitHandle Aux \u2192 Statement K CommitHandle \u2192 ROMView K CommitHandle Aux R1Bat) \u2192\n    PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N PV_RunJoin_LedgerWorld.World C := by\n  letI : ExternalTypes := PDict_CodecDictionary.native base\n  intro world policy disclosed oracle ideal\n  exact PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy\n    (PV_RunJoin_InstalledFamily.inputs base ops hash selection) disclosed oracle ideal\n\n#print runtime\n#print axioms runtime\nend R1Z.PV_RunJoin_InstalledEndpoint\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RJDec_CommonCases.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "334db1c7f191c4e3c01c8201e2723c0eb10f60e1",
+      "sha256": "c41127d3ba0acc2fa412e4066b27d2896aea2d0eade41d34a9f0c933afbb01fa",
+      "text": "import R1Z.PV_RJDec_TotalExtension\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RJDec_CommonCases\nopen Aeneas Aeneas.Std Result R0Z R0Z.JointView R0Z.FsStatement R1Z.Batched R1Z.GamesR1\nopen PV_RunJoin_UnifiedRetry ProverCommitSemanticTransport26\nlocal notation \"K\" => PrivacyR1AcctBasis.K\nvariable [ProverRwFull.ExternalTypes]\nlocal instance : ProverRwRngCaller.NativeTypes := PV_RunJoin_CallerWorld.nativeTypes\nlocal instance : ProverRwRngCaller.ErasureFns := \u27e8fun _ value => .ok value,fun _ value => .ok value\u27e9\nvariable {CH Aux Coins NA LA CA NB LB CB : Type}\nvariable (a : PV_RunJoin_Deployed.Runtime CH Aux Coins NA LA CA)\n    (b : PV_RunJoin_Deployed.Runtime CH Aux Coins NB LB CB)\n    (project : State NA LA CA \u2192 State NB LB CB)\n    (h : R0Z.ZkStatement.HonestProver K) (x : Statement K CH) (w : h.Instance)\n    (entropy_step : \u2200 index s,\n      mapR (fun out => (out.1,project out.2)) (entropy a.account index s) = entropy b.account index (project s))\n    (body_step : \u2200 secret s,\n      mapR (fun out => (out.1,project out.2)) (a.body h x w secret s) = b.body h x w secret (project s))\n    (initial : \u2200 c, project (PV_RunJoin_Deployed.initialState a c)=PV_RunJoin_Deployed.initialState b c)\ninclude entropy_step body_step initial\n\n/-- A consumer of the six exact fixed-decoder cases. These remain native\nobligations; this theorem neither selects nor alters either observer. -/\ntheorem complete_pair (outputs : Statement K CH \u2192 Challenges K \u2192 Aux) (adv : R1Adv K CH Aux)\n    (disclosed_ok : \u2200 value state, a.disclosed adv x (.ok (value,state)) =\n      b.disclosed adv x (.ok (value,project state)))\n    (disclosed_fail : \u2200 error, a.disclosed adv x (.fail error) =\n      b.disclosed adv x (.fail error))\n    (disclosed_div : a.disclosed adv x .div = b.disclosed adv x .div)\n    (oracle_ok : \u2200 value state, a.observerOracle adv x (.ok (value,state)) =\n      b.observerOracle adv x (.ok (value,project state)))\n    (oracle_fail : \u2200 error, a.observerOracle adv x (.fail error) =\n      b.observerOracle adv x (.fail error))\n    (oracle_div : a.observerOracle adv x .div = b.observerOracle adv x .div)\n    (c : Coins) :\n    (let v := (PV_RunJoin_Deployed.rust a).real h PrivacyR1AcctBasis.basis outputs adv x w\n      (PV_RunJoin_FiniteGraph.create _ c)\n     (v,(PV_RunJoin_Deployed.rust a).observe adv v)) =\n    (let v := (PV_RunJoin_Deployed.rust b).real h PrivacyR1AcctBasis.basis outputs adv x w\n      (PV_RunJoin_FiniteGraph.create _ c)\n     (v,(PV_RunJoin_Deployed.rust b).observe adv v)) := by\n  have hd := (PV_RJDec_TotalExtension.cases_iff\n    (fun pair => (pair.1,project pair.2)) (a.disclosed adv x) (b.disclosed adv x)).mpr\n      \u27e8fun pair => disclosed_ok pair.1 pair.2,disclosed_fail,disclosed_div\u27e9\n  have ho := (PV_RJDec_TotalExtension.cases_iff\n    (fun pair => (pair.1,project pair.2)) (a.observerOracle adv x) (b.observerOracle adv x)).mpr\n      \u27e8fun pair => oracle_ok pair.1 pair.2,oracle_fail,oracle_div\u27e9\n  exact PV_RunJoin_CommonObserver32.complete_pair a b project h x w\n    entropy_step body_step initial outputs adv hd ho c\n#print axioms complete_pair\nend R1Z.PV_RJDec_CommonCases\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RJDec_ResultCases.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "30aa974559e8c84d89bd9646d01c7f5ea75328ad",
+      "sha256": "f2b4bf5d07b7d20e4052377d3ae48e8f70e1632fa0d59fa95902d211acb61851",
+      "text": "import R1Z.PV_RJDec_Factor\nset_option autoImplicit false\nnamespace R1Z.PV_RJDec_ResultCases\nopen PV_W_Threading PV_RunJoin_WorldDecode33 PV_RJDec_Factor\nvariable {W C A V : Type}\n\n/-- Success retains the value and final world, but no outcome retains calls\nin the old carrier. Failure/divergence retain neither world nor calls. -/\ntheorem returned_eq (l r : Run W C Aeneas.Std.Error A) :\n    returned l = returned r \u2194\n      (\u2203 a, l.outcome=.ok a \u2227 r.outcome=.ok a \u2227 l.world=r.world) \u2228\n      (\u2203 e, l.outcome=.fail e \u2227 r.outcome=.fail e) \u2228\n      (l.outcome=.div \u2227 r.outcome=.div) := by\n  cases l with | mk lo lw lc =>\n    cases r with | mk ro rw rc =>\n      cases lo <;> cases ro <;> simp [returned,eq_comm]\n\n/-- An exhaustive obligation, including outer fail/div and every inner\nResult rejection carried as an ordinary successful value of A. -/\ntheorem fibres_iff\n    (reachable : Run W C Aeneas.Std.Error A \u2192 Prop)\n    (observe : Run W C Aeneas.Std.Error A \u2192 V) :\n    Fibres reachable observe \u2194\n      (\u2200 l r a, reachable l \u2192 reachable r \u2192 l.outcome=.ok a \u2192\n        r.outcome=.ok a \u2192 l.world=r.world \u2192 observe l=observe r) \u2227\n      (\u2200 l r e, reachable l \u2192 reachable r \u2192 l.outcome=.fail e \u2192\n        r.outcome=.fail e \u2192 observe l=observe r) \u2227\n      (\u2200 l r, reachable l \u2192 reachable r \u2192 l.outcome=.div \u2192\n        r.outcome=.div \u2192 observe l=observe r) := by\n  constructor\n  \u00b7 intro h\n    refine \u27e8?_,?_,?_\u27e9\n    \u00b7 intro l r a hl hr hol hor hw\n      exact h l r hl hr ((returned_eq l r).mpr (.inl \u27e8a,hol,hor,hw\u27e9))\n    \u00b7 intro l r e hl hr hol hor\n      exact h l r hl hr ((returned_eq l r).mpr (.inr (.inl \u27e8e,hol,hor\u27e9)))\n    \u00b7 intro l r hl hr hol hor\n      exact h l r hl hr ((returned_eq l r).mpr (.inr (.inr \u27e8hol,hor\u27e9)))\n  \u00b7 rintro \u27e8hs,hf,hd\u27e9 l r hl hr same\n    rcases (returned_eq l r).mp same with \u27e8a,hol,hor,hw\u27e9 | \u27e8e,hol,hor\u27e9 | \u27e8hol,hor\u27e9\n    \u00b7 exact hs l r a hl hr hol hor hw\n    \u00b7 exact hf l r e hl hr hol hor\n    \u00b7 exact hd l r hl hr hol hor\n#print axioms returned_eq\n#print axioms fibres_iff\nend R1Z.PV_RJDec_ResultCases\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RJDec_V047Native.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "26e5c6edc9eae67ea2b7fea6fe9239f1ad5f8fb5",
+      "sha256": "a64651ed9c74fe343f35db71da5089540de76457ac4694f6720c2194166f824b",
+      "text": "import R1Z.PV_RJDec_V047\nimport PV_2TNV_HeadlineFibre\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RJDec_V047Native\nopen R0Z.ZkStatement\nlocal notation \"K\" => PrivacyR1AcctBasis.K\n/-- The original transfer-13 fibre is supplied here, rather than left as a\npremise. The actual native statement equality is still an explicit obligation.\nNo wrapper execution or FixturePdaRuntime law is consumed by this theorem. -/\ntheorem consume {CH : Type} (actual : Statement K CH) (native_handle : CH)\n    (native_identification : actual = AspisR1.PV_2TNV_PublicEncoding.x native_handle) :\n    \u2203 w : PV_RJDec_V047.H.Instance, PV_RJDec_V047.H.public w = actual.1 :=\n  PV_RJDec_V047.consume (AspisR1.PV_2TNV_PublicEncoding.x native_handle) actual\n    (AspisR1.PV_2TNV_HeadlineFibre.fibre native_handle) native_identification\n\n/-- Full statement identity has two components. This criterion does not erase\nor alter the native commitment handle to obtain public-component equality. -/\ntheorem identification_iff {CH : Type} (actual : Statement K CH) (native_handle : CH) :\n    actual = AspisR1.PV_2TNV_PublicEncoding.x native_handle \u2194\n    actual.1 = (AspisR1.PV_2TNV_PublicEncoding.x native_handle).1 \u2227\n    actual.2 = native_handle := by\n  constructor\n  \u00b7 intro eq\n    exact \u27e8congrArg Prod.fst eq,congrArg Prod.snd eq\u27e9\n  \u00b7 rintro \u27e8public_eq,handle_eq\u27e9\n    exact Prod.ext public_eq handle_eq\n#print axioms consume\n#print axioms identification_iff\nend R1Z.PV_RJDec_V047Native\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_GammaPowers44.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "ab76986ce126dcf7f59c8cdea57d4cb17caddce6",
+      "sha256": "87f4a89b2e86746814bdd6ef8748ab929d904c5d5f8a04c8e55dd4330036a0a6",
+      "text": "import R1Z.PV_RunJoin_SourceArray44\nimport R1Z.ProverRwP6PowersGammaSource\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_GammaPowers44\nopen Aeneas Aeneas.Std Result ProverRwFull\nopen ProverCommitWideOps48 ProverCommitMix48 PV_RunJoin_WideArithmetic44\nvariable [ExternalTypes]\n\n/-- Source-only powers installation. Native callback association remains a\nseparate obligation; no runtime or deployment credit follows from this definition. -/\n@[reducible] def inputs (ops : ExternalFuns) : ExternalFuns := { ops with op254 := ProverRwP6PowersInstall.powers ops }\nabbrev dict (ops : ExternalFuns) := ProverRwP6BodyCandidate.selected (inputs ops)\n\ntheorem gamma (ops : ExternalFuns) (g : Raw) (hg : canonical g) :\n    \u2203 p : Nat \u2192 Raw, (dict ops).op254 29#usize (current (source g)) =\n      .ok (PV_RunJoin_BatchRowValue44.array 29#usize p) \u2227\n      (\u2200 i, i < 29 \u2192 canonical (p i)) \u2227\n      \u2200 i, i < 29 \u2192 value (p i) = value g ^ i := by\n  obtain \u27e8p,hp,hcp,hdp\u27e9 := ProverCommitGamma48.gamma_exact g hg\n  refine \u27e8p,?_,hcp,hdp\u27e9\n  change ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) = _\n  have bridge := ProverRwP6PowersGammaSource.gamma ops (current (source g))\n  change ProverRwP6PowersInstall.powers ops 29#usize (current (source g)) = _ at bridge\n  rw [bridge]\n  change ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map current)\n    (AspisR1ProducerRelease47.gamma (ProverRwDictionaryTower.toW (ProverRwDictionaryTower.fromW (source g)))) = _\n  rw [ProverRwDictionaryTower.native_w_roundtrip,hp]\n  change Result.ok (ProverRwP6ArrayMap.map current (sourceArray 29#usize p)) = _\n  rw [PV_RunJoin_SourceArray44.map]\n#print axioms gamma\nend R1Z.PV_RunJoin_GammaPowers44\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_ClaimEvaluator48.lean",
+      "revision": "3b72078039221c7fa10b3ad71337ffcb5558dbe6",
+      "git_blob": "4257e85e753a9920854f5b73b2586ed325a004f1",
+      "sha256": "11210f762800ce806dd1a90fdd20601cda0aae48de32ca1552dd9efacd75936f",
+      "text": "import R1Z.PV_RunJoin_ClaimProducerCell48\nimport R1Z.PV_DL_EncoderNative\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_RunJoin_ClaimEvaluator48\nopen Aeneas Aeneas.Std Result ProverRwFull\nopen PV_RunJoin_WeightInstalled46\nopen PV_RunJoin_ClaimThread48 (Column Point)\n\n/-- One field projection, separate from any evaluation or byte bind. -/\ntheorem candidate [t : ExternalTypes] (ops : ExternalFuns) :\n    @ExternalFuns.op79 t (ProverRwP6BodyCandidate.selected ops)=@ExternalFuns.op79 t ops := rfl\n\nset_option allowUnsafeReducibility true in\nattribute [local irreducible] ProverRwP6BoundaryInstall.selected\nattribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected\n\n/-- Explicit encoder-installed specialization; this does not assert which\nupstream runtime dictionary the deployed caller supplies. -/\ntheorem complete (base : ExternalTypes) (heap : Heap) (box : Box)\n    (ops : @ExternalFuns (types base)) (point : Point) (column : Column) :\n    PV_RunJoin_ClaimProducerCell48.evaluate base heap box\n      (@PV_DL_EncoderSelected.selected (types base) ops) point column=\n      PV_DL_EncoderNative.value\n        (@aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField\n          (types base) (selected base heap box (@PV_DL_EncoderSelected.selected (types base) ops)))\n        column point := by\n  unfold PV_RunJoin_ClaimProducerCell48.evaluate\n  rw [@candidate (types base) (@PV_DL_EncoderSelected.selected (types base) ops)]\n  exact @PV_DL_EncoderNative.selected_native (types base) ops _ _ column point\n#print axioms candidate\n#print axioms complete\nend R1Z.PV_RunJoin_ClaimEvaluator48\n"
+    }
+  ],
+  "checks": "all assertions passed",
+  "evidence_class": "source inspection and exact text checks; no universal native refinement",
+  "V201": {
+    "row": "V201",
+    "operation": "op79 aspis_core.r0.encoder.eval_message",
+    "status": "SUSPENDED",
+    "known_source_cause_classes": [
+      "B"
+    ],
+    "source_classification_complete": false,
+    "source_revision": "a52174a2d7a9238f3626ae8c5a7582b9157020ae",
+    "artifact": "devnet_spend client; exact deployed selection in every scope receipt; no SBF ELF re-credit",
+    "scope": "Retained emitted source/callback dictionary boundary; no endpoint/native RunJoin or whole-machine claim",
+    "native_link_evidence_class": "unconfirmed deployed transfer; no restored native credit",
+    "native_scopes": [
+      "native-encoder"
+    ],
+    "native_validation_class": "same-input finite validation; never an unbounded Rust/LLVM or binary refinement",
+    "original_structural_checker": "RECOVERED PASS",
+    "deployed_generic_mir_audit": {
+      "reference": "../typed-reached-static.json.xz#V201",
+      "changed_body_records": 79,
+      "unresolved_records": 145,
+      "qualification": "Conservative generic printed-MIR envelope, not a complete monomorphization/callback certificate; counts do not establish completeness"
+    },
+    "endpoint_premises_removed": [],
+    "endpoint_premises_added": [],
+    "endpoint_premises_changed": [],
+    "retained": [
+      "E1/E2",
+      "real RunJoin/native carrier/world link V165-V167",
+      "client proof-account route",
+      "L1/L2/L3 including binary audit",
+      "T exactly entropy_law/entropy_kernel/observation"
+    ],
+    "finding": false,
+    "reason": "The exact original encoder gate is recovered and passes all four native bodies plus the whole owned reference. The full concretely instantiated ChunksExact/Zip/array iterator and indexing cone is not resolved; the typed conservative envelope still has145 unresolved records. Its generic CodeField parameters remain the original explicit boundary. The required1.94.1 library transport is not proved by128 dense finite comparisons.",
+    "next_deliverable": "The exact original encoder gate is recovered and passes all four native bodies plus the whole owned reference. The full concretely instantiated ChunksExact/Zip/array iterator and indexing cone is not resolved; the typed conservative envelope still has145 unresolved records. Its generic CodeField parameters remain the original explicit boundary. The required1.94.1 library transport is not proved by128 dense finite comparisons.",
+    "concrete_native_cone_complete_at_stated_primitive_boundary": false,
+    "class": "D"
+  },
+  "powers_retained_source_sha256": "966c7af71e730b3832c46efee1210f63861db5952b5965b1a94c6c23cfbc2379",
+  "observation_finding": false,
+  "observation_finding_note": "No actual native decoder was identified, so no witness-dependent decoder counterexample is claimed."
+}

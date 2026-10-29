@@ -1,0 +1,84 @@
+175e60:	push   %r15
+175e62:	push   %r14
+175e64:	push   %rbx
+175e65:	sub    $0x50,%rsp
+175e69:	mov    %rdi,%rax
+175e6c:	movdqu (%rsi),%xmm0
+175e70:	movdqu 0x10(%rsi),%xmm1
+175e75:	movdqa -0x14c5dd(%rip),%xmm2        # 298a0 <GCC_except_table365+0xc5c>
+175e7d:	pxor   %xmm2,%xmm1
+175e81:	movdqa -0x14cd39(%rip),%xmm3        # 29150 <GCC_except_table365+0x50c>
+175e89:	pcmpgtd %xmm3,%xmm1
+175e8d:	packssdw %xmm1,%xmm1
+175e91:	pxor   %xmm2,%xmm0
+175e95:	pcmpgtd %xmm3,%xmm0
+175e99:	movdqu (%rdx),%xmm4
+175e9d:	pxor   %xmm2,%xmm4
+175ea1:	pcmpgtd %xmm3,%xmm4
+175ea5:	por    %xmm0,%xmm4
+175ea9:	cmpl   $0x7fffffff,0x10(%rdx)
+175eb0:	setae  %cl
+175eb3:	pshuflw $0xe8,%xmm4,%xmm0
+175eb8:	pshufhw $0xe8,%xmm0,%xmm0
+175ebd:	pshufd $0x84,%xmm0,%xmm0
+175ec2:	punpckhqdq %xmm1,%xmm0
+175ec6:	psllw  $0xf,%xmm0
+175ecb:	pmovmskb %xmm0,%edi
+175ecf:	test   $0xaaaa,%edi
+175ed5:	setne  %dil
+175ed9:	or     %cl,%dil
+175edc:	jne    175efb <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x9b>
+175ede:	cmpl   $0x7ffffffe,0x14(%rdx)
+175ee5:	ja     175efb <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x9b>
+175ee7:	cmpl   $0x7ffffffe,0x18(%rdx)
+175eee:	ja     175efb <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x9b>
+175ef0:	mov    0x1c(%rdx),%edi
+175ef3:	cmp    $0x7ffffffe,%edi
+175ef9:	jbe    175f0d <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0xad>
+175efb:	movb   $0x0,0x1(%rax)
+175eff:	mov    $0x1,%cl
+175f01:	mov    %cl,(%rax)
+175f03:	add    $0x50,%rsp
+175f07:	pop    %rbx
+175f08:	pop    %r14
+175f0a:	pop    %r15
+175f0c:	ret
+175f0d:	test   %edi,%edi
+175f0f:	je     175fa4 <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x144>
+175f15:	mov    %rax,%rbx
+175f18:	mov    %rdx,%r14
+175f1b:	mov    %rsi,%r15
+175f1e:	call   *0xab37c(%rip)        # 2212a0 <_DYNAMIC+0x990>
+175f24:	movups (%r15),%xmm0
+175f28:	movups 0x10(%r15),%xmm1
+175f2d:	movaps %xmm0,(%rsp)
+175f31:	movaps %xmm1,0x10(%rsp)
+175f36:	movl   $0x1,0x40(%rsp)
+175f3e:	movdqu (%r14),%xmm0
+175f43:	movdqu 0x10(%r14),%xmm1
+175f49:	movdqa %xmm0,0x20(%rsp)
+175f4f:	movdqa %xmm1,0x30(%rsp)
+175f55:	mov    %eax,0x44(%rsp)
+175f59:	mov    %rsp,%rdi
+175f5c:	call   *0xaaef6(%rip)        # 220e58 <_DYNAMIC+0x548>
+175f62:	cmp    $0x9,%al
+175f64:	jne    175fad <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x14d>
+175f66:	mov    0x40(%rsp),%rcx
+175f6b:	mov    %rbx,%rax
+175f6e:	mov    %rcx,0x44(%rbx)
+175f72:	movdqa (%rsp),%xmm0
+175f77:	movdqa 0x10(%rsp),%xmm1
+175f7d:	movdqa 0x20(%rsp),%xmm2
+175f83:	movdqa 0x30(%rsp),%xmm3
+175f89:	movdqu %xmm3,0x34(%rbx)
+175f8e:	movdqu %xmm2,0x24(%rbx)
+175f93:	movdqu %xmm1,0x14(%rbx)
+175f98:	movdqu %xmm0,0x4(%rbx)
+175f9d:	xor    %ecx,%ecx
+175f9f:	jmp    175f01 <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0xa1>
+175fa4:	movb   $0x7,0x1(%rax)
+175fa8:	jmp    175eff <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x9f>
+175fad:	mov    %eax,%ecx
+175faf:	mov    %rbx,%rax
+175fb2:	mov    %cl,0x1(%rbx)
+175fb5:	jmp    175eff <<aspis_statement::pool_v1::pair_tree_profile::PoolV1PairLeafWitnessV1>::two_outputs+0x9f>

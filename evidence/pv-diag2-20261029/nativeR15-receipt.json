@@ -1,0 +1,37 @@
+{
+  "target": [
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/body-bindings.py",
+    "panic-oom"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/nativeR15-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/body-bindings.py",
+    "panic-oom"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.06350207328796387,
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "53d75aee4f",
+  "runner_sha256": "0ff8eed44d639dd21594be743a2758bace5be1c0508d82ad84781a78afd17cdc",
+  "print_axioms": "N/A: native evidence"
+}

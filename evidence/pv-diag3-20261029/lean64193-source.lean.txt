@@ -1,0 +1,62 @@
+import PV_DIAG3_Joint
+import R1Z.ProverRwRetryModel
+/-! Concrete retry Result, plus native diagnostic continuation. The cached
+retry cohort is checked separately; the full deployed observer cohort is not
+imported when its source associations fail. No claim of installing RunJoin. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+open Aeneas Aeneas.Std
+open R1Z ProverCommitRetry34
+variable {H S P : Type}
+structure ClientHandlers (H S P : Type) where
+ success : Published P → S → Op H Nat
+ report : ProverCommitRetry34.Error → S → Op H Nat
+ runtime : Aeneas.Std.Error → Op H Nat
+ divergence : Op H Nat
+ unexpectedRetry : S → Op H Nat
+def clientAfter (o : ClientHandlers H S P) :
+ Aeneas.Std.Result (Step (Published P) × S) → Op H Nat
+ | .ok (.done p,s) => o.success p s
+ | .ok (.stop e,s) => o.report e s
+ | .ok (.retry,s) => o.unexpectedRetry s
+ | .fail e => o.runtime e
+ | .div => o.divergence
+def clientExecute (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) : Op H Nat := sequence retry (clientAfter o)
+/-- Calling the model does not manufacture the native prefix: that prefix
+and its result association must be supplied by actualRetry. -/
+def modelClient (a : Attempt S P) (n k : Nat) (s : S)
+ (o : ClientHandlers H S P) : Op H Nat := clientAfter o (run a n k s)
+
+
+theorem client_success_count_retained (o : ClientHandlers H S P) (p : Published P) (s : S) :
+ clientAfter o (.ok (.done p,s)) = o.success p s := rfl
+#print axioms client_success_count_retained
+
+theorem client_stop_state_retained (o : ClientHandlers H S P)
+ (e : ProverCommitRetry34.Error) (s : S) :
+ clientAfter o (.ok (.stop e,s)) = o.report e s := rfl
+#print axioms client_stop_state_retained
+
+theorem client_runtime_failure_retained (o : ClientHandlers H S P) (e : Aeneas.Std.Error) :
+ clientAfter o (.fail e) = o.runtime e := rfl
+#print axioms client_runtime_failure_retained
+
+theorem client_divergence_retained (o : ClientHandlers H S P) :
+ clientAfter o .div = o.divergence := rfl
+#print axioms client_divergence_retained
+
+theorem client_native_abort (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) (s t : H) (es : List Event) (c : Crash)
+ (h : retry s = ⟨es,t,.abort c⟩) :
+ clientExecute retry o s = ⟨es,t,.abort c⟩ := by simp [clientExecute,sequence,h,bind]
+#print axioms client_native_abort
+
+theorem client_native_normal_model (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) (a : Attempt S P) (n k : Nat) (state : S)
+ (s t : H) (es : List Event)
+ (h : retry s = ⟨es,t,.value (run a n k state)⟩) :
+ clientExecute retry o s = prepend es (modelClient a n k state o t) := by
+ simp only [clientExecute,sequence,h,bind,modelClient]
+#print axioms client_native_normal_model
+end PV_DIAG3

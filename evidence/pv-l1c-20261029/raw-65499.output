@@ -1,0 +1,17 @@
+PV_L1C.count_splice {I A : Type} (actualL actualR : I → List ℕ × List ℕ) (l r : I → PV_RJ4IDB.NativeTrace A)
+  (hl : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualL l) (hr : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE (fun i => ((actualL i).1 ++ (actualR i).1, (actualL i).2 ++ (actualR i).2))
+    fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.time_splice {I A : Type} (actualL actualR : I → List PV_RJ4IDB.Bytes) (l r : I → PV_RJ4IDB.NativeTrace A)
+  (hl : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE actualL l) (hr : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_TIME_TRACE (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.oracle_splice {I A : Type} (actualL actualR : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (l r : I → PV_RJ4IDB.NativeTrace A) (hl : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX actualL l)
+  (hr : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.side_splice {I A : Type} (actualL actualR : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (l r : I → PV_RJ4IDB.NativeTrace A) (hl : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS actualL l)
+  (hr : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+'PV_L1C.same_bad_event_agreement' depends on axioms: [propext]
+'PV_L1C.combined_observer_law' depends on axioms: [propext, Classical.choice, Quot.sound]

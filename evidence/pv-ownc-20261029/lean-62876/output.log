@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_SourceIdentity.lean:13:1: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: If you meant to destruct this conjunction, use the `cases` tactic instead
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+keep : Link → Bool
+q : Cursor
+⊢ (have tmp := q.source q.read;
+        have bytes := PV_OWNB_ReadSnapshot.bytes q;
+        have advanced := advance q;
+        if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).owner =
+      q.owner ∧
+    (have tmp := q.source q.read;
+          have bytes := PV_OWNB_ReadSnapshot.bytes q;
+          have advanced := advance q;
+          if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).token =
+        q.token ∧
+      (have tmp := q.source q.read;
+              have bytes := PV_OWNB_ReadSnapshot.bytes q;
+              have advanced := advance q;
+              if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).memory.slots =
+          q.memory.slots ∧
+        (have tmp := q.source q.read;
+              have bytes := PV_OWNB_ReadSnapshot.bytes q;
+              have advanced := advance q;
+              if keep tmp = true then PV_OWNB_ActualSink.sink advanced tmp bytes else advanced).memory.generations =
+          q.memory.generations
+'R1Z.PV_OWNC_SourceIdentity.step' depends on axioms: [sorryAx]
+'R1Z.PV_OWNC_SourceIdentity.loop' depends on axioms: [sorryAx]

@@ -1,0 +1,45 @@
+import PV_DIAG2_Effects
+/-! rust-src 1.94.1 Backtrace::enabled control. The incoming atomic-load value
+and public environment-read results are inputs. The optional Nat denotes a
+requested atomic store, not a claim about final memory under concurrent races.
+Environment read effects/failures are bound separately in CaptureControl. -/
+set_option autoImplicit false
+namespace PV_DIAG2
+inductive EnvRead where
+ | value : String → EnvRead
+ | absent | nonUnicode
+ deriving DecidableEq, Repr
+
+def envFlag : EnvRead → Bool
+ | .value s => s != "0"
+ | _ => false
+
+def chooseEnv (library fallback : EnvRead) : Bool :=
+ match library with
+ | .value s => s != "0"
+ | _ => envFlag fallback
+
+def cacheCode (enabled : Bool) : Nat := if enabled then 2 else 1
+
+def enableStep (cache : Nat) (library fallback : EnvRead) : Bool × Option Nat :=
+ match cache with
+ | 0 => let b := chooseEnv library fallback; (b,some (cacheCode b))
+ | 1 => (false,none)
+ | _+2 => (true,none)
+
+
+theorem lib_zero_suppresses (back : EnvRead) : chooseEnv (.value "0") back = false := by simp [chooseEnv]
+#print axioms lib_zero_suppresses
+
+theorem lib_nonzero_enables (s : String) (h : s ≠ "0") (back : EnvRead) : chooseEnv (.value s) back = true := by simp [chooseEnv,h]
+#print axioms lib_nonzero_enables
+
+theorem absent_lib_falls_back (back : EnvRead) : chooseEnv .absent back = envFlag back := rfl
+#print axioms absent_lib_falls_back
+
+theorem nonunicode_lib_falls_back (back : EnvRead) : chooseEnv .nonUnicode back = envFlag back := rfl
+#print axioms nonunicode_lib_falls_back
+
+theorem absent_back_disables : envFlag .absent = false := rfl
+#print axioms absent_back_disables
+end PV_DIAG2

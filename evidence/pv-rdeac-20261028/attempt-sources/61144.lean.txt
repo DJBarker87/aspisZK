@@ -1,0 +1,66 @@
+import R1Z.PV_RDEAC_PathPrimitives
+import R1Z.PV_RDEAC_OwnedCleanup
+open Aeneas Aeneas.Std Result
+namespace R1Z.PV_RDEAC_JoinValue
+open PV_RDEAC_PathPrimitives PV_RDEAC_VectorProjection
+
+def needsSeparator (base : List U8) : Bool :=
+  decide (0<base.length) && decide ((base[base.length-1]?).getD 0#u8 ≠47#u8)
+
+def joined (base path : List U8) : List U8 :=
+  base++(if needsSeparator base then [47#u8] else [])++path
+
+theorem length_bound (base path : List U8) : (joined base path).length≤base.length+1+path.length := by
+  unfold joined
+  split <;> simp only [List.length_append,List.length_cons,List.length_nil] <;> omega
+
+theorem relative (base path : Slice U8) (positive : 0<path.val.length)
+    (first : path.val[0]'positive ≠47#u8)
+    (bound : base.val.length+1+path.val.length≤Usize.max) :
+    PV_CBL_JoinSlices.join_slices_reference base path (alloc.vec.Vec.new U8)=
+      ok ⟨joined base.val path.val,length_bound _ _ |>.trans bound⟩ := by
+  have ppos : Slice.len path>0#usize := by
+    change 0<(Slice.len path).val
+    rw [Slice.len_val]
+    exact positive
+  unfold PV_CBL_JoinSlices.join_slices_reference
+  rw [if_pos ppos,index path 0#usize positive]
+  simp only [bind_tc_ok,UScalar.ofNatCore_val_eq,first,if_false]
+  rw [extend (alloc.vec.Vec.new U8) base (by change 0+base.val.length≤_;omega)]
+  simp only [bind_tc_ok,alloc.vec.Vec.new,List.nil_append]
+  by_cases bp : 0<base.val.length
+  · have bpos : Slice.len base>0#usize := by
+      change 0<(Slice.len base).val
+      rw [Slice.len_val]
+      exact bp
+    rw [if_pos bpos]
+    simp only [lift,bind_tc_ok]
+    rw [index base (Usize.wrapping_sub (Slice.len base) 1#usize) (by rw [predecessor base bp];omega)]
+    have last : base.val[(Usize.wrapping_sub (Slice.len base) 1#usize).val]'(by rw [predecessor base bp];omega)=
+        (base.val[base.val.length-1]?).getD 0#u8 := by
+      simp only [predecessor base bp]
+      rw [List.getElem?_eq_getElem (by omega)]
+      rfl
+    rw [last]
+    simp only [bne_iff_ne]
+    by_cases slash : (base.val[base.val.length-1]?).getD 0#u8 =47#u8
+    · simp only [slash,bne_self_eq_false,ne_eq,not_true_eq_false,decide_false,if_false,
+        bind_tc_ok,joined,needsSeparator,bp,decide_true,Bool.true_and,Bool.false_eq_true]
+      rw [extend _ path (by change base.val.length+path.val.length≤_;omega)]
+      simp only [List.append_nil]
+    · simp only [slash,ne_eq,not_false_eq_true,decide_true,if_true,joined,
+        needsSeparator,bp,Bool.true_and]
+      rw [push _ 47#u8 (by change base.val.length+1≤_;omega)]
+      simp only [if_pos slash,bind_tc_ok]
+      rw [extend _ path (by simp only [List.length_append,List.length_cons,List.length_nil];omega)]
+  · have bnot : ¬Slice.len base>0#usize := by
+      change ¬0<(Slice.len base).val
+      rw [Slice.len_val]
+      exact bp
+    rw [if_neg bnot]
+    simp only [bind_tc_ok,joined,needsSeparator,bp,decide_false,Bool.false_and,Bool.false_eq_true,if_false,List.append_nil]
+    rw [extend _ path (by change base.val.length+path.val.length≤_;omega)]
+
+#print axioms length_bound
+#print axioms relative
+end R1Z.PV_RDEAC_JoinValue

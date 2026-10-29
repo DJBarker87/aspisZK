@@ -1,0 +1,270 @@
+theorem R1Z.PV_ROWS10B_Consumed.consumed : ∀ {E W C Word Raw : Type} [inst : Fintype Raw]
+  (native source backend : W → R1Z.PV_ROWS10B_Consumed.Op E) (word : W → C → Word)
+  (interpret : Word → ℕ → R1Z.PV_ROWS10B_Consumed.Stop) (callback law : C → Raw → ℚ),
+  R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Entry native source →
+    R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Body source backend →
+      R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Control backend word interpret →
+        R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Public word →
+          R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Callback callback law →
+            (∀ (c : C) (raw : Raw), law c raw = 1 / ↑(Fintype.card Raw)) →
+              (∀ (w : W) (s : Aeneas.Std.Slice Aeneas.Std.U8),
+                  native w s = R1Z.PV_ROWS10B_Consumed.fill (backend w) s) ∧
+                (∀ (a b : W) (c : C) (sa sb : Aeneas.Std.Slice Aeneas.Std.U8),
+                    (↑sa).length = (↑sb).length →
+                      R1Z.PV_ROWS10B_Consumed.stop (native a sa) = R1Z.PV_ROWS10B_Consumed.stop (native b sb)) ∧
+                  ∀ (c : C) (raw : Raw), callback c raw = 1 / ↑(Fintype.card Raw) :=
+fun {E W C Word Raw} [Fintype Raw] native source backend word interpret callback law entry body control publicControl
+    coordinates entropy_law =>
+  have full :=
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            ∀ (w : W) (s : Aeneas.Std.Slice Aeneas.Std.U8), _a w s = R1Z.PV_ROWS10B_Consumed.fill (backend w) s)
+          entry))
+      body;
+  ⟨full,
+    ⟨fun a b c sa sb len =>
+      Eq.mpr
+        (id
+          (congrArg (fun _a => R1Z.PV_ROWS10B_Consumed.stop _a = R1Z.PV_ROWS10B_Consumed.stop (native b sb))
+            (full a sa)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                R1Z.PV_ROWS10B_Consumed.stop (R1Z.PV_ROWS10B_Consumed.fill (backend a) sa) =
+                  R1Z.PV_ROWS10B_Consumed.stop _a)
+              (full b sb)))
+          (Eq.mpr
+            (id
+              (congrArg (fun _a => _a = R1Z.PV_ROWS10B_Consumed.stop (R1Z.PV_ROWS10B_Consumed.fill (backend b) sb))
+                (R1Z.PV_ROWS10B_Consumed.fill_stop (backend a) sa)))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    R1Z.PV_ROWS10B_Consumed.requestStop (fun x => R1Z.PV_ROWS10B_Consumed.stop (backend a sa))
+                        (↑sa).length =
+                      _a)
+                  (R1Z.PV_ROWS10B_Consumed.fill_stop (backend b) sb)))
+              (id
+                (Eq.mpr
+                  (id
+                    (congrArg
+                      (fun _a =>
+                        (if _a = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                          else (fun x => R1Z.PV_ROWS10B_Consumed.stop (backend a sa)) _a) =
+                          if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                          else (fun x => R1Z.PV_ROWS10B_Consumed.stop (backend b sb)) (↑sb).length)
+                      len))
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          (if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                            else (fun x => _a) (↑sb).length) =
+                            if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                            else (fun x => R1Z.PV_ROWS10B_Consumed.stop (backend b sb)) (↑sb).length)
+                        (control a c sa)))
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                              else (fun x => interpret (word a c) (↑sa).length) (↑sb).length) =
+                              if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                              else (fun x => _a) (↑sb).length)
+                          (control b c sb)))
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              (if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                                else (fun x => interpret _a (↑sa).length) (↑sb).length) =
+                                if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                                else (fun x => interpret (word b c) (↑sb).length) (↑sb).length)
+                            (publicControl a b c)))
+                        (Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                (if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                                  else (fun x => interpret (word b c) _a) (↑sb).length) =
+                                  if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                                  else (fun x => interpret (word b c) (↑sb).length) (↑sb).length)
+                              len))
+                          (Eq.refl
+                            (if (↑sb).length = 0 then R1Z.PV_ROWS10B_Consumed.Stop.returned false
+                            else (fun x => interpret (word b c) (↑sb).length) (↑sb).length))))))))))),
+      Eq.mpr (id (congrArg (fun _a => ∀ (c : C) (raw : Raw), _a c raw = 1 / ↑(Fintype.card Raw)) coordinates))
+        entropy_law⟩⟩
+theorem R1Z.PV_ROWS10B_Exact64.consumed64 : ∀ {E W C Word : Type} [inst : Fintype R1Z.PV_ROWS10B_Exact64.Raw]
+  (native source backend : W → R1Z.PV_ROWS10B_Consumed.Op E) (word : W → C → Word)
+  (interpret : Word → ℕ → R1Z.PV_ROWS10B_Consumed.Stop) (callback law : C → R1Z.PV_ROWS10B_Exact64.Raw → ℚ),
+  R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Entry native source →
+    R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Body source backend →
+      R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Control backend word interpret →
+        R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Public word →
+          R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Callback callback law →
+            (∀ (c : C) (raw : R1Z.PV_ROWS10B_Exact64.Raw), law c raw = 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw)) →
+              (∀ (w : W) (s : Aeneas.Std.Slice Aeneas.Std.U8),
+                  native w s = R1Z.PV_ROWS10B_Consumed.fill (backend w) s) ∧
+                (∀ (a b : W) (c : C) (sa sb : Aeneas.Std.Slice Aeneas.Std.U8),
+                    (↑sa).length = 64 →
+                      (↑sb).length = 64 →
+                        R1Z.PV_ROWS10B_Consumed.stop (native a sa) = R1Z.PV_ROWS10B_Consumed.stop (native b sb)) ∧
+                  ∀ (c : C) (raw : R1Z.PV_ROWS10B_Exact64.Raw),
+                    callback c raw = 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw) :=
+fun {E W C Word} [Fintype R1Z.PV_ROWS10B_Exact64.Raw] native source backend word interpret callback law entry body
+    control publicControl coordinates entropy_law =>
+  let ⟨full, right✝⟩ :=
+    R1Z.PV_ROWS10B_Consumed.consumed native source backend word interpret callback law entry body control publicControl
+      coordinates entropy_law
+  let ⟨signal, callbackLaw⟩ := right✝
+  ⟨full, ⟨fun a b c sa sb ha hb => signal a b c sa sb (Eq.trans ha (Eq.symm hb)), callbackLaw⟩⟩
+theorem R1Z.PV_ROWS10B_CanonConsumed.consumed : ∀ {Q Trace State E : Type} (limb : Q → Fin 4 → Aeneas.Std.U32)
+  (reached : Aeneas.Std.Array Q 28#usize → Q → Prop) (occurs : R1Z.PV_ROWS10B_CanonConsumed.Event Q Trace State → Prop)
+  (interpolate : Aeneas.Std.Array Q 28#usize → Aeneas.Std.Result (Aeneas.Std.Array Q 28#usize))
+  (semantic : Trace → Aeneas.Std.Result (Aeneas.Std.core.result.Result Q E × State)),
+  R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_CallerPrefix reached occurs →
+    R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_PrefixEquations occurs interpolate semantic →
+      R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_RoundRange occurs →
+        R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Interpolation limb interpolate →
+          R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Semantic limb semantic →
+            ∀ (p : Aeneas.Std.Array Q 28#usize) (q : Q),
+              reached p q →
+                R1Z.PV_ROWS10B_CanonConsumed.Coefficients limb p ∧ R1Z.PV_ROWS10B_CanonConsumed.Canonical limb q :=
+fun {Q Trace State E} limb reached occurs interpolate semantic caller prefixEq range polynomial challenge p q hit =>
+  let ⟨e, h✝⟩ := caller p q hit
+  let ⟨he, right✝⟩ := h✝
+  let ⟨hp, hq⟩ := right✝
+  let ⟨hi, right✝¹⟩ := prefixEq e he
+  let ⟨hs, right✝²⟩ := right✝¹
+  let ⟨hu, hr⟩ := right✝²
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => R1Z.PV_ROWS10B_CanonConsumed.Coefficients limb _a ∧ R1Z.PV_ROWS10B_CanonConsumed.Canonical limb q)
+        (Eq.symm hp)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_ROWS10B_CanonConsumed.Coefficients limb e.coefficients ∧
+              R1Z.PV_ROWS10B_CanonConsumed.Canonical limb _a)
+          (Eq.symm hq)))
+      ⟨polynomial e.values e.coefficients hi,
+        have same :=
+          R1Z.PV_ROWS10B_CanonConsumed.update_read e.point e.updated e.round e.sampled e.read (range e he) hu hr;
+        Eq.mpr (id (congrArg (fun _a => R1Z.PV_ROWS10B_CanonConsumed.Canonical limb _a) same))
+          (challenge e.trace e.sampled e.after hs)⟩)
+structure R1Z.PV_ROWS10B_Combined.ModelPackage [Fintype R1Z.PV_ROWS10B_Exact64.Raw] : Prop
+number of parameters: 1
+fields:
+  R1Z.PV_ROWS10B_Combined.ModelPackage.entropy : let native := R1Z.PV_ROWS10B_Satisfiable.source;
+    let backend := R1Z.PV_ROWS10B_Satisfiable.backend;
+    let word := R1Z.PV_ROWS10B_Satisfiable.word;
+    let interpret := R1Z.PV_ROWS10B_Satisfiable.interpret;
+    let law := fun x x_1 => 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw);
+    R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Entry native native ∧
+      R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Body native backend ∧
+        R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Control backend word interpret ∧
+          R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Public word ∧
+            R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Callback law law ∧
+              ∀ (c : Unit) (raw : R1Z.PV_ROWS10B_Exact64.Raw),
+                law c raw = 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw)
+  R1Z.PV_ROWS10B_Combined.ModelPackage.canonical : R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_CallerPrefix
+        R1Z.PV_ROWS10B_CanonSatisfiable.reached R1Z.PV_ROWS10B_CanonSatisfiable.occurs ∧
+      R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_PrefixEquations R1Z.PV_ROWS10B_CanonSatisfiable.occurs
+          R1Z.PV_ROWS10B_CanonSatisfiable.interpolate R1Z.PV_ROWS10B_CanonSatisfiable.semantic ∧
+        R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_RoundRange R1Z.PV_ROWS10B_CanonSatisfiable.occurs ∧
+          R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Interpolation R1Z.PV_ROWS10B_CanonSatisfiable.limb
+              R1Z.PV_ROWS10B_CanonSatisfiable.interpolate ∧
+            R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Semantic R1Z.PV_ROWS10B_CanonSatisfiable.limb
+                R1Z.PV_ROWS10B_CanonSatisfiable.semantic ∧
+              R1Z.PV_ROWS10B_CanonSatisfiable.reached R1Z.PV_ROWS10B_CanonSatisfiable.zero28 0#u32
+  R1Z.PV_ROWS10B_Combined.ModelPackage.dispatch_gap : (R1Z.PV_ROWS10B_Dispatch.dispatch
+          R1Z.PV_ROWS10B_Dispatch.Cache.cold (some true) fun x => { returned := 0, errno := 0 }) =
+        R1Z.PV_ROWS10B_Dispatch.Cache.callable true ∧
+      ¬R1Z.PV_ROWS10B_Dispatch.PV_ROWS10B_Link_SymbolOrigin false R1Z.PV_ROWS10B_Dispatch.Cache.cold (some true)
+  R1Z.PV_ROWS10B_Combined.ModelPackage.retry : R1Z.PV_ROWS10B_ControlWord.Diverges
+      (fun x => { returned := -1, errno := 4 }) 64
+constructor:
+  R1Z.PV_ROWS10B_Combined.ModelPackage.mk [Fintype R1Z.PV_ROWS10B_Exact64.Raw]
+    (entropy :
+      let native := R1Z.PV_ROWS10B_Satisfiable.source;
+      let backend := R1Z.PV_ROWS10B_Satisfiable.backend;
+      let word := R1Z.PV_ROWS10B_Satisfiable.word;
+      let interpret := R1Z.PV_ROWS10B_Satisfiable.interpret;
+      let law := fun x x_1 => 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw);
+      R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Entry native native ∧
+        R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Body native backend ∧
+          R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Control backend word interpret ∧
+            R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Public word ∧
+              R1Z.PV_ROWS10B_Consumed.PV_ROWS10B_Link_Callback law law ∧
+                ∀ (c : Unit) (raw : R1Z.PV_ROWS10B_Exact64.Raw),
+                  law c raw = 1 / ↑(Fintype.card R1Z.PV_ROWS10B_Exact64.Raw))
+    (canonical :
+      R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_CallerPrefix R1Z.PV_ROWS10B_CanonSatisfiable.reached
+          R1Z.PV_ROWS10B_CanonSatisfiable.occurs ∧
+        R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_PrefixEquations R1Z.PV_ROWS10B_CanonSatisfiable.occurs
+            R1Z.PV_ROWS10B_CanonSatisfiable.interpolate R1Z.PV_ROWS10B_CanonSatisfiable.semantic ∧
+          R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_RoundRange R1Z.PV_ROWS10B_CanonSatisfiable.occurs ∧
+            R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Interpolation R1Z.PV_ROWS10B_CanonSatisfiable.limb
+                R1Z.PV_ROWS10B_CanonSatisfiable.interpolate ∧
+              R1Z.PV_ROWS10B_CanonConsumed.PV_ROWS10B_Link_Semantic R1Z.PV_ROWS10B_CanonSatisfiable.limb
+                  R1Z.PV_ROWS10B_CanonSatisfiable.semantic ∧
+                R1Z.PV_ROWS10B_CanonSatisfiable.reached R1Z.PV_ROWS10B_CanonSatisfiable.zero28 0#u32)
+    (dispatch_gap :
+      (R1Z.PV_ROWS10B_Dispatch.dispatch R1Z.PV_ROWS10B_Dispatch.Cache.cold (some true) fun x =>
+            { returned := 0, errno := 0 }) =
+          R1Z.PV_ROWS10B_Dispatch.Cache.callable true ∧
+        ¬R1Z.PV_ROWS10B_Dispatch.PV_ROWS10B_Link_SymbolOrigin false R1Z.PV_ROWS10B_Dispatch.Cache.cold (some true))
+    (retry : R1Z.PV_ROWS10B_ControlWord.Diverges (fun x => { returned := -1, errno := 4 }) 64) :
+    R1Z.PV_ROWS10B_Combined.ModelPackage
+'R1Z.PV_ROWS10B_CanonConsumed.update_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_CanonConsumed.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_CanonSatisfiable.zero_canonical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_CanonSatisfiable.all_links' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_CanonSatisfiable.satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Combined.local_results' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Consumed.fill_stop' depends on axioms: [propext]
+'R1Z.PV_ROWS10B_Consumed.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_ControlWord.success_conversion' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_ROWS10B_ControlWord.eio' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.eintr' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.invalid_errno' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.invalid_count' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.zero_return' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.invalid_negative' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.partial_then_error' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.interrupted_then_success' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.short_tape_is_pending' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.failed_fd_initialization' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.successful_fd_initialization' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.fd_initial' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.fd_ongoing' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.poll_error_closes' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.poll_interrupt_retries' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.open_interrupt_retries' does not depend on any axioms
+'R1Z.PV_ROWS10B_ControlWord.fixed64_does_not_fix_signal' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.selected_origin' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.symbol_links_satisfiable' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.probe_not_symbol_binding' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.cached_pointer_not_reprobed' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.probe_eio_keeps_pointer' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.probe_enosys_falls_back' does not depend on any axioms
+'R1Z.PV_ROWS10B_Dispatch.probe_eperm_falls_back' does not depend on any axioms
+'R1Z.PV_ROWS10B_Exact64.coordinate_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_ROWS10B_Exact64.consumed64' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Exact64.exact_links_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Retry.retry_prefix' does not depend on any axioms
+'R1Z.PV_ROWS10B_Retry.perpetual_eintr' does not depend on any axioms
+'R1Z.PV_ROWS10B_Retry.positive_errno_negation_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Retry.fd_ready' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_ROWS10B_Retry.fill_os_error' depends on axioms: [propext]
+'R1Z.PV_ROWS10B_Retry.fill_abort' depends on axioms: [propext]
+'R1Z.PV_ROWS10B_Retry.fill_diverges' depends on axioms: [propext]
+'R1Z.PV_ROWS10B_Satisfiable.all_links' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_ROWS10B_Satisfiable.satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,104 @@
+'PV_L2E_CommonSample.on_existing_join' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_GuardedJoint.relabel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_GuardedJoint.joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_LawPermutation.fibre_card' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_LawPermutation.permutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_LawPermutation.pointwise' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_LawPermutation.triangular' depends on axioms: [propext, Quot.sound]
+'PV_L2E_LawPermutation.retains_coins' depends on axioms: [propext, Quot.sound]
+'PV_L2E_SimECoupling.tapePermutation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_SimECoupling.actual_simE_pointwise' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_SimECoupling.full_coins_joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E.tracePrefix' does not depend on any axioms
+'PV_L2E.StepLink' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V353' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V354' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V355' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V356' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V357' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V358' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V359' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V360' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V361' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V362' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V363' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V364' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V365' does not depend on any axioms
+'PV_L2E.PV_L2E_Link_V367' does not depend on any axioms
+'PV_L2E.trace_simulatable' does not depend on any axioms
+'PV_L2E_TriangularLaw.uniform' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L2E_TriangularLaw.joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+PV_L2E.trace_simulatable {S T E I P C : Type} (native : PV_L2E.Machine S E) (simulator : PV_L2E.Machine T E)
+  (Related : S → T → Prop) (good honest : I → Prop) (realInit : I → S) (pubData : I → P) (coins : I → C)
+  (simInit : P → C → T) (initial : ∀ (i : I), honest i → good i → Related (realInit i) (simInit (pubData i) (coins i)))
+  (v353 : PV_L2E.PV_L2E_Link_V353 native simulator Related) (v354 : PV_L2E.PV_L2E_Link_V354 native simulator Related)
+  (v355 : PV_L2E.PV_L2E_Link_V355 native simulator Related) (v356 : PV_L2E.PV_L2E_Link_V356 native simulator Related)
+  (v357 : PV_L2E.PV_L2E_Link_V357 native simulator Related) (v358 : PV_L2E.PV_L2E_Link_V358 native simulator Related)
+  (v359 : PV_L2E.PV_L2E_Link_V359 native simulator Related) (v360 : PV_L2E.PV_L2E_Link_V360 native simulator Related)
+  (v361 : PV_L2E.PV_L2E_Link_V361 native simulator Related) (v362 : PV_L2E.PV_L2E_Link_V362 native simulator Related)
+  (v363 : PV_L2E.PV_L2E_Link_V363 native simulator Related) (v364 : PV_L2E.PV_L2E_Link_V364 native simulator Related)
+  (v365 : PV_L2E.PV_L2E_Link_V365 native simulator Related) (v367 : PV_L2E.PV_L2E_Link_V367 native simulator Related)
+  (i : I) (hi : honest i) (hg : good i) (n : ℕ) :
+  PV_L2E.tracePrefix native n (realInit i) = PV_L2E.tracePrefix simulator n (simInit (pubData i) (coins i))
+PV_L2E_CommonSample.on_existing_join {R M V S T E P : Type} [Fintype R] [Fintype M] {runtime : R → V} {model : M → V}
+  {old : Fin 8 → M → Prop} {queries : M → List R1Z.ProverCommitSeedEvent19.Entry}
+  (join : R1Z.ProverCommitFuelJoin22.RunJoin runtime model old queries) (native : PV_L2E.Machine S E)
+  (simulator : PV_L2E.Machine T E) (Related : S → T → Prop) (honest : R → Prop) (realInit : R → S) (pubData : R → P)
+  (simInit : P → (M × R0Z.FsStatement.OracleAnswer) × R1Z.ProverCommitFuelJoin22.Tape → T)
+  (initial :
+    ∀ (s : join.cp.S),
+      honest (join.cp.toR s) →
+        PV_FIB_Restricted.OffCharged old queries (join.cp.toM s) →
+          Related (realInit (join.cp.toR s)) (simInit (pubData (join.cp.toR s)) (join.cp.toM s)))
+  (v353 : PV_L2E.PV_L2E_Link_V353 native simulator Related) (v354 : PV_L2E.PV_L2E_Link_V354 native simulator Related)
+  (v355 : PV_L2E.PV_L2E_Link_V355 native simulator Related) (v356 : PV_L2E.PV_L2E_Link_V356 native simulator Related)
+  (v357 : PV_L2E.PV_L2E_Link_V357 native simulator Related) (v358 : PV_L2E.PV_L2E_Link_V358 native simulator Related)
+  (v359 : PV_L2E.PV_L2E_Link_V359 native simulator Related) (v360 : PV_L2E.PV_L2E_Link_V360 native simulator Related)
+  (v361 : PV_L2E.PV_L2E_Link_V361 native simulator Related) (v362 : PV_L2E.PV_L2E_Link_V362 native simulator Related)
+  (v363 : PV_L2E.PV_L2E_Link_V363 native simulator Related) (v364 : PV_L2E.PV_L2E_Link_V364 native simulator Related)
+  (v365 : PV_L2E.PV_L2E_Link_V365 native simulator Related) (v367 : PV_L2E.PV_L2E_Link_V367 native simulator Related)
+  (s : join.cp.S) (hs : honest (join.cp.toR s)) (good : PV_FIB_Restricted.OffCharged old queries (join.cp.toM s))
+  (n : ℕ) :
+  PV_L2E.tracePrefix native n (realInit (join.cp.toR s)) =
+    PV_L2E.tracePrefix simulator n (simInit (pubData (join.cp.toR s)) (join.cp.toM s))
+PV_L2E_GuardedJoint.joint {K CommitHandle Aux C O : Type} [Field K] [Fintype K] [DecidableEq K]
+  [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K} [Fintype C] (h : R0Z.JointView.HonestProver K)
+  (B : R0P.PackBasis F) (hB : R0Z.K4.PackField B)
+  (outputs : R0Z.JointView.Statement K CommitHandle → R0Z.JointView.Challenges K → Aux)
+  (x : R0Z.JointView.Statement K CommitHandle) (hpub : R0P.PublicBase F x.1)
+  (hs : R0Z.HonestValidity.BuilderSoundOn h B x) (w : h.Instance) (hw : h.public w = x.1)
+  (ch : C → R0Z.JointView.Challenges K) (good : C → Prop)
+  (hP : ∀ (c : C), good c → R1Z.PredicateR1.P_R1 h.transport B hB (ch c))
+  (hV : ∀ (c : C), good c → R1Z.MaskImageVR1.VR1 h (ch c) w) (observe : C → O)
+  (test : O × R0Z.JointView.View K CommitHandle Aux R1Z.Batched.R1Bat → ℚ) :
+  (R0Z.mean fun p => if good p.1 then test (observe p.1, R0Z.JointView.view h B outputs x w (ch p.1) p.2) else 0) =
+    R0Z.mean fun p =>
+      if good p.1 then test (observe p.1, R0Z.RefPayload.simE h.transport B outputs x (ch p.1) p.2) else 0
+def PV_L2E.PV_L2E_Link_V353 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v353
+def PV_L2E.PV_L2E_Link_V354 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v354
+def PV_L2E.PV_L2E_Link_V355 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v355
+def PV_L2E.PV_L2E_Link_V356 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v356
+def PV_L2E.PV_L2E_Link_V357 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v357
+def PV_L2E.PV_L2E_Link_V358 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v358
+def PV_L2E.PV_L2E_Link_V359 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v359
+def PV_L2E.PV_L2E_Link_V360 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v360
+def PV_L2E.PV_L2E_Link_V361 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v361
+def PV_L2E.PV_L2E_Link_V362 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v362
+def PV_L2E.PV_L2E_Link_V363 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v363
+def PV_L2E.PV_L2E_Link_V364 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v364
+def PV_L2E.PV_L2E_Link_V365 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v365
+def PV_L2E.PV_L2E_Link_V367 : {S T E : Type} → PV_L2E.Machine S E → PV_L2E.Machine T E → (S → T → Prop) → Prop :=
+fun {S T E} a b r => PV_L2E.StepLink a b r PV_L2E.Site.v367

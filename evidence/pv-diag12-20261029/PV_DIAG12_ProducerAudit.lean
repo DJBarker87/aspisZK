@@ -1,0 +1,53 @@
+import PV_DIAG12_Buffer
+import PV_DIAG12_Line
+import PV_DIAG12_JSONStdout
+import PV_DIAG12_Composition
+#print axioms PV_DIAG12.flush_cut
+#print axioms PV_DIAG12.bindB_error
+#print axioms PV_DIAG12.bindB_cut
+#print axioms PV_DIAG12.bindB_pure
+#print axioms PV_DIAG12.flush_empty
+#print axioms PV_DIAG12.flush_error
+#print axioms PV_DIAG12.flush_interrupted
+#print axioms PV_DIAG12.flush_zero
+#print axioms PV_DIAG12.flush_progress
+#print axioms PV_DIAG12.flush_missing_return
+#print axioms PV_DIAG12.rebase_preserves_content
+#print axioms PV_DIAG12.rebase_restores_offset
+#print axioms PV_DIAG12.buffered_append_bytes
+#print axioms PV_DIAG12.buffered_append_capacity
+#print axioms PV_DIAG12.buffered_append_panicked
+#print axioms PV_DIAG12.bufferedAll_fits
+#print axioms PV_DIAG12.bufferedAll_fits_no_request
+#print axioms PV_DIAG12.bufferDrop_panicked
+#print axioms PV_DIAG12.bufferDrop_trace
+#print axioms PV_DIAG12.bufferDrop_error_ignored
+#print axioms PV_DIAG12.bufferDrop_cut_kept
+#print axioms PV_DIAG12.lastNewline_nil
+#print axioms PV_DIAG12.lastNewline_cons_found
+#print axioms PV_DIAG12.lastNewline_cons_new
+#print axioms PV_DIAG12.lastNewline_cons_absent
+#print axioms PV_DIAG12.lineSpan_tail_content
+#print axioms PV_DIAG12.flushCompleted_absent
+#print axioms PV_DIAG12.flushCompleted_present
+#print axioms PV_DIAG12.lineAll_no_newline
+#print axioms PV_DIAG12.lineAll_empty_buffer
+#print axioms PV_DIAG12.lineAll_nonempty_buffer
+#print axioms PV_DIAG12.bufferWrite_fits
+#print axioms PV_DIAG12.lineWrite_no_newline
+#print axioms PV_DIAG12.lineTail_partial_fits
+#print axioms PV_DIAG12.lineTail_no_short_buffer
+#print axioms PV_DIAG12.lineAll_quiet_buffer
+#print axioms PV_DIAG12.jsonStream_nil
+#print axioms PV_DIAG12.jsonStream_cons
+#print axioms PV_DIAG12.jsonStream_error_stops
+#print axioms PV_DIAG12.jsonStream_cut_stops
+#print axioms PV_DIAG12.println_error_no_newline
+#print axioms PV_DIAG12.println_cut_no_newline
+#print axioms PV_DIAG12.println_serialization_then_newline
+#print axioms PV_DIAG12.println_delivered_prefix
+#print axioms PV_DIAG12.println_requests_prefix
+#print axioms PV_DIAG12.bindB_assoc
+#print axioms PV_DIAG12.jsonStream_append
+#print axioms PV_DIAG12.onePrintln_chunks_append
+#print axioms PV_DIAG12.pending_prefix_readout

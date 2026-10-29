@@ -1,0 +1,66 @@
+{
+  "family": "panic-oom",
+  "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
+  "sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/alloc.rs",
+      "file_sha256": "b48015cc69035ec2c689dfc8567ea9a854f639015cd870fe5de383f1b1ce3f47",
+      "line": 355,
+      "body": "fn default_alloc_error_hook(layout: Layout) {\n    if cfg!(panic = \"immediate-abort\") {\n        return;\n    }\n\n    // This is the default path taken on OOM, and the only path taken on stable with std.\n    // Crucially, it does *not* call any user-defined code, and therefore users do not have to\n    // worry about allocation failure causing reentrancy issues. That makes it different from\n    // the default `__rdl_alloc_error_handler` defined in alloc (i.e., the default alloc error\n    // handler that is  called when there is no `#[alloc_error_handler]`), which triggers a\n    // regular panic and thus can invoke a user-defined panic hook, executing arbitrary\n    // user-defined code.\n\n    static PREV_ALLOC_FAILURE: AtomicBool = AtomicBool::new(false);\n    if PREV_ALLOC_FAILURE.swap(true, Ordering::Relaxed) {\n        // Don't try to print a backtrace if a previous alloc error happened. This likely means\n        // there is not enough memory to print a backtrace, although it could also mean that two\n        // threads concurrently run out of memory.\n        rtprintpanic!(\n            \"memory allocation of {} bytes failed\\nskipping backtrace printing to avoid potential recursion\\n\",\n            layout.size()\n        );\n        return;\n    } else {\n        rtprintpanic!(\"memory allocation of {} bytes failed\\n\", layout.size());\n    }\n\n    let Some(mut out) = crate::sys::stdio::panic_output() else {\n        return;\n    };\n\n    // Use a lock to prevent mixed output in multithreading context.\n    // Some platforms also require it when printing a backtrace, like `SymFromAddr` on Windows.\n    // Make sure to not take this lock until after checking PREV_ALLOC_FAILURE to avoid deadlocks\n    // when there is too little memory to print a backtrace.\n    let mut lock = crate::sys::backtrace::lock();\n\n    match crate::panic::get_backtrace_style() {\n        Some(crate::panic::BacktraceStyle::Short) => {\n            drop(lock.print(&mut out, crate::backtrace_rs::PrintFmt::Short))\n        }\n        Some(crate::panic::BacktraceStyle::Full) => {\n            drop(lock.print(&mut out, crate::backtrace_rs::PrintFmt::Full))\n        }\n        Some(crate::panic::BacktraceStyle::Off) => {\n            use crate::io::Write;\n            let _ = writeln!(\n                out,\n                \"note: run with `RUST_BACKTRACE=1` environment variable to display a \\\n                             backtrace\"\n            );\n            if cfg!(miri) {\n                let _ = writeln!(\n                    out,\n                    \"note: in Miri, you may have to set `MIRIFLAGS=-Zmiri-env-forward=RUST_BACKTRACE` \\\n                                for the environment variable to have an effect\"\n                );\n            }\n        }\n        // If backtraces aren't supported or are forced-off, do nothing.\n        None => {}\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/alloc.rs",
+      "file_sha256": "b48015cc69035ec2c689dfc8567ea9a854f639015cd870fe5de383f1b1ce3f47",
+      "line": 423,
+      "body": "pub fn rust_oom(layout: Layout) -> ! {\n    crate::sys::backtrace::__rust_end_short_backtrace(|| {\n        let hook = HOOK.load(Ordering::Acquire);\n        let hook: fn(Layout) =\n            if hook.is_null() { default_alloc_error_hook } else { unsafe { mem::transmute(hook) } };\n        hook(layout);\n        crate::process::abort()\n    })\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panicking.rs",
+      "file_sha256": "8aa4e1a2a94dec487185e927606fc449602aeb8bd49e4d26f9789c184376cbb1",
+      "line": 240,
+      "body": "fn default_hook(info: &PanicHookInfo<'_>) {\n    // If this is a double panic, make sure that we print a backtrace\n    // for this panic. Otherwise only print it if logging is enabled.\n    let backtrace = if info.force_no_backtrace() {\n        None\n    } else if panic_count::get_count() >= 2 {\n        BacktraceStyle::full()\n    } else {\n        crate::panic::get_backtrace_style()\n    };\n\n    // The current implementation always returns `Some`.\n    let location = info.location().unwrap();\n\n    let msg = payload_as_str(info.payload());\n\n    let write = #[optimize(size)]\n    |err: &mut dyn crate::io::Write| {\n        // Use a lock to prevent mixed output in multithreading context.\n        // Some platforms also require it when printing a backtrace, like `SymFromAddr` on Windows.\n        let mut lock = backtrace::lock();\n\n        thread::with_current_name(|name| {\n            let name = name.unwrap_or(\"<unnamed>\");\n            let tid = thread::current_os_id();\n\n            // Try to write the panic message to a buffer first to prevent other concurrent outputs\n            // interleaving with it.\n            let mut buffer = [0u8; 512];\n            let mut cursor = crate::io::Cursor::new(&mut buffer[..]);\n\n            let write_msg = |dst: &mut dyn crate::io::Write| {\n                // We add a newline to ensure the panic message appears at the start of a line.\n                writeln!(dst, \"\\nthread '{name}' ({tid}) panicked at {location}:\\n{msg}\")\n            };\n\n            if write_msg(&mut cursor).is_ok() {\n                let pos = cursor.position() as usize;\n                let _ = err.write_all(&buffer[0..pos]);\n            } else {\n                // The message did not fit into the buffer, write it directly instead.\n                let _ = write_msg(err);\n            };\n        });\n\n        static FIRST_PANIC: Atomic<bool> = AtomicBool::new(true);\n\n        match backtrace {\n            Some(BacktraceStyle::Short) => {\n                drop(lock.print(err, crate::backtrace_rs::PrintFmt::Short))\n            }\n            Some(BacktraceStyle::Full) => {\n                drop(lock.print(err, crate::backtrace_rs::PrintFmt::Full))\n            }\n            Some(BacktraceStyle::Off) => {\n                if FIRST_PANIC.swap(false, Ordering::Relaxed) {\n                    let _ = writeln!(\n                        err,\n                        \"note: run with `RUST_BACKTRACE=1` environment variable to display a \\\n                             backtrace\"\n                    );\n                    if cfg!(miri) {\n                        let _ = writeln!(\n                            err,\n                            \"note: in Miri, you may have to set `MIRIFLAGS=-Zmiri-env-forward=RUST_BACKTRACE` \\\n                                for the environment variable to have an effect\"\n                        );\n                    }\n                }\n            }\n            // If backtraces aren't supported or are forced-off, do nothing.\n            None => {}\n        }\n    };\n\n    if let Ok(Some(local)) = try_set_output_capture(None) {\n        write(&mut *local.lock().unwrap_or_else(|e| e.into_inner()));\n        try_set_output_capture(Some(local)).ok();\n    } else if let Some(mut out) = panic_output() {\n        write(&mut out);\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/panic.rs",
+      "file_sha256": "c03ecff00c1986fd6d68410343a0419d412d13d3c37abd4217a6fc54d94dd0ba",
+      "line": 509,
+      "body": "pub fn get_backtrace_style() -> Option<BacktraceStyle> {\n    if !cfg!(feature = \"backtrace\") {\n        // If the `backtrace` feature of this crate isn't enabled quickly return\n        // `Unsupported` so this can be constant propagated all over the place\n        // to optimize away callers.\n        return None;\n    }\n\n    let current = SHOULD_CAPTURE.load(Ordering::Relaxed);\n    if let Some(style) = BacktraceStyle::from_u8(current) {\n        return Some(style);\n    }\n\n    let format = match crate::env::var_os(\"RUST_BACKTRACE\") {\n        Some(x) if &x == \"0\" => BacktraceStyle::Off,\n        Some(x) if &x == \"full\" => BacktraceStyle::Full,\n        Some(_) => BacktraceStyle::Short,\n        None if crate::sys::backtrace::FULL_BACKTRACE_DEFAULT => BacktraceStyle::Full,\n        None => BacktraceStyle::Off,\n    };\n\n    match SHOULD_CAPTURE.compare_exchange(0, format.as_u8(), Ordering::Relaxed, Ordering::Relaxed) {\n        Ok(_) => Some(format),\n        Err(new) => BacktraceStyle::from_u8(new),\n    }\n}"
+    }
+  ],
+  "models": {
+    "PV_DIAG2_Effects": "ebb52a9e9e90cbfda56dbb6b9b6dd97550fc1d2993e59e4100dcf147cc346b9d",
+    "PV_DIAG2_Process": "157a66d75409a5f9de8d564e7e97fe5920d16257775da4a72025be6c79433584",
+    "PV_DIAG2_Termination": "fdd4e2b5d071ae297514557861a699e075fc3eff38942ac05f86a8e9dd49bff4"
+  },
+  "steps": [
+    [
+      "OOM previous-allocation-failure atomic swap and recursion message",
+      "runtime OOM leaf remains open",
+      "size field retained; no constant/public-size theorem"
+    ],
+    [
+      "panic_output, backtrace lock and Short/Full/Off/None style branches",
+      "runtime hook leaf remains open",
+      "actual writes, style/environment/cache, mutex drop and frame lists not erased"
+    ],
+    [
+      "rust_oom hook selection, invoke hook, process::abort",
+      "runtime OOM/foreign closure remains open",
+      "original Terminal lacks distinct abort/crash-memory carrier; no complete native fatal-refinement claim"
+    ],
+    [
+      "default panic hook thread/location/payload/output/style/frames",
+      "runtime panic leaf remains open",
+      "panic frame source differs from post-return plan::err capture; honest guard not excluded"
+    ]
+  ],
+  "open_native_obligations": [
+    "complete native panic/OOM/hook/double-panic/abort representation and source association",
+    "failure occurrence and allocation sizes/frames provenance",
+    "raw bytes, foreign writes, delivered stderr and configured crash-memory/register reports"
+  ],
+  "toolchain": "rustc 1.94.1 sources; no extractor/toolchain substitution",
+  "profile": "deployed release opt3 overflow/debug assertions off panic unwind",
+  "compiler_boundary": "V370 at owner pending D381/D386; no LLVM or machine equality silently assumed",
+  "new_trust_fields": 0
+}

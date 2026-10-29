@@ -1,0 +1,63 @@
+plan('Write',['PV_DIAG3_Ownership'],'''/-! std::io::Write::write_all, including interrupted-error destruction,
+partial writes and the checked slice failure. The leaf guard includes its
+abnormal owned-error cleanup; its law is a separate native obligation. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S E : Type}
+structure WriteOps (S E : Type) where
+ write : Bytes → Op S (Except E Nat)
+ zeroError : E
+ interruptedGuard : E → Op S Bool
+ dropInterrupted : E → Op S Unit
+ slicePanic : Bytes → Nat → Op S (Except E Unit)
+def writeAllStep (o : WriteOps S E) (buf : Bytes)
+ (next : Bytes → Op S (Except E Unit)) : Op S (Except E Unit) :=
+ if buf.isEmpty then pure (.ok ()) else
+ sequence (o.write buf) (fun r => match r with
+ | .ok 0 => pure (.error o.zeroError)
+ | .ok (n+1) => if n+1 ≤ buf.length then next (buf.drop (n+1)) else o.slicePanic buf (n+1)
+ | .error e => sequence (o.interruptedGuard e) (fun interrupted =>
+   if interrupted then sequence (o.dropInterrupted e) (fun _ => next buf)
+   else pure (.error e)))
+/-- The suffix is supplied, not replaced by an arbitrary fuel exhaustion.
+Every native finite prefix can be interpreted without asserting termination. -/
+def writePrefix (o : WriteOps S E) : Nat → (Bytes → Op S (Except E Unit)) →
+ Bytes → Op S (Except E Unit)
+ | 0,suffix => suffix
+ | n+1,suffix => fun buf => writeAllStep o buf (writePrefix o n suffix)
+''',[
+th('''theorem write_empty (o : WriteOps S E) (k : Bytes → Op S (Except E Unit)) :
+ writeAllStep o [] k = pure (.ok ()) := rfl'''),
+th('''theorem write_zero (o : WriteOps S E) (buf : Bytes) (s t : S) (es : List Event)
+ (k : Bytes → Op S (Except E Unit)) (hne : buf.isEmpty = false)
+ (h : o.write buf s = ⟨es,t,.value (.ok 0)⟩) :
+ writeAllStep o buf k s = ⟨es,t,.value (.error o.zeroError)⟩ := by
+ simp [writeAllStep,hne,sequence,h,bind,prepend,pure]'''),
+th('''theorem write_partial (o : WriteOps S E) (buf : Bytes) (s t : S) (es : List Event)
+ (k : Bytes → Op S (Except E Unit)) (n : Nat) (hne : buf.isEmpty = false)
+ (hn : n+1 ≤ buf.length) (h : o.write buf s = ⟨es,t,.value (.ok (n+1))⟩) :
+ writeAllStep o buf k s = prepend es (k (buf.drop (n+1)) t) := by
+ simp [writeAllStep,hne,sequence,h,bind,hn]'''),
+th('''theorem write_bad_count (o : WriteOps S E) (buf : Bytes) (s t : S) (es : List Event)
+ (k : Bytes → Op S (Except E Unit)) (n : Nat) (hne : buf.isEmpty = false)
+ (hn : ¬ n+1 ≤ buf.length) (h : o.write buf s = ⟨es,t,.value (.ok (n+1))⟩) :
+ writeAllStep o buf k s = prepend es (o.slicePanic buf (n+1) t) := by
+ simp [writeAllStep,hne,sequence,h,bind,hn]'''),
+th('''theorem write_interrupted_drop (o : WriteOps S E) (buf : Bytes) (s t u : S)
+ (es gs : List Event) (e : E) (k : Bytes → Op S (Except E Unit))
+ (hne : buf.isEmpty = false) (hw : o.write buf s = ⟨es,t,.value (.error e)⟩)
+ (hg : o.interruptedGuard e t = ⟨gs,u,.value true⟩) :
+ writeAllStep o buf k s = prepend (es++gs)
+ (bind (o.dropInterrupted e u) (fun _ => k buf)) := by
+ simp [writeAllStep,hne,sequence,hw,hg,bind,prepend,List.append_assoc]'''),
+th('''theorem write_error_return (o : WriteOps S E) (buf : Bytes) (s t u : S)
+ (es gs : List Event) (e : E) (k : Bytes → Op S (Except E Unit))
+ (hne : buf.isEmpty = false) (hw : o.write buf s = ⟨es,t,.value (.error e)⟩)
+ (hg : o.interruptedGuard e t = ⟨gs,u,.value false⟩) :
+ writeAllStep o buf k s = ⟨es++gs,u,.value (.error e)⟩ := by
+ simp [writeAllStep,hne,sequence,hw,hg,bind,prepend,pure]'''),
+th('''theorem write_prefix_zero (o : WriteOps S E) (suffix : Bytes → Op S (Except E Unit)) :
+ writePrefix o 0 suffix = suffix := rfl'''),
+th('''theorem write_prefix_successor (o : WriteOps S E) (n : Nat)
+ (suffix : Bytes → Op S (Except E Unit)) (buf : Bytes) :
+ writePrefix o (n+1) suffix buf = writeAllStep o buf (writePrefix o n suffix) := rfl''')])

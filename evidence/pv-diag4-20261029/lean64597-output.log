@@ -1,0 +1,66 @@
+'PV_DIAG4.os_word_nonzero' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.os_word_bound' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.os_word_high' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.signed32_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG4.signed32_pattern' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.stored_eintr_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG4.errno_location_normal' depends on axioms: [propext]
+'PV_DIAG4.last_error_normal' depends on axioms: [propext]
+'PV_DIAG4.errno_location_panics' depends on axioms: [propext]
+'PV_DIAG4.errno_location_aborts' depends on axioms: [propext]
+'PV_DIAG4.errno_location_diverges' depends on axioms: [propext]
+'PV_DIAG4.os_interrupted_exact' does not depend on any axioms
+'PV_DIAG4.os_interrupted_no_effect' does not depend on any axioms
+'PV_DIAG4.interrupted_drop_then_retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG4.noninterrupted_moves_error' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.interrupted_keeps_retry_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG4.concrete_leaf_exact' does not depend on any axioms
+'PV_DIAG4.concrete_leaves_exact' depends on axioms: [propext]
+'PV_DIAG4.silent_leaves_emission_joint' depends on axioms: [propext]
+'PV_DIAG4.silent_leaves_return_control_retained' depends on axioms: [propext]
+'PV_DIAG4.status_exact' does not depend on any axioms
+'PV_DIAG4.status_refines' does not depend on any axioms
+'PV_DIAG4.status_no_diagnostics' does not depend on any axioms
+'PV_DIAG4.status_preserves_state' does not depend on any axioms
+'PV_DIAG4.status_captured_ignores_payload' does not depend on any axioms
+'PV_DIAG4.raw_flush_exact' does not depend on any axioms
+'PV_DIAG4.raw_stderr_new_exact' does not depend on any axioms
+'PV_DIAG4.raw_vectored_exact' does not depend on any axioms
+'PV_DIAG4.panic_output_exact' does not depend on any axioms
+'PV_DIAG4.once_incomplete' depends on axioms: [propext]
+'PV_DIAG4.once_poisoned' depends on axioms: [propext]
+'PV_DIAG4.once_complete' depends on axioms: [propext]
+'PV_DIAG4.once_invalid' depends on axioms: [propext]
+'PV_DIAG4.poisoned_drop_exact' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.incomplete_drop_exact' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.complete_drop_exact' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.poisoned_unwind_no_extra_effect' depends on axioms: [propext, Quot.sound]
+'PV_DIAG4.raw_error_drop_no_operation' does not depend on any axioms
+'PV_DIAG4.raw_cvt_minus_one' depends on axioms: [propext]
+'PV_DIAG4.raw_cvt_other' depends on axioms: [propext]
+'PV_DIAG4.raw_write_count' does not depend on any axioms
+'PV_DIAG4.write_zero_guard_false' does not depend on any axioms
+'PV_DIAG4.raw_interrupted_retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG4.os_constructor_tag' depends on axioms: [propext]
+'PV_DIAG4.os_drop_exact' does not depend on any axioms
+'PV_DIAG4.simple_drop_exact' does not depend on any axioms
+'PV_DIAG4.message_drop_exact' does not depend on any axioms
+'PV_DIAG4.custom_drop_retained' does not depend on any axioms
+'PV_DIAG4.noncustom_drop_exact' depends on axioms: [propext]
+'PV_DIAG4.os_error_unwind_silent' depends on axioms: [propext]
+structure R1Z.PV_RunJoin_TrustItems {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]
+  (d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation) : Prop
+number of parameters: 11
+fields:
+  R1Z.PV_RunJoin_TrustItems.entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law
+  R1Z.PV_RunJoin_TrustItems.entropy_kernel : ∀ (c : Coins),
+      d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c
+  R1Z.PV_RunJoin_TrustItems.observation : ∀ (c : Coins), d.nativeObservation c = d.extractedObservation c
+constructor:
+  R1Z.PV_RunJoin_TrustItems.mk {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]
+    {d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation}
+    (entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law)
+    (entropy_kernel : ∀ (c : Coins), d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c)
+    (observation : ∀ (c : Coins), d.nativeObservation c = d.extractedObservation c) : R1Z.PV_RunJoin_TrustItems d
+'R1Z.ProverRwRetryModel.retry' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.ProverCommitRetry34.run' does not depend on any axioms

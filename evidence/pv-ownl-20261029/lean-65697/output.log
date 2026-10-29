@@ -1,0 +1,423 @@
+R1Z.PV_OWNL_Scale.canonical (x : R1Z.PV_OWNK_TowerCanon.Q) (w : Aeneas.Std.U32) :
+  R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNL_Scale.scale x w)
+R1Z.PV_OWNL_HelperSlots.slot_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi acc out : R1Z.PV_OWNK_TowerCanon.Q) (producer : Bool) (s : R1Z.PV_OWNL_HelperSlots.Slot)
+  (hc : R1Z.PV_OWNK_TowerCanon.Canon acc) (h : R1Z.PV_OWNL_HelperSlots.slot inverse chi producer s acc = some out) :
+  R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNL_HelperSlots.slots_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (producer : Bool) (ss : List R1Z.PV_OWNL_HelperSlots.Slot)
+  (acc out : R1Z.PV_OWNK_TowerCanon.Q) (hc : R1Z.PV_OWNK_TowerCanon.Canon acc)
+  (h : R1Z.PV_OWNL_HelperSlots.slots inverse chi producer ss acc = some out) : R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNL_HelperRows.row_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi out : R1Z.PV_OWNK_TowerCanon.Q) (r : R1Z.PV_OWNL_HelperRows.Row)
+  (h : R1Z.PV_OWNL_HelperRows.row inverse chi r = some out) : R1Z.PV_OWNK_TowerCanon.Canon out
+R1Z.PV_OWNL_HelperRows.store_canonical (helper : List R1Z.PV_OWNK_TowerCanon.Q) (index : ℕ)
+  (value : R1Z.PV_OWNK_TowerCanon.Q) (hh : ∀ q ∈ helper, R1Z.PV_OWNK_TowerCanon.Canon q)
+  (hv : R1Z.PV_OWNK_TowerCanon.Canon value) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ helper.set index value → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_HelperRows.rows_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (rs : List R1Z.PV_OWNL_HelperRows.Row) (index : ℕ)
+  (helper out : List R1Z.PV_OWNK_TowerCanon.Q) (hh : ∀ q ∈ helper, R1Z.PV_OWNK_TowerCanon.Canon q)
+  (h : R1Z.PV_OWNL_HelperRows.rows inverse chi rs index helper = some out) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_HelperRows.helper_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (rs : List R1Z.PV_OWNL_HelperRows.Row) (out : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNL_HelperRows.rows inverse chi rs 0 (List.replicate 1024 R1Z.PV_OWNK_TowerCanon.zero) = some out)
+  (q : R1Z.PV_OWNK_TowerCanon.Q) : q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_HelperRows.vector_canonical (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (rs : List R1Z.PV_OWNL_HelperRows.Row) (out : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some out) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ out → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_HelperRows.vector_length (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (chi : R1Z.PV_OWNK_TowerCanon.Q) (rs : List R1Z.PV_OWNL_HelperRows.Row) (out : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some out) : out.length = rs.length
+R1Z.PV_OWNL_InputBytes.read_write (x : ℕ) (hx : x < 4294967296) :
+  R1Z.PV_OWNL_InputBytes.read4 (R1Z.PV_OWNL_InputBytes.le4 x) = x
+R1Z.PV_OWNL_InputBytes.checked_iff (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  R1Z.PV_OWNL_InputBytes.checked q = true ↔ R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_InputBytes.accepted_canonical (values : List R1Z.PV_OWNK_TowerCanon.Q)
+  (h : values.all R1Z.PV_OWNL_InputBytes.checked = true) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ values → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNL_SampleWord.rem_bound (n : Aeneas.Std.U64) : ↑(R1Z.PV_OWNL_SampleWord.rem64 n) < 2147483647
+R1Z.PV_OWNL_SampleWord.truncate_canonical (n : Aeneas.Std.U64) (h : ↑n < 2147483647) :
+  R1Z.PV_OWNK_ScalarOps.Canon (R1Z.PV_OWNL_SampleWord.truncate n)
+R1Z.PV_OWNL_SampleCanon.step_bound (s : R1Z.PV_OWNL_SampleCanon.State) (w : Aeneas.Std.U32) :
+  ↑(R1Z.PV_OWNL_SampleCanon.step s w).remainder < 2147483647
+R1Z.PV_OWNL_SampleCanon.fold_bound (rank : List Aeneas.Std.U32) (s : R1Z.PV_OWNL_SampleCanon.State)
+  (hr : ↑s.remainder < 2147483647) : ↑(List.foldl R1Z.PV_OWNL_SampleCanon.step s rank).remainder < 2147483647
+R1Z.PV_OWNL_SampleCanon.pass_canonical (rank : List Aeneas.Std.U32) :
+  R1Z.PV_OWNK_ScalarOps.Canon (R1Z.PV_OWNL_SampleCanon.pass rank).2
+R1Z.PV_OWNL_SampleCanon.sample_canonical (rank : List Aeneas.Std.U32) :
+  R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNL_SampleCanon.sample rank)
+R1Z.PV_OWNL_Inputs.successorRev_canon (point : List R1Z.PV_OWNI_RawOps.Q) (carry : R1Z.PV_OWNI_RawOps.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNL_Inputs.Canon q) (hc : R1Z.PV_OWNL_Inputs.Canon carry) (q : R1Z.PV_OWNI_RawOps.Q) :
+  q ∈ R1Z.PV_OWNJ_Points.successorRev point carry → R1Z.PV_OWNL_Inputs.Canon q
+R1Z.PV_OWNL_Inputs.zipIdx_fst_mem {A : Type} (xs : List A) (offset : ℕ) (e : A × ℕ) (he : e ∈ xs.zipIdx offset) :
+  e.1 ∈ xs
+R1Z.PV_OWNL_Inputs.statement_points_canon (point : List R1Z.PV_OWNI_RawOps.Q)
+  (hp : ∀ q ∈ point, R1Z.PV_OWNL_Inputs.Canon q) (p : List R1Z.PV_OWNI_RawOps.Q) :
+  p ∈ R1Z.PV_OWNJ_Points.statement_points point → ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q
+R1Z.PV_OWNL_Inputs.lift_canon (x : Aeneas.Std.U32) (hx : ↑x < 2147483647) :
+  R1Z.PV_OWNL_Inputs.Canon (R1Z.PV_OWNL_Inputs.lift x)
+R1Z.PV_OWNL_Inputs.columns_canon (base : List (List Aeneas.Std.U32)) (h1 g d : List R1Z.PV_OWNI_RawOps.Q)
+  (hb : ∀ c ∈ base, ∀ x ∈ c, ↑x < 2147483647) (hh : ∀ q ∈ h1, R1Z.PV_OWNL_Inputs.Canon q)
+  (hg : ∀ q ∈ g, R1Z.PV_OWNL_Inputs.Canon q) (hd : ∀ q ∈ d, R1Z.PV_OWNL_Inputs.Canon q)
+  (c : List R1Z.PV_OWNI_RawOps.Q) :
+  c ∈ List.map (List.map R1Z.PV_OWNL_Inputs.lift) base ++ [h1, g, d] → ∀ q ∈ c, R1Z.PV_OWNL_Inputs.Canon q
+R1Z.PV_OWNL_Inputs.sampled_point (ranks : List (List Aeneas.Std.U32)) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ List.map R1Z.PV_OWNL_SampleCanon.sample ranks → R1Z.PV_OWNL_Inputs.Canon q
+R1Z.PV_OWNL_Inputs.accepted_columns (base : List (List Aeneas.Std.U32)) (h1 g d : List R1Z.PV_OWNI_RawOps.Q)
+  (inverse : R1Z.PV_OWNI_RawOps.Q → Option R1Z.PV_OWNI_RawOps.Q) (chi : R1Z.PV_OWNI_RawOps.Q)
+  (rs : List R1Z.PV_OWNL_HelperRows.Row) (hb : (base.all fun c => c.all fun x => decide (↑x < 2147483647)) = true)
+  (hh : R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some h1) (hg : g.all R1Z.PV_OWNL_InputBytes.checked = true)
+  (hd : d.all R1Z.PV_OWNL_InputBytes.checked = true) (c : List R1Z.PV_OWNI_RawOps.Q) :
+  c ∈ List.map (List.map R1Z.PV_OWNL_Inputs.lift) base ++ [h1, g, d] → ∀ q ∈ c, R1Z.PV_OWNL_Inputs.Canon q
+R1Z.PV_OWNL_RowEnumeration.tail_injective (n : ℕ) : Function.Injective (R1Z.PV_OWNL_RowEnumeration.tail n)
+R1Z.PV_OWNL_RowEnumeration.join_injective (w t : ℕ) : Function.Injective (R1Z.PV_OWNL_RowEnumeration.join w t)
+R1Z.PV_OWNL_RowEnumeration.join_bijective (w t : ℕ) : Function.Bijective (R1Z.PV_OWNL_RowEnumeration.join w t)
+R1Z.PV_OWNL_RowEnumeration.sum_join {K : Type} [AddCommMonoid K] (w t : ℕ) (f : Fin (2 ^ (w + t)) → K) :
+  ∑ r, f r = ∑ a, ∑ b, f (R1Z.PV_OWNL_RowEnumeration.join w t (a, b))
+R1Z.PV_OWNL_RowEnumeration.dense_sparse {K : Type} [Field K] (w t : ℕ) (p : Fin w → K) (suffix : Fin (2 ^ t))
+  (column : Fin (2 ^ (w + t)) → K) :
+  R1Z.PV_OWNL_RowEnumeration.denseSplit w t p suffix column =
+    ∑ a,
+      R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+        column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix))
+R1Z.PV_OWNL_Suffix.head_bit (x : R1Z.PV_OWNI_RawOps.Q) (xs : List R1Z.PV_OWNI_RawOps.Q) :
+  (R1Z.PV_OWNI_Scanner.bits (x :: xs)).testBit xs.length = R1Z.PV_OWNI_Scanner.equal x R1Z.PV_OWNI_RawOps.one
+R1Z.PV_OWNL_Suffix.tail_bit (x : R1Z.PV_OWNI_RawOps.Q) (xs : List R1Z.PV_OWNI_RawOps.Q) (i : ℕ) (hi : i < xs.length) :
+  (R1Z.PV_OWNI_Scanner.bits (x :: xs)).testBit i = (R1Z.PV_OWNI_Scanner.bits xs).testBit i
+R1Z.PV_OWNL_Suffix.decoded_bits {K : Type} [Zero K] [One K] (decode : R1Z.PV_OWNI_RawOps.Q → K)
+  (hz : decode R1Z.PV_OWNI_RawOps.zero = 0) (ho : decode R1Z.PV_OWNI_RawOps.one = 1) (xs : List R1Z.PV_OWNI_RawOps.Q)
+  (hb : ∀ x ∈ xs, R1Z.PV_OWNI_Scanner.boolean x = true) (i : Fin xs.length) :
+  decode (xs.get i) = if (R1Z.PV_OWNI_Scanner.bits xs).testBit (xs.length - 1 - ↑i) = true then 1 else 0
+R1Z.PV_OWNL_Suffix.scanner_decoded {K : Type} [Zero K] [One K] (decode : R1Z.PV_OWNI_RawOps.Q → K)
+  (hz : decode R1Z.PV_OWNI_RawOps.zero = 0) (ho : decode R1Z.PV_OWNI_RawOps.one = 1) (point : List R1Z.PV_OWNI_RawOps.Q)
+  (i : Fin (List.drop (R1Z.PV_OWNI_Scanner.width point) point).length) :
+  decode ((List.drop (R1Z.PV_OWNI_Scanner.width point) point).get i) =
+    if
+        (R1Z.PV_OWNI_Scanner.suffix point).testBit
+            ((List.drop (R1Z.PV_OWNI_Scanner.width point) point).length - 1 - ↑i) =
+          true then
+      1
+    else 0
+R1Z.PV_OWNL_PrefixProduct.fold_product {K : Type} [Field K] (width pref : ℕ) (xs : List K) (acc : K) (index : ℕ) :
+  (List.foldl (R1Z.PV_OWNL_PrefixProduct.step width pref) (acc, index) xs).1 =
+    acc * (R1Z.PV_OWNL_PrefixProduct.factors width pref index xs).prod
+R1Z.PV_OWNL_PrefixProduct.factors_product {K : Type} [Field K] (width pref : ℕ) (xs : List K) (index : ℕ) :
+  (R1Z.PV_OWNL_PrefixProduct.factors width pref index xs).prod =
+    ∏ i, if pref.testBit (width - 1 - (index + ↑i)) = true then xs.get i else 1 - xs.get i
+R1Z.PV_OWNL_PrefixProduct.prefix_weight {K : Type} [Field K] (xs : List K) (pref : Fin (2 ^ xs.length)) :
+  (List.foldl (R1Z.PV_OWNL_PrefixProduct.step xs.length ↑pref) (1, 0) xs).1 =
+    R1Z.PV_OWNI_DensePrune.weight (fun i => xs.get i) fun i => (↑pref).testBit (xs.length - 1 - ↑i)
+theorem R1Z.PV_OWNL_Inputs.accepted_columns : ∀ (base : List (List Aeneas.Std.U32)) (h1 g d : List R1Z.PV_OWNI_RawOps.Q)
+  (inverse : R1Z.PV_OWNI_RawOps.Q → Option R1Z.PV_OWNI_RawOps.Q) (chi : R1Z.PV_OWNI_RawOps.Q)
+  (rs : List R1Z.PV_OWNL_HelperRows.Row),
+  (base.all fun c => c.all fun x => decide (↑x < 2147483647)) = true →
+    R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some h1 →
+      g.all R1Z.PV_OWNL_InputBytes.checked = true →
+        d.all R1Z.PV_OWNL_InputBytes.checked = true →
+          ∀ c ∈ List.map (List.map R1Z.PV_OWNL_Inputs.lift) base ++ [h1, g, d], ∀ q ∈ c, R1Z.PV_OWNL_Inputs.Canon q :=
+fun base h1 g d inverse chi rs hb hh hg hd =>
+  R1Z.PV_OWNL_Inputs.columns_canon base h1 g d
+    (fun c hc x hx => of_decide_eq_true (List.all_eq_true.mp (List.all_eq_true.mp hb c hc) x hx))
+    (R1Z.PV_OWNL_HelperRows.vector_canonical inverse chi rs h1 hh) (R1Z.PV_OWNL_InputBytes.accepted_canonical g hg)
+    (R1Z.PV_OWNL_InputBytes.accepted_canonical d hd)
+theorem R1Z.PV_OWNL_Inputs.statement_points_canon : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  (∀ q ∈ point, R1Z.PV_OWNL_Inputs.Canon q) →
+    ∀ p ∈ R1Z.PV_OWNJ_Points.statement_points point, ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q :=
+fun point hp p hmem =>
+  Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q)
+    (Eq.mp
+      (Eq.trans R1Z.PV_OWNL_Inputs.zipIdx_fst_mem._simp_1
+        (congrArg (Or (p = point))
+          (Eq.trans R1Z.PV_OWNL_Inputs.zipIdx_fst_mem._simp_1
+            (congrArg (Or (p = R1Z.PV_OWNJ_Points.successor point))
+              (Eq.trans R1Z.PV_OWNL_Inputs.zipIdx_fst_mem._simp_1
+                (Eq.trans
+                  (congrArg (Or (p = R1Z.PV_OWNJ_Points.xor12 point)) R1Z.PV_OWNL_Inputs.statement_points_canon._simp_1)
+                  (or_false (p = R1Z.PV_OWNJ_Points.xor12 point))))))))
+      hmem)
+    (fun h =>
+      Eq.ndrec (motive := fun point => (∀ q ∈ point, R1Z.PV_OWNL_Inputs.Canon q) → ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q)
+        (fun hp => hp) h hp)
+    fun h =>
+    Or.casesOn (motive := fun x => ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q) h
+      (fun h =>
+        Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q)
+          (fun q hq =>
+            R1Z.PV_OWNL_Inputs.successorRev_canon point.reverse R1Z.PV_OWNI_RawOps.one
+              (fun x hx => hp x (List.mem_reverse.mp hx)) R1Z.PV_OWNK_TowerCanon.one_canon q (List.mem_reverse.mp hq))
+          (Eq.symm h))
+      fun h =>
+      Eq.ndrec (motive := fun p => ∀ q ∈ p, R1Z.PV_OWNL_Inputs.Canon q)
+        (fun q hq =>
+          let ⟨w✝, h✝⟩ := List.mem_map.mp hq
+          let ⟨x, i, h✝⟩ := w✝
+          let ⟨hx, right✝⟩ := h✝
+          Eq.ndrec (motive := fun q => q ∈ R1Z.PV_OWNJ_Points.xor12 point → R1Z.PV_OWNL_Inputs.Canon q)
+            (fun hq =>
+              have hc := hp x (R1Z.PV_OWNL_Inputs.zipIdx_fst_mem point 0 (x, i) hx);
+              id
+                (if h : i = 6 ∨ i = 7 then
+                  Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNL_Inputs.Canon _a) (if_pos h)))
+                    (R1Z.PV_OWNK_TowerCanon.qm_sub R1Z.PV_OWNI_RawOps.one x R1Z.PV_OWNK_TowerCanon.one_canon hc)
+                else Eq.mpr (id (congrArg (fun _a => R1Z.PV_OWNL_Inputs.Canon _a) (if_neg h))) hc))
+            right✝ hq)
+        (Eq.symm h)
+theorem R1Z.PV_OWNL_SampleCanon.sample_canonical : ∀ (rank : List Aeneas.Std.U32),
+  R1Z.PV_OWNK_TowerCanon.Canon (R1Z.PV_OWNL_SampleCanon.sample rank) :=
+fun rank =>
+  ⟨⟨R1Z.PV_OWNL_SampleCanon.pass_canonical rank,
+      R1Z.PV_OWNL_SampleCanon.pass_canonical (R1Z.PV_OWNL_SampleCanon.pass rank).1⟩,
+    ⟨R1Z.PV_OWNL_SampleCanon.pass_canonical (R1Z.PV_OWNL_SampleCanon.pass (R1Z.PV_OWNL_SampleCanon.pass rank).1).1,
+      R1Z.PV_OWNL_SampleCanon.pass_canonical
+        (R1Z.PV_OWNL_SampleCanon.pass (R1Z.PV_OWNL_SampleCanon.pass (R1Z.PV_OWNL_SampleCanon.pass rank).1).1).1⟩⟩
+theorem R1Z.PV_OWNL_HelperRows.vector_canonical : ∀
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q) (chi : R1Z.PV_OWNK_TowerCanon.Q)
+  (rs : List R1Z.PV_OWNL_HelperRows.Row) (out : List R1Z.PV_OWNK_TowerCanon.Q),
+  R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some out → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q :=
+fun inverse chi rs out h =>
+  List.rec (motive := fun rs =>
+    ∀ (out : List R1Z.PV_OWNK_TowerCanon.Q),
+      R1Z.PV_OWNL_HelperRows.vector inverse chi rs = some out → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+    (fun out h =>
+      let ⟨⟩ := out
+      Option.some.inj h)
+    (fun r rs ih out h =>
+      Option.casesOn (motive := fun t =>
+        R1Z.PV_OWNL_HelperRows.row inverse chi r = t → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+        (R1Z.PV_OWNL_HelperRows.row inverse chi r)
+        (fun h_1 =>
+          Eq.ndrec (motive := fun x =>
+            R1Z.PV_OWNL_HelperRows.row inverse chi r = x → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+            (fun hr =>
+              let ⟨⟩ := some out
+              Eq.mp
+                (congrFun'
+                  (congrArg Eq
+                    (congrFun' (congrArg bind hr) fun value => do
+                      let rest ← R1Z.PV_OWNL_HelperRows.vector inverse chi rs
+                      some (value :: rest)))
+                  (some out))
+                h)
+            (Eq.symm h_1) (Eq.refl (R1Z.PV_OWNL_HelperRows.row inverse chi r)))
+        (fun value h_1 =>
+          Eq.ndrec (motive := fun x =>
+            R1Z.PV_OWNL_HelperRows.row inverse chi r = x → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+            (fun hr =>
+              Option.casesOn (motive := fun t =>
+                R1Z.PV_OWNL_HelperRows.vector inverse chi rs = t → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+                (R1Z.PV_OWNL_HelperRows.vector inverse chi rs)
+                (fun h_2 =>
+                  Eq.ndrec (motive := fun x =>
+                    R1Z.PV_OWNL_HelperRows.vector inverse chi rs = x → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+                    (fun ht =>
+                      let ⟨⟩ := some out
+                      Eq.mp
+                        (congrFun'
+                          (congrArg Eq
+                            (congr (congrArg bind hr)
+                              (funext fun value => congrFun' (congrArg bind ht) fun rest => some (value :: rest))))
+                          (some out))
+                        h)
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_OWNL_HelperRows.vector inverse chi rs)))
+                (fun rest h_2 =>
+                  Eq.ndrec (motive := fun x =>
+                    R1Z.PV_OWNL_HelperRows.vector inverse chi rs = x → ∀ q ∈ out, R1Z.PV_OWNK_TowerCanon.Canon q)
+                    (fun ht =>
+                      let ⟨⟩ := out
+                      Option.some.inj
+                        (Eq.mp
+                          (congrFun'
+                            (congrArg Eq
+                              (congr (congrArg bind hr)
+                                (funext fun value => congrFun' (congrArg bind ht) fun rest => some (value :: rest))))
+                            (some out))
+                          h))
+                    (Eq.symm h_2) (Eq.refl (R1Z.PV_OWNL_HelperRows.vector inverse chi rs)))
+                (Eq.refl (R1Z.PV_OWNL_HelperRows.vector inverse chi rs)))
+            (Eq.symm h_1) (Eq.refl (R1Z.PV_OWNL_HelperRows.row inverse chi r)))
+        (Eq.refl (R1Z.PV_OWNL_HelperRows.row inverse chi r)))
+    rs out h
+theorem R1Z.PV_OWNL_RowEnumeration.dense_sparse : ∀ {K : Type} [inst : Field K] (w t : ℕ) (p : Fin w → K)
+  (suffix : Fin (2 ^ t)) (column : Fin (2 ^ (w + t)) → K),
+  R1Z.PV_OWNL_RowEnumeration.denseSplit w t p suffix column =
+    ∑ a,
+      R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+        column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix)) :=
+fun {K} [Field K] w t p suffix column =>
+  have hi := fun z => Equiv.symm_apply_apply (R1Z.PV_OWNL_RowEnumeration.rowEquiv w t) z;
+  have hb := fun b =>
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = if b = suffix then 1 else 0)
+          (R1Z.PV_OWNI_DensePrune.boolean_weight (R1Z.PV_OWNL_RowEnumeration.tail t suffix)
+            (R1Z.PV_OWNL_RowEnumeration.tail t b))))
+      (if h : b = suffix then
+        Eq.symm h ▸
+          of_eq_true
+            (Eq.trans
+              (congr
+                (congrArg Eq
+                  (ite_congr (eq_self (R1Z.PV_OWNL_RowEnumeration.tail t suffix)) (fun a => Eq.refl 1) fun a =>
+                    Eq.refl 0))
+                (ite_congr (eq_self suffix) (fun a => Eq.refl 1) fun a => Eq.refl 0))
+              (eq_self (if True then 1 else 0)))
+      else
+        Eq.mpr
+          (id
+            (congrArg (fun _a => _a = if b = suffix then 1 else 0)
+              (if_neg fun he => h (R1Z.PV_OWNL_RowEnumeration.tail_injective t he))))
+          (Eq.mpr (id (congrArg (fun _a => 0 = _a) (if_neg h))) (Eq.refl 0)));
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              ∑ a,
+                R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                  column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix)))
+          (R1Z.PV_OWNL_RowEnumeration.sum_join w t fun r =>
+            have z := (R1Z.PV_OWNL_RowEnumeration.rowEquiv w t).symm r;
+            R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w z.1) *
+                R1Z.PV_OWNI_DensePrune.weight
+                  (fun j => if R1Z.PV_OWNL_RowEnumeration.tail t suffix j = true then 1 else 0)
+                  (R1Z.PV_OWNL_RowEnumeration.tail t z.2) *
+              column r)))
+      (Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (Finset.sum_congr (Eq.refl Finset.univ) fun x a =>
+                Finset.sum_congr (Eq.refl Finset.univ) fun x_1 a =>
+                  congrFun'
+                    (congrArg HMul.hMul
+                      (congr
+                        (congrArg HMul.hMul
+                          (congrArg (R1Z.PV_OWNI_DensePrune.weight p)
+                            (congrArg (R1Z.PV_OWNL_RowEnumeration.tail w)
+                              (congrArg Prod.fst ((fun z => hi z) (x, x_1))))))
+                        (congrArg
+                          (R1Z.PV_OWNI_DensePrune.weight fun j =>
+                            if R1Z.PV_OWNL_RowEnumeration.tail t suffix j = true then 1 else 0)
+                          (congrArg (R1Z.PV_OWNL_RowEnumeration.tail t)
+                            (congrArg Prod.snd ((fun z => hi z) (x, x_1)))))))
+                    (column (R1Z.PV_OWNL_RowEnumeration.join w t (x, x_1)))))
+            (∑ a,
+              R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix)))))
+        (Finset.sum_congr rfl fun a ha =>
+          of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg Eq
+                  (Eq.trans
+                    (Eq.trans
+                      (Finset.sum_congr (Eq.refl Finset.univ) fun x a_1 =>
+                        Eq.trans
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg HMul.hMul
+                                (Eq.trans
+                                  (Eq.trans
+                                    (congrArg
+                                      (HMul.hMul
+                                        (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a)))
+                                      ((fun b => hb b) x))
+                                    (mul_ite (x = suffix)
+                                      (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a)) 1 0))
+                                  (ite_congr (Eq.refl (x = suffix))
+                                    (fun a_2 =>
+                                      mul_one (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a)))
+                                    fun a_2 =>
+                                    mul_zero (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a)))))
+                              (column (R1Z.PV_OWNL_RowEnumeration.join w t (a, x))))
+                            (ite_mul (x = suffix)
+                              (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a)) 0
+                              (column (R1Z.PV_OWNL_RowEnumeration.join w t (a, x)))))
+                          (ite_congr (Eq.refl (x = suffix))
+                            (fun a_2 =>
+                              Eq.refl
+                                (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                                  column (R1Z.PV_OWNL_RowEnumeration.join w t (a, x))))
+                            fun a_2 => zero_mul (column (R1Z.PV_OWNL_RowEnumeration.join w t (a, x)))))
+                      (Finset.sum_ite_eq' Finset.univ suffix fun x =>
+                        R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                          column (R1Z.PV_OWNL_RowEnumeration.join w t (a, x))))
+                    (ite_cond_eq_true
+                      (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                        column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix)))
+                      0 (Finset.mem_univ._simp_1 suffix))))
+                (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                  column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix))))
+              (eq_self
+                (R1Z.PV_OWNI_DensePrune.weight p (R1Z.PV_OWNL_RowEnumeration.tail w a) *
+                  column (R1Z.PV_OWNL_RowEnumeration.join w t (a, suffix))))))))
+theorem R1Z.PV_OWNL_Suffix.scanner_decoded : ∀ {K : Type} [inst : Zero K] [inst_1 : One K]
+  (decode : R1Z.PV_OWNI_RawOps.Q → K),
+  decode R1Z.PV_OWNI_RawOps.zero = 0 →
+    decode R1Z.PV_OWNI_RawOps.one = 1 →
+      ∀ (point : List R1Z.PV_OWNI_RawOps.Q) (i : Fin (List.drop (R1Z.PV_OWNI_Scanner.width point) point).length),
+        decode ((List.drop (R1Z.PV_OWNI_Scanner.width point) point).get i) =
+          if
+              (R1Z.PV_OWNI_Scanner.suffix point).testBit
+                  ((List.drop (R1Z.PV_OWNI_Scanner.width point) point).length - 1 - ↑i) =
+                true then
+            1
+          else 0 :=
+fun {K} [Zero K] [One K] decode hz ho point i =>
+  R1Z.PV_OWNL_Suffix.decoded_bits decode hz ho (List.drop (R1Z.PV_OWNI_Scanner.width point) point)
+    (R1Z.PV_OWNJ_Rows.suffix_boolean point) i
+theorem R1Z.PV_OWNL_PrefixProduct.prefix_weight : ∀ {K : Type} [inst : Field K] (xs : List K)
+  (pref : Fin (2 ^ xs.length)),
+  (List.foldl (R1Z.PV_OWNL_PrefixProduct.step xs.length ↑pref) (1, 0) xs).1 =
+    R1Z.PV_OWNI_DensePrune.weight (fun i => xs.get i) fun i => (↑pref).testBit (xs.length - 1 - ↑i) :=
+fun {K} [Field K] xs pref =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a => _a = R1Z.PV_OWNI_DensePrune.weight (fun i => xs.get i) fun i => (↑pref).testBit (xs.length - 1 - ↑i))
+        (R1Z.PV_OWNL_PrefixProduct.fold_product xs.length (↑pref) xs 1 0)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            1 * _a = R1Z.PV_OWNI_DensePrune.weight (fun i => xs.get i) fun i => (↑pref).testBit (xs.length - 1 - ↑i))
+          (R1Z.PV_OWNL_PrefixProduct.factors_product xs.length (↑pref) xs 0)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              _a = R1Z.PV_OWNI_DensePrune.weight (fun i => xs.get i) fun i => (↑pref).testBit (xs.length - 1 - ↑i))
+            (one_mul (∏ i, if (↑pref).testBit (xs.length - 1 - (0 + ↑i)) = true then xs.get i else 1 - xs.get i))))
+        (of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Finset.prod_congr (Eq.refl Finset.univ) fun x a =>
+                  ite_congr
+                    (congrFun'
+                      (congrArg Eq (congrArg (↑pref).testBit (congrArg (HSub.hSub (xs.length - 1)) (Nat.zero_add ↑x))))
+                      true)
+                    (fun a => Eq.refl (xs.get x)) fun a => Eq.refl (1 - xs.get x)))
+              (Finset.prod_congr (Eq.refl Finset.univ) fun x a =>
+                ite_congr (Eq.refl ((↑pref).testBit (xs.length - 1 - ↑x) = true)) (fun a => Eq.refl (xs.get x)) fun a =>
+                  Eq.refl (1 - xs.get x)))
+            (eq_self (∏ x, if (↑pref).testBit (xs.length - 1 - ↑x) = true then xs.get x else 1 - xs.get x))))))
+def R1Z.PV_OWNK_TowerCanon.Canon : R1Z.PV_OWNK_TowerCanon.Q → Prop :=
+fun x => R1Z.PV_OWNK_TowerCanon.CC x.c0 ∧ R1Z.PV_OWNK_TowerCanon.CC x.c1
+def R1Z.PV_OWNL_HelperSlots.slot : (R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q) →
+  R1Z.PV_OWNK_TowerCanon.Q →
+    Bool → R1Z.PV_OWNL_HelperSlots.Slot → R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q :=
+fun inverse chi producer s acc =>
+  if ↑s.weight = 0 then some acc
+  else do
+    let inv ← inverse (R1Z.PV_OWNK_TowerCanon.valueSub chi s.value)
+    some
+        (if producer = true then R1Z.PV_OWNK_TowerCanon.valueAdd acc (R1Z.PV_OWNL_Scale.scale inv s.weight)
+        else R1Z.PV_OWNK_TowerCanon.valueSub acc (R1Z.PV_OWNL_Scale.scale inv s.weight))
+def R1Z.PV_OWNL_HelperRows.vector : (R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q) →
+  R1Z.PV_OWNK_TowerCanon.Q → List R1Z.PV_OWNL_HelperRows.Row → Option (List R1Z.PV_OWNK_TowerCanon.Q) :=
+fun inverse chi x => List.brecOn x (R1Z.PV_OWNL_HelperRows.vector._f inverse chi)

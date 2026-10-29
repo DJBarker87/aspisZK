@@ -1,0 +1,33 @@
+{
+  "classification": "finite native validation; no complete dispatch or endpoint claim",
+  "scope": "native02",
+  "recovery": "The optimized fixture completed with exit0 and both expected traces. The subsequent Python MIR check was wrong: ownership is transferred into the generic std join, rather than dropped in the caller MIR. Recovering the recorded run without recompiling or rerunning.",
+  "fixture_exit": 0,
+  "scope_exit": 1,
+  "stdout": "owned=[(1, 0, 4), (2, 4, 8), (2, 8, 74), (3, 69, 0)]\nborrowed=[(1, 0, 4), (2, 4, 8), (2, 8, 74)]\nvalue_bytes=74",
+  "source_sha256": "aa3b4ae869332e6cb17a0ef454464e55a3ba75e4ffdae45c4de85f85e731ed70",
+  "binary_sha256": "5be327f5618198907d8d68853e7352fe98b8be07fb0da09beba0fe4ff34588ba",
+  "mir_sha256": "d38a7cb9581bf80c6cddc07aafc9b4177973b01d7af9581484dfaeec284d6f68",
+  "owned_wrapper": "fn owned(_1: &Path, _2: String) -> PathBuf {\n    debug base => _1;\n    debug name => _2;\n    let mut _0: std::path::PathBuf;\n\n    bb0: {\n        _0 = Path::join::<String>(move _1, move _2) -> [return: bb1, unwind continue];\n    }\n\n    bb1: {\n        return;\n    }\n}\n\n",
+  "std_join": "    pub fn join<P: AsRef<Path>>(&self, path: P) -> PathBuf {\n        self._join(path.as_ref())\n    }",
+  "library_sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/path.rs",
+      "sha256": "82494a72a204e7e60d2511300d3eb0ef8ce10ff73b14b570d9949088c48eda9a"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+      "sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/string.rs",
+      "sha256": "4436d55804bbac0c1691a251042ff82e30b5eab0d4d0bebc20b016b60a0c07a7"
+    }
+  ],
+  "toolchain": "1.94.1; release opt3; debug_assertions=false overflow_checks=false panic=unwind",
+  "features": "std-only fixture; project deployed feature graph inherited, no project body linked"
+}

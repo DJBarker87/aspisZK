@@ -1,0 +1,42 @@
+'PV_L1G_BodyBind.bind_at' depends on axioms: [propext]
+'PV_L1G_CountPrefixes.append' depends on axioms: [propext]
+'PV_L1G_CountPrefixes.success' depends on axioms: [propext]
+'PV_L1G_CountPrefixes.failed' depends on axioms: [propext]
+'PV_L1G_CountPrefixes.divergent' depends on axioms: [propext]
+'PV_L1G_OriginalRetry.original_retry' depends on axioms: [propext, Quot.sound]
+'PV_L1G_SourcePublication.actual_count_with_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1G_WorldCapture.bind_ok' depends on axioms: [propext]
+'PV_L1G_WorldCapture.bind_fail' depends on axioms: [propext]
+'PV_L1G_WorldCapture.bind_div' depends on axioms: [propext]
+'PV_L1G_WorldRetry.reached_congr' depends on axioms: [propext]
+'PV_L1G_WorldRetry.logged_join' depends on axioms: [propext, Quot.sound]
+'PV_L1G_WorldRetry.retry_calls' depends on axioms: [propext]
+'PV_L1G_WorldRetry.retry_world' depends on axioms: [propext]
+'PV_L1G_WorldRetry.original_logged' depends on axioms: [propext, Quot.sound]
+'PV_L1G_WorldRetry.failure_prefix' depends on axioms: [propext]
+'PV_L1G_WorldRetry.divergence_prefix' depends on axioms: [propext]
+'PV_L1G_WorldRetry.valid_run' depends on axioms: [propext]
+'PV_L1G_Statements.combined' depends on axioms: [propext]
+def PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition : {I A : Type} →
+  (I → List ℕ × List ℕ) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} actualCount sourceWorld =>
+  ∀ (i : I), actualCount i = (PV_RJ4IDB.counts (sourceWorld i).events, PV_RJ4IDB.rejections (sourceWorld i).events)
+def PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} sourceWorld bodyWorld => ∀ (i : I), sourceWorld i = bodyWorld i
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry : {I A S P : Type} →
+  (I → PV_RJ4IDB.Trace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} bodyWorld owner initial fuel index adapt =>
+  ∀ (i : I), bodyWorld i = adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i))
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 : {I A S P : Type} →
+  (I → PV_RJ4IDB.NativeTrace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} native owner initial fuel index adapt =>
+  ∀ (i : I),
+    adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i)) =
+      PV_RJ4IDB.modelTrace (native i)
+def PV_DIAG10.PV_DIAG10_Link_Sites : {I P : Type} → (I → P) → (I → PV_DIAG9.DiagnosticCall) → Prop :=
+fun {I P} context calls => ∀ (i j : I), context i = context j → (calls i).site = (calls j).site

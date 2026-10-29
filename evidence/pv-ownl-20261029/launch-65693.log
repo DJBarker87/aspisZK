@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_Suffix.lean:42:4: error: unsolved goals
+case cons.refine_1.inr
+K : Type
+inst✝¹ : Zero K
+inst✝ : One K
+decode : Q → K
+hz : decode zero = 0
+ho : decode one = 1
+xs : List Q
+ih :
+  (∀ x ∈ xs, boolean x = true) →
+    ∀ (i : Fin xs.length), decode (xs.get i) = if (bits xs).testBit (xs.length - 1 - ↑i) = true then 1 else 0
+hb : ∀ x ∈ one :: xs, boolean x = true
+i : Fin (one :: xs).length
+⊢ 1 = if true = true then 1 else 0
+'R1Z.PV_OWNL_Suffix.head_bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNL_Suffix.tail_bit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNL_Suffix.decoded_bits' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNL_Suffix.scanner_decoded' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65693/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-65693/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-objects/R1Z/PV_OWNL_Suffix.olean", "/home/dombarker/project-offloads/codex-pv-ownl-20261029/lean-sources/R1Z/PV_OWNL_Suffix.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.24", "peak_rss_kib": "2638284", "swap": "0", "source_revision": "56477b73e92c68d17406c112fa9eaa72984fcb6f", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

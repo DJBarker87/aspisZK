@@ -1,0 +1,37 @@
+START 66500 PV_L1E_CountSkeleton
+DONE 66500 PV_L1E_CountSkeleton exit 1 wall 0.21 RSS 488361984
+/home/dombarker/project-offloads/codex-pv-l1e-20261029/sources/PV_L1E_CountSkeleton.lean:43:8: error(lean.unknownIdentifier): Unknown identifier `congrArg₂`
+theorem PV_L1E_CountSkeleton.count_trace : ∀ {I A : Type} (actualCount : I → List Nat × List Nat)
+  (native : I → NativeTrace A) (sourceWorld bodyWorld originalWorld : I → Trace A),
+  PV_L1E_Link_CountAcquisition actualCount sourceWorld →
+    PV_L1E_Link_BodyWrapper sourceWorld bodyWorld →
+      PV_L1E_Link_RetryJoin bodyWorld originalWorld →
+        PV_L1E_Link_NativeOriginal originalWorld native → OpenInputs.L1_COUNT_TRACE actualCount native :=
+fun {I A} actualCount native sourceWorld bodyWorld originalWorld acquisition body retry coupling i =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = (nativeCounts (native i).events, nativeRejections (native i).events)) (acquisition i)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (counts _a.events, rejections _a.events) =
+              (nativeCounts (native i).events, nativeRejections (native i).events))
+          (body i)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (counts _a.events, rejections _a.events) =
+                (nativeCounts (native i).events, nativeRejections (native i).events))
+            (retry i)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (counts _a.events, rejections _a.events) =
+                  (nativeCounts (native i).events, nativeRejections (native i).events))
+              (coupling i)))
+          sorry)))
+'PV_L1E_CountSkeleton.count_trace' depends on axioms: [propext, sorryAx]
+

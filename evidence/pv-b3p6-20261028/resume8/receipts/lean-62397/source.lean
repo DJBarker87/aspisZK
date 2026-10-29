@@ -1,0 +1,101 @@
+import PV_B3P_CompositionSuccess8227
+import PV_B3P_DigestAssoc227
+import PV_B3P_DigestBranch227
+import PV_B3P_DigestContinue8227
+import PV_B3P_DigestCps8227
+import PV_B3P_DigestFields227
+import PV_B3P_DigestHead24227
+import PV_B3P_DigestRaw8227
+import PV_B3P_DigestStage00227
+import PV_B3P_DigestStage01227
+import PV_B3P_DigestStage02227
+import PV_B3P_DigestStage03227
+import PV_B3P_DigestStage04227
+import PV_B3P_DigestStage05227
+import PV_B3P_DigestStage06227
+import PV_B3P_DigestStage07227
+import PV_B3P_DigestStage08227
+import PV_B3P_DigestStage09227
+import PV_B3P_DigestStage10227
+import PV_B3P_DigestStage11227
+import PV_B3P_DigestStage12227
+import PV_B3P_DigestStage13227
+import PV_B3P_DigestStage14227
+import PV_B3P_DigestStage15227
+import PV_B3P_DigestStage16227
+import PV_B3P_DigestStage17227
+import PV_B3P_DigestStage18227
+import PV_B3P_DigestStage19227
+import PV_B3P_DigestStage20227
+import PV_B3P_DigestStage21227
+import PV_B3P_DigestStage22227
+import PV_B3P_DigestStage23227
+import PV_B3P_DigestStage24227
+import PV_B3P_DigestSuffix00227
+import PV_B3P_DigestSuffix01227
+import PV_B3P_DigestSuffix02227
+import PV_B3P_DigestSuffix03227
+import PV_B3P_DigestSuffix04227
+import PV_B3P_DigestSuffix05227
+import PV_B3P_DigestSuffix06227
+import PV_B3P_DigestSuffix07227
+import PV_B3P_DigestSuffix08227
+import PV_B3P_DigestSuffix09227
+import PV_B3P_DigestSuffix10227
+import PV_B3P_DigestSuffix11227
+import PV_B3P_DigestSuffix12227
+import PV_B3P_DigestSuffix13227
+import PV_B3P_DigestSuffix14227
+import PV_B3P_DigestSuffix15227
+import PV_B3P_DigestSuffix16227
+import PV_B3P_DigestSuffix17227
+import PV_B3P_DigestSuffix18227
+import PV_B3P_DigestSuffix19227
+import PV_B3P_DigestSuffix20227
+import PV_B3P_DigestSuffix21227
+import PV_B3P_DigestSuffix22227
+import PV_B3P_DigestSuffix23227
+import PV_B3P_DigestSuffix24227
+import PV_B3P_HornerBodyBinding8227
+import PV_B3P_HornerLoopBinding8227
+import PV_B3P_InstalledOk8227
+import PV_B3P_InstalledPublic8227
+import PV_B3P_RustOkStages227
+import PV_B3P_SemanticStagesSuccess227
+import PV_B3P_TerminalOk8227
+
+-- Accepted current-source laws only; no native/source binding inferred.
+#check PV_B3P_Success227.composition_success8
+#print axioms PV_B3P_Success227.composition_success8
+#check PV_B3P_Success227.read_helper_binding8
+#print axioms PV_B3P_Success227.read_helper_binding8
+#check PV_B3P_Success227.digest_helper_binding8
+#print axioms PV_B3P_Success227.digest_helper_binding8
+#check PV_B3P_Success227.horner_semantic_body_binding8
+#print axioms PV_B3P_Success227.horner_semantic_body_binding8
+#check PV_B3P_Success227.horner_poseidon_body_binding8
+#print axioms PV_B3P_Success227.horner_poseidon_body_binding8
+#check PV_B3P_Success227.horner_semantic_loop_binding8
+#print axioms PV_B3P_Success227.horner_semantic_loop_binding8
+#check PV_B3P_Success227.horner_poseidon_loop_binding8
+#print axioms PV_B3P_Success227.horner_poseidon_loop_binding8
+#check PV_B3P_Success227.installed_dictionary_same8
+#print axioms PV_B3P_Success227.installed_dictionary_same8
+#check PV_B3P_Success227.installed_op227_projection8
+#print axioms PV_B3P_Success227.installed_op227_projection8
+#check PV_B3P_Success227.installed_success8
+#print axioms PV_B3P_Success227.installed_success8
+#check PV_B3P_Success227.installed_nonvacuity8
+#print axioms PV_B3P_Success227.installed_nonvacuity8
+#check PV_B3P_Success227.semantic_success8
+#print axioms PV_B3P_Success227.semantic_success8
+#check PV_B3P_Success227.terminal_parts_success8
+#print axioms PV_B3P_Success227.terminal_parts_success8
+#check PV_B3P_Success227.reference_success8
+#print axioms PV_B3P_Success227.reference_success8
+#check PV_B3P_Success227.reference_nonvacuity8
+#print axioms PV_B3P_Success227.reference_nonvacuity8
+#print axioms PV_B3P_Install227.actual_source
+#print axioms PV_B3P_Install227.preserved_op224
+#print axioms PV_B3P_Install227.preserved_op226
+#print axioms PV_B3P_Install227.preserved_op228

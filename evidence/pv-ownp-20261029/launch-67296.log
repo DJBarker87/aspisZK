@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean:15:1: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b - c ≥ 1
+  0 ≤ a ≤ 2147483646
+  4294967296*a + c ≥ 18446744073709551616
+where
+ a := ↑↑r
+ b := ↑2 ^ UScalarTy.U32.numBits
+ c := ↑↑w
+/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean:25:1: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 4294967296
+  c ≥ 0
+  0 ≤ c - 2147483647*d ≤ 2147483646
+  0 ≤ a ≤ 2147483646
+  4294967296*a - c ≤ 0
+  4294967296*a + b - c ≥ 1
+where
+ a := ↑↑r
+ b := ↑2 ^ UScalarTy.U32.numBits
+ c := ↑↑(dividend r w)
+ d := ↑(↑r * 4294967296 + ↑w) / 2147483647
+'R1Z.PV_OWNP_SampleCarrier.dividend_exact' depends on axioms: [propext, sorryAx]
+'R1Z.PV_OWNP_SampleCarrier.quotient_exact' depends on axioms: [propext, sorryAx]
+'R1Z.PV_OWNP_SampleCarrier.remainder_exact' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWNP_SampleCarrier.truncate_exact' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWNP_SampleCarrier.step_words' does not depend on any axioms
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67296/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67296/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects/R1Z/PV_OWNP_SampleCarrier.olean", "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_SampleCarrier.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.07", "peak_rss_kib": "2628300", "swap": "0", "source_revision": "225a70b08c5cae33f1f1854e77a718db6c465d9d", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

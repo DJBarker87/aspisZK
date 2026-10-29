@@ -1,0 +1,17 @@
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean:24:5: error(lean.unknownIdentifier): Unknown identifier `copied_prefix`
+/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean:23:90: error: unsolved goals
+request : Request
+memory : ℕ → Option ℕ
+c : Cell
+destination : ℕ
+grow : request.oldCapacity ≤ request.newCapacity
+size : c.size = request.oldCapacity * request.shape.width
+association : ∀ i < c.size, memory (request.address + i) = Option.map UInt8.toNat (c.contents i)
+i : ℕ
+inside : i < c.size
+⊢ memoryAfter request destination memory (destination + i) = Option.map UInt8.toNat (c.contents i)
+'R1Z.PV_OWN_Reserve.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWN_Reserve.initialized_prefix' depends on axioms: [sorryAx]
+'R1Z.PV_OWN_Reserve.typed_prefix' depends on axioms: [propext, sorryAx, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61795/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61795/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects/R1Z/PV_OWN_Reserve.olean", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_Reserve.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.08", "peak_rss_kib": "2626040", "swap": "0", "source_revision": "03ca75909fe642f0e2c67228b7a32c7591012574", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

@@ -1,0 +1,21 @@
+import PV_DIAG10_Operands
+import PV_DIAG2_Effects
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Scoped unit-error operand producer and log-0.4.34 initial selection.
+The variant law is a consumed L1 input; it is NOT derived from environment.
+No theorem here excludes reached logger setters or binds native frames. -/
+def unitErrorCall (site : Nat) (e : PV_DIAG2.Error) (frames : PV_DIAG9.Stack) (level : Nat) : PV_DIAG9.DiagnosticCall :=
+ ⟨site,[PV_DIAG2.spelling e],frames,level⟩
+structure LoggerState where
+ initialized : Nat
+ binding : Nat
+ maxLevel : Nat
+ deriving DecidableEq
+def initialLogger : LoggerState := ⟨0,0,0⟩
+def selectedLogger (s : LoggerState) : Nat := if s.initialized=2 then s.binding else 0
+
+theorem unit_error_operand_link {I P : Type} (context : I → P) (site level : I → Nat) (errors : I → PV_DIAG2.Error) (frames : I → PV_DIAG9.Stack) (variants : ∀ i j, context i=context j → errors i=errors j) : PV_DIAG10.PV_DIAG10_Link_Operands context (fun i => unitErrorCall (site i) (errors i) (frames i) (level i)) := by intro i j h; change [PV_DIAG2.spelling (errors i)]=[PV_DIAG2.spelling (errors j)]; rw [variants i j h]
+#print axioms unit_error_operand_link
+end PV_DIAG11

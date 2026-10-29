@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/sources/PV_RJ4IDB_StdIndex.lean:24:3: error: Tactic `rfl` failed: The left-hand side
+  fail Error.panic
+is not definitionally equal to the right-hand side
+  do
+    let x ←
+      match none with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x
+    ok (x, a.set i)
+
+case neg
+A : Type
+N : Usize
+a : Std.Array A N
+i : Usize
+hi : ¬↑i < ↑N
+⊢ fail Error.panic = do
+    let x ←
+      match none with
+        | none => fail Error.arrayOutOfBounds
+        | some x => ok x
+    ok (x, a.set i)
+'R1Z.PV_RJ4IDB_StdIndex.source_equal' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RJ4IDB_StdIndex.in_bounds' depends on axioms: [propext]
+'R1Z.PV_RJ4IDB_StdIndex.out_of_bounds' depends on axioms: [propext, Quot.sound]

@@ -1,0 +1,35 @@
+import PV_DIAG7_Program
+import PV_DIAG3_Write
+/-! Instantiate the existing write-all control model with option-B OS
+replies, retaining its actual suffix argument and checked-slice branch.
+The valid OS/static error representation has no custom payload destructor.
+Syscall association and source-to-code V370 remain named obligations. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+inductive WriteError where
+ | os (error : OsError)
+ | zero
+ deriving DecidableEq, Repr
+def nativeWrite (signal : Signal) (fd : Nat) (bs : Bytes) : Op State (Except WriteError Nat) := fun s =>
+ match signal.write fd s.cursor with
+ | .ok n => ⟨[.requested fd bs,.delivered fd (bs.take n)],advance s,.value (.ok n)⟩
+ | .error e => ⟨[.requested fd bs],store s e,.value (.error (.os e))⟩
+def writeOps (signal : Signal) (fd : Nat)
+ (slicePanic : Bytes → Nat → Op State (Except WriteError Unit)) : WriteOps State WriteError where
+ write := nativeWrite signal fd
+ zeroError := .zero
+ interruptedGuard := fun e => pure (match e with | .os e => e.interrupted | .zero => false)
+ dropInterrupted := fun _ => pure ()
+ slicePanic := slicePanic
+theorem native_write_ok (signal : Signal) (fd n : Nat) (bs : Bytes) (s : State)
+ (h : signal.write fd s.cursor = .ok n) :
+ nativeWrite signal fd bs s = ⟨[.requested fd bs,.delivered fd (bs.take n)],advance s,.value (.ok n)⟩ := by
+ simp only [nativeWrite,h]
+#print axioms native_write_ok
+theorem native_write_error (signal : Signal) (fd : Nat) (bs : Bytes) (s : State) (e : OsError)
+ (h : signal.write fd s.cursor = .error e) :
+ nativeWrite signal fd bs s = ⟨[.requested fd bs],store s e,.value (.error (.os e))⟩ := by
+ simp only [nativeWrite,h]
+#print axioms native_write_error
+end PV_DIAG7

@@ -1,0 +1,126 @@
+{
+  "copy_enums": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/circle.rs",
+      "sha256": "8f6f0f32c8dd93e3ee459df0c1d0ef710b01996d3bc929dbeffb3f7d14a0227c",
+      "name": "CirclePointError",
+      "body": "pub enum CirclePointError {\n    /// `1 + t^2 = 0`, so the rational map has no finite value.\n    SingularParameter,\n    /// OOD policy rejects the whole CM31 parameter subfield. This is stronger\n    /// than merely excluding the M31 circle domain and matches the existing\n    /// line-point policy of sampling from `QM31 \\ CM31`.\n    ParameterInCm31Subfield,\n}",
+      "property": "Concrete Copy fieldless enum; Rust Copy coherence excludes user Drop"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/r0_transcript.rs",
+      "sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "name": "CircleRow",
+      "body": "pub enum CircleRow {\n    First,\n    Second,\n}",
+      "property": "Concrete Copy fieldless enum; Rust Copy coherence excludes user Drop"
+    }
+  ],
+  "records": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/mod.rs",
+      "file_sha256": "603b64e1beb380e4e138782358b07443b3416b1906c38647d2177480a8688d27",
+      "context": "impl<T> const From<T> for T",
+      "body": "fn from(t: T) -> T {\n        t\n    }",
+      "expected_body": "fn from(t:T)->T{t}",
+      "law": "PV_RDCD3_Control194.into_from; concrete error identity conversion",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "context": "const IndexMut<I> for [T; N]",
+      "body": "fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut Self::Output {IndexMut::index_mut(self as &mut[T],index)}",
+      "law": "PV_RDCD3_ArrayWrite194.complete/read_back/frame",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "context": "const ops::IndexMut<I> for [T]",
+      "body": "fn index_mut(&mut self, index: I) -> &mut I::Output {\n        index.index_mut(self)\n    }",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut I::Output {index.index_mut(self)}",
+      "law": "PV_RDCD3_Concrete I=usize dispatch to the following record",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "context": "const SliceIndex<[T]> for usize",
+      "body": "fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }",
+      "expected_body": "fn index_mut(self,slice:&mut[T])->&mut T {&mut(*slice)[self]}",
+      "law": "PV_RDCD3_ArrayWrite194.complete/read_back/frame; native checked-write intrinsic boundary",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "context": "pub const fn ok_or<E:",
+      "body": "pub const fn ok_or<E: [const] Destruct>(self, err: E) -> Result<T, E> {\n        match self {\n            Some(v) => Ok(v),\n            None => Err(err),\n        }\n    }",
+      "expected_body": "pub const fn ok_or<E:[const] Destruct>(self,err:E)->Result<T,E>{match self {Some(v)=>Ok(v),None=>Err(err),}}",
+      "law": "PV_RDCD3_Result194.ok_or_some/ok_or_none; V265.okOr_binding",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "file_sha256": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc",
+      "context": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output>",
+      "body": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            Ok(v) => ControlFlow::Continue(v),\n            Err(e) => ControlFlow::Break(Err(e)),\n        }\n    }",
+      "expected_body": "fn branch(self)->ControlFlow<Self::Residual,Self::Output>{match self{Ok(v)=>ControlFlow::Continue(v),Err(e)=>ControlFlow::Break(Err(e)),}}",
+      "law": "PV_RDCD3_Result194.question_mark",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "file_sha256": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc",
+      "context": "fn from_residual(residual: Result<convert::Infallible, E>)",
+      "body": "fn from_residual(residual: Result<convert::Infallible, E>) -> Self {\n        match residual {\n            Err(e) => Err(From::from(e)),\n        }\n    }",
+      "expected_body": "fn from_residual(residual:Result<convert::Infallible,E>)->Self{match residual{Err(e)=>Err(From::from(e)),}}",
+      "law": "PV_RDCD3_Result194.residual/question_mark; concrete E=F identity From, empty Infallible Ok case",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "file_sha256": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc",
+      "context": "pub const fn unwrap_or_else<F>",
+      "body": "pub const fn unwrap_or_else<F>(self, op: F) -> T\n    where\n        F: [const] FnOnce(E) -> T + [const] Destruct,\n    {\n        match self {\n            Ok(t) => t,\n            Err(e) => op(e),\n        }\n    }",
+      "expected_body": "pub const fn unwrap_or_else<F>(self,op:F)->T where F:[const] FnOnce(E)->T+[const] Destruct,{match self{Ok(t)=>t,Err(e)=>op(e),}}",
+      "law": "PV_RDCD3_Result194.unwrap_ok/unwrap_error; V265.unwrap_binding",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "context": "macro_rules! uint_impl",
+      "body": "pub const fn from_le_bytes(bytes: [u8; size_of::<Self>()]) -> Self {\n            Self::from_le(Self::from_ne_bytes(bytes))\n        }",
+      "expected_body": "pub const fn from_le_bytes(bytes:[u8;size_of::<Self>()])->Self{Self::from_le(Self::from_ne_bytes(bytes))}",
+      "law": "PV_RDCD3_Endian194.binding; integer-layout/compiler primitive is retained explicitly",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "context": "macro_rules! uint_impl",
+      "body": "pub const fn from_ne_bytes(bytes: [u8; size_of::<Self>()]) -> Self {\n            // SAFETY: integers are plain old datatypes so we can always transmute to them\n            unsafe { mem::transmute(bytes) }\n        }",
+      "expected_body": "pub const fn from_ne_bytes(bytes:[u8;size_of::<Self>()])->Self{unsafe{mem::transmute(bytes)}}",
+      "law": "PV_RDCD3_Endian194.word/binding at existing transmute primitive boundary",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "context": "macro_rules! uint_impl",
+      "body": "pub const fn from_le(x: Self) -> Self {\n            #[cfg(target_endian = \"little\")]\n            {\n                x\n            }\n            #[cfg(not(target_endian = \"little\"))]\n            {\n                x.swap_bytes()\n            }\n        }",
+      "expected_body": "pub const fn from_le(x:Self)->Self{#[cfg(target_endian=\"little\")]{x}#[cfg(not(target_endian=\"little\"))]{x.swap_bytes()}}",
+      "law": "PV_RDCD3_Endian194.word/binding; host target little endian, identity branch selected",
+      "negative_control": "whole body replaced by a well-typed terminal panic; rejected"
+    }
+  ],
+  "toolchain": "1.94.1",
+  "target": "x86_64-unknown-linux-gnu, little endian",
+  "scope": "Eleven complete concrete library bodies only; row closure also requires full source binding, matching proof receipts, frozen DAG and same-input finite evidence",
+  "destructor_qualification": "CirclePointError and captured CircleRow are concrete Copy enums with no user Drop; no claim about arbitrary destructor/world effects",
+  "primitive_boundary": "Integer casts/transmute/layout and checked typed-memory reads/writes retain existing compiler/Aeneas semantics; no LLVM/world/observer theorem",
+  "composition": "Reclassification within existing tool trust; zero endpoint premise removal",
+  "feature_graph_sha256": "3bf8d1033e906315b76cab9576db009197c18bc8e969e62b5aae21fecfd61dad"
+}

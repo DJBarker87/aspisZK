@@ -1,0 +1,101 @@
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:31:92: error: unsolved goals
+case pos
+q : ℕ
+ds : List ℕ
+h✝ : decide ((PV_L2E_CarryTrace.run 0 (q + 1) ds).1.2 ≠ 0) = true
+⊢ (if (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.2 = 0 then
+        { digits := (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1, finalCarry := 0,
+          events := List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++ [Event.wrapped false] }
+      else
+        { digits := (PV_L2E_CarryTrace.run 0 1 (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1).1.1,
+          finalCarry := (PV_L2E_CarryTrace.run 0 1 (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1).1.2,
+          events :=
+            List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++
+              ([Event.wrapped true] ++ List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length)) }).events =
+    List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++
+      ([Event.wrapped true] ++ List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length))
+
+case neg
+q : ℕ
+ds : List ℕ
+h✝ : ¬decide ((PV_L2E_CarryTrace.run 0 (q + 1) ds).1.2 ≠ 0) = true
+⊢ (if (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.2 = 0 then
+        { digits := (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1, finalCarry := 0,
+          events := List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++ [Event.wrapped false] }
+      else
+        { digits := (PV_L2E_CarryTrace.run 0 1 (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1).1.1,
+          finalCarry := (PV_L2E_CarryTrace.run 0 1 (PV_L2E_CarryTrace.run 0 (q + 1) ds).1.1).1.2,
+          events :=
+            List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++
+              ([Event.wrapped true] ++ List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length)) }).events =
+    List.map Event.carry (PV_L2E_CarryTrace.plan 0 ds.length) ++ [Event.wrapped false]
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:34:29: warning: This simp argument is unused:
+  decide_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [PV_L2E_CarryTrace.trace_constant,
+  ̵  ̵ ̵ ̵PV_L2E_CarryTrace.length,
+  ̲ ̲ ̲ ̲ ̲decide_t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵↓reduceIte, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:34:41: warning: This simp argument is unused:
+  decide_false
+
+Hint: Omit it from the simp argument list.
+  simp_all only [PV_L2E_CarryTrace.trace_constant,
+  ̵  ̵ ̵ ̵PV_L2E_CarryTrace.length,
+  ̲ ̲ ̲ ̲ ̲decide_true,d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵ ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵↓reduceIte, ̲List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:34:54: warning: This simp argument is unused:
+  Bool.false_eq_true
+
+Hint: Omit it from the simp argument list.
+  simp_all only [PV_L2E_CarryTrace.trace_constant, P̵V̵_̵L̵2̵E̵_̵C̵a̵r̵r̵y̵T̵r̵a̵c̵e̵.̵l̵e̵n̵g̵t̵h̵,̵d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]̵P̲V̲_̲L̲2̲E̲_̲C̲a̲r̲r̲y̲T̲r̲a̲c̲e̲.̲l̲e̲n̲g̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲↓̲r̲e̲d̲u̲c̲e̲I̲t̲e̲,̲ ̲L̲i̲s̲t̲.̲a̲p̲p̲e̲n̲d̲_̲a̲s̲s̲o̲c̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:35:4: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp_all only [PV_L2E_CarryTrace.trace_constant,
+  ̵  ̵ ̵ ̵PV_L2E_CarryTrace.length,
+  ̲ ̲ ̲ ̲ ̲decide_true, ̲decide_false, ̲Bool.false_eq_true,
+  ̵  ̵ ̵ ̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵,̵List.append_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:39:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+q : ℕ
+ds : List ℕ
+⊢ (have first := PV_L2E_CarryTrace.run 0 (q + 1) ds;
+        if first.1.2 = 0 then
+          { digits := first.1.1, finalCarry := 0, events := List.map Event.carry first.2 ++ [Event.wrapped false] }
+        else
+          have second := PV_L2E_CarryTrace.run 0 1 first.1.1;
+          { digits := second.1.1, finalCarry := second.1.2,
+            events :=
+              List.map Event.carry first.2 ++ [Event.wrapped true] ++ List.map Event.carry second.2 }).digits.length =
+    ds.length
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaTrace.lean:43:2: error: Tactic `split_ifs` failed: no if-then-else conditions to split
+
+q : ℕ
+ds : List ℕ
+⊢ ∀
+    d ∈
+      (have first := PV_L2E_CarryTrace.run 0 (q + 1) ds;
+        if first.1.2 = 0 then
+          { digits := first.1.1, finalCarry := 0, events := List.map Event.carry first.2 ++ [Event.wrapped false] }
+        else
+          have second := PV_L2E_CarryTrace.run 0 1 first.1.1;
+          { digits := second.1.1, finalCarry := second.1.2,
+            events := List.map Event.carry first.2 ++ [Event.wrapped true] ++ List.map Event.carry second.2 }).digits,
+    d < P
+'PV_L2E_GammaTrace.trace_by_carry' depends on axioms: [propext, sorryAx]
+'PV_L2E_GammaTrace.output_length' depends on axioms: [sorryAx]
+'PV_L2E_GammaTrace.output_bounds' depends on axioms: [sorryAx]
+'PV_L2E_GammaTrace.second_carry_zero' depends on axioms: [propext, Classical.choice, Quot.sound]

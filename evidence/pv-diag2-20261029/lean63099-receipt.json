@@ -1,0 +1,61 @@
+{
+  "target": [
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_FinalManifest.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_FinalManifest.lean",
+    "7000"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/lean63099-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_FinalManifest.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_FinalManifest.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 1.7118148803710938,
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "e3d0cc4902",
+  "runner_sha256": "0ff8eed44d639dd21594be743a2758bace5be1c0508d82ad84781a78afd17cdc",
+  "dependency_objects": {
+    "PV_DIAG2_Audit": {
+      "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_Audit.olean": "11a2087ae3070f0e418324668dcde472a734fecd6a49893057c0d37d541ad558"
+    },
+    "PV_DIAG2_ResumeAudit": {
+      "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ResumeAudit.olean": "028ee83cd746e0e253872567484a010c062035249815b97d060eb0c13825cbe8"
+    }
+  },
+  "module": "PV_DIAG2_FinalManifest",
+  "attempt": 63099,
+  "source_sha256": "ade765feeb2db3adfb4fe97228328d7e4967b2d2b31360f8a18d30bf78f54cf7",
+  "dependency_fingerprint": "1de0d6b8101731316bc22be922ec4799b1862ef572067fabb71e723234f876db",
+  "environment_sha256": "119a5e58d75b69116d0b29adf10a043c62bb43cbcc6eb0c0fb65df47b3f80532",
+  "print_axioms": "@PV_DIAG2.source_client_no_rejected : \u2200 [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]\n  {C E : Type}\n  (generate :\n    C \u2192 Aeneas.Std.Usize \u2192 Aeneas.Std.Result (Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Secret E \u00d7 C))\n  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)\n  (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash)\n  (store after : R1Z.ProverRwRetryModel.Store) (state : C) (k : Aeneas.Std.Usize) (n : \u2115),\n  \u2191k + n = 8 \u2192\n    ProverRwFull.prover.retry_attempt (PV_DIAG2.clientEntropy generate) pub compiled variant hash store state k \u2260\n      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n@PV_DIAG2.client_observed_api_not_rejected : \u2200 [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]\n  {C E : Type}\n  (generate :\n    C \u2192 Aeneas.Std.Usize \u2192 Aeneas.Std.Result (Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Secret E \u00d7 C))\n  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)\n  (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash)\n  (a :\n    \u2115 \u2192\n      C \u00d7 R1Z.ProverRwRetryModel.Store \u2192\n        PV_DIAG2.Observed\n          (R1Z.ProverCommitRetry34.Step R1Z.ProverRwRetryModel.Proof \u00d7 C \u00d7 R1Z.ProverRwRetryModel.Store)),\n  (\u2200 (k : \u2115) (s : C \u00d7 R1Z.ProverRwRetryModel.Store),\n      (a k s).result = R1Z.ProverRwRetryModel.attempt (PV_DIAG2.clientEntropy generate) pub compiled variant hash k s) \u2192\n    \u2200 (n k : \u2115) (state : C \u00d7 R1Z.ProverRwRetryModel.Store),\n      PV_DIAG2.apiError (PV_DIAG2.runEffects a n k state).result \u2260 some AspisR1SimControl21.verifier.Error.Rejected\n@PV_DIAG2.retry_sink_silent : \u2200 {S P : Type} (a : \u2115 \u2192 S \u2192 PV_DIAG2.Observed (R1Z.ProverCommitRetry34.Step P \u00d7 S))\n  (sink : PV_DIAG2.Sink),\n  (\u2200 (k : \u2115) (s : S), PV_DIAG2.atSink sink (a k s).effects = []) \u2192\n    \u2200 (n k : \u2115) (s : S), PV_DIAG2.atSink sink (PV_DIAG2.runEffects a n k s).effects = []\n@PV_DIAG2.process : {S P : Type} \u2192\n  PV_DIAG2.Observed (R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published P) \u00d7 S) \u2192\n    (PV_DIAG2.Error \u2192 PV_DIAG2.Execution \u2115) \u2192\n      (R1Z.ProverCommitRetry34.Published P \u2192 S \u2192 PV_DIAG2.Execution \u2115) \u2192\n        (Aeneas.Std.Error \u2192 PV_DIAG2.Execution \u2115) \u2192 PV_DIAG2.Execution \u2115 \u2192 PV_DIAG2.Execution \u2115 \u2192 PV_DIAG2.Process S P\n'PV_DIAG2.source_client_no_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.client_observed_api_not_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.rejected_not_in_report_suffix' depends on axioms: [propext]\n'PV_DIAG2.cap_requested_text' depends on axioms: [propext, Quot.sound]\n'PV_DIAG2.semantic_mapper_exact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.mask_mapper_exact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.semantic_mapper_silent' depends on axioms: [propext]\n'PV_DIAG2.mask_mapper_silent' depends on axioms: [propext]\n'PV_DIAG2.termination_success' depends on axioms: [propext]\n'PV_DIAG2.normal_error_exit' depends on axioms: [propext]\n'PV_DIAG2.retry_sink_exact' depends on axioms: [propext]\n'PV_DIAG2.result_equality_not_stderr_equality' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.result_equality_not_frame_equality' depends on axioms: [propext]\n'R1Z.ProverRwRetryModel.retry' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "object_sha256": "258331c3d6f032814e68ae0e79270b2ad6c8afaa5b8e4b54d126060cc9eea384"
+}

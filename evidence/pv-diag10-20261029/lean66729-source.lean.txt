@@ -1,0 +1,19 @@
+import PV_DIAG10_FILE
+import PV_DIAG10_JSON_STDOUT
+import PV_DIAG10_ERROR_STDERR
+set_option autoImplicit false
+namespace PV_DIAG10
+open PV_RJ4IDB
+/-! The source-model observer is the EXISTING decoder on translated events.
+Its local links are proved here. Readout/EventOrder for deployed execution are
+not constructed by defining a model observer. All abnormal prefixes remain. -/
+def sourceFile {I : Type} (_ : I) (es : List NativeEvent) := files (es.map translateEvent)
+def sourceJSON {I : Type} (_ : I) (es : List NativeEvent) :=
+ (json (es.map translateEvent),stdout (es.map translateEvent))
+def sourceError {I : Type} (_ : I) (es : List NativeEvent) :=
+ (diagnostics2 (es.map translateEvent),diagnostics3 (es.map translateEvent))
+theorem file_source_agrees {I : Type} (i : I) (es : List NativeEvent) :
+ sourceFile i es=nativeFiles es := by
+ simp only [sourceFile,nativeFiles_translation]
+#print axioms file_source_agrees
+end PV_DIAG10

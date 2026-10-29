@@ -1,0 +1,102 @@
+lean65797 0 
+'PV_DIAG7.fd2_public' does not depend on any axioms
+'PV_DIAG7.answer_correct' depends on axioms: [propext]
+'PV_DIAG7.run_done' depends on axioms: [propext]
+'PV_DIAG7.run_returned' depends on axioms: [propext]
+'PV_DIAG7.run_call_is_bind' depends on axioms: [propext]
+'PV_DIAG7.run_public' depends on axioms: [propext]
+'PV_DIAG7.calls_public' depends on axioms: [propext]
+'PV_DIAG7.run_events_public' depends on axioms: [propext]
+'PV_DIAG7.run_terminal_public' depends on axioms: [propext]
+'PV_DIAG7.run_state_public' depends on axioms: [propext]
+'PV_DIAG7.run_has_value' depends on axioms: [propext]
+'PV_DIAG7.returned_order' depends on axioms: [propext]
+'PV_DIAG7.return_preserves_calls' depends on axioms: [propext]
+'PV_DIAG7.call_is_first' depends on axioms: [propext]
+'PV_DIAG7.write_success_continuation' depends on axioms: [propext]
+'PV_DIAG7.write_error_continuation' depends on axioms: [propext]
+'PV_DIAG7.interrupted_keeps_prior_delivery' depends on axioms: [propext]
+'PV_DIAG7.flush_failure_continuation' depends on axioms: [propext]
+'PV_DIAG7.file_failure_continuation' depends on axioms: [propext]
+'PV_DIAG7.strerror_is_precursor' depends on axioms: [propext]
+'PV_DIAG7.os_failure_does_not_erase_returned' depends on axioms: [propext]
+'PV_DIAG7.all_prefix_programs_public' depends on axioms: [propext]
+'PV_DIAG7.occurrence_order_content_joint' depends on axioms: [propext]
+'PV_DIAG7.native_write_ok' depends on axioms: [propext]
+'PV_DIAG7.native_write_error' depends on axioms: [propext]
+'PV_DIAG7.os_interrupted_guard' does not depend on any axioms
+'PV_DIAG7.interrupted_drop_no_custom_payload' does not depend on any axioms
+'PV_DIAG7.optionB_write_step_public' does not depend on any axioms
+'PV_DIAG7.optionB_write_prefix_public' does not depend on any axioms
+'PV_DIAG7.optionB_interrupted_retry' depends on axioms: [propext]
+'PV_DIAG7.optionB_noninterrupted_return' depends on axioms: [propext]
+'PV_DIAG7.optionB_every_write_prefix' does not depend on any axioms
+'PV_DIAG7.nonce_failure_retained' depends on axioms: [propext]
+'PV_DIAG7.nonce_success_resets_error' depends on axioms: [propext]
+'PV_DIAG7.nonce_last_error_kind' depends on axioms: [propext]
+'PV_DIAG7.nonce_wrapper_public' does not depend on any axioms
+'PV_DIAG7.DIAG_public_given_optionB' depends on axioms: [propext]
+'PV_DIAG7.DIAG_complete_decoder' depends on axioms: [propext]
+'PV_DIAG7.DIAG_retained_state' depends on axioms: [propext]
+'PV_DIAG7.DIAG_native_handoff' depends on axioms: [propext, Quot.sound]
+'PV_DIAG7.DIAG_signal_not_fixed' depends on axioms: [propext]
+'PV_DIAG7.DIAG_witness_operand_obstruction' depends on axioms: [propext]
+'PV_DIAG7.print_to_message_public' does not depend on any axioms
+'PV_DIAG7.print_to_message_length_public' does not depend on any axioms
+'PV_DIAG7.optionB_bound_unchanged' does not depend on any axioms
+theorem PV_DIAG7.DIAG_optionB_public_signal : ∀ {W P C : Type} (pub : W → P) (coins : W → C)
+  (publicSignal : P → C → Signal) (program : P → C → Nat → Program) (initial : P → C → State)
+  (existingL1Count : P → C → Nat) (w u : W),
+  pub w = pub u →
+    coins w = coins u →
+      (fun n =>
+          DIAG_inputs (existingL1Count (pub w) (coins w))
+            (run (publicSignal (pub w) (coins w)) (program (pub w) (coins w) n) (initial (pub w) (coins w)))
+            (calls (publicSignal (pub w) (coins w)) (program (pub w) (coins w) n) (initial (pub w) (coins w)))) =
+        fun n =>
+        DIAG_inputs (existingL1Count (pub u) (coins u))
+          (run (publicSignal (pub u) (coins u)) (program (pub u) (coins u) n) (initial (pub u) (coins u)))
+          (calls (publicSignal (pub u) (coins u)) (program (pub u) (coins u) n) (initial (pub u) (coins u))) :=
+fun {W P C} pub coins publicSignal program initial existingL1Count w u hp hc =>
+  DIAG_public_given_optionB pub coins (fun w => publicSignal (pub w) (coins w))
+    (public_signal_satisfies_P pub coins publicSignal) program initial existingL1Count w u hp hc
+theorem PV_DIAG7.DIAG_native_handoff : ∀ {W P C O : Type} (native : W → Nat → Execution State Reply) (pub : W → P)
+  (coins : W → C) (environment : W → Signal),
+  V400_OptionB_P pub coins environment →
+    ∀ (program : P → C → Nat → Program) (initial : P → C → State),
+      (∀ (w : W) (n : Nat),
+          native w n = run (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w))) →
+        ∀ (decode : Execution State Reply → O) (w u : W),
+          pub w = pub u → coins w = coins u → (fun n => decode (native w n)) = fun n => decode (native u n) :=
+fun {W P C O} native pub coins environment V400 program initial sourceBinding decode w u hp hc =>
+  funext fun n =>
+    Eq.mpr (id (congrArg (fun _a => decode _a = decode (native u n)) (sourceBinding w n)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              decode (run (environment w) (program (pub w) (coins w) n) (initial (pub w) (coins w))) = decode _a)
+            (sourceBinding u n)))
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                decode (run _a (program (pub w) (coins w) n) (initial (pub w) (coins w))) =
+                  decode (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u))))
+              (V400 w u hp hc)))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  decode (run (environment u) (program _a (coins w) n) (initial _a (coins w))) =
+                    decode (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u))))
+                hp))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    decode (run (environment u) (program (pub u) _a n) (initial (pub u) _a)) =
+                      decode (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u))))
+                  hc))
+              (Eq.refl (decode (run (environment u) (program (pub u) (coins u) n) (initial (pub u) (coins u)))))))))
+

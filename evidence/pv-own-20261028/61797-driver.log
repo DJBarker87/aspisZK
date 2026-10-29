@@ -1,0 +1,235 @@
+ignment, capacity := 0,
+                                                              contents := fun x => none, owner := cmd.owner,
+                                                              live := true })))
+                                                      (funext fun a =>
+                                                        ite_congr (Eq.refl (a = p))
+                                                          (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                          Eq.refl (w.memory.generations a)))
+                                                    fun s =>
+                                                    if s = cmd.owner then
+                                                      some { address := p, generation := w.memory.generations p + 1 }
+                                                    else w.memory.slots s)
+                                                  w.memory.loans))
+                                              (congrArg Prod.snd h))
+                                            w.extra)))))
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x.1 with
+                                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                                            (R1Z.PV_W_Threading.Outcome.fail e,
+                                              { memory := w.memory, allocator := (primitive cmd.request w.allocator).2,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.div =>
+                                            (R1Z.PV_W_Threading.Outcome.div,
+                                              { memory := w.memory, allocator := (primitive cmd.request w.allocator).2,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                                            (R1Z.PV_W_Threading.Outcome.ok none,
+                                              { memory := w.memory, allocator := (primitive cmd.request w.allocator).2,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                            have t := { address := p, generation := w.memory.generations p + 1 };
+                                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                              {
+                                                memory :=
+                                                  have __src := w.memory;
+                                                  {
+                                                    heap :=
+                                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some
+                                                          (R1Z.PV_OWN_Heap.emptyCell cmd.request.size
+                                                            cmd.request.alignment cmd.owner)),
+                                                    generations := fun a =>
+                                                      if a = p then t.generation else w.memory.generations a,
+                                                    slots := fun s =>
+                                                      if s = cmd.owner then some t else w.memory.slots s,
+                                                    loans := __src.loans },
+                                                allocator :=
+                                                  { memory := w.memory,
+                                                      allocator := (primitive cmd.request w.allocator).2,
+                                                      extra := w.extra }.allocator,
+                                                extra :=
+                                                  { memory := w.memory,
+                                                      allocator := (primitive cmd.request w.allocator).2,
+                                                      extra := w.extra }.extra }))
+                                        h)
+                                      (congrArg
+                                        (Prod.mk
+                                          (R1Z.PV_W_Threading.Outcome.ok
+                                            (some { address := p, generation := w.memory.generations p + 1 })))
+                                        (congrFun'
+                                          (congr
+                                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrArg
+                                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some
+                                                          { size := cmd.request.size,
+                                                            alignment := cmd.request.alignment, capacity := 0,
+                                                            contents := fun x => none, owner := cmd.owner,
+                                                            live := true })))
+                                                    (funext fun a =>
+                                                      ite_congr (Eq.refl (a = p))
+                                                        (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                        Eq.refl (w.memory.generations a)))
+                                                  fun s =>
+                                                  if s = cmd.owner then
+                                                    some { address := p, generation := w.memory.generations p + 1 }
+                                                  else w.memory.slots s)
+                                                w.memory.loans))
+                                            (congrArg Prod.snd h))
+                                          w.extra)))))
+                                [(w, R1Z.PV_OWN_Operations.Event.allocate cmd.request.size cmd.request.alignment)]))))
+                        cmd.owner)
+                      (ite_cond_eq_true (some { address := p, generation := w.memory.generations p + 1 })
+                        (w.memory.slots cmd.owner) (eq_self cmd.owner))))
+                  (some { address := p, generation := w.memory.generations p + 1 }))
+                (eq_self (some { address := p, generation := w.memory.generations p + 1 }))))
+            (eq_self cmd.owner))
+          (and_self True)))
+      (and_self True))
+'R1Z.PV_OWN_CheckedAlloc.owned_success' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWN_CheckedStore.representation : ∀ {T : Type} {k : R1Z.PV_OWN_View.Codec T} {m : R1Z.PV_OWN_Heap.Memory}
+  (c : R1Z.PV_OWN_CheckedStore.Command k m),
+  R1Z.PV_OWN_View.View k (R1Z.PV_OWN_CheckedStore.execute c) c.token c.offset c.value :=
+fun {T} {k} {m} c =>
+  Exists.intro (R1Z.PV_OWN_Bytes.store c.cell c.offset k.width (k.encode c.value))
+    ⟨⟨R1Z.PV_OWN_Heap.put_same m.heap c.token.address
+          (some (R1Z.PV_OWN_Bytes.store c.cell c.offset k.width (k.encode c.value))),
+        ⟨c.writable.left.left.right.left, c.writable.left.left.right.right⟩⟩,
+      R1Z.PV_OWN_View.initialized k c.cell c.offset c.value c.fits⟩
+'R1Z.PV_OWN_CheckedStore.representation' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWN_CollectorFrame.unread : ∀ {T : Type} (codec : R1Z.PV_OWN_View.Codec T) (cell : R1Z.PV_OWN_Heap.Cell)
+  (bytes : R1Z.PV_OWN_Bytes.Bytes) (read write next : ℕ) (value : T),
+  write ≤ read →
+    read < next →
+      R1Z.PV_OWN_View.Represents codec cell (next * codec.width) value →
+        R1Z.PV_OWN_View.Represents codec (R1Z.PV_OWN_Bytes.store cell (write * codec.width) codec.width bytes)
+          (next * codec.width) value :=
+fun {T} codec cell bytes read write next value compact future represented =>
+  ⟨represented.left, fun i hi =>
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = codec.encode value i)
+          (have this :=
+            R1Z.PV_OWN_CollectorCursor.future_byte cell.contents bytes codec.width read write next i compact future;
+          this)))
+      (represented.right i hi)⟩
+'R1Z.PV_OWN_CollectorFrame.unread' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWN_Reserve.typed_prefix : ∀ {T : Type} (codec : R1Z.PV_OWN_View.Codec T)
+  (request : R1Z.PV_RDB1_V183_ReserveWorld.Request) (memory : ℕ → Option ℕ) (c : R1Z.PV_OWN_Heap.Cell)
+  (destination offset : ℕ) (v : T),
+  request.oldCapacity ≤ request.newCapacity →
+    c.size = request.oldCapacity * request.shape.width →
+      (∀ i < c.size, memory (request.address + i) = Option.map UInt8.toNat (c.contents i)) →
+        R1Z.PV_OWN_View.Represents codec c offset v →
+          ∀ i < codec.width,
+            R1Z.PV_RDB1_V183_ReserveWorld.memoryAfter request destination memory (destination + (offset + i)) =
+              Option.map UInt8.toNat (codec.encode v i) :=
+fun {T} codec request memory c destination offset v grow size association repr i hi =>
+  have hin :=
+    have hh := repr.left;
+    Decidable.byContradiction fun a => R1Z.PV_OWN_Reserve.typed_prefix._proof_1 codec request c offset size i hi hh a;
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = Option.map UInt8.toNat (codec.encode v i))
+        (R1Z.PV_OWN_Reserve.initialized_prefix request memory c destination grow size association (offset + i) hin)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => Option.map UInt8.toNat _a = Option.map UInt8.toNat (codec.encode v i)) (repr.right i hi)))
+      (Eq.refl (Option.map UInt8.toNat (codec.encode v i))))
+'R1Z.PV_OWN_Reserve.typed_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_OWN_Unique.move_preserves : ∀ (m : R1Z.PV_OWN_Heap.Memory) (src dst : ℕ) (t : R1Z.PV_OWN_Heap.Token)
+  (c : R1Z.PV_OWN_Heap.Cell),
+  R1Z.PV_OWN_Unique.Unique m →
+    m.slots src = some t →
+      m.slots dst = none → dst ≠ src → R1Z.PV_OWN_Unique.Unique (R1Z.PV_OWN_Operations.move src dst t c m) :=
+fun m src dst t c unique source empty distinct i j u hi hj =>
+  have ni := fun h =>
+    Eq.ndrec (motive := fun i => (R1Z.PV_OWN_Operations.move src dst t c m).slots i = some u → False)
+      (fun hi =>
+        False.elim
+          (Eq.mp
+            (Eq.trans
+              (congrFun' (congrArg Eq (ite_cond_eq_true none (if src = dst then some t else m.slots src) (eq_self src)))
+                (some u))
+              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+            hi))
+      (Eq.symm h) hi;
+  have nj := fun h =>
+    Eq.ndrec (motive := fun j => (R1Z.PV_OWN_Operations.move src dst t c m).slots j = some u → False)
+      (fun hj =>
+        False.elim
+          (Eq.mp
+            (Eq.trans
+              (congrFun' (congrArg Eq (ite_cond_eq_true none (if src = dst then some t else m.slots src) (eq_self src)))
+                (some u))
+              (eq_false' fun h => False.elim (noConfusion_of_Nat Option.ctorIdx h)))
+            hj))
+      (Eq.symm h) hj;
+  if di : i = dst then
+    Eq.ndrec (motive := fun i => i ≠ src → (if i = dst then some t else m.slots i) = some u → i = j)
+      (fun ni hi =>
+        let ⟨⟩ := some u
+        Eq.mp
+          (congrFun' (congrArg Eq (ite_congr (eq_self dst) (fun a => Eq.refl (some t)) fun a => Eq.refl (m.slots dst)))
+            (some u))
+          hi)
+      (Eq.symm di) ni
+      (Eq.mp
+        (congrFun'
+          (congrArg Eq
+            (ite_congr (eq_false ni) (fun a => Eq.refl none) fun a => Eq.refl (if i = dst then some t else m.slots i)))
+          (some u))
+        hi)
+  else
+    if dj : j = dst then
+      Eq.ndrec (motive := fun j => j ≠ src → (if j = dst then some t else m.slots j) = some u → i = j)
+        (fun nj hj =>
+          let ⟨⟩ := some u
+          Eq.mp
+            (congrFun'
+              (congrArg Eq (ite_congr (eq_self dst) (fun a => Eq.refl (some t)) fun a => Eq.refl (m.slots dst)))
+              (some u))
+            hj)
+        (Eq.symm dj) nj
+        (Eq.mp
+          (congrFun'
+            (congrArg Eq
+              (ite_congr (eq_false nj) (fun a => Eq.refl none) fun a =>
+                Eq.refl (if j = dst then some t else m.slots j)))
+            (some u))
+          hj)
+    else
+      unique i j u
+        (Eq.mp
+          (congrFun' (congrArg Eq (ite_congr (eq_false di) (fun a => Eq.refl (some t)) fun a => Eq.refl (m.slots i)))
+            (some u))
+          (Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (ite_congr (eq_false ni) (fun a => Eq.refl none) fun a =>
+                  Eq.refl (if i = dst then some t else m.slots i)))
+              (some u))
+            hi))
+        (Eq.mp
+          (congrFun' (congrArg Eq (ite_congr (eq_false dj) (fun a => Eq.refl (some t)) fun a => Eq.refl (m.slots j)))
+            (some u))
+          (Eq.mp
+            (congrFun'
+              (congrArg Eq
+                (ite_congr (eq_false nj) (fun a => Eq.refl none) fun a =>
+                  Eq.refl (if j = dst then some t else m.slots j)))
+              (some u))
+            hj))
+'R1Z.PV_OWN_Unique.move_preserves' depends on axioms: [propext]
+theorem R1Z.PV_OWN_Containers.utf8 : ∀ (m : R1Z.PV_OWN_Heap.Memory) (v : R1Z.PV_OWN_Operations.Vector UInt8),
+  R1Z.PV_OWN_Containers.StringView m v → ∃ text, text.toUTF8.data.toList = v.values :=
+fun m v h => h.right
+'R1Z.PV_OWN_Containers.utf8' depends on axioms: [propext]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61797/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61797/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects/R1Z/PV_OWN_StatementsAudit.olean", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_StatementsAudit.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.62", "peak_rss_kib": "2633632", "swap": "0", "source_revision": "e89db568e0ffa9436e763d528765603a5cd5685e", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

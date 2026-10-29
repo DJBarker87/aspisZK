@@ -1,0 +1,82 @@
+import PV_DIAG2_ClientRetry
+import PV_DIAG2_Exit
+set_option autoImplicit false
+namespace PV_DIAG2
+open Aeneas Aeneas.Std Result
+open R1Z ProverCommitRetry34
+
+def apiError {S P : Type} : Result (Step (Published P) × S) → Option ProverCommitRetry34.Error
+ | .ok (.stop e,_) => some e
+ | _ => none
+
+theorem reject_free_api {S P : Type} (r : Result (Step (Published P) × S))
+    (h : RejectFree r) : apiError r ≠ some .Rejected := by
+ cases r with
+ | fail e => simp [apiError]
+ | div => simp [apiError]
+ | ok pair =>
+   rcases pair with ⟨step,next⟩
+   cases step with
+   | done p => simp [apiError]
+   | retry => simp [apiError]
+   | stop e =>
+     intro he
+     have equal : e = .Rejected := by simpa only [apiError,Option.some.injEq] using he
+     subst e
+     exact h next rfl
+
+/-- The instrumented concrete-client callback cannot pass Rejected to
+plan::err. Callee effects, success count, state and other errors survive. -/
+theorem client_observed_api_not_rejected
+    [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] {C E : Type}
+    (generate : C → Usize → Result (core.result.Result ProverRwRetryModel.Secret E × C))
+    (pub : ProverRwRetryModel.Pub) (compiled : ProverRwRetryModel.Compiled)
+    (variant : ProverRwFull.transport.Variant) (hash : ProverRwRetryModel.Hash)
+    (a : Nat → (C × ProverRwRetryModel.Store) →
+      Observed (Step ProverRwRetryModel.Proof × (C × ProverRwRetryModel.Store)))
+    (resultLaw : ∀ k s, (a k s).result =
+      ProverRwRetryModel.attempt (clientEntropy generate) pub compiled variant hash k s)
+    (n k : Nat) (state : C × ProverRwRetryModel.Store) :
+ apiError (runEffects a n k state).result ≠ some .Rejected := by
+ apply reject_free_api
+ apply observed_reject_free
+ intro i s
+ rw [resultLaw]
+ exact client_attempt_reject_free generate pub compiled variant hash i s
+
+def directReportSuffix {S P : Type} (c : Capture) :
+    Result (Step (Published P) × S) → List Effect
+ | .ok (.stop e,_) => (reportError (exportError e) c.pcs c.rendered c.enabled).effects
+ | _ => []
+
+theorem finish_splits_prefix {S P : Type} (c : Capture)
+    (x : Observed (Step (Published P) × S)) :
+ (finish c x).effects = x.effects ++ directReportSuffix c x.result := by
+ unfold finish directReportSuffix
+ cases x.result with
+ | fail e => simp
+ | div => simp
+ | ok pair => rcases pair with ⟨step,s⟩; cases step <;> simp
+
+/-- No blanket claim is made about earlier callee effects that may contain
+any .returned tag. This excludes exactly this reporting continuation's tag. -/
+theorem rejected_not_in_report_suffix {S P : Type} (c : Capture)
+    (r : Result (Step (Published P) × S)) (h : RejectFree r) :
+ .returned .Rejected ∉ directReportSuffix c r := by
+ cases r with
+ | fail e => simp [directReportSuffix]
+ | div => simp [directReportSuffix]
+ | ok pair =>
+   rcases pair with ⟨step,next⟩
+   cases step with
+   | done p => simp [directReportSuffix]
+   | retry => simp [directReportSuffix]
+   | stop e =>
+     have ne : e ≠ .Rejected := by intro eq; subst e; exact h next rfl
+     cases e <;> cases c.enabled <;> simp [directReportSuffix,reportError,exportError,ne]
+
+#print axioms reject_free_api
+#print axioms client_observed_api_not_rejected
+#print axioms finish_splits_prefix
+#print axioms rejected_not_in_report_suffix
+end PV_DIAG2

@@ -1,0 +1,103 @@
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:30:34: error: Application type mismatch: The argument
+  active
+has type
+  start < stop
+but is expected to have type
+  Cursor.start ?m.63 < Cursor.stop ?m.63
+in the application
+  next_active ?m.63 active
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:34:6: error: Type mismatch
+  ih (start + 1) out (Decidable.byContradiction fun a => complete._proof_6 stop fuel start bound a)
+has type
+  source f { start := start + 1, stop := stop } out = ordered f fuel (start + 1) out
+but is expected to have type
+  (match
+      match next { start := start, stop := stop } with
+      | (none, snd) => ok (done acc)
+      | (some x, r') => do
+        let acc' ← f acc x
+        ok (cont (r', acc')) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ordered f fuel (start + 1) out
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:35:13: error: unsolved goals
+case succ.fail
+S : Type
+f : S → ℕ → Result S
+stop fuel : ℕ
+ih :
+  ∀ (start : ℕ) (acc : S),
+    stop = start + fuel → source f { start := start, stop := stop } acc = ordered f fuel start acc
+start : ℕ
+acc : S
+bound : stop = start + (fuel + 1)
+active : start < stop
+e : Error
+hf : f acc start = fail e
+⊢ (match
+      match next { start := start, stop := stop } with
+      | (none, snd) => ok (done acc)
+      | (some x, r') => do
+        let acc' ← f acc x
+        ok (cont (r', acc')) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fail e
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:36:10: error: unsolved goals
+case succ.div
+S : Type
+f : S → ℕ → Result S
+stop fuel : ℕ
+ih :
+  ∀ (start : ℕ) (acc : S),
+    stop = start + fuel → source f { start := start, stop := stop } acc = ordered f fuel start acc
+start : ℕ
+acc : S
+bound : stop = start + (fuel + 1)
+active : start < stop
+hf : f acc start = div
+⊢ (match
+      match next { start := start, stop := stop } with
+      | (none, snd) => ok (done acc)
+      | (some x, r') => do
+        let acc' ← f acc x
+        ok (cont (r', acc')) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    div
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:33:17: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵f̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:35:22: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeLoop.lean:36:19: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp ̵[̵h̵f̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD3_RangeLoop.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD3_RangeLoop.empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD3_RangeLoop.all_endpoints' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

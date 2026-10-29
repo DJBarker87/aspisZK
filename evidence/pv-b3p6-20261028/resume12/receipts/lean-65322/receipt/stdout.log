@@ -1,0 +1,512 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedBuild12227.lean:87:2: error: Type mismatch: After simplification, term
+  four_interleaved12 aspis_core.field.QM31.ZERO (preweighted_window12 start values group_index)
+ has type
+  (do
+      let a ←
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize < start.wrapping_add N then
+              values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize).wrapping_sub start)
+            else ok aspis_core.field.QM31.ZERO
+          else ok aspis_core.field.QM31.ZERO
+      let s0 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize a
+      let b ←
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize < start.wrapping_add N then
+              values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize).wrapping_sub start)
+            else ok aspis_core.field.QM31.ZERO
+          else ok aspis_core.field.QM31.ZERO
+      let s1 ← s0.update 1#usize b
+      let c ←
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then
+              values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+            else ok aspis_core.field.QM31.ZERO
+          else ok aspis_core.field.QM31.ZERO
+      let s2 ← s1.update 2#usize c
+      let d ←
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then
+              values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+            else ok aspis_core.field.QM31.ZERO
+          else ok aspis_core.field.QM31.ZERO
+      s2.update 3#usize d) =
+    four_build12 (preweighted_window12 start values group_index)
+but is expected to have type
+  (if (Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize ≥ start then
+      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize < start.wrapping_add N then do
+        let q ← values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 0#usize).wrapping_sub start)
+        let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize < start.wrapping_add N then do
+              let q1 ←
+                values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize).wrapping_sub start)
+              let output2 ← output1.update 1#usize q1
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize
+                          (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+            else do
+              let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize
+                          (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ←
+                    values.index_usize
+                        (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+      else do
+        let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ZERO
+        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize < start.wrapping_add N then do
+              let q1 ←
+                values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize).wrapping_sub start)
+              let output2 ← output1.update 1#usize q1
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize
+                          (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+            else do
+              let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize
+                          (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          ok output4
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ←
+                    values.index_usize
+                        (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+    else do
+      let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ZERO
+      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize ≥ start then
+          if (Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize < start.wrapping_add N then do
+            let q1 ←
+              values.index_usize (((Usize.wrapping_mul 4#usize group_index).wrapping_add 1#usize).wrapping_sub start)
+            let output2 ← output1.update 1#usize q1
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ←
+                    values.index_usize
+                        (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ←
+                    values.index_usize
+                        (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize
+                              (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        ok output4
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+        else do
+          let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+          if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize ≥ start then
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize < start.wrapping_add N then do
+                let q2 ←
+                  values.index_usize
+                      (((Usize.wrapping_mul 4#usize group_index).wrapping_add 2#usize).wrapping_sub start)
+                let output3 ← output2.update 2#usize q2
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize
+                            (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      ok output4
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+            else do
+              let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize < start.wrapping_add N then do
+                    let q3 ←
+                      values.index_usize
+                          (((Usize.wrapping_mul 4#usize group_index).wrapping_add 3#usize).wrapping_sub start)
+                    let output4 ← output3.update 3#usize q3
+                    ok output4
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    ok output4
+                else do
+                  let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                  ok output4) =
+    four_build12 (preweighted_window12 start values group_index)
+'PV_B3P_Binding12227.preweighted_build_binding12' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

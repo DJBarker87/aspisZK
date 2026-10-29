@@ -1,0 +1,1538 @@
+'R1Z.PV_RDEAC_Statements.constructor_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem R1Z.PV_RDEAC_ConstructorSimulation.simulation : ∀ [inst : ExternalTypes] {S F : Type} (ops : ExternalFuns)
+  (step : Request → S → Option ℕ × S) (shape : Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (self : PV_RDEA_ActualReservationTail.Store) (digest : Std.Array U8 32#usize) (w : World S F),
+      have e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w;
+      have run := PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w;
+      PV_RDEA_CapacityEndpoint.sizes run.2.history = PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] ∧
+        match e.returned with
+        | Except.error err => run = (Except.error err, e.world)
+        | Except.ok PUnit.unit =>
+          ∃ out after,
+            run = (Except.ok out, after) ∧
+              PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                  PV_RDEAC_AfterCapacity.joinTail ops self (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                  out.capacity = 69 ∧
+                    out.address = e.buffer.address ∧
+                      after.allocator = e.world.allocator ∧
+                        after.history = e.world.history ∧ after.frame = e.world.frame :=
+fun [ExternalTypes] {S F} ops step shape width address self digest w =>
+  id
+    (let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w;
+    have empty := PV_RDB1_V181.empty_value step 18446744073709551615 9223372036854775807 shape width address 69 w;
+    have length :=
+      Eq.mpr (id (congrArg (fun _a => _a = 32) (List.length_map PV_RDEAC_NibbleModel.byte))) digest.property;
+    ⟨PV_RDEA_ReservationExecution.requests step shape width address (List.map PV_RDEAC_NibbleModel.byte ↑digest) length
+        w,
+      id
+        (Except.casesOn (motive := fun t =>
+          e.returned = t →
+            match e.returned with
+            | Except.error err =>
+              PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                (Except.error err,
+                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w).world)
+            | Except.ok PUnit.unit =>
+              ∃ out after,
+                PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                    (Except.ok out, after) ∧
+                  PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                      PV_RDEAC_AfterCapacity.joinTail ops self (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                    PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                      out.capacity = 69 ∧
+                        out.address =
+                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                  w).buffer.address ∧
+                          after.allocator =
+                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                    w).world.allocator ∧
+                            after.history =
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).world.history ∧
+                              after.frame =
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).world.frame)
+          e.returned
+          (fun err h =>
+            Eq.ndrec (motive := fun x =>
+              e.returned = x →
+                match x with
+                | Except.error err =>
+                  PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                    (Except.error err,
+                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w).world)
+                | Except.ok PUnit.unit =>
+                  ∃ out after,
+                    PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                        (Except.ok out, after) ∧
+                      PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                          PV_RDEAC_AfterCapacity.joinTail ops self (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                        PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                          out.capacity = 69 ∧
+                            out.address =
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).buffer.address ∧
+                              after.allocator =
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                        w).world.allocator ∧
+                                after.history =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+                                          69 w).world.history ∧
+                                  after.frame =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+                                          69 w).world.frame)
+              (fun h =>
+                id
+                  (id
+                    (Eq.mpr
+                      (id
+                        (congrArg
+                          (fun _a =>
+                            (match _a with
+                              | Except.error err => (Except.error err, e.world)
+                              | Except.ok PUnit.unit =>
+                                PV_RDEA_NameFill.fill step shape (List.map PV_RDEAC_NibbleModel.byte ↑digest)
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).buffer
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).world) =
+                              (Except.error err,
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                    w).world))
+                          h))
+                      (Eq.refl
+                        (match Except.error err with
+                        | Except.error err => (Except.error err, e.world)
+                        | Except.ok PUnit.unit =>
+                          PV_RDEA_NameFill.fill step shape (List.map PV_RDEAC_NibbleModel.byte ↑digest)
+                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                w).buffer
+                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                w).world)))))
+              (Eq.symm h) (Eq.refl e.returned))
+          (fun unit h =>
+            Eq.ndrec (motive := fun x =>
+              e.returned = x →
+                match x with
+                | Except.error err =>
+                  PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                    (Except.error err,
+                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69 w).world)
+                | Except.ok PUnit.unit =>
+                  ∃ out after,
+                    PV_RDEA_ReservationExecution.run step shape address (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                        (Except.ok out, after) ∧
+                      PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                          PV_RDEAC_AfterCapacity.joinTail ops self (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                        PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                          out.capacity = 69 ∧
+                            out.address =
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                      w).buffer.address ∧
+                              after.allocator =
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address 69
+                                        w).world.allocator ∧
+                                after.history =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+                                          69 w).world.history ∧
+                                  after.frame =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape address
+                                          69 w).world.frame)
+              (fun h =>
+                have cap := PV_RDEA_CloneExecution.capacity_success step shape address 69 w h;
+                have repr := empty;
+                have bound := PV_RDEAC_ConstructorSimulation.simulation._proof_2 step shape address w;
+                let ⟨out, h✝⟩ :=
+                  PV_RDEAC_AfterCapacity.simulation ops step shape self digest "" e.buffer e.world repr
+                    (Eq.mpr (id (congrArg (fun _a => _a.length + 69 ≤ e.buffer.capacity) empty))
+                      (Eq.mpr (id (congrArg (fun _a => [].length + 69 ≤ _a) cap))
+                        (id
+                          (Decidable.byContradiction fun a =>
+                            PV_RDEAC_ConstructorSimulation.simulation._proof_3 step shape address digest w a))))
+                    (Decidable.byContradiction fun a =>
+                      PV_RDEAC_ConstructorSimulation.simulation._proof_4 step shape address digest w cap bound a)
+                let ⟨after, h✝¹⟩ := h✝
+                let ⟨run, right✝⟩ := h✝¹
+                let ⟨source, right✝¹⟩ := right✝
+                let ⟨rep, right✝²⟩ := right✝¹
+                let ⟨haddr, right✝³⟩ := right✝²
+                let ⟨hcap, right✝⁴⟩ := right✝³
+                let ⟨halloc, right✝⁵⟩ := right✝⁴
+                let ⟨hhist, hframe⟩ := right✝⁵
+                Exists.intro out
+                  (Exists.intro after
+                    ⟨id
+                        (id
+                          (Eq.mpr
+                            (id
+                              (congrArg
+                                (fun _a =>
+                                  (match _a with
+                                    | Except.error err => (Except.error err, e.world)
+                                    | Except.ok PUnit.unit =>
+                                      PV_RDEA_NameFill.fill step shape (List.map PV_RDEAC_NibbleModel.byte ↑digest)
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            address 69 w).buffer
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            address 69 w).world) =
+                                    (Except.ok out, after))
+                                h))
+                            run)),
+                      ⟨Eq.mp
+                          (congrArg (Eq (PV_RDEA_ActualEndpointConsumer.afterCapacity self digest ""))
+                            (congrArg (PV_RDEAC_AfterCapacity.joinTail ops self) String.empty_append))
+                          source,
+                        ⟨Eq.mp (congrFun' (congrArg PV_RDEAC_AppendSimulation.Represents String.empty_append) out) rep,
+                          ⟨Decidable.byContradiction fun a =>
+                              PV_RDEAC_ConstructorSimulation.simulation._proof_5 step shape address digest w cap out
+                                hcap a,
+                            ⟨haddr, ⟨halloc, ⟨hhist, hframe⟩⟩⟩⟩⟩⟩⟩))
+              (Eq.symm h) (Eq.refl e.returned))
+          (Eq.refl e.returned))⟩)
+theorem R1Z.PV_RDEAC_EndpointInstance.complete : ∀ {S F R : Type} (base : ExternalTypes) (ops : ExternalFuns)
+  (self : PV_RDEA_ActualReservationTail.Store) (digest : Std.Array U8 32#usize) (step : Request → S → Option ℕ × S)
+  (free : ℕ → ℕ → ℕ → S → S) (shape : Shape),
+  shape.width = 1 →
+    ∀ (nameAddress joinAddress : ℕ) (w : World S F) (oom : core.alloc.layout.Layout → World S F → R)
+      (panic : World S F → R) (next : List U8 → World S F → R),
+      have e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w;
+      have nameRun :=
+        PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest) w;
+      (match e.returned with
+        | Except.error (Error.allocError layout) =>
+          PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next =
+            oom layout e.world
+        | Except.error Error.capacityOverflow =>
+          PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next =
+            panic e.world
+        | Except.ok PUnit.unit =>
+          ∃ nameBuffer after,
+            nameRun = (Except.ok nameBuffer, after) ∧
+              nameBuffer.values = PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                nameBuffer.capacity = 69 ∧
+                  after.frame = e.world.frame ∧
+                    after.history = e.world.history ∧
+                      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                          panic next =
+                        PV_RDEAC_JoinHandlers.consume free nameBuffer
+                          (PV_RDEAC_FullJoin.join step shape joinAddress false
+                            (PV_RDEAC_JoinValue.needsSeparator
+                              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                            nameBuffer.values after)
+                          oom panic next) ∧
+        PV_RDEA_CapacityEndpoint.sizes nameRun.2.history = PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] :=
+fun {S F R} base ops self digest step free shape width nameAddress joinAddress w oom panic next =>
+  let e := PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w;
+  let ⟨history, stage⟩ :=
+    PV_RDEAC_ConstructorSimulation.simulation (selectedJoin base ops) step shape width nameAddress self digest w
+  id
+    (fun stage =>
+      id
+        ⟨id
+            (Except.casesOn (motive := fun t =>
+              e.returned = t →
+                match e.returned with
+                | Except.error (Error.allocError layout) =>
+                  PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                      panic next =
+                    oom layout
+                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).world
+                | Except.error Error.capacityOverflow =>
+                  PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                      panic next =
+                    panic
+                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).world
+                | Except.ok PUnit.unit =>
+                  ∃ nameBuffer after,
+                    PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest)
+                          w =
+                        (Except.ok nameBuffer, after) ∧
+                      nameBuffer.values =
+                          PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                        nameBuffer.capacity = 69 ∧
+                          after.frame =
+                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                                    w).world.frame ∧
+                            after.history =
+                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                      69 w).world.history ∧
+                              PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress
+                                  joinAddress w oom panic next =
+                                PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                  (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                    (PV_RDEAC_JoinValue.needsSeparator
+                                      (PV_CBL_StringBytesAdapter.encodeList
+                                        (PV_RDEAC_PublishedTail.directory base self)))
+                                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                                    nameBuffer.values after)
+                                  oom panic next)
+              e.returned
+              (fun err h =>
+                Eq.ndrec (motive := fun x =>
+                  e.returned = x →
+                    match x with
+                    | Except.error (Error.allocError layout) =>
+                      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                          panic next =
+                        oom layout
+                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                              w).world
+                    | Except.error Error.capacityOverflow =>
+                      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                          panic next =
+                        panic
+                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                              w).world
+                    | Except.ok PUnit.unit =>
+                      ∃ nameBuffer after,
+                        PV_RDEA_ReservationExecution.run step shape nameAddress
+                              (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                            (Except.ok nameBuffer, after) ∧
+                          nameBuffer.values =
+                              PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                            nameBuffer.capacity = 69 ∧
+                              after.frame =
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                        69 w).world.frame ∧
+                                after.history =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world.history ∧
+                                  PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress
+                                      joinAddress w oom panic next =
+                                    PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        nameBuffer.values after)
+                                      oom panic next)
+                  (fun h =>
+                    id
+                      (Eq.mpr
+                        (id
+                          (congrArg
+                            (fun _a =>
+                              match Except.error err with
+                              | Except.error (Error.allocError layout) =>
+                                (have nameRun := _a;
+                                  match nameRun.1 with
+                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                  | Except.ok owned =>
+                                    PV_RDEAC_JoinHandlers.consume free owned
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        owned.values nameRun.2)
+                                      oom panic next) =
+                                  oom layout
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                        nameAddress 69 w).world
+                              | Except.error Error.capacityOverflow =>
+                                (have nameRun := _a;
+                                  match nameRun.1 with
+                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                  | Except.ok owned =>
+                                    PV_RDEAC_JoinHandlers.consume free owned
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        owned.values nameRun.2)
+                                      oom panic next) =
+                                  panic
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                        nameAddress 69 w).world
+                              | Except.ok PUnit.unit =>
+                                ∃ nameBuffer after,
+                                  _a = (Except.ok nameBuffer, after) ∧
+                                    nameBuffer.values =
+                                        PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                      nameBuffer.capacity = 69 ∧
+                                        after.frame =
+                                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                  nameAddress 69 w).world.frame ∧
+                                          after.history =
+                                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                    nameAddress 69 w).world.history ∧
+                                            (have nameRun := _a;
+                                              match nameRun.1 with
+                                              | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                              | Except.error Error.capacityOverflow => panic nameRun.2
+                                              | Except.ok owned =>
+                                                PV_RDEAC_JoinHandlers.consume free owned
+                                                  (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                    (PV_RDEAC_JoinValue.needsSeparator
+                                                      (PV_CBL_StringBytesAdapter.encodeList
+                                                        (PV_RDEAC_PublishedTail.directory base self)))
+                                                    (PV_CBL_StringBytesAdapter.encodeList
+                                                      (PV_RDEAC_PublishedTail.directory base self))
+                                                    owned.values nameRun.2)
+                                                  oom panic next) =
+                                              PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                                (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                  (PV_RDEAC_JoinValue.needsSeparator
+                                                    (PV_CBL_StringBytesAdapter.encodeList
+                                                      (PV_RDEAC_PublishedTail.directory base self)))
+                                                  (PV_CBL_StringBytesAdapter.encodeList
+                                                    (PV_RDEAC_PublishedTail.directory base self))
+                                                  nameBuffer.values after)
+                                                oom panic next)
+                            (Eq.mp
+                              (congrArg
+                                (fun x =>
+                                  match x with
+                                  | Except.error err =>
+                                    PV_RDEA_ReservationExecution.run step shape nameAddress
+                                        (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                      (Except.error err,
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            nameAddress 69 w).world)
+                                  | Except.ok PUnit.unit =>
+                                    ∃ out after,
+                                      PV_RDEA_ReservationExecution.run step shape nameAddress
+                                            (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                          (Except.ok out, after) ∧
+                                        PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                                            PV_RDEAC_AfterCapacity.joinTail (selectedJoin base ops) self
+                                              (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                          PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest)
+                                              out ∧
+                                            out.capacity = 69 ∧
+                                              out.address =
+                                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                        shape nameAddress 69 w).buffer.address ∧
+                                                after.allocator =
+                                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                          shape nameAddress 69 w).world.allocator ∧
+                                                  after.history =
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                            9223372036854775807 shape nameAddress 69 w).world.history ∧
+                                                    after.frame =
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                            9223372036854775807 shape nameAddress 69 w).world.frame)
+                                h)
+                              stage)))
+                        (PV_RDB1_V183_ReserveWorld.Error.casesOn (motive := fun t =>
+                          err = t →
+                            match Except.error err with
+                            | Except.error (Error.allocError layout) =>
+                              (have nameRun :=
+                                  (Except.error err,
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                        nameAddress 69 w).world);
+                                match nameRun.1 with
+                                | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                | Except.error Error.capacityOverflow => panic nameRun.2
+                                | Except.ok owned =>
+                                  PV_RDEAC_JoinHandlers.consume free owned
+                                    (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                      (PV_RDEAC_JoinValue.needsSeparator
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self)))
+                                      (PV_CBL_StringBytesAdapter.encodeList
+                                        (PV_RDEAC_PublishedTail.directory base self))
+                                      owned.values nameRun.2)
+                                    oom panic next) =
+                                oom layout
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                      69 w).world
+                            | Except.error Error.capacityOverflow =>
+                              (have nameRun :=
+                                  (Except.error err,
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                        nameAddress 69 w).world);
+                                match nameRun.1 with
+                                | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                | Except.error Error.capacityOverflow => panic nameRun.2
+                                | Except.ok owned =>
+                                  PV_RDEAC_JoinHandlers.consume free owned
+                                    (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                      (PV_RDEAC_JoinValue.needsSeparator
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self)))
+                                      (PV_CBL_StringBytesAdapter.encodeList
+                                        (PV_RDEAC_PublishedTail.directory base self))
+                                      owned.values nameRun.2)
+                                    oom panic next) =
+                                panic
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                      69 w).world
+                            | Except.ok PUnit.unit =>
+                              ∃ nameBuffer after,
+                                (Except.error err,
+                                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world) =
+                                    (Except.ok nameBuffer, after) ∧
+                                  nameBuffer.values =
+                                      PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                    nameBuffer.capacity = 69 ∧
+                                      after.frame =
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                nameAddress 69 w).world.frame ∧
+                                        after.history =
+                                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                  nameAddress 69 w).world.history ∧
+                                          (have nameRun :=
+                                              (Except.error err,
+                                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                    shape nameAddress 69 w).world);
+                                            match nameRun.1 with
+                                            | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                            | Except.error Error.capacityOverflow => panic nameRun.2
+                                            | Except.ok owned =>
+                                              PV_RDEAC_JoinHandlers.consume free owned
+                                                (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                  (PV_RDEAC_JoinValue.needsSeparator
+                                                    (PV_CBL_StringBytesAdapter.encodeList
+                                                      (PV_RDEAC_PublishedTail.directory base self)))
+                                                  (PV_CBL_StringBytesAdapter.encodeList
+                                                    (PV_RDEAC_PublishedTail.directory base self))
+                                                  owned.values nameRun.2)
+                                                oom panic next) =
+                                            PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                              (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                (PV_RDEAC_JoinValue.needsSeparator
+                                                  (PV_CBL_StringBytesAdapter.encodeList
+                                                    (PV_RDEAC_PublishedTail.directory base self)))
+                                                (PV_CBL_StringBytesAdapter.encodeList
+                                                  (PV_RDEAC_PublishedTail.directory base self))
+                                                nameBuffer.values after)
+                                              oom panic next)
+                          err
+                          (fun h_1 =>
+                            Eq.ndrec (motive := fun err =>
+                              e.returned = Except.error err →
+                                PV_RDEA_ReservationExecution.run step shape nameAddress
+                                      (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                    (Except.error err,
+                                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world) →
+                                  match Except.error err with
+                                  | Except.error (Error.allocError layout) =>
+                                    (have nameRun :=
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world);
+                                      match nameRun.1 with
+                                      | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                      | Except.error Error.capacityOverflow => panic nameRun.2
+                                      | Except.ok owned =>
+                                        PV_RDEAC_JoinHandlers.consume free owned
+                                          (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                            (PV_RDEAC_JoinValue.needsSeparator
+                                              (PV_CBL_StringBytesAdapter.encodeList
+                                                (PV_RDEAC_PublishedTail.directory base self)))
+                                            (PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_PublishedTail.directory base self))
+                                            owned.values nameRun.2)
+                                          oom panic next) =
+                                      oom layout
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            nameAddress 69 w).world
+                                  | Except.error Error.capacityOverflow =>
+                                    (have nameRun :=
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world);
+                                      match nameRun.1 with
+                                      | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                      | Except.error Error.capacityOverflow => panic nameRun.2
+                                      | Except.ok owned =>
+                                        PV_RDEAC_JoinHandlers.consume free owned
+                                          (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                            (PV_RDEAC_JoinValue.needsSeparator
+                                              (PV_CBL_StringBytesAdapter.encodeList
+                                                (PV_RDEAC_PublishedTail.directory base self)))
+                                            (PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_PublishedTail.directory base self))
+                                            owned.values nameRun.2)
+                                          oom panic next) =
+                                      panic
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            nameAddress 69 w).world
+                                  | Except.ok PUnit.unit =>
+                                    ∃ nameBuffer after,
+                                      (Except.error err,
+                                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                nameAddress 69 w).world) =
+                                          (Except.ok nameBuffer, after) ∧
+                                        nameBuffer.values =
+                                            PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                          nameBuffer.capacity = 69 ∧
+                                            after.frame =
+                                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                      shape nameAddress 69 w).world.frame ∧
+                                              after.history =
+                                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                        shape nameAddress 69 w).world.history ∧
+                                                (have nameRun :=
+                                                    (Except.error err,
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                          9223372036854775807 shape nameAddress 69 w).world);
+                                                  match nameRun.1 with
+                                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                                  | Except.ok owned =>
+                                                    PV_RDEAC_JoinHandlers.consume free owned
+                                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                        (PV_RDEAC_JoinValue.needsSeparator
+                                                          (PV_CBL_StringBytesAdapter.encodeList
+                                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                                        (PV_CBL_StringBytesAdapter.encodeList
+                                                          (PV_RDEAC_PublishedTail.directory base self))
+                                                        owned.values nameRun.2)
+                                                      oom panic next) =
+                                                  PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                                    (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                      (PV_RDEAC_JoinValue.needsSeparator
+                                                        (PV_CBL_StringBytesAdapter.encodeList
+                                                          (PV_RDEAC_PublishedTail.directory base self)))
+                                                      (PV_CBL_StringBytesAdapter.encodeList
+                                                        (PV_RDEAC_PublishedTail.directory base self))
+                                                      nameBuffer.values after)
+                                                    oom panic next)
+                              (fun h stage =>
+                                Eq.refl
+                                  (have nameRun :=
+                                    (Except.error Error.capacityOverflow,
+                                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world);
+                                  match nameRun.1 with
+                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                  | Except.ok owned =>
+                                    PV_RDEAC_JoinHandlers.consume free owned
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        owned.values nameRun.2)
+                                      oom panic next))
+                              (Eq.symm h_1) h
+                              (Eq.mp
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Except.error err =>
+                                      PV_RDEA_ReservationExecution.run step shape nameAddress
+                                          (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world)
+                                    | Except.ok PUnit.unit =>
+                                      ∃ out after,
+                                        PV_RDEA_ReservationExecution.run step shape nameAddress
+                                              (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                            (Except.ok out, after) ∧
+                                          PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                                              PV_RDEAC_AfterCapacity.joinTail (selectedJoin base ops) self
+                                                (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                            PV_RDEAC_AppendSimulation.Represents
+                                                (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                                              out.capacity = 69 ∧
+                                                out.address =
+                                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                          shape nameAddress 69 w).buffer.address ∧
+                                                  after.allocator =
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                            9223372036854775807 shape nameAddress 69
+                                                            w).world.allocator ∧
+                                                    after.history =
+                                                        (PV_RDB1_V181.deployed step 18446744073709551615
+                                                              9223372036854775807 shape nameAddress 69
+                                                              w).world.history ∧
+                                                      after.frame =
+                                                        (PV_RDB1_V181.deployed step 18446744073709551615
+                                                              9223372036854775807 shape nameAddress 69 w).world.frame)
+                                  h)
+                                stage))
+                          (fun layout h_1 =>
+                            Eq.ndrec (motive := fun err =>
+                              e.returned = Except.error err →
+                                PV_RDEA_ReservationExecution.run step shape nameAddress
+                                      (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                    (Except.error err,
+                                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world) →
+                                  match Except.error err with
+                                  | Except.error (Error.allocError layout) =>
+                                    (have nameRun :=
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world);
+                                      match nameRun.1 with
+                                      | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                      | Except.error Error.capacityOverflow => panic nameRun.2
+                                      | Except.ok owned =>
+                                        PV_RDEAC_JoinHandlers.consume free owned
+                                          (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                            (PV_RDEAC_JoinValue.needsSeparator
+                                              (PV_CBL_StringBytesAdapter.encodeList
+                                                (PV_RDEAC_PublishedTail.directory base self)))
+                                            (PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_PublishedTail.directory base self))
+                                            owned.values nameRun.2)
+                                          oom panic next) =
+                                      oom layout
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            nameAddress 69 w).world
+                                  | Except.error Error.capacityOverflow =>
+                                    (have nameRun :=
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world);
+                                      match nameRun.1 with
+                                      | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                      | Except.error Error.capacityOverflow => panic nameRun.2
+                                      | Except.ok owned =>
+                                        PV_RDEAC_JoinHandlers.consume free owned
+                                          (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                            (PV_RDEAC_JoinValue.needsSeparator
+                                              (PV_CBL_StringBytesAdapter.encodeList
+                                                (PV_RDEAC_PublishedTail.directory base self)))
+                                            (PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_PublishedTail.directory base self))
+                                            owned.values nameRun.2)
+                                          oom panic next) =
+                                      panic
+                                        (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                            nameAddress 69 w).world
+                                  | Except.ok PUnit.unit =>
+                                    ∃ nameBuffer after,
+                                      (Except.error err,
+                                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                nameAddress 69 w).world) =
+                                          (Except.ok nameBuffer, after) ∧
+                                        nameBuffer.values =
+                                            PV_CBL_StringBytesAdapter.encodeList
+                                              (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                          nameBuffer.capacity = 69 ∧
+                                            after.frame =
+                                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                      shape nameAddress 69 w).world.frame ∧
+                                              after.history =
+                                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                        shape nameAddress 69 w).world.history ∧
+                                                (have nameRun :=
+                                                    (Except.error err,
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                          9223372036854775807 shape nameAddress 69 w).world);
+                                                  match nameRun.1 with
+                                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                                  | Except.ok owned =>
+                                                    PV_RDEAC_JoinHandlers.consume free owned
+                                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                        (PV_RDEAC_JoinValue.needsSeparator
+                                                          (PV_CBL_StringBytesAdapter.encodeList
+                                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                                        (PV_CBL_StringBytesAdapter.encodeList
+                                                          (PV_RDEAC_PublishedTail.directory base self))
+                                                        owned.values nameRun.2)
+                                                      oom panic next) =
+                                                  PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                                    (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                      (PV_RDEAC_JoinValue.needsSeparator
+                                                        (PV_CBL_StringBytesAdapter.encodeList
+                                                          (PV_RDEAC_PublishedTail.directory base self)))
+                                                      (PV_CBL_StringBytesAdapter.encodeList
+                                                        (PV_RDEAC_PublishedTail.directory base self))
+                                                      nameBuffer.values after)
+                                                    oom panic next)
+                              (fun h stage =>
+                                Eq.refl
+                                  (have nameRun :=
+                                    (Except.error (Error.allocError layout),
+                                      (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world);
+                                  match nameRun.1 with
+                                  | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                  | Except.error Error.capacityOverflow => panic nameRun.2
+                                  | Except.ok owned =>
+                                    PV_RDEAC_JoinHandlers.consume free owned
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        owned.values nameRun.2)
+                                      oom panic next))
+                              (Eq.symm h_1) h
+                              (Eq.mp
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Except.error err =>
+                                      PV_RDEA_ReservationExecution.run step shape nameAddress
+                                          (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                        (Except.error err,
+                                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                              nameAddress 69 w).world)
+                                    | Except.ok PUnit.unit =>
+                                      ∃ out after,
+                                        PV_RDEA_ReservationExecution.run step shape nameAddress
+                                              (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                            (Except.ok out, after) ∧
+                                          PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                                              PV_RDEAC_AfterCapacity.joinTail (selectedJoin base ops) self
+                                                (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                            PV_RDEAC_AppendSimulation.Represents
+                                                (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                                              out.capacity = 69 ∧
+                                                out.address =
+                                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                          shape nameAddress 69 w).buffer.address ∧
+                                                  after.allocator =
+                                                      (PV_RDB1_V181.deployed step 18446744073709551615
+                                                            9223372036854775807 shape nameAddress 69
+                                                            w).world.allocator ∧
+                                                    after.history =
+                                                        (PV_RDB1_V181.deployed step 18446744073709551615
+                                                              9223372036854775807 shape nameAddress 69
+                                                              w).world.history ∧
+                                                      after.frame =
+                                                        (PV_RDB1_V181.deployed step 18446744073709551615
+                                                              9223372036854775807 shape nameAddress 69 w).world.frame)
+                                  h)
+                                stage))
+                          (Eq.refl err))))
+                  (Eq.symm h) (Eq.refl e.returned))
+              (fun unit h =>
+                Eq.ndrec (motive := fun x =>
+                  e.returned = x →
+                    match x with
+                    | Except.error (Error.allocError layout) =>
+                      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                          panic next =
+                        oom layout
+                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                              w).world
+                    | Except.error Error.capacityOverflow =>
+                      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom
+                          panic next =
+                        panic
+                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                              w).world
+                    | Except.ok PUnit.unit =>
+                      ∃ nameBuffer after,
+                        PV_RDEA_ReservationExecution.run step shape nameAddress
+                              (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                            (Except.ok nameBuffer, after) ∧
+                          nameBuffer.values =
+                              PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                            nameBuffer.capacity = 69 ∧
+                              after.frame =
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                        69 w).world.frame ∧
+                                after.history =
+                                    (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                          nameAddress 69 w).world.history ∧
+                                  PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress
+                                      joinAddress w oom panic next =
+                                    PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                      (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                        (PV_RDEAC_JoinValue.needsSeparator
+                                          (PV_CBL_StringBytesAdapter.encodeList
+                                            (PV_RDEAC_PublishedTail.directory base self)))
+                                        (PV_CBL_StringBytesAdapter.encodeList
+                                          (PV_RDEAC_PublishedTail.directory base self))
+                                        nameBuffer.values after)
+                                      oom panic next)
+                  (fun h =>
+                    let ⟨nameBuffer, h✝⟩ :=
+                      Eq.mp
+                        (congrArg
+                          (fun x =>
+                            match x with
+                            | Except.error err =>
+                              PV_RDEA_ReservationExecution.run step shape nameAddress
+                                  (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                (Except.error err,
+                                  (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress
+                                      69 w).world)
+                            | Except.ok PUnit.unit =>
+                              ∃ out after,
+                                PV_RDEA_ReservationExecution.run step shape nameAddress
+                                      (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                                    (Except.ok out, after) ∧
+                                  PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                                      PV_RDEAC_AfterCapacity.joinTail (selectedJoin base ops) self
+                                        (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                                    PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                                      out.capacity = 69 ∧
+                                        out.address =
+                                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                  nameAddress 69 w).buffer.address ∧
+                                          after.allocator =
+                                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape
+                                                    nameAddress 69 w).world.allocator ∧
+                                            after.history =
+                                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                      shape nameAddress 69 w).world.history ∧
+                                              after.frame =
+                                                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807
+                                                      shape nameAddress 69 w).world.frame)
+                          h)
+                        stage
+                    let ⟨after, h✝¹⟩ := h✝
+                    let ⟨run, right✝⟩ := h✝¹
+                    let ⟨left✝, right✝¹⟩ := right✝
+                    let ⟨repr, right✝²⟩ := right✝¹
+                    let ⟨cap, right✝³⟩ := right✝²
+                    let ⟨left✝¹, right✝⁴⟩ := right✝³
+                    let ⟨left✝², right✝⁵⟩ := right✝⁴
+                    let ⟨hhist, hframe⟩ := right✝⁵
+                    Exists.intro nameBuffer
+                      (Exists.intro after
+                        ⟨run,
+                          ⟨repr,
+                            ⟨cap,
+                              ⟨hframe,
+                                ⟨hhist,
+                                  id
+                                    (Eq.mpr
+                                      (id
+                                        (congrArg
+                                          (fun _a =>
+                                            (have nameRun := _a;
+                                              match nameRun.1 with
+                                              | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                              | Except.error Error.capacityOverflow => panic nameRun.2
+                                              | Except.ok owned =>
+                                                PV_RDEAC_JoinHandlers.consume free owned
+                                                  (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                    (PV_RDEAC_JoinValue.needsSeparator
+                                                      (PV_CBL_StringBytesAdapter.encodeList
+                                                        (PV_RDEAC_PublishedTail.directory base self)))
+                                                    (PV_CBL_StringBytesAdapter.encodeList
+                                                      (PV_RDEAC_PublishedTail.directory base self))
+                                                    owned.values nameRun.2)
+                                                  oom panic next) =
+                                              PV_RDEAC_JoinHandlers.consume free nameBuffer
+                                                (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                                  (PV_RDEAC_JoinValue.needsSeparator
+                                                    (PV_CBL_StringBytesAdapter.encodeList
+                                                      (PV_RDEAC_PublishedTail.directory base self)))
+                                                  (PV_CBL_StringBytesAdapter.encodeList
+                                                    (PV_RDEAC_PublishedTail.directory base self))
+                                                  nameBuffer.values after)
+                                                oom panic next)
+                                          run))
+                                      (Eq.refl
+                                        (have nameRun := (Except.ok nameBuffer, after);
+                                        match nameRun.1 with
+                                        | Except.error (Error.allocError layout) => oom layout nameRun.2
+                                        | Except.error Error.capacityOverflow => panic nameRun.2
+                                        | Except.ok owned =>
+                                          PV_RDEAC_JoinHandlers.consume free owned
+                                            (PV_RDEAC_FullJoin.join step shape joinAddress false
+                                              (PV_RDEAC_JoinValue.needsSeparator
+                                                (PV_CBL_StringBytesAdapter.encodeList
+                                                  (PV_RDEAC_PublishedTail.directory base self)))
+                                              (PV_CBL_StringBytesAdapter.encodeList
+                                                (PV_RDEAC_PublishedTail.directory base self))
+                                              owned.values nameRun.2)
+                                            oom panic next)))⟩⟩⟩⟩⟩))
+                  (Eq.symm h) (Eq.refl e.returned))
+              (Eq.refl e.returned)),
+          history⟩)
+    (Eq.mp
+      (congrArg
+        (fun _a =>
+          match
+            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).returned with
+          | Except.error err =>
+            PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+              (Except.error err,
+                (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).world)
+          | Except.ok PUnit.unit =>
+            ∃ out after,
+              PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+                  (Except.ok out, after) ∧
+                PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                    PV_RDEAC_AfterCapacity.joinTail (selectedJoin base ops) self
+                      (PV_RDEAC_NameText.basenameText ↑digest) ∧
+                  PV_RDEAC_AppendSimulation.Represents (PV_RDEAC_NameText.basenameText ↑digest) out ∧
+                    out.capacity = 69 ∧
+                      out.address =
+                          (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                                w).buffer.address ∧
+                        after.allocator =
+                            (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                                  w).world.allocator ∧
+                          after.history =
+                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                                    w).world.history ∧
+                            after.frame =
+                              (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69
+                                    w).world.frame)
+        (PV_RDEAC_PublishedTail.append_idempotent base ops))
+      stage)
+theorem R1Z.PV_RDEAC_EndpointInstance.owned : ∀ {S F R : Type} (base : ExternalTypes) (ops : ExternalFuns)
+  (self : PV_RDEA_ActualReservationTail.Store) (digest : Std.Array U8 32#usize) (step : Request → S → Option ℕ × S)
+  (free : ℕ → ℕ → ℕ → S → S) (nameBuffer : Buffer U8) (shape : Shape),
+  shape.width = 1 →
+    ∀ (joinAddress : ℕ) (w : World S F),
+      9223372036854775808 ≤ Usize.max →
+        nameBuffer.values = PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) →
+          ∀ (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R) (next : List U8 → World S F → R),
+            have e :=
+              PV_RDEAC_FullJoin.join step shape joinAddress false
+                (PV_RDEAC_JoinValue.needsSeparator
+                  (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)) nameBuffer.values w;
+            (PV_RDEAC_JoinHandlers.consume free nameBuffer e oom panic next =
+                match e.returned with
+                | Except.error (Error.allocError layout) => oom layout e.world
+                | Except.error Error.capacityOverflow =>
+                  panic
+                    (PV_RDEAC_OwnedCleanup.release free nameBuffer
+                      (PV_RDEAC_OwnedCleanup.release free e.buffer e.world))
+                | Except.ok PUnit.unit =>
+                  next
+                    (PV_CBL_StringBytesAdapter.encodeList
+                      (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                        (PV_RDEAC_NameText.basenameText ↑digest)))
+                    (PV_RDEAC_OwnedCleanup.release free nameBuffer e.world)) ∧
+              (e.returned = Except.ok () →
+                  PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                    Result.ok
+                      (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                        (PV_RDEAC_NameText.basenameText ↑digest))) ∧
+                PV_RDEA_PrefixWords.Prefix
+                  (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free nameBuffer e).history)
+                  (PV_RDEA_CapacityEndpoint.sizes w.history ++
+                    PV_RDEA_PathSchedule.joinWord
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)).length
+                      nameBuffer.values.length false
+                      (PV_RDEAC_JoinValue.needsSeparator
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))) :=
+fun {S F R} base ops self digest step free nameBuffer shape width joinAddress w abi repr oom panic next =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          let e :=
+            PV_RDEAC_FullJoin.join step shape joinAddress false
+              (PV_RDEAC_JoinValue.needsSeparator
+                (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)) _a w;
+          (PV_RDEAC_JoinHandlers.consume free nameBuffer e oom panic next =
+              match e.returned with
+              | Except.error (Error.allocError layout) => oom layout e.world
+              | Except.error Error.capacityOverflow =>
+                panic
+                  (PV_RDEAC_OwnedCleanup.release free nameBuffer (PV_RDEAC_OwnedCleanup.release free e.buffer e.world))
+              | Except.ok PUnit.unit =>
+                next
+                  (PV_CBL_StringBytesAdapter.encodeList
+                    (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                      (PV_RDEAC_NameText.basenameText ↑digest)))
+                  (PV_RDEAC_OwnedCleanup.release free nameBuffer e.world)) ∧
+            (e.returned = Except.ok () →
+                PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                  Result.ok
+                    (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                      (PV_RDEAC_NameText.basenameText ↑digest))) ∧
+              PV_RDEA_PrefixWords.Prefix
+                (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free nameBuffer e).history)
+                (PV_RDEA_CapacityEndpoint.sizes w.history ++
+                  PV_RDEA_PathSchedule.joinWord
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)).length _a.length
+                    false
+                    (PV_RDEAC_JoinValue.needsSeparator
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))))
+        repr))
+    (PV_RDEAC_JoinSimulation.consumed base ops self digest step free nameBuffer shape width joinAddress w abi oom panic
+      next)
+theorem R1Z.PV_RDEAC_JoinSimulation.consumed : ∀ {S F R : Type} (base : ExternalTypes) (ops : ExternalFuns)
+  (self : PV_RDEA_ActualReservationTail.Store) (digest : Std.Array U8 32#usize) (step : Request → S → Option ℕ × S)
+  (free : ℕ → ℕ → ℕ → S → S) (owned : Buffer U8) (shape : Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : World S F),
+      9223372036854775808 ≤ Usize.max →
+        ∀ (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R) (next : List U8 → World S F → R),
+          have e :=
+            PV_RDEAC_FullJoin.join step shape address false
+              (PV_RDEAC_JoinValue.needsSeparator
+                (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w;
+          (PV_RDEAC_JoinHandlers.consume free owned e oom panic next =
+              match e.returned with
+              | Except.error (Error.allocError layout) => oom layout e.world
+              | Except.error Error.capacityOverflow =>
+                panic (PV_RDEAC_OwnedCleanup.release free owned (PV_RDEAC_OwnedCleanup.release free e.buffer e.world))
+              | Except.ok PUnit.unit =>
+                next
+                  (PV_CBL_StringBytesAdapter.encodeList
+                    (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                      (PV_RDEAC_NameText.basenameText ↑digest)))
+                  (PV_RDEAC_OwnedCleanup.release free owned e.world)) ∧
+            (e.returned = Except.ok () →
+                PV_RDEA_ActualEndpointConsumer.afterCapacity self digest "" =
+                  Result.ok
+                    (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                      (PV_RDEAC_NameText.basenameText ↑digest))) ∧
+              PV_RDEA_PrefixWords.Prefix
+                (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free owned e).history)
+                (PV_RDEA_CapacityEndpoint.sizes w.history ++
+                  PV_RDEA_PathSchedule.joinWord
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)).length
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)).length false
+                    (PV_RDEAC_JoinValue.needsSeparator
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))) :=
+fun {S F R} base ops self digest step free owned shape width address w abi oom panic next =>
+  id
+    (let ⟨law, hprefix⟩ :=
+      PV_RDEAC_JoinHandlers.consumed step free owned shape width address false
+        (PV_RDEAC_JoinValue.needsSeparator
+          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w oom panic next
+    ⟨Eq.mp
+        (congrArg
+          (fun _a =>
+            PV_RDEAC_JoinHandlers.consume free owned
+                (PV_RDEAC_FullJoin.join step shape address false
+                  (PV_RDEAC_JoinValue.needsSeparator
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                  (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                  (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w)
+                oom panic next =
+              match
+                (PV_RDEAC_FullJoin.join step shape address false
+                    (PV_RDEAC_JoinValue.needsSeparator
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).returned with
+              | Except.error (Error.allocError layout) =>
+                oom layout
+                  (PV_RDEAC_FullJoin.join step shape address false
+                      (PV_RDEAC_JoinValue.needsSeparator
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world
+              | Except.error Error.capacityOverflow =>
+                panic
+                  (PV_RDEAC_OwnedCleanup.release free owned
+                    (PV_RDEAC_OwnedCleanup.release free
+                      (PV_RDEAC_FullJoin.join step shape address false
+                          (PV_RDEAC_JoinValue.needsSeparator
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).buffer
+                      (PV_RDEAC_FullJoin.join step shape address false
+                          (PV_RDEAC_JoinValue.needsSeparator
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world))
+              | Except.ok PUnit.unit =>
+                next _a
+                  (PV_RDEAC_OwnedCleanup.release free owned
+                    (PV_RDEAC_FullJoin.join step shape address false
+                        (PV_RDEAC_JoinValue.needsSeparator
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world))
+          (Eq.symm
+            (PV_RDEAC_JoinString.joined_bytes (PV_RDEAC_PublishedTail.directory base self)
+              (PV_RDEAC_NameText.basenameText ↑digest))))
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              PV_RDEAC_JoinHandlers.consume free owned
+                  (PV_RDEAC_FullJoin.join step shape address false
+                    (PV_RDEAC_JoinValue.needsSeparator
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                    (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w)
+                  oom panic next =
+                match
+                  (PV_RDEAC_FullJoin.join step shape address false
+                      (PV_RDEAC_JoinValue.needsSeparator
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                      (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).returned with
+                | Except.error (Error.allocError layout) =>
+                  oom layout
+                    (PV_RDEAC_FullJoin.join step shape address false
+                        (PV_RDEAC_JoinValue.needsSeparator
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                        (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world
+                | Except.error Error.capacityOverflow =>
+                  panic
+                    (PV_RDEAC_OwnedCleanup.release free owned
+                      (PV_RDEAC_OwnedCleanup.release free
+                        (PV_RDEAC_FullJoin.join step shape address false
+                            (PV_RDEAC_JoinValue.needsSeparator
+                              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).buffer
+                        (PV_RDEAC_FullJoin.join step shape address false
+                            (PV_RDEAC_JoinValue.needsSeparator
+                              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world))
+                | Except.ok PUnit.unit =>
+                  next _a
+                    (PV_RDEAC_OwnedCleanup.release free owned
+                      (PV_RDEAC_FullJoin.join step shape address false
+                          (PV_RDEAC_JoinValue.needsSeparator
+                            (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                          (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).world))
+            (PV_RDEAC_ReturningBound.relative_value
+              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+              (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest))))
+          law),
+      ⟨fun h => (PV_RDEAC_JoinSimulation.returning base ops self digest step shape width address w abi h).left,
+        hprefix⟩⟩)
+theorem R1Z.PV_RDEAC_SourceTail.tail : ∀ (base : ExternalTypes) (ops : ExternalFuns)
+  (self : PV_RDEA_ActualReservationTail.Store) (digest : Std.Array U8 32#usize) {S F : Type}
+  (step : Request → S → Option ℕ × S) (shape : Shape),
+  shape.width = 1 →
+    ∀ (address : ℕ) (w : World S F),
+      System.Platform.numBits = 64 →
+        (PV_RDEAC_FullJoin.join step shape address false
+                (PV_RDEAC_JoinValue.needsSeparator
+                  (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self)))
+                (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_PublishedTail.directory base self))
+                (PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest)) w).returned =
+            Except.ok () →
+          PV_RDEA_ActualReservationTail.tail self digest =
+            Result.ok
+              (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                (PV_RDEAC_NameText.basenameText ↑digest)) :=
+fun base ops self digest {S F} step shape width address w target success =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            Result.ok
+              (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                (PV_RDEAC_NameText.basenameText ↑digest)))
+        (PV_RDEA_ActualEndpointConsumer.capacity_consumer self digest)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            (do
+                let s ← _a
+                PV_RDEA_ActualEndpointConsumer.afterCapacity self digest s) =
+              Result.ok
+                (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                  (PV_RDEAC_NameText.basenameText ↑digest)))
+          (PV_RDEAC_SourceTail.constructor_callback base ops)))
+      (Eq.mpr
+        (id
+          (congrFun' (congrArg Eq (bind_tc_ok "" (PV_RDEA_ActualEndpointConsumer.afterCapacity self digest)))
+            (Result.ok
+              (PV_RDEAC_JoinString.joinedText (PV_RDEAC_PublishedTail.directory base self)
+                (PV_RDEAC_NameText.basenameText ↑digest)))))
+        (PV_RDEAC_JoinSimulation.returning base ops self digest step shape width address w
+            (PV_RDEAC_ABI.word_room target) success).left))
+theorem R1Z.PV_RDEAC_SourceTail.source_factor : ∀ (base : ExternalTypes) (ops : ExternalFuns)
+  (self : PV_RDEA_ActualReservationTail.Store) (nonce : Std.Array U8 32#usize),
+  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path self nonce = do
+    let digest ← PV_RDEA_ActualReservationTail.prelude self nonce
+    PV_RDEA_ActualReservationTail.tail self digest :=
+fun base ops self nonce => PV_RDEA_ActualReservationTail.source_factor self nonce
+theorem R1Z.PV_RDEAC_EndpointRequests.prefix_word : ∀ {S F : Type} (step : Request → S → Option ℕ × S)
+  (free : ℕ → ℕ → ℕ → S → S) (shape : Shape),
+  shape.width = 1 →
+    ∀ (nameAddress joinAddress : ℕ) (digest : Std.Array U8 32#usize) (base : List U8) (w : World S F)
+      (owned : Buffer U8) (after : World S F),
+      PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+          (Except.ok owned, after) →
+        owned.values = PV_CBL_StringBytesAdapter.encodeList (PV_RDEAC_NameText.basenameText ↑digest) →
+          have e :=
+            PV_RDEAC_FullJoin.join step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base) base
+              owned.values after;
+          PV_RDEA_PrefixWords.Prefix
+            (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free owned e).history)
+            (PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] ++
+              PV_RDEA_PathSchedule.joinWord base.length 69 false (PV_RDEAC_JoinValue.needsSeparator base)) :=
+fun {S F} step free shape width nameAddress joinAddress digest base w owned after run repr =>
+  id
+    (have len := Eq.mpr (id (congrArg (fun _a => _a = 32) (List.length_map PV_RDEAC_NibbleModel.byte))) digest.property;
+    have stage :=
+      PV_RDEA_ReservationExecution.requests step shape width nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest)
+        len w;
+    have nameLen :=
+      Eq.mpr (id (congrArg (fun _a => _a.length = 69) repr))
+        (Eq.mpr (id (congrArg (fun _a => _a = 69) (PV_RDEAC_NameText.name_length ↑digest)))
+          (have hl := digest.property;
+          Eq.mpr (id (congrArg (fun _a => 2 * _a + 5 = 69) hl)) (Eq.refl (2 * 32 + 5))));
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            PV_RDEA_PrefixWords.Prefix (PV_RDEA_CapacityEndpoint.sizes _a)
+              (PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] ++
+                PV_RDEA_PathSchedule.joinWord base.length 69 false (PV_RDEAC_JoinValue.needsSeparator base)))
+          (PV_RDEAC_JoinHandlers.frame_history free owned
+              (PV_RDEAC_FullJoin.join step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base) base
+                owned.values after)).right))
+      (have h :=
+        PV_RDEA_JoinRequests.join_requests_prefix step shape width joinAddress false
+          (PV_RDEAC_JoinValue.needsSeparator base) base owned.values after;
+      Eq.mp
+        (congrArg
+          (fun _a =>
+            PV_RDEA_PrefixWords.Prefix
+              (PV_RDEA_CapacityEndpoint.sizes
+                (PV_RDEAC_FullJoin.join step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base) base
+                      owned.values after).world.history)
+              (PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)] ++
+                PV_RDEA_PathSchedule.joinWord base.length _a false (PV_RDEAC_JoinValue.needsSeparator base)))
+          nameLen)
+        (Eq.mp
+          (congrArg
+            (fun _a =>
+              PV_RDEA_PrefixWords.Prefix
+                (PV_RDEA_CapacityEndpoint.sizes
+                  (PV_RDEAC_FullJoin.join step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base) base
+                        owned.values after).world.history)
+                (_a ++
+                  PV_RDEA_PathSchedule.joinWord base.length owned.values.length false
+                    (PV_RDEAC_JoinValue.needsSeparator base)))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  PV_RDEA_CapacityEndpoint.sizes _a.2.history =
+                    PV_RDEA_CapacityEndpoint.sizes w.history ++ [(0, 69, 1)])
+                run)
+              stage))
+          (Eq.mp
+            (congrFun'
+              (congrArg PV_RDEA_PrefixWords.Prefix
+                (congrArg PV_RDEA_CapacityEndpoint.sizes
+                  (congrArg World.history
+                    (PV_RDEAC_JoinHandlers.erase_world
+                      (PV_RDEAC_FullJoin.join step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base) base
+                        owned.values after)))))
+              (PV_RDEA_CapacityEndpoint.sizes after.history ++
+                PV_RDEA_PathSchedule.joinWord base.length owned.values.length false
+                  (PV_RDEAC_JoinValue.needsSeparator base)))
+            (Eq.mp
+              (congrArg
+                (fun _a =>
+                  PV_RDEA_PrefixWords.Prefix (PV_RDEA_CapacityEndpoint.sizes _a.2.history)
+                    (PV_RDEA_CapacityEndpoint.sizes after.history ++
+                      PV_RDEA_PathSchedule.joinWord base.length owned.values.length false
+                        (PV_RDEAC_JoinValue.needsSeparator base)))
+                (Eq.symm
+                  (PV_RDEAC_FullJoin.projection step shape joinAddress false (PV_RDEAC_JoinValue.needsSeparator base)
+                    base owned.values after)))
+              h)))))
+theorem R1Z.PV_RDEAC_EndpointFrames.final_frame : ∀ {S F : Type} (step : Request → S → Option ℕ × S)
+  (free : ℕ → ℕ → ℕ → S → S) (shape : Shape),
+  shape.width = 1 →
+    ∀ (nameAddress joinAddress : ℕ) (digest : Std.Array U8 32#usize) (base : List U8) (needSep : Bool) (w : World S F)
+      (owned : Buffer U8) (after : World S F),
+      PV_RDEA_ReservationExecution.run step shape nameAddress (List.map PV_RDEAC_NibbleModel.byte ↑digest) w =
+          (Except.ok owned, after) →
+        (PV_RDEAC_JoinHandlers.finalWorld free owned
+              (PV_RDEAC_FullJoin.join step shape joinAddress false needSep base owned.values after)).frame =
+          w.frame :=
+fun {S F} step free shape width nameAddress joinAddress digest base needSep w owned after run =>
+  have frame := PV_RDEAC_EndpointFrames.name_frame step shape width nameAddress digest w;
+  Eq.trans
+    (PV_RDEAC_JoinHandlers.frame_history free owned
+        (PV_RDEAC_FullJoin.join step shape joinAddress false needSep base owned.values after)).left
+    (Eq.trans (PV_RDEAC_Frames.join step shape joinAddress false needSep base owned.values after)
+      (Eq.mp (congrArg (fun _a => _a.2.frame = w.frame) run) frame))
+theorem R1Z.PV_RDEAC_FreeWord.source_headers : ∀ {S F : Type} (step : Request → S → Option ℕ × S) (shape : Shape)
+  (address : ℕ) (needSep : Bool) (base path : List U8) (w : World S F) (owned : Buffer U8),
+  owned.capacity = 69 →
+    have e := PV_RDEAC_FullJoin.join step shape address false needSep base path w;
+    PV_RDEAC_FreeWord.word owned e = [] ∨
+      PV_RDEAC_FreeWord.word owned e = [69] ∨
+        ∃ partialCap,
+          (partialCap = 0 ∨
+              partialCap = base.length ∨ partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+            PV_RDEAC_FreeWord.word owned e = PV_RDEAC_FreeWord.releaseWord partialCap ++ [69] :=
+fun {S F} step shape address needSep base path w owned cap =>
+  id
+    (let e := PV_RDEAC_FullJoin.join step shape address false needSep base path w;
+    id
+      (Except.casesOn (motive := fun t =>
+        e.returned = t →
+          PV_RDEAC_FreeWord.word owned e = [] ∨
+            PV_RDEAC_FreeWord.word owned e = [69] ∨
+              ∃ partialCap,
+                (partialCap = 0 ∨
+                    partialCap = base.length ∨
+                      partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                  PV_RDEAC_FreeWord.word owned (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                    PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+        e.returned
+        (fun err h =>
+          Eq.ndrec (motive := fun x =>
+            e.returned = x →
+              PV_RDEAC_FreeWord.word owned e = [] ∨
+                PV_RDEAC_FreeWord.word owned e = [69] ∨
+                  ∃ partialCap,
+                    (partialCap = 0 ∨
+                        partialCap = base.length ∨
+                          partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                      PV_RDEAC_FreeWord.word owned
+                          (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                        PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+            (fun h =>
+              PV_RDB1_V183_ReserveWorld.Error.casesOn (motive := fun t =>
+                err = t →
+                  PV_RDEAC_FreeWord.word owned e = [] ∨
+                    PV_RDEAC_FreeWord.word owned e = [69] ∨
+                      ∃ partialCap,
+                        (partialCap = 0 ∨
+                            partialCap = base.length ∨
+                              partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                          PV_RDEAC_FreeWord.word owned
+                              (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                            PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+                err
+                (fun h_1 =>
+                  Eq.ndrec (motive := fun err =>
+                    e.returned = Except.error err →
+                      PV_RDEAC_FreeWord.word owned e = [] ∨
+                        PV_RDEAC_FreeWord.word owned e = [69] ∨
+                          ∃ partialCap,
+                            (partialCap = 0 ∨
+                                partialCap = base.length ∨
+                                  partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                              PV_RDEAC_FreeWord.word owned
+                                  (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                                PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+                    (fun h =>
+                      have headers :=
+                        PV_RDEAC_PartialHeaders.join_error step shape address needSep base path w Error.capacityOverflow
+                          h;
+                      have hw :=
+                        of_eq_true
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (Eq.trans
+                                  (congrArg
+                                    (fun x =>
+                                      match x with
+                                      | Except.error (Error.allocError layout) => []
+                                      | Except.error Error.capacityOverflow =>
+                                        PV_RDEAC_FreeWord.releaseWord e.buffer.capacity ++
+                                          PV_RDEAC_FreeWord.releaseWord owned.capacity
+                                      | Except.ok PUnit.unit => PV_RDEAC_FreeWord.releaseWord owned.capacity)
+                                    h)
+                                  (congrArg (HAppend.hAppend (PV_RDEAC_FreeWord.releaseWord e.buffer.capacity))
+                                    (PV_RDEAC_FreeWord.owned_word owned.capacity cap))))
+                              (PV_RDEAC_FreeWord.releaseWord e.buffer.capacity ++ [69]))
+                            (eq_self (PV_RDEAC_FreeWord.releaseWord e.buffer.capacity ++ [69])));
+                      Or.inr (Or.inr (Exists.intro e.buffer.capacity ⟨headers, hw⟩)))
+                    (Eq.symm h_1) h)
+                (fun layout h_1 =>
+                  Eq.ndrec (motive := fun err =>
+                    e.returned = Except.error err →
+                      PV_RDEAC_FreeWord.word owned e = [] ∨
+                        PV_RDEAC_FreeWord.word owned e = [69] ∨
+                          ∃ partialCap,
+                            (partialCap = 0 ∨
+                                partialCap = base.length ∨
+                                  partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                              PV_RDEAC_FreeWord.word owned
+                                  (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                                PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+                    (fun h =>
+                      Or.inl
+                        (of_eq_true
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg Eq
+                                (congrArg
+                                  (fun x =>
+                                    match x with
+                                    | Except.error (Error.allocError layout) => []
+                                    | Except.error Error.capacityOverflow =>
+                                      PV_RDEAC_FreeWord.releaseWord e.buffer.capacity ++
+                                        PV_RDEAC_FreeWord.releaseWord owned.capacity
+                                    | Except.ok PUnit.unit => PV_RDEAC_FreeWord.releaseWord owned.capacity)
+                                  h))
+                              [])
+                            (eq_self []))))
+                    (Eq.symm h_1) h)
+                (Eq.refl err))
+            (Eq.symm h) (Eq.refl e.returned))
+        (fun unit h =>
+          Eq.ndrec (motive := fun x =>
+            e.returned = x →
+              PV_RDEAC_FreeWord.word owned e = [] ∨
+                PV_RDEAC_FreeWord.word owned e = [69] ∨
+                  ∃ partialCap,
+                    (partialCap = 0 ∨
+                        partialCap = base.length ∨
+                          partialCap = PV_RDEA_AppendRequests.nextCapacity base.length base.length 1) ∧
+                      PV_RDEAC_FreeWord.word owned
+                          (PV_RDEAC_FullJoin.join step shape address false needSep base path w) =
+                        PV_RDEAC_FreeWord.releaseWord partialCap ++ [69])
+            (fun h =>
+              Or.inr
+                (Or.inl
+                  (of_eq_true
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrArg
+                              (fun x =>
+                                match x with
+                                | Except.error (Error.allocError layout) => []
+                                | Except.error Error.capacityOverflow =>
+                                  PV_RDEAC_FreeWord.releaseWord e.buffer.capacity ++
+                                    PV_RDEAC_FreeWord.releaseWord owned.capacity
+                                | Except.ok PUnit.unit => PV_RDEAC_FreeWord.releaseWord owned.capacity)
+                              h)
+                            (PV_RDEAC_FreeWord.owned_word owned.capacity cap)))
+                        [69])
+                      (eq_self [69])))))
+            (Eq.symm h) (Eq.refl e.returned))
+        (Eq.refl e.returned)))
+theorem R1Z.PV_RDEAC_ABI.word_room : System.Platform.numBits = 64 → 9223372036854775808 ≤ Usize.max :=
+fun target =>
+  Eq.mpr (id (congrArg (fun _a => 9223372036854775808 ≤ _a) Usize.max_def))
+    (Eq.mpr (id (congrArg (fun _a => 9223372036854775808 ≤ 2 ^ _a - 1) Usize.numBits_def))
+      (Eq.mpr (id (congrArg (fun _a => 9223372036854775808 ≤ 2 ^ _a - 1) UScalarTy.Usize_numBits_eq))
+        (Eq.mpr (id (congrArg (fun _a => 9223372036854775808 ≤ 2 ^ _a - 1) target))
+          (Mathlib.Meta.NormNum.isNat_le_true (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 9223372036854775808))
+            (Mathlib.Meta.NormNum.isNat_natSub
+              (Mathlib.Meta.NormNum.isNat_pow (Eq.refl HPow.hPow) (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 2))
+                (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 64))
+                (Mathlib.Meta.NormNum.IsNatPowT.run
+                  (Mathlib.Meta.NormNum.IsNatPowT.trans
+                    (Mathlib.Meta.NormNum.IsNatPowT.trans
+                      (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                        Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                      Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                    (Mathlib.Meta.NormNum.IsNatPowT.trans
+                      (Mathlib.Meta.NormNum.IsNatPowT.trans Mathlib.Meta.NormNum.IsNatPowT.bit0
+                        Mathlib.Meta.NormNum.IsNatPowT.bit0)
+                      Mathlib.Meta.NormNum.IsNatPowT.bit0))))
+              (Mathlib.Meta.NormNum.isNat_ofNat ℕ (Eq.refl 1)) (Eq.refl 18446744073709551615))
+            (Eq.refl true)))))

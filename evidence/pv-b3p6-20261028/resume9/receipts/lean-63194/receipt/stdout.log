@@ -1,0 +1,90 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:2: error: Type mismatch
+  Array.set ?m.35 (↑component) (Array.set ?m.37 (↑channel) (old.wrapping_add product) ?m.38) ?m.39
+has type
+  _root_.Array (_root_.Array U64)
+but is expected to have type
+  Matrix3x3
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:21:41: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @LT.lt ℕ instLTNat (↑component) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑component ↑3#usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:22:38: error: Type mismatch: After simplification, term
+  hk
+ has type
+  @LT.lt ℕ instLTNat (↑channel) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑channel ↑3#usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:28: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:28: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+sums : Matrix3x3
+component channel : Usize
+hc : ↑component < 3
+hk : ↑channel < 3
+left right : U32
+row : Std.Array U64 3#usize := (↑sums)[↑component]
+old : U64 := (↑row)[↑channel]
+product : U64 := U64.wrapping_mul (UScalar.cast UScalarTy.U64 left) (UScalar.cast UScalarTy.U64 right)
+⊢ ↑channel < Array.size ?m.37
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:2: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:2: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+sums : Matrix3x3
+component channel : Usize
+hc : ↑component < 3
+hk : ↑channel < 3
+left right : U32
+row : Std.Array U64 3#usize := (↑sums)[↑component]
+old : U64 := (↑row)[↑channel]
+product : U64 := U64.wrapping_mul (UScalar.cast UScalarTy.U64 left) (UScalar.cast UScalarTy.U64 right)
+⊢ ↑component < Array.size ?m.35
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:24:38: error: Application type mismatch: The argument
+  row
+has type
+  Std.Array U64 3#usize
+but is expected to have type
+  _root_.Array U64
+in the application
+  @Array.set U64 row
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:33:41: error: Type mismatch: After simplification, term
+  hc
+ has type
+  @LT.lt ℕ instLTNat (↑component) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑component ↑3#usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixCell9227.lean:44:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let updated ←
+      Result.ok
+          ((↑sums)[↑component].set channel
+            ((↑(↑sums)[↑component])[↑channel].wrapping_add
+              (U64.wrapping_mul (UScalar.cast UScalarTy.U64 left) (UScalar.cast UScalarTy.U64 right))))
+    Result.ok (Std.Array.set sums component updated)
+is not definitionally equal to the right-hand side
+  Result.ok (matrix_put sums component channel hc hk left right)
+
+sums : Matrix3x3
+component channel : Usize
+hc : ↑component < 3
+hk : ↑channel < 3
+left right : U32
+hc' : ↑component < ↑3#usize
+row : Std.Array U64 3#usize := (↑sums)[↑component]
+hk' : ↑channel < ↑3#usize
+⊢ (do
+      let updated ←
+        Result.ok
+            ((↑sums)[↑component].set channel
+              ((↑(↑sums)[↑component])[↑channel].wrapping_add
+                (U64.wrapping_mul (UScalar.cast UScalarTy.U64 left) (UScalar.cast UScalarTy.U64 right))))
+      Result.ok (Std.Array.set sums component updated)) =
+    Result.ok (matrix_put sums component channel hc hk left right)
+'PV_B3P_Binding9227.matrix_cell_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,17 @@
+@R1Z.PV_RDCD4_FocusedReplay.v201 : ∀ {E : Type} (inst : ProverRwFull.aspis_core.r0.scalar.CodeField E)
+  (q : Aeneas.Std.Array E 1024#usize) (p : ProverRwFull.aspis_core.r0.domain.Point E),
+  R1Z.PV_RDCD4_V201.value inst q p = PV_CB_OwnedEncoder.owned.encoder inst q p
+R1Z.PV_RDCD4_FocusedReplay.v220 : ∀ (poly : Aeneas.Std.Array R1Z.PV_RDCD4_LazyComponents.Q 28#usize)
+  (challenge : R1Z.PV_RDCD4_LazyComponents.Q),
+  R1Z.PV_RDCD4_V220.source poly challenge = R1Z.PV_RDCD4_V220.reference poly challenge
+@R1Z.PV_RDCD4_FocusedReplay.v237 : ∀ {T : Type} (core : Aeneas.Std.Result T),
+  (do
+      let v ← R1Z.PV_DL_DefaultBuffer.model core
+      Aeneas.Std.Result.ok (R1Z.PV_DL_WrapLaw.observe v)) =
+    do
+    let c ← core
+    let v ← PV_DL_Wrap.wrap_reference c
+    Aeneas.Std.Result.ok (R1Z.PV_DL_WrapLaw.observeReference v)
+'R1Z.PV_RDCD4_FocusedReplay.v201' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_FocusedReplay.v220' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_FocusedReplay.v237' depends on axioms: [propext, Classical.choice, Quot.sound]

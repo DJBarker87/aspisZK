@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-sources/R1Z/PV_OWNI_RawConsumer.lean:23:1: error: unsolved goals
+case pos
+point column : List Q
+width trailing suffix : ℕ
+split : width + trailing = 10
+hs : suffix < 2 ^ trailing
+h : column.length ≠ 1024
+⊢ (if column.length ≠ 1024 then ok none
+    else do
+      let entries ← PV_RDB2D_SparseWeights.build ops point width trailing suffix
+      let sum ← PV_RDB2D_SparseFold.source ops.toOps column entries ops.zero
+      ok (some sum)) =
+    ok
+      (if column.length ≠ 1024 then none
+      else
+        some (List.foldl (PV_OWNI_RawFold.term column) zero (PV_OWNI_BuildTotal.entries point width trailing suffix)))
+/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-sources/R1Z/PV_OWNI_RawConsumer.lean:23:27: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [source, ̲value,h̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-sources/R1Z/PV_OWNI_RawConsumer.lean:23:29: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵o̵u̵r̵c̵e̵,̵v̵a̵l̵u̵e̵,̵h̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲v̲a̲l̲u̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWNI_RawConsumer.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

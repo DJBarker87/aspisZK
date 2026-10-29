@@ -1,0 +1,64 @@
+{
+  "family": "print",
+  "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
+  "sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "file_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "line": 1155,
+      "body": "fn print_to<T>(args: fmt::Arguments<'_>, global_s: fn() -> T, label: &str)\nwhere\n    T: Write,\n{\n    if print_to_buffer_if_capture_used(args) {\n        // Successfully wrote to capture buffer.\n        return;\n    }\n\n    if let Err(e) = global_s().write_fmt(args) {\n        panic!(\"failed printing to {label}: {e}\");\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "file_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "line": 1169,
+      "body": "fn print_to_buffer_if_capture_used(args: fmt::Arguments<'_>) -> bool {\n    OUTPUT_CAPTURE_USED.load(Ordering::Relaxed)\n        && OUTPUT_CAPTURE.try_with(|s| {\n            // Note that we completely remove a local sink to write to in case\n            // our printing recursively panics/prints, so the recursive\n            // panic/print goes to the global sink instead of our local sink.\n            s.take().map(|w| {\n                let _ = w.lock().unwrap_or_else(|e| e.into_inner()).write_fmt(args);\n                s.set(Some(w));\n            })\n        }) == Ok(Some(()))\n}"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "file_sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "line": 1185,
+      "body": "pub(crate) fn attempt_print_to_stderr(args: fmt::Arguments<'_>) {\n    if print_to_buffer_if_capture_used(args) {\n        return;\n    }\n\n    // Ignore error if the write fails, for example because stderr is already\n    // closed. There is not much point panicking at this point.\n    let _ = stderr().write_fmt(args);\n}"
+    }
+  ],
+  "models": {
+    "PV_DIAG2_PrintControl": "8be81ec4538ff0d16fd9e2c81fcc90d21325cfdf79d48777c2374a4f716951c3",
+    "PV_DIAG2_Termination": "fdd4e2b5d071ae297514557861a699e075fc3eff38942ac05f86a8e9dd49bff4"
+  },
+  "steps": [
+    [
+      "print_to buffer capture check and early return",
+      "printTo.capture true",
+      "whole capture helper effects retained; argument evaluation before this helper remains earlier prefix"
+    ],
+    [
+      "global_s getter, write_fmt and temporary handle scope",
+      "printTo.write",
+      "full getter/write/partial-delivery/temporary-drop/native-unwind execution supplied"
+    ],
+    [
+      "Err(e) panic formatting/hook and Err lifetime",
+      "printTo.panic e",
+      "includes the error Display operand, actual frames and Err drop/unwind; not a normal error report"
+    ],
+    [
+      "normal Ok returned write result",
+      "print_write_ok",
+      "capture and write prefixes retained"
+    ],
+    [
+      "attempt_print_to_stderr capture then ignored write Result",
+      "attemptPrint / ignoreWriteResult / terminateOwned",
+      "Result and handle drops are native leaf executions; no panic invented on returned I/O error"
+    ]
+  ],
+  "open_native_obligations": [
+    "capture helper atomic/TLS/mutex/poison/write/restore/drop execution",
+    "global getter and delivered-byte/partial-I/O law",
+    "I/O error Display, panic/OOM/unwind/drop/native failure independence"
+  ],
+  "toolchain": "rustc 1.94.1 sources; no extractor/toolchain substitution",
+  "profile": "deployed release opt3 overflow/debug assertions off panic unwind",
+  "compiler_boundary": "V370 at owner pending D381/D386; no LLVM or machine equality silently assumed",
+  "new_trust_fields": 0
+}

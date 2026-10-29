@@ -1,0 +1,40 @@
+import PV_DIAG12_WriteAll
+namespace PV_DIAG12
+set_option autoImplicit false
+
+structure OpenOptions where
+ read : Bool := false
+ write : Bool := false
+ append : Bool := false
+ truncate : Bool := false
+ create : Bool := false
+ createNew : Bool := false
+ custom : Nat := 0
+ mode : Nat := 438
+ deriving DecidableEq, Repr
+inductive Validation where
+ | needsWrite | needsAccess
+ deriving DecidableEq, Repr
+def access (o : OpenOptions) : Except Validation Nat :=
+ match o.read,o.write,o.append with
+ | true,false,false => .ok 0
+ | false,true,false => .ok 1
+ | true,true,false => .ok 2
+ | false,_,true => .ok 1025
+ | true,_,true => .ok 1026
+ | false,false,false =>
+   if o.create || o.createNew || o.truncate then .error .needsWrite else .error .needsAccess
+def creation (o : OpenOptions) : Except Validation Nat :=
+ if (!o.write && !o.append && (o.truncate || o.create || o.createNew)) ||
+     (o.append && o.truncate && !o.createNew) then .error .needsWrite else
+ .ok (if o.createNew then 192 else (if o.create then 64 else 0)+(if o.truncate then 512 else 0))
+def openFlags (o : OpenOptions) : Except Validation Nat := do
+ let a ← access o
+ let c ← creation o
+ pure (Nat.lor 524288 (Nat.lor a (Nat.lor c (Nat.land o.custom 4294967292))))
+/- custom is the u32 representation of c_int. Restrict custom<2^32 and
+mode<2^32 at the native representation boundary; no saturation is substituted. -/
+theorem open_default_invalid : access {}=.error .needsAccess := rfl
+#print axioms open_default_invalid
+
+end PV_DIAG12

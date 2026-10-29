@@ -1,0 +1,249 @@
+{
+  "row": "V217",
+  "input_sha256": "324ca4938c63fe5bd3b6fc9529c14ac0cf9be9befe97f6f6fd72961c52da3646",
+  "records": [
+    {
+      "cohort": "old",
+      "function": "aspis_core::state_only_selected_mask_value(_1: &[QM31; 16], _2: &[QM31; 10], _3: QM31, _4: &[QM31; 10]) -> QM31",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "old",
+      "function": "aspis_core::state_only_selected_mask_value(_1: &[QM31; 16], _2: &[QM31; 10], _3: QM31, _4: &[QM31; 10]) -> QM31",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "old",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "old",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "disposition": "terminal Result projection",
+      "argument": "Index failure and invalid tower coordinate are terminal at the Result interface; all reached fixed indices are proved safe. The invalid-coordinate helper still retains its failure arm. Panic text, runtime effects and physical observer behavior are separate retained obligations.",
+      "law": "Index194.failure; ArrayWrite194.complete; CB_MaskLeaves.tower; CB_MaskIndices.coordinate"
+    },
+    {
+      "cohort": "old",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "disposition": "panic diagnostic outside value projection",
+      "argument": "This record constructs panic diagnostics, not a successful field result or loop state. No diagnostic/world/observer law is inferred from Result equality; those obligations remain explicitly retained.",
+      "law": "Control194.panic_terminal; source/Result scope qualification"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "deployed",
+      "function": "aspis_core::state_only_selected_mask_value(_1: &[QM31; 16], _2: &[QM31; 10], _3: QM31, _4: &[QM31; 10]) -> QM31",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "deployed",
+      "function": "aspis_core::state_only_selected_mask_value(_1: &[QM31; 16], _2: &[QM31; 10], _3: QM31, _4: &[QM31; 10]) -> QM31",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "disposition": "concrete range source law",
+      "argument": "ops::Range<usize> uses TrustedStep; next updates start and returns the previous value, preserving complete range state. Fixed ranges have explicit reachable-index rank proofs.",
+      "law": "CB_ForwardRange.next_done/next_step; CB_ForwardLoop.source; CB_MaskFillBody.c1/mask; CB_FillLoopsEq.c1/mask"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "disposition": "terminal Result projection",
+      "argument": "Index failure and invalid tower coordinate are terminal at the Result interface; all reached fixed indices are proved safe. The invalid-coordinate helper still retains its failure arm. Panic text, runtime effects and physical observer behavior are separate retained obligations.",
+      "law": "Index194.failure; ArrayWrite194.complete; CB_MaskLeaves.tower; CB_MaskIndices.coordinate"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "disposition": "panic diagnostic outside value projection",
+      "argument": "This record constructs panic diagnostics, not a successful field result or loop state. No diagnostic/world/observer law is inferred from Result equality; those obligations remain explicitly retained.",
+      "law": "Control194.panic_terminal; source/Result scope qualification"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete receiver",
+      "argument": "The complete application bodies contain ops::Range<usize>, fixed arrays and Copy field records. No BTreeMap/BTreeSet, tree node, KV storage or alloc::Range is constructed or passed. The generic printed-name match is not this concrete receiver.",
+      "law": "v217-application-source-result.json; range-source-result.json dispatch checks"
+    }
+  ],
+  "additional_reached_bodies": "Six complete reverse bodies, six complete mask application bodies and 26 field bodies are recorded separately, as well as range/index/write/widening/wrapping primitives. This conservative inventory is not treated as exhaustive merely because all20 are classified.",
+  "scope": "Complete source-value/Result only after matching successful root/closing proof receipts and coherent DAG; compiler V370/D381/D386, native RunJoin/world/observer and physical effects retained.",
+  "composition": "Reclassification within existing Aeneas/Rust semantics; no endpoint premise removal"
+}

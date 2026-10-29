@@ -1,0 +1,236 @@
+{
+  "records": [
+    {
+      "cohort": "old",
+      "function": "aspis_r1_cost_probe::transport::<crates/aspis-r1-cost-probe/src/transport.rs::impl Variant>::row(_1: transport::Variant, _2: usize) -> usize",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "record": 0,
+      "disposition": "Concrete dispatch identified",
+      "disposition_reason": "d indexes TAU: [usize;5], so receiver is core::ops::Range<usize>",
+      "required_law": "Range194 and V260RowSource (pending compile)"
+    },
+    {
+      "cohort": "old",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "record": 1,
+      "disposition": "Concrete specialization identified",
+      "disposition_reason": "usize TrustedStep selects spec_next under pinned 1.94.1 source",
+      "required_law": "Range194 successor_bound/extracted/projection and source dispatch check"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "record": 2,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "record": 3,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "record": 4,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "record": 5,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "record": 6,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "old",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "record": 7,
+      "disposition": "OPEN failure-continuation audit",
+      "disposition_reason": "Distinguish unreachable inactive Err/unwrap and checked-Step expect from terminal index failure; no blanket fmt/panic closure",
+      "required_law": "V260RowResult.complete and V260Exact.inactive_refactor pending; terminal-failure statement audit"
+    },
+    {
+      "cohort": "old",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "record": 8,
+      "disposition": "OPEN failure-continuation audit",
+      "disposition_reason": "Distinguish unreachable inactive Err/unwrap and checked-Step expect from terminal index failure; no blanket fmt/panic closure",
+      "required_law": "V260RowResult.complete and V260Exact.inactive_refactor pending; terminal-failure statement audit"
+    },
+    {
+      "cohort": "deployed",
+      "function": "aspis_r1_cost_probe::transport::<crates/aspis-r1-cost-probe/src/transport.rs::impl Variant>::row(_1: transport::Variant, _2: usize) -> usize",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "record": 9,
+      "disposition": "Concrete dispatch identified",
+      "disposition_reason": "d indexes TAU: [usize;5], so receiver is core::ops::Range<usize>",
+      "required_law": "Range194 and V260RowSource (pending compile)"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "record": 10,
+      "disposition": "Concrete specialization identified",
+      "disposition_reason": "usize TrustedStep selects spec_next under pinned 1.94.1 source",
+      "required_law": "Range194 successor_bound/extracted/projection and source dispatch check"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "record": 11,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "record": 12,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "record": 13,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "record": 14,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "record": 15,
+      "disposition": "Excluded alternative, pending final concrete-dispatch statement audit",
+      "disposition_reason": "Ambiguous printed Range name; original source has usize indices/fixed arrays and no B-tree receiver",
+      "required_law": "Complete Rust body pattern and Range194 projection"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "record": 16,
+      "disposition": "OPEN failure-continuation audit",
+      "disposition_reason": "Distinguish unreachable inactive Err/unwrap and checked-Step expect from terminal index failure; no blanket fmt/panic closure",
+      "required_law": "V260RowResult.complete and V260Exact.inactive_refactor pending; terminal-failure statement audit"
+    },
+    {
+      "cohort": "deployed",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "record": 17,
+      "disposition": "OPEN failure-continuation audit",
+      "disposition_reason": "Distinguish unreachable inactive Err/unwrap and checked-Step expect from terminal index failure; no blanket fmt/panic closure",
+      "required_law": "V260RowResult.complete and V260Exact.inactive_refactor pending; terminal-failure statement audit"
+    }
+  ],
+  "status": "Draft, not a complete dynamic/monomorphized graph certificate",
+  "all_records_disposed": false
+}

@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-64788/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-64788/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-objects/R1Z/PV_OWNJ_Claims.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.19",
+  "peak_rss_kib": "2641476",
+  "swap": "0",
+  "source_revision": "988ebfc2c9284c08b6ca5d43cf4ea5f265c80f3b",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:35:7: error: unsolved goals\ncase nil\np : List Q\nafter : List (List Q)\nbad : List Q\nh : bad.length \u2260 1024\n\u22a2 (do\n      let q \u2190 none\n      let rest \u2190 lanes p after\n      some (q :: rest)) =\n    none\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:35:66: warning: This simp argument is unused:\n  Option.bind_none\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335L\u0335i\u0335s\u0335t\u0335.\u0335n\u0335i\u0335l\u0335_\u0335a\u0335p\u0335p\u0335e\u0335n\u0335d\u0335,\u0335l\u0335a\u0335n\u0335e\u0335s\u0335,\u0335e\u0335v\u0335a\u0335l\u0335u\u0335a\u0335t\u0335e\u0335_\u0335w\u0335r\u0335o\u0335n\u0335g\u0335[\u0332L\u0332i\u0332s\u0332t\u0332.\u0332n\u0332i\u0332l\u0332_\u0332a\u0332p\u0332p\u0332e\u0332n\u0332d\u0332,\u0332 \u0332l\u0332a\u0332n\u0332e\u0332s\u0332,\u0332 \u0332e\u0332v\u0332a\u0332l\u0332u\u0332a\u0332t\u0332e\u0332_\u0332w\u0332r\u0332o\u0332n\u0332g\u0332 p bad h\u0335,\u0335O\u0335p\u0335t\u0335i\u0335o\u0335n\u0335.\u0335b\u0335i\u0335n\u0335d\u0335_\u0335n\u0335o\u0335n\u0335e\u0335]\u0335h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:41:79: error: unsolved goals\npoint : List Q\nbefore after : List (List Q)\nbad : List Q\nh : bad.length \u2260 1024\n\u22a2 (do\n      let claim \u2190 none\n      let rest \u2190\n        do\n          let claim \u2190 lanes (successor point) (before ++ bad :: after)\n          let rest \u2190\n            do\n              let claim \u2190 lanes (xor12 point) (before ++ bad :: after)\n              let rest \u2190 some []\n              some (claim :: rest)\n          some (claim :: rest)\n      some (claim :: rest)) =\n    none\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:43:2: warning: This simp argument is unused:\n  Option.bind_none\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335p\u0335o\u0335i\u0335n\u0335t\u0335_\u0335c\u0335l\u0335a\u0335i\u0335m\u0335s\u0335,\u0335s\u0335t\u0335a\u0335t\u0335e\u0335m\u0335e\u0335n\u0335t\u0335_\u0335p\u0335o\u0335i\u0335n\u0335t\u0335s\u0335,\u0335p\u0335o\u0335i\u0335n\u0335t\u0335s\u0335,\u0335l\u0335a\u0335n\u0335e\u0335s\u0335_\u0335f\u0335i\u0335r\u0335s\u0335t\u0335_\u0335w\u0335r\u0335o\u0335n\u0335g\u0335[\u0332p\u0332o\u0332i\u0332n\u0332t\u0332_\u0332c\u0332l\u0332a\u0332i\u0332m\u0332s\u0332,\u0332 \u0332s\u0332t\u0332a\u0332t\u0332e\u0332m\u0332e\u0332n\u0332t\u0332_\u0332p\u0332o\u0332i\u0332n\u0332t\u0332s\u0332,\u0332 \u0332p\u0332o\u0332i\u0332n\u0332t\u0332s\u0332,\u0332 \u0332l\u0332a\u0332n\u0332e\u0332s\u0332_\u0332f\u0332i\u0332r\u0332s\u0332t\u0332_\u0332w\u0332r\u0332o\u0332n\u0332g\u0332 point before after bad h\u0335,\u0335\n  \u0335 \u0335 \u0335O\u0335p\u0335t\u0335i\u0335o\u0335n\u0335.\u0335b\u0335i\u0335n\u0335d\u0335_\u0335n\u0335o\u0335n\u0335e\u0335]\u0335h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownj-20261029/lean-sources/R1Z/PV_OWNJ_Claims.lean:55:2: error: Tactic `apply` failed: could not unify the conclusion of `@List.eq_replicate_of_mem`\n  ?l = List.replicate (List.length ?l) ?a\nwith the goal\n  List.map List.length base = List.replicate base.length 1024\n\nNote: The full type of `@List.eq_replicate_of_mem` is\n  \u2200 {\u03b1 : Type ?u.57} {a : \u03b1} {l : List \u03b1}, (\u2200 b \u2208 l, b = a) \u2192 l = List.replicate l.length a\n\nbase : List (List Q)\nh1 g d : List Q\nhb : base.length = 26\nhc : \u2200 c \u2208 base, c.length = 1024\nhh : h1.length = 1024\nhg : g.length = 1024\nhd : d.length = 1024\n\u22a2 List.map List.length base = List.replicate base.length 1024\n'R1Z.PV_OWNJ_Claims.evaluate_wrong' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_Claims.lanes_first_wrong' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_Claims.point_claims_wrong' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNJ_Claims.built_lengths' depends on axioms: [propext, sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 64788,
+  "module": "R1Z/PV_OWNJ_Claims",
+  "source_blob": "31c8ed2fa14782612955ef9711de204f3f179116",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNJ_Claims.lean",
+  "source_sha256": "0e1dfa1377681f154248d488dc8c1fd3b342475869e6a9a1a675d1d9ebb89803",
+  "imports": [
+    "R1Z.PV_OWNJ_Points",
+    "R1Z.PV_OWNI_PublicPlan"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNJ_Points": "141585f8a7371998ea9798c823c21f16a1908cf32a1af1445c23d4de1b743d07",
+    "R1Z.PV_OWNI_PublicPlan": "67bff29b084f48e8c4309cff30c8b499ad9bb055ece8cd8b0783b57ffb31388f"
+  },
+  "deps_fingerprint": "7b5da34774284a830a03c6be4e77cbfa55d2f30d63d67fd2a900416d13f4809c"
+}

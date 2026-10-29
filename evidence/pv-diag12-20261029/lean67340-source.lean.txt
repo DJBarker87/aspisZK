@@ -1,0 +1,94 @@
+import PV_DIAG12_WriteAll
+namespace PV_DIAG12
+set_option autoImplicit false
+
+structure OpenOptions where
+ read : Bool := false
+ write : Bool := false
+ append : Bool := false
+ truncate : Bool := false
+ create : Bool := false
+ createNew : Bool := false
+ custom : Nat := 0
+ mode : Nat := 438
+ deriving DecidableEq, Repr
+inductive Validation where
+ | needsWrite | needsAccess
+ deriving DecidableEq, Repr
+def access (o : OpenOptions) : Except Validation Nat :=
+ match o.read,o.write,o.append with
+ | true,false,false => .ok 0
+ | false,true,false => .ok 1
+ | true,true,false => .ok 2
+ | false,_,true => .ok 1025
+ | true,_,true => .ok 1026
+ | false,false,false =>
+   if o.create || o.createNew || o.truncate then .error .needsWrite else .error .needsAccess
+def creation (o : OpenOptions) : Except Validation Nat :=
+ if (!o.write && !o.append && (o.truncate || o.create || o.createNew)) ||
+     (o.append && o.truncate && !o.createNew) then .error .needsWrite else
+ .ok (if o.createNew then 192 else (if o.create then 64 else 0)+(if o.truncate then 512 else 0))
+def openFlags (o : OpenOptions) : Except Validation Nat := do
+ let a ← access o
+ let c ← creation o
+ pure (Nat.lor 524288 (Nat.lor a (Nat.lor c (Nat.land o.custom 4294967292))))
+/- custom is the u32 representation of c_int. Restrict custom<2^32 and
+mode<2^32 at the native representation boundary; no saturation is substituted. -/
+theorem open_default_invalid : access {}=.error .needsAccess := rfl
+#print axioms open_default_invalid
+
+theorem open_read_access (o : OpenOptions) (hr : o.read=true) (hw : o.write=false)
+ (ha : o.append=false) : access o=.ok 0 := by simp only [access,hr,hw,ha]
+#print axioms open_read_access
+
+theorem open_write_access (o : OpenOptions) (hr : o.read=false) (hw : o.write=true)
+ (ha : o.append=false) : access o=.ok 1 := by simp only [access,hr,hw,ha]
+#print axioms open_write_access
+
+theorem open_readwrite_access (o : OpenOptions) (hr : o.read=true) (hw : o.write=true)
+ (ha : o.append=false) : access o=.ok 2 := by simp only [access,hr,hw,ha]
+#print axioms open_readwrite_access
+
+theorem open_append_access (o : OpenOptions) (hr : o.read=false) (ha : o.append=true) :
+ access o=.ok 1025 := by cases h : o.write <;> simp only [access,hr,h,ha]
+theorem open_readappend_access (o : OpenOptions) (hr : o.read=true) (ha : o.append=true) :
+ access o=.ok 1026 := by cases h : o.write <;> simp only [access,hr,h,ha]
+#print axioms open_append_access
+#print axioms open_readappend_access
+
+def openRetry (q : Request) (sig : Signal) : Nat → Cursor → WRun Nat
+ | 0,c => ⟨⟨[],.cut⟩,c⟩
+ | fuel+1,c =>
+  let reply := sig c.next q
+  let r := call q reply
+  let c' : Cursor := ⟨c.next+1⟩
+  match reply with
+  | .error e => if e=4 then
+      let tail := openRetry q sig fuel c'
+      ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩
+     else ⟨r,c'⟩
+  | _ => ⟨r,c'⟩
+def openC (addr : Nat) (path : Bytes) (o : OpenOptions) (sig : Signal)
+ (fuel : Nat) (c : Cursor) : Except Validation (WRun Nat) :=
+ match openFlags o with
+ | .error e => .error e
+ | .ok flags => .ok (openRetry (.open64 addr path flags o.mode) sig fuel c)
+theorem open_retry_cut (q : Request) (sig : Signal) (c : Cursor) :
+ openRetry q sig 0 c=⟨⟨[],.cut⟩,c⟩ := rfl
+#print axioms open_retry_cut
+
+theorem open_retry_eintr (q : Request) (sig : Signal) (fuel : Nat) (c : Cursor)
+ (h : sig c.next q=.error 4) :
+ openRetry q sig (fuel+1) c=
+ let tail := openRetry q sig fuel ⟨c.next+1⟩
+ ⟨⟨⟨q,.error 4⟩::tail.execution.trace,tail.execution.result⟩,tail.cursor⟩ := by
+ simp only [openRetry,h,call,eq_self,ite_true,List.cons_append,List.nil_append]
+#print axioms open_retry_eintr
+
+theorem open_retry_error (q : Request) (sig : Signal) (fuel : Nat) (c : Cursor)
+ (e : Int) (h : sig c.next q=.error e) (he : e≠4) :
+ openRetry q sig (fuel+1) c=⟨⟨[⟨q,.error e⟩],.error e⟩,⟨c.next+1⟩⟩ := by
+ simp only [openRetry,h,call,if_neg he]
+#print axioms open_retry_error
+
+end PV_DIAG12

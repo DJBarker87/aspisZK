@@ -1,0 +1,40 @@
+'PV_DIAG6.unwind_joint' does not depend on any axioms
+'PV_DIAG6.scope_joint' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-diag6-20261029/sources/PV_DIAG6_Native.lean:69:7: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case isFalse.ok.succ
+S E : Type
+rel : S → S → Prop
+a b : WriteOps S E
+ka kb : Bytes → Op S (Except E Unit)
+buf : Bytes
+s t : S
+h : rel s t
+hz : a.zeroError = b.zeroError
+hw : ∀ (bs : Bytes) (u v : S), rel u v → Coupled rel (a.write bs u) (b.write bs v)
+hg : ∀ (e : E) (u v : S), rel u v → Coupled rel (a.interruptedGuard e u) (b.interruptedGuard e v)
+hd : ∀ (e : E) (u v : S), rel u v → Coupled rel (a.dropInterrupted e u) (b.dropInterrupted e v)
+hp : ∀ (bs : Bytes) (n : Nat) (u v : S), rel u v → Coupled rel (a.slicePanic bs n u) (b.slicePanic bs n v)
+hk : ∀ (bs : Bytes) (u v : S), rel u v → Coupled rel (ka bs u) (kb bs v)
+h✝ : ¬List.isEmpty buf = true
+u v : S
+huv : rel u v
+n : Nat
+⊢ Coupled rel
+    ((match Except.ok (n + 1) with
+      | Except.ok 0 => PV_DIAG3.pure (Except.error a.zeroError)
+      | Except.ok n.succ => if n + 1 ≤ List.length buf then ka (List.drop (n + 1) buf) else a.slicePanic buf (n + 1)
+      | Except.error e =>
+        sequence (a.interruptedGuard e) fun interrupted =>
+          if interrupted = true then sequence (a.dropInterrupted e) fun x => ka buf else PV_DIAG3.pure (Except.error e))
+      u)
+    ((match Except.ok (n + 1) with
+      | Except.ok 0 => PV_DIAG3.pure (Except.error b.zeroError)
+      | Except.ok n.succ => if n + 1 ≤ List.length buf then kb (List.drop (n + 1) buf) else b.slicePanic buf (n + 1)
+      | Except.error e =>
+        sequence (b.interruptedGuard e) fun interrupted =>
+          if interrupted = true then sequence (b.dropInterrupted e) fun x => kb buf else PV_DIAG3.pure (Except.error e))
+      v)
+'PV_DIAG6.write_step_joint' depends on axioms: [sorryAx]

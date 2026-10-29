@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NameValue.lean:7:83: error: Tactic `decide` failed for proposition
+  ↑PV_RDEA_ActualReservation.suffixText = encodeList ".burn"
+because its `Decidable` instance
+  instDecidableEqList (↑PV_RDEA_ActualReservation.suffixText) (encodeList ".burn")
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match ↑PV_RDEA_ActualReservation.suffixText with
+  | [] =>
+    match encodeList ".burn" with
+    | [] => isTrue ⋯
+    | head :: tail => isFalse ⋯
+  | a :: «as» =>
+    match encodeList ".burn" with
+    | [] => isFalse ⋯
+    | b :: bs =>
+      match decEq a b with
+      | isTrue hab =>
+        match «as».hasDecEq bs with
+        | isTrue habs => isTrue ⋯
+        | isFalse nabs => isFalse ⋯
+      | isFalse nab => isFalse ⋯
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NameValue.lean:18:20: error: Application type mismatch: The argument
+  (↑digest).length
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.53
+of sort `Type (?u.53 + 1)` in the application
+  @InitialSeg (↑digest).length
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NameValue.lean:18:39: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.52
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NameValue.lean:18:50: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 5
+where
+ a := ↑Usize.max
+ b := ↑(encodeList s).length
+'R1Z.PV_RDEAC_NameValue.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_NameValue.finite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_NameValue.start' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

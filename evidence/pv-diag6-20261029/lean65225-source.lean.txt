@@ -1,0 +1,203 @@
+import PV_DIAG3_Joint
+/-! Complete event/terminal control laws. Each callee contract includes its
+state, emitted prefix and abnormal terminal. These are own-1 control laws;
+they do not supply witness independence of the concrete callees. V370 stays P. -/
+set_option autoImplicit false
+namespace PV_DIAG6
+open PV_DIAG3
+variable {S A B E : Type}
+theorem unwind_joint (rel : S → S → Prop) (p : Panic)
+ (d e : Op S Unit) (f g : Panic → Panic → Op S A) (s t : S)
+ (hd : Coupled rel (d s) (e t))
+ (hf : ∀ q u v, rel u v → Coupled rel (f p q u) (g p q v)) :
+ Coupled rel (unwind p d f s) (unwind p e g t) := by
+ rcases hds : d s with ⟨es,u,ex⟩
+ rcases hes : e t with ⟨fs,v,ey⟩
+ rw [hds,hes] at hd
+ rcases hd with ⟨he,hu,hx⟩
+ dsimp at he hu hx
+ cases he; cases hx
+ unfold unwind
+ rw [hds,hes]
+ cases ex with
+ | value a => cases a; exact ⟨rfl,hu,rfl⟩
+ | panic q => exact coupled_prepend rel es _ _ (hf q u v hu)
+ | abort c => exact ⟨rfl,hu,rfl⟩
+ | diverge => exact ⟨rfl,hu,rfl⟩
+#print axioms unwind_joint
+theorem scope_joint (rel : S → S → Prop)
+ (a b : Op S A) (d e : Op S Unit) (f g : Panic → Panic → Op S A)
+ (s t : S) (ha : Coupled rel (a s) (b t))
+ (hd : ∀ u v, rel u v → Coupled rel (d u) (e v))
+ (hf : ∀ p q u v, rel u v → Coupled rel (f p q u) (g p q v)) :
+ Coupled rel (scope a d f s) (scope b e g t) := by
+ rcases hsa : a s with ⟨es,u,ex⟩
+ rcases htb : b t with ⟨fs,v,ey⟩
+ rw [hsa,htb] at ha
+ rcases ha with ⟨he,hu,hx⟩
+ dsimp at he hu hx
+ cases he; cases hx
+ unfold scope
+ rw [hsa,htb]
+ cases ex with
+ | value a =>
+   apply coupled_prepend rel es
+   exact coupled_bind rel _ _ _ _ (hd u v hu) (fun _ x y hxy => coupled_pure rel a x y hxy)
+ | panic p => exact coupled_prepend rel es _ _ (unwind_joint rel p d e f g u v (hd u v hu) (hf p))
+ | abort c => exact ⟨rfl,hu,rfl⟩
+ | diverge => exact ⟨rfl,hu,rfl⟩
+#print axioms scope_joint
+theorem write_step_joint (rel : S → S → Prop) (a b : WriteOps S E)
+ (ka kb : Bytes → Op S (Except E Unit)) (buf : Bytes) (s t : S) (h : rel s t)
+ (hz : a.zeroError = b.zeroError)
+ (hw : ∀ bs u v, rel u v → Coupled rel (a.write bs u) (b.write bs v))
+ (hg : ∀ e u v, rel u v → Coupled rel (a.interruptedGuard e u) (b.interruptedGuard e v))
+ (hd : ∀ e u v, rel u v → Coupled rel (a.dropInterrupted e u) (b.dropInterrupted e v))
+ (hp : ∀ bs n u v, rel u v → Coupled rel (a.slicePanic bs n u) (b.slicePanic bs n v))
+ (hk : ∀ bs u v, rel u v → Coupled rel (ka bs u) (kb bs v)) :
+ Coupled rel (writeAllStep a buf ka s) (writeAllStep b buf kb t) := by
+ unfold writeAllStep
+ split
+ · exact coupled_pure rel (Except.ok () : Except E Unit) s t h
+ · apply coupled_bind rel _ _ _ _ (hw buf s t h)
+   intro out u v huv
+   cases out with
+   | ok n =>
+     cases n with
+     | zero => rw [hz]; exact coupled_pure rel (Except.error b.zeroError : Except E Unit) u v huv
+     | succ n =>
+       dsimp only
+       by_cases hn : n+1 ≤ buf.length
+       · simp only [if_pos hn]; exact hk _ u v huv
+       · simp only [if_neg hn]; exact hp _ _ u v huv
+   | error e =>
+     apply coupled_bind rel _ _ _ _ (hg e u v huv)
+     intro flag x y hxy
+     cases flag with
+     | false => exact coupled_pure rel (Except.error e : Except E Unit) x y hxy
+     | true => exact coupled_bind rel _ _ _ _ (hd e x y hxy) (fun _ z z' hzz => hk buf z z' hzz)
+#print axioms write_step_joint
+theorem write_prefix_joint (rel : S → S → Prop) (a b : WriteOps S E)
+ (ka kb : Bytes → Op S (Except E Unit)) (n : Nat) (buf : Bytes)
+ (s t : S) (h : rel s t) (hz : a.zeroError = b.zeroError)
+ (hw : ∀ bs u v, rel u v → Coupled rel (a.write bs u) (b.write bs v))
+ (hg : ∀ e u v, rel u v → Coupled rel (a.interruptedGuard e u) (b.interruptedGuard e v))
+ (hd : ∀ e u v, rel u v → Coupled rel (a.dropInterrupted e u) (b.dropInterrupted e v))
+ (hp : ∀ bs k u v, rel u v → Coupled rel (a.slicePanic bs k u) (b.slicePanic bs k v))
+ (hk : ∀ bs u v, rel u v → Coupled rel (ka bs u) (kb bs v)) :
+ Coupled rel (writePrefix a n ka buf s) (writePrefix b n kb buf t) := by
+ induction n generalizing buf s t with
+ | zero => exact hk buf s t h
+ | succ n ih => exact write_step_joint rel a b _ _ buf s t h hz hw hg hd hp (fun bs u v huv => ih bs u v huv)
+#print axioms write_prefix_joint
+theorem formatter_joint (rel : S → S → Prop) (a b : FmtOps S E)
+ (s t : S) (hf : Coupled rel (a.format s) (b.format t))
+ (hd : ∀ slot u v, rel u v → Coupled rel (a.dropSlot slot u) (b.dropSlot slot v))
+ (hp : ∀ u v, rel u v → Coupled rel (a.impossibleFmt u) (b.impossibleFmt v)) :
+ Coupled rel (defaultFmt a s) (defaultFmt b t) := by
+ apply coupled_bind rel _ _ _ _ hf
+ intro pair u v huv
+ rcases pair with ⟨out,slot⟩
+ cases out with
+ | ok unit => exact coupled_bind rel _ _ _ _ (hd slot u v huv) (fun _ x y hxy => coupled_pure rel (Except.ok () : Except E Unit) x y hxy)
+ | error unit =>
+   cases slot with
+   | ok unit => exact hp u v huv
+   | error e => exact coupled_pure rel (Except.error e : Except E Unit) u v huv
+#print axioms formatter_joint
+theorem write_fmt_joint (rel : S → S → Prop) (known : Option Bytes)
+ (a b : FmtOps S E) (wa wb : Bytes → Op S (Except E Unit)) (s t : S)
+ (hw : ∀ bs, Coupled rel (wa bs s) (wb bs t))
+ (hf : Coupled rel (defaultFmt a s) (defaultFmt b t)) :
+ Coupled rel (writeFmt known wa a s) (writeFmt known wb b t) := by
+ cases known with
+ | none => exact hf
+ | some bs => exact hw bs
+#print axioms write_fmt_joint
+theorem adapter_joint (rel : S → S → Prop)
+ (wa wb : Bytes → Op S (Except E Unit)) (da db : E → Op S Unit)
+ (bs : Bytes) (s t : S) (hw : Coupled rel (wa bs s) (wb bs t))
+ (hd : ∀ e u v, rel u v → Coupled rel (da e u) (db e v)) :
+ Coupled rel (adapterWrite wa da bs s) (adapterWrite wb db bs t) := by
+ apply coupled_bind rel _ _ _ _ hw
+ intro out u v huv
+ cases out with
+ | ok unit => exact coupled_pure rel (Except.ok () : Except Unit Unit) u v huv
+ | error e => exact coupled_bind rel _ _ _ _ (hd e u v huv) (fun _ x y hxy => coupled_pure rel (Except.error () : Except Unit Unit) x y hxy)
+#print axioms adapter_joint
+theorem stderr_joint (rel : S → S → Prop) (ca cb : Op S Bool) (wa wb : Op S Unit)
+ (s t : S) (hc : Coupled rel (ca s) (cb t))
+ (hw : ∀ u v, rel u v → Coupled rel (wa u) (wb v)) :
+ Coupled rel (attemptStderr ca wa s) (attemptStderr cb wb t) := by
+ apply coupled_bind rel _ _ _ _ hc
+ intro flag u v huv
+ cases flag with
+ | false => exact hw u v huv
+ | true => exact coupled_pure rel () u v huv
+#print axioms stderr_joint
+theorem ignored_write_joint (rel : S → S → Prop)
+ (wa wb : Op S (Except E Unit)) (da db : Except E Unit → Op S Unit)
+ (s t : S) (hw : Coupled rel (wa s) (wb t))
+ (hd : ∀ out u v, rel u v → Coupled rel (da out u) (db out v)) :
+ Coupled rel (ignoredWrite wa da s) (ignoredWrite wb db t) :=
+ coupled_bind rel _ _ _ _ hw hd
+#print axioms ignored_write_joint
+theorem report_joint (rel : S → S → Prop) (out : Except E Unit)
+ (ra rb da db : E → Op S Unit) (fa fb : Panic → Panic → Op S Unit)
+ (s t : S) (h : rel s t)
+ (hr : ∀ e u v, rel u v → Coupled rel (ra e u) (rb e v))
+ (hd : ∀ e u v, rel u v → Coupled rel (da e u) (db e v))
+ (hf : ∀ p q u v, rel u v → Coupled rel (fa p q u) (fb p q v)) :
+ Coupled rel (reportOwned out ra da fa s) (reportOwned out rb db fb t) := by
+ cases out with
+ | ok unit => exact coupled_pure rel 0 s t h
+ | error e =>
+   exact coupled_bind rel _ _ _ _ (scope_joint rel (ra e) (rb e) (da e) (db e) fa fb s t (hr e s t h) (hd e) hf)
+     (fun _ u v huv => coupled_pure rel 1 u v huv)
+#print axioms report_joint
+theorem write_leaf_panic
+ (o : WriteOps S E) (bs : Bytes) (s t : S) (es : List Event) (p : Panic)
+ (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
+ (h : o.write bs s = ⟨es,t,.panic p⟩) :
+ writeAllStep o bs k s = ⟨es,t,.panic p⟩ := by
+ simp [writeAllStep,hne,sequence,h,PV_DIAG3.bind]
+#print axioms write_leaf_panic
+theorem write_guard_panic
+ (o : WriteOps S E) (bs : Bytes) (s t u : S) (es gs : List Event) (e : E) (p : Panic)
+ (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
+ (hw : o.write bs s = ⟨es,t,.value (.error e)⟩)
+ (hg : o.interruptedGuard e t = ⟨gs,u,.panic p⟩) :
+ writeAllStep o bs k s = ⟨es++gs,u,.panic p⟩ := by
+ simp [writeAllStep,hne,sequence,hw,hg,PV_DIAG3.bind,prepend]
+#print axioms write_guard_panic
+theorem write_drop_panic
+ (o : WriteOps S E) (bs : Bytes) (s t u v : S) (es gs ds : List Event) (e : E) (p : Panic)
+ (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
+ (hw : o.write bs s = ⟨es,t,.value (.error e)⟩)
+ (hg : o.interruptedGuard e t = ⟨gs,u,.value true⟩)
+ (hd : o.dropInterrupted e u = ⟨ds,v,.panic p⟩) :
+ writeAllStep o bs k s = ⟨es++(gs++ds),v,.panic p⟩ := by
+ simp [writeAllStep,hne,sequence,hw,hg,hd,PV_DIAG3.bind,prepend]
+#print axioms write_drop_panic
+theorem formatter_leaf_panic
+ (o : FmtOps S E) (s t : S) (es : List Event) (p : Panic)
+ (h : o.format s = ⟨es,t,.panic p⟩) :
+ defaultFmt o s = ⟨es,t,.panic p⟩ := by
+ simp [defaultFmt,sequence,h,PV_DIAG3.bind]
+#print axioms formatter_leaf_panic
+theorem adapter_write_panic
+ (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
+ (bs : Bytes) (s t : S) (es : List Event) (p : Panic)
+ (h : w bs s = ⟨es,t,.panic p⟩) :
+ adapterWrite w d bs s = ⟨es,t,.panic p⟩ := by
+ simp [adapterWrite,sequence,h,PV_DIAG3.bind]
+#print axioms adapter_write_panic
+theorem adapter_store_panic
+ (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
+ (bs : Bytes) (s t u : S) (es ds : List Event) (e : E) (p : Panic)
+ (hw : w bs s = ⟨es,t,.value (.error e)⟩)
+ (hd : d e t = ⟨ds,u,.panic p⟩) :
+ adapterWrite w d bs s = ⟨es++ds,u,.panic p⟩ := by
+ simp [adapterWrite,sequence,hw,hd,PV_DIAG3.bind,prepend]
+#print axioms adapter_store_panic
+end PV_DIAG6

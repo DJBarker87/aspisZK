@@ -1,0 +1,64 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "4e70bdb32dd82f82b0d01b4a45c58bd8fbd500a5",
+  "runner_sha256": "ead2badc24328c1c4fdddf99146c49fc4d2fa489a71e93e3c1868c9ad58e2b55",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG11_FinalManifest",
+  "attempt": 67099,
+  "source_sha256": "a24af9a3fa7a9fad742c0aa4fa36cb37b4f2aaa8c1ff76377c1afa943c6f14fa",
+  "environment_sha256": "f7b84df58c7f60a46049373cddb37d30e7369e217ef4889b9e157d2565b792d0",
+  "dependency_objects": {
+    "PV_DIAG11_Audit": {
+      "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_Audit.olean": "00bd9dc6400a95ebbaa72bf58ffd14d445ffb60d3490d91a910306014e25d78b"
+    },
+    "PV_DIAG11_ProducerAudit": {
+      "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_ProducerAudit.olean": "d701782615c92143cc0eee20718c0ca91f217b7240478ca6ed8f9f41ac9c34c0"
+    },
+    "PV_DIAG10_Handoff": {
+      "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects/PV_DIAG10_Handoff.olean": "8336f4b1f825ec32986906bc0dc855f92ef0e65f872e5548d2b50a317d2c4da8"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/lean67099-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/objects/PV_DIAG11_FinalManifest.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_FinalManifest.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 1.8249809741973877,
+  "peak_rss_kib": "4955128",
+  "swaps": "0",
+  "gnu_wall": "0:01.79",
+  "print_axioms": "PV_DIAG10.DIAG_FILE_TRACE {I A : Type} (actual : I \u2192 List PV_RJ4IDB.FileOp) (native : I \u2192 PV_RJ4IDB.NativeTrace A)\n  (raw : I \u2192 List PV_RJ4IDB.NativeEvent) (state : I \u2192 List PV_RJ4IDB.NativeEvent \u2192 List PV_RJ4IDB.FileOp)\n  (initial : PV_DIAG10.PV_DIAG10_Link_Init state (PV_RJ4IDB.nativeFiles []))\n  (step : PV_DIAG10.PV_DIAG10_Link_Step state List.append fun e => PV_RJ4IDB.nativeFiles [e])\n  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)\n  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE actual native\nPV_DIAG10.DIAG_JSON_STDOUT_TRACE {I A : Type}\n  (actual : I \u2192 List PV_RJ4IDB.Bytes \u00d7 List (PV_RJ4IDB.Bytes \u00d7 PV_RJ4IDB.Bytes)) (native : I \u2192 PV_RJ4IDB.NativeTrace A)\n  (raw : I \u2192 List PV_RJ4IDB.NativeEvent)\n  (state : I \u2192 List PV_RJ4IDB.NativeEvent \u2192 List PV_RJ4IDB.Bytes \u00d7 List (PV_RJ4IDB.Bytes \u00d7 PV_RJ4IDB.Bytes))\n  (initial : PV_DIAG10.PV_DIAG10_Link_Init state ((fun es => (PV_RJ4IDB.nativeJSON es, PV_RJ4IDB.nativeStdout es)) []))\n  (step :\n    PV_DIAG10.PV_DIAG10_Link_Step state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>\n      (fun es => (PV_RJ4IDB.nativeJSON es, PV_RJ4IDB.nativeStdout es)) [e])\n  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)\n  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE actual native\nPV_DIAG10.DIAG_ERROR_STDERR_TRACE {I A : Type} (actual : I \u2192 List PV_DIAG2.Effect \u00d7 List PV_DIAG3.Event)\n  (native : I \u2192 PV_RJ4IDB.NativeTrace A) (raw : I \u2192 List PV_RJ4IDB.NativeEvent)\n  (state : I \u2192 List PV_RJ4IDB.NativeEvent \u2192 List PV_DIAG2.Effect \u00d7 List PV_DIAG3.Event)\n  (initial : PV_DIAG10.PV_DIAG10_Link_Init state ((fun es => (PV_RJ4IDB.nativeDiag2 es, PV_RJ4IDB.nativeDiag3 es)) []))\n  (step :\n    PV_DIAG10.PV_DIAG10_Link_Step state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>\n      (fun es => (PV_RJ4IDB.nativeDiag2 es, PV_RJ4IDB.nativeDiag3 es)) [e])\n  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)\n  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE actual native\n'PV_DIAG10.DIAG_FILE_TRACE' depends on axioms: [propext]\n'PV_DIAG10.DIAG_JSON_STDOUT_TRACE' depends on axioms: [propext]\n'PV_DIAG10.DIAG_ERROR_STDERR_TRACE' depends on axioms: [propext]\n'PV_DIAG11.writeAll_same_length_metadata' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG11.unit_error_operand_link' does not depend on any axioms\n",
+  "object_sha256": "bf56110315274f75dc5200942eef379936bc82093f36d3a916c17eba4bbe11a2"
+}

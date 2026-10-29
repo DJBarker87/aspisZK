@@ -1,0 +1,48 @@
+@PV_DIAG2.source_client_no_rejected : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  {C E : Type}
+  (generate :
+    C → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Secret E × C))
+  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+  (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash)
+  (store after : R1Z.ProverRwRetryModel.Store) (state : C) (k : Aeneas.Std.Usize) (n : ℕ),
+  ↑k + n = 8 →
+    ProverRwFull.prover.retry_attempt (PV_DIAG2.clientEntropy generate) pub compiled variant hash store state k ≠
+      Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+@PV_DIAG2.client_observed_api_not_rejected : ∀ [inst : ProverRwFull.ExternalTypes] [inst_1 : ProverRwFull.ExternalFuns]
+  {C E : Type}
+  (generate :
+    C → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.result.Result R1Z.ProverRwRetryModel.Secret E × C))
+  (pub : R1Z.ProverRwRetryModel.Pub) (compiled : R1Z.ProverRwRetryModel.Compiled)
+  (variant : ProverRwFull.transport.Variant) (hash : R1Z.ProverRwRetryModel.Hash)
+  (a :
+    ℕ →
+      C × R1Z.ProverRwRetryModel.Store →
+        PV_DIAG2.Observed
+          (R1Z.ProverCommitRetry34.Step R1Z.ProverRwRetryModel.Proof × C × R1Z.ProverRwRetryModel.Store)),
+  (∀ (k : ℕ) (s : C × R1Z.ProverRwRetryModel.Store),
+      (a k s).result = R1Z.ProverRwRetryModel.attempt (PV_DIAG2.clientEntropy generate) pub compiled variant hash k s) →
+    ∀ (n k : ℕ) (state : C × R1Z.ProverRwRetryModel.Store),
+      PV_DIAG2.apiError (PV_DIAG2.runEffects a n k state).result ≠ some AspisR1SimControl21.verifier.Error.Rejected
+@PV_DIAG2.retry_sink_silent : ∀ {S P : Type} (a : ℕ → S → PV_DIAG2.Observed (R1Z.ProverCommitRetry34.Step P × S))
+  (sink : PV_DIAG2.Sink),
+  (∀ (k : ℕ) (s : S), PV_DIAG2.atSink sink (a k s).effects = []) →
+    ∀ (n k : ℕ) (s : S), PV_DIAG2.atSink sink (PV_DIAG2.runEffects a n k s).effects = []
+@PV_DIAG2.process : {S P : Type} →
+  PV_DIAG2.Observed (R1Z.ProverCommitRetry34.Step (R1Z.ProverCommitRetry34.Published P) × S) →
+    (PV_DIAG2.Error → PV_DIAG2.Execution ℕ) →
+      (R1Z.ProverCommitRetry34.Published P → S → PV_DIAG2.Execution ℕ) →
+        (Aeneas.Std.Error → PV_DIAG2.Execution ℕ) → PV_DIAG2.Execution ℕ → PV_DIAG2.Execution ℕ → PV_DIAG2.Process S P
+'PV_DIAG2.source_client_no_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG2.client_observed_api_not_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG2.rejected_not_in_report_suffix' depends on axioms: [propext]
+'PV_DIAG2.cap_requested_text' depends on axioms: [propext, Quot.sound]
+'PV_DIAG2.semantic_mapper_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG2.mask_mapper_exact' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG2.semantic_mapper_silent' depends on axioms: [propext]
+'PV_DIAG2.mask_mapper_silent' depends on axioms: [propext]
+'PV_DIAG2.termination_success' depends on axioms: [propext]
+'PV_DIAG2.normal_error_exit' depends on axioms: [propext]
+'PV_DIAG2.retry_sink_exact' depends on axioms: [propext]
+'PV_DIAG2.result_equality_not_stderr_equality' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG2.result_equality_not_frame_equality' depends on axioms: [propext]
+'R1Z.ProverRwRetryModel.retry' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63295/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63295/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_CheckSource.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CheckSource.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.54",
+  "peak_rss_kib": "571856",
+  "swap": "0",
+  "source_revision": "a2c77a4b8882dda4be83263e757d26a0e790c8f4",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CheckSource.lean:12:22: error: unsolved goals\nm : Memory\nt : Token\nowner : Nat\npayload : Nat \u2192 Link \u2192 Bytes\n\u22a2 (match check PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with\n    | Except.error (Error.endpointCapacity row) => Except.error (CheckError.endpoint row)\n    | Except.ok a => Except.ok ()) =\n    match check PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with\n    | Except.error (Error.endpointCapacity row) => Except.error (CheckError.endpoint row)\n    | Except.ok a => Except.ok ()\n'R1Z.PV_OWND_CheckSource.scalar_input' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 63295,
+  "module": "R1Z/PV_OWND_CheckSource",
+  "source_blob": "371cb5826f79814ce0708cde3dae2e8cf3277f47",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWND_CheckSource.lean",
+  "source_sha256": "6c7c49aa1d066fb0216826293e04f039ada5c5c3097300d9e406a6b7a8a72c50",
+  "imports": [
+    "R1Z.PV_OWND_InitialCheck",
+    "R1Z.PV_OWND_SourceShape"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWND_InitialCheck": "704a93f4ad901af97d4ed3bc5183bf0380882b9b7707d9b2380020e359f8ae0e",
+    "R1Z.PV_OWND_SourceShape": "24f04a89ff9f5eef9735b4a71ccb076a90367de0dc4f7b426ac9073426bc0104"
+  },
+  "deps_fingerprint": "e391c67cac6b02d95e2c55d35197692f81485531f117d23a7e43174301b38eb2"
+}

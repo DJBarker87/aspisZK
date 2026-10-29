@@ -1,0 +1,16 @@
+'R1Z.PV_ROWS10_Replay.error_buffer' does not depend on any axioms
+R1Z.PV_ROWS10_Combined.local_results (a b : List Reply) (ta tb da db : List UInt8)
+  (publicControl : List.map PV_ROWS10_Entropy.control a = List.map PV_ROWS10_Entropy.control b)
+  (publicLength : ta.length = tb.length) (n k : Nat) (hk : k < 16) :
+  failed (run a ta da) = failed (run b tb db) ∧
+    (buffer (run a ta da)).length = da.length + ta.length ∧
+      PV_ROWS10_WorkRanges.start n k ≤ PV_ROWS10_WorkRanges.stop n k ∧
+        PV_ROWS10_WorkRanges.stop n k ≤ n ∧ PV_ROWS10_WorkRanges.stop n 15 = n
+R1Z.PV_ROWS10_Entropy.consumed_signal {W : Type} (length : W → Nat) (trace : W → List Control) (nativeSignal : W → Bool)
+  (sourceBinding : ∀ (w : W), nativeSignal w = signal (trace w) (length w))
+  (publicControl : ∀ (a b : W), trace a = trace b) (publicLength : ∀ (a b : W), length a = length b) (a b : W) :
+  nativeSignal a = nativeSignal b
+R1Z.PV_ROWS10_WorkRanges.intermediate_bounds (n k limit : Nat) (hn : n ≤ limit) (hk : k < 16) :
+  n / 16 * k ≤ limit ∧
+    PV_ROWS10_WorkRanges.start n k ≤ limit ∧
+      PV_ROWS10_WorkRanges.start n k + n / 16 ≤ limit ∧ PV_ROWS10_WorkRanges.stop n k ≤ limit

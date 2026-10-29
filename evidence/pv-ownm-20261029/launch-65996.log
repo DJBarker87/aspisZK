@@ -1,0 +1,56 @@
+/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_SourceDense.lean:13:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_OWNM_SourceDense.take_coordinates`:
+  [Field K]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Field K] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_SourceDense.lean:41:36: warning: This simp argument is unused:
+  tail
+
+Hint: Omit it from the simp argument list.
+  simp only [List.length_ofFn, ̲weight,t̵a̵i̵l̵,̵ ̲List.get_eq_getElem, ̲List.getElem_ofFn] at hprod
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_SourceDense.lean:67:6: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => decode point[w + ↑i] = if (PV_OWNI_Scanner.suffix point).testBit (_a - 1 - ↑i) = true then 1 else 0
+Error: Application type mismatch: The argument
+  hi
+has type
+  ↑i < (List.drop w point).length
+but is expected to have type
+  ↑i < _a
+in the application
+  ⟨↑i, hi⟩
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+K : Type
+inst✝ : Field K
+decode : Q → K
+D : PV_OWNJ_DecodeFold.Decoder decode
+point column : List Q
+hl : point.length = 10
+hp : ∀ q ∈ point, PV_OWNJ_DecodeFold.Canon q
+w : ℕ := width point
+t : ℕ := trailing point
+split : w + t = 10
+hw : w ≤ point.length
+htlen : (List.drop w point).length = t
+suffix : Fin (2 ^ t) := ⟨PV_OWNI_Scanner.suffix point, ⋯⟩
+i : Fin t
+hi : ↑i < (List.drop w point).length
+hb : w + ↑i < point.length
+hd :
+  decode point[w + ↑i] =
+    if (PV_OWNI_Scanner.suffix point).testBit ((List.drop w point).length - 1 - ↑i) = true then 1 else 0
+⊢ decode (point[↑(Fin.natAdd w i)]?.getD zero) = if tail t suffix i = true then 1 else 0
+'R1Z.PV_OWNM_SourceDense.concrete_source_dense' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNM_SourceDense.take_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNM_SourceDense.prefix_weight' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNM_SourceDense.sparse_dense' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNM_SourceDense.source_dense' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNM_SourceDense.concrete_restore' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-65996/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-65996/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-objects/R1Z/PV_OWNM_SourceDense.olean", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_SourceDense.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.57", "peak_rss_kib": "3027996", "swap": "0", "source_revision": "05af80128fcf8e94de0b2922bb8e8b6103b71d4a", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

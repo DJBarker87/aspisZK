@@ -1,0 +1,19 @@
+Expected time: small optimized harness compilation/link, then eight controlled-boundary tests and one live 64-byte fill
+warning: associated items `CUSTOM_START` and `new_custom` are never used
+   --> /home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/getrandom-0.3.4/src/error.rs:49:11
+    |
+ 38 | impl Error {
+    | ---------- associated items in this implementation
+...
+ 49 |     const CUSTOM_START: RawOsError = 1 << 17;
+    |           ^^^^^^^^^^^^
+...
+126 |     pub const fn new_custom(n: u16) -> Error {
+    |                  ^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+
+{"cases":8,"original_sys_fill_exact":true,"same_request_different_failure_signal":true,"live_fill_success":true,"classification":"finite controlled-boundary validation; not a native witness-dependent failure counterexample"}
+

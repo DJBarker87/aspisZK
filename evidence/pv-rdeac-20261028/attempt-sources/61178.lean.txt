@@ -1,0 +1,71 @@
+import R1Z.PV_RDEAC_PublishedTail
+import R1Z.PV_RDEAC_ReturningBound
+open Aeneas Aeneas.Std Result ProverRwFull
+namespace R1Z.PV_RDEAC_JoinSimulation
+open PV_RDB1_V183_ReserveWorld PV_CBL_StringBytesAdapter PV_CBL_CallbackBundle
+open PV_RDEAC_NameText PV_RDEAC_PublishedTail PV_RDEAC_JoinValue
+
+theorem returning {S F : Type} (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (shape : Shape) (width : shape.width=1)
+    (address : Nat) (w : World S F) (abi : 9223372036854775808≤Usize.max)
+    (success : (PV_RDEAC_FullJoin.join step shape address false
+      (needsSeparator (encodeList (directory base self)))
+      (encodeList (directory base self)) (encodeList (basenameText digest.val)) w).returned=.ok ()) :
+    letI : ExternalTypes := AppendTypes base
+    letI : ExternalFuns := selectedJoin base ops
+    PV_RDEA_ActualEndpointConsumer.afterCapacity self digest ""=
+      ok (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val)) ∧
+    (PV_RDEAC_FullJoin.join step shape address false
+      (needsSeparator (encodeList (directory base self)))
+      (encodeList (directory base self)) (encodeList (basenameText digest.val)) w).buffer.values=
+      encodeList (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val)) := by
+  letI : ExternalTypes := AppendTypes base
+  letI : ExternalFuns := selectedJoin base ops
+  have derived := PV_RDEAC_ReturningBound.derived step shape width address
+    (encodeList (directory base self)) (encodeList (basenameText digest.val)) w abi success
+  have len : digest.val.length=32 := digest.property
+  rw [name_length,len] at derived
+  refine ⟨PV_RDEAC_PublishedTail.source base ops self digest (by omega),?_⟩
+  rw [PV_RDEAC_JoinHandlers.success_value step shape address false _ _ _ w success,
+    PV_RDEAC_ReturningBound.relative_value,PV_RDEAC_JoinString.joined_bytes]
+
+/-- Complete native handler law plus the *actual unchanged publication*
+consumer on returning executions. No success restriction is placed on the
+outer law: allocation abort and capacity unwind remain explicit alternatives. -/
+theorem consumed {S F R : Type} (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (free : Nat → Nat → Nat → S → S)
+    (owned : Buffer U8) (shape : Shape) (width : shape.width=1) (address : Nat)
+    (w : World S F) (abi : 9223372036854775808≤Usize.max)
+    (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R)
+    (next : List U8 → World S F → R) :
+    letI : ExternalTypes := AppendTypes base
+    letI : ExternalFuns := selectedJoin base ops
+    let e := PV_RDEAC_FullJoin.join step shape address false
+      (needsSeparator (encodeList (directory base self)))
+      (encodeList (directory base self)) (encodeList (basenameText digest.val)) w
+    PV_RDEAC_JoinHandlers.consume free owned e oom panic next=
+      (match e.returned with
+       | .error (.allocError layout) => oom layout e.world
+       | .error .capacityOverflow => panic (PV_RDEAC_OwnedCleanup.release free owned (PV_RDEAC_OwnedCleanup.release free e.buffer e.world))
+       | .ok () => next (encodeList (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val)))
+          (PV_RDEAC_OwnedCleanup.release free owned e.world)) ∧
+    (e.returned=.ok () → PV_RDEA_ActualEndpointConsumer.afterCapacity self digest ""=
+      ok (PV_RDEAC_JoinString.joinedText (directory base self) (basenameText digest.val))) ∧
+    PV_RDEA_PrefixWords.Prefix (PV_RDEA_CapacityEndpoint.sizes (PV_RDEAC_JoinHandlers.finalWorld free owned e).history)
+      (PV_RDEA_CapacityEndpoint.sizes w.history++PV_RDEA_PathSchedule.joinWord
+        (encodeList (directory base self)).length (encodeList (basenameText digest.val)).length false
+        (needsSeparator (encodeList (directory base self)))) := by
+  letI : ExternalTypes := AppendTypes base
+  letI : ExternalFuns := selectedJoin base ops
+  dsimp only
+  obtain ⟨law,prefix⟩ := PV_RDEAC_JoinHandlers.consumed step free owned shape width address false
+    (needsSeparator (encodeList (directory base self)))
+    (encodeList (directory base self)) (encodeList (basenameText digest.val)) w oom panic next
+  rw [PV_RDEAC_ReturningBound.relative_value,←PV_RDEAC_JoinString.joined_bytes] at law
+  exact ⟨law,(fun h => (returning base ops self digest step shape width address w abi h).1),prefix⟩
+
+#print axioms returning
+#print axioms consumed
+end R1Z.PV_RDEAC_JoinSimulation

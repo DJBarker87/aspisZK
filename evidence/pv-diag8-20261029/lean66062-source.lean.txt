@@ -1,0 +1,32 @@
+import PV_DIAG8_Publication
+set_option autoImplicit false
+namespace PV_DIAG8
+/-! Literal error-construction sites of the actual proof-account client.
+Formatting OS replies and arbitrary Debug implementations remains separate. -/
+inductive ClientGuard
+ | legacy | listType | listCount | keyType | keyCanonical | duplicate
+ | position | attempts | lane | checkpoint | anchor | settled | marker | unknown
+ deriving DecidableEq
+ def guardText : ClientGuard → String
+ | .legacy => "legacy proof_account input is unsupported"
+ | .listType => "proof_accounts must be eight public keys"
+ | .listCount => "proof_accounts must contain eight public keys"
+ | .keyType => "proof account must be a string"
+ | .keyCanonical => "noncanonical/zero proof account"
+ | .duplicate => "duplicate proof account"
+ | .position => "unexpected settlement proof-account position"
+ | .attempts => "invalid successful attempt count"
+ | .lane => "wrong live output lane"
+ | .checkpoint => "checkpoint master mismatch"
+ | .anchor => "deposits do not reconstruct finalized anchor"
+ | .settled => "settled lane differs from proved afterstate"
+ | .marker => "consumed marker identity differs"
+ | .unknown => "unknown action"
+
+theorem message_fixed_at_site {W : Type} (site : ClientGuard) (w w' : W) : (fun _ : W => guardText site) w = (fun _ : W => guardText site) w' := rfl
+#print axioms message_fixed_at_site
+theorem message_site_law (a b : ClientGuard) (h : a=b) : guardText a = guardText b := congrArg guardText h
+#print axioms message_site_law
+theorem message_no_dynamic_operands (g : ClientGuard) : ∃ text : String, guardText g = text := ⟨guardText g,rfl⟩
+#print axioms message_no_dynamic_operands
+end PV_DIAG8

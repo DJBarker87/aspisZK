@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_BuilderShape.lean:53:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.map (fun c => (List.map PV_OWNL_Inputs.lift c).length) ↑base
+in the target expression
+  List.map (List.length ∘ List.map PV_OWNL_Inputs.lift) ↑base = List.replicate 26 1024
+
+E : Type
+publicError imbalance : E
+inverse : Q → Option Q
+base : Std.Array (List U32) 26#usize
+d g : Std.Array Q 1024#usize
+setup : Unit → Except E (Q × Q)
+registry : Q → Except E (List CopyRow)
+balanced : List Q → Bool
+finish : List Q → Except E Unit
+accepted : (PV_OWNO_Builder.acceptedBase ↑base && PV_OWNO_Builder.acceptedExtensions ↑d ↑g) = true
+hb : ∀ c ∈ ↑base, c.length = 1024
+lambda chi : Q
+hs : setup () = Except.ok (lambda, chi)
+h1 : List Q
+hr : PV_OWNO_HelperSelect.selected imbalance inverse chi (registry lambda) = Except.ok h1
+hlen : ¬h1.length ≠ 1024
+hl : h1.length = 1024
+h✝ : balanced h1 = true
+unit : Unit
+hf : finish h1 = Except.ok unit
+h :
+  Except.ok (List.map (List.map PV_OWNL_Inputs.lift) ↑base ++ [h1, ↑g, ↑d]) =
+    Except.ok (List.map (List.map PV_OWNL_Inputs.lift) ↑base ++ [h1, ↑g, ↑d])
+he : List.map (fun c => (List.map PV_OWNL_Inputs.lift c).length) ↑base = List.map (fun x => 1024) ↑base
+⊢ List.map (List.length ∘ List.map PV_OWNL_Inputs.lift) ↑base = List.replicate 26 1024
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (26 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_BuilderShape.lean:42:14: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'R1Z.PV_OWNP_BuilderShape.accepted_lengths' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWNP_BuilderShape.successful_lengths' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNP_BuilderShape.at_array_execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,36 @@
+import R1Z.PV_RDEAC_EndpointRequests
+open Aeneas Aeneas.Std ProverRwFull
+namespace R1Z.PV_RDEAC_Statements
+open PV_RDB1_V183_ReserveWorld PV_CBL_CallbackBundle
+
+/-- At the literal capacity69 site, native constructor error is allocation
+failure. It selects the actual OOM handler and post-request world before any
+name append, path borrow, join, or owned-name destruction can execute. -/
+theorem constructor_failure {S F R : Type} (base : ExternalTypes) (ops : @ExternalFuns (AppendTypes base))
+    (self : @PV_RDEA_ActualReservationTail.Store (AppendTypes base)) (digest : Array U8 32#usize)
+    (step : Request → S → Option Nat × S) (free : Nat → Nat → Nat → S → S)
+    (shape : Shape) (width : shape.width=1) (nameAddress joinAddress : Nat) (w : World S F)
+    (oom : core.alloc.layout.Layout → World S F → R) (panic : World S F → R)
+    (next : List U8 → World S F → R) (err : PV_RDB1_V183_ReserveWorld.Error)
+    (failed : (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).returned=.error err) :
+    ∃ layout,err=.allocError layout ∧
+      PV_RDEAC_EndpointInstance.endpoint base self digest step free shape nameAddress joinAddress w oom panic next=
+        oom layout (PV_RDB1_V181.deployed step 18446744073709551615 9223372036854775807 shape nameAddress 69 w).world := by
+  obtain ⟨layout,rfl⟩ := PV_RDEAC_LiteralDomain.error_kind step shape width nameAddress w err failed
+  have law := (PV_RDEAC_EndpointInstance.complete base ops self digest step free shape width nameAddress joinAddress w oom panic next).1
+  rw [failed] at law
+  exact ⟨layout,rfl,law⟩
+
+#print axioms constructor_failure
+
+#print R1Z.PV_RDEAC_ConstructorSimulation.simulation
+#print R1Z.PV_RDEAC_EndpointInstance.complete
+#print R1Z.PV_RDEAC_EndpointInstance.owned
+#print R1Z.PV_RDEAC_JoinSimulation.consumed
+#print R1Z.PV_RDEAC_SourceTail.tail
+#print R1Z.PV_RDEAC_SourceTail.source_factor
+#print R1Z.PV_RDEAC_EndpointRequests.prefix_word
+#print R1Z.PV_RDEAC_EndpointFrames.final_frame
+#print R1Z.PV_RDEAC_FreeWord.source_headers
+#print R1Z.PV_RDEAC_ABI.word_room
+end R1Z.PV_RDEAC_Statements

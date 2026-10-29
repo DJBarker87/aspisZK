@@ -1,0 +1,59 @@
+{
+  "classification": "source control/formatter binding with explicit unproved leaf-effect refinement",
+  "source_rows": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 635,
+      "body": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> {\n    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }\n    let attempt=next_attempt(k)?;\n    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),\n        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),\n        Err(e)=>Err(e),\n    }\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 266,
+      "body": "fn semantic_error(e:SError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==SError::ActivePole { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 256,
+      "body": "fn mask_error(e:StateOnlyMaskBuildError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==StateOnlyMaskBuildError::MaskSampleExhausted { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "line": 20,
+      "body": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> {\n    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {\n        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)\n    })\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "sha256": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+      "line": 21,
+      "body": "fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!(\"{e:?}\")}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "sha256": "9bbd4c80d76daa18fd595ebf921b911cfe9cf473675f30d417e47ec87fda20ee",
+      "line": 13,
+      "body": "fn main()->Result<()> {\n let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;\n if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}\n let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();\n let ixs:Vec<Instruction>=q[\"instructions\"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i[\"program\"].as_str().unwrap()).unwrap(),accounts:i[\"accounts\"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i[\"data\"].as_str().unwrap())}).collect();\n let conf=TransactionConfig::empty().with_priority_fee(10000).with_compute_unit_limit(1_400_000).with_loaded_accounts_data_size_limit(8*1024*1024).with_heap_size(256*1024);\n let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q[\"blockhash\"].as_str().unwrap().parse()?,conf)?;\n let refs:Vec<&Keypair>=keys.iter().collect();let tx=VersionedTransaction::try_new(VersionedMessage::V1(m),&refs)?;\n let b=wincode::serialize(&tx)?;ensure!(b.len()<=4096,\"TxV1 exceeds 4096 bytes\");\n println!(\"{}\",serde_json::json!({\"hex\":hex(&b),\"signature\":tx.signatures[0].to_string(),\"bytes\":b.len()}));Ok(())\n}"
+    }
+  ],
+  "std_termination_source_sha256": "6384b820420b1488380a289554f230640acc44e8db81d356db50ee7bd6c8a1fa",
+  "std_termination_span": "impl<T: Termination, E: fmt::Debug> Termination for Result<T, E> {\n    fn report(self) -> ExitCode {\n        match self {\n            Ok(val) => val.report(),\n            Err(err) => {\n                io::attempt_print_to_stderr(format_args_nl!(\"Error: {err:?}\"));\n                ExitCode::FAILURE\n            }\n        }\n    }\n}\n",
+  "controller_direct_diagnostic_calls": 0,
+  "model_correspondence": {
+    "cap": "runEffects zero / cap_no_direct_effects",
+    "successful_attempt": "runEffects done retains index+1, proof/audit/store/callback",
+    "rejected_attempt": "rejected_effects preserves full prefix and recursion",
+    "other_returned_error": "runEffects stop preserves variant/state/effects",
+    "Aeneas_fail": "fatal_effects_retained; abstract failure kind is not equated with native panic/OOM",
+    "Aeneas_divergence": "runEffects div retains prefix; no termination report invented"
+  },
+  "open_leaves": [
+    "complete native per-attempt effect trace equals Observed.effects, including implicit drops, panic/OOM and frames",
+    "plan::err formatted allocation/capture partial failures equal reportError, with delivered/partial stderr writes refined separately",
+    "main plan::run post-proof filesystem/serialization and success stdout effects",
+    "same-public joint occurrence/variant/frame history transported through existing L1 coupling",
+    "complete foreign/logger/crash-reporter closure"
+  ]
+}

@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_HostQuerySafety.lean:22:30: error: Type mismatch: After simplification, term
+  cap
+ has type
+  i + (ys.length + 1) ≤ 22
+but is expected to have type
+  i + 1 + ys.length ≤ 22
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_HostQuerySafety.lean:64:24: error: Tactic `subst` failed: invalid equality proof, it is not of the form (x = t) or (t = x)
+  ((e = Event.drawGuard false ∨ e = Event.acceptedGuard false) ∨
+      e = Event.readByte (s.draws / 8) (4 * (s.draws % 8)) ∨
+        e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 1) ∨
+          e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 2) ∨
+            e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 3)) ∨
+    e ∈ List.flatMap comparisons (member x 0 s.accepted).2
+
+case neg.inl.inl
+x : ℕ
+xs : List ℕ
+ih : ∀ (s : State), Admitted s → (∀ x ∈ xs, x < 2 ^ 18) → ∀ e ∈ (run s xs).2, Safe e
+s : State
+admitted : Admitted s
+small : ∀ x_1 ∈ x :: xs, x_1 < 2 ^ 18
+hd : ¬s.draws = 64
+ha : ¬s.accepted.length = 22
+live : stopped s = false
+hb : s.draws / 8 < 8 ∧ ∀ i < 4, 4 * (s.draws % 8) + i < 32
+hw : s.accepted.length < 22
+hm : ∀ e ∈ List.flatMap comparisons (member x 0 s.accepted).2, Safe e
+ht : ∀ e ∈ (run (next s x) xs).2, Safe e
+e : PV_L2E_HostQuery.Event
+h✝ :
+  ((e = Event.drawGuard false ∨ e = Event.acceptedGuard false) ∨
+      e = Event.readByte (s.draws / 8) (4 * (s.draws % 8)) ∨
+        e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 1) ∨
+          e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 2) ∨
+            e = Event.readByte (s.draws / 8) (4 * (s.draws % 8) + 3)) ∨
+    e ∈ List.flatMap comparisons (member x 0 s.accepted).2
+⊢ Safe e
+'PV_L2E_HostQuerySafety.member_safe' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_L2E_HostQuerySafety.run_safe' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

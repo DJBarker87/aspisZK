@@ -1,0 +1,50 @@
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_CollectorRequests.lean:12:8: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_CollectorRequests.lean:45:84: error: unsolved goals
+S F : Type
+allocate : Allocator S
+deallocate : ℕ → ℕ → ℕ → S → Result S
+handler : Handler S F
+state : State S F
+p : ℕ
+s : S
+h : allocate (second p) (filtered p state).resource.allocator = ok (none, s)
+hh :
+  allocate
+      { address := (retained p).address, oldCapacity := (retained p).capacity,
+        newCapacity := (retained p).values.length + 190, shape := { width := 8, align := alignment2 } }
+      (filtered p state).resource.allocator =
+    ok (none, s)
+⊢ abortWith handler ((64 + 190) * { width := 8, align := alignment2 }.width)
+      (afterRequest (second p) none s (filtered p state)) =
+    abortWith handler 2032 (afterRequest (second p) none s (filtered p state))
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_CollectorRequests.lean:57:88: error: unsolved goals
+S F : Type
+allocate : Allocator S
+deallocate : ℕ → ℕ → ℕ → S → Result S
+handler : Handler S F
+state : State S F
+p1 p2 : ℕ
+s : S
+h : allocate (second p1) (filtered p1 state).resource.allocator = ok (some p2, s)
+hh :
+  allocate
+      { address := (retained p1).address, oldCapacity := (retained p1).capacity,
+        newCapacity := (retained p1).values.length + 190, shape := { width := 8, align := alignment2 } }
+      (filtered p1 state).resource.allocator =
+    ok (some p2, s)
+⊢ flatReference allocate deallocate handler p2
+      (store p2 (Cells.links (PV_B3P_Schedule133.forestLinks PV_B3P_Schedule133.legacyLinks))
+        (afterRequest (second p1) (some p2) s (filtered p1 state))) =
+    flatReference allocate deallocate handler p2 (initializedForest p1 p2 s state)
+'R1Z.PV_RDB2D_CollectorRequests.first_public' depends on axioms: [propext]
+'R1Z.PV_RDB2D_CollectorRequests.second_public' depends on axioms: [propext]
+'R1Z.PV_RDB2D_CollectorRequests.third_public' depends on axioms: [propext]
+'R1Z.PV_RDB2D_CollectorRequests.retained_length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.second_exact' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.after_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.second_null' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.after_second' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.third_null' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2D_CollectorRequests.after_third' depends on axioms: [propext, Classical.choice, Quot.sound]

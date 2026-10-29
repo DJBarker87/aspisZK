@@ -1,0 +1,30 @@
+import PV_DIAG9_Operands
+set_option autoImplicit false
+namespace PV_DIAG10
+open PV_DIAG9
+/-! A public environment does not supply witness-bearing operands, live PCs or
+mutable logger state. All four independent field links remain explicit. -/
+def PV_DIAG10_Link_Operands {I P : Type} (context : I → P)
+ (calls : I → DiagnosticCall) : Prop :=
+ ∀ i j, context i=context j → (calls i).operands=(calls j).operands
+def PV_DIAG10_Link_Sites {I P : Type} (context : I → P)
+ (calls : I → DiagnosticCall) : Prop :=
+ ∀ i j, context i=context j → (calls i).site=(calls j).site
+def PV_DIAG10_Link_Frames {I P : Type} (context : I → P)
+ (calls : I → DiagnosticCall) : Prop :=
+ ∀ i j, context i=context j → (calls i).frames=(calls j).frames
+def PV_DIAG10_Link_Levels {I P : Type} (context : I → P)
+ (calls : I → DiagnosticCall) : Prop :=
+ ∀ i j, context i=context j → (calls i).level=(calls j).level
+theorem call_fields_suffice (a b : DiagnosticCall)
+ (site : a.site=b.site) (operands : a.operands=b.operands)
+ (frames : a.frames=b.frames) (level : a.level=b.level) : a=b := by
+ cases a
+ cases b
+ cases site
+ cases operands
+ cases frames
+ cases level
+ rfl
+#print axioms call_fields_suffice
+end PV_DIAG10

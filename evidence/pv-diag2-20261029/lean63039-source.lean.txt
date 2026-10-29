@@ -1,0 +1,49 @@
+import PV_DIAG2_BacktraceFlags
+import PV_DIAG2_Termination
+set_option autoImplicit false
+namespace PV_DIAG2
+
+/-- Scope continuations retain owned String/VarError drop glue, comparison
+and all normal/unwind cleanup effects. They must be supplied from native
+execution, and are never defaulted to identity. -/
+def readBacktraceEnv (library fallback : Execution EnvRead)
+    (closeLibrary closeFallback : EnvRead → Execution Bool → Execution Bool) : Execution Bool :=
+ bind library (fun value => closeLibrary value (match value with
+  | .value s => pureExecution (s != "0")
+  | _ => bind fallback (fun value => closeFallback value (pureExecution (envFlag value)))))
+
+def enabledExecution (load : Execution Nat) (library fallback : Execution EnvRead)
+    (closeLibrary closeFallback : EnvRead → Execution Bool → Execution Bool)
+    (store : Nat → Execution Unit) : Execution Bool :=
+ bind load (fun value => match value with
+  | 0 => bind (readBacktraceEnv library fallback closeLibrary closeFallback) (fun b =>
+    bind (store (cacheCode b)) (fun _ => pureExecution b))
+  | 1 => pureExecution false
+  | _+2 => pureExecution true)
+
+inductive BacktraceValue where
+ | disabled | unsupported | captured : List Nat → BacktraceValue
+ deriving Repr
+
+def captureExecution (enabled : Execution Bool) (create : Execution BacktraceValue) :
+    Execution BacktraceValue :=
+ bind enabled (fun flag => if flag then create else pureExecution .disabled)
+
+def forceCaptureExecution (create : Execution BacktraceValue) := create
+
+
+theorem env_unicode_skips_fallback (prior : List Effect) (s : String) (fallback : Execution EnvRead)
+ (cl cb : EnvRead → Execution Bool → Execution Bool) :
+ readBacktraceEnv ⟨prior,.value (.value s)⟩ fallback cl cb = prepend prior (cl (.value s) (pureExecution (s != "0"))) := rfl
+#print axioms env_unicode_skips_fallback
+
+theorem env_absent_runs_fallback (prior : List Effect) (fallback : Execution EnvRead)
+ (cl cb : EnvRead → Execution Bool → Execution Bool) :
+ readBacktraceEnv ⟨prior,.value .absent⟩ fallback cl cb = prepend prior (cl .absent (bind fallback (fun value => cb value (pureExecution (envFlag value))))) := rfl
+#print axioms env_absent_runs_fallback
+
+theorem env_nonunicode_runs_fallback (prior : List Effect) (fallback : Execution EnvRead)
+ (cl cb : EnvRead → Execution Bool → Execution Bool) :
+ readBacktraceEnv ⟨prior,.value .nonUnicode⟩ fallback cl cb = prepend prior (cl .nonUnicode (bind fallback (fun value => cb value (pureExecution (envFlag value))))) := rfl
+#print axioms env_nonunicode_runs_fallback
+end PV_DIAG2

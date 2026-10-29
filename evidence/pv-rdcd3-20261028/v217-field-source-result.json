@@ -1,0 +1,306 @@
+{
+  "records": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn subtract_p(",
+      "body": "pub fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "selected_body": "pub fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "expected_body": "pub fn subtract_p(x:u32)->u32{let mask=0u32.wrapping_sub((x>=P)as u32);x.wrapping_sub(P&mask)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.ct.subtract_p",
+      "statement_binding": "Compare x>=P; bool cast; wrapping zero-minus-bit; bitwise P mask; wrapping subtraction."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn reduce64(",
+      "body": "pub fn reduce64(x: u64) -> u32 {\n    let x = (x & P as u64) + (x >> 31);\n    let x = (x & P as u64) + (x >> 31);\n    subtract_p(x as u32)\n}",
+      "selected_body": "pub fn reduce64(x: u64) -> u32 {\n    let x = (x & P as u64) + (x >> 31);\n    let x = (x & P as u64) + (x >> 31);\n    subtract_p(x as u32)\n}",
+      "expected_body": "pub fn reduce64(x:u64)->u32{let x=(x&P as u64)+(x>>31);let x=(x&P as u64)+(x>>31);subtract_p(x as u32)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.ct.reduce64",
+      "statement_binding": "Two ordered mask/shift/add folds; truncating cast; subtract_p. Release additions use wrapping carrier."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn add(",
+      "body": "pub fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "selected_body": "pub fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "expected_body": "pub fn add(a:u32,b:u32)->u32{subtract_p(a.wrapping_add(b))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.ct.add",
+      "statement_binding": "Wrapping add then subtract_p."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn sub(",
+      "body": "pub fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "selected_body": "pub fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "expected_body": "pub fn sub(a:u32,b:u32)->u32{subtract_p(a.wrapping_add(P).wrapping_sub(b))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.ct.sub",
+      "statement_binding": "Wrapping add P, wrapping subtract b, then subtract_p."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn neg(",
+      "body": "pub fn neg(a: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((a != 0) as u32);\n    P.wrapping_sub(a) & mask\n}",
+      "selected_body": "pub fn neg(a: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((a != 0) as u32);\n    P.wrapping_sub(a) & mask\n}",
+      "expected_body": "pub fn neg(a:u32)->u32{let mask=0u32.wrapping_sub((a!=0)as u32);P.wrapping_sub(a)&mask}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.ct.neg",
+      "statement_binding": "Nonzero comparison and bool cast, mask subtraction, P-a wrapping subtraction, bitwise and."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }",
+      "selected_body": "pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }",
+      "expected_body": "pub fn add(self,rhs:Self)->Self{Self(ct::add(self.0,rhs.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.add",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }",
+      "selected_body": "pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }",
+      "expected_body": "pub fn sub(self,rhs:Self)->Self{Self(ct::sub(self.0,rhs.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.sub",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn neg(self) -> Self { Self(ct::neg(self.0)) }",
+      "selected_body": "pub fn neg(self) -> Self { Self(ct::neg(self.0)) }",
+      "expected_body": "pub fn neg(self)->Self{Self(ct::neg(self.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.neg",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "body": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "selected_body": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "expected_body": "fn reduce_u64(x:u64)->u32{ct::reduce64(x)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.reduce_u64",
+      "statement_binding": "ct-host-prover selects this definition; audit/reference/default body inactive."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: M31) -> M31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);\n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+      "selected_body": "pub fn mul(self, rhs: M31) -> M31 {\n        \n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+      "expected_body": "pub fn mul(self,rhs:M31)->M31{M31(reduce_u64(self.0 as u64*rhs.0 as u64))}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);"
+      ],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.mul",
+      "statement_binding": "Widen both operands; release u64 multiplication; reduce; newtype."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn reduce_u64(value: u64) -> M31 {\n        M31(reduce_u64(value))\n    }",
+      "selected_body": "pub fn reduce_u64(value: u64) -> M31 {\n        M31(reduce_u64(value))\n    }",
+      "expected_body": "pub fn reduce_u64(value:u64)->M31{M31(reduce_u64(value))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.reduce_u64",
+      "statement_binding": "Call selected reducer; newtype."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn double(self) -> M31 {\n        self.add(self)\n    }",
+      "selected_body": "pub fn double(self) -> M31 {\n        self.add(self)\n    }",
+      "expected_body": "pub fn double(self)->M31{self.add(self)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.M31.double",
+      "statement_binding": "Call selected ct add on identical operands."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn new(a: M31, b: M31) -> CM31 {\n        CM31 { a, b }\n    }",
+      "selected_body": "pub fn new(a: M31, b: M31) -> CM31 {\n        CM31 { a, b }\n    }",
+      "expected_body": "pub fn new(a:M31,b:M31)->CM31{CM31{a,b}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.new",
+      "statement_binding": "Construct ordered pair."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn add(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+      "selected_body": "pub fn add(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+      "expected_body": "pub fn add(self,rhs:CM31)->CM31{CM31{a:self.a.add(rhs.a),b:self.b.add(rhs.b),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.add",
+      "statement_binding": "Ordered a then b ct additions."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn sub(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+      "selected_body": "pub fn sub(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+      "expected_body": "pub fn sub(self,rhs:CM31)->CM31{CM31{a:self.a.sub(rhs.a),b:self.b.sub(rhs.b),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.sub",
+      "statement_binding": "Ordered a then b ct subtractions."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: CM31) -> CM31 {\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: CM31) -> CM31 {\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:CM31)->CM31{let m0=self.a.mul(rhs.a);let m1=self.b.mul(rhs.b);let m2=M31::reduce_u64((u64::from(self.a.0)+u64::from(self.b.0))*(u64::from(rhs.a.0)+u64::from(rhs.b.0)),);CM31{a:m0.sub(m1),b:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.mul",
+      "statement_binding": "m0 then m1; left/right raw widening sums, release product, reduction; a subtraction then two b subtractions."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn square(self) -> CM31 {\n        CM31 {\n            // `(a+b)*(a-b)` with raw representatives. Both factors are\n            // below 2P and their product is strictly below 2^64.\n            a: M31::reduce_u64(\n                (u64::from(self.a.0) + u64::from(self.b.0))\n                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),\n            ),\n            b: self.a.mul(self.b).double(),\n        }\n    }",
+      "selected_body": "pub fn square(self) -> CM31 {\n        CM31 {\n            // `(a+b)*(a-b)` with raw representatives. Both factors are\n            // below 2P and their product is strictly below 2^64.\n            a: M31::reduce_u64(\n                (u64::from(self.a.0) + u64::from(self.b.0))\n                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),\n            ),\n            b: self.a.mul(self.b).double(),\n        }\n    }",
+      "expected_body": "pub fn square(self)->CM31{CM31{a:M31::reduce_u64((u64::from(self.a.0)+u64::from(self.b.0))*(u64::from(self.a.0)+u64::from(P)-u64::from(self.b.0)),),b:self.a.mul(self.b).double(),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.square",
+      "statement_binding": "Widening, sums/subtraction/product with release wrap semantics; reduce a; multiply then double b."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn mul_m31(self, rhs: M31) -> CM31 {\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+      "selected_body": "pub fn mul_m31(self, rhs: M31) -> CM31 {\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+      "expected_body": "pub fn mul_m31(self,rhs:M31)->CM31{CM31{a:self.a.mul(rhs),b:self.b.mul(rhs),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.mul_m31",
+      "statement_binding": "Ordered scalar products."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn double(self) -> CM31 {\n        self.add(self)\n    }",
+      "selected_body": "pub fn double(self) -> CM31 {\n        self.add(self)\n    }",
+      "expected_body": "pub fn double(self)->CM31{self.add(self)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.CM31.double",
+      "statement_binding": "Pair addition with itself."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "fn mul_by_r(",
+      "body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "selected_body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "expected_body": "fn mul_by_r(x:CM31)->CM31{CM31{a:x.a.double().sub(x.b),b:x.a.add(x.b.double()),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.mul_by_r",
+      "statement_binding": "Double a then subtract b; double b then add a; construct pair."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn add(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);\n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "selected_body": "pub fn add(self, rhs: QM31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "expected_body": "pub fn add(self,rhs:QM31)->QM31{QM31{c0:self.c0.add(rhs.c0),c1:self.c1.add(rhs.c1),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);"
+      ],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.QM31.add",
+      "statement_binding": "c0 then c1 pair additions."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);\n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        \n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:QM31)->QM31{let m0=self.c0.mul(rhs.c0);let m1=self.c1.mul(rhs.c1);let m2=self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));QM31{c0:m0.add(mul_by_r(m1)),c1:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);"
+      ],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.QM31.mul",
+      "statement_binding": "m0,m1; left/right sums then m2; mul_by_r then c0 add; ordered two c1 subtractions."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn square(self) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "selected_body": "pub fn square(self) -> QM31 {\n        \n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "expected_body": "pub fn square(self)->QM31{let c0_square=self.c0.square();let c1_square=self.c1.square();QM31{c0:c0_square.add(mul_by_r(c1_square)),c1:self.c0.mul(self.c1).double(),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);"
+      ],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.QM31.square",
+      "statement_binding": "Two squares; mul_by_r and c0 add; c0*c1 and double."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn mul_m31(self, rhs: M31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);\n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "selected_body": "pub fn mul_m31(self, rhs: M31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "expected_body": "pub fn mul_m31(self,rhs:M31)->QM31{QM31{c0:self.c0.mul_m31(rhs),c1:self.c1.mul_m31(rhs),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);"
+      ],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.QM31.mul_m31",
+      "statement_binding": "c0 then c1 scalar products."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl PreparedQm31Multiplier {",
+      "body": "pub fn new(value: QM31) -> Self {\n        let prepare = |component: CM31| [component.a, component.b, component.a.add(component.b)];\n        Self {\n            components: [\n                prepare(value.c0),\n                prepare(value.c1),\n                prepare(value.c0.add(value.c1)),\n            ],\n        }\n    }",
+      "selected_body": "pub fn new(value: QM31) -> Self {\n        let prepare = |component: CM31| [component.a, component.b, component.a.add(component.b)];\n        Self {\n            components: [\n                prepare(value.c0),\n                prepare(value.c1),\n                prepare(value.c0.add(value.c1)),\n            ],\n        }\n    }",
+      "expected_body": "pub fn new(value:QM31)->Self{let prepare=|component:CM31|[component.a,component.b,component.a.add(component.b)];Self{components:[prepare(value.c0),prepare(value.c1),prepare(value.c0.add(value.c1)),],}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.PreparedQm31Multiplier.new",
+      "statement_binding": "prepare closure reads a,b and computes add. Calls on c0,c1, then pair sum. Closure and 3x3 arrays are explicit in model; unit closure holds no capture."
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl PreparedQm31Multiplier {",
+      "body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        let multiply = |left: [M31; 3], right: CM31| {\n            let m0 = left[0].mul(right.a);\n            let m1 = left[1].mul(right.b);\n            let m2 = left[2].mul(right.a.add(right.b));\n            CM31 {\n                a: m0.sub(m1),\n                b: m2.sub(m0).sub(m1),\n            }\n        };\n        let m0 = multiply(self.components[0], rhs.c0);\n        let m1 = multiply(self.components[1], rhs.c1);\n        let m2 = multiply(self.components[2], rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        let multiply = |left: [M31; 3], right: CM31| {\n            let m0 = left[0].mul(right.a);\n            let m1 = left[1].mul(right.b);\n            let m2 = left[2].mul(right.a.add(right.b));\n            CM31 {\n                a: m0.sub(m1),\n                b: m2.sub(m0).sub(m1),\n            }\n        };\n        let m0 = multiply(self.components[0], rhs.c0);\n        let m1 = multiply(self.components[1], rhs.c1);\n        let m2 = multiply(self.components[2], rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:QM31)->QM31{let multiply=|left:[M31;3],right:CM31|{let m0=left[0].mul(right.a);let m1=left[1].mul(right.b);let m2=left[2].mul(right.a.add(right.b));CM31{a:m0.sub(m1),b:m2.sub(m0).sub(m1),}};let m0=multiply(self.components[0],rhs.c0);let m1=multiply(self.components[1],rhs.c1);let m2=multiply(self.components[2],rhs.c0.add(rhs.c1));QM31{c0:m0.add(mul_by_r(m1)),c1:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD3_FieldSource.aspis_core.field.PreparedQm31Multiplier.mul",
+      "statement_binding": "multiply closure preserves reads0,1,2 and all ordered operations. Outer closure calls read components0,1,2 then pair sums. Unit closure has no capture; all constant indices have type-level bounds3. No mutable writes or backward continuation."
+    }
+  ],
+  "feature_graph_sha256": "3bf8d1033e906315b76cab9576db009197c18bc8e969e62b5aae21fecfd61dad",
+  "owned_model_sha256": "f2b0d2e87275e882e777e9a84b6737e251f607ff3315c4177e378c6f9e281afc",
+  "qualification": "Source-pattern to explicitly named ANF model association at existing arithmetic/memory primitive boundary; full row proof and primitive library bindings required. No machine-code/world/observer theorem.",
+  "constants": "P=2147483647; M31 ZERO/ONE=0/1; CM31/QM31 constants ordered as source, validated separately by model source and closing theorem.",
+  "drop": "All reached field and Prepared records derive Copy; closure captures are empty; no user destructor. Primitive stack construction/layout remains V370.",
+  "composition": "Aeneas/compiler semantic trust retained, reclassification only"
+}

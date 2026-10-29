@@ -1,0 +1,2268 @@
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:432:14: error: Tactic `rfl` failed: The left-hand side
+  if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+  else do
+    let a ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+    let a_1 ← aspis_core.field.QM31.ZERO
+    let a ←
+      core.cmp.PartialEq.ne.trait_default
+          (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) a
+          (some a_1)
+    if a = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+      else do
+        let a ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+        let a_2 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+        erase
+            (match a_2 with
+            | core.ops.control_flow.ControlFlow.Continue val9 => do
+              let s9 ← PV_L1D_Logged.lift (Std.lift val9.to_slice)
+              let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+              let cf9 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val11 => do
+                  let __x ← PV_L1D_Source_056.produce aspis_coredigestDigest32Inst __x.2.1 __x.2.2
+                  let cf10 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                      let s10 ← PV_L1D_Logged.lift (Std.lift (Std.Array.empty U8).to_slice)
+                      let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 13#u8 s10 __x.2.1 __x.2.2
+                      let cf11 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val15 => do
+                          let columns ← PV_L1D_Source_052.produce c1 (value✝¹.2 value.2) g d
+                          let dc ←
+                            PV_L1D_Logged.lift
+                                (transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d)
+                          let mask_sum ← PV_L1D_Source_051.produce columns
+                          let mask_sum1 ← PV_L1D_Source_055.produce mask_sum dc
+                          let we ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1)
+                          let a_3 ← PV_L1D_Logged.lift we.to_le_bytes
+                          let s11 ← PV_L1D_Logged.lift (Std.lift a_3.to_slice)
+                          let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 14#u8 s11 __x.2.1 __x.2.2
+                          let cf12 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val17 => do
+                              let __x ←
+                                PV_L1D_Source_043.produce aspis_coredigestDigest32Inst
+                                    host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle __x.2.1
+                                    __x.2.2 mask_sum1
+                                    { «public» := public1, columns := columns,
+                                      challenges :=
+                                        { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                          eta := val17 },
+                                      eta := val17, d := dc }
+                              let cf13 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val19 => do
+                                  let r16 ← PV_L1D_Source_066.produce columns val19.1
+                                  let cf14 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r16)
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                      let state_before_z0 ←
+                                        PV_L1D_Logged.lift
+                                            (host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst
+                                              __x.2.1)
+                                      let q1 ← PV_L1D_Logged.lift (val19.1.index_usize 8#usize)
+                                      let q2 ← PV_L1D_Logged.lift (val19.1.index_usize 9#usize)
+                                      let extras ← PV_L1D_Source_049.produce columns variant q1 q2
+                                      let v ← PV_L1D_Source_047.produce val20 extras
+                                      let r17 ← PV_L1D_Logged.lift (host_wire.record 25#u8 v.deref)
+                                      let cf15 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r17)
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                          let __x_1 ←
+                                            PV_L1D_Logged.lift
+                                                (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                  aspis_coredigestDigest32Inst __x.2.1 25#u8 val21.deref)
+                                          let cf16 ←
+                                            PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x_1.1)
+                                          match cf16 with
+                                            | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                              let bytes8 ←
+                                                PV_L1D_Logged.lift
+                                                    (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 __x.2.2
+                                                      val21.deref)
+                                              let v1 ← PV_L1D_Source_045.produce columns variant val23
+                                              let r19 ← PV_L1D_Logged.lift (host_wire.record 26#u8 v1.deref)
+                                              let cf17 ←
+                                                PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r19)
+                                              match cf17 with
+                                                | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                  let __x ←
+                                                    PV_L1D_Logged.lift
+                                                        (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                          aspis_coredigestDigest32Inst __x_1.2 26#u8 val24.deref)
+                                                  let cf18 ←
+                                                    PV_L1D_Logged.lift
+                                                        (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                                  match cf18 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                      let bytes9 ←
+                                                        PV_L1D_Logged.lift
+                                                            (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                              val24.deref)
+                                                      let b1 ←
+                                                        PV_L1D_Logged.lift
+                                                            (aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                              val23 val26)
+                                                      if b1 = true then
+                                                          Pure.pure
+                                                            (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                              a.2)
+                                                        else
+                                                          Pure.pure
+                                                            (core.result.Result.Ok
+                                                                { bytes := bytes9, transcript := __x.2,
+                                                                  challenges :=
+                                                                    { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                      zc := val13, mu := val15, eta := val17 },
+                                                                  alpha := val19.1, state_before_z0 := state_before_z0,
+                                                                  roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                  columns := columns,
+                                                                  z := Array.make 2#usize [val23, val26] ⋯ },
+                                                              a.2)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r21 ←
+                                                        PV_L1D_Logged.lift
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (host_semantic.BuiltSemantics H)
+                                                              (core.convert.FromSame r1_wire.Error) residual)
+                                                      Pure.pure (r21, a.2)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r21 ←
+                                                    PV_L1D_Logged.lift
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (host_semantic.BuiltSemantics H)
+                                                          (core.convert.FromSame r1_wire.Error) residual)
+                                                  Pure.pure (r21, a.2)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r21 ←
+                                                PV_L1D_Logged.lift
+                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (host_semantic.BuiltSemantics H)
+                                                      (core.convert.FromSame r1_wire.Error) residual)
+                                              Pure.pure (r21, a.2)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r21 ←
+                                            PV_L1D_Logged.lift
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                  residual)
+                                          Pure.pure (r21, a.2)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r21 ←
+                                        PV_L1D_Logged.lift
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                              residual)
+                                      Pure.pure (r21, a.2)
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r21 ←
+                                    PV_L1D_Logged.lift
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                          residual)
+                                  Pure.pure (r21, a.2)
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r21 ←
+                                PV_L1D_Logged.lift
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                              Pure.pure (r21, a.2)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r21 ←
+                            PV_L1D_Logged.lift
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                          Pure.pure (r21, a.2)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r21 ←
+                        PV_L1D_Logged.lift
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                      Pure.pure (r21, a.2)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r21 ←
+                    PV_L1D_Logged.lift
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                  Pure.pure (r21, a.2)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r21 ←
+                PV_L1D_Logged.lift
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+              Pure.pure (r21, a.2))
+is not definitionally equal to the right-hand side
+  if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+  else do
+    let o ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+    let q ← aspis_core.field.QM31.ZERO
+    let b ←
+      core.cmp.PartialEq.ne.trait_default
+          (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) o (some q)
+    if b = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+      else do
+        let (r10, commitments2) ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+        let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r10
+        match cf8 with
+          | core.ops.control_flow.ControlFlow.Continue val9 => do
+            let s9 ← Std.lift val9.to_slice
+            let (r11, val10, bytes3) ←
+              host_semantic.semantic_row aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+            let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+            match cf9 with
+              | core.ops.control_flow.ControlFlow.Continue val11 => do
+                let (r12, val12, bytes4) ← host_semantic.zc_rows aspis_coredigestDigest32Inst val10 bytes3
+                let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                match cf10 with
+                  | core.ops.control_flow.ControlFlow.Continue val13 => do
+                    let s10 ← Std.lift (Std.Array.empty U8).to_slice
+                    let (r13, val14, bytes5) ←
+                      host_semantic.semantic_row aspis_coredigestDigest32Inst 13#u8 s10 val12 bytes4
+                    let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                    match cf11 with
+                      | core.ops.control_flow.ControlFlow.Continue val15 => do
+                        let columns ← host_semantic.lift_columns c1 (value✝¹.2 value.2) g d
+                        let dc ← transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d
+                        let mask_sum ← host_semantic.initial_mask_sum columns
+                        let mask_sum1 ← host_semantic.add_d_tail mask_sum dc
+                        let we ← aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1
+                        let a ← we.to_le_bytes
+                        let s11 ← Std.lift a.to_slice
+                        let (r14, val16, bytes6) ←
+                          host_semantic.semantic_row aspis_coredigestDigest32Inst 14#u8 s11 val14 bytes5
+                        let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r14
+                        match cf12 with
+                          | core.ops.control_flow.ControlFlow.Continue val17 => do
+                            let (r15, val18, bytes7) ←
+                              host_sumcheck.prove_sumcheck aspis_coredigestDigest32Inst
+                                  host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle val16 bytes6
+                                  mask_sum1
+                                  { «public» := public1, columns := columns,
+                                    challenges :=
+                                      { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                        eta := val17 },
+                                    eta := val17, d := dc }
+                            let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                            match cf13 with
+                              | core.ops.control_flow.ControlFlow.Continue val19 =>
+                                let (alpha, _) := val19
+                                do
+                                let r16 ← host_semantic.point_claims columns alpha
+                                let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                match cf14 with
+                                  | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                    let state_before_z0 ←
+                                      host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst val18
+                                    let q1 ← alpha.index_usize 8#usize
+                                    let q2 ← alpha.index_usize 9#usize
+                                    let extras ← host_semantic.extra_claims columns variant q1 q2
+                                    let v ← host_semantic.claim_bytes val20 extras
+                                    let r17 ← host_wire.record 25#u8 v.deref
+                                    let cf15 ← core.result.Result.Insts.CoreOpsTry.branch r17
+                                    match cf15 with
+                                      | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                        let (r18, val22) ←
+                                          host_wire.SemanticTranscript.challenge_reference_circle_point
+                                              aspis_coredigestDigest32Inst val18 25#u8 val21.deref
+                                        let cf16 ← core.result.Result.Insts.CoreOpsTry.branch r18
+                                        match cf16 with
+                                          | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                            let bytes8 ←
+                                              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes7 val21.deref
+                                            let v1 ← host_semantic.endpoint_bytes columns variant val23
+                                            let r19 ← host_wire.record 26#u8 v1.deref
+                                            let cf17 ← core.result.Result.Insts.CoreOpsTry.branch r19
+                                            match cf17 with
+                                              | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                let (r20, val25) ←
+                                                  host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                      aspis_coredigestDigest32Inst val22 26#u8 val24.deref
+                                                let cf18 ← core.result.Result.Insts.CoreOpsTry.branch r20
+                                                match cf18 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                    let bytes9 ←
+                                                      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                          val24.deref
+                                                    let b1 ←
+                                                      aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                          val23 val26
+                                                    if b1 = true then
+                                                        ok
+                                                          (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                            commitments2)
+                                                      else
+                                                        ok
+                                                          (core.result.Result.Ok
+                                                              { bytes := bytes9, transcript := val25,
+                                                                challenges :=
+                                                                  { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                    zc := val13, mu := val15, eta := val17 },
+                                                                alpha := alpha, state_before_z0 := state_before_z0,
+                                                                roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                columns := columns,
+                                                                z := Array.make 2#usize [val23, val26] ⋯ },
+                                                            commitments2)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r21 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (host_semantic.BuiltSemantics H)
+                                                          (core.convert.FromSame r1_wire.Error) residual
+                                                    ok (r21, commitments2)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r21 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (host_semantic.BuiltSemantics H)
+                                                      (core.convert.FromSame r1_wire.Error) residual
+                                                ok (r21, commitments2)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r21 ←
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                  residual
+                                            ok (r21, commitments2)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r21 ←
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                              residual
+                                        ok (r21, commitments2)
+                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                    let r21 ←
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                          residual
+                                    ok (r21, commitments2)
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r21 ←
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                                ok (r21, commitments2)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r21 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                            ok (r21, commitments2)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r21 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                        ok (r21, commitments2)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r21 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                    ok (r21, commitments2)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r21 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                ok (r21, commitments2)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r21 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+            ok (r21, commitments2)
+
+case h_1.Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H T1 T2 : Type
+aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H
+coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst :
+  core.ops.function.FnOnce T1 (aspis_core.field.QM31 × aspis_core.field.QM31)
+    (core.result.Result (alloc.vec.Vec aspis_core.field.QM31) r1_wire.Error)
+CommitmentsInst : host_semantic.Commitments T2
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+c1 : Std.Array (alloc.vec.Vec aspis_core.field.M31) 26#usize
+d g h1_padding : Std.Array aspis_core.field.QM31 1024#usize
+helper : T1
+commitments : T2
+hash : H
+variant : transport.Variant
+value✝¹³ : core.result.Result Unit r1_wire.Error
+called✝²² : host_semantic.check_semantic_columns c1 d g = ok value✝¹³
+cf7✝¹ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Unit
+a✝² : Unit
+called✝²¹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹³ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝¹² : core.result.Result (Std.Array U8 32#usize) r1_wire.Error × T2
+called✝²⁰ : CommitmentsInst.c1 commitments c1 d = ok value✝¹²
+cf8✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (Std.Array U8 32#usize)
+val9✝ : Std.Array U8 32#usize
+called✝¹⁹ :
+  core.result.Result.Insts.CoreOpsTry.branch value✝¹².1 = ok (core.ops.control_flow.ControlFlow.Continue val9✝)
+value✝¹¹ : core.result.Result (alloc.vec.Vec U8) aspis_core.state_only_prefix.r0.Error
+called✝¹⁸ : public1.public_bytes = ok value✝¹¹
+value✝¹⁰ : core.result.Result (alloc.vec.Vec U8) r1_wire.Error
+called✝¹⁷ :
+  core.result.Result.map_err
+      (host_semantic.build_with_helper_mode.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst)
+      value✝¹¹ () =
+    ok value✝¹⁰
+cf17✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (alloc.vec.Vec U8)
+val24✝ : alloc.vec.Vec U8
+called✝¹⁶ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁰ = ok (core.ops.control_flow.ControlFlow.Continue val24✝)
+value✝⁹ : core.result.Result (host_wire.SemanticTranscript H) r1_wire.Error
+called✝¹⁵ : host_wire.SemanticTranscript.new aspis_coredigestDigest32Inst hash val24✝.deref val9✝ = ok value✝⁹
+cf3✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (host_wire.SemanticTranscript H)
+val2✝ : host_wire.SemanticTranscript H
+called✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue val2✝)
+value✝⁸ : Slice U8
+called✝¹³ : Std.lift val9✝.to_slice = ok value✝⁸
+value✝⁷ : alloc.vec.Vec U8
+called✝¹² : alloc.slice.Slice.to_vec core.clone.CloneU8 value✝⁸ = ok value✝⁷
+value✝⁶ : Slice U8
+called✝¹¹ : Std.lift (Std.Array.empty U8).to_slice = ok value✝⁶
+value✝⁵ : core.result.Result aspis_core.field.QM31 r1_wire.Error × host_wire.SemanticTranscript H × alloc.vec.Vec U8
+called✝¹⁰ : host_semantic.semantic_row aspis_coredigestDigest32Inst 0#u8 value✝⁶ val2✝ value✝⁷ = ok value✝⁵
+cf12✝¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) aspis_core.field.QM31
+val17✝¹ : aspis_core.field.QM31
+called✝⁹ :
+  core.result.Result.Insts.CoreOpsTry.branch value✝⁵.1 = ok (core.ops.control_flow.ControlFlow.Continue val17✝¹)
+value✝⁴ : Slice U8
+called✝⁸ : Std.lift (Std.Array.empty U8).to_slice = ok value✝⁴
+value✝³ : core.result.Result aspis_core.field.QM31 r1_wire.Error × host_wire.SemanticTranscript H × alloc.vec.Vec U8
+called✝⁷ : host_semantic.semantic_row aspis_coredigestDigest32Inst 1#u8 value✝⁴ value✝⁵.2.1 value✝⁵.2.2 = ok value✝³
+cf12✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) aspis_core.field.QM31
+val17✝ : aspis_core.field.QM31
+called✝⁶ : core.result.Result.Insts.CoreOpsTry.branch value✝³.1 = ok (core.ops.control_flow.ControlFlow.Continue val17✝)
+value✝² : core.result.Result (alloc.vec.Vec aspis_core.field.QM31) r1_wire.Error
+called✝⁵ : coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst.call_once helper (val17✝¹, val17✝) = ok value✝²
+cf6✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (alloc.vec.Vec aspis_core.field.QM31)
+val7✝ : alloc.vec.Vec aspis_core.field.QM31
+called✝⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝² = ok (core.ops.control_flow.ControlFlow.Continue val7✝)
+value✝¹ : Slice aspis_core.field.QM31 × (Slice aspis_core.field.QM31 → alloc.vec.Vec aspis_core.field.QM31)
+called✝³ : Std.lift val7✝.deref_mut = ok value✝¹
+value✝ : Slice aspis_core.field.QM31
+called✝² : Std.lift h1_padding.to_slice = ok value✝
+value : core.result.Result Unit aspis_prover.state_only_hiding.StateOnlyMaskBuildError × Slice aspis_core.field.QM31
+called✝¹ : aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_h1_padding_mask_v1 value✝¹.1 value✝ = ok value
+cf7✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Unit
+a✝¹ a✝ : Unit
+called✝ :
+  core.result.Result.map_err
+      (host_semantic.build_with_helper_mode.closure_1.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+        aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst)
+      value.1 () =
+    ok (core.result.Result.Ok a✝)
+called :
+  core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Ok a✝) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+⊢ (if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+    else do
+      let a ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+      let a_1 ← aspis_core.field.QM31.ZERO
+      let a ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) a
+            (some a_1)
+      if a = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+        else do
+          let a ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+          let a_2 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+          erase
+              (match a_2 with
+              | core.ops.control_flow.ControlFlow.Continue val9 => do
+                let s9 ← PV_L1D_Logged.lift (Std.lift val9.to_slice)
+                let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+                let cf9 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                match cf9 with
+                  | core.ops.control_flow.ControlFlow.Continue val11 => do
+                    let __x ← PV_L1D_Source_056.produce aspis_coredigestDigest32Inst __x.2.1 __x.2.2
+                    let cf10 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                    match cf10 with
+                      | core.ops.control_flow.ControlFlow.Continue val13 => do
+                        let s10 ← PV_L1D_Logged.lift (Std.lift (Std.Array.empty U8).to_slice)
+                        let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 13#u8 s10 __x.2.1 __x.2.2
+                        let cf11 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf11 with
+                          | core.ops.control_flow.ControlFlow.Continue val15 => do
+                            let columns ← PV_L1D_Source_052.produce c1 (value✝¹.2 value.2) g d
+                            let dc ←
+                              PV_L1D_Logged.lift
+                                  (transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d)
+                            let mask_sum ← PV_L1D_Source_051.produce columns
+                            let mask_sum1 ← PV_L1D_Source_055.produce mask_sum dc
+                            let we ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1)
+                            let a_3 ← PV_L1D_Logged.lift we.to_le_bytes
+                            let s11 ← PV_L1D_Logged.lift (Std.lift a_3.to_slice)
+                            let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 14#u8 s11 __x.2.1 __x.2.2
+                            let cf12 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                            match cf12 with
+                              | core.ops.control_flow.ControlFlow.Continue val17 => do
+                                let __x ←
+                                  PV_L1D_Source_043.produce aspis_coredigestDigest32Inst
+                                      host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle __x.2.1
+                                      __x.2.2 mask_sum1
+                                      { «public» := public1, columns := columns,
+                                        challenges :=
+                                          { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                            eta := val17 },
+                                        eta := val17, d := dc }
+                                let cf13 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                match cf13 with
+                                  | core.ops.control_flow.ControlFlow.Continue val19 => do
+                                    let r16 ← PV_L1D_Source_066.produce columns val19.1
+                                    let cf14 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r16)
+                                    match cf14 with
+                                      | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                        let state_before_z0 ←
+                                          PV_L1D_Logged.lift
+                                              (host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst
+                                                __x.2.1)
+                                        let q1 ← PV_L1D_Logged.lift (val19.1.index_usize 8#usize)
+                                        let q2 ← PV_L1D_Logged.lift (val19.1.index_usize 9#usize)
+                                        let extras ← PV_L1D_Source_049.produce columns variant q1 q2
+                                        let v ← PV_L1D_Source_047.produce val20 extras
+                                        let r17 ← PV_L1D_Logged.lift (host_wire.record 25#u8 v.deref)
+                                        let cf15 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r17)
+                                        match cf15 with
+                                          | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                            let __x_1 ←
+                                              PV_L1D_Logged.lift
+                                                  (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                    aspis_coredigestDigest32Inst __x.2.1 25#u8 val21.deref)
+                                            let cf16 ←
+                                              PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x_1.1)
+                                            match cf16 with
+                                              | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                                let bytes8 ←
+                                                  PV_L1D_Logged.lift
+                                                      (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 __x.2.2
+                                                        val21.deref)
+                                                let v1 ← PV_L1D_Source_045.produce columns variant val23
+                                                let r19 ← PV_L1D_Logged.lift (host_wire.record 26#u8 v1.deref)
+                                                let cf17 ←
+                                                  PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r19)
+                                                match cf17 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                    let __x ←
+                                                      PV_L1D_Logged.lift
+                                                          (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                            aspis_coredigestDigest32Inst __x_1.2 26#u8 val24.deref)
+                                                    let cf18 ←
+                                                      PV_L1D_Logged.lift
+                                                          (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                                    match cf18 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                        let bytes9 ←
+                                                          PV_L1D_Logged.lift
+                                                              (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                                val24.deref)
+                                                        let b1 ←
+                                                          PV_L1D_Logged.lift
+                                                              (aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                                val23 val26)
+                                                        if b1 = true then
+                                                            Pure.pure
+                                                              (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                                a.2)
+                                                          else
+                                                            Pure.pure
+                                                              (core.result.Result.Ok
+                                                                  { bytes := bytes9, transcript := __x.2,
+                                                                    challenges :=
+                                                                      { lambda := val17✝¹, chi := val17✝,
+                                                                        theta := val11, zc := val13, mu := val15,
+                                                                        eta := val17 },
+                                                                    alpha := val19.1,
+                                                                    state_before_z0 := state_before_z0,
+                                                                    roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                    columns := columns,
+                                                                    z := Array.make 2#usize [val23, val26] ⋯ },
+                                                                a.2)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r21 ←
+                                                          PV_L1D_Logged.lift
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (host_semantic.BuiltSemantics H)
+                                                                (core.convert.FromSame r1_wire.Error) residual)
+                                                        Pure.pure (r21, a.2)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r21 ←
+                                                      PV_L1D_Logged.lift
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (host_semantic.BuiltSemantics H)
+                                                            (core.convert.FromSame r1_wire.Error) residual)
+                                                    Pure.pure (r21, a.2)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r21 ←
+                                                  PV_L1D_Logged.lift
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (host_semantic.BuiltSemantics H)
+                                                        (core.convert.FromSame r1_wire.Error) residual)
+                                                Pure.pure (r21, a.2)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r21 ←
+                                              PV_L1D_Logged.lift
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (host_semantic.BuiltSemantics H)
+                                                    (core.convert.FromSame r1_wire.Error) residual)
+                                            Pure.pure (r21, a.2)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r21 ←
+                                          PV_L1D_Logged.lift
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                residual)
+                                        Pure.pure (r21, a.2)
+                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                    let r21 ←
+                                      PV_L1D_Logged.lift
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                            residual)
+                                    Pure.pure (r21, a.2)
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r21 ←
+                                  PV_L1D_Logged.lift
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                                Pure.pure (r21, a.2)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r21 ←
+                              PV_L1D_Logged.lift
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                            Pure.pure (r21, a.2)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r21 ←
+                          PV_L1D_Logged.lift
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                        Pure.pure (r21, a.2)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r21 ←
+                      PV_L1D_Logged.lift
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                    Pure.pure (r21, a.2)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r21 ←
+                  PV_L1D_Logged.lift
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                Pure.pure (r21, a.2))) =
+    if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+    else do
+      let o ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+      let q ← aspis_core.field.QM31.ZERO
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) o
+            (some q)
+      if b = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+        else do
+          let (r10, commitments2) ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+          let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r10
+          match cf8 with
+            | core.ops.control_flow.ControlFlow.Continue val9 => do
+              let s9 ← Std.lift val9.to_slice
+              let (r11, val10, bytes3) ←
+                host_semantic.semantic_row aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+              let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val11 => do
+                  let (r12, val12, bytes4) ← host_semantic.zc_rows aspis_coredigestDigest32Inst val10 bytes3
+                  let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                      let s10 ← Std.lift (Std.Array.empty U8).to_slice
+                      let (r13, val14, bytes5) ←
+                        host_semantic.semantic_row aspis_coredigestDigest32Inst 13#u8 s10 val12 bytes4
+                      let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val15 => do
+                          let columns ← host_semantic.lift_columns c1 (value✝¹.2 value.2) g d
+                          let dc ← transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d
+                          let mask_sum ← host_semantic.initial_mask_sum columns
+                          let mask_sum1 ← host_semantic.add_d_tail mask_sum dc
+                          let we ← aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1
+                          let a ← we.to_le_bytes
+                          let s11 ← Std.lift a.to_slice
+                          let (r14, val16, bytes6) ←
+                            host_semantic.semantic_row aspis_coredigestDigest32Inst 14#u8 s11 val14 bytes5
+                          let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r14
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val17 => do
+                              let (r15, val18, bytes7) ←
+                                host_sumcheck.prove_sumcheck aspis_coredigestDigest32Inst
+                                    host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle val16
+                                    bytes6 mask_sum1
+                                    { «public» := public1, columns := columns,
+                                      challenges :=
+                                        { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                          eta := val17 },
+                                      eta := val17, d := dc }
+                              let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val19 =>
+                                  let (alpha, _) := val19
+                                  do
+                                  let r16 ← host_semantic.point_claims columns alpha
+                                  let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                      let state_before_z0 ←
+                                        host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst val18
+                                      let q1 ← alpha.index_usize 8#usize
+                                      let q2 ← alpha.index_usize 9#usize
+                                      let extras ← host_semantic.extra_claims columns variant q1 q2
+                                      let v ← host_semantic.claim_bytes val20 extras
+                                      let r17 ← host_wire.record 25#u8 v.deref
+                                      let cf15 ← core.result.Result.Insts.CoreOpsTry.branch r17
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                          let (r18, val22) ←
+                                            host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                aspis_coredigestDigest32Inst val18 25#u8 val21.deref
+                                          let cf16 ← core.result.Result.Insts.CoreOpsTry.branch r18
+                                          match cf16 with
+                                            | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                              let bytes8 ←
+                                                alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes7 val21.deref
+                                              let v1 ← host_semantic.endpoint_bytes columns variant val23
+                                              let r19 ← host_wire.record 26#u8 v1.deref
+                                              let cf17 ← core.result.Result.Insts.CoreOpsTry.branch r19
+                                              match cf17 with
+                                                | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                  let (r20, val25) ←
+                                                    host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                        aspis_coredigestDigest32Inst val22 26#u8 val24.deref
+                                                  let cf18 ← core.result.Result.Insts.CoreOpsTry.branch r20
+                                                  match cf18 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                      let bytes9 ←
+                                                        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                            val24.deref
+                                                      let b1 ←
+                                                        aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                            val23 val26
+                                                      if b1 = true then
+                                                          ok
+                                                            (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                              commitments2)
+                                                        else
+                                                          ok
+                                                            (core.result.Result.Ok
+                                                                { bytes := bytes9, transcript := val25,
+                                                                  challenges :=
+                                                                    { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                      zc := val13, mu := val15, eta := val17 },
+                                                                  alpha := alpha, state_before_z0 := state_before_z0,
+                                                                  roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                  columns := columns,
+                                                                  z := Array.make 2#usize [val23, val26] ⋯ },
+                                                              commitments2)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r21 ←
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (host_semantic.BuiltSemantics H)
+                                                            (core.convert.FromSame r1_wire.Error) residual
+                                                      ok (r21, commitments2)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r21 ←
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (host_semantic.BuiltSemantics H)
+                                                        (core.convert.FromSame r1_wire.Error) residual
+                                                  ok (r21, commitments2)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r21 ←
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (host_semantic.BuiltSemantics H)
+                                                    (core.convert.FromSame r1_wire.Error) residual
+                                              ok (r21, commitments2)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r21 ←
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                residual
+                                          ok (r21, commitments2)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r21 ←
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                            residual
+                                      ok (r21, commitments2)
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r21 ←
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                                  ok (r21, commitments2)
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r21 ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                              ok (r21, commitments2)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r21 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                          ok (r21, commitments2)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r21 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                      ok (r21, commitments2)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r21 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                  ok (r21, commitments2)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r21 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+              ok (r21, commitments2)
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:432:14: error: Tactic `rfl` failed: The left-hand side
+  if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+  else do
+    let a ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+    let a_1 ← aspis_core.field.QM31.ZERO
+    let a ←
+      core.cmp.PartialEq.ne.trait_default
+          (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) a
+          (some a_1)
+    if a = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+      else do
+        let a ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+        let a_2 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+        erase
+            (match a_2 with
+            | core.ops.control_flow.ControlFlow.Continue val9 => do
+              let s9 ← PV_L1D_Logged.lift (Std.lift val9.to_slice)
+              let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+              let cf9 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val11 => do
+                  let __x ← PV_L1D_Source_056.produce aspis_coredigestDigest32Inst __x.2.1 __x.2.2
+                  let cf10 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                      let s10 ← PV_L1D_Logged.lift (Std.lift (Std.Array.empty U8).to_slice)
+                      let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 13#u8 s10 __x.2.1 __x.2.2
+                      let cf11 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val15 => do
+                          let columns ← PV_L1D_Source_052.produce c1 (value✝¹.2 value.2) g d
+                          let dc ←
+                            PV_L1D_Logged.lift
+                                (transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d)
+                          let mask_sum ← PV_L1D_Source_051.produce columns
+                          let mask_sum1 ← PV_L1D_Source_055.produce mask_sum dc
+                          let we ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1)
+                          let a_3 ← PV_L1D_Logged.lift we.to_le_bytes
+                          let s11 ← PV_L1D_Logged.lift (Std.lift a_3.to_slice)
+                          let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 14#u8 s11 __x.2.1 __x.2.2
+                          let cf12 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val17 => do
+                              let __x ←
+                                PV_L1D_Source_043.produce aspis_coredigestDigest32Inst
+                                    host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle __x.2.1
+                                    __x.2.2 mask_sum1
+                                    { «public» := public1, columns := columns,
+                                      challenges :=
+                                        { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                          eta := val17 },
+                                      eta := val17, d := dc }
+                              let cf13 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val19 => do
+                                  let r16 ← PV_L1D_Source_066.produce columns val19.1
+                                  let cf14 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r16)
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                      let state_before_z0 ←
+                                        PV_L1D_Logged.lift
+                                            (host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst
+                                              __x.2.1)
+                                      let q1 ← PV_L1D_Logged.lift (val19.1.index_usize 8#usize)
+                                      let q2 ← PV_L1D_Logged.lift (val19.1.index_usize 9#usize)
+                                      let extras ← PV_L1D_Source_049.produce columns variant q1 q2
+                                      let v ← PV_L1D_Source_047.produce val20 extras
+                                      let r17 ← PV_L1D_Logged.lift (host_wire.record 25#u8 v.deref)
+                                      let cf15 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r17)
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                          let __x_1 ←
+                                            PV_L1D_Logged.lift
+                                                (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                  aspis_coredigestDigest32Inst __x.2.1 25#u8 val21.deref)
+                                          let cf16 ←
+                                            PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x_1.1)
+                                          match cf16 with
+                                            | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                              let bytes8 ←
+                                                PV_L1D_Logged.lift
+                                                    (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 __x.2.2
+                                                      val21.deref)
+                                              let v1 ← PV_L1D_Source_045.produce columns variant val23
+                                              let r19 ← PV_L1D_Logged.lift (host_wire.record 26#u8 v1.deref)
+                                              let cf17 ←
+                                                PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r19)
+                                              match cf17 with
+                                                | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                  let __x ←
+                                                    PV_L1D_Logged.lift
+                                                        (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                          aspis_coredigestDigest32Inst __x_1.2 26#u8 val24.deref)
+                                                  let cf18 ←
+                                                    PV_L1D_Logged.lift
+                                                        (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                                  match cf18 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                      let bytes9 ←
+                                                        PV_L1D_Logged.lift
+                                                            (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                              val24.deref)
+                                                      let b1 ←
+                                                        PV_L1D_Logged.lift
+                                                            (aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                              val23 val26)
+                                                      if b1 = true then
+                                                          Pure.pure
+                                                            (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                              a.2)
+                                                        else
+                                                          Pure.pure
+                                                            (core.result.Result.Ok
+                                                                { bytes := bytes9, transcript := __x.2,
+                                                                  challenges :=
+                                                                    { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                      zc := val13, mu := val15, eta := val17 },
+                                                                  alpha := val19.1, state_before_z0 := state_before_z0,
+                                                                  roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                  columns := columns,
+                                                                  z := Array.make 2#usize [val23, val26] ⋯ },
+                                                              a.2)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r21 ←
+                                                        PV_L1D_Logged.lift
+                                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                              (host_semantic.BuiltSemantics H)
+                                                              (core.convert.FromSame r1_wire.Error) residual)
+                                                      Pure.pure (r21, a.2)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r21 ←
+                                                    PV_L1D_Logged.lift
+                                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (host_semantic.BuiltSemantics H)
+                                                          (core.convert.FromSame r1_wire.Error) residual)
+                                                  Pure.pure (r21, a.2)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r21 ←
+                                                PV_L1D_Logged.lift
+                                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (host_semantic.BuiltSemantics H)
+                                                      (core.convert.FromSame r1_wire.Error) residual)
+                                              Pure.pure (r21, a.2)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r21 ←
+                                            PV_L1D_Logged.lift
+                                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                  residual)
+                                          Pure.pure (r21, a.2)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r21 ←
+                                        PV_L1D_Logged.lift
+                                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                              residual)
+                                      Pure.pure (r21, a.2)
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r21 ←
+                                    PV_L1D_Logged.lift
+                                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                          residual)
+                                  Pure.pure (r21, a.2)
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r21 ←
+                                PV_L1D_Logged.lift
+                                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                              Pure.pure (r21, a.2)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r21 ←
+                            PV_L1D_Logged.lift
+                                (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                          Pure.pure (r21, a.2)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r21 ←
+                        PV_L1D_Logged.lift
+                            (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                      Pure.pure (r21, a.2)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r21 ←
+                    PV_L1D_Logged.lift
+                        (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                  Pure.pure (r21, a.2)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r21 ←
+                PV_L1D_Logged.lift
+                    (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+              Pure.pure (r21, a.2))
+is not definitionally equal to the right-hand side
+  if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+  else do
+    let o ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+    let q ← aspis_core.field.QM31.ZERO
+    let b ←
+      core.cmp.PartialEq.ne.trait_default
+          (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) o (some q)
+    if b = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+      else do
+        let (r10, commitments2) ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+        let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r10
+        match cf8 with
+          | core.ops.control_flow.ControlFlow.Continue val9 => do
+            let s9 ← Std.lift val9.to_slice
+            let (r11, val10, bytes3) ←
+              host_semantic.semantic_row aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+            let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+            match cf9 with
+              | core.ops.control_flow.ControlFlow.Continue val11 => do
+                let (r12, val12, bytes4) ← host_semantic.zc_rows aspis_coredigestDigest32Inst val10 bytes3
+                let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                match cf10 with
+                  | core.ops.control_flow.ControlFlow.Continue val13 => do
+                    let s10 ← Std.lift (Std.Array.empty U8).to_slice
+                    let (r13, val14, bytes5) ←
+                      host_semantic.semantic_row aspis_coredigestDigest32Inst 13#u8 s10 val12 bytes4
+                    let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                    match cf11 with
+                      | core.ops.control_flow.ControlFlow.Continue val15 => do
+                        let columns ← host_semantic.lift_columns c1 (value✝¹.2 value.2) g d
+                        let dc ← transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d
+                        let mask_sum ← host_semantic.initial_mask_sum columns
+                        let mask_sum1 ← host_semantic.add_d_tail mask_sum dc
+                        let we ← aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1
+                        let a ← we.to_le_bytes
+                        let s11 ← Std.lift a.to_slice
+                        let (r14, val16, bytes6) ←
+                          host_semantic.semantic_row aspis_coredigestDigest32Inst 14#u8 s11 val14 bytes5
+                        let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r14
+                        match cf12 with
+                          | core.ops.control_flow.ControlFlow.Continue val17 => do
+                            let (r15, val18, bytes7) ←
+                              host_sumcheck.prove_sumcheck aspis_coredigestDigest32Inst
+                                  host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle val16 bytes6
+                                  mask_sum1
+                                  { «public» := public1, columns := columns,
+                                    challenges :=
+                                      { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                        eta := val17 },
+                                    eta := val17, d := dc }
+                            let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                            match cf13 with
+                              | core.ops.control_flow.ControlFlow.Continue val19 =>
+                                let (alpha, _) := val19
+                                do
+                                let r16 ← host_semantic.point_claims columns alpha
+                                let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                match cf14 with
+                                  | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                    let state_before_z0 ←
+                                      host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst val18
+                                    let q1 ← alpha.index_usize 8#usize
+                                    let q2 ← alpha.index_usize 9#usize
+                                    let extras ← host_semantic.extra_claims columns variant q1 q2
+                                    let v ← host_semantic.claim_bytes val20 extras
+                                    let r17 ← host_wire.record 25#u8 v.deref
+                                    let cf15 ← core.result.Result.Insts.CoreOpsTry.branch r17
+                                    match cf15 with
+                                      | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                        let (r18, val22) ←
+                                          host_wire.SemanticTranscript.challenge_reference_circle_point
+                                              aspis_coredigestDigest32Inst val18 25#u8 val21.deref
+                                        let cf16 ← core.result.Result.Insts.CoreOpsTry.branch r18
+                                        match cf16 with
+                                          | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                            let bytes8 ←
+                                              alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes7 val21.deref
+                                            let v1 ← host_semantic.endpoint_bytes columns variant val23
+                                            let r19 ← host_wire.record 26#u8 v1.deref
+                                            let cf17 ← core.result.Result.Insts.CoreOpsTry.branch r19
+                                            match cf17 with
+                                              | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                let (r20, val25) ←
+                                                  host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                      aspis_coredigestDigest32Inst val22 26#u8 val24.deref
+                                                let cf18 ← core.result.Result.Insts.CoreOpsTry.branch r20
+                                                match cf18 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                    let bytes9 ←
+                                                      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                          val24.deref
+                                                    let b1 ←
+                                                      aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                          val23 val26
+                                                    if b1 = true then
+                                                        ok
+                                                          (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                            commitments2)
+                                                      else
+                                                        ok
+                                                          (core.result.Result.Ok
+                                                              { bytes := bytes9, transcript := val25,
+                                                                challenges :=
+                                                                  { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                    zc := val13, mu := val15, eta := val17 },
+                                                                alpha := alpha, state_before_z0 := state_before_z0,
+                                                                roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                columns := columns,
+                                                                z := Array.make 2#usize [val23, val26] ⋯ },
+                                                            commitments2)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r21 ←
+                                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                          (host_semantic.BuiltSemantics H)
+                                                          (core.convert.FromSame r1_wire.Error) residual
+                                                    ok (r21, commitments2)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r21 ←
+                                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                      (host_semantic.BuiltSemantics H)
+                                                      (core.convert.FromSame r1_wire.Error) residual
+                                                ok (r21, commitments2)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r21 ←
+                                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                  residual
+                                            ok (r21, commitments2)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r21 ←
+                                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                              residual
+                                        ok (r21, commitments2)
+                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                    let r21 ←
+                                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                          residual
+                                    ok (r21, commitments2)
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r21 ←
+                                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                                ok (r21, commitments2)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r21 ←
+                              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                            ok (r21, commitments2)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r21 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                        ok (r21, commitments2)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r21 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                    ok (r21, commitments2)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r21 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                ok (r21, commitments2)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r21 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+            ok (r21, commitments2)
+
+case h_1.Err
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H T1 T2 : Type
+aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H
+coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst :
+  core.ops.function.FnOnce T1 (aspis_core.field.QM31 × aspis_core.field.QM31)
+    (core.result.Result (alloc.vec.Vec aspis_core.field.QM31) r1_wire.Error)
+CommitmentsInst : host_semantic.Commitments T2
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+c1 : Std.Array (alloc.vec.Vec aspis_core.field.M31) 26#usize
+d g h1_padding : Std.Array aspis_core.field.QM31 1024#usize
+helper : T1
+commitments : T2
+hash : H
+variant : transport.Variant
+value✝¹³ : core.result.Result Unit r1_wire.Error
+called✝²² : host_semantic.check_semantic_columns c1 d g = ok value✝¹³
+cf7✝¹ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Unit
+a✝² : Unit
+called✝²¹ : core.result.Result.Insts.CoreOpsTry.branch value✝¹³ = ok (core.ops.control_flow.ControlFlow.Continue a✝²)
+value✝¹² : core.result.Result (Std.Array U8 32#usize) r1_wire.Error × T2
+called✝²⁰ : CommitmentsInst.c1 commitments c1 d = ok value✝¹²
+cf8✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (Std.Array U8 32#usize)
+val9✝ : Std.Array U8 32#usize
+called✝¹⁹ :
+  core.result.Result.Insts.CoreOpsTry.branch value✝¹².1 = ok (core.ops.control_flow.ControlFlow.Continue val9✝)
+value✝¹¹ : core.result.Result (alloc.vec.Vec U8) aspis_core.state_only_prefix.r0.Error
+called✝¹⁸ : public1.public_bytes = ok value✝¹¹
+value✝¹⁰ : core.result.Result (alloc.vec.Vec U8) r1_wire.Error
+called✝¹⁷ :
+  core.result.Result.map_err
+      (host_semantic.build_with_helper_mode.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+        aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst)
+      value✝¹¹ () =
+    ok value✝¹⁰
+cf17✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) (alloc.vec.Vec U8)
+val24✝ : alloc.vec.Vec U8
+called✝¹⁶ : core.result.Result.Insts.CoreOpsTry.branch value✝¹⁰ = ok (core.ops.control_flow.ControlFlow.Continue val24✝)
+value✝⁹ : core.result.Result (host_wire.SemanticTranscript H) r1_wire.Error
+called✝¹⁵ : host_wire.SemanticTranscript.new aspis_coredigestDigest32Inst hash val24✝.deref val9✝ = ok value✝⁹
+cf3✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (host_wire.SemanticTranscript H)
+val2✝ : host_wire.SemanticTranscript H
+called✝¹⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝⁹ = ok (core.ops.control_flow.ControlFlow.Continue val2✝)
+value✝⁸ : Slice U8
+called✝¹³ : Std.lift val9✝.to_slice = ok value✝⁸
+value✝⁷ : alloc.vec.Vec U8
+called✝¹² : alloc.slice.Slice.to_vec core.clone.CloneU8 value✝⁸ = ok value✝⁷
+value✝⁶ : Slice U8
+called✝¹¹ : Std.lift (Std.Array.empty U8).to_slice = ok value✝⁶
+value✝⁵ : core.result.Result aspis_core.field.QM31 r1_wire.Error × host_wire.SemanticTranscript H × alloc.vec.Vec U8
+called✝¹⁰ : host_semantic.semantic_row aspis_coredigestDigest32Inst 0#u8 value✝⁶ val2✝ value✝⁷ = ok value✝⁵
+cf12✝¹ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) aspis_core.field.QM31
+val17✝¹ : aspis_core.field.QM31
+called✝⁹ :
+  core.result.Result.Insts.CoreOpsTry.branch value✝⁵.1 = ok (core.ops.control_flow.ControlFlow.Continue val17✝¹)
+value✝⁴ : Slice U8
+called✝⁸ : Std.lift (Std.Array.empty U8).to_slice = ok value✝⁴
+value✝³ : core.result.Result aspis_core.field.QM31 r1_wire.Error × host_wire.SemanticTranscript H × alloc.vec.Vec U8
+called✝⁷ : host_semantic.semantic_row aspis_coredigestDigest32Inst 1#u8 value✝⁴ value✝⁵.2.1 value✝⁵.2.2 = ok value✝³
+cf12✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) aspis_core.field.QM31
+val17✝ : aspis_core.field.QM31
+called✝⁶ : core.result.Result.Insts.CoreOpsTry.branch value✝³.1 = ok (core.ops.control_flow.ControlFlow.Continue val17✝)
+value✝² : core.result.Result (alloc.vec.Vec aspis_core.field.QM31) r1_wire.Error
+called✝⁵ : coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst.call_once helper (val17✝¹, val17✝) = ok value✝²
+cf6✝ :
+  core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error)
+    (alloc.vec.Vec aspis_core.field.QM31)
+val7✝ : alloc.vec.Vec aspis_core.field.QM31
+called✝⁴ : core.result.Result.Insts.CoreOpsTry.branch value✝² = ok (core.ops.control_flow.ControlFlow.Continue val7✝)
+value✝¹ : Slice aspis_core.field.QM31 × (Slice aspis_core.field.QM31 → alloc.vec.Vec aspis_core.field.QM31)
+called✝³ : Std.lift val7✝.deref_mut = ok value✝¹
+value✝ : Slice aspis_core.field.QM31
+called✝² : Std.lift h1_padding.to_slice = ok value✝
+value : core.result.Result Unit aspis_prover.state_only_hiding.StateOnlyMaskBuildError × Slice aspis_core.field.QM31
+called✝¹ : aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_h1_padding_mask_v1 value✝¹.1 value✝ = ok value
+cf7✝ : core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible r1_wire.Error) Unit
+a✝¹ : Unit
+a✝ : r1_wire.Error
+called✝ :
+  core.result.Result.map_err
+      (host_semantic.build_with_helper_mode.closure_1.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
+        aspis_coredigestDigest32Inst coreopsfunctionFnOnceT1PairQM31QM31ResultVecQM31ErrorInst CommitmentsInst)
+      value.1 () =
+    ok (core.result.Result.Err a✝)
+called :
+  core.result.Result.Insts.CoreOpsTry.branch (core.result.Result.Err a✝) =
+    ok (core.ops.control_flow.ControlFlow.Continue a✝¹)
+⊢ (if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+    else do
+      let a ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+      let a_1 ← aspis_core.field.QM31.ZERO
+      let a ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) a
+            (some a_1)
+      if a = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+        else do
+          let a ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+          let a_2 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+          erase
+              (match a_2 with
+              | core.ops.control_flow.ControlFlow.Continue val9 => do
+                let s9 ← PV_L1D_Logged.lift (Std.lift val9.to_slice)
+                let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+                let cf9 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                match cf9 with
+                  | core.ops.control_flow.ControlFlow.Continue val11 => do
+                    let __x ← PV_L1D_Source_056.produce aspis_coredigestDigest32Inst __x.2.1 __x.2.2
+                    let cf10 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                    match cf10 with
+                      | core.ops.control_flow.ControlFlow.Continue val13 => do
+                        let s10 ← PV_L1D_Logged.lift (Std.lift (Std.Array.empty U8).to_slice)
+                        let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 13#u8 s10 __x.2.1 __x.2.2
+                        let cf11 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                        match cf11 with
+                          | core.ops.control_flow.ControlFlow.Continue val15 => do
+                            let columns ← PV_L1D_Source_052.produce c1 (value✝¹.2 value.2) g d
+                            let dc ←
+                              PV_L1D_Logged.lift
+                                  (transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d)
+                            let mask_sum ← PV_L1D_Source_051.produce columns
+                            let mask_sum1 ← PV_L1D_Source_055.produce mask_sum dc
+                            let we ← PV_L1D_Logged.lift (aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1)
+                            let a_3 ← PV_L1D_Logged.lift we.to_le_bytes
+                            let s11 ← PV_L1D_Logged.lift (Std.lift a_3.to_slice)
+                            let __x ← PV_L1D_Source_044.produce aspis_coredigestDigest32Inst 14#u8 s11 __x.2.1 __x.2.2
+                            let cf12 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                            match cf12 with
+                              | core.ops.control_flow.ControlFlow.Continue val17 => do
+                                let __x ←
+                                  PV_L1D_Source_043.produce aspis_coredigestDigest32Inst
+                                      host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle __x.2.1
+                                      __x.2.2 mask_sum1
+                                      { «public» := public1, columns := columns,
+                                        challenges :=
+                                          { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                            eta := val17 },
+                                        eta := val17, d := dc }
+                                let cf13 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                match cf13 with
+                                  | core.ops.control_flow.ControlFlow.Continue val19 => do
+                                    let r16 ← PV_L1D_Source_066.produce columns val19.1
+                                    let cf14 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r16)
+                                    match cf14 with
+                                      | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                        let state_before_z0 ←
+                                          PV_L1D_Logged.lift
+                                              (host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst
+                                                __x.2.1)
+                                        let q1 ← PV_L1D_Logged.lift (val19.1.index_usize 8#usize)
+                                        let q2 ← PV_L1D_Logged.lift (val19.1.index_usize 9#usize)
+                                        let extras ← PV_L1D_Source_049.produce columns variant q1 q2
+                                        let v ← PV_L1D_Source_047.produce val20 extras
+                                        let r17 ← PV_L1D_Logged.lift (host_wire.record 25#u8 v.deref)
+                                        let cf15 ← PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r17)
+                                        match cf15 with
+                                          | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                            let __x_1 ←
+                                              PV_L1D_Logged.lift
+                                                  (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                    aspis_coredigestDigest32Inst __x.2.1 25#u8 val21.deref)
+                                            let cf16 ←
+                                              PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch __x_1.1)
+                                            match cf16 with
+                                              | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                                let bytes8 ←
+                                                  PV_L1D_Logged.lift
+                                                      (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 __x.2.2
+                                                        val21.deref)
+                                                let v1 ← PV_L1D_Source_045.produce columns variant val23
+                                                let r19 ← PV_L1D_Logged.lift (host_wire.record 26#u8 v1.deref)
+                                                let cf17 ←
+                                                  PV_L1D_Logged.lift (core.result.Result.Insts.CoreOpsTry.branch r19)
+                                                match cf17 with
+                                                  | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                    let __x ←
+                                                      PV_L1D_Logged.lift
+                                                          (host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                            aspis_coredigestDigest32Inst __x_1.2 26#u8 val24.deref)
+                                                    let cf18 ←
+                                                      PV_L1D_Logged.lift
+                                                          (core.result.Result.Insts.CoreOpsTry.branch __x.1)
+                                                    match cf18 with
+                                                      | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                        let bytes9 ←
+                                                          PV_L1D_Logged.lift
+                                                              (alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                                val24.deref)
+                                                        let b1 ←
+                                                          PV_L1D_Logged.lift
+                                                              (aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                                val23 val26)
+                                                        if b1 = true then
+                                                            Pure.pure
+                                                              (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                                a.2)
+                                                          else
+                                                            Pure.pure
+                                                              (core.result.Result.Ok
+                                                                  { bytes := bytes9, transcript := __x.2,
+                                                                    challenges :=
+                                                                      { lambda := val17✝¹, chi := val17✝,
+                                                                        theta := val11, zc := val13, mu := val15,
+                                                                        eta := val17 },
+                                                                    alpha := val19.1,
+                                                                    state_before_z0 := state_before_z0,
+                                                                    roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                    columns := columns,
+                                                                    z := Array.make 2#usize [val23, val26] ⋯ },
+                                                                a.2)
+                                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                                        let r21 ←
+                                                          PV_L1D_Logged.lift
+                                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                                (host_semantic.BuiltSemantics H)
+                                                                (core.convert.FromSame r1_wire.Error) residual)
+                                                        Pure.pure (r21, a.2)
+                                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                                    let r21 ←
+                                                      PV_L1D_Logged.lift
+                                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (host_semantic.BuiltSemantics H)
+                                                            (core.convert.FromSame r1_wire.Error) residual)
+                                                    Pure.pure (r21, a.2)
+                                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                                let r21 ←
+                                                  PV_L1D_Logged.lift
+                                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (host_semantic.BuiltSemantics H)
+                                                        (core.convert.FromSame r1_wire.Error) residual)
+                                                Pure.pure (r21, a.2)
+                                          | core.ops.control_flow.ControlFlow.Break residual => do
+                                            let r21 ←
+                                              PV_L1D_Logged.lift
+                                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (host_semantic.BuiltSemantics H)
+                                                    (core.convert.FromSame r1_wire.Error) residual)
+                                            Pure.pure (r21, a.2)
+                                      | core.ops.control_flow.ControlFlow.Break residual => do
+                                        let r21 ←
+                                          PV_L1D_Logged.lift
+                                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                residual)
+                                        Pure.pure (r21, a.2)
+                                  | core.ops.control_flow.ControlFlow.Break residual => do
+                                    let r21 ←
+                                      PV_L1D_Logged.lift
+                                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                            residual)
+                                    Pure.pure (r21, a.2)
+                              | core.ops.control_flow.ControlFlow.Break residual => do
+                                let r21 ←
+                                  PV_L1D_Logged.lift
+                                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                                Pure.pure (r21, a.2)
+                          | core.ops.control_flow.ControlFlow.Break residual => do
+                            let r21 ←
+                              PV_L1D_Logged.lift
+                                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                            Pure.pure (r21, a.2)
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r21 ←
+                          PV_L1D_Logged.lift
+                              (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                        Pure.pure (r21, a.2)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r21 ←
+                      PV_L1D_Logged.lift
+                          (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                    Pure.pure (r21, a.2)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r21 ←
+                  PV_L1D_Logged.lift
+                      (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual)
+                Pure.pure (r21, a.2))) =
+    if ((value✝¹.2 value.2).len != 1024#usize) = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+    else do
+      let o ← aspis_statement.state_only_semantic.state_only_copy_helper_sum (value✝¹.2 value.2).deref
+      let q ← aspis_core.field.QM31.ZERO
+      let b ←
+        core.cmp.PartialEq.ne.trait_default
+            (core.option.Option.Insts.CoreCmpPartialEqOption aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31) o
+            (some q)
+      if b = true then ok (core.result.Result.Err r1_wire.Error.Public, value✝¹².2)
+        else do
+          let (r10, commitments2) ← CommitmentsInst.c2 value✝¹².2 (value✝¹.2 value.2).deref g
+          let cf8 ← core.result.Result.Insts.CoreOpsTry.branch r10
+          match cf8 with
+            | core.ops.control_flow.ControlFlow.Continue val9 => do
+              let s9 ← Std.lift val9.to_slice
+              let (r11, val10, bytes3) ←
+                host_semantic.semantic_row aspis_coredigestDigest32Inst 2#u8 s9 value✝³.2.1 value✝³.2.2
+              let cf9 ← core.result.Result.Insts.CoreOpsTry.branch r11
+              match cf9 with
+                | core.ops.control_flow.ControlFlow.Continue val11 => do
+                  let (r12, val12, bytes4) ← host_semantic.zc_rows aspis_coredigestDigest32Inst val10 bytes3
+                  let cf10 ← core.result.Result.Insts.CoreOpsTry.branch r12
+                  match cf10 with
+                    | core.ops.control_flow.ControlFlow.Continue val13 => do
+                      let s10 ← Std.lift (Std.Array.empty U8).to_slice
+                      let (r13, val14, bytes5) ←
+                        host_semantic.semantic_row aspis_coredigestDigest32Inst 13#u8 s10 val12 bytes4
+                      let cf11 ← core.result.Result.Insts.CoreOpsTry.branch r13
+                      match cf11 with
+                        | core.ops.control_flow.ControlFlow.Continue val15 => do
+                          let columns ← host_semantic.lift_columns c1 (value✝¹.2 value.2) g d
+                          let dc ← transport.Variant.coefficients aspis_core.field.QM31.Insts.CoreMarkerCopy variant d
+                          let mask_sum ← host_semantic.initial_mask_sum columns
+                          let mask_sum1 ← host_semantic.add_d_tail mask_sum dc
+                          let we ← aspis_core.field.wide_exact.WideExact.from_qm31 mask_sum1
+                          let a ← we.to_le_bytes
+                          let s11 ← Std.lift a.to_slice
+                          let (r14, val16, bytes6) ←
+                            host_semantic.semantic_row aspis_coredigestDigest32Inst 14#u8 s11 val14 bytes5
+                          let cf12 ← core.result.Result.Insts.CoreOpsTry.branch r14
+                          match cf12 with
+                            | core.ops.control_flow.ControlFlow.Continue val17 => do
+                              let (r15, val18, bytes7) ←
+                                host_sumcheck.prove_sumcheck aspis_coredigestDigest32Inst
+                                    host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle val16
+                                    bytes6 mask_sum1
+                                    { «public» := public1, columns := columns,
+                                      challenges :=
+                                        { lambda := val17✝¹, chi := val17✝, theta := val11, zc := val13, mu := val15,
+                                          eta := val17 },
+                                      eta := val17, d := dc }
+                              let cf13 ← core.result.Result.Insts.CoreOpsTry.branch r15
+                              match cf13 with
+                                | core.ops.control_flow.ControlFlow.Continue val19 =>
+                                  let (alpha, _) := val19
+                                  do
+                                  let r16 ← host_semantic.point_claims columns alpha
+                                  let cf14 ← core.result.Result.Insts.CoreOpsTry.branch r16
+                                  match cf14 with
+                                    | core.ops.control_flow.ControlFlow.Continue val20 => do
+                                      let state_before_z0 ←
+                                        host_wire.SemanticTranscript.impl.state aspis_coredigestDigest32Inst val18
+                                      let q1 ← alpha.index_usize 8#usize
+                                      let q2 ← alpha.index_usize 9#usize
+                                      let extras ← host_semantic.extra_claims columns variant q1 q2
+                                      let v ← host_semantic.claim_bytes val20 extras
+                                      let r17 ← host_wire.record 25#u8 v.deref
+                                      let cf15 ← core.result.Result.Insts.CoreOpsTry.branch r17
+                                      match cf15 with
+                                        | core.ops.control_flow.ControlFlow.Continue val21 => do
+                                          let (r18, val22) ←
+                                            host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                aspis_coredigestDigest32Inst val18 25#u8 val21.deref
+                                          let cf16 ← core.result.Result.Insts.CoreOpsTry.branch r18
+                                          match cf16 with
+                                            | core.ops.control_flow.ControlFlow.Continue val23 => do
+                                              let bytes8 ←
+                                                alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes7 val21.deref
+                                              let v1 ← host_semantic.endpoint_bytes columns variant val23
+                                              let r19 ← host_wire.record 26#u8 v1.deref
+                                              let cf17 ← core.result.Result.Insts.CoreOpsTry.branch r19
+                                              match cf17 with
+                                                | core.ops.control_flow.ControlFlow.Continue val24 => do
+                                                  let (r20, val25) ←
+                                                    host_wire.SemanticTranscript.challenge_reference_circle_point
+                                                        aspis_coredigestDigest32Inst val22 26#u8 val24.deref
+                                                  let cf18 ← core.result.Result.Insts.CoreOpsTry.branch r20
+                                                  match cf18 with
+                                                    | core.ops.control_flow.ControlFlow.Continue val26 => do
+                                                      let bytes9 ←
+                                                        alloc.vec.Vec.extend_from_slice core.clone.CloneU8 bytes8
+                                                            val24.deref
+                                                      let b1 ←
+                                                        aspis_core.circle.SecureCirclePoint.Insts.CoreCmpPartialEqSecureCirclePoint.eq
+                                                            val23 val26
+                                                      if b1 = true then
+                                                          ok
+                                                            (core.result.Result.Err r1_wire.Error.EqualCirclePoints,
+                                                              commitments2)
+                                                        else
+                                                          ok
+                                                            (core.result.Result.Ok
+                                                                { bytes := bytes9, transcript := val25,
+                                                                  challenges :=
+                                                                    { lambda := val17✝¹, chi := val17✝, theta := val11,
+                                                                      zc := val13, mu := val15, eta := val17 },
+                                                                  alpha := alpha, state_before_z0 := state_before_z0,
+                                                                  roots := Array.make 2#usize [val9✝, val9] ⋯,
+                                                                  columns := columns,
+                                                                  z := Array.make 2#usize [val23, val26] ⋯ },
+                                                              commitments2)
+                                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                                      let r21 ←
+                                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                            (host_semantic.BuiltSemantics H)
+                                                            (core.convert.FromSame r1_wire.Error) residual
+                                                      ok (r21, commitments2)
+                                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                                  let r21 ←
+                                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                        (host_semantic.BuiltSemantics H)
+                                                        (core.convert.FromSame r1_wire.Error) residual
+                                                  ok (r21, commitments2)
+                                            | core.ops.control_flow.ControlFlow.Break residual => do
+                                              let r21 ←
+                                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                    (host_semantic.BuiltSemantics H)
+                                                    (core.convert.FromSame r1_wire.Error) residual
+                                              ok (r21, commitments2)
+                                        | core.ops.control_flow.ControlFlow.Break residual => do
+                                          let r21 ←
+                                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                                residual
+                                          ok (r21, commitments2)
+                                    | core.ops.control_flow.ControlFlow.Break residual => do
+                                      let r21 ←
+                                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error)
+                                            residual
+                                      ok (r21, commitments2)
+                                | core.ops.control_flow.ControlFlow.Break residual => do
+                                  let r21 ←
+                                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                                  ok (r21, commitments2)
+                            | core.ops.control_flow.ControlFlow.Break residual => do
+                              let r21 ←
+                                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                              ok (r21, commitments2)
+                        | core.ops.control_flow.ControlFlow.Break residual => do
+                          let r21 ←
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                                (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                          ok (r21, commitments2)
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r21 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                      ok (r21, commitments2)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r21 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+                  ok (r21, commitments2)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r21 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (host_semantic.BuiltSemantics H) (core.convert.FromSame r1_wire.Error) residual
+              ok (r21, commitments2)
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:13: warning: This simp argument is unused:
+  PV_L1D_EraseIf.erase_if
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵PV̵_̵L̵1̵D̵_̵P̵rojection.prod_case, ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe,
+  ̲ ̲ ̲ ̲ ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:37: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if,P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift,
+  ̲ ̲ ̲ ̲ ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:123: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:133: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵ ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:144: warning: This simp argument is unused:
+  PV_L1D_Source_043.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵44̵.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:178: warning: This simp argument is unused:
+  PV_L1D_Source_044.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵5.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:212: warning: This simp argument is unused:
+  PV_L1D_Source_045.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044̵4̲.complete_result, ̲PV_L1D_Source_045̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵7.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:246: warning: This simp argument is unused:
+  PV_L1D_Source_047.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵9.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:280: warning: This simp argument is unused:
+  PV_L1D_Source_049.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_04̵9̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵51.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:314: warning: This simp argument is unused:
+  PV_L1D_Source_051.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵2.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:348: warning: This simp argument is unused:
+  PV_L1D_Source_052.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051̵1̲.complete_result, ̲PV_L1D_Source_052̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵55̵.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:382: warning: This simp argument is unused:
+  PV_L1D_Source_055.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵6.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:416: warning: This simp argument is unused:
+  PV_L1D_Source_056.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055̵5̲.complete_result, ̲PV_L1D_Source_05̵6.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵3.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:419:484: warning: This simp argument is unused:
+  PV_L1D_Source_066.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵6̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:51: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if,P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:79: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,A̵ ̲en̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵rase_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:112: warning: This simp argument is unused:
+  erase_observe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:137: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:158: warning: This simp argument is unused:
+  PV_L1D_Source_043.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵44̵.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:226: warning: This simp argument is unused:
+  PV_L1D_Source_045.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044̵4̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵7.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:260: warning: This simp argument is unused:
+  PV_L1D_Source_047.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵9.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:294: warning: This simp argument is unused:
+  PV_L1D_Source_049.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_04̵9̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵51.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:328: warning: This simp argument is unused:
+  PV_L1D_Source_051.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵2.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:362: warning: This simp argument is unused:
+  PV_L1D_Source_052.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051̵1̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵55̵.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:396: warning: This simp argument is unused:
+  PV_L1D_Source_055.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵6.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:430: warning: This simp argument is unused:
+  PV_L1D_Source_056.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵5̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_05̵6.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵3.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:464: warning: This simp argument is unused:
+  PV_L1D_Source_063.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵5̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_05̵5̲6.complete_result, ̲PV_L1D_Source_063̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵66̵.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:422:498: warning: This simp argument is unused:
+  PV_L1D_Source_066.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵6̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:29: warning: This simp argument is unused:
+  PV_L1D_EraseIf.erase_if
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵PV̵_̵L̵1̵D̵_̵P̵rojection.prod_case, ̲Aeneas.Std.bind_tc_ok, ̲erase_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:53: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if,P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:81: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,A̵ ̲en̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵rase_bind,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_043.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_044.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:103: warning: This simp argument is unused:
+  erase_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:114: warning: This simp argument is unused:
+  erase_observe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:128: warning: This simp argument is unused:
+  erase_lift
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:139: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:149: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:160: warning: This simp argument is unused:
+  PV_L1D_Source_043.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵44̵.complete_result, ̲PV_L1D_Source_045.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:194: warning: This simp argument is unused:
+  PV_L1D_Source_044.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵5.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_047.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:228: warning: This simp argument is unused:
+  PV_L1D_Source_045.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044̵4̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵7.complete_result, ̲PV_L1D_Source_049.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:262: warning: This simp argument is unused:
+  PV_L1D_Source_047.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵9.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_051.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:296: warning: This simp argument is unused:
+  PV_L1D_Source_049.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_04̵9̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵51.complete_result, ̲PV_L1D_Source_052.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:330: warning: This simp argument is unused:
+  PV_L1D_Source_051.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵2.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_055.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:364: warning: This simp argument is unused:
+  PV_L1D_Source_052.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051̵1̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵55̵.complete_result, ̲PV_L1D_Source_056.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:398: warning: This simp argument is unused:
+  PV_L1D_Source_055.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵5̵6.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_063.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:432: warning: This simp argument is unused:
+  PV_L1D_Source_056.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵5̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_05̵6.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵3.complete_result, ̲PV_L1D_Source_066.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:466: warning: This simp argument is unused:
+  PV_L1D_Source_063.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055̵5̲.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_05̵5̲6.complete_result, ̲PV_L1D_Source_063̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵66̵.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_067.lean:431:500: warning: This simp argument is unused:
+  PV_L1D_Source_066.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_043.complete_result, ̲PV_L1D_Source_044.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_045.complete_result, ̲PV_L1D_Source_047.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_049.complete_result, ̲PV_L1D_Source_051.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_052.complete_result, ̲PV_L1D_Source_055.complete_result,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲PV_L1D_Source_056.complete_result, ̲PV_L1D_Source_063.complete_result,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵6̵6̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1D_Source_067.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

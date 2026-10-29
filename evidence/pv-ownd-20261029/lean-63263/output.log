@@ -1,0 +1,18 @@
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PaddedValues.lean:25:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (append k (push k b v (payload j v)) vs payload (j + 1)).values b.length
+in the target expression
+  (append k (push k b v (payload j v)) vs payload (j + 1)).values (b.length + 0) = (v :: vs)[0]
+
+case cons.zero
+T : Type
+k : Codec T
+payload : Nat → T → Bytes
+v : T
+vs : List T
+ih : ∀ (b : Buffer T) (j i : Nat) (hi : i < vs.length), (append k b vs payload j).values (b.length + i) = vs[i]
+b : Buffer T
+j : Nat
+hi : 0 < (v :: vs).length
+⊢ (append k (push k b v (payload j v)) vs payload (j + 1)).values (b.length + 0) = (v :: vs)[0]
+'R1Z.PV_OWND_PaddedValues.retained' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWND_PaddedValues.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

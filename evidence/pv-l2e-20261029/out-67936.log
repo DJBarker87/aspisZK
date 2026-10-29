@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaValue.lean:39:73: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 257
+  d - e ≤ 0
+  c ≥ 1
+  c - d ≤ 0
+  c ≥ 1
+  b ≥ 0
+  a ≥ 0
+  -257 ≤ a - c - d ≤ -1
+  a - d ≤ 0
+  a + b - c - d ≥ 0
+where
+ a := ↑(value ds)
+ b := ↑P
+ c := ↑(value (run 0 1 (run 0 (q + 1) ds).1.1).1.1)
+ d := ↑(P ^ 8 - 1)
+ e := ↑(value ds + q - (P ^ 8 - 1)) % ↑(P ^ 8 - 1)
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_GammaValue.lean:38:34: error: unsolved goals
+q : ℕ
+ds : List ℕ
+hq : q ≤ 256
+width : ds.length = 8
+hd : ∀ d ∈ ds, d < P
+hb : value ds < P ^ 8
+hp : 257 < P ^ 8
+hr : value (run 0 (q + 1) ds).1.1 + P ^ 8 = value ds + (q + 1)
+hout : value (run 0 (q + 1) ds).1.1 < P ^ 8
+hc : ¬(run 0 (q + 1) ds).1.2 = 0
+ha : q + 1 ≤ P
+ne : ds ≠ []
+hcarry : (run 0 (q + 1) ds).1.2 ≤ 1
+he : (run 0 (q + 1) ds).1.2 = 1
+hz : (run 0 1 (run 0 (q + 1) ds).1.1).1.2 = 0
+ht : value (run 0 1 (run 0 (q + 1) ds).1.1).1.1 = value (run 0 (q + 1) ds).1.1 + 1
+hl : P ^ 8 - 1 ≤ value ds + q
+hu : value ds + q < 2 * (P ^ 8 - 1)
+⊢ (value ds + q - (P ^ 8 - 1)) % (P ^ 8 - 1) = value ds + q - (P ^ 8 - 1)
+'PV_L2E_GammaValue.cyclic_increment' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

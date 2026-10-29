@@ -1,0 +1,58 @@
+{
+  "target": [
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ClientRetry.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean",
+    "7000"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/lean63007-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ClientRetry.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 1.9564251899719238,
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "480c4eda8a",
+  "runner_sha256": "0ff8eed44d639dd21594be743a2758bace5be1c0508d82ad84781a78afd17cdc",
+  "dependency_objects": {
+    "PV_DIAG2_Rejection": {
+      "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_Rejection.olean": "ae394d88c085f800eb539a70d95d794619689a3f55cecc7fbf9afc9f988cae60"
+    }
+  },
+  "module": "PV_DIAG2_ClientRetry",
+  "attempt": 63007,
+  "source_sha256": "9cdab321ef858e774a0da71a7693e264433c4ba57aab74cad76ffa43f7857782",
+  "dependency_fingerprint": "1de0d6b8101731316bc22be922ec4799b1862ef572067fabb71e723234f876db",
+  "environment_sha256": "119a5e58d75b69116d0b29adf10a043c62bb43cbcc6eb0c0fb65df47b3f80532",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:14:1: error: Insufficient number of fields for `\u27e8...\u27e9` constructor: Constructor `Aeneas.Std.core.ops.function.FnMut.mk` has 2 explicit field, but only 1 was provided\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:14:2: error: Application type mismatch: The argument\n  fun state k => ?m.10\nhas type\n  (state : ?m.7) \u2192 (k : ?m.11 state) \u2192 ?m.12 state k\nbut is expected to have type\n  core.ops.function.FnOnce C Usize (core.result.Result ProverRwRetryModel.Secret ProverRwFull.verifier.Error)\nin the application\n  core.ops.function.FnMut.mk fun state k => ?m.10\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:17:23: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined\n\nHint: Using `core.result.Result.Ok would be unambiguous:\n  [apply] `core.result.Result.Ok`\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:18:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined\n\nHint: Using `core.result.Result.Err would be unambiguous:\n  [apply] `core.result.Result.Err`\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:27:10: error: unsolved goals\ncase fail\ninst\u271d\u00b9 : ProverRwFull.ExternalTypes\ninst\u271d : ProverRwFull.ExternalFuns\nC E : Type\ngenerate : C \u2192 Usize \u2192 Result (core.result.Result ProverRwRetryModel.Secret E \u00d7 C)\ns after : C\nk : Usize\ne : Std.Error\nh : generate s k = fail e\n\u22a2 \u00acsorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:28:7: error: unsolved goals\ncase div\ninst\u271d\u00b9 : ProverRwFull.ExternalTypes\ninst\u271d : ProverRwFull.ExternalFuns\nC E : Type\ngenerate : C \u2192 Usize \u2192 Result (core.result.Result ProverRwRetryModel.Secret E \u00d7 C)\ns after : C\nk : Usize\nh : generate s k = div\n\u22a2 \u00acsorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:29:11: error: unsolved goals\ncase ok.Ok\ninst\u271d\u00b9 : ProverRwFull.ExternalTypes\ninst\u271d : ProverRwFull.ExternalFuns\nC E : Type\ngenerate : C \u2192 Usize \u2192 Result (core.result.Result ProverRwRetryModel.Secret E \u00d7 C)\ns after : C\nk : Usize\nnext : C\na\u271d : ProverRwRetryModel.Secret\nh : generate s k = ok (core.result.Result.Ok a\u271d, next)\n\u22a2 \u00acsorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n\ncase ok.Err\ninst\u271d\u00b9 : ProverRwFull.ExternalTypes\ninst\u271d : ProverRwFull.ExternalFuns\nC E : Type\ngenerate : C \u2192 Usize \u2192 Result (core.result.Result ProverRwRetryModel.Secret E \u00d7 C)\ns after : C\nk : Usize\nnext : C\na\u271d : E\nh : generate s k = ok (core.result.Result.Err a\u271d, next)\n\u22a2 \u00acsorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:74:9: error: Type mismatch: After simplification, term\n  law\n has type\n  (do\n      let value \u2190 ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)\n      ok\n          (match value.1 with\n            | core.result.Result.Ok p => Step.done { proof := (p.proof, p.audit), attempts := \u2191p.attempts }\n            | core.result.Result.Err e =>\n              Step.stop\n                (match e with\n                | ProverRwFull.verifier.Error.Parse => AspisR1SimControl21.verifier.Error.Parse\n                | ProverRwFull.verifier.Error.Semantic => AspisR1SimControl21.verifier.Error.Semantic\n                | ProverRwFull.verifier.Error.Transcript => AspisR1SimControl21.verifier.Error.Transcript\n                | ProverRwFull.verifier.Error.Relation => AspisR1SimControl21.verifier.Error.Relation\n                | ProverRwFull.verifier.Error.Merkle => AspisR1SimControl21.verifier.Error.Merkle\n                | ProverRwFull.verifier.Error.Query => AspisR1SimControl21.verifier.Error.Query\n                | ProverRwFull.verifier.Error.Checkpoint => AspisR1SimControl21.verifier.Error.Checkpoint\n                | ProverRwFull.verifier.Error.Allocation => AspisR1SimControl21.verifier.Error.Allocation\n                | ProverRwFull.verifier.Error.Rejected => AspisR1SimControl21.verifier.Error.Rejected\n                | ProverRwFull.verifier.Error.AttemptsExhausted => AspisR1SimControl21.verifier.Error.AttemptsExhausted\n                | ProverRwFull.verifier.Error.Entropy => AspisR1SimControl21.verifier.Error.Entropy),\n            value.2)) =\n    do\n    let value \u2190 ok (Step.stop e, next)\n    ok (value.1, value.2.2)\nbut is expected to have type\n  AspisR1SimControl21.verifier.Error.Rejected = e \u2227 after = next.2\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:64:24: warning: This simp argument is unused:\n  mapR\n\nHint: Omit it from the simp argument list.\n  simp [hrun,\u0335m\u0335a\u0335p\u0335R\u0335] at law\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:65:21: warning: This simp argument is unused:\n  mapR\n\nHint: Omit it from the simp argument list.\n  simp [hrun,\u0335m\u0335a\u0335p\u0335R\u0335] at law\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:69:26: warning: This simp argument is unused:\n  mapR\n\nHint: Omit it from the simp argument list.\n  simp [hrun,m\u0335a\u0335p\u0335R\u0335,\u0335 \u0332ProverRwRetryModel.drop] at law\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:70:25: warning: This simp argument is unused:\n  mapR\n\nHint: Omit it from the simp argument list.\n  simp [hrun,m\u0335a\u0335p\u0335R\u0335,\u0335 \u0332ProverRwRetryModel.drop] at law\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG2.client_entropy_not_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'PV_DIAG2.client_attempt_reject_free' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'PV_DIAG2.client_run_reject_free' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'PV_DIAG2.source_client_no_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "object_sha256": null
+}

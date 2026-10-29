@@ -1,0 +1,23 @@
+import PV_L1C_Statements
+set_option autoImplicit false
+#print axioms PV_L1C.counts_append
+#print axioms PV_L1C.rejections_append
+#print axioms PV_L1C.times_append
+#print axioms PV_L1C.oracle_append
+#print axioms PV_L1C.side_append
+#print axioms PV_L1C.count_splice
+#print axioms PV_L1C.time_splice
+#print axioms PV_L1C.oracle_splice
+#print axioms PV_L1C.side_splice
+#print axioms PV_L1C.four_inputs_do_not_fix_order
+#print axioms PV_L1C.duplicate_failure_prefix
+#print axioms PV_L1C.terminal_does_not_erase
+#print axioms PV_L1C.restore_times
+#print axioms PV_L1C.timing_key_injective
+#print axioms PV_L1C.law_map
+#print axioms PV_L1C.timing_law_iff_tests
+#print axioms PV_L1C.full_law_iff_timing_law
+#print axioms PV_L1C.timing_extension_iff
+#print axioms PV_L1C.same_bad_event_agreement
+#print axioms PV_L1C.combined_observer_law
+#print axioms PV_RJ4IDB.native_factorization

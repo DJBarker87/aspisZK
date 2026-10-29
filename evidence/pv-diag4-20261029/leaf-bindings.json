@@ -1,0 +1,347 @@
+{
+  "classification": "own-1 statement-level source association; local emission laws only",
+  "bindings": [
+    {
+      "name": "status",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+        "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+        "start_line": 363,
+        "text": "pub fn status(&self) -> BacktraceStatus {\n        match self.inner {\n            Inner::Unsupported => BacktraceStatus::Unsupported,\n            Inner::Disabled => BacktraceStatus::Disabled,\n            Inner::Captured(_) => BacktraceStatus::Captured,\n        }\n    }"
+      },
+      "model": "PV_DIAG4.status",
+      "steps": [
+        "borrow self; read discriminant",
+        "three branches return corresponding enum",
+        "captured payload borrowed, neither forced nor moved",
+        "no stores, calls, allocations, destructor or panic branches"
+      ],
+      "open_native_obligations": [
+        "borrowed memory representation/source-to-machine preservation V370"
+      ]
+    },
+    {
+      "name": "raw_flush",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+        "file_sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+        "start_line": 87,
+        "text": "fn flush(&mut self) -> io::Result<()> {\n        Ok(())\n    }"
+      },
+      "model": "PV_DIAG4.rawFlush",
+      "steps": [
+        "construct Ok unit; return; no calls, stores or drop payload"
+      ],
+      "open_native_obligations": [
+        "V370"
+      ]
+    },
+    {
+      "name": "raw_vectored",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+        "file_sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+        "start_line": 82,
+        "text": "fn is_write_vectored(&self) -> bool {\n        true\n    }"
+      },
+      "model": "PV_DIAG4.rawIsWriteVectored",
+      "steps": [
+        "return true"
+      ],
+      "open_native_obligations": [
+        "V370"
+      ]
+    },
+    {
+      "name": "raw_new",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+        "file_sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+        "start_line": 67,
+        "text": "pub const fn new() -> Stderr {\n        Stderr\n    }"
+      },
+      "model": "PV_DIAG4.rawStderrNew",
+      "steps": [
+        "construct zero-field Stderr; return"
+      ],
+      "open_native_obligations": [
+        "V370"
+      ]
+    },
+    {
+      "name": "panic_output",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+        "file_sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+        "start_line": 98,
+        "text": "pub fn panic_output() -> Option<impl io::Write> {\n    Some(Stderr::new())\n}"
+      },
+      "model": "PV_DIAG4.panicOutput",
+      "steps": [
+        "call concrete rawStderrNew law",
+        "construct Some; return"
+      ],
+      "open_native_obligations": [
+        "V370"
+      ]
+    },
+    {
+      "name": "once_wrapper",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sync/once.rs",
+        "file_sha256": "648eac3cda716284da25246f3a14e420fd644b91287f9481138e3e891a10df3e",
+        "start_line": 319,
+        "text": "pub(crate) fn state(&mut self) -> OnceExclusiveState {\n        self.inner.state()\n    }"
+      },
+      "model": "PV_DIAG4.onceState",
+      "steps": [
+        "exclusive self.inner; call futex state law"
+      ],
+      "open_native_obligations": [
+        "exclusive native representation/V370"
+      ]
+    },
+    {
+      "name": "once_state",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/sync/once/futex.rs",
+        "file_sha256": "8d69ffa8d055bcc2f9dcde784b4f163fb1e0087837ac48cc65e49b597803f729",
+        "start_line": 86,
+        "text": "pub(crate) fn state(&mut self) -> OnceExclusiveState {\n        match *self.state_and_queued.get_mut() {\n            INCOMPLETE => OnceExclusiveState::Incomplete,\n            POISONED => OnceExclusiveState::Poisoned,\n            COMPLETE => OnceExclusiveState::Complete,\n            _ => unreachable!(\"invalid Once state\"),\n        }\n    }"
+      },
+      "model": "PV_DIAG4.onceState",
+      "steps": [
+        "exclusive AtomicU32::get_mut loads caller-owned word",
+        "match 3 incomplete, 2 poisoned, 0 complete",
+        "other words retain invalid-state panic operation"
+      ],
+      "open_native_obligations": [
+        "all invalid-state panic/hook/abort effects stay P; source read representation V370"
+      ]
+    },
+    {
+      "name": "os_interrupted",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/unix.rs",
+        "file_sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+        "start_line": 97,
+        "text": "pub fn is_interrupted(errno: i32) -> bool {\n    errno == libc::EINTR\n}"
+      },
+      "model": "PV_DIAG4.osInterrupted",
+      "steps": [
+        "compare STORED raw i32 argument with Linux EINTR",
+        "return Bool; no errno TLS access"
+      ],
+      "open_native_obligations": [
+        "valid raw-code bit representation, libc constant selection, V370"
+      ]
+    },
+    {
+      "name": "repr_drop",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error/repr_bitpacked.rs",
+        "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+        "start_line": 228,
+        "text": "impl Drop for Repr {\n    #[inline]\n    fn drop(&mut self) {\n        // Safety: We're a Repr, decode_repr is fine. The `Box::from_raw` is\n        // safe because we're being dropped.\n        unsafe {\n            let _ = decode_repr(self.0, |p| Box::<Custom>::from_raw(p));\n        }\n    }\n}"
+      },
+      "model": "PV_DIAG4.errorReprDrop",
+      "steps": [
+        "tag/state branch selection; custom or selected field full destructor retained; noncustom or poisoned branch has no owned field drop"
+      ],
+      "open_native_obligations": [
+        "validity/provenance/kind decoding and concrete field/Box/allocator operations outside the proved noncustom/poisoned branches; V370"
+      ]
+    },
+    {
+      "name": "repr_decode",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error/repr_bitpacked.rs",
+        "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+        "start_line": 244,
+        "text": "unsafe fn decode_repr<C, F>(ptr: NonNull<()>, make_custom: F) -> ErrorData<C>\nwhere\n    F: FnOnce(*mut Custom) -> C,\n{\n    let bits = ptr.as_ptr().addr();\n    match bits & TAG_MASK {\n        TAG_OS => {\n            let code = ((bits as i64) >> 32) as RawOsError;\n            ErrorData::Os(code)\n        }\n        TAG_SIMPLE => {\n            let kind_bits = (bits >> 32) as u32;\n            let kind = kind_from_prim(kind_bits).unwrap_or_else(|| {\n                debug_assert!(false, \"Invalid io::error::Repr bits: `Repr({:#018x})`\", bits);\n                // This means the `ptr` passed in was not valid, which violates\n                // the unsafe contract of `decode_repr`.\n                //\n                // Using this rather than unwrap meaningfully improves the code\n                // for callers which only care about one variant (usually\n                // `Custom`)\n                unsafe { core::hint::unreachable_unchecked() };\n            });\n            ErrorData::Simple(kind)\n        }\n        TAG_SIMPLE_MESSAGE => {\n            // SAFETY: per tag\n            unsafe { ErrorData::SimpleMessage(&*ptr.cast::<SimpleMessage>().as_ptr()) }\n        }\n        TAG_CUSTOM => {\n            // It would be correct for us to use `ptr::byte_sub` here (see the\n            // comment above the `wrapping_add` call in `new_custom` for why),\n            // but it isn't clear that it makes a difference, so we don't.\n            let custom = ptr.as_ptr().wrapping_byte_sub(TAG_CUSTOM).cast::<Custom>();\n            ErrorData::Custom(make_custom(custom))\n        }\n        _ => {\n            // Can't happen, and compiler can tell\n            unreachable!();\n        }\n    }\n}"
+      },
+      "model": "PV_DIAG4.errorTag / ValidErrorRepr",
+      "steps": [
+        "tag/state branch selection; custom or selected field full destructor retained; noncustom or poisoned branch has no owned field drop"
+      ],
+      "open_native_obligations": [
+        "validity/provenance/kind decoding and concrete field/Box/allocator operations outside the proved noncustom/poisoned branches; V370"
+      ]
+    },
+    {
+      "name": "repr_os_constructor",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error/repr_bitpacked.rs",
+        "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+        "start_line": 167,
+        "text": "pub(super) fn new_os(code: RawOsError) -> Self {\n        let utagged = ((code as usize) << 32) | TAG_OS;\n        // Safety: `TAG_OS` is not zero, so the result of the `|` is not 0.\n        let res = Self(\n            NonNull::without_provenance(unsafe { NonZeroUsize::new_unchecked(utagged) }),\n            PhantomData,\n        );\n        // quickly smoke-check we encoded the right thing (This generally will\n        // only run in std's tests, unless the user uses -Zbuild-std)\n        debug_assert!(\n            matches!(res.data(), ErrorData::Os(c) if c == code),\n            \"repr(os) encoding failed for {code}\"\n        );\n        res\n    }"
+      },
+      "model": "PV_DIAG4.osWord",
+      "steps": [
+        "tag/state branch selection; custom or selected field full destructor retained; noncustom or poisoned branch has no owned field drop"
+      ],
+      "open_native_obligations": [
+        "validity/provenance/kind decoding and concrete field/Box/allocator operations outside the proved noncustom/poisoned branches; V370"
+      ]
+    },
+    {
+      "name": "lazy_drop",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sync/lazy_lock.rs",
+        "file_sha256": "63d689dc1740418bcc2de8f1ea5969c8b9ccebe427c22d4ff9152649cd166b32",
+        "start_line": 333,
+        "text": "impl<T, F> Drop for LazyLock<T, F> {\n    fn drop(&mut self) {\n        match self.once.state() {\n            OnceExclusiveState::Incomplete => unsafe {\n                ManuallyDrop::drop(&mut self.data.get_mut().f)\n            },\n            OnceExclusiveState::Complete => unsafe {\n                ManuallyDrop::drop(&mut self.data.get_mut().value)\n            },\n            OnceExclusiveState::Poisoned => {}\n        }\n    }\n}"
+      },
+      "model": "PV_DIAG4.lazyDropWord",
+      "steps": [
+        "tag/state branch selection; custom or selected field full destructor retained; noncustom or poisoned branch has no owned field drop"
+      ],
+      "open_native_obligations": [
+        "validity/provenance/kind decoding and concrete field/Box/allocator operations outside the proved noncustom/poisoned branches; V370"
+      ]
+    },
+    {
+      "name": "fd_write",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/fd/unix.rs",
+        "file_sha256": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+        "start_line": 344,
+        "text": "pub fn write(&self, buf: &[u8]) -> io::Result<usize> {\n        let ret = cvt(unsafe {\n            libc::write(\n                self.as_raw_fd(),\n                buf.as_ptr() as *const libc::c_void,\n                cmp::min(buf.len(), READ_LIMIT),\n            )\n        })?;\n        Ok(ret as usize)\n    }"
+      },
+      "model": "PV_DIAG4.rawFdWrite",
+      "steps": [
+        "source stores/argument evaluation and Result branch follow the model",
+        "syscall and errno_location remain full explicit operations",
+        "normal errno-location prefix is retained before the load and OS constructor",
+        "dropInterrupted uses proved OS-repr destructor, never formats or captures"
+      ],
+      "open_native_obligations": [
+        "native pointer/memory/ABI association, syscall/errno-location laws and joint external outcomes remain P; V370"
+      ]
+    },
+    {
+      "name": "cvt",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/pal/unix/mod.rs",
+        "file_sha256": "c71c1298c20cdfa96b9831cd2b51f75b0333a50e49188ab5fddd1945e82df312",
+        "start_line": 244,
+        "text": "pub fn cvt<T: IsMinusOne>(t: T) -> io::Result<T> {\n    if t.is_minus_one() { Err(io::Error::last_os_error()) } else { Ok(t) }\n}"
+      },
+      "model": "PV_DIAG4.rawCvt",
+      "steps": [
+        "source stores/argument evaluation and Result branch follow the model",
+        "syscall and errno_location remain full explicit operations",
+        "normal errno-location prefix is retained before the load and OS constructor",
+        "dropInterrupted uses proved OS-repr destructor, never formats or captures"
+      ],
+      "open_native_obligations": [
+        "native pointer/memory/ABI association, syscall/errno-location laws and joint external outcomes remain P; V370"
+      ]
+    },
+    {
+      "name": "last_os_error",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error.rs",
+        "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+        "start_line": 655,
+        "text": "pub fn last_os_error() -> Error {\n        Error::from_raw_os_error(sys::io::errno())\n    }"
+      },
+      "model": "PV_DIAG4.lastOsError",
+      "steps": [
+        "source stores/argument evaluation and Result branch follow the model",
+        "syscall and errno_location remain full explicit operations",
+        "normal errno-location prefix is retained before the load and OS constructor",
+        "dropInterrupted uses proved OS-repr destructor, never formats or captures"
+      ],
+      "open_native_obligations": [
+        "native pointer/memory/ABI association, syscall/errno-location laws and joint external outcomes remain P; V370"
+      ]
+    },
+    {
+      "name": "from_raw_os_error",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/error.rs",
+        "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+        "start_line": 687,
+        "text": "pub fn from_raw_os_error(code: RawOsError) -> Error {\n        Error { repr: Repr::new_os(code) }\n    }"
+      },
+      "model": "ValidErrorRepr.os / osWord",
+      "steps": [
+        "source stores/argument evaluation and Result branch follow the model",
+        "syscall and errno_location remain full explicit operations",
+        "normal errno-location prefix is retained before the load and OS constructor",
+        "dropInterrupted uses proved OS-repr destructor, never formats or captures"
+      ],
+      "open_native_obligations": [
+        "native pointer/memory/ABI association, syscall/errno-location laws and joint external outcomes remain P; V370"
+      ]
+    },
+    {
+      "name": "errno",
+      "source": {
+        "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/io/error/unix.rs",
+        "file_sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+        "start_line": 41,
+        "text": "pub fn errno() -> i32 {\n    unsafe { (*errno_location()) as i32 }\n}"
+      },
+      "model": "PV_DIAG4.readErrno",
+      "steps": [
+        "source stores/argument evaluation and Result branch follow the model",
+        "syscall and errno_location remain full explicit operations",
+        "normal errno-location prefix is retained before the load and OS constructor",
+        "dropInterrupted uses proved OS-repr destructor, never formats or captures"
+      ],
+      "open_native_obligations": [
+        "native pointer/memory/ABI association, syscall/errno-location laws and joint external outcomes remain P; V370"
+      ]
+    }
+  ],
+  "libc_constant_authority": [
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libc-0.2.178/src/unix/linux_like/linux/mod.rs",
+      "sha256": "c36750c4829ac5e15f3532d5e15fb83a2c82a422dda8ee240467db3bd7fcd6e8",
+      "constant": "EINTR=4",
+      "stdlib_lock": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/Cargo.lock",
+      "stdlib_lock_sha256": "f14fb9ee9032ecb2610578650e071d106c7c34fe990878522914d30a15abbf79",
+      "package": {
+        "name": "libc",
+        "version": "0.2.178",
+        "source": "registry+https://github.com/rust-lang/crates.io-index",
+        "checksum": "37c93d8daa9d8a012fd8ab92f088405fb202ea0b6ab73ee2482ae66af4f42091",
+        "dependencies": [
+          "rustc-std-workspace-core"
+        ]
+      },
+      "checksum_source": "/home/dombarker/.cargo/registry/cache/index.crates.io-1949cf8c6b5b557f/libc-0.2.178.crate",
+      "checksum_sha256": "37c93d8daa9d8a012fd8ab92f088405fb202ea0b6ab73ee2482ae66af4f42091"
+    }
+  ],
+  "generated_models": {
+    "PV_DIAG4_Errno": "026fda373361a0591de59da0fc2d68c2e9ac0ad2173cee1c348b47cd18a297ba",
+    "PV_DIAG4_Leaves": "60270dea5d6e45df9bbd0b7927746fd2684a7669c2461b75208ba39eaab177fa",
+    "PV_DIAG4_Once": "3eec658afef81fb5916dcc8abad8fcf8f411d4ba01ad48fba84602f9d95f1da0",
+    "PV_DIAG4_Bits": "ce8bbf2a5cefce53a650aba66079c14c65c872dd6f0efd4e0120f18b5c48e915",
+    "PV_DIAG4_ReprDrop": "7a4363fbfbae1ae534675e6276ff80463cede59ecf3a0fd1f9562b087e694491",
+    "PV_DIAG4_Interrupted": "47f446a2e6638f16f63f8d23e218976d8f5e16ca6b8699900e7611216579ecbe",
+    "PV_DIAG4_RawWrite": "87ae8dac0c2b8ca09f0a25cc4c44011802a3d23297aab99690739b5a6d2de2ff",
+    "PV_DIAG4_LeafTrace": "14c65c172ae6e46c86ce1a7ef4b769c96b91e6e6ea38351ee01ecbc0ba87b6e5"
+  },
+  "release_cfg_note": "debug_assert in Repr::new_os/decode is inactive; invalid unsafe representation remains outside admitted memory domain",
+  "compiler_boundary": "V370 / D381/D386 retained",
+  "native_validation": "finite validation, std-only 1.94.1 optimized harness; no whole-run or singleton-domain claim",
+  "native_source_sha256": "98cf0dd7cbf6bb163b4c5117ea7f872493ab1d4b53b17186a5831f803ba57dfc",
+  "native_binary_sha256": "9698d23725ebc7bd1c7df6de9d54bfbeb9766b1bfa1ff83e68bdc81b59f31be2",
+  "native_binary_bytes": 3967072,
+  "rustc": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "profile": {
+    "opt_level": 3,
+    "debug_assertions": false,
+    "overflow_checks": false,
+    "panic": "unwind"
+  },
+  "features": "std-only harness: no application crate or dependency feature selection; deployed full application units inherited by hash",
+  "deployed_units_sha256": "30993edca44a4f12691cde0acc6c1a2f6ab130cc84229e8d8da864ad5a32fe35",
+  "deployed_binary": "fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348",
+  "restored_endpoint_rows": [],
+  "whole_native_joint_law": false
+}

@@ -1,0 +1,48 @@
+{
+  "reference_branch": "codex/pv-rj4idb-20261029",
+  "reference_revision": "2f5799d410e6f751d978f8bd0080ae3212a7a347",
+  "candidate_revision": "19b2164e3d",
+  "candidate_contains_decoder": false,
+  "read_only": true,
+  "rows": [
+    {
+      "path": "lean/PV_RJ4IDB_DiagAdapter.lean",
+      "source_sha256": "8652b78a0e95f5aedb0359a4394ab87d69de577c77da61afea29b98d580fe0cf",
+      "blob": "60255e09a2e6720dbdc89d424d74cd78ddb09770"
+    },
+    {
+      "path": "lean/PV_RJ4IDB_Decoder.lean",
+      "source_sha256": "59e57fb0ce87fd6e49dc2b67784dfcabff1c1af8eda3373c63c85d7fc196b28d",
+      "blob": "fb444e664002765979e6dd3f73aeb3f92fbe1d78"
+    },
+    {
+      "path": "lean/PV_RJ4IDB_ClientSuffix.lean",
+      "source_sha256": "1eb66bb08f443d39b752d9aca7876c120861a7578798f4156234bbfab938300a",
+      "blob": "17149f7e723b51f50c120b191f88dd5adcc500ae"
+    }
+  ],
+  "pieces": {
+    "clientEvents": "clientOutput.execution.events : List PV_DIAG3.Event",
+    "clientTerminal": "clientOutput.execution.exit : PV_DIAG3.Exit A",
+    "adapter": "PV_RJ4IDB.diagTrace clientOutput.execution",
+    "decoder_event_law": "PV_RJ4IDB.diag_events",
+    "decoder_prefix_law": "PV_RJ4IDB.diag_prefix",
+    "ordered_cross_channel_owner": "PV_RJ4IDB.decoder"
+  },
+  "remaining": [
+    "concrete primitive complete-exit event/state/terminal joint laws under own-1",
+    "nativeDiagnosticLaw and nativeTerminalLaw in honest_joint_native",
+    "native complete PrefixFamily correspondence for every finite prefix, including emitting divergence",
+    "same original D163 L1 coupling and V347\u2013V351 entered/rejected/ActivePole history",
+    "merge decoder sources and resolve coherent import cohort before integration",
+    "actual runtime.disclosed/observerOracle prefix recovery and V036\u2013V038",
+    "option-B witness-independent failure event V336\u2013V339"
+  ],
+  "new_exports": {
+    "PV_DIAG6.diagnosticPieces": "existing count and ordered events/terminal, directly adapts to PV_DIAG5.clientPieces",
+    "PV_DIAG6.recover_family_function": "instantiate recover x := (PV_RJ4IDB.decoder (PV_RJ4IDB.diagTrace x)).errorsStderr3; lossless := PV_RJ4IDB.diag_events",
+    "PV_DIAG6.decoder_and_decision_joint": "instantiate decode es out := PV_RJ4IDB.decoder (PV_RJ4IDB.diagTrace (Execution.mk es state out)); auxiliary state arbitrary, adapter ignores it",
+    "PV_DIAG6.whole_prefix_family_law": "law of entire prefix function, not separate fixed-prefix marginals",
+    "PV_DIAG6.decoder_family_decision_law": "arbitrary decision of whole recovered family"
+  }
+}

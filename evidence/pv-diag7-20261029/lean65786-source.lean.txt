@@ -1,0 +1,79 @@
+import PV_DIAG7_Program
+import PV_DIAG3_Write
+/-! Instantiate the existing write-all control model with option-B OS
+replies, retaining its actual suffix argument and checked-slice branch.
+The valid OS/static error representation has no custom payload destructor.
+Syscall association and source-to-code V370 remain named obligations. -/
+set_option autoImplicit false
+namespace PV_DIAG7
+open PV_DIAG3
+inductive WriteError where
+ | os (error : OsError)
+ | zero
+ deriving DecidableEq, Repr
+def nativeWrite (signal : Signal) (fd : Nat) (bs : Bytes) : Op State (Except WriteError Nat) := fun s =>
+ match signal.write fd s.cursor with
+ | .ok n => ⟨[.requested fd bs,.delivered fd (bs.take n)],advance s,.value (.ok n)⟩
+ | .error e => ⟨[.requested fd bs],store s e,.value (.error (.os e))⟩
+def writeOps (signal : Signal) (fd : Nat)
+ (slicePanic : Bytes → Nat → Op State (Except WriteError Unit)) : WriteOps State WriteError where
+ write := nativeWrite signal fd
+ zeroError := .zero
+ interruptedGuard := fun e => pure (match e with | .os e => e.interrupted | .zero => false)
+ dropInterrupted := fun _ => pure ()
+ slicePanic := slicePanic
+theorem native_write_ok (signal : Signal) (fd n : Nat) (bs : Bytes) (s : State)
+ (h : signal.write fd s.cursor = .ok n) :
+ nativeWrite signal fd bs s = ⟨[.requested fd bs,.delivered fd (bs.take n)],advance s,.value (.ok n)⟩ := by
+ simp only [nativeWrite,h]
+#print axioms native_write_ok
+theorem native_write_error (signal : Signal) (fd : Nat) (bs : Bytes) (s : State) (e : OsError)
+ (h : signal.write fd s.cursor = .error e) :
+ nativeWrite signal fd bs s = ⟨[.requested fd bs],store s e,.value (.error (.os e))⟩ := by
+ simp only [nativeWrite,h]
+#print axioms native_write_error
+theorem os_interrupted_guard (signal : Signal) (fd : Nat)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit)) (e : OsError) :
+ (writeOps signal fd bad).interruptedGuard (.os e) = pure e.interrupted := rfl
+#print axioms os_interrupted_guard
+theorem interrupted_drop_no_custom_payload (signal : Signal) (fd : Nat)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit)) (e : WriteError) :
+ (writeOps signal fd bad).dropInterrupted e = pure () := rfl
+#print axioms interrupted_drop_no_custom_payload
+theorem optionB_write_step_public (a b : Signal) (fd : Nat) (bs : Bytes)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit))
+ (suffix : Bytes → Op State (Except WriteError Unit)) (s : State) (h : a = b) :
+ writeAllStep (writeOps a fd bad) bs suffix s =
+ writeAllStep (writeOps b fd bad) bs suffix s := by cases h; rfl
+#print axioms optionB_write_step_public
+theorem optionB_write_prefix_public (a b : Signal) (fd n : Nat) (bs : Bytes)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit))
+ (suffix : Bytes → Op State (Except WriteError Unit)) (s : State) (h : a = b) :
+ writePrefix (writeOps a fd bad) n suffix bs s =
+ writePrefix (writeOps b fd bad) n suffix bs s := by cases h; rfl
+#print axioms optionB_write_prefix_public
+theorem optionB_interrupted_retry (signal : Signal) (fd : Nat) (bs : Bytes) (s : State)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit))
+ (suffix : Bytes → Op State (Except WriteError Unit)) (e : OsError)
+ (hne : bs.isEmpty = false) (hw : signal.write fd s.cursor = .error e)
+ (hi : e.interrupted = true) :
+ writeAllStep (writeOps signal fd bad) bs suffix s =
+ prepend [.requested fd bs] (suffix bs (store s e)) := by
+ simp [writeAllStep,hne,writeOps,nativeWrite,hw,hi,sequence,PV_DIAG3.bind,prepend,PV_DIAG3.pure]
+#print axioms optionB_interrupted_retry
+theorem optionB_noninterrupted_return (signal : Signal) (fd : Nat) (bs : Bytes) (s : State)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit))
+ (suffix : Bytes → Op State (Except WriteError Unit)) (e : OsError)
+ (hne : bs.isEmpty = false) (hw : signal.write fd s.cursor = .error e)
+ (hi : e.interrupted = false) :
+ writeAllStep (writeOps signal fd bad) bs suffix s =
+ ⟨[.requested fd bs],store s e,.value (.error (.os e))⟩ := by
+ simp [writeAllStep,hne,writeOps,nativeWrite,hw,hi,sequence,PV_DIAG3.bind,prepend,PV_DIAG3.pure]
+#print axioms optionB_noninterrupted_return
+theorem optionB_every_write_prefix (a b : Signal) (fd : Nat) (bs : Bytes)
+ (bad : Bytes → Nat → Op State (Except WriteError Unit))
+ (suffix : Nat → Bytes → Op State (Except WriteError Unit)) (s : State) (h : a = b) :
+ (fun n => writePrefix (writeOps a fd bad) n (suffix n) bs s) =
+ (fun n => writePrefix (writeOps b fd bad) n (suffix n) bs s) := by cases h; rfl
+#print axioms optionB_every_write_prefix
+end PV_DIAG7

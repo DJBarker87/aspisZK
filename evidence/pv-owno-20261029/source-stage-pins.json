@@ -1,0 +1,83 @@
+{
+  "source_revision": "31ea738219dae0589ca852d1c4f0a3a31090ae4c",
+  "verified_original_crate_files": 300,
+  "rows": [
+    {
+      "path": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "first_line": 785,
+      "last_line": 845,
+      "file_sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "span_sha256": "4a6d4db975de47e40b4c3f746d63176a195770337c0d52ebb8e20ed84583e5cb",
+      "span": "        commitments: &mut impl Commitments,\n        hash: HashFn,\n        transported_endpoints: bool,\n    ) -> Result<BuiltSemantics, Error> {\n        // Reject raw noncanonical constructors rather than normalize their\n        // commitment representation. D is supplied before any challenge.\n        if c1\n            .iter()\n            .any(|v| v.len() != 1024 || v.iter().any(|x| x.0 >= P))\n            || d.iter().chain(g).any(|x| {\n                QM31::from_le_bytes(&{\n                    let mut b = [0; 16];\n                    x.write_le_bytes(&mut b);\n                    b\n                })\n                .is_none()\n            })\n        {\n            return Err(Error::Public);\n        }\n        let base: [&[M31; 1024]; 26] =\n            core::array::from_fn(|i| c1[i].as_slice().try_into().unwrap());\n        let first = core::array::from_fn(|i| {\n            if i < 26 {\n                Column::Base(base[i])\n            } else {\n                Column::Extension(d)\n            }\n        });\n        let c1_root = commitments.c1(first)?;\n        let mut transcript = SemanticTranscript::new(hash, &public.public_bytes()?, &c1_root)?;\n        let mut bytes = c1_root.to_vec();\n        let mut scalar = |row, payload: &[u8], transcript: &mut SemanticTranscript| {\n            let framed = wire::record(row, payload)?;\n            let value = transcript.semantic(row, &framed)?;\n            bytes.extend_from_slice(&framed);\n            Ok::<QM31, Error>(value)\n        };\n        let lambda = scalar(0, &[], &mut transcript)?;\n        let chi = scalar(1, &[], &mut transcript)?;\n        let h1 = helper(lambda, chi)?;\n        let h1: &[QM31; 1024] = h1.as_slice().try_into().map_err(|_| Error::Public)?;\n        if state_only_copy_helper_sum(h1) != Some(QM31::ZERO) {\n            return Err(Error::Public);\n        }\n        let c2_root = commitments.c2([h1, g])?;\n        let theta = scalar(2, &c2_root, &mut transcript)?;\n        let mut zc = [QM31::ZERO; 10];\n        for (i, value) in zc.iter_mut().enumerate() {\n            *value = scalar(3 + i as u8, &[], &mut transcript)?;\n        }\n        let mu = scalar(13, &[], &mut transcript)?;\n        let columns: [Vec<QM31>; 29] = core::array::from_fn(|lane| match lane {\n            0..=25 => c1[lane].iter().copied().map(lift).collect(),\n            26 => h1.to_vec(),\n            27 => g.to_vec(),\n            _ => d.to_vec(),\n        });\n        let mut mask_sum = QM31::ZERO;\n        for row in 0..1024 {\n            let point = core::array::from_fn(|i| {\n"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "first_line": 1587,
+      "last_line": 1628,
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "span_sha256": "e8106c629f5eeece05825157d5c49c8f46859bf352ebbb461816c42865626600",
+      "span": "    pub fn prove_sumcheck(\n        transcript: &mut SemanticTranscript,\n        output: &mut Vec<u8>,\n        initial_claim: QM31,\n        mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,\n    ) -> Result<([QM31; 10], QM31), Error> {\n        let mut point = [QM31::ZERO; 10];\n        let mut running = initial_claim;\n        for round in 0..10 {\n            let remaining = 9 - round;\n            let mut values = [QM31::ZERO; 28];\n            for (sample, value) in values.iter_mut().enumerate() {\n                point[round] = QM31::from_cm31(CM31::from_m31(M31(sample as u32)));\n                for assignment in 0..1usize << remaining {\n                    for offset in 0..remaining {\n                        point[round + 1 + offset] =\n                            if (assignment >> (remaining - 1 - offset)) & 1 == 0 {\n                                QM31::ZERO\n                            } else {\n                                QM31::ONE\n                            };\n                    }\n                    *value = value.add(oracle(&point)?);\n                }\n            }\n            let polynomial = interpolate(&values);\n            if state_only_boundary_sum(&polynomial) != running {\n                return Err(Error::Boundary { round });\n            }\n            let framed = wire::record(\n                15 + round as u8,\n                &wire::encode_values(polynomial.map(WideExact::from_qm31)),\n            )?;\n            point[round] = transcript.semantic(15 + round as u8, &framed)?;\n            output.extend_from_slice(&framed);\n            running = evaluate_state_only_polynomial(&polynomial, point[round]);\n        }\n        if oracle(&point)? != running {\n            return Err(Error::Terminal);\n        }\n        Ok((point, running))\n    }\n"
+    },
+    {
+      "path": "crates/aspis-core/src/r0_transcript.rs",
+      "first_line": 126,
+      "last_line": 155,
+      "file_sha256": "2a315219d20069742c7c07e2a1ab8ee283865be3c607fdde2cf6975ad1813fc1",
+      "span_sha256": "031e79d2601ea41d5aba9be71efc100468f354bd4b93e25c515c5a076dbfafab",
+      "span": "fn base_p_digits(mut rank: Rank) -> [u32; 8] {\n    core::array::from_fn(|_| {\n        let mut remainder = 0u64;\n        for limb in rank.iter_mut().rev() {\n            let dividend = (remainder << 32) | u64::from(*limb);\n            *limb = (dividend / u64::from(P)) as u32;\n            remainder = dividend % u64::from(P);\n        }\n        remainder as u32\n    })\n}\n\nfn decode4([a, b, c, d]: [u32; 4]) -> QM31 {\n    QM31 {\n        c0: CM31::new(M31(a), M31(b)),\n        c1: CM31::new(M31(c), M31(d)),\n    }\n}\n\nfn decode8([a, b, c, d, e, f, g, h]: [u32; 8]) -> WideExact {\n    // R-A's constructor, with already canonical base-P digits. No fallible\n    // decoder or unwrap on the sampler's total path.\n    WideExact::new(decode4([a, b, c, d]), decode4([e, f, g, h]))\n}\n\n/// `decode4(digits(rank(block) mod P^4))`, exactly `SemD2.qm31Sample`.\npub fn qm31_sample(block: &[u8; 32]) -> QM31 {\n    let d = base_p_digits(reduce_rank(block_rank(block), P4));\n    decode4([d[0], d[1], d[2], d[3]])\n}\n"
+    },
+    {
+      "path": "crates/aspis-statement/src/logup.rs",
+      "first_line": 192,
+      "last_line": 225,
+      "file_sha256": "c6e84617e6473f014fc53c704dd26b04667046211985ea6ddca8f66f496bea65",
+      "span_sha256": "9f9c14773881bd2c6c22b38890a55e788a8cb8af0270350566e4b58289d68fa6",
+      "span": "pub fn build_copy_logup_helper(rows: &[CopyLogUpRow], chi: QM31) -> Result<Vec<QM31>, LogUpError> {\n    let mut helper = Vec::with_capacity(rows.len());\n    for (row_index, row) in rows.iter().enumerate() {\n        let mut value = QM31::ZERO;\n        for (producer_value, weight) in row.producer_values.into_iter().zip(row.producer_weights) {\n            if weight != M31::ZERO {\n                value = value.add(\n                    chi.sub(producer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Producer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        for (consumer_value, weight) in row.consumer_values.into_iter().zip(row.consumer_weights) {\n            if weight != M31::ZERO {\n                value = value.sub(\n                    chi.sub(consumer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Consumer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        helper.push(value);\n    }\n    Ok(helper)\n}\n"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs",
+      "first_line": 171,
+      "last_line": 179,
+      "file_sha256": "930c9f2211f1bc672195802d6e5de05588a37b48f770d805a5b2d240c8bbf344",
+      "span_sha256": "d17d7f4669bab1e9cc1b879c5f4b763d435ffeb908ff38191e83ed864f032902",
+      "span": "pub fn build_pool_v1_pair_forest_copy_helper_v1(\n    trace: &PoolV1PairForestTraceV1,\n    append_index: u64,\n    lambda: QM31,\n    chi: QM31,\n) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {\n    let rows = pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?;\n    build_copy_logup_helper(&rows, chi).map_err(|_| PoolV1PairTraceErrorV1::CopyImbalance)\n}\n"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "first_line": 239,
+      "last_line": 247,
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "span_sha256": "4cc1d344c1e3b8747f43d9e3d80f371d550168663a5c4875ced10f79f0e36d1a",
+      "span": "    pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {\n        let v = u32::from_le_bytes(bytes);\n        if v >= P {\n            None\n        } else {\n            Some(M31(v))\n        }\n    }\n\n"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "first_line": 410,
+      "last_line": 427,
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "span_sha256": "8dea3fd37175f5bbb23746ab52446b35484a05f4bf9a1876e578c596ae05a510",
+      "span": "    pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31> {\n        let a_bytes = match bytes[0..4].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let a = M31::from_le_bytes(a_bytes)?;\n        let b_bytes = match bytes[4..8].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let b = M31::from_le_bytes(b_bytes)?;\n        Some(CM31 { a, b })\n    }\n\n    pub fn write_le_bytes(self, out: &mut [u8]) {\n        out[0..4].copy_from_slice(&self.a.to_le_bytes());\n        out[4..8].copy_from_slice(&self.b.to_le_bytes());\n    }\n"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "first_line": 1022,
+      "last_line": 1032,
+      "file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "span_sha256": "152b1a520808bdcf37fd184869a1e5d2e30fe50cc1c32f10478c6bafc42fbc5d",
+      "span": "    pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31> {\n        let c0 = CM31::from_le_bytes(&bytes[0..8])?;\n        let c1 = CM31::from_le_bytes(&bytes[8..16])?;\n        Some(QM31 { c0, c1 })\n    }\n\n    pub fn write_le_bytes(self, out: &mut [u8]) {\n        self.c0.write_le_bytes(&mut out[0..8]);\n        self.c1.write_le_bytes(&mut out[8..16]);\n    }\n}\n"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "first_line": 960,
+      "last_line": 999,
+      "file_sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "span_sha256": "2f45b9b6adc33de1d2ed96f3abf0180b1d3b82424a48f1b3126c0c4da86caf25",
+      "span": "    fn build_pair_forest_mode(\n        public: Public<'_>,\n        compiled: &PoolV1PairForestMergedC1CompilationV1,\n        mask_only: &[Vec<M31>; 10],\n        d: &[QM31; 1024],\n        g: &[QM31; 1024],\n        commitments: &mut impl Commitments,\n        hash: HashFn,\n        transported_endpoints: bool,\n    ) -> Result<BuiltSemantics, Error> {\n        if compiled.semantic_c1.c1.len() != 16 || &compiled.public_statement != public.transition()\n        {\n            return Err(Error::Public);\n        }\n        let c1 = core::array::from_fn(|i| {\n            if i < 16 {\n                compiled.semantic_c1.c1[i].clone()\n            } else {\n                mask_only[i - 16].clone()\n            }\n        });\n        build_with_helper_mode(\n            public,\n            &c1,\n            d,\n            g,\n            |lambda, chi| {\n                build_pool_v1_pair_forest_copy_helper_v1(\n                    &compiled.trace,\n                    public.transition().live_snapshot.next_pair_index,\n                    lambda,\n                    chi,\n                )\n                .map_err(|_| Error::Public)\n            },\n            commitments,\n            hash,\n            transported_endpoints,\n        )\n    }\n"
+    }
+  ],
+  "classification": "source inspection and stage model association inventory; not installed native link",
+  "b3p6": {
+    "report": "evidence/pv-b3p6-20261028/resume12/FINAL.md",
+    "status": "own op227 callback unclosed; no V239 Link theorem supplied"
+  }
+}

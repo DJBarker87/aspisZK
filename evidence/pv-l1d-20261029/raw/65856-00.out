@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_042.lean:76:10: error(lean.unknownIdentifier): Unknown identifier `value`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_042.lean:76:4: error: Tactic `cases` failed: major premise type is not an inductive type
+  ?m.20
+
+Explanation: the `cases` tactic is for constructor-based reasoning as well as for applying custom cases principles with a 'using' clause or a registered '@[cases_eliminator]' theorem. The above type neither is an inductive type nor has a registered theorem.
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F : Type
+aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H
+OracleInst : host_sumcheck.Oracle F
+transcript : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array aspis_core.field.QM31 10#usize
+running : aspis_core.field.QM31
+round : Usize
+oracle : F
+x✝ : ?m.20
+⊢ (if round = 10#usize then do
+      let a ← OracleInst.evaluate oracle point
+      let a ← core.result.Result.Insts.CoreOpsTry.branch a
+      erase
+          (match a with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let b ←
+              PV_L1D_Logged.lift
+                  (core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running)
+            if b = true then Pure.pure (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+              else Pure.pure (core.result.Result.Ok (point, running), transcript, output)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              PV_L1D_Logged.lift
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                    (core.convert.FromSame r1_wire.Error) residual)
+            Pure.pure (r1, transcript, output))
+    else do
+      let a ←
+        host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point running round
+            oracle
+      let a_1 ← core.result.Result.Insts.CoreOpsTry.branch a.1
+      erase
+          (match a_1 with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let i ← PV_L1D_Logged.lift (Std.lift (round.wrapping_add 1#usize))
+            PV_L1D_Logged.lift
+                (host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst a.2.1 a.2.2 val.1 val.2 i
+                  oracle)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              PV_L1D_Logged.lift
+                  (core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                    (core.convert.FromSame r1_wire.Error) residual)
+            Pure.pure (r1, a.2.1, a.2.2))) =
+    if round = 10#usize then do
+      let r ← OracleInst.evaluate oracle point
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 val running
+          if b = true then ok (core.result.Result.Err r1_wire.Error.Terminal, transcript, output)
+            else ok (core.result.Result.Ok (point, running), transcript, output)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, transcript, output)
+    else do
+      let (r, transcript1, output1) ←
+        host_sumcheck.prove_sumcheck_round aspis_coredigestDigest32Inst OracleInst transcript output point running round
+            oracle
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (point1, running1) := val
+          do
+          let i ← Std.lift (round.wrapping_add 1#usize)
+          host_sumcheck.prove_sumcheck_rounds aspis_coredigestDigest32Inst OracleInst transcript1 output1 point1
+              running1 i oracle
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31) (core.convert.FromSame r1_wire.Error)
+                residual
+          ok (r1, transcript1, output1)
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_042.lean:69:37: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵I̵f̵.̵e̵r̵a̵s̵e̵_̵i̵f̵,̵P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵e̵r̵a̵s̵e̵_̵b̵i̵n̵d̵,̵e̵r̵a̵s̵e̵_̵o̵b̵s̵e̵r̵v̵e̵,̵e̵r̵a̵s̵e̵_̵l̵i̵f̵t̵,̵e̵r̵a̵s̵e̵_̵c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵4̵1̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵]̵[̲P̲V̲_̲L̲1̲D̲_̲E̲r̲a̲s̲e̲I̲f̲.̲e̲r̲a̲s̲e̲_̲i̲f̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲e̲r̲a̲s̲e̲_̲b̲i̲n̲d̲,̲ ̲e̲r̲a̲s̲e̲_̲o̲b̲s̲e̲r̲v̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲a̲s̲e̲_̲c̲o̲e̲,̲ ̲e̲r̲a̲s̲e̲_̲p̲u̲r̲e̲,̲ ̲P̲V̲_̲L̲1̲D̲_̲S̲o̲u̲r̲c̲e̲_̲0̲4̲1̲.̲c̲o̲m̲p̲l̲e̲t̲e̲_̲r̲e̲s̲u̲l̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_042.lean:69:123: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure, ̲PV_L1D_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_042.lean:69:133: warning: This simp argument is unused:
+  erase_pure
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe,e̵r̵a̵s̵e̵_̵p̵u̵r̵e̵,̵ ̲PV_L1D_Source_041.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1D_Source_042.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

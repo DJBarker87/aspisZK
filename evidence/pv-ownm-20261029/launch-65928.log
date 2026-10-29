@@ -1,0 +1,39 @@
+'R1Z.PV_OWNM_V239.ready_value' does not depend on any axioms
+theorem R1Z.PV_OWNM_V239.restore : ∀ {K W : Type} [inst : Field K] (decode : Q → K) (zero : Q)
+  (source222 : List Q → List Q → Result (Option Q)) (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
+  (reconstruct879 reconstruct890 : Public → List Q) (native : Input → List Q → ℕ → Execution K W)
+  (resource : Input → List Q → ℕ → ResourceExit W) (failures : List Bool) (left right : Input),
+  PV_OWNM_Link_ActualInput wirePoints left →
+    PV_OWNM_Link_ActualInput wirePoints right →
+      PV_OWNM_Link_SourceDense decode zero source222 →
+        PV_OWNM_Link_Transcript879 reconstruct879 left →
+          PV_OWNM_Link_Transcript879 reconstruct879 right →
+            PV_OWNM_Link_Transcript890 reconstruct890 left →
+              PV_OWNM_Link_Transcript890 reconstruct890 right →
+                PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures left →
+                  PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures right →
+                    left.pubData = right.pubData →
+                      left.site = right.site →
+                        List.map List.length left.columns = List.map List.length right.columns →
+                          (∀ p ∈ wirePoints left.point,
+                              ∀ (lane : ℕ) (c : List Q),
+                                left.columns[lane]? = some c →
+                                  native left p lane =
+                                    attach (resource left p lane)
+                                      (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
+                            (∀ p ∈ wirePoints right.point,
+                                ∀ (lane : ℕ) (c : List Q),
+                                  right.columns[lane]? = some c →
+                                    native right p lane =
+                                      attach (resource right p lane)
+                                        (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
+                              ∀ pL ∈ wirePoints left.point,
+                                ∀ pR ∈ wirePoints right.point,
+                                  ∀ (laneL laneR : ℕ) (cL cR : List Q),
+                                    left.columns[laneL]? = some cL →
+                                      right.columns[laneR]? = some cR →
+                                        (native left pL laneL).trace = (native right pR laneR).trace :=
+⋯
+'R1Z.PV_OWNM_V239.restore' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-65928/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-65928/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-objects/R1Z/PV_OWNM_V239.olean", "/home/dombarker/project-offloads/codex-pv-ownm-20261029/lean-sources/R1Z/PV_OWNM_V239.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:02.11", "peak_rss_kib": "2648964", "swap": "0", "source_revision": "ee73c1cd58d8fef209ba02c82ba8e0f13dbcde05", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

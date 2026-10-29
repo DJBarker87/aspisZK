@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:27:4: error: Tactic `rfl` failed: The left-hand side
+  e.world.deallocCalls
+is not definitionally equal to the right-hand side
+  e.world.deallocCalls +
+    (match e.returned with
+      | Except.error (Error.allocError layout) => []
+      | Except.error Error.capacityOverflow => releaseWord e.buffer.capacity ++ releaseWord owned.capacity
+      | Except.ok PUnit.unit => releaseWord owned.capacity).length
+
+case h_1
+S F : Type
+free : ℕ → ℕ → ℕ → S → S
+owned : Buffer U8
+e : Execution U8 S F
+x✝ : Except PV_RDB1_V183_ReserveWorld.Error Unit
+layout✝ : core.alloc.layout.Layout
+heq✝ : e.returned = Except.error (Error.allocError layout✝)
+⊢ e.world.deallocCalls =
+    e.world.deallocCalls +
+      (match e.returned with
+        | Except.error (Error.allocError layout) => []
+        | Except.error Error.capacityOverflow => releaseWord e.buffer.capacity ++ releaseWord owned.capacity
+        | Except.ok PUnit.unit => releaseWord owned.capacity).length
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:28:36: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m.86 ++ ?m.87).length
+in the target expression
+  e.world.deallocCalls + (releaseWord e.buffer.capacity).length + (releaseWord owned.capacity).length =
+    e.world.deallocCalls +
+      (match e.returned with
+        | Except.error (Error.allocError layout) => []
+        | Except.error Error.capacityOverflow => releaseWord e.buffer.capacity ++ releaseWord owned.capacity
+        | Except.ok PUnit.unit => releaseWord owned.capacity).length
+
+case h_2
+S F : Type
+free : ℕ → ℕ → ℕ → S → S
+owned : Buffer U8
+e : Execution U8 S F
+x✝ : Except PV_RDB1_V183_ReserveWorld.Error Unit
+heq✝ : e.returned = Except.error Error.capacityOverflow
+⊢ e.world.deallocCalls + (releaseWord e.buffer.capacity).length + (releaseWord owned.capacity).length =
+    e.world.deallocCalls +
+      (match e.returned with
+        | Except.error (Error.allocError layout) => []
+        | Except.error Error.capacityOverflow => releaseWord e.buffer.capacity ++ releaseWord owned.capacity
+        | Except.ok PUnit.unit => releaseWord owned.capacity).length
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:29:4: error: Type mismatch
+  release_count free owned e.world
+has type
+  (PV_RDEAC_OwnedCleanup.release free owned e.world).deallocCalls =
+    e.world.deallocCalls + (releaseWord owned.capacity).length
+but is expected to have type
+  (PV_RDEAC_OwnedCleanup.release free owned e.world).deallocCalls =
+    e.world.deallocCalls +
+      (match e.returned with
+        | Except.error (Error.allocError layout) => []
+        | Except.error Error.capacityOverflow => releaseWord e.buffer.capacity ++ releaseWord owned.capacity
+        | Except.ok PUnit.unit => releaseWord owned.capacity).length
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:43:7: error: unexpected token 'partial'; expected '(', '_' or identifier
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:43:15: error: unexpected token ','; expected 'lemma'
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:43:25: error: unexpected token '='; expected 'lemma'
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:43:37: error: unexpected token '='; expected 'lemma'
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:43:59: error: unexpected token '='; expected 'lemma'
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:44:40: error: unexpected token '++'; expected 'lemma'
+'R1Z.PV_RDEAC_FreeWord.release_count' depends on axioms: [propext]
+'R1Z.PV_RDEAC_FreeWord.final_count' depends on axioms: [sorryAx]
+'R1Z.PV_RDEAC_FreeWord.owned_word' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_FreeWord.lean:60:14: error(lean.unknownIdentifier): Unknown constant `source_headers`

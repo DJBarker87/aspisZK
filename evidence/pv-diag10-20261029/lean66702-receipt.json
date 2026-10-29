@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "2d083b9a4210bbf3040f047f7f070cdc4f2be201",
+  "runner_sha256": "8efd7d3a459b77b356fde132e9ad1701546c4ac1d4e1c7efd165fed22ce30076",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG10_FILE",
+  "attempt": 66702,
+  "source_sha256": "9cc9896a744d32f23db910cf488d0140aafdf23ad7ffd726ba575fd31bbdb1c8",
+  "environment_sha256": "f8d7fd06e0305f6cf576964805f5fb95cb847eda176dd8fab1f31082e7bbbf5d",
+  "dependency_objects": {
+    "PV_DIAG10_Links": {
+      "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects/PV_DIAG10_Links.olean": "c613646ca9759dfff3de960dcdc928368a74bdab1ebb9dc8204621ca717b1dd8"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/lean66702-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects/PV_DIAG10_FILE.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_FILE.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 0.23270678520202637,
+  "peak_rss_kib": "481392",
+  "swaps": "0",
+  "gnu_wall": "0:00.20",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_FILE.lean:12:45: error: unsolved goals\nI A : Type\nactual : I \u2192 List FileOp\nnative : I \u2192 NativeTrace A\nraw : I \u2192 List NativeEvent\nstate : I \u2192 List NativeEvent \u2192 List FileOp\ninitial : PV_DIAG10_Link_Init state (nativeFiles [])\nstep : PV_DIAG10_Link_Step state List.append fun e => nativeFiles [e]\nreadout : PV_DIAG10_Link_Readout actual state raw\norder : PV_DIAG10_Link_EventOrder raw native\ni : I\nes : List NativeEvent\ne : NativeEvent\n\u22a2 List.filterMap\n        (fun e =>\n          match e with\n          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.otherFile f => some f\n          | x => none)\n        es ++\n      List.filterMap\n        (fun e =>\n          match e with\n          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.otherFile f => some f\n          | x => none)\n        [e] =\n    (List.filterMap\n          (fun e =>\n            match e with\n            | NativeEvent.proofWrite p a b => some (FileOp.write p a b)\n            | NativeEvent.statementWrite p a b => some (FileOp.write p a b)\n            | NativeEvent.otherFile f => some f\n            | x => none)\n          es).append\n      (List.filterMap\n        (fun e =>\n          match e with\n          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)\n          | NativeEvent.otherFile f => some f\n          | x => none)\n        [e])\n'PV_DIAG10.DIAG_FILE_TRACE' depends on axioms: [propext, sorryAx]\n",
+  "object_sha256": null
+}

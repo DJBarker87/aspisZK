@@ -1,0 +1,97 @@
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:25:9: error: unsolved goals
+case zero
+S : Type
+f : S → ℕ → Result S
+r : Range
+acc : S
+bound : ↑r.end = ↑r.start + 0
+h : ¬↑r.start < ↑r.end
+⊢ (match do
+      let (o, r) ←
+        if h_1 : False then ok (some r.start, { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end })
+          else ok (none, r)
+      match o with
+        | none => ok (done acc)
+        | some i => do
+          let acc ← f acc ↑i
+          ok (cont (r, acc)) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok acc
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:40:6: error: Tactic `apply` failed: could not unify the conclusion of `ih`
+  source f ?r ?acc = PV_RDCD3_RangeFold.ordered f fuel ↑(core.ops.range.Range.start ?r) ?acc
+with the goal
+  (match
+      let (o, r) := (some r.start, { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end })
+      match o with
+      | none => ok (done acc)
+      | some i => do
+        let acc ← f acc ↑i
+        ok (cont (r, acc)) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    PV_RDCD3_RangeFold.ordered f fuel (↑r.start + 1) out
+
+Note: The full type of `ih` is
+  ∀ (r : Range) (acc : S), ↑r.end = ↑r.start + fuel → source f r acc = PV_RDCD3_RangeFold.ordered f fuel (↑r.start) acc
+
+case succ.ok
+S : Type
+f : S → ℕ → Result S
+fuel : ℕ
+ih :
+  ∀ (r : Range) (acc : S), ↑r.end = ↑r.start + fuel → source f r acc = PV_RDCD3_RangeFold.ordered f fuel (↑r.start) acc
+r : Range
+acc : S
+bound : ↑r.end = ↑r.start + (fuel + 1)
+h : ↑r.start < ↑r.end
+out : S
+hf : f acc ↑r.start = ok out
+⊢ (match
+      let (o, r) := (some r.start, { start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end })
+      match o with
+      | none => ok (done acc)
+      | some i => do
+        let acc ← f acc ↑i
+        ok (cont (r, acc)) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    PV_RDCD3_RangeFold.ordered f fuel (↑r.start + 1) out
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:29:6: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵1̵9̵4̵.̵e̵x̵t̵r̵a̵c̵t̵e̵d̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵1̵9̵4̵.̵s̵o̵u̵r̵c̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵d̵i̵f̵_̵n̵e̵g̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵F̵o̵l̵d̵.̵o̵r̵d̵e̵r̵e̵d̵]̵[̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲1̲9̲4̲.̲e̲x̲t̲r̲a̲c̲t̲e̲d̲,̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲1̲9̲4̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲F̲o̲l̲d̲.̲o̲r̲d̲e̲r̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:29:14: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵1̵9̵4̵.̵e̵x̵t̵r̵a̵c̵t̵e̵d̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵1̵9̵4̵.̵s̵o̵u̵r̵c̵e̵,̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵d̵i̵f̵_̵n̵e̵g̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵P̵V̵_̵R̵D̵C̵D̵3̵_̵R̵a̵n̵g̵e̵F̵o̵l̵d̵.̵o̵r̵d̵e̵r̵e̵d̵]̵[̲b̲o̲d̲y̲,̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲1̲9̲4̲.̲e̲x̲t̲r̲a̲c̲t̲e̲d̲,̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲1̲9̲4̲.̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲R̲D̲C̲D̲3̲_̲R̲a̲n̲g̲e̲F̲o̲l̲d̲.̲o̲r̲d̲e̲r̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:39:17: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵f̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD3_UsizeLoop.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

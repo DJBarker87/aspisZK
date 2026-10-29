@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61786/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61786/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects/R1Z/PV_OWN_AllocationAbort.olean",
+    "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.24",
+  "peak_rss_kib": "480660",
+  "swap": "0",
+  "source_revision": "9a4cae44c4ea0e383b61b596386c1c1117cf59f5",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:15: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:16:80: error: unsolved goals\nS X E A : Type\nprimitive : Request \u2192 S \u2192 Outcome E (Option Nat) \u00d7 S\nr : Request\nowner : Nat\nabort : Action S X E A\nnext : Token \u2192 Action S X E A\nw : State S X\ns : S\nh : primitive r w.allocator = (Outcome.ok none, s)\n\u22a2 PV_W_Threading.bind\n      (emit (Event.allocate r.size r.alignment) fun w =>\n        match (primitive r w.allocator).fst with\n        | Outcome.fail e =>\n          (Outcome.fail e, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.div =>\n          (Outcome.div, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.ok none =>\n          (Outcome.ok none, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.ok (some p) =>\n          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),\n            {\n              memory :=\n                { heap := put w.memory.heap p (some (emptyCell r.size r.alignment owner)),\n                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,\n                  slots := fun s =>\n                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }\n                    else w.memory.slots s,\n                  loans := w.memory.loans },\n              allocator := (primitive r w.allocator).snd, extra := w.extra }))\n      (fun result =>\n        match result with\n        | none => abort\n        | some token => next token)\n      w =\n    { outcome := (abort { memory := w.memory, allocator := s, extra := w.extra }).outcome,\n      world := (abort { memory := w.memory, allocator := s, extra := w.extra }).world,\n      calls :=\n        (w, Event.allocate r.size r.alignment) ::\n          (abort { memory := w.memory, allocator := s, extra := w.extra }).calls }\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:29: warning: This simp argument is unused:\n  emit\n\nHint: Omit it from the simp argument list.\n  simp [\u0335r\u0335e\u0335q\u0335u\u0335e\u0335s\u0335t\u0335,\u0335b\u0335i\u0335n\u0335d\u0335,\u0335a\u0335l\u0335l\u0335o\u0335c\u0335a\u0335t\u0335e\u0335,\u0335e\u0335m\u0335i\u0335t\u0335,\u0335h\u0335]\u0335[\u0332r\u0332e\u0332q\u0332u\u0332e\u0332s\u0332t\u0332,\u0332 \u0332b\u0332i\u0332n\u0332d\u0332,\u0332 \u0332a\u0332l\u0332l\u0332o\u0332c\u0332a\u0332t\u0332e\u0332,\u0332 \u0332h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:17:34: warning: This simp argument is unused:\n  h\n\nHint: Omit it from the simp argument list.\n  simp [request, \u0332bind, \u0332allocate, \u0332emit,\u0335h\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:15: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:23:70: error: unsolved goals\nS X E A : Type\nprimitive : Request \u2192 S \u2192 Outcome E (Option Nat) \u00d7 S\nr : Request\nowner : Nat\nabort : Action S X E A\nnext : Token \u2192 Action S X E A\nw : State S X\ns : S\nh : primitive r w.allocator = (Outcome.div, s)\n\u22a2 PV_W_Threading.bind\n      (emit (Event.allocate r.size r.alignment) fun w =>\n        match (primitive r w.allocator).fst with\n        | Outcome.fail e =>\n          (Outcome.fail e, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.div =>\n          (Outcome.div, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.ok none =>\n          (Outcome.ok none, { memory := w.memory, allocator := (primitive r w.allocator).snd, extra := w.extra })\n        | Outcome.ok (some p) =>\n          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),\n            {\n              memory :=\n                { heap := put w.memory.heap p (some (emptyCell r.size r.alignment owner)),\n                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,\n                  slots := fun s =>\n                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }\n                    else w.memory.slots s,\n                  loans := w.memory.loans },\n              allocator := (primitive r w.allocator).snd, extra := w.extra }))\n      (fun result =>\n        match result with\n        | none => abort\n        | some token => next token)\n      w =\n    { outcome := Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },\n      calls := [(w, Event.allocate r.size r.alignment)] }\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:29: warning: This simp argument is unused:\n  emit\n\nHint: Omit it from the simp argument list.\n  simp [\u0335r\u0335e\u0335q\u0335u\u0335e\u0335s\u0335t\u0335,\u0335b\u0335i\u0335n\u0335d\u0335,\u0335a\u0335l\u0335l\u0335o\u0335c\u0335a\u0335t\u0335e\u0335,\u0335e\u0335m\u0335i\u0335t\u0335,\u0335h\u0335]\u0335[\u0332r\u0332e\u0332q\u0332u\u0332e\u0332s\u0332t\u0332,\u0332 \u0332b\u0332i\u0332n\u0332d\u0332,\u0332 \u0332a\u0332l\u0332l\u0332o\u0332c\u0332a\u0332t\u0332e\u0332,\u0332 \u0332h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_AllocationAbort.lean:24:34: warning: This simp argument is unused:\n  h\n\nHint: Omit it from the simp argument list.\n  simp [request, \u0332bind, \u0332allocate, \u0332emit,\u0335h\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWN_AllocationAbort.null' depends on axioms: [sorryAx, Quot.sound]\n'R1Z.PV_OWN_AllocationAbort.divergence' depends on axioms: [sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 61786,
+  "module": "R1Z/PV_OWN_AllocationAbort",
+  "source_blob": "b250938932d1c8b8c3d151df8a0c4df4a75ae910",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWN_AllocationAbort.lean",
+  "source_sha256": "c5a88aa9843fd747951750a4b9a7939a457ac7fa4e2eb722040695d06fea5e83",
+  "imports": [
+    "R1Z.PV_OWN_Operations"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWN_Operations": "72c6768fd3dc6c657e19736a7a07b4240fedb0cb735ef0199a5a027d6dcb1fa6"
+  },
+  "deps_fingerprint": "27b04503269a63c7985c80dc98c4dffade3caa2ba00a5464dc7f7a23c68445a6"
+}

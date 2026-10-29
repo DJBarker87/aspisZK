@@ -1,0 +1,36 @@
+{
+  "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+  "constants_source_sha256": "4563a7192a69748ab0a56ddc023a9f13f2d96d0064cd829dd17ac358bce1a740",
+  "reference_sha256": "db2c41b30411f6038a9d6266c96ba4b073d4cc33f42d84f6472263d6710e7d16",
+  "changes": [
+    "owned copy of helpers between lift and multilinear_evaluate",
+    "copy exact three private constant tables",
+    "fixed4 array constructors and maps in same order",
+    "fixed7 ROWS maps and ordered sums",
+    "unroll fixed8/fixed16 for loops"
+  ],
+  "laws_outstanding": true,
+  "field_helper_change": "owned fixed3/fixed7 field helpers; four-element slices replaced by same-order four copied values",
+  "fixed_loop_change": "unroll fixed4/fixed16 while loops from their original initial counter; isolate same scalar raw-matrix match",
+  "timeout_replacement": {
+    "old_gate": "aeneas227-resume5-projectedloops",
+    "old_exit": 124,
+    "old_wall_seconds": 300.225,
+    "old_peak_rss_kib": 6211868,
+    "old_swaps": 0,
+    "declaration": "external_linear_lazy",
+    "replacement": "external_group227,global_sums227,add_global227; exact raw per-row arithmetic and global addition order; group writes moved after four pure calculations on pre-copied group input, requiring frame law",
+    "caps_unchanged": true
+  },
+  "interpolation_timeout_replacement": {
+    "old_gate": "aeneas227-resume5-projectedsplit",
+    "old_exit": 124,
+    "old_wall_seconds": 300.117,
+    "old_peak_rss_kib": 4005596,
+    "old_swaps": 0,
+    "declaration": "interpolate_three_constant_columns",
+    "replacement": "interpolate_column227 receives owned weights and three scalar constant limbs; exact original field expression, with fixed16 ordered caller",
+    "external_linear_lazy_passed_before_timeout": true,
+    "caps_unchanged": true
+  }
+}

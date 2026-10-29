@@ -1,0 +1,15 @@
+theorem R1Z.PV_OWN_FocusedReplay.checked_store : ∀ {T : Type} (codec : Codec T) (m : Memory)
+  (cmd : PV_OWN_CheckedStore.Command codec m),
+  View codec (PV_OWN_CheckedStore.execute cmd) cmd.token cmd.offset cmd.value ∧
+    Writable (PV_OWN_CheckedStore.execute cmd) cmd.owner cmd.token
+      (store cmd.cell cmd.offset codec.width (codec.encode cmd.value)) :=
+fun {T} codec m cmd =>
+  ⟨PV_OWN_CheckedStore.representation cmd,
+    PV_OWN_Laws.InitWritable codec cmd.token cmd.cell cmd.owner cmd.offset cmd.value m cmd.writable⟩
+'R1Z.PV_OWN_FocusedReplay.checked_store' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWN_Reserve.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWN_Reserve.typed_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWN_CollectorFrame.unread' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWN_Containers.zero_capacity' depends on axioms: [propext, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61799/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-61799/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-own-20261028/env-J.json", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-objects/R1Z/PV_OWN_FocusedReplay.olean", "/home/dombarker/project-offloads/codex-pv-own-20261028/lean-sources/R1Z/PV_OWN_FocusedReplay.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.77", "peak_rss_kib": "2634116", "swap": "0", "source_revision": "e89db568e0ffa9436e763d528765603a5cd5685e", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

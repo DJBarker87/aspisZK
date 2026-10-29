@@ -1,0 +1,591 @@
+{
+  "source_module": "PV_B3P_P227_00",
+  "source_sha256": "69083729819943ab0bcf96421c9b6ad31868e95919238514e15090a619dd194f",
+  "modules": [
+    "PV_B3P_Index3_100227",
+    "PV_B3P_Index3_101227",
+    "PV_B3P_Index3_102227",
+    "PV_B3P_MatrixStorage10227"
+  ],
+  "statements": [
+    {
+      "binding": "a",
+      "kind": "read",
+      "source": "Array.index_usize left.components 0#usize",
+      "model": "get3_0 left.components"
+    },
+    {
+      "binding": "m3",
+      "kind": "read",
+      "source": "Array.index_usize a 0#usize",
+      "model": "get3_0 a"
+    },
+    {
+      "binding": "i",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m3)",
+      "model": "(UScalar.cast .U64 m3)"
+    },
+    {
+      "binding": "a1",
+      "kind": "read",
+      "source": "Array.index_usize\n      (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl)) 0#usize",
+      "model": "get3_0 (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl))"
+    },
+    {
+      "binding": "m4",
+      "kind": "read",
+      "source": "Array.index_usize a1 0#usize",
+      "model": "get3_0 a1"
+    },
+    {
+      "binding": "i1",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m4)",
+      "model": "(UScalar.cast .U64 m4)"
+    },
+    {
+      "binding": "i2",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i i1)",
+      "model": "(Std.U64.wrapping_mul i i1)"
+    },
+    {
+      "binding": "a2",
+      "kind": "read",
+      "source": "Array.index_usize sums 0#usize",
+      "model": "get3_0 sums"
+    },
+    {
+      "binding": "i3",
+      "kind": "read",
+      "source": "Array.index_usize a2 0#usize",
+      "model": "get3_0 a2"
+    },
+    {
+      "binding": "i4",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i3 i2)",
+      "model": "(Std.U64.wrapping_add i3 i2)"
+    },
+    {
+      "binding": "(a3, index_mut_back)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums 0#usize",
+      "model": "(get3_0 sums,Aeneas.Std.Array.set sums 0#usize)"
+    },
+    {
+      "binding": "a4",
+      "kind": "store",
+      "source": "Array.update a3 0#usize i4",
+      "model": "Aeneas.Std.Array.set a3 0#usize i4"
+    },
+    {
+      "binding": "m5",
+      "kind": "read",
+      "source": "Array.index_usize a 1#usize",
+      "model": "get3_1 a"
+    },
+    {
+      "binding": "i5",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m5)",
+      "model": "(UScalar.cast .U64 m5)"
+    },
+    {
+      "binding": "m6",
+      "kind": "read",
+      "source": "Array.index_usize a1 1#usize",
+      "model": "get3_1 a1"
+    },
+    {
+      "binding": "i6",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m6)",
+      "model": "(UScalar.cast .U64 m6)"
+    },
+    {
+      "binding": "i7",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i5 i6)",
+      "model": "(Std.U64.wrapping_mul i5 i6)"
+    },
+    {
+      "binding": "a5",
+      "kind": "read",
+      "source": "Array.index_usize sums1 0#usize",
+      "model": "get3_0 sums1"
+    },
+    {
+      "binding": "i8",
+      "kind": "read",
+      "source": "Array.index_usize a5 1#usize",
+      "model": "get3_1 a5"
+    },
+    {
+      "binding": "i9",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i8 i7)",
+      "model": "(Std.U64.wrapping_add i8 i7)"
+    },
+    {
+      "binding": "(a6, index_mut_back1)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums1 0#usize",
+      "model": "(get3_0 sums1,Aeneas.Std.Array.set sums1 0#usize)"
+    },
+    {
+      "binding": "a7",
+      "kind": "store",
+      "source": "Array.update a6 1#usize i9",
+      "model": "Aeneas.Std.Array.set a6 1#usize i9"
+    },
+    {
+      "binding": "m7",
+      "kind": "read",
+      "source": "Array.index_usize a 2#usize",
+      "model": "get3_2 a"
+    },
+    {
+      "binding": "i10",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m7)",
+      "model": "(UScalar.cast .U64 m7)"
+    },
+    {
+      "binding": "m8",
+      "kind": "read",
+      "source": "Array.index_usize a1 2#usize",
+      "model": "get3_2 a1"
+    },
+    {
+      "binding": "i11",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m8)",
+      "model": "(UScalar.cast .U64 m8)"
+    },
+    {
+      "binding": "i12",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i10 i11)",
+      "model": "(Std.U64.wrapping_mul i10 i11)"
+    },
+    {
+      "binding": "a8",
+      "kind": "read",
+      "source": "Array.index_usize sums2 0#usize",
+      "model": "get3_0 sums2"
+    },
+    {
+      "binding": "i13",
+      "kind": "read",
+      "source": "Array.index_usize a8 2#usize",
+      "model": "get3_2 a8"
+    },
+    {
+      "binding": "i14",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i13 i12)",
+      "model": "(Std.U64.wrapping_add i13 i12)"
+    },
+    {
+      "binding": "(a9, index_mut_back2)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums2 0#usize",
+      "model": "(get3_0 sums2,Aeneas.Std.Array.set sums2 0#usize)"
+    },
+    {
+      "binding": "a10",
+      "kind": "store",
+      "source": "Array.update a9 2#usize i14",
+      "model": "Aeneas.Std.Array.set a9 2#usize i14"
+    },
+    {
+      "binding": "a11",
+      "kind": "read",
+      "source": "Array.index_usize left.components 1#usize",
+      "model": "get3_1 left.components"
+    },
+    {
+      "binding": "m9",
+      "kind": "read",
+      "source": "Array.index_usize a11 0#usize",
+      "model": "get3_0 a11"
+    },
+    {
+      "binding": "i15",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m9)",
+      "model": "(UScalar.cast .U64 m9)"
+    },
+    {
+      "binding": "a12",
+      "kind": "read",
+      "source": "Array.index_usize\n      (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl)) 1#usize",
+      "model": "get3_1 (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl))"
+    },
+    {
+      "binding": "m10",
+      "kind": "read",
+      "source": "Array.index_usize a12 0#usize",
+      "model": "get3_0 a12"
+    },
+    {
+      "binding": "i16",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m10)",
+      "model": "(UScalar.cast .U64 m10)"
+    },
+    {
+      "binding": "i17",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i15 i16)",
+      "model": "(Std.U64.wrapping_mul i15 i16)"
+    },
+    {
+      "binding": "a13",
+      "kind": "read",
+      "source": "Array.index_usize sums3 1#usize",
+      "model": "get3_1 sums3"
+    },
+    {
+      "binding": "i18",
+      "kind": "read",
+      "source": "Array.index_usize a13 0#usize",
+      "model": "get3_0 a13"
+    },
+    {
+      "binding": "i19",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i18 i17)",
+      "model": "(Std.U64.wrapping_add i18 i17)"
+    },
+    {
+      "binding": "(a14, index_mut_back3)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums3 1#usize",
+      "model": "(get3_1 sums3,Aeneas.Std.Array.set sums3 1#usize)"
+    },
+    {
+      "binding": "a15",
+      "kind": "store",
+      "source": "Array.update a14 0#usize i19",
+      "model": "Aeneas.Std.Array.set a14 0#usize i19"
+    },
+    {
+      "binding": "m11",
+      "kind": "read",
+      "source": "Array.index_usize a11 1#usize",
+      "model": "get3_1 a11"
+    },
+    {
+      "binding": "i20",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m11)",
+      "model": "(UScalar.cast .U64 m11)"
+    },
+    {
+      "binding": "m12",
+      "kind": "read",
+      "source": "Array.index_usize a12 1#usize",
+      "model": "get3_1 a12"
+    },
+    {
+      "binding": "i21",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m12)",
+      "model": "(UScalar.cast .U64 m12)"
+    },
+    {
+      "binding": "i22",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i20 i21)",
+      "model": "(Std.U64.wrapping_mul i20 i21)"
+    },
+    {
+      "binding": "a16",
+      "kind": "read",
+      "source": "Array.index_usize sums4 1#usize",
+      "model": "get3_1 sums4"
+    },
+    {
+      "binding": "i23",
+      "kind": "read",
+      "source": "Array.index_usize a16 1#usize",
+      "model": "get3_1 a16"
+    },
+    {
+      "binding": "i24",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i23 i22)",
+      "model": "(Std.U64.wrapping_add i23 i22)"
+    },
+    {
+      "binding": "(a17, index_mut_back4)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums4 1#usize",
+      "model": "(get3_1 sums4,Aeneas.Std.Array.set sums4 1#usize)"
+    },
+    {
+      "binding": "a18",
+      "kind": "store",
+      "source": "Array.update a17 1#usize i24",
+      "model": "Aeneas.Std.Array.set a17 1#usize i24"
+    },
+    {
+      "binding": "m13",
+      "kind": "read",
+      "source": "Array.index_usize a11 2#usize",
+      "model": "get3_2 a11"
+    },
+    {
+      "binding": "i25",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m13)",
+      "model": "(UScalar.cast .U64 m13)"
+    },
+    {
+      "binding": "m14",
+      "kind": "read",
+      "source": "Array.index_usize a12 2#usize",
+      "model": "get3_2 a12"
+    },
+    {
+      "binding": "i26",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m14)",
+      "model": "(UScalar.cast .U64 m14)"
+    },
+    {
+      "binding": "i27",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i25 i26)",
+      "model": "(Std.U64.wrapping_mul i25 i26)"
+    },
+    {
+      "binding": "a19",
+      "kind": "read",
+      "source": "Array.index_usize sums5 1#usize",
+      "model": "get3_1 sums5"
+    },
+    {
+      "binding": "i28",
+      "kind": "read",
+      "source": "Array.index_usize a19 2#usize",
+      "model": "get3_2 a19"
+    },
+    {
+      "binding": "i29",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i28 i27)",
+      "model": "(Std.U64.wrapping_add i28 i27)"
+    },
+    {
+      "binding": "(a20, index_mut_back5)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums5 1#usize",
+      "model": "(get3_1 sums5,Aeneas.Std.Array.set sums5 1#usize)"
+    },
+    {
+      "binding": "a21",
+      "kind": "store",
+      "source": "Array.update a20 2#usize i29",
+      "model": "Aeneas.Std.Array.set a20 2#usize i29"
+    },
+    {
+      "binding": "a22",
+      "kind": "read",
+      "source": "Array.index_usize left.components 2#usize",
+      "model": "get3_2 left.components"
+    },
+    {
+      "binding": "m15",
+      "kind": "read",
+      "source": "Array.index_usize a22 0#usize",
+      "model": "get3_0 a22"
+    },
+    {
+      "binding": "i30",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m15)",
+      "model": "(UScalar.cast .U64 m15)"
+    },
+    {
+      "binding": "a23",
+      "kind": "read",
+      "source": "Array.index_usize\n      (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl)) 2#usize",
+      "model": "get3_2 (Array.make 3#usize [\n        (Array.make 3#usize [ right.c0.a, right.c0.b, m ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right.c1.a, right.c1.b, m1 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize),\n        (Array.make 3#usize [ right_sum.a, right_sum.b, m2 ] (by simp only [List.length_cons,List.length_nil]; rfl) : Array\n        aspis_core.field.M31 3#usize)\n        ] (by simp only [List.length_cons,List.length_nil]; rfl))"
+    },
+    {
+      "binding": "m16",
+      "kind": "read",
+      "source": "Array.index_usize a23 0#usize",
+      "model": "get3_0 a23"
+    },
+    {
+      "binding": "i31",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m16)",
+      "model": "(UScalar.cast .U64 m16)"
+    },
+    {
+      "binding": "i32",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i30 i31)",
+      "model": "(Std.U64.wrapping_mul i30 i31)"
+    },
+    {
+      "binding": "a24",
+      "kind": "read",
+      "source": "Array.index_usize sums6 2#usize",
+      "model": "get3_2 sums6"
+    },
+    {
+      "binding": "i33",
+      "kind": "read",
+      "source": "Array.index_usize a24 0#usize",
+      "model": "get3_0 a24"
+    },
+    {
+      "binding": "i34",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i33 i32)",
+      "model": "(Std.U64.wrapping_add i33 i32)"
+    },
+    {
+      "binding": "(a25, index_mut_back6)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums6 2#usize",
+      "model": "(get3_2 sums6,Aeneas.Std.Array.set sums6 2#usize)"
+    },
+    {
+      "binding": "a26",
+      "kind": "store",
+      "source": "Array.update a25 0#usize i34",
+      "model": "Aeneas.Std.Array.set a25 0#usize i34"
+    },
+    {
+      "binding": "m17",
+      "kind": "read",
+      "source": "Array.index_usize a22 1#usize",
+      "model": "get3_1 a22"
+    },
+    {
+      "binding": "i35",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m17)",
+      "model": "(UScalar.cast .U64 m17)"
+    },
+    {
+      "binding": "m18",
+      "kind": "read",
+      "source": "Array.index_usize a23 1#usize",
+      "model": "get3_1 a23"
+    },
+    {
+      "binding": "i36",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m18)",
+      "model": "(UScalar.cast .U64 m18)"
+    },
+    {
+      "binding": "i37",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i35 i36)",
+      "model": "(Std.U64.wrapping_mul i35 i36)"
+    },
+    {
+      "binding": "a27",
+      "kind": "read",
+      "source": "Array.index_usize sums7 2#usize",
+      "model": "get3_2 sums7"
+    },
+    {
+      "binding": "i38",
+      "kind": "read",
+      "source": "Array.index_usize a27 1#usize",
+      "model": "get3_1 a27"
+    },
+    {
+      "binding": "i39",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i38 i37)",
+      "model": "(Std.U64.wrapping_add i38 i37)"
+    },
+    {
+      "binding": "(a28, index_mut_back7)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums7 2#usize",
+      "model": "(get3_2 sums7,Aeneas.Std.Array.set sums7 2#usize)"
+    },
+    {
+      "binding": "a29",
+      "kind": "store",
+      "source": "Array.update a28 1#usize i39",
+      "model": "Aeneas.Std.Array.set a28 1#usize i39"
+    },
+    {
+      "binding": "m19",
+      "kind": "read",
+      "source": "Array.index_usize a22 2#usize",
+      "model": "get3_2 a22"
+    },
+    {
+      "binding": "i40",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m19)",
+      "model": "(UScalar.cast .U64 m19)"
+    },
+    {
+      "binding": "m20",
+      "kind": "read",
+      "source": "Array.index_usize a23 2#usize",
+      "model": "get3_2 a23"
+    },
+    {
+      "binding": "i41",
+      "kind": "lift",
+      "source": "lift (UScalar.cast .U64 m20)",
+      "model": "(UScalar.cast .U64 m20)"
+    },
+    {
+      "binding": "i42",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_mul i40 i41)",
+      "model": "(Std.U64.wrapping_mul i40 i41)"
+    },
+    {
+      "binding": "a30",
+      "kind": "read",
+      "source": "Array.index_usize sums8 2#usize",
+      "model": "get3_2 sums8"
+    },
+    {
+      "binding": "i43",
+      "kind": "read",
+      "source": "Array.index_usize a30 2#usize",
+      "model": "get3_2 a30"
+    },
+    {
+      "binding": "i44",
+      "kind": "lift",
+      "source": "lift (Std.U64.wrapping_add i43 i42)",
+      "model": "(Std.U64.wrapping_add i43 i42)"
+    },
+    {
+      "binding": "(a31, index_mut_back8)",
+      "kind": "borrow",
+      "source": "Array.index_mut_usize sums8 2#usize",
+      "model": "(get3_2 sums8,Aeneas.Std.Array.set sums8 2#usize)"
+    },
+    {
+      "binding": "a32",
+      "kind": "store",
+      "source": "Array.update a31 2#usize i44",
+      "model": "Aeneas.Std.Array.set a31 2#usize i44"
+    }
+  ],
+  "field_calls_unchanged": 4,
+  "credit": "complete emitted accumulator array storage Result binding; source loop and final matrix model law remain separate",
+  "semantic_use": "reclassification within existing Charon/Aeneas tool trust"
+}

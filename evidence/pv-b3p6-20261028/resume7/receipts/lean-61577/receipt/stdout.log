@@ -1,0 +1,841 @@
+'PV_B3P_Success227.window_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:42:57: error: unsolved goals
+N : Usize
+packed : Std.Array aspis_core.field.QM31 24#usize
+values : Std.Array aspis_core.field.QM31 N
+start last i : Usize
+hsum : ↑start + ↑N ≤ 96
+hlast : ↑last < 24
+hi : i ≤ last
+base : Usize := Usize.wrapping_mul 4#usize i
+q0 q1 q2 q3 : aspis_core.field.QM31
+w0 : Std.Array aspis_core.field.QM31 4#usize
+hw0 : (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q0 = Result.ok w0
+w1 : Std.Array aspis_core.field.QM31 4#usize
+hw1 : w0.update 1#usize q1 = Result.ok w1
+w2 : Std.Array aspis_core.field.QM31 4#usize
+hw2 : w1.update 2#usize q2 = Result.ok w2
+w3 : Std.Array aspis_core.field.QM31 4#usize
+hw3 : w2.update 3#usize q3 = Result.ok w3
+old : aspis_core.field.QM31
+hold : packed.index_usize i = Result.ok old
+group : aspis_core.field.QM31
+hgroup : host_terminal_field.qm31_pack_base4 w3.to_slice = Result.ok group
+value : aspis_core.field.QM31
+hvalue : old.add group = Result.ok value
+next : Std.Array aspis_core.field.QM31 24#usize
+hnext : packed.update i value = Result.ok next
+hq0 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 0#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q0
+hq1 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q1
+hq2 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q2
+hq3 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q3
+⊢ (if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize ≥ start then
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize < start.wrapping_add N then do
+        let q ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 0#usize).wrapping_sub start)
+        let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q
+        if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize < start.wrapping_add N then do
+              let q1 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize).wrapping_sub start)
+              let output2 ← output1.update 1#usize q1
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+            else do
+              let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+      else do
+        let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ZERO
+        if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize ≥ start then
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize < start.wrapping_add N then do
+              let q1 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize).wrapping_sub start)
+              let output2 ← output1.update 1#usize q1
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+            else do
+              let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                    let q2 ←
+                      values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                    let output3 ← output2.update 2#usize q2
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                        if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                          let q3 ←
+                            values.index_usize
+                                (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                          let output4 ← output3.update 3#usize q3
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                        else do
+                          let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                          let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                          let q6 ← old.add q5
+                          let packed1 ← packed.update i q6
+                          Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+    else do
+      let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ZERO
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize ≥ start then
+          if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize < start.wrapping_add N then do
+            let q1 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize).wrapping_sub start)
+            let output2 ← output1.update 1#usize q1
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+          else do
+            let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+            if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                  let q2 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                  let output3 ← output2.update 2#usize q2
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                        let q3 ←
+                          values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                        let output4 ← output3.update 3#usize q3
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                      else do
+                        let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                        let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                        let q6 ← old.add q5
+                        let packed1 ← packed.update i q6
+                        Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+        else do
+          let output2 ← output1.update 1#usize aspis_core.field.QM31.ZERO
+          if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < start.wrapping_add N then do
+                let q2 ← values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+                let output3 ← output2.update 2#usize q2
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+              else do
+                let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+                if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                    if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                      let q3 ←
+                        values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                      let output4 ← output3.update 3#usize q3
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                    else do
+                      let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                      let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                      let q6 ← old.add q5
+                      let packed1 ← packed.update i q6
+                      Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+            else do
+              let output3 ← output2.update 2#usize aspis_core.field.QM31.ZERO
+              if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then
+                  if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < start.wrapping_add N then do
+                    let q3 ←
+                      values.index_usize (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+                    let output4 ← output3.update 3#usize q3
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                  else do
+                    let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                    let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                    let q6 ← old.add q5
+                    let packed1 ← packed.update i q6
+                    Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+                else do
+                  let output4 ← output3.update 3#usize aspis_core.field.QM31.ZERO
+                  let q5 ← host_terminal_field.qm31_pack_base4 output4.to_slice
+                  let q6 ← old.add q5
+                  let packed1 ← packed.update i q6
+                  Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))) =
+    Result.ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:4: warning: This simp argument is unused:
+  hq0
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲1̲,̲
+      hq0̵,̵h̵q̵1̵,̵h̵q̵2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:8: warning: This simp argument is unused:
+  hq1
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1̵,̵h̵q̵2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:12: warning: This simp argument is unused:
+  hq2
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2̵,̵h̵q̵3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:16: warning: This simp argument is unused:
+  hq3
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq̵3̵,̵h̵w0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:20: warning: This simp argument is unused:
+  hw0
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0̵,̵h̵w̵1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:24: warning: This simp argument is unused:
+  hw1
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1̵,̵h̵w̵2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:28: warning: This simp argument is unused:
+  hw2
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1, ̲hw2̵,̵h̵w̵3, ̲hold, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:32: warning: This simp argument is unused:
+  hw3
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw̵3̵,̵h̵old, ̲hgroup, ̲hvalue, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:41: warning: This simp argument is unused:
+  hgroup
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hg̵r̵o̵u̵p̵,̵h̵value, ̲hnext]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:48: warning: This simp argument is unused:
+  hvalue
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hv̵a̵l̵u̵e̵,̵h̵next]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:60:55: warning: This simp argument is unused:
+  hnext
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_terminal.add_preweighted_loop.body, ̲hi, ̲↓reduceIte, ̲lift, ̲bind_tc_ok, ̲h̲q̲0̲,̲
+      hq0̵,̵h̵q̵1, ̲hq2, ̲hq3, ̲hw0, ̲hw1, ̲hw2, ̲hw3, ̲hold, ̲hgroup, ̲hvalue,̵h̵n̵e̵x̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Success227.preweighted_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.preweighted_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:109:4: warning: 'change last.val < 24' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PV_B3P_Success227.preweighted_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

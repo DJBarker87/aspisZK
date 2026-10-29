@@ -1,0 +1,22 @@
+{
+  "source_revision": "57076b04630af7645efb99998b1d7a304d2dda57",
+  "classification": "source inspection; Result helper model pending compilation, not actual-input discharge",
+  "rows": [
+    {
+      "path": "crates/aspis-statement/src/logup.rs",
+      "first_line": 191,
+      "last_line": 225,
+      "file_sha256": "c6e84617e6473f014fc53c704dd26b04667046211985ea6ddca8f66f496bea65",
+      "span_sha256": "e79eb68adacc3881d8ba1e2b7cecbb90b44cf73dd530b9e485343d7e2448fd04",
+      "text": "/// Construct the copy helper for the bounded multi-endpoint row layout.\npub fn build_copy_logup_helper(rows: &[CopyLogUpRow], chi: QM31) -> Result<Vec<QM31>, LogUpError> {\n    let mut helper = Vec::with_capacity(rows.len());\n    for (row_index, row) in rows.iter().enumerate() {\n        let mut value = QM31::ZERO;\n        for (producer_value, weight) in row.producer_values.into_iter().zip(row.producer_weights) {\n            if weight != M31::ZERO {\n                value = value.add(\n                    chi.sub(producer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Producer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        for (consumer_value, weight) in row.consumer_values.into_iter().zip(row.consumer_weights) {\n            if weight != M31::ZERO {\n                value = value.sub(\n                    chi.sub(consumer_value)\n                        .try_inv()\n                        .ok_or(LogUpError::ActivePole {\n                            row: row_index,\n                            side: LogUpSide::Consumer,\n                        })?\n                        .mul_m31(weight),\n                );\n            }\n        }\n        helper.push(value);\n    }\n    Ok(helper)\n}\n"
+    },
+    {
+      "path": "crates/aspis-statement/src/pool_v1/pair_forest_semantic_oracle.rs",
+      "first_line": 168,
+      "last_line": 179,
+      "file_sha256": "930c9f2211f1bc672195802d6e5de05588a37b48f770d805a5b2d240c8bbf344",
+      "span_sha256": "b9f0a5e31a42e7405de46986a3c83dc19df66fb7d4649e7bcc6380fef95f0fc3",
+      "text": "/// Construct the unique forest LogUp helper from the literal typed copy\n/// registry.  The append index remains an explicit input because append-side\n/// links are selected by its live lane-path bits.\npub fn build_pool_v1_pair_forest_copy_helper_v1(\n    trace: &PoolV1PairForestTraceV1,\n    append_index: u64,\n    lambda: QM31,\n    chi: QM31,\n) -> Result<Vec<QM31>, PoolV1PairTraceErrorV1> {\n    let rows = pool_v1_pair_forest_copy_rows_v1(trace, append_index, lambda)?;\n    build_copy_logup_helper(&rows, chi).map_err(|_| PoolV1PairTraceErrorV1::CopyImbalance)\n}\n"
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+import PV_DIAG3_Ownership
+/-! Deployed Backtrace::create callback and lazy ownership. Frames are
+native observations, not invented source labels. Foreign trace/resolve and
+lock effects remain explicit operations on the same state. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+structure Frame where
+ pc : Nat
+ symbolAddress : Nat
+ deriving DecidableEq, Repr
+structure CaptureState where
+ frames : List Frame
+ actualStart : Option Nat
+ deriving DecidableEq, Repr
+inductive TraceValue where
+ | unsupported
+ | disabled
+ | captured (frames : List Frame) (start : Nat)
+ deriving DecidableEq, Repr
+def pushFrame (ip : Nat) (c : CaptureState) (f : Frame) : CaptureState :=
+ let frames := c.frames ++ [f]
+ ⟨frames,if f.symbolAddress == ip && c.actualStart.isNone then some frames.length else c.actualStart⟩
+def finishCapture (c : CaptureState) : TraceValue :=
+ if c.frames.isEmpty then .unsupported else .captured c.frames (c.actualStart.getD 0)
+def traceStatus : TraceValue → Nat
+ | .unsupported => 0
+ | .disabled => 1
+ | .captured _ _ => 2
+variable {S : Type}
+structure CaptureOps (S : Type) where
+ lock : Op S Unit
+ unlock : Op S Unit
+ imageBase : Op S Unit
+ trace : CaptureState → Op S CaptureState
+ package : TraceValue → Op S TraceValue
+ doublePanic : Panic → Panic → Op S TraceValue
+/-- package includes LazyLock capture ownership and its failure cleanup.
+trace includes frame clone/push, callbacks, PC selection and their cleanup. -/
+def createTrace (o : CaptureOps S) : Op S TraceValue :=
+ sequence o.lock (fun _ => scope
+  (sequence o.imageBase (fun _ => sequence (o.trace ⟨[],none⟩)
+    (fun c => o.package (finishCapture c)))) o.unlock o.doublePanic)
+
+
+theorem push_frame_preserves_order (ip : Nat) (c : CaptureState) (f : Frame) :
+ (pushFrame ip c f).frames = c.frames ++ [f] := rfl
+#print axioms push_frame_preserves_order
+
+theorem first_symbol_match (ip : Nat) (fs : List Frame) (f : Frame)
+ (h : f.symbolAddress = ip) :
+ (pushFrame ip ⟨fs,none⟩ f).actualStart = some (fs++[f]).length := by
+ simp [pushFrame,h]
+#print axioms first_symbol_match
+
+theorem later_symbol_match_keeps_first (ip k : Nat) (fs : List Frame) (f : Frame) :
+ (pushFrame ip ⟨fs,some k⟩ f).actualStart = some k := by simp [pushFrame]
+#print axioms later_symbol_match_keeps_first
+
+theorem nonmatch_keeps_search (ip : Nat) (fs : List Frame) (f : Frame)
+ (h : f.symbolAddress ≠ ip) :
+ (pushFrame ip ⟨fs,none⟩ f).actualStart = none := by simp [pushFrame,h]
+#print axioms nonmatch_keeps_search
+
+theorem empty_trace_unsupported (start : Option Nat) :
+ finishCapture ⟨[],start⟩ = .unsupported := rfl
+#print axioms empty_trace_unsupported
+
+theorem missing_ip_starts_zero (f : Frame) (fs : List Frame) :
+ finishCapture ⟨f::fs,none⟩ = .captured (f::fs) 0 := rfl
+#print axioms missing_ip_starts_zero
+
+theorem captured_start_exact (f : Frame) (fs : List Frame) (k : Nat) :
+ finishCapture ⟨f::fs,some k⟩ = .captured (f::fs) k := rfl
+#print axioms captured_start_exact
+
+theorem trace_status_no_symbolization (frames : List Frame) (start : Nat) :
+ traceStatus (.captured frames start) = 2 := rfl
+#print axioms trace_status_no_symbolization
+end PV_DIAG3

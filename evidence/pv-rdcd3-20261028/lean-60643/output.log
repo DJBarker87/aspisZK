@@ -1,0 +1,14 @@
+def Aeneas.Std.Array.update.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → α → Result (Std.Array α n) :=
+fun {α} {n} v i x =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some val => Result.ok ⟨(↑v).set (↑i) x, ⋯⟩
+def Aeneas.Std.core.num.U32.from_le_bytes : Std.Array U8 4#usize → U32 :=
+fun a => BitVec.cast ⋯ (BitVec.fromLEBytes (List.map U8.bv ↑a))#uscalar
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+def Aeneas.Std.core.convert.num.FromU64U32.from : U32 → U64 :=
+fun x => BitVec.setWidth UScalarTy.U64.numBits x.bv#uscalar

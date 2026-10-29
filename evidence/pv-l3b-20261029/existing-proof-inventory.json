@@ -1,0 +1,138 @@
+{
+  "revision": "b3a9a2842f",
+  "rows": [
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_NativeQ.lean",
+      "sha256": "6c01def76146065238da4377c4d6476803901dc2f688201a26a465633e9ccef5",
+      "theorems": [
+        "zero_exact",
+        "nonzero_test",
+        "subtract_nonzero"
+      ],
+      "source": "import R1Z.ProverCommitNativeQInverse49\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_NativeQ\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitPrimitive47 ProverCommitSubfieldOps47\nopen AspisR1.ExtractedCurrentQM31Exact (decode)\nopen ProverCommitNativeQ48 (source)\n\ntheorem zero_exact (x : Old.Q) (hx : Canonical x) :\n    kernels.inverse_q (source x) = ok none \u2194 decode x = 0 := by\n  constructor\n  \u00b7 intro h\n    by_contra hn\n    obtain \u27e8z,hz,_,_\u27e9 := ProverCommitNativeQInverse49.inverse x hx hn\n    rw [h] at hz\n    cases hz\n  \u00b7 intro hz\n    have he := (ProverCommitNativeQInverse49.zero_iff x hx).mp hz\n    rw [kernels.inverse_q,ProverCommitNativeQInverse49.zero_test]\n    simp only [he,decide_true,if_true,bind_tc_ok]\n\ntheorem nonzero_test (x : Old.Q) (hx : Canonical x) (hn : decode x \u2260 0) :\n    field.QM31.is_zero (source x) = ok false := by\n  have h : x \u2260 zero := by\n    intro hz\n    exact hn ((ProverCommitNativeQInverse49.zero_iff x hx).mpr hz)\n  rw [ProverCommitNativeQInverse49.zero_test]\n  simp only [h,decide_false]\n\ntheorem subtract_nonzero (chi slot : Old.Q) (hc : Canonical chi) (hs : Canonical slot)\n    (hn : decode chi \u2260 decode slot) :\n    \u2203 operand inverse : Old.Q,\n      field.QM31.sub (source chi) (source slot) = ok (source operand) \u2227\n      Canonical operand \u2227 decode operand \u2260 0 \u2227\n      field.QM31.is_zero (source operand) = ok false \u2227\n      kernels.inverse_q (source operand) = ok (some (source inverse)) \u2227 Canonical inverse := by\n  obtain \u27e8operand,ho,hco,hdo\u27e9 := ProverCommitNativeQ48.sub chi slot hc hs\n  have hno : decode operand \u2260 0 := by rw [hdo]; exact sub_ne_zero.mpr hn\n  obtain \u27e8inverse,hi,hci,_\u27e9 := ProverCommitNativeQInverse49.inverse operand hco hno\n  exact \u27e8operand,inverse,ho,hco,hno,nonzero_test operand hco hno,hi,hci\u27e9\n\n#print axioms zero_exact\n#print axioms nonzero_test\n#print axioms subtract_nonzero\nend R1Z.PV_Inv_NativeQ\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_NativeNormQ.lean",
+      "sha256": "091b5457b80e6769d982ee5491a30ee31051b1e2647532dab9ff679e0aea4ca9",
+      "theorems": [
+        "norm_operand"
+      ],
+      "source": "import R1Z.PV_Inv_NativeQ\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_NativeNormQ\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitPrimitive47 ProverCommitSubfieldOps47\nopen AspisV8R15.ExactTowerBase\nopen AspisR1.ExtractedCurrentQM31Exact (decode)\n\ntheorem norm_operand (x : Old.Q) (hx : Canonical x) (hn : decode x \u2260 0) :\n    \u2203 a b r n : Old.C,\n      field.CM31.square (ProverCommitNativeC49.source x.c0) = ok (ProverCommitNativeC49.source a) \u2227\n      field.CM31.square (ProverCommitNativeC49.source x.c1) = ok (ProverCommitNativeC49.source b) \u2227\n      kernels.mul_r (ProverCommitNativeC49.source b) = ok (ProverCommitNativeC49.source r) \u2227\n      field.CM31.sub (ProverCommitNativeC49.source a) (ProverCommitNativeC49.source r) = ok (ProverCommitNativeC49.source n) \u2227\n      ProverCommitNativeC49.Canonical n \u2227 ProverCommitNativeC49.value n \u2260 0 := by\n  obtain \u27e8a,ha,hca,hva\u27e9 := ProverCommitNativeSquare49.square x.c0 hx.1\n  obtain \u27e8b,hb,hcb,hvb\u27e9 := ProverCommitNativeSquare49.square x.c1 hx.2\n  obtain \u27e8r,hr,hcr,hvr\u27e9 := ProverCommitNativeC49.mul_r b hcb\n  obtain \u27e8n,hnn,hcn,hvn\u27e9 := ProverCommitNativeC49.sub a r hca hcr\n  refine \u27e8a,b,r,n,ha,hb,hr,hnn,hcn,?_\u27e9\n  have hnorm : ProverCommitNativeC49.value n = QuadraticAlgebra.norm (decode x) := by\n    rw [hvn,hva,hvr,hvb,ProverCommitNativeQInverse49.norm_value]\n    change ProverCommitNativeC49.value x.c0*ProverCommitNativeC49.value x.c0-qm31R*(ProverCommitNativeC49.value x.c1*ProverCommitNativeC49.value x.c1) = ProverCommitNativeC49.value x.c0*ProverCommitNativeC49.value x.c0-qm31R*ProverCommitNativeC49.value x.c1*ProverCommitNativeC49.value x.c1\n    ring\n  intro hz\n  exact hn (QuadraticAlgebra.norm_eq_zero_iff_eq_zero.mp (hnorm.symm.trans hz))\n\n#print axioms norm_operand\nend R1Z.PV_Inv_NativeNormQ\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_NativeNormC.lean",
+      "sha256": "702268dbe5f2562d9cee18536b1f8862174d3bb14434c9074f066f094d1863ca",
+      "theorems": [
+        "norm_operand"
+      ],
+      "source": "import R1Z.PV_Inv_NativeQ\nset_option autoImplicit false\nnamespace R1Z.PV_Inv_NativeNormC\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitPrimitive47 ProverCommitNativeC49\nopen AspisV8R15.ExactTowerBase\n\ntheorem norm_operand (x : Old.C) (hx : Canonical x) (hn : value x \u2260 0) :\n    \u2203 aa bb n : U32,\n      field.M31.mul x.a x.a = ok aa \u2227 field.M31.mul x.b x.b = ok bb \u2227\n      field.M31.add aa bb = ok n \u2227 ProverCommitM31Ops48.canonical n \u2227 n \u2260 0#u32 := by\n  obtain \u27e8aa,haa,hcaa,hvaa\u27e9 := ProverCommitM31Ops48.mul_exact x.a x.a\n  obtain \u27e8bb,hbb,hcbb,hvbb\u27e9 := ProverCommitM31Ops48.mul_exact x.b x.b\n  obtain \u27e8n,hnn,hcn,hvn\u27e9 := ProverCommitM31Ops48.add_exact aa bb hcaa hcbb\n  refine \u27e8aa,bb,n,haa,hbb,hnn,hcn,?_\u27e9\n  have hnorm : ProverCommitM31Ops48.decode n = QuadraticAlgebra.norm (value x) := by\n    rw [hvn,hvaa,hvbb,ProverCommitNativeCInverse49.norm_value]\n    rfl\n  intro hz\n  have hzero : ProverCommitM31Ops48.decode n = 0 := by rw [hz]; rfl\n  exact hn (QuadraticAlgebra.norm_eq_zero_iff_eq_zero.mp (hnorm.symm.trans hzero))\n\n#print axioms norm_operand\nend R1Z.PV_Inv_NativeNormC\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_InterpolationSource.lean",
+      "sha256": "91851f5892fef0d6ec7e8e6dfa51794194daa13aad294eb63de85d3022b48836",
+      "theorems": [
+        "source_inverse_operand"
+      ],
+      "source": "import R1Z.PV_Inv_IInterpolationInitial\nimport R1Z.PV_Inv_NativeInverseM\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_InterpolationSource\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitM31Ops48\n\ntheorem source_inverse_operand (i : U8) (bound : i.val<28) :\n    \u2203 (basis : Array U32 28#usize) (den inv : U32),\n      PV_Inv_IInterpolationInitial.prepare i=ok (basis,den) \u2227 canonical den \u2227\n      den \u2260 0#u32 \u2227 inverse_ref den=ok inv \u2227 canonical inv := by\n  obtain \u27e8basis,den,hprep,hbasis,hden,hpoly,hvalue,hn\u27e9 :=\n    PV_Inv_IInterpolationInitial.prepare_exact i bound\n  obtain \u27e8inv,hinv,hcan,hval\u27e9 := ProverCommitInterpolationInverse48.inverse_exact den hn\n  exact \u27e8PV_Inv_IM31Array.array 28#usize basis,den,inv,hprep,hden,hn,hinv,hcan\u27e9\n\n#print axioms source_inverse_operand\nend R1Z.PV_Inv_InterpolationSource\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_Sentinel.lean",
+      "sha256": "d4f89ef3cc25047c819b80c8d5d9b687cc0dc4a9a9a217838a77d6c46722e9a9",
+      "theorems": [
+        "zero_reject",
+        "nonzero_success"
+      ],
+      "source": "import R1Z.PV_Inv_NativeInverseM\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_Sentinel\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\n\ndef constructorInverse (sentinel : U32) : Result (Option U32) :=\n  if sentinel=0#u32 then ok none else do\n    let inv \u2190 inverse_ref sentinel\n    ok (some inv)\n\ntheorem zero_reject : constructorInverse (0#u32)=ok none := by simp [constructorInverse]\n\ntheorem nonzero_success (s : U32) (nonzero : s \u2260 0#u32) :\n    \u2203 inv, constructorInverse s=ok (some inv) \u2227 inv.val < AspisCircleGroupOrder.P := by\n  obtain \u27e8inv,hr,hc,_\u27e9 := ProverCommitInterpolationInverse48.inverse_exact s nonzero\n  exact \u27e8inv,by simp [constructorInverse,nonzero,hr],hc\u27e9\n\n#print axioms zero_reject\n#print axioms nonzero_success\nend R1Z.PV_Inv_Sentinel\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_Pivot.lean",
+      "sha256": "f6481183111ee79bfd02067c6ad96a2af2ad0a63874f6553c16cc59852f90a61",
+      "theorems": [
+        "selected_nonzero",
+        "selected_inverse"
+      ],
+      "source": "import R1Z.PV_Inv_Guard\nimport Mathlib.Data.List.Find\nset_option autoImplicit false\nnamespace R1Z.PV_Inv_Pivot\nvariable {K : Type} [Field K] [DecidableEq K]\n\ndef pivot (xs : List K) : Option K := xs.find? (fun x => decide (x \u2260 0))\n\ntheorem selected_nonzero (xs : List K) (v : K) (h : pivot xs = some v) : v \u2260 0 := by\n  have := List.find?_some h\n  exact of_decide_eq_true this\n\ntheorem selected_inverse (xs : List K) (v : K) (h : pivot xs = some v) :\n    PV_Inv_Guard.checkedInverse v = some v\u207b\u00b9 :=\n  PV_Inv_Guard.nonzero_branch v (selected_nonzero xs v h)\n\n#print axioms selected_nonzero\n#print axioms selected_inverse\nend R1Z.PV_Inv_Pivot\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_Guard.lean",
+      "sha256": "4ffbaeb550278225c32205016b563d9f284f3259cb0131d77e1a10b7b53ff1e1",
+      "theorems": [
+        "none_iff",
+        "nonzero_branch",
+        "difference",
+        "guarded"
+      ],
+      "source": "import Mathlib.Algebra.Field.Basic\n\n/-! Scalar zero-boundary facts. Source association is kept separate. -/\nset_option autoImplicit false\nnamespace R1Z.PV_Inv_Guard\nvariable {K : Type} [Field K] [DecidableEq K]\n\ndef checkedInverse (x : K) : Option K := if x = 0 then none else some x\u207b\u00b9\n\ntheorem none_iff (x : K) : checkedInverse x = none \u2194 x = 0 := by\n  simp [checkedInverse]\n\ntheorem nonzero_branch (x : K) (h : x \u2260 0) : checkedInverse x = some x\u207b\u00b9 := by\n  simp [checkedInverse,h]\n\ntheorem difference (chi slot : K) : checkedInverse (chi-slot) = none \u2194 chi = slot := by\n  rw [none_iff,sub_eq_zero]\n\ntheorem guarded (x : K) : (if x = 0 then none else checkedInverse x) = checkedInverse x := by\n  by_cases h : x=0 <;> simp [checkedInverse,h]\n\n#print axioms none_iff\n#print axioms nonzero_branch\n#print axioms difference\n#print axioms guarded\nend R1Z.PV_Inv_Guard\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_Circle.lean",
+      "sha256": "c3d9956a92effdd7e0332db89e59b517c12c9c50f6d6388e04c5bab2039af8bc",
+      "theorems": [
+        "denominator_factor",
+        "singular_iff",
+        "denominator_nonzero"
+      ],
+      "source": "import Mathlib.Algebra.Field.Basic\nimport Mathlib.Tactic.Ring\nset_option autoImplicit false\nnamespace R1Z.PV_Inv_Circle\nvariable {K : Type} [Field K]\n\ntheorem denominator_factor (t i : K) (hi : i^2 = -1) :\n    1+t^2=(t-i)*(t+i) := by\n  calc 1+t^2 = t^2-i^2 := by rw [hi]; ring\n       _ = (t-i)*(t+i) := by ring\n\ntheorem singular_iff (t i : K) (hi : i^2 = -1) :\n    1+t^2=0 \u2194 t=i \u2228 t= -i := by\n  rw [denominator_factor t i hi,mul_eq_zero,sub_eq_zero,add_eq_zero_iff_eq_neg]\n\ntheorem denominator_nonzero (t i : K) (hi : i^2 = -1)\n    (hp : t \u2260 i) (hm : t \u2260 -i) : 1+t^2 \u2260 0 := by\n  intro h\n  exact ((singular_iff t i hi).mp h).elim hp hm\n\n#print axioms denominator_factor\n#print axioms singular_iff\n#print axioms denominator_nonzero\nend R1Z.PV_Inv_Circle\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_CircleSubfield.lean",
+      "sha256": "9cd24b324f61e5d133069b907503600157c094919637bc4ebb3235f04acfdfb7",
+      "theorems": [
+        "outside_subfield_safe"
+      ],
+      "source": "import R1Z.PV_Inv_Circle\nimport Mathlib.Algebra.Field.Subfield.Basic\nset_option autoImplicit false\nnamespace R1Z.PV_Inv_CircleSubfield\nvariable {K : Type} [Field K]\n\ntheorem outside_subfield_safe (S : Subfield K) (i t : K) (hi : i^2 = -1)\n    (contained : i \u2208 S) (outside : t \u2209 S) : 1+t^2 \u2260 0 := by\n  apply PV_Inv_Circle.denominator_nonzero t i hi\n  \u00b7 intro he\n    exact outside (he \u25b8 contained)\n  \u00b7 intro he\n    apply outside\n    rw [he]\n    exact S.neg_mem contained\n\n#print axioms outside_subfield_safe\nend R1Z.PV_Inv_CircleSubfield\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_NativeRegistry.lean",
+      "sha256": "752db569d0c4889a5f01c70da02948f96767990f4aa0f4ac0dc1d7e3fec3182e",
+      "theorems": [
+        "producer"
+      ],
+      "source": "import R1Z.PV_Inv_CompressTuple\nimport R1Z.PV_Inv_RegistryNoPole\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_NativeRegistry\nopen R0P R0Z.HonestValidity\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitPrimitive47 ProverCommitSubfieldOps47\nopen AspisR1.ExtractedCurrentQM31Exact (decode QM31Exact)\nopen ProverCommitNativeQ48 (source)\nattribute [local irreducible] copyLinks copyPatterns copyActiveRowMasks copyInactiveRows\n\ntheorem producer (t : Trace QM31Exact) (lambda chi : Old.Q)\n    (hl : Canonical lambda) (hc : Canonical chi) (tag : U32) (htag : tag.val < AspisCircleGroupOrder.P)\n    (limbs : Fin 16 \u2192 U32) (link : CopyLink) (member : link \u2208 copyLinks)\n    (active : CopyActiveRow link.producer.row) (safe : NoPole t (decode lambda) (decode chi))\n    (input_join : PV_Inv_WordTuple.tuple tag limbs=\n      copyEndpointTuple t link.tag link.producer) :\n    \u2203 slot operand inv : Old.Q,\n      PV_Inv_NativeCompress.loop (source lambda) (source (PV_Inv_EmbedTag.liftWord tag))\n        (source lambda) (List.ofFn limbs)=ok (source slot) \u2227\n      Canonical slot \u2227 field.QM31.sub (source chi) (source slot)=ok (source operand) \u2227\n      Canonical operand \u2227 decode operand \u2260 0 \u2227 field.QM31.is_zero (source operand)=ok false \u2227\n      kernels.inverse_q (source operand)=ok (some (source inv)) \u2227 Canonical inv := by\n  obtain \u27e8slot,hcomp,hcs,hvs\u27e9 := PV_Inv_CompressTuple.compress_exact lambda hl tag htag limbs\n  rw [input_join] at hvs\n  have hn : decode chi \u2260 decode slot := by\n    rw [hvs]\n    exact PV_Inv_RegistryNoPole.producer t (decode lambda) (decode chi) link member active safe\n  obtain \u27e8d,inv,hd,hcd,hnd,ht,hi,hci\u27e9 := PV_Inv_NativeQ.subtract_nonzero chi slot hc hcs hn\n  exact \u27e8slot,d,inv,hcomp,hcs,hd,hcd,hnd,ht,hi,hci\u27e9\n\n#print axioms producer\nend R1Z.PV_Inv_NativeRegistry\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_NativePackScan.lean",
+      "sha256": "1189274803aaf098a0cc76ccca662f54b0340bee052f629ed90eda7bc644e5fa",
+      "theorems": [
+        "guarded_packing"
+      ],
+      "source": "import R1Z.PV_Inv_RawNative\nimport R1Z.PV_Inv_Scan\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_NativePackScan\nopen Aeneas Aeneas.Std Result AspisR1ProducerRelease47\nopen ProverCommitPrimitive47 ProverCommitSubfieldOps47\nopen AspisR1.ExtractedCurrentQM31Exact (decode)\nopen PV_Inv_RawSlots PV_Inv_RawRun PV_Inv_RawInvoke\nopen ProverCommitNativeQ48 (source)\nlocal instance : DecidableEq U32 := Classical.decEq _\n\ntheorem guarded_packing (chi : Old.Q) (hc : Canonical chi)\n    (es : List (Entry Old.Q U32)) (s : Slots Old.Q U32)\n    (canon : \u2200 e \u2208 es, Canonical e.value)\n    (guard : PV_Inv_Scan.scan (decode chi) true (es.map (fun e => decode e.value)) = true)\n    (hr : run (empty zero) es=some s) :\n    \u2200 slot \u2208 reached s, \u2203 operand inverse : Old.Q,\n      field.QM31.sub (source chi) (source slot)=ok (source operand) \u2227\n      Canonical operand \u2227 decode operand \u2260 0 \u2227 field.QM31.is_zero (source operand)=ok false \u2227\n      kernels.inverse_q (source operand)=ok (some (source inverse)) \u2227 Canonical inverse := by\n  apply PV_Inv_RawNative.packed_nonzero chi hc es s canon _ hr\n  intro e he\n  exact ((PV_Inv_Scan.scan_iff (decode chi) true _).mp guard).2 (decode e.value)\n    (List.mem_map.mpr \u27e8e,he,rfl\u27e9)\n\n#print axioms guarded_packing\nend R1Z.PV_Inv_NativePackScan\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_BadContainment.lean",
+      "sha256": "8b1cf38b873889029c37d139f9b8bb8f64f354a9c5db355b9bb56f2a197a87f5",
+      "theorems": [
+        "producer_zero_is_pole",
+        "consumer_zero_is_pole"
+      ],
+      "source": "import R1Z.PoleMassR1\nimport R1Z.PV_Inv_ModelPack\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_BadContainment\nopen R0P R0Z.HonestValidity PV_Inv_Pack PV_Inv_ModelRow PV_Inv_PackOperands\nvariable {K : Type} [Field K] [DecidableEq K]\n\ntheorem producer_zero_is_pole (t : Trace K) (lam chi : K) (b : Fin 1024)\n    (active : CopyActiveRow b) (weights : Fin 2 \u2192 K) (s : Slots K)\n    (run : PV_Inv_PackList.run PV_Inv_Pack.empty (entries t lam b CopyLink.producer weights)=some s)\n    (zero : 0 \u2208 operands chi s) : \u00ac NoPole t lam chi := by\n  intro hp\n  exact PV_Inv_ModelPack.producer t lam chi b active weights hp s run 0 zero rfl\n\ntheorem consumer_zero_is_pole (t : Trace K) (lam chi : K) (b : Fin 1024)\n    (active : CopyActiveRow b) (weights : Fin 2 \u2192 K) (s : Slots K)\n    (run : PV_Inv_PackList.run PV_Inv_Pack.empty (entries t lam b CopyLink.consumer weights)=some s)\n    (zero : 0 \u2208 operands chi s) : \u00ac NoPole t lam chi := by\n  intro hp\n  exact PV_Inv_ModelPack.consumer t lam chi b active weights hp s run 0 zero rfl\n\n#print axioms producer_zero_is_pole\n#print axioms consumer_zero_is_pole\nend R1Z.PV_Inv_BadContainment\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_ChargeRules.lean",
+      "sha256": "bd3885e4c5a6ebc4eb77cbff1929919da5b98eaa29035577efc8af5c91b34ee8",
+      "theorems": [
+        "already_charged",
+        "no_double_charge"
+      ],
+      "source": "import R1Z.PV_Inv_PoleMass\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_ChargeRules\nopen R0Z.FsAbort R0Z.HvzkV\n\ntheorem already_charged {C : Type} [Fintype C] (zero old : C \u2192 Prop) (bound : \u211a)\n    (subset : \u2200 c, zero c \u2192 old c) (charged : eventMass old \u2264 bound) : eventMass zero \u2264 bound :=\n  (eventMass_mono zero old subset).trans charged\n\ntheorem no_double_charge {C : Type} [Fintype C] (zero old : C \u2192 Prop)\n    (subset : \u2200 c, zero c \u2192 old c) : eventMass (fun c => old c \u2228 zero c)=eventMass old := by\n  congr 1\n  funext c\n  exact propext \u27e8fun h => h.elim id (subset c),Or.inl\u27e9\n\n#print axioms already_charged\n#print axioms no_double_charge\nend R1Z.PV_Inv_ChargeRules\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_PoleMass.lean",
+      "sha256": "e1aa1b07784d5f7bd1218786ff324e6b0b19218adfffb329ff8e7051e7319900",
+      "theorems": [
+        "contained",
+        "mass"
+      ],
+      "source": "import R1Z.PV_Inv_BadContainment\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_PoleMass\nopen R0Z.JointView R0P R0Z.HonestValidity R0Z.FsAbort R0Z.FsGood R0Z.FsStatement R0Z.HvzkV\nopen PV_Inv_Pack PV_Inv_ModelRow PV_Inv_PackOperands PoleMassR1\nvariable {K : Type} [Field K] [Fintype K] [DecidableEq K] [Algebra (ZMod AspisCircleGroupOrder.P) K]\n\n/-- Existentially ranges over both side packs, every active row, every weight,\nand every reached operand, so no union bound is charged per invocation. -/\ndef zeroEvent (t : Trace K) (lam chi : K) : Prop :=\n  \u2203 b : Fin 1024, CopyActiveRow b \u2227 \u2203 weights : Fin 2 \u2192 K, \u2203 s : Slots K,\n   (PV_Inv_PackList.run PV_Inv_Pack.empty (entries t lam b CopyLink.producer weights)=some s \u2228\n    PV_Inv_PackList.run PV_Inv_Pack.empty (entries t lam b CopyLink.consumer weights)=some s) \u2227\n    0 \u2208 operands chi s\n\ntheorem contained (t : Trace K) (lam chi : K) (hz : zeroEvent t lam chi) : \u00ac NoPole t lam chi := by\n  obtain \u27e8b,hb,w,s,hr,hz\u27e9 := hz\n  rcases hr with hp|hc\n  \u00b7 exact PV_Inv_BadContainment.producer_zero_is_pole t lam chi b hb w s hp hz\n  \u00b7 exact PV_Inv_BadContainment.consumer_zero_is_pole t lam chi b hb w s hc hz\n\ntheorem mass {C : Type} [Fintype C] (draw : C \u2192 Challenges K) (Q : \u2115)\n    (law : Sem1Uniform draw Q) (t : Trace K) :\n    eventMass (fun c => zeroEvent t ((draw c).sem 0) ((draw c).sem 1)) \u2264 (4096 : \u211a)/Q := by\n  exact (eventMass_mono _ _ (fun c h => contained t _ _ h)).trans (pole_mass_le draw Q law t)\n\n#print axioms contained\n#print axioms mass\nend R1Z.PV_Inv_PoleMass\n"
+    },
+    {
+      "path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_Inv_PoleUnion.lean",
+      "sha256": "87b2232cb6139aa8a32d1c88ac886f5c0d3e67a265d71d0bfbecacaf93282da7",
+      "theorems": [
+        "eight_attempts"
+      ],
+      "source": "import R1Z.PV_Inv_PoleMass\nimport R0Z.FsAbortBounds\nset_option autoImplicit false\nnoncomputable section\nnamespace R1Z.PV_Inv_PoleUnion\nopen R0Z.JointView R0P R0Z.FsAbort R0Z.FsGood R0Z.FsStatement R0Z.HvzkV\nopen PoleMassR1 PV_Inv_PoleMass\nvariable {K : Type} [Field K] [Fintype K] [DecidableEq K]\n    [Algebra (ZMod AspisCircleGroupOrder.P) K]\n\ntheorem eight_attempts {C : Type} [Fintype C] (draw : Fin 8 \u2192 C \u2192 Challenges K) (Q : \u2115)\n    (law : \u2200 i, Sem1Uniform (draw i) Q) (t : Trace K) :\n    eventMass (fun c => \u2203 i, zeroEvent t ((draw i c).sem 0) ((draw i c).sem 1)) \u2264\n      8 * ((4096 : \u211a)/Q) := by\n  have h := R0Z.FsAbortBounds.mass_exists_le_card\n    (fun i c => zeroEvent t ((draw i c).sem 0) ((draw i c).sem 1)) ((4096 : \u211a)/Q)\n    (fun i => PV_Inv_PoleMass.mass (draw i) Q (law i) t)\n  simpa only [eventMass,R0Z.FsAbortBounds.mass,Fintype.card_fin,Nat.cast_ofNat] using h\n\n#print axioms eight_attempts\nend R1Z.PV_Inv_PoleUnion\n"
+    }
+  ],
+  "validation": "Reused historical proof receipts and axioms; no new Lean compilation; source statements retained in full"
+}

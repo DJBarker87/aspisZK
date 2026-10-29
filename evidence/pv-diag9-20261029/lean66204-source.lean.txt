@@ -1,0 +1,23 @@
+import Aeneas
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result
+
+theorem ok_excludes_panic {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .fail .panic := by rw [h]; intro e; cases e
+#print axioms ok_excludes_panic
+theorem ok_excludes_div {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .div := by rw [h]; intro e; cases e
+#print axioms ok_excludes_div
+theorem ok_excludes_failure {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) (e : Error) : r ≠ .fail e := by rw [h]; intro x; cases x
+#print axioms ok_excludes_failure
+theorem terminating_excludes_panic {A : Type} {r : Result A}
+ (h : ∃ a, r=.ok a) : r ≠ .fail .panic := by
+ obtain ⟨a,ha⟩ := h; exact ok_excludes_panic ha
+#print axioms terminating_excludes_panic
+theorem rust_error_excludes_panic {A E : Type} {r : Result (core.result.Result A E)}
+ (e : E) (h : r=.ok (.Err e)) : r ≠ .fail .panic := ok_excludes_panic h
+#print axioms rust_error_excludes_panic
+end PV_DIAG9

@@ -1,0 +1,14 @@
+import Mathlib.Tactic
+set_option autoImplicit false
+namespace PV_DIAG8
+/-! Source guards only: no panic payload is evaluated. The caller invariant
+is proved inductively from new(word=8), not postulated for an entire client. -/
+def slot (word : Nat) : Nat := if word = 8 then 0 else word
+def nextCursor (word : Nat) : Nat := slot word + 1
+def cursorRun : Nat → Nat
+ | 0 => 8
+ | n+1 => nextCursor (cursorRun n)
+
+theorem cursor_initial : cursorRun 0 = 8 := rfl
+#print axioms cursor_initial
+end PV_DIAG8

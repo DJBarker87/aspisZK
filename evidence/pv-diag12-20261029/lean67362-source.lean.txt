@@ -1,0 +1,117 @@
+import Init
+namespace PV_DIAG12
+set_option autoImplicit false
+
+/-! Linux x86_64 std-to-POSIX-ABI request semantics. `Exchange` names the
+foreign call, NOT its unproved libc-to-kernel expansion. `cut` is an observation
+boundary, never a claim of divergence. Pointer coordinates remain observable. -/
+abbrev Bytes := List UInt8
+structure Span where
+ base : Nat
+ offset : Nat
+ bytes : Bytes
+ deriving DecidableEq, Repr
+def advance (s : Span) (n : Nat) : Span :=
+ ⟨s.base,s.offset+n,s.bytes.drop n⟩
+inductive Request where
+ | write (fd : Int) (span : Span) (count : Nat)
+ | open64 (pathAddress : Nat) (path : Bytes) (flags mode : Nat)
+ | close (fd : Int)
+ deriving DecidableEq, Repr
+inductive Reply where
+ | returned (value : Nat)
+ | error (errno : Int)
+ | pending (visible : Bytes)
+ deriving DecidableEq, Repr
+structure Exchange where
+ request : Request
+ reply : Reply
+ deriving DecidableEq, Repr
+inductive Result (A : Type) where
+ | ok (value : A)
+ | error (errno : Int)
+ | cut
+ deriving DecidableEq, Repr
+structure Exec (A : Type) where
+ trace : List Exchange
+ result : Result A
+ deriving DecidableEq, Repr
+def pureE {A : Type} (a : A) : Exec A := ⟨[],.ok a⟩
+def bindE {A B : Type} (r : Exec A) (f : A → Exec B) : Exec B :=
+ match r.result with
+ | .ok a => let s := f a; ⟨r.trace++s.trace,s.result⟩
+ | .error e => ⟨r.trace,.error e⟩
+ | .cut => ⟨r.trace,.cut⟩
+def call (q : Request) (r : Reply) : Exec Nat :=
+ ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .pending _ => .cut⟩
+theorem call_request (q : Request) (r : Reply) : (call q r).trace.map Exchange.request=[q] := rfl
+#print axioms call_request
+
+theorem advance_zero (s : Span) : advance s 0=s := by cases s; rfl
+theorem advance_add (s : Span) (a b : Nat) : advance (advance s a) b=advance s (a+b) := by
+ cases s; simp only [advance,List.drop_drop,Nat.add_assoc]
+#print axioms advance_zero
+#print axioms advance_add
+
+theorem bind_ok {A B : Type} (es : List Exchange) (a : A) (f : A → Exec B) :
+ bindE ⟨es,.ok a⟩ f=⟨es++(f a).trace,(f a).result⟩ := rfl
+theorem bind_error {A B : Type} (es : List Exchange) (e : Int) (f : A → Exec B) :
+ bindE ⟨es,.error e⟩ f=⟨es,.error e⟩ := rfl
+#print axioms bind_ok
+#print axioms bind_error
+
+theorem bind_cut {A B : Type} (es : List Exchange) (f : A → Exec B) :
+ bindE ⟨es,.cut⟩ f=⟨es,.cut⟩ := rfl
+theorem bind_pure {A B : Type} (a : A) (f : A → Exec B) : bindE (pureE a) f=f a := by
+ simp only [bindE,pureE,List.nil_append]
+#print axioms bind_cut
+#print axioms bind_pure
+
+theorem bind_prefix {A B : Type} (r : Exec A) (f : A → Exec B) :
+ ∃ tail, (bindE r f).trace=r.trace++tail := by
+ cases r with | mk es ex => cases ex <;> simp only [bindE] <;>
+   first | exact ⟨_,rfl⟩ | exact ⟨[],(List.append_nil _).symm⟩
+#print axioms bind_prefix
+
+theorem bind_assoc {A B C : Type} (r : Exec A) (f : A → Exec B) (g : B → Exec C) :
+ bindE (bindE r f) g=bindE r (fun a => bindE (f a) g) := by
+ cases r with
+ | mk es ex =>
+  cases ex with
+  | ok a => cases h : f a with
+    | mk fs fx => cases fx <;> simp only [bindE,h,List.append_assoc]
+  | error e => rfl
+  | cut => rfl
+#print axioms bind_assoc
+
+def requested (es : List Exchange) : List Request := es.map Exchange.request
+def delivered (fd : Int) (es : List Exchange) : Bytes := es.flatMap fun e =>
+ match e.request,e.reply with
+ | .write out s count,.returned n => if out=fd then s.bytes.take (min count n) else []
+ | .write out _ _,.pending visible => if out=fd then visible else []
+ | _,_ => []
+theorem delivered_append (fd : Int) (xs ys : List Exchange) :
+ delivered fd (xs++ys)=delivered fd xs++delivered fd ys := by
+ simp only [delivered,List.flatMap_append]
+#print axioms delivered_append
+
+theorem delivered_error (fd out : Int) (s : Span) (count : Nat) (e : Int) :
+ delivered fd [⟨.write out s count,.error e⟩]=[] := rfl
+theorem delivered_cut (fd out : Int) (s : Span) (count : Nat) :
+ delivered fd [⟨.write out s count,.pending []⟩]=[] := rfl
+#print axioms delivered_error
+#print axioms delivered_cut
+
+theorem delivered_write (fd : Int) (s : Span) (count n : Nat) :
+ delivered fd [⟨.write fd s count,.returned n⟩]=s.bytes.take (min count n) := by
+ simp only [delivered,eq_self,ite_true,List.flatMap_cons,List.flatMap_nil,List.append_nil]
+#print axioms delivered_write
+
+theorem requested_append (xs ys : List Exchange) :
+ requested (xs++ys)=requested xs++requested ys := by
+ simp only [requested,List.map_append]
+theorem advance_base (s : Span) (n : Nat) : (advance s n).base=s.base := rfl
+#print axioms requested_append
+#print axioms advance_base
+
+end PV_DIAG12

@@ -1,0 +1,64 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "b92d9aa056a97686a6ff3027bdbe09216d82edbc",
+  "runner_sha256": "18b5e1a81769036f1557d51b4163ceedb6c3ce323e92730bc8dce0d5cc0be057",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG4_CohortAudit",
+  "attempt": 64598,
+  "source_sha256": "e502d7208f433627c6f2b9ccbb3f4b61580682c63c591a0a60f2a0df31cf64b5",
+  "environment_sha256": "88ce1214ba48a95647b1a1c21fe4afe62124ce87718b4df72110dddd46543071",
+  "dependency_objects": {
+    "R1Z.PV_RunJoin_TrustItems": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_TrustItems.olean": "7999a595b4f1224f34e679cdd8ccd61664330db43d3e4361fde461eedb29b24f"
+    },
+    "R1Z.PV_RunJoin_CompletedWorld": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_CompletedWorld.olean": "62b82b310cb0cadd111183a630b1146160cea5719508a13b5f5f788b5d683f2e"
+    },
+    "R1Z.PV_RunJoin_UnifiedRetry": {
+      "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/R1Z/PV_RunJoin_UnifiedRetry.olean": "b671e625276d072bea5b3ff1c05f07168882c946200c8c54863d5ba3e5e2905a"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/lean64598-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/objects/PV_DIAG4_CohortAudit.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag4-20261029/sources/PV_DIAG4_CohortAudit.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 2.099231004714966,
+  "peak_rss_kib": "4268748",
+  "swaps": "0",
+  "gnu_wall": "0:02.07",
+  "print_axioms": "'ProverRwSampler.sampler.qm31_sample' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.ProverRwSamplerArithmetic.shift_exact' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.ProverRwRngOwnerCertificate.universal_cap16' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_RunJoin_CompletedWorld.execution_replay' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_RunJoin_UnifiedRetry.client' depends on axioms: [propext, Classical.choice, Quot.sound]\nstructure R1Z.PV_RunJoin_TrustItems {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n  (d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation) : Prop\nnumber of parameters: 11\nfields:\n  R1Z.PV_RunJoin_TrustItems.entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law\n  R1Z.PV_RunJoin_TrustItems.entropy_kernel : \u2200 (c : Coins),\n      d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c\n  R1Z.PV_RunJoin_TrustItems.observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c\nconstructor:\n  R1Z.PV_RunJoin_TrustItems.mk {E File Reply Time Worker Context Coins Rest Observation : Type} [Fintype Rest]\n    {d : R1Z.PV_RunJoin_TrustBoundary.Data E File Reply Time Worker Context Coins Rest Observation}\n    (entropy_law : R1Z.ProverCommitPublicNonce40.E1 d.law)\n    (entropy_kernel : \u2200 (c : Coins), d.nativeWeight c = R1Z.PV_RunJoin_E1Joint.weight 128 d.law d.frame d.coordinates c)\n    (observation : \u2200 (c : Coins), d.nativeObservation c = d.extractedObservation c) : R1Z.PV_RunJoin_TrustItems d\n",
+  "object_sha256": "a1ea63e7e9a6b0343ffe8f65f5e2a841b4a393af21f60205fcd8818d86b7feb8"
+}

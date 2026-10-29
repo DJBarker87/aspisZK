@@ -1,0 +1,25 @@
+import PV_DIAG9_Result
+import R1Z.PV_RunJoin_CallerSuccess43
+import R1Z.PV_RunJoin_SemanticComplete40
+import R1Z.PV_RunJoin_EncodedComplete41
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result R1Z ProverRwFull
+variable [ExternalTypes]
+abbrev Q := aspis_core.field.QM31
+theorem encoded_slice_no_panic (ops : ExternalFuns)
+ (values : Slice aspis_core.field.wide_exact.WideExact)
+ (room : 32*values.length≤Usize.max) :
+ @prover.encoded_slice _ (ProverRwP6BodyCandidate.selected ops) values ≠ .fail .panic := by
+ obtain ⟨next,h,_,_⟩ := PV_RunJoin_EncodedComplete41.encode ops values room
+ exact ok_excludes_panic h
+#print axioms encoded_slice_no_panic
+theorem encoded_slice_no_divergence (ops : ExternalFuns)
+ (values : Slice aspis_core.field.wide_exact.WideExact)
+ (room : 32*values.length≤Usize.max) :
+ @prover.encoded_slice _ (ProverRwP6BodyCandidate.selected ops) values ≠ .div := by
+ obtain ⟨next,h,_,_⟩ := PV_RunJoin_EncodedComplete41.encode ops values room
+ exact ok_excludes_div h
+#print axioms encoded_slice_no_divergence
+end PV_DIAG9

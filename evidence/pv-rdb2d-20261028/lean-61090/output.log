@@ -1,0 +1,42 @@
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_SparseResource.lean:48:97: error: unsolved goals
+K S F : Type
+ops : Ops K
+allocate : Allocator S
+deallocate : ℕ → ℕ → ℕ → S → Result S
+handler : Handler K S F
+isBoolean : K → Bool
+point column : List K
+build : List K → Result (List (Entry K))
+state : State S F
+h : column.length ≠ 1024
+⊢ (if column.length ≠ 1024 then ok (none, state)
+    else do
+      let (out, after) ←
+        issue allocate PV_RDB2D_SparseLayout.shape (PV_RDB2D_SparseLayout.empty K) (capacity isBoolean point) state
+      match out.returned with
+        | Except.error a =>
+          handler (Action.abort (24 * capacity isBoolean point) 8)
+            { resource := after.resource, trace := after.trace ++ [Action.abort (24 * capacity isBoolean point) 8],
+              initialized := after.initialized }
+        | Except.ok PUnit.unit => do
+          let entries ← build point
+          let value ← PV_RDB2D_SparseFold.source ops column entries ops.zero
+          let after ← PV_RDB2D_SparseFree.release deallocate out.buffer.address (capacity isBoolean point) after
+          ok (some value, after)) =
+    ok (none, state)
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_SparseResource.lean:49:28: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [source, ̲runWith,h̵,̵ ̲ite_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2c-20261028/lean-sources/R1Z/PV_RDB2D_SparseResource.lean:49:30: warning: This simp argument is unused:
+  ite_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵o̵u̵r̵c̵e̵,̵r̵u̵n̵W̵i̵t̵h̵,̵h̵,̵i̵t̵e̵_̵t̵r̵u̵e̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲r̲u̲n̲W̲i̲t̲h̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDB2D_SparseResource.arbitrary_column_world' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2D_SparseResource.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

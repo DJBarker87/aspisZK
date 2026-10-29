@@ -1,0 +1,36 @@
+import PV_DIAG9_Scope
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG10
+open Aeneas Aeneas.Std Result R1Z ProverRwFull
+variable [ExternalTypes] [ExternalFuns]
+/-! Producers are explicit complete outer Results, including returned errors.
+Entropy's success continuation requires the actual masked-attempt cone.
+Neither op227 nonvacuity nor a postcondition supplies that producer. -/
+def PV_DIAG10_Link_Entropy {C : Type} (entropy : ProverRwRetryModel.Entropy C) : Prop :=
+ ∀ k c, ∃ out, entropy.call_mut c (ProverCommitRetrySource34.word k)=.ok out
+def PV_DIAG10_Link_MaskedAttempt (pub : ProverRwRetryModel.Pub)
+ (compiled : ProverRwRetryModel.Compiled) (variant : transport.Variant)
+ (hash : ProverRwRetryModel.Hash) : Prop :=
+ ∀ secret store, ∃ out, prover.prove_masked_attempt pub compiled variant hash secret store=.ok out
+theorem attempt_from_complete_producers {C : Type}
+ (entropy : ProverRwRetryModel.Entropy C) (pub : ProverRwRetryModel.Pub)
+ (compiled : ProverRwRetryModel.Compiled) (variant : transport.Variant)
+ (hash : ProverRwRetryModel.Hash) (he : PV_DIAG10_Link_Entropy entropy)
+ (hm : PV_DIAG10_Link_MaskedAttempt pub compiled variant hash)
+ (k : Nat) (s : C × ProverRwRetryModel.Store) :
+ ∃ out, ProverRwRetryModel.attempt entropy pub compiled variant hash k s=.ok out := by
+ obtain ⟨⟨status,after⟩,hs⟩ := he k s.1
+ unfold ProverRwRetryModel.attempt
+ rw [hs]
+ cases status with
+ | Err e => exact ⟨_,rfl⟩
+ | Ok secret =>
+   obtain ⟨⟨status,store⟩,hm⟩ := hm secret s.2
+   change ∃ out, (prover.prove_masked_attempt pub compiled variant hash secret s.2 >>= _) = .ok out
+   rw [hm]
+   cases status with
+   | Ok proof => exact ⟨_,rfl⟩
+   | Err e => cases e <;> exact ⟨_,rfl⟩
+#print axioms attempt_from_complete_producers
+end PV_DIAG10

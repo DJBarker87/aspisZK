@@ -1,0 +1,80 @@
+{
+  "family": "capture",
+  "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
+  "sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+      "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+      "line": 253,
+      "body": "    fn enabled() -> bool {\n        // Cache the result of reading the environment variables to make\n        // backtrace captures speedy, because otherwise reading environment\n        // variables every time can be somewhat slow.\n        static ENABLED: Atomic<u8> = AtomicU8::new(0);\n        match ENABLED.load(Relaxed) {\n            0 => {}\n            1 => return false,\n            _ => return true,\n        }\n        let enabled = match env::var(\"RUST_LIB_BACKTRACE\") {\n            Ok(s) => s != \"0\",\n            Err(_) => match env::var(\"RUST_BACKTRACE\") {\n                Ok(s) => s != \"0\",\n                Err(_) => false,\n            },\n        };\n        ENABLED.store(enabled as u8 + 1, Relaxed);\n        enabled\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+      "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+      "line": 292,
+      "body": "    pub fn capture() -> Backtrace {\n        if !Backtrace::enabled() {\n            return Backtrace { inner: Inner::Disabled };\n        }\n        Backtrace::create(Backtrace::capture as fn() -> Backtrace as usize)\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+      "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+      "line": 311,
+      "body": "    pub fn force_capture() -> Backtrace {\n        Backtrace::create(Backtrace::force_capture as fn() -> Backtrace as usize)\n    }"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+      "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+      "line": 319,
+      "body": "    pub const fn disabled() -> Backtrace {\n        Backtrace { inner: Inner::Disabled }\n    }"
+    }
+  ],
+  "models": {
+    "PV_DIAG2_BacktraceFlags": "b4baf3ef2cec10954e77d15a9b3f7196cec359ace301f9dc39548ed81fe1001a",
+    "PV_DIAG2_CaptureControl": "45e0b170f13b0e99d16c98f2e7437f964ace4ae282a0087ef8b90b75b3dd5940"
+  },
+  "steps": [
+    [
+      "atomic cache load and cached1/_ returns",
+      "enableStep / enabledExecution.load",
+      "cache input is the actual observed load, not invented final concurrent memory"
+    ],
+    [
+      "cache0 library env read; Ok(s) s!=\"0\"; Err(_) fallback read",
+      "chooseEnv / readBacktraceEnv.library/fallback",
+      "library and fallback executions retain their own allocation/OS/panic effects"
+    ],
+    [
+      "owned String/VarError comparison and drops",
+      "closeLibrary / closeFallback",
+      "native lexical scopes and unwind/failure cleanup remain explicit supplied continuations; not identity"
+    ],
+    [
+      "atomic store bool-as-u8+1 and return",
+      "cacheCode / enabledExecution.store",
+      "requested code proved1or2; relaxed concurrency law remains open"
+    ],
+    [
+      "capture enabled false => Inner::Disabled",
+      "captureExecution false",
+      "no Backtrace::create call after normally completed false flag; earlier env effects remain"
+    ],
+    [
+      "capture enabled true => create(ip)",
+      "captureExecution create",
+      "create includes lock, allocations, unwinder, image-base, frames, actual_start, cleanup and runtime outcomes"
+    ],
+    [
+      "force_capture bypasses enabled; disabled const returns Disabled",
+      "forceCaptureExecution / BacktraceValue.disabled",
+      "neither proves global absence of other callers or native frames publicness"
+    ]
+  ],
+  "open_native_obligations": [
+    "native env/comparison/drop-scope executions",
+    "Backtrace::create and allocator/unwinder/image/module closure",
+    "actual PC lists and concurrent environment/cache-history law"
+  ],
+  "toolchain": "rustc 1.94.1 sources; no extractor/toolchain substitution",
+  "profile": "deployed release opt3 overflow/debug assertions off panic unwind",
+  "compiler_boundary": "V370 at owner pending D381/D386; no LLVM or machine equality silently assumed",
+  "new_trust_fields": 0
+}

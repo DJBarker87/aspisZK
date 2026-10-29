@@ -1,0 +1,25 @@
+import PV_DIAG12_Buffer
+namespace PV_DIAG12
+set_option autoImplicit false
+
+def lastNewline : Bytes → Option Nat
+ | [] => none
+ | x::xs => match lastNewline xs with
+   | some n => some (n+1)
+   | none => if x=10 then some 0 else none
+def lineSpan (s : Span) (n : Nat) : Span := {s with bytes := s.bytes.take (n+1)}
+def flushCompleted (fd : Int) (sig : Signal) (fuel : Nat) (b : Buffer) (c : Cursor) : BRun Unit :=
+ if b.span.bytes.getLast?=some 10 then flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c else pureB () b c
+def lineAll (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor) : BRun Unit :=
+ match lastNewline s.bytes with
+ | none => bindB (flushCompleted fd sig fuel b c) fun _ b c => bufferedAll fd sig fuel s b c
+ | some n =>
+   let lines := lineSpan s n
+   let tail := advance s (n+1)
+   let r := if b.span.bytes.isEmpty then directAll fd sig fuel lines b c else
+    bindB (bufferedAll fd sig fuel lines b c) fun _ b c => flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c
+   bindB r fun _ b c => bufferedAll fd sig fuel tail b c
+theorem lastNewline_nil : lastNewline []=none := rfl
+#print axioms lastNewline_nil
+
+end PV_DIAG12

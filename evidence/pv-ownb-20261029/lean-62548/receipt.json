@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62548/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62548/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_CursorRead.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorRead.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.19",
+  "peak_rss_kib": "482980",
+  "swap": "0",
+  "source_revision": "c93bfe48ef6c850adc25f6853d09279ff7de2cea",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorRead.lean:14:30: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f \u2265 0\n  e \u2265 0\n  e - f \u2265 1\n  d \u2265 0\n  c \u2265 0\n  b \u2265 0\n  b - c \u2265 0\n  b - d \u2264 -1\n  a \u2265 0\n  a - d \u2265 0\nwhere\n a := \u2191q.capacity\n b := \u2191q.read\n c := \u2191q.written\n d := \u2191q.length\n e := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.written\n f := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.read\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorRead.lean:14:39: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  f \u2265 0\n  e \u2265 0\n  e - f \u2265 1\n  d \u2265 0\n  c \u2265 0\n  b \u2265 0\n  b - c \u2265 0\n  b - d \u2264 -1\n  a \u2265 0\n  a - d \u2265 0\nwhere\n a := \u2191q.capacity\n b := \u2191q.read\n c := \u2191q.written\n d := \u2191q.length\n e := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.read\n f := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.length\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_CursorRead.lean:16:29: error: omega could not prove the goal:\na possible counterexample may satisfy the constraints\n  g \u2265 0\n  f \u2265 0\n  e \u2265 0\n  e - f \u2265 0\n  e - g \u2264 -1\n  d \u2265 0\n  c \u2265 0\n  b \u2265 0\n  b - c \u2265 0\n  b - d \u2264 -1\n  b - e \u2265 1\n  a \u2265 0\n  a - d \u2265 0\nwhere\n a := \u2191q.capacity\n b := \u2191q.read\n c := \u2191q.written\n d := \u2191q.length\n e := \u2191i\n f := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.read\n g := \u2191{ memory := q.memory, token := q.token, owner := q.owner, cell := q.cell, read := q.read + 1,\n      written := q.written, length := q.length, capacity := q.capacity, source := q.source, output := q.output }.length\n'R1Z.PV_OWNB_CursorRead.read' depends on axioms: [propext]\n'R1Z.PV_OWNB_CursorRead.advance' depends on axioms: [propext, sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62548,
+  "module": "R1Z/PV_OWNB_CursorRead",
+  "source_blob": "178db2d226e1ff0a60400d224fdb515bd8a38b24",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNB_CursorRead.lean",
+  "source_sha256": "67bc4ff2f75d816dda834ae798585550ccac856025faf5be3847fbce3c41a2e3",
+  "imports": [
+    "R1Z.PV_OWNB_Cursor"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNB_Cursor": "971905e458f299d013e9564880450fc6824d738668ad11b314e1497493605876"
+  },
+  "deps_fingerprint": "350a880c56bc4b35dff90be94d948fa3336d1ef8a41c400a61fb27041fbab3e8"
+}

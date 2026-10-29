@@ -1,0 +1,56 @@
+import PV_DIAG5_Emit
+/-! Outer deployed Backtrace::Display and capture control. All ambient reads,
+force/resolve, formatter leaves and cwd destruction remain native operations.
+The caller's captured vector is borrowed. Invalid short slices retain panic.
+V370 and the raw-frame distribution are explicitly retained. -/
+set_option autoImplicit false
+namespace PV_DIAG5
+open PV_DIAG3
+variable {S C A B D : Type}
+inductive Trace (C : Type) where
+ | unsupported
+ | disabled
+ | captured (payload : C)
+def disabledTrace : Op S (Trace C) := PV_DIAG3.pure .disabled
+def captureTrace (enabled : Op S Bool) (create : Nat → Op S (Trace C)) (ip : Nat) :
+ Op S (Trace C) := sequence enabled (fun yes => if yes then create ip else disabledTrace)
+def forceTrace (create : Nat → Op S (Trace C)) (ip : Nat) := create ip
+structure DisplayOps (S C A B D : Type) where
+ literal : String → Op S (Except Unit Unit)
+ force : C → Op S (List (ResolvedFrame A B) × Nat)
+ currentDir : Op S D
+ newFmt : Bool → D → Op S Unit
+ context : Op S (Except Unit Unit)
+ raw : A → Op S (Except Unit Unit)
+ symbol : A → B → Op S (Except Unit Unit)
+ finish : Op S (Except Unit Unit)
+ dropCwd : D → Op S Unit
+ doublePanic : Panic → Panic → Op S (Except Unit Unit)
+ badSlice : Nat → Nat → Op S (Except Unit Unit)
+def displaySelected (o : DisplayOps S C A B D) (full : Bool)
+ (fs : List (ResolvedFrame A B)) : Op S (Except Unit Unit) :=
+ sequence o.currentDir (fun cwd => scope
+  (sequence (o.newFmt full cwd) (fun _ => tryThen o.context
+    (tryThen (emitEach (emitFrame o.raw o.symbol) fs) o.finish)))
+  (o.dropCwd cwd) o.doublePanic)
+def displayTrace (o : DisplayOps S C A B D) (full : Bool) : Trace C → Op S (Except Unit Unit)
+ | .unsupported => o.literal "unsupported backtrace"
+ | .disabled => o.literal "disabled backtrace"
+ | .captured p => sequence (o.force p) (fun pair =>
+   if full then displaySelected o full pair.1 else
+   if pair.2 ≤ pair.1.length then displaySelected o full (pair.1.drop pair.2)
+   else o.badSlice pair.2 pair.1.length)
+theorem disabled_no_capture (s : S) :
+ (disabledTrace : Op S (Trace C)) s = ⟨[],s,.value .disabled⟩ := rfl
+#print axioms disabled_no_capture
+theorem capture_false (e : Op S Bool) (c : Nat → Op S (Trace C)) (ip : Nat)
+ (s t : S) (es : List Event) (h : e s = ⟨es,t,.value false⟩) :
+ captureTrace e c ip s = ⟨es,t,.value .disabled⟩ := by
+ simp [captureTrace,sequence,h,PV_DIAG3.bind,disabledTrace,prepend,PV_DIAG3.pure]
+#print axioms capture_false
+theorem capture_true (e : Op S Bool) (c : Nat → Op S (Trace C)) (ip : Nat)
+ (s t : S) (es : List Event) (h : e s = ⟨es,t,.value true⟩) :
+ captureTrace e c ip s = prepend es (c ip t) := by
+ simp [captureTrace,sequence,h,PV_DIAG3.bind]
+#print axioms capture_true
+end PV_DIAG5

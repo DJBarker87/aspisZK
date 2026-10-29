@@ -1,0 +1,465 @@
+{
+  "root": "generic_array0.14.7::GenericArray<u8,typenum1.20.1::U64>::default()",
+  "input_domain": "unit; no parameters or captured environment",
+  "records": [
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/impls.rs",
+      "file_sha256": "18b285821421eea0cdbbcfcc896eef67bd55d72f8d85b5827cca6687e9c0fc27",
+      "context": "Default for GenericArray<T, N>",
+      "marker": "fn default(",
+      "body": "fn default() -> Self {\r\n        Self::generate(|_| T::default())\r\n    }",
+      "body_sha256": "4fdb5f601f9aa933acd17ec04210af1bb9c2a72da6584ae8714d9ed3249f13e6",
+      "influence_channels": "No arguments; concrete T=u8 literal default, N=U64 fixed public type.",
+      "callees": "GenericSequence.generate; zero-capture u8 Default closure"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "GenericSequence<T> for GenericArray<T, N>",
+      "marker": "fn generate<",
+      "body": "fn generate<F>(mut f: F) -> GenericArray<T, N>\r\n    where\r\n        F: FnMut(usize) -> T,\r\n    {\r\n        unsafe {\r\n            let mut destination = ArrayBuilder::new();\r\n\r\n            {\r\n                let (destination_iter, position) = destination.iter_position();\r\n\r\n                destination_iter.enumerate().for_each(|(i, dst)| {\r\n                    ptr::write(dst, f(i));\r\n\r\n                    *position += 1;\r\n                });\r\n            }\r\n\r\n            destination.into_inner()\r\n        }\r\n    }",
+      "body_sha256": "1d53defd6a439d6eb4eee8fba4247b687b03c9a82b0403f4102394cf2b93a2af",
+      "influence_channels": "All state is local: uninitialized stack storage, initialized position0, fixed64 writes. No old destination byte is read.",
+      "callees": "ArrayBuilder.new/iter_position/into_inner; Iterator.enumerate/for_each; ptr.write; u8.default; local position increment"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "impl<T, N: ArrayLength<T>> ArrayBuilder<T, N>",
+      "marker": "pub unsafe fn new(",
+      "body": "pub unsafe fn new() -> ArrayBuilder<T, N> {\r\n        ArrayBuilder {\r\n            array: MaybeUninit::uninit(),\r\n            position: 0,\r\n        }\r\n    }",
+      "body_sha256": "110c34127429b88e0bdf9338e5beb0c4bc793f57555b61c2c7804d04dad29ac1",
+      "influence_channels": "Construct local MaybeUninit and position0. No allocator.",
+      "callees": "MaybeUninit.uninit"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "impl<T, N: ArrayLength<T>> ArrayBuilder<T, N>",
+      "marker": "pub unsafe fn iter_position(",
+      "body": "pub unsafe fn iter_position(&mut self) -> (slice::IterMut<T>, &mut usize) {\r\n        ((&mut *self.array.as_mut_ptr()).iter_mut(), &mut self.position)\r\n    }",
+      "body_sha256": "cf3da7a3f0170787837061d0a9537500d68d1c5b1ebf0297b723d3fd9e31c403",
+      "influence_channels": "Borrow only the caller-owned builder array and position field; no old byte values read.",
+      "callees": "MaybeUninit.as_mut_ptr; GenericArray.deref_mut; slice.iter_mut"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "impl<T, N: ArrayLength<T>> ArrayBuilder<T, N>",
+      "marker": "pub unsafe fn into_inner(",
+      "body": "pub unsafe fn into_inner(self) -> GenericArray<T, N> {\r\n        let array = ptr::read(&self.array);\r\n\r\n        mem::forget(self);\r\n\r\n        array.assume_init()\r\n    }",
+      "body_sha256": "7cfbce37e1af6cbad1720b787fa024ba66fc6a56a5cf48adcd9bf11b48a0c1f4",
+      "influence_channels": "Read fully initialized local array after64 writes; forget builder to suppress its Drop; return those bytes.",
+      "callees": "ptr.read; mem.forget; MaybeUninit.assume_init"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "Drop for ArrayBuilder<T, N>",
+      "marker": "fn drop(",
+      "body": "fn drop(&mut self) {\r\n        if mem::needs_drop::<T>() {\r\n            unsafe {\r\n                for value in &mut (&mut *self.array.as_mut_ptr())[..self.position] {\r\n                    ptr::drop_in_place(value);\r\n                }\r\n            }\r\n        }\r\n    }",
+      "body_sha256": "a50df9cb8100c32c564d61ee7975bc2aebc1c060704da81357a2e2bc540be80e",
+      "influence_channels": "Normal path suppressed by forget. Any unwind guard tests needs_drop<u8>=false; no destructor callback.",
+      "callees": "mem.needs_drop (compiler Copy/type property); element drop branch excluded"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/generic-array-0.14.7/src/lib.rs",
+      "file_sha256": "20b64b4359b0e82a3523fd536ad06de25e174cead734cffd3fa5f7c48f659247",
+      "context": "DerefMut for GenericArray<T, N>",
+      "marker": "fn deref_mut(",
+      "body": "fn deref_mut(&mut self) -> &mut [T] {\r\n        unsafe { slice::from_raw_parts_mut(self as *mut Self as *mut T, N::USIZE) }\r\n    }",
+      "body_sha256": "f4469cca84024cb58577a715546405a5a3f7636180c34d28e58ffef62adc4090",
+      "influence_channels": "Cast same local object pointer and form a mutable slice with constant N::USIZE=64. Returned addresses never become result bytes.",
+      "callees": "slice.from_raw_parts_mut; typename constant64; compiler pointer casts"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "context": "pub const fn iter_mut(",
+      "marker": "pub const fn iter_mut(",
+      "body": "pub const fn iter_mut(&mut self) -> IterMut<'_, T> {\n        IterMut::new(self)\n    }",
+      "body_sha256": "ae0ad78afc43a00d66ad7808d596897d94e4433c44dbd09d49cf1a4ba329c2db",
+      "influence_channels": "Forward same borrowed local slice.",
+      "callees": "IterMut.new"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "context": "impl<'a, T> IterMut<'a, T>",
+      "marker": "pub(super) const fn new(",
+      "body": "pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+      "body_sha256": "d2a3a86acea4b1267a61f12c2b9aaafd55209ad6ebd4be4c67645b4a5e46de15",
+      "influence_channels": "Only slice metadata and the local allocation pointer. T::IS_ZST=false for u8; end=base+64.",
+      "callees": "slice.len; NonNull.from_mut/cast/as_ptr; pointer.add; PhantomData construction"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+      "file_sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589",
+      "context": "fn enumerate(self)",
+      "marker": "fn enumerate(self)",
+      "body": "fn enumerate(self) -> Enumerate<Self>\n    where\n        Self: Sized,\n    {\n        Enumerate::new(self)\n    }",
+      "body_sha256": "7a30c52685f8b34a995c1e40d18ccd8a0346505929106efeee7d82d13284b6e1",
+      "influence_channels": "Move the same iterator into an adapter.",
+      "callees": "Enumerate.new"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/enumerate.rs",
+      "file_sha256": "82b139ab80c433cb095adca865ddd19db80ebdd6e0c05be95f097401877d0a3a",
+      "context": "pub(in crate::iter) fn new(",
+      "marker": "pub(in crate::iter) fn new(",
+      "body": "pub(in crate::iter) fn new(iter: I) -> Enumerate<I> {\n        Enumerate { iter, count: 0 }\n    }",
+      "body_sha256": "e3707ff332ce934fa0bdd7a12b9cc9936e7738b5797cea00af47352ed39419be",
+      "influence_channels": "Store iterator and initialize count0.",
+      "callees": "Struct construction only"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+      "file_sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589",
+      "context": "fn for_each<F>",
+      "marker": "fn for_each<F>",
+      "body": "fn for_each<F>(self, f: F)\n    where\n        Self: Sized,\n        F: FnMut(Self::Item),\n    {\n        #[inline]\n        fn call<T>(mut f: impl FnMut(T)) -> impl FnMut((), T) {\n            move |(), item| f(item)\n        }\n\n        self.fold((), call(f));\n    }",
+      "body_sha256": "dd8b5eefc7aee24b1605205fd55fc32468ccb812095004d23929349bb13e0a30",
+      "influence_channels": "Unit accumulator; closure forwards each local item; no output or system interaction.",
+      "callees": "Enumerate.fold; call closure adapter"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/enumerate.rs",
+      "file_sha256": "82b139ab80c433cb095adca865ddd19db80ebdd6e0c05be95f097401877d0a3a",
+      "context": "fn fold<Acc, Fold>",
+      "marker": "fn fold<Acc, Fold>",
+      "body": "fn fold<Acc, Fold>(self, init: Acc, fold: Fold) -> Acc\n    where\n        Fold: FnMut(Acc, Self::Item) -> Acc,\n    {\n        #[inline]\n        fn enumerate<T, Acc>(\n            mut count: usize,\n            mut fold: impl FnMut(Acc, (usize, T)) -> Acc,\n        ) -> impl FnMut(Acc, T) -> Acc {\n            #[rustc_inherit_overflow_checks]\n            move |acc, item| {\n                let acc = fold(acc, (count, item));\n                count += 1;\n                acc\n            }\n        }\n\n        self.iter.fold(init, enumerate(self.count, fold))\n    }",
+      "body_sha256": "b0bb4c62f5704625535bfaf55b35573e3bf161af129f1e2a4803b374ac8820f0",
+      "influence_channels": "Count starts0, increments after each local closure, bounded by64.",
+      "callees": "IterMut.fold; supplied closure ptr.write then position increment"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "context": "fn fold<B, F>",
+      "marker": "fn fold<B, F>",
+      "body": "fn fold<B, F>(self, init: B, mut f: F) -> B\n                where\n                    F: FnMut(B, Self::Item) -> B,\n            {\n                // this implementation consists of the following optimizations compared to the\n                // default implementation:\n                // - do-while loop, as is llvm's preferred loop shape,\n                //   see https://releases.llvm.org/16.0.0/docs/LoopTerminology.html#more-canonical-loops\n                // - bumps an index instead of a pointer since the latter case inhibits\n                //   some optimizations, see #111603\n                // - avoids Option wrapping/matching\n                if is_empty!(self) {\n                    return init;\n                }\n                let mut acc = init;\n                let mut i = 0;\n                let len = len!(self);\n                loop {\n                    // SAFETY: the loop iterates `i in 0..len`, which always is in bounds of\n                    // the slice allocation\n                    acc = f(acc, unsafe { & $( $mut_ )? *self.ptr.add(i).as_ptr() });\n                    // SAFETY: `i` can't overflow since it'll only reach usize::MAX if the\n                    // slice had that length, in which case we'll break out of the loop\n                    // after the increment\n                    i = unsafe { i.unchecked_add(1) };\n                    if i == len {\n                        break;\n                    }\n                }\n                acc\n            }",
+      "body_sha256": "0f790349ed2d899523faa2473536d4efb6f816c373456b3ff4da242c15603437",
+      "influence_channels": "is_empty and len compare/subtract pointers in the same fixed64-byte allocation. In the u8 branch guards and distance depend only on relative offsets. Body indexes0..63 and only passes each local write location.",
+      "callees": "is_empty!/len! macros; NonNull.add/as_ptr; unchecked usize increment; supplied local closure"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "context": "pub const fn uninit()",
+      "marker": "pub const fn uninit()",
+      "body": "pub const fn uninit() -> MaybeUninit<T> {\n        MaybeUninit { uninit: () }\n    }",
+      "body_sha256": "1ee2ba4d64ab055ef38500e54a40af48ae1e87ea022d2a0c2cbddb84da2d3282",
+      "influence_channels": "Create local uninitialized storage without reading its contents.",
+      "callees": "Union/unit construction"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "context": "pub const fn as_mut_ptr(",
+      "marker": "pub const fn as_mut_ptr(",
+      "body": "pub const fn as_mut_ptr(&mut self) -> *mut T {\n        // `MaybeUninit` and `ManuallyDrop` are both `repr(transparent)` so we can cast the pointer.\n        self as *mut _ as *mut T\n    }",
+      "body_sha256": "7a783cb1824ff8026dad882e5ff7389d351d0fa0ff8ffdeb799ddb66e1cea599",
+      "influence_channels": "Same caller-owned storage pointer; no data read.",
+      "callees": "Pointer cast only"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "context": "pub const unsafe fn assume_init(self)",
+      "marker": "pub const unsafe fn assume_init(self)",
+      "body": "pub const unsafe fn assume_init(self) -> T {\n        // SAFETY: the caller must guarantee that `self` is initialized.\n        // This also means that `self` must be a `value` variant.\n        unsafe {\n            intrinsics::assert_inhabited::<T>();\n            // We do this via a raw ptr read instead of `ManuallyDrop::into_inner` so that there's\n            // no trace of `ManuallyDrop` in Miri's error messages here.\n            (&raw const self.value).cast::<T>().read()\n        }\n    }",
+      "body_sha256": "d8d216b781b48d3686ccfd0962885c9336fa79d233702d1aced78c2e7ff324b9",
+      "influence_channels": "Read the local fully initialized value; inhabited u8 array type.",
+      "callees": "assert_inhabited; const-pointer cast/read of the same initialized local storage; compiler primitive"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs",
+      "file_sha256": "ad70d291fcddf9bd91e7b3d75d6d432d1473e078ab92bf21741fc1d47f786b78",
+      "context": "pub const fn forget<",
+      "marker": "pub const fn forget<",
+      "body": "pub const fn forget<T>(t: T) {\n    let _ = ManuallyDrop::new(t);\n}",
+      "body_sha256": "cd75b71e528676ca9cf82fdf6b670c105f6840702e76cd318e06b4b8e9828c1c",
+      "influence_channels": "Suppress Drop through ManuallyDrop; no external state.",
+      "callees": "ManuallyDrop.new"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "context": "pub const fn new(value: T)",
+      "marker": "pub const fn new(value: T)",
+      "body": "pub const fn new(value: T) -> ManuallyDrop<T> {\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+      "body_sha256": "691c737feee1f3a342afb087f8a3d3f9e7052ef278ebaaab42bf195b987314f3",
+      "influence_channels": "Store the same moved local value.",
+      "callees": "Struct construction only"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "context": "pub const unsafe fn write<T>",
+      "marker": "pub const unsafe fn write<T>",
+      "body": "pub const unsafe fn write<T>(dst: *mut T, src: T) {\n    // Semantically, it would be fine for this to be implemented as a\n    // `copy_nonoverlapping` and appropriate drop suppression of `src`.\n\n    // However, implementing via that currently produces more MIR than is ideal.\n    // Using an intrinsic keeps it down to just the simple `*dst = move src` in\n    // MIR (11 statements shorter, at the time of writing), and also allows\n    // `src` to stay an SSA value in codegen_ssa, rather than a memory one.\n\n    // SAFETY: the caller must guarantee that `dst` is valid for writes.\n    // `dst` cannot overlap `src` because the caller has mutable access\n    // to `dst` while `src` is owned by this function.\n    unsafe {\n        #[cfg(debug_assertions)] // Too expensive to always enable (for now?)\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::write requires that the pointer argument is aligned and non-null\",\n            (\n                addr: *mut () = dst as *mut (),\n                align: usize = align_of::<T>(),\n                is_zst: bool = T::IS_ZST,\n            ) => ub_checks::maybe_is_aligned_and_not_null(addr, align, is_zst)\n        );\n        intrinsics::write_via_move(dst, src)\n    }\n}",
+      "body_sha256": "bcfe0961c1063042c9419ad50dff294deacef3e6c592dc65cad5a2ba046796bf",
+      "influence_channels": "Write the supplied zero to supplied local storage. Does not read or drop old bytes. debug_assertions block inactive.",
+      "callees": "intrinsics.write_via_move; compiler/runtime memory primitive"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "context": "pub const unsafe fn read<T>",
+      "marker": "pub const unsafe fn read<T>",
+      "body": "pub const unsafe fn read<T>(src: *const T) -> T {\n    // It would be semantically correct to implement this via `copy_nonoverlapping`\n    // and `MaybeUninit`, as was done before PR #109035. Calling `assume_init`\n    // provides enough information to know that this is a typed operation.\n\n    // However, as of March 2023 the compiler was not capable of taking advantage\n    // of that information. Thus, the implementation here switched to an intrinsic,\n    // which lowers to `_0 = *src` in MIR, to address a few issues:\n    //\n    // - Using `MaybeUninit::assume_init` after a `copy_nonoverlapping` was not\n    //   turning the untyped copy into a typed load. As such, the generated\n    //   `load` in LLVM didn't get various metadata, such as `!range` (#73258),\n    //   `!nonnull`, and `!noundef`, resulting in poorer optimization.\n    // - Going through the extra local resulted in multiple extra copies, even\n    //   in optimized MIR.  (Ignoring StorageLive/Dead, the intrinsic is one\n    //   MIR statement, while the previous implementation was eight.)  LLVM\n    //   could sometimes optimize them away, but because `read` is at the core\n    //   of so many things, not having them in the first place improves what we\n    //   hand off to the backend.  For example, `mem::replace::<Big>` previously\n    //   emitted 4 `alloca` and 6 `memcpy`s, but is now 1 `alloc` and 3 `memcpy`s.\n    // - In general, this approach keeps us from getting any more bugs (like\n    //   #106369) that boil down to \"`read(p)` is worse than `*p`\", as this\n    //   makes them look identical to the backend (or other MIR consumers).\n    //\n    // Future enhancements to MIR optimizations might well allow this to return\n    // to the previous implementation, rather than using an intrinsic.\n\n    // SAFETY: the caller must guarantee that `src` is valid for reads.\n    unsafe {\n        #[cfg(debug_assertions)] // Too expensive to always enable (for now?)\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::read requires that the pointer argument is aligned and non-null\",\n            (\n                addr: *const () = src as *const (),\n                align: usize = align_of::<T>(),\n                is_zst: bool = T::IS_ZST,\n            ) => ub_checks::maybe_is_aligned_and_not_null(addr, align, is_zst)\n        );\n        crate::intrinsics::read_via_copy(src)\n    }\n}",
+      "body_sha256": "0638fa83d5b5da093110511d686842bc36bbdad8b6c5638bed0cb7e7613fbe12",
+      "influence_channels": "Read only supplied fully initialized caller-local storage.",
+      "callees": "intrinsics.read_via_copy; compiler/runtime memory primitive"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs",
+      "file_sha256": "0914968067f7e2bc798680c1edd72bcb032a9fd44ebb2b6fbc082a3a2b16941f",
+      "context": "pub const unsafe fn from_raw_parts_mut<",
+      "marker": "pub const unsafe fn from_raw_parts_mut<",
+      "body": "pub const unsafe fn from_raw_parts_mut<'a, T>(data: *mut T, len: usize) -> &'a mut [T] {\n    // SAFETY: the caller must uphold the safety contract for `from_raw_parts_mut`.\n    unsafe {\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"slice::from_raw_parts_mut requires the pointer to be aligned and non-null, and the total size of the slice not to exceed `isize::MAX`\",\n            (\n                data: *mut () = data as *mut (),\n                size: usize = size_of::<T>(),\n                align: usize = align_of::<T>(),\n                len: usize = len,\n            ) =>\n            ub_checks::maybe_is_aligned_and_not_null(data, align, false)\n                && ub_checks::is_valid_allocation_size(size, len)\n        );\n        &mut *ptr::slice_from_raw_parts_mut(data, len)\n    }\n}",
+      "body_sha256": "f3f34a2b37f9c27039c0a8f277ec0aa95fd42b4df1c2120c222ba2e2cc3c9620",
+      "influence_channels": "Construct slice over same supplied local storage and constant length64; UB debug checks inactive in deployed release.",
+      "callees": "ptr.slice_from_raw_parts_mut; compiler reference formation"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/default.rs",
+      "file_sha256": "f38d238b803f9acfab9199158b610ac6a0fe06daa6be04c57adf176c4e4fb536",
+      "context": "macro_rules! default_impl",
+      "marker": "macro_rules! default_impl",
+      "body": "macro_rules! default_impl {\n    ($t:ty, $v:expr, $doc:tt) => {\n        #[stable(feature = \"rust1\", since = \"1.0.0\")]\n        #[rustc_const_unstable(feature = \"const_default\", issue = \"143894\")]\n        impl const Default for $t {\n            #[inline(always)]\n            #[doc = $doc]\n            fn default() -> $t {\n                $v\n            }\n        }\n    };\n}",
+      "body_sha256": "0e032d10729154d5598e41b22e467c76da7a7a216b2c1c73254df6ffaae593c8",
+      "influence_channels": "Instantiate $t=u8,$v=0. No input, no capture, no callee.",
+      "callees": "Literal0 only"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const fn from_mut(",
+      "marker": "pub const fn from_mut(",
+      "body": "pub const fn from_mut(r: &mut T) -> Self {\n        // SAFETY: A mutable reference cannot be null.\n        unsafe { NonNull { pointer: r as *mut T } }\n    }",
+      "body_sha256": "3ee1521eee809829143f309b3295e7a116255f6234871d89c344d59ec157720d",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const fn cast<U>",
+      "marker": "pub const fn cast<U>",
+      "body": "pub const fn cast<U>(self) -> NonNull<U> {\n        // SAFETY: `self` is a `NonNull` pointer which is necessarily non-null\n        unsafe { NonNull { pointer: self.as_ptr() as *mut U } }\n    }",
+      "body_sha256": "328b65c8285b5ec6a62866811b0e50f565e37a0bf2125c00bbd1512269545d8f",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const fn as_ptr(self)",
+      "marker": "pub const fn as_ptr(self)",
+      "body": "pub const fn as_ptr(self) -> *mut T {\n        // This is a transmute for the same reasons as `NonZero::get`.\n\n        // SAFETY: `NonNull` is `transparent` over a `*const T`, and `*const T`\n        // and `*mut T` have the same layout, so transitively we can transmute\n        // our `NonNull` to a `*mut T` directly.\n        unsafe { mem::transmute::<Self, *mut T>(self) }\n    }",
+      "body_sha256": "fcb0986a34159ef2049fe489a76545764ba3351d839975cb4b49177ae396d03b",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const unsafe fn add(self",
+      "marker": "pub const unsafe fn add(self",
+      "body": "pub const unsafe fn add(self, count: usize) -> Self\n    where\n        T: Sized,\n    {\n        // SAFETY: the caller must uphold the safety contract for `offset`.\n        // Additionally safety contract of `offset` guarantees that the resulting pointer is\n        // pointing to an allocation, there can't be an allocation at null, thus it's safe to\n        // construct `NonNull`.\n        unsafe { NonNull { pointer: intrinsics::offset(self.as_ptr(), count) } }\n    }",
+      "body_sha256": "3a3bbf035118657283c568c49d51af5d150ef0927dac171c8f760cf32d6c3cab",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mut_ptr.rs",
+      "file_sha256": "b2c91c8ecad105dd611f004d8af1b7ff621007485c1b65f011b17b747e74cdae",
+      "context": "pub const unsafe fn add(self",
+      "marker": "pub const unsafe fn add(self",
+      "body": "pub const unsafe fn add(self, count: usize) -> Self\n    where\n        T: Sized,\n    {\n        #[cfg(debug_assertions)]\n        #[inline]\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_add_nowrap(this: *const (), count: usize, size: usize) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), count: usize, size: usize } -> bool:\n                if const {\n                    true\n                } else {\n                    let Some(byte_offset) = count.checked_mul(size) else {\n                        return false;\n                    };\n                    let (_, overflow) = this.addr().overflowing_add(byte_offset);\n                    byte_offset <= (isize::MAX as usize) && !overflow\n                }\n            )\n        }\n\n        #[cfg(debug_assertions)] // Expensive, and doesn't catch much in the wild.\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::add requires that the address calculation does not overflow\",\n            (\n                this: *const () = self as *const (),\n                count: usize = count,\n                size: usize = size_of::<T>(),\n            ) => runtime_add_nowrap(this, count, size)\n        );\n\n        // SAFETY: the caller must uphold the safety contract for `offset`.\n        unsafe { intrinsics::offset(self, count) }\n    }",
+      "body_sha256": "6e8ef9c9453163c071515b82c8302e776d944e5a660fc456d10f6e4ef271a6a5",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "context": "pub const unsafe fn offset_from_unsigned",
+      "marker": "pub const unsafe fn offset_from_unsigned",
+      "body": "pub const unsafe fn offset_from_unsigned(self, origin: *const T) -> usize\n    where\n        T: Sized,\n    {\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_ptr_ge(this: *const (), origin: *const ()) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), origin: *const () } -> bool:\n                if const {\n                    true\n                } else {\n                    this >= origin\n                }\n            )\n        }\n\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::offset_from_unsigned requires `self >= origin`\",\n            (\n                this: *const () = self as *const (),\n                origin: *const () = origin as *const (),\n            ) => runtime_ptr_ge(this, origin)\n        );\n\n        let pointee_size = size_of::<T>();\n        assert!(0 < pointee_size && pointee_size <= isize::MAX as usize);\n        // SAFETY: the caller must uphold the safety contract for `ptr_offset_from_unsigned`.\n        unsafe { intrinsics::ptr_offset_from_unsigned(self, origin) }\n    }",
+      "body_sha256": "1678818696462df478b7da414e61a9787d176effc3f88e4ffe0e2d673bb89b94",
+      "influence_channels": "Only supplied same-allocation pointer coordinates/counts; no mutable external data read. Debug precondition branches inactive; address tests normalize to public relative bounds.",
+      "callees": "Compiler pointer arithmetic/projection intrinsics and precondition wrappers; V370 retained"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "context": "macro_rules! if_zst",
+      "marker": "macro_rules! if_zst",
+      "body": "macro_rules! if_zst {\n    (mut $this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{\n        #![allow(unused_unsafe)] // we're sometimes used within an unsafe block\n\n        if T::IS_ZST {\n            // SAFETY: for ZSTs, the pointer is storing a provenance-free length,\n            // so consuming and updating it as a `usize` is fine.\n            let $len = unsafe { &mut *(&raw mut $this.end_or_len).cast::<usize>() };\n            $zst_body\n        } else {\n            // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null\n            let $end = unsafe { &mut *(&raw mut $this.end_or_len).cast::<NonNull<T>>() };\n            $other_body\n        }\n    }};\n    ($this:ident, $len:ident => $zst_body:expr, $end:ident => $other_body:expr,) => {{\n        #![allow(unused_unsafe)] // we're sometimes used within an unsafe block\n\n        if T::IS_ZST {\n            let $len = $this.end_or_len.addr();\n            $zst_body\n        } else {\n            // SAFETY: for non-ZSTs, the type invariant ensures it cannot be null\n            let $end = unsafe { mem::transmute::<*const T, NonNull<T>>($this.end_or_len) };\n            $other_body\n        }\n    }};\n}",
+      "body_sha256": "b59b62350b59b84ac0cc888b8591b17a2b9a79ba45bf734a5084c87681028967",
+      "influence_channels": "T=u8 is non-ZST. Only the same-allocation pointer branch is reached; the ZST addr() branch is excluded.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "context": "macro_rules! is_empty",
+      "marker": "macro_rules! is_empty",
+      "body": "macro_rules! is_empty {\n    ($self: ident) => {\n        if_zst!($self,\n            len => len == 0,\n            end => $self.ptr == end,\n        )\n    };\n}",
+      "body_sha256": "4a7e019f4091c61059a7fd5c195bde387a6ec7ab50162ccb2cce764411da62e9",
+      "influence_channels": "Compare base with end=base+64; fixed false, by relative endpoint equality.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+      "context": "macro_rules! len {",
+      "marker": "macro_rules! len {",
+      "body": "macro_rules! len {\n    ($self: ident) => {{\n        if_zst!($self,\n            len => len,\n            end => {\n                // To get rid of some bounds checks (see `position`), we use ptr_sub instead of\n                // offset_from (Tested by `codegen/slice-position-bounds-check`.)\n                // SAFETY: by the type invariant pointers are aligned and `start <= end`\n                unsafe { end.offset_from_unsigned($self.ptr) }\n            },\n        )\n    }};\n}",
+      "body_sha256": "e7aab60d3684e0699e62e79c9710ad675aeb0f0287d48571d500011febbf6047",
+      "influence_channels": "Same-allocation unsigned pointer distance is64, independent of base.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mut_ptr.rs",
+      "file_sha256": "b2c91c8ecad105dd611f004d8af1b7ff621007485c1b65f011b17b747e74cdae",
+      "context": "PartialEq for *mut T",
+      "marker": "fn eq(",
+      "body": "fn eq(&self, other: &*mut T) -> bool {\n        *self == *other\n    }",
+      "body_sha256": "9158068359a4990cc709c1a0e60915faa4fdd19d3bb790fb95573efbc7be26eb",
+      "influence_channels": "Primitive equality of the same local base/end thin pointers; no external memory read.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "PartialEq for NonNull<T>",
+      "marker": "fn eq(",
+      "body": "fn eq(&self, other: &Self) -> bool {\n        self.as_ptr() == other.as_ptr()\n    }",
+      "body_sha256": "b54e5c80e686e3c533673d25c5f300eb2ba18dba6e66b5f73d9283ece716c921",
+      "influence_channels": "Thin u8 pointers compared only as base/end from one fixed-length allocation.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const unsafe fn new_unchecked(",
+      "marker": "pub const unsafe fn new_unchecked(",
+      "body": "pub const unsafe fn new_unchecked(ptr: *mut T) -> Self {\n        // SAFETY: the caller must guarantee that `ptr` is non-null.\n        unsafe {\n            assert_unsafe_precondition!(\n                check_language_ub,\n                \"NonNull::new_unchecked requires that the pointer is non-null\",\n                (ptr: *mut () = ptr as *mut ()) => !ptr.is_null()\n            );\n            NonNull { pointer: ptr as _ }\n        }\n    }",
+      "body_sha256": "ac718ce8d4d035f14b018fbda438a2eac14df260a24eefeba5b201608022137b",
+      "influence_channels": "Forward the supplied non-null local pointer. Language UB checks inactive; no external state read.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/non_null.rs",
+      "file_sha256": "c1b6db4d0b71413bd827ff9cc4dc7f53a5bbb4945be3e1356943fa630c48732f",
+      "context": "pub const unsafe fn offset_from_unsigned",
+      "marker": "pub const unsafe fn offset_from_unsigned",
+      "body": "pub const unsafe fn offset_from_unsigned(self, subtracted: NonNull<T>) -> usize\n    where\n        T: Sized,\n    {\n        // SAFETY: the caller must uphold the safety contract for `offset_from_unsigned`.\n        unsafe { self.as_ptr().offset_from_unsigned(subtracted.as_ptr()) }\n    }",
+      "body_sha256": "5287e94fb023fba0f9c730ab15b54753d9271683b5c64b05b1a382cd477063dc",
+      "influence_channels": "Same supplied pointers forward to raw-pointer distance; result constant64.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mut_ptr.rs",
+      "file_sha256": "b2c91c8ecad105dd611f004d8af1b7ff621007485c1b65f011b17b747e74cdae",
+      "context": "pub const unsafe fn offset_from_unsigned",
+      "marker": "pub const unsafe fn offset_from_unsigned",
+      "body": "pub const unsafe fn offset_from_unsigned(self, origin: *const T) -> usize\n    where\n        T: Sized,\n    {\n        // SAFETY: the caller must uphold the safety contract for `offset_from_unsigned`.\n        unsafe { (self as *const T).offset_from_unsigned(origin) }\n    }",
+      "body_sha256": "0ad0f40022aeb33db4905f60bcd8234865244502eff1cad3d97f7a6838f123aa",
+      "influence_channels": "Same supplied pointers forward to const-pointer distance; result constant64.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "context": "pub const fn slice_from_raw_parts_mut<",
+      "marker": "pub const fn slice_from_raw_parts_mut<",
+      "body": "pub const fn slice_from_raw_parts_mut<T>(data: *mut T, len: usize) -> *mut [T] {\n    from_raw_parts_mut(data, len)\n}",
+      "body_sha256": "534b788469fb286cbd7263c3949884b898f775919a9c5d5a73c1eb29aaa21949",
+      "influence_channels": "Forward supplied local pointer and constant length to metadata construction.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/metadata.rs",
+      "file_sha256": "97d94065abf5054505768dcccbe09a07b71570dddb4c1d7775d5d09e605e26a9",
+      "context": "pub const fn from_raw_parts_mut<",
+      "marker": "pub const fn from_raw_parts_mut<",
+      "body": "pub const fn from_raw_parts_mut<T: PointeeSized>(\n    data_pointer: *mut impl Thin,\n    metadata: <T as Pointee>::Metadata,\n) -> *mut T {\n    aggregate_raw_ptr(data_pointer, metadata)\n}",
+      "body_sha256": "d544269212ef38a834b62fa40ce39aacb87cb082dfb9e90332b56c9b491bec64",
+      "influence_channels": "Aggregate the same local pointer and supplied length; no pointee read.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "context": "pub const fn cast<U>",
+      "marker": "pub const fn cast<U>",
+      "body": "pub const fn cast<U>(self) -> *const U {\n        self as _\n    }",
+      "body_sha256": "cb6a8fe3b00dd79ec71a38668c74adac1c88b1bf451eb7b7d7be3bef32c82d7e",
+      "influence_channels": "Same local address, transparent type cast; no external memory read.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "context": "pub const unsafe fn read(self)",
+      "marker": "pub const unsafe fn read(self)",
+      "body": "pub const unsafe fn read(self) -> T\n    where\n        T: Sized,\n    {\n        // SAFETY: the caller must uphold the safety contract for `read`.\n        unsafe { read(self) }\n    }",
+      "body_sha256": "ed0dd5c265764a0e709678ed72647f68f183b58b7caa95812d3900ef2cd2de6c",
+      "influence_channels": "Forward the same initialized local pointer to ptr.read.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "context": "pub const fn len(",
+      "marker": "pub const fn len(",
+      "body": "pub const fn len(&self) -> usize {\n        ptr::metadata(self)\n    }",
+      "body_sha256": "d695aa30f17660613bd0c64dbd54e756d11bdee980b4ea2431434058ea96c585",
+      "influence_channels": "Return caller-supplied slice metadata, here64.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/metadata.rs",
+      "file_sha256": "97d94065abf5054505768dcccbe09a07b71570dddb4c1d7775d5d09e605e26a9",
+      "context": "pub const fn metadata<",
+      "marker": "pub const fn metadata<",
+      "body": "pub const fn metadata<T: PointeeSized>(ptr: *const T) -> <T as Pointee>::Metadata {\n    ptr_metadata(ptr)\n}",
+      "body_sha256": "ead3dddb7e9b4da53286ad5e44bda6ecc87027704111a75c281d47ab703f4f99",
+      "influence_channels": "Return compiler pointer metadata from the supplied pointer.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs",
+      "file_sha256": "d05a661966104ee074957fb06263b40efa586b56c80248b5ae74cfbf47ad5c70",
+      "context": "macro_rules! assert_unsafe_precondition",
+      "marker": "macro_rules! assert_unsafe_precondition",
+      "body": "macro_rules! assert_unsafe_precondition {\n    ($kind:ident, $message:expr, ($($name:ident:$ty:ty = $arg:expr),*$(,)?) => $e:expr $(,)?) => {\n        {\n            // This check is inlineable, but not by the MIR inliner.\n            // The reason for this is that the MIR inliner is in an exceptionally bad position\n            // to think about whether or not to inline this. In MIR, this call is gated behind `debug_assertions`,\n            // which will codegen to `false` in release builds. Inlining the check would be wasted work in that case and\n            // would be bad for compile times.\n            //\n            // LLVM on the other hand sees the constant branch, so if it's `false`, it can immediately delete it without\n            // inlining the check. If it's `true`, it can inline it and get significantly better performance.\n            #[rustc_no_mir_inline]\n            #[inline]\n            #[rustc_nounwind]\n            #[track_caller]\n            const fn precondition_check($($name:$ty),*) {\n                if !$e {\n                    let msg = concat!(\"unsafe precondition(s) violated: \", $message,\n                        \"\\n\\nThis indicates a bug in the program. \\\n                        This Undefined Behavior check is optional, and cannot be relied on for safety.\");\n                    ::core::panicking::panic_nounwind_fmt(::core::fmt::Arguments::from_str(msg), false);\n                }\n            }\n\n            if ::core::ub_checks::$kind() {\n                precondition_check($($arg,)*);\n            }\n        }\n    };\n}",
+      "body_sha256": "bcb90e21d6dae3b4116924bf5249fe51d6fac4dcd77e2fb85433a1be2801f963",
+      "influence_channels": "Precondition call gated by check_language_ub/ub_checks; no argument expression or panic diagnostic executes in the deployed release.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ub_checks.rs",
+      "file_sha256": "d05a661966104ee074957fb06263b40efa586b56c80248b5ae74cfbf47ad5c70",
+      "context": "pub(crate) const fn check_language_ub",
+      "marker": "pub(crate) const fn check_language_ub",
+      "body": "pub(crate) const fn check_language_ub() -> bool {\n    // Only used for UB checks so we may const_eval_select.\n    const_eval_select!(\n        @capture { } -> bool:\n        if const {\n            // Always disable UB checks.\n            false\n        } else {\n            // Disable UB checks in Miri.\n            !cfg!(miri)\n        }\n    ) && intrinsics::ub_checks()\n}",
+      "body_sha256": "94d50f2b4d007bd40dfaf7710446c05fac01c71ea1ad2dc407a34c7fa7848ac1",
+      "influence_channels": "Runtime UB checks false for deployed debug_assertions=false; constant-evaluation branch also false.",
+      "callees": "Argument-confined source macro/forwarding and compiler intrinsics; no unclassified external callee"
+    }
+  ],
+  "allocation_requests": [],
+  "memory_primitives": "Any introduced memset/memcpy/memmove operates only on caller-supplied local storage; permitted own-2 triple-prime(1), semantics retained at V370.",
+  "address_independence": "IterMut base/end and len use one valid allocation of64 u8. base+offset=base+length iff offset=length and (base+length)-base=length; named V237 address lemmas. Pointer values feed only local memory destinations, not returned byte values. No address hashing or address-to-integer result/control channel survives release checks.",
+  "allocator_channel_iii": "Closed: no allocator call or external mutable read in this helper cone.",
+  "drop": "u8 is Copy, has no Drop; builder is forgotten on success, unwind needs_drop<u8> false; closure/iterator captures are references or unit.",
+  "errors": "No zero-sized block check in GenericArray helper. Its fixed64 iteration cannot overflow. u8.default cannot panic. BlockBuffer64 zero guard and CoreWrapper field order belong to separate own-1 original-checker bindings; Core::default remains original full Result parameter.",
+  "disqualifying_channels": [],
+  "qualification": "Static influence census only. Requires fresh literal-value kernel proof and exhaustive deployed-configuration harness execution. Does not itself restore V237.",
+  "evidence_class": "exhaustive over a singleton input domain, deployed-configuration harness (pending execution)"
+}

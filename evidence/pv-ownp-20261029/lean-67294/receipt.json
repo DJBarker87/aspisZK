@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67294/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67294/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects/R1Z/PV_OWNP_BuilderShape.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_BuilderShape.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.19",
+  "peak_rss_kib": "2645204",
+  "swap": "0",
+  "source_revision": "eeee689b4c82babf516aaa7e3edafb3efb41c973",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_BuilderShape.lean:53:15: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  List.map (fun c => (List.map PV_OWNL_Inputs.lift c).length) \u2191base\nin the target expression\n  List.map (List.length \u2218 List.map PV_OWNL_Inputs.lift) \u2191base = List.replicate 26 1024\n\nE : Type\npublicError imbalance : E\ninverse : Q \u2192 Option Q\nbase : Std.Array (List U32) 26#usize\nd g : Std.Array Q 1024#usize\nsetup : Unit \u2192 Except E (Q \u00d7 Q)\nregistry : Q \u2192 Except E (List CopyRow)\nbalanced : List Q \u2192 Bool\nfinish : List Q \u2192 Except E Unit\naccepted : (PV_OWNO_Builder.acceptedBase \u2191base && PV_OWNO_Builder.acceptedExtensions \u2191d \u2191g) = true\nhb : \u2200 c \u2208 \u2191base, c.length = 1024\nlambda chi : Q\nhs : setup () = Except.ok (lambda, chi)\nh1 : List Q\nhr : PV_OWNO_HelperSelect.selected imbalance inverse chi (registry lambda) = Except.ok h1\nhlen : \u00ach1.length \u2260 1024\nhl : h1.length = 1024\nh\u271d : balanced h1 = true\nunit : Unit\nhf : finish h1 = Except.ok unit\nh :\n  Except.ok (List.map (List.map PV_OWNL_Inputs.lift) \u2191base ++ [h1, \u2191g, \u2191d]) =\n    Except.ok (List.map (List.map PV_OWNL_Inputs.lift) \u2191base ++ [h1, \u2191g, \u2191d])\nhe : List.map (fun c => (List.map PV_OWNL_Inputs.lift c).length) \u2191base = List.map (fun x => 1024) \u2191base\n\u22a2 List.map (List.length \u2218 List.map PV_OWNL_Inputs.lift) \u2191base = List.replicate 26 1024\n\nNote: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.\nFull error:\n  Application type mismatch: The argument\n    Eq.refl true\n  has type\n    @Eq Bool true true\n  but is expected to have type\n    @Eq Bool (decide (26 \u2264 UScalar.cMax UScalarTy.Usize)) true\n  in the application\n    id (Eq.refl true)\n/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_BuilderShape.lean:42:14: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.\n\nNote: This linter can be disabled with `set_option linter.constructorNameAsVariable false`\n'R1Z.PV_OWNP_BuilderShape.accepted_lengths' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_OWNP_BuilderShape.successful_lengths' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNP_BuilderShape.at_array_execution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 67294,
+  "module": "R1Z/PV_OWNP_BuilderShape",
+  "source_blob": "b0c7a27ca2ad8f4017db8dfd715faa6592495a66",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNP_BuilderShape.lean",
+  "source_sha256": "af83c2f0a62c5c332a60db58218320dc76c6397253936bd5b6d322bd6ab79258",
+  "imports": [
+    "R1Z.PV_OWNP_QueryStores"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNP_QueryStores": "199d3e432cd5424c18ae869b56151fd932c4061ea9e5f78067d32e51ba3db283"
+  },
+  "deps_fingerprint": "7753ce81391646c26ffa3bd5400947e81d591abdf87a8b1125100cabdfde265f"
+}

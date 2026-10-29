@@ -1,0 +1,68 @@
+/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:55:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_OWNK_FieldScalar.decode
+    ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b))
+in the target expression
+  ds ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =
+    (decode x * decode y).re
+
+case re
+x y : C
+hx : CC x
+hy : CC y
+h0 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)
+h1 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)
+h2 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y))
+⊢ ds ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =
+    (decode x * decode y).re
+/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:59:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_OWNK_FieldScalar.decode
+    (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub
+          (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub
+      (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b))
+in the target expression
+  ds
+      (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub
+            (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub
+        (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =
+    (decode x * decode y).im
+
+case im
+x y : C
+hx : CC x
+hy : CC y
+h0 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)
+h1 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)
+h2 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y))
+⊢ ds
+      (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub
+            (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub
+        (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =
+    (decode x * decode y).im
+/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:71:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_OWNK_FieldScalar.decode ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b)
+in the target expression
+  ds ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b) = (AspisV8R15.ExactTowerBase.qm31R * decode x).re
+
+case re
+x : C
+hx : CC x
+⊢ ds ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b) = (AspisV8R15.ExactTowerBase.qm31R * decode x).re
+/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:76:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_OWNK_FieldScalar.decode
+    (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b))
+in the target expression
+  ds (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b)) =
+    (AspisV8R15.ExactTowerBase.qm31R * decode x).im
+
+case im
+x : C
+hx : CC x
+⊢ ds (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b)) =
+    (AspisV8R15.ExactTowerBase.qm31R * decode x).im
+'R1Z.PV_OWNK_CMDecode.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNK_CMDecode.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNK_CMDecode.cross_val' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNK_CMDecode.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWNK_CMDecode.mul_by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65159/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65159/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects/R1Z/PV_OWNK_CMDecode.olean", "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:01.45", "peak_rss_kib": "3027260", "swap": "0", "source_revision": "d48cc8d3feeb8f220badcb4383ea0da1f3eb4f54", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

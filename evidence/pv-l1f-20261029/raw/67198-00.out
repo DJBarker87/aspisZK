@@ -1,0 +1,45 @@
+'PV_L1F_ActualPublication.source_publication_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_LoggedCount.source_logged_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_LoggedCount.source_count_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_ReachedJoin.reached_producer' does not depend on any axioms
+'PV_L1F_ReachedJoin.reached_join' does not depend on any axioms
+'PV_L1F_RetryBounds.read_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_ReturnedCount.finish_read' depends on axioms: [propext]
+'PV_L1F_ReturnedCount.read_done' depends on axioms: [propext]
+'PV_L1F_ReturnedCount.read_map_state' depends on axioms: [propext]
+'PV_L1F_ReturnedCount.source_read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_ReturnedPrefix.counts_suffix' depends on axioms: [propext]
+'PV_L1F_ReturnedPrefix.rejects_suffix' depends on axioms: [propext]
+'PV_L1F_ReturnedPrefix.ordered_acquisition' depends on axioms: [propext]
+'PV_L1F_SourceBounds.actual_count_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_SourceRead.actual_retry_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_SourceRead.reported_source_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_L1F_WorldFields.runtime_fields' does not depend on any axioms
+'PV_L1F_WorldFields.prefix_frame' does not depend on any axioms
+'PV_L1F_WorldLog.bind_log' depends on axioms: [propext]
+'PV_L1F_WorldLog.fail_world' depends on axioms: [propext]
+'PV_L1F_WorldLog.div_world' depends on axioms: [propext]
+'PV_L1F_Statements.combined' depends on axioms: [propext]
+def PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition : {I A : Type} →
+  (I → List ℕ × List ℕ) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} actualCount sourceWorld =>
+  ∀ (i : I), actualCount i = (PV_RJ4IDB.counts (sourceWorld i).events, PV_RJ4IDB.rejections (sourceWorld i).events)
+def PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper : {I A : Type} →
+  (I → PV_RJ4IDB.Trace A) → (I → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A} sourceWorld bodyWorld => ∀ (i : I), sourceWorld i = bodyWorld i
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry : {I A S P : Type} →
+  (I → PV_RJ4IDB.Trace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} bodyWorld owner initial fuel index adapt =>
+  ∀ (i : I), bodyWorld i = adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i))
+def PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163 : {I A S P : Type} →
+  (I → PV_RJ4IDB.NativeTrace A) →
+    (I → R1Z.SideChannelL1AttemptRecord.Owner S P) →
+      (I → S) → (I → ℕ) → (I → ℕ) → (I → R1Z.SideChannelL1AttemptRecord.Run P × S → PV_RJ4IDB.Trace A) → Prop :=
+fun {I A S P} native owner initial fuel index adapt =>
+  ∀ (i : I),
+    adapt i (R1Z.SideChannelL1AttemptRecord.run (owner i) (fuel i) (index i) (initial i)) =
+      PV_RJ4IDB.modelTrace (native i)
+def PV_DIAG10.PV_DIAG10_Link_Sites : {I P : Type} → (I → P) → (I → PV_DIAG9.DiagnosticCall) → Prop :=
+fun {I P} context calls => ∀ (i j : I), context i = context j → (calls i).site = (calls j).site

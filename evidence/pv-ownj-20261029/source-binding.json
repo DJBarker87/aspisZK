@@ -1,0 +1,107 @@
+{
+  "revision": "2b581a0105bf0ab01afed6695e76c57928e6c090",
+  "classification": "partial structural source-stage binding under own-1; concrete decoder/owned consumer refinement not supplied",
+  "rows": [
+    {
+      "name": "claims",
+      "path": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "first_line": 749,
+      "last_line": 760,
+      "file_sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "span_sha256": "1ab6044f4f9606b48d74b2570b7bcba005d7b09a225ede719cf7de5aca58c32b",
+      "text": "    pub fn point_claims(\n        columns: &[Vec<QM31>; 29],\n        point: &[QM31; 10],\n    ) -> Result<[[QM31; 29]; 3], Error> {\n        let mut claims = [[QM31::ZERO; 29]; 3];\n        for (p, at) in wire::statement_points(point).iter().enumerate() {\n            for (lane, column) in columns.iter().enumerate() {\n                claims[p][lane] = multilinear_evaluate_qm31(column, at).ok_or(Error::Public)?;\n            }\n        }\n        Ok(claims)\n    }\n",
+      "ordered_tokens": [
+        "wire::statement_points(point)",
+        "columns.iter().enumerate()",
+        "multilinear_evaluate_qm31(column, at).ok_or(Error::Public)?"
+      ]
+    },
+    {
+      "name": "construction",
+      "path": "crates/aspis-prover/src/state_only_candidate_prefix.rs",
+      "first_line": 785,
+      "last_line": 895,
+      "file_sha256": "a04147941fc2f8e0c9667caf9dc7f1f4e0bd8ce8add740bbe6bee88c2c3e05b5",
+      "span_sha256": "2611395c9ae60065b0ea6629298b8d3d8423a5f6719c42899040cb4fd90a9ef8",
+      "text": "        commitments: &mut impl Commitments,\n        hash: HashFn,\n        transported_endpoints: bool,\n    ) -> Result<BuiltSemantics, Error> {\n        // Reject raw noncanonical constructors rather than normalize their\n        // commitment representation. D is supplied before any challenge.\n        if c1\n            .iter()\n            .any(|v| v.len() != 1024 || v.iter().any(|x| x.0 >= P))\n            || d.iter().chain(g).any(|x| {\n                QM31::from_le_bytes(&{\n                    let mut b = [0; 16];\n                    x.write_le_bytes(&mut b);\n                    b\n                })\n                .is_none()\n            })\n        {\n            return Err(Error::Public);\n        }\n        let base: [&[M31; 1024]; 26] =\n            core::array::from_fn(|i| c1[i].as_slice().try_into().unwrap());\n        let first = core::array::from_fn(|i| {\n            if i < 26 {\n                Column::Base(base[i])\n            } else {\n                Column::Extension(d)\n            }\n        });\n        let c1_root = commitments.c1(first)?;\n        let mut transcript = SemanticTranscript::new(hash, &public.public_bytes()?, &c1_root)?;\n        let mut bytes = c1_root.to_vec();\n        let mut scalar = |row, payload: &[u8], transcript: &mut SemanticTranscript| {\n            let framed = wire::record(row, payload)?;\n            let value = transcript.semantic(row, &framed)?;\n            bytes.extend_from_slice(&framed);\n            Ok::<QM31, Error>(value)\n        };\n        let lambda = scalar(0, &[], &mut transcript)?;\n        let chi = scalar(1, &[], &mut transcript)?;\n        let h1 = helper(lambda, chi)?;\n        let h1: &[QM31; 1024] = h1.as_slice().try_into().map_err(|_| Error::Public)?;\n        if state_only_copy_helper_sum(h1) != Some(QM31::ZERO) {\n            return Err(Error::Public);\n        }\n        let c2_root = commitments.c2([h1, g])?;\n        let theta = scalar(2, &c2_root, &mut transcript)?;\n        let mut zc = [QM31::ZERO; 10];\n        for (i, value) in zc.iter_mut().enumerate() {\n            *value = scalar(3 + i as u8, &[], &mut transcript)?;\n        }\n        let mu = scalar(13, &[], &mut transcript)?;\n        let columns: [Vec<QM31>; 29] = core::array::from_fn(|lane| match lane {\n            0..=25 => c1[lane].iter().copied().map(lift).collect(),\n            26 => h1.to_vec(),\n            27 => g.to_vec(),\n            _ => d.to_vec(),\n        });\n        let mut mask_sum = QM31::ZERO;\n        for row in 0..1024 {\n            let point = core::array::from_fn(|i| {\n                if (row >> (9 - i)) & 1 == 0 {\n                    QM31::ZERO\n                } else {\n                    QM31::ONE\n                }\n            });\n            mask_sum = mask_sum.add(\n                aspis_core::state_only_hiding::state_only_selected_mask_value(\n                    &core::array::from_fn(|i| columns[i][row]),\n                    &core::array::from_fn(|i| columns[16 + i][row]),\n                    columns[27][row],\n                    &point,\n                ),\n            );\n        }\n        let eta = scalar(\n            14,\n            &WideExact::from_qm31(mask_sum).to_le_bytes(),\n            &mut transcript,\n        )?;\n        let challenges = Challenges {\n            lambda,\n            chi,\n            theta,\n            zc,\n            mu,\n            eta,\n        };\n        let (alpha, _) = crate::state_only_hiding::r0::prove_sumcheck(\n            &mut transcript,\n            &mut bytes,\n            mask_sum,\n            |point| {\n                let claims = point_claims(&columns, point)?;\n                let terminal = public.terminal_qm31(&claims, point, &challenges)?;\n                let mask = aspis_core::state_only_hiding::state_only_selected_mask_value(\n                    &core::array::from_fn(|i| claims[0][i]),\n                    &core::array::from_fn(|i| claims[0][16 + i]),\n                    claims[0][27],\n                    point,\n                );\n                Ok(mask.add(eta.mul(terminal)))\n            },\n        )?;\n        let claims = point_claims(&columns, &alpha)?;\n        let state_before_z0 = transcript.state();\n        let before_z0 = wire::record(\n            25,\n            &wire::encode_values(claims.into_iter().flatten().map(WideExact::from_qm31)),\n        )?;\n",
+      "ordered_tokens": [
+        "v.len() != 1024",
+        "let h1 = helper(lambda, chi)?",
+        "h1.as_slice().try_into()",
+        "let columns: [Vec<QM31>; 29]",
+        "26 => h1.to_vec()",
+        "27 => g.to_vec()",
+        "_ => d.to_vec()",
+        "prove_sumcheck(",
+        "point_claims(&columns, point)?",
+        "point_claims(&columns, &alpha)?"
+      ]
+    },
+    {
+      "name": "queries",
+      "path": "crates/aspis-prover/src/state_only_hiding.rs",
+      "first_line": 1587,
+      "last_line": 1628,
+      "file_sha256": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c",
+      "span_sha256": "e8106c629f5eeece05825157d5c49c8f46859bf352ebbb461816c42865626600",
+      "text": "    pub fn prove_sumcheck(\n        transcript: &mut SemanticTranscript,\n        output: &mut Vec<u8>,\n        initial_claim: QM31,\n        mut oracle: impl FnMut(&[QM31; 10]) -> Result<QM31, Error>,\n    ) -> Result<([QM31; 10], QM31), Error> {\n        let mut point = [QM31::ZERO; 10];\n        let mut running = initial_claim;\n        for round in 0..10 {\n            let remaining = 9 - round;\n            let mut values = [QM31::ZERO; 28];\n            for (sample, value) in values.iter_mut().enumerate() {\n                point[round] = QM31::from_cm31(CM31::from_m31(M31(sample as u32)));\n                for assignment in 0..1usize << remaining {\n                    for offset in 0..remaining {\n                        point[round + 1 + offset] =\n                            if (assignment >> (remaining - 1 - offset)) & 1 == 0 {\n                                QM31::ZERO\n                            } else {\n                                QM31::ONE\n                            };\n                    }\n                    *value = value.add(oracle(&point)?);\n                }\n            }\n            let polynomial = interpolate(&values);\n            if state_only_boundary_sum(&polynomial) != running {\n                return Err(Error::Boundary { round });\n            }\n            let framed = wire::record(\n                15 + round as u8,\n                &wire::encode_values(polynomial.map(WideExact::from_qm31)),\n            )?;\n            point[round] = transcript.semantic(15 + round as u8, &framed)?;\n            output.extend_from_slice(&framed);\n            running = evaluate_state_only_polynomial(&polynomial, point[round]);\n        }\n        if oracle(&point)? != running {\n            return Err(Error::Terminal);\n        }\n        Ok((point, running))\n    }\n",
+      "ordered_tokens": [
+        "let mut point = [QM31::ZERO; 10]",
+        "for round in 0..10",
+        "for (sample, value)",
+        "point[round] = QM31::from_cm31",
+        "for assignment",
+        "point[round + 1 + offset]",
+        "oracle(&point)?",
+        "let polynomial = interpolate",
+        "wire::record(",
+        "point[round] = transcript.semantic",
+        "output.extend_from_slice(&framed)",
+        "if oracle(&point)?",
+        "Ok((point, running))"
+      ]
+    },
+    {
+      "name": "transcript",
+      "path": "crates/aspis-core/src/state_only_prefix.rs",
+      "first_line": 1722,
+      "last_line": 1759,
+      "file_sha256": "31c2cd269efadc9b41d77bb841c7728e11e7494b443dbfea4b1e804795c11d0f",
+      "span_sha256": "14de973dc0def9c0d0e41288d8403a297f7ac5e8f6c8fd94dbfe542a370f87ee",
+      "text": "        pub fn new(hash: HashFn, public_bytes: &[u8], c1_root: &[u8; 32]) -> Result<Self, Error> {\n            let length = u32::try_from(public_bytes.len()).map_err(|_| Error::Public)?;\n            Ok(Self {\n                state: hash(&[DOMAIN, &[0], &length.to_le_bytes(), public_bytes, c1_root]),\n                hash,\n                next_row: 0,\n            })\n        }\n        pub fn state(&self) -> [u8; 32] {\n            self.state\n        }\n        pub fn next_row(&self) -> u8 {\n            self.next_row\n        }\n\n        fn sample_block(&mut self, row: u8, framed: &[u8]) -> Result<[u8; 32], Error> {\n            if row != self.next_row {\n                return Err(Error::RowOrder {\n                    expected: self.next_row,\n                    actual: row,\n                });\n            }\n            parse_record(row, framed)?;\n            // Exactly one absorb, one squeeze and one advance. Both reads\n            // use s_abs; advancing from the challenge block would be wrong.\n            let absorbed = (self.hash)(&[&self.state, &[0, 0xa0 + row], framed]);\n            let block = (self.hash)(&[&absorbed, &[1]]);\n            self.state = (self.hash)(&[&absorbed, &[2]]);\n            self.next_row += 1;\n            Ok(block)\n        }\n        pub fn semantic(&mut self, row: u8, framed: &[u8]) -> Result<QM31, Error> {\n            if row > 24 {\n                return Err(Error::InvalidRow);\n            }\n            Ok(qm31_sample(&self.sample_block(row, framed)?))\n        }\n        /// R-B's one-block reference-circle map, including fixed fallback.\n",
+      "ordered_tokens": [
+        "state: hash(&[DOMAIN",
+        "fn sample_block",
+        "parse_record(row, framed)?",
+        "let absorbed =",
+        "let block =",
+        "self.state =",
+        "self.next_row += 1",
+        "Ok(block)",
+        "pub fn semantic",
+        "qm31_sample"
+      ]
+    },
+    {
+      "name": "points",
+      "path": "crates/aspis-core/src/state_only_prefix.rs",
+      "first_line": 600,
+      "last_line": 613,
+      "file_sha256": "31c2cd269efadc9b41d77bb841c7728e11e7494b443dbfea4b1e804795c11d0f",
+      "span_sha256": "c5e132283d2b93261b59581a6b3045b53fe4d30db2d5343480b831cd50e37799",
+      "text": "fn state_only_statement_points(z: &[QM31; 10]) -> [[QM31; 10]; 3] {\n    let mut successor = *z;\n    let mut carry = QM31::ONE;\n    for coordinate in (0..z.len()).rev() {\n        let bit = z[coordinate];\n        let bit_and_carry = bit.mul(carry);\n        successor[coordinate] = bit.add(carry).sub(bit_and_carry.add(bit_and_carry));\n        carry = bit_and_carry;\n    }\n    let mut absorption = *z;\n    absorption[7] = QM31::ONE.sub(absorption[7]);\n    absorption[6] = QM31::ONE.sub(absorption[6]);\n    [*z, successor, absorption]\n}\n",
+      "ordered_tokens": [
+        "let mut successor = *z",
+        "let mut carry = QM31::ONE",
+        "for coordinate in (0..z.len()).rev()",
+        "let bit_and_carry = bit.mul(carry)",
+        "successor[coordinate] =",
+        "carry = bit_and_carry",
+        "let mut absorption = *z",
+        "absorption[7]",
+        "absorption[6]",
+        "[*z, successor, absorption]"
+      ]
+    }
+  ]
+}

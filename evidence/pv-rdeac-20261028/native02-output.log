@@ -1,0 +1,25 @@
+Expected time: optimized fixture compilation then finite allocation/deallocation validation.
+owned=[(1, 0, 4), (2, 4, 8), (2, 8, 74), (3, 69, 0)]
+borrowed=[(1, 0, 4), (2, 4, 8), (2, 8, 74)]
+value_bytes=74
+
+
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-pv-rdeac-20261028/native-owned.py", line 14, in <module>
+    assert 'drop(_2)' in body,body
+           ^^^^^^^^^^^^^^^^^^
+AssertionError: fn owned(_1: &Path, _2: String) -> PathBuf {
+    debug base => _1;
+    debug name => _2;
+    let mut _0: std::path::PathBuf;
+
+    bb0: {
+        _0 = Path::join::<String>(move _1, move _2) -> [return: bb1, unwind continue];
+    }
+
+    bb1: {
+        return;
+    }
+}
+
+

@@ -1,0 +1,102 @@
+module('Line','import PV_DIAG12_Buffer',[
+'''def lastNewline : Bytes → Option Nat
+ | [] => none
+ | x::xs => match lastNewline xs with
+   | some n => some (n+1)
+   | none => if x=10 then some 0 else none
+def lineSpan (s : Span) (n : Nat) : Span := {s with bytes := s.bytes.take (n+1)}
+def flushCompleted (fd : Int) (sig : Signal) (fuel : Nat) (b : Buffer) (c : Cursor) : BRun Unit :=
+ if b.span.bytes.getLast?=some 10 then flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c else pureB () b c
+def lineAll (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor) : BRun Unit :=
+ match lastNewline s.bytes with
+ | none => bindB (flushCompleted fd sig fuel b c) fun _ b c => bufferedAll fd sig fuel s b c
+ | some n =>
+   let lines := lineSpan s n
+   let tail := advance s (n+1)
+   let r := if b.span.bytes.isEmpty then directAll fd sig fuel lines b c else
+    bindB (bufferedAll fd sig fuel lines b c) fun _ b c => flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c
+   bindB r fun _ b c => bufferedAll fd sig fuel tail b c
+theorem lastNewline_nil : lastNewline []=none := rfl''',
+'''theorem lastNewline_cons_found (x : UInt8) (xs : Bytes) (n : Nat) (h : lastNewline xs=some n) :
+ lastNewline (x::xs)=some (n+1) := by simp only [lastNewline,h]''',
+'''theorem lastNewline_cons_new (xs : Bytes) (h : lastNewline xs=none) :
+ lastNewline (10::xs)=some 0 := by simp only [lastNewline,h,eq_self,ite_true]''',
+'''theorem lastNewline_cons_absent (x : UInt8) (xs : Bytes) (h : lastNewline xs=none) (hx : x≠10) :
+ lastNewline (x::xs)=none := by simp only [lastNewline,h,if_neg hx]''',
+'''theorem lineSpan_tail_content (s : Span) (n : Nat) :
+ (lineSpan s n).bytes++(advance s (n+1)).bytes=s.bytes := by
+ exact List.take_append_drop (n+1) s.bytes''',
+'''theorem flushCompleted_absent (fd : Int) (sig : Signal) (fuel : Nat) (b : Buffer) (c : Cursor)
+ (h : b.span.bytes.getLast?≠some 10) :
+ flushCompleted fd sig fuel b c=pureB () b c := by simp only [flushCompleted,if_neg h]''',
+'''theorem flushCompleted_present (fd : Int) (sig : Signal) (fuel : Nat) (b : Buffer) (c : Cursor)
+ (h : b.span.bytes.getLast?=some 10) :
+ flushCompleted fd sig fuel b c=flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c := by
+ simp only [flushCompleted,if_pos h]''',
+'''theorem lineAll_no_newline (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (h : lastNewline s.bytes=none) :
+ lineAll fd sig fuel s b c=bindB (flushCompleted fd sig fuel b c) (fun _ b c => bufferedAll fd sig fuel s b c) := by
+ simp only [lineAll,h]''',
+'''theorem lineAll_empty_buffer (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (n : Nat) (h : lastNewline s.bytes=some n) (hb : b.span.bytes.isEmpty=true) :
+ lineAll fd sig fuel s b c=bindB (directAll fd sig fuel (lineSpan s n) b c)
+ (fun _ b c => bufferedAll fd sig fuel (advance s (n+1)) b c) := by
+ simp only [lineAll,h,hb,eq_self,ite_true]''',
+'''theorem lineAll_nonempty_buffer (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (n : Nat) (h : lastNewline s.bytes=some n) (hb : b.span.bytes.isEmpty=false) :
+ lineAll fd sig fuel s b c=
+ bindB (bindB (bufferedAll fd sig fuel (lineSpan s n) b c)
+   (fun _ b c => flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c))
+ (fun _ b c => bufferedAll fd sig fuel (advance s (n+1)) b c) := by
+ simp only [lineAll,h,hb,Bool.false_eq_true,ite_false]''',
+'''def bufferWrite (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor) : BRun Nat :=
+ if s.bytes.length<spare b then pureB s.bytes.length (appendBuffer b s.bytes) c else
+ let r := if s.bytes.length>spare b then flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c else pureB () b c
+ bindB r fun _ b c =>
+  if s.bytes.length≥b.capacity then
+   let r := stdWrite fd s (sig c.next (writeRequest fd s))
+   ⟨r,{b with panicked := match r.result with | .cut => true | _ => false},⟨c.next+1⟩⟩
+  else pureB s.bytes.length (appendBuffer b s.bytes) c
+theorem bufferWrite_fits (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (h : s.bytes.length<spare b) :
+ bufferWrite fd sig fuel s b c=pureB s.bytes.length (appendBuffer b s.bytes) c := by
+ simp only [bufferWrite,if_pos h]''',
+'''def lineTail (s : Span) (newlineIdx flushed capacity : Nat) : Bytes :=
+ if flushed≥newlineIdx then
+  let tail := s.bytes.drop flushed
+  if tail.length≥capacity then [] else tail
+ else if newlineIdx-flushed≤capacity then (s.bytes.drop flushed).take (newlineIdx-flushed)
+ else
+  let scan := (s.bytes.drop flushed).take capacity
+  match lastNewline scan with | some n => scan.take (n+1) | none => scan
+def lineWrite (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor) : BRun Nat :=
+ match lastNewline s.bytes with
+ | none => bindB (flushCompleted fd sig fuel b c) fun _ b c => bufferWrite fd sig fuel s b c
+ | some n =>
+  bindB (flushBuf (stdWrite fd) (writeRequest fd) sig fuel b c) fun _ b c =>
+   let lines := lineSpan s n
+   let r := stdWrite fd lines (sig c.next (writeRequest fd lines))
+   let first : BRun Nat := ⟨r,b,⟨c.next+1⟩⟩
+   bindB first fun flushed b c =>
+    if flushed=0 then pureB 0 b c else
+    let tail := lineTail s (n+1) flushed b.capacity
+    let buffered := min (spare b) tail.length
+    pureB (flushed+buffered) (appendBuffer b (tail.take buffered)) c
+theorem lineWrite_no_newline (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (h : lastNewline s.bytes=none) :
+ lineWrite fd sig fuel s b c=bindB (flushCompleted fd sig fuel b c)
+ (fun _ b c => bufferWrite fd sig fuel s b c) := by simp only [lineWrite,h]''',
+'''theorem lineTail_partial_fits (s : Span) (newlineIdx flushed capacity : Nat)
+ (h : ¬flushed≥newlineIdx) (hc : newlineIdx-flushed≤capacity) :
+ lineTail s newlineIdx flushed capacity=(s.bytes.drop flushed).take (newlineIdx-flushed) := by
+ simp only [lineTail,if_neg h,if_pos hc]''',
+'''theorem lineTail_no_short_buffer (s : Span) (newlineIdx flushed capacity : Nat)
+ (h : flushed≥newlineIdx) (hc : (s.bytes.drop flushed).length≥capacity) :
+ lineTail s newlineIdx flushed capacity=[] := by simp only [lineTail,if_pos h,if_pos hc]''',
+'''theorem lineAll_quiet_buffer (fd : Int) (sig : Signal) (fuel : Nat) (s : Span) (b : Buffer) (c : Cursor)
+ (h : lastNewline s.bytes=none) (hb : b.span.bytes.getLast?≠some 10)
+ (hf : s.bytes.length<spare b) :
+ lineAll fd sig fuel s b c=pureB () (appendBuffer b s.bytes) c := by
+ rw [lineAll_no_newline fd sig fuel s b c h,flushCompleted_absent fd sig fuel b c hb,bindB_pure]
+ exact bufferedAll_fits fd sig fuel s b c hf''',
+])

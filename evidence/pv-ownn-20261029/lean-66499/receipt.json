@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-66499/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-66499/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-objects/R1Z/PV_OWNN_FocusedReplay.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownn-20261029/lean-sources/R1Z/PV_OWNN_FocusedReplay.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "transport_exit": 0,
+  "wall": "0:01.19",
+  "peak_rss_kib": "3024588",
+  "swap": "0",
+  "source_revision": "3392652870e09b232f3739488d3d3c4cc02acefb",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "R1Z.PV_OWNN_SourceDense.take_coordinates {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q \u2192 K)\n  (point : List R1Z.PV_OWNI_RawOps.Q) (w : \u2115) (hw : w \u2264 point.length) :\n  List.map decode (List.take w point) = List.ofFn fun i => decode (point[\u2191i]?.getD R1Z.PV_OWNI_RawOps.zero)\nR1Z.PV_OWNN_SourceDense.prefix_weight {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q \u2192 K)\n  (D : R1Z.PV_OWNJ_DecodeFold.Decoder decode) (point : List R1Z.PV_OWNI_RawOps.Q) (w : \u2115) (hw : w \u2264 point.length)\n  (a : Fin (2 ^ w)) (hp : \u2200 q \u2208 point, R1Z.PV_OWNJ_DecodeFold.Canon q) :\n  decode (List.foldl (R1Z.PV_OWNI_WeightTotal.step w \u2191a) (R1Z.PV_OWNI_RawOps.ops.one, 0) (List.take w point)).1 =\n    R1Z.PV_OWNI_DensePrune.weight (fun i => decode (point[\u2191i]?.getD R1Z.PV_OWNI_RawOps.zero))\n      (R1Z.PV_OWNL_RowEnumeration.tail w a)\nR1Z.PV_OWNN_SourceDense.scanner_suffix_length (point : List R1Z.PV_OWNI_RawOps.Q) :\n  (List.drop (R1Z.PV_OWNI_Scanner.width point) point).length = R1Z.PV_OWNI_Scanner.trailing point\nR1Z.PV_OWNN_SourceDense.scanner_decoded_cast {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q \u2192 K)\n  (D : R1Z.PV_OWNJ_DecodeFold.Decoder decode) (point : List R1Z.PV_OWNI_RawOps.Q)\n  (i : Fin (R1Z.PV_OWNI_Scanner.trailing point)) :\n  decode ((List.drop (R1Z.PV_OWNI_Scanner.width point) point).get (Fin.cast \u22ef i)) =\n    if (R1Z.PV_OWNI_Scanner.suffix point).testBit (R1Z.PV_OWNI_Scanner.trailing point - 1 - \u2191i) = true then 1 else 0\nR1Z.PV_OWNN_SourceDense.sparse_dense {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q \u2192 K)\n  (D : R1Z.PV_OWNJ_DecodeFold.Decoder decode) (point column : List R1Z.PV_OWNI_RawOps.Q) (hl : point.length = 10)\n  (hp : \u2200 q \u2208 point, R1Z.PV_OWNJ_DecodeFold.Canon q) :\n  R1Z.PV_OWNJ_ValueBridge.sparse decode point column =\n    R1Z.PV_OWNM_V239.dense decode R1Z.PV_OWNI_RawOps.zero point column\nR1Z.PV_OWNN_SourceDense.source_dense {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q \u2192 K)\n  (D : R1Z.PV_OWNJ_DecodeFold.Decoder decode) :\n  R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense decode R1Z.PV_OWNI_RawOps.zero R1Z.PV_OWNN_SourceDense.source222\nR1Z.PV_OWNN_SourceDense.concrete_source_dense :\n  R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense R1Z.PV_OWNK_ConcreteDecoder.decode R1Z.PV_OWNI_RawOps.zero\n    R1Z.PV_OWNN_SourceDense.source222\nR1Z.PV_OWNN_SourceDense.concrete_restore {W : Type}\n  (wirePoints : List R1Z.PV_OWNI_RawOps.Q \u2192 List (List R1Z.PV_OWNI_RawOps.Q)) (isBoolean : R1Z.PV_OWNI_RawOps.Q \u2192 Bool)\n  (reconstruct879 reconstruct890 : R1Z.PV_OWNM_V239.Public \u2192 List R1Z.PV_OWNI_RawOps.Q)\n  (native :\n    R1Z.PV_OWNM_V239.Input \u2192 List R1Z.PV_OWNI_RawOps.Q \u2192 \u2115 \u2192 R1Z.PV_OWNM_V239.Execution R1Z.PV_OWNK_ConcreteDecoder.K W)\n  (resource : R1Z.PV_OWNM_V239.Input \u2192 List R1Z.PV_OWNI_RawOps.Q \u2192 \u2115 \u2192 R1Z.PV_OWNM_V239.ResourceExit W)\n  (failures : List Bool) (left right : R1Z.PV_OWNM_V239.Input)\n  (inputL : R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints left)\n  (inputR : R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput wirePoints right)\n  (cbL : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 left)\n  (cbR : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879 reconstruct879 right)\n  (finalL : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 left)\n  (finalR : R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890 reconstruct890 right)\n  (ownedL :\n    R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan R1Z.PV_OWNK_ConcreteDecoder.decode R1Z.PV_OWNN_SourceDense.source222\n      wirePoints isBoolean native resource failures left)\n  (ownedR :\n    R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan R1Z.PV_OWNK_ConcreteDecoder.decode R1Z.PV_OWNN_SourceDense.source222\n      wirePoints isBoolean native resource failures right)\n  (samePublic : left.pubData = right.pubData) (sameSite : left.site = right.site)\n  (sameLengths : List.map List.length left.columns = List.map List.length right.columns) :\n  (\u2200 p \u2208 wirePoints left.point,\n      \u2200 (lane : \u2115) (c : List R1Z.PV_OWNM_V239.Q),\n        left.columns[lane]? = some c \u2192\n          native left p lane =\n            R1Z.PV_OWNM_V239.attach (resource left p lane)\n              (Aeneas.Std.Result.ok\n                (if c.length \u2260 1024 then none\n                else some (R1Z.PV_OWNM_V239.dense R1Z.PV_OWNK_ConcreteDecoder.decode R1Z.PV_OWNI_RawOps.zero p c)))) \u2227\n    (\u2200 p \u2208 wirePoints right.point,\n        \u2200 (lane : \u2115) (c : List R1Z.PV_OWNM_V239.Q),\n          right.columns[lane]? = some c \u2192\n            native right p lane =\n              R1Z.PV_OWNM_V239.attach (resource right p lane)\n                (Aeneas.Std.Result.ok\n                  (if c.length \u2260 1024 then none\n                  else some (R1Z.PV_OWNM_V239.dense R1Z.PV_OWNK_ConcreteDecoder.decode R1Z.PV_OWNI_RawOps.zero p c)))) \u2227\n      \u2200 pL \u2208 wirePoints left.point,\n        \u2200 pR \u2208 wirePoints right.point,\n          \u2200 (laneL laneR : \u2115) (cL cR : List R1Z.PV_OWNM_V239.Q),\n            left.columns[laneL]? = some cL \u2192\n              right.columns[laneR]? = some cR \u2192 (native left pL laneL).trace = (native right pR laneR).trace\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 66499,
+  "module": "R1Z/PV_OWNN_FocusedReplay",
+  "source_blob": "542cd3d2c3b17d6cc2e614ac660bdb826f7e7aa0",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNN_FocusedReplay.lean",
+  "source_sha256": "587317415e3860c22b8a96361f4ac06ba0251e77f8858a4d2c6132d8918ddcc8",
+  "imports": [
+    "R1Z.PV_OWNN_AxiomsAudit"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNN_AxiomsAudit": "37e598eec87d3d17b325b47855af371b9c659ceff7c6f856bbc69aa0e973697f"
+  },
+  "deps_fingerprint": "8d56233799bd9449d4179cad70db475be330fa646aa7d5c3cbf9afb84b66d275"
+}

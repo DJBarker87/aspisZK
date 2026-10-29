@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_Print.lean:21:210: error: Tactic `rfl` failed: The left-hand side
+  { events := es ++ (if True then { events := [], exit := Exit.ok () } else printGlobal g p).events,
+    exit := (if True then { events := [], exit := Exit.ok () } else printGlobal g p).exit }
+is not definitionally equal to the right-hand side
+  { events := es, exit := Exit.ok () }
+
+V : Type
+es : List V
+g : Run V IoError Unit
+p : IoError → Run V IoError Unit
+⊢ { events := es ++ (if True then { events := [], exit := Exit.ok () } else printGlobal g p).events,
+      exit := (if True then { events := [], exit := Exit.ok () } else printGlobal g p).exit } =
+    { events := es, exit := Exit.ok () }
+/home/dombarker/project-offloads/codex-pv-diag11-20261029/sources/PV_DIAG11_Print.lean:21:192: warning: This simp argument is unused:
+  List.append_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵r̵i̵n̵t̵T̵o̵,̵s̵e̵q̵,̵p̵r̵e̵,̵r̵e̵t̵,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵n̵i̵l̵]̵[̲p̲r̲i̲n̲t̲T̲o̲,̲
+  ̲ ̲ ̲s̲e̲q̲,̲ ̲p̲r̲e̲,̲ ̲r̲e̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG11.print_capture_returns' depends on axioms: [propext, sorryAx]

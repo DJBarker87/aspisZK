@@ -1,0 +1,35 @@
+def Aeneas.Std.UScalar.wrapping_shr : {ty : UScalarTy} → UScalar ty → U32 → UScalar ty :=
+fun {ty} x s => x.bv.ushiftRight (↑s % ty.numBits)#uscalar
+def Aeneas.Std.UScalar.val : {ty : UScalarTy} → UScalar ty → ℕ :=
+fun {ty} x => x.bv.toNat
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:6:7: error(lean.unknownIdentifier): Unknown constant `UScalar.ofBitVec`
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:11:21: warning: Possibly looping simp theorem: `UScalar.val.eq_1`
+
+Note: Possibly caused by: `UScalar.bv_toNat` and `UScalar.val`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:11:33: warning: Possibly looping simp theorem: `U8.wrapping_shr.eq_1`
+
+Note: Possibly caused by: `UScalar.wrapping_shr`, `UScalarTy.U8_numBits_eq`, `Bvify.U8.UScalar_bv`, `UScalar.val`, `UScalarTy.U32_numBits_eq`, `Bvify.U32.UScalar_bv`, and `UScalar.bv_toNat`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:11:49: warning: Possibly looping simp theorem: `UScalar.wrapping_shr.eq_1`
+
+Note: Possibly caused by: `UScalar.val`, `UScalarTy.U32_numBits_eq`, `Bvify.U32.UScalar_bv`, and `UScalar.bv_toNat`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:11:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:14:21: warning: Possibly looping simp theorem: `UScalar.val.eq_1`
+
+Note: Possibly caused by: `UScalar.bv_toNat` and `UScalar.val`
+
+Hint: You can disable a simp theorem from the default simp set by passing `- theoremName` to `simp`.
+/home/dombarker/project-offloads/codex-pv-rdeac-20261028/sources/R1Z/PV_RDEAC_NibbleBounds.lean:14:2: error: Tactic `simp` failed with a nested error:
+maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.PV_RDEAC_NibbleBounds.high_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDEAC_NibbleBounds.low_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,348 @@
+{
+  "revision": "9355cd8bc3fa3aa24fa47ee37153472852b5ef0f",
+  "evidence_class": "structural (K-1 substitute), source/complete-Result boundary",
+  "source_records": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover_powers.rs",
+      "sha256": "966c7af71e730b3832c46efee1210f63861db5952b5965b1a94c6c23cfbc2379"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/lib.rs",
+      "sha256": "5bc994bdd1cb9b6dbff95222e59ade14d83c4adaf46b7011f126156c88957245"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684"
+    },
+    {
+      "path": "crates/aspis-core/src/field/wide_exact.rs",
+      "sha256": "f059fac85a369a226db0d9b37ba82e83cc50faf4aee7c69328c874e751d4b6a3"
+    }
+  ],
+  "config_selected_core_features": [
+    "ct-host-prover",
+    "r0"
+  ],
+  "config": "release; opt-level 3, debug assertions off, overflow checks off, panic unwind",
+  "static_call": "prover::opening_batch -> prover_powers::powers::<29> (WideExact)",
+  "source_statement_binding": [
+    [
+      "[E::ZERO;N]",
+      "Array.repeat N zero",
+      "copy-repeat of field-free Copy WideExact; no destructor/allocator; constant native ZERO transport"
+    ],
+    [
+      "E::ONE",
+      "ProverRwP6PowersSource.aspis_core.field.wide_exact.WideExact.ONE",
+      "literal two-quartic ONE, transported in retained dictionary"
+    ],
+    [
+      "let mut i=0usize",
+      "0#usize",
+      "initial invariant i.val+fuel=N.val"
+    ],
+    [
+      "while i<N",
+      "PowersControl.dispatch outer guard",
+      "PowersSafety.finite_total: terminating invariant; all N, including zero"
+    ],
+    [
+      "out[i]=p",
+      "Array.index_mut_usize then back p",
+      "PowersSafety.index_restore: length and bounds; full mutable restoration retained"
+    ],
+    [
+      "i+=1",
+      "Usize.wrapping_add i 1#usize",
+      "PowersSafety.increment: no wrap or overflow; release checked-add panic absent"
+    ],
+    [
+      "if i<N",
+      "PowersControl.dispatch inner guard",
+      "uses incremented i; last multiplication omitted"
+    ],
+    [
+      "p=p.mul(x)",
+      "PV_RJ4IDB_FieldWide.mul",
+      "complete CT primitive source Result law through FieldQ, FieldR, FieldQMul, FieldWide"
+    ],
+    [
+      "out",
+      "return full final array",
+      "PowersBridge.complete; final writeback and N=0 retained"
+    ]
+  ],
+  "primitive_binding": [
+    [
+      "WideExact::mul",
+      "PV_RJ4IDB_FieldWide.mul",
+      "PV_RJ4IDB_FieldWide.complete"
+    ],
+    [
+      "wide_exact::mul_u",
+      "PV_RJ4IDB_FieldWide.mulU",
+      "PV_RJ4IDB_FieldWide.mulU_complete"
+    ],
+    [
+      "QM31::mul",
+      "ProverRwP7CurrentFieldSource.aspis_core.field.QM31.mul",
+      "PV_RJ4IDB_FieldQMul.complete"
+    ],
+    [
+      "QM31::add",
+      "ProverRwP7CurrentFieldSource.aspis_core.field.QM31.add",
+      "PV_RJ4IDB_FieldQ.add"
+    ],
+    [
+      "QM31::sub",
+      "PV_RJ4IDB_FieldQ.S.qsub",
+      "PV_RJ4IDB_FieldQ.sub"
+    ],
+    [
+      "mul_by_r",
+      "ProverRwP7CurrentFieldSource.aspis_core.field.mul_by_r",
+      "PV_RJ4IDB_FieldR.complete"
+    ],
+    [
+      "CM31::{add,sub,mul}",
+      "ProverRwP7CurrentFieldSource",
+      "PV_ProverRwP7CurrentComplexBridge.{add,sub,mul}"
+    ],
+    [
+      "M31::{double,add,sub,mul,reduce_u64}",
+      "ProverRwP7CurrentFieldSource",
+      "ProverRwP7CurrentBaseBridge.{double,add,sub,mul,mreduce}"
+    ],
+    [
+      "ct::{subtract_p,reduce64,add,sub}",
+      "ProverRwP7CurrentFieldSource",
+      "ProverRwP7CurrentCtBridge.{subtract_source,reduce_source,add_source,sub_source}"
+    ]
+  ],
+  "complete_primitive_token_checks": [
+    {
+      "label": "CM31.add",
+      "native_body": "pub fn add(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+      "native_token_sha256": "ab0698a0b0bfb49c8fa69a3ff9ca03eb882db9144909a2adf4d6e339407a55cb",
+      "complete": true
+    },
+    {
+      "label": "CM31.sub",
+      "native_body": "pub fn sub(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+      "native_token_sha256": "1faf7c59e7b8a5b0f9418a847ec618f67503515cd9f1da3c91abbbfe6e446277",
+      "complete": true
+    },
+    {
+      "label": "CM31.mul",
+      "native_body": "pub fn mul(self, rhs: CM31) -> CM31 {\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+      "native_token_sha256": "777ae218a7eef3b31d2f0e950508eb047f08a049748f4882d1118a08a6e573e8",
+      "complete": true
+    },
+    {
+      "label": "QM31.add",
+      "native_body": "pub fn add(self, rhs: QM31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "native_token_sha256": "7d5cb169e887f23e88fc89b1c95a775ef90df58c267a7c9d81ddcbf9fac55823",
+      "complete": true
+    },
+    {
+      "label": "QM31.sub",
+      "native_body": "pub fn sub(self, rhs: QM31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.sub(rhs.c0),\n            c1: self.c1.sub(rhs.c1),\n        }\n    }",
+      "native_token_sha256": "eb007f064cf37e9c5a4ab4451692a2c562de1401e3bc96065bb79e27d49da763",
+      "complete": true
+    },
+    {
+      "label": "QM31.mul",
+      "native_body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        \n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "native_token_sha256": "8d88d61df680054e90bf2c3ed208b99797cc0c9696a3ae841315c997b2641df9",
+      "complete": true
+    },
+    {
+      "label": "mul_by_r",
+      "native_body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "native_token_sha256": "b24c248426a95f40cfb5d8d6882bff15b66be95c45af26532ac5f631b438764c",
+      "complete": true
+    },
+    {
+      "label": "M31.mul",
+      "native_body": "pub fn mul(self, rhs: M31) -> M31 {\n        \n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+      "native_token_sha256": "44e6f4e02d3e05572d7c1c7e4b11d54edb6006ff38aa220ede42365c8f6438a3",
+      "complete": true
+    },
+    {
+      "label": "M31.double",
+      "native_body": "pub fn double(self) -> M31 {\n        self.add(self)\n    }",
+      "native_token_sha256": "ee5876d0eb1b79fba8d81576c6b8ab641a8be4e48c95b51553a24395c9dde967",
+      "complete": true
+    },
+    {
+      "label": "M31.reduce_u64",
+      "native_body": "pub fn reduce_u64(value: u64) -> M31 {\n        M31(reduce_u64(value))\n    }",
+      "native_token_sha256": "dfb5ea0979aa198b82fe257b4e5801fc0223970222d04af85c7bd9002b6d46f3",
+      "complete": true
+    },
+    {
+      "label": "M31.add.ct",
+      "native_body": "pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }",
+      "native_token_sha256": "d109c44c39c98b05fcb182ce2e1e0c38fe1627709365e28b30822ea52b84598a",
+      "complete": true
+    },
+    {
+      "label": "M31.sub.ct",
+      "native_body": "pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }",
+      "native_token_sha256": "0ee09a61a8768d2cef6d98e4042b45f3da59775e35debbe5a36a48a78b014972",
+      "complete": true
+    },
+    {
+      "label": "reduce_u64.ct",
+      "native_body": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "native_token_sha256": "dc8fd8f1deba9a49ce1229c94ad09167bc077ff694b920824d88896ca33aeeb9",
+      "complete": true
+    },
+    {
+      "label": "ct.subtract_p",
+      "native_body": "pub fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "native_token_sha256": "3b296bb8eb99e636e9c4f433e01a619be460661864b4d15b5441c3e4aba334da",
+      "complete": true
+    },
+    {
+      "label": "ct.reduce64",
+      "native_body": "pub fn reduce64(x: u64) -> u32 {\n    let x = (x & P as u64) + (x >> 31);\n    let x = (x & P as u64) + (x >> 31);\n    subtract_p(x as u32)\n}",
+      "native_token_sha256": "15e2560581b72296327b5a00f19a6db4b17dc6492a58a24cc89a97622b3ec989",
+      "complete": true
+    },
+    {
+      "label": "ct.add",
+      "native_body": "pub fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "native_token_sha256": "1013c1d09f6c4ec4c33e44924c885ccde7609c8e096831efdb279d8292609be4",
+      "complete": true
+    },
+    {
+      "label": "ct.sub",
+      "native_body": "pub fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "native_token_sha256": "0491b8d034547b23ae930dc487a4b634bac543d31a3c745b3b4809fcab751571",
+      "complete": true
+    },
+    {
+      "label": "WideExact.ZERO",
+      "native_body": "pub const ZERO: Self = Self {\n        c0: QM31::ZERO,\n        c1: QM31::ZERO,\n    }",
+      "native_token_sha256": "8fbe7107e756a5a69dd643240d0b3aaeaa0750296a8e85c9ec0c485a295f1f50",
+      "complete": true
+    },
+    {
+      "label": "WideExact.ONE",
+      "native_body": "pub const ONE: Self = Self {\n        c0: QM31::ONE,\n        c1: QM31::ZERO,\n    }",
+      "native_token_sha256": "989071bfdb3689fc14af1cbc57a362033a9e282a439c7d1f8e1a1741080cc89e",
+      "complete": true
+    },
+    {
+      "label": "QM31.ZERO",
+      "native_body": "pub const ZERO: QM31 = QM31 {\n        c0: CM31 {\n            a: M31(0),\n            b: M31(0),\n        },\n        c1: CM31 {\n            a: M31(0),\n            b: M31(0),\n        },\n    }",
+      "native_token_sha256": "0e2b1ef02ddddd8d997a11c0aaf35e0e7d1aec97e99265e4a389f315d04ee53f",
+      "complete": true
+    },
+    {
+      "label": "QM31.ONE",
+      "native_body": "pub const ONE: QM31 = QM31 {\n        c0: CM31 {\n            a: M31(1),\n            b: M31(0),\n        },\n        c1: CM31 {\n            a: M31(0),\n            b: M31(0),\n        },\n    }",
+      "native_token_sha256": "00d5445fa537a9c3580bc6fbbf807f7c1c813439d96c4dcadd5c4b85d3b8d63e",
+      "complete": true
+    }
+  ],
+  "standard_source": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "start": 394,
+      "end": 404,
+      "text": "#[stable(feature = \"index_trait_on_arrays\", since = \"1.50.0\")]\n#[rustc_const_unstable(feature = \"const_index\", issue = \"143775\")]\nimpl<T, I, const N: usize> const IndexMut<I> for [T; N]\nwhere\n    [T]: [const] IndexMut<I>,\n{\n    #[inline]\n    fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }\n}",
+      "sha256": "64985de3dd5d919ec22991689597f6d2529830c4545af5f3468e55da5d3d4567"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "start": 24,
+      "end": 33,
+      "text": "#[rustc_const_unstable(feature = \"const_index\", issue = \"143775\")]\nimpl<T, I> const ops::IndexMut<I> for [T]\nwhere\n    I: [const] SliceIndex<[T]>,\n{\n    #[inline(always)]\n    fn index_mut(&mut self, index: I) -> &mut I::Output {\n        index.index_mut(self)\n    }\n}",
+      "sha256": "dc86858fee78004d8294e3b6edbf36aa84e19643bff7348525893944ca1127ab"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "start": 211,
+      "end": 280,
+      "text": "/// The methods `index` and `index_mut` panic if the index is out of bounds.\n#[stable(feature = \"slice_get_slice_impls\", since = \"1.15.0\")]\n#[rustc_const_unstable(feature = \"const_index\", issue = \"143775\")]\nunsafe impl<T> const SliceIndex<[T]> for usize {\n    type Output = T;\n\n    #[inline]\n    fn get(self, slice: &[T]) -> Option<&T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    fn get_mut(self, slice: &mut [T]) -> Option<&mut T> {\n        if self < slice.len() {\n            // SAFETY: `self` is checked to be in bounds.\n            unsafe { Some(slice_get_unchecked(slice, self)) }\n        } else {\n            None\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked(self, slice: *const [T]) -> *const T {\n        assert_unsafe_precondition!(\n            check_language_ub, // okay because of the `assume` below\n            \"slice::get_unchecked requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: the caller guarantees that `slice` is not dangling, so it\n        // cannot be longer than `isize::MAX`. They also guarantee that\n        // `self` is in bounds of `slice` so `self` cannot overflow an `isize`,\n        // so the call to `add` is safe.\n        unsafe {\n            // Use intrinsics::assume instead of hint::assert_unchecked so that we don't check the\n            // precondition of this function twice.\n            crate::intrinsics::assume(self < slice.len());\n            slice_get_unchecked(slice, self)\n        }\n    }\n\n    #[inline]\n    #[track_caller]\n    unsafe fn get_unchecked_mut(self, slice: *mut [T]) -> *mut T {\n        assert_unsafe_precondition!(\n            check_library_ub,\n            \"slice::get_unchecked_mut requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: see comments for `get_unchecked` above.\n        unsafe { slice_get_unchecked(slice, self) }\n    }\n\n    #[inline]\n    fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }\n\n    #[inline]\n    fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }\n}",
+      "sha256": "34ce2326db0b0ba2992539bfcd848743d70e76e532d9741521ba8f4972a491ef"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/convert/num.rs",
+      "file_sha256": "2c5ae5de6317835420415f88f3d0c631f4e0921a1032031532a7066658d9f6b5",
+      "start": 50,
+      "end": 130,
+      "text": "            concat!(\n                \"Converts a [`bool`] to [`\", stringify!($Int), \"`] losslessly.\\n\",\n                \"The resulting value is `0` for `false` and `1` for `true` values.\\n\",\n                \"\\n\",\n                \"# Examples\\n\",\n                \"\\n\",\n                \"```\\n\",\n                \"assert_eq!(\", stringify!($Int), \"::from(true), 1);\\n\",\n                \"assert_eq!(\", stringify!($Int), \"::from(false), 0);\\n\",\n                \"```\\n\",\n            ),\n        );\n    };\n    ($Small:ty => $Large:ty, #[$attr:meta] $(,)?) => {\n        impl_from!(\n            $Small => $Large,\n            #[$attr],\n            concat!(\"Converts [`\", stringify!($Small), \"`] to [`\", stringify!($Large), \"`] losslessly.\"),\n        );\n    };\n    ($Small:ty => $Large:ty, #[$attr:meta], $doc:expr $(,)?) => {\n        #[$attr]\n        #[rustc_const_unstable(feature = \"const_convert\", issue = \"143773\")]\n        impl const From<$Small> for $Large {\n            // Rustdocs on the impl block show a \"[+] show undocumented items\" toggle.\n            // Rustdocs on functions do not.\n            #[doc = $doc]\n            #[inline(always)]\n            fn from(small: $Small) -> Self {\n                small as Self\n            }\n        }\n    };\n}\n\n// boolean -> integer\nimpl_from!(bool => u8);\nimpl_from!(bool => u16);\nimpl_from!(bool => u32);\nimpl_from!(bool => u64);\nimpl_from!(bool => u128);\nimpl_from!(bool => usize);\nimpl_from!(bool => i8);\nimpl_from!(bool => i16);\nimpl_from!(bool => i32);\nimpl_from!(bool => i64);\nimpl_from!(bool => i128);\nimpl_from!(bool => isize);\n\n// unsigned integer -> unsigned integer\nimpl_from!(u8 => u16, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => u32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => u64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u8 => usize, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u16 => u32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u16 => u64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u16 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u32 => u64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u32 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u64 => u128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\n\n// signed integer -> signed integer\nimpl_from!(i8 => i16, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i8 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i8 => isize, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i16 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i32 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(i32 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(i64 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\n\n// unsigned integer -> signed integer\nimpl_from!(u8 => i16, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i64, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);\nimpl_from!(u8 => i128, #[stable(feature = \"i128\", since = \"1.26.0\")]);\nimpl_from!(u16 => i32, #[stable(feature = \"lossless_int_conv\", since = \"1.5.0\")]);",
+      "sha256": "1aad5ed9a51228bbee379e62181c4b590a788af59159d40fab2b02cbc11398c6"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "start": 2370,
+      "end": 2380,
+      "text": "        #[stable(feature = \"rust1\", since = \"1.0.0\")]\n        #[rustc_const_stable(feature = \"const_wrapping_math\", since = \"1.32.0\")]\n        #[must_use = \"this returns the result of the operation, \\\n                      without modifying the original\"]\n        #[inline(always)]\n        pub const fn wrapping_add(self, rhs: Self) -> Self {\n            intrinsics::wrapping_add(self, rhs)\n        }\n\n        /// Wrapping (modular) addition with a signed integer. Computes\n        /// `self + rhs`, wrapping around at the boundary of the type.",
+      "sha256": "68587a2c41e03469b079e180b9eb7a0d18c90bb3f233fc479fe5773a76c4ce81"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "start": 2408,
+      "end": 2418,
+      "text": "        #[rustc_const_stable(feature = \"const_wrapping_math\", since = \"1.32.0\")]\n        #[must_use = \"this returns the result of the operation, \\\n                      without modifying the original\"]\n        #[inline(always)]\n        pub const fn wrapping_sub(self, rhs: Self) -> Self {\n            intrinsics::wrapping_sub(self, rhs)\n        }\n\n        /// Wrapping (modular) subtraction with a signed integer. Computes\n        /// `self - rhs`, wrapping around at the boundary of the type.\n        ///",
+      "sha256": "50eebf58c7923ed3c9632aea8c8376ee6e5688767f4cc2de4663ccf8d95d61d1"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "start": 2447,
+      "end": 2457,
+      "text": "        #[rustc_const_stable(feature = \"const_wrapping_math\", since = \"1.32.0\")]\n        #[must_use = \"this returns the result of the operation, \\\n                      without modifying the original\"]\n        #[inline(always)]\n        pub const fn wrapping_mul(self, rhs: Self) -> Self {\n            intrinsics::wrapping_mul(self, rhs)\n        }\n\n        /// Wrapping (modular) division. Computes `self / rhs`.\n        ///\n        /// Wrapped division on unsigned types is just normal division. There's",
+      "sha256": "c2976ed911c9957036d11b82a83e8d9f3a617874357510963236508e917d2ee8"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "start": 2663,
+      "end": 2676,
+      "text": "        #[stable(feature = \"num_wrapping\", since = \"1.2.0\")]\n        #[rustc_const_stable(feature = \"const_wrapping_math\", since = \"1.32.0\")]\n        #[must_use = \"this returns the result of the operation, \\\n                      without modifying the original\"]\n        #[inline(always)]\n        pub const fn wrapping_shr(self, rhs: u32) -> Self {\n            // SAFETY: the masking by the bitsize of the type ensures that we do not shift\n            // out of bounds\n            unsafe {\n                self.unchecked_shr(rhs & (Self::BITS - 1))\n            }\n        }\n\n        /// Wrapping (modular) exponentiation. Computes `self.pow(exp)`,",
+      "sha256": "265b614099588aa0d5c5189ba81724f3b76b815ad3608cde6fe907803535ec0a"
+    }
+  ],
+  "standard_binding": {
+    "array_IndexMut": "unsize preserves length N and element order; forward to slice IndexMut",
+    "slice_IndexMut": "forward same index/self to SliceIndex<usize>",
+    "usize_SliceIndex": "intrinsic indexing; bound proved by PowersSafety.index_restore; unreachable panic does not execute its formatting/drop cone",
+    "From<u32> for u64": "lossless as cast; UScalar.cast source operation",
+    "usize_add": "release wrapping addition; no overflow by PowersSafety.increment",
+    "copy_drop": "WideExact, QM31, CM31, M31 are recursively Copy; no user Drop; no allocation inside powers or arithmetic; array copies/memory primitives retained at V370"
+  },
+  "control_difference": {
+    "native": "store before multiply",
+    "result_model": "restore continuation applied in Result expression after multiply",
+    "justification": "PowersSafety.mul_total/PowersTotal.complete: selected arithmetic never fails/diverges, every final restored value preserved; this is a Result transport, not erasure of actual store/crash observations"
+  },
+  "compiler_boundary": "V370, owner D381/D386 retained; source-to-machine preservation is not asserted or added to T",
+  "effects_boundary": "D348/diag, L1/L2/L3 and asynchronous crash/physical memory observation retained separately; no whole-observer law claimed",
+  "native_validation": "native-powers-result.json: deployed1.94.1 opt3 exact powers source, 32768 same-input pairs incl N29; finite validation only",
+  "constant_Lean_laws": [
+    "PV_RJ4IDB_NativeConstants.zero_source",
+    "PV_RJ4IDB_NativeConstants.one_source"
+  ],
+  "index_Lean_law": "PV_RJ4IDB_StdIndex.source_equal plus PowersSafety.index_restore and increment",
+  "removed": "op254 static caller source-body and primitive installation identification at the own-1 source/Result boundary",
+  "not_removed": "whole native RunJoin, compiler cohort, observation, side channels, endpoint assumptions",
+  "passed": true
+}

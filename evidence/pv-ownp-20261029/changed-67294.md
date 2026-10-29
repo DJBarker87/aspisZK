@@ -1,0 +1,1 @@
+67294 failed on rewriting the composed length/map function under an Aeneas sized-array carrier. Replaced that rewrite with a typed calc chain and explicit equality congruence for the array length. The old source is retained by its committed blob and receipt; it is never resubmitted unchanged. Failed sorryAx reports receive no credit.

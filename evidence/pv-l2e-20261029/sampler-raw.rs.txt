@@ -1,0 +1,77 @@
+const P:u32=2147483647;
+fn qm31_div_pass(mut rank: [u32; 8]) -> ([u32; 8], u32) {
+    let mut remainder = 0u64;
+    let mut j = 8usize;
+    while j > 0 {
+        j -= 1;
+        let dividend = (remainder << 32) | u64::from(rank[j]);
+        rank[j] = (dividend / u64::from(P)) as u32;
+        remainder = dividend % u64::from(P);
+    }
+    (rank, remainder as u32)
+}
+fn qm31_digits(block: &[u8; 32]) -> [u32; 4] {
+    let mut rank = [0u32; 8];
+    let mut i = 0usize;
+    while i < 8 {
+        let start = 4 * i;
+        rank[i] = u32::from_le_bytes([
+            block[start],
+            block[start + 1],
+            block[start + 2],
+            block[start + 3],
+        ]);
+        i += 1;
+    }
+    let mut digits = [0u32; 4];
+    let mut i = 0usize;
+    while i < 4 {
+        let (quotient, digit) = qm31_div_pass(rank);
+        rank = quotient;
+        digits[i] = digit;
+        i += 1;
+    }
+    digits
+}
+fn low_base_p_digits(block: &[u8; 32]) -> ([u32; 8], u32) {
+    let mut quotient = [0u32; 8];
+    let mut i = 0usize;
+    while i < 8 {
+        quotient[i] = (block[4*i] as u32) | ((block[4*i+1] as u32)<<8u32) | ((block[4*i+2] as u32)<<16u32) | ((block[4*i+3] as u32)<<24u32);
+        i += 1;
+    }
+    let mut digits = [0u32; 8];
+    let mut d = 0usize;
+    while d < 8 {
+        let mut remainder = 0u64;
+        let mut j = 8usize;
+        while j > 0 {
+            j -= 1;
+            let dividend = (remainder << 32u32) | u64::from(quotient[j]);
+            quotient[j] = (dividend / u64::from(P)) as u32;
+            remainder = dividend % u64::from(P);
+        }
+        digits[d] = remainder as u32;
+        d += 1;
+    }
+
+    // After eight divisions, the quotient is at most 256 and fits in u32.
+    let mut check = 1usize;
+    while check < 8 { debug_assert!(quotient[check] == 0); check += 1; }
+    debug_assert!(quotient[0] <= 256);
+    (digits, quotient[0])
+}
+fn add_small_base_p(digits: &mut [u32; 8], mut addend: u32) -> bool {
+    let mut i = 0usize;
+    while i < 8 {
+        let sum = u64::from(digits[i]) + u64::from(addend);
+        digits[i] = (sum % u64::from(P)) as u32;
+        addend = (sum / u64::from(P)) as u32;
+        i += 1;
+    }
+    debug_assert!(addend <= 1);
+    addend != 0
+}
+pub fn low(b:&[u8;32])->([u32;8],u32){low_base_p_digits(b)}
+pub fn qm(b:&[u8;32])->[u32;4]{qm31_digits(b)}
+pub fn add(d:&mut[u32;8],a:u32)->bool{add_small_base_p(d,a)}

@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_RangeFold.lean:70:31: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  f acc start
+in the target expression
+  (match
+      (some { start := start, stop := stop }.start,
+        { start := { start := start, stop := stop }.start + 1, stop := { start := start, stop := stop }.stop }) with
+    | (none, snd) => ok acc
+    | (some x, r') => do
+      let acc' ← f acc x
+      run f fuel r' acc') =
+    fail e
+
+S : Type
+f : S → ℕ → Result S
+fuel start stop : ℕ
+acc : S
+e : Error
+active : start < stop
+failed : f acc start = fail e
+⊢ (match
+      (some { start := start, stop := stop }.start,
+        { start := { start := start, stop := stop }.start + 1, stop := { start := start, stop := stop }.stop }) with
+    | (none, snd) => ok acc
+    | (some x, r') => do
+      let acc' ← f acc x
+      run f fuel r' acc') =
+    fail e
+'R1Z.PV_RDCD3_RangeFold.next_active' depends on axioms: [propext]
+'R1Z.PV_RDCD3_RangeFold.next_empty' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD3_RangeFold.increment_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD3_RangeFold.complete' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD3_RangeFold.complete_empty' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD3_RangeFold.zero_to' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD3_RangeFold.first_failure' depends on axioms: [propext, sorryAx]

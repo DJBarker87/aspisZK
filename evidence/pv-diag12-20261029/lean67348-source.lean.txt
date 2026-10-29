@@ -1,0 +1,79 @@
+import PV_DIAG12_Open
+namespace PV_DIAG12
+set_option autoImplicit false
+
+structure Buffer where
+ span : Span
+ capacity : Nat
+ panicked : Bool
+ deriving DecidableEq, Repr
+structure BRun (A : Type) where
+ execution : Exec A
+ buffer : Buffer
+ cursor : Cursor
+ deriving DecidableEq, Repr
+def pureB {A : Type} (a : A) (b : Buffer) (c : Cursor) : BRun A := ⟨pureE a,b,c⟩
+def bindB {A B : Type} (r : BRun A) (f : A → Buffer → Cursor → BRun B) : BRun B :=
+ match r.execution.result with
+ | .ok a => let s := f a r.buffer r.cursor
+            ⟨⟨r.execution.trace++s.execution.trace,s.execution.result⟩,s.buffer,s.cursor⟩
+ | .error e => ⟨⟨r.execution.trace,.error e⟩,r.buffer,r.cursor⟩
+ | .cut => ⟨⟨r.execution.trace,.cut⟩,r.buffer,r.cursor⟩
+def spare (b : Buffer) : Nat := b.capacity-b.span.bytes.length
+def appendBuffer (b : Buffer) (xs : Bytes) : Buffer :=
+ {b with span := {b.span with bytes := b.span.bytes++xs}}
+def flushLoop (w : Writer) (q : Span → Request) (sig : Signal) :
+ Nat → Buffer → Cursor → BRun Unit
+ | 0,b,c => ⟨⟨[],.cut⟩,b,c⟩
+ | fuel+1,b,c =>
+  if b.span.bytes.isEmpty then pureB () b c else
+  let r := w b.span (sig c.next (q b.span))
+  let c' : Cursor := ⟨c.next+1⟩
+  match r.result with
+  | .cut => ⟨⟨r.trace,.cut⟩,{b with panicked := true},c'⟩
+  | .error e =>
+   if e=4 then
+    let tail := flushLoop w q sig fuel {b with panicked := false} c'
+    ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.buffer,tail.cursor⟩
+   else ⟨⟨r.trace,.error e⟩,{b with panicked := false},c'⟩
+  | .ok n =>
+   if n=0 then ⟨⟨r.trace,.error (-1)⟩,{b with panicked := false},c'⟩ else
+   if n>b.span.bytes.length then ⟨⟨r.trace,.error (-2)⟩,{b with panicked := false},c'⟩ else
+   let tail := flushLoop w q sig fuel {b with span := advance b.span n,panicked := false} c'
+   ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.buffer,tail.cursor⟩
+/- flushLoop models the remaining slice of the live BufGuard. flushBuf rebases
+the resulting content after ordinary-return Vec::drain. Exact intermediate
+Vec memory, native unwind and pointer restoration still require association. -/
+theorem flush_cut (w : Writer) (q : Span → Request) (sig : Signal) (b : Buffer) (c : Cursor) :
+ flushLoop w q sig 0 b c=⟨⟨[],.cut⟩,b,c⟩ := rfl
+#print axioms flush_cut
+
+theorem bindB_error {A B : Type} (es : List Exchange) (e : Int) (b : Buffer) (c : Cursor)
+ (f : A → Buffer → Cursor → BRun B) :
+ bindB ⟨⟨es,.error e⟩,b,c⟩ f=⟨⟨es,.error e⟩,b,c⟩ := rfl
+#print axioms bindB_error
+
+theorem bindB_cut {A B : Type} (es : List Exchange) (b : Buffer) (c : Cursor)
+ (f : A → Buffer → Cursor → BRun B) :
+ bindB ⟨⟨es,.cut⟩,b,c⟩ f=⟨⟨es,.cut⟩,b,c⟩ := rfl
+#print axioms bindB_cut
+
+theorem bindB_pure {A B : Type} (a : A) (b : Buffer) (c : Cursor)
+ (f : A → Buffer → Cursor → BRun B) : bindB (pureB a b c) f=f a b c := by
+ simp only [bindB,pureB,pureE,List.nil_append]
+#print axioms bindB_pure
+
+theorem flush_empty (w : Writer) (q : Span → Request) (sig : Signal) (fuel : Nat)
+ (b : Buffer) (c : Cursor) (h : b.span.bytes.isEmpty=true) :
+ flushLoop w q sig (fuel+1) b c=pureB () b c := by
+ simp only [flushLoop,h,eq_self,ite_true]
+#print axioms flush_empty
+
+theorem flush_error (w : Writer) (q : Span → Request) (sig : Signal) (fuel : Nat)
+ (b : Buffer) (c : Cursor) (h : b.span.bytes.isEmpty=false)
+ (es : List Exchange) (e : Int) (hr : w b.span (sig c.next (q b.span))=⟨es,.error e⟩) (he : e≠4) :
+ flushLoop w q sig (fuel+1) b c=⟨⟨es,.error e⟩,{b with panicked := false},⟨c.next+1⟩⟩ := by
+ simp only [flushLoop,h,Bool.false_eq_true,ite_false,hr,if_neg he]
+#print axioms flush_error
+
+end PV_DIAG12

@@ -1,0 +1,314 @@
+{
+  "rows": [
+    {
+      "name": "FileDesc::write",
+      "snapshot": "source-sys_fd_unix.rs.txt",
+      "sha256": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+      "body_sha256": "39efd0195a1fefa691ceefff6ff6af8d937c8151976b696660ffc3b92e00bf32",
+      "start_line": 344,
+      "end_line": 353,
+      "steps": [
+        {
+          "rust": "libc::write(",
+          "lean": "fdWrite / one write ABI request"
+        },
+        {
+          "rust": "self.as_raw_fd()",
+          "lean": "Request.write fd"
+        },
+        {
+          "rust": "buf.as_ptr()",
+          "lean": "Span.base / offset"
+        },
+        {
+          "rust": "cmp::min(buf.len(), READ_LIMIT)",
+          "lean": "min len linuxReadLimit"
+        },
+        {
+          "rust": "cvt(unsafe",
+          "lean": "Reply returned/error and errno conversion"
+        },
+        {
+          "rust": "Ok(ret as usize)",
+          "lean": "Result.ok n"
+        }
+      ],
+      "residual": [
+        "libc write and errno TLS to exact kernel requests/results",
+        "valid pointer/range representation and foreign-contract returned count",
+        "READ_LIMIT Linux x86_64 cfg selection; machine code V370 / D381 / D386"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "sys::File::flush",
+      "snapshot": "source-sys_fs_unix.rs.txt",
+      "sha256": "bdd7dbe59f56df067504141fd6c04f46601f8eb7af39c672921eb2c7e4bc12df",
+      "body_sha256": "057d5f31af6f5c632729898639642220a1330c5a5b1c51dabe107b6d165d3cfd",
+      "start_line": 1744,
+      "end_line": 1746,
+      "steps": [
+        {
+          "rust": "Ok(())",
+          "lean": "fdFlush, no fsync"
+        }
+      ],
+      "residual": [
+        "fd/state source association; V370"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "sys::File::open_c",
+      "snapshot": "source-sys_fs_unix.rs.txt",
+      "sha256": "bdd7dbe59f56df067504141fd6c04f46601f8eb7af39c672921eb2c7e4bc12df",
+      "body_sha256": "c907774218a63d13efb4e4a5f605f82c965376e1f5a66754a5cdf75c16858c11",
+      "start_line": 1349,
+      "end_line": 1360,
+      "steps": [
+        {
+          "rust": "libc::O_CLOEXEC",
+          "lean": "openFlags 524288"
+        },
+        {
+          "rust": "opts.get_access_mode()?",
+          "lean": "access options"
+        },
+        {
+          "rust": "opts.get_creation_mode()?",
+          "lean": "creation options"
+        },
+        {
+          "rust": "opts.custom_flags as c_int & !libc::O_ACCMODE",
+          "lean": "custom u32 mask 4294967292"
+        },
+        {
+          "rust": "cvt_r(|| unsafe { open64",
+          "lean": "openRetry preserving EINTR request/result records"
+        },
+        {
+          "rust": "opts.mode as c_int",
+          "lean": "Request.open64 mode"
+        },
+        {
+          "rust": "FileDesc::from_raw_fd(fd)",
+          "lean": "valid fd constructor"
+        }
+      ],
+      "residual": [
+        "path/CStr conversion allocation and invalid NUL handling",
+        "io::Error::new validation allocation/drop/abort",
+        "libc open64 cancellation/TLS and actual openat requests",
+        "native constructor/frame association and V370"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "OwnedFd::drop",
+      "snapshot": "source-os_fd_owned.rs.txt",
+      "sha256": "7dfc471fedb90c0ac426845f2fe584216b5d1af27bc846d05fc5631d93f8319d",
+      "body_sha256": "e34188101100493107f07301efdc6f08b8cfc38edd55a1b1d7d531bd7adca113",
+      "start_line": 198,
+      "end_line": 221,
+      "steps": [
+        {
+          "rust": "debug_assert_fd_is_open",
+          "lean": "explicit precondition: UB checker disabled for fdDrop model"
+        },
+        {
+          "rust": "let _ = libc::close",
+          "lean": "fdDrop ignored response and no retry"
+        }
+      ],
+      "residual": [
+        "core::intrinsics::ub_checks specialization; if enabled fcntl + abort path",
+        "libc close cancellation/TLS / syscall expansion",
+        "native drop glue and unwind prefixes; V370"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "StdoutRaw::write/all",
+      "snapshot": "source-io_stdio.rs.txt",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "body_sha256": "823afc7bd13850c9ee37081fca083346898829a7084169eaac5d6b04bda90165",
+      "start_line": 139,
+      "end_line": 171,
+      "steps": [
+        {
+          "rust": "handle_ebadf(self.0.write(buf), || Ok(buf.len()))",
+          "lean": "stdWrite / success does not imply delivery"
+        },
+        {
+          "rust": "handle_ebadf(self.0.write_all(buf), || Ok(()))",
+          "lean": "stdWriteAll masks around full inner loop, once"
+        },
+        {
+          "rust": "handle_ebadf(self.0.flush(), || Ok(()))",
+          "lean": "fdFlush"
+        }
+      ],
+      "residual": [
+        "std/sys forwarding and raw error representation/drop; allocation for non-raw errors",
+        "all ABI-to-kernel residuals inherited"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "BufWriter::flush_buf",
+      "snapshot": "source-io_buffered_bufwriter.rs.txt",
+      "sha256": "743f9f2d6270bbdb623fd13d437efca531c48b120b7438ff25fc60bc484927f4",
+      "body_sha256": "49d44141dec843376ffcdfb658dbfeb3df3d4be2e4f3f25a4a0667ccefef8373",
+      "start_line": 195,
+      "end_line": 254,
+      "steps": [
+        {
+          "rust": "struct BufGuard",
+          "lean": "flushLoop remaining view; flushBuf normal rebase"
+        },
+        {
+          "rust": "self.buffer.drain(..self.written)",
+          "lean": "rebaseBuffer + remaining content, physical memory still open"
+        },
+        {
+          "rust": "self.panicked = true",
+          "lean": "in-flight flag"
+        },
+        {
+          "rust": "self.inner.write(guard.remaining())",
+          "lean": "stdWrite fd of remaining view"
+        },
+        {
+          "rust": "self.panicked = false",
+          "lean": "ordinary reply restores flag"
+        },
+        {
+          "rust": "Ok(0)",
+          "lean": "model WriteZero -1"
+        },
+        {
+          "rust": "Ok(n) => guard.consume(n)",
+          "lean": "advance symbolic span"
+        },
+        {
+          "rust": "Err(ref e) if e.is_interrupted()",
+          "lean": "same view/new signal cursor"
+        },
+        {
+          "rust": "Err(e) => return Err(e)",
+          "lean": "error + written prefix retained"
+        }
+      ],
+      "residual": [
+        "actual Vec drain/copy addresses and memory state, live BufGuard, unwinding and native abort",
+        "model -2 denotes violated Write contract, not native panic/hook",
+        "fuel cut is not native divergence; emitted prefix association open"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "BufWriter::drop",
+      "snapshot": "source-io_buffered_bufwriter.rs.txt",
+      "sha256": "743f9f2d6270bbdb623fd13d437efca531c48b120b7438ff25fc60bc484927f4",
+      "body_sha256": "56cb45f44da0da9b307b529072aa7ff3732cfba329a736f1c10916f7bfad3727",
+      "start_line": 673,
+      "end_line": 680,
+      "steps": [
+        {
+          "rust": "if !self.panicked",
+          "lean": "bufferDrop guard"
+        },
+        {
+          "rust": "let _r = self.flush_buf()",
+          "lean": "ignore returned error, preserve requests/results and cut"
+        }
+      ],
+      "residual": [
+        "inner/Vec destruction after body, native panic/OOM/unwind/drop glue"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "LineWriterShim::write_all",
+      "snapshot": "source-io_buffered_linewritershim.rs.txt",
+      "sha256": "fd927da2f7c40c2aac375fdf26363c768c51ac9c946645526f37010edc95cabd",
+      "body_sha256": "5c7099ade75593c155a1703ea2e2bc5cb3b2257c42b0721457f3d47dc24201dc",
+      "start_line": 268,
+      "end_line": 296,
+      "steps": [
+        {
+          "rust": "memchr::memrchr",
+          "lean": "lastNewline"
+        },
+        {
+          "rust": "self.flush_if_completed_line()?",
+          "lean": "flushCompleted"
+        },
+        {
+          "rust": "self.buffer.write_all(buf)",
+          "lean": "bufferedAll no-newline"
+        },
+        {
+          "rust": "buf.split_at(newline_idx + 1)",
+          "lean": "lineSpan and advance"
+        },
+        {
+          "rust": "self.buffered().is_empty()",
+          "lean": "empty/nonempty buffer case"
+        },
+        {
+          "rust": "self.inner_mut().write_all(lines)?",
+          "lean": "directAll"
+        },
+        {
+          "rust": "self.buffer.write_all(lines)?",
+          "lean": "bufferedAll"
+        },
+        {
+          "rust": "self.buffer.flush_buf()?",
+          "lean": "flushBuf"
+        },
+        {
+          "rust": "self.buffer.write_all(tail)",
+          "lean": "bufferedAll tail"
+        }
+      ],
+      "residual": [
+        "native scan/slice/store/borrow and allocation/midcall state association",
+        "capacity/pointer/drain association and inherited syscall residuals"
+      ],
+      "complete_syscall_binding": false
+    },
+    {
+      "name": "stdout lock/write_fmt",
+      "snapshot": "source-io_stdio.rs.txt",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "body_sha256": "88e93f9a1ddc446817f079343d74d5909957aabb2f8e34f3a956ad956c055301",
+      "start_line": 813,
+      "end_line": 845,
+      "steps": [
+        {
+          "rust": "self.lock().write_fmt(args)",
+          "lean": "whole fmt under one lock"
+        }
+      ],
+      "residual": [
+        "OnceLock and allocation, ReentrantLock owner/TLS/thread_id/futex contention/overflow",
+        "RefCell borrow and guard drop, native callbacks/reentrancy, capture",
+        "fmt specialization and JSON Value Display streaming"
+      ],
+      "complete_syscall_binding": false
+    }
+  ],
+  "source_inputs_checked": 551,
+  "toolchain": "1.94.1",
+  "target": "x86_64-unknown-linux-gnu",
+  "profile": "release",
+  "features": [
+    "r1p-check",
+    "aspis-r1-cost-probe/ct-host-prover"
+  ],
+  "compiler_boundary": "V370 / D381 / D386 retained",
+  "evidence_class": "own-1 source-body associations for listed control; explicitly incomplete transitive syscall binding",
+  "endpoint_premises_removed": 0
+}

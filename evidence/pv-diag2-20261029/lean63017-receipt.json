@@ -1,0 +1,61 @@
+{
+  "target": [
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ApiSink.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ApiSink.lean",
+    "7000"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/lean63017-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ApiSink.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ApiSink.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 1.9375889301300049,
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "53d75aee4f",
+  "runner_sha256": "0ff8eed44d639dd21594be743a2758bace5be1c0508d82ad84781a78afd17cdc",
+  "dependency_objects": {
+    "PV_DIAG2_ClientRetry": {
+      "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_ClientRetry.olean": "a80cd8fc26b7d52ffd9ab97d9690a629ff8c671aae1fe727eb76511c7bc0231c"
+    },
+    "PV_DIAG2_Exit": {
+      "/home/dombarker/project-offloads/codex-pv-diag2-20261029/objects/PV_DIAG2_Exit.olean": "29c77a0957f59946efe43a39c3ffb9dc63e801f1a95826fa0a955975f801536d"
+    }
+  },
+  "module": "PV_DIAG2_ApiSink",
+  "attempt": 63017,
+  "source_sha256": "9d1871575ce1939b926e2e7c12082125eb2345c220b66197e9ba841088f2e9e1",
+  "dependency_fingerprint": "1de0d6b8101731316bc22be922ec4799b1862ef572067fabb71e723234f876db",
+  "environment_sha256": "119a5e58d75b69116d0b29adf10a043c62bb43cbcc6eb0c0fb65df47b3f80532",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ApiSink.lean:74:12: error: unsolved goals\ncase ok.stop.Rejected.false\nS P : Type\nc : Capture\nnext : S\nh : RejectFree (ok (Step.stop AspisR1SimControl21.verifier.Error.Rejected, next))\nne : AspisR1SimControl21.verifier.Error.Rejected \u2260 AspisR1SimControl21.verifier.Error.Rejected\n\u22a2 False\n\ncase ok.stop.Rejected.true\nS P : Type\nc : Capture\nnext : S\nh : RejectFree (ok (Step.stop AspisR1SimControl21.verifier.Error.Rejected, next))\nne : AspisR1SimControl21.verifier.Error.Rejected \u2260 AspisR1SimControl21.verifier.Error.Rejected\n\u22a2 False\n/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ApiSink.lean:76:86: warning: This simp argument is unused:\n  ne\n\nHint: Omit it from the simp argument list.\n  simp [directReportSuffix, \u0332reportError, \u0332exportError,\u0335n\u0335e\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'PV_DIAG2.reject_free_api' depends on axioms: [propext]\n'PV_DIAG2.client_observed_api_not_rejected' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG2.finish_splits_prefix' depends on axioms: [propext]\n'PV_DIAG2.rejected_not_in_report_suffix' depends on axioms: [propext, sorryAx]\n",
+  "object_sha256": null
+}

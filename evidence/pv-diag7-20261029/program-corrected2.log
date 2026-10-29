@@ -1,0 +1,24 @@
+lean65758 1 'PV_DIAG7.answer_correct' depends on axioms: [propext]
+'PV_DIAG7.run_done' depends on axioms: [propext]
+'PV_DIAG7.run_returned' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-diag7-20261029/sources/PV_DIAG7_Program.lean:39:90: error: unsolved goals
+signal : Signal
+q : Request
+next : Reply → Program
+s : State
+⊢ prepend (effect signal q s).events (run signal (next (answer signal q s)) (effect signal q s).state) =
+    match Exit.value (answer signal q s) with
+    | Exit.value a =>
+      prepend (effect signal q s).events
+        ((fun r =>
+            match next r with
+            | Program.done r => PV_DIAG3.pure r
+            | Program.returned bs next => fun s => prepend [Event.returned bs] (run signal next s)
+            | Program.call q next => fun s =>
+              prepend (effect signal q s).events (run signal (next (answer signal q s)) (effect signal q s).state))
+          a (effect signal q s).state)
+    | Exit.panic p => { events := (effect signal q s).events, state := (effect signal q s).state, exit := Exit.panic p }
+    | Exit.abort c => { events := (effect signal q s).events, state := (effect signal q s).state, exit := Exit.abort c }
+    | Exit.diverge => { events := (effect signal q s).events, state := (effect signal q s).state, exit := Exit.diverge }
+'PV_DIAG7.run_call_is_bind' depends on axioms: [propext, sorryAx, Quot.sound]
+

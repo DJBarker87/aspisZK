@@ -1,0 +1,112 @@
+import PV_DIAG6_Native
+/-! Lossless-prefix obligations for the EXISTING PV_RJ4IDB.diagTrace decoder.
+No decoder is implemented here. `recover` is its existing errorsStderr3
+projection; its universal law is supplied by PV_RJ4IDB.diag_events after merge.
+A family quantifies over every finite prefix of an emitting divergence. -/
+set_option autoImplicit false
+namespace PV_DIAG6
+open PV_DIAG3
+variable {S A B : Type}
+def EventPrefix (before after : List Event) : Prop := ∃ tail, after = before ++ tail
+structure PrefixFamily (S A : Type) where
+ sample : Nat → Execution S A
+ coherent : ∀ i j, i ≤ j → EventPrefix (sample i).events (sample j).events
+theorem event_prefix_refl (es : List Event) : EventPrefix es es := ⟨[],(List.append_nil es).symm⟩
+#print axioms event_prefix_refl
+theorem event_prefix_trans (a b c : List Event) (hab : EventPrefix a b)
+ (hbc : EventPrefix b c) : EventPrefix a c := by
+ rcases hab with ⟨xs,rfl⟩
+ rcases hbc with ⟨ys,rfl⟩
+ exact ⟨xs++ys,List.append_assoc a xs ys⟩
+#print axioms event_prefix_trans
+theorem event_prefix_prepend (es : List Event) (x : Execution S A) :
+ EventPrefix es (prepend es x).events := ⟨x.events,rfl⟩
+#print axioms event_prefix_prepend
+theorem event_prefix_member (a b : List Event) (h : EventPrefix a b)
+ (e : Event) (he : e ∈ a) : e ∈ b := by
+ rcases h with ⟨tail,rfl⟩
+ exact List.mem_append_left tail he
+#print axioms event_prefix_member
+theorem event_prefix_length (a b : List Event) (h : EventPrefix a b) :
+ a.length ≤ b.length := by
+ rcases h with ⟨tail,rfl⟩
+ rw [List.length_append]
+ exact Nat.le_add_right _ _
+#print axioms event_prefix_length
+theorem recover_complete (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (x : Execution S A) :
+ recover x = x.events := lossless x
+#print axioms recover_complete
+theorem recover_prepend (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (es : List Event) (x : Execution S A) :
+ recover (prepend es x) = es ++ recover x := by rw [lossless,lossless]; rfl
+#print axioms recover_prepend
+theorem recover_terminal_independent (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (es : List Event) (s t : S) (a b : Exit A) :
+ recover ⟨es,s,a⟩ = recover ⟨es,t,b⟩ := by rw [lossless,lossless]
+#print axioms recover_terminal_independent
+theorem recover_bind_abnormal (recover : Execution S B → List Event)
+ (lossless : ∀ x, recover x = x.events) (x : Execution S A) (f : A → Op S B)
+ (hn : ∀ a, x.exit ≠ .value a) : recover (PV_DIAG3.bind x f) = x.events := by
+ rw [lossless]
+ cases x with
+ | mk es s out =>
+   cases out with
+   | value a => exact False.elim (hn a rfl)
+   | panic p => rfl
+   | abort c => rfl
+   | diverge => rfl
+#print axioms recover_bind_abnormal
+theorem recover_family_sample (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (n : Nat) :
+ recover (f.sample n) = (f.sample n).events := lossless _
+#print axioms recover_family_sample
+theorem recover_family_monotone (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A)
+ (i j : Nat) (h : i ≤ j) : EventPrefix (recover (f.sample i)) (recover (f.sample j)) := by
+ rw [lossless,lossless]
+ exact f.coherent i j h
+#print axioms recover_family_monotone
+theorem recover_every_emitted_event (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (i j : Nat)
+ (h : i ≤ j) (e : Event) (he : e ∈ (f.sample i).events) :
+ e ∈ recover (f.sample j) := by
+ rw [lossless]
+ exact event_prefix_member _ _ (f.coherent i j h) e he
+#print axioms recover_every_emitted_event
+theorem recover_whole_prefix (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (i j : Nat)
+ (h : i ≤ j) : ∃ tail, recover (f.sample j) = (f.sample i).events ++ tail := by
+ rw [lossless]
+ exact f.coherent i j h
+#print axioms recover_whole_prefix
+theorem recover_prefix_order (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (x : Execution S A)
+ (before middle after : List Event) (h : x.events = before++middle++after) :
+ recover x = before++middle++after := (lossless x).trans h
+#print axioms recover_prefix_order
+theorem recover_all_prefixes_iff (recover : Execution S A → List Event)
+ (lossless : ∀ x, recover x = x.events) (f g : PrefixFamily S A) :
+ (∀ n, recover (f.sample n) = recover (g.sample n)) ↔
+ (∀ n, (f.sample n).events = (g.sample n).events) := by
+ constructor <;> intro h n
+ · rw [← lossless,← lossless]; exact h n
+ · rw [lossless,lossless]; exact h n
+#print axioms recover_all_prefixes_iff
+theorem recover_scope_drop_panic
+ (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
+ (a : A) (s t u : S) (bs ds : List Event) (p : Panic)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.panic p⟩) :
+ recover (scope body drop dp s) = bs++ds := by
+ rw [normal_drop_panics a s t u bs ds p body drop dp hb hd,lossless]
+#print axioms recover_scope_drop_panic
+theorem recover_scope_drop_abort
+ (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
+ (a : A) (s t u : S) (bs ds : List Event) (p : Crash)
+ (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)
+ (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,.abort p⟩) :
+ recover (scope body drop dp s) = bs++ds := by
+ rw [normal_drop_aborts a s t u bs ds p body drop dp hb hd,lossless]
+#print axioms recover_scope_drop_abort
+end PV_DIAG6
