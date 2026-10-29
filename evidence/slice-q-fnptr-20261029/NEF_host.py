@@ -11,7 +11,9 @@ def ssh(code,submitted=False):
   if r.returncode!=255 or submitted:return r
   if trial<10:print('transport255; waiting60s',flush=True);time.sleep(60)
  raise SystemExit('STOP persistent transport255')
-def py(code,submitted=False):return ssh('python3 -c '+shlex.quote(code),submitted)
+def py(code,submitted=False):
+ packed=base64.b64encode(zlib.compress(code.encode())).decode()
+ return ssh('python3 -c '+shlex.quote('import base64,zlib;exec(zlib.decompress(base64.b64decode('+repr(packed)+')))'),submitted)
 def admit(a):
  for retry in range(11):
   r=py(f'''from pathlib import Path

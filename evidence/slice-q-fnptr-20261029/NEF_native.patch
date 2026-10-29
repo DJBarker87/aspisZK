@@ -1,0 +1,37 @@
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,8 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NBZ_native;
++#[cfg(kani)]
++mod NEF_native;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NBZ_native.rs
+@@ -0,0 +1,17 @@
++use super::*;
++static mut NBZ_Q:usize=0;
++static mut NBZ_MARK_CALLS:usize=0;
++fn NBZ_mark_none(obs:Observer,phase:Phase) {
++ assert!(obs.is_none());
++ match phase {Phase::Query(i)=>unsafe{assert_eq!(i,NBZ_Q);},_=>panic!("wrong phase")}
++ unsafe{NBZ_MARK_CALLS+=1;}
++}
++#[kani::proof]
++
++#[kani::unwind(4096)]
++fn NBZ_return_carriers() {
++ let i:usize=kani::any();kani::assume(i<10);
++ unsafe{NBZ_Q=i;}
++ NBZ_mark_none(None,Phase::Query(i));
++ unsafe{assert_eq!(NBZ_MARK_CALLS,1);}
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEF_native.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof]
++fn NEF_none_control() { assert!(None::<fn(Phase)>.is_none()); }
