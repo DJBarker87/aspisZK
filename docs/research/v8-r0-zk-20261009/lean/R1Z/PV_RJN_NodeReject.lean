@@ -1,3 +1,5 @@
+import Mathlib.Data.List.Sort
+import Mathlib.Data.List.OfFn
 import R1Z.PV_RunJoin_QueryInvalidIndex56
 import R1Z.PV_RunJoin_NodeSlot41
 set_option autoImplicit false
@@ -9,11 +11,20 @@ abbrev badQueries := PV_RunJoin_QueryInvalidIndex56.badQueries
 def badIndex : alloc.vec.Vec U32 := ⟨[262144#u32],by simp; scalar_tac⟩
 def badSlice : Slice U32 := alloc.vec.Vec.deref badIndex
 
-theorem indices : PV_RunJoin_PublishSkeleton54.indices badQueries 0 10 false=[262144] := by rfl
+theorem erase_ten : (List.replicate 10 262144).eraseDups=[262144] := by decide
+
+theorem indices : PV_RunJoin_PublishSkeleton54.indices badQueries 0 10 false=[262144] := by
+  unfold PV_RunJoin_PublishSkeleton54.indices badQueries PV_RunJoin_QueryInvalidIndex56.badQueries
+    ProverCommitArray49.array
+  rw [List.ofFn_const]
+  simp only [List.drop_zero,List.take_replicate,List.map_replicate,Bool.false_eq_true,if_false]
+  change ((List.replicate 10 262144).mergeSort (· ≤ ·)).eraseDups=[262144]
+  rw [List.mergeSort_eq_self (List.pairwise_replicate.mpr (Or.inr (Nat.le_refl _)))]
+  exact erase_ten
 
 theorem unique (idx : alloc.vec.Vec U32) (h : idx.val.map UScalar.val=[262144]) : idx=badIndex := by
   apply Subtype.ext
-  apply List.map_injective (f := fun x : U32 => x.val) (fun a b h => UScalar.eq_of_val_eq h)
+  apply (List.map_inj_right (f := fun x : U32 => x.val) (fun a b h => UScalar.eq_of_val_eq h)).mp
   exact h
 
 variable [ExternalTypes] [ExternalFuns]
@@ -58,7 +69,7 @@ theorem first_slot (laws : PV_RJN_Producer_NodePrimitives) (out : alloc.vec.Vec 
   have he := unique idx hv
   subst idx
   simp only [prover.append_node_slot,show (0#usize)=(0#usize) from rfl,if_true,bind_tc_ok,
-    show ¬(0#usize)=(2#usize) from by decide,hidx,host_commitment.Commitment.multiproof,
+    show ¬(0#usize)=(2#usize) from by decide,decide_false,show (0#usize).val=0 from rfl,hidx,host_commitment.Commitment.multiproof,
     tree laws,laws.2.2.2.2,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rfl
 
@@ -71,6 +82,7 @@ theorem source (laws : PV_RJN_Producer_NodePrimitives) (out : alloc.vec.Vec U8)
   simp only [prover.append_node_slots,first_slot laws out cc1 cc2 t idx hidx hv,
     core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rfl
+#print axioms erase_ten
 #print axioms indices
 #print axioms unique
 #print axioms body
