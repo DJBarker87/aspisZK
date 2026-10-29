@@ -13,7 +13,6 @@ theorem body (rank : Array U32 8#usize) (rem : U64) (j : Usize) :
   · simp only [if_pos go,PV_RunJoin_SamplerChecked54.sub_one j go,
       PV_RunJoin_SamplerChecked54.shift32,lift,bind_tc_ok]
     simp only [AspisR1PublicPreparation.aspis_core.field.P,PV_RunJoin_CircleRawTower52.field.P,PV_RunJoin_CircleRawScalar52.field.P]
-    rfl
   · simp only [if_neg go]
 
 theorem loop (rank : Array U32 8#usize) (rem : U64) (j : Usize) :
