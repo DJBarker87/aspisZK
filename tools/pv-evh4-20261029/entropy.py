@@ -16,6 +16,7 @@ noncomputable section
 namespace PV_EVH_Entropy
 open Aeneas Aeneas.Std ProverRwFull ControlFlow
 open PV_EVH_World
+open PV_RJ4IDB (NativeEvent)
 variable [ExternalTypes] [ExternalFuns]
 
 abbrev FillReply := Result ((core.result.Result Unit getrandom.error.Error) × Slice U8)
@@ -26,9 +27,13 @@ def ascii (s : String) : PV_RJ4IDB.Bytes :=
 
 def draw (answers : EntropyAnswers) (buffer : Slice U8) : M
     ((core.result.Result Unit getrandom.error.Error) × Slice U8) := fun w =>
-  ⟨answers w.entropyCursor buffer,{w with entropyCursor := w.entropyCursor + 1},
-    [.side (ascii "entropy-request") (ascii (toString w.entropyCursor)),
-     .side (ascii "entropy-delivery") (ascii (toString w.entropyCursor))]⟩
+  let r := answers w.entropyCursor buffer
+  let next := {w with entropyCursor := w.entropyCursor + 1}
+  let request := NativeEvent.side (ascii "entropy-request") (ascii (toString w.entropyCursor))
+  match r with
+  | .div => ⟨.div,next,[request]⟩
+  | _ => ⟨r,next,[request,
+      .side (ascii "entropy-delivery") (ascii (toString w.entropyCursor))]⟩
 
 instance : MonadLift Result M where
   monadLift := PV_EVH_World.lift
@@ -36,7 +41,10 @@ instance : MonadLift Result M where
 theorem draw_fixed (answers : EntropyAnswers)
     (h : ∀ n s, answers n s = getrandom.fill s) (buffer : Slice U8) :
     FixedView (draw answers buffer) (getrandom.fill buffer) :=
-  fun w => h w.entropyCursor buffer
+  by
+    intro w
+    cases hr : answers w.entropyCursor buffer <;>
+      simpa only [draw,hr] using h w.entropyCursor buffer
 
 /- Exact emitted body, only monad lift / entropy primitive interpretation.
 Every other helper remains a fixed Result call: whole-prover event credit is
@@ -48,3 +56,40 @@ end PV_EVH_Entropy
 '''
 Path('lean/PV_EVH_Entropy.lean').write_text(header+body+footer)
 Path('evidence/pv-evh4-20261029/entropy-generation.json').write_text(json.dumps(dict(source=p,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(s[start:end].encode()).hexdigest(),changes=['Result return interpreted as M','one getrandom.fill replaced by draw','ok terminals interpreted as pure','other Result actions lifted by MonadLift'],source_body=s[start:end],status='single-body reinterpretation; other helpers still Result-only'),indent=2)+'\n')
+# Reuse only the reviewed syntax parser definitions, without executing another
+# job's generator or touching its output/evidence directories.
+import ast
+parser=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text())
+selected=[n for n in parser.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse']]
+ns={};exec(compile(ast.Module(body=selected,type_ignores=[]),'<reviewed-parser>','exec'),ns)
+node=ns['parse'](ns['normalize'](s[start:end].split(':= do\n',1)[1]))
+def proof(x,n=2):
+ pad=' '*n
+ if x.kind=='let':return pad+'dsimp only\n'+proof(x.next,n)
+ if x.kind=='bind':
+  var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
+  return pad+'dsimp only\n'+pad+'apply fixed_bind\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
+ if x.kind=='if':
+  return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
+ if x.kind=='match':
+  out=pad+'dsimp only\n'+pad+'cases '+x.discr+' with\n'
+  for j,(pattern,child) in enumerate(x.branches):
+   bits=pattern.split();ctor=bits[0].split('.')[-1];args=[('unused'+str(j)) if b=='_' else b for b in bits[1:]]
+   out+=pad+'| '+ctor+(' '+' '.join(args) if args else '')+' =>\n'+proof(child,n+2)+'\n'
+  return out.rstrip()
+ if x.kind=='pure':return pad+'exact fixed_lift _'
+ return pad+('exact draw_fixed answers h _' if x.expr.split()[0]=='getrandom.fill' else 'exact fixed_lift _')
+theorem='''
+/-- Complete Result equality for this actual emitted iteration, on the fixed
+answer view. This restriction is deliberately not imposed on the world loop. -/
+theorem entropyBody_fixed (answers : EntropyAnswers)
+    (h : ∀ n s, answers n s = getrandom.fill s)
+    (nonce : Array U8 32#usize) (limit retry : Usize) :
+    FixedView (entropyBody answers nonce limit retry)
+      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry) := by
+  unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
+'''+proof(node)+'''
+
+#print axioms entropyBody_fixed
+'''
+p=Path('lean/PV_EVH_Entropy.lean');p.write_text(p.read_text().replace(footer,theorem+footer))

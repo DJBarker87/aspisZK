@@ -4,6 +4,7 @@ noncomputable section
 namespace PV_EVH_Entropy
 open Aeneas Aeneas.Std ProverRwFull ControlFlow
 open PV_EVH_World
+open PV_RJ4IDB (NativeEvent)
 variable [ExternalTypes] [ExternalFuns]
 
 abbrev FillReply := Result ((core.result.Result Unit getrandom.error.Error) × Slice U8)
@@ -14,9 +15,13 @@ def ascii (s : String) : PV_RJ4IDB.Bytes :=
 
 def draw (answers : EntropyAnswers) (buffer : Slice U8) : M
     ((core.result.Result Unit getrandom.error.Error) × Slice U8) := fun w =>
-  ⟨answers w.entropyCursor buffer,{w with entropyCursor := w.entropyCursor + 1},
-    [.side (ascii "entropy-request") (ascii (toString w.entropyCursor)),
-     .side (ascii "entropy-delivery") (ascii (toString w.entropyCursor))]⟩
+  let r := answers w.entropyCursor buffer
+  let next := {w with entropyCursor := w.entropyCursor + 1}
+  let request := NativeEvent.side (ascii "entropy-request") (ascii (toString w.entropyCursor))
+  match r with
+  | .div => ⟨.div,next,[request]⟩
+  | _ => ⟨r,next,[request,
+      .side (ascii "entropy-delivery") (ascii (toString w.entropyCursor))]⟩
 
 instance : MonadLift Result M where
   monadLift := PV_EVH_World.lift
@@ -24,7 +29,10 @@ instance : MonadLift Result M where
 theorem draw_fixed (answers : EntropyAnswers)
     (h : ∀ n s, answers n s = getrandom.fill s) (buffer : Slice U8) :
     FixedView (draw answers buffer) (getrandom.fill buffer) :=
-  fun w => h w.entropyCursor buffer
+  by
+    intro w
+    cases hr : answers w.entropyCursor buffer <;>
+      simpa only [draw,hr] using h w.entropyCursor buffer
 
 /- Exact emitted body, only monad lift / entropy primitive interpretation.
 Every other helper remains a fixed Result call: whole-prover event credit is
@@ -124,6 +132,153 @@ def entropyBody (answers : EntropyAnswers)
   else
     pure (done (core.result.Result.Err
       aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock))
+
+/-- Complete Result equality for this actual emitted iteration, on the fixed
+answer view. This restriction is deliberately not imposed on the world loop. -/
+theorem entropyBody_fixed (answers : EntropyAnswers)
+    (h : ∀ n s, answers n s = getrandom.fill s)
+    (nonce : Array U8 32#usize) (limit retry : Usize) :
+    FixedView (entropyBody answers nonce limit retry)
+      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry) := by
+  unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
+  by_cases condition : retry < limit
+  · simp only [condition,if_true]
+    dsimp only
+    dsimp only
+    apply fixed_bind
+    ·
+      exact fixed_lift _
+    · intro bytes
+      dsimp only
+      apply fixed_bind
+      ·
+        exact fixed_lift _
+      · rintro ⟨s, as_mut_back⟩
+        dsimp only
+        apply fixed_bind
+        ·
+          exact draw_fixed answers h _
+        · rintro ⟨r, s1⟩
+          dsimp only
+          apply fixed_bind
+          ·
+            exact fixed_lift _
+          · intro cf
+            dsimp only
+            cases cf with
+            | Continue unused0 =>
+              dsimp only
+              dsimp only
+              dsimp only
+              apply fixed_bind
+              ·
+                exact fixed_lift _
+              · intro field_mask_entropy
+                dsimp only
+                dsimp only
+                apply fixed_bind
+                ·
+                  exact fixed_lift _
+                · intro leaf_salt_seed
+                  dsimp only
+                  apply fixed_bind
+                  ·
+                    exact fixed_lift _
+                  · rintro ⟨a3, deref_mut_back⟩
+                    dsimp only
+                    apply fixed_bind
+                    ·
+                      exact fixed_lift _
+                    · rintro ⟨s2, to_slice_mut_back⟩
+                      dsimp only
+                      apply fixed_bind
+                      ·
+                        exact fixed_lift _
+                      · intro a4
+                        dsimp only
+                        apply fixed_bind
+                        ·
+                          exact fixed_lift _
+                        · intro s3
+                          dsimp only
+                          apply fixed_bind
+                          ·
+                            exact fixed_lift _
+                          · intro s4
+                            dsimp only
+                            dsimp only
+                            dsimp only
+                            apply fixed_bind
+                            ·
+                              exact fixed_lift _
+                            · rintro ⟨a6, deref_mut_back1⟩
+                              dsimp only
+                              apply fixed_bind
+                              ·
+                                exact fixed_lift _
+                              · rintro ⟨s5, to_slice_mut_back1⟩
+                                dsimp only
+                                apply fixed_bind
+                                ·
+                                  exact fixed_lift _
+                                · intro s6
+                                  dsimp only
+                                  apply fixed_bind
+                                  ·
+                                    exact fixed_lift _
+                                  · intro s7
+                                    dsimp only
+                                    dsimp only
+                                    dsimp only
+                                    apply fixed_bind
+                                    ·
+                                      exact fixed_lift _
+                                    · intro a8
+                                      dsimp only
+                                      apply fixed_bind
+                                      ·
+                                        exact fixed_lift _
+                                      · intro b
+                                        by_cases condition : b
+                                        · simp only [condition,if_true]
+                                          dsimp only
+                                          apply fixed_bind
+                                          ·
+                                            exact fixed_lift _
+                                          · intro a9
+                                            dsimp only
+                                            apply fixed_bind
+                                            ·
+                                              exact fixed_lift _
+                                            · intro b1
+                                              by_cases condition : b1
+                                              · simp only [condition,if_true]
+                                                exact fixed_lift _
+                                              · simp only [condition,if_false]
+                                                dsimp only
+                                                apply fixed_bind
+                                                ·
+                                                  exact fixed_lift _
+                                                · intro retry1
+                                                  exact fixed_lift _
+                                        · simp only [condition,if_false]
+                                          dsimp only
+                                          apply fixed_bind
+                                          ·
+                                            exact fixed_lift _
+                                          · intro retry1
+                                            exact fixed_lift _
+            | Break residual =>
+              dsimp only
+              apply fixed_bind
+              ·
+                exact fixed_lift _
+              · intro r1
+                exact fixed_lift _
+  · simp only [condition,if_false]
+    exact fixed_lift _
+
+#print axioms entropyBody_fixed
 
 #print axioms draw_fixed
 end PV_EVH_Entropy
