@@ -31,6 +31,14 @@ def Trace (variant : transport.Variant) (p : prover.Publication) (proof : V) : P
     compact.OFF_NODES=ok nodes ∧ alloc.vec.Vec.len h9=nodes ∧
     prover.append_node_slots h9 cc1 cc2 p.tree p.queries=ok (.Ok proof) ∧ alloc.vec.Vec.len proof=size
 
+theorem unwrap_success {T : Type} (o : Option T) (x : T)
+    (h : core.option.Option.unwrap o=ok x) : o=some x := by
+  cases o with
+  | none => cases h
+  | some a =>
+    have he : a=x := Result.ok.inj h
+    exact congrArg some he
+
 theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V)
     (h : prover.publish_compact variant p=ok (.Ok proof)) : Trace variant p proof := by
   unfold prover.publish_compact at h
@@ -69,31 +77,28 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
       by_cases hopenlen : alloc.vec.Vec.len h8=openings
       · simp only [massert,hopenlen,if_true,bind_tc_ok] at h
         dsimp only [core.option.Option.take] at h
-        cases hc1 : p.backend.c1 with
-        | none => simp only [hc1,core.option.Option.take,core.option.Option.unwrap,ofOption,bind_tc_fail] at h; cases h
-        | some cc1 =>
-          simp only [hc1,core.option.Option.take,core.option.Option.unwrap,ofOption,bind_tc_ok] at h
-          cases hc2 : p.backend.c2 with
-          | none => simp only [hc2,core.option.Option.take,core.option.Option.unwrap,ofOption,bind_tc_fail] at h; cases h
-          | some cc2 =>
-            simp only [hc2,core.option.Option.take,core.option.Option.unwrap,ofOption,bind_tc_ok] at h
-            obtain ⟨h9,hh9,h⟩ := bind_eq_ok h
-            obtain ⟨nodes,hnodes,h⟩ := bind_eq_ok h
-            by_cases hnodelen : alloc.vec.Vec.len h9=nodes
-            · simp only [massert,hnodelen,if_true,bind_tc_ok] at h
-              obtain ⟨r,hn,h⟩ := bind_eq_ok h
-              cases r with
-              | Err e => cases h
-              | Ok val =>
-                simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
-                by_cases hlen : alloc.vec.Vec.len val=size
-                · simp only [massert,hlen,if_true,bind_tc_ok] at h
-                  cases h
-                  exact ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,semanticResult,valuesResult,
-                    hsize,hmagic,htag,hh0,hh1,hsem,hclaim,hib,hh4,hh5,hh6,hh7,hh8,hopen,hopenlen,
-                    hc1,hc2,hh9,hnodes,hnodelen,hn,hlen⟩
-                · simp only [massert,hlen,if_false] at h; cases h
-            · simp only [massert,hnodelen,if_false] at h; cases h
+        obtain ⟨cc1,hc1,h⟩ := bind_eq_ok h
+        obtain ⟨cc2,hc2,h⟩ := bind_eq_ok h
+        have hc1' : p.backend.c1=some cc1 := unwrap_success _ _ hc1
+        have hc2' : p.backend.c2=some cc2 := unwrap_success _ _ hc2
+        obtain ⟨h9,hh9,h⟩ := bind_eq_ok h
+        obtain ⟨nodes,hnodes,h⟩ := bind_eq_ok h
+        by_cases hnodelen : alloc.vec.Vec.len h9=nodes
+        · simp only [massert,hnodelen,if_true,bind_tc_ok] at h
+          obtain ⟨r,hn,h⟩ := bind_eq_ok h
+          cases r with
+          | Err e => cases h
+          | Ok val =>
+            simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+            by_cases hlen : alloc.vec.Vec.len val=size
+            · simp only [massert,hlen,if_true,bind_tc_ok] at h
+              cases h
+              exact ⟨size,openings,nodes,magic,tag,h0,h1,h2,h3,h4,h5,h6,h7,h8,h9,ib,cc1,cc2,semanticResult,valuesResult,
+                hsize,hmagic,htag,hh0,hh1,hsem,hclaim,hib,hh4,hh5,hh6,hh7,hh8,hopen,hopenlen,
+                hc1',hc2',hh9,hnodes,hnodelen,hn,hlen⟩
+            · simp only [massert,hlen,if_false] at h; cases h
+        · simp only [massert,hnodelen,if_false] at h; cases h
       · simp only [massert,hopenlen,if_false] at h; cases h
+#print axioms unwrap_success
 #print axioms source
 end R1Z.PV_RJN_PublishTrace
