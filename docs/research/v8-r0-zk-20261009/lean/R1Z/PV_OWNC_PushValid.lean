@@ -9,7 +9,7 @@ theorem valid {T : Type} (k : Codec T) (b : Buffer T) (v : T)
  (bytes:PV_OWNB_Padding.Agrees (k.encode v) actual) : Valid k (push k b v actual) := by
  have own:=PV_OWNC_PushOwned.writable k b v actual h
  have new:=PV_OWNC_PushBytes.initialized k b v actual h room (bounded v) bytes
- have old:=PV_OWNC_PushBytes.prefix k b v actual h bounded
+ have old:=PV_OWNC_PushBytes.frame k b v actual h bounded
  unfold Valid at h ⊢
  refine ⟨own,h.2.1,h.2.2.1,?_,?_⟩
  · change b.length+1≤b.capacity

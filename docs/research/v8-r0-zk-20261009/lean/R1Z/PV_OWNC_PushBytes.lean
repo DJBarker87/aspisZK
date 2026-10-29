@@ -18,7 +18,7 @@ theorem initialized {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : By
  rw [eq]
  exact Nat.mul_le_mul_right k.width (by omega)
 
-theorem prefix {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : Bytes)
+theorem frame {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : Bytes)
  (h:Valid k b) (bounded:∀ x i z, k.encode x i=some z → i<k.width)
  (i : Nat) (hi:i<b.length) :
  View k (push k b v actual).cell (i*k.width) (b.values i) := by
@@ -30,5 +30,5 @@ theorem prefix {T : Type} (k : Codec T) (b : Buffer T) (v : T) (actual : Bytes)
   i*k.width+k.width=(i+1)*k.width := by simp only [Nat.add_mul,Nat.one_mul]
   _≤b.length*k.width := Nat.mul_le_mul_right k.width (by omega)
 #print axioms initialized
-#print axioms prefix
+#print axioms frame
 end R1Z.PV_OWNC_PushBytes
