@@ -100,8 +100,16 @@ theorem actual {I : Type} (runs : I → Run)
     rw [PV_RJN_Bytes.length,hpsize]
     exact congrArg UScalar.val hprooflen
   rw [ProverCommitPublish43.assemble_loop]
-  simp only [ProverCommitPublish43.assemble,bind,Except.bind,querybytes,nodeLen,ne_eq,not_true_eq_false,if_false,
-    slots,proofLen]
+  change (if (ProverCommitPublish43.queries (runs i).plan.queries (front (runs i))).length≠(runs i).plan.offNodes
+    then Except.error ProverCommitPublish43.Error.parse
+    else (ProverCommitPublish43.slots (runs i).plan.slots
+      (ProverCommitPublish43.queries (runs i).plan.queries (front (runs i)))).bind
+      (fun out => if out.length≠(runs i).plan.proofBytes then .error .parse else .ok out))=.ok (bytes proof.val)
+  simp only [querybytes,nodeLen,ne_eq,not_true_eq_false,if_false]
+  rw [slots]
+  change (if (bytes proof.val).length≠(runs i).plan.proofBytes then Except.error ProverCommitPublish43.Error.parse
+    else Except.ok (bytes proof.val))=Except.ok (bytes proof.val)
+  simp only [proofLen,ne_eq,not_true_eq_false,if_false]
 
 #print axioms actual
 end R1Z.PV_RJN_PublishOrder
