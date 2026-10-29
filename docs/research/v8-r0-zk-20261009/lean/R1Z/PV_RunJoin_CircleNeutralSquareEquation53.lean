@@ -12,7 +12,11 @@ theorem owned (r : core.ops.range.Range Usize) (a : U32) :
   unfold PV_RunJoin_CircleRawScalar52.field.square_n_loop
   rw [ProverRw19LoopBind.loop_bind]
   simp only [Aeneas.Std.uncurry,Prod.mk.eta]
-  rfl
+  apply congrArg (Aeneas.Std.bind (PV_RunJoin_CircleRawScalar52.field.square_n_loop.body r a))
+  funext cf
+  cases cf with
+  | cont next => cases next; rfl
+  | done out => rfl
 
 theorem model (r : core.ops.range.Range Usize) (a : U32) :
     PV_RunJoin_CircleR72Raw52.field.square_n_loop r a = (do
@@ -23,7 +27,11 @@ theorem model (r : core.ops.range.Range Usize) (a : U32) :
   unfold PV_RunJoin_CircleR72Raw52.field.square_n_loop
   rw [ProverRw19LoopBind.loop_bind]
   simp only [Aeneas.Std.uncurry,Prod.mk.eta]
-  rfl
+  apply congrArg (Aeneas.Std.bind (PV_RunJoin_CircleR72Raw52.field.square_n_loop.body r a))
+  funext cf
+  cases cf with
+  | cont next => cases next; rfl
+  | done out => rfl
 
 #print axioms owned
 #print axioms model
