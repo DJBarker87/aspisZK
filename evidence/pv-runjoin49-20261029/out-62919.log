@@ -1,0 +1,41 @@
+START 62919 R1Z.PV_RunJoin_EncoderStages49
+DONE 62919 R1Z.PV_RunJoin_EncoderStages49 exit 1 wall 1.77 RSS 4250628096
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncoderStages49.lean:38:6: error: Type mismatch: After simplification, term
+  Eq.symm
+    (PV_RunJoin_WeightMap46.map_bind f (amap f) (PV_RunJoin_EncoderFactor49.next factor)
+      (fun x => ProverCommitBasisCounter47.stagesN n out1 (PV_DL_EncoderBasis.advance width) x)
+      (fun x => PV_DL_EncoderBasis.finite inst n (amap f out1) (PV_DL_EncoderBasis.advance width) x) fun x =>
+      Eq.symm (ih out1 (PV_DL_EncoderBasis.advance width) x hr))
+ has type
+  @Eq (Result (Std.Array E 512#usize))
+    (do
+      let x ←
+        mapResult f do
+            let square ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul factor factor
+            let doubled ← square.add square
+            doubled.sub AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
+      PV_DL_EncoderBasis.finite inst n (amap f out1) (PV_DL_EncoderBasis.advance width) x)
+    (mapResult (amap f) do
+      let x ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul factor factor
+      let x ← x.add x
+      let x ← x.sub AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
+      ProverCommitBasisCounter47.stagesN n out1 (PV_DL_EncoderBasis.advance width) x)
+but is expected to have type
+  @Eq (Result (Std.Array E 512#usize))
+    (do
+      let x ←
+        mapResult f do
+            let square ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul factor factor
+            let doubled ← square.add square
+            doubled.sub AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
+      PV_DL_EncoderBasis.finite inst n (amap f out1) (PV_DL_EncoderBasis.advance width) x)
+    (match do
+      let square ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul factor factor
+      let twice ← square.add square
+      let next ← twice.sub AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
+      ProverCommitBasisCounter47.stagesN n out1 (width.wrapping_mul 2#usize) next with
+    | ok v => ok (amap f v)
+    | fail e => fail e
+    | div => div)
+'R1Z.PV_RunJoin_EncoderStages49.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

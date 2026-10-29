@@ -1,0 +1,75 @@
+START 62970 R1Z.PV_RunJoin_MaterialTail49
+DONE 62970 R1Z.PV_RunJoin_MaterialTail49 exit 1 wall 1.73 RSS 4464377856
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:23:45: error: Application type mismatch: The argument
+  types base
+has type
+  ExternalTypes
+of sort `Type 1` but is expected to have type
+  Result (core.result.Result (alloc.vec.Vec PV_RunJoin_MaterialVec49.W) verifier.Error)
+of sort `Type` in the application
+  PV_RunJoin_MaterialContinuation49.run (types base)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:29:29: error(lean.unknownIdentifier): Unknown constant `PUnit.Err`
+
+Note: Inferred this name from the expected resulting type of `.Err`:
+  PUnit.{1}
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:30:27: error: Type mismatch
+  PV_RunJoin_PrepareTailAssociation48.retained
+has type
+  transport.Variant →
+    (Slice (Slice U8) → Result (Std.Array U8 32#usize)) →
+      prover.Backend →
+        host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn →
+          host_transcript.Transcript aspis_core.digest.LegacyHashFn →
+            alloc.vec.Vec U8 →
+              W →
+                W →
+                  W →
+                    alloc.vec.Vec U8 →
+                      Slice W →
+                        Slice W →
+                          (Slice W → W → Bool → Result (alloc.vec.Vec W)) →
+                            Result (core.result.Result prover.PreparedOpening verifier.Error)
+but is expected to have type
+  Result PUnit.{1}
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:31:16: error: Function expected at
+  variant
+but this term has type
+  transport.Variant
+
+Note: Expected a function because this term is being applied to the argument
+  hash
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:40:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ExternalFuns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:36:94: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+y1 : alloc.vec.Vec U8
+gamma inactive kappa : W
+q w : ℕ → Raw
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+request : Result PV_B2_F_AllocationTransport.Outcome
+c0 : ℕ → Raw
+bytes : alloc.vec.Vec U8
+hc0 : ∀ j < 7, canonical (c0 j)
+heq :
+  PV_RunJoin_PrepareTail48.run variant hash backend sem tr y1 gamma inactive kappa (array 1024#usize q).to_slice
+      (array 1024#usize w).to_slice =
+    PV_RunJoin_PrepareTailAssociation48.retained variant hash backend sem tr y1 gamma inactive kappa bytes
+      (array 1024#usize q).to_slice (array 1024#usize w).to_slice prover.fold
+hmodel :
+  ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w) =
+    ok (List.ofFn fun i => source (c0 ↑i))
+hbytes : List.map PV_RunJoin_WideImage43.byte ↑bytes = ProverCommitOpeningBytes49.stream 7 c0 hc0
+⊢ sorry = ?m.35
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:49:14: error(lean.unknownIdentifier): Unknown constant `complete`
+

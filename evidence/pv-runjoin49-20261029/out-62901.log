@@ -1,0 +1,52 @@
+START 62901 R1Z.PV_RunJoin_EncoderFill49
+DONE 62901 R1Z.PV_RunJoin_EncoderFill49 exit 1 wall 1.69 RSS 4242432000
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncoderFill49.lean:19:4: error: Tactic `apply` failed: could not unify the conclusion of `PV_RunJoin_WeightMap46.map_bind (amap f) (amap f)`
+  mapResult (amap f) (?r >>= ?k) = mapResult (amap f) ?r >>= ?l
+with the goal
+  (mapResult (amap f) do
+      let v ← out.index_usize j
+      let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul v factor
+      let out ← out.update (width.wrapping_add j) product
+      ProverCommitBasisCounter47.fillN n out (j.wrapping_add 1#usize) width factor) =
+    do
+    let out ←
+      mapResult (amap f) do
+          let v ← out.index_usize j
+          let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul v factor
+          out.update (width.wrapping_add j) product
+    PV_DL_EncoderFill.finite inst width (f factor) n (PV_DL_EncoderRange.advance j) out
+
+Note: The full type of `PV_RunJoin_WeightMap46.map_bind (amap f) (amap f)` is
+  ∀ (r : Result (Std.Array S ?m.47)) (k : Std.Array S ?m.47 → Result (Std.Array S ?m.50))
+    (l : Std.Array E ?m.47 → Result (Std.Array E ?m.50)),
+    (∀ (a : Std.Array S ?m.47), mapResult (amap f) (k a) = l (amap f a)) →
+      mapResult (amap f) (r >>= k) = mapResult (amap f) r >>= l
+
+case succ
+E : Type
+inst : aspis_core.r0.scalar.CodeField E
+f : S → E
+hm : ∀ (a b : S), inst.mul (f a) (f b) = mapResult f (AspisR1ProducerRelease47.field.wide_exact.WideExact.mul a b)
+width : Usize
+factor : S
+n : ℕ
+ih :
+  ∀ (out : Std.Array S 512#usize) (j : Usize),
+    PV_DL_EncoderFill.finite inst width (f factor) n j (amap f out) =
+      mapResult (amap f) (ProverCommitBasisCounter47.fillN n out j width factor)
+out : Std.Array S 512#usize
+j : Usize
+⊢ (mapResult (amap f) do
+      let v ← out.index_usize j
+      let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul v factor
+      let out ← out.update (width.wrapping_add j) product
+      ProverCommitBasisCounter47.fillN n out (j.wrapping_add 1#usize) width factor) =
+    do
+    let out ←
+      mapResult (amap f) do
+          let v ← out.index_usize j
+          let product ← AspisR1ProducerRelease47.field.wide_exact.WideExact.mul v factor
+          out.update (width.wrapping_add j) product
+    PV_DL_EncoderFill.finite inst width (f factor) n (PV_DL_EncoderRange.advance j) out
+'R1Z.PV_RunJoin_EncoderFill49.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

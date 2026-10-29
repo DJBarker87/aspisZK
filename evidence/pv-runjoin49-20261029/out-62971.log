@@ -1,0 +1,45 @@
+START 62971 R1Z.PV_RunJoin_MaterialTail49
+DONE 62971 R1Z.PV_RunJoin_MaterialTail49 exit 1 wall 1.78 RSS 4466868224
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:40:6: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  ExternalFuns
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaterialTail49.lean:36:94: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+y1 : alloc.vec.Vec U8
+gamma inactive kappa : W
+q w : ℕ → Raw
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+request : Result PV_B2_F_AllocationTransport.Outcome
+c0 : ℕ → Raw
+bytes : alloc.vec.Vec U8
+hc0 : ∀ j < 7, canonical (c0 j)
+heq :
+  PV_RunJoin_PrepareTail48.run variant hash backend sem tr y1 gamma inactive kappa (array 1024#usize q).to_slice
+      (array 1024#usize w).to_slice =
+    PV_RunJoin_PrepareTailAssociation48.retained variant hash backend sem tr y1 gamma inactive kappa bytes
+      (array 1024#usize q).to_slice (array 1024#usize w).to_slice prover.fold
+hmodel :
+  ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w) =
+    ok (List.ofFn fun i => source (c0 ↑i))
+hbytes : List.map PV_RunJoin_WideImage43.byte ↑bytes = ProverCommitOpeningBytes49.stream 7 c0 hc0
+⊢ PV_RunJoin_MaterialContinuation49.run (PV_RunJoin_MaterialRun49.outcome request (ok (sourceArray 1024#usize w)))
+      (PV_RunJoin_PrepareTail48.run variant hash backend sem tr y1 gamma inactive kappa (array 1024#usize q).to_slice) =
+    do
+    let event ← request
+    match event with
+      | PV_B2_F_AllocationTransport.Outcome.denied => ok (core.result.Result.Err verifier.Error.Allocation)
+      | PV_B2_F_AllocationTransport.Outcome.supplied =>
+        PV_RunJoin_PrepareTailAssociation48.retained variant hash backend sem tr y1 gamma inactive kappa bytes
+          (array 1024#usize q).to_slice (array 1024#usize w).to_slice prover.fold
+'R1Z.PV_RunJoin_MaterialTail49.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

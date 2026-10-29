@@ -1,0 +1,54 @@
+START 62930 R1Z.PV_RunJoin_EncoderPairs49
+DONE 62930 R1Z.PV_RunJoin_EncoderPairs49 exit 1 wall 1.61 RSS 4246577152
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncoderPairs49.lean:25:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let __x ← ?r
+    match __x with
+      | (a, b) => ?k a b
+in the target expression
+  (do
+      let (p0, p1) ← mapResult (pairMap f) (ProverCommitNativePair48.step q basis j (p0, p1))
+      PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p0 p1) =
+    mapResult (pairMap f) do
+      let p ← ProverCommitNativePair48.step q basis j (p0, p1)
+      ProverCommitNativePair48.range q basis n (j.wrapping_add 1#usize) p
+
+case succ
+E : Type
+inst : aspis_core.r0.scalar.CodeField E
+f : S → E
+hm : ∀ (a b : S), inst.mul (f a) (f b) = mapResult f (AspisR1ProducerRelease47.field.wide_exact.WideExact.mul a b)
+ha : ∀ (a b : S), inst.add (f a) (f b) = mapResult f (AspisR1ProducerRelease47.field.wide_exact.WideExact.add a b)
+q : Std.Array S 1024#usize
+basis : Std.Array S 512#usize
+n : ℕ
+ih :
+  ∀ (j : Usize),
+    ↑j + n = 512 →
+      ∀ (p0 p1 : S),
+        PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n j (f p0) (f p1) =
+          mapResult (pairMap f) (ProverCommitNativePair48.range q basis n j (p0, p1))
+j : Usize
+rank : ↑j + (n + 1) = 512
+p0 p1 : S
+hj : ↑j < 512
+hr : ↑(PV_DL_EncoderRange.advance j) + n = 512
+⊢ (do
+      let (p0, p1) ← mapResult (pairMap f) (ProverCommitNativePair48.step q basis j (p0, p1))
+      PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p0 p1) =
+    mapResult (pairMap f) do
+      let p ← ProverCommitNativePair48.step q basis j (p0, p1)
+      ProverCommitNativePair48.range q basis n (j.wrapping_add 1#usize) p
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1024 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_EncoderPairs49.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

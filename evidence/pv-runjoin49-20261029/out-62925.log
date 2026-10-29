@@ -1,0 +1,25 @@
+START 62925 R1Z.PV_RunJoin_EncoderPairs49
+DONE 62925 R1Z.PV_RunJoin_EncoderPairs49 exit 1 wall 1.71 RSS 4246614016
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_EncoderPairs49.lean:25:4: error: Type mismatch: After simplification, term
+  PV_RunJoin_WeightMap46.map_bind (pairMap f) (pairMap f) (ProverCommitNativePair48.step q basis j (p0, p1))
+    (fun p => ProverCommitNativePair48.range q basis n (PV_DL_EncoderRange.advance j) p)
+    (fun p => PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p.1 p.2) fun p =>
+    Eq.symm (ih (PV_DL_EncoderRange.advance j) hr p.1 p.2)
+ has type
+  @Eq (Result (E × E))
+    (mapResult (pairMap f) do
+      let p ← ProverCommitNativePair48.step q basis j (p0, p1)
+      ProverCommitNativePair48.range q basis n (PV_DL_EncoderRange.advance j) p)
+    do
+    let p ← mapResult (pairMap f) (ProverCommitNativePair48.step q basis j (p0, p1))
+    PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p.1 p.2
+but is expected to have type
+  @Eq (Result (E × E))
+    (mapResult (pairMap f) do
+      let p ← ProverCommitNativePair48.step q basis j (p0, p1)
+      ProverCommitNativePair48.range q basis n (j.wrapping_add 1#usize) p)
+    do
+    let (p0, p1) ← mapResult (pairMap f) (ProverCommitNativePair48.step q basis j (p0, p1))
+    PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p0 p1
+'R1Z.PV_RunJoin_EncoderPairs49.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
