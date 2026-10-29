@@ -24,7 +24,7 @@ theorem complete (width n : Nat) (a : Memory) :
     have hr := congrArg Prod.snd hp
     have ht := ih (PV_L2E_ArrayDivision.run width 0 a).1
     simp only [run,PV_L2E_DigitsTrace.run,PV_L2E_DivisionTrace.complete_value]
-    rw [length] at *
+    dsimp only at hq hr
     rw [hq] at ht
     exact ⟨ht.1,by rw [hr,ht.2]⟩
 
