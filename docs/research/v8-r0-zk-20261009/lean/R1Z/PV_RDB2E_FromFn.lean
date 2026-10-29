@@ -24,7 +24,9 @@ theorem step {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s : S
 theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s after : S)
     (out : List A) (h : build f n i s=ok (out,after)) : out.length=n := by
   induction n generalizing i s out after with
-  | zero => simp only [build,Result.ok.injEq,Prod.mk.injEq] at h; subst out; rfl
+  | zero =>
+    simp only [build,Result.ok.injEq,Prod.mk.injEq] at h
+    rw [←h.1]; rfl
   | succ n ih =>
     simp only [build] at h
     cases hf : f i s with
@@ -32,14 +34,16 @@ theorem length {S A : Type} (f : Nat → S → Result (A × S)) (n i : Nat) (s a
     | div => simp [hf] at h
     | ok result =>
       rcases result with ⟨a,s1⟩
+      simp only [hf,bind_tc_ok] at h
       cases hb : build f n (i+1) s1 with
-      | fail e => simp [hf,hb] at h
-      | div => simp [hf,hb] at h
+      | fail e => simp [hb] at h
+      | div => simp [hb] at h
       | ok result =>
         rcases result with ⟨tail,s2⟩
-        simp only [hf,hb,bind_tc_ok,Result.ok.injEq,Prod.mk.injEq] at h
-        rcases h with ⟨rfl,rfl⟩
-        simp only [List.length_cons,ih (i+1) s1 tail s2 hb]
+        simp only [hb,bind_tc_ok] at h
+        have e : a::tail=out := congrArg Prod.fst (Result.ok.inj h)
+        rw [←e]
+        exact congrArg Nat.succ (ih (i+1) s1 tail s2 hb)
 
 #print axioms zero
 #print axioms step
