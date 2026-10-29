@@ -4,6 +4,7 @@ import subprocess,json,shlex,sys,time,datetime,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-l1e-20261029';H='/home/dombarker/project-offloads/codex-pv-l1e-20261029';P=H;host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 66500<=a<=66599
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
+assert len(mods)==1, 'one smallest target per Lean attempt'
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
 assert sum(len(json.loads(p.read_text())) for p in E.glob('modules-665*.json')) < 100, '100 Lean starts exhausted'
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
