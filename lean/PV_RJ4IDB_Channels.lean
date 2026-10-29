@@ -70,6 +70,6 @@ def sideChannels : List Event → List (Bytes × Bytes) := List.filterMap fun e 
  match e with | .retained a b => some (a,b) | _ => none
 
 theorem files_append (a b : List Event) : files (a++b) = files a ++ files b :=
- List.filterMap_append _ a b
+ List.filterMap_append
 #print axioms files_append
 end PV_RJ4IDB
