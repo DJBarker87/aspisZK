@@ -1,0 +1,43 @@
+START 68201 R1Z.PV_RunJoin_CommonCircleSuccessFirst56
+DONE 68201 R1Z.PV_RunJoin_CommonCircleSuccessFirst56 exit 1 wall 1.76 RSS 4472168448
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommonCircleSuccessFirst56.lean:57:9: error: Application type mismatch: The argument
+  success
+has type
+  (do
+      let parsed ← host_wire.parse_record 25#u8 framed
+      match parsed with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err e,
+              { state := block (fieldVal (fc (TRead.absS ⟨25, ⋯⟩)) (record W Pr h B outputs x w (s k).2.1)),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 })
+        | core.result.Result.Ok a =>
+          ok
+            (core.result.Result.Ok q,
+              { state := block ((s k).2.1 (Sum.inl (TRead.advS ⟨25, ⋯⟩))),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 26#u8 })) =
+    ok (core.result.Result.Ok point, next)
+but is expected to have type
+  (do
+      let r ← host_wire.parse_record 25#u8 framed
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err e,
+              { state := block (fieldVal (fc (TRead.absS ⟨25, ?m.285⟩)) (record W Pr h B outputs x w (s k).2.1)),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 })
+        | core.result.Result.Ok a =>
+          ok
+            (core.result.Result.Ok q,
+              { state := block ((s k).2.1 (Sum.inl (TRead.advS ⟨25, ?m.327⟩))),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 26#u8 })) =
+    ok (core.result.Result.Ok point, next)
+in the application
+  PV_RunJoin_CircleResultSuccess55.complete (host_wire.parse_record 25#u8 framed) q point
+    { state := block (fieldVal (fc (TRead.absS ⟨25, ?m.285⟩)) (record W Pr h B outputs x w (s k).2.1)),
+      hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 }
+    { state := block ((s k).2.1 (Sum.inl (TRead.advS ⟨25, ?m.327⟩))),
+      hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 26#u8 }
+    next success
+'R1Z.PV_RunJoin_CommonCircleSuccessFirst56.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

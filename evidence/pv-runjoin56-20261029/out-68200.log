@@ -1,0 +1,30 @@
+START 68200 R1Z.PV_RunJoin_CommonCircleSuccessFirst56
+DONE 68200 R1Z.PV_RunJoin_CommonCircleSuccessFirst56 exit 1 wall 2.69 RSS 4455649280
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommonCircleSuccessFirst56.lean:51:69: error: Application type mismatch: The argument
+  success
+has type
+  (do
+      let parsed ← host_wire.parse_record 25#u8 framed
+      match parsed with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err e,
+              { state := block (fieldVal (fc (TRead.absS ⟨25, ⋯⟩)) (record W Pr h B outputs x w (s k).2.1)),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 25#u8 })
+        | core.result.Result.Ok a =>
+          ok
+            (core.result.Result.Ok q,
+              { state := block ((s k).2.1 (Sum.inl (TRead.advS ⟨25, ⋯⟩))),
+                hash := PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1, next_row := 26#u8 })) =
+    ok (core.result.Result.Ok point, next)
+but is expected to have type
+  (do
+      let r ← ?m.277
+      match r with
+        | core.result.Result.Err e => ok (core.result.Result.Err e, ?m.280)
+        | core.result.Result.Ok a => ok (core.result.Result.Ok ?m.278, ?m.281)) =
+    ok (core.result.Result.Ok ?m.279, ?m.282)
+in the application
+  PV_RunJoin_CircleResultSuccess55.complete ?m.277 ?m.278 ?m.279 ?m.280 ?m.281 ?m.282 success
+'R1Z.PV_RunJoin_CommonCircleSuccessFirst56.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
