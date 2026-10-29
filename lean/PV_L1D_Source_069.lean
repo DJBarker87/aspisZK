@@ -283,5 +283,12 @@ theorem complete_result
       intro value called
     | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_030.complete_result,PV_L1D_Source_031.complete_result,PV_L1D_Source_037.complete_result,PV_L1D_Source_038.complete_result,PV_L1D_Source_068.complete_result]
     | with_reducible rfl
+  all_goals
+    repeat' first
+      | with_reducible rfl
+      | apply congrArg₂ (ite _)
+      | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+        intro value called
+      | split <;> simp only [PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_030.complete_result,PV_L1D_Source_031.complete_result,PV_L1D_Source_037.complete_result,PV_L1D_Source_038.complete_result,PV_L1D_Source_068.complete_result]
 #print axioms complete_result
 end PV_L1D_Source_069
