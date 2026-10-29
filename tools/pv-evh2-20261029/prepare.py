@@ -73,6 +73,8 @@ def add_rj(m):
    edges.append(dict(module=m,dependency=e['dependency'],sha256=e['expected']))
    add_rj(e['dependency'])
 for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):add_rj(d)
+# Previously accepted own consumers also retain their runjoin dependencies.
+for edge in list(edges):add_rj(edge['dependency'])
 (E/('runjoin-resolution-'+module+'.json')).write_text(json.dumps(dict(revision=rjrev,workspace=rjp['workspace'],added={m:projects[m] for m in checked}),indent=2)+'\n')
 payload=dict(H=H,revision=rev,projects=projects,edges=edges,external=external,source=b.decode(),sha256=sha(b),module=module,runjoin_objects=rjp['workspace']+'/objects')
 code=r'''
