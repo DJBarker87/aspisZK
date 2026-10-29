@@ -9,6 +9,7 @@ theorem source (alpha : W) (values : Array W 4#usize) (inverse : Array U32 5#usi
       NEA_StateLaws.lift (FIp_CircleSource.circle alpha values inverse) := by
   rw [← NEA_FoldModel.circle]
   simp only [NEA_FoldStateRef.circle_ref,NEA_FoldRef.circle_ref,NEA_StateLaws.ops,NEA_StateBind.bind_pair,lift_bind]
+  rfl
 #print axioms source
 end NEA_FoldStateCircle
 end

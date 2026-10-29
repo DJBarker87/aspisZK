@@ -1,0 +1,6 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,3 @@
++pub trait Ops{fn mul(x:u32,y:u32)->u32;fn add(x:u32,y:u32)->u32;fn neg(x:u32)->u32;fn inv(x:u32)->u32;}
++pub fn cm_inv_ref<O:Ops>(x:[u32;2])->[u32;2]{let aa=O::mul(x[0],x[0]);let bb=O::mul(x[1],x[1]);let norm=O::add(aa,bb);let n=O::inv(norm);[O::mul(x[0],n),O::mul(O::neg(x[1]),n)]}
++pub fn cm_inv_with_ref<O:Ops>(x:[u32;2],inverse:fn(u32)->u32)->[u32;2]{let aa=O::mul(x[0],x[0]);let bb=O::mul(x[1],x[1]);let norm=O::add(aa,bb);let n=inverse(norm);[O::mul(x[0],n),O::mul(O::neg(x[1]),n)]}

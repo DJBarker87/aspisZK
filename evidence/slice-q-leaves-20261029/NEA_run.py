@@ -40,7 +40,7 @@ sys.exit(r.returncode)
     raise RuntimeError('STOP host admission')
 files={}
 sources=[]
-env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEA_tmp',LEAN_PATH=B+'/NEA_objects:'+C+':'+W+':'+W+'/objects')
+env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEA_tmp',LEAN_PATH=B+'/NEA_objects:'+C+'/NEA_exports_20261029:'+C+':'+W+':'+W+'/objects')
 deps={}
 native=[]
 if kind=='lean':
@@ -49,7 +49,9 @@ if kind=='lean':
     library=json.loads((E/'NEA_SOURCE.json').read_text())['library']
     deps['selected_objects']={p:dict(path=p,sha256=h) for p,h in library.items()}
 elif kind=='kani':
-    payload=json.loads((E/'NEA_PAYLOAD.json').read_text())
+    from NEA_restore import native
+    patch=os.environ.get('NEA_REPLAY_PATCH')
+    payload=native(patch) if patch or not (E/'NEA_PAYLOAD.json').exists() else json.loads((E/'NEA_PAYLOAD.json').read_text())
     files={ 'NEA_src/'+n:t for n,t in payload.items() }
     for n in ['gate','graph']: files['NEA_'+n+'.py']=(E/('NEA_'+n+'.py')).read_text()
     sources=list(files)+['NEA_src/Cargo.lock','NEA_SOURCE_PINS.json']
@@ -67,10 +69,14 @@ elif kind=='inspect':
     sources=list(files);command=['python3','NEA_goto_inspect.py']
 else:
     files['NEA_extract.py']=(E/'NEA_extract.py').read_text()
-    files['NEA_reference.rs']=(E/os.environ.get('NEA_REFERENCE','NEA_reference.rs.txt')).read_text()
+    reference_path=E/os.environ.get('NEA_REFERENCE','NEA_reference.rs.txt')
+    if not reference_path.exists():
+        from NEA_restore import references
+        references()
+    files['NEA_reference.rs']=reference_path.read_text()
     if os.environ.get('NEA_EXTRACT_CONFIG'):env['NEA_EXTRACT_CONFIG']=os.environ['NEA_EXTRACT_CONFIG']
     sources=list(files);command=['python3','NEA_extract.py']
-cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
+cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized reference compilation and Charon/Aeneas IR generation; no arithmetic execution' if kind=='extract' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 files[a+'.json']=json.dumps(cfg)
 code=f'''from pathlib import Path
 import json,hashlib

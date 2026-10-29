@@ -23,6 +23,9 @@ pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),rust_reference_sha256=sha(S/
 print(json.dumps(pins),flush=True)
 r=subprocess.run(cmd,cwd=S,env=env)
 if r.returncode:raise SystemExit(r.returncode)
+pins['llbc_sha256']=sha(B/'NEA_reference.llbc')
+pins['llbc_bytes']=(B/'NEA_reference.llbc').stat().st_size
+(B/'NEA_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2))
 cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace',namespace,'-dest',str(dest),'-subdir',namespace,'-split-files',str(B/'NEA_reference.llbc')]
 print(json.dumps(cmd),flush=True);r=subprocess.run(cmd,cwd=B,env=env)
 pins.update(aeneas_command=cmd,exit=r.returncode,outputs={str(p.relative_to(B)):sha(p) for p in dest.rglob('*') if p.is_file()})

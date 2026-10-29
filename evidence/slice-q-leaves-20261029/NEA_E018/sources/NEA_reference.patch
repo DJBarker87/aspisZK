@@ -1,0 +1,33 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,30 @@
++#![no_std]
++pub trait NEA_Ops<E,M> {
++ fn add(x:E,y:E)->E; fn sub(x:E,y:E)->E;
++ fn mul(x:E,y:E)->E; fn scale(x:E,y:M)->E; fn base_mul(x:M,y:M)->M;
++}
++pub fn circle_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(alpha:E,values:[E;4],inverse:[M;5],quarter:M)->E {
++ let [ix,iy,_,_,_]=inverse;let [a,b,c,d]=values;
++ let ab=O::add(a,b);let abc=O::add(ab,c);let abcd=O::add(abc,d);let h0=O::scale(abcd,quarter);
++ let amb=O::sub(a,b);let ambmc=O::sub(amb,c);let ambmcpd=O::add(ambmc,d);
++ let m=O::base_mul(quarter,iy);let h1=O::scale(ambmcpd,m);
++ let abmc=O::sub(ab,c);let abmcmd=O::sub(abmc,d);let m1=O::base_mul(quarter,ix);let h2=O::scale(abmcmd,m1);
++ let ambpc=O::add(amb,c);let ambpcmd=O::sub(ambpc,d);let m2=O::base_mul(m1,iy);let h3=O::scale(ambpcmd,m2);
++ let we10=O::mul(alpha,h3);let we11=O::add(h2,we10);let we12=O::mul(alpha,we11);
++ let we13=O::add(h1,we12);let we14=O::mul(alpha,we13);O::add(h0,we14)
++}
++pub fn line_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(alpha:E,values:[E;4],inverse:[M;5],quarter:M,half:M)->E {
++ let [_,_,ix,iy,iz]=inverse;let [a,b,c,d]=values;
++ let ab=O::add(a,b);let abc=O::add(ab,c);let abcd=O::add(abc,d);let h0=O::scale(abcd,quarter);
++ let abmc=O::sub(ab,c);let abmcmd=O::sub(abmc,d);let m=O::base_mul(quarter,iz);let h2=O::scale(abmcmd,m);
++ let amb=O::sub(a,b);let m1=O::base_mul(half,ix);let c0=O::scale(amb,m1);
++ let dmc=O::sub(d,c);let m2=O::base_mul(half,iy);let c1=O::scale(dmc,m2);
++ let c0pc1=O::add(c0,c1);let h1=O::scale(c0pc1,half);
++ let c0mc1=O::sub(c0,c1);let m3=O::base_mul(half,iz);let h3=O::scale(c0mc1,m3);
++ let we9=O::mul(alpha,h3);let we10=O::add(h2,we9);let we11=O::mul(alpha,we10);
++ let we12=O::add(h1,we11);let we13=O::mul(alpha,we12);O::add(h0,we13)
++}
++
++pub fn horner_step_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(alpha:E,coefficient:E,rest:E)->E{let product=O::mul(alpha,rest);O::add(coefficient,product)}
++pub fn circle_h0_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(a:[E;4],quarter:M)->E{let ab=O::add(a[0],a[1]);let abc=O::add(ab,a[2]);let abcd=O::add(abc,a[3]);O::scale(abcd,quarter)}
++pub fn circle_h3_ref<E:Copy,M:Copy,O:NEA_Ops<E,M>>(a:[E;4],ix:M,iy:M,quarter:M)->E{let ab=O::sub(a[0],a[1]);let abc=O::add(ab,a[2]);let abcd=O::sub(abc,a[3]);let m=O::base_mul(quarter,ix);let m1=O::base_mul(m,iy);O::scale(abcd,m1)}

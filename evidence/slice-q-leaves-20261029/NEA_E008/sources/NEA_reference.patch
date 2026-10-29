@@ -1,0 +1,11 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,8 @@
++extern crate alloc;
++use alloc::vec::Vec;
++pub trait Ops {fn point(u:usize)->(u32,u32);fn line(u:usize)->u32;fn mul(a:u32,b:u32)->u32;fn double(a:u32)->u32;fn sub(a:u32,b:u32)->u32;fn inv(a:u32)->u32;}
++pub struct Geometry {pub start:usize,pub inverses:Vec<[u32;5]>,pub line_z:Vec<u32>}
++fn index_ref(u:usize)->Result<usize,u8>{if u<262144{Ok(u)}else{Err(1)}}
++pub fn geometry_step_ref<O:Ops>(q:u32)->Result<([u32;5],u32),u8>{let u=q as usize;let f=index_ref(u)?;let (x,y)=O::point(f);let lx=O::line(index_ref(u/4*4)?);let ly=O::line(index_ref(u/4*4+3)?);let square=O::mul(lx,lx);let twice=O::double(square);let z=O::sub(twice,1);let v=[x,y,lx,ly,z];for x in v{if x==0{return Err(1);}}Ok((v,z))}
++pub fn geometry_ref<O:Ops>(queries:&[u32;22],start:usize,end:usize)->Result<Geometry,u8>{if start>end||end>22{return Err(1);}let mut zs=Vec::with_capacity(end-start);let mut flat=Vec::with_capacity((end-start)*5);for &q in &queries[start..end]{let(v,z)=geometry_step_ref::<O>(q)?;flat.extend_from_slice(&v);zs.push(z);}if flat.is_empty(){return Ok(Geometry{start,inverses:Vec::new(),line_z:zs});}let mut prefixes=Vec::with_capacity(flat.len());let mut p=1;let mut i=0;while i<flat.len(){prefixes.push(p);p=O::mul(p,flat[i]);i+=1;}let mut suffix=O::inv(p);let mut inv=Vec::with_capacity(flat.len());inv.resize(flat.len(),0);for j in (0..flat.len()).rev(){inv[j]=O::mul(suffix,prefixes[j]);suffix=O::mul(suffix,flat[j]);}let mut groups=Vec::with_capacity(zs.len());for k in 0..zs.len(){groups.push([inv[5*k],inv[5*k+1],inv[5*k+2],inv[5*k+3],inv[5*k+4]]);}Ok(Geometry{start,inverses:groups,line_z:zs})}
++pub fn geometry_append_ref<O:Ops>(mut flat:Vec<u32>,mut zs:Vec<u32>,q:u32)->Result<(Vec<u32>,Vec<u32>),u8>{let(v,z)=geometry_step_ref::<O>(q)?;flat.extend_from_slice(&v);zs.push(z);Ok((flat,zs))}

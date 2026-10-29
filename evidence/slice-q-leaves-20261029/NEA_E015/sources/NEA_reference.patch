@@ -1,0 +1,5 @@
+--- /dev/null
++++ b/NEA_reference.rs
+@@ -0,0 +1,2 @@
++pub trait Ops{fn square(x:[u32;2])->[u32;2];fn sub(x:[u32;2],y:[u32;2])->[u32;2];fn by_r(x:[u32;2])->[u32;2];fn inv(x:[u32;2])->[u32;2];fn mul(x:[u32;2],y:[u32;2])->[u32;2];fn neg(x:[u32;2])->[u32;2];}
++pub fn qm_try_ref<O:Ops>(x:[u32;4])->Option<[u32;4]>{if x==[0;4]{return None;}let a=[x[0],x[1]];let b=[x[2],x[3]];let aa=O::square(a);let bb=O::square(b);let norm=O::sub(aa,O::by_r(bb));let n=O::inv(norm);let lo=O::mul(a,n);let hi=O::mul(O::neg(b),n);Some([lo[0],lo[1],hi[0],hi[1]])}

@@ -1,0 +1,7 @@
+# Product-log validation, not fold closure
+
+K059/K060 confirm the exact official KMX pointer-copy positive/negative pair under deployed features, and K061/K062 do so under the additional NEA_fold cfg. The patch hash is unchanged. K063–K080 are nine positive/inverted pairs checking the OWN product-log implementation: repeated operands, two independent requests replayed in reverse order, and full log capacities. All pairs produced the expected verification verdicts, with no compiler error or timeout. EM capacity is three E products, SM six E-by-M31 products, and BM four scalar products. Replay preserves count and returns the recorded reply on the same operands. BM inputs cover every raw u32; EM/SM assert their canonical domains.
+
+These are validation of verification scaffolding used by slice-Q fold candidates. They are not additional shipped-function bridges, do not prove multiplication, and cannot replace a full native fold-to-reference result. Model product values still come only from the paired named Lean laws in LPh_STUBS.md. No helper outside slice Q is proposed for ledger credit.
+
+Full circle gates K034/K036/K056/K057 and full line gates K039/K058 all time out. None is a pass, and no unchanged shape was rerun. The next useful native work is small prelude/Horner cuts followed by explicit composition; E018 supplies reference candidates for those cuts. That continuation also needs a new Lean budget, not another unchanged whole-fold replay.
