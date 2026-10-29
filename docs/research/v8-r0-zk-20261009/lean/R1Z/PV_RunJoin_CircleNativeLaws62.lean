@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_NativeResidual62
 import R1Z.PV_RunJoin_CircleInstalledTotal55
+import R1Z.PV_RunJoin_CircleUnit62
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_CircleNativeLaws62
@@ -28,8 +29,8 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
   refine ⟨p,hp,hx,hy,?_⟩
   rw [hc]
   split
-  · exact point_unit (R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block))
-  · exact point_unit (R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block))
+  · exact PV_RunJoin_CircleUnit62.second block
+  · exact PV_RunJoin_CircleUnit62.first block
 
 #print axioms point_unit
 #print axioms complete
