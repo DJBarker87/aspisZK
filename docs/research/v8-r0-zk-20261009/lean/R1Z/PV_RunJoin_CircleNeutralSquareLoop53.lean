@@ -1,6 +1,7 @@
 import R1Z.PV_RunJoin_CircleNeutralRange53
 import R1Z.PV_RunJoin_CircleNeutralFinite53
 import R1Z.ProverRw19LoopBind
+import R1Z.PV_RunJoin_CircleNeutralSquareEquation53
 import R1Z.PV_RunJoin_CircleNeutralSquareCell53
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result ControlFlow
@@ -13,15 +14,13 @@ theorem owned (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
   induction n generalizing r a with
   | zero =>
     have hn := next_none r (by omega)
-    unfold PV_RunJoin_CircleRawScalar52.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.owned]
     simp only [PV_RunJoin_CircleRawScalar52.field.square_n_loop.body,hn,bind_tc_ok,finite]
     rfl
   | succ n ih =>
     obtain ⟨after,hn,hs,he⟩ := next_some r (by omega)
     have hafter : after.end.val=after.start.val+n := by rw [he];omega
-    unfold PV_RunJoin_CircleRawScalar52.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.owned]
     rw [PV_RunJoin_CircleNeutralSquareCell53.owned r after a hn]
     simp only [bind_assoc_eq,bind_tc_ok]
     change (do let v ← PV_RunJoin_CircleRawScalar52.field.M31.mul a a
@@ -37,15 +36,13 @@ theorem model (n : Nat) (r : core.ops.range.Range Usize) (a : U32)
   induction n generalizing r a with
   | zero =>
     have hn := next_none r (by omega)
-    unfold PV_RunJoin_CircleR72Raw52.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.model]
     simp only [PV_RunJoin_CircleR72Raw52.field.square_n_loop.body,hn,bind_tc_ok,PV_RunJoin_CircleNeutralFinite53.model]
     rfl
   | succ n ih =>
     obtain ⟨after,hn,hs,he⟩ := next_some r (by omega)
     have hafter : after.end.val=after.start.val+n := by rw [he];omega
-    unfold PV_RunJoin_CircleR72Raw52.field.square_n_loop
-    rw [ProverRw19LoopBind.loop_bind]
+    rw [PV_RunJoin_CircleNeutralSquareEquation53.model]
     rw [PV_RunJoin_CircleNeutralSquareCell53.model r after a hn]
     simp only [bind_assoc_eq,bind_tc_ok]
     change (do let v ← PV_RunJoin_CircleR72Raw52.field.M31.mul a a
