@@ -42,8 +42,7 @@ theorem source (variant : transport.Variant) (p : prover.Publication) (proof : V
   try simp only [lift,bind_tc_ok] at h
   obtain ⟨h1,hh1,h⟩ := bind_eq_ok h
   obtain ⟨pair,hsem,h⟩ := bind_eq_ok h
-  rcases pair with ⟨r,h2⟩
-  rename r => semanticResult
+  rcases pair with ⟨semanticResult,h2⟩
   obtain ⟨r,hmapped,h⟩ := bind_eq_ok h
   cases r with
   | Err e => cases h
