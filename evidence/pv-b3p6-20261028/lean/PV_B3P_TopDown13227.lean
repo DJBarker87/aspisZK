@@ -98,6 +98,7 @@ theorem selected_callback (ops : @ExternalFuns (PV_B3P_Install227.Types base))
     ∀ claims,
       ops.op227 self.«public» claims point self.challenges =
         terminal self.«public» claims point self.challenges := by
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   intro claims
   exact Eq.trans (wrapper self.«public» claims point self.challenges)
     (continuation_composes base native semantic selection parts self.«public» claims point self.challenges)
