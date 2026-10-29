@@ -1,7 +1,7 @@
 import Mathlib.MeasureTheory.Measure.ProbabilityMeasure
 import Mathlib.MeasureTheory.Integral.Bochner.Basic
 
-/-! General probability-law averaging. Preregistered draft: see
+/-! General probability-law averaging. Preregistered statement: see
  evidence/pv-meas-20261029/DESIGN.md and authority-gap receipt.
  No finite support, uniformity or rational mass hypothesis. -/
 set_option autoImplicit false
@@ -35,6 +35,16 @@ theorem expectation_eq_of_equal_laws
   rw [← integral_map hf.aemeasurable htest.aestronglyMeasurable,
     law, integral_map hg.aemeasurable htest.aestronglyMeasurable]
 
+/-- Measurable decision probabilities are integrable without any finite-carrier
+or bounded-timing assumption. Only the decision probability lies in [0,1]. -/
+theorem decision_integrable {E : Type*} [MeasurableSpace E]
+    (μ : ProbabilityMeasure E) (p : E → ℝ) (hp : Measurable p)
+    (bounded : ∀ e, 0 ≤ p e ∧ p e ≤ 1) : Integrable p (μ : Measure E) := by
+  exact integrable_of_le_of_le hp.aestronglyMeasurable
+    (ae_of_all _ (fun e => (bounded e).1))
+    (ae_of_all _ (fun e => (bounded e).2)) (integrable_const 0) (integrable_const 1)
+
+#print axioms decision_integrable
 #print axioms average_bound
 #print axioms expectation_eq_of_equal_laws
 end PV_MEAS_Average
