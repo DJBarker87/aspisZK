@@ -34,6 +34,7 @@ theorem publication (phase : PV_RunJoin_NativeControl55.Phase)
     cases status with
     | Err e => change 0≤bound;omega
     | Ok p =>
+      dsimp only
       cases he : f p with
       | fail e => change 0≤bound;omega
       | div => change 0≤bound;omega
