@@ -1,0 +1,30 @@
+{
+  "command": [
+    "docker",
+    "create",
+    "--name",
+    "pv-cx2-n73330",
+    "--network",
+    "none",
+    "--memory",
+    "8g",
+    "--memory-swap",
+    "8g",
+    "--pids-limit",
+    "64",
+    "--cpus",
+    "4",
+    "--user",
+    "0",
+    "--mount",
+    "type=bind,src=/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1,dst=/job",
+    "--entrypoint",
+    "/bin/bash",
+    "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+    "-c",
+    "while [ ! -f /job/N73330/go ]; do sleep 0.1; done; exec /usr/bin/time -v -o /job/N73330/time.log timeout 540 opam exec -- bash /job/build.sh"
+  ],
+  "expected_work": "Optimized OCaml compilation: pinned Charon dependency then original extended Aeneas translator; no arithmetic gate.",
+  "source_revision": "570c0008098b8cc23d16d86f9edb0c2a41b0e118",
+  "source_recovery_sha256": "bd6efbaae21960f09e5de9fb089ec3757a33076eab78166ae546482c704fd551"
+}

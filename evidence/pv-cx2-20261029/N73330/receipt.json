@@ -1,0 +1,63 @@
+{
+  "target": [
+    "docker",
+    "create",
+    "--name",
+    "pv-cx2-n73330",
+    "--network",
+    "none",
+    "--memory",
+    "8g",
+    "--memory-swap",
+    "8g",
+    "--pids-limit",
+    "64",
+    "--cpus",
+    "4",
+    "--user",
+    "0",
+    "--mount",
+    "type=bind,src=/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1,dst=/job",
+    "--entrypoint",
+    "/bin/bash",
+    "sha256:ef96e46342a4159b6a62663e1ff5474a5f5deaf260daf08ea7b0963974418db7",
+    "-c",
+    "while [ ! -f /job/N73330/go ]; do sleep 0.1; done; exec /usr/bin/time -v -o /job/N73330/time.log timeout 540 opam exec -- bash /job/build.sh"
+  ],
+  "exit_status": 0,
+  "wall_seconds": 114.67708767706063,
+  "peak_rss_kib": 590096,
+  "swaps": 0,
+  "observed_cgroup_peaks": {
+    "memory.peak": 2251898880,
+    "memory.swap.peak": 0,
+    "pids.peak": 25
+  },
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "source_revision": "570c0008098b8cc23d16d86f9edb0c2a41b0e118",
+  "print_axioms": "N/A: OCaml translator rebuild",
+  "utc": "2026-10-29T13:05:57.316925+00:00",
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T13:04:02.398291994Z",
+    "FinishedAt": "2026-10-29T13:05:57.110810364Z"
+  },
+  "binary": {
+    "path": "/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1/aeneas/src/_build/default/main.exe",
+    "bytes": 49422424,
+    "sha256": "fda587d25a66604a973bbc2947a4416ba373b56dd8c98655991c1b6eaa240b68"
+  }
+}
