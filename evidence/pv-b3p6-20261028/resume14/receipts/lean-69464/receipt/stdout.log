@@ -1,0 +1,167 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_FieldsIterator14227.lean:35:6: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (item, rest) := (some value, rest)
+    match item with
+    | none => ok (done (core.result.Result.Ok (), out))
+    | some value =>
+      if value ≥ 2147483647#u32 then
+        ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+      else do
+        let out ← append out value
+        ok (cont (out, rest)) with
+  | ok r =>
+    match r with
+    | cont x => loop (fields_body14 append) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out)
+
+case pos
+append : AppendWord13
+value : U32
+rest : List U32
+ih : ∀ (out : List U8), loop (fields_body14 append) (out, rest) = fields_model13 append out rest
+out : List U8
+bad : value ≥ 2147483647#u32
+⊢ (match
+      let (item, rest) := (some value, rest)
+      match item with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ 2147483647#u32 then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let out ← append out value
+          ok (cont (out, rest)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fields_body14 append) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_FieldsIterator14227.lean:38:18: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (item, rest) := (some value, rest)
+    match item with
+    | none => ok (done (core.result.Result.Ok (), out))
+    | some value =>
+      if value ≥ 2147483647#u32 then
+        ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+      else do
+        let out ← append out value
+        ok (cont (out, rest)) with
+  | ok r =>
+    match r with
+    | cont x => loop (fields_body14 append) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let out1 ← fail e
+    fields_model13 append out1 rest
+
+case neg.fail
+append : AppendWord13
+value : U32
+rest : List U32
+ih : ∀ (out : List U8), loop (fields_body14 append) (out, rest) = fields_model13 append out rest
+out : List U8
+bad : ¬value ≥ 2147483647#u32
+e : Error
+h : append out value = fail e
+⊢ (match
+      let (item, rest) := (some value, rest)
+      match item with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ 2147483647#u32 then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let out ← append out value
+          ok (cont (out, rest)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fields_body14 append) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let out1 ← fail e
+    fields_model13 append out1 rest
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_FieldsIterator14227.lean:39:15: error: Tactic `rfl` failed: The left-hand side
+  match
+    let (item, rest) := (some value, rest)
+    match item with
+    | none => ok (done (core.result.Result.Ok (), out))
+    | some value =>
+      if value ≥ 2147483647#u32 then
+        ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+      else do
+        let out ← append out value
+        ok (cont (out, rest)) with
+  | ok r =>
+    match r with
+    | cont x => loop (fields_body14 append) x
+    | done x => ok x
+  | fail e => fail e
+  | div => div
+is not definitionally equal to the right-hand side
+  do
+    let out1 ← div
+    fields_model13 append out1 rest
+
+case neg.div
+append : AppendWord13
+value : U32
+rest : List U32
+ih : ∀ (out : List U8), loop (fields_body14 append) (out, rest) = fields_model13 append out rest
+out : List U8
+bad : ¬value ≥ 2147483647#u32
+h : append out value = div
+⊢ (match
+      let (item, rest) := (some value, rest)
+      match item with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ 2147483647#u32 then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let out ← append out value
+          ok (cont (out, rest)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fields_body14 append) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let out1 ← div
+    fields_model13 append out1 rest
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_FieldsIterator14227.lean:40:19: error: Type mismatch: After simplification, term
+  ih next
+ has type
+  loop (fields_body14 append) (next, rest) = fields_model13 append next rest
+but is expected to have type
+  (match
+      let (item, rest) := (some value, rest)
+      match item with
+      | none => ok (done (core.result.Result.Ok (), out))
+      | some value =>
+        if value ≥ 2147483647#u32 then
+          ok (done (core.result.Result.Err aspis_core.state_only_prefix.r0.Error.Public, out))
+        else do
+          let out ← append out value
+          ok (cont (out, rest)) with
+    | ok r =>
+      match r with
+      | cont x => loop (fields_body14 append) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    fields_model13 append next rest
+'PV_B3P_Fields14227.fields_iterator_binding14' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Fields14227.fields_source_link14' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

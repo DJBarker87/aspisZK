@@ -1,0 +1,132 @@
+[
+  {
+    "function": "reconstruct_10",
+    "source": "tools/pv-b3p6-20261028/v244/host_terminal.rs",
+    "source_file_sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+    "source_span": [
+      200,
+      208
+    ],
+    "token_sha256": "c8f804be3b81f60987fa323e5ff7d0ff0feefe78139c8fcde29e102cd69b34d4",
+    "exact_source": "fn reconstruct_10(view: &[QM31; 16]) -> QM31 {\n    let mut acc = view[9];\n    let mut index = 9usize;\n    while index > 0 {\n        index -= 1;\n        acc = acc.add(acc).add(view[index]);\n    }\n    acc\n}",
+    "step_map": [
+      {
+        "source": "let mut acc=view[9]",
+        "model": "Array.index_usize view.value 9#usize; reconstruct_fixed_read_bound14"
+      },
+      {
+        "source": "let mut index=9usize",
+        "model": "loop initial state (acc,9#usize)"
+      },
+      {
+        "source": "while index>0",
+        "model": "reverse_body guard; reverse_loop_plan; zero arm returns acc"
+      },
+      {
+        "source": "index-=1",
+        "model": "wrapping_sub after nonzero guard; reconstruct_source_read_bound14"
+      },
+      {
+        "source": "acc=acc.add(acc).add(view[index])",
+        "model": "reconstruct_step: receiver add, index read, second add; original field callee order retained"
+      },
+      {
+        "source": "acc",
+        "model": "complete scalar Result; shared input identity retained, no mutable stores/drop"
+      }
+    ],
+    "module": "PV_B3P_ReconstructNative14227",
+    "scope": "source interpreter with immutable shared-loan representation; array indexing and field primitives use pinned Aeneas models, with actual caller bounds; compiler realization remains V370",
+    "native_status": "Exact source-to-interpreter statement map and complete-Result local law; full source-index/primitive/dependency association remains OPEN. Do not count as fully composed own-1 BOUND.",
+    "unbound_dependencies": [
+      "complete pre-inline dependency/source coverage remains tracked separately; do not infer whole callback closure"
+    ],
+    "statement_pattern_complete": true,
+    "matched_negative_control": "changed initial read/index rejected by exact grammar",
+    "models": [
+      {
+        "module": "PV_B3P_ReconstructNative14227",
+        "sha256": "bbd8efeed68edd90369d36aa2e083209e93b4036a39f250d44fd5ce159860f17"
+      },
+      {
+        "module": "PV_B3P_ReconstructBinding9227",
+        "sha256": "a99b0c210d681ec0d4495ee79fc3f6db11e3ad9e2e3924183f15c5d2cc9176f7"
+      },
+      {
+        "module": "PV_B3P_ReverseLoop9227",
+        "sha256": "50f4834608e933a981123347400173a68bd6f6b8a1900c328739fe261714d86d"
+      },
+      {
+        "module": "PV_B3P_SelectIndex227",
+        "sha256": "c226ec6811be3e83f80b242bd840bcee6fa425a7697d6f28a5d0a070bc9ffa5b"
+      },
+      {
+        "module": "PV_B3P_ArrayWrite227",
+        "sha256": "b287e95e59079cc309c52cf42652ae43723225caf3e87fa54898e04e34f3c0d4"
+      }
+    ]
+  },
+  {
+    "function": "equality_value",
+    "source": "tools/pv-b3p6-20261028/v244/host_terminal.rs",
+    "source_file_sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+    "source_span": [
+      1240,
+      1248
+    ],
+    "token_sha256": "7c26692815be0e03abaaa3278595da1c7404730ad1208e7417d68f5d881b34b2",
+    "exact_source": "fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 {\n    let mut product = equality_factor(left[0], right[0]);\n    let mut index = 1usize;\n    while index < left.len() {\n        product = product.mul(equality_factor(left[index], right[index]));\n        index += 1;\n    }\n    product\n}",
+    "step_map": [
+      {
+        "source": "product=equality_factor(left[0],right[0])",
+        "model": "read left then right then equality_factor; scalar input reads at 0<10"
+      },
+      {
+        "source": "index=1usize",
+        "model": "source_equality_loop initial index 1"
+      },
+      {
+        "source": "while index<left.len()",
+        "model": "array length 10 via equality_source_length14; source_equality_loop guard"
+      },
+      {
+        "source": "product=product.mul(equality_factor(left[index],right[index]))",
+        "model": "equality_step: read left, read right, factor, receiver mul; all Result tags retained"
+      },
+      {
+        "source": "index+=1",
+        "model": "usize_body wrapping_add under index<10; no overflow"
+      },
+      {
+        "source": "product",
+        "model": "scalar return; both immutable loans unchanged; aliasing allowed"
+      }
+    ],
+    "module": "PV_B3P_EqualityNative14227",
+    "scope": "source interpreter with immutable shared-loan representation; array indexing and field primitives use pinned Aeneas models, with actual caller bounds; compiler realization remains V370",
+    "native_status": "Exact source-to-interpreter statement map and complete-Result local law; full source-index/primitive/dependency association remains OPEN. Do not count as fully composed own-1 BOUND.",
+    "unbound_dependencies": [
+      "complete pre-inline dependency/source coverage remains tracked separately; do not infer whole callback closure"
+    ],
+    "statement_pattern_complete": true,
+    "matched_negative_control": "changed initial read/index rejected by exact grammar",
+    "models": [
+      {
+        "module": "PV_B3P_EqualityNative14227",
+        "sha256": "2ab51c5b7ea5e872da5957ddcc813987e232a7af422effd759c06606ed7b49f2"
+      },
+      {
+        "module": "PV_B3P_EqualityBinding9227",
+        "sha256": "0cf40b640f5c3990a0b7cc22d5443e9b427e9cbf0e17daa47c8c347490f6ae34"
+      },
+      {
+        "module": "PV_B3P_UsizeLoop9227",
+        "sha256": "a0a3579e27c15925db2d611deb306c37ecd514b09494d5b49a957b80303172b8"
+      },
+      {
+        "module": "PV_B3P_SelectIndex227",
+        "sha256": "c226ec6811be3e83f80b242bd840bcee6fa425a7697d6f28a5d0a070bc9ffa5b"
+      }
+    ]
+  }
+]

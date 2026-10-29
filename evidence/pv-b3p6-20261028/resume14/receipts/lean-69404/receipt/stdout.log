@@ -1,0 +1,29 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixStore14227.lean:28:60: error: Type mismatch: After simplification, term
+  hr
+ has type
+  @LT.lt ℕ instLTNat (↑row) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑row ↑3#usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixStore14227.lean:33:4: error: Type mismatch
+  Array.update sums row next_row
+has type
+  Result (Std.Array (Std.Array U64 3#usize) 3#usize)
+but is expected to have type
+  Result (_root_.Array (Std.Array U64 3#usize))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixStore14227.lean:31:9: error: could not synthesize default value for parameter 'h' using tactics
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_MatrixStore14227.lean:31:9: error: failed to prove index is valid, possible solutions:
+  - Use `have`-expressions to prove the index is valid
+  - Use `a[i]!` notation instead, runtime check is performed, and 'Panic' error message is produced if index is not valid
+  - Use `a[i]?` notation instead, result is an `Option` type
+  - Use `a[i]'h` notation instead, where `h` is a proof that index is valid
+sums : Matrix14
+row column : Usize
+value : U64
+hr : ↑row < 3
+hc : ↑column < 3
+rowValue : Std.Array U64 3#usize := (↑sums)[↑row]
+_old : U64
+back_row : U64 → Std.Array U64 3#usize
+⊢ ↑row < Array.size ?m.64
+'PV_B3P_Binding14227.matrix_store_binding14' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Binding14227.matrix_stores_link14' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

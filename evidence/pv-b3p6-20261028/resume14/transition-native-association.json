@@ -1,0 +1,43 @@
+{
+  "body": "r0.Public.transition",
+  "rule": "own-1 structural shared-loan binding",
+  "source": "tools/pv-b3p6-20261028/v244/host_terminal.rs",
+  "owned": "tools/pv-b3p6-20261028/v244/reference_terminal.rs",
+  "source_file_sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+  "owned_file_sha256": "a0b19681cee6dc8192082cba81409070d97f2eb89b4a987ea8f25df1b272299c",
+  "source_span": [
+    1508,
+    1510
+  ],
+  "owned_span": [
+    2390,
+    2392
+  ],
+  "token_sha256": "98784fcc01246efa9b8262d46153bc7a9908466453817a6ace0777eca246d73d",
+  "checked_every_body_token": true,
+  "steps": [
+    {
+      "source": "consume Copy Public discriminant; Transfer(_,t) arm",
+      "model": "BorrowedPublic14.Transfer p t / transition_transfer_identity14; returns exactly same identity and value"
+    },
+    {
+      "source": "Withdrawal(_,t) arm in same or-pattern",
+      "model": "BorrowedPublic14.Withdrawal p t / transition_withdrawal_identity14; returns exactly same identity and value"
+    },
+    {
+      "source": "shared reference return; no dereference, allocation or mutation",
+      "model": "Shared14 identity retained; transition_loan_continuation14 permits identity-sensitive continuations"
+    },
+    {
+      "source": "caller reads immutable value",
+      "model": "transition_loan_binding14 transports to transition_source13 after value erasure"
+    }
+  ],
+  "callees": [],
+  "stores": [],
+  "drop_glue": "Public is Copy; fields are shared references. No destructor or explicit Drop in this body. No cleanup side effects.",
+  "error_abort_divergence": "exhaustive two-arm pure return; no failure operation",
+  "lean_module": "PV_B3P_TransitionLoan14227",
+  "status": "Exact source statement map checked; loan/continuation laws compiled at 69462. No std/dependency callees in this body; source-to-machine remains at V370.",
+  "compiler_boundary": "source-to-machine V370 / pending owner D381,D386 retained; never T"
+}
