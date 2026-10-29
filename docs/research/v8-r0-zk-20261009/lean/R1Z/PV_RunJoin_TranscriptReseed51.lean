@@ -30,8 +30,8 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @External
 
 theorem domain_bytes : PV_RunJoin_TranscriptReseedSource51.domain.val.map ProverCommitOwnerBytes42.byte=
     TranscriptR1.openDomain := by
-  unfold TranscriptR1.openDomain
-  rfl
+  simp [PV_RunJoin_TranscriptReseedSource51.domain,TranscriptR1.openDomain,
+    Array.to_slice,Array.make,ProverCommitOwnerBytes42.byte]
 
 theorem frame (s : Block) (tag : U8) :
     ProverRwOuterFrames.flatten (PV_RunJoin_TranscriptReseedSource51.request s tag)=
