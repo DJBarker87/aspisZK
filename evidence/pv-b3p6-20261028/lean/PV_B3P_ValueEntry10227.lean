@@ -12,7 +12,7 @@ theorem value_source_equation10_00 (packed : Array aspis_core.field.QM31 24#usiz
     reference_terminal.add_value_lanes packed openings selectors =
       value_owned_stage9_00 packed openings selectors >>= value_source_tail10_01 packed openings selectors := by
   unfold reference_terminal.add_value_lanes value_owned_stage9_00 value_read_context9_00
-  simp only [bind_assoc, bind_tc_ok]
+  conv_rhs => simp only [bind_assoc, bind_tc_ok]
   apply bind_equal9
   intro head_0
   apply bind_equal9
