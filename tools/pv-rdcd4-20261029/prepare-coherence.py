@@ -28,5 +28,7 @@ if (E/'v237-singleton-result.json').exists():
   extra.append(dict(path='/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/'+pin['path'],sha256=pin['sha256']))
  for manifest in ['v237-library-sources.json','buffer-dependency-sources.json']:
   for pin in json.load(open(E/manifest)):extra.append(dict(path=pin['path'],sha256=pin['sha256']))
+if (E/'v197-library-sources.json').exists():
+ for pin in json.load(open(E/'v197-library-sources.json')):extra.append(dict(path=pin['path'],sha256=pin['sha256']))
 (E/'final-coherence-inputs.json').write_text(json.dumps(dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),modules=modules,additional_native_source_pins=extra),indent=2)+'\n')
 print(len(modules),'successful source/launch snapshots prepared')
