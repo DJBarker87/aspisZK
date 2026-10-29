@@ -1,0 +1,3 @@
+import PV_B3P_P227_03d
+
+#print axioms PV_B3P_227.reference_poseidon.external_local_packed_raw

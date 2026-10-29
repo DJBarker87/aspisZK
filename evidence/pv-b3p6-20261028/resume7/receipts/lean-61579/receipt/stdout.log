@@ -1,0 +1,259 @@
+'PV_B3P_Success227.window_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:63:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize ≥ start then do
+    let stop ← lift (start.wrapping_add N)
+    if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize < stop then do
+        let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 0#usize).wrapping_sub start)
+        values.index_usize i
+      else Result.ok aspis_core.field.QM31.ZERO
+  else Result.ok aspis_core.field.QM31.ZERO
+in the target expression
+  (have x := (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize;
+    have __do_jp := fun q => do
+      let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q
+      let i1 ← lift (Usize.wrapping_mul 4#usize i)
+      let source1 ← lift (i1.wrapping_add 1#usize)
+      have __do_jp :
+        aspis_core.field.QM31 →
+          Result
+            (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+              (Std.Array aspis_core.field.QM31 24#usize)) :=
+        fun q1 => do
+        let output2 ← output1.update 1#usize q1
+        let i2 ← lift (Usize.wrapping_mul 4#usize i)
+        let source2 ← lift (i2.wrapping_add 2#usize)
+        have __do_jp :
+          aspis_core.field.QM31 →
+            Result
+              (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+                (Std.Array aspis_core.field.QM31 24#usize)) :=
+          fun q2 => do
+          let output3 ← output2.update 2#usize q2
+          let i3 ← lift (Usize.wrapping_mul 4#usize i)
+          let source3 ← lift (i3.wrapping_add 3#usize)
+          have __do_jp :
+            aspis_core.field.QM31 →
+              Result
+                (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+                  (Std.Array aspis_core.field.QM31 24#usize)) :=
+            fun q3 => do
+            let output4 ← output3.update 3#usize q3
+            let q4 ← packed.index_usize i
+            let s ← lift output4.to_slice
+            let q5 ← host_terminal_field.qm31_pack_base4 s
+            let q6 ← q4.add q5
+            let packed1 ← packed.update i q6
+            Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+          if source3 ≥ start then do
+              let i4 ← lift (start.wrapping_add N)
+              if source3 < i4 then do
+                  let i5 ← lift (source3.wrapping_sub start)
+                  let q3 ← values.index_usize i5
+                  __do_jp q3
+                else do
+                  let q3 ← Result.ok aspis_core.field.QM31.ZERO
+                  __do_jp q3
+            else do
+              let q3 ← Result.ok aspis_core.field.QM31.ZERO
+              __do_jp q3
+        if source2 ≥ start then do
+            let i3 ← lift (start.wrapping_add N)
+            if source2 < i3 then do
+                let i4 ← lift (source2.wrapping_sub start)
+                let q2 ← values.index_usize i4
+                __do_jp q2
+              else do
+                let q2 ← Result.ok aspis_core.field.QM31.ZERO
+                __do_jp q2
+          else do
+            let q2 ← Result.ok aspis_core.field.QM31.ZERO
+            __do_jp q2
+      if source1 ≥ start then do
+          let i2 ← lift (start.wrapping_add N)
+          if source1 < i2 then do
+              let i3 ← lift (source1.wrapping_sub start)
+              let q1 ← values.index_usize i3
+              __do_jp q1
+            else do
+              let q1 ← Result.ok aspis_core.field.QM31.ZERO
+              __do_jp q1
+        else do
+          let q1 ← Result.ok aspis_core.field.QM31.ZERO
+          __do_jp q1;
+    if x ≥ start then do
+      let i1 ← lift (start.wrapping_add N)
+      if x < i1 then do
+          let i2 ← lift (x.wrapping_sub start)
+          let q ← values.index_usize i2
+          __do_jp q
+        else do
+          let q ← Result.ok aspis_core.field.QM31.ZERO
+          __do_jp q
+    else do
+      let q ← Result.ok aspis_core.field.QM31.ZERO
+      __do_jp q) =
+    Result.ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+
+N : Usize
+packed : Std.Array aspis_core.field.QM31 24#usize
+values : Std.Array aspis_core.field.QM31 N
+start last i : Usize
+hsum : ↑start + ↑N ≤ 96
+hlast : ↑last < 24
+hi : i ≤ last
+base : Usize := Usize.wrapping_mul 4#usize i
+q0 q1 q2 q3 : aspis_core.field.QM31
+w0 : Std.Array aspis_core.field.QM31 4#usize
+hw0 : (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q0 = Result.ok w0
+w1 : Std.Array aspis_core.field.QM31 4#usize
+hw1 : w0.update 1#usize q1 = Result.ok w1
+w2 : Std.Array aspis_core.field.QM31 4#usize
+hw2 : w1.update 2#usize q2 = Result.ok w2
+w3 : Std.Array aspis_core.field.QM31 4#usize
+hw3 : w2.update 3#usize q3 = Result.ok w3
+old : aspis_core.field.QM31
+hold : packed.index_usize i = Result.ok old
+group : aspis_core.field.QM31
+hgroup : host_terminal_field.qm31_pack_base4 w3.to_slice = Result.ok group
+value : aspis_core.field.QM31
+hvalue : old.add group = Result.ok value
+next : Std.Array aspis_core.field.QM31 24#usize
+hnext : packed.update i value = Result.ok next
+hq0 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 0#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q0
+hq1 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 1#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 1#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q1
+hq2 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 2#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 2#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q2
+hq3 :
+  (if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize ≥ start then do
+      let stop ← lift (start.wrapping_add N)
+      if (Usize.wrapping_mul 4#usize i).wrapping_add 3#usize < stop then do
+          let i ← lift (((Usize.wrapping_mul 4#usize i).wrapping_add 3#usize).wrapping_sub start)
+          values.index_usize i
+        else Result.ok aspis_core.field.QM31.ZERO
+    else Result.ok aspis_core.field.QM31.ZERO) =
+    Result.ok q3
+⊢ (have x := (Usize.wrapping_mul 4#usize i).wrapping_add 0#usize;
+    have __do_jp := fun q => do
+      let output1 ← (Array.repeat 4#usize aspis_core.field.QM31.ZERO).update 0#usize q
+      let i1 ← lift (Usize.wrapping_mul 4#usize i)
+      let source1 ← lift (i1.wrapping_add 1#usize)
+      have __do_jp :
+        aspis_core.field.QM31 →
+          Result
+            (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+              (Std.Array aspis_core.field.QM31 24#usize)) :=
+        fun q1 => do
+        let output2 ← output1.update 1#usize q1
+        let i2 ← lift (Usize.wrapping_mul 4#usize i)
+        let source2 ← lift (i2.wrapping_add 2#usize)
+        have __do_jp :
+          aspis_core.field.QM31 →
+            Result
+              (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+                (Std.Array aspis_core.field.QM31 24#usize)) :=
+          fun q2 => do
+          let output3 ← output2.update 2#usize q2
+          let i3 ← lift (Usize.wrapping_mul 4#usize i)
+          let source3 ← lift (i3.wrapping_add 3#usize)
+          have __do_jp :
+            aspis_core.field.QM31 →
+              Result
+                (ControlFlow (Std.Array aspis_core.field.QM31 24#usize × Usize)
+                  (Std.Array aspis_core.field.QM31 24#usize)) :=
+            fun q3 => do
+            let output4 ← output3.update 3#usize q3
+            let q4 ← packed.index_usize i
+            let s ← lift output4.to_slice
+            let q5 ← host_terminal_field.qm31_pack_base4 s
+            let q6 ← q4.add q5
+            let packed1 ← packed.update i q6
+            Result.ok (ControlFlow.cont (packed1, i.wrapping_add 1#usize))
+          if source3 ≥ start then do
+              let i4 ← lift (start.wrapping_add N)
+              if source3 < i4 then do
+                  let i5 ← lift (source3.wrapping_sub start)
+                  let q3 ← values.index_usize i5
+                  __do_jp q3
+                else do
+                  let q3 ← Result.ok aspis_core.field.QM31.ZERO
+                  __do_jp q3
+            else do
+              let q3 ← Result.ok aspis_core.field.QM31.ZERO
+              __do_jp q3
+        if source2 ≥ start then do
+            let i3 ← lift (start.wrapping_add N)
+            if source2 < i3 then do
+                let i4 ← lift (source2.wrapping_sub start)
+                let q2 ← values.index_usize i4
+                __do_jp q2
+              else do
+                let q2 ← Result.ok aspis_core.field.QM31.ZERO
+                __do_jp q2
+          else do
+            let q2 ← Result.ok aspis_core.field.QM31.ZERO
+            __do_jp q2
+      if source1 ≥ start then do
+          let i2 ← lift (start.wrapping_add N)
+          if source1 < i2 then do
+              let i3 ← lift (source1.wrapping_sub start)
+              let q1 ← values.index_usize i3
+              __do_jp q1
+            else do
+              let q1 ← Result.ok aspis_core.field.QM31.ZERO
+              __do_jp q1
+        else do
+          let q1 ← Result.ok aspis_core.field.QM31.ZERO
+          __do_jp q1;
+    if x ≥ start then do
+      let i1 ← lift (start.wrapping_add N)
+      if x < i1 then do
+          let i2 ← lift (x.wrapping_sub start)
+          let q ← values.index_usize i2
+          __do_jp q
+        else do
+          let q ← Result.ok aspis_core.field.QM31.ZERO
+          __do_jp q
+    else do
+      let q ← Result.ok aspis_core.field.QM31.ZERO
+      __do_jp q) =
+    Result.ok (ControlFlow.cont (next, i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (24 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3P_Success227.preweighted_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.preweighted_loop_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PreweightedSuccess227.lean:119:4: warning: 'change last.val < 24' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+'PV_B3P_Success227.preweighted_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

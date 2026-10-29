@@ -276,3 +276,7 @@ native Vec composition and complete structural binding, then its carrier law.
 ## D373 final resume
 
 Exact base1e826627aa, IDs50500–50599,100 charged Lean attempts (86 pass/14 failed drafts),0 Kani. V243 selected source/value requirement closed with whole-buffer, Vec/error, structural binding and original-carrier packet. V229 retained. V228 safe fixed-array extraction accepted and local geometry/write/measure laws proved; whole-loop value/count and source binding remain open. V241,V245,V244 not advanced. Audits50597–50599 passed;86 project-module hash closure coherent. Final details in FINAL.md and receipt-index-resume2.json. Own rebuildable caches removed after all scopes ended; keys/shared paths untouched. Budget exhausted; no ROWS7/endpoint counterexample; target not yet established.
+
+## D451 resume11
+
+100 Lean attempts64900–64999 (92 pass,8 rejected),3 optimized capped native compilation scopes,0 Kani. Audits pass;209 new theorem axiom reports standard only. Four round folds, full value scaling loop/frame, digest20-level loop/eight-cell stores and interval helper accepted. Reachability79 is conservative, not certified exact;43 String identity laws do not instantiate Rust/model semantics and count0/79 new fully composed own-1 bindings. Sum caller namespace fix remains uncompiled; copy/preweighted/other transforms and(c)/(d) remain. No runjoin op227 discharge or endpoint premise removal. See resume11/FINAL.md and RESIDUALS.md. Cache retained, no shipped Rust/ELF/key changes.

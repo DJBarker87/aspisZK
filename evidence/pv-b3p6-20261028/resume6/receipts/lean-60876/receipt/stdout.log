@@ -1,0 +1,112 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:9:4: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  Monad fun a => Result Prop
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:11:11: error: Tactic `rfl` failed: The left-hand side
+  List.allM
+    (fun x =>
+      match x with
+      | (x, y) => do
+        let b ← cmp.ne x y
+        Result.ok ¬b = true)
+    ([].zip [])
+is not definitionally equal to the right-hand side
+  Result.ok (true = true)
+
+case nil
+T : Type
+cmp : core.cmp.PartialEq T T
+hn : ∀ (x : T), cmp.ne x x = Result.ok false
+⊢ List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← cmp.ne x y
+          Result.ok ¬b = true)
+      ([].zip []) =
+    Result.ok (true = true)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:14:4: error: Type mismatch
+  ih
+has type
+  List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← cmp.ne x y
+          Result.ok ¬b = true)
+      (xs.zip xs) =
+    Result.ok (true = true)
+but is expected to have type
+  (do
+      let __do_lift ← Result.ok ¬false = true
+      if __do_lift = true then
+          List.allM
+            (fun x => do
+              let b ← cmp.ne x.1 x.2
+              Result.ok ¬b = true)
+            (xs.zip xs)
+        else pure false) =
+    Result.ok True
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:13:63: warning: This simp argument is unused:
+  ↓reduceIte
+
+Hint: Omit it from the simp argument list.
+  simp only [̵L̵i̵s̵t̵.̵z̵i̵p̵_̵c̵o̵n̵s̵_̵c̵o̵n̵s̵,̵L̵i̵s̵t̵.̵a̵l̵l̵M̵_̵c̵o̵n̵s̵,̵h̵n̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵↓̵r̵e̵d̵u̵c̵e̵I̵t̵e̵]̵[̲L̲i̲s̲t̲.̲z̲i̲p̲_̲c̲o̲n̲s̲_̲c̲o̲n̲s̲,̲ ̲L̲i̲s̲t̲.̲a̲l̲l̲M̲_̲c̲o̲n̲s̲,̲ ̲h̲n̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:20:17: error(lean.unknownIdentifier): Unknown identifier `list_self`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:18:65: error: unsolved goals
+T : Type
+n : Usize
+cmp : core.cmp.PartialEq T T
+hn : ∀ (x : T), cmp.ne x x = Result.ok false
+a : Std.Array T n
+⊢ (do
+      let b ←
+        List.allM
+            (fun x =>
+              match x with
+              | (x, y) => do
+                let b ← cmp.ne x y
+                Result.ok (decide ¬b = true))
+            ((↑a).zip ↑a)
+      Result.ok (decide ¬b = true)) =
+    Result.ok false
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:28:73: error: unsolved goals
+x : U32
+⊢ Result.ok (decide ¬True) = Result.ok false
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:29:13: warning: This simp argument is unused:
+  core.cmp.PartialEq.ne.trait_default
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲ aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq, d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵e̵q̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵]̵d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲e̲q̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:30:4: warning: This simp argument is unused:
+  aspis_core.field.M31.Insts.CoreCmpPartialEqM31
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵t̵r̵a̵i̵t̵_̵d̵e̵f̵a̵u̵l̵t̵,̵c̵o̵r̵e̵.̵c̵m̵p̵.̵P̵a̵r̵t̵i̵a̵l̵E̵q̵.̵n̵e̵.̵d̵e̵f̵a̵u̵l̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵M̵3̵1̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵C̵m̵p̵P̵a̵r̵t̵i̵a̵l̵E̵q̵M̵3̵1̵,̵[̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲t̲r̲a̲i̲t̲_̲d̲e̲f̲a̲u̲l̲t̲,̲ ̲c̲o̲r̲e̲.̲c̲m̲p̲.̲P̲a̲r̲t̲i̲a̲l̲E̲q̲.̲n̲e̲.̲d̲e̲f̲a̲u̲l̲t̲,̲
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq, d̵e̵c̵i̵d̵e̵_̵t̵r̵u̵e̵,̵e̵q̵_̵s̵e̵l̵f̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵]̵d̲e̲c̲i̲d̲e̲_̲t̲r̲u̲e̲,̲ ̲e̲q̲_̲s̲e̲l̲f̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲B̲o̲o̲l̲.̲n̲o̲t̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:32:35: warning: This simp argument is unused:
+  Bool.not_true
+
+Hint: Omit it from the simp argument list.
+  simp only [core.cmp.PartialEq.ne.trait_default, ̲core.cmp.PartialEq.ne.default,
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31,
+      aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+  ̵  ̵ ̵ ̵decide_true, ̲eq_self, ̲bind_tc_ok,̵B̵o̵o̵l̵.̵n̵o̵t̵_̵t̵r̵u̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ArraySelfSuccess227.lean:42:14: error(lean.unknownIdentifier): Unknown constant `list_self`
+'PV_B3P_Success227.array_ne_self' depends on axioms: [sorryAx]
+'PV_B3P_Success227.byte_ne_self' depends on axioms: [propext]
+'PV_B3P_Success227.word_ne_self' depends on axioms: [propext, sorryAx]
+'PV_B3P_Success227.bytes_ne_self' depends on axioms: [propext, sorryAx]
+'PV_B3P_Success227.digest_ne_self' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
