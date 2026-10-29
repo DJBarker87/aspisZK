@@ -94,7 +94,7 @@ def deploy_role(role):
         final=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','set-upgrade-authority',program,'--final']
         with open(O/(role+'-immutable.json'),'w') as stdout,open(O/(role+'-immutable-stderr.txt'),'w') as stderr:subprocess.run(final,stdout=stdout,stderr=stderr,check=True)
         finaldata=base64.b64decode(account(pd)['value']['data'][0]);assert finaldata[12]==0 and finaldata[45:]==elf
-    write(role+'-rent-ledger',[loader_rent(program,account(program)['value'],C['payer']),loader_rent(pd,account(pd)['value'],C['payer'])]);write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
+    write(role+'-rent-ledger',[loader_rent(program,account(program)['value'],C['payer'],role in ('verifier','registry')),loader_rent(pd,account(pd)['value'],C['payer'])]);write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
 
 def interrupted(signum,frame):raise KeyboardInterrupt(f'interrupted by signal {signum}')
 signal.signal(signal.SIGTERM,interrupted)

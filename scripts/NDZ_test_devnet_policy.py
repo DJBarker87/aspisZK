@@ -5,7 +5,7 @@ import pathlib
 import tempfile
 import unittest
 from unittest.mock import patch
-from r1_devnet_policy import require_key, loader_rent, close_failed_buffer, created_accounts, LOADER
+from r1_devnet_policy import require_key, loader_rent, close_failed_buffer, created_accounts, state_rent, LOADER
 from r1_devnet_release_gate import base58
 
 PAYER='CVZJcAv97von8njTJSyLVQ9X33NAKQYbEXFKnAYvst9t'
@@ -38,6 +38,12 @@ class Policy(unittest.TestCase):
             result=close_failed_buffer(pathlib.Path('/cli'),'http://127.0.0.1:1','key',PAYER,'buffer',lambda _:next(values),lambda *args:None)
             self.assertEqual(result['remaining_lamports'],0)
             self.assertIn('finalized',run.call_args.args[0]);self.assertIn(PAYER,run.call_args.args[0])
+    def test_only_retained_token_owner_marks_state_rent_recoverable(self):
+        raw=bytearray(165);raw[32:64]=base58(PAYER)
+        token=account(raw,'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+        self.assertEqual(state_rent('token',token,PAYER,PAYER)['recoverable_lamports'],123)
+        raw[129:133]=(1).to_bytes(4,'little');token=account(raw,'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
+        self.assertEqual(state_rent('token',token,PAYER,PAYER)['recoverable_lamports'],0)
     def actual_wait(self, height):
         tree=ast.parse(pathlib.Path(__file__).with_name('r1_devnet_deploy_paced.py').read_text())
         node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='wait')

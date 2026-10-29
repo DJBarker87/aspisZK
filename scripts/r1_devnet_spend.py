@@ -214,6 +214,6 @@ for receipt in O.glob('*-transaction.json'):
 ledger=[]
 for address in sorted(created):
     current=account(address)['value']
-    if current:ledger.append(state_rent(address,current,C['payer']))
+    if current:ledger.append(state_rent(address,current,C['payer'],gov))
 write('rent-ledger',ledger)
 write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True,'programs':C['programs'],'payer':C['payer'],'key_namespace':C.get('key_namespace','')})

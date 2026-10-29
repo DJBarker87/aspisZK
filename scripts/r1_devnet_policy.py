@@ -19,7 +19,7 @@ def require_key(path, cli, expected=None):
     return {'path': str(path.absolute()), 'public': public, 'mode': '0600'}
 
 
-def loader_rent(address, account, payer):
+def loader_rent(address, account, payer, immutable_program=False):
     """Conservatively classify live loader accounts; never infer recoverability from a key file."""
     raw = base64.b64decode(account['data'][0])
     tag = int.from_bytes(raw[:4], 'little')
@@ -29,7 +29,7 @@ def loader_rent(address, account, payer):
         if tag == 1:
             kind, recovery = 'buffer', 'payer loader close after finalized signature reconciliation'
         elif tag == 2:
-            kind, recovery = 'program', 'see linked ProgramData authority'
+            kind, recovery = 'program', ('permanently locked' if immutable_program else 'see linked ProgramData authority')
         elif tag == 3:
             kind = 'programdata'
             if len(raw) < 45:
@@ -38,7 +38,9 @@ def loader_rent(address, account, payer):
             recovery = 'permanently locked' if authority == 0 else 'retained upgrade authority loader close'
     return {'address': address, 'lamports': account['lamports'], 'kind': kind,
             'recovery': recovery, 'recovery_public_destination': payer,
-            'authority_option': authority}
+            'authority_option': authority,
+            'locked_lamports': account['lamports'] if recovery=='permanently locked' else 0,
+            'recoverability_requires_authority_check': recovery!='permanently locked'}
 
 
 def close_failed_buffer(cli, url, payer_key, payer, buffer, fetch, output):
@@ -78,9 +80,17 @@ def created_accounts(transaction):
             if before == 0 and after > 0]
 
 
-def state_rent(address, account, payer):
-    return {'address': address, 'owner': account['owner'], 'lamports': account['lamports'],
+def state_rent(address, account, payer, token_authority=None):
+    row= {'address': address, 'owner': account['owner'], 'lamports': account['lamports'],
             'data_bytes': len(base64.b64decode(account['data'][0])),
             'recovery': 'no demonstrated close path; budget as locked',
             'recovery_public_destination': payer,
-            'keys_retained': True}
+            'keys_retained': True, 'recoverable_lamports': 0, 'locked_lamports': account['lamports']}
+    raw=base64.b64decode(account['data'][0])
+    if token_authority and account['owner']=='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA' and len(raw)==165:
+        from r1_devnet_release_gate import base58
+        if raw[32:64]==base58(token_authority) and raw[129:133]==bytes(4):
+            row.update(recovery='SPL Token CloseAccount after token balance zero',
+                       recovery_authority=token_authority, token_balance=int.from_bytes(raw[64:72],'little'),
+                       recoverable_lamports=account['lamports'],locked_lamports=0)
+    return row
