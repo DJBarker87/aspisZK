@@ -14,7 +14,7 @@ retained. Lead integration/recount is still required.
 Worktree exactly `/Users/dominic/ZK/.worktrees/pv-own` (sparse);
 branch `codex/pv-ownh-20261029`, candidate base `b7e35cda1b`.
 `COMMITS.txt` gives `git log --oneline b7e35cda1b..HEAD` before this report
-commit; the report commit follows it. Only this task's evidence/tools and
+commit; the report was captured in snapshot `5f4d967a31`; the final handoff commit follows it. Only this task's evidence/tools and
 new `PV_OWNH_` modules changed. No crates/programs, root checkout, other
 worktrees, protected soundness files, keys, simulator, observer or T changed.
 No release ELF rebuild was needed because implementation sources are unchanged.
@@ -146,3 +146,13 @@ closure. Nothing further is proposed as a prerequisite for the D439 leaf
 restorations. No push/merge; no committed binaries/objects or file over20MB;
 `git diff --check` passes. Rebuildable outputs created by this task are removed
 after the final object fingerprint; inherited caches are retained unchanged.
+
+## Capacity relaunch 1 finalization
+
+Recovered snapshot `5f4d967a31` already contains the completed restoration,
+all three final audits/replay receipts and this report. `resume-1.json` records
+the independent receipt, source-hash, frozen-manifest and literal-byte checks
+after relaunch; all passed. No new Lean or native run was required or launched.
+Budget remains57/60 Lean,1/30 native scopes,0 Kani. The stopping condition is
+completion of both requested leaf restorations; unused attempts are retained.
+The final handoff commit changes evidence only.
