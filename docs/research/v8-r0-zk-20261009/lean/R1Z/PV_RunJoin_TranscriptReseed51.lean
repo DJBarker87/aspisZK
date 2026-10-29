@@ -18,6 +18,8 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @External
       hash semantic v=(do
         let state ← hash (PV_RunJoin_TranscriptReseedSource51.request semantic (ProverRwOuterTag.byte v))
         ok ⟨state,hash⟩) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_TranscriptReseedSource51.source]
   change (do let tag ← (selected base heap box ops).op234 v
              let state ← (selected base heap box ops).op39 hash
@@ -27,7 +29,8 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @External
   simp only [bind_tc_ok,PV_RunJoin_TranscriptDigest51.installed]
 
 theorem domain_bytes : PV_RunJoin_TranscriptReseedSource51.domain.val.map ProverCommitOwnerBytes42.byte=
-    TranscriptR1.openDomain := rfl
+    TranscriptR1.openDomain := by
+  decide
 
 theorem frame (s : Block) (tag : U8) :
     ProverRwOuterFrames.flatten (PV_RunJoin_TranscriptReseedSource51.request s tag)=
