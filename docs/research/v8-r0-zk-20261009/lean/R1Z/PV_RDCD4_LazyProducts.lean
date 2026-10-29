@@ -32,7 +32,8 @@ def reference (left right : Array Q 3#usize) : Result Q := do
 theorem binding (left right : Array Q 3#usize) : source left right=reference left right := by
   unfold source reference
   rw [PV_RDCD3_RangeLoop.complete _ 3 0 3 zero (by omega)]
-  simp [PV_RDCD3_RangeFold.ordered,step_binding,bind_assoc_eq]
+  simp only [PV_RDCD3_RangeFold.ordered,step_binding,bind_assoc_eq,bind_tc_ok,
+    PV_RDCD4_LazyChannels.bind_return]
 #print axioms step_binding
 #print axioms binding
 end R1Z.PV_RDCD4_LazyProducts
