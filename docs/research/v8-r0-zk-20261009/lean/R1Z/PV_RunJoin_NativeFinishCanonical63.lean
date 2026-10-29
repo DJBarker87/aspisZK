@@ -12,7 +12,8 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F)
     (phase : @PV_RunJoin_NativeControl55.Phase (types base)) (prepared : prover.PreparedOpening)
-    (success : @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
+    (success : letI : ExternalTypes := types base
+      @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
       .S2 phase.hash phase.backend phase.sem=ok (.Ok prepared)) :
     letI : ExternalTypes := types base
     letI : ExternalFuns := opsNative base heap box ops runtime world
