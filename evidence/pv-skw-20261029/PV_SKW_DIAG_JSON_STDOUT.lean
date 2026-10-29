@@ -26,6 +26,9 @@ theorem satisfiable : ∃ x : Instance,
  · intro i es e; exact project_step es e
  · intro i; rfl
  · intro i; rfl
+def sample : I := ⟨[.returned [123,125],.printed [10] [10]],.success 7⟩
+theorem nondegenerate : model.actual sample = ([[123,125]],[([10],[10])]) := rfl
+#print axioms nondegenerate
 #print axioms project_step
 #print axioms satisfiable
 end PV_SKW_DIAG_JSON_STDOUT

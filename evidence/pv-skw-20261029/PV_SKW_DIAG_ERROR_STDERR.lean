@@ -26,6 +26,9 @@ theorem satisfiable : ∃ x : Instance,
  · intro i es e; exact project_step es e
  · intro i; rfl
  · intro i; rfl
+def sample : I := ⟨[.diag2 (.returned .Semantic),.diag3 (.requested 2 [69])],.failure [69]⟩
+theorem nondegenerate : model.actual sample = ([.returned .Semantic],[.requested 2 [69]]) := rfl
+#print axioms nondegenerate
 #print axioms project_step
 #print axioms satisfiable
 end PV_SKW_DIAG_ERROR_STDERR
