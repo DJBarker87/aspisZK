@@ -2598,7 +2598,7 @@ pub fn reconstruct(v:&[QM31;16])->QM31 { reconstruct_10(v) }
 pub fn equality(a:&[QM31;10],b:&[QM31;10])->QM31 { equality_value(a,b) }
 pub fn sum(h:[QM31;64],l:[QM31;16],r:&[core::ops::Range<usize>])->QM31 { sum_high(&Selectors{high:h,low:l},r) }
 #[cfg(not(feature="optimized-terminal"))]
-pub fn digest(o:&mut[QM31;8],q:QM31,v:&[QM31;16],s:usize,d:&[M31;8],t:bool) { add_digest_binding(o,q,v,s,d,t) }
+pub fn digest(o:&mut[QM31;8],q:QM31,v:&[QM31;16],s:usize,d:&[M31;8],t:bool) { *o=add_digest_binding(*o,q,*v,s,*d,t) }
 #[cfg(not(feature="optimized-terminal"))]
 pub fn absorption(a:[QM31;5],v:&[QM31;16])->[QM31;16] { absorption_lanes_literal(a[0],a[1],a[2],a[3],a[4],v) }
 #[cfg(not(feature="optimized-terminal"))]

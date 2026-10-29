@@ -32,6 +32,7 @@ records=[]
 for family,stem in [('copy','copy_terminal'),('terminal','terminal')]:
  for side in ['host','reference']:
   src=P/f'{side}_{stem}.rs';raw=src.read_bytes();w=wrappers[family]
+  if side=='reference':w=w.replace('add_digest_binding(o,q,v,s,d,t)', '*o=add_digest_binding(*o,q,*v,s,*d,t)').replace('absorption_lanes_literal(a[0],a[1],a[2],a[3],a[4],v)', 'absorption_lanes_literal(a[0],a[1],a[2],a[3],a[4],v)')
   if family=='copy':w=w.replace('MASK_CALL','selector_mask_sum_16(v,m)' if side=='host' else 'selector_mask_sum_16(*v,m)')
   dest=P/f'{side}_{stem}_kani16.rs';out=raw+b'\n// Harness-only adapters after an unmodified module prefix.\n'+w.encode()+b'\n'
   if '--check' in sys.argv:assert dest.read_bytes()==out
