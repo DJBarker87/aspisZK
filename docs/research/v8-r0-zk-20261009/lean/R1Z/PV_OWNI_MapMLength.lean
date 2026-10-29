@@ -22,7 +22,9 @@ theorem length {A B : Type} (f : A → Result B) (xs : List A) (ys : List B)
    | ok tail =>
     have hh : y::tail=ys := by
      have eq:(ok (y::tail) : Result (List B))=ok ys := by
-      simpa only [List.mapM_cons,hx,ht,bind_tc_ok] using h
+      simp only [List.mapM_cons,hx,ht,bind_tc_ok] at h
+      change ok (y::tail)=ok ys at h
+      exact h
      exact Result.ok.inj eq
     subst ys
     rw [List.length_cons,List.length_cons,ih tail ht]
