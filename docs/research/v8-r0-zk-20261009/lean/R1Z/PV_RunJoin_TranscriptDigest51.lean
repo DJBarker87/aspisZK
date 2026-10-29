@@ -17,7 +17,7 @@ theorem installed (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Exter
     (selected base heap box ops).op39 hash parts=hash parts := by
   unfold selected
   rw [PV_B2_F_RawNative.preserved_39]
-  exact candidate ops hash parts
+  exact @candidate (types base) ops hash parts
 
 theorem block (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (t : host_transcript.Transcript aspis_core.digest.LegacyHashFn) (row : U8) (payload : Slice U8) :
