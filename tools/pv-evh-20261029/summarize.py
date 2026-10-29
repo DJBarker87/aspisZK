@@ -15,6 +15,7 @@ for r in rs:
   assert r['admission']['allowed'] is True
 summary=dict(lean_attempts=len(rs),accepted=sum(r['accepted'] for r in rs),
  rejected=sum(not r['accepted'] for r in rs),native_scopes=0,kani=0,
+ admission_refusals=len(list(E.glob('refusal-history-*.json')))+1,
  max_peak_rss_kbytes=max(int(r['peak_rss_kbytes']) for r in rs),
  swaps=sum(int(r['swaps']) for r in rs),void_launches=0,
  guard_sha256=hashlib.sha256(Path('tools/pv-evh-20261029/compile.py').read_bytes()).hexdigest(),
