@@ -14466,3 +14466,17 @@ Lead direction for pv-rdb2f (branch codex/pv-rdb2f-20261029 from 50c43a49d6; IDs
 (2) Bind the V256 and V257 sampler continuations under own-1.
 (3) Complete V231's software path. Prove the SHA-NI path's refinement conditional on one explicit named intrinsic-semantics hypothesis, which never enters T.
 V231 cannot be restored until the owner decides packet item 3 (keep SHA-NI with refinement under the capped T, change the instruction-semantics trust, or select a soft backend with its timing and adoption gates). The conditional proof will make the remaining SHA-NI obligation exact. Rows removed: 0. Privacy target not yet established.
+
+## D435 (Stream B) 2026-10-29 01:44 UTC: pv-ownd results; V228-V230 model input-free functions; ruling own-2; pv-owne launched
+
+pv-ownd (head ad4c77cc47) used 100 Lean attempts (86 passed, 14 failed), one native scope and no Kani. The statement and axioms audits passed with standard axioms only. The final focused replay failed, and its correction is uncompiled. It wrote the coverage plan first, as directed: eight stages with deployed source locations (evidence/pv-ownd-20261029/PLAN.md). It reached only stage 1, the allocation-derived 127-Link byte and owner carrier with all kinds and arbitrary padding. It then stopped on endpoint_counts' stack-array stores and their cleanup. It was merged into the candidate as 325ba5f047 and pushed. V229 remains SUSPENDED. About 400 attempts over four rounds have gone into V229's own-1 route.
+
+Lead observation: the plan shows the deployed functions behind V229 (pool_v1_pair_forest_copy_active_rows_v1) and V230 (pool_v1_pair_forest_copy_active_row_masks_v1) take NO arguments. The same appears to hold for V228 (pool_v1_pair_forest_relation_free_mask_cells_v1). These functions build a fixed row schedule, flat_map it, sort_unstable and dedup it, and fold it into masks, and the crate exports fingerprint functions for the results. The sort therefore runs on public constant data, so it is not a timing channel. Such a function cannot carry witness information, and its privacy-relevant content is only the exact constant it returns and its allocation behaviour.
+
+Ruling own-2 (pv-common.txt) applies to an input-free deployed function. That means no parameters, plus a static check over the complete call cone, standard library included, that it reads no mutable static, thread-local, environment, clock, randomness, file or network state. Such a row is closed by three things:
+(a) a Lean proof by named lemmas that the model's Result equals an explicit literal;
+(b) one execution of the deployed release build compared byte for byte with that literal;
+(c) allocation and abort under rdea-1.
+The evidence class is labelled "exhaustive over a singleton input domain, deployed compiled artifact". This is not finite validation promoted to a universal claim: the domain has one element, and the deployed artifact itself is what was executed. Any external read disqualifies the function and returns the row to own-1. Recount 9 should scrutinise this ruling and each use of it.
+
+pv-owne (branch codex/pv-owne-20261029 from 325ba5f047; IDs 63400-63499; 60 Lean, 30 native, 0 Kani) applies own-2 to V229 and V230, cross-checking against the crate's fingerprint functions. The own-1 work stays as supporting evidence. V239 and V178 are not input-free and stay on own-1. Rows removed: 0. Privacy target not yet established.
