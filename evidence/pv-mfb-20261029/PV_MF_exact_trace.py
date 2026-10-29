@@ -1,8 +1,8 @@
-import json,subprocess,re,hashlib,collections,importlib.util
+import lzma,json,subprocess,re,hashlib,collections,importlib.util
 from pathlib import Path
 D=Path(__file__).resolve().parent
 sp=importlib.util.spec_from_file_location('c',str(D.parent/'pv-mf-20261029/PV_MF_check.py'));c=importlib.util.module_from_spec(sp);sp.loader.exec_module(c)
-mods=c.load('MODULES.json');rows=json.load(open(D/'rows9-input.json'));stale=c.load('STALE.json');co=c.load('COHORTS.json');ej={x['module'].replace('/','.'):x['resolution']['path'] for x in co['selected'] if x.get('resolution')}
+mods=c.load('MODULES.json');rows=json.load(lzma.open(D/'rows9-input.json.xz'));stale=c.load('STALE.json');co=c.load('COHORTS.json');ej={x['module'].replace('/','.'):x['resolution']['path'] for x in co['selected'] if x.get('resolution')}
 external=json.load(open(D/'external-object-manifest.json'));ext={x['module'].replace('/','.') for x in external}
 idx=collections.defaultdict(set)
 for p,m in mods.items():

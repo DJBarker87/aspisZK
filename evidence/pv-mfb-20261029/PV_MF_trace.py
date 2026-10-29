@@ -2,7 +2,7 @@ import json,importlib.util,lzma,collections
 from pathlib import Path
 D=Path(__file__).resolve().parent
 s=importlib.util.spec_from_file_location('c',str(D.parent/'pv-mf-20261029/PV_MF_check.py'));c=importlib.util.module_from_spec(s);s.loader.exec_module(c)
-mods=c.load('MODULES.json');stale=c.load('STALE.json');rows=json.loads((D/'rows9-input.json').read_text());out=[]
+mods=c.load('MODULES.json');stale=c.load('STALE.json');rows=json.load(lzma.open(D/'rows9-input.json.xz'));out=[]
 for r in rows:
  if r['recount9_status'] not in ['CLOSED-ON-CANDIDATE','RESTORED']:continue
  cs=r.get('closing_statement9'); roots=[]

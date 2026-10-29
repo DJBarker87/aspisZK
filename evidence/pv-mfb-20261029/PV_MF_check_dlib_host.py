@@ -2,6 +2,7 @@ from pathlib import Path
 import json,hashlib,subprocess,sys,os,re
 D=Path('/home/dombarker/project-offloads/codex-pv-mfb-20261029');f=json.load(open(D/'dlib-preflight-input.json'));sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 row=sys.argv[1];attempt=int(sys.argv[2]);assert 69600<=attempt<=69699
+r=next(r for r in json.load(open(D/'request.json')) if r['id']==row);cs=r['closing'];env=f['environment'];roots=[Path(x) for x in env['LEAN_PATH'].split(':')];seen={}
 # Corrected h4 preflight: all transitive external objects, before Lean starts.
 ext=json.load(open(D/'external-object-manifest.json'))
 for rec in ext:
@@ -9,7 +10,6 @@ for rec in ext:
  ep=next((rt/(m+'.olean') for rt in roots if (rt/(m+'.olean')).exists()),None)
  assert ep and sha(ep)==rec['object_sha256'],(m,'h4 external mismatch',str(ep))
 external_checked=len(ext)
-r=next(r for r in json.load(open(D/'request.json')) if r['id']==row);cs=r['closing'];env=f['environment'];roots=[Path(x) for x in env['LEAN_PATH'].split(':')];seen={}
 def visit(m):
  m=m.replace('.','/')
  if m in seen:return
