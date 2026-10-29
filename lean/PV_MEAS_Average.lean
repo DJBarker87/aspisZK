@@ -44,6 +44,18 @@ theorem decision_integrable {E : Type*} [MeasurableSpace E]
     (ae_of_all _ (fun e => (bounded e).1))
     (ae_of_all _ (fun e => (bounded e).2)) (integrable_const 0) (integrable_const 1)
 
+/-- Expectations of measurable decisions remain in [0,1]. -/
+theorem decision_probability_bounds {E : Type*} [MeasurableSpace E]
+    (μ : ProbabilityMeasure E) (p : E → ℝ) (hp : Measurable p)
+    (bounded : ∀ e, 0 ≤ p e ∧ p e ≤ 1) :
+    0 ≤ (∫ e, p e ∂(μ : Measure E)) ∧ (∫ e, p e ∂(μ : Measure E)) ≤ 1 := by
+  constructor
+  · exact integral_nonneg (fun e => (bounded e).1)
+  · have hi := integral_mono (decision_integrable μ p hp bounded)
+      (integrable_const (1 : ℝ)) (fun e => (bounded e).2)
+    simpa only [integral_const, probReal_univ, one_smul] using hi
+
+#print axioms decision_probability_bounds
 #print axioms decision_integrable
 #print axioms average_bound
 #print axioms expectation_eq_of_equal_laws
