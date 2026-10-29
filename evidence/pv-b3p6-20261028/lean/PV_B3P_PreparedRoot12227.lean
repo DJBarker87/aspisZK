@@ -37,6 +37,7 @@ theorem prepared_root_binding12 (left : Array reference_field.PreparedQm31Multip
     (right : Array aspis_core.field.QM31 3#usize) :
     reference_field.qm31_sum_products3_prepared left right = source_prepared12 left right := by
   unfold source_prepared12
+  dsimp only
   rw [three_loop12]
   simp only [reference_field.qm31_sum_products3_prepared,source_product_term12,
     source_channel_reconstruct12,accumulate_nested_binding12,PV_B3P_Ordered227.bind_assoc]
