@@ -40,7 +40,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     have next := ih (Usize.wrapping_add lane 1#usize) (by rw [inc];omega)
       {self with messages:=matrix (bases p (values columns hlen) (lane.val+1))}
       (by rw [inc])
-    simpa only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0] using next
+    simpa only [prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0,
+      prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop0.body,lift,bind_tc_ok] using next
 
 #print axioms complete
 end R1Z.PV_RunJoin_BackendBaseColumns58
