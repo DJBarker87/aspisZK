@@ -37,6 +37,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [PV_RunJoin_ScalarResultModel50.complete]
   unfold PV_RunJoin_ScalarResultModel50.retained
   rw [PV_RunJoin_OriginalBlock51.complete base heap box ops W x V c tab unique i payload small hp]
+  simp only [bind_tc_ok]
+  dsimp only [Aeneas.Std.uncurry]
   simp only [bind_tc_ok,lift,PV_RunJoin_OpeningBlockEquiv50.inverse]
 #print axioms complete
 end R1Z.PV_RunJoin_OriginalScalar51
