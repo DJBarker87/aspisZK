@@ -21,8 +21,8 @@ theorem proof_statement_order (p : PublicationInput) : files (requestedPublicati
  [.write p.proofPath (p.afterstate++p.publish_compact) [],
   .write p.statementPath p.statement []] := rfl
 
-theorem publication_append_prefix (p : PublicationInput) (prefix : List Event) :
- files (prefix ++ requestedPublication p) = files prefix ++
+theorem publication_append_prefix (p : PublicationInput) (prior : List Event) :
+ files (prior ++ requestedPublication p) = files prior ++
  [.write p.proofPath (p.afterstate++p.publish_compact) [],
   .write p.statementPath p.statement []] := by
  rw [files_append,proof_statement_order]
