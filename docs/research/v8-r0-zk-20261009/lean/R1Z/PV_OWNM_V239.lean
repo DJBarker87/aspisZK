@@ -86,27 +86,28 @@ def PV_OWNM_Link_Transcript890 (reconstruct890 : Public → List Q) (i : Input) 
  i.site = .final890 → i.point = reconstruct890 i.pubData
 
 /-- The owned context retains allocator error/abort/divergence and the post-world.
-The association is to the raw source value, never to dense evaluation. The
-trace clause holds for every value continuation, including error and div. -/
+Its association uses the raw source value at every transformed wire point.
+The trace is the whole point_claims execution's projection, including its first
+shape/null stop, for every value continuation. -/
 def PV_OWNM_Link_OwnedPublicPlan {K W : Type} (decode : Q → K)
  (source222 : List Q → List Q → Result (Option Q))
  (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
- (native : Input → Nat → Execution K W)
- (owned : Input → Nat → Result (Option K) → Execution K W)
+ (native : Input → List Q → Nat → Execution K W)
+ (owned : Input → List Q → Nat → Result (Option K) → Execution K W)
  (failures : List Bool) (i : Input) : Prop :=
- (∀ lane c, i.columns[lane]? = some c →
-  native i lane = owned i lane (do let v ← source222 i.point c; ok (v.map decode))) ∧
- (∀ lane value, (owned i lane value).trace = plan isBoolean (calls wirePoints i) failures)
+ (∀ p ∈ wirePoints i.point, ∀ lane c, i.columns[lane]? = some c →
+  native i p lane = owned i p lane (do let v ← source222 p c; ok (v.map decode))) ∧
+ (∀ p lane value, (owned i p lane value).trace = plan isBoolean (calls wirePoints i) failures)
 
-/-- Conditional restoration composition. All missing source instances are named
-links above. Equality of Execution preserves the complete Result and post-world;
-resource equality compares the very executions used in the value equation. -/
+/-- Conditional restoration composition. Equality of Execution preserves the
+complete Result and post-world. Both the value and resource laws refer to the
+same native execution projections at all three wire points and every lane. -/
 theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  (source222 : List Q → List Q → Result (Option Q))
  (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
  (reconstruct879 reconstruct890 : Public → List Q)
- (native : Input → Nat → Execution K W)
- (owned : Input → Nat → Result (Option K) → Execution K W)
+ (native : Input → List Q → Nat → Execution K W)
+ (owned : Input → List Q → Nat → Result (Option K) → Execution K W)
  (failures : List Bool) (left right : Input)
  (inputL : PV_OWNM_Link_ActualInput wirePoints left)
  (inputR : PV_OWNM_Link_ActualInput wirePoints right)
@@ -118,17 +119,17 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
  (ownedL : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures left)
  (ownedR : PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native owned failures right)
  (samePublic : left.pubData = right.pubData) (sameSite : left.site = right.site)
- (sameLengths : left.columns.map List.length = right.columns.map List.length)
- (wireSelf : ∀ p, p ∈ wirePoints p) :
- (∀ lane c, left.columns[lane]? = some c →
-  native left lane = owned left lane
-   (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c)))) ∧
- (∀ lane c, right.columns[lane]? = some c →
-  native right lane = owned right lane
-   (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c)))) ∧
- (∀ laneL laneR cL cR, left.columns[laneL]? = some cL →
+ (sameLengths : left.columns.map List.length = right.columns.map List.length) :
+ (∀ p ∈ wirePoints left.point, ∀ lane c, left.columns[lane]? = some c →
+  native left p lane = owned left p lane
+   (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
+ (∀ p ∈ wirePoints right.point, ∀ lane c, right.columns[lane]? = some c →
+  native right p lane = owned right p lane
+   (ok (if c.length ≠ 1024 then none else some (dense decode zero p c)))) ∧
+ (∀ pL ∈ wirePoints left.point, ∀ pR ∈ wirePoints right.point,
+  ∀ laneL laneR cL cR, left.columns[laneL]? = some cL →
   right.columns[laneR]? = some cR →
-  (native left laneL).trace = (native right laneR).trace) := by
+  (native left pL laneL).trace = (native right pR laneR).trace) := by
  have points : left.point = right.point := by
   cases hs : left.site with
   | callback879 =>
@@ -137,28 +138,24 @@ theorem restore {K W : Type} [Field K] (decode : Q → K) (zero : Q)
   | final890 =>
    have hr : right.site = .final890 := sameSite.symm.trans hs
    rw [finalL hs,finalR hr,samePublic]
- have valueL : ∀ lane c, left.columns[lane]? = some c →
-  native left lane = owned left lane
-   (ok (if c.length ≠ 1024 then none else some (dense decode zero left.point c))) := by
-  intro lane c hc
-  rw [ownedL.1 lane c hc]
-  rw [commute left.point c inputL.1 (inputL.2.1 _ (wireSelf _)).2
-   (inputL.2.2 c (List.mem_of_getElem? hc))]
- have valueR : ∀ lane c, right.columns[lane]? = some c →
-  native right lane = owned right lane
-   (ok (if c.length ≠ 1024 then none else some (dense decode zero right.point c))) := by
-  intro lane c hc
-  rw [ownedR.1 lane c hc]
-  rw [commute right.point c inputR.1 (inputR.2.1 _ (wireSelf _)).2
-   (inputR.2.2 c (List.mem_of_getElem? hc))]
- refine ⟨valueL,valueR,?_⟩
- intro laneL laneR cL cR hcL hcR
- rw [ownedL.1 laneL cL hcL,ownedR.1 laneR cR hcR,ownedL.2,ownedR.2]
- have callEq : calls wirePoints left = calls wirePoints right := by
-  simp only [calls]
-  rw [points,sameLengths]
- rw [callEq]
+ constructor
+ · intro p hp lane c hc
+   rw [ownedL.1 p hp lane c hc]
+   rw [commute p c (inputL.2.1 p hp).1 (inputL.2.1 p hp).2
+    (inputL.2.2 c (List.mem_of_getElem? hc))]
+ constructor
+ · intro p hp lane c hc
+   rw [ownedR.1 p hp lane c hc]
+   rw [commute p c (inputR.2.1 p hp).1 (inputR.2.1 p hp).2
+    (inputR.2.2 c (List.mem_of_getElem? hc))]
+ · intro pL hpL pR hpR laneL laneR cL cR hcL hcR
+   rw [ownedL.1 pL hpL laneL cL hcL,ownedR.1 pR hpR laneR cR hcR,ownedL.2,ownedR.2]
+   have callEq : calls wirePoints left = calls wirePoints right := by
+    simp only [calls]
+    rw [points,sameLengths]
+   rw [callEq]
 
+set_option pp.proofs false in
 #print restore
 #print axioms restore
 end R1Z.PV_OWNM_V239
