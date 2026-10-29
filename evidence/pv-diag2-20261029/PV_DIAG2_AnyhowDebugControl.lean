@@ -1,0 +1,81 @@
+import PV_DIAG2_Termination
+/-! Anyhow 1.0.104 ErrorImpl::debug specialized to plan::err's
+MessageError<String/&str>, whose source() is None. Formatter/backtrace state
+and partial-write error state are retained. Captured branch, all cleanup and
+runtime effects remain supplied native executions, never silent defaults. -/
+set_option autoImplicit false
+namespace PV_DIAG2
+
+def writerBind {S F : Type} (first : Execution (Except F Unit × S))
+    (next : S → Execution (Except F Unit × S)) : Execution (Except F Unit × S) :=
+ bind first (fun (status,state) => match status with
+  | .ok () => next state
+  | .error e => pureExecution (.error e,state))
+
+structure MessageDebugOps (S F : Type) where
+ alternate : S → Execution (Except F Unit × S)
+ display : S → Execution (Except F Unit × S)
+ getBacktrace : S → Execution (Bool × S)
+ captured : S → Execution (Except F Unit × S)
+
+def messageDebug {S F : Type} (alternate : Bool) (ops : MessageDebugOps S F)
+    (state : S) : Execution (Except F Unit × S) :=
+ if alternate then ops.alternate state else
+ writerBind (ops.display state) (fun next =>
+  bind (ops.getBacktrace next) (fun (captured,after) =>
+   if captured then ops.captured after else pureExecution (.ok (),after)))
+
+variable {S F : Type}
+
+
+theorem debug_alternate_only (ops : MessageDebugOps S F) (s : S) : messageDebug true ops s = ops.alternate s := rfl
+#print axioms debug_alternate_only
+
+theorem debug_ordinary_sequence (ops : MessageDebugOps S F) (s : S) :
+ messageDebug false ops s = writerBind (ops.display s) (fun next => bind (ops.getBacktrace next) (fun (captured,after) => if captured then ops.captured after else pureExecution (.ok (),after))) := rfl
+#print axioms debug_ordinary_sequence
+
+theorem debug_display_error_stops (ops : MessageDebugOps S F) (s after : S) (events : List Effect) (e : F)
+ (h : ops.display s = ⟨events,.value (.error e,after)⟩) :
+ messageDebug false ops s = ⟨events,.value (.error e,after)⟩ := by simp [messageDebug,h,writerBind,bind,prepend,pureExecution]
+#print axioms debug_display_error_stops
+
+theorem debug_display_panic (ops : MessageDebugOps S F) (s : S) (events : List Effect) (msg : String) (pcs : List Nat)
+ (h : ops.display s = ⟨events,.panic msg pcs⟩) : messageDebug false ops s = ⟨events,.panic msg pcs⟩ := by simp [messageDebug,h,writerBind,bind]
+#print axioms debug_display_panic
+
+theorem debug_display_oom (ops : MessageDebugOps S F) (s : S) (events : List Effect) (size : Nat) (pcs : List Nat)
+ (h : ops.display s = ⟨events,.oom size pcs⟩) : messageDebug false ops s = ⟨events,.oom size pcs⟩ := by simp [messageDebug,h,writerBind,bind]
+#print axioms debug_display_oom
+
+theorem debug_display_diverges (ops : MessageDebugOps S F) (s : S) (events : List Effect)
+ (h : ops.display s = ⟨events,.diverge⟩) : messageDebug false ops s = ⟨events,.diverge⟩ := by simp [messageDebug,h,writerBind,bind]
+#print axioms debug_display_diverges
+
+theorem debug_not_captured (ops : MessageDebugOps S F) (s mid after : S) (text checked : List Effect)
+ (hd : ops.display s = ⟨text,.value (.ok (),mid)⟩) (hb : ops.getBacktrace mid = ⟨checked,.value (false,after)⟩) :
+ messageDebug false ops s = ⟨text++checked,.value (.ok (),after)⟩ := by simp [messageDebug,hd,hb,writerBind,bind,prepend,pureExecution]
+#print axioms debug_not_captured
+
+theorem debug_captured_branch (ops : MessageDebugOps S F) (s mid after : S) (text checked : List Effect)
+ (hd : ops.display s = ⟨text,.value (.ok (),mid)⟩) (hb : ops.getBacktrace mid = ⟨checked,.value (true,after)⟩) :
+ messageDebug false ops s = prepend (text++checked) (ops.captured after) := by simp [messageDebug,hd,hb,writerBind,bind,prepend,List.append_assoc]
+#print axioms debug_captured_branch
+
+theorem debug_getter_panic (ops : MessageDebugOps S F) (s mid : S) (text checked : List Effect) (msg : String) (pcs : List Nat)
+ (hd : ops.display s = ⟨text,.value (.ok (),mid)⟩) (hb : ops.getBacktrace mid = ⟨checked,.panic msg pcs⟩) :
+ messageDebug false ops s = ⟨text++checked,.panic msg pcs⟩ := by simp [messageDebug,hd,hb,writerBind,bind,prepend]
+#print axioms debug_getter_panic
+
+theorem debug_captured_error_state (ops : MessageDebugOps S F) (s mid after final : S) (text checked written : List Effect) (e : F)
+ (hd : ops.display s = ⟨text,.value (.ok (),mid)⟩) (hb : ops.getBacktrace mid = ⟨checked,.value (true,after)⟩)
+ (hc : ops.captured after = ⟨written,.value (.error e,final)⟩) :
+ messageDebug false ops s = ⟨text++checked++written,.value (.error e,final)⟩ := by simp [messageDebug,hd,hb,hc,writerBind,bind,prepend,List.append_assoc]
+#print axioms debug_captured_error_state
+
+theorem debug_captured_oom (ops : MessageDebugOps S F) (s mid after : S) (text checked written : List Effect) (size : Nat) (pcs : List Nat)
+ (hd : ops.display s = ⟨text,.value (.ok (),mid)⟩) (hb : ops.getBacktrace mid = ⟨checked,.value (true,after)⟩)
+ (hc : ops.captured after = ⟨written,.oom size pcs⟩) :
+ messageDebug false ops s = ⟨text++checked++written,.oom size pcs⟩ := by simp [messageDebug,hd,hb,hc,writerBind,bind,prepend,List.append_assoc]
+#print axioms debug_captured_oom
+end PV_DIAG2

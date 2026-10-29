@@ -1,0 +1,34 @@
+import PV_DIAG2_Termination
+set_option autoImplicit false
+namespace PV_DIAG2
+/-- std::io::print_to outer frame. `write` supplies the complete global
+getter/write_fmt/temporary-handle scope; `panic` supplies formatting, hook,
+Err cleanup and abnormal effects. They are not assumed to be silent. -/
+def printTo {I : Type} (capture : Execution Bool) (write : Execution (Except I Unit))
+    (panic : I → Execution Unit) : Execution Unit :=
+ bind capture (fun captured => if captured then pureExecution () else
+  bind write (fun status => match status with
+   | .ok () => pureExecution ()
+   | .error e => panic e))
+
+
+theorem print_capture_suppresses_global {I : Type} (prior : List Effect) (write : Execution (Except I Unit)) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value true⟩ write panic = ⟨prior,.value ()⟩ := by simp [printTo,bind,prepend,pureExecution]
+#print axioms print_capture_suppresses_global
+
+theorem print_uncaptured_writes {I : Type} (prior : List Effect) (write : Execution (Except I Unit)) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value false⟩ write panic = prepend prior (bind write (fun status => match status with | .ok () => pureExecution () | .error e => panic e)) := rfl
+#print axioms print_uncaptured_writes
+
+theorem print_write_ok {I : Type} (prior writes : List Effect) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value false⟩ ⟨writes,.value (.ok ())⟩ panic = ⟨prior++writes,.value ()⟩ := by simp [printTo,bind,prepend,pureExecution]
+#print axioms print_write_ok
+
+theorem print_write_error {I : Type} (prior writes : List Effect) (e : I) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value false⟩ ⟨writes,.value (.error e)⟩ panic = prepend (prior++writes) (panic e) := by simp [printTo,bind,prepend,List.append_assoc]
+#print axioms print_write_error
+
+theorem print_write_panics {I : Type} (prior writes : List Effect) (msg : String) (pcs : List Nat) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value false⟩ ⟨writes,.panic msg pcs⟩ panic = ⟨prior++writes,.panic msg pcs⟩ := rfl
+#print axioms print_write_panics
+end PV_DIAG2

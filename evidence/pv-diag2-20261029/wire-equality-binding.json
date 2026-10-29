@@ -1,0 +1,48 @@
+{
+  "classification": "source-derived PartialEq structural binding with finite native validation; not a Kani PASS",
+  "source": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/r1_wire.rs",
+  "source_sha256": "a51eaebf27a6f95f70bd82977d09b217ae974a822990ee82f7d33ab64e991738",
+  "enum": "#[derive(Clone, Copy, Debug, PartialEq, Eq)]\npub enum Error {\n    Allocation,\n    RowOrder { expected: u8, actual: u8 },\n    InvalidRow,\n    Tag { row: u8 },\n    Length { row: u8 },\n    NonCanonical { row: u8, value: usize },\n    Boundary { round: usize },\n    Terminal,\n    EqualCirclePoints,\n    TrailingBytes,\n    Public, #[cfg(feature = \"r1p-check\")] ActivePole, // host retry loop only: Lean \u00acNoPole, no detail (LOG D73.4.1)\n}",
+  "features": "deployed r1p-check enables ActivePole; exact deployed release rlib reused",
+  "profile": "opt3, overflow/debug assertions off, panic unwind",
+  "command": [
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "debug-assertions=no",
+    "-C",
+    "overflow-checks=no",
+    "-C",
+    "panic=unwind",
+    "--extern",
+    "aspis_r1_cost_probe=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_r1_cost_probe-710e73f0b1aae129.rlib",
+    "-L",
+    "dependency=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/PV_DIAG2_WireEquality.rs",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/wire-equality"
+  ],
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "rlib_sha256": "ba99d3f07282349544a7999f713699f726162de1a270da3e93d02e67c6e5a76e",
+  "reference_source_sha256": "f28a8e18cdf99071ead61096743d21cdf73c1f9b24c268a5e6a34e3b2612b423",
+  "lean_source_sha256": "38959ed2ee40b6ce6c38528900b5f6de769907e6f3b792970d765cbc19ddc8c9",
+  "binding": [
+    "derived PartialEq dispatches by the same twelve variants",
+    "unit variants: equal iff same constructor",
+    "RowOrder and NonCanonical: both payload fields compared in declaration order",
+    "Tag, Length, Boundary: single field compared",
+    "different variants: false",
+    "no stores or drops on Copy enum comparisons; primitive field equality compiler-preservation boundary retained"
+  ],
+  "laws": [
+    "wire_equal_exact",
+    "active_pole_installed"
+  ],
+  "results": {
+    "comparisons": 2601,
+    "inputs": 51
+  },
+  "compiler_boundary": "V370 at owner pending D381/D386; primitive/derived equality expansion preservation retained"
+}

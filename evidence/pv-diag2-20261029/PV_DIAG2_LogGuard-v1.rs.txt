@@ -1,0 +1,19 @@
+//! Finite controls for the exact deployed log facade, not a native caller-closure proof.
+use std::cell::Cell;
+use log::{Level,LevelFilter,Log,Metadata,Record};
+struct Observer<'a>(&'a Cell<usize>);
+impl Log for Observer<'_>{fn enabled(&self,_:&Metadata)->bool{true} fn log(&self,_:&Record){self.0.set(self.0.get()+1);} fn flush(&self){}}
+fn main(){
+ assert_eq!(log::STATIC_MAX_LEVEL,LevelFilter::Trace);
+ assert_eq!(log::max_level(),LevelFilter::Off);
+ let args=Cell::new(0usize);let received=Cell::new(0usize);let logger=Observer(&received);let mut cases=0;
+ for enabled in [false,true]{
+  log::set_max_level(if enabled{LevelFilter::Trace}else{LevelFilter::Off});
+  for level in [Level::Error,Level::Warn,Level::Info,Level::Debug,Level::Trace]{
+   let a=args.get();let r=received.get();
+   log::log!(logger:&logger,level,"{}",{args.set(args.get()+1);17});
+   assert_eq!(args.get()-a,if enabled{1}else{0});assert_eq!(received.get()-r,if enabled{1}else{0});cases+=1;
+  }
+ }
+ println!("{{\"cases\":{cases},\"arguments_evaluated\":{},\"dispatched\":{}}}",args.get(),received.get());
+}

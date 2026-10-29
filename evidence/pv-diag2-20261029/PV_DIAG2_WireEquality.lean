@@ -25,13 +25,13 @@ theorem wire_equal_exact (a b : r1_wire.Error) : wireEqual a b = .ok (decide (a=
 
 
 /-- Explicit equality dictionary, not an assumption about arbitrary op256. -/
-def withWireEquality [ExternalTypes] (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def withWireEquality [ExternalTypes] (ops : ExternalFuns) : ExternalFuns :=
  {ops with op256 := wireEqual}
 
 theorem active_pole_installed [ExternalTypes] (ops : ExternalFuns) :
  @prover.semantic_error _ (withWireEquality ops) .ActivePole = ok .Rejected := by
- apply active_pole_rejected
- rfl
+ letI : ExternalFuns := withWireEquality ops
+ exact active_pole_rejected (by rfl)
 
 #print axioms wire_equal_exact
 #print axioms active_pole_installed

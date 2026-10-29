@@ -1,0 +1,70 @@
+{
+  "classification": "structural (K-1 substitute) complete local mapper binding plus finite native validation; no production attempt-silence claim",
+  "source_rows": [
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 266,
+      "body": "fn semantic_error(e:SError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==SError::ActivePole { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+      "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "line": 256,
+      "body": "fn mask_error(e:StateOnlyMaskBuildError)->Error {\n    #[cfg(feature=\"r1p-check\")]\n    if e==StateOnlyMaskBuildError::MaskSampleExhausted { return Error::Rejected; }\n    let _=e;\n    Error::Semantic\n}"
+    }
+  ],
+  "additional_sources": {
+    "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/r1_wire.rs": "a51eaebf27a6f95f70bd82977d09b217ae974a822990ee82f7d33ab64e991738",
+    "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-prover/src/state_only_hiding.rs": "8e19d67c453d0075b62538ae9cacf9096717b82bcbdaacbe9c3800cfb4f4b35c"
+  },
+  "command": [
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "--cfg",
+    "feature=\"r1p-check\"",
+    "--cfg",
+    "feature=\"ct-host-prover\"",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "debug-assertions=no",
+    "-C",
+    "overflow-checks=no",
+    "-C",
+    "panic=unwind",
+    "-L",
+    "dependency=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps",
+    "--extern",
+    "aspis_r1_cost_probe=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_r1_cost_probe-710e73f0b1aae129.rlib",
+    "--extern",
+    "aspis_prover=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_prover-82cae697dbaea47e.rlib",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/PV_DIAG2_MapperControl.rs",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/mapper-control"
+  ],
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "features": "deployed r1p-check selected in helper and exact deployed dependency rlibs",
+  "profile": "release opt3 debug/overflow assertions off panic unwind",
+  "rlibs": {
+    "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_r1_cost_probe-710e73f0b1aae129.rlib": "ba99d3f07282349544a7999f713699f726162de1a270da3e93d02e67c6e5a76e",
+    "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_prover-82cae697dbaea47e.rlib": "7205ab6ad3906096e643f36cd62ff9161c9cfcfafece7788e0221f7bf5b0d73f"
+  },
+  "generated_reference_sha256": "22d8b015964ab248bc36f4a87eb0a352bb0ef5fccf0401643d08ce4375f89547",
+  "results": {
+    "cases": 17
+  },
+  "binding": [
+    "copy enum argument has no drop glue",
+    "derived equality compares variants; comparing with unit ActivePole/MaskSampleExhausted reads no data payload fields",
+    "conditional selects unit Rejected or unit Semantic",
+    "let _=e has no owned destructor",
+    "no formatter, allocator, I/O, hook, log or capture call in this complete local primitive call closure",
+    "Lean complete-Result semantic_mapper_exact/mask_mapper_exact and local diagnostic silence semantic_mapper_silent/mask_mapper_silent; typed source primitives retain compiler boundary"
+  ],
+  "retained": [
+    "V370 / owner pending D381/D386 compiler-cohort boundary",
+    "error producer/caller effects and existing L1 V347-V351 joint event law",
+    "asynchronous runtime/foreign crash observations; timing/microarchitecture not classified by diagnostic-effect silence"
+  ]
+}
