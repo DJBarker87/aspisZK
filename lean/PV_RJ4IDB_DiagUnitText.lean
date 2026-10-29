@@ -21,7 +21,6 @@ theorem unit_content_retained (e : ProverRwFull.verifier.Error) (pcs : List Nat)
  before ++ [.returned (PV_DIAG2.exportError (R1Z.ProverRwRetryModel.error e)),
  .stderr ("Error: " ++ PV_DIAG2.nativeUnitDebug e ++ "\n")] := by
  rw [diag2_recover,unit_variant_content]
- rfl
 #print axioms unit_variant_content
 #print axioms unit_content_retained
 end PV_RJ4IDB
