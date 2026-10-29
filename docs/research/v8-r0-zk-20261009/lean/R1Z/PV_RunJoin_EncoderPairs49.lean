@@ -22,7 +22,12 @@ theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S →
       rw [PV_DL_EncoderRange.advance_val j hj];omega
     rw [PV_DL_EncoderFold.finite,PV_RunJoin_EncoderPairCell49.complete inst f hm ha q basis j hj]
     rw [ProverCommitNativePair48.range]
-    rw [PV_RunJoin_EncoderBind49.destructure]
+    trans (do let p ← mapResult (pairMap f) (ProverCommitNativePair48.step q basis j (p0,p1))
+              PV_DL_EncoderFold.finite inst (amap f q) (amap f basis) n (PV_DL_EncoderRange.advance j) p.1 p.2)
+    · apply congrArg (Aeneas.Std.bind _)
+      funext p
+      rcases p with ⟨a,b⟩
+      rfl
     symm
     simpa only [PV_DL_EncoderRange.advance] using
       PV_RunJoin_WeightMap46.map_bind (pairMap f) (pairMap f)
