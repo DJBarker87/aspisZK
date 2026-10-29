@@ -31,10 +31,10 @@ theorem actual_simE_pointwise (w : h.Instance) (ch : Challenges K)
         view (Bat := R1Bat) h B outputs x w ch t :=
   PV_L2E_LawPermutation.pointwise _ _ _ t
 
+include hpub hs in
 /-- Any function of the ENTIRE fixed coin vector can be retained jointly,
 including eager unused blocks and rejected-attempt histories. This law does
 not bind that function to native trace producers. -/
-include hpub hs in
 theorem full_coins_joint {C O : Type} (c : C) (observeCoins : C → O)
     (w : h.Instance) (ch : Challenges K)
     (hP : P_R1 h.transport B hB ch) (hV : VR1 h ch w) (hw : h.public w=x.1)
