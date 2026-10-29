@@ -33,6 +33,7 @@ theorem inactive (base : ExternalTypes) (heap : Heap) (box : Box)
   refine ⟨ib,hib,?_⟩
   change bytes ib.val=PV_RunJoin_ActualPlanSources59.publicationBytes phase _
   rw [hp,hv]
+  rfl
 
 #print axioms inactive
 end R1Z.PV_RunJoin_FinishStored63
