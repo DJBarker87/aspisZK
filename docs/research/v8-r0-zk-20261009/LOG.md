@@ -14376,3 +14376,24 @@ The lead merged rjdec's last round (fa6e6a6291) into the runjoin branch, which i
 - the query and node appends and publish_compact's proof bytes;
 - the backend messages association.
 Rows removed: 0. Privacy target not yet established.
+
+## D428 (Stream B) 2026-10-29 00:29 UTC: pv-diag results (client diagnostic sinks inventoried; D348 still open); pv-diag2 launched
+
+pv-diag (head 9924cf5369) used 50 capped native scopes (48 exit 0, 2 recorded failures; compliant admissions; zero swap) and no Lean or Kani. Its evidence (379 files, 20 MB in total, no single file over 5 MB) was merged into the candidate as 9dab53f366 and pushed. Neither universal public-only diagnostic behaviour nor a checked witness-dependent diagnostic finding was established, so D348 remains open.
+
+The report gives the following:
+- a candidate inventory from the deployed MIR, LLVM and symbols, with counts per category: stdout 407 and stderr 56 candidates, 24,828 returned-error constructors, 86,534 panic and 6 hook candidates, 207 backtrace and 459 formatting candidates, 23,014 indirect calls;
+- a sink table with exact trigger and content per sink;
+- the exact anyhow and std backtrace capture rules in this build, including panic and OOM handling;
+- twelve passing finite backtrace controls, which are labelled finite validation, not proof.
+Two retained MIR files failed their recorded hashes and were excluded. The existing Lean models do not carry a client diagnostic-effect trace. In particular, the published projection of ProverCommitRetry34 erases the attempt count that the actual client prints.
+
+Lead assessment of the attempt count: the successful attempt count and index that devnet_spend prints to stdout are not a new channel. Ledger row V394 records that the client publishes the account at index attempts-1, so the count is already public on chain, and the D163 L1 layer carries an ideal count law and retry-control erasure. What remains open is whether that count law covers the actual joint retry distribution, given that ActivePole is derived from witness trace values. That stays under the existing L1 rows and is now named explicitly.
+
+The returned mask_audit fields are fixed by explicit success guards (source inspection only). Eight consecutive rejections expose AttemptsExhausted through plan::err, Termination and stderr. The owner's D348 item gains the report's seven concrete questions.
+
+pv-diag2 continues in the same sparse worktree on branch codex/pv-diag2-20261029 (IDs 62700-62799; 100 Lean, 40 native, 0 Kani). It covers three things:
+- a source-faithful diagnostic-effect model consuming the retry models without erasing attempts, errors, panic, OOM or frames, bound natively from the returned-error-to-Termination path and the retry and exhaustion surface;
+- per-sink honest-run silence or public-only-content theorems where provable;
+- regeneration or replacement of the two failed MIR artifacts.
+Rows removed: 0. Privacy target not yet established.
