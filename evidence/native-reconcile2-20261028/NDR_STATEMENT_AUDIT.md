@@ -37,3 +37,11 @@ and deployed artifacts have not been changed by this lane.
 The prepared combined audit also checks each of the 76 historical gap module names
 against the kernel environment import header and emits one exclusion marker per
 name. These checks remain unexecuted until the sole combined replay.
+
+The predecessor NDJ_RELEASE_MANIFEST.md also records 105 nonstandard imported
+axioms that were unreachable from its audited roots (F-AXIOM remains OPEN).
+Standard-only `#print axioms` for this lane's theorems is a reachable-root audit,
+not a claim that the entire imported library contains only standard axioms.
+This lane does not adopt or discharge those inherited import-wide findings.
+Likewise, identifying installed constants is narrower than instantiating every
+headline trust/game hypothesis; any final closure claim must preserve that limit.
