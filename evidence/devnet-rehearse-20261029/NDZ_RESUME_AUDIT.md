@@ -45,3 +45,26 @@ NDZ_DEVNET_RUNBOOK.md remain the delivery. No public write, signature submission
 key access, key cleanup or push occurred during this relaunch. L188 obligation 5
 remains open for the separate real-devnet execution and read-only association.
 Stop at lead review; do not execute the public runbook in this worker.
+
+## Automatic relaunch 2 — stop boundary reconfirmed
+
+Resumed from clean commit 6462a5c8a3. Read AGENTS.md, the preceding recovery
+accounting, NDS handoff/procedure/runbook, NDZ handoff/procedure/runbook and the
+SOL recovery policy. The original approximately 2h40 task window and all attempts
+listed above remain charged to the same approximately three-hour budget; neither
+automatic relaunch starts a new budget. No additional build, validator, proof,
+transaction or test-suite attempt was launched in either recovery turn.
+
+A local public-receipt integrity check again verified all 336 packaged manifest
+entries; 6,956 host-retained entries were not fetched or independently rehashed.
+All 1,812 unique signature rows match captured metadata slots, fees and errors;
+fee and CU totals match the summary. Exact lamport conservation and empty final
+buffers pass. The worktree has no crates/programs difference from 4bb3b3f51e.
+This is a delivery-integrity check, not another runtime or release sample.
+
+No RPC request, public write, signature submission, secret-key access, key
+cleanup or push occurred in this recovery. Existing keys/ledgers remain retained;
+this turn makes no new assertion about remote key presence or backup status.
+The local-only assignment remains complete. Deliver NDZ_HANDOFF.md and
+NDZ_DEVNET_RUNBOOK.md to the lead, then stop. Real-devnet execution and its
+read-only association remain outstanding under L188 obligation 5.
