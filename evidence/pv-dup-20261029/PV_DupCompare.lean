@@ -28,7 +28,6 @@ def getConstant (parts : Array (ModuleData × CompactedRegion)) (name : String) 
   let j := Json.mkObj [("name",toJson f[0]!), ("left_module",toJson f[1]!), ("right_module",toJson f[3]!),
     ("type_equal",toJson (ta == tb)), ("value_equal",toJson (va == vb)),
     ("level_params_equal",toJson (ca.levelParams == cb.levelParams)),
-    ("constant_info_equal",toJson (reprStr ca == reprStr cb)),
     ("left_type",toJson ta), ("right_type",toJson tb), ("left_value",toJson va), ("right_value",toJson vb)]
   (← IO.getStdout).putStrLn j.compress
   (← IO.getStdout).flush
