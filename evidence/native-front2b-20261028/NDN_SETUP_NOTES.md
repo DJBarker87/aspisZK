@@ -1,0 +1,1 @@
+Setup copied the prior lane scratch into an independent host workspace and retained the lane cache. Initial setup read NDE_SOURCE.json from the wrong host path; corrected by uploading the committed local pinset. No proof launched during this input repair. No shared infrastructure changed.

@@ -1,0 +1,14 @@
+from pathlib import Path
+import subprocess,os,json
+from NDN_verdicts import classify
+E=Path(__file__).resolve().parent
+jobs=[(6, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_route_window', 'NDN_active_route'), (7, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_route_window', 'NDN_active_route --cfg NDN_invert'), (8, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_add_window', 'NDN_active_sparse'), (9, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_add_window', 'NDN_active_sparse --cfg NDN_invert'), (10, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord0'), (11, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord0 --cfg NDN_invert'), (12, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord1'), (13, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord1 --cfg NDN_invert'), (14, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord2'), (15, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord2 --cfg NDN_invert'), (16, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord3'), (17, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord3 --cfg NDN_invert'), (18, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord4'), (19, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord4 --cfg NDN_invert'), (20, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord5'), (21, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord5 --cfg NDN_invert'), (22, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord6'), (23, 'pool_v1::pair_forest_copy_terminal::NDN_native::active_low_window', 'NDN_active_low --cfg NDN_coord6 --cfg NDN_invert')]
+for n,t,cfg in jobs:
+ r=subprocess.run(['python3',str(E/'NDN_run.py'),f'NDN_K{n:03}','kani',t],env=dict(os.environ,NDN_RUST_CFG=cfg),stdout=(E/f'NDN_K{n:03}-console.log').open('w'),stderr=subprocess.STDOUT)
+ if r.returncode:raise SystemExit(r.returncode)
+ log=(E/f'NDN_K{n:03}/stdout.log').read_text()
+ expected='CHECK_FAILURE' if ('NDN_invert' in cfg or 'NDN_old_header_ref' in cfg or t.endswith('header_copy_negative')) else 'PASS'
+ actual=classify(log)
+ if actual!=expected:
+  print('STOP unexpected native result',n,actual,'expected',expected,flush=True);break
+ print('finished',n,flush=True)

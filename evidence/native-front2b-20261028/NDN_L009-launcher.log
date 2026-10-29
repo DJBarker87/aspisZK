@@ -1,0 +1,65 @@
+{"attempt": "NDN_L009", "exit_status": 1, "wall_seconds": 3.625337768928148, "peak_rss_kib": "5346976", "swaps": "0", "print_axioms": ["'NDN_PackedReference.matrix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDN_generated/NDN_PackedReference.lean:75:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+    let x_1 ← 3#u64 * core.convert.num.FromU64U32.from b0
+    let x ← x + x_1
+    let x ← x + core.convert.num.FromU64U32.from c0
+    let out ← x + core.convert.num.FromU64U32.from d0
+    ok (out, input, row)
+is not definitionally equal to the right-hand side
+  match ↑row with
+  | 0 => do
+    let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+    let y ← 3#u64 * core.convert.num.FromU64U32.from b0
+    let z ← x + y
+    let z ← z + core.convert.num.FromU64U32.from c0
+    let z ← z + core.convert.num.FromU64U32.from d0
+    ok (z, input, row)
+...
+vert.num.FromU64U32.from a0
+      let x ← x + core.convert.num.FromU64U32.from b0
+      let x ← x + core.convert.num.FromU64U32.from c0
+      let x_1 ← 2#u64 * core.convert.num.FromU64U32.from d0
+      let out ← x + x_1
+      ok (out, input, row)) =
+    match ↑row with
+    | 0 => do
+      let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+      let y ← 3#u64 * core.convert.num.FromU64U32.from b0
+      let z ← x + y
+      let z ← z + core.convert.num.FromU64U32.from c0
+      let z ← z + core.convert.num.FromU64U32.from d0
+      ok (z, input, row)
+    | 1 => do
+      let x ← 2#u64 * core.convert.num.FromU64U32.from b0
+      let z ← core.convert.num.FromU64U32.from a0 + x
+      let y ← 3#u64 * core.convert.num.FromU64U32.from c0
+      let z ← z + y
+      let z ← z + core.convert.num.FromU64U32.from d0
+      ok (z, input, row)
+    | 2 => do
+      let z ← core.convert.num.FromU64U32.from a0 + core.convert.num.FromU64U32.from b0
+      let x ← 2#u64 * core.convert.num.FromU64U32.from c0
+      let z ← z + x
+      let y ← 3#u64 * core.convert.num.FromU64U32.from d0
+      let z ← z + y
+      ok (z, input, row)
+    | 3 => do
+      let x ← 3#u64 * core.convert.num.FromU64U32.from a0
+      let z ← x + core.convert.num.FromU64U32.from b0
+      let z ← z + core.convert.num.FromU64U32.from c0
+      let y ← 2#u64 * core.convert.num.FromU64U32.from d0
+      let z ← z + y
+      ok (z, input, row)
+    | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:75:38: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDN_PackedReference.matrix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3bbe0e4e83fd4bcc8f95b740df45f7fc.scope; invocation ID: eadd1830353248efb37384eba196e99b

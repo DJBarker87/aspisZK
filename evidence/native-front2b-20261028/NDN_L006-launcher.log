@@ -1,0 +1,58 @@
+{"attempt": "NDN_L006", "exit_status": 1, "wall_seconds": 3.0271744589554146, "peak_rss_kib": "5398224", "swaps": "0", "print_axioms": ["'NDN_PackedReference.matrix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDN_generated/NDN_PackedReference.lean:38:65: error: Tactic `rfl` failed: The left-hand side
+  do
+    let x ← 2#u64 * core.convert.num.FromU64U32.from a0
+    let x_1 ← 3#u64 * core.convert.num.FromU64U32.from b0
+    let x ← x + x_1
+    let x ← x + core.convert.num.FromU64U32.from c0
+    let out ← x + core.convert.num.FromU64U32.from d0
+    ok (out, input, { toFin := ⟨rv, rp⟩ }#uscalar)
+is not definitionally equal to the right-hand side
+  let (a, i) := (input, { toFin := ⟨rv, rp⟩ }#uscalar)
+  do
+  let a1 ← a.index_usize 0#usize
+  let i1 ← a1.index_usize limb
+  let a3 ← a.index_usize 1#usize
+  let i2 ← a3.index_usize limb
+  let a4 ← a.index_usize 2#usize
+  let i3 ← a4.index_usize limb
+  let a5
+...
+}#uscalar)
+      | 2 => do
+        let i5 ← core.convert.num.FromU64U32.from i1 + core.convert.num.FromU64U32.from i2
+        let i6 ← 2#u64 * core.convert.num.FromU64U32.from i3
+        let i7 ← i5 + i6
+        let i8 ← 3#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, { toFin := ⟨rv, rp⟩ }#uscalar)
+      | 3 => do
+        let i5 ← 3#u64 * core.convert.num.FromU64U32.from i1
+        let i6 ← i5 + core.convert.num.FromU64U32.from i2
+        let i7 ← i6 + core.convert.num.FromU64U32.from i3
+        let i8 ← 2#u64 * core.convert.num.FromU64U32.from i4
+        let i9 ← i7 + i8
+        ok (i9, input, { toFin := ⟨rv, rp⟩ }#uscalar)
+      | x => fail Error.panic
+NDN_generated/NDN_PackedReference.lean:38:27: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    (input, { toFin := ⟨rv, rp⟩ }#uscalar)
+  has type
+    Std.Array (Std.Array U32 4#usize) 4#usize × Usize
+  but is expected to have type
+    FIq_Native.state_only_poseidon.external_local_packed_raw.closure.closure
+  in the application
+    (out, input, { toFin := ⟨rv, rp⟩ }#uscalar)
+NDN_generated/NDN_PackedReference.lean:38:38: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_t̵c̵_̵o̵k̵,̵b̵i̵n̵d̵_̵assoc_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NDN_PackedReference.matrix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-ra46ca6f74cfb434aa02742b00503d50e.scope; invocation ID: 2f2f4828b2ac41d6bb318bafc0430c80

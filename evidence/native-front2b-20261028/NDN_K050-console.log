@@ -1,0 +1,42 @@
+{"attempt": "NDN_K050", "exit_status": 1, "wall_seconds": 5.986411662073806, "peak_rss_kib": "442652", "swaps": "0", "print_axioms": "N/A: kani"}
+his is intentional, prefix it with an underscore: `_w`
+
+warning: unused variable: `v`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:345:16
+    |
+345 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: unused variable: `w`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:358:10
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |          ^ help: if this is intentional, prefix it with an underscore: `_w`
+
+warning: unused variable: `v`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:358:16
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: value assigned to `group` is never read
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:862:21
+    |
+862 |     let mut group = 0usize;
+    |                     ^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `coordinate` is never read
+   --> crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs:865:30
+    |
+865 |         let mut coordinate = COPY_PATTERN_GROUP_OFFSETS[group];
+    |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+For more information about this error, try `rustc --explain E0658`.
+error: could not compile `aspis-statement` (lib) due to 2 previous errors; 180 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+

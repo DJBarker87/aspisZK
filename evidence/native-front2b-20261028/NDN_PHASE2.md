@@ -1,0 +1,9 @@
+# Scalar references and active-mask splits
+
+K005 TIMEOUT (99.933 s, 1,067,168 KiB, swap 0); no credit or unchanged rerun. Replacements separate routing, sparse scalar addition and seven low-coordinate branches. K006/K007, K008/K009 and K010–K023 have exactly zero/one failed checks with expected exits. K008 uses all-equal input arrays and needs a full-prestate frame lift; that restricted diagnostic is explicitly not substituted for the caller domain. No full active-mask closure.
+
+E001–E020 all extracted successfully with NCO-pinned Charon/Aeneas and optimized offline Rust. L015–L054 compiled their Types/Funs independently, smallest dependencies first. These are window/reference candidates, not full-member bridges. The scalar header reference has not yet been associated to actual transition tags/digest encoding; names alone supply no credit. Tool pins and output hashes are archived per extraction.
+
+The coherent SInt2 Aeneas objects and all 53 retained NDE objects are pinned; later receipts include all current private NDN objects too. Earlier NDN L011/L014 reused the same immutable NDE object selection; the retained NDE audit supplies those object hashes. No prior failed NDE module is imported.
+
+NDK validation1 rejected the changed report corpus. Validation2 rejected its old snapshot-specific assertions. The lane-owned wrapper updates only the snapshot/output destinations and records an explicit non-credit review manifest of newly merged inherited frontier pointers. The original claim/feature/theorem checks remain intact; NDN_VALIDATION3 exits 0, pins 8,104 artifacts, and keeps the authoritative 130-representative frontier. It does NOT ingest or admit the new local NDN packed claim. The authoritative ledger is untouched; review remains required for native coverage promotion.
