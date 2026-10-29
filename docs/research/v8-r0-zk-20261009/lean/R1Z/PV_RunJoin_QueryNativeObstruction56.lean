@@ -13,17 +13,17 @@ theorem buffer_length (n : Nat) (bound : n≤Usize.max) : (buffer n bound).lengt
   exact List.length_replicate
 
 /-- These fields are never read: the first index rejects before opening. -/
-def unused [ExternalTypes] (p : prover.Publication) : host_commitment.Commitment :=
-  ⟨.C1,⟨[],by simp; scalar_tac⟩,⟨[],by simp; scalar_tac⟩,p.tree,none⟩
+def unused (p : prover.Publication) : host_commitment.Commitment :=
+  ⟨.C1,⟨[],by simp⟩,⟨[],by simp⟩,p.tree,none⟩
 
 theorem complete {I : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (runs : I → @Run (types base)) (i : I)
-    (p : @prover.Publication (types base))
+    (p : prover.Publication)
     (hf : @Fields (types base) (selected base heap box ops) (runs i) p)
     (bound : (runs i).plan.offOpenings≤Usize.max) :
     ¬@PV_RunJoin_Link_QueryAppend (types base) (selected base heap box ops) I runs := by
   exact @PV_RunJoin_QueryLinkObstruction56.impossible (types base) (selected base heap box ops)
-    I runs i p (@unused (types base) p) (@unused (types base) p) (buffer _ bound) hf (buffer_length _ bound)
+    I runs i p (unused p) (unused p) (buffer _ bound) hf (buffer_length _ bound)
     (PV_RunJoin_QueryIndexInstalled56.rejected base heap box ops)
 
 #print axioms buffer
