@@ -8,9 +8,9 @@ def source {E : Type} (origin : Nat) (s : PV_RDCD4_ArrayIter194.State E) :
     Result (Option E × PV_RDCD4_ArrayIter194.State E) := do
   if 0 < s.stop-s.start then
     let idx := s.start
-    let s := {s with start := s.start+1}
-    let value ← PV_RDCD4_Memory194.constPtrRead ⟨origin,s.data,idx⟩
-    ok (some value,s)
+    let advanced : PV_RDCD4_ArrayIter194.State E := {s with start := s.start+1}
+    let value ← PV_RDCD4_Memory194.constPtrRead ⟨origin,advanced.data,idx⟩
+    ok (some value,advanced)
   else ok (none,s)
 
 /-- Store the advanced range before the initialized read, then restore all
