@@ -37,7 +37,6 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row : U8) (at1 : Usiz
       intro payload payloadBound
       apply PV_RunJoin_PostBind62.bind _ _ _ _ (PV_RunJoin_SliceBound62.append mid payload)
       intro next nextLength
-      simp only [lift,bind_tc_ok]
       change next.length≤out.length+2*bound
       omega
     | true =>
@@ -47,6 +46,7 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row : U8) (at1 : Usiz
       apply PV_RunJoin_PostBind62.bind _ _ _ _
         (PV_RunJoin_CompactUniversal62.values payload mid bound (by omega) (by omega))
       rintro ⟨codecStatus,next⟩ nextBound
+      change next.length≤mid.length+bound at nextBound
       dsimp only [Aeneas.Std.uncurry]
       cases codecStatus with
       | Err e =>
