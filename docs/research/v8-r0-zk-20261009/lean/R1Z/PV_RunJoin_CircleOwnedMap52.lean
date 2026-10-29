@@ -57,7 +57,7 @@ theorem complete (q : Q) :
     rw [PV_RunJoin_CircleOwnedProjection52.q_c1,op1,op0]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro bad _
-    cases bad <;> rfl
+    cases bad <;> simp only [Bool.false_eq_true,if_false,if_true,bind_tc_ok,encOutcome,encError,encPoint]
 
 #print axioms encError
 #print axioms encOutcome
