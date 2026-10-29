@@ -104,6 +104,6 @@ theorem complete (ops : ExternalFuns) (law : @ExternalFuns.op12 _ ops=@ProverRwO
                           trivial
                         · have h1_padding_inactive_balancedgood : audit.h1_padding_inactive_balanced=true := Classical.not_not.mp h1_padding_inactive_balanced
                           simp only [if_pos h1_padding_inactive_balancedgood]
-                          apply PV_RunJoin_AfterAuditOriginGeneric60.complete ops
+                          apply PV_RunJoin_AfterAuditOriginGeneric60.complete ops law
 #print axioms complete
 end R1Z.PV_RunJoin_AuditOriginGeneric60
