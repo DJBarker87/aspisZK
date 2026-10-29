@@ -9,12 +9,11 @@ theorem small_rank (a : Memory) (n : Nat) (small : rank (backwards a (n+1))<B) :
     rank (backwards a (n+1))=a 0 ∧ ∀ i,0 < i → i<n+1 → a i=0 := by
   induction n with
   | zero =>
-    simp only [backwards,rank,List.length_nil,pow_zero,Nat.mul_one,Nat.add_zero] at *
-    exact ⟨rfl,by intros; omega⟩
+    exact ⟨by simp [backwards,rank],by intros; omega⟩
   | succ n ih =>
     have he : rank (backwards a (n+2))=
         a (n+1)*B^(n+1)+rank (backwards a (n+1)) := by
-      simp only [backwards,rank,length]
+      rw [backwards,rank,length]
     have hp : B≤B^(n+1) := by
       rw [pow_succ]
       have hpos : 0<B^n := pow_pos (by decide : 0<B) n
