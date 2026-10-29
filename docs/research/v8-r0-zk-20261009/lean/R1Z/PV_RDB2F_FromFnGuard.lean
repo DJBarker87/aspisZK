@@ -24,6 +24,7 @@ theorem initialized_prefix {S A : Type} (f : Nat → S → Result (A × S))
     | ok pair =>
       rcases pair with ⟨item,current⟩
       simp only [guarded,PV_RDB2E_FromFn.build,hf,bind_tc_ok]
+      change guarded f n (i+1) (filled++[item]) current = _
       rw [ih]
       cases hb : PV_RDB2E_FromFn.build f n (i+1) current with
       | fail e => simp [hb,bind_tc_fail]
