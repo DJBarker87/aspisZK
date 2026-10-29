@@ -6,7 +6,7 @@ must bind the actual edge, frozen body, selected packets, all four association
 parts, full Lean receipt/axioms, and the caller's inner-hypothesis discharge.
 """
 from pathlib import Path
-import argparse,copy,hashlib,importlib.util,json,re,subprocess,sys
+import argparse,copy,hashlib,importlib.util,json,lzma,re,subprocess,sys
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent;N=E.parent/'native-ledger3-20261029'
 sys.path[:0]=[str(N),str(E.parent/'native-ledger2-20261028')]
@@ -83,6 +83,8 @@ def extend(baseline,edges):
   callers=[r for r in baseline['rows'] if r['function']==e['caller']]
   require(callers and all(r['frozen_body_sha256']==e['source_body_sha256'] for r in callers),'edge source body mismatch')
   require(all(any(o['id']==e['obligation_id'] and o.get('callee')==e['callee'] for o in r['caller_domain_obligations']) for r in callers),'edge obligation mismatch')
+ from NEB_certificates import expected
+ approved_edges,approved_rows=expected(baseline)
  out=copy.deepcopy(baseline);changes=[]
  rowcerts={c['row']:c for c in edges.get('row_certificates',[])}
  require(len(rowcerts)==len(edges.get('row_certificates',[])),'duplicate row certificate')
@@ -95,12 +97,14 @@ def extend(baseline,edges):
    edge=index.get(obligation['id'])
    if edge is None:continue
    errors=certificate_errors(edge,edge.get('certificate'),baseline)
+   if not errors and edge.get('certificate')!=approved_edges.get(edge['edge']):errors=['unregistered or wrong concrete certificate']
    if not errors:
     obligation.update(status='CLOSED',discharged_by=edge['certificate']['id'])
   # Existing NDT semantics remain necessary. The edge extension alone cannot
   # discharge an inventory domain or a row's own named hypothesis.
   rc=rowcerts.get(row['row'])
   if rc is not None:
+   require(rc==approved_rows.get(row['row']),'unregistered or wrong concrete row certificate')
    require(rc['function']==row['function'] and rc['frozen_body_sha256']==row['frozen_body_sha256'],'wrong row certificate')
    require(rc['selected_claims']==row['selected_claims'] and rc['selected_claims'],'wrong row bridge selection')
    require(sorted(rc['named_hypotheses_discharged'])==sorted(h['name'] for h in row['named_hypotheses']),'row named hypothesis mismatch')
@@ -118,6 +122,12 @@ def extend(baseline,edges):
    require(not need or need<=set(c['function'] for c in rowcerts.values()),'missing dependency certificate')
    for h in row['named_hypotheses']:h['discharged_by']=rc['id']
    for o in row['inventory_domain_obligations']:o.update(status='CLOSED',discharged_by=rc['id'])
+   for o in row['caller_domain_obligations']:
+    if 'call' in o:
+     ext=rc['external_obligations'].get(o['id'])
+     require(ext is not None and ext['kind']=='TRANSPARENT_M31_CONSTRUCTOR','external obligation unproved')
+     require(o['call'].get('expression',o['call'].get('syntax'))=='M31' and ext['syntax']=='M31','wrong external constructor')
+     o.update(status='CLOSED',discharged_by=rc['id']+':constructor')
  # Admit rows bottom-up along actual obligations. Resolved-away alternatives
  # remain CLOSED obligations but are not active call dependencies. No real SCC
  # is closed without a separately supplied induction certificate.
@@ -156,7 +166,7 @@ def extend(baseline,edges):
    require(all(o['status']=='CLOSED' and o['discharged_by'] for o in row['caller_domain_obligations']),'open row call domain')
    require(not row['open_transitive_dependencies'],'open/quarantined transitive dependency')
    require(row['selected_claims'],'missing bridge')
- return out,dict(schema='NEB-ledger-delta-v1',composed_rows_closed=changes,closed_count=len(changes),slice='Q',roots={f:sorted(set(r['composed_status'] for r in out['rows'] if r['function']==f)) for f in scope['roots']},edge_closed=sum(not certificate_errors(e,e.get('certificate'),baseline) for e in edges['edges']),edge_total=len(edges['edges']),baseline_unchanged=True)
+ return out,dict(schema='NEB-ledger-delta-v1',composed_rows_closed=changes,closed_count=len(changes),slice='Q',roots={f:sorted(set(r['composed_status'] for r in out['rows'] if r['function']==f)) for f in scope['roots']},edge_closed=sum(not certificate_errors(e,e.get('certificate'),baseline) and e.get('certificate')==approved_edges.get(e['edge']) for e in edges['edges']),edge_total=len(edges['edges']),baseline_unchanged=True)
 
 def replay_baseline():
  # NDT deliberately rejects previously unknown merged reports. Reconstruct its
@@ -174,6 +184,9 @@ def replay_baseline():
    for p,h in corpus['additional_reports'].items():
     raw=self.blob('HEAD:'+p);require(sha(raw)==h,'additional report changed: '+p)
     if (R/p).exists():require(sha((R/p).read_bytes())==h,'dirty additional report: '+p)
+   require(all(self.head_tree.get(p)==v[0] for p,v in self.tree.items()),'an inherited Git file changed; historical replay cannot hide it')
+   dirty=set(ndt.git('diff','--name-only','HEAD').decode().splitlines())
+   require(not (dirty & set(self.tree)),'dirty inherited file before historical replay')
    self.head_tree={p:v[0] for p,v in self.tree.items()}
  ndt.Store=HistoricalStore
  try:rebuilt=ndt.collect()
@@ -183,10 +196,12 @@ def replay_baseline():
  return rebuilt
 
 def main():
- p=argparse.ArgumentParser();p.add_argument('--write',action='store_true');p.add_argument('--replay-baseline',action='store_true');a=p.parse_args()
+ p=argparse.ArgumentParser();p.add_argument('--write',action='store_true');p.add_argument('--replay-baseline',action='store_true');p.add_argument('--write-ledger',action='store_true');a=p.parse_args()
  baseline=replay_baseline() if a.replay_baseline else obj(N/'NDT_LEDGER.json')
  scope=obj(E/'NEB_SCOPE.json');require(sha((N/'NDT_LEDGER.json').read_bytes())==scope['ledger_sha256'],'changed authoritative ledger')
  out,delta=extend(baseline,obj(E/'NEB_EDGES.json'))
+ if a.write_ledger:
+  raw=ndt.dump(out).encode();(E/'NEB_LEDGER.json.xz').write_bytes(lzma.compress(raw,preset=6));(E/'NEB_LEDGER.json.sha256').write_text(sha(raw)+'  NEB_LEDGER.json\n')
  if a.write:(E/'NEB_LEDGER_DELTA.json').write_text(json.dumps(delta,indent=1)+'\n')
  else:require(delta==obj(E/'NEB_LEDGER_DELTA.json'),'ledger delta differs from checked certificates')
  print(json.dumps(delta,indent=1))

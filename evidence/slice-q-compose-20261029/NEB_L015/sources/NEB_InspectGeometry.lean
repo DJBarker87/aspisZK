@@ -1,0 +1,6 @@
+import AspisR1QueryGeometryActual.Funs
+#check AspisR1QueryGeometryActual.verifier.QueryGeometry.for_range
+#check AspisR1QueryGeometryActual.verifier.batch_prefix_products
+#check AspisR1QueryGeometryActual.fast_domain.fibre_point
+#check AspisR1QueryGeometryActual.fast_domain.line_node
+#print AspisR1QueryGeometryActual.verifier.batch_prefix_products

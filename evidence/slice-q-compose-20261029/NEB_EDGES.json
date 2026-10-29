@@ -1308,7 +1308,7 @@
    "caller": "crates/aspis-core/src/field.rs::M31::reduce_u64",
    "callee": "crates/aspis-core/src/field.rs::reduce_u64",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::reduce_u64->crates/aspis-core/src/field.rs::reduce_u64",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "PURE_TYPED_CALL",
    "source_body_sha256": "065261fab4e25c2593df2610ba9f3d47ff605780f8c233af825c7bced4ef9ed4",
    "static_resolution": "receiver field owners and frozen body",
@@ -1317,7 +1317,97 @@
     "NEB_BaseCallBounds.reducer_wrapper",
     "NEB_BaseCallBounds.reducer"
    ],
-   "certificate": null,
+   "certificate": {
+    "id": "NEB-reducer-call",
+    "edge": "crates/aspis-core/src/field.rs::M31::reduce_u64 -> crates/aspis-core/src/field.rs::reduce_u64",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "065261fab4e25c2593df2610ba9f3d47ff605780f8c233af825c7bced4ef9ed4",
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::reduce_u64"
+    ],
+    "inner_hypotheses_discharged": [
+     "NCS_R060.PacketDomain",
+     "NCS_R060.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NCS_R060.PacketDomain": [
+      "NEB_ReducerCall.all_domain"
+     ],
+     "NCS_R060.PhysicalInterpretation": [
+      "NEB_ReducerCall.reference",
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.state_effects"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEB_ReducerCall.all_domain"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEB_ReducerCall.value"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEB_ReducerCall.reference",
+       "NEB_ReducerCall.wrapper"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEB_ReducerCall.state_effects"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEB_ReducerCall.reference",
+       "NEB_ReducerCall.wrapper"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEB_ReducerCall.wrapper"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose-20261029/NEB_L021/receipt.json",
+      "receipt_sha256": "07ce209f18caf35e86a5a6edf8f081be232ac4ea6842f88945fbe4dcb1924f2a",
+      "theorems": [
+       "NEB_ReducerCall.all_domain",
+       "NEB_ReducerCall.reference",
+       "NEB_ReducerCall.wrapper",
+       "NEB_ReducerCall.value",
+       "NEB_ReducerCall.state_effects"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEB_ReducerCall.all_domain",
+     "NEB_ReducerCall.reference",
+     "NEB_ReducerCall.wrapper",
+     "NEB_ReducerCall.value",
+     "NEB_ReducerCall.state_effects"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-compose-20261029/NEB_REDUCER_ASSOCIATION.md",
+     "sha256": "a54141eb6ce644347b391aafc966607d9b015c4e419d84c55b4e56298b5e84c1",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-compose-20261029/NEB_NATIVE_REVIEW.json",
+     "sha256": "cd74885c14d119d2a9b2a3c8bc5271d71ccc8478e6f1809f2cb55854ec66879a"
+    },
+    "trust": "NativeContractSemanticTransport: reclassification, never removal"
+   },
    "required_named_hypotheses": [
     "NCS_R060.PacketDomain",
     "NCS_R060.PhysicalInterpretation"
@@ -1340,7 +1430,7 @@
      ]
     }
    ],
-   "obstacle": "Native same-execution association, state/effects and inner PhysicalInterpretation discharge not yet certified; model domain is partial evidence only."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::QM31::add -> crates/aspis-core/src/field.rs::CM31::add",
@@ -12895,6 +12985,234 @@
    "kind": "SLICE_BOUNDARY",
    "action": "No out-of-slice bridge work; record and continue independent members",
    "source_body_sha256": "1d4a03f4fd8ab36049bbbcdf033c09ff9c7303842bfa6cd91763c9732adb3c1e"
+  }
+ ],
+ "row_certificates": [
+  {
+   "id": "NEB-reducer-root:TX1:020",
+   "row": "TX1:020",
+   "function": "crates/aspis-core/src/field.rs::M31::reduce_u64",
+   "frozen_body_sha256": "065261fab4e25c2593df2610ba9f3d47ff605780f8c233af825c7bced4ef9ed4",
+   "selected_claims": [
+    "NBG::crates/aspis-core/src/field.rs::M31::reduce_u64"
+   ],
+   "named_hypotheses_discharged": [
+    "NCS_R048.PacketDomain",
+    "NCS_R048.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "field"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose-20261029/NEB_L021/receipt.json",
+     "receipt_sha256": "07ce209f18caf35e86a5a6edf8f081be232ac4ea6842f88945fbe4dcb1924f2a",
+     "theorems": [
+      "NEB_ReducerCall.all_domain",
+      "NEB_ReducerCall.reference",
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.value",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-core/src/field.rs::M31::reduce_u64.PacketDomain",
+    "crates/aspis-core/src/field.rs::M31::reduce_u64.PhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_REDUCER_ASSOCIATION.md",
+    "sha256": "a54141eb6ce644347b391aafc966607d9b015c4e419d84c55b4e56298b5e84c1",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_NATIVE_REVIEW.json",
+    "sha256": "cd74885c14d119d2a9b2a3c8bc5271d71ccc8478e6f1809f2cb55854ec66879a"
+   },
+   "external_obligations": {
+    "external:TX1:20:1": {
+     "kind": "TRANSPARENT_M31_CONSTRUCTOR",
+     "syntax": "M31",
+     "theorems": [
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEB-reducer-root:TX1:045",
+   "row": "TX1:045",
+   "function": "crates/aspis-core/src/field.rs::reduce_u64",
+   "frozen_body_sha256": "ea04e7311160208e97026b9dc343b3b3bffae79735722e5bccd90d661ab0ef45",
+   "selected_claims": [
+    "NBG::crates/aspis-core/src/field.rs::reduce_u64"
+   ],
+   "named_hypotheses_discharged": [
+    "NCS_R060.PacketDomain",
+    "NCS_R060.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "field"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose-20261029/NEB_L021/receipt.json",
+     "receipt_sha256": "07ce209f18caf35e86a5a6edf8f081be232ac4ea6842f88945fbe4dcb1924f2a",
+     "theorems": [
+      "NEB_ReducerCall.all_domain",
+      "NEB_ReducerCall.reference",
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.value",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-core/src/field.rs::reduce_u64.PacketDomain",
+    "crates/aspis-core/src/field.rs::reduce_u64.PhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_REDUCER_ASSOCIATION.md",
+    "sha256": "a54141eb6ce644347b391aafc966607d9b015c4e419d84c55b4e56298b5e84c1",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_NATIVE_REVIEW.json",
+    "sha256": "cd74885c14d119d2a9b2a3c8bc5271d71ccc8478e6f1809f2cb55854ec66879a"
+   },
+   "external_obligations": {}
+  },
+  {
+   "id": "NEB-reducer-root:TX2:014",
+   "row": "TX2:014",
+   "function": "crates/aspis-core/src/field.rs::M31::reduce_u64",
+   "frozen_body_sha256": "065261fab4e25c2593df2610ba9f3d47ff605780f8c233af825c7bced4ef9ed4",
+   "selected_claims": [
+    "NBG::crates/aspis-core/src/field.rs::M31::reduce_u64"
+   ],
+   "named_hypotheses_discharged": [
+    "NCS_R048.PacketDomain",
+    "NCS_R048.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U01"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose-20261029/NEB_L021/receipt.json",
+     "receipt_sha256": "07ce209f18caf35e86a5a6edf8f081be232ac4ea6842f88945fbe4dcb1924f2a",
+     "theorems": [
+      "NEB_ReducerCall.all_domain",
+      "NEB_ReducerCall.reference",
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.value",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-core/src/field.rs::M31::reduce_u64.PacketDomain",
+    "crates/aspis-core/src/field.rs::M31::reduce_u64.PhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_REDUCER_ASSOCIATION.md",
+    "sha256": "a54141eb6ce644347b391aafc966607d9b015c4e419d84c55b4e56298b5e84c1",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_NATIVE_REVIEW.json",
+    "sha256": "cd74885c14d119d2a9b2a3c8bc5271d71ccc8478e6f1809f2cb55854ec66879a"
+   },
+   "external_obligations": {
+    "external:TX2:14:1": {
+     "kind": "TRANSPARENT_M31_CONSTRUCTOR",
+     "syntax": "M31",
+     "theorems": [
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEB-reducer-root:TX2:026",
+   "row": "TX2:026",
+   "function": "crates/aspis-core/src/field.rs::reduce_u64",
+   "frozen_body_sha256": "ea04e7311160208e97026b9dc343b3b3bffae79735722e5bccd90d661ab0ef45",
+   "selected_claims": [
+    "NBG::crates/aspis-core/src/field.rs::reduce_u64"
+   ],
+   "named_hypotheses_discharged": [
+    "NCS_R060.PacketDomain",
+    "NCS_R060.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U01"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose-20261029/NEB_L021/receipt.json",
+     "receipt_sha256": "07ce209f18caf35e86a5a6edf8f081be232ac4ea6842f88945fbe4dcb1924f2a",
+     "theorems": [
+      "NEB_ReducerCall.all_domain",
+      "NEB_ReducerCall.reference",
+      "NEB_ReducerCall.wrapper",
+      "NEB_ReducerCall.value",
+      "NEB_ReducerCall.state_effects"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-core/src/field.rs::reduce_u64.PacketDomain",
+    "crates/aspis-core/src/field.rs::reduce_u64.PhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_REDUCER_ASSOCIATION.md",
+    "sha256": "a54141eb6ce644347b391aafc966607d9b015c4e419d84c55b4e56298b5e84c1",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-compose-20261029/NEB_NATIVE_REVIEW.json",
+    "sha256": "cd74885c14d119d2a9b2a3c8bc5271d71ccc8478e6f1809f2cb55854ec66879a"
+   },
+   "external_obligations": {}
   }
  ]
 }

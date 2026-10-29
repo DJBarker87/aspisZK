@@ -1,0 +1,50 @@
+{"attempt": "NEB_L019", "exit_status": 1, "wall_seconds": 2.863002869999036, "peak_rss_kib": "3813344", "swaps": "0", "print_axioms": ["'NEB_ReducerCall.all_domain' depends on axioms: [propext, Quot.sound]", "'NEB_ReducerCall.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEB_ReducerCall.wrapper' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEB_ReducerCall.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEB_ReducerCall.state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEB_ReducerCall.lean:16:74: error: unsolved goals
+x : U64
+⊢ (if
+        UScalar.cast UScalarTy.U32
+            (((x &&& UScalar.cast UScalarTy.U64 2147483647#u32).wrapping_add (x.wrapping_shr 31#u32) &&&
+                  UScalar.cast UScalarTy.U64 2147483647#u32).wrapping_add
+              (U64.wrapping_shr ((x &&& UScalar.cast UScalarTy.U64 2147483647#u32).wrapping_add (x.wrapping_shr 31#u32))
+                31#u32)) ≥
+          2147483647#u32 then
+      ok
+        ((UScalar.cast UScalarTy.U32
+              (((x &&& UScalar.cast UScalarTy.U64 2147483647#u32).wrapping_add (x.wrapping_shr 31#u32) &&&
+                    UScalar.cast UScalarTy.U64 2147483647#u32).wrapping_add
+               
+...
+ScalarTy.U64 2147483647#u32).wrapping_add (x.wrapping_shr 31#u32))
+              31#u32)))) =
+    if
+        UScalar.cast UScalarTy.U32
+            (U64.wrapping_add
+              (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                UScalar.cast UScalarTy.U64 2147483647#u32)
+              ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+                31#u32)) ≥
+          2147483647#u32 then
+      ok
+        (U32.wrapping_sub
+          (UScalar.cast UScalarTy.U32
+            (U64.wrapping_add
+              (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                UScalar.cast UScalarTy.U64 2147483647#u32)
+              ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+                31#u32)))
+          2147483647#u32)
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add
+            (U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              UScalar.cast UScalarTy.U64 2147483647#u32)
+            ((U64.wrapping_add (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32)))
+'NEB_ReducerCall.all_domain' depends on axioms: [propext, Quot.sound]
+'NEB_ReducerCall.reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEB_ReducerCall.wrapper' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEB_ReducerCall.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEB_ReducerCall.state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6f8a0176999349bbaf7a121ab3c05b24.scope; invocation ID: d180a02b0f0b4b54992b7726161280e1

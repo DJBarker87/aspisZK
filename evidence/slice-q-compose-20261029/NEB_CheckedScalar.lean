@@ -14,7 +14,7 @@ theorem accepted (x : NQ) (q : FIo_Native.fast_pairing.canonical.Q)
       have h := (LPi_CheckedInputs.checked x hx).symm.trans run
       cases h
       rfl
-    exact ⟨hx,same,same ▸ LPi_CheckedInputs.canonical x hx⟩
+    exact ⟨hx,same,by rw [same]; exact LPi_CheckedInputs.canonical x hx⟩
   · rw [NBQ_QChecks.checked_invalid x hx] at run
     cases run
 

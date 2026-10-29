@@ -1,0 +1,88 @@
+{
+  "attempt": "NEB_K002",
+  "kind": "kani",
+  "target": "field::NEB_reducer::reduce_contract",
+  "source_revision": "b9beaee9dade3b036ccb1343ddda3db65502601a",
+  "source_tree_dirty": true,
+  "sources": [
+    "NEB_gate.py",
+    "NEB_graph.py",
+    "NEB_SOURCE_PINS.json",
+    "NEB_src/Cargo.lock",
+    "NEB_src/Cargo.toml",
+    "NEB_src/crates/aspis-core/src/field.rs",
+    "NEB_src/crates/aspis-core/src/field/NEB_reducer.rs"
+  ],
+  "command": [
+    "python3",
+    "NEB_gate.py",
+    "NEB_K002.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_target",
+    "--features",
+    "r0",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::NEB_reducer::reduce_contract",
+    "--output-format",
+    "terse"
+  ],
+  "timeout": 180,
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NEB_wrong_reduce",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_tmp"
+  },
+  "deps_fingerprint": {
+    "source_pinset": "NEB_SOURCE_PINS.json",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387"
+  },
+  "expected_time": "Optimized compilation then one full-u64 scalar bit-vector contract; no multiplication, generation or elimination",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "feature_scope": "core helper: reducer and wrapper have no source feature gates apart from added cfg(kani) annotations",
+  "copy_dependency": "none: scalar args and replies; typed scalar references only in frame fidelity control",
+  "exit_status": 1,
+  "wall_seconds": 6.495355846942402,
+  "peak_rss_kib": "494784",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r56bfe51e8452453fbc012db7a1287c8b.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "550252544",
+  "source_hashes": {
+    "NEB_gate.py": "0cd74823628d05283d5e2b6be0d9688f1f4d79d75922fd3cedc222f795679e3d",
+    "NEB_graph.py": "9cb4c1e3e7b9b94df390b63677bf8b2db8379dce7a112b476f8be987b5604859",
+    "NEB_SOURCE_PINS.json": "391aa693e69698e0270ccd8e813c0e8339b0c9dd41911b5802457f97c1a1c528",
+    "NEB_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef",
+    "NEB_src/Cargo.toml": "3de458ef315222e2ac6facb0ca39f24286ab3bb6ed103eebc2c87a02761bd23e",
+    "NEB_src/crates/aspis-core/src/field.rs": "144192dd1e59b7e1880a8c0e82e2cbb62db83803fcb6e11a146f78e6c61863b2",
+    "NEB_src/crates/aspis-core/src/field/NEB_reducer.rs": "29e440c95a66f0d347cc1858cdd4ba63173d2457e7c369dcbd574d79e18509ac"
+  },
+  "print_axioms": "N/A: kani"
+}

@@ -1,0 +1,117 @@
+{
+ "schema": "NEB-reducer-native-review-v1",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "functions": [
+  "crates/aspis-core/src/field.rs::reduce_u64",
+  "crates/aspis-core/src/field.rs::M31::reduce_u64"
+ ],
+ "native_results": [
+  {
+   "attempt": "NEB_K001",
+   "target": "reduce_contract",
+   "expected_exit": 0,
+   "receipt_sha256": "d4c92d3b07606ed6d098ed8e20afdff9e7e8e00dc7b096bd35c080e654cf9c02",
+   "wall_seconds": 15.48499692499172,
+   "peak_rss_kib": "572992",
+   "swaps": "0",
+   "control": null
+  },
+  {
+   "attempt": "NEB_K002",
+   "target": "reduce_contract",
+   "expected_exit": 1,
+   "receipt_sha256": "333f7646901b073b9541ef1540db564bafabfcb5fc2edb2f0f179b1e9f025cc3",
+   "wall_seconds": 6.495355846942402,
+   "peak_rss_kib": "494784",
+   "swaps": "0",
+   "control": "reduce_post"
+  },
+  {
+   "attempt": "NEB_K003",
+   "target": "weak_contract",
+   "expected_exit": 0,
+   "receipt_sha256": "6ea8215d9d108a3923a538b7485cd47cbc05f3d4f1160e6d8e8fd6f253729d82",
+   "wall_seconds": 13.73826240899507,
+   "peak_rss_kib": "575092",
+   "swaps": "0",
+   "control": null
+  },
+  {
+   "attempt": "NEB_K004",
+   "target": "real_body",
+   "expected_exit": 0,
+   "receipt_sha256": "de7e35408f6c769385d33f20ff5da25f102207b41264c62cc2cb0bbbba89f389",
+   "wall_seconds": 15.680157833965495,
+   "peak_rss_kib": "678620",
+   "swaps": "0",
+   "control": null
+  },
+  {
+   "attempt": "NEB_K005",
+   "target": "unimplied",
+   "expected_exit": 1,
+   "receipt_sha256": "8b72d01b6110c68d58a459491e64671b5fede8f0c3923f661a4399c10f3699ba",
+   "wall_seconds": 14.850783391972072,
+   "peak_rss_kib": "679100",
+   "swaps": "0",
+   "control": "placeholder message"
+  },
+  {
+   "attempt": "NEB_K006",
+   "target": "frame_control",
+   "expected_exit": 1,
+   "receipt_sha256": "2c01eb9dba657d9bdd86c0320d5f609636101a6cb65c3e16ba42bc1bc392c7b5",
+   "wall_seconds": 11.5949111150112,
+   "peak_rss_kib": "575328",
+   "swaps": "0",
+   "control": "is assignable"
+  },
+  {
+   "attempt": "NEB_K007",
+   "target": "wrapper_contract",
+   "expected_exit": 0,
+   "receipt_sha256": "74ec055000c66e924b11c4eb52d1853fb3b960158e9e2b5b24942aef2c21c5a5",
+   "wall_seconds": 13.949581545079127,
+   "peak_rss_kib": "574580",
+   "swaps": "0",
+   "control": null
+  },
+  {
+   "attempt": "NEB_K008",
+   "target": "wrapper_contract",
+   "expected_exit": 1,
+   "receipt_sha256": "cbceebf27fb4976625fc8d6a95797f5cca7deeb05bbb4120536df3cfae535f73",
+   "wall_seconds": 6.323098570923321,
+   "peak_rss_kib": "495352",
+   "swaps": "0",
+   "control": "wrapper_post"
+  }
+ ],
+ "body_erasure": "entire field.rs byte identical after removing exactly two cfg(kani) ensures attributes and one cfg(kani) harness module",
+ "patch_sha256": "c5dabbe5ddd34163e145e7476c430fc0a0abcbaa628b7ff73b07aee88ac923b8",
+ "reference_sha256": "98f1321cc1c60b740983f3e3f7a17feb2a9f7f5f85a4f0da474f1248556aa738",
+ "copy_stub_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+ "copy_dependent": false,
+ "rule14_dependent": false,
+ "source_feature_parity": "Both reached frozen bodies contain no cfg feature/target branch. Exact native core-r0 source bodies equal their deployed bodies.",
+ "fidelity": {
+  "inverted_ensures": "NEB_K002",
+  "weak_contract": "NEB_K003",
+  "real_body": "NEB_K004",
+  "unimplied_under_stub": "NEB_K005",
+  "modifies_violation": "NEB_K006"
+ },
+ "callsite": {
+  "caller": "crates/aspis-core/src/field.rs::M31::reduce_u64",
+  "callee": "crates/aspis-core/src/field.rs::reduce_u64",
+  "domain": "every u64, no requires clause",
+  "actual_expression": "M31(reduce_u64(value))",
+  "native_proof": "NEB_K007",
+  "matched_control": "NEB_K008",
+  "selected_callee_positive": "NEB_K001",
+  "selected_callee_control": "NEB_K002",
+  "callee_reply": "u32, wrapped unchanged into the sole M31 field"
+ },
+ "composition_trust": "NativeContractSemanticTransport: P6/D188 reclassification, never removal",
+ "remaining": "Independent reference extraction and checked Lean reference/cohort/state/effect laws must pass before composition credit"
+}
