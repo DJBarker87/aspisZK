@@ -8,6 +8,9 @@ theorem no_second_call {S X E : Type} (dealloc : Nat → Request → S → Outco
  let first:=PV_OWNB_CursorCleanup.cleanup dealloc q ⟨q.memory,s,x⟩
  (PV_OWNB_CursorCleanup.cleanup dealloc q first.world).calls=[] := by
  have consumed:=PV_OWNB_CleanupConsumed.consumed dealloc q h s x
- simp [PV_OWNB_CursorCleanup.cleanup,dropOwned,consumed]
+ have empty (w : State S X) (hz:w.memory.slots q.owner=none) :
+  (PV_OWNB_CursorCleanup.cleanup dealloc q w).calls=[] := by
+  simp [PV_OWNB_CursorCleanup.cleanup,dropOwned,hz]
+ exact empty _ consumed
 #print axioms no_second_call
 end R1Z.PV_OWNB_NoDoubleCleanup
