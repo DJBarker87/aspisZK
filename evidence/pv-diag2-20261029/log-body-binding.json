@@ -3,15 +3,15 @@
   "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
   "sources": [
     {
-      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.33/src/macros.rs",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.34/src/macros.rs",
       "file_sha256": "6917080cd9c4a2ca8128024f562a2bfdbbcd43616e41ef125289a30c6a9a4be2",
       "line": 119,
       "body": "macro_rules! __log {\n    // log!(logger: my_logger, target: \"my_target\", Level::Info, key1:? = 42, key2 = true; \"a {} event\", \"log\");\n    (logger: $logger:expr, target: $target:expr, $lvl:expr, $($key:tt $(:$capture:tt)? $(= $value:expr)?),+; $($arg:tt)+) => ({\n        let lvl = $lvl;\n        if lvl <= $crate::STATIC_MAX_LEVEL && lvl <= $crate::max_level() {\n            $crate::__private_api::log(\n                $logger,\n                $crate::__private_api::format_args!($($arg)+),\n                lvl,\n                &($target, $crate::__private_api::module_path!(), $crate::__private_api::loc()),\n                &[$(($crate::__log_key!($key), $crate::__log_value!($key $(:$capture)* = $($value)*))),+] as &[_],\n            );\n        }\n    });\n\n    // log!(logger: my_logger, target: \"my_target\", Level::Info, \"a {} event\", \"log\");\n    (logger: $logger:expr, target: $target:expr, $lvl:expr, $($arg:tt)+) => ({\n        let lvl = $lvl;\n        if lvl <= $crate::STATIC_MAX_LEVEL && lvl <= $crate::max_level() {\n            $crate::__private_api::log(\n                $logger,\n                $crate::__private_api::format_args!($($arg)+),\n                lvl,\n                &($target, $crate::__private_api::module_path!(), $crate::__private_api::loc()),\n                (),\n            );\n        }\n    });\n}"
     },
     {
-      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.33/src/lib.rs",
-      "file_sha256": "7b605f1702b0a97c5ba5371aba62d6297cad21c00f1097040d201eb7cc28fa7e",
-      "line": 1422,
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.34/src/lib.rs",
+      "file_sha256": "f6633a72e77e5039ef767189116986ba12a57e43304b40eebb466959e03b9a92",
+      "line": 1431,
       "body": "pub fn max_level() -> LevelFilter {\n    // Since `LevelFilter` is `repr(usize)`,\n    // this transmute is sound if and only if `MAX_LOG_LEVEL_FILTER`\n    // is set to a usize that is a valid discriminant for `LevelFilter`.\n    // Since `MAX_LOG_LEVEL_FILTER` is private, the only time it's set\n    // is by `set_max_level` above, i.e. by casting a `LevelFilter` to `usize`.\n    // So any usize stored in `MAX_LOG_LEVEL_FILTER` is a valid discriminant.\n    unsafe { mem::transmute(MAX_LOG_LEVEL_FILTER.load(Ordering::Relaxed)) }\n}"
     },
     {

@@ -18,7 +18,14 @@ for p in sorted(E.glob('*-receipt.json')):
   if label=='lean62797':assert x['exit']==0 and len(x['axioms'])==8 and 'sorryAx' not in str(x['axioms'])
  rows.append(x)
 r=dict(native_scopes=sum(x['label'].startswith('native') for x in rows),lean_attempts=sum(x['label'].startswith('lean') for x in rows),kani=0,native_failures=[x['label'] for x in rows if x['label'].startswith('native') and x['exit']],lean_failures=[x['label'] for x in rows if x['label'].startswith('lean') and x['exit']],peak_rss_kib=max(x['peak_rss_kib'] or 0 for x in rows),total_gnu_wall_seconds=sum(x['gnu_wall_seconds'] or 0 for x in rows),all_swaps_zero=all(x['swaps']==0 for x in rows),admission_all_compliant=all(x['admission_exit']==0 and x['admission_allowed'] is True for x in rows),ids=[x.get('attempt',int(x['label'][4:])) for x in rows if x['label'].startswith('lean')],scopes=rows)
-assert r['native_scopes']<=40 and r['lean_attempts']<=100 and r['admission_all_compliant'] and all(62700<=i<=62799 for i in r['ids'])
+r['budgets'] = dict(prior_lean=sum(62700<=i<=62799 for i in r['ids']), resume_lean=sum(63000<=i<=63099 for i in r['ids']), prior_native=sum(x['label'].startswith('native') and not x['label'].startswith('nativeR') for x in rows), resume_native=sum(x['label'].startswith('nativeR') for x in rows), resume_lean_limit=85,resume_native_limit=22)
+assert r['budgets']['resume_lean']==85 and r['budgets']['resume_native']<=22 and r['admission_all_compliant'] and all(62700<=i<=62799 or 63000<=i<=63099 for i in r['ids'])
+accepted={x['attempt']:x['module'] for x in json.loads((E/'final-cohort-post.json').read_text())['modules']}
+for x in rows:
+ if x['label'].startswith('lean630'):
+  n=int(x['label'][4:]);x['formal_credit']='final accepted source/model cohort' if n in accepted else 'historical failed or superseded attempt; no independent final credit'
+  x['source_revision_qualification']='Raw revision plus per-attempt source snapshot/hash and dependency_objects pins; final-cohort-post.json validates the accepted closure. Source model credit does not discharge open native leaf or compiler obligations.'
+
 (E/'attempts.json').write_text(json.dumps(r,indent=2)+'\n')
 print(json.dumps({k:v for k,v in r.items() if k!='scopes'},indent=2))
 # Current final-source pins; these do not invent source snapshots for failed iterations.
