@@ -43,9 +43,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     simp only [PV_RunJoin_BackendRows58.body,if_pos hir,hread row hi,bind_tc_ok]
     rw [hw]
     simp only [bind_tc_ok,lift]
-    have next := ih (Usize.wrapping_add row 1#usize)
+    have next := ih (Usize.wrapping_add row 1#usize) (by rw [inc];omega)
       {self with messages:=matrix (filled p lane.val input (row.val+1))}
-      (by rw [inc];omega) (by rw [inc])
+      (by rw [inc])
     simpa only [PV_RunJoin_BackendRows58.run] using next
 
 #print axioms complete
