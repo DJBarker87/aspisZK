@@ -9,7 +9,7 @@ def message (s : Block) (mark : U8) : Slice (Slice U8) :=
     Array.to_slice (Array.make 1#usize [mark])])
 
 theorem message_bytes (s : Block) (mark : U8) :
-    (message s mark).val.flatMap Slice.val=s.val++[mark] := by
+    (message s mark).val.flatMap (fun x => x.val)=s.val++[mark] := by
   simp only [message,Array.to_slice,Array.make,List.flatMap_cons,List.flatMap_nil,List.append_nil]
 
 theorem block [ExternalTypes] {H : Type} (D : aspis_core.digest.Digest32 H)
