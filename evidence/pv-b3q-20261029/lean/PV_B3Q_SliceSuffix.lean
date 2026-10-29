@@ -38,7 +38,7 @@ theorem loop_suffix_binding {α β : Type} (ne : α → β → Result Bool)
  induction remaining generalizing index with
  | zero => rfl
  | succ remaining ih =>
-   simp only [source_loop,compare_at,read_suffix,tail_loop,PV_B3P_Ordered227.bind_assoc]
+   simp only [source_loop,compare_at,read_suffix,tail_loop]
    cases hl : left.drop index with
    | nil => rfl
    | cons x xs =>
