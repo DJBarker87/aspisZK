@@ -18,6 +18,7 @@ theorem fresh {S X E : Type}
  ∀ c, w.memory.heap p=some c → c.live=true → False := by
  intro c hc hl
  have disjoint:=(ctx.runtime p s h).2.2.2 p c hc hl
+ change p+c.size≤p ∨ p+1016≤p at disjoint
  have positive:=ctx.live_nonzero p c hc hl
  omega
 
