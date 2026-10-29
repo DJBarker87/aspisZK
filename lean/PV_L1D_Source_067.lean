@@ -444,6 +444,13 @@ theorem complete_result
             intro value called
           | split <;> simp only [*,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_063.complete_result,PV_L1D_Source_066.complete_result]
           | with_reducible rfl
-        all_goals rfl
+        all_goals
+          congr 1
+          repeat' first
+            | split <;> simp only [*,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_043.complete_result,PV_L1D_Source_044.complete_result,PV_L1D_Source_045.complete_result,PV_L1D_Source_047.complete_result,PV_L1D_Source_049.complete_result,PV_L1D_Source_051.complete_result,PV_L1D_Source_052.complete_result,PV_L1D_Source_055.complete_result,PV_L1D_Source_056.complete_result,PV_L1D_Source_063.complete_result,PV_L1D_Source_066.complete_result]
+            | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+              intro value called
+            | with_reducible rfl
+          all_goals rfl
 #print axioms complete_result
 end PV_L1D_Source_067
