@@ -15,3 +15,9 @@ The unchanged source plus direct-dependency guard in the normal runner remains a
 No privacy premise has been removed, added, or changed. The target is not yet established. FixturePdaRuntime, event acquisition and joint simulation links, native associations, allocator/abort conditions and the compiler boundary remain as recorded in the prior report. Consumer axioms remain pending separate authorization.
 
 Final rebuild result and READY status will be recorded after the topological run.
+
+## Pre-compiler guard correction
+
+71001 received admission but launched no Lean: the unchanged normal runner refused the submission because its direct-only dependency identity matched 71000. The namespace-complete overlay changes transitive first-root resolution, which that guard does not model. This is a wrapper input/staging obstruction before compilation, not a proof failure. The launcher output is retained in `launch-71001.log` and `build-71001.log`; there is no compiler receipt for 71001.
+
+Under the explicitly authorized (u') exception, the host's complete `lean-71000` packet was moved without changing its contents to `resume3/prior-environment/lean-71000`. This removes only that known pre-elaboration environment failure from the normal runner's historical glob. The outer guard still reads the archived receipt and exempts only that exact module/failure classification; all new failures remain stops. The normal runner files are unchanged. `guard-environment-correction.json` records the receipt hash, paths and both spent IDs. The next fresh submission is 71002.

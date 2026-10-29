@@ -12,9 +12,11 @@ assert all(v['identical'] and (v['kind']=='project' or v['host_matches_common_so
 ndr=B.parent/'codex-cx-reconcile-cache-20261028/objects'
 sysroot='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0'
 leanpath=str(B/'objects')+':'+str(ndr)+':'+sysroot+'/lib/lean'
-start=time.monotonic();nextid=71001
+start=time.monotonic();nextid=71003
+refusals=[json.load(open(p))['epoch'] for p in E.glob('refusal-*.json')]
+if refusals:time.sleep(max(0,180-(time.time()-max(refusals))))
 for m in plan['rebuild']:
- old=list(B.glob('lean-*/receipt.json'))
+ old=list(B.glob('lean-*/receipt.json'))+list((E/'prior-environment').glob('lean-71000/receipt.json'))
  for p in old:
   v=json.load(open(p))
   assert v['exit_status']==0 or (p.parent.name=='lean-71000' and v['module']=='R0Z.MaskedProtocol' and json.load(open(B/'isolation.json'))['failure_class'].startswith('pre-elaboration environment:')),('prior genuine failure: stop',str(p))
@@ -47,7 +49,12 @@ for m in plan['rebuild']:
    (E/f'refusal-{a}-{retry}.json').write_text(json.dumps(dict(epoch=time.time(),exit=r.returncode,admission=result,compiler_started=False)))
    print('REFUSED',a,retry,flush=True)
    if retry==10:sys.exit(78)
-   time.sleep(180);continue
+   time.sleep(180)
+   # Refused IDs are spent even though no compiler started (ruling d).
+   while str(nextid) in used or (B/f'lean-{nextid}').exists() or (E/f'attempt-{nextid}.json').exists():nextid+=1
+   assert nextid<=71999
+   a=nextid;nextid+=1;cfg['attempt']=f'lean-{a}';cfgfile=f'resume3/attempt-{a}.json';Path(cfgfile).write_text(json.dumps(cfg,indent=2)+'\n')
+   continue
   print('INFRASTRUCTURE STOP',a,log.read_text(),flush=True);sys.exit(1)
  command=['systemd-run','--user','--scope','--quiet',f'--unit=pv-evhc3-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',str(B/'S2W_lean_host.py'),cfgfile]
  print('START',a,m,flush=True)

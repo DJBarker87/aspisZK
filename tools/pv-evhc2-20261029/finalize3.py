@@ -11,7 +11,7 @@ roots=list(map(Path,pre['LEAN_PATH'].split(':')))
 def resolve(m):
  top=m.split('.')[0];root=next(r for r in roots if (r/top).is_dir() or (r/(top+'.olean')).is_file())
  return root/(m.replace('.','/')+'.olean')
-summary=dict(modules_rebuilt=len(success),modules_planned=510,mechanical_attempts=len(receipts),proof_attempts=0,compile_wall_seconds=sum(r['wall_seconds'] for r in receipts),peak_rss_kib=max([int(r['peak_rss_kib']) for r in receipts]+[0]),swaps=sum(int(r['swaps']) for r in receipts),source_revision='5098cacee75c803ba0486836a94c9894afbafab4',attempts=[r['attempt'] for r in receipts],consumer_compile_run=False,consumer_axioms='not run: aggregation not authorized',print_axioms={r['module']:r['print_axioms'] for r in receipts})
+summary=dict(modules_rebuilt=len(success),modules_planned=510,mechanical_attempts=len(receipts),proof_attempts=0,precompiler_guard_refusals=[71001],prior_environment_failure=71000,compile_wall_seconds=sum(r['wall_seconds'] for r in receipts),peak_rss_kib=max([int(r['peak_rss_kib']) for r in receipts]+[0]),swaps=sum(int(r['swaps']) for r in receipts),source_revision='5098cacee75c803ba0486836a94c9894afbafab4',attempts=[r['attempt'] for r in receipts],consumer_compile_run=False,consumer_axioms='not run: aggregation not authorized',print_axioms={r['module']:r['print_axioms'] for r in receipts})
 manifest=None
 if complete:
  assert all(r['swaps']=='0' and int(r['peak_rss_kib'])<=7*1024*1024 and r['wall_seconds']<600 for r in receipts)
