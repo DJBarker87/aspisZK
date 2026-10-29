@@ -21,16 +21,14 @@ theorem neutral_first : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 0#u
 
 theorem neutral_second : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 1#usize = ok secondParameter := rfl
 
+theorem rem0 : (0#usize % 2#usize) = ok 0#usize := rfl
+theorem rem1 : (1#usize % 2#usize) = ok 1#usize := rfl
+
 theorem first : PV_AL_CircleOwned.fallback 0#usize = (do
     let p ← PV_RunJoin_CircleRawMap52.fallback 0#usize
     ok (encPoint p)) := by
   unfold PV_AL_CircleOwned.fallback PV_RunJoin_CircleRawMap52.fallback
-  change (do
-      let q ← Array.index_usize PV_AL_CircleOwned.FALLBACK 0#usize
-      let r ← PV_AL_CircleOwned.map_parameter q
-      match r with
-      | .Ok p => ok p
-      | .Err _ => ok {x:=PV_AL_CircleOwned.aspis_core.field.QM31.ONE,y:=PV_AL_CircleOwned.aspis_core.field.QM31.ZERO}) = _
+  simp only [rem0,bind_tc_ok]
   rw [owned_first,neutral_first]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_CircleOwnedMap52.complete]
@@ -46,12 +44,7 @@ theorem second : PV_AL_CircleOwned.fallback 1#usize = (do
     let p ← PV_RunJoin_CircleRawMap52.fallback 1#usize
     ok (encPoint p)) := by
   unfold PV_AL_CircleOwned.fallback PV_RunJoin_CircleRawMap52.fallback
-  change (do
-      let q ← Array.index_usize PV_AL_CircleOwned.FALLBACK 1#usize
-      let r ← PV_AL_CircleOwned.map_parameter q
-      match r with
-      | .Ok p => ok p
-      | .Err _ => ok {x:=PV_AL_CircleOwned.aspis_core.field.QM31.ONE,y:=PV_AL_CircleOwned.aspis_core.field.QM31.ZERO}) = _
+  simp only [rem1,bind_tc_ok]
   rw [owned_second,neutral_second]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_CircleOwnedMap52.complete]
@@ -69,6 +62,8 @@ theorem second : PV_AL_CircleOwned.fallback 1#usize = (do
 #print axioms owned_second
 #print axioms neutral_first
 #print axioms neutral_second
+#print axioms rem0
+#print axioms rem1
 #print axioms first
 #print axioms second
 end R1Z.PV_RunJoin_CircleOwnedFallback52
