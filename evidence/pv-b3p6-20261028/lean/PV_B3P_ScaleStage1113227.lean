@@ -13,6 +13,6 @@ theorem scale_stage11_13 (packed : Array aspis_core.field.QM31 24#usize)
   rw [scale_frame_fold11]
   unfold value_direct_stage9_13 value_read_context9_13
   conv_rhs => simp only [PV_B3P_Ordered227.fold,scale_cell11,PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
-  exact Eq.refl _
+
 #print axioms scale_stage11_13
 end PV_B3P_Binding11227
