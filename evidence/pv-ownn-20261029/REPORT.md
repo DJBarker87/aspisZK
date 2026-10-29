@@ -1,4 +1,4 @@
-# D465 V239 — work in progress
+# D465 V239 — SUSPENDED
 
 Branch `codex/pv-ownn-20261029`, candidate base
 `64ff4f9240f873ae841a533ecdaa79df8db5cd25`.
@@ -11,11 +11,17 @@ implementation, dictionary, simulator, observer, keys, or other row changed.
 
 ## Required link order
 
-1. SourceDense: suffix-length lemma plus explicit Fin.cast repair prepared;
-   focused dependencies rebuilding. No credit before successful compilation.
+1. SourceDense: **PROVED** by PV_OWNN_SourceDense.concrete_source_dense,
+   attempt66493. scanner_suffix_length and scanner_decoded_cast provide the
+   named length lemma and explicit Fin.cast; the lookup is transported after
+   making the local dimensions explicit. The original full1024-row dense
+   semantics and every Link definition are unchanged. concrete_restore
+   consumes this theorem, retaining the other four links as hypotheses.
+   This is the scalar raw-source model law, not native op222 installation.
 2. ActualInput: OPEN. Accepted parser/builder/helper/sampler execution still
    needs identification with Input. Existing model invariants alone do not
-   identify that execution. Error-preserving selected-helper bridge prepared.
+   identify that execution. The attempted error-preserving selected-helper bridge failed66496
+   and receives no credit. It is retained verbatim under unsubmitted/.
 3. OwnedPublicPlan: OPEN. Actual selected op222 Slice/array carriers,
    initialized sparse tuple ownership, move/IntoIter/drop/error/abort stages,
    resource projection and first-stop failure prior remain to be associated
@@ -44,4 +50,19 @@ and91 inherited ownership objects before the first compile. Only missing
 focused dependencies are rebuilt. No unchanged full regression or native
 suite repeated. Kani0; native scopes0. No wallet/account keys touched.
 
-Final accounting, audit and replay pending.
+66492: the new named cast lemmas compiled, but the complete scalar theorem
+failed in the local width/trailing alias simplification. The changed66493
+proof makes the dependent List.get/Fin.cast type explicit and separately
+rewrites the optional lookup. It passes with standard axioms. The failed
+scalar/restore result is uncredited, not imported.
+
+66496: helper Result bridge failed on Option do-bind conversion and a local
+variable removed by equality substitution. Entire module uncredited, moved
+verbatim to unsubmitted/PV_OWNN_HelperResult.lean.txt; its sorryAx reports
+are never imported. Proposed repair and remaining binding gaps are in
+helper-66496-failure.md. No unchanged failed proof was resubmitted.
+
+Development budget exhausted at97 attempts; three reserved audits pending.
+Native scopes0; Kani0. V239 cannot be restored while four named links are
+open. No new cryptographic/runtime assumption, endpoint premise or T field.
+
