@@ -17,12 +17,13 @@ theorem installed (base : ExternalTypes) (heap : Heap) (box : Box)
     @ExternalFuns.op75 (types base) (selected base heap box ops)=ProverRwDictionaryDomain.fibreNew := by
   unfold selected
   rw [PV_B2_F_RawNative.preserved_75]
-  exact primitive ops
+  exact @primitive (types base) ops
 
 theorem rejected (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @aspis_core.r0.domain.FibreIndex.new (types base) (selected base heap box ops) 262144#usize=ok (.Err .IndexOutOfRange) := by
-  rw [installed]
+  change @ExternalFuns.op75 (types base) (selected base heap box ops) 262144#usize=_
+  rw [installed base heap box ops]
   simp only [ProverRwDictionaryDomain.fibreNew,lt_self_iff_false,if_false]
 
 #print axioms primitive
