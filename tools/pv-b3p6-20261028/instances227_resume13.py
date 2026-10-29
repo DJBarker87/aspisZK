@@ -1,0 +1,17 @@
+"""Instantiate unchanged links with already accepted explicit source models.
+This does not claim native source association or dependency closure."""
+from pathlib import Path
+import re,json
+D=Path('evidence/pv-b3p6-20261028');L=D/'lean';rows=[];mods=[]
+head='''namespace PV_B3P_Binding13227
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Links13227 PV_B3P_Binding9227 PV_B3P_Binding10227 PV_B3P_Binding11227 PV_B3P_Binding12227
+set_option autoImplicit false
+'''
+specs=[('Leading','poseidon_leading_pair_packed','source_leading12','leading_operation12.symm',['PV_B3P_Operations12227']),('Internal','poseidon_internal_linear_lazy','source_internal12','funext fun state => (internal_linear_binding12 state).symm',['PV_B3P_InternalBinding12227','PV_B3P_Operations12227']),('Reconstruct','terminal_reconstruct_10','source_reconstruct','funext reconstruct_body_binding',['PV_B3P_Operations12227']),('Preweighted','terminal_add_preweighted','@source_preweighted12','preweighted_operation_binding12.symm',['PV_B3P_Operations12227']),('DigestStore','terminal_add_digest_binding','source_digest_store12','digest_store_operation12.symm',['PV_B3P_Operations12227']),('Value','terminal_add_value_lanes','value_source12','funext fun packed => funext fun openings => funext fun selectors => (value_caller_binding12 packed openings selectors).symm',['PV_B3P_Operations12227','PV_B3P_ValueCallerBridge12227']),('Digest','terminal_public_digest_lanes','public_digest_source_loop11','funext fun public1 => funext fun openings => funext fun selectors => (public_digest_source_loop_binding11 public1 openings selectors).symm',['PV_B3P_Operations12227','PV_B3P_DigestLoopBridge11227'])]
+for label,link,model,proof,imports in specs:
+ mod='PV_B3P_'+label+'Link13227';theorem=label.lower()+'_link13';s='import PV_B3P_LinkDefinitions13227\n'+''.join('import '+m+'\n'for m in imports)+head+f'theorem {theorem} : PV_B3P_Link_{link} ({model}) :=\n  {proof}\n#print axioms {theorem}\nend PV_B3P_Binding13227\n';(L/(mod+'.lean')).write_text(s);mods.append(mod);rows.append(dict(module=mod,link='PV_B3P_Link_'+link,model=model,theorem=theorem,scope='explicit source model; complete native association OPEN'))
+for label,target,filename,law in [('QPlain','full_round','RoundQPlain','full_round_source_fold11'),('QPacked','full_round_packed','RoundQPacked','full_round_packed_source_fold11'),('MPlain','full_round_m31_constants','RoundMPlain','full_round_m31_constants_source_fold11'),('MPacked','full_round_m31_constants_packed','RoundMPacked','full_round_m31_constants_packed_source_fold11')]:
+ text=(L/('PV_B3P_'+filename+'11227.lean')).read_text();a=text.index('theorem '+law)+len('theorem '+law);b=text.index(' :\n',a);pars=text[a:b];rhs=text[text.index(' = (',b)+3:text.index(' := by',b)]
+ mod='PV_B3P_Round'+label+'Link13227';model='source_round13_'+label;th='round_link13_'+label
+ s='import PV_B3P_LinkDefinitions13227\nimport PV_B3P_Operations12227\n'+head+f'def {model} {pars} := {rhs}\ntheorem {th} : PV_B3P_Link_poseidon_{target} {model} :=\n  funext fun state => funext fun constants1 => ({law} state constants1).symm\n#print axioms {th}\nend PV_B3P_Binding13227\n';(L/(mod+'.lean')).write_text(s);mods.append(mod);rows.append(dict(module=mod,link='PV_B3P_Link_poseidon_'+target,model=model,theorem=th,scope='explicit source fold model; complete native association OPEN'))
+(D/'resume13/link-instances.json').write_text(json.dumps(rows,indent=2)+'\n');print(' '.join(mods))

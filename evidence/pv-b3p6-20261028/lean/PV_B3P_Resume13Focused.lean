@@ -1,0 +1,34 @@
+import PV_B3P_Resume13Axioms
+-- One final frozen focused manifest.
+#check PV_B3P_Binding13227.selected_callback13
+#print axioms PV_B3P_Binding13227.selected_callback13
+#check PV_B3P_Binding13227.selected_scalar_callback13
+#print axioms PV_B3P_Binding13227.selected_scalar_callback13
+#check PV_B3P_Binding13227.scalar_links_satisfiable13
+#print axioms PV_B3P_Binding13227.scalar_links_satisfiable13
+#check PV_B3P_Binding13227.prepared_link13
+#print axioms PV_B3P_Binding13227.prepared_link13
+#check PV_B3P_Binding13227.reconstruct_cleanup_binding13
+#print axioms PV_B3P_Binding13227.reconstruct_cleanup_binding13
+#check PV_B3P_Binding13227.projected_link13
+#print axioms PV_B3P_Binding13227.projected_link13
+#check PV_B3P_Binding13227.iter_mut_restoration13
+#print axioms PV_B3P_Binding13227.iter_mut_restoration13
+#check PV_B3P_Binding13227.slice_loop_plan13
+#print axioms PV_B3P_Binding13227.slice_loop_plan13
+#check PV_B3P_Binding13227.slice_four_literal13
+#print axioms PV_B3P_Binding13227.slice_four_literal13
+#check PV_B3P_Binding13227.frozen_mask_adapter_link13
+#print axioms PV_B3P_Binding13227.frozen_mask_adapter_link13
+#check PV_B3P_Binding13227.sum_high_link13
+#print axioms PV_B3P_Binding13227.sum_high_link13
+#check PV_B3P_Binding13227.fields_rejected_suffix_keeps_prefix13
+#print axioms PV_B3P_Binding13227.fields_rejected_suffix_keeps_prefix13
+#check PV_B3P_Groups13227.selected_from_function_links13
+#print axioms PV_B3P_Groups13227.selected_from_function_links13
+#check PV_B3P_Groups13227.function_group_joint_witness13
+#print axioms PV_B3P_Groups13227.function_group_joint_witness13
+#check PV_B3P_Groups13227.changed_bodies_satisfiable13
+#print axioms PV_B3P_Groups13227.changed_bodies_satisfiable13
+#check PV_B3P_ScalarBinding13227.semantic_source_binding13
+#print axioms PV_B3P_ScalarBinding13227.semantic_source_binding13

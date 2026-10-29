@@ -1,0 +1,52 @@
+[package]
+name="pv-b3p6-reference227"
+version="0.0.0"
+edition="2021"
+[workspace]
+[lib]
+path="../v244/lib.rs"
+[dependencies]
+aspis-core={path="../../../crates/aspis-core",features=["r0","ct-host-prover"]}
+aspis-statement={path="../../../crates/aspis-statement",features=["r0","pool-v1-kernel"]}
+aspis-prover={path="../../../crates/aspis-prover",features=["r0","prover","ct-host-prover","insecure-spend-fixture"]}
+aspis-r1-cost-probe={path="../../../crates/aspis-r1-cost-probe",features=["r1p-check","ct-host-prover"]}
+crypto-common={version="=0.1.7",default-features=false,features=["getrandom", "rand_core", "std"]}
+digest={version="=0.10.7",default-features=false,features=["alloc", "block-buffer", "const-oid", "core-api", "default", "mac", "oid", "std", "subtle"]}
+generic-array={version="=0.14.7",default-features=false,features=["more_lengths", "zeroize"]}
+getrandom={version="=0.3.4",default-features=false,features=["std"]}
+libc={version="=0.2.189",default-features=false,features=["default", "std"]}
+memchr={version="=2.8.3",default-features=false,features=["alloc", "std", "use_std"]}
+proc-macro2={version="=1.0.107",default-features=false,features=["default", "proc-macro"]}
+quote={version="=1.0.47",default-features=false,features=["default", "proc-macro"]}
+serde={version="=1.0.229",default-features=false,features=["alloc", "default", "derive", "serde_derive", "std"]}
+serde_core={version="=1.0.229",default-features=false,features=["alloc", "result", "std"]}
+syn={version="=3.0.4",default-features=false,features=["clone-impls", "default", "derive", "extra-traits", "fold", "full", "parsing", "printing", "proc-macro", "visit", "visit-mut"]}
+typenum={version="=1.20.1",default-features=false,features=["const-generics"]}
+zeroize={version="=1.9.0",default-features=false,features=["alloc", "default", "zeroize_derive"]}
+parity_getrandom_0_2_17={package="getrandom",version="=0.2.17",default-features=false,features=["custom", "js", "js-sys", "std", "wasm-bindgen"]}
+parity_rand_core_0_6_4={package="rand_core",version="=0.6.4",default-features=false,features=["alloc", "getrandom", "std"]}
+parity_subtle_2_6_1={package="subtle",version="=2.6.1",default-features=false,features=["default", "i128", "std"]}
+parity_syn_2_0_119={package="syn",version="=2.0.119",default-features=false,features=["clone-impls", "default", "derive", "extra-traits", "full", "parsing", "printing", "proc-macro", "visit", "visit-mut"]}
+parity_once_cell_1_21_4={package="once_cell",version="=1.21.4",default-features=false,features=["alloc", "default", "race", "std"]}
+parity_wasm_bindgen_0_2_129={package="wasm-bindgen",version="=0.2.129",default-features=false,features=["default", "std"]}
+[features]
+default=["prover","r0"]
+prover=[]
+r0=[]
+optimized-terminal=[]
+[profile.release]
+opt-level=3
+overflow-checks=false
+debug-assertions=false
+
+[[bin]]
+name="finite227-owned"
+path="../v244/finite227_owned.rs"
+
+[[bin]]
+name="fidelity227"
+path="main.rs"
+
+[[bin]]
+name="raw13"
+path="main.rs"
