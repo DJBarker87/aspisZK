@@ -33,8 +33,8 @@ theorem values (base : ExternalTypes) (heap : Heap) (box : Box)
       c u initial 0#usize=ok next := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
-  rw [PV_RunJoin_FibreFillThread43.thread c.lanes.length c u initial 0#usize (by rfl) domain.1]
-  exact finite base heap box ops c domain u bound c.lanes.length initial 0#usize rfl
+  rw [PV_RunJoin_FibreFillThread43.thread c.lanes.length c u initial 0#usize (by change 0+c.lanes.length=c.lanes.length;omega) domain.1]
+  exact finite base heap box ops c domain u bound c.lanes.length initial 0#usize (by change 0+c.lanes.length=c.lanes.length;omega)
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (c : host_commitment.Commitment)
@@ -50,7 +50,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     cases c.time <;> exact ⟨_,rfl,by decide⟩
   let zero := Array.repeat 32#usize 0#u8
   obtain ⟨paths,hpaths,hpost⟩ := WP.spec_imp_exists
-    (Array.update_spec opening.paths path (Array.repeat 6#usize (Array.repeat 7#usize zero)) hbound)
+    (Array.update_spec opening.paths path (Array.repeat 6#usize (Array.repeat 7#usize zero)) (by simpa only [Array.length,opening.paths.property,show (2#usize).val=2 from rfl] using hbound))
+  dsimp only [zero] at hpaths
   refine ⟨⟨matrix,paths⟩,?_⟩
   simp only [host_commitment.Commitment.fill_opening,hm,hpath,bind_tc_ok,hpaths]
 
