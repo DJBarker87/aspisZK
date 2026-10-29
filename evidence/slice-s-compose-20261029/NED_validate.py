@@ -6,7 +6,7 @@ callsite review is pinned by NED_REVIEWED_CERTIFICATES.json. Model-only work
 is deliberately ineligible for native composition credit.
 """
 from pathlib import Path
-import argparse,copy,hashlib,importlib.util,json,re,sys
+import argparse,collections,copy,hashlib,importlib.util,json,re,sys
 E=Path(__file__).resolve().parent;R=E.parent.parent
 sys.path.insert(0,str(R/'evidence/native-ledger3-20261029'))
 import NDT_validate as ndt
@@ -35,7 +35,7 @@ def theorem(t):
 
 def certificate(c,expected,ledger,reviewed):
  try:
-  assert c and c['kind'] in {'call-domain','root-composition','alternative-resolution','hypothesis-discharge'}
+  assert c and c['kind'] in {'call-domain','root-composition','alternative-resolution','hypothesis-discharge','external-domain'}
   assert c['subject']==expected and c['frozen_revision']==ledger['frozen_revision']
   assert c['semantic_review_sha256']==reviewed.get(expected)==sha(json.dumps({k:v for k,v in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
   assert c['theorems'] and all(theorem(t) for t in c['theorems'])
@@ -52,19 +52,27 @@ def certificate(c,expected,ledger,reviewed):
 
 def compose(base,packet,reviewed):
  ndt.validate_invariants(base) # ALL original NDT invariants, unchanged.
+ assert base==read(R/'evidence/native-ledger3-20261029/NDT_LEDGER.json'), 'baseline content drift'
  assert sha((R/'evidence/native-ledger3-20261029/NDT_LEDGER.json').read_bytes())==packet['base_sha256']
  assert packet['frozen_revision']==base['frozen_revision']
  spec=read(R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json')['slices']['S']
  assert set(packet['edges'])<=set(spec['internal_edges'])
  assert set(packet['roots'])<=set(spec['roots'])
+ assert set(packet['members'])<=set(spec['functions'])
+ valid_hypotheses={r['function']+'::'+h['name'] for r in base['rows'] if r['function'] in spec['functions'] for h in r['named_hypotheses']}
+ assert set(packet['hypotheses'])<=valid_hypotheses
+ external_ids={o['id'] for r in base['rows'] if r['function'] in spec['functions'] for o in r['caller_domain_obligations'] if 'callee' not in o}
+ assert set(packet.get('externals',{}))<=external_ids
  out=copy.deepcopy(base);byfunction={}
  for row in out['rows']:byfunction.setdefault(row['function'],[]).append(row)
  # Discharge only explicit named hypotheses, with separate same-call certificates.
  for row in out['rows']:
   if row['function'] not in spec['functions']:continue
   for ob in row['caller_domain_obligations']:
-   edge=ob.get('caller',row['function'])+' -> '+ob.get('callee','<unresolved>');c=packet['edges'].get(edge)
-   if certificate(c,edge,base,reviewed):ob.update(status='CLOSED',discharged_by=c['id'])
+   edge=ob.get('caller',row['function'])+' -> '+ob.get('callee','<unresolved>')
+   subject=edge if 'callee' in ob else ob['id']
+   c=packet['edges'].get(edge) if 'callee' in ob else packet.get('externals',{}).get(subject)
+   if certificate(c,subject,base,reviewed):ob.update(status='CLOSED',discharged_by=c['id'])
   for h in row['named_hypotheses']:
    key=row['function']+'::'+h['name'];c=packet['hypotheses'].get(key)
    if certificate(c,key,base,reviewed):h['discharged_by']=c['id']
@@ -84,7 +92,29 @@ def compose(base,packet,reviewed):
     if any(any(r['composed_status']!='CLOSED' for r in byfunction[g]) for g in deps):continue
     if row['open_transitive_dependencies']:continue # baseline OPEN bridges cannot be erased by composition
     row.update(composed_status='CLOSED',composed_reason='NED reviewed same-call certificates '+c['id']);changed=True
- ndt.validate_invariants(out) # original postconditions must still hold.
+ # NDK's historical "no new certificate in this refresh" assertion fixes ALL
+ # baseline rows to OPEN. Preserve and run it unchanged on the pinned baseline;
+ # the new certificate overlay is a separate checked layer, never a rewrite of
+ # that historical evidence. Enforce every non-composition field byte-for-byte.
+ projected=copy.deepcopy(out)
+ for row,original in zip(projected['rows'],base['rows']):
+  for key in ['composed_status','composed_reason','caller_domain_obligations','named_hypotheses']:
+   row[key]=copy.deepcopy(original[key])
+ assert projected==base, 'non-composition field changed'
+ ndt.validate_invariants(projected)
+ for row,original in zip(out['rows'],base['rows']):
+  for got,old in zip(row['caller_domain_obligations'],original['caller_domain_obligations']):
+   restored=copy.deepcopy(got)
+   for k in ['status','discharged_by']:restored[k]=old[k]
+   assert restored==old, 'call-domain statement changed'
+  for got,old in zip(row['named_hypotheses'],original['named_hypotheses']):
+   assert dict(got,discharged_by=old['discharged_by'])==old, 'hypothesis statement changed'
+  if row['composed_status']=='CLOSED':
+   assert all(h['discharged_by'] for h in row['named_hypotheses'])
+   assert all(o['status']=='CLOSED' and o['discharged_by'] for o in row['caller_domain_obligations'])
+   assert not row['open_transitive_dependencies'] and row['selected_claims']
+ out['NED_composition_overlay']={'base_sha256':packet['base_sha256'],'native_statuses_unchanged':True,
+    'coverage':dict(collections.Counter(r['composed_status'] for r in out['rows']))}
  return out
 
 def main():

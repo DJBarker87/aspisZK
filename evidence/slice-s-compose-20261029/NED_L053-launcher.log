@@ -1,0 +1,49 @@
+{"attempt": "NED_L053", "exit_status": 1, "wall_seconds": 26.931665270007215, "peak_rss_kib": "5388600", "swaps": "0", "print_axioms": ["'NED_PaymentValidation.transfer_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NED_PaymentValidation.value_limit' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NED_PaymentValidation.withdrawal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NED_generated/NED_PaymentValidation.lean:18:9: error: unsolved goals
+case h_1
+p : T
+h : NBG_PaymentChecks.common (NBG_PaymentValidators.tc p) = core.result.Result.Ok PUnit.unit
+h✝¹ : NBG_PaymentChecks.canonical (toRawTransfer p).recipient_commitment = true
+h✝ : NBG_PaymentChecks.canonical (toRawTransfer p).change_commitment = true
+x✝ : core.result.Result Unit TE
+value✝ : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+heq✝ :
+  (if
+        NBG_PaymentChecks.canonical p.recipient_commitment = false ∨
+          NBG_PaymentChecks.canonical p.change_commitment = false then
+      core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1
+...
+PaymentChecks.zero (toRawWithdrawal p).destination_token_account = false
+h✝ : NBG_PaymentChecks.canonical (toRawWithdrawal p).change_commitment = false
+heq✝ :
+  (if ↑p.amount = 0 ∨ 1073741824 ≤ ↑p.amount then
+      core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount
+    else
+      if NBG_PaymentChecks.zero p.destination_token_account = true then
+        core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidDestination
+      else
+        if NBG_PaymentChecks.canonical p.change_commitment = false then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest
+        else core.result.Result.Ok ()) =
+    core.result.Result.Err
+      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.EnvelopeMismatch
+⊢ False
+NED_generated/NED_PaymentValidation.lean:38:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [NBG_PaymentValidators.withdrawal, ̲h, ̲mapPayment,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+       ̵ ̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_PaymentValidation.transfer_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NED_PaymentValidation.value_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_PaymentValidation.withdrawal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb1fd659e9aa14cd18f3316806b7b36e3.scope; invocation ID: 7a40b156a8d941708ad2d3b4911e73ad

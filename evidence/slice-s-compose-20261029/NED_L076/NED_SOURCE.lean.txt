@@ -1,0 +1,55 @@
+import NED_CommonEncodeCohort
+import NBP_TransferEncode
+set_option autoImplicit false
+noncomputable section
+namespace NED_TransferEncodingCohort
+open Aeneas Aeneas.Std Result NED_PaymentCohorts NED_CommonValidation
+open AspisR1AdapterReconstruct
+
+theorem result (p : T) :
+    aspis_statement.pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 (toRawTransfer p) =
+    ok (mapPayment (NBP_PaymentModel.transfer_encoded p)) := by
+  simp only [aspis_statement.pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1,
+    NED_PaymentValidation.transfer_result,bind_tc_ok]
+  unfold NBP_PaymentModel.transfer_encoded
+  cases h : NBG_PaymentValidators.transfer p with
+  | Err e =>
+    simp [h,mapPayment,core.result.Result.Insts.CoreOpsTry.branch,
+      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+      core.convert.FromSame]
+  | Ok u =>
+    cases u
+    simp only [h,mapPayment,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    rw [NED_PaymentCohorts.transfer_common]
+    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
+    rw [NED_CommonEncodeCohort.result (Array.repeat 216#usize 0#u8)
+      aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC
+      .PrivateTransfer (NBG_PaymentValidators.tc p)]
+    simp only [bind_tc_ok,NED_DigestCohorts.digest_encode,NBP_DigestEncode.result,lift,
+      aspis_statement.pool_v1.payment_relation.FIRST_OUTPUT_OR_DESTINATION_OFFSET,
+      aspis_statement.pool_v1.payment_relation.SECOND_OUTPUT_OFFSET,
+      aspis_statement.pool_v1.payment_relation.AMOUNT_OR_RESERVED_OFFSET]
+    simp only [toRawTransfer,AspisR1.JHf_Carrier.toPoolV1PrivateTransferPublicV1,
+      AspisS6CurrentAdapterCarrier.fromPoolV1PrivateTransferPublicV1]
+    unfold NBP_PaymentModel.transfer_bytes
+    simp only [aspis_statement.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC,
+      AspisR1TerminalDecoder.pool_v1.payment_relation.POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC]
+    generalize common : NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8)
+      (Array.make 4#usize [65#u8,83#u8,67#u8,80#u8])
+      AspisR1TerminalDecoder.pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer
+      (NBG_PaymentValidators.tc p) = out
+    rw [NBP_ArrayIndex.index_mut out 152#usize 184#usize (by decide) (by decide)]
+    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NBP_ArrayIndex.slice out 152#usize 184#usize) (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment).to_slice; _) = _
+    rw [NBP_ArrayIndex.copy_range out 152#usize 184#usize
+      (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment) (by decide) (by decide) (by decide)]
+    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
+    generalize first : out.setSlice! 152 (AspisR1.S2K.DigestBytes.bytes p.recipient_commitment).val = out1
+    rw [NBP_ArrayIndex.suffix_index out1 184#usize (by decide)]
+    change (do let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 (NBP_ArrayIndex.slice out1 184#usize 216#usize) (AspisR1.S2K.DigestBytes.bytes p.change_commitment).to_slice; _) = _
+    rw [NBP_ArrayIndex.copy_range out1 184#usize 216#usize
+      (AspisR1.S2K.DigestBytes.bytes p.change_commitment) (by decide) (by decide) (by decide)]
+    simp only [bind_tc_ok,Array.to_slice,UScalar.ofNatCore_val_eq]
+    rfl
+
+#print axioms result
+end NED_TransferEncodingCohort

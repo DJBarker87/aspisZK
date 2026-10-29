@@ -1,0 +1,31 @@
+import NED_PaymentCohorts
+set_option autoImplicit false
+noncomputable section
+namespace NED_CommonValidation
+open Aeneas Aeneas.Std Result NED_PaymentCohorts
+abbrev TE := AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+abbrev RE := AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+
+def mapPayment {T : Type} : core.result.Result T TE → core.result.Result T RE
+  | .Ok v => .Ok v
+  | .Err e => .Err (NED_ErrorCarriers.toRawPoolV1PaymentStatementFormatError e)
+
+theorem capacity :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY = ok 1048576#u64 := by
+  unfold AspisR1AdapterReconstruct.aspis_statement.pool_v1.incremental_merkle.POOL_V1_LEAF_CAPACITY
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.format.POOL_V1_TREE_DEPTH
+  rfl
+
+theorem common_result (c : C) :
+    AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.validate_common (toRawCommon c) =
+    ok (mapPayment (NBG_PaymentChecks.common c)) := by
+  simp [AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.validate_common,
+    toRawCommon,NBG_PaymentChecks.zero_result,capacity,NED_PaymentCohorts.canonical_result,
+    NBG_PaymentChecks.common,AspisR1AdapterReconstruct.aspis_core.field.P,mapPayment,
+    NED_ErrorCarriers.toRawPoolV1PaymentStatementFormatError]
+  repeat' split
+  all_goals simp_all
+
+#print axioms capacity
+#print axioms common_result
+end NED_CommonValidation

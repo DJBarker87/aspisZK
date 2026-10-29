@@ -1,0 +1,59 @@
+{"attempt": "NED_L056", "exit_status": 1, "wall_seconds": 18.69230151793454, "peak_rss_kib": "5383068", "swaps": "0", "print_axioms": ["'NED_PaymentValidation.transfer_result' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NED_PaymentValidation.value_limit' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NED_PaymentValidation.withdrawal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NED_generated/NED_PaymentValidation.lean:17:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [NBG_PaymentValidators.transfer, ̲h, ̲mapPayment,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+       ̵ ̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NED_generated/NED_PaymentValidation.lean:49:34: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : W
+h : NBG_Pa
+...
+tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+p : W
+h : NBG_PaymentChecks.common (NBG_PaymentValidators.wc p) = core.result.Result.Ok PUnit.unit
+x✝ : core.result.Result Unit TE
+value✝ : AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError
+h✝³ : ¬↑p.amount = 0
+h✝² : ↑p.amount ≤ 1073741823
+h✝¹ : NBG_PaymentChecks.zero p.destination_token_account = false
+h✝ : NBG_PaymentChecks.canonical p.change_commitment = false
+heq✝ :
+  (if 1073741824 ≤ ↑p.amount then
+      core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.InvalidWithdrawalAmount
+    else
+      core.result.Result.Err
+        AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.NonCanonicalDigest) =
+    core.result.Result.Err
+      AspisR1TerminalDecoder.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.EnvelopeMismatch
+⊢ False
+NED_generated/NED_PaymentValidation.lean:40:6: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp [NBG_PaymentValidators.withdrawal, ̲h, ̲mapPayment,
+       ̵ ̵core.result.Result.Insts.CoreOpsTry.branch,
+       ̵ ̵core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NED_PaymentValidation.transfer_result' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_PaymentValidation.value_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_PaymentValidation.withdrawal_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r1e86a1787af341f5ab2e84d6c33b915e.scope; invocation ID: 72aa12195289486d936df98db2fdb6dc
