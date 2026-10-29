@@ -45,13 +45,7 @@ theorem test_bound (μR : ProbabilityMeasure R)
   rw [integral_rat_mean
     (fun m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape => test (model m.1.1))
     (fun m => (bounded (model m.1.1)).1)] at ht
-  have hm : (∫ₚ m, (if ∃ i, ProverCommitFuelJoin22.bad old queries i m then (1 : ℝ) else 0)
-      ∂(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape) : Measure _)) =
-      (eventMass (fun m => ∃ i, ProverCommitFuelJoin22.bad old queries i m) : ℝ) := by
-    simpa only [eventMass, apply_ite, Rat.cast_one, Rat.cast_zero] using
-      (integral_rat_mean (fun m => if ∃ i, ProverCommitFuelJoin22.bad old queries i m
-        then (1 : ℚ) else 0) (by intro m; split_ifs <;> norm_num))
-  rw [hm] at ht
+  rw [integral_event_mass] at ht
   have hp : mean (fun m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape =>
       test (model m.1.1)) = mean (fun m => test (model m)) :=
     (CouplingR1PBin.mp_fst (X := M × OracleAnswer) (Y := ProverCommitFuelJoin22.Tape)

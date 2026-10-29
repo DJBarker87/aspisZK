@@ -26,6 +26,17 @@ theorem integral_bit_mean {M : Type} [Fintype M] [Nonempty M]
   integral_rat_mean _ (fun _ => R0Z.FsGood.bit_nonneg _)
 
 #print axioms integral_bit_mean
+/-- Abstract predicates retain one decision convention through exact mass
+transport, even when a concrete predicate contains finite quantifiers. -/
+theorem integral_event_mass {M : Type} [Fintype M] [Nonempty M]
+    [MeasurableSpace M] [MeasurableSingletonClass M] (bad : M → Prop) :
+    (∫ₚ m, (if bad m then (1 : ℝ) else 0) ∂(uniform M : Measure M)) =
+      (R0Z.FsAbort.eventMass bad : ℝ) := by
+  simpa only [R0Z.FsAbort.eventMass, apply_ite, Rat.cast_one, Rat.cast_zero] using
+    (integral_rat_mean (fun m => if bad m then (1 : ℚ) else 0)
+      (by intro m; split_ifs <;> norm_num))
+
+#print axioms integral_event_mass
 /-- Evaluation of a finite uniform measure, related exactly to rational mass. -/
 theorem uniform_apply_real {X : Type} [Fintype X] [Nonempty X]
     [MeasurableSpace X] [MeasurableSingletonClass X] (s : Set X) :
