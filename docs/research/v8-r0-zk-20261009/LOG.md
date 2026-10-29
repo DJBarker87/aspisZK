@@ -14755,3 +14755,17 @@ pv-ownl used all 100 Lean attempts (91 passed, 9 failed), one capped native scop
 V239 remains SUSPENDED on the complete consuming-execution composition. That composition is the source-to-dense commuting theorem in full coordinates, the transcript publicness for :879 and :890 as a Lean statement, and the owned-execution-to-PublicPlan join.
 
 Lead assessment: four rounds (owni to ownl, about 400 attempts) built V239's pieces bottom-up without attempting the composition. AGENTS.md section 7 asks for end-to-end composition early. pv-ownm (IDs 65900-65999; 100 Lean, 20 native) goes top-down. First, within ten attempts, it compiles the final restoration theorem PV_OWNM_V239.restore with V239's exact consumed-law conclusion, with each missing link as an explicit named hypothesis: a standalone Prop with its exact statement, never restating the conclusion, with no sorry or axiom. That shows the composition fits, or exposes the real mismatch. It then discharges the links one at a time. Rows removed: 0. Privacy target not yet established.
+
+## D461 (Stream B) 2026-10-29 04:31 UTC: pv-diag7 results (option-B public-signal law proved for the OS-driven diagnostic channels); pv-diag8 launched
+
+pv-diag7 used all 100 Lean attempts (91 passed), five capped native scopes and no Kani. The final audits passed, the closure identities match and swap was zero. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits. It was merged into the candidate and pushed.
+
+Applying the owner's option B (D458) worked. PV_DIAG7.DIAG_optionB_public_signal proves that the covered diagnostic events, their ordering, the retained state and the terminal results are functions of public data and the public environment-failure signal. Coverage includes write and flush outcomes, Interrupted retries, nonce error retention, errno and error rendering, and configuration inputs. T and the error bound are unchanged, and the result stays conditional on option B's P row (V400, failure independence).
+
+Still unresolved: native invocation and operand bindings, V400 itself, witness-derived formatting, panic payloads, logger behaviour and captured frames. pv-diag8 (IDs 66000-66099; 100 Lean, 40 native, 0 Kani) works through them in order:
+- panic sites proved unreachable on honest canonical runs, with no payload analysis; a reachable site carrying witness data is a finding;
+- no witness-derived operand reaching honest-reachable format sites, or a finding;
+- dependency logger operands;
+- captured frames on honest-reachable error paths;
+- what V400 requires of the deployed client, proved as far as the world, ownership and allocation results allow.
+Rows removed: 0. Privacy target not yet established.
