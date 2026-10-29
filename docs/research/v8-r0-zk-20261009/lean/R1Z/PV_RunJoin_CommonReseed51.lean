@@ -24,6 +24,7 @@ variable (W : R1Wire K CH Aux) (Pr : R1ProverP K CH Aux F W) (R : RomModel W)
   (hpub : ∀ g,addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g)≠W.pubBytes x)
 include hin hc hcoll hpub
 
+omit hin hc hcoll hpub in
 theorem frame (r : Rec) (tag : r.rest.vtag=2) :
     ProverRwOuterFrames.flatten (PV_RunJoin_TranscriptReseedSource51.request
       (block (r.tr (.advS 26))) (ProverRwOuterTag.byte .S2))=addr .reseed r := by
@@ -36,8 +37,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     @host_transcript.Transcript.new (types base) (selected base heap box ops) _
       (@aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 (types base) (selected base heap box ops))
       (hash W (toRP W Pr R h B outputs x w hN s).1) (block ((s k).2.1 (.inl (.advS 26)))) .S2=
-      ok ({state:=block ((s k).2.1 (.inl .reseed)),
-        hash:=hash W (toRP W Pr R h B outputs x w hN s).1} : host_transcript.Transcript _) := by
+      ok (host_transcript.Transcript.mk (block ((s k).2.1 (.inl TRead.reseed)))
+        (hash W (toRP W Pr R h B outputs x w hN s).1)) := by
   rw [PV_RunJoin_TranscriptReseed51.source]
   have req := PV_RunJoin_CommonOracle51.read W Pr R N hN h B outputs x w hin hc s hcoll hpub k .reseed _
     ((frame (record W Pr h B outputs x w (s k).2.1) tag).trans
