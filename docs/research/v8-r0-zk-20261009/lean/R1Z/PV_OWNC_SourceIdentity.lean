@@ -10,6 +10,7 @@ theorem step (keep : Link → Bool) (q : Cursor) :
  (sourceStep keep q).memory.slots=q.memory.slots ∧
  (sourceStep keep q).memory.generations=q.memory.generations := by
  unfold sourceStep
+ dsimp only
  split <;> exact ⟨rfl,rfl,rfl,rfl⟩
 
 theorem loop (keep : Link → Bool) (n : Nat) (q : Cursor) :

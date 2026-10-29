@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:47: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:1: error: Type mismatch: After simplification, term
+  PV_OWNB_CursorCleanup.positive dealloc q h s x nz
+ has type
+  @Eq (List (State S X × Event))
+    (PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).calls
+    [({ memory := take q.owner q.memory, allocator := s, extra := x },
+        Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+but is expected to have type
+  @Eq (List (State S X × Event))
+    (PV_W_Threading.bind (lift (Outcome.ok ())) (fun x => PV_OWNB_CursorCleanup.cleanup dealloc q)
+        { memory := q.memory, allocator := s, extra := x }).calls
+    [({ memory := take q.owner q.memory, allocator := s, extra := x },
+        Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+'R1Z.PV_OWNC_GuardCleanup.prefix_empty' does not depend on any axioms
+'R1Z.PV_OWNC_GuardCleanup.original_layout' depends on axioms: [propext, sorryAx]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62870/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62870/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_GuardCleanup.olean", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:00.20", "peak_rss_kib": "488380", "swap": "0", "source_revision": "d29bbef689be88a029a77194740c26dbf5a52dfa", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
