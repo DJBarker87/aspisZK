@@ -10,7 +10,7 @@ variable {A : Type}
 def indexMut {N : Usize} (a : Array A N) (i : Usize) :
  Result (A × (A → Array A N)) :=
  if h : i.val<N.val then
-  .ok (a.val[i.val]'(by rw [a.property]; exact h),Array.set a i)
+  .ok (a.val[i.val]'(by rw [a.property]; exact h),Aeneas.Std.Array.set a i)
  else .fail .panic
 
 theorem source_equal {N : Usize} (a : Array A N) (i : Usize) :
@@ -24,12 +24,12 @@ theorem source_equal {N : Usize} (a : Array A N) (i : Usize) :
    rfl
 
 theorem in_bounds {N : Usize} (a : Array A N) (i : Usize) (hi : i.val<N.val) :
- ∃ old, indexMut a i = ok (old,Array.set a i) := by
+ ∃ old, indexMut a i = ok (old,Aeneas.Std.Array.set a i) := by
  unfold indexMut
  rw [dif_pos hi]
  exact ⟨_,rfl⟩
 
-theorem out_of_bounds {N : Usize} (a : Array A N) (i : Usize) (hi : N.val≤i.val) :
+theorem out_of_bounds {N : Usize} (a : Array A N) (i : Usize) (hi : N.val ≤ i.val) :
  indexMut a i = fail .panic := by
  unfold indexMut
  rw [dif_neg (by omega)]
