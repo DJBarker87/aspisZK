@@ -2077,7 +2077,9 @@ theorem final_links : PV_OWNM_Link_ActualInput wirePoints (input .final890) ∧
 theorem nondegenerate (site : Site) : (input site).point.length = 10 ∧
  (wirePoints (input site).point).length = 3 ∧
  ((input site).columns.map List.length) = [1024,1024] := by
- simp [input,point,wirePoints,columns]
+ simp only [input, point, wirePoints, columns, List.map_cons, List.map_nil,
+  List.length_replicate, List.length_cons, List.length_nil]
+ exact ⟨True.intro, True.intro, True.intro⟩
 #print axioms actual_input
 #print axioms owned
 #print axioms satisfiable
