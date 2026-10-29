@@ -73,3 +73,8 @@ callback bind (not the successor bound): exit1, wall1.20s, peak2,633,516KiB,
 swap0. The next changed proof explicitly reduces the tuple let before splitting
 callback outcomes and closes the zero case definitionally. No failed object is
 consumed and no sorryAx output is credited.
+
+60640 reaches the revised proof but fails solely because the extra explicit
+`dsimp only` reports no progress (its reduction is already performed by the
+preceding step). Removed that redundant tactic for60641; zero case now closes.
+60640:exit1, wall1.17s, peak2,629,464KiB, swap0; uncredited.
