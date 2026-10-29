@@ -1,0 +1,101 @@
+[
+  {
+    "name": "write_all",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/mod.rs",
+    "file_sha256": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+    "line_start": 1875,
+    "line_end": 1889,
+    "text": "    fn write_all(&mut self, mut buf: &[u8]) -> Result<()> {\n        while !buf.is_empty() {\n            match self.write(buf) {\n                Ok(0) => {\n                    return Err(Error::WRITE_ALL_EOF);\n                }\n                Ok(n) => buf = &buf[n..],\n                Err(ref e) if e.is_interrupted() => {}\n                Err(e) => return Err(e),\n            }\n        }\n        Ok(())\n    }\n\n",
+    "text_sha256": "d39db1b35e9007c0cd85998782fcf879ff076fe36e3f516259e010b6d34dd260"
+  },
+  {
+    "name": "default_write_fmt",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/mod.rs",
+    "file_sha256": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+    "line_start": 615,
+    "line_end": 656,
+    "text": "pub(crate) fn default_write_fmt<W: Write + ?Sized>(\n    this: &mut W,\n    args: fmt::Arguments<'_>,\n) -> Result<()> {\n    // Create a shim which translates a `Write` to a `fmt::Write` and saves off\n    // I/O errors, instead of discarding them.\n    struct Adapter<'a, T: ?Sized + 'a> {\n        inner: &'a mut T,\n        error: Result<()>,\n    }\n\n    impl<T: Write + ?Sized> fmt::Write for Adapter<'_, T> {\n        fn write_str(&mut self, s: &str) -> fmt::Result {\n            match self.inner.write_all(s.as_bytes()) {\n                Ok(()) => Ok(()),\n                Err(e) => {\n                    self.error = Err(e);\n                    Err(fmt::Error)\n                }\n            }\n        }\n    }\n\n    let mut output = Adapter { inner: this, error: Ok(()) };\n    match fmt::write(&mut output, args) {\n        Ok(()) => Ok(()),\n        Err(..) => {\n            // Check whether the error came from the underlying `Write`.\n            if output.error.is_err() {\n                output.error\n            } else {\n                // This shouldn't happen: the underlying stream did not error,\n                // but somehow the formatter still errored?\n                panic!(\n                    \"a formatting trait implementation returned an error when the underlying stream did not\"\n                );\n            }\n        }\n    }\n}\n\n",
+    "text_sha256": "57bd2d3252ba3dba4376876b38a06823a10e8da247073cf9cde1169122517d30"
+  },
+  {
+    "name": "write_fmt",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/mod.rs",
+    "file_sha256": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+    "line_start": 1990,
+    "line_end": 1998,
+    "text": "    fn write_fmt(&mut self, args: fmt::Arguments<'_>) -> Result<()> {\n        if let Some(s) = args.as_statically_known_str() {\n            self.write_all(s.as_bytes())\n        } else {\n            default_write_fmt(self, args)\n        }\n    }\n\n",
+    "text_sha256": "62a7fde559092d5a8ac59d9656324cbc81a811ae06852005e846368200beb7df"
+  },
+  {
+    "name": "unix_stdio",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+    "file_sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+    "line_start": 66,
+    "line_end": 92,
+    "text": "impl Stderr {\n    pub const fn new() -> Stderr {\n        Stderr\n    }\n}\n\nimpl io::Write for Stderr {\n    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {\n        unsafe { ManuallyDrop::new(FileDesc::from_raw_fd(STDERR_FILENO)).write(buf) }\n    }\n\n    fn write_vectored(&mut self, bufs: &[IoSlice<'_>]) -> io::Result<usize> {\n        unsafe { ManuallyDrop::new(FileDesc::from_raw_fd(STDERR_FILENO)).write_vectored(bufs) }\n    }\n\n    #[inline]\n    fn is_write_vectored(&self) -> bool {\n        true\n    }\n\n    #[inline]\n    fn flush(&mut self) -> io::Result<()> {\n        Ok(())\n    }\n}\n\n",
+    "text_sha256": "2f7e6d92e55ca145db5bb87a0d78c49b11251b0a48bcbc8bd378596d17fba905"
+  },
+  {
+    "name": "unix_fd_write",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/fd/unix.rs",
+    "file_sha256": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+    "line_start": 344,
+    "line_end": 355,
+    "text": "    pub fn write(&self, buf: &[u8]) -> io::Result<usize> {\n        let ret = cvt(unsafe {\n            libc::write(\n                self.as_raw_fd(),\n                buf.as_ptr() as *const libc::c_void,\n                cmp::min(buf.len(), READ_LIMIT),\n            )\n        })?;\n        Ok(ret as usize)\n    }\n\n",
+    "text_sha256": "8b3129e5517306d48eed94060a81fba193e58caf4f2bce1ba110573a1143f32e"
+  },
+  {
+    "name": "backtrace_create_status",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+    "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+    "line_start": 325,
+    "line_end": 372,
+    "text": "    fn create(ip: usize) -> Backtrace {\n        let _lock = lock();\n        let mut frames = Vec::new();\n        let mut actual_start = None;\n        set_image_base();\n        unsafe {\n            backtrace_rs::trace_unsynchronized(|frame| {\n                frames.push(BacktraceFrame {\n                    frame: RawFrame::Actual(frame.clone()),\n                    symbols: Vec::new(),\n                });\n                if frame.symbol_address().addr() == ip && actual_start.is_none() {\n                    actual_start = Some(frames.len());\n                }\n                true\n            });\n        }\n\n        // If no frames came out assume that this is an unsupported platform\n        // since `backtrace` doesn't provide a way of learning this right now,\n        // and this should be a good enough approximation.\n        let inner = if frames.is_empty() {\n            Inner::Unsupported\n        } else {\n            Inner::Captured(LazyLock::new(lazy_resolve(Capture {\n                actual_start: actual_start.unwrap_or(0),\n                frames,\n            })))\n        };\n\n        Backtrace { inner }\n    }\n\n    /// Returns the status of this backtrace, indicating whether this backtrace\n    /// request was unsupported, disabled, or a stack trace was actually\n    /// captured.\n    #[stable(feature = \"backtrace\", since = \"1.65.0\")]\n    #[must_use]\n    pub fn status(&self) -> BacktraceStatus {\n        match self.inner {\n            Inner::Unsupported => BacktraceStatus::Unsupported,\n            Inner::Disabled => BacktraceStatus::Disabled,\n            Inner::Captured(_) => BacktraceStatus::Captured,\n        }\n    }\n}\n\n",
+    "text_sha256": "00fb36e534090390b4b1c18aa723cd70886996e527ec78dbd1267be4fc3babcd"
+  },
+  {
+    "name": "backtrace_display",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+    "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+    "line_start": 382,
+    "line_end": 431,
+    "text": "impl fmt::Display for Backtrace {\n    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {\n        let capture = match &self.inner {\n            Inner::Unsupported => return fmt.write_str(\"unsupported backtrace\"),\n            Inner::Disabled => return fmt.write_str(\"disabled backtrace\"),\n            Inner::Captured(c) => &**c,\n        };\n\n        let full = fmt.alternate();\n        let (frames, style) = if full {\n            (&capture.frames[..], backtrace_rs::PrintFmt::Full)\n        } else {\n            (&capture.frames[capture.actual_start..], backtrace_rs::PrintFmt::Short)\n        };\n\n        // When printing paths we try to strip the cwd if it exists, otherwise\n        // we just print the path as-is. Note that we also only do this for the\n        // short format, because if it's full we presumably want to print\n        // everything.\n        let cwd = crate::env::current_dir();\n        let mut print_path = move |fmt: &mut fmt::Formatter<'_>, path: BytesOrWideString<'_>| {\n            output_filename(fmt, path, style, cwd.as_ref().ok())\n        };\n\n        let mut f = backtrace_rs::BacktraceFmt::new(fmt, style, &mut print_path);\n        f.add_context()?;\n        for frame in frames {\n            if frame.symbols.is_empty() {\n                f.frame().print_raw(frame.frame.ip(), None, None, None)?;\n            } else {\n                for symbol in frame.symbols.iter() {\n                    f.frame().print_raw_with_column(\n                        frame.frame.ip(),\n                        symbol.name.as_ref().map(|b| backtrace_rs::SymbolName::new(b)),\n                        symbol.filename.as_ref().map(|b| match b {\n                            BytesOrWide::Bytes(w) => BytesOrWideString::Bytes(w),\n                            BytesOrWide::Wide(w) => BytesOrWideString::Wide(w),\n                        }),\n                        symbol.lineno,\n                        symbol.colno,\n                    )?;\n                }\n            }\n        }\n        f.finish()?;\n        Ok(())\n    }\n}\n\n",
+    "text_sha256": "5420fe98ad4886349f4d08b0a60547c16bb5deaf9698794e5a4e8b74309e5755"
+  },
+  {
+    "name": "backtrace_resolve",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/backtrace.rs",
+    "file_sha256": "b1d5bdb5db8b622ab022ac0d6d29b6022b5b4a1001e6c5d28c66ca81d9ae262a",
+    "line_start": 431,
+    "line_end": 468,
+    "text": "mod helper {\n    use super::*;\n    pub(super) type LazyResolve = impl (FnOnce() -> Capture) + Send + Sync + UnwindSafe;\n\n    #[define_opaque(LazyResolve)]\n    pub(super) fn lazy_resolve(mut capture: Capture) -> LazyResolve {\n        move || {\n            // Use the global backtrace lock to synchronize this as it's a\n            // requirement of the `backtrace` crate, and then actually resolve\n            // everything.\n            let _lock = lock();\n            for frame in capture.frames.iter_mut() {\n                let symbols = &mut frame.symbols;\n                let frame = match &frame.frame {\n                    RawFrame::Actual(frame) => frame,\n                    #[cfg(test)]\n                    RawFrame::Fake => unimplemented!(),\n                };\n                unsafe {\n                    backtrace_rs::resolve_frame_unsynchronized(frame, |symbol| {\n                        symbols.push(BacktraceSymbol {\n                            name: symbol.name().map(|m| m.as_bytes().to_vec()),\n                            filename: symbol.filename_raw().map(|b| match b {\n                                BytesOrWideString::Bytes(b) => BytesOrWide::Bytes(b.to_owned()),\n                                BytesOrWideString::Wide(b) => BytesOrWide::Wide(b.to_owned()),\n                            }),\n                            lineno: symbol.lineno(),\n                            colno: symbol.colno(),\n                        });\n                    });\n                }\n            }\n\n            capture\n        }\n    }\n}\n",
+    "text_sha256": "3da4ef5e030ff21b802fd1c66ed517bdd56e1b38bc283850f1088f762f2db517"
+  },
+  {
+    "name": "anyhow_drop",
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs",
+    "file_sha256": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+    "line_start": 713,
+    "line_end": 743,
+    "text": "impl Drop for Error {\n    fn drop(&mut self) {\n        unsafe {\n            // Invoke the vtable's drop behavior.\n            (vtable(self.inner.ptr).object_drop)(self.inner);\n        }\n    }\n}\n\nstruct ErrorVTable {\n    object_drop: unsafe fn(Own<ErrorImpl>),\n    object_ref: unsafe fn(Ref<ErrorImpl>) -> Ref<dyn StdError + Send + Sync + 'static>,\n    #[cfg(any(feature = \"std\", not(anyhow_no_core_error)))]\n    object_boxed: unsafe fn(Own<ErrorImpl>) -> Box<dyn StdError + Send + Sync + 'static>,\n    #[cfg(any(feature = \"std\", not(anyhow_no_core_error)))]\n    object_reallocate_boxed: unsafe fn(Own<ErrorImpl>) -> Box<dyn StdError + Send + Sync + 'static>,\n    object_downcast: unsafe fn(Ref<ErrorImpl>, TypeId) -> Option<Ref<()>>,\n    object_drop_rest: unsafe fn(Own<ErrorImpl>, TypeId),\n    #[cfg(all(not(error_generic_member_access), feature = \"std\"))]\n    object_backtrace: unsafe fn(Ref<ErrorImpl>) -> Option<&Backtrace>,\n}\n\n// Safety: requires layout of *e to match ErrorImpl<E>.\nunsafe fn object_drop<E>(e: Own<ErrorImpl>) {\n    // Cast back to ErrorImpl<E> so that the allocator receives the correct\n    // Layout to deallocate the Box's memory.\n    let unerased_own = e.cast::<ErrorImpl<E>>();\n    drop(unsafe { unerased_own.boxed() });\n}\n\n",
+    "text_sha256": "9d01f53754c29b4bb7c42ba9698952c01d03097dc990ee10398c82c199313b2c"
+  },
+  {
+    "name": "anyhow_layout",
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs",
+    "file_sha256": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+    "line_start": 908,
+    "line_end": 931,
+    "text": "pub(crate) struct ErrorImpl<E = ()> {\n    vtable: &'static ErrorVTable,\n    backtrace: Option<Backtrace>,\n    // NOTE: Don't use directly. Use only through vtable. Erased type may have\n    // different alignment.\n    _object: E,\n}\n\n// Reads the vtable out of `p`. This is the same as `p.as_ref().vtable`, but\n// avoids converting `p` into a reference.\nunsafe fn vtable(p: NonNull<ErrorImpl>) -> &'static ErrorVTable {\n    // NOTE: This assumes that `ErrorVTable` is the first field of ErrorImpl.\n    unsafe { *(p.as_ptr() as *const &'static ErrorVTable) }\n}\n\n// repr C to ensure that ContextError<C, E> has the same layout as\n// ContextError<ManuallyDrop<C>, E> and ContextError<C, ManuallyDrop<E>>.\n#[repr(C)]\npub(crate) struct ContextError<C, E> {\n    pub context: C,\n    pub error: E,\n}\n\n",
+    "text_sha256": "8d3d80b770c89a331b20cea06aa77bf7c4d4be03f07e018b715a207a90c46876"
+  },
+  {
+    "name": "anyhow_ptr",
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ptr.rs",
+    "file_sha256": "a114639d26f4feca7e186106342334cdf2e2176f892149aa331ace72e5d81410",
+    "line_start": 28,
+    "line_end": 72,
+    "text": "impl<T> Own<T>\nwhere\n    T: ?Sized,\n{\n    pub fn new(ptr: Box<T>) -> Self {\n        Own {\n            ptr: unsafe { NonNull::new_unchecked(Box::into_raw(ptr)) },\n        }\n    }\n\n    pub fn cast<U: CastTo>(self) -> Own<U::Target> {\n        Own {\n            ptr: self.ptr.cast(),\n        }\n    }\n\n    pub unsafe fn boxed(self) -> Box<T> {\n        unsafe { Box::from_raw(self.ptr.as_ptr()) }\n    }\n\n    pub fn by_ref(&self) -> Ref<T> {\n        Ref {\n            ptr: self.ptr,\n            lifetime: PhantomData,\n        }\n    }\n\n    pub fn by_mut(&mut self) -> Mut<T> {\n        Mut {\n            ptr: self.ptr,\n            lifetime: PhantomData,\n        }\n    }\n}\n\n#[repr(transparent)]\npub struct Ref<'a, T>\nwhere\n    T: ?Sized,\n{\n    pub ptr: NonNull<T>,\n    lifetime: PhantomData<&'a T>,\n}\n\n",
+    "text_sha256": "dcf9f8fd20a1e4e985cbb1f6d4e841c8d51fc551bbec05ec0109eccada46857c"
+  }
+]

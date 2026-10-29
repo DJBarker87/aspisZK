@@ -1,0 +1,41 @@
+{
+  "kind": "native",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "0fc3e8ea896a36c7089a50194ae2dafe21ecde1f",
+  "runner_sha256": "48e715ac3c5a0551bb503be828aa9abc29cf4cee2b00c8af18ee4b81f4f777b4",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag3-20261029/native02-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-diag3-20261029/source-inventory.py"
+  ],
+  "exit": 0,
+  "wall_seconds": 0.05740094184875488,
+  "peak_rss_kib": "16192",
+  "swaps": "0",
+  "gnu_wall": "0:00.02",
+  "print_axioms": "N/A: native source/control evidence"
+}
