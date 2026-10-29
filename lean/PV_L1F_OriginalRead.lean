@@ -38,7 +38,7 @@ theorem original_success_of_read {C : Type} (entropy : Entropy C) (pub : Pub)
  rw [original_read entropy pub compiled variant hash owner control store callback k n bound] at readout
  cases h : (run owner n k.val (callback,store)).1.result with
  | done p =>
-   refine ⟨p,h,?_⟩
+   refine ⟨p,by simp only [h],?_⟩
    simpa only [returnedAttempts,h,Option.some.injEq] using readout
  | stop e => simp only [returnedAttempts,h] at readout; cases readout
  | retry => simp only [returnedAttempts,h] at readout; cases readout
