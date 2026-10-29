@@ -34,6 +34,7 @@ theorem complete (phase : PV_RunJoin_NativeControl55.Phase) (prepared : prover.P
   have halpha : PV_RunJoin_ActualRunSources59.alpha1 phase=ok (some alpha) := by
     simp only [PV_RunJoin_ActualRunSources59.alpha1,hprepare,hfinish,bind_tc_ok,
       hpublication,lift,hpayload0,hpayload,hscalar]
+    rfl
   have hb : ProverRwDictionaryTower.fromW
       (ProverCommitWideOps48.source (PV_RunJoin_ActualRun.data phase).b)=alpha := by
     simp only [PV_RunJoin_ActualRun.data,PV_RunJoin_ActualData59.data,
