@@ -15177,3 +15177,7 @@ V244 is split across two workers with separate prefixes, as was done for runjoin
 - b3p6p (same worktree; IDs 70100-70199; 100 Lean, 20 native) takes the 36 changed-function links to native association under own-1, starting with the 18 that have model or context instances;
 - pv-b3q (new branch codex/pv-b3q-20261029 from 15819d2768; prefix PV_B3Q_, PV_B3P_ read-only; IDs 70200-70299; 100 Lean, 30 native) takes the concrete std and dependency catalogue, D188 and the nine-entry intermediate-matrix association, each stated as an instance of an existing link.
 Rows removed: 0. Privacy target not yet established.
+
+## D501 (Stream B) 2026-10-29 09:29 UTC: pv-mfd results (76 credited stale records all pass on current source; 31 remain); pv-mfe launched
+
+pv-mfd used all 100 focused invocations, with no proofs, native scopes, Kani or manifest replay; its receipt validation passed. It resolved 101 of the 132 undeterminable records (55 to A, all passing; 46 to B), so the totals are now 76 A, 657 B and 31 C. V243's 31-invocation chain ran first and passes on current pinned source with the recovered cache, and focused checks of V260, V195, V219 and V246 also pass, with standard axioms only. Across D497-D501, no credited closure checked against current source has failed. The 31 remaining C records need import-cohort provenance resolution and consumer rebuilds. It was merged into the candidate and pushed. pv-mfe (IDs 70300-70399; 80 focused invocations) resolves them and produces the final A, B and C table. Rows removed: 0. Privacy target not yet established.
