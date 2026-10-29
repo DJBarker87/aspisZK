@@ -1,0 +1,19 @@
+NDZ intentional local signer failure after buffer creation
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/r1_devnet_deploy_paced.py", line 116, in <module>
+    deploy_role(role)
+  File "/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/r1_devnet_deploy_paced.py", line 89, in deploy_role
+    e=submit(f'{role}-write-{offset}',[ix(LOADER,[[buf,False,True],[C['payer'],True,False]],data)],[PAYER_KEY],bh);e['offset']=offset;sigs.append(e);batch.append(e);write(role+'-signatures',sigs);time.sleep(C.get('write_delay_seconds',.2))
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/r1_devnet_deploy_paced.py", line 48, in submit
+    s=signed(ixs,keys,block['blockhash']);wire=base64.b64encode(bytes.fromhex(s['hex'])).decode()
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/r1_devnet_deploy_paced.py", line 15, in signed
+    q={'keys':keys,'blockhash':bh,'instructions':ixs};return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
+                                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/home/dombarker/project-offloads/codex-cx-devnet-rehearse-20261029/evidence/devnet-rehearse-20261029/NDZ_fail_signer_final.py']' returned non-zero exit status 1.

@@ -5,17 +5,19 @@ Run inside r1_devnet_receipt.sh and the documented capped scope.
 import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
 from concurrent.futures import ThreadPoolExecutor
 from r1_devnet_rpc import rpc
+from r1_devnet_policy import require_key, created_accounts, state_rent
 from Client64_proof_accounts import proof_plan, retain_key, key_public
 C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=True,mode=0o700)
 URL=C['rpc_url'];SIGNER=C.get('signer','native-target/release/devnet_spend')
-CLI=pathlib.Path.home()/'.local/share/solana/install/active_release/bin'
+CLI=pathlib.Path(C.get('cli_dir',str(pathlib.Path.home()/'.local/share/solana/install/active_release/bin')))
+KEYS=pathlib.Path(C.get('key_dir','keys'));PAYER_KEY=str(C.get('payer_key',KEYS/'payer.json'))
 SYSTEM='11111111111111111111111111111111';TOKEN='TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA'
 def write(name,v):
     p=O/(name+'.json');p.write_text(json.dumps(v,indent=2)+'\n')
 def key(name,require_existing=False):
     namespace=C.get('key_namespace','')
     assert re.fullmatch(r'[A-Za-z0-9_-]*',namespace), 'invalid key namespace'
-    p=pathlib.Path('keys')/((namespace+'-' if namespace else '')+name+'.json')
+    p=pathlib.Path(C.get('key_dir','keys'))/((namespace+'-' if namespace else '')+name+'.json')
     if require_existing and not p.exists():raise RuntimeError('missing retained key; manual recovery required: '+str(p))
     if not p.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(p)],stdout=subprocess.DEVNULL,check=True)
     os.chmod(p,0o600)
@@ -24,8 +26,17 @@ def account(address):
     a=rpc(URL,'getAccountInfo',[address,{'encoding':'base64','commitment':'finalized'}])
     return a
 
+def record_rent(transaction):
+    addresses=created_accounts(transaction)
+    if not addresses:return
+    path=O/'rent-ledger.json'
+    rows={row['address']:row for row in json.loads(path.read_text())} if path.exists() else {}
+    for address in addresses:
+        value=account(address)['value']
+        if value:rows[address]=state_rent(address,value,C['payer'],globals().get('gov'))
+    write('rent-ledger',list(rows.values()))
 def invoke(q):return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
-def send(name,ixs,keys=['keys/payer.json'],negative=False):
+def send(name,ixs,keys=[PAYER_KEY],negative=False):
     done=O/(name+'.json')
     if done.exists():
         old=json.load(open(done))
@@ -43,9 +54,9 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
             if status and status['confirmationStatus']=='finalized':
                 tx=rpc(URL,'getTransaction',[sig,{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}])
                 if not tx:raise RuntimeError(f'{name}: finalized metadata not yet available')
-                write(name+'-transaction',tx)
+                write(name+'-transaction',tx);record_rent(tx)
                 origin=attempt_record.get('started_unix',path.stat().st_mtime)
-                result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
+                result={'signature':sig,'explorer':(None if URL.startswith(('http://127.0.0.1:','http://localhost:')) else f'https://explorer.solana.com/tx/{sig}?cluster=devnet'),'slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
                 write(name,result)
                 if bool(result['error'])!=negative:raise RuntimeError(f'{name}: reconciled unexpected result {result}')
                 print(name,json.dumps(result),flush=True);return result
@@ -82,8 +93,8 @@ def send(name,ixs,keys=['keys/payer.json'],negative=False):
             if tx:break
             time.sleep(2)
         if not tx:raise RuntimeError('finalized tx metadata unavailable')
-        write(name+'-transaction',tx)
-        result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
+        write(name+'-transaction',tx);record_rent(tx)
+        result={'signature':sig,'explorer':(None if URL.startswith(('http://127.0.0.1:','http://localhost:')) else f'https://explorer.solana.com/tx/{sig}?cluster=devnet'),'slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
         write(name,result)
         if bool(result['error'])!=negative:raise RuntimeError(f'{name} unexpected finalized result: {result}')
         print(name,json.dumps(result),flush=True);return result
@@ -96,7 +107,7 @@ def create(name,address,owner,size,signer):
         return
     rent=rpc(URL,'getMinimumBalanceForRentExemption',[size])
     data=(0).to_bytes(4,'little')+rent.to_bytes(8,'little')+size.to_bytes(8,'little')+b58(owner)
-    return send(name,[ix(SYSTEM,[[C['payer'],True,True],[address,True,True]],data)],['keys/payer.json',signer])
+    return send(name,[ix(SYSTEM,[[C['payer'],True,True],[address,True,True]],data)],[PAYER_KEY,signer])
 def b58(s):
     alphabet='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';n=0
     for x in s:n=n*58+alphabet.index(x)
@@ -114,7 +125,7 @@ def upload(label,address,path,body):
         write(label+'-phase-timing',timing)
     def one(item):
         i,start=item;time.sleep((i%4)*.25)
-        return send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],['keys/payer.json',path])
+        return send(f'{label}-{i}',[ix(C['carrier'],[[address,True,True]],start.to_bytes(4,'little')+body[start:start+3763])],[PAYER_KEY,path])
     # Disjoint ranges may be submitted concurrently. Every transaction must
     # finalize before byte readback or stage 1; at most four are in flight.
     with ThreadPoolExecutor(max_workers=4) as pool:
@@ -122,7 +133,7 @@ def upload(label,address,path,body):
     actual=bytes.fromhex(readhex(address,C['carrier']));assert actual==body
     result={'count':len(stats),'compute_units':sum(s['compute_units'] for s in stats),'wall_seconds':time.time()-timing['started_unix'],'wall_origin_kind':timing['origin_kind'],'transaction_wall_seconds_sum':sum(s['wall_seconds'] for s in stats),'sha256':hashlib.sha256(body).hexdigest()};write(label+'-summary',result);return result
 
-assert subprocess.check_output([str(CLI/'solana-keygen'),'pubkey','keys/payer.json'],text=True).strip()==C['payer']
+write('retained-payer',require_key(PAYER_KEY,CLI,C['payer']))
 assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
 assert 'carrier' in C,'deploy and pin the raw-buffer carrier before setup'
 if (O/'complete.json').exists():
@@ -145,36 +156,37 @@ slot=rpc(URL,'getSlot',[{'commitment':'finalized'}]);setupfile=O/'setup-plan.jso
 if setupfile.exists():setup=json.load(open(setupfile))
 else:
     setup=plan('setup',funding_payer=C['payer'],governance=gov,activation_slot=slot+100,registry_hash=C['release_artifacts']['registry']['sha256'],verifier_hash=C['release_artifacts']['devnet_verifier']['sha256']);write('setup-plan',setup)
-send('pool-initialize',[setup['initialize']])
-send('registry-initialize',[setup['registry_initialize']],['keys/payer.json',govkey])
+if not C.get('pool_initialize_after_registry',False):send('pool-initialize',[setup['initialize']])
+send('registry-initialize',[setup['registry_initialize']],[PAYER_KEY,govkey])
 if not (O/'registry-schedule.json').exists():
     activation=rpc(URL,'getSlot',[{'commitment':'confirmed'}])+100
     setup=plan('setup',funding_payer=C['payer'],governance=gov,activation_slot=activation,registry_hash=C['release_artifacts']['registry']['sha256'],verifier_hash=C['release_artifacts']['devnet_verifier']['sha256']);setup['activation_slot']=activation;write('setup-plan',setup)
-send('registry-schedule',[setup['schedule']],['keys/payer.json',govkey])
+send('registry-schedule',[setup['schedule']],[PAYER_KEY,govkey])
 while rpc(URL,'getSlot',[{'commitment':'finalized'}])<setup['activation_slot']:time.sleep(2)
-send('registry-activate',[setup['activate']],['keys/payer.json',govkey])
-send('registry-freeze',[setup['freeze']],['keys/payer.json',govkey])
+send('registry-activate',[setup['activate']],[PAYER_KEY,govkey])
+send('registry-freeze',[setup['freeze']],[PAYER_KEY,govkey])
+if C.get('pool_initialize_after_registry',False):send('pool-initialize',[setup['initialize']])
 deposits=[]
 for n in range(2):
     d=plan('deposit',note=n,source=source,token_owner=gov,genesis=True)
     # The second note may land in the same lane; then use its existing root page.
     if account(d['page'])['value'] is not None:d=plan('deposit',note=n,source=source,token_owner=gov,genesis=False)
-    write(f'deposit-{n}-plan',d);send(f'deposit-{n}',[d['instruction']],['keys/payer.json',govkey]);deposits.append(d)
+    write(f'deposit-{n}-plan',d);send(f'deposit-{n}',[d['instruction']],[PAYER_KEY,govkey]);deposits.append(d)
 cp=plan('checkpoint',sequence=0);send('forest-checkpoint',[cp['instruction']]);write('forest-checkpoint-plan',cp)
 for n,label in enumerate(['transfer','withdrawal']):
     saved=O/(label+'-proof-plan.json')
-    resuming=(O/(label+'-client64-proof-private')).exists() or saved.exists()
+    resuming=(O.joinpath(C.get('proof_key_dir',''))/((C.get('key_namespace','')+'-' if C.get('key_namespace') else '')+label+'-client64-proof-private')).exists() or saved.exists()
     publickey,publicaccount=key(label+'-public',require_existing=resuming);cpkey,verifiercp=key(label+'-checkpoint',require_existing=resuming)
     identity={**C['programs'],'payer':C['payer'],'mint':mint,'action':'prove',
               'note':n,'withdrawal':n==1,'destination':dest,'checkpoint':cp['checkpoint'],
               'public_account':publicaccount,'verifier_checkpoint':verifiercp}
-    p,proofkey=proof_plan(O/(label+'-client64-proof-private'),identity,
+    p,proofkey=proof_plan(O.joinpath(C.get('proof_key_dir',''))/((C.get('key_namespace','')+'-' if C.get('key_namespace') else '')+label+'-client64-proof-private'),identity,
         lambda: {'lane_bytes':readhex(deposits[n]['output_lane'],C['programs']['pool']),
                  'checkpoint_bytes':readhex(cp['checkpoint'],C['programs']['pool'])},
         invoke,lambda address: account(address)['value'] is None,
         lambda path: retain_key(path,CLI),lambda path: key_public(path,CLI),saved)
     proofaccount=p['proof_account'];write(label+'-proof-plan',p)
-    proofdir=O/(label+'-client64-proof-private')/'proof'
+    proofdir=O.joinpath(C.get('proof_key_dir',''))/((C.get('key_namespace','')+'-' if C.get('key_namespace') else '')+label+'-client64-proof-private')/'proof'
     proof=(proofdir/'proof.bin').read_bytes();public=(proofdir/'statement.bin').read_bytes()
     create(label+'-proof-create',proofaccount,C['carrier'],len(proof),proofkey);create(label+'-public-create',publicaccount,C['carrier'],len(public),publickey)
     t=time.monotonic();proof_stats=upload(label+'-proof-upload',proofaccount,proofkey,proof);statement_stats=upload(label+'-statement-upload',publicaccount,publickey,public)
@@ -197,12 +209,20 @@ for n,label in enumerate(['transfer','withdrawal']):
     negkey,negcp=key(label+'-negative-checkpoint');create(label+'-negative-checkpoint-create',negcp,C['programs']['verifier'],1768,negkey)
     # Mutate the compact proof header, leaving candidate bytes intact, and use a fresh checkpoint.
     offset=len(proof)-57607
-    send(label+'-mutate-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+bytes([proof[offset]^1]))],['keys/payer.json',proofkey])
+    send(label+'-mutate-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+bytes([proof[offset]^1]))],[PAYER_KEY,proofkey])
     negstage=json.loads(json.dumps(p['stage1']));negstage['accounts'][2][0]=negcp
     negative_before=account(negcp)['value']
     mutation=send(label+'-mutated-stage1',[negstage],negative=True)
     assert mutation['error']=={'InstructionError':[0,'InvalidInstructionData']},'mutated proof failed for an unexpected reason'
     assert account(negcp)['value']==negative_before,'mutated proof changed zero checkpoint'
     write(label+'-mutation-validation',{'error_name':'InvalidInstructionData','fresh_checkpoint_unchanged':True})
-    send(label+'-restore-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+proof[offset:offset+1])],['keys/payer.json',proofkey])
+    send(label+'-restore-proof',[ix(C['carrier'],[[proofaccount,True,True]],offset.to_bytes(4,'little')+proof[offset:offset+1])],[PAYER_KEY,proofkey])
+created=set()
+for receipt in O.glob('*-transaction.json'):
+    created.update(created_accounts(json.loads(receipt.read_text())))
+ledger=[]
+for address in sorted(created):
+    current=account(address)['value']
+    if current:ledger.append(state_rent(address,current,C['payer'],gov))
+write('rent-ledger',ledger)
 write('complete',{'settled':['transfer','withdrawal'],'negative_checks':['transfer-replay','withdrawal-replay','transfer-mutated-stage1','withdrawal-mutated-stage1'],'mint':mint,'source':source,'destination':dest,'fixture_witnesses_public':True,'programs':C['programs'],'payer':C['payer'],'key_namespace':C.get('key_namespace','')})
