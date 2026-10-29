@@ -3,6 +3,7 @@ use crate::diagnostics::{anyhow,ensure,err,Result};
 use aspis_core::field::{M31,P};
 use aspis_statement::{poseidon2::Digest,pool_v1::*,pool_v1::pair_trace::PoolV1PairInputNoteWitnessV1};
 use serde_json::Value;
+use aspis_pool::POOL_V1_PAIR_EMPTY_ROOTS;
 fn digest(v:&Value)->Result<Digest>{
  let s=v.as_str().ok_or_else(||anyhow!("public commitment must be hex"))?;
  ensure!(s.len()==64&&s.is_ascii(),"public commitment width");
@@ -48,7 +49,7 @@ fn prepare(v:&Value,cm:Digest)->Result<Lane>{
  let (root,siblings)=path(hashes(&leaves)?,index);
  Ok(Lane{root,selected:selected.map(|(i,second)|(leaves[i],i,second,siblings))})
 }
-pub fn input(q:&Value,cm:Digest,k:Digest,salt:Digest,value:u64,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
+pub fn input(q:&Value,cm:Digest,k:Digest,salt:Digest,value:u32,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
  let all=q["lane_leaf_sets"].as_array().ok_or_else(||anyhow!("missing complete public lane leaf sets"))?;
  ensure!(all.len()==8,"all eight public lane leaf sets required");
  let mut prepared=Vec::with_capacity(8);for v in all{prepared.push(prepare(v,cm)?);}
