@@ -37,7 +37,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       cases eq
       obtain ⟨produced,hp,hc,hm⟩ := PV_RunJoin_SemanticSampler51.complete base heap box ops (PV_RunJoin_OpeningBlock50.answer b)
       rw [PV_RunJoin_OpeningBlock50.roundtrip] at hp
-      have same : actual=produced := Result.ok.inj (ha.symm.trans hp)
+      have same : q=produced := Result.ok.inj (ha.symm.trans hp)
       cases same
       exact ⟨b,hs,ha,hc,hm⟩
 #print axioms complete
