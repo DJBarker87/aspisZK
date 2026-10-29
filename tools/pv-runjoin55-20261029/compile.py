@@ -8,8 +8,8 @@ assert all(m in plan['modules'] for m in mods),'stage every target before admiss
 assert len(mods)==1,'one module per attempt'
 for prior in (R/'evidence').glob('pv-runjoin*/modules-*.json'):
  for record in json.loads(prior.read_text()):
-  if not record['accepted'] and record['module'] in mods:
-   assert record['source_sha256']!=plan['modules'][record['module']]['sha256'],('unchanged failed source forbidden',record['module'],str(prior))
+  if not record['accepted']:
+   assert record['source_sha256']!=plan['modules'][mods[0]]['sha256'],('unchanged failed source forbidden',record['module'],str(prior))
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.

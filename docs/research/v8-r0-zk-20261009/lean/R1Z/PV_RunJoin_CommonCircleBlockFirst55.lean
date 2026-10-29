@@ -24,7 +24,9 @@ variable (W : R1Wire K CH Aux) (Pr : R1ProverP K CH Aux F W) (R : RomModel W)
   (hpub : ∀ g,addrQ W Pr R N hN h B outputs x w s (AgreeR1PBin.posE W Pr N g)≠W.pubBytes x)
 include hin hc hcoll hpub
 
+omit hin hc hcoll hpub in
 theorem row25 : row ⟨25,by decide⟩=25#u8 := rfl
+omit hin hc hcoll hpub in
 theorem row26 : U8.wrapping_add (row ⟨25,by decide⟩) 1#u8=26#u8 := rfl
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
