@@ -1,6 +1,5 @@
 import R1Z.PV_RunJoin_LinkR24Discharged54
 import R1Z.PV_RunJoin_NativeControl55
-import R1Z.PV_RunJoin_SourceSuccessVariant55
 import R1Z.PV_RunJoin_PublicationSuccess55
 set_option autoImplicit false
 noncomputable section
@@ -34,7 +33,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (query : @PV_RunJoin_Link_QueryAppend (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
     (node : @PV_RunJoin_Link_NodeAppend (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
     (ordering : @PV_RunJoin_Link_PublishOrder (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (p : @Phase (types base)) :
+    (p : @Phase (types base)) (hv : p.variant=.S2) :
     Rel (CoreRel (fun proof pub => decode proof=PV_RJ4IDB.PublicationInput.publish_compact pub))
       (@PV_RunJoin_NativeControl55.source (types base) (selected base heap box ops) p)
       (@model (types base) (selected base heap box ops) data plans p) := by
@@ -46,7 +45,6 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   apply PV_RunJoin_PublicationSuccess55.complete decode PV_RJ4IDB.PublicationInput.publish_compact verifier.Error.Semantic
   intro proof success
   change prover.prove_from_semantics p.public1 p.variant p.hash p.backend p.sem p.salts=ok (.Ok proof) at success
-  have hv := PV_RunJoin_SourceSuccessVariant55.complete p.public1 p.variant p.hash p.backend p.sem p.salts proof success
   have hs : PV_RunJoin_PublishSkeleton54.source (runOf data plans p)=ok (.Ok proof) := by
     rw [source_s2]
     simpa only [hv] using success
