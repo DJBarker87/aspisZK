@@ -89,3 +89,12 @@ concrete inverse chain and closing source/Result law.
 rebuild:exit0, wall1.07s, peak2,627,952KiB, swap0; standard axioms. This is the
 first circle dependency in this own coherent cache. Native fixtures remain
 unchanged finite validation; no duplicate arithmetic test was launched.
+
+60643 inspection was first refused before Lean by the documented ENOENT cgroup
+scan race (session-416363.scope). Retried the SAME unlaunched ID after the full
+180s cooldown and it passed:exit0, wall1.22s, peak2,623,088KiB, swap0; axioms
+N/A (declaration inspection, no theorem/row credit). This confirms actual
+Array.update/index_usize, little-endian bytes and widening interfaces.
+60644 proves both concrete lossless widening bindings and value preservation:
+exit0, wall1.07s, peak2,634,176KiB, swap0; only standard axioms (primitive
+bindings themselves use none). No Kani, dictionary or shipped source changes.
