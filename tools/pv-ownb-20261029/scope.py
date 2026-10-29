@@ -39,11 +39,12 @@ if r.returncode!=0 or ad.get('allowed') is not True:
  print('UNCHARGED REFUSAL',r.returncode,{k:ad.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
 admit=f'python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/reservation-launch.log 2>&1'
-r=ssh(admit+' && '+shlex.join(run)+f' > {D}/{name}/output.log 2>&1',retry=False)
+check='python3 -c '+shlex.quote("import json; assert json.load(open("+repr(D+'/'+name+'/admission-launch.json')+"))['allowed'] is True")
+r=ssh(admit+' && '+check+' && '+shlex.join(run)+f' > {D}/{name}/output.log 2>&1',retry=False)
 if r.returncode==255:
  with (out/'transport.jsonl').open('a') as f:f.write(json.dumps(dict(stage='after scope submission; NOT resubmitted',exit=255))+'\n')
  print('SSH 255 after scope submission; waiting 60s then collecting read-only',flush=True);time.sleep(60)
-for f in ['admission-barrier.json','output.log','time.log']:
+for f in ['admission-launch.json','reservation-launch.log','admission-barrier.json','output.log','time.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
 bar=json.loads((out/'admission-barrier.json').read_text())
 if bar.get('allowed') is not True:
@@ -56,7 +57,7 @@ actual_exit=int(actual_exit) if actual_exit is not None else r.returncode
 receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 # Full admission inventories stay on the host; retain decisions and a byte hash.
-for f in ['admission-before.json','admission-barrier.json']:
+for f in ['admission-before.json','admission-launch.json','admission-barrier.json']:
  raw=(out/f).read_bytes();a=json.loads(raw)
  (out/f).write_text(json.dumps(dict(sha256=hashlib.sha256(raw).hexdigest(),host_path=D+'/'+name+'/'+f,**{k:a.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
 print((out/'output.log').read_text()[-14000:]);print(json.dumps(receipt))
