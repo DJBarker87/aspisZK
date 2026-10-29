@@ -58,7 +58,7 @@ JGi_FinishFields.source, the inferred/explicit `none` observer becomes
 `RPz7_PhaseIso.observerToFirst none`; the existing finish premise is supplied by
 `by simpa only [NDO_PhaseIdentity.noneToFirst] using finish` (respectively
 `finished`). This is the release None specialization, without a producer
-execution transport assumption. These edits await dependency-ordered compilation.
+execution transport assumption. These edits pass dependency-ordered compilation: ClaimArrays in NDR_B010 and SemanticOperands in NDR_B019. The printed source-theorem axioms are standard only.
 
 NDO_JHk_QueryPowerStep's observer remains the emitted producer carrier: its
 query-values theorem calls the producer API directly. NDO_JGy_QueryFrontier and
