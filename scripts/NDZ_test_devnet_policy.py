@@ -44,6 +44,17 @@ class Policy(unittest.TestCase):
         self.assertEqual(state_rent('token',token,PAYER,PAYER)['recoverable_lamports'],123)
         raw[129:133]=(1).to_bytes(4,'little');token=account(raw,'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA')
         self.assertEqual(state_rent('token',token,PAYER,PAYER)['recoverable_lamports'],0)
+    def test_transaction_metadata_is_required_and_can_arrive_late(self):
+        tree=ast.parse(pathlib.Path(__file__).with_name('r1_devnet_deploy_paced.py').read_text())
+        node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='record_tx')
+        responses=iter([None,{'meta':{'err':None}}]);writes=[]
+        env={'rpc':lambda *args:next(responses),'URL':'local','time':types.SimpleNamespace(sleep=lambda _:None),'write':lambda *args:writes.append(args)}
+        exec(compile(ast.Module(body=[node],type_ignores=[]),'actual-record-tx','exec'),env)
+        self.assertEqual(env['record_tx']('public'),{'meta':{'err':None}})
+        self.assertEqual(len(writes),1)
+        env['rpc']=lambda *args:None
+        with self.assertRaisesRegex(RuntimeError,'metadata unavailable'):env['record_tx']('missing')
+        self.assertEqual(len(writes),1)
     def actual_wait(self, height):
         tree=ast.parse(pathlib.Path(__file__).with_name('r1_devnet_deploy_paced.py').read_text())
         node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='wait')
