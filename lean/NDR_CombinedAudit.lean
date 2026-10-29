@@ -262,5 +262,6 @@ run_cmd do
     if imported.contains historical then
       throwError "unverified historical provenance object imported: {historical}"
     logInfo m!"NDR_HISTORICAL_OBJECT_EXCLUDED {historical}"
+  logInfo m!"NDR_IMPORTED_MODULES {toJson (imported.map (·.toString)) |>.compress}"
   logInfo m!"NDR_CLOSURE_MODULE_COUNT {env.header.modules.size}"
   logInfo "NDR_COMBINED_COMPLETE"
