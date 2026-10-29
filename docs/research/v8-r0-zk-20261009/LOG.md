@@ -14615,3 +14615,19 @@ Two cohort problems blocked the full observer composition. Neither is a leak fin
 (2) ProverRwSampler.Funs has two tracked variants with no proved generation association. This is an (h7) case.
 
 pv-diag4 (branch codex/pv-diag4-20261029 from 5a2df9074c; IDs 64500-64599; 100 Lean, 40 native, 0 Kani) resolves both first. It rebuilds the V2 importer closure fresh from the EJR source, and applies (h7) to the sampler, recovering the chain or else running step 4 regeneration. It then continues with the native leaf laws, their joint L1 distribution and the client-observer composition. Rows removed: 0. Privacy target not yet established.
+
+## D448 (Stream B) 2026-10-29 03:05 UTC: pv-rj4id results; the observation decoder is a construction, not a deployed function; pv-rj4idb relaunched
+
+pv-rj4id used 11 Lean attempts and no native scopes or Kani. Audits 64497-64499 passed with standard axioms only, and peak RSS was 4.70 GB with zero swap. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; runjoin's live worktree untouched. Merged into the candidate as f63ed1bd4e and pushed.
+
+- (b): it proved the model installation equalities R1Z.PV_RJ4ID_Op79.installation and R1Z.PV_RJ4ID_Op254.installation, with complete Result equality for arbitrary field callbacks; op254's carrier and control gap is closed for every N. The native calls are r0::encoder::eval_message specialised to WideExact (prover.rs:354) and prover_powers::powers::<29> (prover.rs:360), by static dispatch. Their deployed association is open, and op79 inherits V201's 145 unresolved iterator and indexing records.
+- (c): it proved the necessary index and handle conditions and applied PV_RJDec_V047Native.consume conditionally. The caller-to-transfer-13 statement equality is open.
+- (a): no native disclosed or observerOracle implementation exists. The Runtime constructors forward model functions, and the only native callback at the call site (plan.rs:116, |k| accounts.nonce(k)) selects one of eight public account keys. It is not an observation decoder. The worker correctly declined to invent one.
+
+Lead assessment of (a): this settles what step (4) has to prove. The privacy argument needs the deployed client's actual observation to factor through the model's observation functions. That observation comprises the published proof and statement bytes, ordered file writes, returned and stdout JSON, errors and stderr, counts, prove_wall_seconds and the retained side channels, and it must keep failure and divergence prefixes, which the returned Result erases. So the decoder must be constructed as the composition of those native channels, and the factorization proved, using the runjoin publication equation, the pv-diag client-output models and the existing L1 rows.
+
+pv-rj4idb continues in the same worktree on branch codex/pv-rj4idb-20261029 (IDs 64600-64699; the remaining 89 Lean attempts, 30 native, 0 Kani). It covers three things:
+- for (a), defining that decoder, stating the factorization theorem exactly, and proving the six complete_pair clauses and fibres_iff for every available component, with each missing component left as one named open input owned by runjoin, diag or L1;
+- for (b), the op254 deployed association, with op79 waiting on V201 (pv-rdcd3);
+- for (c), the statement equality.
+Rows removed: 0. Privacy target not yet established.
