@@ -101,3 +101,29 @@ for i,n in enumerate(tower):
  stmt+='  simp only ['+','.join(deps+['bind_assoc_eq','bind_tc_ok','encCM','encQ'])+']\n'
  body+=stmt+'\n';proofs.append('t'+str(i))
 write('PV_RunJoin_CircleOwnedTower52',['R1Z.PV_RunJoin_CircleOwnedScalar52','R1Z.PV_RunJoin_CircleOwnedCarrier52','R1Z.'+rawtower],body,proofs)
+projections='''open PV_RunJoin_CircleOwnedCarrier52
+theorem cm_a (a : CM) : (encCM a).a=a.1 := rfl
+theorem cm_b (a : CM) : (encCM a).b=a.2 := rfl
+theorem q_c0 (a : Q) : (encQ a).c0=encCM a.1 := rfl
+theorem q_c1 (a : Q) : (encQ a).c1=encCM a.2 := rfl
+'''
+write('PV_RunJoin_CircleOwnedProjection52',['R1Z.PV_RunJoin_CircleOwnedCarrier52'],projections,['cm_a','cm_b','q_c0','q_c1'])
+# Split the rejected tower draft: each exceptional transport is its own target.
+whole=(L/'PV_RunJoin_CircleOwnedTower52.lean').read_text()
+chunks=re.split(r'(?=^theorem t\d+)',whole[whole.index('theorem t0'):whole.index('#print axioms t0')],flags=re.M)
+mods=[]
+for i,c in enumerate(chunks):
+ if not c.strip():continue
+ stem='PV_RunJoin_CircleOwnedOp'+str(i)+'52'; prev=mods[-1] if mods else 'PV_RunJoin_CircleOwnedProjection52'
+ c=re.sub(r'\bt(\d+)\b',lambda m:'op'+m[1],c)
+ c=c.replace(',encCM,encQ',',PV_RunJoin_CircleOwnedProjection52.cm_a,PV_RunJoin_CircleOwnedProjection52.cm_b,PV_RunJoin_CircleOwnedProjection52.q_c0,PV_RunJoin_CircleOwnedProjection52.q_c1')
+ c+='  all_goals simp only [encCM,encQ]\n  all_goals rfl\n'
+ # same shared namespace allows later modules to use the checked predecessor names
+ text='\n'.join('import R1Z.'+n for n in [prev,'PV_RunJoin_CircleOwnedScalar52',rawtower])+'''\nset_option autoImplicit false
+open Aeneas Aeneas.Std Result ControlFlow
+namespace R1Z.PV_RunJoin_CircleOwnedOps52
+open PV_RunJoin_CircleOwnedCarrier52
+attribute [local irreducible] encCM encQ
+'''+c+f'\n#print axioms op{i}\nend R1Z.PV_RunJoin_CircleOwnedOps52\n'
+ (L/(stem+'.lean')).write_text(text);mods.append(stem)
+(E/'owned-op-sequence.json').write_text(json.dumps(mods,indent=2)+'\n')
