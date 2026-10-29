@@ -89,7 +89,7 @@ theorem consumed_signal {W : Type} (length : W → Nat)
     | cons x xs =>
       cases r with
       | interrupted writes =>
-        simpa only [run, List.map_cons, control, signal, overwrite_length] using
+        simpa only [run, List.map_cons, control, List.length_cons, signal, overwrite_length] using
           ih (overwrite (x::xs) writes) done
       | error c writes => rfl
       | unexpected writes => rfl
@@ -126,7 +126,8 @@ def buffer : Outcome → List UInt8
           have hp : ¬ (x::xs).length < p.length := by
             intro hp
             apply h
-            simp [hp]
+            have hp' : xs.length + 1 < p.length := by simpa using hp
+            simp [hp']
           simp only [List.length_cons] at hp ⊢
           omega
  theorem public_control_suffices (a b : List Reply)
