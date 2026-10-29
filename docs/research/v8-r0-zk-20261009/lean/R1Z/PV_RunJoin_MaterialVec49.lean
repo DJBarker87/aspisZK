@@ -20,7 +20,8 @@ theorem payload (a : Array S 1024#usize) :
     PV_RunJoin_WeightMaterialInstalled47.nativeRust (.Ok a)=.Ok (vec a) := by
   apply congrArg core.result.Result.Ok
   apply Subtype.ext
-  simp only [PV_RunJoin_WeightMaterialInstalled47.nativeRust,vec,scalar]
+  change a.val.map PV_RunJoin_WeightMaterialInstalled47.native=a.val.map ProverRwDictionaryTower.fromW
+  exact congrArg (fun f => a.val.map f) (funext scalar)
 
 theorem wrap (r : Result (Array S 1024#usize)) :
     mapResult PV_RunJoin_WeightMaterialInstalled47.nativeRust (do let out ← r;ok (.Ok out))=
