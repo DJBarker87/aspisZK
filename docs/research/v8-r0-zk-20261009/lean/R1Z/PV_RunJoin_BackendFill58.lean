@@ -19,7 +19,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (p : Nat → Nat → W) (lane : Usize) (hl : lane.val<29)
     (n : Nat) (row : Usize) (bound : row.val+n=1024) (self : prover.Backend)
     (messages : self.messages=matrix (filled p lane.val input row.val)) :
-    @PV_RunJoin_BackendRows58.run (types base) (selected base heap box ops) read lane self row=
+    PV_RunJoin_BackendRows58.run read lane self row=
       ok {self with messages:=matrix (filled p lane.val input 1024)} := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
