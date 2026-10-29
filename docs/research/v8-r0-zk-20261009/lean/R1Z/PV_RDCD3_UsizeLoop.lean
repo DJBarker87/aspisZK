@@ -38,7 +38,7 @@ theorem complete {S : Type} (f : S → Nat → Result S) (fuel : Nat)
     | ok out =>
       simp only [hf,bind_tc_ok]
       apply ih
-      simpa only [UScalar.ofNatCore_val] using (show r.«end».val = (r.start.val+1)+fuel from by omega)
+      simpa using (show r.«end».val = (r.start.val+1)+fuel from by omega)
 
 #print axioms complete
 end R1Z.PV_RDCD3_UsizeLoop
