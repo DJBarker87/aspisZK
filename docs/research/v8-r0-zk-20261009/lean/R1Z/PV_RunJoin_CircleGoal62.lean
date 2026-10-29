@@ -14,5 +14,7 @@ set_option pp.all true in
 set_option pp.all true in
 #print PV_RunJoin_CircleUnit62.second
 
-example (block : Array U8 32#usize) : wanted block := PV_RunJoin_CircleUnit62.second block
+theorem match_unit (block : Array U8 32#usize) : wanted block := PV_RunJoin_CircleUnit62.second block
+#print axioms wanted
+#print axioms match_unit
 end R1Z.PV_RunJoin_CircleGoal62
