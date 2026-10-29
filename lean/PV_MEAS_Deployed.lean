@@ -164,6 +164,8 @@ def SignalAgreement : Prop := ∀ e adv w,
 /-- adopted by owner decision D502/D478. Existing V400 option-B input,
 quantified over all equal-public witnesses; the earlier event prefix is retained. -/
 def V400 : Prop := ∀ adv w, (h).public w = x.1 →
+  Measurable (fun n => rt.signal (rt.acquisition n).1 adv w (rt.acquisition n).2) ∧
+  Measurable (fun e => rt.completion.signal rt.publicInput e) ∧
   Measure.map (fun n => rt.signal (rt.acquisition n).1 adv w (rt.acquisition n).2)
     (rt.acquisitionLaw : Measure N) =
   Measure.map (fun e => rt.completion.signal rt.publicInput e)

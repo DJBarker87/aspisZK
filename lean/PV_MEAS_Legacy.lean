@@ -143,6 +143,7 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
   signal := links.signal
   publicSignal := by
     intro adv w hw
+    refine ⟨measurable_of_finite _,measurable_of_finite _,?_⟩
     apply map_uniform_of_means _ _ (measurable_of_finite _) (measurable_of_finite _)
     intro test
     have hl := R0Z.LawTransport.mean_eq_of_equalLaws
