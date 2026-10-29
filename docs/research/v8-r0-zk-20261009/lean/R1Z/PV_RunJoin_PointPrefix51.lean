@@ -20,7 +20,7 @@ theorem update (a : Array Q 10#usize) (n : Usize) (v : Q) (small : n.val<10)
   obtain ⟨next,hr,hset⟩ := WP.spec_imp_exists (Array.update_spec a n v bound)
   refine ⟨next,hr,?_⟩
   intro j hj
-  simp only [hset,Array.set,List.getElem_set]
+  simp only [hset,Aeneas.Std.Array.set,List.getElem_set]
   by_cases same : n.val=j.val
   · simp only [same,if_true]
     exact canonical
