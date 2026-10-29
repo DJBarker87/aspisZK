@@ -1,0 +1,45 @@
+use super::*;
+pub static mut NDM_COUNTER:u8=0;
+fn common(value:u8)->PoolV1PairForestTerminalCommonV1 {let mut c:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::zeroed()};c.output_lane=value;c}
+#[kani::ensures(|r| (r.output_lane<=u8::MAX) != cfg!(NDM_invert_fidelity))]
+#[kani::modifies(NDM_MODIFIES)]
+fn shape_box(value:u8)->Box<PoolV1PairForestTerminalCommonV1> {
+ unsafe{NDM_COUNTER=NDM_COUNTER.wrapping_add(1);}
+ Box::new(common(value))
+}
+#[kani::ensures(|r| r.is_ok() != cfg!(NDM_invert_fidelity))]
+#[kani::modifies(NDM_MODIFIES)]
+fn shape_stmt(value:u8)->Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError> {
+ unsafe{NDM_COUNTER=NDM_COUNTER.wrapping_add(1);}
+ let public:aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1=unsafe{core::mem::zeroed()};
+ Ok(Box::new(PoolV1PairForestTerminalStatementV1::PrivateTransfer{common:common(value),public}))
+}
+#[kani::proof_for_contract(shape_box)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_box_contract(){unsafe{NDM_COUNTER=0;}let _=shape_box(kani::any());}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_box_real(){unsafe{NDM_COUNTER=0;}let x:u8=kani::any();let r=shape_box(x);assert_eq!(r.output_lane,x);}
+#[kani::proof]
+#[kani::stub_verified(shape_box)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_box_unimplied(){unsafe{NDM_COUNTER=0;}let x:u8=kani::any();let r=shape_box(x);assert_eq!(r.output_lane,x);}
+#[kani::proof_for_contract(shape_stmt)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_stmt_contract(){unsafe{NDM_COUNTER=0;}let _=shape_stmt(kani::any());}
+fn observed(r:Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>,x:u8)->bool {
+ match r {Ok(s)=>match *s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,..}=>common.output_lane==x,_=>false},Err(_)=>false}
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_stmt_real(){unsafe{NDM_COUNTER=0;}let x:u8=kani::any();assert!(observed(shape_stmt(x),x));}
+#[kani::proof]
+#[kani::stub_verified(shape_stmt)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn shape_stmt_unimplied(){unsafe{NDM_COUNTER=0;}let x:u8=kani::any();assert!(observed(shape_stmt(x),x));}

@@ -9,7 +9,8 @@ S=B/'NDM_ref';(S/'src').mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 roots=['crate::common_ref','crate::zero_tail_ref']
 namespace='NDM_Reference'
-if os.environ.get('NDM_EXTRA')=='snapshot':roots=['crate::snapshot_select_ref','crate::snapshot_value_ref','crate::failed_snapshot_ref','crate::validation_ref'];namespace='NDM_SnapshotRef'
+if os.environ.get('NDM_EXTRA')=='gate':roots=['crate::byte_word_ref','crate::field_word_ref','crate::next_gate_ref','crate::reconstruction_gate_ref'];namespace='NDM_GateRef'
+elif os.environ.get('NDM_EXTRA')=='snapshot':roots=['crate::snapshot_select_ref','crate::snapshot_value_ref','crate::failed_snapshot_ref','crate::validation_ref'];namespace='NDM_SnapshotRef'
 elif os.environ.get('NDM_EXTRA'):roots=['crate::identity_ref'];namespace='NDM_ProjectionRef'
 dest=B/'NDM_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']

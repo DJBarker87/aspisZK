@@ -1,0 +1,15 @@
+use super::*;
+fn lane_step(lane_account:&OwnedAccount)->Result<Box<PoolV1PairForestLaneStateV1>,ProgramError>{
+ // Exact native source statement, on arbitrary eligible pre-state.
+ let selected_lane=decode_lane_from_pool_release(lane_account.data()?)?;
+ Ok(selected_lane)
+}
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn lane_input(){
+ let raw:[u8;768]=kani::any();let boxed:Box<[u8]>=Box::new(raw);let data:Vec<u8>=boxed.into_vec();
+ aspis_statement::pool_v1::NDM_call_probe::prepare(data.as_ptr(),data.len());
+ let a=OwnedAccount{key:Pubkey::new_from_array(kani::any()),owner:Pubkey::new_from_array(kani::any()),is_signer:kani::any(),is_writable:kani::any(),executable:kani::any(),length:Ok(kani::any()),bytes:Ok(data)};
+ let _=lane_step(&a);
+}

@@ -30,3 +30,28 @@ fn common_contract(){
  let c:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1>()]>())};
  let _=asq8_common(&a,&c);
 }
+
+#[cfg(NDM_probe)]
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn scan_input(){
+ let bytes:[u8;58295]=kani::any();
+ aspis_statement::pool_v1::NDM_call_probe::prepare(bytes.as_ptr(),688);
+ let _=scan_proof_buffer(&bytes);
+}
+
+#[kani::proof]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NDM_kmx::KMX_copy_nonoverlapping)]
+#[kani::unwind(34)]
+fn reconstruct_reject(){
+ let a=account();
+ let c:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1>()]>())};
+ let public=if kani::any(){aspis_statement::pool_v1::PoolV1PairForestTerminalPaymentV1::PrivateTransfer(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PrivateTransferPublicV1>()]>())})}else{aspis_statement::pool_v1::PoolV1PairForestTerminalPaymentV1::Withdrawal(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1WithdrawalPublicV1>()]>())})};
+ let request=aspis_statement::pool_v1::PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
+ kani::assume(a.live_snapshot.next_pair_index.checked_add(1)!=Some(c.next_pair_index));
+ let result=reconstruct_asq8_statement(&request,&a,&c);
+ let reference=reference::failed_snapshot_ref::<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>(ProgramError::InvalidAccountData);
+ let good=matches!(result,Err(ProgramError::InvalidAccountData)) && matches!(reference,Err(ProgramError::InvalidAccountData));
+ assert_eq!(good,!cfg!(NDM_prefix_negative));
+}

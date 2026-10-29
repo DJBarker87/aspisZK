@@ -13,3 +13,12 @@ pub fn failed_snapshot_ref<T,E>(error:E)->Result<T,E> {Err(error)}
 pub fn validation_ref<C,P>(common:C,public:P,valid:bool)->Result<(C,P),u8> {
  if valid {Ok((common,public))} else {Err(0)}
 }
+
+pub fn byte_word_ref(value:u8)->u64 {value as u64}
+pub fn field_word_ref(value:u32)->u64 {value as u64}
+pub fn next_gate_ref(live:u64,next:u64)->bool {
+ match live.checked_add(1) {Some(incremented)=>incremented==next,None=>false}
+}
+pub fn reconstruction_gate_ref(live:u64,next:u64,asset:u32,requested:u32)->u8 {
+ if !next_gate_ref(live,next) {1} else if asset!=requested {2} else {0}
+}

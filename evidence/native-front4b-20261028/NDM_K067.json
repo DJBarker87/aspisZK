@@ -1,0 +1,71 @@
+{
+  "attempt": "NDM_K067",
+  "kind": "kani",
+  "module": "r1_pool_adapter::owned::NDM_snapshot::snapshot_copy_input",
+  "sources": [
+    "NDM_gate.py",
+    "NDM_graph.py",
+    "NDM_SOURCE_PINS.json",
+    "NDM_src/programs/r1-cost-probe/src/lib.rs",
+    "NDM_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NDM_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "NDM_src/programs/r1-cost-probe/src/NDM_native.rs",
+    "NDM_src/programs/r1-cost-probe/src/NDM_reference.rs",
+    "NDM_src/programs/r1-cost-probe/src/NDM_owned.rs",
+    "NDM_src/programs/r1-cost-probe/src/NDM_getters.rs",
+    "NDM_src/programs/r1-cost-probe/src/NDM_snapshot.rs",
+    "NDM_src/Cargo.lock",
+    "NDM_src/Cargo.toml"
+  ],
+  "command": [
+    "python3",
+    "NDM_gate.py",
+    "NDM_K067.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-native-front4b-20261028/NDM_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-native-front4b-20261028/NDM_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::owned::NDM_snapshot::snapshot_copy_input",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-native-front4b-20261028/NDM_tmp",
+    "LEAN_PATH": "/home/dombarker/project-offloads/codex-cx-native-front4b-20261028/NDM_objects:/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_objects:/home/dombarker/project-offloads/codex-cx-front4-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects"
+  },
+  "timeout": 240,
+  "source_revision": "408a1d71b553db70dce697702c3c84ed8d755a67",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "source_pinset": "NDM_SOURCE.json",
+    "library_pinset": "NDM_SOURCE.json:library"
+  },
+  "expected_time": "optimized compile then one contract/shape proof; no field multiplication",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67"
+}

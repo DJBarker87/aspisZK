@@ -18,7 +18,21 @@ def files():
  s+='\n#[cfg(kani)]\n#[path="NDM_native.rs"]\nmod NDM_native;\n'
  if os.environ.get('NDM_FIDELITY'):
   s+='\n#[cfg(kani)]\n#[path="NDM_fidelity.rs"]\nmod NDM_fidelity;\n'
+ if os.environ.get('NDM_CTOR'):
+  for name,expect,kind in [('transfer_statement_box','expected_transfer',0),('withdrawal_statement_box','expected_withdrawal',1)]:
+   attribute='#[cfg_attr(kani,kani::ensures(|r| NDM_ctor::post(r,old(NDM_ctor::'+expect+'(&common,&public)),'+str(kind)+')))]\n'
+   attribute+='#[cfg_attr(kani,kani::modifies((&*common as *const PoolV1PairForestTerminalCommonV1).cast_mut(),&raw mut NDM_ctor::CALLS,&raw mut NDM_ctor::SEEN,&raw mut NDM_ctor::SEEN_KIND))]\n'
+   s=s.replace('fn '+name+'(',attribute+'fn '+name+'(',1)
+  s+='\n#[cfg(kani)]\n#[path="NDM_ctor.rs"]\nmod NDM_ctor;\n'
  put(n,s,b)
+ if os.environ.get('NDM_CTOR'):
+  f=(E/'NDM_ctor.rs.txt').read_text().replace('NDM_CTOR_MODE',os.environ.get('NDM_CTOR_MODE','0')).replace('cfg!(NDM_ctor_negative)','true' if os.environ.get('NDM_INVERT') else 'false')
+  if os.environ.get('NDM_CTOR_OBSERVE'):
+   f=f.replace('#[kani::proof_for_contract(super::transfer_statement_box)]','#[kani::proof]').replace('#[kani::proof_for_contract(super::withdrawal_statement_box)]','#[kani::proof]')
+   f=f.replace('let g:u8=kani::any();','let g:u8='+os.environ.get('NDM_CTOR_GROUP','0')+';')
+   f=f.replace('let _=transfer_statement_box(Box::new(common),public);','let word=expected_transfer(&common,&public);let result=transfer_statement_box(Box::new(common),public);assert!(post(&result,word,0));')
+   f=f.replace('let _=withdrawal_statement_box(Box::new(common),public);','let word=expected_withdrawal(&common,&public);let result=withdrawal_statement_box(Box::new(common),public);assert!(post(&result,word,1));')
+  put('programs/r1-cost-probe/src/NDM_ctor.rs',f)
  if os.environ.get('NDM_FIDELITY'):
   f=(E/'NDM_fidelity.rs.txt').read_text().replace('cfg!(NDM_invert_fidelity)','true' if os.environ.get('NDM_FIDELITY_INVERT') else 'false').replace('NDM_MODIFIES','' if os.environ.get('NDM_BAD_MODIFIES') else '&raw mut NDM_COUNTER')
   put('programs/r1-cost-probe/src/NDM_fidelity.rs',f)
@@ -45,7 +59,38 @@ def files():
 
  put(n,s,b)
  for name in ['NDM_native','NDM_reference','NDM_owned','NDM_getters','NDM_snapshot']:
-  put('programs/r1-cost-probe/src/'+name+'.rs',(E/(name+'.rs.txt')).read_text().replace('cfg!(NDM_negative)','true' if os.environ.get('NDM_INVERT') else 'false'))
+  value=(E/(name+'.rs.txt')).read_text().replace('cfg!(NDM_prefix_negative)','true' if os.environ.get('NDM_PREFIX_INVERT') else 'false')
+  if name=='NDM_snapshot' and os.environ.get('NDM_SNAPSHOT_PART'):
+   first=' assert_eq!(good,!cfg!(NDM_negative));'
+   a=value.index(' if !data.is_empty()');z=value.index(' // Observe',a)
+   if os.environ['NDM_SNAPSHOT_PART']=='descriptor':value=value[:a]+value[z:]
+   elif os.environ['NDM_SNAPSHOT_PART']=='byte':value=value.replace(first,' assert!(good); kani::assume(good);',1)
+   else:raise ValueError('unknown snapshot split')
+  put('programs/r1-cost-probe/src/'+name+'.rs',value.replace('cfg!(NDM_negative)','true' if os.environ.get('NDM_INVERT') else 'false'))
+ if not os.environ.get('NDM_CALL_PROBE'):
+  path='crates/aspis-statement/src/pool_v1/pair_terminal.rs'
+  put(path,base(path),base(path))
+ if os.environ.get('NDM_CALL_PROBE'):
+  path='crates/aspis-statement/src/pool_v1/mod.rs';original=base(path)
+  put(path,original+'\n#[cfg(kani)]\npub mod NDM_call_probe;\n',original)
+  value=(E/'NDM_call_probe.rs.txt').read_text().replace('cfg!(NDM_probe_negative)','true' if os.environ.get('NDM_PROBE_INVERT') else 'false')
+  put('crates/aspis-statement/src/pool_v1/NDM_call_probe.rs',value)
+  path='crates/aspis-statement/src/pool_v1/pair_terminal.rs';original=base(path)
+  signature='pub fn decode_pool_v1_pair_verified_afterstate_v1('
+  pos=original.index('{',original.index(signature))+1
+  put(path,original[:pos]+'\n    #[cfg(kani)] super::NDM_call_probe::inspect(bytes);'+original[pos:],original)
+  path='programs/r1-cost-probe/src/r1_pool_adapter.rs'
+  current=out[path];pos=current.index('{',current.index('fn decode_lane_from_pool_release('))+1
+  value=current[:pos]+'\n    #[cfg(kani)] aspis_statement::pool_v1::NDM_call_probe::inspect(bytes);'+current[pos:]
+  # Replace its prior patch, retaining all earlier cfg-only harness support.
+  out[path]=value
+  path='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs';out[path]+='\n#[cfg(kani)]\n#[path="NDM_calls.rs"]\nmod NDM_calls;\n'
+  put('programs/r1-cost-probe/src/NDM_calls.rs',(E/'NDM_calls.rs.txt').read_text())
+  out['programs/r1-cost-probe/src/NDM_native.rs']=out['programs/r1-cost-probe/src/NDM_native.rs'].replace('#[cfg(NDM_probe)]','#[cfg(kani)]')
+  patch=[]
+  for path,value in out.items():
+   original=subprocess.run(['git','show',REV+':'+path],capture_output=True,text=True)
+   patch.append(''.join(difflib.unified_diff((original.stdout if original.returncode==0 else '').splitlines(True),value.splitlines(True),fromfile='a/'+path if original.returncode==0 else '/dev/null',tofile='b/'+path)))
  if os.environ.get('NDM_ARBITRARY'):
   from NDM_arbitrary import additions
   for path,value in additions().items():
