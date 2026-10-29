@@ -28,6 +28,6 @@ theorem digest_store_fold11 (output : Array aspis_core.field.QM31 8#usize)
     reference_terminal.add_digest_binding output selector opened start expected right_tweak =
       PV_B3P_Ordered227.fold (digest_store_cell11 selector opened start expected right_tweak)
         [0#usize,1#usize,2#usize,3#usize,4#usize,5#usize,6#usize,7#usize] output := by
-  simp only [reference_terminal.add_digest_binding,PV_B3P_Ordered227.fold,digest_store_cell11,PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
+  simp only [reference_terminal.add_digest_binding,PV_B3P_Ordered227.fold,digest_store_cell11,PV_B3P_Ordered227.bind_assoc,bind_tc_ok,result_right]
 #print axioms digest_store_fold11
 end PV_B3P_Binding11227
