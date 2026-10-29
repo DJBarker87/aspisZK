@@ -43,7 +43,7 @@ def queryBytes (p : prover.Publication) (i : Usize) : Result (alloc.vec.Vec U8) 
 /-- The six slices are the actual compact format's 480/128/32/32/128/32
 query fields. Slicing remains symbolic. -/
 def queryPart (p : Phase) (i : Fin 22) : ProverCommitPublish43.QueryParts :=
-  let payload := publicationBytes p (fun publication => queryBytes publication (UScalar.ofNatCore i.val (by omega)))
+  let payload := publicationBytes p (fun publication => queryBytes publication (UScalar.ofNatCore i.val (by rw [UScalarTy.Usize_numBits_eq]; omega)))
   ⟨payload.take 480,(payload.drop 480).take 128,(payload.drop 608).take 32,
     (payload.drop 640).take 32,(payload.drop 672).take 128,(payload.drop 800).take 32⟩
 
@@ -62,8 +62,8 @@ def nodeBytes (p : prover.Publication) (batch t : Usize) :
 def slot (p : Phase) (i : Fin 6) : ProverCommitPublish43.Slot :=
   let nodes := match PV_RunJoin_ActualRunSources59.finish p with
     | .ok (.Ok publication) =>
-      match nodeBytes publication (UScalar.ofNatCore (i.val/3) (by omega))
-          (UScalar.ofNatCore (i.val%3) (by omega)) with
+      match nodeBytes publication (UScalar.ofNatCore (i.val/3) (by rw [UScalarTy.Usize_numBits_eq]; omega))
+          (UScalar.ofNatCore (i.val%3) (by rw [UScalarTy.Usize_numBits_eq]; omega)) with
       | .ok (.Ok out) => Except.ok (bytes out.val)
       | _ => Except.error ProverCommitPublish43.Error.merkle
     | _ => Except.error ProverCommitPublish43.Error.merkle
