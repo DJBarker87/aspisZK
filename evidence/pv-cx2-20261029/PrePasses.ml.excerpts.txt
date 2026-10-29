@@ -1,0 +1,62 @@
+811: let lower_nested_loop_returns (crate : crate) (f : fun_decl) : fun_decl =
+812:   match f.body with
+813:   | StructuredBody body ->
+814:       let has_nested_return =
+815:         let visitor =
+816:           object
+817:             inherit [_] iter_statement as super
+818:             method! visit_Loop depth loop = super#visit_Loop (depth + 1) loop
+819:             method! visit_Return depth = if depth >= 1 then raise Found
+820:           end
+821:         in
+822:         try
+823:           visitor#visit_block 0 body.body;
+824:           false
+825:         with Found -> true
+826:       in
+827:       if not has_nested_return then f
+828:       else
+829:         let option_ids =
+830:           TypeDeclId.Map.fold
+831:             (fun id (decl : type_decl) ids ->
+832:               if decl.item_meta.lang_item = Some "Option" then id :: ids
+833:               else ids)
+834:             crate.type_decls []
+835:         in
+836:         let option_id =
+837:           match option_ids with
+838:           | [ id ] -> id
+839:           | _ ->
+840:               [%craise] f.item_meta.span
+841:                 "Nested-loop returns require exactly one Option language item"
+842:         in
+843:         let return_local =
+844:           match body.locals.locals with
+845:           | return_local :: _ -> return_local
+846:           | [] -> [%internal_error] f.item_meta.span
+847:         in
+848:         let return_ty = return_local.local_ty in
+849:         let option_ref : type_decl_ref =
+850:           {
+851:             id = TAdtId option_id;
+852:             generics = TypesUtils.mk_generic_args [] [ return_ty ] [] [];
+853:           }
+854:         in
+855:         let pending_ty = TAdt option_ref in
+
+3280:   (* Passes that apply to the whole crate *)
+3281:   let crate = update_array_default crate in
+3282:   (* Passes that apply to individual function bodies *)
+3283:   let function_passes =
+3284:     [
+3285:       ("fix_closure_lifetimes", fix_closure_lifetimes);
+3286:       ("erase_body_regions", erase_body_regions);
+3287:       ( "eliminate_metadata_only_slice_raw_pointers",
+3288:         eliminate_metadata_only_slice_raw_pointers );
+3289:       ("remove_unreachable", remove_unreachable);
+3290:       ("restore_structured_nested_returns", restore_structured_nested_returns);
+3291:       ("lower_nested_loop_returns", lower_nested_loop_returns);
+3292:       ("eliminate_outer_loop_control", eliminate_outer_loop_control);
+3293:       ("update_loop", update_loops);
+3294:       ("remove_useless_joins", remove_useless_joins);
+3295:       ( "remove_shallow_borrows_storage_live_dead",

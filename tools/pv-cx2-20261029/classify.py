@@ -26,7 +26,10 @@ for ids,cls,note in groups:
 assert set(assign)==set(defs)
 for r in old['opaque_functions']:
  i=r['llbc_fun_id']
+ r['rust_ident_path']='::'.join(t['Ident'][0] for t in r['rust_name_structured'] if 'Ident' in t)
+ r['classification_status']='inherited unverified candidate; not a new source audit'
  if i not in defs:continue
+ r['classification_status']='resolved source operation role; transitive effect laws remain open'
  assert r['effect_class']==[]
  cls,note=assign[i];r['effect_class']=cls;r['classification_note']=note
  r['classification_evidence']=dict(definition_source=defs[i],source_call_excerpts=sites[i]['call_sites'],method='Manual source-role classification from exact definition and caller spans; not a source-model law or proof of transitive effect freedom')
