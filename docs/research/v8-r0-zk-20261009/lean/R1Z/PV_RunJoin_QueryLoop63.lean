@@ -2,6 +2,7 @@ import R1Z.PV_RunJoin_QuerySize63
 import R1Z.PV_RunJoin_ByteSequence63
 import R1Z.PV_RunJoin_BindSuccess63
 import R1Z.ProverRw19LoopBind
+import R1Z.PV_RunJoin_QueryRoom63
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_QueryLoop63
@@ -46,8 +47,8 @@ theorem loop (base : ExternalTypes) (heap : Heap) (box : Box)
     unfold prover.append_query_openings_loop
     rw [ProverRw19LoopBind.loop_bind]
     dsimp only
-    rw [PV_RunJoin_QueryFactor63.body base heap box ops cc1 cc2 queries folded salts out i more (by
-      simp only [Nat.mul_add,Nat.mul_one] at room;omega)]
+    have roomParts := PV_RunJoin_QueryRoom63.split out.length Usize.max n room
+    rw [PV_RunJoin_QueryFactor63.body base heap box ops cc1 cc2 queries folded salts out i more roomParts.1]
     simp only [bind_assoc_eq,bind_tc_ok,series,PV_RunJoin_ByteSequence63.run]
     apply PV_RunJoin_BindSuccess63.congr
     intro next success
@@ -56,10 +57,7 @@ theorem loop (base : ExternalTypes) (heap : Heap) (box : Box)
     have hsize := PV_RunJoin_QuerySize63.script base heap box ops cc1 cc2 queries range folded salts atFin out
     rw [index] at hsize
     have hlen := PV_RunJoin_ResultPost41.success _ _ _ hsize success
-    have tailRoom : next.length+832*n≤Usize.max := by
-      change next.length=out.length+832 at hlen
-      simp only [Nat.mul_add,Nat.mul_one] at room
-      omega
+    have tailRoom : next.length+832*n≤Usize.max := roomParts.2 next.length hlen
     change prover.append_query_openings_loop next cc1 cc2 queries folded salts (Usize.wrapping_add i 1#usize)=_
     exact ih (Usize.wrapping_add i 1#usize) next (by rw [nextIndex];omega) tailRoom
 
