@@ -4,6 +4,8 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_OWNJ_DecodeFold
 open PV_OWNI_RawOps
+attribute [local irreducible] PV_B2_FieldValue.aspis_core.field.QM31.add
+ PV_B2_FieldValue.aspis_core.field.QM31.mul PV_B2_FieldValue.aspis_core.field.QM31.sub
 variable {K : Type} [Field K]
 
 /-- Canonicality is concrete, not an assumed image of the desired result. -/

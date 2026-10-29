@@ -3,6 +3,8 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_OWNJ_DecodeWeight
 open PV_OWNI_RawOps PV_OWNJ_DecodeFold
+attribute [local irreducible] PV_B2_FieldValue.aspis_core.field.QM31.add
+ PV_B2_FieldValue.aspis_core.field.QM31.mul PV_B2_FieldValue.aspis_core.field.QM31.sub
 variable {K : Type} [Field K]
 
 def step (width pref : Nat) (acc : K × Nat) (coordinate : K) : K × Nat :=
