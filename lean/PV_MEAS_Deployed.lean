@@ -311,8 +311,9 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
   · have e : Env := Classical.choice rt.environmentLaw.nonempty
     have hb : PV_EVH_Core.bound template outputs x < (1 : ℚ) / 2^100 :=
       (pointwise e).2.2
-    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_one, Rat.cast_ofNat] using
-      (Rat.cast_lt (K := ℝ)).mpr hb
+    have hb_real : (PV_EVH_Core.bound template outputs x : ℝ) <
+        (((1 : ℚ) / 2^100 : ℚ) : ℝ) := Rat.cast_lt.mpr hb
+    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_one, Rat.cast_ofNat] using hb_real
 
 #print axioms toCoreLinks
 #print axioms privacy_headline_deployed_events_meas
