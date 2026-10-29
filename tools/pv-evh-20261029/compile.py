@@ -51,7 +51,9 @@ for name in ['admission','out','time']:
  (E/f'{name}-{a}.{suffix}').write_text(q.stdout+q.stderr)
 admission=json.load(open(E/f'admission-{a}.json'))
 if not admission.get('allowed'):
- (E/f'refusal-{a}.json').write_text(json.dumps(dict(epoch=time.time(),admission=admission,compiler_started=False)))
+ refusal=dict(epoch=time.time(),admission=admission,admission_exit=r.returncode,compiler_started=False)
+ (E/f'refusal-{a}.json').write_text(json.dumps(refusal))
+ (E/f'refusal-history-{a}-{int(refusal["epoch"])}.json').write_text(json.dumps(refusal))
  (E/f'submission-{a}.json').unlink();print('REFUSED uncharged; full 180s cooldown');sys.exit(78)
 tim=(E/f'time-{a}.log').read_text();out=(E/f'out-{a}.log').read_text()
 for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kbytes=r'Maximum resident set size \(kbytes\): (\d+)',swaps=r'Swaps: (\d+)',wall=r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)').items():
