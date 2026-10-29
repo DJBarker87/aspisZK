@@ -1,7 +1,8 @@
 import R1Z.SideChannelRetryLaw
 set_option autoImplicit false
 namespace PV_L1D_CountSuccess
-open R1Z.SideChannelL1AttemptRecord R1Z.ProverCommitRetry34
+open R1Z.SideChannelL1AttemptRecord
+open R1Z.ProverCommitRetry34 (Published)
 variable {S P : Type}
 /-- A successful return count is the initial index plus the number of entered
 callbacks. The state and owner are those of the original D163 run. -/
