@@ -7,7 +7,7 @@ namespace R1Z.PV_RunJoin_R24Value0_54
 open PV_RunJoin_NeutralValue54 PV_RunJoin_NeutralTowerValue54 PV_RunJoin_CircleNeutralShape53
 open PV_RunJoin_R24Inputs54 PV_RunJoin_R24PartialValues54
 
-theorem complete (a b : Q) (ha : QC a) (hb : QC b) :
+theorem complete (a b : PV_RunJoin_NeutralTowerValue54.Q) (ha : QC a) (hb : QC b) :
     (PV_RunJoin_R24Equation0_54.accumulator a b (u a b) (v a b) : M)=
       (qm (qv a) (qv b)).1.1 := by
   have h := PV_RunJoin_R24NatBounds54.first a b ha hb

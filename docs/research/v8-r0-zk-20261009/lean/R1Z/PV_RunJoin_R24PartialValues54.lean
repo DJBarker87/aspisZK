@@ -9,7 +9,7 @@ open PV_RunJoin_R24Inputs54
 theorem square_zero : ((4611686014132420609 : Nat) : M)=0 := by
   rw [show (4611686014132420609:Nat)=2147483647*2147483647 from rfl,Nat.cast_mul,prime_zero,mul_zero]
 
-theorem u_value (a b : Q) (ha : QC a) (hb : QC b) :
+theorem u_value (a b : PV_RunJoin_NeutralTowerValue54.Q) (ha : QC a) (hb : QC b) :
     (u a b : M)=scalar a.2.1*scalar b.2.1-scalar a.2.2*scalar b.2.2 := by
   have hcg := PV_RunJoin_CircleNeutralR24Bounds53.product _ _ ha.2.1 hb.2.1
   have hdh := PV_RunJoin_CircleNeutralR24Bounds53.product _ _ ha.2.2 hb.2.2
@@ -18,7 +18,7 @@ theorem u_value (a b : Q) (ha : QC a) (hb : QC b) :
   rw [fold,Nat.cast_sub hle,Nat.cast_add,Nat.cast_mul,Nat.cast_mul,square_zero,add_zero]
   rfl
 
-theorem v_value (a b : Q) :
+theorem v_value (a b : PV_RunJoin_NeutralTowerValue54.Q) :
     (v a b : M)=scalar a.2.1*scalar b.2.2+scalar a.2.2*scalar b.2.1 := by
   unfold v
   rw [fold,Nat.cast_add,Nat.cast_mul,Nat.cast_mul]
