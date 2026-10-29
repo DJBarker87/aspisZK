@@ -1,1 +1,176 @@
-cat: /home/dombarker/project-offloads/codex-pv-evh-20261029/evidence/out-70498.log: No such file or directory
+theorem R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [inst_1 : Fintype R] [Nonempty R] [inst_3 : Fintype S] [Nonempty S]
+  [inst_5 : Fintype Env] [Nonempty Env] [inst_7 : Fintype N] [Nonempty N]
+  (rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x),
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt →
+    (∀ (adv : PV_EVH_Core.Observer Signal A)
+        (w : (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input).Instance),
+        (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input).public w = x.1 →
+          |(R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide (R1Z.PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w r))) -
+                R0Z.mean fun r =>
+                  R0Z.FsStatement.bit
+                    (adv.decide (R1Z.PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv r))| ≤
+            PV_EVH_Core.bound template outputs x) ∧
+      PV_EVH_Core.bound template outputs x ≤
+          1 / 2 ^ 109 + 1 / 2 ^ 137 + 1 / 2 ^ 454 +
+                R1Z.QueryScanFreshUnion.freshBudget
+                  (8 *
+                      R1Z.GamesR1PBin.n1
+                        (R1Z.PhaseProtocolInstanceBin.wire
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                        (R1Z.PhaseProtocolInstanceBin.prover
+                            (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                            ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                            (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                            R1Z.PrivacyR1AcctBasis.basis outputs x
+                            (R1Z.PrivacyR1AcctModel.seed
+                              (R1Z.PhaseProtocolInstanceBin.wire
+                                  (R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log)
+                                  ((R1Z.PrivacyR1AcctModel.base template R1Z.PhaseWireLog2Bin.log).pubBytes x).length
+                                  (R1Z.PhaseWireLog2Bin.honest R1Z.PrivacyR1HeadlineDeployedEvents.input)
+                                  R1Z.PrivacyR1AcctBasis.basis outputs x).toWire
+                              R1Z.PrivacyR1HeadlineDeployedEvents.ownedDecode R1Z.PhaseWireLog2Bin.fib
+                              R1Z.PhaseWireLog2Bin.opens)).toProver +
+                    1) +
+              2 * R1Z.ProverCommitSeedEvent19.budget (2 ^ 64) +
+            2 * R1Z.ProverCommitFuelMass22.charge ∧
+        PV_EVH_Core.bound template outputs x < 1 / 2 ^ 100 :=
+⋯
+structure R1Z.PrivacyR1HeadlineDeployedEvents.Links {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [ProverRwFull.ExternalTypes]
+  {Public Signal Env A R S N : Type} [Fintype R] [Fintype S] [Fintype Env] [Fintype N]
+  (rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x) : Prop
+number of parameters: 18
+fields:
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.RUNJOIN_PUBLISH_COMPACT : PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT
+      rt.compact rt.published
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.RUNJOIN_STATEMENT_BYTES : PV_RJ4IDB.OpenInputs.RUNJOIN_STATEMENT_BYTES
+      rt.statementBytes rt.published
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_FILE_TRACE : PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE rt.fileTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_JSON_STDOUT_TRACE : PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE
+      rt.jsonStdout (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.DIAG_ERROR_STDERR_TRACE : PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE
+      rt.errorStderr (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_COUNT_TRACE : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE rt.countTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_TIME_TRACE : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE rt.timeTrace
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_ORACLE_PREFIX : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX rt.oraclePrefix
+      (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.L1_RETAINED_SIDECHANNELS : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS
+      rt.retained (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt)
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.coupling : R1Z.PrivacyR1HeadlineDeployedEvents.D163 template outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.context : R1Z.PrivacyR1HeadlineDeployedEvents.OrderedEventContext template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.timing : R1Z.PrivacyR1HeadlineDeployedEvents.D166 template outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.signal : R1Z.PrivacyR1HeadlineDeployedEvents.SignalAgreement template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.publicSignal : R1Z.PrivacyR1HeadlineDeployedEvents.V400 template outputs x
+      rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.environment : R1Z.PrivacyR1HeadlineDeployedEvents.PublicEnvironment template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.causal : R1Z.PrivacyR1HeadlineDeployedEvents.CausalPrefix template outputs x
+      rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.observer : R1Z.PrivacyR1HeadlineDeployedEvents.ObserverProgram template
+      outputs x rt
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.selectedCallback : R1Z.PrivacyR1HeadlineDeployedEvents.op227 template
+      outputs x rt
+constructor:
+  R1Z.PrivacyR1HeadlineDeployedEvents.Links.mk {CommitHandle Aux : Type}
+    {template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux}
+    {outputs :
+      R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+        R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux}
+    {x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle} [ProverRwFull.ExternalTypes]
+    {Public Signal Env A R S N : Type} [Fintype R] [Fintype S] [Fintype Env] [Fintype N]
+    {rt : R1Z.PrivacyR1HeadlineDeployedEvents.Runtime template outputs x}
+    (RUNJOIN_PUBLISH_COMPACT : PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT rt.compact rt.published)
+    (RUNJOIN_STATEMENT_BYTES : PV_RJ4IDB.OpenInputs.RUNJOIN_STATEMENT_BYTES rt.statementBytes rt.published)
+    (DIAG_FILE_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE rt.fileTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (DIAG_JSON_STDOUT_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE rt.jsonStdout
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (DIAG_ERROR_STDERR_TRACE :
+      PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE rt.errorStderr
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_COUNT_TRACE :
+      PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE rt.countTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_TIME_TRACE :
+      PV_RJ4IDB.OpenInputs.L1_TIME_TRACE rt.timeTrace
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_ORACLE_PREFIX :
+      PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX rt.oraclePrefix
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (L1_RETAINED_SIDECHANNELS :
+      PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS rt.retained
+        (R1Z.PrivacyR1HeadlineDeployedEvents.acquired template outputs x rt))
+    (coupling : R1Z.PrivacyR1HeadlineDeployedEvents.D163 template outputs x rt)
+    (context : R1Z.PrivacyR1HeadlineDeployedEvents.OrderedEventContext template outputs x rt)
+    (timing : R1Z.PrivacyR1HeadlineDeployedEvents.D166 template outputs x rt)
+    (signal : R1Z.PrivacyR1HeadlineDeployedEvents.SignalAgreement template outputs x rt)
+    (publicSignal : R1Z.PrivacyR1HeadlineDeployedEvents.V400 template outputs x rt)
+    (environment : R1Z.PrivacyR1HeadlineDeployedEvents.PublicEnvironment template outputs x rt)
+    (causal : R1Z.PrivacyR1HeadlineDeployedEvents.CausalPrefix template outputs x rt)
+    (observer : R1Z.PrivacyR1HeadlineDeployedEvents.ObserverProgram template outputs x rt)
+    (selectedCallback : R1Z.PrivacyR1HeadlineDeployedEvents.op227 template outputs x rt) :
+    R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt
+theorem PV_EVH_Satisfiability.simultaneously_satisfiable : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle) [inst : ProverRwFull.ExternalTypes]
+  (ops : ProverRwFull.ExternalFuns) (sem : ProverRwFull.host_semantic.SemanticOracle)
+  (pt : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize),
+  ∃ rt, R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt :=
+⋯
+'PV_EVH_Interface.restore_times' depends on axioms: [propext]
+'PV_EVH_Interface.timing_key_injective' depends on axioms: [propext]
+'PV_EVH_Interface.full_agreement' depends on axioms: [propext]
+'PV_EVH_Interface.eventJoin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Interface.source_observation' depends on axioms: [propext]
+'PV_EVH_Core.joined' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Core.privacy_headline_events_model' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Average.average_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Average.privacy_headline_events_joint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Residual.with_residual' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Residual.exact_links_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Residual.headline_plus_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineDeployedEvents.toCoreLinks' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PrivacyR1HeadlineDeployedEvents.privacy_headline_deployed_events' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'PV_EVH_Satisfiability.all_links' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Satisfiability.simultaneously_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_Satisfiability.exampleObserver' does not depend on any axioms
+theorem PV_EVH_ClosedModel.all_links_satisfiable : ∀ {CommitHandle Aux : Type}
+  (template : R1Z.GamesR1.R1Wire R1Z.PrivacyR1AcctBasis.K CommitHandle Aux)
+  (outputs :
+    R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle →
+      R0Z.JointView.Challenges R1Z.PrivacyR1AcctBasis.K → Aux)
+  (x : R0Z.JointView.Statement R1Z.PrivacyR1AcctBasis.K CommitHandle),
+  ∃ rt, R1Z.PrivacyR1HeadlineDeployedEvents.Links template outputs x rt :=
+⋯
+'PV_EVH_ClosedModel.all_links_satisfiable' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_ModelData.types' does not depend on any axioms
+'PV_EVH_ModelData.operations' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_ModelData.filled' depends on axioms: [propext]
+'PV_EVH_ModelData.semantic' depends on axioms: [propext, Classical.choice, Quot.sound]

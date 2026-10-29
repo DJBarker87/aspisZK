@@ -157,3 +157,48 @@ coins. The endpoint's PublicEnvironment link then transports the actual native
 sample through its acquisition map to that exact public product. Finally the
 existing numerical envelope is reused. These are conditional model equalities
 and inequalities, not independent marginal arguments about native channels.
+
+## Final focused result
+
+All eight substantive adopted modules pass. The combined statements/axioms
+audit **70498** and the single final focused cached replay **70499** pass.
+The audit prints the exact adopted theorem and all 18 links, as well as the
+closed external-data satisfiability theorem. Every accepted printed axiom set
+is a subset of **{propext, Classical.choice, Quot.sound}**. The complete original
+lines are in `out-70498.log` and each `receipt-*.json`; rejected diagnostics
+are never accepted or imported. No sorry/admit/native_decide/implemented_by,
+new axiom, recursion limit or heartbeat override appears in the new source.
+
+Actual Lean attempts: **14/100**, **10 accepted / 4 rejected**. IDs are
+70400–70411, 70498 and 70499; 70497 remains unused. Native scopes **0**, Kani
+**0**. Four admission refusals occurred before compilation, each followed by
+the required cooldown. There were **0 VOID launches**, **0 cooldown violations**
+and **0 unchanged failed-source resubmissions**. The rejected sources changed
+before their replacements were submitted. The proof-only carrier adoption
+removes the Result-fibre installation requirement; unused budget is not
+reported as exhausted and does not justify inventing a native association.
+
+Peak RSS across all attempts is **4,279,988 KiB**, swap **0**. Exact per-target
+wall time, exit, RSS, swap, source revision, Git blob, source/dependency hashes
+and original axiom outputs are recorded in `receipts.md`, `summary.json` and
+individual receipts. Guard SHA256 is
+`834712a75ce60216319f0ca6c22587412cdb913feb9b9cf69a1b90c43f1d82d6`.
+`proof-source-freeze.json` pins every new Lean source, including the uncompiled
+lead-only consumer. `final-manifest.json` records the focused accepted closure
+and its final read-only source/object/cohort verification: **10 modules,
+14 added theorems, 6,376 object hashes, zero mismatches**. The summed Lean
+command wall time is **240.46 s**; this excludes admission waits and preflight hashing.
+
+`check.py` confirms the historical Result theorem is byte-identical, the bound
+is unchanged, all nine typed inputs are reused, every new docstring is labelled
+with D502/D478, the lead-only consumer was never submitted, and each evidence
+file is below 20 MB. No crates/programs, soundness-cone file, T field, shared
+source/object or release artifact was changed. No key was created or removed.
+
+`COMMITS.txt` records `git log --oneline ae30a1421e..HEAD` before the final
+receipt/report commit. No push or merge was performed by this worker.
+
+The full deployed privacy target is **not yet established**. Remaining work is
+exactly the native event-producing selection and named links in `LINKS.md`,
+plus the lead's explicitly deferred 16 GiB fixture aggregation. The checked
+model witness is satisfiability evidence, not a live native execution.
