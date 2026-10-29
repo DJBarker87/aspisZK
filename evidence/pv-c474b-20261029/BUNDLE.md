@@ -34,3 +34,24 @@ The 1,000-pair gate reuses and verifies the shipped control's retained 6000–69
 | `devnet_spend/Client64_accounts.rs` | 2, 20 | none |
 
 `PATCH.diff` contains the entire production bundle versus a9a9781f8a, including the accepted first half. `PATCH.incremental-from-19c9611220.diff` contains only this continuation. Both reverse-apply checks pass against the final tree. `N7-port.diff` records the exact key-loader block differences from the prepared patch; its Python hunk and fixed-copy decoder are unchanged. All other source additions in this evidence directory are gate tools, not production inputs.
+
+## Completed combined-client gates
+
+- **Build/recipe PASS:** Rust 1.94.1 (`e408947bfd200af42db322daf0fadfe7e26d3bd1`, LLVM 21.1.8), locked and offline. `client` inherits release opt-level=3 and uses panic=abort. `client-cargo-tree-features.txt` and the exact one-root `devnet_spend` unit graph show ct-host-prover ON and insecure-spend-fixture OFF. Root workspace unchanged.
+- **New client:** SHA-256 `da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0`, 2,281,512 bytes. This is a proposed replacement artifact hash, not a changed shipping pin. See `client-build.json` for the complete recipe and compiler record.
+- **All three ELF rebuilds PASS:** default `f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4` (1,563,728 bytes), devnet `63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299` (1,563,728 bytes), Pool `121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548` (605,704 bytes). Receipts: N73504/N73505/N73506; `elf-*/comparison.json`. Existing SBF stack-size diagnostics were emitted; each build exited 0 and the pinned output bytes are unchanged.
+- **Existing fixtures PASS:** 3/3 client unit tests; fixed-coin transfer and withdrawal proof/public/result/ledger bytes equal their verified controls (`fixed-fixture-comparison.json`). Actual fixture-OFF client proofs accepted by both default and devnet verifier ELFs with the pinned Pool, with matching settlement and duplicate-reservation rejection (`runtime-private/acceptance.json`). These are native fixture checks, not universal refinement proofs.
+- **N7 signing PASS:** exact patched Python invoke on public RFC8032 vector 1 yields the same 158-byte transaction as the current shipped control, SHA-256 `44e9ec48d04617ad3467573d95dc25d3797ab6581618959d11cd6eac23c8b41d`. Original test key retained unchanged mode 0600. Short/extra records reject with fixed diagnostics; malformed JSON and panic tests also retain fixed stderr even with backtrace environment variables enabled.
+- **CT decoding PASS — evidence class: instruction-trace comparison.** The actual optimized fixture-OFF client decoder executes the same nine instructions for all-zero and all-0xff 64-byte records of equal public shape. PTRACE_SINGLESTEP records identical relative PCs and source/destination pointer offsets through RET, and checks both output copies. Disassembly contains eight fixed-offset MOVUPS loads/stores plus RET, with no data-dependent branch, early exit, length-dependent loop or table index. This is precisely a decoder-slice comparison, not dudect or whole-loader/signing CT; V371 latency, I/O scheduling, keypair consistency validation and Python preparation obligations remain. See `ct-decoding.json` and `decoder-disassembly.txt`.
+
+Exact recipe (run from any directory via this script; full script in PATCH.diff):
+
+```sh
+cd tools/r1-cost-probe
+unset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP
+export RUSTFLAGS='--cfg getrandom_backend="linux_raw" --check-cfg=cfg(getrandom_backend,values("linux_raw")) -C link-arg=-Wl,--threads=4'
+cargo +1.94.1 build --profile client --locked --offline -j 4 \
+  --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend
+```
+
+Production source freeze: `ba39168f67`; subsequent commits add only gate tools and evidence. `expected-sources.json` binds the staged host sources, and final source/artifact rechecks will be recorded without rerunning successful native gates. Per-scope receipts give target, exit, wall, peak RSS, swaps, revision and `#print axioms` = N/A. No Lean or Kani runs occurred.
