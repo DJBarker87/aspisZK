@@ -7,7 +7,7 @@ import json,re,sys,hashlib
 E=Path('evidence/pv-l1e-20261029')
 order=json.loads((E/'missing-order.json').read_text())
 mods=[m for m in order if m.startswith('PV_L1D_Source_') or m in ['PV_L1D_QueryAbsorb','PV_L1D_QueryProducer']]+['PV_L1E_Source_070']
-code='import PV_L1E_Source_070\nimport PV_L1D_CallbackSafe\nimport PV_L1E_SafeObserve\nset_option autoImplicit false\nnoncomputable section\nnamespace PV_L1E_CallbackSafety\nopen Aeneas Aeneas.Std Result ControlFlow ProverRwFull\nopen PV_L1D_Logged PV_L1D_CallbackSafe\nvariable [ExternalTypes] [ExternalFuns]\n'
+code='import PV_L1E_Source_070\nimport PV_L1D_CallbackSafe\nimport PV_L1E_SafeObserve\nimport PV_L1E_SafetyTactics\nset_option autoImplicit false\nnoncomputable section\nnamespace PV_L1E_CallbackSafety\nopen Aeneas Aeneas.Std Result ControlFlow ProverRwFull\nopen PV_L1D_Logged PV_L1D_CallbackSafe\nvariable [ExternalTypes] [ExternalFuns]\n'
 code+='''theorem safe_coe {α : Type} (r : Result α) : Safe (r : Logged α) := rfl
 #print axioms safe_coe
 '''
@@ -19,13 +19,11 @@ for m in mods:
  code+=params+'  Safe ('+m+'.produce '+app+') := by\n  unfold '+m+'.produce\n'
  code+='  try simp only [PV_L1D_Projection.prod_case]\n'
  code+="  repeat' first\n"
- for prior in reversed([v for v in known if v+'.produce' in s[:start]]):code+='    | exact safe_'+prior+' '+('' if False else '(by assumption)')+'\n' if False else ''
- # apply the callee law with its parameters inferred from the concrete goal.
- for prior in reversed([v for v in known if v+'.produce' in s[:start]]):code+='    | solve | with_reducible apply safe_'+prior+'\n'
+ code+='    | solve | l1e_safe_callee\n'
  code+='''    | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
+    | l1e_safe_observe
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
