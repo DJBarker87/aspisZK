@@ -24,7 +24,7 @@ for r in runs:
  assert q['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  for a in r['axioms']:
   assert 'sorryAx' not in a
-  if 'depends on axioms: [' in a:assert set(re.search(r'\[([^\]]*)\]',a)[1].split(', '))<=set(['propext','Classical.choice','Quot.sound'])
+  if 'depends on axioms: [' in a:assert set(filter(None,re.split(r',\s*',re.search(r'\[([^\]]*)\]',a)[1])))<=set(['propext','Classical.choice','Quot.sound'])
  if r['mode']=='rebuild':
   v=inp['modules'][r['module']];raw=subprocess.check_output(['git','show','HEAD:'+v['path']]);assert hashlib.sha256(raw).hexdigest()==v['sha256']==r['source_sha256']
  else:

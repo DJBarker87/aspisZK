@@ -4,6 +4,8 @@
 
 Branch `codex/pv-mfd-20261029`, exact sparse worktree `/Users/dominic/ZK/.worktrees/pv-mf`, candidate base `212f9c5a54`. All compiled sources are unchanged candidate blobs at source revision `e41e4372b72596e0356ed18c6c745b8c542e8ff0` (request-receipt commit). No proof was authored or repaired. No crates/programs, endpoint, dictionary, simulator, observer or trust-field change; no key/wallet activity, push or merge. Privacy target not yet established.
 
+Receipt integrity validation: `PV_MF_validate.py` PASSES (`validation.json`); it invokes no compiler or manifest replay. The receipt parser was corrected to accept line-wrapped standard axiom lists. Final collection found100 completed attempts and zero running task scopes (`collection.json`).
+
 ## Dispositions
 
 | Population | A | B | C | Total |
