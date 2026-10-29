@@ -6,6 +6,8 @@ import json,shutil,time
 D=Path('/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029')
 assert D.is_dir() and not D.is_symlink()
 proof=json.load(open(D/'final-coherence-result.json'));assert proof['external_count']==5673
+for module in ['R1Z/PV_RDCD4_FinalAudit','R1Z/PV_RDCD4_FocusedReplay','R1Z/PV_RDCD4_FrozenManifest']:
+ assert module in proof['modules'],('final release gate missing',module)
 removed=[]
 for name in ['classification-target','lean-objects','external-objects']:
  p=D/name;assert p.parent==D
