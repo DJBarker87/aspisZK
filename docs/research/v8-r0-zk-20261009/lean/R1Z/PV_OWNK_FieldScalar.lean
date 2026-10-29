@@ -25,7 +25,7 @@ theorem mul (a b : U32) : decode (PV_B2_FieldValue.aspis_core.field.M31.mul a b)
  unfold decode
  rw [mul_decode,ZMod.natCast_mod,Nat.cast_mul]
 theorem reduce (a : U64) : decode (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 a) = (a.val : F) := by
- unfold decode M PV_B2_FieldValue.aspis_core.field.M31.reduce_u64
+ unfold decode PV_B2_FieldValue.aspis_core.field.M31.reduce_u64
   PV_B2_FieldValue.aspis_core.field.reduce_u64
  rw [PV_OWNK_CTDecode.reduce_decode,ZMod.natCast_mod]
 theorem double (a : U32) (ha : Canon a) : decode (PV_B2_FieldValue.aspis_core.field.M31.double a) = decode a + decode a :=

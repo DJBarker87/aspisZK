@@ -25,6 +25,7 @@ theorem mul_decode (a b : U32) :
  unfold PV_B2_FieldValue.aspis_core.field.M31.mul
   PV_B2_FieldValue.aspis_core.field.reduce_u64
  rw [PV_OWNK_CTDecode.reduce_decode,U64.wrapping_mul_val_eq,hac,hbc,UScalar.size]
+ change (a.val*b.val)%18446744073709551616%2147483647 = (a.val*b.val)%2147483647
  rw [Nat.mod_eq_of_lt hp]
 
 theorem reduce_canon (a : U64) : Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 a) :=

@@ -39,6 +39,8 @@ theorem cross_val (x y : C) (hx : CC x) (hy : CC y) :
  unfold cross
  rw [U64.wrapping_mul_val_eq,U64.wrapping_add_val_eq,U64.wrapping_add_val_eq,
   cast_val,cast_val,cast_val,cast_val,UScalar.size]
+ change ((x.a.val+x.b.val)%18446744073709551616 *
+  ((y.a.val+y.b.val)%18446744073709551616))%18446744073709551616 = _
  rw [Nat.mod_eq_of_lt (show x.a.val+x.b.val < 18446744073709551616 by omega),
   Nat.mod_eq_of_lt (show y.a.val+y.b.val < 18446744073709551616 by omega)]
  exact Nat.mod_eq_of_lt (by nlinarith)
