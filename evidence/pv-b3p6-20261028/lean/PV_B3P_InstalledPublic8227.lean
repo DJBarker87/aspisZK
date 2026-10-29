@@ -14,17 +14,20 @@ def installed_public8 (base : ProverRwFull.ExternalTypes)
     (p : reference_terminal.SemanticPublic) (recipient : Array U32 8#usize) :
     @ProverRwFull.aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
       (PV_B3P_Install227.Types base) :=
+  letI : ProverRwFull.ExternalTypes := PV_B3P_Install227.Types base
   .Transfer
-    {pool := p.pool, deployment_domain := p.deployment_domain,
+    ({pool := p.pool, deployment_domain := p.deployment_domain,
      anchor_sequence := 0#u64, anchor_root := p.anchor, nullifier := p.nullifier,
-     asset_id := p.asset_id, recipient_commitment := recipient, change_commitment := p.change}
+     asset_id := p.asset_id, recipient_commitment := recipient, change_commitment := p.change} :
+      PV_B3P_226V3.aspis_statement.pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
     {live_snapshot :=
       {pool := p.pool, deployment_domain := p.deployment_domain,
        sequence := 0#u64, next_pair_index := 0#u64,
        current_root := p.transition.live_snapshot.current_root, frontier := empty_frontier},
      candidate_afterstate :=
-      {next_pair_index := 1#u64, next_root := p.transition.candidate_afterstate.next_root,
-       next_frontier := empty_frontier}}
+      ({next_pair_index := 1#u64, next_root := p.transition.candidate_afterstate.next_root,
+       next_frontier := empty_frontier} :
+        aspis_statement.pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1)}
 
 theorem installed_public_semantic8 (base : ProverRwFull.ExternalTypes)
     (p : reference_terminal.SemanticPublic) (recipient : Array U32 8#usize) :
@@ -32,4 +35,5 @@ theorem installed_public_semantic8 (base : ProverRwFull.ExternalTypes)
       valid_public (transfer_seed8 p recipient) := rfl
 
 #print axioms installed_public_semantic8
+end
 end PV_B3P_Success227
