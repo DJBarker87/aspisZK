@@ -9,7 +9,7 @@ s=Path('lean')/(m+'.lean');b=s.read_bytes();assert subprocess.check_output(['git
 base=json.load(open('evidence/pv-fib-20261029/prepare-PV_FIB_Restricted.json'))['result']
 projects=[v for v in base['project_checks'] if 'source' in v]
 for v in projects:
- a=v['source'];p=a['path'];r=a['revision'] if 'EJR' in a['authority'] or 'freeze' in a['authority'] or 'runjoin' in a['authority'] else rev
+ a=v['source'];p=a['path'];authority=a.get('authority','h5 HEAD');r=a['revision'] if any(k in authority for k in ['EJR','freeze','runjoin']) else rev
  raw=subprocess.check_output(['git','show',r+':'+p]);assert sha(raw)==a['source_sha256'],('source changed',v['module'])
 r=json.load(open('evidence/pv-fib-20261029/receipt-67504.json'))
 projects.append(dict(module='PV_FIB_Restricted',path='/home/dombarker/project-offloads/codex-pv-fib-20261029/objects/PV_FIB_Restricted.olean',source=dict(source_sha256=r['source_sha256']),sha256=None))
