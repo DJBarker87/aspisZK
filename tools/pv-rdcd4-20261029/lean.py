@@ -23,6 +23,23 @@ print(json.dumps(dict(shared=a,private=b)))
 assert not a and not b,(a,b)
 '''.replace('ID',str(n))
 r=subprocess.run(['ssh',H,'python3','-'],input=code,text=True,capture_output=True);(E/f'{n}-id-check.json').write_text(json.dumps(dict(exit=r.returncode,stdout=r.stdout,stderr=r.stderr),indent=2));assert r.returncode==0,r.stderr
+# Diagnose admission before source transport (local-lean rule7). The scoped
+# launch still performs its own reservation and same-command barrier later.
+import shlex
+out=E/('lean-'+str(n));out.mkdir(exist_ok=True)
+G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
+remote=D+'/lean-'+str(n)
+command='mkdir -p '+shlex.quote(remote)+'; python3 '+shlex.quote(G+'/reservation.py')+' '+shlex.quote(remote+'/admission-before-upload.json')+' > '+shlex.quote(remote+'/reservation-before-upload.log')+' 2>&1'
+a=subprocess.run(['ssh',H,command],capture_output=True,text=True)
+for name in ['admission-before-upload.json','reservation-before-upload.log']:
+ q=subprocess.run(['ssh',H,'cat '+shlex.quote(remote+'/'+name)],capture_output=True,text=True)
+ assert q.returncode==0,('pre-upload admission receipt missing',q.stderr)
+ (out/name).write_text(q.stdout)
+ad=json.load(open(out/'admission-before-upload.json'))
+with (out/'admission-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=a.returncode,admission=ad,stage='before-source-upload'))+'\n')
+if a.returncode!=0 or ad.get('allowed') is not True:
+ print('UNCHARGED pre-upload admission refusal; no source transport or compiler launched',flush=True)
+ sys.exit(78 if not ad.get('error') else 79)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
 # Capture actual private dependency objects before submission. Earlier receipts
 # retain their original fields; final closure verification is separately labelled.
