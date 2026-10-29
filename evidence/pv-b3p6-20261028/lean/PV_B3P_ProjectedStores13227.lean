@@ -17,13 +17,13 @@ theorem projected_values13
   rw [projected_cell_binding13_0]
   unfold four_values13
   apply congrArg (Aeneas.Std.bind _)
-  intro a
+  funext a
   rw [projected_cell_binding13_1]
   apply congrArg (Aeneas.Std.bind _)
-  intro b
+  funext b
   rw [projected_cell_binding13_2]
   apply congrArg (Aeneas.Std.bind _)
-  intro c
+  funext c
   exact projected_cell_binding13_3 openings leading full internal pqm pqm1 pqm2 prepared_block a b c
 
 def projected_output_loop13
