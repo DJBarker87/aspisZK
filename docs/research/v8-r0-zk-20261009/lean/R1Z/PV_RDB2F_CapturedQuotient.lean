@@ -19,7 +19,15 @@ def guardBody (captured output : Words) (initialized : Usize) :
 
 theorem body_association (q output : Words) (initialized : Usize) :
     guardBody q output initialized=digitsBody q output initialized := by
-  simp only [guardBody,invoke,digitsBody,bind_assoc_eq,bind_tc_ok]
+  unfold guardBody digitsBody
+  split
+  · simp only [invoke,bind_assoc_eq]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro pair hp
+    rcases pair with ⟨current,remainder⟩
+    simp only [lift,bind_tc_ok]
+    rfl
+  · rfl
 
 def fromFn (q output : Words) (initialized : Usize) : Result (Words × Words) :=
   loop (fun (q,output,initialized) => guardBody q output initialized) (q,output,initialized)
@@ -35,7 +43,12 @@ theorem final_capture_read (q output : Words) :
     (do let (current,_) ← fromFn q output 0#usize
         Array.index_usize current 0#usize)=
     (do let (current,_) ← digits q output 0#usize
-        Array.index_usize current 0#usize) := by rw [entire_capture]
+        Array.index_usize current 0#usize) := by
+  rw [entire_capture]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro pair hp
+  rcases pair with ⟨current,output⟩
+  rfl
 
 #print axioms body_association
 #print axioms entire_capture
