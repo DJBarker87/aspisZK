@@ -1,4 +1,4 @@
-import R1Z.PV_OWNB_SnapshotResult
+import R1Z.PV_OWNB_SnapshotStep
 set_option autoImplicit false
 namespace R1Z.PV_OWNC_SourceIterator
 open PV_OWNB_Cursor PV_OWN_Link
