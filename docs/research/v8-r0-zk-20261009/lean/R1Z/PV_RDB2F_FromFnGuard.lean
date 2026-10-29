@@ -23,6 +23,7 @@ theorem initialized_prefix {S A : Type} (f : Nat → S → Result (A × S))
     congr 1
     funext pair
     rcases pair with ⟨item,current⟩
+    dsimp only
     rw [ih]
     simp only [bind_tc_ok,bind_assoc_eq,List.append_assoc,List.singleton_append]
 
