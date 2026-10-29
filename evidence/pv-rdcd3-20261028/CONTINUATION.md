@@ -1,0 +1,57 @@
+# Continuation state after capacity relaunch1
+
+Assigned cwd/branch unchanged. All pv-common rulings read; no local Lean;
+no crates/programs/dictionary/simulator/observer edits, no Kani or key operations.
+
+Current charged budget:57 Lean (45 PASS,12 FAIL),7 native scopes. Actual Lean
+IDs60600–60656 consumed. 60630 prior barrier refusal was recovered and retried
+compliantly, same ID; no compiler had launched before the refusal. No new
+cooldown violation. `scope.py` enforces180s after completion and refusal. Inspect
+predecessor results before dependent submissions. Audit IDs60697–60699 reserved.
+
+V260 RESTORED/B, structural (K-1 substitute), complete source-value/Result only,
+with both253 API and selected251 callback proven. End-of-job combined audit and
+focused replay still mandatory. Receipt60637 closes `PV_RDCD3_V260Complete`;
+`v260-final-source` validates31 own project objects and5673 h4 external hashes.
+Complete scope and limitations in rows/V260.md/json; zero endpoint premise
+changes, all original observer/native world obligations retained.
+
+V265 RESTORED/B at source/Result boundary:inverse60653, closing60655, source2 gate all pass; pointer Kani remains quarantined. V260 and V265 final combined audit/replay due at job end. Original v265 source gate failed its own mutation-generator control and is retained; corrected source2 gate passes. Next60657 compiles R1Z/ProverRwFullTypes, then60658 FieldSource; FullExternalTypes passed60656.
+
+V217 owned candidates are drafted by prepare-v217.py, with30 derived modules, plus FieldSource, Total, FieldTotal. They are UNCOMPILED and receive no row credit. Existing modules unchanged; all new prefixes PV_RDCD3_. Minimal carrier files in docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023 were added with sparse-checkout add (never full checkout). Canonical carrier and pv-b3p6 variant hashes are identical. resolve-v217.py now emits the full candidate DAG and order; field totality must be compiled before dependent mask modules. The candidate programs preserve original definition bodies apart from namespace/import rebinding. Direct FieldTotal proofs replace legacy totality imports; no source/dictionary change. Further complete native structural binding is still required before any V217 restoration, especially concrete library map/initialization/iterator cone; do not grant credit merely from copied proofs.
+
+Use tools/pv-rdcd3-20261028/lean.py ID R1Z/Module; it requires committed source
+at HEAD and records source/blob/import snapshots. All project names in the
+V265 closure were absent from EJR/freeze; resolved under h5 tracked HEAD.
+`resolve-v265.py` regenerates v265-source-resolution.json (upload to own host
+D). It lists the dependency order. Higher-priority absence census is recorded.
+Do not edit existing proof modules except trivial import/name fixes.
+
+V265 drafts: V265Inverse proves concrete square_n loop to ordered iteration,
+then exact fixed addition chain including assert at zero, then static
+CM31.inv dispatch. V265 closes circle control and generic complete carrier.
+`v265-source.py` binds exact deployed Rust square_n/M31.inv/CM31.inv bodies,
+checks r0-op-count disabled in feature graph, and rejecting semantic mutation
+controls. Uploaded but not executed. Pointer Kani stays QUARANTINED.
+Existing pv-rdcd native-circle/inverse finite evidence has Rust1.94.1/deployed
+features/release and unchanged source; retain it as finite, never unbounded.
+Need complete library disposition and current coherent DAG before row credit.
+
+Host D=/home/dombarker/project-offloads/codex-pv-rdcd3-20261028, SSH
+ dombarker@100.108.41.90. Prior rdcd caches were deleted; own surviving cache
+is pinned and reused. Existing capped `scope.py` launch protocol only; all
+new scopes180s apart,6G/8G/swap0/Tasks64; Lean-M7000. No host infrastructure edits.
+
+Later work order V217,V220,V237,V236,V197,V233,V201. Rows still SUSPENDED with
+prior exact blockers. New optional generic SliceRange194 draft uncompiled.
+The old MaskRootEq source cone and existing native arithmetic witnesses may
+help V217; actual deployed body has selected_mask_linears and prepared Horner.
+V220 uses radix-four polynomial evaluation and prepared_x4, not the old Horner
+alternative. Source is frozen under fscan/src (read-only). Never mislabel pin/
+projection scripts original checkers. V197 must use exact owned structural
+reference; pinned Aeneas rejection is retained, no bypass.
+
+Use full100 Lean budget with meaningful focused proofs; do not repeat unchanged
+full gates. Final audit60697, focused row replay60698, final frozen manifest60699
+should be source/statement/axioms audited and receipt/fingerprint associated.
+No binary files/objects committed; check evidence -size +20M before each commit.

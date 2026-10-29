@@ -1,0 +1,270 @@
+{
+  "row": "V260",
+  "conservative_input_sha256": "324ca4938c63fe5bd3b6fc9529c14ac0cf9be9befe97f6f6fd72961c52da3646",
+  "unresolved_disposition": [
+    {
+      "index": 0,
+      "cohort": "old",
+      "function": "aspis_r1_cost_probe::transport::<crates/aspis-r1-cost-probe/src/transport.rs::impl Variant>::row(_1: transport::Variant, _2: usize) -> usize",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete source law",
+      "argument": "Receiver is ops::Range<usize>, not either allocation-tree Range. Blanket IntoIterator returns the full iterator state unchanged.",
+      "evidence": "Range194.projection; RangeLoop.all_endpoints; Control194.intoIter_state"
+    },
+    {
+      "index": 1,
+      "cohort": "old",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "disposition": "concrete source law",
+      "argument": "usize implements TrustedStep, selecting the specialized ops::Range<T> implementation; no generic fallback is instantiated.",
+      "evidence": "Range194.extracted/projection; RangeFold.next_active/next_empty/increment_bound"
+    },
+    {
+      "index": 2,
+      "cohort": "old",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 3,
+      "cohort": "old",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 4,
+      "cohort": "old",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 5,
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 6,
+      "cohort": "old",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 7,
+      "cohort": "old",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "disposition": "terminal Result projection only",
+      "argument": "Actual invalid array indexing remains an error at the retained Aeneas Result interface. No continuation runs. Panic diagnostics and whole-observer behavior are not established by this interface. Result.unwrap error is unreachable after a successful row lookup; invalid D fails earlier.",
+      "evidence": "Index194.failure/nested_failure; V260RowResult.complete/invalid_D; Control194.panic_terminal; v260-word-source-result.json result_unwrap"
+    },
+    {
+      "index": 8,
+      "cohort": "old",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "disposition": "panic diagnostic outside Result projection",
+      "argument": "The fmt Arguments/str length call belongs to panic construction, not successful arithmetic, lookup or folding. The Result theorem preserves the terminal error, not diagnostic bytes, allocations, timing or observer behavior; no native RunJoin/observer credit.",
+      "evidence": "Control194.panic_terminal; Index194.failure; scope restriction retained explicitly"
+    },
+    {
+      "index": 9,
+      "cohort": "deployed",
+      "function": "aspis_r1_cost_probe::transport::<crates/aspis-r1-cost-probe/src/transport.rs::impl Variant>::row(_1: transport::Variant, _2: usize) -> usize",
+      "call": "<core::ops::Range<usize> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+      ],
+      "disposition": "concrete source law",
+      "argument": "Receiver is ops::Range<usize>, not either allocation-tree Range. Blanket IntoIterator returns the full iterator state unchanged.",
+      "evidence": "Range194.projection; RangeLoop.all_endpoints; Control194.intoIter_state"
+    },
+    {
+      "index": 10,
+      "cohort": "deployed",
+      "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+      "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+      ],
+      "disposition": "concrete source law",
+      "argument": "usize implements TrustedStep, selecting the specialized ops::Range<T> implementation; no generic fallback is instantiated.",
+      "evidence": "Range194.extracted/projection; RangeFold.next_active/next_empty/increment_bound"
+    },
+    {
+      "index": 11,
+      "cohort": "deployed",
+      "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+      "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+      ],
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 12,
+      "cohort": "deployed",
+      "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+      "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+        "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+      ],
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 13,
+      "cohort": "deployed",
+      "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+      "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 49,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 14,
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 15,
+      "cohort": "deployed",
+      "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+      "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 14,
+      "disposition": "excluded concrete dispatch",
+      "argument": "The only source range has type core::ops::Range<usize>. No BTreeMap, BTreeSet, node, leaf, key/value storage or associated iterator exists in the complete checked raw/row bodies. These candidates enter only through the ambiguous printed name Range; substituting one would change the receiver type.",
+      "evidence": "range-source-result.json dispatch_checks; v260-project-source-result.json complete raw/row bodies"
+    },
+    {
+      "index": 16,
+      "cohort": "deployed",
+      "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+      "call": "panicking::panic_fmt::panic_impl",
+      "reason": "no uniquely resolved body",
+      "candidate_count": 0,
+      "disposition": "terminal Result projection only",
+      "argument": "Actual invalid array indexing remains an error at the retained Aeneas Result interface. No continuation runs. Panic diagnostics and whole-observer behavior are not established by this interface. Result.unwrap error is unreachable after a successful row lookup; invalid D fails earlier.",
+      "evidence": "Index194.failure/nested_failure; V260RowResult.complete/invalid_D; Control194.panic_terminal; v260-word-source-result.json result_unwrap"
+    },
+    {
+      "index": 17,
+      "cohort": "deployed",
+      "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+      "call": "str::<impl str>::len",
+      "reason": "ambiguous printed MIR symbol",
+      "candidates": [
+        "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+        "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+      ],
+      "disposition": "panic diagnostic outside Result projection",
+      "argument": "The fmt Arguments/str length call belongs to panic construction, not successful arithmetic, lookup or folding. The Result theorem preserves the terminal error, not diagnostic bytes, allocations, timing or observer behavior; no native RunJoin/observer credit.",
+      "evidence": "Control194.panic_terminal; Index194.failure; scope restriction retained explicitly"
+    }
+  ],
+  "source_gates": {
+    "range-source-result.json": "6f5a9447270c4fa9f4b2f5cadff870995062a225d94b20aa694aa2a13f7728e1",
+    "v260-word-source-result.json": "3b81aa9618fab932922f373b44511d3091ad391708bfc70d96d98809f28482c5",
+    "v260-project-source-result.json": "78100323bcf0b40b19443d72613b052095246f0af449feb6d967fc3f09de8692",
+    "v260-constants-result.json": "1170b024da0f1070ea18fcfdcda62b52a78ea6d7669d579548630bdefcaa8268"
+  },
+  "scope": "Complete value/Result structural association is still conditional on all named Lean receipts and frozen DAG. No binary, panic-diagnostic, world or observer theorem. No claim that conservative counts are a monomorphized call graph.",
+  "concrete_library_methods": [
+    "ops::Range<usize>::next",
+    "RangeIteratorImpl<usize>::spec_next",
+    "Step<usize>::forward_unchecked",
+    "usize::unchecked_add (increment one)",
+    "Iterator::fold<Range<usize>>",
+    "IntoIterator<Iterator>::into_iter",
+    "[T;N]::index<usize>",
+    "[T]::index<usize>",
+    "SliceIndex<[T]><usize>::index",
+    "u32/u64::wrapping_add",
+    "u32::wrapping_sub",
+    "u64::wrapping_mul",
+    "u16/u64::wrapping_shr",
+    "u64::wrapping_shl",
+    "u16/u64::unchecked_shr",
+    "u64::unchecked_shl",
+    "Result<bool,Error>::unwrap (only Ok reached)"
+  ],
+  "compiler_primitives": "Integer intrinsics, casts, immutable backing storage reads and terminal panic projection retain the existing compiler/Aeneas semantic trust. Reclassification within existing tool trust; no endpoint premise removal.",
+  "rejected_alternatives": [
+    "BTreeMap Range",
+    "BTreeSet Range",
+    "core::range::Range (distinct from core::ops::Range)",
+    "aspis_statement::Variant equality (actual receiver is transport::Variant)"
+  ],
+  "qualification": "A source pattern gate is not a recovered original checker. Every scope qualification is retained; diagnostics/observer obligations remain open."
+}

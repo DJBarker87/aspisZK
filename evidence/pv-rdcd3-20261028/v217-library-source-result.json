@@ -1,0 +1,63 @@
+{
+  "records": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+      "source_sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589",
+      "context": "pub trait Iterator",
+      "source_body": "fn rev(self) -> Rev<Self>\n    where\n        Self: Sized + DoubleEndedIterator,\n    {\n        Rev::new(self)\n    }",
+      "expected_body": "fn rev(self)->Rev<Self> where Self:Sized+DoubleEndedIterator,{Rev::new(self)}",
+      "law": "R1Z.PV_RDCD3_MaskRootEq.reference; constructor retains the entire iterator",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/rev.rs",
+      "source_sha256": "03beda6e5c6eefbc1ec7c5675f0695a5de924bbb7034e979a7b1764e58905320",
+      "context": "impl<T> Rev<T>",
+      "source_body": "pub(in crate::iter) fn new(iter: T) -> Rev<T> {\n        Rev { iter }\n    }",
+      "expected_body": "pub(in crate::iter) fn new(iter:T)->Rev<T>{Rev{iter}}",
+      "law": "R1Z.PV_RDCD3_ReverseRange.before; record constructor, no memory read or hidden state",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/rev.rs",
+      "source_sha256": "03beda6e5c6eefbc1ec7c5675f0695a5de924bbb7034e979a7b1764e58905320",
+      "context": "impl<I> Iterator for Rev<I>",
+      "source_body": "fn next(&mut self) -> Option<<I as Iterator>::Item> {\n        self.iter.next_back()\n    }",
+      "expected_body": "fn next(&mut self)->Option<<I as Iterator>::Item>{self.iter.next_back()}",
+      "law": "R1Z.PV_RDCD3_ReverseRange.next_zero/next_pos; full updated inner range retained",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "source_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "impl<A: Step> DoubleEndedIterator for ops::Range<A>",
+      "source_body": "fn next_back(&mut self) -> Option<A> {\n        self.spec_next_back()\n    }",
+      "expected_body": "fn next_back(&mut self)->Option<A>{self.spec_next_back()}",
+      "law": "R1Z.PV_RDCD3_Receiver ops::Range<usize>; TrustedStep specialization below",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "source_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>",
+      "source_body": "fn spec_next_back(&mut self) -> Option<T> {\n        if self.start < self.end {\n            // SAFETY: just checked precondition\n            self.end = unsafe { Step::backward_unchecked(self.end, 1) };\n            Some(self.end)\n        } else {\n            None\n        }\n    }",
+      "expected_body": "fn spec_next_back(&mut self)->Option<T>{if self.start<self.end{self.end=unsafe{Step::backward_unchecked(self.end,1)};Some(self.end)}else{None}}",
+      "law": "R1Z.PV_RDCD3_ReverseRange.next_zero/next_pos; before e has start zero; predecessor result also becomes new end",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "source_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "macro_rules! step_unsigned_methods",
+      "source_body": "unsafe fn backward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start - n` doesn't overflow.\n            unsafe { start.unchecked_sub(n as Self) }\n        }",
+      "expected_body": "unsafe fn backward_unchecked(start:Self,n:usize)->Self{unsafe{start.unchecked_sub(n as Self)}}",
+      "law": "R1Z.PV_RDCD3_ReverseRange.pred_val; ReverseWrap.pred_eq; n=1 and start>0 discharged by active guard",
+      "negative_control": "terminal panic substitution rejected; syntactic control, not a compiled fidelity control"
+    }
+  ],
+  "source_toolchain": "1.94.1",
+  "feature_graph_sha256": "3bf8d1033e906315b76cab9576db009197c18bc8e969e62b5aae21fecfd61dad",
+  "scope": "Additional V217 reverse range source bodies only. Complete application/field binding, named successful proof receipts, coherent DAG and unchanged native finite validation still required.",
+  "primitive_boundary": "Unchecked integer intrinsic on a proved safe domain and typed array memory retained at V370/Aeneas primitive semantics; diagnostics/world/observer not proved",
+  "composition": "Reclassification within existing tool trust; no endpoint premise removal"
+}

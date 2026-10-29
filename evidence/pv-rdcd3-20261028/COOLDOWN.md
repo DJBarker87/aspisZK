@@ -1,0 +1,8 @@
+# Launch discipline
+
+Every actual launch is checked by the own wrapper against the latest completion or refusal, with a conservative 180-second gap from collection. The host barrier admits and executes the compiler in the same process/scope command; both its exit and allowed field are inspected. Limits are 6G/8G/swap0/Tasks64. A refusal consumes no Lean attempt or ID. Attempt60630 was refused by the second barrier; no compiler ran, and the same ID will be retried only after the full cooldown. Historical pv-rdcd violations remain documented in that job's RESUME-SEQUENCING.md; none is treated as proof evidence here.
+
+Resume2:60674 was once refused by the local pre-submission cooldown guard
+with15.6seconds remaining. No host scope/compiler started; the same ID was
+retried after16seconds and the host launch was compliant. The host timestamp
+audit checks the actual launched attempts/refusals, not metadata upload time.

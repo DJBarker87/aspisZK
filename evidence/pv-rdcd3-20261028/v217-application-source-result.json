@@ -1,0 +1,64 @@
+{
+  "source_path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-core/src/state_only_hiding.rs",
+  "source_sha256": "cc1039531cfe07518542d386668e9572e3eacf5127e8ec441c32bec20d116cd2",
+  "records": [
+    {
+      "marker": "fn cm31_mul_i(",
+      "body": "fn cm31_mul_i(value: CM31) -> CM31 {\n    CM31::new(value.b.neg(), value.a)\n}",
+      "expected_body": "fn cm31_mul_i(value:CM31)->CM31{CM31::new(value.b.neg(),value.a)}",
+      "law": "R1Z.PV_RDCD3_CB_MaskLeaves.i; FieldSource.CM31.new/M31.neg",
+      "statement_binding": "Read b, negate b, construct (neg b,a). All fields Copy; no user drop.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    },
+    {
+      "marker": "fn cm31_mul_r(",
+      "body": "fn cm31_mul_r(value: CM31) -> CM31 {\n    CM31::new(value.a.double().sub(value.b), value.a.add(value.b.double()))\n}",
+      "expected_body": "fn cm31_mul_r(value:CM31)->CM31{CM31::new(value.a.double().sub(value.b),value.a.add(value.b.double()))}",
+      "law": "R1Z.PV_RDCD3_CB_MaskLeaves.r",
+      "statement_binding": "Double a, subtract b; double b, add a; construct ordered pair. No error branch beyond callees.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    },
+    {
+      "marker": "fn mul_tower_basis(",
+      "body": "fn mul_tower_basis(value: QM31, coordinate: usize) -> QM31 {\n    match coordinate {\n        0 => value,\n        1 => QM31 {\n            c0: cm31_mul_i(value.c0),\n            c1: cm31_mul_i(value.c1),\n        },\n        2 => QM31 {\n            c0: cm31_mul_r(value.c1),\n            c1: value.c0,\n        },\n        3 => QM31 {\n            c0: cm31_mul_i(cm31_mul_r(value.c1)),\n            c1: cm31_mul_i(value.c0),\n        },\n        _ => panic!(\"state-only hiding tower coordinate out of range\"),\n    }\n}",
+      "expected_body": "fn mul_tower_basis(value:QM31,coordinate:usize)->QM31{match coordinate{0=>value,1=>QM31{c0:cm31_mul_i(value.c0),c1:cm31_mul_i(value.c1),},2=>QM31{c0:cm31_mul_r(value.c1),c1:value.c0,},3=>QM31{c0:cm31_mul_i(cm31_mul_r(value.c1)),c1:cm31_mul_i(value.c0),},_=>panic!(\"state-only hiding tower coordinate out of range\"),}}",
+      "law": "R1Z.PV_RDCD3_CB_MaskLeaves.tower; OwnedMaskLeaves.tower",
+      "statement_binding": "Four match arms and terminal panic preserved. Reachable column &3 bounds exclude panic; no all-coordinate success claim.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    },
+    {
+      "marker": "fn selected_mask_linears(",
+      "body": "fn selected_mask_linears(point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS]) -> (QM31, QM31) {\n    let mut suffix = QM31::ZERO;\n    let mut weighted = QM31::ZERO;\n    for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev() {\n        suffix = suffix.add(point[variable]);\n        if variable != 0 {\n            weighted = weighted.add(suffix);\n        }\n    }\n    (\n        suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),\n        suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))),\n    )\n}",
+      "expected_body": "fn selected_mask_linears(point:&[QM31;STATE_ONLY_HIDING_SUMCHECK_ROUNDS])->(QM31,QM31){let mut suffix=QM31::ZERO;let mut weighted=QM31::ZERO;for variable in (0..STATE_ONLY_HIDING_SUMCHECK_ROUNDS).rev(){suffix=suffix.add(point[variable]);if variable!=0{weighted=weighted.add(suffix);}}(suffix.mul_m31(M31(3)).add(weighted.mul_m31(M31(22))),suffix.mul_m31(M31(275)).add(weighted.mul_m31(M31(150))),)}",
+      "law": "R1Z.PV_RDCD3_CB_OwnedMaskLinearsEq.source; MaskLinearsFinite.source",
+      "statement_binding": "Zero states; reversed range; index read then suffix write; guarded weighted write; four scalar products and two ordered sums. The final pair is constructed left to right.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    },
+    {
+      "marker": "fn mask_power_26(",
+      "body": "fn mask_power_26(value: QM31) -> QM31 {\n    let x2 = value.square();\n    let x4 = x2.square();\n    let x8 = x4.square();\n    let x16 = x8.square();\n    x16.mul(x8).mul(x2)\n}",
+      "expected_body": "fn mask_power_26(value:QM31)->QM31{let x2=value.square();let x4=x2.square();let x8=x4.square();let x16=x8.square();x16.mul(x8).mul(x2)}",
+      "law": "R1Z.PV_RDCD3_CB_MaskLeaves.power",
+      "statement_binding": "Four squares, then x16*x8, then product*x2; no generic exponentiation substitute.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    },
+    {
+      "marker": "pub fn state_only_selected_mask_value(",
+      "body": "pub fn state_only_selected_mask_value(\n    c1: &[QM31; STATE_ONLY_HIDING_C1_COLUMNS],\n    mask_only_c1: &[QM31; STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],\n    explicit_g: QM31,\n    point: &[QM31; STATE_ONLY_HIDING_SUMCHECK_ROUNDS],\n) -> QM31 {\n    let (linear, explicit_linear) = selected_mask_linears(point);\n    let mut coefficients = [QM31::ZERO; STATE_ONLY_HIDING_FACTOR_DEGREE + 1];\n    for column in 0..STATE_ONLY_HIDING_C1_COLUMNS {\n        coefficients[usize::from(FACTOR_EXPONENTS[column])] =\n            mul_tower_basis(c1[column], column & 3);\n    }\n    for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS {\n        coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])] =\n            mul_tower_basis(mask_only_c1[column], column & 3);\n    }\n\n    let prepared_linear = PreparedQm31Multiplier::new(linear);\n    let mut shared = coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];\n    for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev() {\n        shared = prepared_linear.mul(shared).add(coefficients[exponent]);\n    }\n\n    shared.add(\n        QM31::ONE\n            .add(mask_power_26(explicit_linear))\n            .mul(explicit_g),\n    )\n}",
+      "expected_body": "pub fn state_only_selected_mask_value(c1:&[QM31;STATE_ONLY_HIDING_C1_COLUMNS],mask_only_c1:&[QM31;STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS],explicit_g:QM31,point:&[QM31;STATE_ONLY_HIDING_SUMCHECK_ROUNDS],)->QM31{let(linear,explicit_linear)=selected_mask_linears(point);let mut coefficients=[QM31::ZERO;STATE_ONLY_HIDING_FACTOR_DEGREE+1];for column in 0..STATE_ONLY_HIDING_C1_COLUMNS{coefficients[usize::from(FACTOR_EXPONENTS[column])]=mul_tower_basis(c1[column],column&3);}for column in 0..STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS{coefficients[usize::from(MASK_ONLY_FACTOR_EXPONENTS[column])]=mul_tower_basis(mask_only_c1[column],column&3);}let prepared_linear=PreparedQm31Multiplier::new(linear);let mut shared=coefficients[STATE_ONLY_HIDING_FACTOR_DEGREE];for exponent in (0..STATE_ONLY_HIDING_FACTOR_DEGREE).rev(){shared=prepared_linear.mul(shared).add(coefficients[exponent]);}shared.add(QM31::ONE.add(mask_power_26(explicit_linear)).mul(explicit_g),)}",
+      "law": "R1Z.PV_RDCD3_CB_MaskRootEq.reference; FillLoopsEq.c1/mask; OwnedMaskHornerEq.source",
+      "statement_binding": "Linears call; fixed 27-element zero array; both exact source-range fills retain every store; new prepared multiplier; top coefficient read; reverse range multiply then coefficient read and add; explicit power, one addition, multiplication, final shared addition. Index/RHS evaluation reorder in the owned reference is permitted only by proved bounds and pure total reads (FillCellEq.cell), never on arbitrary failing indices.",
+      "negative_control": "terminal panic replacement rejected, syntactic fail-closed control only"
+    }
+  ],
+  "constants": {
+    "STATE_ONLY_HIDING_C1_COLUMNS": "16",
+    "STATE_ONLY_HIDING_MASK_ONLY_C1_COLUMNS": "10",
+    "STATE_ONLY_HIDING_SUMCHECK_ROUNDS": "10",
+    "STATE_ONLY_HIDING_FACTOR_DEGREE": "26"
+  },
+  "scope": "Application bodies only; complete field and deployed-library bindings plus all successful proofs required before row credit",
+  "writeback": "Both array stores become Array.update, and every returned array is threaded through the next iteration. No mutable-borrow backward result discarded.",
+  "drop": "Concrete M31/CM31/QM31 and arrays are Copy with no user Drop; fixed stack data only. Primitive memory/layout/drop erasure remains V370.",
+  "composition": "Existing Aeneas/compiler semantic trust retained; no endpoint premise removal"
+}
