@@ -20,7 +20,7 @@ theorem length (a : Memory) (n : Nat) : (backwards a n).length=n := by
 
 /-- A direct array store is retained. It affects exactly one slot and leaves
 all lower, not-yet-divided words unchanged. -/
-theorem lower_unchanged (a : Memory) (n i v : Nat) (hi : n≤i) :
+theorem lower_unchanged (a : Memory) (n i v : Nat) (hi : n ≤ i) :
     backwards (store a i v) n=backwards a n := by
   induction n with
   | zero => rfl
