@@ -11,6 +11,12 @@ def next (x : S) : Result S := do
   AspisR1ProducerRelease47.field.wide_exact.WideExact.sub doubled
     AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
 
+attribute [local irreducible]
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.mul
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.add
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.sub
+  AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE
+
 theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S → E)
     (hone : inst.ONE=ok (f AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE))
     (hm : ∀ a b, inst.mul (f a) (f b)=mapResult f (AspisR1ProducerRelease47.field.wide_exact.WideExact.mul a b))
