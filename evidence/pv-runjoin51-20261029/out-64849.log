@@ -1,0 +1,63 @@
+START 64849 R1Z.PV_RunJoin_SemanticRequests51
+DONE 64849 R1Z.PV_RunJoin_SemanticRequests51 exit 1 wall 2.09 RSS 4458606592
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticRequests51.lean:14:9: error(lean.unknownIdentifier): Unknown identifier `row!`
+
+Note: It is not possible to treat `row!` as an implicitly bound variable here because the `autoImplicit` option is set to `false`.
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticRequests51.lean:14:34: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticRequests51.lean:18:12: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticRequests51.lean:18:90: error: unsolved goals
+inst✝ : ExternalTypes
+H : Type
+D : aspis_core.digest.Digest32 H
+t : host_wire.SemanticTranscript H
+row : U8
+framed : Slice U8
+⊢ (if (row != t.next_row) = true then ok (core.result.Result.Err (r1_wire.Error.RowOrder t.next_row row), t)
+    else do
+      let absorbed ←
+        D.digest t.hash
+            (Array.make 3#usize
+                [t.state.to_slice, (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 row] ⋯).to_slice, framed]
+                ⋯).to_slice
+      let block ←
+        D.digest t.hash
+            (Array.make 2#usize
+                [absorbed.to_slice, (Array.make 1#usize [1#u8] host_transcript.Transcript.queries._proof_1).to_slice]
+                ⋯).to_slice
+      let a ←
+        D.digest t.hash
+            (Array.make 2#usize
+                [absorbed.to_slice, (Array.make 1#usize [2#u8] host_transcript.Transcript.queries._proof_3).to_slice]
+                ⋯).to_slice
+      ok (core.result.Result.Ok block, { state := a, hash := t.hash, next_row := t.next_row.wrapping_add 1#u8 })) =
+    if sorry = t.next_row then ok (sorry, t)
+    else do
+      let absorbed ←
+        D.digest t.hash
+            (Array.make 3#usize
+                [t.state.to_slice, (Array.make 2#usize [0#u8, U8.wrapping_add 160#u8 row] ⋯).to_slice, framed]
+                ⋯).to_slice
+      let _ ←
+        D.digest t.hash (Array.make 2#usize [absorbed.to_slice, (Array.make 1#usize [1#u8] ⋯).to_slice] ⋯).to_slice
+      let advanced ←
+        D.digest t.hash (Array.make 2#usize [absorbed.to_slice, (Array.make 1#usize [2#u8] ⋯).to_slice] ⋯).to_slice
+      ok (sorry, { state := advanced, hash := t.hash, next_row := t.next_row.wrapping_add 1#u8 })
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticRequests51.lean:26:41: warning: This simp argument is unused:
+  List.append_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwOuterFrames.flatten, ̲request, ̲Array.to_slice, ̲Array.make, ̲List.flatMap_cons,
+      List.flatMap_nil, ̲List.append_nil, ̲List.map_append, ̲List.map_cons, ̲List.map_nil,
+      PV_RunJoin_TranscriptByteWords51.tag,̵L̵i̵s̵t̵.̵a̵p̵p̵e̵n̵d̵_̵a̵s̵s̵o̵c̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_SemanticRequests51.request' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticRequests51.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticRequests51.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+

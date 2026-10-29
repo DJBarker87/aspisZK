@@ -1,0 +1,42 @@
+START 64865 R1Z.PV_RunJoin_RoundCanonicalComplete51
+DONE 64865 R1Z.PV_RunJoin_RoundCanonicalComplete51 exit 1 wall 2.06 RSS 4453314560
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundCanonicalComplete51.lean:44:37: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  dite (i < 10) ?m.55 ?m.56
+in the target expression
+  ProverCommitSubfieldOps47.Canonical
+    (if h : i < ↑10#usize then PV_RunJoin_SemanticScalar50.raw (↑alpha)[i] else ProverCommitSubfieldOps47.zero)
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+H F : Type
+D : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+t next : host_wire.SemanticTranscript H
+out bytes : alloc.vec.Vec U8
+initial final : Q
+alpha : Std.Array Q 10#usize
+success :
+  host_sumcheck.prove_sumcheck D oi t out initial oracle = ok (core.result.Result.Ok (alpha, final), next, bytes)
+post : Prefix 10 alpha
+i : ℕ
+hi : i < 10
+⊢ ProverCommitSubfieldOps47.Canonical
+    (if h : i < ↑10#usize then PV_RunJoin_SemanticScalar50.raw (↑alpha)[i] else ProverCommitSubfieldOps47.zero)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (10 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_RoundCanonicalComplete51.rounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundCanonicalComplete51.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundCanonicalComplete51.produced' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

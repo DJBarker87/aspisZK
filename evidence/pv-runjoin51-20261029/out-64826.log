@@ -1,0 +1,27 @@
+START 64826 R1Z.PV_RunJoin_TranscriptReseed51
+DONE 64826 R1Z.PV_RunJoin_TranscriptReseed51 exit 1 wall 1.79 RSS 4453826560
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_TranscriptReseed51.lean:33:2: error: Tactic `decide` failed for proposition
+  List.map ProverCommitOwnerBytes42.byte ↑PV_RunJoin_TranscriptReseedSource51.domain = TranscriptR1.openDomain
+because its `Decidable` instance
+  instDecidableEqList (List.map ProverCommitOwnerBytes42.byte ↑PV_RunJoin_TranscriptReseedSource51.domain)
+    TranscriptR1.openDomain
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instance `instDecidableEqList`, reduction got stuck at the `Decidable` instance
+  match TranscriptR1.openDomain with
+  | [] => isFalse ⋯
+  | b :: bs =>
+    match decEq (ProverCommitOwnerBytes42.byte 85#u8) b with
+    | isTrue hab =>
+      match
+        (List.map ProverCommitOwnerBytes42.byte
+              [78#u8, 80#u8, 82#u8, 79#u8, 86#u8, 69#u8, 68#u8, 58#u8, 82#u8, 49#u8, 58#u8, 80#u8, 82#u8, 73#u8, 86#u8,
+                65#u8, 84#u8, 69#u8, 45#u8, 83#u8, 65#u8, 76#u8, 84#u8, 69#u8, 68#u8, 58#u8, 80#u8, 51#u8]).hasDecEq
+          bs with
+      | isTrue habs => isTrue ⋯
+      | isFalse nabs => isFalse ⋯
+    | isFalse nab => isFalse ⋯
+'R1Z.PV_RunJoin_TranscriptReseed51.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TranscriptReseed51.domain_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TranscriptReseed51.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

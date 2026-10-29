@@ -1,0 +1,66 @@
+START 64816 R1Z.PV_RunJoin_OriginalBlock51
+DONE 64816 R1Z.PV_RunJoin_OriginalBlock51 exit 1 wall 1.74 RSS 4454391808
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OriginalBlock51.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RunJoin_OriginalHash51.hash W x V c tab
+    (PV_RunJoin_TranscriptRequests51.message (block ((recP W x V c.1 c.2.1).tr (TRead.absO i))) 1#u8)
+in the target expression
+  (do
+      let b ←
+        PV_RunJoin_OriginalHash51.hash W x V c tab
+            (PV_RunJoin_TranscriptRequests51.message (block (c.1 (TRead.absO i))) 1#u8)
+      let advanced ←
+        PV_RunJoin_OriginalHash51.hash W x V c tab
+            (PV_RunJoin_TranscriptRequests51.message (block (c.1 (TRead.absO i))) 2#u8)
+      ok (b, { state := advanced, hash := PV_RunJoin_OriginalHash51.hash W x V c tab })) =
+    ok
+      (block (c.1 (TRead.sqO i)),
+        { state := block (c.1 (TRead.advO i)), hash := PV_RunJoin_OriginalHash51.hash W x V c tab })
+
+K CH Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+W : R1Wire K CH Aux
+x : Statement K CH
+V : View K CH Aux R1Bat
+c : R1Coins W.Cm W.Tab
+tab : W.Tab
+unique : (List.map Prod.fst (verLog W x V c)).Nodup
+i : Fin 4
+payload : Slice U8
+small : payload.length ≤ U32.max
+hp : List.map ProverCommitOwnerBytes42.byte ↑payload = (recP W x V c.1 c.2.1).rest.payload i
+ha :
+  PV_RunJoin_OriginalHash51.hash W x V c tab
+      (PV_RunJoin_TranscriptAbsorb51.request (block (fieldVal (fc (TRead.absO i)) (recP W x V c.1 c.2.1))) (row i)
+        payload) =
+    ok (block (c.1 (TRead.absO i)))
+⊢ (do
+      let b ←
+        PV_RunJoin_OriginalHash51.hash W x V c tab
+            (PV_RunJoin_TranscriptRequests51.message (block (c.1 (TRead.absO i))) 1#u8)
+      let advanced ←
+        PV_RunJoin_OriginalHash51.hash W x V c tab
+            (PV_RunJoin_TranscriptRequests51.message (block (c.1 (TRead.absO i))) 2#u8)
+      ok (b, { state := advanced, hash := PV_RunJoin_OriginalHash51.hash W x V c tab })) =
+    ok
+      (block (c.1 (TRead.sqO i)),
+        { state := block (c.1 (TRead.advO i)), hash := PV_RunJoin_OriginalHash51.hash W x V c tab })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_OriginalBlock51.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

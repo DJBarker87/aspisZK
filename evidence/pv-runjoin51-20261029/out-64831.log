@@ -1,0 +1,46 @@
+START 64831 R1Z.PV_RunJoin_ByteArrayList51
+DONE 64831 R1Z.PV_RunJoin_ByteArrayList51 exit 1 wall 1.77 RSS 4457828352
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ByteArrayList51.lean:17:38: error: unexpected token ':='; expected term
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ByteArrayList51.lean:12:50: error: unsolved goals
+bs : ByteArray
+i : ℕ
+acc : List UInt8
+hi : i < bs.size
+ih :
+  ByteArray.toList.loop bs (i + 1) (bs.get! i :: acc) = (bs.get! i :: acc).reverse ++ List.drop (i + 1) bs.data.toList
+hlen : i < bs.data.toList.length
+⊢ bs.data[i] = bs.data[i]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ByteArrayList51.lean:15:11: error: Function expected at
+  List.cons_getElem_drop_succ
+but this term has type
+  bs.data.toList[?m.71] :: List.drop (?m.71 + 1) bs.data.toList = List.drop ?m.71 bs.data.toList
+
+Note: Expected a function because this term is being applied to the argument
+  hlen
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ByteArrayList51.lean:17:15: error: Application type mismatch: The argument
+  bs.data.toList.length
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.31
+of sort `Type (?u.31 + 1)` in the application
+  @InitialSeg bs.data.toList.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_ByteArrayList51.lean:16:19: error: unsolved goals
+case len
+bs : ByteArray
+i : ℕ
+acc : List UInt8
+hi : ¬i < bs.size
+⊢ InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+
+case case2
+bs : ByteArray
+i : ℕ
+acc : List UInt8
+hi : ¬i < bs.size
+len : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+⊢ acc.reverse = acc.reverse ++ List.drop i bs.data.toList
+'R1Z.PV_RunJoin_ByteArrayList51.loop' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RunJoin_ByteArrayList51.complete' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RunJoin_ByteArrayList51.of_list' depends on axioms: [propext, sorryAx, Quot.sound]
+

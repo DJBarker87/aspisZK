@@ -1,0 +1,48 @@
+START 64819 R1Z.PV_RunJoin_OriginalScalar51
+DONE 64819 R1Z.PV_RunJoin_OriginalScalar51 exit 1 wall 1.74 RSS 4459274240
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OriginalScalar51.lean:35:100: error: unsolved goals
+K CH Aux : Type
+inst✝³ : Field K
+inst✝² : Fintype K
+inst✝¹ : DecidableEq K
+inst✝ : Algebra (ZMod AspisCircleGroupOrder.P) K
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+W : R1Wire K CH Aux
+x : Statement K CH
+V : View K CH Aux R1Bat
+c : R1Coins W.Cm W.Tab
+tab : W.Tab
+unique : (List.map Prod.fst (verLog W x V c)).Nodup
+i : Fin 4
+payload : Slice U8
+small : payload.length ≤ U32.max
+hp : List.map ProverCommitOwnerBytes42.byte ↑payload = (recP W x V c.1 c.2.1).rest.payload i
+⊢ (let (block, next) :=
+      (block (c.1 (TRead.sqO i)),
+        { state := block (c.1 (TRead.advO i)), hash := PV_RunJoin_OriginalHash51.hash W x V c tab })
+    do
+    trace.value 4#u16 (UScalar.cast UScalarTy.Usize (row i))
+        (ProverRwDictionaryTower.fromW
+          (source (PV_RunJoin_SamplerValue49.value base heap box ops block (PV_RunJoin_SamplerValueModel50.nonzero i))))
+    ok (PhaseSamplerParserBin.openingScalar i (PV_RunJoin_OpeningBlock50.answer block), next)) =
+    do
+    trace.value 4#u16 (UScalar.cast UScalarTy.Usize (row i))
+        (ProverRwDictionaryTower.fromW
+          (source
+            (PV_RunJoin_SamplerValue49.value base heap box ops (block (c.1 (TRead.sqO i)))
+              (PV_RunJoin_SamplerValueModel50.nonzero i))))
+    ok
+        (PhaseSamplerParserBin.openingScalar i (c.1 (TRead.sqO i)),
+          { state := block (c.1 (TRead.advO i)), hash := PV_RunJoin_OriginalHash51.hash W x V c tab })
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_OriginalScalar51.lean:40:29: warning: This simp argument is unused:
+  PV_RunJoin_OpeningBlockEquiv50.inverse
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵l̵i̵f̵t̵,̵P̵V̵_̵R̵u̵n̵J̵o̵i̵n̵_̵O̵p̵e̵n̵i̵n̵g̵B̵l̵o̵c̵k̵E̵q̵u̵i̵v̵5̵0̵.̵i̵n̵v̵e̵r̵s̵e̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_OriginalScalar51.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
