@@ -25,7 +25,6 @@ def produce
     prover.MaskedFixtureAudit) verifier.Error) ×
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   := do
-  let _ ← observe .callback 0 (ok ())
   let r ← PV_L1D_Logged.lift (aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.public_bytes
       public1)
   let r1 ← PV_L1D_Logged.lift (core.result.Result.map_err

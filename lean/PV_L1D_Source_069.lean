@@ -31,7 +31,6 @@ def produce
   Logged ((core.result.Result ((alloc.vec.Vec Std.U8) ×
     prover.MaskedFixtureAudit) verifier.Error) × T0)
   := do
-  let _ ← observe .callback 0 (ok ())
   let (r, nonce_store1) ← PV_L1D_Logged.lift (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1
       aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst attempt hash
       binding context nonce_store)
