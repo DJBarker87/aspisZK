@@ -54,9 +54,7 @@ def rowEquiv (w t : Nat) : (Fin (2^w) × Fin (2^t)) ≃ Fin (2^(w+t)) :=
 theorem sum_join {K : Type} [AddCommMonoid K] (w t : Nat)
  (f : Fin (2^(w+t)) → K) :
  (∑ r, f r) = ∑ a : Fin (2^w), ∑ b : Fin (2^t), f (join w t (a,b)) := by
- rw [← Equiv.sum_comp (rowEquiv w t) f]
- simp only [Fintype.sum_prod_type]
- rfl
+ simpa only [Fintype.sum_prod_type] using (Equiv.sum_comp (rowEquiv w t) f).symm
 
 /-- Dense evaluation in split coordinates, using every row of the integer
 cube. The scanner's List-to-product and suffix-code identities are separate. -/
@@ -78,7 +76,7 @@ theorem dense_sparse {K : Type} [Field K] (w t : Nat) (p : Fin w → K)
   if b=suffix then 1 else 0 := by
   rw [boolean_weight]
   by_cases h : b=suffix
-  · subst b; rw [if_pos rfl,if_pos rfl]
+  · subst b; simp only [if_pos rfl]
   · rw [if_neg (fun he => h (tail_injective t he)),if_neg h]
  unfold denseSplit
  rw [sum_join]
