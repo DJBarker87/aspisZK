@@ -39,7 +39,14 @@ ad=json.load(open(out/'admission-before-upload.json'))
 with (out/'admission-history.jsonl').open('a') as hist:hist.write(json.dumps(dict(exit=a.returncode,admission=ad,stage='before-source-upload'))+'\n')
 if a.returncode!=0 or ad.get('allowed') is not True:
  print('UNCHARGED pre-upload admission refusal; no source transport or compiler launched',flush=True)
- sys.exit(78 if not ad.get('error') else 79)
+ if ad.get('error'):
+  race=bool(re.search(r'\[Errno (?:2|19)\]',ad['error']));consecutive=0
+  for line in reversed((out/'admission-history.jsonl').read_text().splitlines()):
+   error=json.loads(line).get('admission',{}).get('error','')
+   if re.search(r'\[Errno (?:2|19)\]',error):consecutive+=1
+   else:break
+  sys.exit(79 if race and consecutive<4 else 70)
+ sys.exit(78)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
 # Capture actual private dependency objects before submission. Earlier receipts
 # retain their original fields; final closure verification is separately labelled.
