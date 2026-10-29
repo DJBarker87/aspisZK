@@ -175,6 +175,24 @@ def extend(baseline,edges):
       require(ext['line']==o['call']['line'] and ext['caller_body_sha256']==row['frozen_body_sha256'],'wrong source conversion occurrence')
       require(ext['native_review']==rc['native_review'],'scalar conversion has no same-body field review')
       o.update(status='CLOSED',discharged_by=rc['id']+':lossless-u32-u64')
+     elif ext['kind']=='LOSSLESS_PRIVATE_MODULUS_CAST':
+      require(row['function']=='crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce','constant conversion belongs to wrong helper')
+      require(o['call'].get('expression',o['call'].get('syntax'))==ext['syntax']=='u64::from','wrong constant conversion')
+      require(ext['source_value']==2147483647,'wrong private modulus value')
+      require(ext['line']==o['call']['line'] and ext['line'] in [11,12,13] and ext['caller_body_sha256']==row['frozen_body_sha256'],'wrong source constant occurrence')
+      require(ext['native_review']==rc['native_review'],'constant conversion has no same-body native review')
+      require('NEB_PrivateReducer.constant_cast' in ext['theorems'],'missing exact constant widening theorem')
+      o.update(status='CLOSED',discharged_by=rc['id']+':lossless-private-modulus')
+     elif ext['kind']=='RELEASE_PROVER_INACTIVE':
+      require(row['function']=='crates/aspis-r1-cost-probe/src/trace.rs::value','prover cfg belongs to wrong member')
+      require(o['call']['resolution']=='disabled release cfg' and o['call']['cfg']==ext['cfg']==['#[cfg(feature="prover")]'],'not original prover-only cfg')
+      require(ext['syntax']==o['call']['syntax'] and ext['syntax'] in ['VALUES.with','v.borrow_mut().push','v.borrow_mut','x.to_le_bytes'],'wrong erased trace operation')
+      require(ext['line']==o['call']['line']==8 and ext['caller_body_sha256']==row['frozen_body_sha256'],'wrong erased source occurrence')
+      require(ext['native_review']==rc['native_review'],'erased trace has no same-body feature review')
+      features=ext['selected_library_features']
+      require('prover' not in features and all(f in features for f in ['default','private-leaf-salts','optimized-terminal','program-build']),'trace is not erased under deployed features')
+      require(ext['theorems']==['NEB_TraceFrame.result'],'missing exact trace Result/frame')
+      o.update(status='CLOSED',discharged_by=rc['id']+':deployed-prover-inactive')
      else:require(False,'unregistered external obligation kind')
  # Admit rows bottom-up along actual obligations. Resolved-away alternatives
  # remain CLOSED obligations but are not active call dependencies. No real SCC

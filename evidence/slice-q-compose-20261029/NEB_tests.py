@@ -22,7 +22,7 @@ def affected_open(change):
  assert all(x==['OPEN'] for x in delta['roots'].values())
 test('unchanged original NDT invariants',lambda:v.ndt.validate_invariants(base))
 out,delta=v.extend(base,edges)
-assert delta['closed_count']==62 and delta['edge_closed']==107
+assert delta['closed_count']==66 and delta['edge_closed']==107
 results.append(dict(test='registered reducer and additive certificates close 60 occurrence rows bottom-up',result='PASS'))
 test('missing certificate keeps both actual callers OPEN',lambda:affected_open(lambda e:e.update(certificate=None)))
 test('wrong edge identity keeps actual callers OPEN',lambda:affected_open(lambda e:e['certificate'].update(edge=TARGET+' wrong')))
@@ -131,5 +131,19 @@ def square_open(change):
 test('missing raw square cell domain blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and e['selected_target']).update(certificate=None)))
 test('wrong square trace-frame role blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and e['selected_target'])['certificate']['parts']['native_callsite_association'].update(theorems=['NEB_SquareComposition.cell'])))
 test('omitted scalar-loop conservative alternative blocks loop closure',lambda:square_open(lambda m:next(e for e in m['edges'] if e['caller']==SQUARE and not e['selected_target']).update(certificate=None)))
+PRIVATE='crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce'
+TRACE='crates/aspis-r1-cost-probe/src/trace.rs::value'
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==PRIVATE);next(iter(r['external_obligations'].values()))['source_value']+=1
+test('wrong private modulus cast rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==PRIVATE);r['external_obligations'].pop(next(iter(r['external_obligations'])))
+test('missing original scalar constant occurrence rejects promotion',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==TRACE and r['external_obligations']);next(iter(r['external_obligations'].values()))['selected_library_features'].append('prover')
+test('enabled prover trace cannot promote empty ordered effects',lambda:reject(lambda:v.extend(base,bad)))
+bad=copy.deepcopy(edges);r=next(r for r in bad['row_certificates'] if r['function']==TRACE and r['external_obligations']);next(iter(r['external_obligations'].values()))['cfg']=[]
+test('missing original trace cfg cannot be replaced by feature assertion',lambda:reject(lambda:v.extend(base,bad)))
+def missing_trace_root():
+ m=copy.deepcopy(edges);m['row_certificates']=[r for r in m['row_certificates'] if r['function']!=TRACE];o,_=v.extend(base,m)
+ assert all(r['composed_status']=='OPEN' for r in o['rows'] if r['function']==TRACE)
+test('native no-op reachability alone cannot close without Result-frame root theorem',missing_trace_root)
 assert base==v.obj(v.N/'NDT_LEDGER.json');results.append(dict(test='authoritative ledger unchanged',result='PASS'))
 print(json.dumps(dict(results=results,tests=len(results),composed_closed=delta['closed_count'],slice_roots_closed=0,synthetic_evidence_credit=0),indent=1))

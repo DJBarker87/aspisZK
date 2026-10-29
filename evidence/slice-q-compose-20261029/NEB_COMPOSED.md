@@ -1458,3 +1458,237 @@ end NEB_GeometryAccessor
 
 - `'NEB_GeometryAccessor.result' depends on axioms: [propext, Classical.choice, Quot.sound]`.
 - `'NEB_GeometryAccessor.caller' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+## Requested root statements and explicit missing bridge obligations
+
+No theorem for either complete frozen native root is claimed. In particular, none is obtained by assuming the entire native-to-model conclusion, a new generic execution evaluator, or a structure hiding open callee interpretations. The desired statements quantify the following exact native signatures:
+
+```rust
+query_loop(proof: &[u8], p: &Prepared, a: Accumulator,
+           g: &[E; 29], obs: Observer, geometry: &QueryGeometry,
+           pending: BatchedWeights, end: usize)
+    -> Result<(Accumulator, BatchedWeights), Error>
+QueryGeometry::for_range(queries: &[u32;22], start: usize, end: usize)
+    -> Result<QueryGeometry, Error>
+```
+
+For each, the required full statement is equality of the same frozen native execution's Result (including every rejection), returned carrier/state, preserved state and ordered effects with the corresponding coherent cohort call: `verifier.candidate.query_loop ops proof p a g obs geometry pending end`, respectively `Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install ops) queries start end`. Only that root's own PacketDomain and PhysicalInterpretation, approved RuntimeSha256Value/RuntimePersistence where reached and scoped NativeContractSemanticTransport may qualify a CLOSED statement. The root PacketDomain is not silently strengthened to a fixture, None observer, supplied successful output, assumed query-loop trace or assumed geometry inverse vector.
+
+Explicit missing native bridge obligations are `NEB_QueryValuesNative` and `NEB_QueryLoopNativeControl` plus quarantined `NEB_ObserverNativeFidelity` for query_loop; and `NEB_GeometryIndexPortNative`, `NEB_GeometryGatherNativeWindow`, `NEB_BatchPrefixNativeStep`, `NEB_GeometryBackwardNativeStep`, `NEB_GeometryCollectNative` for for_range. These names label OPEN obligations, not declarations, axioms or hidden hypotheses in an alleged CLOSED theorem. Assuming lower leaf bridges would still leave the actual native root/loop and ordered-effect association unproved. No conditional theorem pretending those root facts are a leaf hypothesis is emitted.
+
+The actual checked geometry theorems discharge inner canonical primitives for the real R17 dictionary, exact accepted index/alignment and model call arguments, full accepted nonempty inverse/grouping coordinates and accessor domains. Accepted model success is visibly a premise of those partial model theorems; it is not promoted to a native whole-root Result. The inverse's zero-panic transport, borrowed-row contract shape and source-allocator/loop association remain explicit. See NEB_REMAINING.md for every member, and NEB_EDGES.json for each original edge's exact certificate or obstacle.
+
+## Independent scalar and erased trace leaves
+
+The total is 66 CLOSED occurrence rows (33 functions), 107/257 internal edges certified, eleven conservative original self-edges separately certified. Both requested roots remain OPEN. The private scalar reducer uses only all-U64 input and exact lossless modulus casts; it does not close copied private-Q/dot carriers. The deployed trace leaf ignores all typed inputs and has an empty ordered effect sequence; it does not close observer/mark or caller operand evaluation. The native trace receipt is reachability/termination with zero assertions, NOT an output-equivalence assertion. Exact source cfg erasure and the actual selected emitted no-op, under adopted transport, supply its value/frame law. Full statements and axioms follow.
+
+```lean
+import LPf_ReductionWord
+import NEB_ReducerCall
+import NEB_CMCarrier
+import NEB_PureFrame
+set_option autoImplicit false
+namespace NEB_PrivateReducer
+open Aeneas Aeneas.Std Result AspisR1
+
+/-- No fixture or private-Q canonicality hypothesis is needed: this scalar
+helper consumes every U64 independently of the enclosing dot history. -/
+theorem reference (x : U64) :
+    FIo_Native.fast_pairing.canonical.reduce x=NEB_Reference.reference x := by
+  obtain ⟨a,ha,va,ca⟩ := LPf_ReductionWord.native_reduce x
+  obtain ⟨b,hb,_,vb,cb⟩ := NEB_ReducerCall.value x
+  have same : a=b := UScalar.eq_of_val_eq (va.trans vb.symm)
+  rw [ha,hb,same]
+
+theorem frame {S Event : Type} (state : S) (x : U64) : ∃ z : U32,
+    FIo_Native.fast_pairing.canonical.reduce x=ok z ∧
+    NEB_Reference.reference x=ok z ∧
+    z.val=x.val%2147483647 ∧ z.val<2147483647 ∧
+    NEB_PureFrame.run (Event:=Event) state
+      (FIo_Native.fast_pairing.canonical.reduce x)=ok (z,state,[]) := by
+  obtain ⟨z,hz,vz,cz⟩ := LPf_ReductionWord.native_reduce x
+  exact ⟨z,hz,by rw [← reference];exact hz,vz,cz,by rw [hz];rfl⟩
+
+/-- Each of the four frozen source u64::from(P) occurrences is this same
+lossless scalar conversion; the source carries no private-Q input. -/
+theorem constant_cast :
+    (UScalar.cast .U64 (2147483647#u32)).val=2147483647 := by
+  simpa using NEB_CMCarrier.lossless (2147483647#u32)
+
+#print axioms reference
+#print axioms frame
+#print axioms constant_cast
+end NEB_PrivateReducer
+
+```
+
+- `'NEB_PrivateReducer.reference' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_PrivateReducer.frame' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_PrivateReducer.constant_cast' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+```lean
+import CurrentClaimSumModel
+import NEB_PureFrame
+set_option autoImplicit false
+namespace NEB_TraceFrame
+open Aeneas Aeneas.Std Result
+
+/-- All typed tags/indices and every raw eight-limb carrier are allowed.
+The adopted deployed trace body ignores every argument; no observer premise. -/
+theorem result {S Event : Type} (state : S) (tag : U16) (index : Usize)
+    (x : AspisR1CurrentPreparedClaim.aspis_core.field.WideExact) :
+    AspisR1CurrentPreparedClaim.trace.value tag index x=ok () ∧
+    NEB_PureFrame.run (Event:=Event) state
+      (AspisR1CurrentPreparedClaim.trace.value tag index x)=ok ((),state,[]) := by
+  exact ⟨rfl,rfl⟩
+
+#print axioms result
+end NEB_TraceFrame
+
+```
+
+- `'NEB_TraceFrame.result' does not depend on any axioms`.
+
+## Remaining model-only call-domain completion
+
+L077 covers complete actual installed model rejection Results and frames for invalid start/end and the empty terminal body, which reaches no prefix/inverse/field port. L078 uses the SAME accepted query Observation to derive square/double/subtract domains and node canonicality; it assumes no independent child return or canonical raw geometry z. Neither is a new native root bridge. Full statements and axioms:
+
+```lean
+import NEB_ActualGeometryModel
+import NEB_PureFrame
+set_option autoImplicit false
+noncomputable section
+namespace NEB_GeometryBoundary
+open Aeneas Aeneas.Std Result ControlFlow AspisR1 AspisR1Stage2
+open Port3_NativeGeometryBody
+
+theorem invalid_start {S Event CoreError : Type} (state : S) (ops : Ops CoreError)
+    (error : CoreError) (queries : Array U32 22#usize) (start stop : Usize)
+    (bad : stop.val<start.val) :
+    NEB_PureFrame.run (Event:=Event) state
+      (Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install
+        (NEB_ActualGeometryModel.install ops error)) queries start stop)=
+      ok (.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Query,state,[]) := by
+  rw [Port3_GeometryStage.invalid_start _ _ _ _ bad]
+  rfl
+
+theorem invalid_end {S Event CoreError : Type} (state : S) (ops : Ops CoreError)
+    (error : CoreError) (queries : Array U32 22#usize) (start stop : Usize)
+    (bad : 22<stop.val) :
+    NEB_PureFrame.run (Event:=Event) state
+      (Port3_GeometryStage.geometry (Port5Q1_GeometryTerminal.install
+        (NEB_ActualGeometryModel.install ops error)) queries start stop)=
+      ok (.Err AdapterRw.aspis_r1_cost_probe.verifier.Error.Query,state,[]) := by
+  rw [Port3_GeometryStage.invalid_end _ _ _ _ bad]
+  rfl
+
+/-- Empty terminal state reaches no prefix, inverse or field port. Its entire
+Result is fixed by the actual terminal body, not by a callee-success premise. -/
+theorem empty_terminal {CoreError : Type} (ops : Ops CoreError) (error : CoreError)
+    (start : Usize) (iter : core.slice.iter.Iter U32) (zs : alloc.vec.Vec U32)
+    (ending : iter.slice.val.length≤ iter.i) :
+    verifier.QueryGeometry.for_range_loop0.body
+      (Port5Q1_GeometryTerminal.install (NEB_ActualGeometryModel.install ops error))
+      start iter zs (alloc.vec.Vec.new U32)=
+      ok (done (.Ok {start,inverses:=alloc.vec.Vec.new _,line_z:=zs})) := by
+  have next : core.slice.iter.IteratorSliceIter.next iter=ok (none,iter) := by
+    unfold core.slice.iter.IteratorSliceIter.next
+    split
+    · rename_i active
+      change iter.i< iter.slice.val.length at active
+      omega
+    · rfl
+  have empty : (Port5Q1_GeometryTerminal.install
+      (NEB_ActualGeometryModel.install ops error)).op4 Global (alloc.vec.Vec.new U32)=ok true := rfl
+  unfold verifier.QueryGeometry.for_range_loop0.body
+  rw [next,bind_tc_ok,empty,bind_tc_ok]
+  rfl
+
+#print axioms invalid_start
+#print axioms invalid_end
+#print axioms empty_terminal
+end NEB_GeometryBoundary
+end
+
+```
+
+- `'NEB_GeometryBoundary.invalid_start' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_GeometryBoundary.invalid_end' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_GeometryBoundary.empty_terminal' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+```lean
+import Port4C_QueryValues
+import NEB_GeometryFieldPorts
+set_option autoImplicit false
+noncomputable section
+namespace NEB_QueryNodeDomains
+open Aeneas Aeneas.Std Result AspisR1 AspisR1Stage2
+open Port3_NativeQueryBody
+
+def install (ops : Ops) : Ops :=
+  {ops with
+    op7 := AspisR1Qm31ArithmeticProbe.field.M31.mul
+    op8 := AspisR1Qm31ArithmeticProbe.field.M31.double
+    op5 := ok 1#u32
+    op6 := AspisR1Qm31ArithmeticProbe.field.M31.sub}
+
+/-- The square's selected domain is all raw words. The exact same returned
+square establishes double's canonical domain, and that reply plus ONE
+establish subtract's domain. No canonicality of the raw geometry z or child
+success is an independent caller premise. -/
+theorem reached (ops : Ops) (proof : Slice U8) (p : verifier.Prepared)
+    (a out : verifier.Accumulator)
+    (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
+    (obs : Option (verifier.Phase → Result Unit)) (geometry : verifier.QueryGeometry)
+    (b bout : verifier.BatchedWeights)
+    (o : Port4C_QueryValues.Observation (install ops) proof p a out g obs geometry b bout) :
+    AspisR1Qm31ArithmeticProbe.field.M31.mul o.z o.z=ok o.square ∧
+    o.square.val<2147483647 ∧
+    AspisR1Qm31ArithmeticProbe.field.M31.double o.square=ok o.doubled ∧
+    o.doubled.val<2147483647 ∧ o.one=1#u32 ∧
+    AspisR1Qm31ArithmeticProbe.field.M31.sub o.doubled o.one=ok o.node ∧
+    o.node.val<2147483647 := by
+  have square : AspisR1Qm31ArithmeticProbe.field.M31.mul o.z o.z=ok o.square := o.square_call
+  obtain ⟨s,hs,_,cs⟩ := ExtractedCurrentReducer.current_mul_mod o.z o.z
+  have sameS : s=o.square := Result.ok.inj (hs.symm.trans square)
+  have cSquare : o.square.val<2147483647 := sameS ▸ cs
+  have doubled : AspisR1Qm31ArithmeticProbe.field.M31.double o.square=ok o.doubled := o.double_call
+  obtain ⟨d,hd,_,cd⟩ := ExtractedCurrentM31AddSub.current_add_mod o.square o.square cSquare cSquare
+  have actualD : AspisR1Qm31ArithmeticProbe.field.M31.double o.square=ok d := by
+    simpa only [AspisR1Qm31ArithmeticProbe.field.M31.double] using hd
+  have sameD : d=o.doubled := Result.ok.inj (actualD.symm.trans doubled)
+  have cDouble : o.doubled.val<2147483647 := sameD ▸ cd
+  have one : o.one=1#u32 := Result.ok.inj o.one_call |>.symm
+  have cOne : o.one.val<2147483647 := by rw [one];decide
+  have sub : AspisR1Qm31ArithmeticProbe.field.M31.sub o.doubled o.one=ok o.node := o.node_call
+  obtain ⟨n,hn,_,cn⟩ := ExtractedCurrentM31AddSub.current_sub_mod o.doubled o.one cDouble cOne
+  have sameN : n=o.node := Result.ok.inj (hn.symm.trans sub)
+  exact ⟨square,cSquare,doubled,cDouble,one,sub,sameN ▸ cn⟩
+
+/-- The witness comes from the SAME parent query Result; no new child run is
+selected. Observer native fidelity remains an explicitly open obligation. -/
+theorem accepted (ops : Ops) (proof : Slice U8) (p : verifier.Prepared)
+    (a out : verifier.Accumulator)
+    (g : Array aspis_core.field.wide_exact.WideExact 29#usize)
+    (obs : Option (verifier.Phase → Result Unit)) (geometry : verifier.QueryGeometry)
+    (b bout : verifier.BatchedWeights)
+    (run : verifier.candidate.query_values (install ops) proof p a g obs geometry b=ok (.Ok (out,bout))) :
+    ∃ o : Port4C_QueryValues.Observation (install ops) proof p a out g obs geometry b bout,
+      o.square.val<2147483647 ∧ o.doubled.val<2147483647 ∧ o.node.val<2147483647 := by
+  obtain ⟨o⟩ := Port4C_QueryValues.observed _ proof p a out g obs geometry b bout run
+  have h := reached ops proof p a out g obs geometry b bout o
+  exact ⟨o,h.2.1,h.2.2.2.1,h.2.2.2.2.2.2⟩
+
+#print axioms reached
+#print axioms accepted
+end NEB_QueryNodeDomains
+end
+
+```
+
+- `'NEB_QueryNodeDomains.reached' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+- `'NEB_QueryNodeDomains.accepted' depends on axioms: [propext, Classical.choice, Quot.sound]`.
+
+## Final focused axioms audit
+
+NEB_Audit.lean co-imports52 current accepted modules and prints173 theorem axiom sets. L079 exit0; wall 2.136973805958405s; peak RSS 5051724KiB; swap 0; source revision 42f959f9da20cc0507e19184b5c9923e1c1889fe with exact dirty-source hashes retained. Every printed set is a subset of propext/Classical.choice/Quot.sound, or none. Failed drafts and prelaunch L070 are excluded. This is a focused new-module audit, not a full frozen release replay.
