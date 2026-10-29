@@ -1,6 +1,6 @@
 import PV_B3P_FrontierBase14227
 namespace PV_B3P_FrontierStages14227
-open Aeneas Aeneas.Std PV_B3P_Missing14Frontier
+open Aeneas Aeneas.Std PV_B3P_Missing14Frontier Result
 set_option autoImplicit false
 def suffix19_14 (fields : FF14) (out : alloc.vec.Vec U8) (values : FV14) : Result FS14 := do
   let a19 ←

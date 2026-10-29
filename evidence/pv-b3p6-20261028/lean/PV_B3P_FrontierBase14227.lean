@@ -1,6 +1,6 @@
 import PV_B3P_Frontier14Port
 namespace PV_B3P_FrontierStages14227
-open Aeneas Aeneas.Std PV_B3P_Missing14Frontier
+open Aeneas Aeneas.Std PV_B3P_Missing14Frontier Result
 set_option autoImplicit false
 abbrev FF14 := alloc.vec.Vec U8 → Slice U32 → Result ((core.result.Result Unit aspis_core.state_only_prefix.r0.Error) × alloc.vec.Vec U8)
 abbrev FV14 := Array (Array U32 8#usize) 20#usize
