@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:25:9: error: unsolved goals
+case zero
+S : Type
+f : S → ℕ → Result S
+r : Range
+acc : S
+bound : ↑r.end = ↑r.start + 0
+h : ¬↑r.start < ↑r.end
+⊢ (match
+      let (o, r) := (none, r)
+      match o with
+      | none => ok (done acc)
+      | some i => do
+        let acc ← f acc ↑i
+        ok (cont (r, acc)) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok acc
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:43:6: error: Type mismatch: After simplification, term
+  ih next out hb
+ has type
+  loop (body f) ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, out) =
+    PV_RDCD3_RangeFold.ordered f fuel (↑r.start + 1) out
+but is expected to have type
+  (match do
+      let acc ← f acc ↑r.start
+      ok (cont ({ start := UScalar.ofNatCore (↑r.start + 1) ⋯, «end» := r.end }, acc)) with
+    | ok r =>
+      match r with
+      | cont x => loop (body f) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    PV_RDCD3_RangeFold.ordered f fuel (↑r.start + 1) out
+/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/lean-sources/R1Z/PV_RDCD3_UsizeLoop.lean:37:17: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵f̵,̵bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD3_UsizeLoop.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

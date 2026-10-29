@@ -67,3 +67,9 @@ if and tuple-pattern reductions remained unsimplified; exit1, wall1.20s,
 peak2,630,524KiB, swap0. Failed theorem output containing sorryAx receives no
 credit. The changed proof instantiates dif_pos/dif_neg with its exact guard
 instead of simplifying the guard proposition itself; next fresh ID60639.
+
+60639 also failed, now only on tuple-pattern let reduction and the residual
+callback bind (not the successor bound): exit1, wall1.20s, peak2,633,516KiB,
+swap0. The next changed proof explicitly reduces the tuple let before splitting
+callback outcomes and closes the zero case definitionally. No failed object is
+consumed and no sorryAx output is credited.
