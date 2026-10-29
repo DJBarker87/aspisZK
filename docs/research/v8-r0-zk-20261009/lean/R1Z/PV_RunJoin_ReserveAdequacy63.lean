@@ -27,7 +27,7 @@ theorem growth {T S F : Type} (runtime : Runtime S F) (world : World S F)
     (execute runtime world v n).returned=.ok () := by
   unfold execute native
   split
-  · simp only [growExact,width,Nat.not_lt.mpr words,Nat.not_lt.mpr bytes,ite_false]
+  · simp only [growExact,PV_FXM_ReserveSelected.buffer,width,Nat.not_lt.mpr words,Nat.not_lt.mpr bytes,ite_false]
     exact (success_capacity runtime.step (runtime.shape T)
       (PV_FXM_ReserveSelected.buffer v (runtime.metadata world v)) n.val world address next allocation).1
   · rfl
