@@ -31,11 +31,11 @@ theorem next_pair {E : Type} (a b : E) (tail rem : List E) :
 
 theorem next_empty {E : Type} (rem : List E) :
     next (⟨[],rem⟩ : State E) = (none,⟨[],rem⟩) := by
-  simp only [next, List.length_nil, show ¬2 ≤ 0 by omega, if_neg]
+  simp only [next, List.length_nil, show ¬2 ≤ 0 by omega, if_false]
 
 theorem next_single {E : Type} (a : E) (rem : List E) :
     next (⟨[a],rem⟩ : State E) = (none,⟨[a],rem⟩) := by
-  simp only [next, List.length_cons, List.length_nil, show ¬2 ≤ 0+1 by omega, if_neg]
+  simp only [next, List.length_cons, List.length_nil, show ¬2 ≤ 0+1 by omega, if_false]
 
 theorem message_new {E : Type} (xs : List E) (h : xs.length = 1024) :
     new xs = ⟨xs,[]⟩ := by

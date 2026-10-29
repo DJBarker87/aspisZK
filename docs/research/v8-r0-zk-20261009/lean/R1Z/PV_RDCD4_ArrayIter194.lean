@@ -27,7 +27,7 @@ theorem new_valid {E : Type} (xs : List E) : valid (new xs) := by
 
 theorem next_done {E : Type} (s : State E) (h : s.start = s.stop) :
     next s = (none,s) := by
-  simp only [next,h,Nat.sub_self, Nat.lt_irrefl,if_neg]
+  simp only [next,h,Nat.sub_self, Nat.lt_irrefl,if_false]
 
 theorem next_active {E : Type} (s : State E) (h : valid s)
     (active : s.start < s.stop) :
