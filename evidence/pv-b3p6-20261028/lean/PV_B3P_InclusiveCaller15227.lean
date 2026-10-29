@@ -53,6 +53,6 @@ theorem inclusive_caller_fold15 {α : Type} (step : α → Usize → Result α)
       | fail error => rfl
       | div => rfl
       | ok next =>
-        simpa only [bind_tc_ok] using ih (Usize.wrapping_add first 1#usize) next rest
+        simpa only [inclusive_caller_loop15,bind_tc_ok] using ih (Usize.wrapping_add first 1#usize) next rest
 #print axioms inclusive_caller_fold15
 end PV_B3P_Native15227

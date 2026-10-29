@@ -28,8 +28,8 @@ def native_occupancy15 (input_occupancy output_occupancy : aspis_core.field.QM31
 attribute [local irreducible] Array.index_usize Array.update aspis_core.field.QM31.mul aspis_core.field.QM31.sub aspis_core.field.QM31.add reference_terminal.lift_m31 occupancy_tail15_0 occupancy_finish15 occupancy_step15
 theorem native_occupancy_binding15 (input_occupancy output_occupancy : aspis_core.field.QM31) (expected_output : aspis_core.field.M31) (opened : Array aspis_core.field.QM31 16#usize) :
     native_occupancy15 input_occupancy output_occupancy expected_output opened =
-      reference_terminal.occupancy_lanes_literal input_occupancy output_occupancy expected_output opened := by
-  unfold native_occupancy15 reference_terminal.occupancy_lanes_literal
+      PV_B3P_227.reference_terminal.occupancy_lanes_literal input_occupancy output_occupancy expected_output opened := by
+  unfold native_occupancy15 PV_B3P_227.reference_terminal.occupancy_lanes_literal
   apply bind_equal9
   intro p0
   apply bind_equal9
@@ -63,6 +63,6 @@ theorem native_occupancy_binding15 (input_occupancy output_occupancy : aspis_cor
   apply bind_equal9
   intro p15
   rw [range_as_fold13 _ 0#usize 8#usize 8 _ (by rfl),leading_indices15]
-  exact (occupancy_fold15_0 _ _ _ _ _ _ _ _ _).symm
+  simpa only [occupancy_tail15_0] using (occupancy_fold15_0 input_occupancy output_occupancy expected_output opened p0 p1 p2 p3 p15).symm
 #print axioms native_occupancy_binding15
 end PV_B3P_Native15227

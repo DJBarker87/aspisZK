@@ -18,7 +18,9 @@ def native_power_body15 (lambda : aspis_core.field.QM31)
 theorem native_power_body_binding15 (lambda : aspis_core.field.QM31)
     (powers : PatternPowers15) (power : aspis_core.field.QM31) (limb : Usize) :
     native_power_body15 lambda (powers,power,limb) =
-      reference_copy_terminal.pattern_values_literal_loop0.body lambda powers power limb := rfl
+      reference_copy_terminal.pattern_values_literal_loop0.body lambda powers power limb := by
+  unfold native_power_body15 reference_copy_terminal.pattern_values_literal_loop0.body
+  simp only [aspis_statement.poseidon2.POSEIDON2_WIDTH,lift,bind_tc_ok]
 
 def native_pattern15 (openings : PatternPowers15) (lambda : aspis_core.field.QM31) : Result PatternResult12 := do
   let (powers,limb) ← loop (native_power_body15 lambda)

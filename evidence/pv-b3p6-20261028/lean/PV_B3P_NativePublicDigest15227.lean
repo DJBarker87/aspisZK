@@ -1,7 +1,7 @@
 import PV_B3P_DigestLoopBridge11227
 import PV_B3P_RangeFold13227
 namespace PV_B3P_Native15227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 PV_B3P_Binding11227 PV_B3P_Binding13227 Result
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 PV_B3P_Binding11227 PV_B3P_Binding13227 PV_B3P_Success227 Result
 set_option autoImplicit false
 
 def native_public_digest15 (public1 : reference_terminal.SemanticPublic)
