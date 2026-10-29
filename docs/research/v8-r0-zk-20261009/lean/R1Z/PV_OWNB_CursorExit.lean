@@ -17,7 +17,7 @@ theorem error_success {S X E A : Type} (dealloc : Nat → Request → S → Outc
  error (A:=A) dealloc q e w=
  ⟨.fail e,(PV_OWNB_CursorCleanup.cleanup dealloc q w).world,
  (PV_OWNB_CursorCleanup.cleanup dealloc q w).calls⟩ := by
- simp [error,bind,h,lift]
+ simp [error,PV_W_Threading.bind,h,lift]
 
 theorem error_failure {S X E A : Type} (dealloc : Nat → Request → S → Outcome E Unit × S)
  (q : Cursor) (e f : E) (w : State S X)
