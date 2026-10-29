@@ -57,6 +57,7 @@ if not admission.get('allowed'):
  refusal=dict(epoch=time.time(),admission=admission,admission_exit=r.returncode,compiler_started=False)
  (E/f'refusal-{a}.json').write_text(json.dumps(refusal))
  (E/f'refusal-history-{a}-{int(refusal["epoch"])}.json').write_text(json.dumps(refusal))
+ q=ssh('python3 -c '+shlex.quote('import pathlib,json;pathlib.Path('+repr(H+'/evidence/job-cooldown.json')+').write_text('+repr(json.dumps(dict(until=refusal['epoch']+180,attempt=a)))+')'));assert q.returncode==0,q.stderr
  (E/f'submission-{a}.json').unlink();print('REFUSED uncharged; full 180s cooldown');sys.exit(78)
 tim=(E/f'time-{a}.log').read_text();out=(E/f'out-{a}.log').read_text()
 for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kbytes=r'Maximum resident set size \(kbytes\): (\d+)',swaps=r'Swaps: (\d+)',wall=r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)').items():

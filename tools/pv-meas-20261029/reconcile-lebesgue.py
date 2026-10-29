@@ -62,13 +62,16 @@ for m in order:
  src=pathlib.Path(v['source']);assert sha(src)==v['source_sha256']
  # Guard every previous elaboration failure, even across module names.
  for q in (H/'evidence').glob('receipt-74*.json'):
-  old=json.loads(q.read_text());assert old['accepted'] or old['source_sha256']!=sha(src),('unchanged failed source',m)
+  old=json.loads(q.read_text());assert old['accepted'] or old['source_sha256']!=sha(src) or (old.get('failure_class')=='void admission cooldown' and old.get('environment_correction')),('unchanged failed source',m)
  out=H/'objects'/(m.replace('.','/')+'.olean');out.parent.mkdir(parents=True,exist_ok=True)
  cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-meas-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(H/f'evidence/time-{a}.log'),'timeout','600','python3',str(root/'aspis-fs-generic-20261006/evidence/run2.py'),str(H/'J.json'),str(H/'objects'),str(P),str(out),str(src),'7000']
  rec=dict(attempt=a,target=m,charged=False,source_revision=sys.argv[1],source_mathlib_revision=x['mathlib_revision'],source_blob=v['source_blob'],source_sha256=sha(src),dependencies=deps,deps_fingerprint=hashlib.sha256(json.dumps(deps,sort_keys=True).encode()).hexdigest(),command=cmd,cohort_evidence='fresh one-module rebuild against hash-checked authority plus earlier addendum objects')
  (H/f'evidence/submission-{a}.json').write_text(json.dumps(rec,indent=2))
  retries=0
  while True:
+  cooldown=H/'evidence/job-cooldown.json'
+  until=json.loads(cooldown.read_text())['until'] if cooldown.exists() else 0
+  while time.time()<until:time.sleep(min(60,until-time.time()))
   log=H/f'evidence/admission-{a}.log';admp=H/f'evidence/admission-{a}.json'
   with log.open('w') as f:r=subprocess.run(['python3',str(root/'codex-pv-runjoin-20261026/reservation-existing.py'),str(admp)],stdout=f,stderr=subprocess.STDOUT)
   adm=json.loads(admp.read_text()) if admp.exists() else None
