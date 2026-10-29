@@ -17,7 +17,13 @@ if kind=='lean':
  n,module,fp=args;assert 62700<=int(n)<=62799
  cmd=[str(D.parent/'r1-privacy-build-integration-20261019/tools/run-joint.sh'),n,module,'J','7000','8',fp]
 else:
- assert kind=='native'
+ assert kind in ['native','privatelean']
+ if kind=='privatelean':
+  n,module=args;assert 62700<=int(n)<=62799
+  assert not (D/f'lean{n}-receipt.json').exists()
+  assert json.loads((D/'cache-preflight.json').read_text())['mismatches']==[]
+  src=D/'sources'/(module+'.lean');obj=D/'objects'/(module+'.olean')
+  args=['python3',str(D.parent/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env-J.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
  cmd=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',str(D/f'{label}-time.log'),'timeout','900',*args]
 with (D/f'{label}-output.log').open('w') as f:p=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT)
 rec=dict(target=args,command=cmd,exit=p.returncode,wall_seconds=time.time()-start,admission_exit=a.returncode,admission_allowed=True,source_revision=(D/'revision.txt').read_text().strip(),runner_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
@@ -28,6 +34,8 @@ if kind=='lean':
  out=(D/f'{label}-output.log').read_text()
  rec['exit']=int(re.findall(r'^exit=(\d+)',out,re.M)[-1]) if re.findall(r'^exit=(\d+)',out,re.M) else p.returncode
  rec['print_axioms']=out
+elif kind=='privatelean':
+ rec.update(module=module,attempt=int(n),source_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),dependency_fingerprint=hashlib.sha256((D/'cache-preflight.json').read_bytes()).hexdigest(),environment_sha256=hashlib.sha256((D/'env-J.json').read_bytes()).hexdigest(),print_axioms=(D/f'{label}-output.log').read_text(),object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest() if obj.exists() else None)
 else:rec['print_axioms']='N/A: native evidence'
 (D/f'{label}-receipt.json').write_text(json.dumps(rec,indent=2)+'\n')
 print(label,rec['exit'],(D/f'{label}-output.log').read_text()[-5000:],flush=True)
