@@ -29,8 +29,10 @@ def advance (q : Cursor) : Cursor := {q with read:=q.read+1}
 
 def sink (q : Cursor) (v : Link) : Cursor :=
  let c:=store q.cell (q.written*8) 8 (PV_OWNB_LinkBytes.encode v)
- {q with cell:=c,written:=q.written+1,
-  memory:={q.memory with heap:=put q.memory.heap q.token.address (some c)},
+ {q with
+  cell:=c
+  written:=q.written+1
+  memory:={q.memory with heap:=put q.memory.heap q.token.address (some c)}
   output:=fun i=>if i=q.written then v else q.output i}
 
 attribute [local irreducible] Valid advance sink
