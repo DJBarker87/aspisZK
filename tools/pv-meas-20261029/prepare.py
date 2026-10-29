@@ -17,14 +17,22 @@ for f in sorted(tracked_glob(O,'modules-*.json')):
  for v in tracked_json(f):
   if v['accepted']: records[v['module']]=v
 plan=tracked_json(O/'build-plan.json')['modules']
+# One read-only git process preserves the same byte checks without spawning one
+# process per pinned source in this sparse worktree.
+git_batch=subprocess.Popen(['git','cat-file','--batch'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+def source_bytes(revision,path):
+ git_batch.stdin.write((revision+':'+path+'\n').encode());git_batch.stdin.flush()
+ header=git_batch.stdout.readline().decode().split();assert len(header)==3,header
+ size=int(header[2]);data=git_batch.stdout.read(size);assert git_batch.stdout.read(1)==b'\n'
+ return data
 projects={}; edges=[]
 for m,v in base.items():
  p=v['path']; selected=v['revision'] if 'runjoin' in v['authority'] else rev
- b=subprocess.check_output(['git','show',selected+':'+p])
+ b=source_bytes(selected,p)
  assert sha(b)==v['source_sha256'],('authority changed',m)
  projects[m]=dict(v,object_path=checks[m]['object_path'])
 for m,v in records.items():
- p=plan[m]['path']; b=subprocess.check_output(['git','show',rev+':'+p])
+ p=plan[m]['path']; b=source_bytes(rev,p)
  assert sha(b)==v['source_sha256'],('source changed',m)
  projects[m]=dict(module=m,path=p,revision=rev,source_sha256=sha(b),object_sha256=v['object_sha256'],object_path='/home/dombarker/project-offloads/codex-pv-rj4idb-20261029'+'/objects/'+m.replace('.','/')+'.olean')
  for d,r in v['dependencies'].items():edges.append(dict(module=m,dependency=d,sha256=r['sha256']))
@@ -33,7 +41,7 @@ for q in tracked_glob(Path('evidence/pv-evhd-20261029'),'receipt-*.json') + trac
  v=tracked_json(q)
  if not v.get('accepted'): continue
  m=v['target']; path='lean/'+m+'.lean'
- b=subprocess.check_output(['git','show',rev+':'+path])
+ b=source_bytes(rev,path)
  if sha(b)!=v['source_sha256']: continue
  obj=('/home/dombarker/project-offloads/codex-pv-evhd-20261029' if m.startswith('PV_EVHD_') else ('/home/dombarker/project-offloads/codex-pv-evh-20261029' if m.startswith('PV_EVH_') else H))+'/objects/'+m.replace('.','/')+'.olean'
  r=subprocess.check_output(['ssh','dombarker@100.108.41.90','sha256sum '+obj],text=True)
@@ -43,6 +51,7 @@ for q in tracked_glob(Path('evidence/pv-evhd-20261029'),'receipt-*.json') + trac
  for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):
   found=next(t for t in prep['project_checks'] if t['module']==d)
   edges.append(dict(module=m,dependency=d,sha256=found['sha256']))
+git_batch.stdin.close();git_batch.wait()
 # h6 project edges for the inherited project cohort
 raw=subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/inherited-reuse.json.xz'])
 import lzma
