@@ -1,0 +1,23 @@
+1a3c70:	mov    %rdi,%rax
+1a3c73:	movdqu (%rsi),%xmm0
+1a3c77:	movdqu (%rdx),%xmm1
+1a3c7b:	paddd  %xmm0,%xmm1
+1a3c7f:	movdqa -0x17a3e7(%rip),%xmm0        # 298a0 <GCC_except_table365+0xc5c>
+1a3c87:	movdqa %xmm1,%xmm2
+1a3c8b:	pxor   %xmm0,%xmm2
+1a3c8f:	pcmpeqd %xmm3,%xmm3
+1a3c93:	pcmpeqd %xmm4,%xmm4
+1a3c97:	pcmpgtd %xmm2,%xmm4
+1a3c9b:	movdqa -0x17a753(%rip),%xmm2        # 29550 <GCC_except_table365+0x90c>
+1a3ca3:	pandn  %xmm2,%xmm4
+1a3ca7:	paddd  %xmm1,%xmm4
+1a3cab:	movdqu %xmm4,(%rdi)
+1a3caf:	movdqu 0x10(%rsi),%xmm1
+1a3cb4:	movdqu 0x10(%rdx),%xmm4
+1a3cb9:	paddd  %xmm1,%xmm4
+1a3cbd:	pxor   %xmm4,%xmm0
+1a3cc1:	pcmpgtd %xmm0,%xmm3
+1a3cc5:	pandn  %xmm2,%xmm3
+1a3cc9:	paddd  %xmm4,%xmm3
+1a3ccd:	movdqu %xmm3,0x10(%rdi)
+1a3cd2:	ret

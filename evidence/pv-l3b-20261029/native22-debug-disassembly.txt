@@ -1,0 +1,187 @@
+
+/home/dombarker/project-offloads/codex-pv-l3b-20261029/client-target/release/devnet_spend:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000000be650 <aspis_r1_cost_probe::host_sumcheck::interpolate>:
+   be650:	push   %rbp
+   be651:	push   %r15
+   be653:	push   %r14
+   be655:	push   %r13
+   be657:	push   %r12
+   be659:	push   %rbx
+   be65a:	sub    $0x268,%rsp
+   be661:	mov    %rsi,0x8(%rsp)
+   be666:	mov    %rdi,%r14
+   be669:	lea    0x34(%rsp),%rbp
+   be66e:	xor    %ebx,%ebx
+   be670:	mov    $0x1c0,%edx
+   be675:	xor    %esi,%esi
+   be677:	call   *0x162a63(%rip)        # 2210e0 <memset@GLIBC_2.2.5>
+   be67d:	pxor   %xmm0,%xmm0
+   be681:	lea    0xa8(%rsp),%r12
+   be689:	mov    0x162560(%rip),%r13        # 220bf0 <memcpy@GLIBC_2.14>
+   be690:	movdqu %xmm0,0x5c(%rbp)
+   be695:	movdqu %xmm0,0x50(%rbp)
+   be69a:	movdqu %xmm0,0x40(%rbp)
+   be69f:	movdqu %xmm0,0x30(%rbp)
+   be6a4:	movdqu %xmm0,0x20(%rbp)
+   be6a9:	movdqu %xmm0,0x10(%rbp)
+   be6ae:	movdqu %xmm0,0x0(%rbp)
+   be6b3:	movl   $0x1,0x30(%rsp)
+   be6bb:	mov    %r12,%rdi
+   be6be:	lea    0x30(%rsp),%rsi
+   be6c3:	mov    $0x1,%edx
+   be6c8:	xor    %ecx,%ecx
+   be6ca:	mov    %rbx,%r8
+   be6cd:	xor    %r9d,%r9d
+   be6d0:	call   be9a0 <aspis_r1_cost_probe::host_sumcheck::interpolation_basis_steps>
+   be6d5:	movups 0x108(%rsp),%xmm0
+   be6dd:	movaps %xmm0,0x90(%rsp)
+   be6e5:	movups 0xf8(%rsp),%xmm0
+   be6ed:	movaps %xmm0,0x80(%rsp)
+   be6f5:	movups 0xe8(%rsp),%xmm0
+   be6fd:	movaps %xmm0,0x70(%rsp)
+   be702:	movups 0xa8(%rsp),%xmm0
+   be70a:	movups 0xb8(%rsp),%xmm1
+   be712:	movups 0xc8(%rsp),%xmm2
+   be71a:	movups 0xd8(%rsp),%xmm3
+   be722:	movaps %xmm3,0x60(%rsp)
+   be727:	movaps %xmm2,0x50(%rsp)
+   be72c:	movaps %xmm1,0x40(%rsp)
+   be731:	movaps %xmm0,0x30(%rsp)
+   be736:	mov    0x118(%rsp),%edi
+   be73d:	mov    %rbx,%r15
+   be740:	shl    $0x4,%r15
+   be744:	call   *0x162bbe(%rip)        # 221308 <_DYNAMIC+0x998>
+   be74a:	mov    0x8(%rsp),%rcx
+   be74f:	movdqu (%rcx,%r15,1),%xmm0
+   be755:	pshufd $0xf6,%xmm0,%xmm1
+   be75a:	pshufd $0xd4,%xmm0,%xmm0
+   be75f:	movd   %eax,%xmm2
+   be763:	pshufd $0x44,%xmm2,%xmm2
+   be768:	pmuludq %xmm2,%xmm0
+   be76c:	pmuludq %xmm2,%xmm1
+   be770:	movdqa %xmm1,%xmm2
+   be774:	movdqa -0x95b6c(%rip),%xmm4        # 28c10 <GCC_except_table365+0x74>
+   be77c:	pand   %xmm4,%xmm2
+   be780:	movdqa %xmm0,%xmm3
+   be784:	pand   %xmm4,%xmm3
+   be788:	psrlq  $0x1f,%xmm1
+   be78d:	paddq  %xmm2,%xmm1
+   be791:	psrlq  $0x1f,%xmm0
+   be796:	paddq  %xmm3,%xmm0
+   be79a:	movdqa %xmm1,%xmm2
+   be79e:	pand   %xmm4,%xmm2
+   be7a2:	movdqa %xmm0,%xmm3
+   be7a6:	pand   %xmm4,%xmm3
+   be7aa:	psrlq  $0x1f,%xmm1
+   be7af:	paddq  %xmm2,%xmm1
+   be7b3:	psrlq  $0x1f,%xmm0
+   be7b8:	paddq  %xmm3,%xmm0
+   be7bc:	movdqa %xmm1,%xmm2
+   be7c0:	movdqa -0x94f48(%rip),%xmm5        # 29880 <GCC_except_table365+0xce4>
+   be7c8:	pxor   %xmm5,%xmm2
+   be7cc:	pshufd $0xf5,%xmm2,%xmm3
+   be7d1:	movdqa -0x95659(%rip),%xmm6        # 29180 <GCC_except_table365+0x5e4>
+   be7d9:	pcmpgtd %xmm6,%xmm2
+   be7dd:	pxor   %xmm4,%xmm4
+   be7e1:	pcmpeqd %xmm4,%xmm3
+   be7e5:	pand   %xmm2,%xmm3
+   be7e9:	pshufd $0xf5,%xmm2,%xmm7
+   be7ee:	por    %xmm3,%xmm7
+   be7f2:	movdqa %xmm0,%xmm2
+   be7f6:	pxor   %xmm5,%xmm2
+   be7fa:	pshufd $0xf5,%xmm2,%xmm3
+   be7ff:	pcmpgtd %xmm6,%xmm2
+   be803:	pcmpeqd %xmm4,%xmm3
+   be807:	pand   %xmm2,%xmm3
+   be80b:	pshufd $0xf5,%xmm2,%xmm4
+   be810:	por    %xmm3,%xmm4
+   be814:	movdqa -0x94f6c(%rip),%xmm2        # 298b0 <GCC_except_table365+0xd14>
+   be81c:	pand   %xmm2,%xmm4
+   be820:	pand   %xmm2,%xmm7
+   be824:	paddq  %xmm1,%xmm7
+   be828:	movdqa %xmm7,0x20(%rsp)
+   be82e:	paddq  %xmm0,%xmm4
+   be832:	movdqa %xmm4,0x10(%rsp)
+   be838:	mov    $0x1c0,%edx
+   be83d:	mov    %r12,%rdi
+   be840:	mov    %r14,%rsi
+   be843:	call   *%r13
+   be846:	movdqa 0x10(%rsp),%xmm12
+   be84d:	movdqa 0x20(%rsp),%xmm11
+   be854:	movdqa -0x956dd(%rip),%xmm8        # 29180 <GCC_except_table365+0x5e4>
+   be85d:	movdqa -0x94fe5(%rip),%xmm7        # 29880 <GCC_except_table365+0xce4>
+   be865:	movdqa -0x95c5d(%rip),%xmm6        # 28c10 <GCC_except_table365+0x74>
+   be86d:	pxor   %xmm5,%xmm5
+   be871:	xor    %eax,%eax
+   be873:	movaps -0x9543b(%rip),%xmm9        # 29440 <GCC_except_table365+0x8a4>
+   be87b:	movdqa -0x950e4(%rip),%xmm10        # 297a0 <GCC_except_table365+0xc04>
+   be884:	data16 data16 cs nopw 0x0(%rax,%rax,1)
+   be890:	movdqu 0xa8(%rsp,%rax,4),%xmm2
+   be899:	movd   0x30(%rsp,%rax,1),%xmm0
+   be89f:	pshufd $0x44,%xmm0,%xmm0
+   be8a4:	movdqa %xmm11,%xmm1
+   be8a9:	pmuludq %xmm0,%xmm1
+   be8ad:	pmuludq %xmm12,%xmm0
+   be8b2:	movdqa %xmm0,%xmm3
+   be8b6:	pand   %xmm6,%xmm3
+   be8ba:	movdqa %xmm1,%xmm4
+   be8be:	pand   %xmm6,%xmm4
+   be8c2:	psrlq  $0x1f,%xmm0
+   be8c7:	paddq  %xmm3,%xmm0
+   be8cb:	psrlq  $0x1f,%xmm1
+   be8d0:	paddq  %xmm4,%xmm1
+   be8d4:	movdqa %xmm0,%xmm3
+   be8d8:	pand   %xmm6,%xmm3
+   be8dc:	movdqa %xmm1,%xmm4
+   be8e0:	pand   %xmm6,%xmm4
+   be8e4:	psrlq  $0x1f,%xmm0
+   be8e9:	paddq  %xmm3,%xmm0
+   be8ed:	psrlq  $0x1f,%xmm1
+   be8f2:	paddq  %xmm4,%xmm1
+   be8f6:	movdqa %xmm0,%xmm3
+   be8fa:	shufps $0x88,%xmm1,%xmm3
+   be8fe:	paddd  %xmm2,%xmm3
+   be902:	pxor   %xmm7,%xmm1
+   be906:	pxor   %xmm7,%xmm0
+   be90a:	movdqa %xmm0,%xmm2
+   be90e:	shufps $0xdd,%xmm1,%xmm0
+   be912:	pcmpgtd %xmm8,%xmm1
+   be917:	pcmpgtd %xmm8,%xmm2
+   be91c:	movdqa %xmm2,%xmm4
+   be920:	shufps $0x88,%xmm1,%xmm4
+   be924:	pcmpeqd %xmm5,%xmm0
+   be928:	pand   %xmm4,%xmm0
+   be92c:	shufps $0xdd,%xmm1,%xmm2
+   be930:	orps   %xmm0,%xmm2
+   be933:	andps  %xmm9,%xmm2
+   be937:	paddd  %xmm3,%xmm2
+   be93b:	movdqa %xmm2,%xmm0
+   be93f:	pxor   %xmm10,%xmm0
+   be944:	pcmpeqd %xmm1,%xmm1
+   be948:	pcmpgtd %xmm0,%xmm1
+   be94c:	pandn  %xmm9,%xmm1
+   be951:	paddd  %xmm2,%xmm1
+   be955:	movdqu %xmm1,0xa8(%rsp,%rax,4)
+   be95e:	add    $0x4,%rax
+   be962:	cmp    $0x70,%rax
+   be966:	jne    be890 <aspis_r1_cost_probe::host_sumcheck::interpolate+0x240>
+   be96c:	mov    $0x1c0,%edx
+   be971:	mov    %r14,%rdi
+   be974:	mov    %r12,%rsi
+   be977:	call   *%r13
+   be97a:	pxor   %xmm0,%xmm0
+   be97e:	inc    %rbx
+   be981:	cmp    $0x1c,%rbx
+   be985:	jne    be690 <aspis_r1_cost_probe::host_sumcheck::interpolate+0x40>
+   be98b:	add    $0x268,%rsp
+   be992:	pop    %rbx
+   be993:	pop    %r12
+   be995:	pop    %r13
+   be997:	pop    %r14
+   be999:	pop    %r15
+   be99b:	pop    %rbp
+   be99c:	ret
