@@ -1,0 +1,279 @@
+st.rec (motive := fun input =>
+    ∀ (state : R1Z.PV_RDB2E_ShaHandles.State),
+      R1Z.PV_RDB2F_SoftOuter.blocks input state =
+        R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) input) state)
+    (fun state => Eq.refl (R1Z.PV_RDB2F_SoftOuter.blocks [] state))
+    (fun block tail ih state =>
+      Eq.mpr
+        (id
+          (congrArg
+            (Eq do
+              let block_u32 ← PV_CBL_ShaBytes.sha_load64 block
+              let state_cpy ← PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state block_u32
+              R1Z.PV_RDB2F_SoftOuter.blocks tail state_cpy)
+            (Eq.trans
+              (R1Z.PV_DL_CompressionTrace.run.eq_2 R1Z.PV_RDB2F_ConcreteSoft.software state (↑block)
+                (List.map (fun b => ↑b) tail))
+              (Eq.trans
+                (congrFun' (congrArg bind (R1Z.PV_RDB2F_ConcreteSoft.fixed_block state block)) fun next =>
+                  R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) tail) next)
+                (Aeneas.Std.bind_assoc_eq (PV_CBL_ShaBytes.sha_load64 block)
+                  (fun words => PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state words) fun next =>
+                  R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) tail)
+                    next)))))
+        ((Aeneas.Std.bind_eq_iff (PV_CBL_ShaBytes.sha_load64 block)
+              (fun block_u32 => do
+                let state_cpy ← PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state block_u32
+                R1Z.PV_RDB2F_SoftOuter.blocks tail state_cpy)
+              fun x => do
+              let next ← PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state x
+              R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) tail) next).mpr
+          fun words hw =>
+          (Aeneas.Std.bind_eq_iff (PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state words)
+                (fun state_cpy => R1Z.PV_RDB2F_SoftOuter.blocks tail state_cpy) fun next =>
+                R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) tail)
+                  next).mpr
+            fun next hn => ih next))
+    input state
+theorem R1Z.PV_RDB2F_SoftOuter.final_store : ∀ (state : R1Z.PV_RDB2E_ShaHandles.State)
+  (input : List R1Z.PV_RDB2F_SoftOuter.Block),
+  R1Z.PV_RDB2F_SoftOuter.compress state input = R1Z.PV_RDB2F_SoftOuter.blocks input state :=
+fun state input =>
+  id
+    (Aeneas.Std.Result.casesOn (motive := fun t =>
+      R1Z.PV_RDB2F_SoftOuter.blocks input state = t →
+        (do
+            let state_cpy ← R1Z.PV_RDB2F_SoftOuter.blocks input state
+            Aeneas.Std.Result.ok state_cpy) =
+          R1Z.PV_RDB2F_SoftOuter.blocks input state)
+      (R1Z.PV_RDB2F_SoftOuter.blocks input state)
+      (fun v h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let state_cpy ← Aeneas.Std.Result.ok v
+            Aeneas.Std.Result.ok state_cpy)
+      (fun e h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let state_cpy ← Aeneas.Std.Result.fail e
+            Aeneas.Std.Result.ok state_cpy)
+      (fun h =>
+        Eq.symm h ▸
+          Eq.refl do
+            let state_cpy ← Aeneas.Std.Result.div
+            Aeneas.Std.Result.ok state_cpy)
+      (Eq.refl (R1Z.PV_RDB2F_SoftOuter.blocks input state)))
+theorem R1Z.PV_RDB2F_SoftOuter.full_list : ∀ (state : R1Z.PV_RDB2E_ShaHandles.State)
+  (input : List R1Z.PV_RDB2F_SoftOuter.Block),
+  R1Z.PV_RDB2F_SoftOuter.compress state input =
+    R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) input) state :=
+fun state input =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a = R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) input) state)
+        (R1Z.PV_RDB2F_SoftOuter.final_store state input)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a = R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) input) state)
+          (R1Z.PV_RDB2F_SoftOuter.compression_trace input state)))
+      (Eq.refl
+        (R1Z.PV_DL_CompressionTrace.run R1Z.PV_RDB2F_ConcreteSoft.software (List.map (fun b => ↑b) input) state)))
+@[reducible] def R1Z.PV_RDB2F_SoftOuter.Block : Type :=
+Aeneas.Std.Array Aeneas.Std.U8 64#usize
+def R1Z.PV_RDB2F_SoftOuter.blocks : List R1Z.PV_RDB2F_SoftOuter.Block →
+  R1Z.PV_RDB2E_ShaHandles.State → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State :=
+fun x x_1 =>
+  List.brecOn (motive := fun x => R1Z.PV_RDB2E_ShaHandles.State → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State) x
+    R1Z.PV_RDB2F_SoftOuter.blocks._f x_1
+def R1Z.PV_RDB2F_SoftOuter.compress : R1Z.PV_RDB2E_ShaHandles.State →
+  List R1Z.PV_RDB2F_SoftOuter.Block → Aeneas.Std.Result R1Z.PV_RDB2E_ShaHandles.State :=
+fun state input => do
+  let state_cpy ← R1Z.PV_RDB2F_SoftOuter.blocks input state
+  Aeneas.Std.Result.ok state_cpy
+theorem R1Z.PV_RDB2F_VerifierCalls.scalar_consumed_call : ∀ [inst : ProverRwFull.ExternalTypes] {World : Type}
+  (ops : ProverRwFull.ExternalFuns) (nonzero : Bool) (block : PV_B2_E_OrdinaryOriginal.Bytes) (world : World)
+  (trace : ℕ → PV_B2_E_OrdinaryOriginal.Native → World → Aeneas.Std.Result World),
+  (have __do_jp := fun out => do
+      let world ← trace 4 out world
+      Aeneas.Std.Result.ok (out, world);
+    if nonzero = true then do
+      let out ← PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2F_Iterator.gamma block)
+      __do_jp out
+    else do
+      let out ←
+        PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2F_Iterator.ordinary block)
+      __do_jp out) =
+    do
+    let out ← if nonzero = true then ProverRwFull.ExternalFuns.op249 block else ProverRwFull.ExternalFuns.op250 block
+    let world ← trace 4 out world
+    Aeneas.Std.Result.ok (out, world) :=
+fun [ProverRwFull.ExternalTypes] {World} ops nonzero block world trace =>
+  Bool.casesOn (motive := fun t =>
+    nonzero = t →
+      (have __do_jp := fun out => do
+          let world ← trace 4 out world
+          Aeneas.Std.Result.ok (out, world);
+        if nonzero = true then do
+          let out ←
+            PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2F_Iterator.gamma block)
+          __do_jp out
+        else do
+          let out ←
+            PV_B2_E_OrdinaryOriginal.mapResult PV_B2_E_OrdinaryOriginal.toNative (R1Z.PV_RDB2F_Iterator.ordinary block)
+          __do_jp out) =
+        do
+        let out ←
+          if nonzero = true then ProverRwFull.ExternalFuns.op249 block else ProverRwFull.ExternalFuns.op250 block
+        let world ← trace 4 out world
+        Aeneas.Std.Result.ok (out, world))
+    nonzero
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (ite_congr Bool.false_eq_true
+                    (fun a =>
+                      congrFun' (congrArg bind (R1Z.PV_RDB2F_SamplerCalls.gamma_callback ops block)) fun out => do
+                        let world ← trace 4 out world
+                        Aeneas.Std.Result.ok (out, world))
+                    fun a =>
+                    congrFun' (congrArg bind (R1Z.PV_RDB2F_SamplerCalls.ordinary_callback ops block)) fun out => do
+                      let world ← trace 4 out world
+                      Aeneas.Std.Result.ok (out, world))
+                  (if_false
+                    (do
+                      let out ← ProverRwFull.ExternalFuns.op249 block
+                      let world ← trace 4 out world
+                      Aeneas.Std.Result.ok (out, world))
+                    do
+                    let out ← ProverRwFull.ExternalFuns.op250 block
+                    let world ← trace 4 out world
+                    Aeneas.Std.Result.ok (out, world))))
+              (congrFun'
+                (congrArg bind
+                  (Eq.trans
+                    (ite_congr Bool.false_eq_true (fun a => Eq.refl (ProverRwFull.ExternalFuns.op249 block)) fun a =>
+                      Eq.refl (ProverRwFull.ExternalFuns.op250 block))
+                    (if_false (ProverRwFull.ExternalFuns.op249 block) (ProverRwFull.ExternalFuns.op250 block))))
+                fun out => do
+                let world ← trace 4 out world
+                Aeneas.Std.Result.ok (out, world)))
+            (eq_self do
+              let out ← ProverRwFull.ExternalFuns.op250 block
+              let world ← trace 4 out world
+              Aeneas.Std.Result.ok (out, world))))
+    (fun h =>
+      Eq.symm h ▸
+        of_eq_true
+          (Eq.trans
+            (congr
+              (congrArg Eq
+                (Eq.trans
+                  (ite_congr (eq_self true)
+                    (fun a =>
+                      congrFun' (congrArg bind (R1Z.PV_RDB2F_SamplerCalls.gamma_callback ops block)) fun out => do
+                        let world ← trace 4 out world
+                        Aeneas.Std.Result.ok (out, world))
+                    fun a =>
+                    congrFun' (congrArg bind (R1Z.PV_RDB2F_SamplerCalls.ordinary_callback ops block)) fun out => do
+                      let world ← trace 4 out world
+                      Aeneas.Std.Result.ok (out, world))
+                  (if_true
+                    (do
+                      let out ← ProverRwFull.ExternalFuns.op249 block
+                      let world ← trace 4 out world
+                      Aeneas.Std.Result.ok (out, world))
+                    do
+                    let out ← ProverRwFull.ExternalFuns.op250 block
+                    let world ← trace 4 out world
+                    Aeneas.Std.Result.ok (out, world))))
+              (congrFun'
+                (congrArg bind
+                  (Eq.trans
+                    (ite_congr (eq_self true) (fun a => Eq.refl (ProverRwFull.ExternalFuns.op249 block)) fun a =>
+                      Eq.refl (ProverRwFull.ExternalFuns.op250 block))
+                    (if_true (ProverRwFull.ExternalFuns.op249 block) (ProverRwFull.ExternalFuns.op250 block))))
+                fun out => do
+                let world ← trace 4 out world
+                Aeneas.Std.Result.ok (out, world)))
+            (eq_self do
+              let out ← ProverRwFull.ExternalFuns.op249 block
+              let world ← trace 4 out world
+              Aeneas.Std.Result.ok (out, world))))
+    (Eq.refl nonzero)
+theorem R1Z.PV_RDB2F_WordArray.readback : ∀ (n : Aeneas.Std.Usize) (current : Aeneas.Std.Array Aeneas.Std.U32 n)
+  (i : Aeneas.Std.Usize) (value : Aeneas.Std.U32), ↑i < ↑n → (↑(current.set i value))[↑i]? = some value :=
+fun n current i value h =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (Eq.trans (congrFun' (congrArg getElem? (Aeneas.Std.Array.set_val_eq current i value)) ↑i)
+              (getElem?_pos ((↑current).set (↑i) value) (↑i)
+                (of_eq_true (Eq.trans (congrArg (LT.lt ↑i) (Eq.trans List.length_set current.property)) (eq_true h)))))
+            (congrArg some
+              (List.getElem_set_self
+                (of_eq_true
+                  (Eq.trans (congrArg (LT.lt ↑i) (Eq.trans List.length_set current.property)) (eq_true h)))))))
+        (some value))
+      (eq_self (some value)))
+theorem R1Z.PV_RDB2F_WordArray.other_words : ∀ (n : Aeneas.Std.Usize) (current : Aeneas.Std.Array Aeneas.Std.U32 n)
+  (i j : Aeneas.Std.Usize) (value : Aeneas.Std.U32), ↑j ≠ ↑i → (↑(current.set i value))[↑j]? = (↑current)[↑j]? :=
+fun n current i j value h =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans (congrFun' (congrArg getElem? (Aeneas.Std.Array.set_val_eq current i value)) ↑j)
+            (List.getElem?_set_ne (of_eq_true (Eq.trans (congrArg Not (eq_false (Ne.symm h))) not_false_eq_true)))))
+        (↑current)[↑j]?)
+      (eq_self (↑current)[↑j]?))
+theorem R1Z.PV_RDB2F_WordArray.native_store : ∀ (n : Aeneas.Std.Usize) (current : Aeneas.Std.Array Aeneas.Std.U32 n)
+  (mem : R1Z.PV_RDB2F_RawHandles.Memory) (base : ℕ) (i : Aeneas.Std.Usize) (value : Aeneas.Std.U32),
+  ↑i < ↑n →
+    R1Z.PV_RDB2F_WordArray.RepresentsN n mem base current →
+      R1Z.PV_RDB2F_WordArray.RepresentsN n
+        (R1Z.PV_RDB2F_RawHandles.store mem (R1Z.PV_RDB2F_RawHandles.address base ↑i) value) base
+        (current.set i value) :=
+fun n current mem base i value h rep j hj =>
+  if e : ↑j = ↑i then
+    have ptr := congrArg (R1Z.PV_RDB2F_RawHandles.address base) e;
+    Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_RDB2F_RawHandles.store mem (R1Z.PV_RDB2F_RawHandles.address base ↑i) value _a =
+              (↑(current.set i value))[↑j]?)
+          ptr))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => _a = (↑(current.set i value))[↑j]?)
+            (R1Z.PV_RDB2F_RawHandles.store_read mem (R1Z.PV_RDB2F_RawHandles.address base ↑i) value)))
+        (Eq.mpr (id (congrArg (Eq (some value)) (congrArg (getElem? ↑(current.set i value)) e)))
+          (Eq.symm (R1Z.PV_RDB2F_WordArray.readback n current i value h))))
+  else
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = (↑(current.set i value))[↑j]?)
+          (R1Z.PV_RDB2F_RawHandles.store_frame mem (R1Z.PV_RDB2E_PointerOffsets.address base ↑i)
+            (R1Z.PV_RDB2E_PointerOffsets.address base ↑j) value
+            ((Iff.not (R1Z.PV_RDB2E_PointerOffsets.injective base ↑j ↑i)).mpr e))))
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => mem (R1Z.PV_RDB2E_PointerOffsets.address base ↑j) = _a)
+            (R1Z.PV_RDB2F_WordArray.other_words n current i j value e)))
+        (rep j hj))
+def R1Z.PV_RDB2F_WordArray.RepresentsN : (n : Aeneas.Std.Usize) →
+  R1Z.PV_RDB2F_RawHandles.Memory → ℕ → Aeneas.Std.Array Aeneas.Std.U32 n → Prop :=
+fun n mem base current =>
+  ∀ (j : Aeneas.Std.Usize), ↑j < ↑n → mem (R1Z.PV_RDB2F_RawHandles.address base ↑j) = (↑current)[↑j]?
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2h-20261029/lean-64397/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2h-20261029/lean-64397/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2h-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects/R1Z/PV_RDB2F_StatementAudit.olean", "/home/dombarker/project-offloads/codex-pv-rdb2f-20261029/lean-sources/R1Z/PV_RDB2F_StatementAudit.lean", "7000"], "exit": 0, "wall": "0:02.93", "peak_rss_kib": "3873220", "swap": "0", "source_revision": "cf7bdc8c4fd679fce91522907170e5bb55d04909", "expected_phase": "unchanged exact-environment focused Lean replay", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
