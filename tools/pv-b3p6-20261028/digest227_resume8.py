@@ -46,7 +46,8 @@ for i,ch in enumerate(chunks):
  if i<24:
   var='digests'+str(i+1)
   pat='  let '+var+' ←\n'
-  if pat in ch:ch=ch.replace(pat,'')
+  if pat in ch:
+   before,after=ch.split(pat,1);ch=before+'\n'.join(l[2:] for l in after.splitlines())
   else:
    pat='  let '+var+' ←'
    assert pat in ch,(i,ch)
@@ -67,7 +68,7 @@ for i,ch in enumerate(chunks):
  else:
   proof += ['  apply lift_total','  apply lift_total','  apply bind','  · apply row_total','    apply row_address_bound <;> scalar_tac','  intro selector','  apply bind','  · apply total_reference_terminal_add_digest_binding <;> scalar_tac','  intro digests25','  apply bind','  · exact carry_total _','  intro carry','  split','  · apply lift_total','    apply lift_total','    apply lift_total','    apply bind','    · apply row_total','      apply row_address_bound','      · apply wrap_add_bound; scalar_tac','      · scalar_tac','    intro selector','    apply bind','    · apply index; scalar_tac','    intro expected','    apply total_reference_terminal_add_digest_binding <;> scalar_tac','  · exact ok _']
  mod=f'PV_B3P_DigestStage{i:02}227'
- text='import PV_B3P_DigestFields227\n'+header+definition+f'\ntheorem {name}_success {params}'+(' (output : Digest8Q)'if i else '')+f' :\n    Success ({name} public1 openings selectors'+(' output'if i else '')+') := by\n'+'\n'.join(proof)+f'\n\n#print axioms {name}_success\nend PV_B3P_Success227\n'
+ text='import PV_B3P_DigestFields227\n'+header.replace('abbrev Digest8Q := Array aspis_core.field.QM31 8#usize\n','')+definition+f'\ntheorem {name}_success {params}'+(' (output : Digest8Q)'if i else '')+f' :\n    Success ({name} public1 openings selectors'+(' output'if i else '')+') := by\n'+'\n'.join(proof)+f'\n\n#print axioms {name}_success\nend PV_B3P_Success227\n'
  files[mod]=text
 # Compose opaque stages, then check the syntax-factoring equality separately.
 imports=''.join('import PV_B3P_DigestStage%02227\n'%i if False else f'import PV_B3P_DigestStage{i:02}227\n'for i in range(25))
@@ -75,7 +76,7 @@ stages='\n'.join(f'  let d{i} ← digest_stage_{i:02} public1 openings selectors
 seq=f'def digest_sequence {params} : Result Digest8Q := do\n'+stages
 factor=f'theorem digest_factor {params} :\n    reference_terminal.public_digest_lanes public1 openings selectors =\n      digest_sequence public1 openings selectors := by\n  rfl\n#print axioms digest_factor\n'
 proof='  unfold digest_sequence\n'+''.join(f'  apply bind\n  · exact digest_stage_{i:02}_success public1 openings selectors'+(f' d{i-1}'if i else '')+f'\n  intro d{i}\n'for i in range(24))+'  exact digest_stage_24_success public1 openings selectors d23\n'
-files['PV_B3P_DigestSequence227']=imports+header+seq+factor+f'theorem digest_sequence_success {params} :\n    Success (digest_sequence public1 openings selectors) := by\n'+proof+'\n#print axioms digest_sequence_success\n'+f'theorem public_digest_success8 {params} :\n    Success (reference_terminal.public_digest_lanes public1 openings selectors) := by\n  rw [digest_factor]\n  exact digest_sequence_success public1 openings selectors\n#print axioms public_digest_success8\nend PV_B3P_Success227\n'
+files['PV_B3P_DigestSequence227']=imports+header.replace('abbrev Digest8Q := Array aspis_core.field.QM31 8#usize\n','')+seq+factor+f'theorem digest_sequence_success {params} :\n    Success (digest_sequence public1 openings selectors) := by\n'+proof+'\n#print axioms digest_sequence_success\n'+f'theorem public_digest_success8 {params} :\n    Success (reference_terminal.public_digest_lanes public1 openings selectors) := by\n  rw [digest_factor]\n  exact digest_sequence_success public1 openings selectors\n#print axioms public_digest_success8\nend PV_B3P_Success227\n'
 for m,t in files.items():
  p=L/(m+'.lean')
  if '--check'in sys.argv:assert p.read_text()==t,m
