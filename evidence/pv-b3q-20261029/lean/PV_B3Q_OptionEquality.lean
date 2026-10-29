@@ -2,16 +2,16 @@ import PV_B3P_ClosureLinks14227
 namespace PV_B3Q_OptionEquality
 open Aeneas Aeneas.Std PV_B3P_Groups14227
 set_option autoImplicit false
-/-- Deployed Option<u32> PartialEq: both Some delegates to scalar equality;
+/-- Deployed Option<u64> PartialEq: both Some delegates to scalar equality;
 both None returns true, unlike discriminants return false. Copy payloads have
 no destructor and the shared loans preserve both options. -/
-def source_eq (left right : Option U32) : Result Bool :=
+def source_eq (left right : Option U64) : Result Bool :=
  match left,right with
  | some a,some b => .ok (decide (a=b))
  | none,none => .ok true
  | _,_ => .ok false
-def model_eq (left right : Option U32) : Result Bool := .ok (decide (left=right))
-theorem eq_binding (left right : Option U32) : source_eq left right = model_eq left right := by
+def model_eq (left right : Option U64) : Result Bool := .ok (decide (left=right))
+theorem eq_binding (left right : Option U64) : source_eq left right = model_eq left right := by
  cases left <;> cases right <;> simp only [source_eq,model_eq,Option.some.injEq,reduceCtorEq,decide_true,decide_false]
 /-- PartialEq's default ne first calls eq, then negates the returned Bool.
 The source port preserves a failing or divergent comparator unchanged. -/
@@ -28,7 +28,7 @@ theorem ne_binding {α : Type} (eq : α → α → Result Bool) (left right : α
  unfold source_ne model_ne
  cases eq left right <;> rfl
 inductive Body where | option_eq | option_ne
-def Signature : Body → Type := fun _ => Option U32 → Option U32 → Result Bool
+def Signature : Body → Type := fun _ => Option U64 → Option U64 → Result Bool
 def source : (body : Body) → Signature body
  | .option_eq => source_eq
  | .option_ne => source_ne source_eq
