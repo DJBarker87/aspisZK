@@ -14490,3 +14490,17 @@ Lead assessment: own-2 was stated too strictly. Any heap-allocating function rea
 Ruling own-2' (pv-common.txt): reads confined to the global allocator's own state, reached only through the alloc, realloc and dealloc entry points, do not disqualify a function. The worker must additionally prove address independence: no pointer-to-integer cast, address comparison, address hashing or address-dependent branch may feed the result or the control flow. Every other external read still disqualifies, and the evidence-class label is unchanged.
 
 pv-ownf (branch codex/pv-ownf-20261029 from 95971605dd; IDs 63500-63599; 60 Lean, 30 native, 0 Kani) re-runs the check under own-2'. It then proves address independence, the literal value laws, and one deployed release execution per function, cross-checked against the crate's fingerprint functions, for V229 and V230. Rows removed: 0. Privacy target not yet established.
+
+## D438 (Stream B) 2026-10-29 02:02 UTC: own-2' check stops on allocator-internal shared state; ruling own-2'' (allocator as a black box); pv-owng launched
+
+pv-ownf used no Lean, native or Kani attempts. It found two reads inside the allocator's own code that touch process-wide state: malloc reads __libc_single_threaded at 0xad7b5, a flag written by pthread_create, and free reads and then restores errno at 0xade59. It classed both as OTHER under own-2', whose wording ("allocator's own internal state") they do not literally meet, and stopped V229 and V230. Its checker revalidated the 44 pinned source files. The evidence was merged into the candidate as 4d2d31fa4f and pushed.
+
+Lead assessment: the stop is a correct reading of imprecise wording. own-2 and own-2' classified reads by where the state lives. The relevant property is how the allocator's execution can influence the function.
+
+Ruling own-2'' (pv-common.txt) is the final form of the input-free rule. The global allocator is a black box: its entry points and everything their code executes, including libc malloc and free internals. It can influence the caller only through allocation success or failure (rdea-1), the returned address, and process state it writes that the caller's code later reads. The worker must prove three things:
+(a) the call cone OUTSIDE the black box reads no external state, errno included, and makes no foreign call other than into the allocator;
+(b) address independence;
+(c) that cone never reads state the allocator may write.
+A read inside the cone outside the black box still disqualifies.
+
+pv-owng (branch codex/pv-owng-20261029 from 4d2d31fa4f; IDs 63700-63799; 60 Lean, 30 native, 0 Kani) applies own-2'' to V229 and V230. Rows removed: 0. Privacy target not yet established.
