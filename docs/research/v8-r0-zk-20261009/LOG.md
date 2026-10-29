@@ -14423,3 +14423,16 @@ runjoin48 (head 526c933b84, pushed) used all 100 Lean attempts (77 accepted, 23 
 Two installations remain explicitly incoming, not proved: the backend messages association (hinput) and the op79 and op254 dictionary installations. The complete opening-model equation, FinishContext, publication composition and the upstream backend association remain open. Rows removed: 0.
 
 runjoin49 launched (IDs 62900-62999; 100 Lean, 0 Kani) per OPENING-NEXT.md, starting with PrepareTailAssociation48.retained, then the tag-29 scalar association, FinishContext and the publication bytes. For each incoming installation it must record whether it is discharged in step (2) or by the deployed caller in step (4), and discharge every one that belongs to step (2). Privacy target not yet established.
+
+## D431 (Stream B) 2026-10-29 01:11 UTC: pv-diag2 first run (stopped on an h7 generated-cone mismatch); pv-diag2b relaunched
+
+pv-diag2 (head 9e05db4591) used 15 Lean attempts and 18 capped native scopes, with no Kani. Peak RSS was 4.30 GB and swap zero. Every admission had exit 0 and allowed:true from the launching wrapper, with no void attempt. It did the following:
+- added retry and process instrumentation that keeps attempt histories, errors, earlier effects, panic, OOM and frames;
+- audited the independent effect core at 62797 with standard axioms only;
+- confirmed the eleven fixed prover-error literals in the deployed MIR, with 60 passing native controls (finite validation);
+- replaced the two unbound MIR inputs of pv-diag with explicit matching LLVM and archive coverage arguments;
+- reused the existing L1 count laws (no attempt-count finding, per D428).
+
+It then stopped. The selected coherent-cache object AspisR1CircleSampleWrapper.FunsExternal (0712bbc4) differs from the object at the h7 graph path (5b2ad417). The external adapter is hand-written and its importing wrapper is Aeneas-generated, so this is an unresolved generated-cone association, not evidence against any theorem. Ruling (h7) step 4 already prescribes the action: recover the generation hash chain, or else regenerate the cone with the unchanged pinned extractor under (x'), keeping the adapter byte-for-byte, and re-elaborate the importer unedited.
+
+pv-diag2b relaunched in the same worktree with fresh IDs 63000-63099 (85 Lean, 22 native, 0 Kani). It applies h7 now and then does the per-sink honest-run silence or public-only-content proofs, starting with the returned-error-to-Termination path and the retry and exhaustion surface. D348 remains open. Rows removed: 0. Privacy target not yet established.
