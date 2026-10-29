@@ -16,7 +16,7 @@ def report {n : Usize} (r : Result (Array aspis_core.field.QM31 n)) : String :=
 for ix in range(10,15):
  m='PV_B3Q_D188Fixture'+str(ix);s=base.replace('MODULE',m)
  if ix==10:
-  s+='''def public (variant : reference_terminal.CompiledVariant) : reference_terminal.SemanticPublic :=
+  s+='''def public_fixture (variant : reference_terminal.CompiledVariant) : reference_terminal.SemanticPublic :=
  let bytes := Array.repeat 32#usize 0#u8
  let digest := Array.repeat 8#usize 0#u32
  let frontier := Array.repeat 20#usize digest
@@ -31,7 +31,7 @@ for ix in range(10,15):
   n=(seed+1)*131;state=a(16,n);opening='{ z := '+state+', succ_z := '+a(16,n+20)+', xor12_z := '+a(16,n+40)+' }';selectors='{ high := '+a(64,n+100)+', low := '+state+' }'
   if ix==10:
    for variant,label in [('PrivateTransfer','private'),('Withdrawal','withdrawal')]:
-    expr='(do let (initial,absorption) ← reference_terminal.semantic_initial_and_absorption (public .'+variant+') ('+opening+') ('+selectors+'); .ok (Array.make 32#usize (initial.val ++ absorption.val) (by simp only [List.length_append,initial.property,absorption.property]; rfl)))'
+    expr='(do let (initial,absorption) ← reference_terminal.semantic_initial_and_absorption (public_fixture .'+variant+') ('+opening+') ('+selectors+'); .ok (Array.make 32#usize (initial.val ++ absorption.val) (by simp only [List.length_append,initial.property,absorption.property]; rfl)))'
     s+='#eval "semantic_initial_'+label+':'+str(seed)+'=" ++ report ('+expr+')\n'
   elif ix in[11,12]:
    prefix='host_terminal_field'if ix==11 else'reference_field'
