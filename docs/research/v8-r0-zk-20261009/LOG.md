@@ -14480,3 +14480,13 @@ Ruling own-2 (pv-common.txt) applies to an input-free deployed function. That me
 The evidence class is labelled "exhaustive over a singleton input domain, deployed compiled artifact". This is not finite validation promoted to a universal claim: the domain has one element, and the deployed artifact itself is what was executed. Any external read disqualifies the function and returns the row to own-1. Recount 9 should scrutinise this ruling and each use of it.
 
 pv-owne (branch codex/pv-owne-20261029 from 325ba5f047; IDs 63400-63499; 60 Lean, 30 native, 0 Kani) applies own-2 to V229 and V230, cross-checking against the crate's fingerprint functions. The own-1 work stays as supporting evidence. V239 and V178 are not input-free and stay on own-1. Rows removed: 0. Privacy target not yet established.
+
+## D436 (Stream B) 2026-10-29 01:54 UTC: own-2 check rejects V229/V230 on allocator-internal reads; ruling own-2'; pv-ownf launched
+
+pv-owne used no Lean, native or Kani attempts. It ran the own-2 complete-cone static check against 44 pinned source files (6 application, 38 rust-src 1.94.1) and the raw runtime disassembly. It found that both V229 and V230 reach System.alloc and then libc::malloc through the unconditional initial schedule allocation (build_pool_v1_pair_copy_row_schedule_v1). Along that path malloc reads a mutable global (0xad764) and a thread-local (0xad79a). Under own-2 as written, the worker correctly stopped both rows. Its static checker is a rejection checker, not a purity certificate. The evidence was merged into the candidate as 95971605dd and pushed.
+
+Lead assessment: own-2 was stated too strictly. Any heap-allocating function reaches the allocator's internal state, and rdea-1 already retains by name the allocator's outcome given prior state. The only ways that state can reach the function are allocation success or failure, retained under rdea-1, and the returned addresses.
+
+Ruling own-2' (pv-common.txt): reads confined to the global allocator's own state, reached only through the alloc, realloc and dealloc entry points, do not disqualify a function. The worker must additionally prove address independence: no pointer-to-integer cast, address comparison, address hashing or address-dependent branch may feed the result or the control flow. Every other external read still disqualifies, and the evidence-class label is unchanged.
+
+pv-ownf (branch codex/pv-ownf-20261029 from 95971605dd; IDs 63500-63599; 60 Lean, 30 native, 0 Kani) re-runs the check under own-2'. It then proves address independence, the literal value laws, and one deployed release execution per function, cross-checked against the crate's fingerprint functions, for V229 and V230. Rows removed: 0. Privacy target not yet established.
