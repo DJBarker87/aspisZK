@@ -4,6 +4,10 @@ import os,sys,json,subprocess,time
 H=Path('/home/dombarker/project-offloads/codex-pv-b3q-20261029')
 G=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy')
 def run(label,cmd,note,extra=None):
+ original_label=label;retry=0
+ while (H/label).exists():
+  assert not (H/label/"receipt/receipt.json").exists(), "charged scope cannot be rerun"
+  retry+=1;label=original_label+"-r"+str(retry)
  O=H/label;O.mkdir(exist_ok=False)
  cooldown=H/"admission-not-before.json"
  if cooldown.exists() and time.time()<json.loads(cooldown.read_text())["epoch"]:
