@@ -14,8 +14,9 @@ def uniformMeasure : Measure M :=
 
 instance uniform_probability : IsProbabilityMeasure (uniformMeasure M) := by
   constructor
-  simp [uniformMeasure, Measure.smul_apply, Measure.finsetSum_apply,
-    Fintype.card_ne_zero, ENNReal.natCast_ne_top]
+  simp only [uniformMeasure, Measure.smul_apply, smul_eq_mul, Measure.finsetSum_apply,
+    measure_univ, Finset.sum_const, Finset.card_univ, nsmul_eq_mul, mul_one]
+  exact ENNReal.inv_mul_cancel (by exact_mod_cast Fintype.card_ne_zero) ENNReal.natCast_ne_top
 
 def uniform : ProbabilityMeasure M := ⟨uniformMeasure M, inferInstance⟩
 
@@ -55,7 +56,7 @@ theorem uniform_fst (C R : Type*) [Fintype C] [Nonempty C] [Fintype R] [Nonempty
     Measure.dirac_apply, Set.indicator_apply, Pi.one_apply, Set.mem_preimage,
     Fintype.sum_prod_type, Fintype.card_prod, Nat.cast_mul,
     Finset.sum_const, Finset.card_univ, nsmul_eq_mul, ← Finset.mul_sum]
-  rw [ENNReal.mul_inv]
+  rw [ENNReal.mul_inv (Or.inr ENNReal.natCast_ne_top) (Or.inl ENNReal.natCast_ne_top)]
   have hr : (Fintype.card R : ℝ≥0∞) ≠ 0 := by exact_mod_cast Fintype.card_ne_zero
   calc
     _ = (Fintype.card C : ℝ≥0∞)⁻¹ *

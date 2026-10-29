@@ -29,7 +29,7 @@ theorem uniform_apply_real {X : Type} [Fintype X] [Nonempty X]
   simp only [Measure.dirac_apply, Set.indicator_apply, Pi.one_apply]
   unfold R0Z.FsAbort.mean
   push_cast
-  simp only [ENNReal.toReal_ite, ENNReal.toReal_one, ENNReal.toReal_zero, div_eq_mul_inv]
+  simp only [apply_ite, ENNReal.toReal_one, ENNReal.toReal_zero, div_eq_mul_inv]
   ring
 
 /-- Exact rational test laws imply exact pushforward laws on finite uniform sources.

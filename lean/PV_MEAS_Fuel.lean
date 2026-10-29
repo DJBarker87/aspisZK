@@ -45,7 +45,7 @@ theorem test_bound (μR : ProbabilityMeasure R)
   have hm : (∫ m, (if ∃ i, ProverCommitFuelJoin22.bad old queries i m then (1 : ℝ) else 0)
       ∂(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape) : Measure _)) =
       (eventMass (fun m => ∃ i, ProverCommitFuelJoin22.bad old queries i m) : ℝ) := by
-    simpa only [eventMass, Rat.cast_ite, Rat.cast_one, Rat.cast_zero] using
+    simpa only [eventMass, apply_ite, Rat.cast_one, Rat.cast_zero] using
       (integral_rat_mean (fun m => if ∃ i, ProverCommitFuelJoin22.bad old queries i m
         then (1 : ℚ) else 0))
   rw [hm] at ht
