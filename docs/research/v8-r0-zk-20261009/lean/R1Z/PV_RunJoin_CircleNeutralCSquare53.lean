@@ -32,6 +32,7 @@ theorem complete (a : U32 × U32) (ha : CC a) :
       sum_checked a ha,pad_checked a ha,mix_sub a ha,
       PV_RunJoin_CircleNeutralR23_53.complete]
     rw [PV_RunJoin_CircleNeutralChecked64_53.mul _ _ hp]
+    simp only [prod] at h0'
     simp only [h0',h1',PV_RunJoin_CircleR72Raw52.field.M31.double,h2',bind_tc_ok]
 
 #print axioms complete

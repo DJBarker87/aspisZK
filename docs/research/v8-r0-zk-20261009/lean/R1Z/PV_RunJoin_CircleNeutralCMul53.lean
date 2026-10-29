@@ -38,6 +38,7 @@ theorem complete (a b : U32 × U32) (ha : CC a) (hb : CC b) :
     simp only [h0',h1',lift,bind_tc_ok,from32,sum_checked a ha,sum_checked b hb,
       PV_RunJoin_CircleNeutralR23_53.complete]
     rw [PV_RunJoin_CircleNeutralChecked64_53.mul _ _ hp]
+    simp only [prod] at h2'
     simp only [bind_tc_ok,h2',h3',h4',h5']
 
 #print axioms complete
