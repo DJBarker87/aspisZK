@@ -34,6 +34,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       ProverCommitRoundScaled48.run 256 (sourceArray 1024#usize q) (sourceArray 1024#usize w)=
         ok (List.ofFn (fun i : Fin 7 => source (c0 i.val))) ∧
       bytes.val.map PV_RunJoin_WideImage43.byte=ProverCommitOpeningBytes49.stream 7 c0 hc0 := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   obtain ⟨c0,bytes,hc0,heq,hmodel,hbytes⟩ := PV_RunJoin_PrepareTailAssociation48.complete
     base heap box ops variant hash backend sem tr y1 gamma inactive kappa q w hq hw
   refine ⟨c0,bytes,hc0,?_,hmodel,hbytes⟩
