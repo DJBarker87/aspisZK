@@ -35,7 +35,8 @@ theorem mutable_binding {α : Type} {n : Usize} (xs : Array α n) (index : Usize
  | div => rfl
  | ok old =>
    simp only [bind_tc_ok]
-   congr 1
+   apply congrArg Result.ok
+   apply congrArg (fun back : α → Array α n => (old,back))
    funext value
    apply Subtype.ext
    exact congrArg Subtype.val (restore_view xs index value).symm
