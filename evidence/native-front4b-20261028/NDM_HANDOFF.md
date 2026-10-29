@@ -44,3 +44,5 @@ Host workspace `/home/dombarker/project-offloads/codex-cx-native-front4b-2026102
 Compiled lane objects moved into retained cache subdirectory `NDM_front4b_objects_20261029`; old NDM_objects path is a symlink to preserve exact resolution. Lane-owned Rust target/ref-target scratch removed (~775MB); solver temp files0. Own cache never deleted. No wallet/key operations. No live session A worktree or other lane candidates edited. No file exceeds20MB; no binary/object files committed.
 
 All repository changes are in this lane's evidence directory; harness changes exist only as private scratch patches/source receipts. No shipped Rust file changed, so no three-ELF rebuild trigger occurred. Inherited ELF pins, not newly reproduced: default f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4; devnet63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299; Pool121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548. No push.
+
+Final whitespace check: authored files pass. Unfiltered git diff --check reports whitespace only in raw .log/.patch evidence; these immutable bytes are preserved. NDM_DIFF_CHECK.json records the split.
