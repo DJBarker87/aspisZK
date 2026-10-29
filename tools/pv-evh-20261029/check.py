@@ -15,6 +15,7 @@ for p in files:
 bound=Path('lean/PV_EVH_Core.lean').read_text().split('def bound : ℚ :=',1)[1].split('/--',1)[0].strip()
 prior=Path('lean/PV_EVHD_Headline.lean').read_text().split('def bound : ℚ :=',1)[1].split('/--',1)[0].strip()
 assert bound==prior
+assert "".join(bound.split()) in "".join(Path(old).read_text().split())
 assert 'ProverCommitModelCore16.core_privacy' in Path('lean/PV_EVH_Core.lean').read_text()
 assert 'ProverCommitReencode16.privacy_transport' in Path('lean/PV_EVH_Core.lean').read_text()
 assert 'simE (h).transport B outputs x' in Path('lean/PV_EVH_Core.lean').read_text()
