@@ -1,0 +1,80 @@
+{
+  "row": "V220",
+  "records": [
+    {
+      "marker": "fn qm31_from_karatsuba_channel_sums(",
+      "source_file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body": "fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 {\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_by_r(m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n}",
+      "body_sha256": "70438b6fadc360325d0cc60ddc275fb3cae50d1791bc13fc7ec517179da6eae6",
+      "expected_body": "fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 {\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_by_r(m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n}",
+      "expected_sha256": "70438b6fadc360325d0cc60ddc275fb3cae50d1791bc13fc7ec517179da6eae6",
+      "token_sha256": "ca94aeb6fe7bb5ec4d1e74b2f42764ffe721805fe692221e73a6d72f69d4cd7e",
+      "models": [
+        "R1Z.PV_RDCD4_LazyReconstruct.component",
+        "R1Z.PV_RDCD4_LazyReconstruct.source"
+      ],
+      "statement_binding": "Three channel reads/reductions in order; two scalar subtractions for b; three component reconstructions; mul_by_r; c0 add then c1 sub/sub. Copy values have no user Drop."
+    },
+    {
+      "marker": "fn qm31_accumulate_product_channels(",
+      "source_file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body": "fn qm31_accumulate_product_channels(\n    mut sums: [[u64; 3]; 3],\n    left: QM31,\n    right: QM31,\n) -> [[u64; 3]; 3] {\n    let left_sum = left.c0.add(left.c1);\n    let right_sum = right.c0.add(right.c1);\n    let left_components = [\n        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],\n        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],\n        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],\n    ];\n    let right_components = [\n        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],\n        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],\n        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],\n    ];\n    for component in 0..3 {\n        for channel in 0..3 {\n            sums[component][channel] += left_components[component][channel].0 as u64\n                * right_components[component][channel].0 as u64;\n        }\n    }\n    sums\n}",
+      "body_sha256": "6d9ee5c6f90ae2a29387e3f0811181479d04406b6d10c2a006721bf14583f60c",
+      "expected_body": "fn qm31_accumulate_product_channels(\n    mut sums: [[u64; 3]; 3],\n    left: QM31,\n    right: QM31,\n) -> [[u64; 3]; 3] {\n    let left_sum = left.c0.add(left.c1);\n    let right_sum = right.c0.add(right.c1);\n    let left_components = [\n        [left.c0.a, left.c0.b, left.c0.a.add(left.c0.b)],\n        [left.c1.a, left.c1.b, left.c1.a.add(left.c1.b)],\n        [left_sum.a, left_sum.b, left_sum.a.add(left_sum.b)],\n    ];\n    let right_components = [\n        [right.c0.a, right.c0.b, right.c0.a.add(right.c0.b)],\n        [right.c1.a, right.c1.b, right.c1.a.add(right.c1.b)],\n        [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],\n    ];\nfor component in 0..3 {for channel in 0..3 {sums[component][channel] += left_components[component][channel].0 as u64 * right_components[component][channel].0 as u64;}} sums }",
+      "expected_sha256": "5af024c3a968c9f4ab4491408b2dcc246c6e0193b72962396a703d006a38dc27",
+      "token_sha256": "ccec8ee35867f21af379e64f43f40baee301a110f3c31bfcf6e9979fdcf53d95",
+      "models": [
+        "R1Z.PV_RDCD4_LazyPair.pair/finish",
+        "R1Z.PV_RDCD4_LazyCell.cell/changed_outer",
+        "R1Z.PV_RDCD4_LazyChannels.row_unroll/nine_unroll",
+        "R1Z.PV_RDCD4_LazyAccumulate.binding"
+      ],
+      "statement_binding": "Left-sum then right-sum before component arrays; all six component additions in order; nested row-major Range<usize> loops; read RHS factors, cast to u64, wrapping product; read/update inner destination then write changed outer destination. Final complete sums retained."
+    },
+    {
+      "marker": "fn qm31_sum_products_small<",
+      "source_file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body": "fn qm31_sum_products_small<const N: usize>(left: [QM31; N], right: [QM31; N]) -> QM31 {\n    debug_assert!(N >= 2 && N <= 4);\n    // [quadratic-extension component][CM31 Karatsuba channel].\n    let mut sums = [[0u64; 3]; 3];\n    let mut index = 0usize;\n    while index < N {\n        sums = qm31_accumulate_product_channels(sums, left[index], right[index]);\n        index += 1;\n    }\n\n    qm31_from_karatsuba_channel_sums(sums)\n}",
+      "body_sha256": "62096d6db7e54865e96ef225c9c4bb6b9e98288c5eabe5f46d6c85d367a43112",
+      "expected_body": "fn qm31_sum_products_small<const N:usize>(left:[QM31;N],right:[QM31;N])->QM31 {debug_assert!(N>=2&&N<=4);let mut sums=[[0u64;3];3];let mut index=0usize;while index<N{sums=qm31_accumulate_product_channels(sums,left[index],right[index]);index+=1;}qm31_from_karatsuba_channel_sums(sums)}",
+      "expected_sha256": "7e825c61efbc1af54cba9607331ccb8cb99e38dd851025050a1f07a7b2eb10b4",
+      "token_sha256": "504131a87f600752d437a8f5c83edb4c9954084c61e3da8ba0e5f2bd1535db7f",
+      "models": [
+        "R1Z.PV_RDCD4_LazyProducts.source/binding"
+      ],
+      "statement_binding": "N=3, release debug assertion disabled; initialize all nine zeros; three checked public array reads and complete accumulation stores; increment bounded0..3; reconstruct after loop."
+    },
+    {
+      "marker": "pub fn qm31_sum_products3(",
+      "source_file_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "body": "pub fn qm31_sum_products3(left: [QM31; 3], right: [QM31; 3]) -> QM31 {\n    qm31_sum_products_small(left, right)\n}",
+      "body_sha256": "3f71f4a0094db6ef24d9374a1fc37b00c10f5b24f25db1f65d7c73d23e50e628",
+      "expected_body": "pub fn qm31_sum_products3(left:[QM31;3],right:[QM31;3])->QM31{qm31_sum_products_small(left,right)}",
+      "expected_sha256": "413c52344bc8f2c4046b7b13fdfdd611e7a3e48c1b7914688b90d8bb01b81455",
+      "token_sha256": "6c83cd4c2c4876e2d7d753d93ff6002ad5b39a78963dae26d14062215cf9df70",
+      "models": [
+        "R1Z.PV_RDCD4_LazyProducts.source"
+      ],
+      "statement_binding": "Concrete N=3 forwarding; both Copy arrays remain in source order, no destructor branch."
+    },
+    {
+      "marker": "pub fn evaluate_state_only_polynomial(",
+      "source_file_sha256": "e09008daaaea9f35e2a28b85ec06f38dba75dbc9e6741d53a13020123f00d78d",
+      "body": "pub fn evaluate_state_only_polynomial(\n    polynomial: &StateOnlySumcheckPolynomial,\n    challenge: QM31,\n) -> QM31 {\n    let x2 = challenge.square();\n    let x3 = challenge.mul(x2);\n    let x4 = x2.square();\n    let powers = [challenge, x2, x3];\n    let prepared_x4 = PreparedQm31Multiplier::new(x4);\n    let block_value = |block: usize| {\n        let start = 4 * block;\n        polynomial[start].add(qm31_sum_products3(\n            powers,\n            [\n                polynomial[start + 1],\n                polynomial[start + 2],\n                polynomial[start + 3],\n            ],\n        ))\n    };\n    let mut accumulator = block_value(6);\n    let mut block = 6usize;\n    while block > 0 {\n        block -= 1;\n        accumulator = prepared_x4.mul(accumulator).add(block_value(block));\n    }\n    accumulator\n}",
+      "body_sha256": "38d8ff4b6308a249ce06a1cfcc215e90bdbf687c0fb4f1ad49e2722ab500b5a2",
+      "expected_body": "pub fn evaluate_state_only_polynomial(polynomial:&StateOnlySumcheckPolynomial,challenge:QM31,)->QM31{let x2=challenge.square();let x3=challenge.mul(x2);let x4=x2.square();let powers=[challenge,x2,x3];let prepared_x4=PreparedQm31Multiplier::new(x4);let block_value=|block:usize|{let start=4*block;polynomial[start].add(qm31_sum_products3(powers,[polynomial[start+1],polynomial[start+2],polynomial[start+3],],))};let mut accumulator=block_value(6);let mut block=6usize;while block>0{block-=1;accumulator=prepared_x4.mul(accumulator).add(block_value(block));}accumulator}",
+      "expected_sha256": "3762ea8022a6b1ebc495ab00dd1c9791e2e6b35fab1ef1e64f4a84bc72785426",
+      "token_sha256": "3cb2b72346ab078358cf390a0f90e6b3741b584dc4d8aba4033764beecee9f56",
+      "models": [
+        "R1Z.PV_RDCD4_RadixBlock.index_bound/index_word_bound/binding",
+        "R1Z.PV_RDCD4_RadixLoop.binding/step_binding",
+        "R1Z.PV_RDCD4_V220.source_reference"
+      ],
+      "statement_binding": "square/mul/square in source order; construct three powers; prepare x4; closure start=4*block with exact four indexed coefficients; initialize block6; decrement before each multiply/add; return final accumulator after block0. All reachable indices bounded below28 and word overflow impossible. No external state or arbitrary callback added."
+    }
+  ],
+  "original_owned_reference_sha256": "8a58d36ff208d0e7a8a02649cbed8acf1df2a216e8676857e447a47f990fc0c3",
+  "qualification": "Mechanical whole-body shape checks plus own-1 hand structural associations; NOT an original checker, not a pinned extraction generation chain, zero b3p6-1 reclassifications.",
+  "primitive_boundary": "Rust integer/layout/drop and compiler execution V370/D381/D386 retained; complete Result interface unchanged",
+  "pending": "Compile the source/owned-reference transport; confirm fixed initialized representation invariants and final object/source closure."
+}
