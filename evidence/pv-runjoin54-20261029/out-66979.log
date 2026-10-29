@@ -1,0 +1,46 @@
+START 66979 R1Z.PV_RunJoin_CircleNeutralComplete54
+DONE 66979 R1Z.PV_RunJoin_CircleNeutralComplete54 exit 1 wall 1.5 RSS 3915206656
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleNeutralComplete54.lean:13:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RunJoin_CircleRawMap52.map_parameter parameter
+in the target expression
+  (do
+      let parameter1 ← PV_RunJoin_CircleRawMap52.shipped_sampler.qm31_sample block
+      let r ← PV_RunJoin_CircleRawMap52.map_parameter parameter1
+      match r with
+        | core.result.Result.Ok point => ok point
+        | core.result.Result.Err a =>
+          match row with
+          | false => PV_RunJoin_CircleRawMap52.fallback 0#usize
+          | true => PV_RunJoin_CircleRawMap52.fallback 1#usize) =
+    do
+    let r ← PV_RunJoin_CircleMapPrograms54.run parameter
+    match r with
+      | core.result.Result.Ok p => ok p
+      | core.result.Result.Err a =>
+        if row = true then PV_RunJoin_CircleFallbackPrograms54.fallback 1#usize
+        else PV_RunJoin_CircleFallbackPrograms54.fallback 0#usize
+
+block : Std.Array U8 32#usize
+row : Bool
+parameter : PV_RunJoin_CircleRawTower52.field.QM31
+hp : PV_RunJoin_CircleRawSampler52.shipped_sampler.qm31_sample block = ok parameter
+hc : PV_RunJoin_CircleNeutralShape53.QC parameter
+hmap : PV_RunJoin_CircleRawMap52.map_parameter parameter = PV_RunJoin_CircleMapPrograms54.run parameter
+⊢ (do
+      let parameter1 ← PV_RunJoin_CircleRawMap52.shipped_sampler.qm31_sample block
+      let r ← PV_RunJoin_CircleRawMap52.map_parameter parameter1
+      match r with
+        | core.result.Result.Ok point => ok point
+        | core.result.Result.Err a =>
+          match row with
+          | false => PV_RunJoin_CircleRawMap52.fallback 0#usize
+          | true => PV_RunJoin_CircleRawMap52.fallback 1#usize) =
+    do
+    let r ← PV_RunJoin_CircleMapPrograms54.run parameter
+    match r with
+      | core.result.Result.Ok p => ok p
+      | core.result.Result.Err a =>
+        if row = true then PV_RunJoin_CircleFallbackPrograms54.fallback 1#usize
+        else PV_RunJoin_CircleFallbackPrograms54.fallback 0#usize
+'R1Z.PV_RunJoin_CircleNeutralComplete54.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

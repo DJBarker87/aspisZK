@@ -1,0 +1,83 @@
+START 66973 R1Z.PV_RunJoin_CircleMapSource54
+DONE 66973 R1Z.PV_RunJoin_CircleMapSource54 exit 1 wall 1.09 RSS 2689347584
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleMapSource54.lean:24:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.79 ?m.80 ?m.81).mpr`
+  ?m.79 >>= ?m.80 = ?m.79 >>= ?m.81
+with the goal
+  (do
+      let r ←
+        do
+          let q1 ← PV_RunJoin_CircleR72Raw52.field.QM31.ONE.sub square
+          let q2 ← q1.mul inv
+          let q3 ← PV_RunJoin_CircleR72Raw52.field.QM31.add a a
+          let q4 ← q3.mul inv
+          ok (core.result.Result.Ok (q2, q4))
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2
+                PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+          if b = true then
+              ok (core.result.Result.Err PV_RunJoin_CircleR72Raw52.circle.CirclePointError.ParameterInCm31Subfield)
+            else ok (core.result.Result.Ok val)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            PV_RunJoin_CircleR72Raw52.circle.SecureCirclePoint
+            (core.convert.FromSame PV_RunJoin_CircleR72Raw52.circle.CirclePointError) residual) =
+    do
+    let q1 ← PV_RunJoin_CircleR72Raw52.field.QM31.ONE.sub square
+    let q2 ← q1.mul inv
+    let q3 ← PV_RunJoin_CircleR72Raw52.field.QM31.add a a
+    let q4 ← q3.mul inv
+    let b ←
+      PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2 PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+    if b = true then ok (core.result.Result.Err true) else ok (core.result.Result.Ok (q2, q4))
+
+Note: The full type of `(bind_eq_iff ?m.79 ?m.80 ?m.81).mpr` is
+  (∀ (v : ?m.77), ?m.79 = ok v → ?m.80 v = ?m.81 v) → ?m.79 >>= ?m.80 = ?m.79 >>= ?m.81
+
+case some
+a : Q
+square : PV_RunJoin_CircleR72Raw52.field.QM31
+a✝² : PV_RunJoin_CircleR72Raw52.field.QM31.square a = ok square
+denominator : PV_RunJoin_CircleR72Raw52.field.QM31
+a✝¹ : PV_RunJoin_CircleR72Raw52.field.QM31.ONE.add square = ok denominator
+inv : PV_RunJoin_CircleR72Raw52.field.QM31
+a✝ : denominator.try_inv = ok (some inv)
+⊢ (do
+      let r ←
+        do
+          let q1 ← PV_RunJoin_CircleR72Raw52.field.QM31.ONE.sub square
+          let q2 ← q1.mul inv
+          let q3 ← PV_RunJoin_CircleR72Raw52.field.QM31.add a a
+          let q4 ← q3.mul inv
+          ok (core.result.Result.Ok (q2, q4))
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let b ←
+            PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2
+                PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+          if b = true then
+              ok (core.result.Result.Err PV_RunJoin_CircleR72Raw52.circle.CirclePointError.ParameterInCm31Subfield)
+            else ok (core.result.Result.Ok val)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            PV_RunJoin_CircleR72Raw52.circle.SecureCirclePoint
+            (core.convert.FromSame PV_RunJoin_CircleR72Raw52.circle.CirclePointError) residual) =
+    do
+    let q1 ← PV_RunJoin_CircleR72Raw52.field.QM31.ONE.sub square
+    let q2 ← q1.mul inv
+    let q3 ← PV_RunJoin_CircleR72Raw52.field.QM31.add a a
+    let q4 ← q3.mul inv
+    let b ←
+      PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq a.2 PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+    if b = true then ok (core.result.Result.Err true) else ok (core.result.Result.Ok (q2, q4))
+'R1Z.PV_RunJoin_CircleMapSource54.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

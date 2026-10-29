@@ -1,0 +1,78 @@
+START 66954 R1Z.PV_RunJoin_SamplerDivLoop54
+DONE 66954 R1Z.PV_RunJoin_SamplerDivLoop54 exit 1 wall 1.14 RSS 2691956736
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SamplerDivLoop54.lean:24:13: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  shipped_sampler.qm31_div_pass_loop.body rank rem j
+in the target expression
+  (match
+      match (rank, rem, j) with
+      | (rank1, remainder1, j1) => shipped_sampler.qm31_div_pass_loop.body rank1 remainder1 j1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (rank1, remainder1, j1) => shipped_sampler.qm31_div_pass_loop.body rank1 remainder1 j1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (last, remain)
+
+case succ
+n : ℕ
+ih :
+  ∀ (rank : Std.Array U32 8#usize) (rem : U64) (j : Usize),
+    ↑j = n →
+      n ≤ 8 →
+        ↑rem < 2147483647 → ∃ next r, shipped_sampler.qm31_div_pass_loop rank rem j = ok (next, r) ∧ ↑r < 2147483647
+rank : Std.Array U32 8#usize
+rem : U64
+j : Usize
+hj : ↑j = n + 1
+bound : n + 1 ≤ 8
+hrem : ↑rem < 2147483647
+next : Std.Array U32 8#usize
+r : U64
+hstep : shipped_sampler.qm31_div_pass_loop.body rank rem j = ok (cont (next, r, j.wrapping_sub 1#usize))
+hr : ↑r < 2147483647
+dec : ↑(j.wrapping_sub 1#usize) = n
+last : Std.Array U32 8#usize
+remain : U64
+htail : shipped_sampler.qm31_div_pass_loop next r (j.wrapping_sub 1#usize) = ok (last, remain)
+hremain : ↑remain < 2147483647
+⊢ (match
+      match (rank, rem, j) with
+      | (rank1, remainder1, j1) => shipped_sampler.qm31_div_pass_loop.body rank1 remainder1 j1 with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (rank1, remainder1, j1) => shipped_sampler.qm31_div_pass_loop.body rank1 remainder1 j1)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok (last, remain)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SamplerDivLoop54.lean:16:67: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [shipped_sampler.qm31_div_pass_loop.body, ̲if_neg stop,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_SamplerDivLoop54.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
