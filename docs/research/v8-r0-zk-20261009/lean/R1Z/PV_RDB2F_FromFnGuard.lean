@@ -18,14 +18,19 @@ theorem initialized_prefix {S A : Type} (f : Nat → S → Result (A × S))
   induction n generalizing i filled s with
   | zero => simp [guarded,PV_RDB2E_FromFn.build,bind_tc_ok]
   | succ n ih =>
-    rw [guarded,PV_RDB2E_FromFn.step]
-    simp only [bind_assoc_eq]
-    congr 1
-    funext pair
-    rcases pair with ⟨item,current⟩
-    dsimp only
-    rw [ih]
-    simp only [bind_tc_ok,bind_assoc_eq,List.append_assoc,List.singleton_append]
+    cases hf : f i s with
+    | fail e => simp [guarded,PV_RDB2E_FromFn.build,hf]
+    | div => simp [guarded,PV_RDB2E_FromFn.build,hf]
+    | ok pair =>
+      rcases pair with ⟨item,current⟩
+      simp only [guarded,PV_RDB2E_FromFn.build,hf,bind_tc_ok]
+      rw [ih]
+      cases hb : PV_RDB2E_FromFn.build f n (i+1) current with
+      | fail e => simp [hb,bind_tc_fail]
+      | div => simp [hb,bind_tc_div]
+      | ok pair =>
+        rcases pair with ⟨tail,after⟩
+        simp [hb,bind_tc_ok,List.append_assoc]
 
 theorem complete_capture {S A : Type} (f : Nat → S → Result (A × S))
     (n : Nat) (s : S) :
