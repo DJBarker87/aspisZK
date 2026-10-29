@@ -1,0 +1,61 @@
+{
+  "checks": [
+    {
+      "original": "source/sha256-soft.rs",
+      "owned": "native/soft.rs",
+      "original_sha256": "98e765a8e8dfa0af31f2b76570f212e6b3099522bf300e1554cbbd9fd5d02960",
+      "owned_sha256": "98e765a8e8dfa0af31f2b76570f212e6b3099522bf300e1554cbbd9fd5d02960",
+      "byte_equal": true
+    },
+    {
+      "original": "source/sha256-x86.rs",
+      "owned": "native/x86.rs",
+      "original_sha256": "70f1597f2029522b35bfd026df0a8908f086523ab2a80ba3ef35e6231b56353c",
+      "owned_sha256": "70f1597f2029522b35bfd026df0a8908f086523ab2a80ba3ef35e6231b56353c",
+      "byte_equal": true
+    },
+    {
+      "original": "source/sha-consts.rs",
+      "owned": "native/consts.rs",
+      "original_sha256": "2f820349fa7cbf9fecc1d4aabbd1a721bb1badc3f32ef9e903826960b6f42523",
+      "owned_sha256": "2f820349fa7cbf9fecc1d4aabbd1a721bb1badc3f32ef9e903826960b6f42523",
+      "byte_equal": true
+    },
+    {
+      "body": "Sha256VarCore::finalize_variable_core",
+      "same_calls_same_order_same_error_paths": true,
+      "exact_substitutions": [
+        {
+          "source": "Self::BlockSize::U64",
+          "owned": "64u64",
+          "reason": "fixed U64 block size; constant law in Lean required"
+        }
+      ],
+      "source_tokens_sha256": "ee724a5317af5a00d5cc43d00be976a7e1123dbafdda48d945cd7eaa4f955555",
+      "owned_tokens_sha256": "5bbd1927ca29a9cc9c00dbbb39c6642a310389011c440aa13d26da1b825e92e0"
+    },
+    {
+      "body": "sha256::compress256",
+      "substitution": "selected compress alias \u2192 x86::compress; selected by x86_64, no force-soft/force-soft-compact/asm",
+      "source_tokens_sha256": "bf98f96c645f5ed01bcbae57bb46186aa5c28b45fa7f299f20771affff8cc8ae"
+    }
+  ],
+  "source_model_binding": "partial; Rust-copy body identity does not prove Lean source projection or hardware intrinsic adequacy",
+  "class_if_completed": "structural (K-1 substitute)",
+  "selection": {
+    "sha2": "0.10.9",
+    "features": [
+      "default",
+      "std"
+    ],
+    "architecture": "x86_64-unknown-linux-gnu",
+    "profile": "release opt3 debug_assertions=false overflow_checks=false panic=unwind",
+    "rule": "all four target features compile-time enabled => true; otherwise Linux CPUID cached using relaxed AtomicU8: leaf1.edx[26] SSE2 & leaf1.ecx[9] SSSE3 & leaf1.ecx[19] SSE4.1 & leaf7/subleaf0.ebx[29] SHA. true => digest_blocks; false => soft::compress. Cache initially255;0=false;1=true.",
+    "reachable": [
+      "sha256/x86.rs::digest_blocks",
+      "sha256/soft.rs::compress"
+    ],
+    "sha_ni_owner_pending": true
+  },
+  "composition_trust": "reclassification within existing tool trust, never premise removal"
+}

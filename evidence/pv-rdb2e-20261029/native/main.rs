@@ -69,7 +69,7 @@ fn main(){
   let initial=Core{state,block_len:count};let mut actual=initial.clone();let mut expected=initial;
   let mut b=Buffer::default();b.set(GenericArray::clone_from_slice(&buffer),pos);let mut out=Output::clone_from_slice(&[0xa5;32]);
   actual.finalize(&mut b,&mut out);let mut rb=buffer;let ro=model(&mut expected,&mut rb,pos);
-  assert_eq!(actual,expected);assert_eq!(b.get_pos(),0);assert_eq!(&b.clone().pad_with_zeros()[..],&rb);assert_eq!(&out[..],&ro);sha+=1;
+  assert_eq!(actual,expected);assert_eq!(b.get_pos(),0);let mut expectedbuffer=Buffer::default();expectedbuffer.set(GenericArray::clone_from_slice(&rb),0);assert_eq!(format!("{b:?}"),format!("{expectedbuffer:?}"));assert_eq!(&out[..],&ro);sha+=1;
  }}
  for n in 0..1024 {let mut block=[0;32];for b in &mut block{*b=next(&mut rng)as u8;}if n==0{block=[0xff;32];}
   let (ds,h,visits)=low_trace(&block);assert_eq!((ds,h),sampler_original::low_for_audit(&block));assert_eq!((ds,h),sampler_host::low_for_audit(&block));assert_eq!(visits,64);
@@ -80,6 +80,6 @@ fn main(){
  assert!(changed>0);assert_eq!(carry_trace([2147483646;8],1),(true,[0;8]));assert_eq!(carry_trace([0;8],1),(false,[1,0,0,0,0,0,0,0]));
  let mut backend=0;for n in [0,1,2,3,17]{for _ in 0..64{let state=core::array::from_fn(|_|next(&mut rng));let blocks:Vec<[u8;64]>=(0..n).map(|_|core::array::from_fn(|_|next(&mut rng)as u8)).collect();let mut a=state;let mut b=state;x86::compress(&mut a,&blocks);soft::compress(&mut b,&blocks);assert_eq!(a,b);backend+=1;}}
  // Compare the public shipped trait at every padding boundary against its literal source body.
- for pos in 0..64 {let input=vec![0x47;pos];let mut c=sha2::Sha256VarCore::new(32).unwrap();let mut b=Buffer::default();let mut modelb=Buffer::default();let ga=GenericArray::clone_from_slice(&[0x47;64]);b.set(ga.clone(),pos);modelb.set(ga,pos);let mut out=Output::default();let mut copyout=Output::default();let mut copy=Core{state:consts::H256_256,block_len:0};c.finalize_variable_core(&mut b,&mut out);copy.finalize(&mut modelb,&mut copyout);assert_eq!(out,copyout);assert_eq!(b.get_pos(),modelb.get_pos());assert_eq!(b.pad_with_zeros(),modelb.pad_with_zeros());assert_eq!(input.len(),pos);}
+ for pos in 0..64 {let input=vec![0x47;pos];let mut c=sha2::Sha256VarCore::new(32).unwrap();let mut b=Buffer::default();let mut modelb=Buffer::default();let ga=GenericArray::clone_from_slice(&[0x47;64]);b.set(ga.clone(),pos);modelb.set(ga,pos);let mut out=Output::default();let mut copyout=Output::default();let mut copy=Core{state:consts::H256_256,block_len:0};c.finalize_variable_core(&mut b,&mut out);copy.finalize(&mut modelb,&mut copyout);assert_eq!(out,copyout);assert_eq!(b.get_pos(),modelb.get_pos());assert_eq!(format!("{b:?}"),format!("{modelb:?}"));assert_eq!(input.len(),pos);}
  println!("finite validation: SHA full mutable core/buffer/cursor/output cases={sha}; actual public trait padding cases=64; sampler original/indexed full pairs={sampler}; reverse mutable write visits={}; backend arbitrary-state/list cases={backend}; CPU sha={} sse2={} ssse3={} sse4.1={}",64*sampler,std::is_x86_feature_detected!("sha"),std::is_x86_feature_detected!("sse2"),std::is_x86_feature_detected!("ssse3"),std::is_x86_feature_detected!("sse4.1"));
 }
