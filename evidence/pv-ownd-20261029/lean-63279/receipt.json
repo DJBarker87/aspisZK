@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63279/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63279/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_CounterOrder.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.20",
+  "peak_rss_kib": "489472",
+  "swap": "0",
+  "source_revision": "85d55db3d5984fb30b2916454ef9db889252a728",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:7:64: error: unsolved goals\nv : Link\nvs : List Link\np c : Counts\ne : Error\nh : bump p v.producer = Except.error e\n\u22a2 (do\n      let producers \u2190 Except.error e\n      let consumers \u2190 bump c v.consumer\n      check vs producers consumers) =\n    Except.error e\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:8:20: warning: This simp argument is unused:\n  Except.bind\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335c\u0335h\u0335e\u0335c\u0335k\u0335,\u0335h\u0335,\u0335E\u0335x\u0335c\u0335e\u0335p\u0335t\u0335.\u0335b\u0335i\u0335n\u0335d\u0335]\u0335[\u0332c\u0332h\u0332e\u0332c\u0332k\u0332,\u0332 \u0332h\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:12:31: error: unsolved goals\nv : Link\nvs : List Link\np c p' : Counts\ne : Error\nhp : bump p v.producer = Except.ok p'\nhc : bump c v.consumer = Except.error e\n\u22a2 (do\n      let producers \u2190 Except.ok p'\n      let consumers \u2190 Except.error e\n      check vs producers consumers) =\n    Except.error e\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:13:24: warning: This simp argument is unused:\n  Except.bind\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335c\u0335h\u0335e\u0335c\u0335k\u0335,\u0335h\u0335p\u0335,\u0335h\u0335c\u0335,\u0335E\u0335x\u0335c\u0335e\u0335p\u0335t\u0335.\u0335b\u0335i\u0335n\u0335d\u0335]\u0335[\u0332c\u0332h\u0332e\u0332c\u0332k\u0332,\u0332 \u0332h\u0332p\u0332,\u0332 \u0332h\u0332c\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:17:37: error: unsolved goals\nv : Link\nvs : List Link\np c p' c' : Counts\nhp : bump p v.producer = Except.ok p'\nhc : bump c v.consumer = Except.ok c'\n\u22a2 (do\n      let producers \u2190 Except.ok p'\n      let consumers \u2190 Except.ok c'\n      check vs producers consumers) =\n    check vs p' c'\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_CounterOrder.lean:18:24: warning: This simp argument is unused:\n  Except.bind\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335c\u0335h\u0335e\u0335c\u0335k\u0335,\u0335h\u0335p\u0335,\u0335h\u0335c\u0335,\u0335E\u0335x\u0335c\u0335e\u0335p\u0335t\u0335.\u0335b\u0335i\u0335n\u0335d\u0335]\u0335[\u0332c\u0332h\u0332e\u0332c\u0332k\u0332,\u0332 \u0332h\u0332p\u0332,\u0332 \u0332h\u0332c\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWND_CounterOrder.producer_error' depends on axioms: [sorryAx]\n'R1Z.PV_OWND_CounterOrder.consumer_error' depends on axioms: [sorryAx, Quot.sound]\n'R1Z.PV_OWND_CounterOrder.success' depends on axioms: [sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 63279,
+  "module": "R1Z/PV_OWND_CounterOrder",
+  "source_blob": "de264b6ddcd9e0fdb9fe82dc4fa64115920768db",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWND_CounterOrder.lean",
+  "source_sha256": "42e01cb5da17421031e0d8c824adbbaa46c778b6c6ea340d1164d7b73c9d6c03",
+  "imports": [
+    "R1Z.PV_OWND_CounterBranch"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWND_CounterBranch": "2302c7fea55746d8cccea32605c4dd702345c46f493c18f6653ba55863dbe86b"
+  },
+  "deps_fingerprint": "635357e5c198becf81e26a54631ef8ec437cd41f0ccdbfc5ab235f411c6c7761"
+}

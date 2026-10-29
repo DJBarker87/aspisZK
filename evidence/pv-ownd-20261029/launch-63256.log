@@ -1,0 +1,21 @@
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialBytes.lean:23:1: error: unsolved goals
+case room
+S X E : Type
+prim : Request → S → Outcome E (Option Nat) × S
+w : State S X
+owner p : Nat
+s : S
+h : prim { size := 1016, alignment := 2 } w.allocator = (Outcome.ok (some p), s)
+loans : NoLoans w.memory { address := p, generation := w.memory.generations p + 1 }
+⊢ 0 + 127 ≤ 127
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialBytes.lean:40:7: error: (deterministic) timeout at `whnf`, maximum number of heartbeats (200000) has been reached
+
+Note: Use `set_option maxHeartbeats <num>` to set the limit.
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'R1Z.PV_OWND_InitialBytes.valid' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_OWND_InitialBytes.length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWND_InitialBytes.capacity' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_OWND_InitialBytes.values' depends on axioms: [propext, sorryAx, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63256/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63256/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_InitialBytes.olean", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialBytes.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:11.84", "peak_rss_kib": "508628", "swap": "0", "source_revision": "5b53d5c4a186dc6153c16fd1e2c0377c25a1be89", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

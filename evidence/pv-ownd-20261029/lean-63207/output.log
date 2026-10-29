@@ -1,0 +1,15 @@
+/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PushSuffix.lean:14:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (append k (push k b v (k.encode v)) vs).values b.length
+in the target expression
+  (append k (push k b v (k.encode v)) vs).values (b.length + 0) = (v :: vs)[0]
+
+case cons.zero
+T : Type
+k : Codec T
+v : T
+vs : List T
+ih : ∀ (b : Buffer T) (i : Nat) (hi : i < vs.length), (append k b vs).values (b.length + i) = vs[i]
+b : Buffer T
+hi : 0 < (v :: vs).length
+⊢ (append k (push k b v (k.encode v)) vs).values (b.length + 0) = (v :: vs)[0]
+'R1Z.PV_OWND_PushSuffix.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

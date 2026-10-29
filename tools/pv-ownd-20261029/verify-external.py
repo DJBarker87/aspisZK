@@ -25,6 +25,6 @@ print(json.dumps(dict(checked_at=time.time(),count=len(rows),ok=all(x['ok'] for 
 '''.replace('MANIFEST',repr(p.read_text()))
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True)
 assert r.returncode==0,r.stderr
-j=json.loads(r.stdout);j.update(manifest_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),mode='read-only before any resume compile; all 5673 external objects')
+j=json.loads(r.stdout);j.update(manifest_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),mode='read-only external cohort verification; timestamp authoritative; initial check committed before first compile; final check before audits')
 (E/'external-verification.json').write_text(json.dumps(j,indent=2)+'\n')
 print(json.dumps({k:v for k,v in j.items() if k!='rows'}));print(json.dumps([x for x in j['rows'] if not x['ok']]))

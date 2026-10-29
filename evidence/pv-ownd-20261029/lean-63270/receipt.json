@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63270/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63270/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_InitialSuccess.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.23",
+  "peak_rss_kib": "493460",
+  "swap": "0",
+  "source_revision": "665f82e265dc643f1708c841d7e26589ee8bc8b9",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:22: error: Invalid simp theorem: Expected a proposition, but found\n  (x_0 x_1 x_2 x_3 x_4 : Type) \u2192 M x_0 x_1 x_2 x_3 \u2192 (x_3 \u2192 M x_0 x_1 x_2 x_4) \u2192 M x_0 x_1 x_2 x_4\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:13:67: error: unsolved goals\nS X E : Type\nprim : Request \u2192 S \u2192 Outcome E (Option Nat) \u00d7 S\nowner p : Nat\noom : Action S X E (Buffer Link)\npayload : Nat \u2192 Link \u2192 PV_OWN_Bytes.Bytes\nw : State S X\ns : S\nh : prim { size := 1016, alignment := 2 } w.allocator = (Outcome.ok (some p), s)\n\u22a2 PV_W_Threading.bind\n      (emit (Event.allocate 1016 2) fun w =>\n        match (prim { size := 1016, alignment := 2 } w.allocator).fst with\n        | Outcome.fail e =>\n          (Outcome.fail e,\n            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,\n              extra := w.extra })\n        | Outcome.div =>\n          (Outcome.div,\n            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,\n              extra := w.extra })\n        | Outcome.ok none =>\n          (Outcome.ok none,\n            { memory := w.memory, allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,\n              extra := w.extra })\n        | Outcome.ok (some p) =>\n          (Outcome.ok (some { address := p, generation := w.memory.generations p + 1 }),\n            {\n              memory :=\n                { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),\n                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,\n                  slots := fun s =>\n                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }\n                    else w.memory.slots s,\n                  loans := w.memory.loans },\n              allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd, extra := w.extra }))\n      (fun t =>\n        match t with\n        | none => oom\n        | some t => stores t owner payload)\n      w =\n    {\n      outcome :=\n        Outcome.ok\n          (PV_OWND_ActualBytes.initialized\n            { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),\n              generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,\n              slots := fun s =>\n                if s = owner then some { address := p, generation := w.memory.generations p + 1 } else w.memory.slots s,\n              loans := w.memory.loans }\n            { address := p, generation := w.memory.generations p + 1 } owner payload),\n      world :=\n        {\n          memory :=\n            (PV_OWND_ActualBytes.initialized\n                { heap := put w.memory.heap p (some (emptyCell 1016 2 owner)),\n                  generations := fun a => if a = p then w.memory.generations p + 1 else w.memory.generations a,\n                  slots := fun s =>\n                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }\n                    else w.memory.slots s,\n                  loans := w.memory.loans }\n                { address := p, generation := w.memory.generations p + 1 } owner payload).memory,\n          allocator := s, extra := w.extra },\n      calls := [(w, Event.allocate 1016 2)] }\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:43: warning: This simp argument is unused:\n  stores\n\nHint: Omit it from the simp argument list.\n  simp only [construct, \u0332bind, \u0332allocate, \u0332emit, \u0332h,s\u0335t\u0335o\u0335r\u0335e\u0335s\u0335,\u0335 \u0332List.append_nil]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_InitialSuccess.lean:14:50: warning: This simp argument is unused:\n  List.append_nil\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335c\u0335o\u0335n\u0335s\u0335t\u0335r\u0335u\u0335c\u0335t\u0335,\u0335b\u0335i\u0335n\u0335d\u0335,\u0335a\u0335l\u0335l\u0335o\u0335c\u0335a\u0335t\u0335e\u0335,\u0335e\u0335m\u0335i\u0335t\u0335,\u0335h\u0335,\u0335s\u0335t\u0335o\u0335r\u0335e\u0335s\u0335,\u0335L\u0335i\u0335s\u0335t\u0335.\u0335a\u0335p\u0335p\u0335e\u0335n\u0335d\u0335_\u0335n\u0335i\u0335l\u0335]\u0335[\u0332c\u0332o\u0332n\u0332s\u0332t\u0332r\u0332u\u0332c\u0332t\u0332,\u0332 \u0332b\u0332i\u0332n\u0332d\u0332,\u0332 \u0332a\u0332l\u0332l\u0332o\u0332c\u0332a\u0332t\u0332e\u0332,\u0332 \u0332e\u0332m\u0332i\u0332t\u0332,\u0332 \u0332h\u0332,\u0332 \u0332s\u0332t\u0332o\u0332r\u0332e\u0332s\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWND_InitialSuccess.complete' depends on axioms: [propext, sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 63270,
+  "module": "R1Z/PV_OWND_InitialSuccess",
+  "source_blob": "a6c714827f67fc6150e9ac2a80b6c7573d8610f6",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWND_InitialSuccess.lean",
+  "source_sha256": "c8a916ad9dfc3212ea348a2beef9595ba10f2cfa78028aa497017829a9e51742",
+  "imports": [
+    "R1Z.PV_OWND_InitialRun"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWND_InitialRun": "baa9b4f62032a051f6413e02c71d6e49a947274e21695317557eb2923297a37c"
+  },
+  "deps_fingerprint": "b9bc910bbdb35b497227a8b9af2cc407b32d82f40dcaee07f020da2e19d6bd4a"
+}

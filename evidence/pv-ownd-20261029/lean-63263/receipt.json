@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63263/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63263/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_PaddedValues.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PaddedValues.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.24",
+  "peak_rss_kib": "490448",
+  "swap": "0",
+  "source_revision": "29077b4af87326a6145a868b5613ff86e34e95fd",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PaddedValues.lean:25:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (append k (push k b v (payload j v)) vs payload (j + 1)).values b.length\nin the target expression\n  (append k (push k b v (payload j v)) vs payload (j + 1)).values (b.length + 0) = (v :: vs)[0]\n\ncase cons.zero\nT : Type\nk : Codec T\npayload : Nat \u2192 T \u2192 Bytes\nv : T\nvs : List T\nih : \u2200 (b : Buffer T) (j i : Nat) (hi : i < vs.length), (append k b vs payload j).values (b.length + i) = vs[i]\nb : Buffer T\nj : Nat\nhi : 0 < (v :: vs).length\n\u22a2 (append k (push k b v (payload j v)) vs payload (j + 1)).values (b.length + 0) = (v :: vs)[0]\n'R1Z.PV_OWND_PaddedValues.retained' depends on axioms: [propext, Quot.sound]\n'R1Z.PV_OWND_PaddedValues.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 63263,
+  "module": "R1Z/PV_OWND_PaddedValues",
+  "source_blob": "5c6d5bbf8616b179b670d8a29c8d21a5cd15765a",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWND_PaddedValues.lean",
+  "source_sha256": "9bc67e3ee0077fc26253df28b4eb6c659759a0e9c86b6f39b69f83fa8234997a",
+  "imports": [
+    "R1Z.PV_OWND_PaddedFold"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWND_PaddedFold": "5e93d4b5dcd19f9a2012321ab1b54e40a342b398d1b09b9d269d82cfa4823fad"
+  },
+  "deps_fingerprint": "91cec27950289beaefeaa291056060369e1efe3f52090ffb03ce9ec63e62a29c"
+}
