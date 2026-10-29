@@ -303,3 +303,7 @@ Standing delegation to the soundness lead. The lead may decide method, tooling, 
 2. privacy (Stream B's contract, including the side-channel scope of D159);
 3. the two-transaction design (the approved two-transaction game, RuntimePersistence).
 Any change that would weaken any of these three still goes to the owner. Every decision taken under this delegation is recorded in C3-BIN with its reasoning, and in the trust inventory if it touches trust, and is reported to the owner in plain language.
+
+## Owner approval, 2026-10-29: deploy the release verifier to devnet
+
+Owner message: "approved", in reply to the lead's recommendation to deploy the release devnet verifier (ELF 63ad3e9c..., built from frozen source 4bb3b3f5... with the devnet Pool/registry IDs) as a NEW immutable devnet program (the existing verifier Gk16sp... is immutable and runs the historical fb2fc048...), wire it into the registry and Pool through their normal instructions, and re-run the read-only chain association (L188 obligation 5). Scope: devnet only; no mainnet. Conditions set by the lead: a full rehearsal on a local test validator with cloned devnet accounts first; the exact commands reviewed by the lead before any devnet write; no protocol or source change (if wiring would need a code change, it goes back to the owner).
