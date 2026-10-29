@@ -2,7 +2,7 @@
 """Config-driven R1 devnet setup and spends; wallet files stay in retained host private directories.
 Run inside r1_devnet_receipt.sh and the documented capped scope.
 """
-import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
+import base64,json,os,pathlib,subprocess,sys,time,hashlib,re,threading
 from concurrent.futures import ThreadPoolExecutor
 from r1_devnet_rpc import rpc
 from Client64_proof_accounts import proof_plan, retain_key, key_public
@@ -24,7 +24,35 @@ def account(address):
     a=rpc(URL,'getAccountInfo',[address,{'encoding':'base64','commitment':'finalized'}])
     return a
 
-def invoke(q):return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
+def invoke(q):
+    if 'action' in q:
+        return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
+    # Retained Solana key files stay unchanged. Only the Rust boundary changes:
+    # exactly 64 raw bytes per key, in the public request's key-path order.
+    records=[]
+    for path in q['keys']:
+        with open(path) as stream:
+            value=json.load(stream)
+        if not isinstance(value,list) or len(value)!=64 or any(type(b) is not int or not 0<=b<=255 for b in value):
+            raise ValueError('key file must contain exactly 64 bytes')
+        records.append(bytes(value))
+    read_fd,write_fd=os.pipe()
+    failures=[]
+    def write_records():
+        try:
+            with os.fdopen(write_fd,'wb') as stream:
+                for record in records:stream.write(record)
+        except BaseException as error:
+            failures.append(error)
+    writer=threading.Thread(target=write_records)
+    writer.start()
+    try:
+        result=subprocess.check_output([SIGNER],input=json.dumps({**q,'key_bytes_fd':read_fd}).encode(),pass_fds=(read_fd,))
+    finally:
+        os.close(read_fd)
+        writer.join()
+    if failures:raise failures[0]
+    return json.loads(result)
 def send(name,ixs,keys=['keys/payer.json'],negative=False):
     done=O/(name+'.json')
     if done.exists():
