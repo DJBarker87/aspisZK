@@ -26,8 +26,9 @@ theorem step (p : Nat → Nat → W) (lane row : Nat) (target : Nat → W) :
     · subst j
       simp only [Function.update_self,Nat.lt_succ_self,if_true]
     · simp only [Function.update_of_ne hj]
-      have he : (j<row)=(j<row+1) := propext (by omega)
-      rw [he]
+      by_cases hb : j<row
+      · simp only [if_pos hb,if_pos (show j<row+1 by omega)]
+      · simp only [if_neg hb,if_neg (show ¬j<row+1 by omega)]
   · simp only [filled,Function.update_of_ne hl]
 
 theorem full (p : Nat → Nat → W) (lane : Nat) (target : Nat → W) (l j : Nat) (hj : j<1024) :
