@@ -1,0 +1,46 @@
+/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_FILE.lean:12:45: error: unsolved goals
+I A : Type
+actual : I → List FileOp
+native : I → NativeTrace A
+raw : I → List NativeEvent
+state : I → List NativeEvent → List FileOp
+initial : PV_DIAG10_Link_Init state (nativeFiles [])
+step : PV_DIAG10_Link_Step state List.append fun e => nativeFiles [e]
+readout : PV_DIAG10_Link_Readout actual state raw
+order : PV_DIAG10_Link_EventOrder raw native
+i : I
+es : List NativeEvent
+e : NativeEvent
+⊢ List.filterMap
+        (fun e =>
+          match e with
+          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.otherFile f => some f
+          | x => none)
+        es ++
+      List.filterMap
+        (fun e =>
+          match e with
+          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.otherFile f => some f
+          | x => none)
+        [e] =
+    (List.filterMap
+          (fun e =>
+            match e with
+            | NativeEvent.proofWrite p a b => some (FileOp.write p a b)
+            | NativeEvent.statementWrite p a b => some (FileOp.write p a b)
+            | NativeEvent.otherFile f => some f
+            | x => none)
+          es).append
+      (List.filterMap
+        (fun e =>
+          match e with
+          | NativeEvent.proofWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.statementWrite p a b => some (FileOp.write p a b)
+          | NativeEvent.otherFile f => some f
+          | x => none)
+        [e])
+'PV_DIAG10.DIAG_FILE_TRACE' depends on axioms: [propext, sorryAx]

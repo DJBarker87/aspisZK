@@ -22,14 +22,15 @@ if kind=='lean':
   assert not (r.get('exit')!=0 and r.get('source_sha256')==sha(src)), 'unchanged failed source'
  obj=D/'objects'/(module.replace('.','/')+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
  assert not obj.is_symlink()
- env=json.loads((D/'env-J.json').read_text());deps={}
+ envfile=D/('env-J-b3p.json' if module.startswith('PV_DIAG10_Op227') else 'env-J.json')
+ env=json.loads(envfile.read_text());deps={}
  for imp in re.findall(r'^import (\S+)',src.read_text(),re.M):
   paths=[Path(p) for p in env['LEAN_PATH'].split(':')]
   p=next(p/(imp.replace('.','/')+'.olean') for p in paths if (p/(imp.replace('.','/')+'.olean')).is_file())
   deps[imp]={str(q):sha(q) for q in [p,Path(str(p)+'.server'),Path(str(p)+'.private'),p.with_suffix('.ir')] if q.is_file()}
- rec.update(module=module,attempt=int(n),source_sha256=sha(src),environment_sha256=sha(D/'env-J.json'),dependency_objects=deps,Lean_M=7000)
+ rec.update(module=module,attempt=int(n),source_sha256=sha(src),environment_sha256=sha(envfile),dependency_objects=deps,Lean_M=7000)
  (D/f'{label}-source.lean.txt').write_bytes(src.read_bytes())
- args=['python3',str(D.parent/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env-J.json'),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
+ args=['python3',str(D.parent/'aspis-fs-generic-20261006/evidence/run2.py'),str(envfile),str(D/'objects'),str(D/'sources'),str(obj),str(src),'7000']
 else:
  assert kind=='native'
  inputs={}
