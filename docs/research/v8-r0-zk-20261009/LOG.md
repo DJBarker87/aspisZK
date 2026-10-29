@@ -14986,3 +14986,26 @@ V371 and DOITM remain owner items and are not discharged. Rows removed: 0. Priva
 ## D482 (Stream B) 2026-10-29 07:03 UTC: runjoin55 results; runjoin56 launched
 
 runjoin55 (head 6ecb132a54, pushed) used all 100 Lean attempts with no Kani. Its three final audits passed with standard axioms only. One overlapping attempt was excluded from credit and replaced. Lead review: no forbidden constructs or raised limits in hand-written modules; link definitions unchanged; protected prefixes untouched. The conditional typed RUNJOIN_PUBLISH_COMPACT theorem now covers prove_masked_attempt, including native initialization, and its original toRP hash specialization compiles. Within the links, both circle transcript calls of CommonSample and the C1 and C2 length preservation of BackendInput are proved. All six links (CommonSample, BackendInput, FinishContext, QueryAppend, NodeAppend, PublishOrder) remain OPEN. Rows removed: 0. runjoin56 launched (IDs 68200-68299; 100 Lean, 0 Kani; one scope at a time) to discharge them cheapest first. Privacy target not yet established.
+
+## D483 (Stream B) 2026-10-29 07:06 UTC: recount 9 merged (OPEN 81 -> 73); its qualifications accepted; pv-rows10 launched on unowned rows
+
+Recount 9 (pv-recount9; statement checks only, no Lean or Kani invocations) re-derived all 407 rows at immutable pins. It was merged into research as db8f4e2d67 by the plumbing route, with the dirty-path check run over all 2,331 merged paths, and pushed. Totals:
+- OPEN 81 to 73;
+- CLOSED-ON-CANDIDATE 49 to 57;
+- open buckets a 2, b 62, c 7, d 2.
+It accepted eight scoped restorations: V229, V230, V256, V257, V260, V265, V217, and V213, whose row is restored at its existing source and Result boundary while its aggregate replay chain stays unfinished.
+
+The lead accepts its qualifications:
+- V229 and V230 are confirmed only under the full harness wording ("deployed-configuration harness"), not as an execution of the shipped ELF nor as an own-1 binding. Their explicit-argument domain is a singleton, but allocator state, failure and timing are not, and V370, D381/D386 and public failure independence remain.
+- b3p6-1 is justified only at the existing Charon/Aeneas trust boundary: 36 of the 43 identities have exact extraction provenance, and the seven absent model spans earn nothing. The 79-body universe is conservative, not certified reachability, and calling it a Rust proof or a V244 closure would be false.
+- (h5'') and the V2 resolution are confirmed.
+- The D478 obstruction is a functional-decoder impossibility for the present interface, conditional on a good completed path with no concrete native good pair certified. The owner packet's "two honest runs" phrase must be read with that qualification.
+It records that the current headline covers a conditional, Result-only observer, so the D159 privacy target is not established. It refreshed the owner packet's open-items summary, leaving D474 and D478 unchanged.
+
+pv-rows10 (sparse worktree from the current candidate; IDs 68300-68399; 100 Lean, 40 native, 0 Kani) takes OPEN rows that no running job owns and that do not depend on D474 or D478:
+- V225, getrandom.fill, bound to the syscall boundary and checked against exactly what T's entropy_law and entropy_kernel assume, with its failure branch as the option-B signal;
+- V403, the M31 canonical domain at the op121 callers;
+- V249, the z4 probe p_r1 check;
+- V263, host_work.map;
+- V404 and V405, per-fixture reachability.
+The level-2 rows V352, V366, V368 and V369 go to pv-l2e's next round, and the file-I/O rows (V171, V172, V175, V176, V267-V269, V271) to the diagnostic line once D474 is decided. Privacy target not yet established.
