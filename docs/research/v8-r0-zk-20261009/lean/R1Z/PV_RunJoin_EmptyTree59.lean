@@ -20,7 +20,7 @@ theorem level (out : alloc.vec.Vec U8) (indices : alloc.vec.Vec U32)
   rfl
 
 theorem no_multiproof (indices : Slice U32)
-    (depth : multiproof.LEAF_BITS=ok 18#u8) (out : alloc.vec.Vec U8) :
+    (depth : multiproof.LEAF_BITS=ok 18#u32) (out : alloc.vec.Vec U8) :
     host_tree.BinaryTree.multiproof empty indices ≠ ok (some out) := by
   intro success
   unfold host_tree.BinaryTree.multiproof at success

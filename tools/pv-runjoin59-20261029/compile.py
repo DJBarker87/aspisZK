@@ -82,7 +82,7 @@ if not admission.get('allowed') or rc!=0:
   if 'error' in admission:
    assert re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',admission['error']),admission
    assert sum('error' in json.loads(p.read_text()) for p in E.glob(f'refusal-{a}-*.json'))<=3,'fourth scan race'
-  print('REFUSED uncharged; same ID after full 180s cooldown', {k:admission.get(k) for k in ['attempt','allowed','admission_exit','compiler_started','error']},flush=True);sys.exit(78)
+  print('REFUSED uncharged; next unused ID after full 180s cooldown', {k:admission.get(k) for k in ['attempt','allowed','admission_exit','compiler_started','error']},flush=True);sys.exit(78)
 assert admission.get('allowed') is True,'VOID launch'
 intent['reservation']=admission
 intent['admission_exit']=0
