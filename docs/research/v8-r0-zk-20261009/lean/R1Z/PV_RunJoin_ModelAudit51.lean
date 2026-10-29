@@ -1,0 +1,16 @@
+import R1Z.PV_RunJoin_CommonSemanticSource51
+import R1Z.PV_RunJoin_CommonScalar51
+import R1Z.PV_RunJoin_MaterialSourceFields51
+import R1Z.PV_RunJoin_PrepareOrigins51
+import R1Z.PV_RunJoin_MaterialAlphaFixed51
+set_option autoImplicit false
+#print R1Z.PV_RunJoin_CommonOracle51.read
+#print axioms R1Z.PV_RunJoin_CommonOracle51.read
+#print R1Z.PV_RunJoin_CommonSemanticSource51.complete
+#print axioms R1Z.PV_RunJoin_CommonSemanticSource51.complete
+#print R1Z.PV_RunJoin_CommonScalar51.complete
+#print axioms R1Z.PV_RunJoin_CommonScalar51.complete
+#print R1Z.PV_RunJoin_MaterialSourceFields51.complete
+#print axioms R1Z.PV_RunJoin_MaterialSourceFields51.complete
+#print R1Z.PV_RunJoin_PrepareOrigins51.complete
+#print axioms R1Z.PV_RunJoin_PrepareOrigins51.complete

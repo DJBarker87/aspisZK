@@ -1,0 +1,37 @@
+import R1Z.PV_AL_CircleSelected
+import R1Z.PV_AL_ShiftLiterals
+set_option autoImplicit false
+#print axioms R1Z.PV_AL_CircleCarriers.decodeCM
+#print axioms R1Z.PV_AL_CircleCarriers.decodePoint
+#print axioms R1Z.PV_AL_CircleCarriers.decodeQ
+#print axioms R1Z.PV_AL_CircleCarriers.decodeRow
+#print axioms R1Z.PV_AL_CircleCarriers.encodeCM
+#print axioms R1Z.PV_AL_CircleCarriers.encodePoint
+#print axioms R1Z.PV_AL_CircleCarriers.encodeQ
+#print axioms R1Z.PV_AL_CircleCarriers.encodeRow
+#print axioms R1Z.PV_AL_CircleCarriers.native_point
+#print axioms R1Z.PV_AL_CircleCarriers.native_q
+#print axioms R1Z.PV_AL_CircleCarriers.native_row
+#print axioms R1Z.PV_AL_CircleCarriers.raw_point
+#print axioms R1Z.PV_AL_CircleCarriers.raw_q
+#print axioms R1Z.PV_AL_CircleCarriers.raw_row
+#print axioms R1Z.PV_AL_CircleControl.nativeInner
+#print axioms R1Z.PV_AL_CircleControl.nativeOod
+#print axioms R1Z.PV_AL_CircleControl.native_owned
+#print axioms R1Z.PV_AL_CircleControl.okOr
+#print axioms R1Z.PV_AL_CircleControl.owned
+#print axioms R1Z.PV_AL_CircleControl.unwrapOrElse
+#print axioms R1Z.PV_AL_CircleControl.unwrap_source
+#print axioms R1Z.PV_AL_CircleNative.fallback_source
+#print axioms R1Z.PV_AL_CircleNative.makePoint
+#print axioms R1Z.PV_AL_CircleNative.map_source
+#print axioms R1Z.PV_AL_CircleNative.nativeCircle
+#print axioms R1Z.PV_AL_CircleNative.nativeFallback
+#print axioms R1Z.PV_AL_CircleNative.nativeMap
+#print axioms R1Z.PV_AL_CircleNative.source_reference
+#print axioms R1Z.PV_AL_CircleSelected.consumed
+#print axioms R1Z.PV_AL_CircleSelected.native_source
+#print axioms R1Z.PV_AL_CircleSelected.row_images
+#print axioms R1Z.PV_AL_CircleSelected.selected
+#print axioms R1Z.PV_AL_ShiftLiterals.shl32
+#print axioms R1Z.PV_AL_ShiftLiterals.shr31
