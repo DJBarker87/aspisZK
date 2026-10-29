@@ -133,16 +133,16 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
   · intro i; rfl
   · intro i; rfl
   · intro e adv w
-    exact ⟨measurable_id,measurable_id,by simp only [Measure.map_id],by simp only [Measure.map_id]⟩
+    exact ⟨measurable_id,measurable_id,Measure.map_id,Measure.map_id⟩
   · intro e adv w s _; rfl
   · intro e adv w s _; rfl
   · intro e adv w s _; rfl
   · intro adv w _
     refine ⟨measurable_of_finite _,measurable_of_finite _,?_⟩
-    change Measure.map Prod.fst (uniform (Bool × ModelCoins template outputs x) : Measure _) =
+    change Measure.map Prod.fst (uniform (Bool × ModelCoins template outputs x) : Measure (Bool × ModelCoins template outputs x)) =
       Measure.map id (uniform Bool : Measure Bool)
     exact uniform_fst _ _
-  · exact ⟨measurable_id,by simp only [Measure.map_id]⟩
+  · exact ⟨measurable_id,Measure.map_id⟩
   · intro f hf hb
     exact integral_uniform_product f (fun p => (hb p).1)
   · intro adv ha
@@ -166,6 +166,7 @@ theorem simultaneously_satisfiable (ops : ExternalFuns) (sem : host_semantic.Sem
 
 /-- Closed synthetic witness, using the already checked explicit unit external
 carriers and diverging model operations. This is not a deployed execution. -/
+omit [ExternalTypes] in
 theorem closed_witness :
     letI : ExternalTypes := PV_EVH_ModelData.types
     ∃ rt : Runtime (Public := Unit) (Signal := Bool) (Env := Bool) (A := Unit)
