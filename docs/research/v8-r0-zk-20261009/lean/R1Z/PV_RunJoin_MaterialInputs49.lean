@@ -23,7 +23,12 @@ theorem alpha_model (p : Nat → Old.Q) :
     amap PV_RunJoin_WeightKernel46.toQ (amap PV_B2_F_ConstructorCarrier.fromQ (alpha p))=
       ProverCommitQArray48.array 10#usize p := by
   apply Subtype.ext
-  simp only [alpha,amap,List.map_map,Function.comp_def,scalar,List.map_id]
+  simp only [alpha,amap,List.map_map,Function.comp_def]
+  have identity : (fun q : MQ => PV_RunJoin_WeightKernel46.toQ
+      (PV_B2_F_ConstructorCarrier.fromQ (ProverRwDictionaryTower.fromQ q)))=id := by
+    funext q
+    exact scalar q
+  rw [identity,List.map_id]
 
 theorem read0 (x0 y0 x1 y1 : Old.Q) :
     Array.index_usize (amap PV_B2_F_ConstructorCarrier.fromPoint (points x0 y0 x1 y1)) 0#usize=
