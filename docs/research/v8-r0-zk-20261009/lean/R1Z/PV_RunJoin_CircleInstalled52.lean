@@ -17,7 +17,7 @@ theorem installed_projection (base : ExternalTypes) (heap : Heap) (box : Box)
     @ExternalFuns.op259 (types base) (selected base heap box ops) =
       @ExternalFuns.op259 (types base) ops := by
   exact (PV_B2_F_RawNative.preserved_259 base heap box
-    (@ProverRwP6BodyCandidate.selected (types base) ops)).trans (candidate ops)
+    (@ProverRwP6BodyCandidate.selected (types base) ops)).trans (@candidate (types base) ops)
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (b : Array U8 32#usize) (row : aspis_core.r0_transcript.CircleRow) :
@@ -26,8 +26,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
         let p ← PV_RunJoin_CircleRawMap52.circle_owned b (PV_RunJoin_CircleNeutralSelected52.row row)
         ok (PV_RunJoin_CircleNeutralSelected52.point p)) := by
   change (selected base heap box (@PV_RunJoin_CircleNeutralSelected52.selected (types base) ops)).op259 b row = _
-  rw [installed_projection]
-  exact PV_RunJoin_CircleNeutralSelected52.source ops b row
+  rw [installed_projection base heap box (@PV_RunJoin_CircleNeutralSelected52.selected (types base) ops)]
+  exact @PV_RunJoin_CircleNeutralSelected52.source (types base) ops b row
 
 #print axioms installed_projection
 #print axioms candidate
