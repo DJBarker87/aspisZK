@@ -40,7 +40,7 @@ theorem actual {I : Type} (runs : I → Run)
     rw [← PV_RJN_Bytes.length h1.val,h1bytes]
   have room1 : h1.length+(runs i).plan.semantic.length≤Usize.max := by
     change h1.val.length+_≤_
-    have := room i p fields context
+    have := room i p hfields context
     omega
   obtain ⟨s,hs,hsv⟩ := hsemantic h1 room1
   have he : s=h2 := by
