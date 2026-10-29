@@ -1,0 +1,53 @@
+START 65580 R1Z.PV_RunJoin_CircleR72Op3952
+DONE 65580 R1Z.PV_RunJoin_CircleR72Op3952 exit 1 wall 1.16 RSS 2692968448
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleR72Op3952.lean:22:4: error: Tactic `apply` failed: could not unify the conclusion of `(bind_eq_iff ?m.99 ?m.100 ?m.101).mpr`
+  ?m.99 >>= ?m.100 = ?m.99 >>= ?m.101
+with the goal
+  (do
+      let b ←
+        PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq parameter1.2
+            PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+      if b = true then ok (core.result.Result.Err AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)
+        else ok (core.result.Result.Ok (encPoint point))) =
+    do
+    let x ←
+      do
+        let b ←
+          PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq parameter1.2
+              PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+        if b = true then
+            ok (core.result.Result.Err PV_RunJoin_CircleR72Raw52.circle.CirclePointError.ParameterInCm31Subfield)
+          else ok (core.result.Result.Ok point)
+    ok
+        (match x with
+        | core.result.Result.Ok p => core.result.Result.Ok (encPoint p)
+        | core.result.Result.Err e => core.result.Result.Err (encError e))
+
+Note: The full type of `(bind_eq_iff ?m.99 ?m.100 ?m.101).mpr` is
+  (∀ (v : ?m.97), ?m.99 = ok v → ?m.100 v = ?m.101 v) → ?m.99 >>= ?m.100 = ?m.99 >>= ?m.101
+
+case Ok
+parameter1 : Q
+point : PV_RunJoin_CircleR72Raw52.circle.SecureCirclePoint
+a✝ : PV_RunJoin_CircleR72Raw52.circle.secure_circle_point_from_parameter parameter1 = ok (core.result.Result.Ok point)
+⊢ (do
+      let b ←
+        PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq parameter1.2
+            PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+      if b = true then ok (core.result.Result.Err AspisR72Sampler.circle.CirclePointError.ParameterInCm31Subfield)
+        else ok (core.result.Result.Ok (encPoint point))) =
+    do
+    let x ←
+      do
+        let b ←
+          PV_RunJoin_CircleR72Raw52.field.CM31.Insts.CoreCmpPartialEqCM31.eq parameter1.2
+              PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
+        if b = true then
+            ok (core.result.Result.Err PV_RunJoin_CircleR72Raw52.circle.CirclePointError.ParameterInCm31Subfield)
+          else ok (core.result.Result.Ok point)
+    ok
+        (match x with
+        | core.result.Result.Ok p => core.result.Result.Ok (encPoint p)
+        | core.result.Result.Err e => core.result.Result.Err (encError e))
+'R1Z.PV_RunJoin_CircleR72Ops52.op39' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
