@@ -9,8 +9,8 @@ open PV_RunJoin_WeightInstalled46
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (hash : Slice (Slice U8) → Result (Array U8 32#usize))
-    (backend : @prover.Backend (types base))
-    (sem : @host_semantic.BuiltSemantics (types base) aspis_core.digest.LegacyHashFn) :
+    (backend : prover.Backend)
+    (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) :
     ∃ kw : Weight, ∃ z0 z1 : Point,
       Array.index_usize (amap fromPoint sem.z) 0#usize=ok z0 ∧
       Array.index_usize (amap fromPoint sem.z) 1#usize=ok z1 ∧
