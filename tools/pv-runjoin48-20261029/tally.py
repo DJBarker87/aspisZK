@@ -25,9 +25,9 @@ intervals.sort();overlap=[(a[2],b[2]) for a,b in zip(intervals,intervals[1:]) if
 (E/'scope-sequence-check.json').write_text(json.dumps(dict(intervals=[dict(attempt=a,start=s,end_upper_bound=e) for s,e,a in intervals],overlaps=overlap),indent=2)+'\n')
 tally=dict(attempts=len(receipts),accepted=sum(x['accepted'] for x in receipts),rejected=sum(not x['accepted'] for x in receipts),kani=0,attempt_ids=[x['attempt'] for x in receipts],rows_removed=0,endpoint_fields_removed=0,endpoint_fields_added=0,endpoint_fields_changed=0,all_accepted_printed_axioms_standard=True,peak_rss_bytes=max((x['peak_rss_bytes'] for x in receipts),default=0),all_swaps_zero=True,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True,cwd=R).strip())
 accepted_modules={v['module'] for v in mods if v['accepted']}
-new={m for m in accepted_modules if m.startswith('R1Z.PV_RunJoin_') and m.endswith('47')}
-audit_ids=[61997,61998,62699]
-tally.update(new_source_modules=len([m for m in new if 'Audit47' not in m]),new_audits=len([m for m in new if 'Audit47' in m]),inherited_prerequisites=len(accepted_modules-new),audit_ids=audit_ids,all_audits_passed=all(any(x['attempt']==a and x['accepted'] for x in receipts) for a in audit_ids),reservation_refusals=len(list(E.glob('refusal-*.json'))),scan_races=sum('error' in json.loads(p.read_text()) for p in E.glob('refusal-*.json')),stop='100-attempt Lean budget exhausted' if len(receipts)==100 else None,formal_release_replay=False,new_native_credit=False)
+new={m for m in accepted_modules if m.startswith('R1Z.PV_RunJoin_') and m.endswith('48')}
+audit_ids=[62697,62698,62699]
+tally.update(new_source_modules=len([m for m in new if 'Audit48' not in m]),new_audits=len([m for m in new if 'Audit48' in m]),inherited_prerequisites=len(accepted_modules-new),audit_ids=audit_ids,all_audits_passed=all(any(x['attempt']==a and x['accepted'] for x in receipts) for a in audit_ids),reservation_refusals=len(list(E.glob('refusal-*.json'))),scan_races=sum('error' in json.loads(p.read_text()) for p in E.glob('refusal-*.json')),stop='100-attempt Lean budget exhausted' if len(receipts)==100 else None,formal_release_replay=False,new_native_credit=False)
 (E/'final-tally.json').write_text(json.dumps(tally,indent=2)+'\n')
-(E/'commits.txt').write_text(subprocess.check_output(['git','log','--oneline','98c07508b3..HEAD'],cwd=R,text=True))
+(E/'commits.txt').write_text(subprocess.check_output(['git','log','--oneline','86e74b0a54..HEAD'],cwd=R,text=True))
 print(json.dumps(tally))
