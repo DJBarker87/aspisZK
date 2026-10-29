@@ -1,0 +1,54 @@
+import PV_B3P_InstalledOk8227
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG10
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Success227
+/-! This module uses the coherent b3p6 cohort. No full prover/checker claim.
+The actual original public family still needs its own producer/association. -/
+variable (base : ProverRwFull.ExternalTypes)
+ (ops : @ProverRwFull.ExternalFuns (PV_B3P_Install227.Types base))
+ (p : reference_terminal.SemanticPublic) (recipient : Array U32 8#usize)
+ (claims : Array (Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize)
+ (point : Array ProverRwFull.aspis_core.field.QM31 10#usize)
+ (c : ProverRwFull.aspis_core.state_only_prefix.r0.Challenges)
+theorem rust_ok_no_panic {A E : Type} (r : Result (core.result.Result A E))
+ (h : ∃ a, r=.ok (.Ok a)) : r ≠ .fail .panic := by
+ obtain ⟨a,ha⟩ := h
+ rw [ha]
+ intro bad
+ cases bad
+#print axioms rust_ok_no_panic
+theorem installed_family_no_panic :
+ @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+ (PV_B3P_Install227.actual base ops) (installed_public8 base p recipient) claims point c ≠ .fail .panic :=
+ rust_ok_no_panic _ (installed_success8 base ops p recipient claims point c)
+#print axioms installed_family_no_panic
+theorem installed_family_no_divergence :
+ @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+ (PV_B3P_Install227.actual base ops) (installed_public8 base p recipient) claims point c ≠ .div := by
+ obtain ⟨value,hvalue⟩ := installed_success8 base ops p recipient claims point c
+ rw [hvalue]
+ intro bad
+ cases bad
+#print axioms installed_family_no_divergence
+theorem installed_nonvacuity_no_panic : ∃ public1,
+ @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+ (PV_B3P_Install227.actual base ops) public1 claims point c ≠ .fail .panic := by
+ obtain ⟨public1,value,hvalue⟩ := installed_nonvacuity8 base ops claims point c
+ exact ⟨public1,rust_ok_no_panic _ ⟨value,hvalue⟩⟩
+#print axioms installed_nonvacuity_no_panic
+theorem reference_family_no_panic
+ (cl : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+ (pt : Array aspis_core.field.QM31 10#usize)
+ (ch : aspis_core.state_only_prefix.r0.Challenges) :
+ reference_terminal.reference227 (valid_public p) cl pt ch ≠ .fail .panic :=
+ rust_ok_no_panic _ (reference_success8 p cl pt ch)
+#print axioms reference_family_no_panic
+theorem installed_panic_only_continuation_unreached (Q : Prop)
+ (panicOnly : Q →
+ @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+ (PV_B3P_Install227.actual base ops) (installed_public8 base p recipient) claims point c = .fail .panic) : ¬ Q := by
+ intro h
+ exact installed_family_no_panic base ops p recipient claims point c (panicOnly h)
+#print axioms installed_panic_only_continuation_unreached
+end PV_DIAG10

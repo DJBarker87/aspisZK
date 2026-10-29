@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "2d083b9a4210bbf3040f047f7f070cdc4f2be201",
+  "runner_sha256": "8efd7d3a459b77b356fde132e9ad1701546c4ac1d4e1c7efd165fed22ce30076",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG10_Attempt",
+  "attempt": 66715,
+  "source_sha256": "9c4612ab641f50bb53f9b6bd57f5a97b83205ef70ee3160d8b71f9d9bdb0b72e",
+  "environment_sha256": "f8d7fd06e0305f6cf576964805f5fb95cb847eda176dd8fab1f31082e7bbbf5d",
+  "dependency_objects": {
+    "PV_DIAG9_Scope": {
+      "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects/PV_DIAG9_Scope.olean": "95da8c8d711d5f1ce756bef981bb8b6cc93e623725244bb9bf4dae8ae858d1f1"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/lean66715-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/objects/PV_DIAG10_Attempt.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_Attempt.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "wall_seconds": 1.900252342224121,
+  "peak_rss_kib": "4949164",
+  "swaps": "0",
+  "gnu_wall": "0:01.87",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-diag10-20261029/sources/PV_DIAG10_Attempt.lean:31:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  prover.prove_masked_attempt pub compiled variant hash secret s.2\nin the target expression\n  \u2203 out,\n    (let (r, after) := (core.result.Result.Ok secret, after)\n      match r with\n      | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, s.2)\n      | core.result.Result.Ok secret => do\n        let (r1, store) \u2190 prover.prove_masked_attempt pub compiled variant hash secret s.2\n        match r1 with\n          | core.result.Result.Ok p => ok (ProverCommitRetry34.Step.done p, after, store)\n          | core.result.Result.Err verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, after, store)\n          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, store)) =\n      ok out\n\ncase Ok\ninst\u271d\u00b9 : ExternalTypes\ninst\u271d : ExternalFuns\nC : Type\nentropy : ProverRwRetryModel.Entropy C\npub : ProverRwRetryModel.Pub\ncompiled : ProverRwRetryModel.Compiled\nvariant : transport.Variant\nhash : ProverRwRetryModel.Hash\nhe : PV_DIAG10_Link_Entropy entropy\nhm\u271d : PV_DIAG10_Link_MaskedAttempt pub compiled variant hash\nk : \u2115\ns : C \u00d7 ProverRwRetryModel.Store\nafter : C\nsecret : ProverRwRetryModel.Secret\nhs : entropy.call_mut s.1 (ProverCommitRetrySource34.word k) = ok (core.result.Result.Ok secret, after)\nstatus : core.result.Result (alloc.vec.Vec U8 \u00d7 prover.MaskedFixtureAudit) verifier.Error\nstore : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore\nhm : prover.prove_masked_attempt pub compiled variant hash secret s.2 = ok (status, store)\n\u22a2 \u2203 out,\n    (let (r, after) := (core.result.Result.Ok secret, after)\n      match r with\n      | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, s.2)\n      | core.result.Result.Ok secret => do\n        let (r1, store) \u2190 prover.prove_masked_attempt pub compiled variant hash secret s.2\n        match r1 with\n          | core.result.Result.Ok p => ok (ProverCommitRetry34.Step.done p, after, store)\n          | core.result.Result.Err verifier.Error.Rejected => ok (ProverCommitRetry34.Step.retry, after, store)\n          | core.result.Result.Err e => ok (ProverCommitRetry34.Step.stop (ProverRwRetryModel.error e), after, store)) =\n      ok out\n'PV_DIAG10.attempt_from_complete_producers' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "object_sha256": null
+}

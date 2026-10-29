@@ -58,6 +58,68 @@ All three `DIAG_*` inputs remain OPEN as deployed instances. Their exact conditi
 
 PrivacyR1HeadlineDeployedReal.privacy_headline_deployed premises removed/added/weakened/changed: **0/0/0/0**. Before and after: actual native acquisition, original joint L1 law, deployed V400 and actual prover/checker producers are still required. V038, V178/V181, V336–V339, V347–V351 and V370 remain, with E1/E2 and D381/D386 unchanged. T is exactly entropy_law, entropy_kernel, observation. No crate/program/simulator/observer/release-pin edit, no key/account/nonce operation, merge or push.
 
-## Verification in progress
+## Verification and stop
 
 66700 rejected: missing List.reverseRecOn; replaced with accumulator induction (66701). 66702 rejected: append notation not definitionally closed by simp only; added explicit reflexivity (66703). Neither failed source was resubmitted unchanged. Audits reserved 66797–66799. Host caps 6G/8G, swap 0, TasksMax64, Lean -M7000; one scope at a time; admission requires exit 0 and allowed:true.
+
+**100/100 Lean attempts**, IDs 66700–66799: **96 accepted / 4 rejected**; **3/30 capped native scopes**, **0 Kani**. No admission refusal, void launch, resource kill, cap increase or unchanged failed-source resubmission. The four failed sources are retained: 66700 (unavailable induction constant), 66702 (append normalization), 66715 (rewrite under pair-match/bind), 66716 (non-progress dsimp). Replacements pass at 66701, 66703 and 66717. No failed proof is credited. Setup-only reuse checks were corrected for b3p receipt field `exit_status`; an exact object-cohort mismatch was then resolved using separate private overlays, not overwritten shared objects. An initial setup scp destination mistake was immediately corrected by moving the three job files into their intended private directory before execution (`setup-notes.json`).
+
+| ID | Exact target | Exit | GNU wall | Peak RSS KiB | Swap | Source revision |
+|---|---|---:|---:|---:|---:|---|
+| 66797 | PV_DIAG10_Audit | 0 | 0:01.87 | 4,996,720 | 0 | de348ad8e723c438fbaad6966c4579ba7c033769 |
+| 66798 | PV_DIAG10_Op227Audit | 0 | 0:01.05 | 2,650,316 | 0 | de348ad8e723c438fbaad6966c4579ba7c033769 |
+| 66799 | PV_DIAG10_FinalManifest | 0 | 0:01.84 | 5,016,144 | 0 | de348ad8e723c438fbaad6966c4579ba7c033769 |
+
+All **85 new theorems** are covered by the reserved audits. Every accepted printed axiom set is a subset of {propext, Classical.choice, Quot.sound}. Lean wrapper wall total 118.09 s; maximum RSS 5,016,144 KiB; swap 0. Individual receipts retain exact commands, targets, source snapshots/hashes, dependency object fingerprints, revision labels, exit, wall/RSS/swap and full printed axioms. All 14 final new module sources match proof freeze de348ad8e7 and their accepted snapshots (`proof-source-commit-binding.json`). Earlier launch labels refer to the clean starting base, not a claim that new dirty sources existed at that base.
+
+Nine inherited DIAG9 modules were rebuilt unedited because their private objects had been removed after the prior job; each source matches an earlier accepted source hash. The 2,128 reusable runjoin/decoder objects were checked read-only, with the earlier recursive import-fingerprint authority retained. b3p6 contributes a separately checked 111-object closure, anchored in its retained cache manifest and accepted submissions. Its shared source text is identical, but some object hashes differ from runjoin. **These are two separately coherent cohorts, not a combined coherent release replay.** 156 decoder/b3p source identities were checked against this candidate. Native02/03 recheck 2,239 project objects and 5,673 external objects, with zero mismatches; accepted sources and receipts are verified before and after audit. The main exact-acquisition manifest ran once; this is not the frozen privacy-release manifest. No unchanged full regression was run.
+
+Local finalization checks all 100 snapshot hashes, source-freeze identity, audit coverage and rejection uniqueness. Its first invocation used an absolute git-tree path and was corrected to a repository-relative path before succeeding; no compiler or native scope was involved. The pinned private cache is retained for the unfinished obligations under AGENTS resource rule 6. No wallet/key/account was created, removed or modified; no balance or authority was touched.
+
+**Stop: Lean budget exhausted.** Next concrete deliverables: actual reached masked-attempt complete-Result producer, whole public-check inner-cone producer, deployed observer readout and complete event-order producer, and actual off-bad request/operand/frame provenance. The skeleton/observer factorization organizes acquisition; Readout and EventOrder together still carry its native correspondence gap. It is not credited as premise removal.
+
+## Full skeleton statements
+
+These are the accepted first-six-attempt statements, with proof bodies omitted. Init/Step/Readout/EventOrder are the standalone Props defined in PV_DIAG10_Links.lean.
+
+```lean
+theorem DIAG_FILE_TRACE {I A : Type} (actual : I → List FileOp)
+ (native : I → NativeTrace A) (raw : I → List NativeEvent)
+ (state : I → List NativeEvent → List FileOp)
+ (initial : PV_DIAG10_Link_Init state (nativeFiles []))
+ (step : PV_DIAG10_Link_Step state List.append (fun e => nativeFiles [e]))
+ (readout : PV_DIAG10_Link_Readout actual state raw)
+ (order : PV_DIAG10_Link_EventOrder raw native) :
+ OpenInputs.DIAG_FILE_TRACE actual native
+```
+
+```lean
+theorem DIAG_JSON_STDOUT_TRACE {I A : Type} (actual : I → List Bytes × List (Bytes × Bytes))
+ (native : I → NativeTrace A) (raw : I → List NativeEvent)
+ (state : I → List NativeEvent → List Bytes × List (Bytes × Bytes))
+ (initial : PV_DIAG10_Link_Init state ((fun es => (nativeJSON es,nativeStdout es)) []))
+ (step : PV_DIAG10_Link_Step state (fun a b => (a.1++b.1,a.2++b.2)) (fun e => (fun es => (nativeJSON es,nativeStdout es)) [e]))
+ (readout : PV_DIAG10_Link_Readout actual state raw)
+ (order : PV_DIAG10_Link_EventOrder raw native) :
+ OpenInputs.DIAG_JSON_STDOUT_TRACE actual native
+```
+
+```lean
+theorem DIAG_ERROR_STDERR_TRACE {I A : Type} (actual : I → List PV_DIAG2.Effect × List PV_DIAG3.Event)
+ (native : I → NativeTrace A) (raw : I → List NativeEvent)
+ (state : I → List NativeEvent → List PV_DIAG2.Effect × List PV_DIAG3.Event)
+ (initial : PV_DIAG10_Link_Init state ((fun es => (nativeDiag2 es,nativeDiag3 es)) []))
+ (step : PV_DIAG10_Link_Step state (fun a b => (a.1++b.1,a.2++b.2)) (fun e => (fun es => (nativeDiag2 es,nativeDiag3 es)) [e]))
+ (readout : PV_DIAG10_Link_Readout actual state raw)
+ (order : PV_DIAG10_Link_EventOrder raw native) :
+ OpenInputs.DIAG_ERROR_STDERR_TRACE actual native
+```
+
+## Commits
+
+```text
+de348ad8e7 Derive reached retry panic criteria and expose native diagnostic links
+75981170d0 State exact diagnostic acquisition skeletons with local source links
+```
+
+The final evidence-only commit records this report and receipts; no push or merge.
