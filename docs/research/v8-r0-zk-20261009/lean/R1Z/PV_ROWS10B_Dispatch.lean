@@ -49,7 +49,7 @@ theorem selected_origin {Fn : Type} (expected : Fn) (cached : Cache Fn)
       simp only [dispatch, initChoice] at hf
       split at hf
       · cases hf
-      · cases hf; exact origin.2 g rfl
+      · cases hf; exact origin.2 f rfl
 
 /-- Joint non-vacuity includes a PRESENT function and a successful probe. -/
 theorem symbol_links_satisfiable :
