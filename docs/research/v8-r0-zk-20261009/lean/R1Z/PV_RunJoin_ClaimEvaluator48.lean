@@ -8,8 +8,8 @@ open PV_RunJoin_WeightInstalled46
 open PV_RunJoin_ClaimThread48 (Column Point)
 
 /-- One field projection, separate from any evaluation or byte bind. -/
-theorem candidate [ExternalTypes] (ops : ExternalFuns) :
-    (ProverRwP6BodyCandidate.selected ops).op79=ops.op79 := rfl
+theorem candidate [t : ExternalTypes] (ops : ExternalFuns) :
+    @ExternalFuns.op79 t (ProverRwP6BodyCandidate.selected ops)=@ExternalFuns.op79 t ops := rfl
 
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
