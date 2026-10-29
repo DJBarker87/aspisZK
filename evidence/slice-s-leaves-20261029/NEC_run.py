@@ -26,7 +26,7 @@ print(p.read_text());sys.exit(r.returncode)
   raise SystemExit('STOP infrastructure: reservation JSON missing')
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
  if r.returncode==0 and ad.get('allowed') is True:break
- if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation wait',flush=True);time.sleep(180);continue
+ if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation wait',flush=True);[time.sleep(60) for _ in range(3)];continue
  raise SystemExit('STOP infrastructure admission')
 files={}
 if kind=='lean':
@@ -40,7 +40,7 @@ elif kind=='kani':
  (E/a/'NEC_harness.patch').write_text((E/'NEC_native.patch').read_text())
  cmd=['python3','NEC_gate.py',a+'.json']
 elif kind=='extract':
- script,ref={'NEC_PairRef':('NEC_extract_pair.py','NEC_pair_reference'),'NEC_ReplyRef':('NEC_extract_pure.py','NEC_pure_reference'),'NEC_LiveHeaderRef':('NEC_extract_live_header.py','NEC_live_header_reference')}.get(target,('NEC_extract.py','NEC_reference'))
+ script,ref={'NEC_BindingRef':('NEC_extract_binding.py','NEC_binding_reference'),'NEC_PairRef':('NEC_extract_pair.py','NEC_pair_reference'),'NEC_ReplyRef':('NEC_extract_pure.py','NEC_pure_reference'),'NEC_LiveHeaderRef':('NEC_extract_live_header.py','NEC_live_header_reference')}.get(target,('NEC_extract.py','NEC_reference'))
  files[script]=(E/script).read_text()
  files[ref+'.rs']=template(ref)
  cmd=['python3',script]

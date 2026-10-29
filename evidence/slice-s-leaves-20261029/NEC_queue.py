@@ -5,6 +5,9 @@ E=Path(__file__).resolve().parent
 num=int(sys.argv[1]);phase=sys.argv[2]
 if phase=='afterstate-fields':
  plans=[('pool_v1::pair_tree_profile::NEC_decode::afterstate_box',dict(NEC_PURE_VALUE='1',NEC_RAW_CARRIER='1',NEC_BRANCH='success',NEC_GROUP=str(g))) for g in [1,2]]
+elif phase=='static-after':plans=[('pool_v1::pair_tree_profile::NEC_static_decode::after_contract',dict(NEC_STATIC='1',NEC_STATIC_AFTER_BOUND='1',NEC_GROUP=str(g))) for g in [1,2]]
+elif phase=='live-error':plans=[('pool_v1::pair_tree_profile::NEC_decode::live_box',dict(NEC_BRANCH='error'))]
+elif phase=='derived-binding':plans=[('pool_v1::pair_forest_terminal::NEC_binding::binding_contract',dict(NEC_BINDING='1',NEC_BINDING_DERIVED='1'))]
 elif phase=='live-window':plans=[('NEC_live_step::selected_window',dict(NEC_LIVE_STEP='1'))]
 else:raise ValueError(phase)
 for target,settings in plans:
