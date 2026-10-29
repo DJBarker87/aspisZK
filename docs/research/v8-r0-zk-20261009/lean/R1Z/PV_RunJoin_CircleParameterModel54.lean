@@ -16,11 +16,11 @@ theorem complete (block : Array U8 32#usize) :
       PV_RunJoin_CircleNeutralShape53.QC q ∧ value q=
         R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block) := by
   obtain ⟨q,hq,hc⟩ := PV_RunJoin_SamplerCanonical54.complete block
-  have public : AspisR1PublicPreparation.sampler.qm31_sample block=ok (PV_RunJoin_PublicSampler54.encode q) := by
+  have hpublic : AspisR1PublicPreparation.sampler.qm31_sample block=ok (PV_RunJoin_PublicSampler54.encode q) := by
     rw [PV_RunJoin_PublicSampler54.complete,hq,bind_tc_ok]
   have sampled : AspisR1CircleSampleWrapper.sampler.qm31_sample block=ok (wrapper q) := by
     rw [AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.sampler_qm31_sample_eq_public,
-      public,bind_tc_ok]
+      hpublic,bind_tc_ok]
     rfl
   have meaning := ProverCommitCircleSampler22.parameter_eq block (wrapper q) sampled
   exact ⟨q,hq,hc,meaning⟩
