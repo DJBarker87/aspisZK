@@ -1,6 +1,6 @@
 import PV_B3P_UsizePartition11227
 namespace PV_B3P_Binding11227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 PV_B3P_Binding10227
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
 set_option autoImplicit false
 theorem sixteen_finish11 {α β : Type} (step : α → Usize → Result α) (initial : α) (finish : α → Result β) :
     (do
