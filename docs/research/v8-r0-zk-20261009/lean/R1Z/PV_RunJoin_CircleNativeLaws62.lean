@@ -27,7 +27,7 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
   obtain ⟨p,hp,hx,hy,hc⟩ := PV_RunJoin_CircleInstalledTotal55.complete
     (baseTypes base) heap box (beforeCircle base ops) block row
   refine ⟨p,hp,hx,hy,?_⟩
-  rw [hc]
+  simp only [hc]
   split
   · exact PV_RunJoin_CircleUnit62.second block
   · exact PV_RunJoin_CircleUnit62.first block
