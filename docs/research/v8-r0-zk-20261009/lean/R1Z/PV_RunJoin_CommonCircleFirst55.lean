@@ -54,7 +54,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       (PhaseSamplerParserBin.circle ⟨0,by decide⟩ ((s k).2.1 (.inl (.sqS ⟨25,by decide⟩)))).1 := by
     simpa only [PV_RunJoin_CircleNeutralSelected52.row,Bool.false_eq_true,if_false,
       PhaseSamplerParserBin.circle,PhaseCircleBlocksBin.select,PhaseCircleBlocksBin.first,
-      PV_RunJoin_OpeningSampler50.block,AspisV8R19.SqueezeOracleBridge.state_roundtrip] using hmodel
+      PV_RunJoin_OpeningSampler50.block,AspisV8R19.SqueezeOracleBridge.state_roundtrip,
+      dite_true,PhaseSamplerParserBin.state,R1J.SamplerLawSpend.stateEquiv,Equiv.coe_fn_mk] using hmodel
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box selectedOps
   refine ⟨q,hx,hy,model,?_⟩
   rw [PV_RunJoin_CircleSourceRows55.first]
   unfold host_wire.SemanticTranscript.sample_block
