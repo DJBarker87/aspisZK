@@ -17,7 +17,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       @prover.opening_coefficients (types base) (selected base heap box ops) .S2 (messages p)=ok coefficients ∧
       coefficients.val=payload p 0 29 ∧ coefficients.length=29 ∧
       ∀ point : aspis_core.r0.domain.Point W,
-        mapResult (fun out => out.val)
+        mapResult (fun out : alloc.vec.Vec U8 => out.val)
           (@prover.opening_claim_bytes (types base) (selected base heap box ops)
             (alloc.vec.Vec.deref coefficients) point)=
           mapResult PV_RunJoin_ClaimImage48.bytes
@@ -30,7 +30,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     change coefficients.length≤14336
     omega
   have h := PV_RunJoin_ClaimInstalled48.complete base heap box ops (alloc.vec.Vec.deref coefficients) point small
-  change mapResult (fun out => out.val) _=mapResult PV_RunJoin_ClaimImage48.bytes
+  change mapResult (fun out : alloc.vec.Vec U8 => out.val) _=mapResult PV_RunJoin_ClaimImage48.bytes
     (PV_RunJoin_ClaimImage48.values _ coefficients.val) at h
   rw [hv] at h
   exact h
