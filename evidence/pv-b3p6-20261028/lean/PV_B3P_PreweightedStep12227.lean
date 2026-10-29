@@ -27,7 +27,7 @@ theorem preweighted_step_binding12 {N : Usize} (start : Usize)
   unfold preweighted_source_step12
   rw [← preweighted_build_binding12]
   simp only [reference_terminal.add_preweighted_loop.body,preweighted_build_stores12,
-    lift,bind_tc_ok,PV_B3P_Ordered227.bind_assoc]
+    lift,bind_tc_ok,PV_B3P_Ordered227.bind_assoc,bind_branch12,bind_return12]
 
 #print axioms preweighted_step_binding12
 end PV_B3P_Binding12227

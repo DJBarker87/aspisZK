@@ -1,3 +1,4 @@
+import PV_B3P_BindBranch12227
 import PV_B3P_Ordered227
 import PV_B3P_P227_08
 import PV_B3P_FourStores12227
@@ -85,7 +86,7 @@ theorem preweighted_build_binding12 {N : Usize} (start : Usize) (values : Array 
     preweighted_build_stores12 start values group_index =
       four_build12 (preweighted_window12 start values group_index) := by
   simpa only [preweighted_build_stores12,preweighted_window12,lift,bind_tc_ok,
-    PV_B3P_Ordered227.bind_assoc] using
+    PV_B3P_Ordered227.bind_assoc,bind_branch12,bind_return12] using
     four_interleaved12 aspis_core.field.QM31.ZERO (preweighted_window12 start values group_index)
 #print axioms preweighted_build_binding12
 end PV_B3P_Binding12227
