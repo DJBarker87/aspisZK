@@ -1,0 +1,24 @@
+def R1Z.PV_RunJoin_LedgerConstructor.runtime : [inst : ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N C : Type} →
+    ProverCommitLedger36.Schedule →
+      Bool →
+        PV_RunJoin_LedgerWorld.Address →
+          PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C →
+            ProverRwEffectCallback.Account N →
+              ((h : HonestProver K) → Statement K CommitHandle → h.Instance → PV_RunJoin_LedgerBody.Inputs N C) →
+                (R1Adv K CommitHandle Aux →
+                    Statement K CommitHandle →
+                      Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                        View K CommitHandle Aux R1Bat) →
+                  (R1Adv K CommitHandle Aux →
+                      Statement K CommitHandle →
+                        Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                          List (Bytes × OracleAnswer)) →
+                    ((Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+                        R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat) →
+                      PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N PV_RunJoin_LedgerWorld.World C :=
+fun [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N C} schedule unix address world policy inputs disclosed oracle
+    ideal =>
+  { world := world, account := PV_RunJoin_SourceAccount.account policy,
+    body := fun h x w => PV_RunJoin_LedgerBody.body schedule unix address (inputs h x w), disclosed := disclosed,
+    observerOracle := oracle, ideal := ideal }

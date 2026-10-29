@@ -1,0 +1,115 @@
+/home/dombarker/project-offloads/codex-pv-rjdec-20261028/sources/R1Z/PV_RunJoin_TrustLedger.lean:110:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_TrustLedger.candidate_proofs`:
+  [Fintype Rest]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [Fintype Rest] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+structure R1Z.PV_RunJoin_TrustLedger.RemainingProofs {CommitHandle Aux : Type} (template : R1Wire K CommitHandle Aux)
+  (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) [ProverRwFull.ExternalTypes]
+  {N Client Context Rest : Type} (schedule : ProverCommitLedger36.Schedule) (unix : Bool)
+  (address : PV_RunJoin_LedgerWorld.Address)
+  (world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N PV_RunJoin_LedgerWorld.World Client)
+  (policy : ProverRwEffectCallback.Account N)
+  (inputs :
+    (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_LedgerBody.Inputs N Client)
+  (disclosed :
+    R1Adv K CommitHandle Aux →
+      Statement K CommitHandle →
+        Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+          View K CommitHandle Aux R1Bat)
+  (oracle :
+    R1Adv K CommitHandle Aux →
+      Statement K CommitHandle →
+        Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+          List (Bytes × OracleAnswer))
+  (ideal :
+    (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+      R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat)
+  (common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client)
+  (boundaryData : PV_RunJoin_Boundary.Data runtime Context Rest)
+  (extracted :
+    ModelCoins template outputs x → R1Adv K CommitHandle Aux → h.Instance → ROMView K CommitHandle Aux R1Bat) :
+  Prop
+number of parameters: 22
+fields:
+  R1Z.PV_RunJoin_TrustLedger.RemainingProofs.initial : ∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+      boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+        boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))
+  R1Z.PV_RunJoin_TrustLedger.RemainingProofs.causal : ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw)
+      (rest : Rest), (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest)
+  R1Z.PV_RunJoin_TrustLedger.RemainingProofs.trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+      h.public w = x.1 →
+        ∀ (r : World),
+          (¬∃ i,
+                ProverCommitFuelJoin22.bad
+                  (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 h B outputs x w)
+                  (queries adv w) i r.coins) →
+            extracted r.coins adv w =
+              (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1
+constructor:
+  R1Z.PV_RunJoin_TrustLedger.RemainingProofs.mk {CommitHandle Aux : Type} {template : R1Wire K CommitHandle Aux}
+    {outputs : Statement K CommitHandle → Challenges K → Aux} {x : Statement K CommitHandle}
+    [ProverRwFull.ExternalTypes] {N Client Context Rest : Type} {schedule : ProverCommitLedger36.Schedule} {unix : Bool}
+    {address : PV_RunJoin_LedgerWorld.Address}
+    {world : PV_RunJoin_CompletedWorld.Data (ModelCoins template outputs x) N PV_RunJoin_LedgerWorld.World Client}
+    {policy : ProverRwEffectCallback.Account N}
+    {inputs :
+      (honest : HonestProver K) → Statement K CommitHandle → honest.Instance → PV_RunJoin_LedgerBody.Inputs N Client}
+    {disclosed :
+      R1Adv K CommitHandle Aux →
+        Statement K CommitHandle →
+          Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+            View K CommitHandle Aux R1Bat}
+    {oracle :
+      R1Adv K CommitHandle Aux →
+        Statement K CommitHandle →
+          Aeneas.Std.Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World Client) →
+            List (Bytes × OracleAnswer)}
+    {ideal :
+      (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+        R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat}
+    {common : Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N Client}
+    {boundaryData : PV_RunJoin_Boundary.Data runtime Context Rest}
+    {extracted :
+      ModelCoins template outputs x → R1Adv K CommitHandle Aux → h.Instance → ROMView K CommitHandle Aux R1Bat}
+    (initial :
+      ∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+        boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+          boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest))))
+    (causal :
+      ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+        (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest))
+    (trace :
+      ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (r : World),
+            (¬∃ i,
+                  ProverCommitFuelJoin22.bad
+                    (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 h B outputs x w)
+                    (queries adv w) i r.coins) →
+              extracted r.coins adv w =
+                (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                  h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :
+    RemainingProofs template outputs x schedule unix address world policy inputs disclosed oracle ideal common
+      boundaryData extracted
+'R1Z.PV_RunJoin_TrustLedger.candidate_proofs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustLedger.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]

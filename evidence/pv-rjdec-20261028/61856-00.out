@@ -1,0 +1,36 @@
+def R1Z.PV_RunJoin_LedgerBoundary.boundary : [inst : ProverRwFull.ExternalTypes] →
+  {CommitHandle Aux Coins N C Context Rest : Type} →
+    (schedule : ProverCommitLedger36.Schedule) →
+      (unix : Bool) →
+        (address : PV_RunJoin_LedgerWorld.Address) →
+          (world : PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C) →
+            (policy : ProverRwEffectCallback.Account N) →
+              (inputs :
+                  (h : HonestProver K) → Statement K CommitHandle → h.Instance → PV_RunJoin_LedgerBody.Inputs N C) →
+                (Statement K CommitHandle → PV_RunJoin_LedgerBody.Inputs N C) →
+                  (disclosed :
+                      R1Adv K CommitHandle Aux →
+                        Statement K CommitHandle →
+                          Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                            View K CommitHandle Aux R1Bat) →
+                    (oracle :
+                        R1Adv K CommitHandle Aux →
+                          Statement K CommitHandle →
+                            Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                              List (Bytes × OracleAnswer)) →
+                      (ideal :
+                          (Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+                            R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat) →
+                        Statement K CommitHandle →
+                          PV_RunJoin_Boundary.Data runtime Context Rest →
+                            PV_RunJoin_Boundary.Data runtime Context Rest :=
+fun [ProverRwFull.ExternalTypes] {CommitHandle Aux Coins N C Context Rest} schedule unix address world policy inputs
+    common disclosed oracle ideal x d =>
+  { sourceBody := fun h x w => PV_RunJoin_LedgerSourceBody.sourceBody (inputs h x w),
+    draw := ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64, law := d.law, frame := d.frame,
+    coordinates := d.coordinates, nativeWeight := d.nativeWeight, ledger := fun s => s.ledger.model,
+    reservation := fun secret s =>
+      PV_RunJoin_PublicDecision.decision ((common x).ops s) address ((common x).pub s) ProverRwFull.transport.Variant.S2
+        ((common x).hash s) secret.mask_nonce,
+    schedule := schedule, unix := unix,
+    fault := fun x s kind => schedule (List.length s.ledger.model.history) kind s.ledger.model.history }
