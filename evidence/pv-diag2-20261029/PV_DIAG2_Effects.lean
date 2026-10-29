@@ -23,7 +23,11 @@ def spelling : Error → String
  | .AttemptsExhausted => "AttemptsExhausted"
  | .Entropy => "Entropy"
 
+/-- `entered` and `rejected` are administrative source-control records, not
+new writes. Their existing L1 occurrence law is reused, not re-proved here. -/
 inductive Effect where
+ | entered : Nat → Effect
+ | rejected : Nat → Effect
  | stdout : String → Effect
  | stderr : String → Effect
  | returned : Error → Effect

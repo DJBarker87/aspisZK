@@ -7,7 +7,7 @@ Erasure is a theorem about the Result projection, not the observer. -/
 set_option autoImplicit false
 namespace PV_DIAG2
 open Aeneas Aeneas.Std Result
-open R1Z ProverCommitRetry34
+open R1Z ProverCommitRetry34 ProverCommitSemanticTransport26
 
 structure Observed (A : Type) where
  effects : List Effect
@@ -22,13 +22,13 @@ def runEffects {S P : Type} (a : Nat → S → Observed (Step P × S)) :
  | n+1, k, s =>
    let first := a k s
    match first.result with
-   | .fail e => ⟨first.effects, .fail e⟩
-   | .div => ⟨first.effects, .div⟩
-   | .ok (.done p,after) => ⟨first.effects, ok (.done ⟨p,k+1⟩,after)⟩
-   | .ok (.stop e,after) => ⟨first.effects, ok (.stop e,after)⟩
+   | .fail e => ⟨.entered k :: first.effects, .fail e⟩
+   | .div => ⟨.entered k :: first.effects, .div⟩
+   | .ok (.done p,after) => ⟨.entered k :: first.effects, ok (.done ⟨p,k+1⟩,after)⟩
+   | .ok (.stop e,after) => ⟨.entered k :: first.effects, ok (.stop e,after)⟩
    | .ok (.retry,after) =>
      let rest := runEffects a n (k+1) after
-     ⟨first.effects ++ rest.effects, rest.result⟩
+     ⟨.entered k :: (first.effects ++ (.rejected k :: rest.effects)), rest.result⟩
 
 theorem erase_run {S P : Type} (a : Nat → S → Observed (Step P × S))
     (n k : Nat) (s : S) :
@@ -51,7 +51,7 @@ theorem erase_run {S P : Type} (a : Nat → S → Observed (Step P × S))
 theorem rejected_effects {S P : Type} (a : Nat → S → Observed (Step P × S))
     (n k : Nat) (s after : S) (h : (a k s).result = ok (.retry,after)) :
  runEffects a (n+1) k s =
- ⟨(a k s).effects ++ (runEffects a n (k+1) after).effects,
+ ⟨.entered k :: ((a k s).effects ++ (.rejected k :: (runEffects a n (k+1) after).effects)),
    (runEffects a n (k+1) after).result⟩ := by
  simp only [runEffects,h]
 
@@ -61,8 +61,8 @@ theorem cap_no_direct_effects {S P : Type} (a : Nat → S → Observed (Step P �
     (k : Nat) (s : S) : (runEffects a 0 k s).effects = [] := rfl
 
 theorem fatal_effects_retained {S P : Type} (a : Nat → S → Observed (Step P × S))
-    (n k : Nat) (s : S) (e : Aeneas.Error) (h : (a k s).result = .fail e) :
- (runEffects a (n+1) k s).effects = (a k s).effects := by
+    (n k : Nat) (s : S) (e : Aeneas.Std.Error) (h : (a k s).result = .fail e) :
+ (runEffects a (n+1) k s).effects = .entered k :: (a k s).effects := by
  simp only [runEffects,h]
 
 /-- Install the emitted per-attempt Result law without any hypothesis that
@@ -85,9 +85,17 @@ theorem source_retry_result [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalF
    resultLaw n k.val (callback,store)]
  exact (ProverRwRetryModel.retry entropy pub compiled variant hash store callback k n bound).symm
 
+theorem mask_exhaustion_rejected :
+ ProverRwFull.prover.mask_error
+   ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.MaskSampleExhausted =
+ ok ProverRwFull.verifier.Error.Rejected := by
+ simp [ProverRwFull.prover.mask_error,
+  ProverRwFull.aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Insts.CoreCmpPartialEqStateOnlyMaskBuildError.eq]
+
 #print axioms erase_run
 #print axioms rejected_effects
 #print axioms cap_no_direct_effects
 #print axioms fatal_effects_retained
 #print axioms source_retry_result
+#print axioms mask_exhaustion_rejected
 end PV_DIAG2
