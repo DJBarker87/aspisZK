@@ -28,7 +28,6 @@ theorem one_step (base : ExternalTypes) (heap : Heap) (box : Box)
       (do let next ← step (@host_semantic.lift (types base) (selected base heap box ops)) columns lane out row
           ok (.cont (next,Usize.wrapping_add row 1#usize))) := by
   simp only [host_semantic.lift_columns_loop0_loop0.body,more,if_true,step,lift,bind_tc_ok,bind_assoc_eq]
-  rfl
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (columns : Columns) (lane : Usize)
