@@ -20,26 +20,27 @@ def tapePermutation (w : h.Instance) (ch : Challenges K)
     (hP : P_R1 h.transport B hB ch) (hV : VR1 h ch w) (hw : h.public w=x.1) :
     Tape K F ≃ Tape K F :=
   PV_L2E_LawPermutation.permutation
-    (view h B outputs x w ch) (simE h.transport B outputs x ch)
+    (view (Bat := R1Bat) h B outputs x w ch) (simE (Bat := R1Bat) h.transport B outputs x ch)
     (hvzk_R1S h B hB outputs x hpub hs w ch hP hV hw)
 
 theorem actual_simE_pointwise (w : h.Instance) (ch : Challenges K)
     (hP : P_R1 h.transport B hB ch) (hV : VR1 h ch w) (hw : h.public w=x.1)
     (t : Tape K F) :
-    simE h.transport B outputs x ch
+    simE (Bat := R1Bat) h.transport B outputs x ch
       (tapePermutation h B hB outputs x hpub hs w ch hP hV hw t) =
-        view h B outputs x w ch t :=
+        view (Bat := R1Bat) h B outputs x w ch t :=
   PV_L2E_LawPermutation.pointwise _ _ _ t
 
 /-- Any function of the ENTIRE fixed coin vector can be retained jointly,
 including eager unused blocks and rejected-attempt histories. This law does
 not bind that function to native trace producers. -/
+include hpub hs in
 theorem full_coins_joint {C O : Type} (c : C) (observeCoins : C → O)
     (w : h.Instance) (ch : Challenges K)
     (hP : P_R1 h.transport B hB ch) (hV : VR1 h ch w) (hw : h.public w=x.1)
     (test : O × View K CommitHandle Aux R1Bat → ℚ) :
-    mean (fun t : Tape K F => test (observeCoins c,view h B outputs x w ch t)) =
-    mean (fun t : Tape K F => test (observeCoins c,simE h.transport B outputs x ch t)) := by
+    mean (fun t : Tape K F => test (observeCoins c,view (Bat := R1Bat) h B outputs x w ch t)) =
+    mean (fun t : Tape K F => test (observeCoins c,simE (Bat := R1Bat) h.transport B outputs x ch t)) := by
   exact R0Z.LawTransport.mean_eq_of_equalLaws _ _
     (fun v => test (observeCoins c,v))
     (hvzk_R1S h B hB outputs x hpub hs w ch hP hV hw)
