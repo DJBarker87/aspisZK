@@ -14568,3 +14568,19 @@ On the client's diagnostic-effect model, which keeps retry effects, counts, fail
 Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits in hand-written modules; two pin files of 5.4 MB, under the 20 MB rule; shipped-code diff empty. It was merged into the candidate as 344a81b9f0 and pushed.
 
 D348 remains unresolved. The native leaf, drop, unwind, capture and write executions and their joint L1 occurrence and frame law remain, and no diagnostic counterexample was established. pv-diag3 continues in the same sparse worktree on branch codex/pv-diag3-20261029 (IDs 64100-64199; 100 Lean, 40 native, 0 Kani). It covers those native executions under own-1, their joint public law reusing the existing L1 count laws, and the composition at the client observer. Rows removed: 0. Privacy target not yet established.
+
+## D444 (Stream B) 2026-10-29 02:34 UTC: V229 and V230 restored under own-2''' (lead-verified); pv-owni launched on V239
+
+pv-ownh used 57 of 60 Lean attempts, 1 native scope and no Kani. The final audits and the focused replay passed with standard axioms only, and all three admissions were allowed:true. It restored V229 (op133, pool_v1_pair_forest_copy_active_rows_v1) and V230 (op134, pool_v1_pair_forest_copy_active_row_masks_v1) under ruling own-2'''. The evidence class is "exhaustive over a singleton input domain, deployed-configuration harness".
+
+The lead verified the report and receipts, given the D403 lesson:
+- Whole-cone influence classification covers 44 pinned source files and 49 host inputs: 14 compiled functions, 74 call and jump edges and 63 RIP references, with no unclassified callee and no mutable or thread-local read outside the allowed boundaries. The memset objections are withdrawn under D439(1).
+- One unlisted callee was classified by the principle, as D439 asks: __rust_no_alloc_shim_is_unstable_v2, whose selected body only returns. The lead accepts that classification.
+- Address independence holds, by a source argument plus checked base and offset algebra; channel (iii) is closed.
+- The named literal laws (PV_OWNH_Literals.v229_result, v230_result) are short compositions of existing named schedule, sort and mask theorems, with no whole-term kernel reduction.
+- The harness was built from identical crate sources (85 files verified byte for byte) with the deployed configuration recorded: rustc 1.94.1, the resolved features, release opt3 and the lockfile identities. Its SHA-256 is 2501da70.
+- Native output equals the literals in every byte: V229 437 Result bytes (214 u16 words), V230 137 bytes (64 words). Both cross-check the crate fingerprint df394a5a8554d09c.
+- Allocation and abort are accounted for under rdea-1.
+V370, D381/D386 and rdea-1 are retained. No forbidden constructs; shipped-code diff empty. Merged into the candidate as 4ae289aed7 and pushed. Recount 9 is to re-examine own-2''' and both restorations.
+
+pv-owni (branch codex/pv-owni-20261029 from 4ae289aed7; IDs 64200-64299; 100 Lean, 30 native, 0 Kani) works on V239 only. V239 takes inputs, so it uses own-1, with own-2''' allowed for any input-free sub-call. A stage plan comes first, and allocation sizes and order must be shown to depend on public data only. Rows removed at the endpoint: 0. Privacy target not yet established.
