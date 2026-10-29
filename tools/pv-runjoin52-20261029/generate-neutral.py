@@ -157,3 +157,6 @@ s=s[:a]+''' := by
     all_goals rfl
 
 '''+s[b:];p.write_text(s)
+
+# Stable aggregation interface for the split checked tower.
+(L/'PV_RunJoin_CircleOwnedTower52.lean').write_text('import R1Z.PV_RunJoin_CircleOwnedOp2152\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace R1Z.PV_RunJoin_CircleOwnedTower52\nopen PV_RunJoin_CircleOwnedCarrier52\n/-- Complete option-valued inverse transport, with no canonicality or success premise. -/\ntheorem inverse (q : Q) :\n    PV_AL_CircleOwned.aspis_core.field.QM31.try_inv (encQ q) = (do\n      let x ← PV_RunJoin_CircleRawTower52.field.QM31.try_inv q\n      ok (Option.map encQ x)) := PV_RunJoin_CircleOwnedOps52.op21 q\n#print axioms inverse\nend R1Z.PV_RunJoin_CircleOwnedTower52\n')
