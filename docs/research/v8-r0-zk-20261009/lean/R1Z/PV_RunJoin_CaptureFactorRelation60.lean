@@ -7,7 +7,8 @@ open PV_RunJoin_ActualProvenance60 (capture)
 variable [ExternalTypes] [ExternalFuns]
 
 def resume {A T : Type} (f : Phase → Result (core.result.Result A verifier.Error))
-    (beforeResult : Result (core.result.Result (Phase × prover.MaskedFixtureAudit) verifier.Error × T)) := do
+    (beforeResult : Result (core.result.Result (Phase × prover.MaskedFixtureAudit) verifier.Error × T)) :
+    Result (core.result.Result (A × prover.MaskedFixtureAudit) verifier.Error × T) := do
   let (status,store) ← beforeResult
   match status with
   | .Err e => ok (.Err e,store)
