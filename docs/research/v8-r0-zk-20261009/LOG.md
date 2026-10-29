@@ -14436,3 +14436,19 @@ pv-diag2 (head 9e05db4591) used 15 Lean attempts and 18 capped native scopes, wi
 It then stopped. The selected coherent-cache object AspisR1CircleSampleWrapper.FunsExternal (0712bbc4) differs from the object at the h7 graph path (5b2ad417). The external adapter is hand-written and its importing wrapper is Aeneas-generated, so this is an unresolved generated-cone association, not evidence against any theorem. Ruling (h7) step 4 already prescribes the action: recover the generation hash chain, or else regenerate the cone with the unchanged pinned extractor under (x'), keeping the adapter byte-for-byte, and re-elaborate the importer unedited.
 
 pv-diag2b relaunched in the same worktree with fresh IDs 63000-63099 (85 Lean, 22 native, 0 Kani). It applies h7 now and then does the per-sink honest-run silence or public-only-content proofs, starting with the returned-error-to-Termination path and the retry and exhaustion surface. D348 remains open. Rows removed: 0. Privacy target not yet established.
+
+## D433 (Stream B) 2026-10-29 01:17 UTC: pv-ownc results; ownd focused on V229 alone
+
+pv-ownc used all 100 Lean attempts (91 passed) and two optimized native scopes (4,802 full-Link lifecycle cases; finite validation), with no Kani. All three final audits passed with standard axioms only. Lead review: nothing outside the worker's prefixes and evidence; no forbidden constructs or raised limits in hand-written modules; no large files. It was merged into the candidate as 1e44071977 and pushed.
+
+It added checked models for the cursor, guard transfer, cleanup, conditional store, growth, push and FlatMap initialization. V229, V230, V239 and V178's cleanup half remain SUSPENDED, with no witness-dependent finding.
+
+After three rounds on this line, V229's remaining cone is now itemised (V229.md):
+- the initial schedule's full-Link byte and owner instance;
+- the Vec, IntoIter and guard constructor;
+- the endpoint translation loop;
+- reserve and realloc transport and the push instance;
+- FlatMap allocation, SetLenOnDrop and source destruction;
+- every sort and dedup move;
+- the remaining stores and cleanup stages.
+The rounds so far have spread effort over four rows. pv-ownd (branch codex/pv-ownd-20261029 from 1e44071977; IDs 63200-63299; 100 Lean, 30 native, 0 Kani) works on V229 only. It takes those stages in execution order, and writes a coverage plan with the deployed source location of each stage before any Lean. Rows removed: 0. Privacy target not yet established.
