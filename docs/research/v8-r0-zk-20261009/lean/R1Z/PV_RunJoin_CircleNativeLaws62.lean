@@ -28,9 +28,12 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
     (baseTypes base) heap box (beforeCircle base ops) block row
   refine ⟨p,hp,hx,hy,?_⟩
   simp only [hc]
+  trace_state
   split
-  · exact PV_RunJoin_CircleUnit62.second block
-  · exact PV_RunJoin_CircleUnit62.first block
+  · trace_state
+    exact PV_RunJoin_CircleUnit62.second block
+  · trace_state
+    exact PV_RunJoin_CircleUnit62.first block
 
 #print axioms point_unit
 #print axioms complete
