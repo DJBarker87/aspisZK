@@ -12,6 +12,10 @@ set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 
+attribute [local irreducible] PV_RunJoin_ClaimImageList49.stream
+  ProverCommitY1Bytes47.model AspisR0.Chord.evalMessage R0P.SemSource.coeffsOf
+  PV_RunJoin_ClaimPolynomial49.trace ProverCommitValueRange47.bytes
+
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (c : Nat → Nat → Old.Q) (hc : ∀ l,l<29 → ∀ j,j<1024 → Canonical (c l j))
     (x y : Old.Q) (hx : Canonical x) (hy : Canonical y)
@@ -39,7 +43,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [hstream]
   apply PV_RunJoin_ClaimStreamCongruence49.complete
   · intro l hlt
-    rw [dif_pos hlt,PV_RunJoin_ClaimPolynomial49.message c ⟨l,hlt⟩ x y z hzx hzy]
+    rw [dif_pos hlt]
+    exact congrArg (fun v => List.ofFn (ProverCommitValueRange47.bytes v))
+      (PV_RunJoin_ClaimPolynomial49.message c ⟨l,hlt⟩ x y z hzx hzy)
   · omega
 #print axioms complete
 end R1Z.PV_RunJoin_ClaimModelStream49
