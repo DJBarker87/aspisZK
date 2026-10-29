@@ -11599,3 +11599,15 @@ undecidable hunks stop), port devnet_spend onto the proof-account route with cal
 pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
 proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
 outright: 0. Privacy target not yet established.
+
+## D437 (Stream B) 2026-10-29 01:59 UTC: runjoin49 results; runjoin50 launched
+
+runjoin49 (head 3b72078039, pushed) used all 100 Lean attempts (72 accepted, 28 rejected; 0 Kani). All three reserved axioms audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules; protected prefixes untouched; no large files. It proved the following:
+- ordered 928-byte claim production;
+- pointwise polynomial semantics;
+- the produced gamma and material arrays through the retained continuation;
+- canonical scalars at transcript tags 27 to 29;
+- the q1 and w1 fold meanings from actual tail success.
+It also placed the incoming installations as D430 asked. The hinput backend-messages association is a step (2) producer obligation. The op79 and op254 installation identifications belong to step (4), at the deployed caller. Still open in step (2): the final claim-stream polynomial aggregate, the complete prepare and common-challenge association, the hinput producer proof, FinishContext and the ordered publication bytes. Rows removed: 0.
+
+runjoin50 launched (IDs 63600-63699; 100 Lean, 0 Kani) on those items in order, aggregating the 29 columns by induction or fold. Privacy target not yet established.
