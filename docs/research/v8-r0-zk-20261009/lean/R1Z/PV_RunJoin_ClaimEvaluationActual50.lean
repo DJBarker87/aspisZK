@@ -15,7 +15,7 @@ def run (p : Point) (q : Column) : Result W :=
 theorem array_roundtrip (q : Column) : amap fromW (amap toW q)=q := by
   apply Subtype.ext
   simp only [amap,List.map_map,Function.comp_def,ProverRwDictionaryTower.w_roundtrip]
-  exact List.map_id
+  exact List.map_id _
 
 theorem point_roundtrip (p : Point) :
     (⟨fromW (toW p.x),fromW (toW p.y)⟩ : Point)=p := by
