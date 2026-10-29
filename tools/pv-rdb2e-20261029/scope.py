@@ -35,6 +35,10 @@ run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=
 r=ssh(f'python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/launch-reservation.log 2>&1 && python3 -c '+shlex.quote("import json; assert json.load(open('"+D+'/'+name+"/admission-launch.json'))['allowed'] is True")+' && '+shlex.join(run)+f' > {D}/{name}/output.log 2>&1')
 for f in ['admission-launch.json','launch-reservation.log','admission-barrier.json','output.log','time.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
+launch=json.loads((out/'admission-launch.json').read_text())
+if launch.get('allowed') is not True:
+ refuse('same-shell launch admission '+name,{k:launch.get(k) for k in ['utc','allowed','error']})
+ print('UNCHARGED SAME-SHELL REFUSAL',r.returncode,launch.get('error'));sys.exit(78)
 bar=json.loads((out/'admission-barrier.json').read_text())
 if bar.get('allowed') is not True:
  refuse('scope barrier '+name,{k:bar.get(k) for k in ['utc','allowed','error']})
