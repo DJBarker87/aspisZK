@@ -169,3 +169,10 @@ Usize literal proof was not definitionally equal at instances transparency.
 No counterexample or changed source law is inferred; the entire failed module
 and its sorryAx diagnostics are uncredited. Changed proof uses direct Eq.mpr
 transport of the existing source/finite equality instead of tactic rewriting.
+
+60694 also fails, now solely because bare Total is ambiguous between Mathlib’s
+binary-relation predicate and PV_RDCD3_Total.Total in congrArg. This module
+remains wholly uncredited. Changed proof fully qualifies the Result predicate
+and carrier and supplies direct Eq.mpr transport without rewriting. The prior
+commit’s “Validate fill totality” describes the attempted validation, not a
+success; the failed receipt is preserved unchanged.

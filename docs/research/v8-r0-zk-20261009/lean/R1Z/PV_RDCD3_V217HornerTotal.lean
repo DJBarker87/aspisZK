@@ -24,7 +24,7 @@ theorem finite_total (coeff : Coeff) (p : Prepared) (fuel : Nat) (e : Usize) (s 
 set_option backward.isDefEq.respectTransparency false in
 theorem source_total (coeff : Coeff) (p : Prepared) (s : Q) :
     Total (PV_RDCD3_CB_MaskHorner.S.loop (before 26#usize) coeff p s) := by
-  apply (congrArg Total (PV_RDCD3_CB_MaskHorner.source coeff p 26 26#usize s rfl)).mpr
+  apply (congrArg PV_RDCD3_Total.Total (PV_RDCD3_CB_MaskHorner.source coeff p 26 26#usize s rfl)).mpr
   exact finite_total coeff p 26 26#usize s rfl (by decide)
 #print axioms finite_total
 #print axioms source_total

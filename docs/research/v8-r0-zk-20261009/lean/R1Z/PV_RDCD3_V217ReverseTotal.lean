@@ -31,7 +31,7 @@ theorem finite_total (point : Array Q 10#usize) (fuel : Nat) (e : Usize) (s w : 
 set_option backward.isDefEq.respectTransparency false in
 theorem source_total (point : Array Q 10#usize) (s w : Q) :
     Total (S.loop (before 10#usize) point s w) := by
-  apply (congrArg Total (PV_RDCD3_CB_MaskLinearsFinite.source point 10 10#usize s w rfl)).mpr
+  apply (congrArg PV_RDCD3_Total.Total (PV_RDCD3_CB_MaskLinearsFinite.source point 10 10#usize s w rfl)).mpr
   exact finite_total point 10 10#usize s w rfl (by decide)
 
 set_option backward.isDefEq.respectTransparency false in
