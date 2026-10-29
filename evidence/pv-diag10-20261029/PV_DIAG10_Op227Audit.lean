@@ -1,0 +1,10 @@
+import PV_DIAG10_Op227
+#print axioms PV_DIAG10.rust_ok_no_panic
+#print axioms PV_DIAG10.installed_family_no_panic
+#print axioms PV_DIAG10.installed_family_no_divergence
+#print axioms PV_DIAG10.installed_nonvacuity_no_panic
+#print axioms PV_DIAG10.reference_family_no_panic
+#print axioms PV_DIAG10.installed_panic_only_continuation_unreached
+#print axioms PV_DIAG10.existential_success_not_universal
+#print axioms PV_B3P_Success227.installed_success8
+#print axioms PV_B3P_Success227.installed_nonvacuity8

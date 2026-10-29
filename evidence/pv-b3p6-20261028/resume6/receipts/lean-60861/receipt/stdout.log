@@ -1,0 +1,137 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandSuccess227.lean:38:6: error: Type mismatch: After simplification, term
+  h
+ has type
+  ↑(len.wrapping_mul 2#usize) = ↑len * ↑2#usize
+but is expected to have type
+  ↑len1 = 2 * ↑len
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandSuccess227.lean:49:76: error: unsolved goals
+N : Usize
+point : Std.Array aspis_core.field.QM31 10#usize
+start count : Usize
+hend : ↑(start.wrapping_add count) ≤ 10
+n : ℕ
+ih :
+  ∀ (weights : Std.Array aspis_core.field.QM31 N) (len coordinate : Usize),
+    ↑coordinate + n = ↑(start.wrapping_add count) →
+      ↑len * 2 ^ n ≤ ↑N →
+        Success (reference_copy_terminal.Selectors.expand_loop0 point start count weights len coordinate)
+weights : Std.Array aspis_core.field.QM31 N
+len coordinate : Usize
+hc : ↑coordinate + (n + 1) = ↑(start.wrapping_add count)
+hcap : ↑len * 2 ^ (n + 1) ≤ ↑N
+hb : coordinate < start.wrapping_add count
+hpow : 1 ≤ 2 ^ n
+hcap' : 2 * ↑len * 2 ^ n ≤ ↑N
+hlen : 2 * ↑len ≤ ↑N
+hN : ↑N < UScalar.size UScalarTy.Usize
+len1 : Usize := len.wrapping_mul 2#usize
+hlen1 : ↑len1 = 2 * ↑len
+coordinate1 : Usize := coordinate.wrapping_add 1#usize
+hc1 : ↑coordinate1 = ↑coordinate + 1
+q : aspis_core.field.QM31
+hq : point.index_usize coordinate = Result.ok q
+prepared : host_terminal_field.PreparedQm31Multiplier
+hprepared : host_terminal_field.PreparedQm31Multiplier.new q = Result.ok prepared
+weights1 : Std.Array aspis_core.field.QM31 N
+hweights1 : reference_copy_terminal.Selectors.expand_loop0_loop0 weights prepared len = Result.ok weights1
+⊢ Result.ok (ControlFlow.cont (weights1, len.wrapping_mul 2#usize, coordinate.wrapping_add 1#usize)) =
+    Result.ok (ControlFlow.cont (weights1, len1, coordinate1))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandSuccess227.lean:53:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  reference_copy_terminal.Selectors.expand_loop0.body point start count weights len coordinate
+in the target expression
+  Success
+    (match
+      match (weights, len, coordinate) with
+      | (weights1, len1, coordinate1) =>
+        reference_copy_terminal.Selectors.expand_loop0.body point start count weights1 len1 coordinate1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (weights1, len1, coordinate1) =>
+              reference_copy_terminal.Selectors.expand_loop0.body point start count weights1 len1 coordinate1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div)
+
+case succ
+N : Usize
+point : Std.Array aspis_core.field.QM31 10#usize
+start count : Usize
+hend : ↑(start.wrapping_add count) ≤ 10
+n : ℕ
+ih :
+  ∀ (weights : Std.Array aspis_core.field.QM31 N) (len coordinate : Usize),
+    ↑coordinate + n = ↑(start.wrapping_add count) →
+      ↑len * 2 ^ n ≤ ↑N →
+        Success (reference_copy_terminal.Selectors.expand_loop0 point start count weights len coordinate)
+weights : Std.Array aspis_core.field.QM31 N
+len coordinate : Usize
+hc : ↑coordinate + (n + 1) = ↑(start.wrapping_add count)
+hcap : ↑len * 2 ^ (n + 1) ≤ ↑N
+hb : coordinate < start.wrapping_add count
+hpow : 1 ≤ 2 ^ n
+hcap' : 2 * ↑len * 2 ^ n ≤ ↑N
+hlen : 2 * ↑len ≤ ↑N
+hN : ↑N < UScalar.size UScalarTy.Usize
+len1 : Usize := len.wrapping_mul 2#usize
+hlen1 : ↑len1 = 2 * ↑len
+coordinate1 : Usize := coordinate.wrapping_add 1#usize
+hc1 : ↑coordinate1 = ↑coordinate + 1
+q : aspis_core.field.QM31
+hq : point.index_usize coordinate = Result.ok q
+prepared : host_terminal_field.PreparedQm31Multiplier
+hprepared : host_terminal_field.PreparedQm31Multiplier.new q = Result.ok prepared
+weights1 : Std.Array aspis_core.field.QM31 N
+hweights1 : reference_copy_terminal.Selectors.expand_loop0_loop0 weights prepared len = Result.ok weights1
+hbody :
+  reference_copy_terminal.Selectors.expand_loop0.body point start count weights len coordinate =
+    Result.ok (ControlFlow.cont (weights1, len1, coordinate1))
+⊢ Success
+    (match
+      match (weights, len, coordinate) with
+      | (weights1, len1, coordinate1) =>
+        reference_copy_terminal.Selectors.expand_loop0.body point start count weights1 len1 coordinate1 with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        loop
+          (fun x =>
+            match x with
+            | (weights1, len1, coordinate1) =>
+              reference_copy_terminal.Selectors.expand_loop0.body point start count weights1 len1 coordinate1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_ExpandSuccess227.lean:66:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (Array.repeat N aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ONE
+in the target expression
+  Success
+    (have weights := Array.repeat N aspis_core.field.QM31.ZERO;
+    do
+    let weights1 ← weights.update 0#usize aspis_core.field.QM31.ONE
+    reference_copy_terminal.Selectors.expand_loop0 point start count weights1 1#usize start)
+
+N : Usize
+point : Std.Array aspis_core.field.QM31 10#usize
+start count : Usize
+hend : ↑start + ↑count ≤ 10
+hcap : 2 ^ ↑count ≤ ↑N
+hpow : 1 ≤ 2 ^ ↑count
+he : ↑(start.wrapping_add count) = ↑start + ↑count
+weights : Std.Array aspis_core.field.QM31 N
+hweights : (Array.repeat N aspis_core.field.QM31.ZERO).update 0#usize aspis_core.field.QM31.ONE = Result.ok weights
+⊢ Success
+    (have weights := Array.repeat N aspis_core.field.QM31.ZERO;
+    do
+    let weights1 ← weights.update 0#usize aspis_core.field.QM31.ONE
+    reference_copy_terminal.Selectors.expand_loop0 point start count weights1 1#usize start)
+'PV_B3P_Success227.usize_ten_size' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Success227.expand_outer_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.expand_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.selectors_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.boxed_selectors_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

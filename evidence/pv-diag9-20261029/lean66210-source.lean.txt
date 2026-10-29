@@ -1,0 +1,53 @@
+import Aeneas
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result
+
+theorem ok_excludes_panic {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .fail .panic := by rw [h]; intro e; cases e
+#print axioms ok_excludes_panic
+theorem ok_excludes_div {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) : r ≠ .div := by rw [h]; intro e; cases e
+#print axioms ok_excludes_div
+theorem ok_excludes_failure {A : Type} {r : Result A} {a : A}
+ (h : r=.ok a) (e : Error) : r ≠ .fail e := by rw [h]; intro x; cases x
+#print axioms ok_excludes_failure
+theorem terminating_excludes_panic {A : Type} {r : Result A}
+ (h : ∃ a, r=.ok a) : r ≠ .fail .panic := by
+ obtain ⟨a,ha⟩ := h; exact ok_excludes_panic ha
+#print axioms terminating_excludes_panic
+theorem rust_error_excludes_panic {A E : Type} {r : Result (core.result.Result A E)}
+ (e : E) (h : r=.ok (.Err e)) : r ≠ .fail .panic := ok_excludes_panic h
+#print axioms rust_error_excludes_panic
+theorem bind_prefix_terminates {A B : Type} (r : Result A) (k : A → Result B)
+ {b : B} (h : (r >>= k)=.ok b) : ∃ a, r=.ok a ∧ k a=.ok b := by
+ cases r with
+ | ok a => exact ⟨a,rfl,h⟩
+ | fail e => cases h
+ | div => cases h
+#print axioms bind_prefix_terminates
+theorem bind_prefix_no_panic {A B : Type} (r : Result A) (k : A → Result B)
+ {b : B} (h : (r >>= k)=.ok b) : r ≠ .fail .panic := by
+ obtain ⟨a,ha,_⟩ := bind_prefix_terminates r k h
+ exact ok_excludes_panic ha
+#print axioms bind_prefix_no_panic
+theorem bind_continuation_no_panic {A B : Type} (r : Result A) (k : A → Result B)
+ {b : B} (h : (r >>= k)=.ok b) : ∃ a, r=.ok a ∧ k a ≠ .fail .panic := by
+ obtain ⟨a,ha,hk⟩ := bind_prefix_terminates r k h
+ exact ⟨a,ha,ok_excludes_panic hk⟩
+#print axioms bind_continuation_no_panic
+theorem bind_failure_propagates {A B : Type} (k : A → Result B) :
+ ((.fail .panic : Result A) >>= k) = .fail .panic := rfl
+#print axioms bind_failure_propagates
+theorem bind_divergence_propagates {A B : Type} (k : A → Result B) :
+ ((.div : Result A) >>= k) = .div := rfl
+#print axioms bind_divergence_propagates
+theorem allowed_result_no_panic {A : Type} (r : Result A) (allowed : Error → Prop)
+ (classification : (∃ a, r=.ok a) ∨ (∃ e, allowed e ∧ r=.fail e))
+ (nonpanic : ¬ allowed .panic) : r ≠ .fail .panic := by
+ rcases classification with h | ⟨e,he,hr⟩
+ · exact terminating_excludes_panic h
+ · rw [hr]; intro eq; cases eq; exact nonpanic he
+#print axioms allowed_result_no_panic
+end PV_DIAG9

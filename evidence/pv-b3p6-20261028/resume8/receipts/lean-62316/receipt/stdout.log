@@ -1,0 +1,40 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DigestSuffix23227.lean:41:158: error: unsolved goals
+public1 : reference_terminal.SemanticPublic
+openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings
+selectors : reference_copy_terminal.Selectors
+output : Digest8Q
+⊢ (do
+      let block19 ← lift (Usize.wrapping_add 34#usize 19#usize)
+      let i44 ← lift (public1.transition.live_snapshot.next_pair_index.wrapping_shr 19#u32)
+      let i45 ← lift (i44 &&& 1#u64)
+      if i45 = 0#u64 then do
+          let i46 ← lift (block19.wrapping_mul 16#usize)
+          let q3 ← selectors.row i46
+          let a ← reference_terminal.empty_root 19#usize
+          let digests24 ←
+            reference_terminal.add_digest_binding output q3 openings.z aspis_statement.poseidon2.RATE a true
+          digest_suffix_24 public1 openings selectors digests24
+        else do
+          let i46 ← lift (block19.wrapping_mul 16#usize)
+          let i47 ← lift (i46.wrapping_add 12#usize)
+          let q3 ← selectors.row i47
+          let a ← reference_terminal.digest227 public1.transition.live_snapshot.frontier 19#usize
+          let digests24 ← reference_terminal.add_digest_binding output q3 openings.z 0#usize a false
+          digest_suffix_24 public1 openings selectors digests24) =
+    lift (Usize.wrapping_add 34#usize 19#usize) >>= fun a =>
+      lift (public1.transition.live_snapshot.next_pair_index.wrapping_shr 19#u32) >>= fun a_1 =>
+        lift (a_1 &&& 1#u64) >>= fun a_2 =>
+          (if a_2 = 0#u64 then do
+              let i46 ← lift (a.wrapping_mul 16#usize)
+              let q3 ← selectors.row i46
+              let a ← reference_terminal.empty_root 19#usize
+              reference_terminal.add_digest_binding output q3 openings.z aspis_statement.poseidon2.RATE a true
+            else do
+              let i46 ← lift (a.wrapping_mul 16#usize)
+              let i47 ← lift (i46.wrapping_add 12#usize)
+              let q3 ← selectors.row i47
+              let a ← reference_terminal.digest227 public1.transition.live_snapshot.frontier 19#usize
+              reference_terminal.add_digest_binding output q3 openings.z 0#usize a false) >>=
+            digest_suffix_24 public1 openings selectors
+'PV_B3P_Success227.digest_suffix_23_equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.digest_suffix_23_success' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

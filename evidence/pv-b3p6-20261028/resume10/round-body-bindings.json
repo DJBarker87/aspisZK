@@ -1,0 +1,52 @@
+{
+  "modules": [
+    "PV_B3P_RoundQStep10227",
+    "PV_B3P_RoundQTail1012227",
+    "PV_B3P_RoundQTail1008227",
+    "PV_B3P_RoundQTail1004227",
+    "PV_B3P_RoundQPlain10227",
+    "PV_B3P_RoundQPacked10227",
+    "PV_B3P_RoundMStep10227",
+    "PV_B3P_RoundMTail1012227",
+    "PV_B3P_RoundMTail1008227",
+    "PV_B3P_RoundMTail1004227",
+    "PV_B3P_RoundMPlain10227",
+    "PV_B3P_RoundMPacked10227"
+  ],
+  "bodies": [
+    {
+      "body": "full_round",
+      "module": "PV_B3P_RoundQPlain10227",
+      "theorem": "full_round_body_binding10",
+      "source": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_loop": "for lane in 0..POSEIDON2_WIDTH",
+      "iterations": 16
+    },
+    {
+      "body": "full_round_packed",
+      "module": "PV_B3P_RoundQPacked10227",
+      "theorem": "full_round_packed_body_binding10",
+      "source": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_loop": "for lane in 0..POSEIDON2_WIDTH",
+      "iterations": 16
+    },
+    {
+      "body": "full_round_m31_constants",
+      "module": "PV_B3P_RoundMPlain10227",
+      "theorem": "full_round_m31_constants_body_binding10",
+      "source": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_loop": "for lane in 0..POSEIDON2_WIDTH",
+      "iterations": 16
+    },
+    {
+      "body": "full_round_m31_constants_packed",
+      "module": "PV_B3P_RoundMPacked10227",
+      "theorem": "full_round_m31_constants_packed_body_binding10",
+      "source": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_loop": "for lane in 0..POSEIDON2_WIDTH",
+      "iterations": 16
+    }
+  ],
+  "credit": "emitted full-round bodies to ordered four-lane fold groups; source token-expansion check and std dependency bindings remain separate",
+  "semantic_use": "reclassification within existing Charon/Aeneas tool trust"
+}

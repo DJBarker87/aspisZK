@@ -1,0 +1,10 @@
+{
+  "completed": 40,
+  "original_replay_objects_checked": 672,
+  "original_replay_object_mismatches": [],
+  "task_scopes": "",
+  "active_queues": [
+    "bash -c python3 - <<'PY' from pathlib import Path import json,hashlib D=Path(\"/home/dombarker/project-offloads/codex-pv-mfe-20261029\");j=json.load(open(D/\"h5-audit-input.json\"));jobs=json.load(open(D/\"jobs-audit.json\")) for _,m in jobs:  p=D/\"audit-sources\"/(m.replace(\".\",\"/\")+\".lean\");assert hashlib.sha256(p.read_bytes()).hexdigest()==j[\"modules\"][m][\"sha256\"];q=D/\"h5-sources\"/(m.replace(\".\",\"/\")+\".lean\");q.parent.mkdir(parents=True,exist_ok=True);q.write_bytes(p.read_bytes()) (D/\"h5-rebuild-input.json\").write_bytes((D/\"h5-audit-input.json\").read_bytes()) assert len(list(D.glob(\"lean-*/result.json\")))==33 PY python3 /home/dombarker/project-offloads/codex-pv-mfe-20261029/PV_MF_h5_queue.py jobs-audit.json 70333 > /home/dombarker/project-offloads/codex-pv-mfe-20261029/queue-audit.log 2>&1",
+    "python3 /home/dombarker/project-offloads/codex-pv-mfe-20261029/PV_MF_h5_queue.py jobs-audit.json 70333"
+  ]
+}

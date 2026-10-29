@@ -1,0 +1,31 @@
+import PV_DIAG11_Cleanup
+import PV_DIAG11_WriteAll
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Source control for print_to and attempt_print_to_stderr, retaining capture,
+formatter, panic hook AND io::Error destruction as separate complete runs. -/
+def printGlobal {V : Type} (w : Run V IoError Unit)
+ (panic : IoError → Run V IoError Unit) : Run V IoError Unit :=
+ match w.exit with | .error e => pre w.events (panic e) | _ => w
+def ignoreIoError {V : Type} (w : Run V IoError Unit)
+ (dropError : IoError → Run V IoError Unit) : Run V IoError Unit :=
+ match w.exit with | .error e => pre w.events (dropError e) | _ => w
+def printTo {V : Type} (capture : Run V IoError Bool) (global : Run V IoError Unit)
+ (panic : IoError → Run V IoError Unit) : Run V IoError Unit :=
+ seq capture (fun used => if used then ret () else printGlobal global panic)
+def attemptStderr {V : Type} (capture : Run V IoError Bool) (global : Run V IoError Unit)
+ (dropError : IoError → Run V IoError Unit) : Run V IoError Unit :=
+ seq capture (fun used => if used then ret () else ignoreIoError global dropError)
+
+theorem print_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok true⟩ g p=⟨es,.ok ()⟩ := by simp [printTo,seq,pre,ret]
+#print axioms print_capture_returns
+theorem print_fallback {V : Type} (es : List V) (g : Run V IoError Unit) (p : IoError → Run V IoError Unit) : printTo ⟨es,.ok false⟩ g p=pre es (printGlobal g p) := rfl
+#print axioms print_fallback
+theorem print_error_invokes_hook {V : Type} (es : List V) (e : IoError) (p : IoError → Run V IoError Unit) : printGlobal ⟨es,.error e⟩ p=pre es (p e) := rfl
+#print axioms print_error_invokes_hook
+theorem stderr_error_dropped {V : Type} (es : List V) (e : IoError) (d : IoError → Run V IoError Unit) : ignoreIoError ⟨es,.error e⟩ d=pre es (d e) := rfl
+#print axioms stderr_error_dropped
+theorem stderr_capture_returns {V : Type} (es : List V) (g : Run V IoError Unit) (d : IoError → Run V IoError Unit) : attemptStderr ⟨es,.ok true⟩ g d=⟨es,.ok ()⟩ := by simp [attemptStderr,seq,pre,ret]
+#print axioms stderr_capture_returns
+end PV_DIAG11

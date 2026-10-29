@@ -1,0 +1,59 @@
+'PV_B3P_Success227.widen_u8' depends on axioms: [propext, Quot.sound]
+'PV_B3P_Success227.pattern_limb_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Success227.pattern_inner_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PatternSuccess227.lean:116:4: error: unsolved goals
+case pos.refine_1
+openings powers : Std.Array aspis_core.field.QM31 16#usize
+limb : Usize
+result : Std.Array aspis_core.field.QM31 14#usize
+pattern_index : Usize
+hi✝ : ↑pattern_index ≤ 14
+hw : reference_copy_terminal.POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1 = 14#usize
+oldlimb : Usize
+values : Std.Array aspis_core.field.QM31 14#usize
+i : Usize
+hi : ↑i ≤ 14
+hlt : ↑i < 14
+hb : i < 14#usize
+hlen : ↑i < (↑reference_copy_terminal.constants.COPY_PATTERNS).length
+pattern : reference_copy_terminal.CompiledPoolV1PairForestPattern :=
+  (↑reference_copy_terminal.constants.COPY_PATTERNS)[↑i]
+hpat :
+  reference_copy_terminal.constants.COPY_PATTERNS.index_usize i =
+    Result.ok (↑reference_copy_terminal.constants.COPY_PATTERNS)[↑i]
+hsafe : PatternSafe pattern
+limb1 : Usize
+value : aspis_core.field.QM31
+hvalue :
+  reference_copy_terminal.pattern_values_literal_loop1_loop0 openings powers 0#usize pattern
+      aspis_core.field.QM31.ZERO =
+    Result.ok (limb1, value)
+values1 : Std.Array aspis_core.field.QM31 14#usize
+hvalues1 : values.update i value = Result.ok values1
+j : Usize := i.wrapping_add 1#usize
+hj : ↑j = ↑i + 1
+⊢ (do
+      let __x ←
+        reference_copy_terminal.pattern_values_literal_loop1_loop0 openings powers 0#usize
+            (↑reference_copy_terminal.constants.COPY_PATTERNS)[↑i] aspis_core.field.QM31.ZERO
+      let result1 ← values.update i __x.2
+      Result.ok (ControlFlow.cont (__x.1, result1, i.wrapping_add 1#usize))) =
+    Result.ok (ControlFlow.cont (limb1, values1, i.wrapping_add 1#usize))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PatternSuccess227.lean:117:13: warning: This simp argument is unused:
+  hvalue
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_copy_terminal.pattern_values_literal_loop1.body, ̲hw, ̲hb, ̲↓reduceIte,
+         ̵ ̵hpat, ̲hvalue,̵h̵v̵a̵l̵u̵e̵s1, ̲lift, ̲bind_tc_ok, ̲j]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_PatternSuccess227.lean:117:20: warning: This simp argument is unused:
+  hvalues1
+
+Hint: Omit it from the simp argument list.
+  simp only [reference_copy_terminal.pattern_values_literal_loop1.body, ̲hw, ̲hb, ̲↓reduceIte,
+         ̵ ̵hpat, ̲hvalue,h̵v̵a̵ ̲lu̵e̵s̵1̵,̵l̵ift, ̲bind_tc_ok, ̲j]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Success227.pattern_outer_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Success227.patterns_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,41 @@
+import PV_DIAG11_File
+import PV_DIAG11_Report
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! The deployed plan::prove tail and main action branch. Every argument is
+an entire reached call trace, not just its successful bytes. The tail starts
+at the two fs::write statements; JSON may itself fail, panic or allocate.
+Earlier recovery/nonce/prover traces precede this tail and are retained by seq. -/
+def clientTail {V J : Type} (proof statement : Run V IoError Unit)
+ (json : Run V IoError J) : Run V IoError J := seq proof (fun _ => seq statement (fun _ => json))
+def actionMain {V J : Type} (plan : Run V IoError J) (print : J → Run V IoError Unit) : Run V IoError Unit :=
+ seq plan (fun j => seq (print j) (fun _ => ret ()))
+
+theorem client_proof_error_stops {V J : Type} (es : List V) (e : IoError) (s : Run V IoError Unit) (j : Run V IoError J) : clientTail ⟨es,.error e⟩ s j=⟨es,.error e⟩ := rfl
+#print axioms client_proof_error_stops
+theorem client_statement_error_stops {V J : Type} (es ss : List V) (e : IoError) (j : Run V IoError J) : clientTail (⟨es,.ok ()⟩ : Run V IoError Unit) ⟨ss,.error e⟩ j=⟨es++ss,.error e⟩ := rfl
+#print axioms client_statement_error_stops
+theorem client_json_after_writes {V J : Type} (es ss : List V) (j : Run V IoError J) : clientTail (⟨es,.ok ()⟩ : Run V IoError Unit) ⟨ss,.ok ()⟩ j=pre (es++ss) j := by exact pre_assoc es ss j
+#print axioms client_json_after_writes
+theorem main_plan_error_no_print {V J : Type} (es : List V) (e : IoError) (p : J → Run V IoError Unit) : actionMain ⟨es,.error e⟩ p=⟨es,.error e⟩ := rfl
+#print axioms main_plan_error_no_print
+theorem main_print_error_keeps_prefix {V J : Type} (es ps : List V) (j : J) (e : IoError) : actionMain (⟨es,.ok j⟩ : Run V IoError J) (fun _ => ⟨ps,.error e⟩)=⟨es++ps,.error e⟩ := rfl
+#print axioms main_print_error_keeps_prefix
+theorem main_success_order {V J : Type} (es ps : List V) (j : J) : actionMain (⟨es,.ok j⟩ : Run V IoError J) (fun _ => ⟨ps,.ok ()⟩)=⟨es++ps,.ok ()⟩ := by simp only [actionMain,seq,ret,pre,List.append_nil]
+#print axioms main_success_order
+theorem client_proof_panic {V J : Type} (es : List V) (s : Run V IoError Unit) (j : Run V IoError J) : clientTail ⟨es,.panic⟩ s j=⟨es,.panic⟩ := rfl
+#print axioms client_proof_panic
+theorem client_proof_oom {V J : Type} (es : List V) (s : Run V IoError Unit) (j : Run V IoError J) : clientTail ⟨es,.oom⟩ s j=⟨es,.oom⟩ := rfl
+#print axioms client_proof_oom
+theorem client_proof_abort {V J : Type} (es : List V) (s : Run V IoError Unit) (j : Run V IoError J) : clientTail ⟨es,.abort⟩ s j=⟨es,.abort⟩ := rfl
+#print axioms client_proof_abort
+theorem client_proof_diverge {V J : Type} (es : List V) (s : Run V IoError Unit) (j : Run V IoError J) : clientTail ⟨es,.diverge⟩ s j=⟨es,.diverge⟩ := rfl
+#print axioms client_proof_diverge
+theorem client_tail_prefix {V J : Type} (p s : Run V IoError Unit) (j : Run V IoError J) : ∃ xs, (clientTail p s j).events=p.events++xs := seq_prefix p _
+#print axioms client_tail_prefix
+theorem main_plan_prefix {V J : Type} (p : Run V IoError J) (f : J → Run V IoError Unit) : ∃ xs, (actionMain p f).events=p.events++xs := seq_prefix p _
+#print axioms main_plan_prefix
+theorem main_print_panics {V J : Type} (es ps : List V) (j : J) : actionMain (⟨es,.ok j⟩ : Run V IoError J) (fun _ => ⟨ps,.panic⟩)=⟨es++ps,.panic⟩ := rfl
+#print axioms main_print_panics
+end PV_DIAG11

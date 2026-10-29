@@ -1,0 +1,33 @@
+import PV_B3P_Resume9Axioms
+
+-- Exactly one frozen focused manifest; no endpoint replay claim.
+#check PV_B3P_Binding9227.equality_body_binding
+#print axioms PV_B3P_Binding9227.equality_body_binding
+#check PV_B3P_Binding9227.reconstruct_body_binding
+#print axioms PV_B3P_Binding9227.reconstruct_body_binding
+#check PV_B3P_Binding9227.sum_interval_binding
+#print axioms PV_B3P_Binding9227.sum_interval_binding
+#check PV_B3P_Binding9227.public_digest_read_binding9
+#print axioms PV_B3P_Binding9227.public_digest_read_binding9
+#check PV_B3P_Binding9227.value_sequence_read_binding9
+#print axioms PV_B3P_Binding9227.value_sequence_read_binding9
+#check PV_B3P_Binding9227.matrix_cell_result
+#print axioms PV_B3P_Binding9227.matrix_cell_result
+#check PV_B3P_Binding9227.accumulation_store9_0_0
+#print axioms PV_B3P_Binding9227.accumulation_store9_0_0
+#check PV_B3P_Binding9227.accumulation_store9_0_1
+#print axioms PV_B3P_Binding9227.accumulation_store9_0_1
+#check PV_B3P_Binding9227.accumulation_store9_0_2
+#print axioms PV_B3P_Binding9227.accumulation_store9_0_2
+#check PV_B3P_Binding9227.accumulation_store9_1_0
+#print axioms PV_B3P_Binding9227.accumulation_store9_1_0
+#check PV_B3P_Binding9227.accumulation_store9_1_1
+#print axioms PV_B3P_Binding9227.accumulation_store9_1_1
+#check PV_B3P_Binding9227.accumulation_store9_1_2
+#print axioms PV_B3P_Binding9227.accumulation_store9_1_2
+#check PV_B3P_Binding9227.accumulation_store9_2_0
+#print axioms PV_B3P_Binding9227.accumulation_store9_2_0
+#check PV_B3P_Binding9227.accumulation_store9_2_1
+#print axioms PV_B3P_Binding9227.accumulation_store9_2_1
+#check PV_B3P_Binding9227.accumulation_store9_2_2
+#print axioms PV_B3P_Binding9227.accumulation_store9_2_2

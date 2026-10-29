@@ -1,0 +1,26 @@
+'PV_DIAG9.adaptive_zero' does not depend on any axioms
+'PV_DIAG9.adaptive_stop' does not depend on any axioms
+'PV_DIAG9.adaptive_step' does not depend on any axioms
+'PV_DIAG9.adaptive_prefix_retained' depends on axioms: [propext]
+/home/dombarker/project-offloads/codex-pv-diag9-20261029/sources/PV_DIAG9_World.lean:62:11: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑(List.length (adaptive p world 0 h))
+ b := ↑(List.length h)
+/home/dombarker/project-offloads/codex-pv-diag9-20261029/sources/PV_DIAG9_World.lean:65:31: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 0
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 2
+where
+ a := ↑(List.length
+    (match none with
+    | none => h
+    | some (q, b) => adaptive p world n (h ++ [(q, world h q b)])))
+ b := ↑(List.length h)
+ c := ↑n
+'PV_DIAG9.adaptive_count_bound' depends on axioms: [propext, sorryAx, Quot.sound]

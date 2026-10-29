@@ -1,0 +1,38 @@
+import PV_DIAG9_Frames
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Public invocation criterion for dynamic formatting and stateful logging.
+Operands, site, stack and logger state are explicit; option B supplies configuration
+and outcomes, never witness operands or captured PCs. This is not a native instance. -/
+structure DiagnosticCall where
+ site : Nat
+ operands : List String
+ frames : Stack
+ level : Nat
+ deriving DecidableEq
+structure DiagnosticReply where
+ delivered : List String
+ nextState : Nat
+ failed : Bool
+ deriving DecidableEq
+def operandLengths (c : DiagnosticCall) := c.operands.map (fun x => x.utf8ByteSize)
+def dispatchCalls {Cfg : Type} (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) : Nat → List DiagnosticCall → List DiagnosticReply × Nat
+ | state,[] => ([],state)
+ | state,c::cs =>
+   let r := dispatch cfg state c
+   let tail := dispatchCalls dispatch cfg r.nextState cs
+   (r::tail.1,tail.2)
+theorem format_operands_transport {O : Type} (render : List String → O)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) : render a.operands=render b.operands :=
+ congrArg render h
+#print axioms format_operands_transport
+theorem format_operand_byte_lengths (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ operandLengths a=operandLengths b := congrArg (List.map (fun x : String => x.utf8ByteSize)) h
+#print axioms format_operand_byte_lengths
+theorem formatter_capacity_transport (capacity : List Nat → Nat)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ capacity (operandLengths a)=capacity (operandLengths b) :=
+ congrArg capacity (format_operand_byte_lengths a b h)
+#print axioms formatter_capacity_transport
+end PV_DIAG9

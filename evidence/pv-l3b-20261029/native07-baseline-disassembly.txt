@@ -1,0 +1,33 @@
+bc480:	xor    %eax,%eax
+bc482:	cmpb   $0x1,(%rdx)
+bc485:	jne    bc4ea <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x6a>
+bc487:	movzwl 0x2(%rdx),%ecx
+bc48b:	movzbl 0x4(%rdx),%r8d
+bc490:	mov    0x8(%rdx),%eax
+bc493:	cmpb   $0x0,0x6(%rdx)
+bc497:	je     bc4b8 <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x38>
+bc499:	mov    $0xa,%dl
+bc49b:	cmp    $0xf,%r8b
+bc49f:	ja     bc4ef <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x6f>
+bc4a1:	lea    (%r8,%r8,2),%r9
+bc4a5:	cmp    %rcx,0x190(%rsi,%r9,8)
+bc4ad:	jbe    bc4ef <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x6f>
+bc4af:	add    $0x180,%rsi
+bc4b6:	jmp    bc4cb <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x4b>
+bc4b8:	mov    $0xa,%dl
+bc4ba:	cmp    $0xf,%r8b
+bc4be:	ja     bc4ef <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x6f>
+bc4c0:	lea    (%r8,%r8,2),%r9
+bc4c4:	cmp    %rcx,0x10(%rsi,%r9,8)
+bc4c9:	jbe    bc4ef <aspis_r1_cost_probe::host_semantic::copy_tuple_limb+0x6f>
+bc4cb:	lea    (%r8,%r8,2),%rdx
+bc4cf:	mov    0x8(%rsi,%rdx,8),%rdx
+bc4d4:	mov    (%rdx,%rcx,4),%ecx
+bc4d7:	lea    (%rcx,%rax,1),%edx
+bc4da:	cmp    $0x7fffffff,%edx
+bc4e0:	lea    -0x7fffffff(%rcx,%rax,1),%eax
+bc4e7:	cmovb  %edx,%eax
+bc4ea:	mov    %eax,0x4(%rdi)
+bc4ed:	mov    $0xc,%dl
+bc4ef:	mov    %dl,(%rdi)
+bc4f1:	ret

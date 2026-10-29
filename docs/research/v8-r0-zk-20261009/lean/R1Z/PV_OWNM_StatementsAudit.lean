@@ -1,0 +1,21 @@
+import R1Z.PV_OWNM_DenseRows
+import R1Z.PV_OWNM_FoldSum
+import R1Z.PV_OWNM_V239
+set_option pp.proofs false
+#print R1Z.PV_OWNM_DenseRows.high_bit
+#print R1Z.PV_OWNM_DenseRows.low_bit
+#print R1Z.PV_OWNM_DenseRows.joined_weight
+#print R1Z.PV_OWNM_DenseRows.full_dense_sparse
+#print R1Z.PV_OWNM_FoldSum.fold_sum
+#print R1Z.PV_OWNM_FoldSum.range_sum
+#print R1Z.PV_OWNM_FoldSum.sparse_sum
+#print R1Z.PV_OWNM_FoldSum.prefix_product
+#print R1Z.PV_OWNM_V239.ready_value
+#print R1Z.PV_OWNM_V239.restore
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan
+#print R1Z.PV_OWNM_V239.ResourceExit
+#print R1Z.PV_OWNM_V239.attach

@@ -1,0 +1,78 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "772e7e75578714ed6fe5b49ed565eee42831764e",
+  "runner_sha256": "24f98661ac84c12448578bb09afa9c2bf083d1271261282f309d20f16c422987",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "environment_retry": [
+    {
+      "old_attempt": 68707,
+      "correction": {
+        "failure_class": "pre-elaboration environment",
+        "error": "missing R1Z.PV_OWN_Heap in selected private package",
+        "correction": "stage full verified L1 cohort with all companions and compatible own objects under one private package root",
+        "evidence": "staging.json"
+      }
+    }
+  ],
+  "module": "R1Z.PV_OWNM_V239",
+  "attempt": 69100,
+  "source_sha256": "ba7a035e908e3e345f5b54590857be1343da5ccc7a7338a9a23a4e0a0dc5f589",
+  "environment_sha256": "27562c3a76c496c16294a21d7ad7c4c3f8f897a6e0ffab390c552cc6d5ad9ab6",
+  "dependency_objects": {
+    "R1Z.ProverRwFullTypes": {
+      "/home/dombarker/project-offloads/codex-pv-skwb-20261029/objects/R1Z/ProverRwFullTypes.olean": "2e90c796565caf6d8e78c11465636abfd62254a12804bdd0d27624063755308d"
+    },
+    "R1Z.PV_OWN_Heap": {
+      "/home/dombarker/project-offloads/codex-pv-skwb-20261029/objects/R1Z/PV_OWN_Heap.olean": "2534f67b3bcf1dec9a87470164437e651c23463be0a2007588fa28089b738816"
+    },
+    "Mathlib.Algebra.BigOperators.Field": {
+      "/home/dombarker/project-offloads/codex-pv-l1g-20261029/external/Mathlib/Algebra/BigOperators/Field.olean": "2c7158c759eb3f3a65bc9a8302a6be88f225b7a80ce667a046017fc53ede28ab",
+      "/home/dombarker/project-offloads/codex-pv-l1g-20261029/external/Mathlib/Algebra/BigOperators/Field.olean.server": "d8a8360e17a79ecb5137764f2ff1c9d03a59a5ccb7530920162aa34fc0fa164a",
+      "/home/dombarker/project-offloads/codex-pv-l1g-20261029/external/Mathlib/Algebra/BigOperators/Field.olean.private": "c8b04a871bbf5b25e3e00542f9f37e6c1089eed6cdfd72d461f8c7eb6179d422",
+      "/home/dombarker/project-offloads/codex-pv-l1g-20261029/external/Mathlib/Algebra/BigOperators/Field.ir": "ad78968fe99ad2321ecdc1d1386d99c74448fadb84ed6b6bd76bd4e937432e2e"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/lean69100-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/objects/R1Z/PV_OWNM_V239.olean",
+    "/home/dombarker/project-offloads/codex-pv-skwb-20261029/sources/R1Z/PV_OWNM_V239.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 1.4698855876922607,
+  "peak_rss_kib": "2665184",
+  "swaps": "0",
+  "gnu_wall": "0:01.44",
+  "print_axioms": "'R1Z.PV_OWNM_V239.ready_value' does not depend on any axioms\ntheorem R1Z.PV_OWNM_V239.restore : \u2200 {K W : Type} [inst : Field K] (decode : Q \u2192 K) (zero : Q)\n  (source222 : List Q \u2192 List Q \u2192 Result (Option Q)) (wirePoints : List Q \u2192 List (List Q)) (isBoolean : Q \u2192 Bool)\n  (reconstruct879 reconstruct890 : Public \u2192 List Q) (native : Input \u2192 List Q \u2192 \u2115 \u2192 Execution K W)\n  (resource : Input \u2192 List Q \u2192 \u2115 \u2192 ResourceExit W) (failures : List Bool) (left right : Input),\n  PV_OWNM_Link_ActualInput wirePoints left \u2192\n    PV_OWNM_Link_ActualInput wirePoints right \u2192\n      PV_OWNM_Link_SourceDense decode zero source222 \u2192\n        PV_OWNM_Link_Transcript879 reconstruct879 left \u2192\n          PV_OWNM_Link_Transcript879 reconstruct879 right \u2192\n            PV_OWNM_Link_Transcript890 reconstruct890 left \u2192\n              PV_OWNM_Link_Transcript890 reconstruct890 right \u2192\n                PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures left \u2192\n                  PV_OWNM_Link_OwnedPublicPlan decode source222 wirePoints isBoolean native resource failures right \u2192\n                    left.pubData = right.pubData \u2192\n                      left.site = right.site \u2192\n                        List.map List.length left.columns = List.map List.length right.columns \u2192\n                          (\u2200 p \u2208 wirePoints left.point,\n                              \u2200 (lane : \u2115) (c : List Q),\n                                left.columns[lane]? = some c \u2192\n                                  native left p lane =\n                                    attach (resource left p lane)\n                                      (ok (if c.length \u2260 1024 then none else some (dense decode zero p c)))) \u2227\n                            (\u2200 p \u2208 wirePoints right.point,\n                                \u2200 (lane : \u2115) (c : List Q),\n                                  right.columns[lane]? = some c \u2192\n                                    native right p lane =\n                                      attach (resource right p lane)\n                                        (ok (if c.length \u2260 1024 then none else some (dense decode zero p c)))) \u2227\n                              \u2200 pL \u2208 wirePoints left.point,\n                                \u2200 pR \u2208 wirePoints right.point,\n                                  \u2200 (laneL laneR : \u2115) (cL cR : List Q),\n                                    left.columns[laneL]? = some cL \u2192\n                                      right.columns[laneR]? = some cR \u2192\n                                        (native left pL laneL).trace = (native right pR laneR).trace :=\n\u22ef\n'R1Z.PV_OWNM_V239.restore' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "object_sha256": "996caf5ab2c86df7253d743d2fd8883c0c14b0a01c30297dbc469d433c261951"
+}

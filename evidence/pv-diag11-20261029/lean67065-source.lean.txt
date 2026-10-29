@@ -1,0 +1,27 @@
+import PV_DIAG11_Print
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Termination<Result<T,E>> with complete debugStderr and E drop runs.
+Native drop/unwind implementations remain explicit primitives. -/
+def report {V E A : Type} (result : Except E A) (okReport : A → Run V IoError Nat)
+ (debugStderr dropError : E → Run V IoError Unit) : Run V IoError Nat :=
+ match result with
+ | .ok a => okReport a
+ | .error e => dropReturned (seq (debugStderr e) (fun _ => ret 1)) (dropError e)
+
+theorem report_ok {V E A : Type} (a : A) (ok : A → Run V IoError Nat) (err d : E → Run V IoError Unit) : report (.ok a) ok err d=ok a := rfl
+#print axioms report_ok
+theorem report_err {V E A : Type} (e : E) (ok : A → Run V IoError Nat) (err d : E → Run V IoError Unit) : report (.error e) ok err d=dropReturned (seq (err e) (fun _ => ret 1)) (d e) := rfl
+#print axioms report_err
+theorem report_success_silent {V E : Type} (err d : E → Run V IoError Unit) : report (.ok ()) (fun _ => (ret 0 : Run V IoError Nat)) err d=ret 0 := rfl
+#print axioms report_success_silent
+theorem report_error_failure_exit {V E A : Type} (e : E) (es ds : List V) (ok : A → Run V IoError Nat) : report (.error e) ok (fun _ => ⟨es,.ok ()⟩) (fun _ => ⟨ds,.ok ()⟩)=⟨es++ds,.ok 1⟩ := by simp only [report,seq,ret,pre,dropReturned,List.append_nil]
+#print axioms report_error_failure_exit
+theorem report_debug_panic {V E A : Type} (e : E) (es : List V) (ok : A → Run V IoError Nat) (d : E → Run V IoError Unit) : report (.error e) ok (fun _ => ⟨es,.panic⟩) d=⟨es,.panic⟩ := rfl
+#print axioms report_debug_panic
+theorem report_debug_oom {V E A : Type} (e : E) (es : List V) (ok : A → Run V IoError Nat) (d : E → Run V IoError Unit) : report (.error e) ok (fun _ => ⟨es,.oom⟩) d=⟨es,.oom⟩ := rfl
+#print axioms report_debug_oom
+theorem report_debug_abort {V E A : Type} (e : E) (es : List V) (ok : A → Run V IoError Nat) (d : E → Run V IoError Unit) : report (.error e) ok (fun _ => ⟨es,.abort⟩) d=⟨es,.abort⟩ := rfl
+#print axioms report_debug_abort
+end PV_DIAG11

@@ -1,0 +1,56 @@
+import Init
+namespace PV_DIAG12
+set_option autoImplicit false
+
+/-! Linux x86_64 std-to-POSIX-ABI request semantics. `Exchange` names the
+foreign call, NOT its unproved libc-to-kernel expansion. `cut` is an observation
+boundary, never a claim of divergence. Pointer coordinates remain observable. -/
+abbrev Bytes := List UInt8
+structure Span where
+ base : Nat
+ offset : Nat
+ bytes : Bytes
+ deriving DecidableEq, Repr
+def advance (s : Span) (n : Nat) : Span :=
+ ⟨s.base,s.offset+n,s.bytes.drop n⟩
+inductive Request where
+ | write (fd : Int) (span : Span) (count : Nat)
+ | open64 (pathAddress : Nat) (path : Bytes) (flags mode : Nat)
+ | close (fd : Int)
+ deriving DecidableEq, Repr
+inductive Reply where
+ | returned (value : Nat)
+ | error (errno : Int)
+ | cut
+ deriving DecidableEq, Repr
+structure Exchange where
+ request : Request
+ reply : Reply
+ deriving DecidableEq, Repr
+inductive Result (A : Type) where
+ | ok (value : A)
+ | error (errno : Int)
+ | cut
+ deriving DecidableEq, Repr
+structure Exec (A : Type) where
+ trace : List Exchange
+ result : Result A
+ deriving DecidableEq, Repr
+def pureE {A : Type} (a : A) : Exec A := ⟨[],.ok a⟩
+def bindE {A B : Type} (r : Exec A) (f : A → Exec B) : Exec B :=
+ match r.result with
+ | .ok a => let s := f a; ⟨r.trace++s.trace,s.result⟩
+ | .error e => ⟨r.trace,.error e⟩
+ | .cut => ⟨r.trace,.cut⟩
+def call (q : Request) (r : Reply) : Exec Nat :=
+ ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .cut => .cut⟩
+theorem call_request (q : Request) (r : Reply) : (call q r).trace.map Exchange.request=[q] := rfl
+#print axioms call_request
+
+theorem advance_zero (s : Span) : advance s 0=s := by cases s; rfl
+theorem advance_add (s : Span) (a b : Nat) : advance (advance s a) b=advance s (a+b) := by
+ cases s; simp only [advance,List.drop_drop,Nat.add_assoc]
+#print axioms advance_zero
+#print axioms advance_add
+
+end PV_DIAG12

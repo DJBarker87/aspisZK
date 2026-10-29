@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67299/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-67299/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-objects/R1Z/PV_OWNP_FocusedReplay.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownp-20261029/lean-sources/R1Z/PV_OWNP_FocusedReplay.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "transport_exit": 0,
+  "wall": "0:01.12",
+  "peak_rss_kib": "2639876",
+  "swap": "0",
+  "source_revision": "4f9aedf7c9d032eef21353d480ef5afea881ef57",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "R1Z.PV_OWNP_BuilderShape.accepted_lengths (base : List (List Aeneas.Std.U32))\n  (h : R1Z.PV_OWNO_Builder.acceptedBase base = true) (c : List Aeneas.Std.U32) : c \u2208 base \u2192 c.length = 1024\nR1Z.PV_OWNP_BuilderShape.successful_lengths {E : Type} (publicError imbalance : E)\n  (inverse : R1Z.PV_OWNK_TowerCanon.Q \u2192 Option R1Z.PV_OWNK_TowerCanon.Q)\n  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)\n  (setup : Unit \u2192 Except E (R1Z.PV_OWNK_TowerCanon.Q \u00d7 R1Z.PV_OWNK_TowerCanon.Q))\n  (registry : R1Z.PV_OWNK_TowerCanon.Q \u2192 Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))\n  (balanced : List R1Z.PV_OWNK_TowerCanon.Q \u2192 Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q \u2192 Except E Unit)\n  (out : List (List R1Z.PV_OWNK_TowerCanon.Q))\n  (h :\n    R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok out) :\n  List.map List.length out = List.replicate 29 1024\nR1Z.PV_OWNP_BuilderShape.at_array_execution {E : Type} (publicError imbalance : E)\n  (inverse : R1Z.PV_OWNK_TowerCanon.Q \u2192 Option R1Z.PV_OWNK_TowerCanon.Q)\n  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)\n  (setup : Unit \u2192 Except E (R1Z.PV_OWNK_TowerCanon.Q \u00d7 R1Z.PV_OWNK_TowerCanon.Q))\n  (registry : R1Z.PV_OWNK_TowerCanon.Q \u2192 Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))\n  (balanced : List R1Z.PV_OWNK_TowerCanon.Q \u2192 Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q \u2192 Except E Unit)\n  (columns : List (List R1Z.PV_OWNK_TowerCanon.Q))\n  (built :\n    R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok columns)\n  (pub : R1Z.PV_OWNM_V239.Public) (site : R1Z.PV_OWNM_V239.Site)\n  (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64) (writes : List R1Z.PV_OWNO_PointStores.Write) :\n  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput R1Z.PV_OWNJ_Points.statement_points\n      { pubData := pub, site := site, point := \u2191(R1Z.PV_OWNP_PointArray.run combine writes), columns := columns } \u2227\n    List.map List.length columns = List.replicate 29 1024\nR1Z.PV_OWNP_PointArray.index_bound (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10) : \u2191i < (\u2191p).length\nR1Z.PV_OWNP_PointArray.store_view (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10) (q : R1Z.PV_OWNK_TowerCanon.Q) :\n  \u2191(R1Z.PV_OWNP_PointArray.store p i q) = (\u2191p).set (\u2191i) q\nR1Z.PV_OWNP_PointArray.step_view (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (p : R1Z.PV_OWNP_PointArray.Point) (w : R1Z.PV_OWNO_PointStores.Write) :\n  \u2191(R1Z.PV_OWNP_PointArray.step combine p w) = R1Z.PV_OWNO_PointStores.store combine (\u2191p) w\nR1Z.PV_OWNP_PointArray.fold_view (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (writes : List R1Z.PV_OWNO_PointStores.Write) (p : R1Z.PV_OWNP_PointArray.Point) :\n  \u2191(List.foldl (R1Z.PV_OWNP_PointArray.step combine) p writes) =\n    List.foldl (R1Z.PV_OWNO_PointStores.store combine) (\u2191p) writes\nR1Z.PV_OWNP_PointArray.run_view (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (writes : List R1Z.PV_OWNO_PointStores.Write) :\n  \u2191(R1Z.PV_OWNP_PointArray.run combine writes) = R1Z.PV_OWNO_PointStores.run combine writes\nR1Z.PV_OWNP_PointArray.run_canonical (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (writes : List R1Z.PV_OWNO_PointStores.Write) (q : R1Z.PV_OWNK_TowerCanon.Q) :\n  q \u2208 \u2191(R1Z.PV_OWNP_PointArray.run combine writes) \u2192 R1Z.PV_OWNK_TowerCanon.Canon q\nR1Z.PV_OWNP_QueryStores.suffix_bounds (round : Fin 10) (offset : Fin (9 - \u2191round)) :\n  \u2191round < \u2191(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) \u2227\n    \u2191(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) < 10\nR1Z.PV_OWNP_QueryStores.query_count (rank : Fin 10 \u2192 List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28)\n  (assignment : \u2115) : (R1Z.PV_OWNP_QueryStores.queryWrites rank round sample assignment).length = 10\nR1Z.PV_OWNP_QueryStores.terminal_count (rank : Fin 10 \u2192 List Aeneas.Std.U32) :\n  (R1Z.PV_OWNP_QueryStores.finalWrites rank).length = 10\nR1Z.PV_OWNP_QueryStores.callback_canonical (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (rank : Fin 10 \u2192 List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28) (assignment : \u2115)\n  (q : R1Z.PV_OWNK_TowerCanon.Q) :\n  q \u2208 \u2191(R1Z.PV_OWNP_QueryStores.callback combine rank round sample assignment) \u2192 R1Z.PV_OWNK_TowerCanon.Canon q\nR1Z.PV_OWNP_QueryStores.terminal_canonical (combine : Aeneas.Std.U64 \u2192 Aeneas.Std.U32 \u2192 Aeneas.Std.U64)\n  (rank : Fin 10 \u2192 List Aeneas.Std.U32) (q : R1Z.PV_OWNK_TowerCanon.Q) :\n  q \u2208 \u2191(R1Z.PV_OWNP_QueryStores.terminal combine rank) \u2192 R1Z.PV_OWNK_TowerCanon.Canon q\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 67299,
+  "module": "R1Z/PV_OWNP_FocusedReplay",
+  "source_blob": "af94c1bfe856685280b136150b2e6b710d736b08",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNP_FocusedReplay.lean",
+  "source_sha256": "c4f81ec11f652ae394ddef643587b286cada9f2ee1f4301284ba1de0fca8f02c",
+  "imports": [
+    "R1Z.PV_OWNP_AxiomsAudit"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNP_AxiomsAudit": "984ff64a3634a1e5a33b29685dd81cb1175129a5f7302c40248cc9d649b6d320"
+  },
+  "deps_fingerprint": "9034217a0294984d5d52d7a4c2c2cf6ec08c322bc10ea853e681f33609281e7b"
+}
