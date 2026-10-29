@@ -16,6 +16,6 @@ theorem complete (block : Array U8 32#usize) (rank : Array U32 8#usize) (i : Usi
     PV_RunJoin_SamplerChecked54.add _ 2#usize hstart (by decide),
     PV_RunJoin_SamplerChecked54.add _ 3#usize hstart (by decide),
     PV_RunJoin_SamplerChecked54.add i 1#usize (by omega) (by decide)]
-  rfl
+
 #print axioms complete
 end R1Z.PV_RunJoin_PublicSamplerByteStep54
