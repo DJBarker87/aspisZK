@@ -22,12 +22,14 @@ theorem frontier_stop13 (append : AppendWord13) (out written : List U8)
     (failed : fields_model13 append out row = .ok (.Err error,written)) :
     frontier_rows13 append out (row::rows) = .ok (.Err error,written) := by
   simp only [frontier_rows13,failed,bind_tc_ok]
+  rfl
 
 theorem frontier_continue13 (append : AppendWord13) (out written : List U8)
     (row : List U32) (rows : List (List U32))
     (passed : fields_model13 append out row = .ok (.Ok (),written)) :
     frontier_rows13 append out (row::rows) = frontier_rows13 append written rows := by
   simp only [frontier_rows13,passed,bind_tc_ok]
+  rfl
 
 theorem frontier_model_witness13 (append : AppendWord13) :
     ∃ source, PV_B3P_Link_frontier append source :=
