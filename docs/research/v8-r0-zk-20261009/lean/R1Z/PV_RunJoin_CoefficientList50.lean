@@ -23,6 +23,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (small : messages.length≤14336) (rank : lane.val+n=messages.length) :
     @PV_RunJoin_CoefficientsThread45.phase (types base) (selected base heap box ops) .S2 messages n out lane=
       run (messages.val.drop lane.val) out := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   have len : messages.val.length=messages.length := rfl
   induction n generalizing out lane with
   | zero =>
