@@ -43,8 +43,10 @@ theorem loop (logical : Slice U8) (bound : Nat) (small : logical.length≤bound)
     cases status with
     | Err e =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+      rw [bind_assoc_eq]
       apply PV_RunJoin_ResultPost41.bind
       intro ignored
+      simp only [bind_tc_ok]
       change next.length≤out.length+2*bound*(n+1)
       simp only [Nat.mul_add,Nat.mul_one]
       omega
