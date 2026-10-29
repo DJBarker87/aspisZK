@@ -1,0 +1,48 @@
+import PV_DIAG6_Prefix
+import R0Z.FsAbortBounds
+/-! Original-L1-coordinate handoff, using the existing finite law/mass
+operators. No new coins, bad event, epsilon or trust field. Native event,
+terminal and prefix-family laws remain explicit P hypotheses. -/
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG6
+open PV_DIAG3 R0Z R0Z.FsAbortBounds
+variable {S A W R P C O : Type}
+def diagnosticPieces (count : Nat) (x : Execution S A) := (count,x.events,x.exit)
+theorem pieces_of_joint_execution (rel : S → S → Prop) (a b : Execution S A)
+ (m n : Nat) (hc : m = n) (h : Coupled rel a b) :
+ diagnosticPieces m a = diagnosticPieces n b := by
+ unfold diagnosticPieces
+ rw [hc,h.1,h.2.2]
+#print axioms pieces_of_joint_execution
+theorem pieces_iff (a b : Execution S A) (m n : Nat) :
+ diagnosticPieces m a = diagnosticPieces n b ↔ m = n ∧ a.events = b.events ∧ a.exit = b.exit := by
+ constructor
+ · intro h
+   exact ⟨congrArg (fun p => p.1) h,congrArg (fun p => p.2.1) h,congrArg (fun p => p.2.2) h⟩
+ · rintro ⟨hc,he,ht⟩
+   unfold diagnosticPieces; rw [hc,he,ht]
+#print axioms pieces_iff
+theorem honest_joint_native (honest : W → Prop) (pub : W → P) (coins : W → R → C)
+ (actualCount : W → R → Nat) (l1Count : P → C → Nat)
+ (actual : W → R → Execution S A) (events : P → C → List Event) (terminal : P → C → Exit A)
+ (existingL1Count : ∀ w r, honest w → actualCount w r = l1Count (pub w) (coins w r))
+ (nativeDiagnosticLaw : ∀ w r, honest w → (actual w r).events = events (pub w) (coins w r))
+ (nativeTerminalLaw : ∀ w r, honest w → (actual w r).exit = terminal (pub w) (coins w r))
+ (w : W) (r : R) (hw : honest w) :
+ diagnosticPieces (actualCount w r) (actual w r) =
+ (l1Count (pub w) (coins w r),events (pub w) (coins w r),terminal (pub w) (coins w r)) := by
+ unfold diagnosticPieces
+ rw [existingL1Count w r hw,nativeDiagnosticLaw w r hw,nativeTerminalLaw w r hw]
+#print axioms honest_joint_native
+theorem honest_joint_function (left right : R → Nat × List Event × Exit A)
+ (pointwise : ∀ r, left r = right r) : left = right := funext pointwise
+#print axioms honest_joint_function
+theorem whole_diagnostic_law [Fintype R]
+ (left right : R → Nat × List Event × Exit A) (joint : ∀ r, left r = right r) :
+ EqualLaws left right := by
+ have h : left = right := funext joint
+ rw [h]
+ intro value; rfl
+#print axioms whole_diagnostic_law
+end PV_DIAG6

@@ -1,0 +1,494 @@
+'R0Z.FsAbortBounds.mass_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R0Z.LawTransport.mean_eq_of_equalLaws' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG3.coupled_bind' does not depend on any axioms
+'PV_DIAG6.honest_joint_native' does not depend on any axioms
+'PV_DIAG6.decoder_family_decision_law' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem PV_DIAG6.scope_joint : ∀ {S A : Type} (rel : S → S → Prop) (a b : PV_DIAG3.Op S A) (d e : PV_DIAG3.Op S Unit)
+  (f g : PV_DIAG3.Panic → PV_DIAG3.Panic → PV_DIAG3.Op S A) (s t : S),
+  PV_DIAG3.Coupled rel (a s) (b t) →
+    (∀ (u v : S), rel u v → PV_DIAG3.Coupled rel (d u) (e v)) →
+      (∀ (p q : PV_DIAG3.Panic) (u v : S), rel u v → PV_DIAG3.Coupled rel (f p q u) (g p q v)) →
+        PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t) :=
+fun {S A} rel a b d e f g s t ha hd hf =>
+  PV_DIAG3.Execution.casesOn (motive := fun x =>
+    a s = x → PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t)) (a s)
+    (fun es u ex hsa =>
+      PV_DIAG3.Execution.casesOn (motive := fun x =>
+        b t = x → PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t)) (b t)
+        (fun fs v ey htb =>
+          And.casesOn
+            (Eq.mp (congrArg (fun _a => PV_DIAG3.Coupled rel { events := es, state := u, exit := ex } _a) htb)
+              (Eq.mp (congrArg (fun _a => PV_DIAG3.Coupled rel _a (b t)) hsa) ha))
+            fun he right =>
+            And.casesOn right fun hu hx =>
+              Eq.casesOn (motive := fun a_1 t_1 =>
+                fs = a_1 → he ≍ t_1 → PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t)) he
+                (fun h =>
+                  Eq.ndrec (motive := fun fs =>
+                    b t = { events := fs, state := v, exit := ey } →
+                      ∀ (he : es = fs),
+                        he ≍ Eq.refl es → PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t))
+                    (fun htb he h =>
+                      Eq.casesOn (motive := fun a_1 t_1 =>
+                        ey = a_1 → hx ≍ t_1 → PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t)) hx
+                        (fun h =>
+                          Eq.ndrec (motive := fun ey =>
+                            ∀ (hx : ex = ey),
+                              b t = { events := es, state := v, exit := ey } →
+                                hx ≍ Eq.refl ex →
+                                  PV_DIAG3.Coupled rel (PV_DIAG3.scope a d f s) (PV_DIAG3.scope b e g t))
+                            (fun hx htb h =>
+                              id
+                                (Eq.mpr
+                                  (id
+                                    (congrArg
+                                      (fun _a =>
+                                        PV_DIAG3.Coupled rel
+                                          (have b := _a;
+                                          PV_DIAG3.prepend b.events
+                                            (match b.exit with
+                                            | PV_DIAG3.Exit.value a =>
+                                              PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                            | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                            | PV_DIAG3.Exit.abort c =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                            | PV_DIAG3.Exit.diverge =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                          (have b := b t;
+                                          PV_DIAG3.prepend b.events
+                                            (match b.exit with
+                                            | PV_DIAG3.Exit.value a =>
+                                              PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                            | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                            | PV_DIAG3.Exit.abort c =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                            | PV_DIAG3.Exit.diverge =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                      hsa))
+                                  (Eq.mpr
+                                    (id
+                                      (congrArg
+                                        (fun _a =>
+                                          PV_DIAG3.Coupled rel
+                                            (have b := { events := es, state := u, exit := ex };
+                                            PV_DIAG3.prepend b.events
+                                              (match b.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                            (have b := _a;
+                                            PV_DIAG3.prepend b.events
+                                              (match b.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                        htb))
+                                    (PV_DIAG3.Exit.casesOn (motive := fun t =>
+                                      ex = t →
+                                        PV_DIAG3.Coupled rel
+                                          (have b := { events := es, state := u, exit := ex };
+                                          PV_DIAG3.prepend b.events
+                                            (match b.exit with
+                                            | PV_DIAG3.Exit.value a =>
+                                              PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                            | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                            | PV_DIAG3.Exit.abort c =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                            | PV_DIAG3.Exit.diverge =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                          (have b := { events := es, state := v, exit := ex };
+                                          PV_DIAG3.prepend b.events
+                                            (match b.exit with
+                                            | PV_DIAG3.Exit.value a =>
+                                              PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                            | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                            | PV_DIAG3.Exit.abort c =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                            | PV_DIAG3.Exit.diverge =>
+                                              { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                      ex
+                                      (fun a_1 h =>
+                                        Eq.ndrec (motive := fun ex =>
+                                          a s = { events := es, state := u, exit := ex } →
+                                            b t = { events := es, state := v, exit := ex } →
+                                              PV_DIAG3.Coupled rel
+                                                (have b := { events := es, state := u, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                                (have b := { events := es, state := v, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                          (fun hsa htb =>
+                                            PV_DIAG3.coupled_prepend rel es
+                                              (match
+                                                { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind
+                                                  (d
+                                                    { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.state)
+                                                  fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p =>
+                                                PV_DIAG3.unwind p d f
+                                                  { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.state,
+                                                  exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.state,
+                                                  exit := PV_DIAG3.Exit.diverge })
+                                              (match
+                                                { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind
+                                                  (e
+                                                    { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.state)
+                                                  fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p =>
+                                                PV_DIAG3.unwind p e g
+                                                  { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.state,
+                                                  exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.state,
+                                                  exit := PV_DIAG3.Exit.diverge })
+                                              (PV_DIAG3.coupled_bind rel
+                                                (d { events := es, state := u, exit := PV_DIAG3.Exit.value a_1 }.state)
+                                                (e { events := es, state := v, exit := PV_DIAG3.Exit.value a_1 }.state)
+                                                (fun x => PV_DIAG3.pure a_1) (fun x => PV_DIAG3.pure a_1) (hd u v hu)
+                                                fun x x_1 y hxy => PV_DIAG3.coupled_pure rel a_1 x_1 y hxy))
+                                          (Eq.symm h) hsa htb)
+                                      (fun p h =>
+                                        Eq.ndrec (motive := fun ex =>
+                                          a s = { events := es, state := u, exit := ex } →
+                                            b t = { events := es, state := v, exit := ex } →
+                                              PV_DIAG3.Coupled rel
+                                                (have b := { events := es, state := u, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                                (have b := { events := es, state := v, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                          (fun hsa htb =>
+                                            PV_DIAG3.coupled_prepend rel es
+                                              (match
+                                                { events := es, state := u, exit := PV_DIAG3.Exit.panic p }.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind
+                                                  (d { events := es, state := u, exit := PV_DIAG3.Exit.panic p }.state)
+                                                  fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p_1 =>
+                                                PV_DIAG3.unwind p_1 d f
+                                                  { events := es, state := u, exit := PV_DIAG3.Exit.panic p }.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := u, exit := PV_DIAG3.Exit.panic p }.state,
+                                                  exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := u, exit := PV_DIAG3.Exit.panic p }.state,
+                                                  exit := PV_DIAG3.Exit.diverge })
+                                              (match
+                                                { events := es, state := v, exit := PV_DIAG3.Exit.panic p }.exit with
+                                              | PV_DIAG3.Exit.value a =>
+                                                PV_DIAG3.bind
+                                                  (e { events := es, state := v, exit := PV_DIAG3.Exit.panic p }.state)
+                                                  fun x => PV_DIAG3.pure a
+                                              | PV_DIAG3.Exit.panic p_1 =>
+                                                PV_DIAG3.unwind p_1 e g
+                                                  { events := es, state := v, exit := PV_DIAG3.Exit.panic p }.state
+                                              | PV_DIAG3.Exit.abort c =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := v, exit := PV_DIAG3.Exit.panic p }.state,
+                                                  exit := PV_DIAG3.Exit.abort c }
+                                              | PV_DIAG3.Exit.diverge =>
+                                                { events := [],
+                                                  state :=
+                                                    { events := es, state := v, exit := PV_DIAG3.Exit.panic p }.state,
+                                                  exit := PV_DIAG3.Exit.diverge })
+                                              (PV_DIAG6.unwind_joint rel p d e f g u v (hd u v hu) (hf p)))
+                                          (Eq.symm h) hsa htb)
+                                      (fun c h =>
+                                        Eq.ndrec (motive := fun ex =>
+                                          a s = { events := es, state := u, exit := ex } →
+                                            b t = { events := es, state := v, exit := ex } →
+                                              PV_DIAG3.Coupled rel
+                                                (have b := { events := es, state := u, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                                (have b := { events := es, state := v, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                          (fun hsa htb => ⟨rfl, ⟨hu, rfl⟩⟩) (Eq.symm h) hsa htb)
+                                      (fun h =>
+                                        Eq.ndrec (motive := fun ex =>
+                                          a s = { events := es, state := u, exit := ex } →
+                                            b t = { events := es, state := v, exit := ex } →
+                                              PV_DIAG3.Coupled rel
+                                                (have b := { events := es, state := u, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (d b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p d f b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge }))
+                                                (have b := { events := es, state := v, exit := ex };
+                                                PV_DIAG3.prepend b.events
+                                                  (match b.exit with
+                                                  | PV_DIAG3.Exit.value a =>
+                                                    PV_DIAG3.bind (e b.state) fun x => PV_DIAG3.pure a
+                                                  | PV_DIAG3.Exit.panic p => PV_DIAG3.unwind p e g b.state
+                                                  | PV_DIAG3.Exit.abort c =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.abort c }
+                                                  | PV_DIAG3.Exit.diverge =>
+                                                    { events := [], state := b.state, exit := PV_DIAG3.Exit.diverge })))
+                                          (fun hsa htb => ⟨rfl, ⟨hu, rfl⟩⟩) (Eq.symm h) hsa htb)
+                                      (Eq.refl ex)))))
+                            (Eq.symm h) hx htb)
+                        (Eq.refl ey) (HEq.refl hx))
+                    (Eq.symm h) htb he)
+                (Eq.refl fs) (HEq.refl he))
+        (Eq.refl (b t)))
+    (Eq.refl (a s))
+theorem PV_DIAG6.write_step_joint : ∀ {S E : Type} (rel : S → S → Prop) (a b : PV_DIAG3.WriteOps S E)
+  (ka kb : PV_DIAG3.Bytes → PV_DIAG3.Op S (Except E Unit)) (buf : PV_DIAG3.Bytes) (s t : S),
+  rel s t →
+    a.zeroError = b.zeroError →
+      (∀ (bs : PV_DIAG3.Bytes) (u v : S), rel u v → PV_DIAG3.Coupled rel (a.write bs u) (b.write bs v)) →
+        (∀ (e : E) (u v : S), rel u v → PV_DIAG3.Coupled rel (a.interruptedGuard e u) (b.interruptedGuard e v)) →
+          (∀ (e : E) (u v : S), rel u v → PV_DIAG3.Coupled rel (a.dropInterrupted e u) (b.dropInterrupted e v)) →
+            (∀ (bs : PV_DIAG3.Bytes) (n : ℕ) (u v : S),
+                rel u v → PV_DIAG3.Coupled rel (a.slicePanic bs n u) (b.slicePanic bs n v)) →
+              (∀ (bs : PV_DIAG3.Bytes) (u v : S), rel u v → PV_DIAG3.Coupled rel (ka bs u) (kb bs v)) →
+                PV_DIAG3.Coupled rel (PV_DIAG3.writeAllStep a buf ka s) (PV_DIAG3.writeAllStep b buf kb t) :=
+fun {S E} rel a b ka kb buf s t h hz hw hg hd hp hk =>
+  id
+    (Decidable.casesOn (instDecidableEqBool (List.isEmpty buf) true)
+      (fun h_1 =>
+        Eq.mpr (id (congr (congrArg (PV_DIAG3.Coupled rel) (congrFun (if_neg h_1) s)) (congrFun (if_neg h_1) t)))
+          (PV_DIAG3.coupled_bind rel (a.write buf s) (b.write buf t)
+            (fun r =>
+              match r with
+              | Except.ok 0 => PV_DIAG3.pure (Except.error a.zeroError)
+              | Except.ok n.succ =>
+                if n + 1 ≤ List.length buf then ka (List.drop (n + 1) buf) else a.slicePanic buf (n + 1)
+              | Except.error e =>
+                PV_DIAG3.sequence (a.interruptedGuard e) fun interrupted =>
+                  if interrupted = true then PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                  else PV_DIAG3.pure (Except.error e))
+            (fun r =>
+              match r with
+              | Except.ok 0 => PV_DIAG3.pure (Except.error b.zeroError)
+              | Except.ok n.succ =>
+                if n + 1 ≤ List.length buf then kb (List.drop (n + 1) buf) else b.slicePanic buf (n + 1)
+              | Except.error e =>
+                PV_DIAG3.sequence (b.interruptedGuard e) fun interrupted =>
+                  if interrupted = true then PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                  else PV_DIAG3.pure (Except.error e))
+            (hw buf s t h) fun out u v huv =>
+            Except.casesOn (motive := fun t =>
+              out = t →
+                PV_DIAG3.Coupled rel
+                  ((match out with
+                    | Except.ok 0 => PV_DIAG3.pure (Except.error a.zeroError)
+                    | Except.ok n.succ =>
+                      if n + 1 ≤ List.length buf then ka (List.drop (n + 1) buf) else a.slicePanic buf (n + 1)
+                    | Except.error e =>
+                      PV_DIAG3.sequence (a.interruptedGuard e) fun interrupted =>
+                        if interrupted = true then PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                        else PV_DIAG3.pure (Except.error e))
+                    u)
+                  ((match out with
+                    | Except.ok 0 => PV_DIAG3.pure (Except.error b.zeroError)
+                    | Except.ok n.succ =>
+                      if n + 1 ≤ List.length buf then kb (List.drop (n + 1) buf) else b.slicePanic buf (n + 1)
+                    | Except.error e =>
+                      PV_DIAG3.sequence (b.interruptedGuard e) fun interrupted =>
+                        if interrupted = true then PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                        else PV_DIAG3.pure (Except.error e))
+                    v))
+              out
+              (fun e h =>
+                Eq.symm h ▸
+                  PV_DIAG3.coupled_bind rel (a.interruptedGuard e u) (b.interruptedGuard e v)
+                    (fun interrupted =>
+                      if interrupted = true then PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                      else PV_DIAG3.pure (Except.error e))
+                    (fun interrupted =>
+                      if interrupted = true then PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                      else PV_DIAG3.pure (Except.error e))
+                    (hg e u v huv) fun flag x y hxy =>
+                    Bool.casesOn (motive := fun t =>
+                      flag = t →
+                        PV_DIAG3.Coupled rel
+                          ((if flag = true then PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                            else PV_DIAG3.pure (Except.error e))
+                            x)
+                          ((if flag = true then PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                            else PV_DIAG3.pure (Except.error e))
+                            y))
+                      flag (fun h => Eq.symm h ▸ PV_DIAG3.coupled_pure rel (Except.error e) x y hxy)
+                      (fun h =>
+                        Eq.symm h ▸
+                          PV_DIAG3.coupled_bind rel (a.dropInterrupted e x) (b.dropInterrupted e y) (fun a => ka buf)
+                            (fun a => kb buf) (hd e x y hxy) fun x z z' hzz => hk buf z z' hzz)
+                      (Eq.refl flag))
+              (fun n h =>
+                Eq.symm h ▸
+                  Nat.casesAuxOn (motive := fun a_1 =>
+                    n = a_1 →
+                      PV_DIAG3.Coupled rel
+                        ((match Except.ok n with
+                          | Except.ok 0 => PV_DIAG3.pure (Except.error a.zeroError)
+                          | Except.ok n.succ =>
+                            if n + 1 ≤ List.length buf then ka (List.drop (n + 1) buf) else a.slicePanic buf (n + 1)
+                          | Except.error e =>
+                            PV_DIAG3.sequence (a.interruptedGuard e) fun interrupted =>
+                              if interrupted = true then PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                              else PV_DIAG3.pure (Except.error e))
+                          u)
+                        ((match Except.ok n with
+                          | Except.ok 0 => PV_DIAG3.pure (Except.error b.zeroError)
+                          | Except.ok n.succ =>
+                            if n + 1 ≤ List.length buf then kb (List.drop (n + 1) buf) else b.slicePanic buf (n + 1)
+                          | Except.error e =>
+                            PV_DIAG3.sequence (b.interruptedGuard e) fun interrupted =>
+                              if interrupted = true then PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                              else PV_DIAG3.pure (Except.error e))
+                          v))
+                    n
+                    (fun h =>
+                      Eq.symm h ▸
+                        Eq.mpr
+                          (id
+                            (congrArg
+                              (fun _a =>
+                                PV_DIAG3.Coupled rel
+                                  ((match Except.ok 0 with
+                                    | Except.ok 0 => PV_DIAG3.pure (Except.error _a)
+                                    | Except.ok n.succ =>
+                                      if n + 1 ≤ List.length buf then ka (List.drop (n + 1) buf)
+                                      else a.slicePanic buf (n + 1)
+                                    | Except.error e =>
+                                      PV_DIAG3.sequence (a.interruptedGuard e) fun interrupted =>
+                                        if interrupted = true then
+                                          PV_DIAG3.sequence (a.dropInterrupted e) fun x => ka buf
+                                        else PV_DIAG3.pure (Except.error e))
+                                    u)
+                                  ((match Except.ok 0 with
+                                    | Except.ok 0 => PV_DIAG3.pure (Except.error b.zeroError)
+                                    | Except.ok n.succ =>
+                                      if n + 1 ≤ List.length buf then kb (List.drop (n + 1) buf)
+                                      else b.slicePanic buf (n + 1)
+                                    | Except.error e =>
+                                      PV_DIAG3.sequence (b.interruptedGuard e) fun interrupted =>
+                                        if interrupted = true then
+                                          PV_DIAG3.sequence (b.dropInterrupted e) fun x => kb buf
+                                        else PV_DIAG3.pure (Except.error e))
+                                    v))
+                              hz))
+                          (PV_DIAG3.coupled_pure rel (Except.error b.zeroError) u v huv))
+                    (fun n_1 h =>
+                      Eq.symm h ▸
+                        id
+                          (if hn : n_1 + 1 ≤ List.length buf then
+                            Eq.mpr
+                              (id
+                                (congr
+                                  (congrArg (PV_DIAG3.Coupled rel)
+                                    (congrFun
+                                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos hn) x_0 x_1 x_2 x_3)
+                                        ((n_1 + 1).decLe (List.length buf)) (PV_DIAG3.Op S (Except E Unit))
+                                        (ka (List.drop (n_1 + 1) buf)) (a.slicePanic buf (n_1 + 1)))
+                                      u))
+                                  (congrFun
+                                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_pos hn) x_0 x_1 x_2 x_3)
+                                      ((n_1 + 1).decLe (List.length buf)) (PV_DIAG3.Op S (Except E Unit))
+                                      (kb (List.drop (n_1 + 1) buf)) (b.slicePanic buf (n_1 + 1)))
+                                    v)))
+                              (hk (List.drop (n_1 + 1) buf) u v huv)
+                          else
+                            Eq.mpr
+                              (id
+                                (congr
+                                  (congrArg (PV_DIAG3.Coupled rel)
+                                    (congrFun
+                                      ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg hn) x_0 x_1 x_2 x_3)
+                                        ((n_1 + 1).decLe (List.length buf)) (PV_DIAG3.Op S (Except E Unit))
+                                        (ka (List.drop (n_1 + 1) buf)) (a.slicePanic buf (n_1 + 1)))
+                                      u))
+                                  (congrFun
+                                    ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg hn) x_0 x_1 x_2 x_3)
+                                      ((n_1 + 1).decLe (List.length buf)) (PV_DIAG3.Op S (Except E Unit))
+                                      (kb (List.drop (n_1 + 1) buf)) (b.slicePanic buf (n_1 + 1)))
+                                    v)))
+                              (hp buf (n_1 + 1) u v huv)))
+                    (Eq.refl n))
+              (Eq.refl out)))
+      fun h_1 =>
+      Eq.mpr (id (congr (congrArg (PV_DIAG3.Coupled rel) (congrFun (if_pos h_1) s)) (congrFun (if_pos h_1) t)))
+        (PV_DIAG3.coupled_pure rel (Except.ok ()) s t h))
