@@ -36,7 +36,15 @@ for base,dirs,files in os.walk(root):
  if depth>=5: dirs[:]=[]
  dirs[:]=[d for d in dirs if d not in {'target','sbf-target','charon-target','node_modules','.git','source','sources','.lake','objects','lean-objects','lean','generated','src','rebuild-objects'}]
  for name in dirs+files:
-  if re.search(r'(?<![A-Za-z0-9])'+str(a)+r'(?![A-Za-z0-9])',name): collision.append(str(Path(base)/name))
+  if re.search(r'(?<![A-Za-z0-9])'+str(a)+r'(?![A-Za-z0-9])',name):
+  q=Path(base)/name
+  # Verified transaction-write labels are not env-J attempt IDs. Keep every
+  # actual compiler/launch receipt in the scan, including within this job.
+  nonlean=False
+  if 'codex-cx-devnet-rehearse-20261029' in str(q) and re.fullmatch(r'verifier-write-\d+(?:-attempt-\d+)?(?:-simulation)?\.json',name):
+   tx=json.loads(q.read_text())
+   nonlean=isinstance(tx,dict) and (set(tx)=={'context','value'} or {'signature','serialized_bytes','explorer'}<=set(tx)) and not any(k in tx for k in ['module','command','environment','charged_lean_attempt'])
+  if not nonlean:collision.append(str(q))
  for name in files:
   if name=='sent.txt':
    for line in (Path(base)/name).read_text().splitlines():
