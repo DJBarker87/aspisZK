@@ -27,6 +27,13 @@ theorem no_capture (base : ExternalTypes) (heap : Heap) (box : Box)
   rw [PV_RunJoin_CircleInstalled52.installed_projection] at hblock
   cases hblock
 
+theorem not_uniform_capture (base : ExternalTypes) (heap : Heap) (box : Box)
+    (ops : @ExternalFuns (types base)) :
+    ¬ (∀ candidate : @ExternalFuns (types base),
+      @PV_RunJoin_NonVacuity61.SuccessfulCapture (types base) (selected base heap box candidate)) := by
+  intro h
+  exact no_capture base heap box ops (h (@rejecting (types base) ops))
+
 /-- All nine Links can hold with the actual layout families and no native
 capture. This explicitly fails the requested non-degeneracy condition. -/
 theorem degenerate_links (base : ExternalTypes) (heap : Heap) (box : Box)
@@ -41,5 +48,6 @@ theorem degenerate_links (base : ExternalTypes) (heap : Heap) (box : Box)
 
 #print axioms rejecting
 #print axioms no_capture
+#print axioms not_uniform_capture
 #print axioms degenerate_links
 end R1Z.PV_RunJoin_CircleObstruction61
