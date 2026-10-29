@@ -68,3 +68,21 @@ this turn makes no new assertion about remote key presence or backup status.
 The local-only assignment remains complete. Deliver NDZ_HANDOFF.md and
 NDZ_DEVNET_RUNBOOK.md to the lead, then stop. Real-devnet execution and its
 read-only association remain outstanding under L188 obligation 5.
+
+## Automatic relaunch 3 — completed delivery retained
+
+Resumed from clean commit 476545f9ce on the assigned worktree branch. Read
+AGENTS.md, the existing recovery accounting, NDZ handoff/procedure/runbook,
+NDS handoff/procedure/runbook and the recovery policy at its actual path above.
+The original approximately 2h40 and all previously listed attempts remain
+charged to the same approximately three-hour budget. No new build, validator,
+proof, transaction or test-suite attempt was launched in this recovery turn.
+The prior integrity audit remains the evidence; it was not repeated here.
+The frozen-source comparison still shows no changes under crates/ or programs/.
+
+No RPC request, signature submission, public write, secret-key access, key
+cleanup or push occurred in this relaunch. No new remote key-presence or backup
+claim is made. The assigned stages are complete and their committed delivery
+remains NDZ_HANDOFF.md and NDZ_DEVNET_RUNBOOK.md. Stop at lead review; the
+separate real-devnet run and read-only association remain open under L188
+obligation 5. Automatic relaunch is not authorization to execute that runbook.
