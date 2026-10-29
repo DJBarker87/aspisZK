@@ -473,3 +473,11 @@ become `#check`, proof-body printing is disabled, and a post-import marker is
 added. NDR_B020_OBSTRUCTION.json records the memory failure, proof shape and
 import-union size. This focused diagnostic source is not an unchanged rerun
 of the failed chunk and does not raise the cap.
+
+## NDO_JHw_Wrapper import diagnostic
+
+NDR_B027 and NDR_L005 fail before the added post-import marker. The theorem
+statement and proof are unchanged; only that diagnostic marker is added.
+NDR_B027_OBSTRUCTION.json records the failed source hashes, import-union shape,
+resources and focused result. The final aggregation contains this body and
+its dependent TX2 assembly verbatim, alongside the three earlier thin joins.

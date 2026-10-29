@@ -1,6 +1,8 @@
 import NDO_JHv_Validation
 import NDO_JHi_TX2
 set_option autoImplicit false
+open Lean Elab Command
+run_cmd logInfo "NDR_WRAPPER_POST_IMPORT"
 noncomputable section
 namespace AspisR1.JHw_Wrapper
 open Aeneas Aeneas.Std Result DrvC_Installation

@@ -1,17 +1,21 @@
-import NDO_JHn_TX1Frontier
-import NDO_JHn_ExactReturned
-import NDO_JHn_Joint
-import NDO_JHw_TX2
-import NDO_JHx_Instance
 import Lean
 import RPx_Deployed
 import NDO_InstalledIdentity
 import NDR_HeadlineNatives
+import NDO_JHn_TX1Frontier
+import NDO_JHn_ExactReturned
+import NDO_JHv_Validation
+import NDO_JHi_TX2
+import NDO_JHi_SHAProof
+import NDO_JHi_SHAPublic
+import NDO_JHi_SHAChecksum
+import NDO_JHe_SHARealization
+import NDO_JHn_Joint
+import NDO_JHx_Instance
 set_option autoImplicit false
 open Lean Elab Command
 
-
--- Final aggregation: these three declarations retain their exact source bodies.
+-- Final aggregation: five unchanged thin declaration bodies.
 -- BEGIN verbatim body from NDO_JHq_TX1.lean
 set_option autoImplicit false
 set_option pp.proofs false
@@ -41,6 +45,78 @@ end AspisR1.JHq_TX1
 end
 
 -- END verbatim body from NDO_JHq_TX1.lean
+
+-- BEGIN verbatim body from NDO_JHw_Wrapper.lean
+set_option autoImplicit false
+open Lean Elab Command
+run_cmd logInfo "NDR_WRAPPER_POST_IMPORT"
+noncomputable section
+namespace AspisR1.JHw_Wrapper
+open Aeneas Aeneas.Std Result DrvC_Installation
+open _root_.AdapterRw
+open JHv_Configuration JHu_FixturePdaRuntime
+attribute [local irreducible] JHg_World.e2
+
+/-- Complete same-SDK wrapper composition; the three mathematical digest
+certificates remain explicit until the inherited SHA realization is supplied. -/
+theorem source (base : Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) (sha : JHi_SHARealization.SHARealization) :
+    S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+      JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) := by
+  have validation := JHv_Validation.source base stage slot runtime
+  rw [←JHv_SameSdk.sdk base stage] at validation
+  have wrapped := JHi_TX2.after_validation (JHi_Configuration.base (seed base stage)) () slot validation sha
+  change S2W_D189Wrappers.second
+    (r1_pool_adapter.owned.stage2_owned (DrvC_Installation.sdk
+      (JHi_Configuration.value (seed base stage) ())))
+    CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+    JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) at wrapped
+  rw [JHv_SameSdk.sdk] at wrapped
+  exact wrapped
+#print axioms source
+end AspisR1.JHw_Wrapper
+end
+
+-- END verbatim body from NDO_JHw_Wrapper.lean
+
+-- BEGIN verbatim body from NDO_JHw_TX2.lean
+set_option autoImplicit false
+noncomputable section
+namespace AspisR1.JHw_TX2
+open Aeneas Aeneas.Std Result
+open JHv_Configuration JHu_FixturePdaRuntime
+
+/-- The three inherited, independently checked byte-digest equations. -/
+theorem byteSHA : JHi_SHARealization.SHARealization :=
+  ⟨JHi_SHAProof.source, JHi_SHAPublic.source, JHi_SHAChecksum.source⟩
+#print axioms byteSHA
+
+/-- The explicit seven-call PDA runtime law is the only remaining TX2 premise. -/
+theorem accepted2_runtime (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) :
+    S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+      JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) :=
+  JHw_Wrapper.source base stage slot runtime byteSHA
+#print axioms accepted2_runtime
+
+/-- Joint interface: exactly the existing tree-digest certificate and the
+original deferred fixture PDA runtime law; the TX2 implication is stronger. -/
+theorem accepted2 [trees : JHe_SHARealization]
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : FixturePdaRuntime base) :
+    S2W_D189Wrappers.second (JHe_Natives.second (adapter base) stage)
+      CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+      JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) :=
+  accepted2_runtime base stage slot runtime
+#print axioms accepted2
+set_option pp.proofs false in
+#print accepted2
+end AspisR1.JHw_TX2
+end
+
+-- END verbatim body from NDO_JHw_TX2.lean
 
 -- BEGIN verbatim body from NDO_JHw_Joint.lean
 set_option autoImplicit false
@@ -168,7 +244,7 @@ run_cmd do
       unless constants.contains required do
         throwError "root {root} does not directly mention {required}"
     logInfo m!"NDR_SAME_WRAPPER_CONSTANTS {root}"
-  for root in #[`AspisR1.JHq_TX1.accepted1_saved, `AspisR1.JHw_Joint.source] do
+  for root in #[`AspisR1.JHq_TX1.accepted1_saved, `AspisR1.JHw_TX2.accepted2, `AspisR1.JHw_Joint.source] do
     let some info := env.checked.get.find? root | throwError "missing aggregate declaration {root}"
     unless info.type.getUsedConstants.contains `AspisR1.JHe_SHARealization do
       throwError "lost original tree-realization binder in {root}"

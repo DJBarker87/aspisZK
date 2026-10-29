@@ -28,5 +28,11 @@
     "before_revision": "ec4ae9ad56",
     "statement_change": "none; proof unchanged; import-stage diagnostic isolation only",
     "diff": "diff --git a/lean/NDO_JHq_TX1.lean b/lean/NDO_JHq_TX1.lean\nindex 262beefea5..68deb06941 100644\n--- a/lean/NDO_JHq_TX1.lean\n+++ b/lean/NDO_JHq_TX1.lean\n@@ -1,6 +1,9 @@\n import NDO_JHn_TX1Frontier\n import NDO_JHn_ExactReturned\n set_option autoImplicit false\n+set_option pp.proofs false\n+open Lean Elab Command\n+run_cmd logInfo \"NDR_TX1_POST_IMPORT\"\n noncomputable section\n namespace AspisR1.JHq_TX1\n open Aeneas Aeneas.Std Result AspisR1CurrentCaller\n@@ -8,8 +11,8 @@ open InstalledPreparation FirstComposition JGr_Geometry\n variable [trees : JHe_SHARealization]\n \n -- Named application of the independently checked byte-identity proof.\n-#print AspisR1.JHn_TX1Frontier.of_byte_identity\n-#print AspisR1.JHn_ExactReturned.source\n+#check AspisR1.JHn_TX1Frontier.of_byte_identity\n+#check AspisR1.JHn_ExactReturned.source\n \n theorem accepted1_saved (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :\n     \u2203 saved : alloc.vec.Vec U8,\n@@ -20,6 +23,6 @@ theorem accepted1_saved (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) :\n       saved.val=JFx_NativeBytes.checkpoint.val \u2227 saved.val.length=1768 := by\n   exact JHn_TX1Frontier.of_byte_identity base stage JHn_ExactReturned.source\n #print axioms accepted1_saved\n-#print accepted1_saved\n+#check accepted1_saved\n end AspisR1.JHq_TX1\n end\n"
+  },
+  {
+    "module": "NDO_JHw_Wrapper",
+    "before_revision": "b70ba7c172f24651b78e60891202b9d23cf9e827",
+    "statement_change": "none; proof unchanged; add post-import diagnostic marker",
+    "diff": "diff --git a/lean/NDO_JHw_Wrapper.lean b/lean/NDO_JHw_Wrapper.lean\nindex e408600480..792ad7bc78 100644\n--- a/lean/NDO_JHw_Wrapper.lean\n+++ b/lean/NDO_JHw_Wrapper.lean\n@@ -1,6 +1,8 @@\n import NDO_JHv_Validation\n import NDO_JHi_TX2\n set_option autoImplicit false\n+open Lean Elab Command\n+run_cmd logInfo \"NDR_WRAPPER_POST_IMPORT\"\n noncomputable section\n namespace AspisR1.JHw_Wrapper\n open Aeneas Aeneas.Std Result DrvC_Installation\n"
   }
 ]

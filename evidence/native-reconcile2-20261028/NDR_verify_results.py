@@ -37,6 +37,9 @@ for receipt in sorted(E.glob('NDR_B[0-9][0-9][0-9]/receipt.json')):
             names = {x.strip() for x in used.split(',') if x.strip()}
             if module == 'NDO_JHs_PDA' and 'choice' in names:
                 assert '\nopen Classical\n' in (R / 'lean' / name).read_text()
+                canonical = json.loads((E / 'NDR_L004/receipt.json').read_text())
+                assert canonical['exit_status'] == 0 and len(canonical['print_axioms']) == 9
+                assert all('Classical.choice' in line and 'choice,' not in line.replace('Classical.choice,', '') for line in canonical['print_axioms'])
                 names = (names - {'choice'}) | {'Classical.choice'}
             assert names <= standard, (attempt, module, used)
     passing.update(completed)
@@ -47,7 +50,7 @@ for receipt in sorted(E.glob('NDR_B[0-9][0-9][0-9]/receipt.json')):
                    full_receipt_sha256=hashlib.sha256(raw).hexdigest(),
                    completed_modules=completed, printed_axioms=sorted(axioms),
                    axiom_audit_lines=len(row['print_axioms']),
-                   printer_alias_note=('NDO_JHs_PDA opens Classical; choice prints Classical.choice; canonical full-name focused audit is planned' if 'choice' in axioms else None))
+                   printer_alias_note=('NDO_JHs_PDA opens Classical; choice prints Classical.choice; canonical full-name audit NDR_L004 confirms Classical.choice' if 'choice' in axioms else None))
     summaries.append(summary)
 assert passing <= set(expected)
 result = dict(passing_modules=len(passing), planned_modules=len(expected),

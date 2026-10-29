@@ -1,9 +1,9 @@
 {
   "status": "PREPARED; uncompiled; run only after all independent dependencies pass",
-  "mode": "single final aggregation source with three verbatim declaration bodies; RPx root imported, NDO_Joint.source re-elaborated in the final module",
-  "reason": "NDR_B020/NDR_L002 establish normal-cap failure before proof commands in the import union, not pathological numeral reduction. This source-generator change consolidates the thin remaining aggregation and the requested combined checks into the one authorized agg16 compile, without three extra large-cap prerequisite compiles.",
+  "mode": "single final aggregation source with five verbatim declaration bodies; RPx root imported, NDO_Joint.source re-elaborated in the final module",
+  "reason": "NDR_B020/NDR_L002 and NDR_B027/NDR_L005 isolate normal-cap memory exceptions before proof commands. Consolidate the five thin aggregation modules and requested final checks into the one authorized agg16 compile; no extra large-cap prerequisite compiles.",
   "strict_import_variant": "NDR_STRICT_IMPORT_AUDIT.lean remains uncompiled",
-  "remaining_difference": "NDO_JHq_TX1, NDO_JHw_Joint, NDO_Joint are not separately built as normal-cap modules. If final succeeds, their exact source theorem bodies will instead have been kernel-checked once within NDR_CombinedAudit. Do not report all 3118 standalone modules passing or a strict import of NDO_Joint.",
+  "remaining_difference": "Five modules (two failed imports, three dependent joins) are not separately built under normal caps. If final succeeds, their exact non-import source bodies are instead kernel-checked once in NDR_CombinedAudit. Do not claim all 3118 standalone modules passing or a strict import of NDO_Joint.",
   "theorem_statement_changes": "none; verbatim non-import bodies; existing three declarations share exactly their own original namespaces",
   "bodies": [
     {
@@ -17,6 +17,29 @@
       "standalone_normal_cap_status": "failed import union"
     },
     {
+      "module": "NDO_JHw_Wrapper",
+      "source_sha256": "bb97c3e37307bb56d3279c584449a8da6940302191f43e594d6aee1fe16e0d0a",
+      "verbatim_body_sha256": "f2af62ade208744deea9ccf7ff87f1e17cff65bcb83a166dacd54dd37d92fac2",
+      "imports": [
+        "NDO_JHv_Validation",
+        "NDO_JHi_TX2"
+      ],
+      "standalone_normal_cap_status": "failed import union"
+    },
+    {
+      "module": "NDO_JHw_TX2",
+      "source_sha256": "433463a0872035adc325dde7ba853c3a4f8e7042631e4fc1430ca304fe00540d",
+      "verbatim_body_sha256": "dea52eea134312b11af4d995f4e3fbbd9b38835994da998f6a615de717772a83",
+      "imports": [
+        "NDO_JHw_Wrapper",
+        "NDO_JHi_SHAProof",
+        "NDO_JHi_SHAPublic",
+        "NDO_JHi_SHAChecksum",
+        "NDO_JHe_SHARealization"
+      ],
+      "standalone_normal_cap_status": "blocked by failed import unions"
+    },
+    {
       "module": "NDO_JHw_Joint",
       "source_sha256": "d6a3f2eb62bd50d75e4e41756bd1a87ef596e3d8667a6a37c791331b08db4df4",
       "verbatim_body_sha256": "5b0e9359e4e92ec23794bafb6c9593411ff414a3a32dfdd45fb24ba9f85d484e",
@@ -25,7 +48,7 @@
         "NDO_JHn_Joint",
         "NDO_JHw_TX2"
       ],
-      "standalone_normal_cap_status": "blocked by NDO_JHq_TX1"
+      "standalone_normal_cap_status": "blocked by failed import unions"
     },
     {
       "module": "NDO_Joint",
@@ -35,10 +58,10 @@
         "NDO_JHw_Joint",
         "NDO_JHx_Instance"
       ],
-      "standalone_normal_cap_status": "blocked by NDO_JHq_TX1"
+      "standalone_normal_cap_status": "blocked by failed import unions"
     }
   ],
-  "source_sha256": "b91b9ca517230be56ec432f3ebbd54a85e61892fe47bbed411f949ab33a7c393",
+  "source_sha256": "fdfd7c55f0b99a38a588bd0730878534f697d7f0e872e1529a4c89b560aeb794",
   "statement_guards": "Verify the tree-realization binder remains in the two generic aggregate declarations and the original runtime premise remains in NDO_Joint.source, without a residual tree-realization binder.",
   "module_inventory": "Final kernel header module-name array is emitted as NDR_IMPORTED_MODULES, alongside the 76 per-name historical exclusion guards."
 }

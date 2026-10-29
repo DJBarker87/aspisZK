@@ -53,8 +53,12 @@ as the inherited NDO_ copies; the lead-owned runner and reservation scripts
 are unchanged. The helpers pass in NDR_L003 with standard axioms only.
 
 NDR_AGGREGATION_PACKAGING.json records the active final-source consolidation.
-Three normal-cap packaging modules remain failed/blocked; their exact non-import
+Five normal-cap packaging modules remain failed/blocked; their exact non-import
 source bodies are reproduced in the sole final aggregation. This can validate
 the same declarations in one headline environment, but cannot be reported as
-three successful standalone normal-cap builds or a strict import of NDO_Joint.
+five successful standalone normal-cap builds or a strict import of NDO_Joint.
 The strict import source is retained, uncompiled, for comparison.
+
+NDR_L004 confirms all nine JHs_PDA axiom lines with full names: the previously
+shortened `choice` is exactly Classical.choice. NDR_L005 isolates the second
+import-only memory obstruction before any proof commands; it adds no hypothesis.
