@@ -9,7 +9,7 @@ assert len(mods)==1,'one module per attempt'
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.
-round_sources={m:v for m,v in plan['modules'].items() if m.endswith('48')}
+round_sources={m:v for m,v in plan['modules'].items() if m.startswith('R1Z.PV_RunJoin_') and m.endswith('48')}
 round_accepted={v['module']:v for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
 for m in mods:
  for d in plan['modules'][m]['imports']:
