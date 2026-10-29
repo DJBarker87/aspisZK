@@ -126,7 +126,8 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
   · intro adv w _ value; rfl
   · intro value; rfl
   · intro e v history suffix
-    exact ⟨[],by simp only [List.append_nil]⟩
+    change List.IsPrefix (trace e).events (trace e).events
+    exact ⟨[],List.append_nil _⟩
   · intro adv i; rfl
   · intro i claims; rfl
 
