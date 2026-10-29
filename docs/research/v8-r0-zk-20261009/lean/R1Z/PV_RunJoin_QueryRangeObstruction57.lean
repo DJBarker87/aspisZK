@@ -44,6 +44,10 @@ theorem complete {I : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   have hf := failure base heap box ops p (PV_RunJoin_QueryNativeObstruction56.buffer _ bound)
   change @prover.append_query_openings (types base) (selected base heap box ops) _ _ _ _ _ _=ok next at success
   change @prover.append_query_openings (types base) (selected base heap box ops) _ _ _ _ _ _=fail .arrayOutOfBounds at hf
+  change @prover.append_query_openings (types base) (selected base heap box ops)
+    (PV_RunJoin_QueryNativeObstruction56.buffer _ bound)
+    (PV_RunJoin_QueryEmptyWords57.broken p.tree) (PV_RunJoin_QueryNativeObstruction56.unused p)
+    PV_RunJoin_QueryInRangeFailure57.queries (alloc.vec.Vec.deref p.folded_word) p.folded_salts=ok next at success
   rw [hf] at success
   cases success
 
