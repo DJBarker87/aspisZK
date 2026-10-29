@@ -14963,3 +14963,22 @@ Recount 9 launched (pv-recount9, sparse worktree from research 6474027f52; IDs 6
 - the 36 b3p6-1 bindings, scrutinising b3p6-1;
 - (h5'') and the HeadlineV2 resolution.
 It records the headline observation-carrier finding (D476, D478) and its effect on what the headline currently establishes, the pending owner decisions D474 and D478, the new skeletons as partial decompositions rather than closures, and the paused and parked lines. Rows removed: 0. Privacy target not yet established.
+
+## D481 (Stream B) 2026-10-29 06:49 UTC: pv-evhd results (event-retaining headline drafts with the same bound); D478 addendum; level-3 binary audit launched
+
+pv-evhd used 10 of 100 Lean attempts, with no native scopes or Kani. Its four experimental modules pass with standard axioms only. Lead review: no forbidden constructs. The branch codex/pv-evhd-20261029 (head 438524d32b) is pushed and deliberately NOT merged into the candidate: it is experimental, not adopted, and kept apart from the release target. Its worktree is removed.
+
+The draft compiles a conditional event-retaining headline that reuses simE, core_privacy and privacy_transport unchanged and keeps the SAME bound expression. Under exact joint trace, timing and public-failure links no extra term is forced. Under approximate simulation it states the old bound plus an explicit deltaTrace, and the 2^-100 conclusion would not transfer automatically. The remaining obligations are named links:
+- the D163 coupling including native trace acquisition;
+- the ordered-event context with timing slots and failure prefixes;
+- the D166 joint timing law on the same coupling;
+- option-B signal independence;
+- causal-prefix and observer-program consistency;
+- the nine acquisition inputs.
+COST.md estimates 3-8 person-weeks of integration and joint-model work, excluding unfinished native leaves, with substantial uncertainty. It also notes that option (2) needs the same joint links, and that option (1) removes an installation task that is impossible under the current interface. The lead read COST.md and added it as an addendum to owner packet item D478, leaving the original text unchanged. The recommendation of (1) is strengthened.
+
+The freed slot goes to work independent of both pending decisions: ledger row V373, the level-3 disassembly audit, with V380-inversion adopted as proof work. pv-l3a (sparse worktree from 42760700cb; IDs 68100-68199; 40 Lean, 40 native, 0 Kani) will do the following on the deployed client binary:
+- locate every compiled instance of the constant-time witness and pole kernels and their call sites;
+- audit the machine code for secret-dependent branches, addresses and variable-latency operations by a stated taint method with honest limits;
+- locate every try_inv on a witness-bearing path and show its zero branch is reached only on a charged bad event, or report a finding.
+V371 and DOITM remain owner items and are not discharged. Rows removed: 0. Privacy target not yet established.
