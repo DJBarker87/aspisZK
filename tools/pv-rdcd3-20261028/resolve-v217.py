@@ -16,7 +16,8 @@ def go(m):
  for dep in deps:
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
-go('R1Z.PV_RDCD3_FieldSource')
+go('R1Z.PV_RDCD3_CB_MaskRootEq')
+go('R1Z.PV_RDCD3_FieldTotal')
 checks={}
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json','docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json']:
  raw=git('show','research:'+ref);j=json.loads(raw);hits=[]
