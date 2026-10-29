@@ -8,9 +8,10 @@ open PV_RunJoin_QueryMatrixTotal64 (put)
 variable [ExternalTypes] [ExternalFuns]
 
 def Domain (c : host_commitment.Commitment) : Prop :=
-  c.lanes.length≤29 ∧ c.lanes.length≤c.words.length ∧
+  c.lanes.length≤29 ∧ ∃ enough : c.lanes.length≤c.words.length,
   (∀ lane∈c.lanes.val, lane.val<29) ∧
-  (∀ word∈c.words.val, 1048576≤PV_RunJoin_QueryWordTotal64.length word)
+  (∀ (j : Nat) (h : j<c.lanes.length),
+    1048576≤PV_RunJoin_QueryWordTotal64.length (c.words.val[j]'(Nat.lt_of_lt_of_le h enough)))
 
 def step (c : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex)
     (values : Matrix) (j : Usize) : Result Matrix := do
@@ -46,13 +47,13 @@ theorem total (base : ExternalTypes) (heap : Heap) (box : Box)
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   let lane := c.lanes.val[j.val]'more
-  have wordsBound : j.val<c.words.length := Nat.lt_of_lt_of_le more domain.2.1
+  have wordsBound : j.val<c.words.length := Nat.lt_of_lt_of_le more domain.2.choose
   let word := c.words.val[j.val]'wordsBound
   have hl := PV_RunJoin_QueryAccess64.read c.lanes j more
   have hw := PV_RunJoin_QueryAccess64.read c.words j wordsBound
-  have laneBound : lane.val<29 := domain.2.2.1 lane (List.getElem_mem more)
+  have laneBound : lane.val<29 := domain.2.choose_spec.1 lane (List.getElem_mem more)
   have wordSize : 1048576≤PV_RunJoin_QueryWordTotal64.length word :=
-    domain.2.2.2 word (List.getElem_mem wordsBound)
+    domain.2.choose_spec.2 j.val more
   obtain ⟨row,hrow⟩ := PV_RunJoin_QueryLaneTotal64.complete base heap box ops word wordSize u bound
   obtain ⟨x0,h0⟩ : ∃ x, Array.index_usize row 0#usize=ok x :=
     ⟨_,ProverCommitArrayIndex25.array_index_usize_ok row 0#usize (by decide)⟩
