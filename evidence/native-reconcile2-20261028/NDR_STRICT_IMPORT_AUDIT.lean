@@ -1,0 +1,137 @@
+import Lean
+import RPx_Deployed
+import NDO_Joint
+import NDO_InstalledIdentity
+import NDR_HeadlineNatives
+set_option autoImplicit false
+open Lean Elab Command
+
+namespace AspisR1.NDR_CombinedAudit
+open Aeneas Aeneas.Std Result
+
+/-- The original joint witness, with both native arguments explicitly presented
+through the headline's installed configuration. All fixture/runtime premises and
+saved-byte conclusions are retained. -/
+theorem sourceOnHeadline
+    (base : AdapterRw.Ops) (stage : VTop_Stages.Ops) (slot : U64)
+    (runtime : JHu_FixturePdaRuntime.FixturePdaRuntime base) :
+    ∃ saved : alloc.vec.Vec U8,
+      S2W_D189Wrappers.first
+        (AdapterRw.r1_pool_adapter.owned.stage1_owned
+          (headlineSdk (JHv_Configuration.adapter base) stage))
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHb_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHe_WrapperReady.post saved,())) ∧
+      S2W_D189Wrappers.first
+        (AdapterRw.r1_pool_adapter.owned.stage1_owned
+          (headlineSdk (JHv_Configuration.adapter base) stage))
+        CPH_FixtureData.copy CPH_FixtureData.allocator JHg_World.e1
+        CPH_Program.verifier JHe_Natives.data1 ()=
+          ok (.Ok (saved,JHk_WorldFirst.post saved,())) ∧
+      saved.val=JFx_NativeBytes.checkpoint.val ∧ saved.val.length=1768 ∧
+      S2W_D189Wrappers.second
+        (AdapterRw.r1_pool_adapter.owned.stage2_owned
+          (headlineSdk (JHv_Configuration.adapter base) stage))
+        CPH_FixtureData.allocator JHg_World.e2 CPH_Program.verifier
+        JHb_DataRequest.value (.Ok slot) ()=ok (.Ok (JHg_World.e2.heap,())) := by
+  simpa only [firstNative, secondNative] using NDO_Joint.source base stage slot runtime
+#print axioms sourceOnHeadline
+end AspisR1.NDR_CombinedAudit
+
+-- Submit only after every NDO witness dependency passes.
+#print axioms AspisR1.RPx_Deployed.deployed
+#print axioms AspisR1.NDO_Joint.source
+#print axioms AspisR1.NDO_InstalledIdentity.finalInstalled
+run_cmd do
+  let env := (← getEnv).setExporting false
+  for root in #[`AspisR1.RPx_Deployed.deployed, `AspisR1.NDO_Joint.source] do
+    let some info := env.checked.get.find? root | throwError "missing root {root}"
+    let constants := info.type.getUsedConstants
+    for required in #[`AspisR1.S2W_D189Wrappers.first, `AspisR1.S2W_D189Wrappers.second] do
+      unless constants.contains required do
+        throwError "root {root} does not directly mention {required}"
+    logInfo m!"NDR_SAME_WRAPPER_CONSTANTS {root}"
+  let imported := env.header.modules.map (·.module)
+  for historical in #[
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyV2,
+    `AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw,
+    `ExtractedDigest32Begin,
+    `ExtractedDigest32Callers,
+    `ExtractedSourceDigestOracle,
+    `ExtractedSourceFull25Frames,
+    `Query31DigestInputBridge,
+    `Query31SourceOracleBridge,
+    `S2A_InstalledCuts,
+    `S2G_InstalledValues,
+    `S2K_AfterstateBytes,
+    `S2K_AfterstateEncoding,
+    `S2K_AfterstateLoop,
+    `S2K_AfterstatePrefix,
+    `S2K_AfterstatePrepare,
+    `S2K_AfterstateStatus,
+    `S2K_DigestBytes,
+    `S2K_DigestTotal,
+    `S2K_Iterator,
+    `S2K_LoopStep,
+    `S2K_SourcePorts,
+    `SemanticRoundAlphaSelectedCanonical,
+    `AspisR1CircleSampleWrapper.Funs,
+    `AspisR1CircleSampleWrapper.FunsExternal,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCircleV2,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackCoordinatesV1,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualFallbackResultV4,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualSamplerCanonicalV1,
+    `AspisR1CircleSampleWrapper.RawCircleSampleActualSecureBridgeV1,
+    `AspisR1PoseidonPreparedChannelArraySet,
+    `AspisR1PoseidonPreparedChannelNestedSet,
+    `AspisR1PoseidonPreparedChannelUpdateInvariantV2,
+    `CurrentPreparedAlphaCanonical,
+    `CurrentPreparedCandidateSamplers,
+    `CurrentPreparedClaimCarriers,
+    `CurrentPreparedConcreteBoundaries,
+    `CurrentPreparedConcreteQueryRho,
+    `CurrentPreparedConcreteRun,
+    `CurrentPreparedGammaCallback,
+    `CurrentPreparedGammaRank,
+    `CurrentPreparedGammaSpecialization,
+    `CurrentPreparedInstalledMeaning,
+    `CurrentPreparedJointRankMeaning,
+    `CurrentPreparedJointRankPrefix,
+    `CurrentPreparedJointRankTrace,
+    `CurrentPreparedOrdinaryRankV1,
+    `CurrentPreparedOriginalPayload,
+    `CurrentPreparedPublicSources,
+    `CurrentPreparedRhoMeaning,
+    `CurrentPreparedScratchMeaning,
+    `CurrentPreparedSourceFromQm,
+    `CurrentPreparedSourceMeaning,
+    `CurrentSamplerOrdinaryCallbackV2,
+    `CurrentSamplerPreparedCarrierBoundsV1,
+    `ExtractedDigest32SamplerTransport,
+    `ExtractedDigest32Transcript,
+    `ExtractedSemanticRoundsReachability,
+    `ExtractedSourceDigestAddresses,
+    `ExtractedTx1Reachability,
+    `PreparedFromQmSourceBridge,
+    `PreparedParsedInactiveV1,
+    `PreparedSourcePowersBoundariesV1,
+    `PreparedSourcePowersEntryV1,
+    `PreparedSourcePowersJointRankV1,
+    `PreparedSourcePowersMeaningV1,
+    `Query31ConcreteMaterializedSchedule,
+    `Query31ConcreteMaterializedScheduleFull,
+    `Query31MathematicalSchedule,
+    `RawPoseidonExternalRows,
+    `RawPoseidonRowField,
+    `S2K_SourceStore,
+    `SelectedWideViewInactiveV1,
+    `SelectedWideViewPreparedEntryV1,
+    `SemanticCallSelectedCanonical,
+    `Tx1FinalLenBoundV8
+  ] do
+    if imported.contains historical then
+      throwError "unverified historical provenance object imported: {historical}"
+    logInfo m!"NDR_HISTORICAL_OBJECT_EXCLUDED {historical}"
+  logInfo m!"NDR_CLOSURE_MODULE_COUNT {env.header.modules.size}"
+  logInfo "NDR_COMBINED_COMPLETE"

@@ -27,7 +27,8 @@ theorem source {H : Type} (D : aspis_core.digest.Digest32 H) (hash : H)
   have run := JGi_CurrentSemantic.source D hash expanded pre out otherExpand parse finished
   have es : currentSem out=sem := core.result.Result.Ok.inj (Result.ok.inj (run.symm.trans verify))
   obtain ⟨r25,r26,claims,read25,extra,read26,before⟩ :=
-    JGi_FinishFields.source _ _ _ _ _ _ _ _ out finished
+    JGi_FinishFields.source _ _ _ _ _ _ _ (RPz7_PhaseIso.observerToFirst none) out
+      (by simpa only [NDO_PhaseIdentity.noneToFirst] using finished)
   have records := JFr_PrefixRecords.source expanded pre otherExpand parse
   have rec25 := JFr_RecordsAt.source pre records 25#u8 (by change 25<27;omega) JFw_NativeRow25.record rfl
   have rec26 := JFr_RecordsAt.source pre records 26#u8 (by change 26<27;omega) JFw_NativeRow26.record rfl
