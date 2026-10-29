@@ -12,6 +12,7 @@ theorem represented (c : Cell) (newSize cap s : Nat) (v : PV_OWN_Link.Link)
  intro i z hi
  have bound:=PV_OWNB_LinkBound.bounded v i z hi
  have inside:s+i<c.size := by have hh:=h.1;unfold Fits at hh;omega
+ change (PV_OWN_Growth.grownCell c newSize cap).contents (s+i)=some z
  rw [PV_OWN_Growth.prefix_bytes c newSize cap (s+i) inside]
  exact h.2 i z hi
 #print axioms represented
