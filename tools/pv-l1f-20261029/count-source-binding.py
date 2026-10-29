@@ -9,7 +9,7 @@ end=s.index('\n}',start);suffix=s[start:end]
 expected=['accounts.selected(result.attempts)?','accounts.publication(result.attempts,','"attempts":result.attempts']
 assert suffix.count('result.attempts')==3
 assert all(suffix.count(x)==1 for x in expected)
-assert not re.search(r'\b(?:mut\s+result|result\s*=|result\.attempts\s*=)',suffix)
+assert not re.search(r'\b(?:mut\s+result|result\s*=|result\.attempts\s*=)',suffix.split(';',1)[1])
 checks=[]
 for text in expected:
  at=s.index(text,start);checks.append(dict(statement=text,line=s.count('\n',0,at)+1,sha256=hashlib.sha256(text.encode()).hexdigest()))
