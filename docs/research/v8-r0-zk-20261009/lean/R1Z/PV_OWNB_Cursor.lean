@@ -33,5 +33,5 @@ def sink (q : Cursor) (v : Link) : Cursor :=
   memory:={q.memory with heap:=put q.memory.heap q.token.address (some c)},
   output:=fun i=>if i=q.written then v else q.output i}
 
-attribute [irreducible] Valid advance sink
+attribute [local irreducible] Valid advance sink
 end R1Z.PV_OWNB_Cursor

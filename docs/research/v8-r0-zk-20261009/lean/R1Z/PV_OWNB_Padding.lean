@@ -25,7 +25,7 @@ theorem of_normalization (a b : Bytes) (h:normalize a b=a) : Agrees a b := by
  have hh:=congrFun h i
  simpa [normalize,hi] using hh
 
-attribute [irreducible] Agrees normalize
+attribute [local irreducible] Agrees normalize
 #print axioms refl
 #print axioms trans
 #print axioms normalization

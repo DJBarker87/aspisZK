@@ -25,7 +25,7 @@ def NativeView (c : PV_OWN_Heap.Cell) (start : Nat) (v : Link) : Prop :=
  intro i b hi
  exact (h.2 i (PV_OWNB_LinkBound.bounded v i b hi)).trans hi
 
-attribute [irreducible] codec NativeView
+attribute [local irreducible] codec NativeView
 #print axioms injective
 #print axioms unique
 #print axioms exact_to_native

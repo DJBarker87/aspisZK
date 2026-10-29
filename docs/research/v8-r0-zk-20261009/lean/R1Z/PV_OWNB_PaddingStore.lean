@@ -20,7 +20,7 @@ theorem canonical (required : Bytes) (width : Nat) (c : Cell) (start : Nat)
  Represents required width (store c start width required) start :=
  written required required width c start fits bounded (PV_OWNB_Padding.refl required)
 
-attribute [irreducible] Represents
+attribute [local irreducible] Represents
 #print axioms written
 #print axioms canonical
 end R1Z.PV_OWNB_PaddingStore

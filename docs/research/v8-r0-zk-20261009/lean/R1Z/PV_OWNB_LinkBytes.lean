@@ -19,7 +19,7 @@ theorem kind (v : Link) (i : Nat) (h:i<3) :
  simp [encode,show ¬4+i<2 by omega,show ¬4+i<4 by omega,show 4+i<7 by omega]
 theorem trailing_padding (v : Link) (i : Nat) (h:7≤i) : encode v i=none := by
  simp [encode,show ¬i<2 by omega,show ¬i<4 by omega,show ¬i<7 by omega]
-attribute [irreducible] encode
+attribute [local irreducible] encode
 #print axioms producer
 #print axioms consumer
 #print axioms kind

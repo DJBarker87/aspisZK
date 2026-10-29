@@ -27,7 +27,7 @@ def step (keep : Link → Bool) (q : Cursor) : Cursor :=
  (step keep q).token=q.token ∧ (step keep q).memory.generations=q.memory.generations := by
  unfold step
  split <;> exact ⟨rfl,rfl⟩
-attribute [irreducible] step
+attribute [local irreducible] step
 #print axioms valid
 #print axioms advances
 #print axioms generation
