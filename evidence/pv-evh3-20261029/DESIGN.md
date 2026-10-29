@@ -187,3 +187,30 @@ A pure return, .Err value wrapped in Result.ok, or unrelated model trace does
 not qualify. A labelled MODEL world is permitted; universal success is false.
 Until that witness and the full entry source association compile, no runtime
 field or ledger row is claimed removed. At registration: rows removed NONE.
+
+
+### EVH4 implementation frontier (after focused proofs)
+
+The implementation so far is a SUBPROGRAM result: state/writer algebra,
+finite entropy loop and selected durable-store file-call spines. The entropy
+`afterDraw` tail, reservation_path, and other lifted helpers still use the
+original Result semantics. The World allocation/clock counters are data only;
+no allocator, panic/abort, heap/handle identity or full prover interpreter is
+installed. No `worldRun` for proof-account entry or masked-attempt is claimed.
+The primitive oracle/count/file projection definitions are not bindings of
+rtDeployed. The complete state/type and operation mapping above remain
+acceptance criteria rather than fulfilled claims.
+
+The fixed view used by these lemmas is a SUFFICIENT uniform-answer domain
+(answers agree at every world), not a characterization of all per-run partial
+dictionary views. Stateful reject-then-success entropy, and more generally
+repeated identical primitive requests with different answers, need not have
+that view. NativeObstruction62 prevents inferring uniform successful capture;
+statefulness alone does not discharge its open op132/non-emptiness obligation.
+
+The source-value MODEL VIEW witnesses compatibility of the erasure hypotheses
+only. Its empty byte adapters do not claim observation adequacy, successful
+proof production, opsNative installation, publication, or ruling-(v) credit.
+No privacy skeleton is added. All privacy/runtime rows remain OPEN as before.
+D520 continues to constrain only the client extraction: it is not asserted as
+a blocker to the remaining, unimplemented prover work.

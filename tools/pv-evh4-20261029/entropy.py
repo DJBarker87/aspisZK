@@ -52,7 +52,7 @@ footer='''
 end PV_EVH_Entropy
 '''
 Path('lean/PV_EVH_Entropy.lean').write_text(header+body+footer)
-Path('evidence/pv-evh4-20261029/entropy-generation.json').write_text(json.dumps(dict(source=p,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(s[start:end].encode()).hexdigest(),changes=['Result return interpreted as M','one getrandom.fill replaced by draw','ok terminals interpreted as pure','other Result actions lifted explicitly'],source_body=s[start:end],status='single-body reinterpretation; other helpers still Result-only'),indent=2)+'\n')
+Path('evidence/pv-evh4-20261029/entropy-generation.json').write_text(json.dumps(dict(source=p,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(s[start:end].encode()).hexdigest(),changes=['Result return interpreted as M','one getrandom.fill replaced by draw','ok terminals interpreted as pure','fixed Result prelude lifts; exact afterDraw tail stays in Result'],source_body=s[start:end],status='single-body reinterpretation; other helpers still Result-only'),indent=2)+'\n')
 # Reuse only the reviewed syntax parser definitions, without executing another
 # job's generator or touching its output/evidence directories.
 import ast
