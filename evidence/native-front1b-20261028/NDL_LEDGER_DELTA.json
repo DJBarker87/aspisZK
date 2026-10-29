@@ -4,9 +4,9 @@
   "claim_scope": "Candidate LOCAL Result/value bridges only; all enclosing caller domains and physical interpretations remain OPEN.",
   "trust_change": "Owner amendment fifth: P6/D188 native contract semantic transport is reclassification, never trust removal.",
   "budget_used": {
-    "kani": 33,
-    "lean": 58,
-    "extract": 4
+    "kani": 64,
+    "lean": 80,
+    "extract": 5
   },
   "members": [
     {
@@ -69,10 +69,10 @@
       "function": "crates/aspis-core/src/field.rs::qm31_pack_base4",
       "dependent_rows": 29,
       "status": "OPEN",
-      "partial_evidence": "K060/K061, K062/K063, K068\u2013K075; NDD_CopyFrame and NDD_PackModel",
-      "obstacle": "K037/K038 full checks and K067 isolated-limb/verified-reducer shape timed out; K066 was codegen-only. Copy window, four exact raw arithmetic spans and reducer contract are separate checks. Native SAME-execution association from the actual padded buffer to all four spans/returns remains OPEN. The cohort arithmetic cut/reference equality is proved; no whole-buffer retry or cap increase is justified. Needs new split native association, not more arithmetic normalization.",
-      "requires_further_kani": true,
-      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+      "partial_evidence": "K060/K061, K062/K063, K068\u2013K075; NDD_CopyFrame and NDD_PackModel; NDL_K040 native SAME-execution four reducer argument/reply/count log PASS; K041\u2013043 targeted FAIL; NDL_PrefixValues.cohort L079 covers every length<=4",
+      "obstacle": "Actual native reducer log K040 and all controls K041\u2013043 pass. L079 closes all model padding shapes and full reference equality. Still missing the compiled final transport from the native four raw-span/reply log into that SAME full reference output, or the requested actual-function proof_for_contract against it. Broader opaque reducer probes alone are not promoted to that contract. No unchanged numerical retry is justified.",
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Final raw-span/reducer-log-to-pack_ref composition remains; 80/80 Lean attempts used, so this cannot be attempted further within this job. Kani may also be needed for the exact requested actual-function contract interface."
     },
     {
       "function": "crates/aspis-core/src/field.rs::CM31::square",
@@ -278,11 +278,20 @@
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::double",
       "dependent_rows": 10,
-      "status": "OPEN",
-      "partial_evidence": "NDD_DoubleModel.observed; NDD_ReferenceLinear",
-      "obstacle": "Correct QM31 model performs one product, frozen source performs two SAME-input products. Native opaque multiplication observations, deterministic value association and canonical domains remain missing. M31-named overloads are not this function. Checked-to-wrapping recombination and conditional reference/model theorem are proved. Needs Kani.",
-      "requires_further_kani": true,
-      "remaining_lean_only_obligation": "Current extracted-reference/model cuts are complete or reusable; remaining discharge needs the stated native association and its exact interface/domain."
+      "status": "CLOSED-local",
+      "partial_evidence": "NDL_REFERENCE_REUSE.json pins byte-identical inherited safe reference and its extracted definition.",
+      "obstacle": null,
+      "requires_further_kani": false,
+      "remaining_lean_only_obligation": "Enclosing caller canonicality, call edges and release composition remain OPEN. Native opaque-contract transport reclassifies P6/D188 trust.",
+      "domain": "four canonical input words; opaque SAME-input product reply instantiated by NDL_DoubleLaw.product with exact canonical natural mulQ law",
+      "lean_theorem": "NDL_DoubleLaw.cohort; NDD_DoubleModel.observed",
+      "lean_attempt": "NDL_L068",
+      "kani_attempt": "NDL_K044",
+      "negative_control": "NDL_K045",
+      "supporting_native": [
+        "NDL_K046"
+      ],
+      "extraction": "NDD_E008"
     },
     {
       "function": "crates/aspis-r1-cost-probe/src/weights.rs::shared_two_point_guard",

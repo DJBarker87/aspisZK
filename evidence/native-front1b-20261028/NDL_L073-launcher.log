@@ -1,0 +1,23 @@
+{"attempt": "NDL_L073", "exit_status": 1, "wall_seconds": 1.1096992279635742, "peak_rss_kib": "2617896", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then Aeneas.Std.Result.ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+NDL_generated/NDL_PrefixInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.subslice_mut`
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Slice α → Aeneas.Std.Array α 
+...
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then Aeneas.Std.Result.ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+NDL_generated/NDL_PrefixInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.subslice_mut`
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Slice α → Aeneas.Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a
+
+Running as unit: run-rad43fe3c023e4677bbee5eadb62719ae.scope; invocation ID: 5e2727827b0640ec90e89990bffe966a

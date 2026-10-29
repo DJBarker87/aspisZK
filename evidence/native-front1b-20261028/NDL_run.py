@@ -43,7 +43,7 @@ if kind=='kani':
  if os.environ.get('NDL_PACKAGE')=='verifier':
   native[native.index('--manifest-path')+1]=B+'/NDL_src/crates/aspis-r1-cost-probe/Cargo.toml'
   native[native.index('--features')+1]='private-leaf-salts,optimized-terminal,program-build'
-  sources+=['NDL_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_reference.rs','NDL_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_dot.rs','NDL_src/crates/aspis-core/src/field/NDL_core.rs']
+  sources+=['NDL_src/crates/aspis-r1-cost-probe/src/NDL_multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDD_multiproof.rs','NDL_src/crates/aspis-r1-cost-probe/src/weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_weights.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_reference.rs','NDL_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_pairing.rs','NDL_src/crates/aspis-r1-cost-probe/src/NDL_dot.rs','NDL_src/crates/aspis-core/src/field/NDL_core.rs']
 
 elif kind=='extract':
  files['NDL_extract.py']=(E/'NDL_extract.py').read_text();files['NDL_reference.rs']=source('NDL_reference.rs');sources=['NDL_extract.py','NDL_reference.rs'];native=[];command=['python3','NDL_extract.py']

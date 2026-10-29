@@ -1,0 +1,10 @@
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} r s =>
+  if ↑r.end ≤ s.length then Aeneas.Std.Result.ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+NDL_generated/NDL_PrefixInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Slice.subslice_mut`
+def Aeneas.Std.Array.from_slice.{u} : {α : Type u} →
+  {n : Aeneas.Std.Usize} → Aeneas.Std.Array α n → Aeneas.Std.Slice α → Aeneas.Std.Array α n :=
+fun {α} {n} a s => if h : (↑s).length = ↑n then ⟨↑s, ⋯⟩ else a

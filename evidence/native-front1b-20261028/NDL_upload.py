@@ -5,7 +5,7 @@ from NDL_sources import source,sources
 from pathlib import Path
 import subprocess,json,sys
 E=Path(__file__).resolve().parent
-payload={n:source(n) for n in ['NDL_weights.rs','NDL_reference.rs','NDL_core.rs','NDL_core_reference.rs','NDL_dot.rs','NDL_pairing.rs'] if (E/n).exists() or n in sources()}
+payload={n:source(n) for n in ['NDL_weights.rs','NDL_reference.rs','NDL_core.rs','NDL_core_reference.rs','NDL_dot.rs','NDL_pairing.rs','NDL_multiproof.rs'] if (E/n).exists() or n in sources()}
 code=r'''from pathlib import Path
 import json,subprocess,hashlib
 b=Path('/home/dombarker/project-offloads/codex-cx-native-front1b-20261028')
@@ -30,6 +30,15 @@ if 'field_exact_post' not in text:
  p.write_text(text)
 if 'guard_raw_post(*r,w,folds)' not in text:
  text=text.replace('fn shared_two_point_guard(w:', '#[cfg_attr(all(kani,NDL_guard_raw),kani::ensures(|r| NDL_weights::guard_raw_post(*r,w,folds)))]\nfn shared_two_point_guard(w:');p.write_text(text)
+p=s/'crates/aspis-core/src/field.rs';t=p.read_text();end=t.index('    pub fn reduce_u64');start=t.rfind('    #[inline(always)]',0,end);t=t[:start]+t[start:end].replace('#[cfg_attr(kani,', '#[cfg_attr(all(kani,not(NDL_pack_log)),')+t[end:];p.write_text(t)
+p=s/'crates/aspis-core/src/field/NDD_field.rs';t=p.read_text();t=t.replace('#[kani::stub_verified(M31::reduce_u64)]', '#[cfg_attr(not(NDL_pack_log),kani::stub_verified(M31::reduce_u64))]');t=t.replace('#[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(M31::reduce_u64))]', '#[kani::proof_for_contract(M31::reduce_u64)]');t=t.replace('#[kani::proof_for_contract(M31::reduce_u64)]', '#[cfg_attr(NDL_pack_log,kani::proof)] #[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(M31::reduce_u64))]');p.write_text(t)
+p=s/'crates/aspis-core/src/field.rs';t=p.read_text();end=t.index('    pub fn qm31_pack_base4');start=t.rfind('#[inline(always)]',0,end);t=t[:start]+t[start:end].replace('#[cfg_attr(kani,', '#[cfg_attr(all(kani,not(NDL_pack_log)),')+t[end:];p.write_text(t)
+p=s/'crates/aspis-core/src/field/NDD_field.rs';t=p.read_text();t=t.replace('#[kani::proof_for_contract(qm31_pack_base4)]', '#[cfg_attr(NDL_pack_log,kani::proof)] #[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(qm31_pack_base4))]');p.write_text(t)
+p=s/'crates/aspis-core/src/field/NDD_field.rs';t=p.read_text();t=t.replace('#[cfg_attr(NDL_pack_log,kani::proof)] ','');t=t.replace('#[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(', '#[cfg_attr(NDL_pack_log,kani::proof)] #[cfg_attr(not(NDL_pack_log),kani::proof_for_contract(');p.write_text(t)
+p=s/'crates/aspis-r1-cost-probe/src/weights.rs';t=p.read_text()
+if 'double_post(*r)' not in t:t=t.replace('pub fn double(x:', '#[cfg_attr(all(kani,NDL_double),kani::requires(NDL_weights::double_domain(x)))]\n#[cfg_attr(all(kani,NDL_double),kani::ensures(|r| NDL_weights::double_post(*r)))]\npub fn double(x:');p.write_text(t)
+p=s/'crates/aspis-r1-cost-probe/src/multiproof.rs';t=p.read_text()
+if 'mod NDL_multiproof' not in t:t+='\n#[cfg(kani)] #[path=\"NDL_multiproof.rs\"] mod NDL_multiproof;\n';p.write_text(t)
 x=json.loads((b/'NDL_SOURCE_PINS.json').read_text())
 for p in s.rglob('*.rs'):
  if str(p.relative_to(s)) in x or p.name.startswith('NDL_'):x[str(p.relative_to(s))]=hashlib.sha256(p.read_bytes()).hexdigest()

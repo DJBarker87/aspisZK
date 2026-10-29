@@ -1,0 +1,53 @@
+{"attempt": "NDL_K038", "exit_status": 1, "wall_seconds": 42.139122723951004, "peak_rss_kib": "2154348", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core)
+warning: unexpected `cfg` condition name: `NDL_pack_log`
+   --> crates/aspis-core/src/field.rs:157:29
+    |
+157 |     #[cfg_attr(all(kani,not(NDL_pack_log)), kani::requires(true))]
+    |                             ^^^^^^^^^^^^
+    |
+    = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", c
+...
+32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-native-front1b-20261028/NDL_src/crates/aspis-core/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 4.23s
+Checking harness field::NDL_core::pack_reduce_log...
+
+VERIFICATION RESULT:
+ ** 2 of 654 failed (652 undetermined)
+Failed Checks: |r|
+NDD_field::pack_pred(NDD_field::limbs(*r),
+NDD_field::reference::pack_ref([NDD_field::padded(values,0),NDD_field::padded(values,1),NDD_field::padded(values,2),NDD_field::padded(values,3)]))
+ File: "crates/aspis-core/src/field.rs", line 1066, in field::qm31_pack_base4::{closure#4}
+Failed Checks: unwinding assertion loop 0
+ File: "<builtin-library-memcmp>", line 25, in memcmp
+
+VERIFICATION:- FAILED
+[Kani] info: Verification output shows one or more unwinding failures.
+[Kani] tip: Consider increasing the unwinding value or disabling `--unwinding-assertions`.
+Verification Time: 35.714775s
+
+Manual Harness Summary:
+Verification failed for - field::NDL_core::pack_reduce_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r83c0db471fc046078d92ee282660c4b5.scope; invocation ID: 0d5ac860a0bf4f3d859f8fcdda7617cb
