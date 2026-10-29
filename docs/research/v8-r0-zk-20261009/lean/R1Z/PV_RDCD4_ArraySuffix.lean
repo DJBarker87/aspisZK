@@ -26,6 +26,11 @@ theorem done {E : Type} (s : State E) (h : s.start=s.stop)
 theorem new_remaining {E : Type} (xs : List E) : remaining (new xs)=xs := by
   exact List.drop_zero
 
+/-- Native unchecked_add cannot overflow in the deployed 512-entry iterator. -/
+theorem increment_bound (start stop limit : Nat) (h : start<stop)
+    (hs : stop≤512) (hl : 512<limit) : start+1<limit := by omega
+
+#print axioms increment_bound
 #print axioms active
 #print axioms done
 #print axioms new_remaining

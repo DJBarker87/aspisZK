@@ -4,7 +4,13 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029';D='/home/
 n=int(sys.argv[1]);m=sys.argv[2];assert 66300<=n<=66399
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 if not p.exists():p=R/'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023'/(m.split('/')[-1]+'.lean')
-s=p.read_bytes();assert s==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
+s=p.read_bytes()
+# Do not resubmit an unchanged failed source under a different attempt ID.
+for prior in E.glob('lean-*/receipt.json'):
+ old=json.loads(prior.read_text())
+ if old.get('module')==m and old.get('exit')!=0:
+  assert old.get('source_sha256')!=hashlib.sha256(s).hexdigest(), 'unchanged failed source: edit/split before submission'
+assert s==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
 meta=dict(attempt=n,module=m,source_path=str(p.relative_to(R)),source_sha256=hashlib.sha256(s).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),authority='own tracked h5 project dependency or new PV_RDCD4 module; external closure preflight 5673 objects')
 # Check the ID column, not substrings inside object hashes.
 code='''from pathlib import Path
