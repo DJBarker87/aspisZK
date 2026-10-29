@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_NativeResidual62
+import R1Z.PV_RunJoin_NativeFrames62
 import R1Z.PV_RunJoin_CircleInstalledTotal55
 import R1Z.PV_RunJoin_CircleUnit62
 set_option autoImplicit false
@@ -26,7 +27,17 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
         (PV_RunJoin_CircleInstalledExact55.coordinates p).2^2=1 := by
   obtain ⟨p,hp,hx,hy,hc⟩ := PV_RunJoin_CircleInstalledTotal55.complete
     (baseTypes base) heap box (beforeCircle base ops) block row
-  refine ⟨p,hp,hx,hy,?_⟩
+  have nativeCall : @sampler.circle_sample (types base) (opsNative base heap box ops) block row=ok p := by
+    change @ExternalFuns.op259 (types base) (opsNative base heap box ops) block row=ok p
+    rw [PV_RunJoin_NativeFrames62.op259]
+    change @ExternalFuns.op259 (types base)
+      (PV_RunJoin_CircleNeutralSelected52.selected (beforeCircle base ops)) block row=ok p
+    change @ExternalFuns.op259 (types base)
+      (PV_RunJoin_WeightInstalled46.selected (baseTypes base) heap box
+        (PV_RunJoin_CircleNeutralSelected52.selected (beforeCircle base ops))) block row=ok p at hp
+    rw [PV_RunJoin_CircleInstalled52.installed_projection] at hp
+    exact hp
+  refine ⟨p,nativeCall,hx,hy,?_⟩
   let chosen := if PV_RunJoin_CircleNeutralSelected52.row row then
     R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block)
     else R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block)
