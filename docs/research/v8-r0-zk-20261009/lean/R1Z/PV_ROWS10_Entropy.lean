@@ -90,6 +90,36 @@ theorem consumed_signal {W : Type} (length : W → Nat)
           split <;> rename_i hc
           · rfl
           · simpa using ih ((x::xs).drop p.length) (done ++ p)
+def buffer : Outcome → List UInt8
+  | .success b | .failure _ b | .prefix b => b
+ theorem buffer_length (rs : List Reply) (todo done : List UInt8) :
+    (buffer (run rs todo done)).length = done.length + todo.length := by
+  induction rs generalizing todo done with
+  | nil => cases todo <;> simp [run, buffer]
+  | cons r rs ih =>
+    cases todo with
+    | nil => simp [run, buffer]
+    | cons x xs =>
+      cases r with
+      | interrupted => exact ih (x::xs) done
+      | error c => simp [run, buffer]
+      | unexpected => simp [run, buffer]
+      | bytes p =>
+        simp only [run]
+        split <;> rename_i h
+        · simp [buffer]
+        · rw [ih, List.length_append, List.length_drop]
+          simp only [Bool.or_eq_false_iff, decide_eq_false_iff_not] at h
+          have hp := h.2
+          simp only [List.length_cons] at hp ⊢
+          omega
+ theorem public_control_suffices (a b : List Reply)
+    (ta tb da db : List UInt8)
+    (hc : a.map control = b.map control) (hl : ta.length = tb.length) :
+    failed (run a ta da) = failed (run b tb db) := by
+  rw [failure_control, failure_control, hc, hl]
+#print axioms buffer_length
+#print axioms public_control_suffices
 /-- Successful-byte uniformity alone cannot establish a failure law: identical
 public request lengths allow different errors at the external boundary. -/
 theorem request_length_insufficient :

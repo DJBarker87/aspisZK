@@ -4,6 +4,9 @@ R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rows10-20261029';D='/home
 n=int(sys.argv[1]);m=sys.argv[2];assert 68300<=n<=68399 and m.startswith('R1Z/PV_ROWS10_')
 assert n<68397 or any(x in m for x in ['Audit','Combined','Replay'])
 assert json.loads((E/'cohort-verification.json').read_text())['ok']
+scan=subprocess.run(['ssh',H,'python3','-',subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()],input=(R/'tools/pv-rows10-20261029/id-scan.py').read_text(),text=True,capture_output=True)
+assert scan.returncode==0,scan.stdout+scan.stderr
+(E/f'{n}-id-scan.json').write_text(scan.stdout)
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');rel=str(p.relative_to(R));b=subprocess.check_output(['git','show','HEAD:'+rel]);assert p.read_bytes()==b
 sha=hashlib.sha256(b).hexdigest()
 # Ruling (u): refuse the same source bytes after ANY failure in this line.
