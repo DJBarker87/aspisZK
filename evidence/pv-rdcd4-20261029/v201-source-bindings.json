@@ -864,6 +864,23 @@
       "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame; compiler checked-memory primitive V370",
       "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
       "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IndexRange.len",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs",
+      "file_sha256": "be7f1a663156319aa4762288c44b726338276f0bcb1c36a5ced5003d329deb8f",
+      "body": "pub(crate) const fn len(&self) -> usize {\n        // SAFETY: By invariant, this cannot wrap\n        // Using the intrinsic because a UB check here impedes LLVM optimization. (#131563)\n        unsafe { crate::intrinsics::unchecked_sub(self.end, self.start) }\n    }",
+      "body_sha256": "2d3f22a992affe693ca97652c4f8c8e3ae44f00b41417f6ea8240b82c4455a0c",
+      "token_sha256": "9678e4dc0ecc95d3776465bd106dec3d632a7123655a079070a4d601f3993bb4",
+      "expected_body": "pub(crate) const fn len(&self)->usize{unsafe{crate::intrinsics::unchecked_sub(self.end,self.start)}}",
+      "expected_token_sha256": "9678e4dc0ecc95d3776465bd106dec3d632a7123655a079070a4d601f3993bb4",
+      "ordered_steps": [
+        "source type invariant start<=end discharges unchecked subtraction",
+        "return remaining alive count end-start"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.valid/next_active/next_done; ArrayMemory194.binding",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
     }
   ],
   "toolchain": "1.94.1",
