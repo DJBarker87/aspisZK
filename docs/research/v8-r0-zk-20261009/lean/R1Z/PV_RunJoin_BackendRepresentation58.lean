@@ -17,7 +17,7 @@ theorem matrix_congr (p q : Nat → Nat → W)
       simp only [ProverCommitArray49.array,List.getElem_ofFn]
       apply h
       · simpa only [matrix,List.length_ofFn] using hl
-      · simpa only [ProverCommitArray49.array,List.length_ofFn] using hj
+      · simpa only [ProverCommitArray49.array,List.length_ofFn,UScalar.ofNatCore_val_eq] using hj
 
 def cells (v : alloc.vec.Vec Column) (h : v.length=29) (l j : Nat) : W :=
   let column := v.val[l%29]'(by change l%29<v.length;rw [h];exact Nat.mod_lt _ (by decide))
@@ -35,7 +35,7 @@ theorem of_vec (v : alloc.vec.Vec Column) (h : v.length=29) : matrix (cells v h)
       exact (v.val[l]'hl').property.symm
     · intro j hj hj'
       have bl : l<29 := by simpa only [matrix,List.length_ofFn] using hl
-      have bj : j<1024 := by simpa only [ProverCommitArray49.array,List.length_ofFn] using hj
+      have bj : j<1024 := by simpa only [ProverCommitArray49.array,List.length_ofFn,UScalar.ofNatCore_val_eq] using hj
       simp only [ProverCommitArray49.array,List.getElem_ofFn,cells,
         Nat.mod_eq_of_lt bl,Nat.mod_eq_of_lt bj]
 
