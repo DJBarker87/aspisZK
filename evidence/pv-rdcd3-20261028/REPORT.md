@@ -26,3 +26,14 @@ STATUS.json is regenerated from actual receipts. All nine rows remain SUSPENDED.
 The deployed usize projection passed at 60607; 60606's failed normalization is retained. The library scope range-library-native passed eight exact body comparisons and eight rejecting mutation controls, and 6,371 finite range/fold cases with 97,891 next-state transitions. It uses optimized Rust 1.94.1, release overflow/debug settings, and retains the per-crate deployed feature graph. The selected core method bodies contain no feature conditionals; the full deployed project/client source and root lock/manifests are unchanged from a52174a2d7a9. This is finite library validation and a partial structural binding, not whole-row or binary refinement. Source results and the exact profile/feature qualification are in range-source-result.json and range-native-result.json.
 
 V260 focused continuation: the complete owned match passed 60619; exact S loop passed 60621; retained table range passed 60622; combined row range passed 60623; all-input row-result classification passed 60624. Invalid D input errors propagate before inactive, and every successful row is below 1024. The rejection-preserving exact reference and new source/static-data gate remain pending, so no row status has changed. All associated receipts carry section 6 fields and standard axiom results.
+
+## Capacity-error resume 1
+
+Recovered60630 read-only: the pre-interruption inner reservation barrier refused
+at2026-10-29T00:18:45.848470Z (68,585,259,008 reserved bytes versus
+59,055,800,320 safe bytes), and no compiler started. This was uncharged.
+The same ID was retried after the full cooldown;60630 now passes the complete
+selected251-cohort row lookup transport with standard axioms, no source changes
+to dictionaries. At resume:30 charged Lean attempts (23 pass,7 fail),4 native;
+after60630:31 charged Lean attempts (24 pass,7 fail). No Kani.
+The host cache survives this relaunch. No credited object was resubmitted.
