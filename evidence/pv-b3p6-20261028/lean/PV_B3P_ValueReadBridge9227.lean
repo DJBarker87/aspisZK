@@ -6,13 +6,13 @@ open Aeneas Aeneas.Std PV_B3P_227 Result ControlFlow Error
 set_option autoImplicit false
 open PV_B3P_Ordered227
 
-attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.QM31.sub aspis_core.field.QM31.square aspis_core.field.QM31.mul aspis_core.field.QM31.mul_m31 Array.index_usize Array.update reference_terminal.read227 reference_terminal.reconstruct_10 reference_terminal.add_preweighted reference_copy_terminal.Selectors.row
+attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.QM31.sub aspis_core.field.QM31.square aspis_core.field.QM31.mul aspis_core.field.QM31.mul_m31 Array.index_usize Array.update reference_terminal.read227 reference_terminal.reconstruct_10 reference_terminal.add_preweighted reference_copy_terminal.Selectors.row value_owned_stage9_00 value_read_context9_00 value_owned_stage9_01 value_read_context9_01 value_owned_stage9_02 value_read_context9_02 value_owned_stage9_03 value_read_context9_03 value_owned_stage9_04 value_read_context9_04 value_owned_stage9_05 value_read_context9_05 value_owned_stage9_06 value_read_context9_06 value_owned_stage9_07 value_read_context9_07 value_owned_stage9_08 value_read_context9_08 value_owned_stage9_09 value_read_context9_09 value_owned_stage9_10 value_read_context9_10 value_owned_stage9_11 value_read_context9_11 value_owned_stage9_12 value_read_context9_12 value_owned_stage9_13 value_read_context9_13 value_owned_stage9_14 value_read_context9_14
 
 theorem value_entry_factor9 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
     reference_terminal.add_value_lanes packed openings selectors = value_owned_sequence9 packed openings selectors := by
-  unfold reference_terminal.add_value_lanes
+  delta reference_terminal.add_value_lanes
   conv_rhs => unfold value_owned_sequence9
   conv_rhs => simp only [value_owned_stage9_00,value_read_context9_00,bind_assoc,bind_tc_ok]
   apply bind_equal9
