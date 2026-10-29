@@ -62,46 +62,46 @@ theorem value_entry_cps10 (packed : Array aspis_core.field.QM31 24#usize)
     (selectors : reference_copy_terminal.Selectors) :
     reference_terminal.add_value_lanes packed openings selectors = value_owned_cps10 packed openings selectors := by
   unfold reference_terminal.add_value_lanes value_owned_cps10
-  rw [value_head_cps10_00]
+  rw [value_head_cps10_00 packed openings selectors]
   apply bind_equal9
   intro selector
-  rw [value_head_cps10_01]
+  rw [value_head_cps10_01 packed openings selectors selector (Array.repeat 33#usize aspis_core.field.QM31.ZERO)]
   apply bind_equal9
   intro s1
-  rw [value_head_cps10_02]
+  rw [value_head_cps10_02 packed openings selectors selector s1.2]
   apply bind_equal9
   intro s2
-  rw [value_head_cps10_03]
+  rw [value_head_cps10_03 packed openings selectors selector s2.2]
   apply bind_equal9
   intro s3
-  rw [value_head_cps10_04]
+  rw [value_head_cps10_04 packed openings selectors selector s3.2]
   apply bind_equal9
   intro s4
-  rw [value_head_cps10_05]
+  rw [value_head_cps10_05 packed openings selectors selector s4.2]
   apply bind_equal9
   intro s5
-  rw [value_head_cps10_06]
+  rw [value_head_cps10_06 packed openings selectors selector s5.2]
   apply bind_equal9
   intro s6
-  rw [value_head_cps10_07]
+  rw [value_head_cps10_07 packed openings selectors selector s6.2]
   apply bind_equal9
   intro s7
-  rw [value_head_cps10_08]
+  rw [value_head_cps10_08 packed openings selectors selector s7.2]
   apply bind_equal9
   intro s8
-  rw [value_head_cps10_09]
+  rw [value_head_cps10_09 packed openings selectors selector s8.2]
   apply bind_equal9
   intro s9
-  rw [value_head_cps10_10]
+  rw [value_head_cps10_10 packed openings selectors selector s9.2]
   apply bind_equal9
   intro s10
-  rw [value_head_cps10_11]
+  rw [value_head_cps10_11 packed openings selectors selector s10.2]
   apply bind_equal9
   intro s11
-  rw [value_head_cps10_12]
+  rw [value_head_cps10_12 packed openings selectors selector s11.2]
   apply bind_equal9
   intro s12
-  rw [value_head_cps10_13]
+  rw [value_head_cps10_13 packed openings selectors selector s12.2]
   apply bind_equal9
   intro s13
   unfold value_owned_stage9_14 value_read_context9_14
