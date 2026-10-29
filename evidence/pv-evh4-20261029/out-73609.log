@@ -1,0 +1,209 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_Entropy.lean:171:20: error: Tactic `apply` failed: could not unify the conclusion of `@fixed_bind`
+  FixedView (PV_EVH_World.bind ?m ?k) (Std.bind ?r ?f)
+with the goal
+  FixedView
+    (do
+      let __x ← PV_EVH_World.lift (Std.lift a3.to_slice_mut)
+      let a4 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (as_mut_back s1))
+      let s3 ←
+        PV_EVH_World.lift
+            (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+              { «end» := 32#usize })
+      let s4 ← PV_EVH_World.lift (core.slice.Slice.copy_from_slice core.marker.CopyU8 __x.1 s3)
+      let __x_1 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              leaf_salt_seed)
+      let __x_2 ← PV_EVH_World.lift (Std.lift __x_1.1.to_slice_mut)
+      let s6 ←
+        PV_EVH_World.lift
+            (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+              { start := 32#usize })
+      let s7 ← PV_EVH_World.lift (core.slice.Slice.copy_from_slice core.marker.CopyU8 __x_2.1 s6)
+      let a8 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back (__x.2 s4)))
+      let b ← PV_EVH_World.lift (aspis_prover.state_only_entropy.entropy_nonzero32 a8)
+      if b = true then do
+          let a9 ←
+            PV_EVH_World.lift
+                (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (__x_1.2 (__x_2.2 s7)))
+          let b1 ← PV_EVH_World.lift (aspis_prover.state_only_entropy.entropy_nonzero32 a9)
+          if b1 = true then
+              pure
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := nonce, field_mask_entropy := deref_mut_back (__x.2 s4),
+                      leaf_salt_seed := __x_1.2 (__x_2.2 s7) }))
+            else do
+              let retry1 ← PV_EVH_World.lift (Std.lift (retry.wrapping_add 1#usize))
+              pure (cont retry1)
+        else do
+          let retry1 ← PV_EVH_World.lift (Std.lift (retry.wrapping_add 1#usize))
+          pure (cont retry1))
+    (let (a3, deref_mut_back) := (a3, deref_mut_back)
+    do
+    let (s2, to_slice_mut_back) ← Std.lift a3.to_slice_mut
+    let a4 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (as_mut_back s1)
+    let s3 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+          { «end» := 32#usize }
+    let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+    let (a6, deref_mut_back1) ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed
+    let (s5, to_slice_mut_back1) ← Std.lift a6.to_slice_mut
+    let s6 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+          { start := 32#usize }
+    let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+    let a8 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (deref_mut_back (to_slice_mut_back s4))
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+    if b = true then do
+        let a9 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back1 (to_slice_mut_back1 s7))
+        let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+        if b1 = true then
+            Result.ok
+              (done
+                (core.result.Result.Ok
+                  { mask_nonce := nonce, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                    leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+          else do
+            let retry1 ← Std.lift (retry.wrapping_add 1#usize)
+            Result.ok (cont retry1)
+      else do
+        let retry1 ← Std.lift (retry.wrapping_add 1#usize)
+        Result.ok (cont retry1))
+
+Note: The full type of `@fixed_bind` is
+  ∀ {A B : Type} (m : M A) (k : A → M B) (r : Result A) (f : A → Result B),
+    FixedView m r → (∀ (a : A), FixedView (k a) (f a)) → FixedView (PV_EVH_World.bind m k) (Std.bind r f)
+
+case pos.hk.hk.hk.hk.Continue.hk.hk.hk
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+answers : EntropyAnswers
+h : ∀ (n : ℕ) (s : Slice U8), answers n s = getrandom.fill s
+nonce : Std.Array U8 32#usize
+limit retry : Usize
+condition : retry < limit
+bytes : zeroize.Zeroizing (Std.Array U8 64#usize)
+s : Slice U8
+as_mut_back : Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)
+r : core.result.Result Unit getrandom.error.Error
+s1 : Slice U8
+unused0 : Unit
+field_mask_entropy leaf_salt_seed : zeroize.Zeroizing (Std.Array U8 32#usize)
+a3 : Std.Array U8 32#usize
+deref_mut_back : Std.Array U8 32#usize → zeroize.Zeroizing (Std.Array U8 32#usize)
+⊢ FixedView
+    (do
+      let __x ← PV_EVH_World.lift (Std.lift a3.to_slice_mut)
+      let a4 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (as_mut_back s1))
+      let s3 ←
+        PV_EVH_World.lift
+            (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+              { «end» := 32#usize })
+      let s4 ← PV_EVH_World.lift (core.slice.Slice.copy_from_slice core.marker.CopyU8 __x.1 s3)
+      let __x_1 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              leaf_salt_seed)
+      let __x_2 ← PV_EVH_World.lift (Std.lift __x_1.1.to_slice_mut)
+      let s6 ←
+        PV_EVH_World.lift
+            (core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+              { start := 32#usize })
+      let s7 ← PV_EVH_World.lift (core.slice.Slice.copy_from_slice core.marker.CopyU8 __x_2.1 s6)
+      let a8 ←
+        PV_EVH_World.lift
+            (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back (__x.2 s4)))
+      let b ← PV_EVH_World.lift (aspis_prover.state_only_entropy.entropy_nonzero32 a8)
+      if b = true then do
+          let a9 ←
+            PV_EVH_World.lift
+                (zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                  (__x_1.2 (__x_2.2 s7)))
+          let b1 ← PV_EVH_World.lift (aspis_prover.state_only_entropy.entropy_nonzero32 a9)
+          if b1 = true then
+              pure
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := nonce, field_mask_entropy := deref_mut_back (__x.2 s4),
+                      leaf_salt_seed := __x_1.2 (__x_2.2 s7) }))
+            else do
+              let retry1 ← PV_EVH_World.lift (Std.lift (retry.wrapping_add 1#usize))
+              pure (cont retry1)
+        else do
+          let retry1 ← PV_EVH_World.lift (Std.lift (retry.wrapping_add 1#usize))
+          pure (cont retry1))
+    (let (a3, deref_mut_back) := (a3, deref_mut_back)
+    do
+    let (s2, to_slice_mut_back) ← Std.lift a3.to_slice_mut
+    let a4 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (as_mut_back s1)
+    let s3 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+          { «end» := 32#usize }
+    let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+    let (a6, deref_mut_back1) ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed
+    let (s5, to_slice_mut_back1) ← Std.lift a6.to_slice_mut
+    let s6 ←
+      core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+          { start := 32#usize }
+    let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+    let a8 ←
+      zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+          (deref_mut_back (to_slice_mut_back s4))
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+    if b = true then do
+        let a9 ←
+          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+              (deref_mut_back1 (to_slice_mut_back1 s7))
+        let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+        if b1 = true then
+            Result.ok
+              (done
+                (core.result.Result.Ok
+                  { mask_nonce := nonce, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                    leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+          else do
+            let retry1 ← Std.lift (retry.wrapping_add 1#usize)
+            Result.ok (cont retry1)
+      else do
+        let retry1 ← Std.lift (retry.wrapping_add 1#usize)
+        Result.ok (cont retry1))
+'PV_EVH_Entropy.entropyBody_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_Entropy.draw_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
