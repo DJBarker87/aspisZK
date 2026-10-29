@@ -9,12 +9,12 @@ abbrev Attempt (S P : Type) := Nat → S → Logged (Step P × S)
 /-- Retain each leaf's prefix on every retry and outer failure/divergence.
 The recursion does not coerce an opaque recursive source call into Logged. -/
 def run (a : Attempt S P) : Nat → Nat → S → Logged (Step (Published P) × S)
-  | 0, _, s => pure (.stop .AttemptsExhausted,s)
+  | 0, _, s => Pure.pure (.stop .AttemptsExhausted,s)
   | n+1, k, s => do
     let (out,after) ← a k s
     match out with
-    | .done p => pure (.done ⟨p,k+1⟩,after)
-    | .stop e => pure (.stop e,after)
+    | .done p => Pure.pure (.done ⟨p,k+1⟩,after)
+    | .stop e => Pure.pure (.stop e,after)
     | .retry => run a n (k+1) after
 
 theorem erasure (a : Attempt S P) (n k : Nat) (s : S) :

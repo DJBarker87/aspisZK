@@ -16,13 +16,13 @@ def attempt {C : Type} (entropy : Entropy C) (pub : Pub) (compiled : Compiled)
     PV_L1D_RetryFold.Attempt (C × Store) Proof := fun k s => do
   let (r,after) ← observe .callback k (entropy.call_mut s.1 (ProverCommitRetrySource34.word k))
   match r with
-  | .Err e => pure (.stop (error e),(after,s.2))
+  | .Err e => Pure.pure (.stop (error e),(after,s.2))
   | .Ok secret =>
     let (r1,store) ← PV_L1D_Source_070.produce pub compiled variant hash secret s.2
     match r1 with
-    | .Ok p => pure (.done p,(after,store))
-    | .Err .Rejected => pure (.retry,(after,store))
-    | .Err e => pure (.stop (error e),(after,store))
+    | .Ok p => Pure.pure (.done p,(after,store))
+    | .Err .Rejected => Pure.pure (.retry,(after,store))
+    | .Err e => Pure.pure (.stop (error e),(after,store))
 
 theorem attempt_erasure {C : Type} (entropy : Entropy C) (pub : Pub) (compiled : Compiled)
     (variant : transport.Variant) (hash : Hash) (k : Nat) (s : C × Store) :
