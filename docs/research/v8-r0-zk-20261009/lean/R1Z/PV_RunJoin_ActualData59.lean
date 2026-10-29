@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_ActualRunSources59
 import R1Z.PV_RunJoin_BackendRawCoefficients58
+import R1Z.PV_RunJoin_ActualPoint59
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_ActualData59
@@ -47,9 +48,9 @@ def semantic (p : Phase) (i : Fin 25) : Exact :=
 /-- The fallback makes the family total on malformed Phase inputs. Proving
 that successful actual builders use the first branch remains producer work. -/
 def point (p : Phase) (i : Fin 2) : AspisR0.ChordGeometry.Point Exact :=
-  let x := embed (decode (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_SemanticPoints50.read p.sem.z i.val).x))
-  let y := embed (decode (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_SemanticPoints50.read p.sem.z i.val).y))
-  if h : x^2+y^2=1 then ⟨(x,y),h⟩ else ⟨(1,0),by simp⟩
+  let x := embed (decode (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_SemanticPoints50.read p.sem.z i).x))
+  let y := embed (decode (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_SemanticPoints50.read p.sem.z i).y))
+  PV_RunJoin_ActualPoint59.point x y
 
 def querySet (p : Phase) : Finset (Fin 262144) :=
   match PV_RunJoin_ActualRunSources59.finish p with
