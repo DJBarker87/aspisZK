@@ -42,7 +42,7 @@ def submit(name,ixs,keys,bh):
         sim=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',sim)
         if sim['value']['err']=='BlockhashNotFound':continue
         if sim['value']['err']:raise RuntimeError(sim)
-        entry={'signature':s['signature'],'blockhash':block,'serialized_bytes':s['bytes'],'explorer':f"https://explorer.solana.com/tx/{s['signature']}?cluster=devnet"};write(f'{name}-attempt-{attempt}',entry)
+        entry={'signature':s['signature'],'blockhash':block,'serialized_bytes':s['bytes'],'explorer':(None if URL.startswith(("http://127.0.0.1:","http://localhost:")) else f"https://explorer.solana.com/tx/{s['signature']}?cluster=devnet")};write(f'{name}-attempt-{attempt}',entry)
         try:
             sig=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':False,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sig==s['signature']
         except Exception as error:
@@ -87,7 +87,7 @@ def deploy_role(role):
     if status:raise RuntimeError(f'{role} deploy CLI exit {status}')
     pa=account(program);assert pa['value']['owner']==LOADER and pa['value']['executable'];raw=base64.b64decode(pa['value']['data'][0]);assert int.from_bytes(raw[:4],'little')==2
     # Programdata address encoded in the linked Program account; use the CLI public account output for its base58 form.
-    show=subprocess.check_output([str(CLI/'solana'),'--url',URL,'--output','json','program','show',program],text=True);show=json.loads(show);write(role+'-program',show)
+    show=subprocess.check_output([str(CLI/'solana'),'--keypair',PAYER_KEY,'--url',URL,'--output','json','program','show',program],text=True);show=json.loads(show);write(role+'-program',show)
     pd=show['programdataAddress'];assert raw[4:36]==base58(pd);pda=account(pd);assert pda['value']['owner']==LOADER and not pda['value']['executable'] and int.from_bytes(base64.b64decode(pda['value']['data'][0])[:4],'little')==3;payload=base64.b64decode(pda['value']['data'][0])[45:];assert payload==elf
     write(role+'-programdata',{'address':pd,'lamports':pda['value']['lamports'],'bytes':len(payload)+45,'elf_sha256':hashlib.sha256(payload).hexdigest(),'context_slot':pda['context']['slot']})
     if role in ('verifier','registry'):
@@ -117,7 +117,7 @@ for role in roles:
             write(role+'-refund-signatures',rpc(URL,'getSignaturesForAddress',[buffer,{'commitment':'finalized','limit':10}]))
         raise
     finally:
-        command=[str(CLI/'solana'),'--url',URL,'--output','json','program','show','--buffers','--buffer-authority',C['payer']]
+        command=[str(CLI/'solana'),'--keypair',PAYER_KEY,'--url',URL,'--output','json','program','show','--buffers','--buffer-authority',C['payer']]
         result=subprocess.run(command,text=True,capture_output=True)
         write(role+'-final-buffers',{'command':command,'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
         if result.returncode:raise RuntimeError('buffer inventory failed; retain all keys')

@@ -56,7 +56,7 @@ def send(name,ixs,keys=[PAYER_KEY],negative=False):
                 if not tx:raise RuntimeError(f'{name}: finalized metadata not yet available')
                 write(name+'-transaction',tx);record_rent(tx)
                 origin=attempt_record.get('started_unix',path.stat().st_mtime)
-                result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
+                result={'signature':sig,'explorer':(None if URL.startswith(('http://127.0.0.1:','http://localhost:')) else f'https://explorer.solana.com/tx/{sig}?cluster=devnet'),'slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
                 write(name,result)
                 if bool(result['error'])!=negative:raise RuntimeError(f'{name}: reconciled unexpected result {result}')
                 print(name,json.dumps(result),flush=True);return result
@@ -94,7 +94,7 @@ def send(name,ixs,keys=[PAYER_KEY],negative=False):
             time.sleep(2)
         if not tx:raise RuntimeError('finalized tx metadata unavailable')
         write(name+'-transaction',tx);record_rent(tx)
-        result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
+        result={'signature':sig,'explorer':(None if URL.startswith(('http://127.0.0.1:','http://localhost:')) else f'https://explorer.solana.com/tx/{sig}?cluster=devnet'),'slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
         write(name,result)
         if bool(result['error'])!=negative:raise RuntimeError(f'{name} unexpected finalized result: {result}')
         print(name,json.dumps(result),flush=True);return result
