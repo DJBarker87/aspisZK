@@ -14452,3 +14452,17 @@ After three rounds on this line, V229's remaining cone is now itemised (V229.md)
 - every sort and dedup move;
 - the remaining stores and cleanup stages.
 The rounds so far have spread effort over four rows. pv-ownd (branch codex/pv-ownd-20261029 from 1e44071977; IDs 63200-63299; 100 Lean, 30 native, 0 Kani) works on V229 only. It takes those stages in execution order, and writes a coverage plan with the deployed source location of each stage before any Lean. Rows removed: 0. Privacy target not yet established.
+
+## D434 (Stream B) 2026-10-29 01:32 UTC: pv-rdb2e results; R72 cohort rebuild ordered; V231's SHA-NI path to be proved conditionally pending owner item 3; pv-rdb2f launched
+
+pv-rdb2e (head c7440e137b) used all 100 Lean attempts, 5 capped native scopes and no Kani. Its final independent model audits and replay passed: 244 theorems and 453 named declarations, with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits in hand-written modules; no large files. sorryAx appears only in retained, uncredited failed-recovery output, which no module imports. It was merged into the candidate as 50c43a49d6 and pushed.
+
+V231, V256 and V257 remain SUSPENDED (partial structural evidence only):
+- V256 and V257: the R72 object cohort blocks formal credit. The canonical R72 Funs source hash matches, but the rebuilt object 5a4850e2 differs from the recorded 38a9c51b, and 15 cached dependents are affected. The original iterator and from_fn restoration and the verifier-call association are not yet proved.
+- V231: the typed SHA state, buffer and output frames, both runtime dispatch cases, and the software word-block laws are checked. SHA selection is recorded exactly: on Linux x86_64 with no force-soft, cached CPUID requiring SHA, SSE2, SSSE3 and SSE4.1 selects x86::digest_blocks, and otherwise soft::compress. The native Sha256VarCore, BlockBuffer and GenericArray association, the software outer iterator and copy, and the SHA-NI law remain. A length-guard draft failed at 62295/62296.
+
+Lead direction for pv-rdb2f (branch codex/pv-rdb2f-20261029 from 50c43a49d6; IDs 63300-63399; 100 Lean, 40 native, 0 Kani):
+(1) Rebuild R72 and its affected closure fresh from unchanged pinned sources under compliant admission. The fresh coherent closure becomes the authority for that cone, and every consumer is re-elaborated unedited.
+(2) Bind the V256 and V257 sampler continuations under own-1.
+(3) Complete V231's software path. Prove the SHA-NI path's refinement conditional on one explicit named intrinsic-semantics hypothesis, which never enters T.
+V231 cannot be restored until the owner decides packet item 3 (keep SHA-NI with refinement under the capped T, change the instruction-semantics trust, or select a soft backend with its timing and adoption gates). The conditional proof will make the remaining SHA-NI obligation exact. Rows removed: 0. Privacy target not yet established.
