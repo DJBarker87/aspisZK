@@ -1,0 +1,18 @@
+import PV_B3P_ScaleFrame11227
+import PV_B3P_ValueRead912227
+namespace PV_B3P_Binding11227
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
+set_option autoImplicit false
+attribute [local irreducible] Array.index_usize Array.update aspis_core.field.QM31.mul
+theorem scale_stage11_12 (packed : Array aspis_core.field.QM31 24#usize)
+    (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
+    (selectors : reference_copy_terminal.Selectors) (state : ValueState9) :
+    value_direct_stage9_12 packed openings selectors state =
+      PV_B3P_Ordered227.fold scale_frame11 [24#usize, 25#usize, 26#usize, 27#usize, 28#usize, 29#usize] state := by
+  rcases state with ⟨selector,range⟩
+  rw [scale_frame_fold11]
+  unfold value_direct_stage9_12 value_read_context9_12
+  conv_rhs => simp only [PV_B3P_Ordered227.fold,scale_cell11,PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
+  exact Eq.refl _
+#print axioms scale_stage11_12
+end PV_B3P_Binding11227
