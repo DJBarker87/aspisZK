@@ -29,9 +29,17 @@ for key,(context,body,law) in expected.items():
  bad=body.replace('value.mul(value)','value.add(value)',1) if key=='square_n' else body.replace('M31::inv','M31::neg',1) if key=='CM31.inv' else body.replace('square_n(t2,2)','square_n(t2,3)',1)
  assert tokens(actual)!=tokens(bad),key
  records.append(dict(key=key,source_body=actual,owned_pattern=body,law='R1Z.PV_RDCD3_'+law,negative_control='changed operation/count/dispatch rejected'))
+convert=a['root']/'convert/num.rs';cs=convert.read_text()
+cast_body='fn from(small: $Small) -> Self { small as Self }'
+cast_actual=span(cs,'macro_rules! impl_from', 'fn from(small: $Small) -> Self')
+assert tokens(cast_actual)==tokens(cast_body)
+assert tokens(cast_actual)!=tokens(cast_body.replace('small as Self','0 as Self'))
+assert 'impl_from!(u32 => u64,' in cs and 'impl_from!(u8 => usize,' in cs
+widening=dict(path=str(convert),sha256=sha(convert.read_bytes()),body=cast_actual,
+  concrete_bindings=['u32 => u64','u8 => usize'],law='PV_RDCD3_Cast194.u32_u64/u8_usize/u32_u64_val/u8_usize_val',negative_control='constant substitution rejected')
 features=json.load(open(D/'deployed-client-features.json'))
 core=[x for x in features if x['name']=='aspis-core'];assert core
 assert all('ct-host-prover' in x['features'] and 'r0-op-count' not in x['features'] for x in core)
 assert all(not x['profile']['debug_assertions'] and not x['profile']['overflow_checks'] for x in features)
-j=dict(source=dict(path=str(p),sha256=sha(p.read_bytes())),bodies=records,feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()),profile='deployed release, rust1.94.1 native; assert! is unconditional, op-count disabled',range_binding_sha256=sha((D/'range-source-result.json').read_bytes()),scope='Static M31 backend source binding only. Complete circle law, library disposition, source cohort and native finite evidence remain required.',pointer_kani='QUARANTINED under r-double-prime; no Kani run or credit',composition='Reclassification within existing Aeneas/Rust/compiler trust, never endpoint premise removal')
+j=dict(widening=widening,source=dict(path=str(p),sha256=sha(p.read_bytes())),bodies=records,feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()),profile='deployed release, rust1.94.1 native; assert! is unconditional, op-count disabled',range_binding_sha256=sha((D/'range-source-result.json').read_bytes()),scope='Static M31 backend source binding only. Complete circle law, library disposition, source cohort and native finite evidence remain required.',pointer_kani='QUARANTINED under r-double-prime; no Kani run or credit',composition='Reclassification within existing Aeneas/Rust/compiler trust, never endpoint premise removal')
 (D/'v265-source-result.json').write_text(json.dumps(j,indent=2)+'\n');print('Three complete inverse/loop/static-dispatch bodies matched with rejecting controls; op-count disabled')
