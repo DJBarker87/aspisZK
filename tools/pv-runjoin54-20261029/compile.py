@@ -6,6 +6,10 @@ a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 66900<=a<=66999
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
 assert len(mods)==1,'one module per attempt'
+for prior in E.glob('modules-*.json'):
+ for record in json.loads(prior.read_text()):
+  if not record['accepted'] and record['module'] in mods:
+   assert record['source_sha256']!=plan['modules'][record['module']]['sha256'],('unchanged failed source forbidden',record['module'],str(prior))
 assert len(list(E.glob('receipt-*.json')))<100
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.

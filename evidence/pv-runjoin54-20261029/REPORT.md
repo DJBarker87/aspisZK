@@ -18,3 +18,10 @@ r24/sampler, common sample, backend producer, FinishContext, query append,
 node append/indices, and publication ordering separately.
 
 Whole ledger rows removed: none. Endpoint and TrustItems unchanged.
+
+## Recorded workflow error
+
+66939 accidentally resubmitted the unchanged failed source from 66938: an
+exact-text replacement missed its indentation. Both failed, neither earns
+credit. The subsequent source is changed, and the own-input pre-submission
+wrapper now rejects any source hash previously rejected for that module.

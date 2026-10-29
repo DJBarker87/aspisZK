@@ -12,8 +12,8 @@ theorem complete (a : C) (ha : CC a) :
   obtain ⟨d1,h2,hc2,hv2⟩ := PV_RunJoin_NeutralAddValue54.complete a.2 a.2 ha.2 ha.2
   obtain ⟨y1,h3,hc3,hv3⟩ := PV_RunJoin_NeutralAddValue54.complete a.1 d1 ha.1 hc2
   refine ⟨(y0,y1),?_,⟨hc1,hc3⟩,?_⟩
-  · unfold PV_RunJoin_CircleRawTower52.field.mul_by_r PV_RunJoin_CircleRawScalar52.field.M31.double
-    simp only [h0,h1,h2,h3,bind_tc_ok]
+  · unfold PV_RunJoin_CircleRawTower52.field.mul_by_r
+    simp only [PV_RunJoin_CircleRawTower52.field.M31.double,PV_RunJoin_CircleRawScalar52.field.M31.double,h0,h1,h2,h3,bind_tc_ok]
   · apply Prod.ext
     · change scalar y0=2*scalar a.1-scalar a.2
       rw [hv1,hv0];ring
