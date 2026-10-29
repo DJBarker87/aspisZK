@@ -44,13 +44,13 @@ theorem division_body (q : Words) (r : U64) (j : Usize) :
     divisionBody q r j=PV_RDB2D_SamplerRestoration.divisionBody q r j := by
   simp only [divisionBody,nextBack,restore,PV_RDB2D_SamplerRestoration.divisionBody,
     PV_RDB2D_SamplerRestoration.borrow,bind_assoc_eq,bind_tc_ok]
-  split <;> rfl
+  split <;> simp only [bind_assoc_eq,bind_tc_ok,lift] <;> rfl
 
 theorem carry_body (q : Words) (n : U32) (i : Usize) :
     carryBody q n i=PV_RDB2D_SamplerRestoration.carryBody q n i := by
   simp only [carryBody,next,restore,PV_RDB2D_SamplerRestoration.carryBody,
     PV_RDB2D_SamplerRestoration.borrow,bind_assoc_eq,bind_tc_ok]
-  split <;> rfl
+  split <;> simp only [bind_assoc_eq,bind_tc_ok,lift] <;> rfl
 
 #print axioms division_body
 #print axioms carry_body
