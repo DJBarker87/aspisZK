@@ -15,8 +15,8 @@ theorem total (values : Matrix) (row lane : Usize) (x : W)
     (rowBound : row.val<4) (laneBound : lane.val<29) :
     ∃ next, put values row lane x=ok next := by
   obtain ⟨⟨a,back⟩,hr,hpost⟩ := WP.spec_imp_exists
-    (Array.index_mut_usize_spec values row (by simpa only [Array.length,values.property] using rowBound))
-  obtain ⟨a',ha,hvalue⟩ := WP.spec_imp_exists (Array.update_spec a lane x (by simpa only [Array.length,a.property] using laneBound))
+    (Array.index_mut_usize_spec values row (by simpa only [Array.length,values.property,show (4#usize).val=4 from rfl] using rowBound))
+  obtain ⟨a',ha,hvalue⟩ := WP.spec_imp_exists (Array.update_spec a lane x (by simpa only [Array.length,a.property,show (29#usize).val=29 from rfl] using laneBound))
   refine ⟨back a',?_⟩
   simp only [put,hr,ha,bind_tc_ok,Aeneas.Std.uncurry]
 
