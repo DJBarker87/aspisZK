@@ -1,0 +1,17 @@
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:47: error: Invalid simp theorem: Expected a proposition, but found
+  (x_0 x_1 x_2 x_3 x_4 : Type) → M x_0 x_1 x_2 x_3 → (x_3 → M x_0 x_1 x_2 x_4) → M x_0 x_1 x_2 x_4
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_GuardCleanup.lean:23:1: error: Type mismatch: After simplification, term
+  PV_OWNB_CursorCleanup.positive dealloc q h s x nz
+ has type
+  @Eq (List (State S X × Event))
+    (PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).calls
+    [({ memory := take q.owner q.memory, allocator := s, extra := x },
+        Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+but is expected to have type
+  @Eq (List (State S X × Event))
+    (PV_W_Threading.bind (lift (Outcome.ok ())) (fun x => PV_OWNB_CursorCleanup.cleanup dealloc q)
+        { memory := q.memory, allocator := s, extra := x }).calls
+    [({ memory := take q.owner q.memory, allocator := s, extra := x },
+        Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+'R1Z.PV_OWNC_GuardCleanup.prefix_empty' does not depend on any axioms
+'R1Z.PV_OWNC_GuardCleanup.original_layout' depends on axioms: [propext, sorryAx]

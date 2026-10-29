@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62878/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62878/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_InPlaceResult.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.20",
+  "peak_rss_kib": "485068",
+  "swap": "0",
+  "source_revision": "327f1acdeb4d81425ed35fbebc2523e0f93db392",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:25:63: error: unsolved goals\nq : Cursor\nkeep : Link \u2192 Bool\nh : Valid q\nguard result : Nat\nge : q.memory.slots guard = none\nre : q.memory.slots result = none\ngs : guard \u2260 q.owner\nrs : result \u2260 q.owner\nrg : result \u2260 guard\nhi :\n  (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).owner = q.owner \u2227\n    (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).token = q.token \u2227\n      (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).memory.slots = q.memory.slots \u2227\n        (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).memory.generations = q.memory.generations\nhf : Valid (PV_OWNC_SourceLoop.run keep (q.length - q.read) q)\nfiltered : Cursor := PV_OWNC_SourceLoop.run keep (q.length - q.read) q\nhge : filtered.memory.slots guard = none\nhgs : guard \u2260 filtered.owner\nhg : Valid (handoff filtered guard)\nhrs : result \u2260 filtered.owner\n\u22a2 filtered.memory.slots result = none\n/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:27:16: warning: This simp argument is unused:\n  hi.2.2.1\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335h\u0335a\u0335n\u0335d\u0335o\u0335f\u0335f\u0335,\u0335m\u0335o\u0335v\u0335e\u0335,\u0335h\u0335r\u0335s\u0335,\u0335\n  \u0335 \u0335 \u0335 \u0335r\u0335g\u0335,\u0335i\u0335t\u0335e\u0335_\u0335f\u0335a\u0335l\u0335s\u0335e\u0335,\u0335h\u0335i\u0335.\u03352\u0335.\u03352\u0335.\u03351\u0335,\u0335r\u0335e\u0335]\u0335[\u0332h\u0332a\u0332n\u0332d\u0332o\u0332f\u0332f\u0332,\u0332 \u0332m\u0332o\u0332v\u0332e\u0332,\u0332 \u0332h\u0332r\u0332s\u0332,\u0332 \u0332r\u0332g\u0332,\u0332 \u0332i\u0332t\u0332e\u0332_\u0332f\u0332a\u0332l\u0332s\u0332e\u0332,\u0332 \u0332r\u0332e\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:27:25: warning: This simp argument is unused:\n  re\n\nHint: Omit it from the simp argument list.\n  simp only [handoff, \u0332move, \u0332hrs,\n  \u0335  \u0335 \u0335rg, \u0332ite_false, \u0332hi.2.2.1,\u0335r\u0335e\u0335]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWNC_InPlaceResult.guarded' depends on axioms: [propext, sorryAx, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62878,
+  "module": "R1Z/PV_OWNC_InPlaceResult",
+  "source_blob": "c6c1dc74141457ee805b5517a1b5c8b9de6b860f",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNC_InPlaceResult.lean",
+  "source_sha256": "e5a4c2a710fabe51c45c434bef9f82868cd2da5409e072afaa54283d36b71809",
+  "imports": [
+    "R1Z.PV_OWNC_SourceIdentity"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNC_SourceIdentity": "5229b7a207b16eb1cb43befff1abb76d123f7751eb07cb6ed50d65e10691769d"
+  },
+  "deps_fingerprint": "6f91070fb7e74b28c55c7939d02e96b4c0b340460d3d2e16820645bed6a1fa3a"
+}

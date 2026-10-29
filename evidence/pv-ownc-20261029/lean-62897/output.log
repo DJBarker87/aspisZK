@@ -1,0 +1,285 @@
+R1Z.PV_OWNC_CursorVector.initialized (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec (R1Z.PV_OWNC_CursorVector.vector q)
+R1Z.PV_OWNC_FlatMap.source_array_order (xs : List R1Z.PV_OWN_Link.Link) :
+  R1Z.PV_OWNC_FlatMap.rows xs = List.flatMap (fun v => [v.producer, v.consumer]) xs
+R1Z.PV_OWNC_FlatMap.count (xs : List R1Z.PV_OWN_Link.Link) : (R1Z.PV_OWNC_FlatMap.rows xs).length = 2 * xs.length
+R1Z.PV_OWNC_FlatMap.u16_bound (v : UInt16) (i : Nat) (z : UInt8) (h : R1Z.PV_OWN_U16.codec.encode v i = some z) :
+  i < R1Z.PV_OWN_U16.codec.width
+R1Z.PV_OWNC_FlatMap.initialized (b : R1Z.PV_OWNC_Vector.Buffer UInt16) (xs : List R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWN_U16.codec b) (empty : b.length = 0) (cap : b.capacity = 272)
+  (n : xs.length = 136) :
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWN_U16.codec
+      (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs)) ∧
+    (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs)).length = 272
+R1Z.PV_OWNC_FoldSource.step_binding (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNC_FoldSource.sourceStep keep q = R1Z.PV_OWNB_SnapshotStep.step keep q
+R1Z.PV_OWNC_FoldSource.valid (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (more : q.read < q.length) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNC_FoldSource.sourceStep keep q)
+R1Z.PV_OWNC_GuardCleanup.prefix_empty {S X E : Type} (w : R1Z.PV_OWN_Operations.State S X) :
+  (R1Z.PV_OWNC_GuardCleanup.headDrop w).outcome = R1Z.PV_W_Threading.Outcome.ok () ∧
+    (R1Z.PV_OWNC_GuardCleanup.headDrop w).world = w ∧ (R1Z.PV_OWNC_GuardCleanup.headDrop w).calls = []
+R1Z.PV_OWNC_GuardCleanup.original_layout {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (s : S) (x : X) (nz : q.cell.size ≠ 0) :
+  (R1Z.PV_OWNC_GuardCleanup.destination dealloc q { memory := q.memory, allocator := s, extra := x }).calls =
+    [({ memory := R1Z.PV_OWN_Operations.take q.owner q.memory, allocator := s, extra := x },
+        R1Z.PV_OWN_Operations.Event.deallocate q.token.address q.cell.size q.cell.alignment)]
+R1Z.PV_OWNC_GuardReturn.returned_valid (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (dst : Nat)
+  (empty : q.memory.slots dst = none) (distinct : dst ≠ q.owner) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNC_GuardState.handoff q dst) ∧
+    R1Z.PV_OWN_Heap.Owned (R1Z.PV_OWNC_GuardState.handoff q dst).memory dst q.token
+        (R1Z.PV_OWNC_GuardState.handoff q dst).cell ∧
+      (R1Z.PV_OWNC_GuardState.handoff q dst).memory.slots q.owner = none
+R1Z.PV_OWNC_GuardReturn.returned_header (q : R1Z.PV_OWNB_Cursor.Cursor) (dst : Nat) :
+  (R1Z.PV_OWNC_GuardState.handoff q dst).capacity = q.capacity ∧
+    (R1Z.PV_OWNC_GuardState.handoff q dst).written = q.written ∧
+      (R1Z.PV_OWNC_GuardState.handoff q dst).token.address = q.token.address
+R1Z.PV_OWNC_GuardTransfer.owned (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (dst : Nat)
+  (empty : q.memory.slots dst = none) (distinct : dst ≠ q.owner) :
+  R1Z.PV_OWN_Heap.Owned (R1Z.PV_OWNC_GuardState.handoff q dst).memory dst q.token
+    (R1Z.PV_OWNC_GuardState.handoff q dst).cell
+R1Z.PV_OWNC_GuardTransfer.source_consumed (q : R1Z.PV_OWNB_Cursor.Cursor) (dst : Nat) :
+  (R1Z.PV_OWNC_GuardState.handoff q dst).memory.slots q.owner = none
+R1Z.PV_OWNC_GuardTransfer.identity (q : R1Z.PV_OWNB_Cursor.Cursor) (dst : Nat) :
+  (R1Z.PV_OWNC_GuardState.handoff q dst).token = q.token ∧
+    (R1Z.PV_OWNC_GuardState.handoff q dst).memory.generations = q.memory.generations ∧
+      (R1Z.PV_OWNC_GuardState.handoff q dst).cell.contents = q.cell.contents
+R1Z.PV_OWNC_GuardValid.valid (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q) (dst : Nat)
+  (empty : q.memory.slots dst = none) (distinct : dst ≠ q.owner) :
+  R1Z.PV_OWNB_Cursor.Valid (R1Z.PV_OWNC_GuardState.handoff q dst)
+R1Z.PV_OWNC_HeaderStores.cap (h : R1Z.PV_OWNC_SourceIterator.Header) :
+  (R1Z.PV_OWNC_GuardState.clearCap h).cap = 0 ∧
+    (R1Z.PV_OWNC_GuardState.clearCap h).buf = h.buf ∧
+      (R1Z.PV_OWNC_GuardState.clearCap h).ptr = h.ptr ∧ (R1Z.PV_OWNC_GuardState.clearCap h).endPtr = h.endPtr
+R1Z.PV_OWNC_HeaderStores.buf (h : R1Z.PV_OWNC_SourceIterator.Header) :
+  (R1Z.PV_OWNC_GuardState.clearBuf (R1Z.PV_OWNC_GuardState.clearCap h)).buf = 2 ∧
+    (R1Z.PV_OWNC_GuardState.clearBuf (R1Z.PV_OWNC_GuardState.clearCap h)).cap = 0
+R1Z.PV_OWNC_HeaderStores.ptr (h : R1Z.PV_OWNC_SourceIterator.Header) :
+  (R1Z.PV_OWNC_GuardState.clearPtr (R1Z.PV_OWNC_GuardState.clearBuf (R1Z.PV_OWNC_GuardState.clearCap h))).ptr = 2 ∧
+    (R1Z.PV_OWNC_GuardState.clearPtr (R1Z.PV_OWNC_GuardState.clearBuf (R1Z.PV_OWNC_GuardState.clearCap h))).endPtr =
+      h.endPtr
+R1Z.PV_OWNC_HeaderStores.endPtr (h : R1Z.PV_OWNC_SourceIterator.Header) :
+  R1Z.PV_OWNC_GuardState.reset h = { buf := 2, ptr := 2, endPtr := 2, cap := 0 }
+R1Z.PV_OWNC_HeaderStores.empty_remaining (h : R1Z.PV_OWNC_SourceIterator.Header) :
+  R1Z.PV_OWNC_GuardState.remaining (R1Z.PV_OWNC_GuardState.reset h) = (2, 0)
+R1Z.PV_OWNC_InPlaceResult.guarded (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) (guard result : Nat) (ge : q.memory.slots guard = none)
+  (re : q.memory.slots result = none) (gs : guard ≠ q.owner) (rs : result ≠ q.owner) (rg : result ≠ guard) :
+  have filtered := R1Z.PV_OWNC_SourceLoop.run keep (q.length - q.read) q;
+  have guarded := R1Z.PV_OWNC_GuardState.handoff filtered guard;
+  have returned := R1Z.PV_OWNC_GuardState.handoff guarded result;
+  R1Z.PV_OWNB_Cursor.Valid returned ∧ returned.token = q.token ∧ returned.memory.slots guard = none
+R1Z.PV_OWNC_LinkGrowth.represented (c : R1Z.PV_OWN_Heap.Cell) (newSize cap s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) (grow : c.size ≤ newSize) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWN_Growth.grownCell c newSize cap) s v
+R1Z.PV_OWNC_LinkPush.forest (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) (xs : List R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec b) (len : b.length = 64) (cap : b.capacity = 254)
+  (count : xs.length = 72) :
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs) ∧
+    (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs).length = 136 ∧
+      (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs).capacity = 254
+R1Z.PV_OWNC_PathPredicate.path_current (n : UInt8) (p c : UInt16) :
+  R1Z.PV_OWNC_PathPredicate.keep { kind := R1Z.PV_OWN_Link.Kind.privatePathCurrent n, producer := p, consumer := c } =
+    false
+R1Z.PV_OWNC_PathPredicate.path_left (n : UInt8) (p c : UInt16) :
+  R1Z.PV_OWNC_PathPredicate.keep { kind := R1Z.PV_OWN_Link.Kind.privatePathLeft n, producer := p, consumer := c } =
+    false
+R1Z.PV_OWNC_PathPredicate.path_right (n : UInt8) (p c : UInt16) :
+  R1Z.PV_OWNC_PathPredicate.keep { kind := R1Z.PV_OWN_Link.Kind.privatePathRight n, producer := p, consumer := c } =
+    false
+R1Z.PV_OWNC_PushBytes.initialized {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (v : T)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNC_Vector.Valid k b) (room : b.length < b.capacity)
+  (bounded : ∀ (i : Nat) (x : UInt8), k.encode v i = some x → i < k.width)
+  (bytes : R1Z.PV_OWNB_Padding.Agrees (k.encode v) actual) :
+  R1Z.PV_OWNC_Vector.View k (R1Z.PV_OWNC_Vector.push k b v actual).cell (b.length * k.width) v
+R1Z.PV_OWNC_PushBytes.frame {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (v : T)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNC_Vector.Valid k b)
+  (bounded : ∀ (x : T) (i : Nat) (z : UInt8), k.encode x i = some z → i < k.width) (i : Nat) (hi : i < b.length) :
+  R1Z.PV_OWNC_Vector.View k (R1Z.PV_OWNC_Vector.push k b v actual).cell (i * k.width) (b.values i)
+R1Z.PV_OWNC_PushFold.length {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T) :
+  (R1Z.PV_OWNC_PushFold.append k b xs).length = b.length + xs.length
+R1Z.PV_OWNC_PushFold.capacity {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T) :
+  (R1Z.PV_OWNC_PushFold.append k b xs).capacity = b.capacity
+R1Z.PV_OWNC_PushFold.valid {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (h : R1Z.PV_OWNC_Vector.Valid k b) (room : b.length + xs.length ≤ b.capacity)
+  (bounded : ∀ (x : T) (i : Nat) (z : UInt8), k.encode x i = some z → i < k.width) :
+  R1Z.PV_OWNC_Vector.Valid k (R1Z.PV_OWNC_PushFold.append k b xs)
+R1Z.PV_OWNC_PushOwned.writable {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (v : T)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNC_Vector.Valid k b) :
+  R1Z.PV_OWN_Heap.Writable (R1Z.PV_OWNC_Vector.push k b v actual).memory b.owner b.token
+    (R1Z.PV_OWNC_Vector.push k b v actual).cell
+R1Z.PV_OWNC_PushOwned.identity {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (v : T)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) :
+  (R1Z.PV_OWNC_Vector.push k b v actual).token = b.token ∧
+    (R1Z.PV_OWNC_Vector.push k b v actual).memory.generations = b.memory.generations ∧
+      (R1Z.PV_OWNC_Vector.push k b v actual).memory.slots = b.memory.slots
+R1Z.PV_OWNC_PushValid.valid {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (v : T)
+  (actual : R1Z.PV_OWN_Bytes.Bytes) (h : R1Z.PV_OWNC_Vector.Valid k b) (room : b.length < b.capacity)
+  (bounded : ∀ (x : T) (i : Nat) (z : UInt8), k.encode x i = some z → i < k.width)
+  (bytes : R1Z.PV_OWNB_Padding.Agrees (k.encode v) actual) :
+  R1Z.PV_OWNC_Vector.Valid k (R1Z.PV_OWNC_Vector.push k b v actual)
+R1Z.PV_OWNC_ReadPointer.in_bounds (q : R1Z.PV_OWNB_Cursor.Cursor) (h : R1Z.PV_OWNB_Cursor.Valid q)
+  (more : q.read < q.length) :
+  (R1Z.PV_OWNC_SourceIterator.header q).buf ≤ (R1Z.PV_OWNC_SourceIterator.header q).ptr ∧
+    (R1Z.PV_OWNC_SourceIterator.header q).ptr + 8 ≤ (R1Z.PV_OWNC_SourceIterator.header q).endPtr ∧
+      (R1Z.PV_OWNC_SourceIterator.header q).endPtr ≤ (R1Z.PV_OWNC_SourceIterator.header q).buf + q.capacity * 8
+R1Z.PV_OWNC_ReadPointer.advance_pointer (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNC_SourceIterator.header (R1Z.PV_OWNB_Cursor.advance q)).ptr = (R1Z.PV_OWNC_SourceIterator.header q).ptr + 8
+R1Z.PV_OWNC_SourceDetached.reset_no_free {S X E : Type} (h : R1Z.PV_OWNC_SourceIterator.Header)
+  (freeSource : R1Z.PV_OWN_Operations.Action S X E Unit) (w : R1Z.PV_OWN_Operations.State S X) :
+  R1Z.PV_OWNC_SourceDetached.sourceDrop (R1Z.PV_OWNC_GuardState.reset h) freeSource w =
+    { outcome := R1Z.PV_W_Threading.Outcome.ok (), world := w, calls := [] }
+R1Z.PV_OWNC_SourceDetached.consumed_no_free {S X E : Type} (q : R1Z.PV_OWNB_Cursor.Cursor) (dst : Nat)
+  (glue : R1Z.PV_OWN_Heap.Token → R1Z.PV_OWN_Operations.Action S X E Unit) (s : S) (x : X) :
+  R1Z.PV_OWN_Operations.dropOwned q.owner glue
+      { memory := (R1Z.PV_OWNC_GuardState.handoff q dst).memory, allocator := s, extra := x } =
+    { outcome := R1Z.PV_W_Threading.Outcome.ok (),
+      world :=
+        { memory := R1Z.PV_OWN_Operations.take q.owner (R1Z.PV_OWNC_GuardState.handoff q dst).memory, allocator := s,
+          extra := x },
+      calls := [] }
+R1Z.PV_OWNC_SourceIdentity.step (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNC_FoldSource.sourceStep keep q).owner = q.owner ∧
+    (R1Z.PV_OWNC_FoldSource.sourceStep keep q).token = q.token ∧
+      (R1Z.PV_OWNC_FoldSource.sourceStep keep q).memory.slots = q.memory.slots ∧
+        (R1Z.PV_OWNC_FoldSource.sourceStep keep q).memory.generations = q.memory.generations
+R1Z.PV_OWNC_SourceIdentity.loop (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNC_SourceLoop.run keep n q).owner = q.owner ∧
+    (R1Z.PV_OWNC_SourceLoop.run keep n q).token = q.token ∧
+      (R1Z.PV_OWNC_SourceLoop.run keep n q).memory.slots = q.memory.slots ∧
+        (R1Z.PV_OWNC_SourceLoop.run keep n q).memory.generations = q.memory.generations
+R1Z.PV_OWNC_SourceIterator.exhausted (q : R1Z.PV_OWNB_Cursor.Cursor) (h : q.read = q.length) :
+  R1Z.PV_OWNC_SourceIterator.next q = (none, q)
+R1Z.PV_OWNC_SourceIterator.available (q : R1Z.PV_OWNB_Cursor.Cursor) (h : q.read ≠ q.length) :
+  R1Z.PV_OWNC_SourceIterator.next q = (some (q.source q.read), R1Z.PV_OWNB_Cursor.advance q)
+R1Z.PV_OWNC_SourceIterator.pointer_exhausted (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  (R1Z.PV_OWNC_SourceIterator.header q).ptr = (R1Z.PV_OWNC_SourceIterator.header q).endPtr ↔ q.read = q.length
+R1Z.PV_OWNC_SourceLoop.snapshot_binding (keep : R1Z.PV_OWN_Link.Link → Bool) (n : Nat) (q : R1Z.PV_OWNB_Cursor.Cursor) :
+  R1Z.PV_OWNC_SourceLoop.run keep n q = R1Z.PV_OWNB_SnapshotFold.run keep n q
+R1Z.PV_OWNC_SourceLoop.completed (keep : R1Z.PV_OWN_Link.Link → Bool) (q : R1Z.PV_OWNB_Cursor.Cursor)
+  (h : R1Z.PV_OWNB_Cursor.Valid q) :
+  have result := R1Z.PV_OWNC_SourceLoop.run keep (q.length - q.read) q;
+  R1Z.PV_OWNB_Cursor.Valid result ∧ result.read = q.length
+R1Z.PV_OWNC_Specialization.selected : R1Z.PV_OWNC_Specialization.collectible 8 8 2 2 1 1 = true
+R1Z.PV_OWNC_Specialization.no_shrink (cap : Nat) : R1Z.PV_OWNC_Specialization.needsRealloc 8 8 2 2 cap cap = false
+R1Z.PV_OWNC_Specialization.capacity_bytes (cap : Nat) : cap * 8 / 8 = cap
+R1Z.PV_OWNC_Translation.producer_store (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNC_Translation.first c s v) s
+    { kind := v.kind, producer := R1Z.PV_OWNC_Translation.producer v, consumer := v.consumer }
+R1Z.PV_OWNC_Translation.consumer_store (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNC_Translation.second c s v) s
+    { kind := v.kind, producer := v.producer, consumer := R1Z.PV_OWNC_Translation.consumer v }
+R1Z.PV_OWNC_Translation.both (c : R1Z.PV_OWN_Heap.Cell) (s : Nat) (v : R1Z.PV_OWN_Link.Link)
+  (h : R1Z.PV_OWNB_LinkCodec.NativeView c s v) :
+  R1Z.PV_OWNB_LinkCodec.NativeView (R1Z.PV_OWNC_Translation.second (R1Z.PV_OWNC_Translation.first c s v) s v) s
+    (R1Z.PV_OWN_Link.relocate v (R1Z.PV_OWNC_Translation.producer v) (R1Z.PV_OWNC_Translation.consumer v))
+R1Z.PV_OWNC_Unwind.prefix_then_source {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor) (w : R1Z.PV_OWN_Operations.State S X) :
+  R1Z.PV_W_Threading.bind R1Z.PV_OWNC_GuardCleanup.headDrop (fun x => R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q) w =
+    R1Z.PV_OWNB_CursorCleanup.cleanup dealloc q w
+R1Z.PV_OWNC_Unwind.abort_direct {S X E A : Type} (handler : R1Z.PV_OWN_Operations.Action S X E A)
+  (unwind : R1Z.PV_OWN_Operations.Action S X E Unit) (w : R1Z.PV_OWN_Operations.State S X) :
+  R1Z.PV_OWNB_CursorExit.abort handler w = handler w
+theorem R1Z.PV_OWNC_InPlaceResult.guarded : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor) (keep : R1Z.PV_OWN_Link.Link → Bool),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    ∀ (guard result : Nat),
+      q.memory.slots guard = none →
+        q.memory.slots result = none →
+          guard ≠ q.owner →
+            result ≠ q.owner →
+              result ≠ guard →
+                have filtered := R1Z.PV_OWNC_SourceLoop.run keep (q.length - q.read) q;
+                have guarded := R1Z.PV_OWNC_GuardState.handoff filtered guard;
+                have returned := R1Z.PV_OWNC_GuardState.handoff guarded result;
+                R1Z.PV_OWNB_Cursor.Valid returned ∧ returned.token = q.token ∧ returned.memory.slots guard = none :=
+fun q keep h guard result ge re gs rs rg =>
+  id
+    (have hi := R1Z.PV_OWNC_SourceIdentity.loop keep (q.length - q.read) q;
+    have hf := (R1Z.PV_OWNC_SourceLoop.completed keep q h).left;
+    let filtered := R1Z.PV_OWNC_SourceLoop.run keep (q.length - q.read) q;
+    have hge := Eq.mpr (id (congrArg (fun _a => _a guard = none) hi.right.right.left)) ge;
+    have hgs := Eq.mpr (id (congrArg (fun _a => guard ≠ _a) hi.left)) gs;
+    have hg := R1Z.PV_OWNC_GuardValid.valid filtered hf guard hge hgs;
+    have hrs := Eq.mpr (id (congrArg (fun _a => result ≠ _a) hi.left)) rs;
+    have hfe := Eq.mpr (id (congrArg (fun _a => _a result = none) hi.right.right.left)) re;
+    have hre :=
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg Eq
+              (ite_congr (eq_false hrs) (fun a => Eq.refl none) fun a =>
+                ite_congr (eq_false rg) (fun a => Eq.refl (some filtered.token)) fun a =>
+                  Eq.refl (filtered.memory.slots result)))
+            none))
+        hfe;
+    ⟨R1Z.PV_OWNC_GuardValid.valid (R1Z.PV_OWNC_GuardState.handoff filtered guard) hg result hre rg,
+      ⟨hi.right.left,
+        R1Z.PV_OWNC_GuardTransfer.source_consumed (R1Z.PV_OWNC_GuardState.handoff filtered guard) result⟩⟩)
+'R1Z.PV_OWNC_InPlaceResult.guarded' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNC_GuardCleanup.original_layout : ∀ {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (q : R1Z.PV_OWNB_Cursor.Cursor),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    ∀ (s : S) (x : X),
+      q.cell.size ≠ 0 →
+        (R1Z.PV_OWNC_GuardCleanup.destination dealloc q { memory := q.memory, allocator := s, extra := x }).calls =
+          [({ memory := R1Z.PV_OWN_Operations.take q.owner q.memory, allocator := s, extra := x },
+              R1Z.PV_OWN_Operations.Event.deallocate q.token.address q.cell.size q.cell.alignment)] :=
+fun {S X E} dealloc q h s x nz => id (R1Z.PV_OWNB_CursorCleanup.positive dealloc q h s x nz)
+'R1Z.PV_OWNC_GuardCleanup.original_layout' depends on axioms: [propext]
+theorem R1Z.PV_OWNC_LinkPush.forest : ∀ (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link)
+  (xs : List R1Z.PV_OWN_Link.Link),
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec b →
+    b.length = 64 →
+      b.capacity = 254 →
+        xs.length = 72 →
+          R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec
+              (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs) ∧
+            (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs).length = 136 ∧
+              (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNB_LinkCodec.codec b xs).capacity = 254 :=
+fun b xs h len cap count =>
+  ⟨R1Z.PV_OWNC_PushFold.valid R1Z.PV_OWNB_LinkCodec.codec b xs h
+      (Decidable.byContradiction fun a => R1Z.PV_OWNC_LinkPush.forest._proof_1 b xs len cap count a) fun x i z hi =>
+      R1Z.PV_OWNB_LinkBound.bounded x i z hi,
+    ⟨Eq.mpr (id (congrArg (fun _a => _a = 136) (R1Z.PV_OWNC_PushFold.length R1Z.PV_OWNB_LinkCodec.codec b xs)))
+        (Eq.mpr (id (congrArg (fun _a => _a + xs.length = 136) len))
+          (Eq.mpr (id (congrArg (fun _a => 64 + _a = 136) count)) (Eq.refl (64 + 72)))),
+      Eq.mpr (id (congrArg (fun _a => _a = 254) (R1Z.PV_OWNC_PushFold.capacity R1Z.PV_OWNB_LinkCodec.codec b xs)))
+        (Eq.mpr (id (congrArg (fun _a => _a = 254) cap)) (Eq.refl 254))⟩⟩
+'R1Z.PV_OWNC_LinkPush.forest' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNC_FlatMap.initialized : ∀ (b : R1Z.PV_OWNC_Vector.Buffer UInt16) (xs : List R1Z.PV_OWN_Link.Link),
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWN_U16.codec b →
+    b.length = 0 →
+      b.capacity = 272 →
+        xs.length = 136 →
+          R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWN_U16.codec
+              (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs)) ∧
+            (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs)).length = 272 :=
+fun b xs h empty cap n =>
+  have len :=
+    Eq.mpr (id (congrArg (fun _a => _a = 272) (R1Z.PV_OWNC_FlatMap.count xs)))
+      (Eq.mpr (id (congrArg (fun _a => 2 * _a = 272) n)) (Eq.refl (2 * 136)));
+  ⟨R1Z.PV_OWNC_PushFold.valid R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs) h
+      (Decidable.byContradiction fun a => R1Z.PV_OWNC_FlatMap.initialized._proof_1 b xs empty cap len a)
+      R1Z.PV_OWNC_FlatMap.u16_bound,
+    Eq.mpr
+      (id
+        (congrArg (fun _a => _a = 272)
+          (R1Z.PV_OWNC_PushFold.length R1Z.PV_OWN_U16.codec b (R1Z.PV_OWNC_FlatMap.rows xs))))
+      (Eq.mpr (id (congrArg (fun _a => _a + (R1Z.PV_OWNC_FlatMap.rows xs).length = 272) empty))
+        (Eq.mpr (id (congrArg (fun _a => 0 + _a = 272) len)) (Eq.refl (0 + 272))))⟩
+'R1Z.PV_OWNC_FlatMap.initialized' depends on axioms: [propext, Quot.sound]
+theorem R1Z.PV_OWNC_CursorVector.initialized : ∀ (q : R1Z.PV_OWNB_Cursor.Cursor),
+  R1Z.PV_OWNB_Cursor.Valid q →
+    R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec (R1Z.PV_OWNC_CursorVector.vector q) :=
+fun q h =>
+  ⟨h.left,
+    ⟨h.right.left,
+      ⟨h.right.right.left,
+        ⟨id (Decidable.byContradiction fun a => R1Z.PV_OWNC_CursorVector.initialized._proof_1 q h a),
+          h.right.right.right.right.right.right.right⟩⟩⟩⟩
+'R1Z.PV_OWNC_CursorVector.initialized' depends on axioms: [propext, Quot.sound]

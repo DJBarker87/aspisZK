@@ -1,0 +1,41 @@
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:25:63: error: unsolved goals
+q : Cursor
+keep : Link → Bool
+h : Valid q
+guard result : Nat
+ge : q.memory.slots guard = none
+re : q.memory.slots result = none
+gs : guard ≠ q.owner
+rs : result ≠ q.owner
+rg : result ≠ guard
+hi :
+  (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).owner = q.owner ∧
+    (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).token = q.token ∧
+      (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).memory.slots = q.memory.slots ∧
+        (PV_OWNC_SourceLoop.run keep (q.length - q.read) q).memory.generations = q.memory.generations
+hf : Valid (PV_OWNC_SourceLoop.run keep (q.length - q.read) q)
+filtered : Cursor := PV_OWNC_SourceLoop.run keep (q.length - q.read) q
+hge : filtered.memory.slots guard = none
+hgs : guard ≠ filtered.owner
+hg : Valid (handoff filtered guard)
+hrs : result ≠ filtered.owner
+⊢ filtered.memory.slots result = none
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:27:16: warning: This simp argument is unused:
+  hi.2.2.1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵a̵n̵d̵o̵f̵f̵,̵m̵o̵v̵e̵,̵h̵r̵s̵,̵
+  ̵ ̵ ̵ ̵r̵g̵,̵i̵t̵e̵_̵f̵a̵l̵s̵e̵,̵h̵i̵.̵2̵.̵2̵.̵1̵,̵r̵e̵]̵[̲h̲a̲n̲d̲o̲f̲f̲,̲ ̲m̲o̲v̲e̲,̲ ̲h̲r̲s̲,̲ ̲r̲g̲,̲ ̲i̲t̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲r̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean:27:25: warning: This simp argument is unused:
+  re
+
+Hint: Omit it from the simp argument list.
+  simp only [handoff, ̲move, ̲hrs,
+  ̵  ̵ ̵rg, ̲ite_false, ̲hi.2.2.1,̵r̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWNC_InPlaceResult.guarded' depends on axioms: [propext, sorryAx, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62878/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62878/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_InPlaceResult.olean", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_InPlaceResult.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:00.20", "peak_rss_kib": "485068", "swap": "0", "source_revision": "327f1acdeb4d81425ed35fbebc2523e0f93db392", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

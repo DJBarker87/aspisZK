@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_LinkGrowth.lean:15:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_OWN_Growth.grownCell c newSize cap).contents (s + i)
+in the target expression
+  (fun i => (PV_OWN_Growth.grownCell c newSize cap).contents (s + i)) i = some z
+
+c : Cell
+newSize cap s : Nat
+v : PV_OWN_Link.Link
+h : NativeView c s v
+grow : c.size ≤ newSize
+i : Nat
+z : UInt8
+hi : PV_OWNB_LinkBytes.encode v i = some z
+bound : i < 8
+inside : s + i < c.size
+⊢ (fun i => (PV_OWN_Growth.grownCell c newSize cap).contents (s + i)) i = some z
+'R1Z.PV_OWNC_LinkGrowth.represented' depends on axioms: [propext, sorryAx]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62891/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-62891/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-objects/R1Z/PV_OWNC_LinkGrowth.olean", "/home/dombarker/project-offloads/codex-pv-ownc-20261029/lean-sources/R1Z/PV_OWNC_LinkGrowth.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:00.18", "peak_rss_kib": "488000", "swap": "0", "source_revision": "fe33b05d0a7004da005ffd7df0b0a7358853ceff", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

@@ -1,0 +1,1 @@
+These drafts were not submitted under the development budget and receive no proof credit. The final replay may separately compose the checked CursorVector and InPlaceResult roots; that does not credit the draft file.
