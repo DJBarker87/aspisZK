@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2]; E=R/'evidence/pv-ownc-20261029'
 D='/home/dombarker/project-offloads/codex-pv-ownc-20261029'; H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);m=sys.argv[2];assert 62800<=n<=62899
 assert n<62897 or any(x in m for x in ['Audit','Replay'])
-assert m.startswith(('R1Z/PV_OWNC_','R1Z/PV_OWNB_','R1Z/PV_OWN_','R1Z/PV_W_','R1Z/PV_RDB2C_PV_RDB1_'))
+assert m.startswith(('R1Z/PV_OWNC_','R1Z/PV_OWNB_','R1Z/PV_OWN_','R1Z/PV_W_','R1Z/PV_RDB2C_PV_RDB1_','R1Z/PV_RDB2D_'))
 assert json.loads((E/'external-verification.json').read_text())['ok']
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');b=p.read_bytes()
 assert b==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])

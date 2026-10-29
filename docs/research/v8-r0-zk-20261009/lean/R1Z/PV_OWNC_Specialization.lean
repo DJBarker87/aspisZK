@@ -13,8 +13,7 @@ def needsRealloc (srcSize dstSize srcAlign dstAlign srcCap dstCap : Nat) : Bool 
 
 theorem selected : collectible 8 8 2 2 1 1=true := by decide
 
-theorem no_shrink (cap : Nat) : needsRealloc 8 8 2 2 cap cap=false := by
- simp only [needsRealloc]; rfl
+theorem no_shrink (cap : Nat) : needsRealloc 8 8 2 2 cap cap=false := rfl
 
 theorem capacity_bytes (cap : Nat) : cap*8/8=cap := by omega
 #print axioms selected

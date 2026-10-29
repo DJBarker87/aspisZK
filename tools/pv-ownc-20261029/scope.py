@@ -10,7 +10,7 @@ D='/home/dombarker/project-offloads/codex-pv-ownc-20261029'
 H='dombarker@100.108.41.90'
 G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 name,phase,*cmd=sys.argv[1:]
-for f in E.glob('*/admission-*.json'):
+for f in E.glob('**/admission-*.json'):
  try:
   a=json.loads(f.read_text())
   if a.get('allowed') is False:
@@ -46,6 +46,9 @@ if r.returncode==255:
  print('SSH 255 after scope submission; waiting 60s then collecting read-only',flush=True);time.sleep(60)
 for f in ['admission-launch.json','reservation-launch.log','admission-barrier.json','output.log','time.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
+launch=json.loads((out/'admission-launch.json').read_text())
+if launch.get('allowed') is not True:
+ print('UNCHARGED LAUNCH REFUSAL',launch.get('utc'));sys.exit(78)
 bar=json.loads((out/'admission-barrier.json').read_text())
 if bar.get('allowed') is not True:
  print('UNCHARGED BARRIER REFUSAL',{k:bar.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)

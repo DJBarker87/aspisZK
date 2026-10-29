@@ -1,0 +1,194 @@
+{
+  "source_revision": "4526a4fd4c13ab03d720298be8bf65e127006a40",
+  "ruling": "own-1 D429",
+  "compiler_boundary": "V370 D381/D386 retained",
+  "scope": "partial source coverage preflight, not complete structural (K-1 substitute) gate",
+  "pins": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/in_place_collect.rs",
+      "sha256": "4d3bb7a31de144bcb7470b371c5643f0739466c731f11cd7924e1fc951932c4b",
+      "actual": "4d3bb7a31de144bcb7470b371c5643f0739466c731f11cd7924e1fc951932c4b",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/in_place_drop.rs",
+      "sha256": "39613702ced1246a9e3195d91b9228888d2dd3fcb33a54e862f08619272a1968",
+      "actual": "39613702ced1246a9e3195d91b9228888d2dd3fcb33a54e862f08619272a1968",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/into_iter.rs",
+      "sha256": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "actual": "cd31180b395f914d4707b9b9a1a450b1ca8676ccccdbc75410f96756d2db801a",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/filter.rs",
+      "sha256": "b400a7c52019b96ca4097c3fc66dfbf3703992d2ed45e6d4e1e07d45a877007b",
+      "actual": "b400a7c52019b96ca4097c3fc66dfbf3703992d2ed45e6d4e1e07d45a877007b",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/flatten.rs",
+      "sha256": "2a2184f32ef8e80ce07da324abc07d2c0d0386161f3cba5c60faa2d872905367",
+      "actual": "2a2184f32ef8e80ce07da324abc07d2c0d0386161f3cba5c60faa2d872905367",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/spec_from_iter.rs",
+      "sha256": "584c9018149f930b5cd56ca3ba7a7d70f48583b2dfc32b243926a6ae4cb10566",
+      "actual": "584c9018149f930b5cd56ca3ba7a7d70f48583b2dfc32b243926a6ae4cb10566",
+      "ok": true
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/spec_from_iter_nested.rs",
+      "sha256": "f3c1a06f43734a65e102b6a107e2fd5adadd7d94d9a226d6ffe1610d1e7e1466",
+      "actual": "f3c1a06f43734a65e102b6a107e2fd5adadd7d94d9a226d6ffe1610d1e7e1466",
+      "ok": true
+    }
+  ],
+  "items": [
+    {
+      "file": "into_iter.rs",
+      "start_line": 214,
+      "end_line": 232,
+      "sha256": "2e3e2bfb61458fa0a1fe1369e8021dcf52424c30c4a519ad813ed89e31595683",
+      "text": "fn next(&mut self) -> Option<T> {\n        let ptr = if T::IS_ZST {\n            if self.ptr.as_ptr() == self.end as *mut T {\n                return None;\n            }\n            // `ptr` has to stay where it is to remain aligned, so we reduce the length by 1 by\n            // reducing the `end`.\n            self.end = self.end.wrapping_byte_sub(1);\n            self.ptr\n        } else {\n            if self.ptr == non_null!(self.end, T) {\n                return None;\n            }\n            let old = self.ptr;\n            self.ptr = unsafe { old.add(1) };\n            old\n        };\n        Some(unsafe { ptr.read() })\n    }",
+      "ordered_source_statements": [
+        "if T::IS_ZST",
+        "if self.ptr == non_null!(self.end, T)",
+        "let old = self.ptr",
+        "self.ptr = unsafe { old.add(1) }",
+        "Some(unsafe { ptr.read() })"
+      ],
+      "model_laws": [
+        "PV_OWNC_SourceIterator.available",
+        "PV_OWNC_SourceIterator.exhausted",
+        "PV_OWNC_ReadPointer.advance_pointer"
+      ],
+      "differences": [
+        "ZST branch unreachable for Link size8; symbolic indices use byte address base+8*read; active-byte representation inherited ownb, compiler layout retained"
+      ],
+      "status": "partial symbolic binding; final compile/audit required"
+    },
+    {
+      "file": "into_iter.rs",
+      "start_line": 335,
+      "end_line": 361,
+      "sha256": "d31bf0113104f214de74f2fdf8b34de917148d191a62344686db5f2bbe6f36bd",
+      "text": "fn try_fold<B, F, R>(&mut self, mut accum: B, mut f: F) -> R\n    where\n        Self: Sized,\n        F: FnMut(B, Self::Item) -> R,\n        R: core::ops::Try<Output = B>,\n    {\n        if T::IS_ZST {\n            while self.ptr.as_ptr() != self.end.cast_mut() {\n                // SAFETY: we just checked that `self.ptr` is in bounds.\n                let tmp = unsafe { self.ptr.read() };\n                // See `next` for why we subtract from `end` here.\n                self.end = self.end.wrapping_byte_sub(1);\n                accum = f(accum, tmp)?;\n            }\n        } else {\n            // SAFETY: `self.end` can only be null if `T` is a ZST.\n            while self.ptr != non_null!(self.end, T) {\n                // SAFETY: we just checked that `self.ptr` is in bounds.\n                let tmp = unsafe { self.ptr.read() };\n                // SAFETY: the maximum this can be is `self.end`.\n                // Increment `self.ptr` first to avoid double dropping in the event of a panic.\n                self.ptr = unsafe { self.ptr.add(1) };\n                accum = f(accum, tmp)?;\n            }\n        }\n        R::from_output(accum)\n    }",
+      "ordered_source_statements": [
+        "if T::IS_ZST",
+        "while self.ptr != non_null!(self.end, T)",
+        "let tmp = unsafe { self.ptr.read() }",
+        "self.ptr = unsafe { self.ptr.add(1) }",
+        "accum = f(accum, tmp)?",
+        "R::from_output(accum)"
+      ],
+      "model_laws": [
+        "PV_OWNC_FoldSource.step_binding",
+        "PV_OWNC_SourceLoop.snapshot_binding",
+        "PV_OWNC_SourceLoop.completed"
+      ],
+      "differences": [
+        "Generic ? branch is specialized to total path filter plus Result<_,!> sink; predicate-panic cleanup must be reviewed independently; no Result/world equality for the whole callback follows"
+      ],
+      "status": "partial symbolic binding; final compile/audit required"
+    },
+    {
+      "file": "into_iter.rs",
+      "start_line": 144,
+      "end_line": 160,
+      "sha256": "d9f2e694f5b89d6e763f735e2a8bb38274b956ed280bdce4230aa2088eb1cecd",
+      "text": "pub(super) fn forget_allocation_drop_remaining(&mut self) {\n        let remaining = self.as_raw_mut_slice();\n\n        // overwrite the individual fields instead of creating a new\n        // struct and then overwriting &mut self.\n        // this creates less assembly\n        self.cap = 0;\n        self.buf = RawVec::new().non_null();\n        self.ptr = self.buf;\n        self.end = self.buf.as_ptr();\n\n        // Dropping the remaining elements can panic, so this needs to be\n        // done only after updating the other fields.\n        unsafe {\n            ptr::drop_in_place(remaining);\n        }\n    }",
+      "ordered_source_statements": [
+        "let remaining = self.as_raw_mut_slice()",
+        "self.cap = 0",
+        "self.buf = RawVec::new().non_null()",
+        "self.ptr = self.buf",
+        "self.end = self.buf.as_ptr()",
+        "ptr::drop_in_place(remaining)"
+      ],
+      "model_laws": [
+        "PV_OWNC_HeaderStores.cap",
+        "PV_OWNC_HeaderStores.buf",
+        "PV_OWNC_HeaderStores.ptr",
+        "PV_OWNC_HeaderStores.endPtr",
+        "PV_OWNC_SourceDetached.reset_no_free"
+      ],
+      "differences": [
+        "Dangling aligned Link pointer represented by2; pointer identity becomes unobservable once header has cap0 and no live slice; saved tail is Link POD; this does not permit omitting non-POD destruction"
+      ],
+      "status": "partial symbolic binding; final compile/audit required"
+    },
+    {
+      "file": "in_place_drop.rs",
+      "start_line": 22,
+      "end_line": 26,
+      "sha256": "4292147eafa78aeb6b8e3afba8391450c8bf386af43fcea8590fe116d4005059",
+      "text": "fn drop(&mut self) {\n        unsafe {\n            ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.inner, self.len()));\n        }\n    }",
+      "ordered_source_statements": [
+        "ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.inner, self.len()))"
+      ],
+      "model_laws": [
+        "PV_OWNC_GuardCleanup.prefix_empty"
+      ],
+      "differences": [
+        "No runtime destructor event for Link POD; source drop invocation is retained as a logical control-flow stage"
+      ],
+      "status": "partial symbolic binding; final compile/audit required"
+    },
+    {
+      "file": "in_place_drop.rs",
+      "start_line": 39,
+      "end_line": 48,
+      "sha256": "97a865f83358d6770d48099a592e0870101d85a6d861a17d227dcbc8e026e06d",
+      "text": "impl<Src, Dest> Drop for InPlaceDstDataSrcBufDrop<Src, Dest> {\n    #[inline]\n    fn drop(&mut self) {\n        unsafe {\n            let _drop_allocation =\n                RawVec::<Src>::from_nonnull_in(self.ptr.cast::<Src>(), self.src_cap, Global);\n            drop_in_place(core::ptr::slice_from_raw_parts_mut::<Dest>(self.ptr.as_ptr(), self.len));\n        };\n    }\n}",
+      "ordered_source_statements": [
+        "let _drop_allocation",
+        "RawVec::<Src>::from_nonnull_in",
+        "drop_in_place(core::ptr::slice_from_raw_parts_mut::<Dest>"
+      ],
+      "model_laws": [
+        "PV_OWNC_GuardCleanup.original_layout",
+        "PV_OWNC_GuardTransfer.owned",
+        "PV_OWNC_GuardReturn.returned_valid"
+      ],
+      "differences": [
+        "RawVec allocation guard deallocates original source layout after POD prefix; generic panicking element branches not instantiated for Link"
+      ],
+      "status": "partial symbolic binding; final compile/audit required"
+    }
+  ],
+  "unclosed": [
+    {
+      "stage": "full source carrier",
+      "missing": "bind typed source Link fields to the padding-aware representation; compiler-chosen layout evidence stays reclassification at retained V370 D381/D386, not a machine-code correspondence task"
+    },
+    {
+      "stage": "filter loop and guards",
+      "missing": "compose guard state, saved tail, unwind and byte filtering into one complete Result/world source instance"
+    },
+    {
+      "stage": "translation",
+      "missing": "bind every producer/consumer mutation and checked endpoint branch into full Link representation"
+    },
+    {
+      "stage": "reserve and pushes",
+      "missing": "instantiate realloc prefix/ownership transport and all 72 initialized pushes"
+    },
+    {
+      "stage": "FlatMap collect",
+      "missing": "TrustedLen destination array iterator initialization, source teardown and separate allocation association"
+    },
+    {
+      "stage": "sort/dedup",
+      "missing": "bind every in-place permutation/dedup move, initialized length and POD tail drop"
+    },
+    {
+      "stage": "consumption",
+      "missing": "compose full byte/world source instance with PV_RDB2D_CollectorProgram.complete and full value law"
+    }
+  ],
+  "whole_row_restored": false
+}
