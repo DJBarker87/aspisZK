@@ -1,7 +1,7 @@
 import R1Z.PV_RunJoin_ArrayUpdatePrefix50
 import R1Z.PV_RunJoin_Vector44
 import R1Z.PV_RunJoin_ResultMap50
-import R1Z.PV_RunJoin_MergeLoop35
+import R1Z.ProverCommitPairCounter47
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_PrefixFold50
 open Aeneas Aeneas.Std Result
@@ -43,7 +43,7 @@ theorem complete {A B : Type} (f : A → B) (cell : Usize → Result A)
       rw [hprefix,List.length_map,List.length_take,a.property]
       change min row.val 1024=row.val
       omega
-    have inc := PV_RunJoin_MergeLoop35.increment row (by omega)
+    have inc := ProverCommitPairCounter47.next_val row (by omega)
     cases result : cell row with
     | fail e => simp only [vecRun,arrayRun,result,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_fail]
     | div => simp only [vecRun,arrayRun,result,mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_div]

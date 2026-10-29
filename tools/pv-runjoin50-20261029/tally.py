@@ -3,7 +3,7 @@ from pathlib import Path
 import json,subprocess,hashlib,re,datetime
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin50-20261029'
 receipts=sorted((json.loads(p.read_text()) for p in E.glob('receipt-*.json')),key=lambda x:x['attempt'])
-assert len(receipts)<=100 and all(62900<=x['attempt']<=62999 for x in receipts)
+assert len(receipts)<=100 and all(63600<=x['attempt']<=63699 for x in receipts)
 assert all(x['completed_modules']==1 for x in receipts)
 assert all(x['swaps']==0 for x in receipts)
 mods=[v for p in sorted(E.glob('modules-*.json')) for v in json.loads(p.read_text())]
@@ -26,8 +26,8 @@ intervals.sort();overlap=[(a[2],b[2]) for a,b in zip(intervals,intervals[1:]) if
 tally=dict(attempts=len(receipts),accepted=sum(x['accepted'] for x in receipts),rejected=sum(not x['accepted'] for x in receipts),kani=0,attempt_ids=[x['attempt'] for x in receipts],rows_removed=0,endpoint_fields_removed=0,endpoint_fields_added=0,endpoint_fields_changed=0,all_accepted_printed_axioms_standard=True,peak_rss_bytes=max((x['peak_rss_bytes'] for x in receipts),default=0),all_swaps_zero=True,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True,cwd=R).strip())
 accepted_modules={v['module'] for v in mods if v['accepted']}
 new={m for m in accepted_modules if m.startswith('R1Z.PV_RunJoin_') and m.endswith('50')}
-audit_ids=[62997,62998,62999]
-tally.update(new_source_modules=len([m for m in new if 'Audit49' not in m]),new_audits=len([m for m in new if 'Audit49' in m]),inherited_prerequisites=len(accepted_modules-new),audit_ids=audit_ids,all_audits_passed=all(any(x['attempt']==a and x['accepted'] for x in receipts) for a in audit_ids),reservation_refusals=len(list(E.glob('refusal-*.json'))),scan_races=sum('error' in json.loads(p.read_text()) for p in E.glob('refusal-*.json')),stop='100-attempt Lean budget exhausted' if len(receipts)==100 else None,formal_release_replay=False,new_native_credit=False)
+audit_ids=[63697,63698,63699]
+tally.update(new_source_modules=len([m for m in new if 'Audit50' not in m]),new_audits=len([m for m in new if 'Audit50' in m]),inherited_prerequisites=len(accepted_modules-new),audit_ids=audit_ids,all_audits_passed=all(any(x['attempt']==a and x['accepted'] for x in receipts) for a in audit_ids),reservation_refusals=len(list(E.glob('refusal-*.json'))),scan_races=sum('error' in json.loads(p.read_text()) for p in E.glob('refusal-*.json')),stop='100-attempt Lean budget exhausted' if len(receipts)==100 else None,formal_release_replay=False,new_native_credit=False)
 (E/'final-tally.json').write_text(json.dumps(tally,indent=2)+'\n')
-(E/'commits.txt').write_text(subprocess.check_output(['git','log','--oneline','526c933b84..HEAD'],cwd=R,text=True))
+(E/'commits.txt').write_text(subprocess.check_output(['git','log','--oneline','e8fb711bc5..HEAD'],cwd=R,text=True))
 print(json.dumps(tally))

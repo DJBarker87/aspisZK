@@ -2,7 +2,7 @@
 from pathlib import Path
 import json,subprocess,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin50-20261029'
-base='526c933b848822a20acaa120c214d052bbb55ac2';head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
+base='e8fb711bc52fad638e0b7d85d86a9170791210e0';head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip()
 x=json.loads((R/'evidence/pv-runjoin41-20261028/endpoint-boundaries-unchanged.json').read_text());checks=[]
 for p in x['paths']:
  before=subprocess.check_output(['git','show',base+':'+p],cwd=R);after=subprocess.check_output(['git','show',head+':'+p],cwd=R)
