@@ -1,3 +1,4 @@
+import PV_B3P_IndexSteps9227
 import PV_B3P_BindBranch12227
 import PV_B3P_MatrixModel10227
 import PV_B3P_UsizeLoop9227
@@ -38,8 +39,8 @@ theorem three_loop12 {α : Type} (step : α → Usize → Result α) (state : α
       let s1 ← step s0 1#usize
       step s1 2#usize) := by
   rw [usize_loop_plan step 3#usize 0#usize 3 state (by scalar_tac)]
-  have h01 : Usize.wrapping_add 0#usize 1#usize = 1#usize := rfl
-  have h12 : Usize.wrapping_add 1#usize 1#usize = 2#usize := rfl
+  have h01 : Usize.wrapping_add 0#usize 1#usize = 1#usize := next_exact _ _ rfl
+  have h12 : Usize.wrapping_add 1#usize 1#usize = 2#usize := next_exact _ _ rfl
   simp only [usize_plan,h01,h12,PV_B3P_Ordered227.bind_assoc,bind_tc_ok,bind_return12]
 
 def source_component12 (left right : Channels12) (component : Usize) (sums : Matrix3x3) : Result Matrix3x3 :=
