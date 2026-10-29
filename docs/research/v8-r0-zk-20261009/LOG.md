@@ -14411,3 +14411,15 @@ A deployed-layout probe passed 67,086 active-field cases without reading padding
 Ruling own-1 (in pv-common.txt): for a class-B row, a standard-library or dependency body, "native association" means a statement-by-statement structural binding ((k')) of the deployed source body (rust-src 1.94.1 or the deployed dependency version) onto the model. That covers every control-flow step, store, drop-glue call and error or abort branch. The step from that source to machine code is the existing compiler-preservation obligation (V370) at the owner's pending D381/D386 boundary, named and retained. Machine-code correspondence is not required to restore such a row and is never silently assumed. This matches how the pv-rdb1, pv-rdb2 and pv-rdcd restorations were classed (structural, K-1 substitute), and it stops "native association" from becoming an open-ended target.
 
 pv-ownc continues in the same sparse worktree on branch codex/pv-ownc-20261029 (IDs 62800-62899; 100 Lean, 40 native, 0 Kani). It binds the rest of the deployed in-place collector source under own-1 and composes it with the rdb2d resource law to restore V229. Then come V230, V239 and V178's cleanup half; the diagnostic half stays with pv-diag2. Rows removed: 0. Privacy target not yet established.
+
+## D430 (Stream B) 2026-10-29 01:06 UTC: runjoin48 results; runjoin49 launched
+
+runjoin48 (head 526c933b84, pushed) used all 100 Lean attempts (77 accepted, 23 rejected; 0 Kani). All three reserved audits passed with standard axioms only. Lead review: no forbidden constructs or limit options; protected prefixes untouched; no large files. It proved the following:
+- PrepareClaims48, the claim and inactive producer substitution inside the actual prepare source, with the produced weights object, its S2 variant, state, arbitrary Box Result and input-dependent materializer;
+- ClaimVector48, ClaimInstalled48 and ClaimLength48, with the successful 29-column claim length 928;
+- InactiveRun48, InactiveInstalled48 and InactiveModel48, which identify the inactive sum with Batched.ell by symbolic induction;
+- PrepareTailAssociation48.complete, covering the first round, c0 bytes and fold transport.
+
+Two installations remain explicitly incoming, not proved: the backend messages association (hinput) and the op79 and op254 dictionary installations. The complete opening-model equation, FinishContext, publication composition and the upstream backend association remain open. Rows removed: 0.
+
+runjoin49 launched (IDs 62900-62999; 100 Lean, 0 Kani) per OPENING-NEXT.md, starting with PrepareTailAssociation48.retained, then the tag-29 scalar association, FinishContext and the publication bytes. For each incoming installation it must record whether it is discharged in step (2) or by the deployed caller in step (4), and discharge every one that belongs to step (2). Privacy target not yet established.
