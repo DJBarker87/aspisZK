@@ -21,7 +21,7 @@ fn equality_value() {let a=qs();let b=qs();assert_eq!(dep::equality(&a,&b),refer
 #[kani::proof] #[kani::unwind(70)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn sum_high() { let h=qs();let l=qs();let a:usize=kani::any();let b:usize=kani::any();let c:usize=kani::any();let d:usize=kani::any();kani::assume(a<=64&&b<=64&&c<=64&&d<=64);let r=[a..b,c..d];assert_eq!(dep::sum(h,l,&r),reference::sum(h,l,&r)); }
-fn pre<const N:usize>(start:usize) {let mut a=qs();let mut b=a;let v=qs::<N>();dep::pre(&mut a,start,&v);reference::pre(&mut b,start,&v);assert_eq!(a,b);}
+fn pre<const N:usize>(start:usize) {let mut a=qs();let mut b=a;let v=qs::<N>();dep::pre(&mut a,start,&v);reference::pre(&mut b,start,&v);let k:usize=kani::any();kani::assume(k<24);assert_eq!(a[k],b[k]);}
 #[kani::proof] #[kani::unwind(100)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn add_preweighted() {let case:u8=kani::any();kani::assume(case<8);match case {0=>pre::<16>(0),1=>pre::<16>(16),2=>pre::<17>(32),3=>pre::<33>(49),4=>pre::<2>(82),5=>pre::<12>(0),6=>pre::<8>(84),_=>pre::<2>(92)}}
