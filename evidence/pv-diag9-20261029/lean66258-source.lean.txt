@@ -1,0 +1,63 @@
+import PV_DIAG9_Frames
+set_option autoImplicit false
+namespace PV_DIAG9
+/-! Public invocation criterion for dynamic formatting and stateful logging.
+Operands, site, stack and logger state are explicit; option B supplies configuration
+and outcomes, never witness operands or captured PCs. This is not a native instance. -/
+structure DiagnosticCall where
+ site : Nat
+ operands : List String
+ frames : Stack
+ level : Nat
+ deriving DecidableEq
+structure DiagnosticReply where
+ delivered : List String
+ nextState : Nat
+ failed : Bool
+ deriving DecidableEq
+def operandLengths (c : DiagnosticCall) := c.operands.map (fun x => x.utf8ByteSize)
+def dispatchCalls {Cfg : Type} (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) : Nat → List DiagnosticCall → List DiagnosticReply × Nat
+ | state,[] => ([],state)
+ | state,c::cs =>
+   let r := dispatch cfg state c
+   let tail := dispatchCalls dispatch cfg r.nextState cs
+   (r::tail.1,tail.2)
+theorem format_operands_transport {O : Type} (render : List String → O)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) : render a.operands=render b.operands :=
+ congrArg render h
+#print axioms format_operands_transport
+theorem format_operand_byte_lengths (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ operandLengths a=operandLengths b := congrArg (List.map (fun x : String => x.utf8ByteSize)) h
+#print axioms format_operand_byte_lengths
+theorem formatter_capacity_transport (capacity : List Nat → Nat)
+ (a b : DiagnosticCall) (h : a.operands=b.operands) :
+ capacity (operandLengths a)=capacity (operandLengths b) :=
+ congrArg capacity (format_operand_byte_lengths a b h)
+#print axioms formatter_capacity_transport
+theorem formatter_effects_transport {Cfg O : Type}
+ (render : Cfg → DiagnosticCall → O) (cfg : Cfg) (a b : DiagnosticCall) (h : a=b) :
+ render cfg a=render cfg b := congrArg (render cfg) h
+#print axioms formatter_effects_transport
+theorem returned_error_callsite_frames (site level : Nat) (ops : List String)
+ (a b : LivePath) (f g : Nat) (s : Stack) :
+ (DiagnosticCall.mk site ops (pathRun (.call f a) s).2 level) =
+ (DiagnosticCall.mk site ops (pathRun (.call g b) s).2 level) := by
+ rw [normal_return_restores,normal_return_restores]
+#print axioms returned_error_callsite_frames
+theorem logger_same_invocation {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) (state : Nat) (a b : DiagnosticCall) (h : a=b) :
+ dispatch cfg state a=dispatch cfg state b := congrArg (dispatch cfg state) h
+#print axioms logger_same_invocation
+theorem logger_same_public_state {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply)
+ (cfg : Cfg) (s t : Nat) (h : s=t) (c : DiagnosticCall) :
+ dispatch cfg s c=dispatch cfg t c := by cases h; rfl
+#print axioms logger_same_public_state
+theorem logger_trace_transport {Cfg : Type}
+ (dispatch : Cfg → Nat → DiagnosticCall → DiagnosticReply) (cfg : Cfg)
+ (s t : Nat) (a b : List DiagnosticCall) (hs : s=t) (hc : a=b) :
+ dispatchCalls dispatch cfg s a=dispatchCalls dispatch cfg t b := by cases hs; cases hc; rfl
+#print axioms logger_trace_transport
+end PV_DIAG9

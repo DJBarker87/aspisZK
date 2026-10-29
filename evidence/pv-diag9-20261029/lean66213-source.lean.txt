@@ -1,0 +1,23 @@
+import PV_DIAG9_Result
+import R1Z.PV_RunJoin_CanonicalHonest31
+import R1Z.PV_RunJoin_HonestIdentification26
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result
+open R1Z R1Z.PV_RunJoin_HonestIdentification26
+local notation "E" => R1Z.PV_RunJoin_ShippedExternal.E_shipped
+local notation "R" => R1Z.PV_RunJoin_UniversalRecords22.shipped
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+ [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+/-- Complete Result, all modelled panic branches of this compiler invocation. -/
+theorem honest_compiler_no_panic (i : Honest (K := K)) :
+ @PV_Src_NativeInput.run E R (inputs i) ≠ .fail .panic :=
+ ok_excludes_panic (PV_RunJoin_HonestIdentification26.success i)
+#print axioms honest_compiler_no_panic
+theorem honest_compiler_no_divergence (i : Honest (K := K)) :
+ @PV_Src_NativeInput.run E R (inputs i) ≠ .div :=
+ ok_excludes_div (PV_RunJoin_HonestIdentification26.success i)
+#print axioms honest_compiler_no_divergence
+end PV_DIAG9

@@ -1,0 +1,38 @@
+'PV_DIAG9.normal_return_restores' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-diag9-20261029/sources/PV_DIAG9_Frames.lean:43:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (pathRun ?path ?s).2
+in the target expression
+  (have a := pathRun (LivePath.call f body) s;
+      have b := pathRun (LivePath.capture enabled) a.2;
+      (a.1 ++ b.1, b.2)).1 =
+    (match body, f :: s with
+        | LivePath.done, s => ([], s)
+        | LivePath.capture enabled, s => (if enabled = true then [s] else [], s)
+        | first.seq second, s =>
+          have a := pathRun first s;
+          have b := pathRun second a.2;
+          (a.1 ++ b.1, b.2)
+        | LivePath.call f body, s =>
+          have a := pathRun body (f :: s);
+          (a.1, List.tail a.2)).1 ++
+      if enabled = true then [s] else []
+
+body : LivePath
+f : ℕ
+s : Stack
+enabled : Bool
+⊢ (have a := pathRun (LivePath.call f body) s;
+      have b := pathRun (LivePath.capture enabled) a.2;
+      (a.1 ++ b.1, b.2)).1 =
+    (match body, f :: s with
+        | LivePath.done, s => ([], s)
+        | LivePath.capture enabled, s => (if enabled = true then [s] else [], s)
+        | first.seq second, s =>
+          have a := pathRun first s;
+          have b := pathRun second a.2;
+          (a.1 ++ b.1, b.2)
+        | LivePath.call f body, s =>
+          have a := pathRun body (f :: s);
+          (a.1, List.tail a.2)).1 ++
+      if enabled = true then [s] else []
+'PV_DIAG9.caller_capture_after_return' depends on axioms: [sorryAx]

@@ -1,0 +1,28 @@
+import PV_DIAG9_Honest
+import PV_DIAG9_Retry
+import R1Z.ProverRwRetryModel
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result R1Z
+theorem map_result_panic_reflection {A B : Type} (f : A → B) (r : Result A)
+ (h : ProverCommitSemanticTransport26.mapR f r ≠ .fail .panic) : r ≠ .fail .panic := by
+ intro hr; apply h; rw [hr]; rfl
+#print axioms map_result_panic_reflection
+theorem extracted_retry_no_panic [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+ {C : Type} (entropy : ProverRwRetryModel.Entropy C)
+ (pub : ProverRwRetryModel.Pub) (compiled : ProverRwRetryModel.Compiled)
+ (variant : ProverRwFull.transport.Variant) (hash : ProverRwRetryModel.Hash)
+ (store : ProverRwRetryModel.Store) (callback : C)
+ (k : Usize) (n : Nat) (bound : k.val+n=8)
+ (attemptLaw : ∀ index state, ∃ out,
+  ProverRwRetryModel.attempt entropy pub compiled variant hash index state=.ok out) :
+ ProverRwFull.prover.retry_attempt entropy pub compiled variant hash store callback k ≠ .fail .panic := by
+ apply map_result_panic_reflection ProverRwRetryModel.sourceOutput
+ rw [ProverRwRetryModel.retry entropy pub compiled variant hash store callback k n bound]
+ obtain ⟨out,ho⟩ := retry_terminates (ProverRwRetryModel.attempt entropy pub compiled variant hash)
+  attemptLaw n k.val (callback,store)
+ rw [ho]
+ exact ok_excludes_panic rfl
+#print axioms extracted_retry_no_panic
+end PV_DIAG9

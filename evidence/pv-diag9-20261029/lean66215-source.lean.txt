@@ -1,0 +1,42 @@
+import PV_DIAG9_Result
+import R1Z.PV_RunJoin_CanonicalHonest31
+import R1Z.PV_RunJoin_HonestIdentification26
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG9
+open Aeneas Aeneas.Std Result
+open R1Z R1Z.PV_RunJoin_HonestIdentification26
+local notation "E" => R1Z.PV_RunJoin_ShippedExternal.E_shipped
+local notation "R" => R1Z.PV_RunJoin_UniversalRecords22.shipped
+variable {K : Type} [Field K] [Fintype K] [DecidableEq K]
+ [Algebra (ZMod AspisCircleGroupOrder.P) K] [CharP K 2147483647]
+
+/-- Complete Result, all modelled panic branches of this compiler invocation. -/
+theorem honest_compiler_no_panic (i : Honest (K := K)) :
+ @PV_Src_NativeInput.run E R (inputs i) ≠ .fail .panic :=
+ ok_excludes_panic (PV_RunJoin_HonestIdentification26.success i)
+#print axioms honest_compiler_no_panic
+theorem honest_compiler_no_divergence (i : Honest (K := K)) :
+ @PV_Src_NativeInput.run E R (inputs i) ≠ .div :=
+ ok_excludes_div (PV_RunJoin_HonestIdentification26.success i)
+#print axioms honest_compiler_no_divergence
+theorem honest_compiler_no_outer_error (i : Honest (K := K)) (e : Error) :
+ @PV_Src_NativeInput.run E R (inputs i) ≠ .fail e :=
+ ok_excludes_failure (PV_RunJoin_HonestIdentification26.success i) e
+#print axioms honest_compiler_no_outer_error
+theorem canonical_transfer_no_panic (bytes : Slice U8) (p : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1)
+    (w : pool_v1.pair_forest_trace.PoolV1PairForestPrivateTransferWitnessV1)
+    (context : pool_v1.payment_relation.PoolV1PaymentRelationContextV1)
+    (snapshot : PV_RunJoin_CodecOuter30.Snapshot)
+    (c : pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)
+    (h : PV_RunJoin_CodecOuter30.run bytes
+      (pool_v1.pair_forest_trace.compile_pool_v1_pair_forest_private_transfer_merged_c1_v1 p w context) = ok (.Ok (snapshot,c))) :
+    ∃ root,  pool_v1.pair_forest_trace.lane_root w.input.pair = ok (.Ok root) ∧
+      PV_RunJoin_ConsumerBoundary25.HonestInput (K := K)
+        (PV_RunJoin_OuterChecked30.transferInput p w root (PV_RunJoin_CodecOuter30.snapshot snapshot) c) ∧
+      @PV_Src_NativeInput.run E R
+        (PV_RunJoin_OuterChecked30.transferInput p w root (PV_RunJoin_CodecOuter30.snapshot snapshot) c) ≠ .fail .panic := by
+  obtain ⟨root,hr,hi⟩ := PV_RunJoin_CanonicalHonest31.transfer (K := K) bytes p w context snapshot c h
+  exact ⟨root,hr,hi,ok_excludes_panic hi.2.1⟩
+#print axioms canonical_transfer_no_panic
+end PV_DIAG9
