@@ -1,0 +1,44 @@
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_OptionEquality.lean:45:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  source_eq ?left ?right
+in the target expression
+  (match Body.option_ne with
+      | Body.option_eq => source_eq
+      | Body.option_ne => fun left right => do
+        let same ← source_eq left right
+        Result.ok !same)
+      left right =
+    (match Body.option_ne with
+      | Body.option_eq => model_eq
+      | Body.option_ne => fun left right => do
+        let same ← model_eq left right
+        Result.ok !same)
+      left right
+
+case option_ne
+left right : Option U64
+⊢ (match Body.option_ne with
+      | Body.option_eq => source_eq
+      | Body.option_ne => fun left right => do
+        let same ← source_eq left right
+        Result.ok !same)
+      left right =
+    (match Body.option_ne with
+      | Body.option_eq => model_eq
+      | Body.option_ne => fun left right => do
+        let same ← model_eq left right
+        Result.ok !same)
+      left right
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun _ => source_eq
+  has type
+    Unit → Option U64 → Option U64 → Result Bool
+  but is expected to have type
+    Unit → Signature Body.option_eq
+  in the application
+    source.match_1 (fun x => Signature x) Body.option_ne fun _ => source_eq
+'PV_B3Q_OptionEquality.eq_binding' depends on axioms: [propext]
+'PV_B3Q_OptionEquality.ne_binding' does not depend on any axioms
+'PV_B3Q_OptionEquality.option_links' depends on axioms: [propext, sorryAx, Quot.sound]

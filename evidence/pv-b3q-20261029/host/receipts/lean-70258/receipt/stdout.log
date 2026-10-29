@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_MatrixFrame.lean:19:23: error: Type mismatch: After simplification, term
+  bound
+ has type
+  @LT.lt ℕ instLTNat (↑row) 3
+but is expected to have type
+  @LT.lt ℕ instLTNat ↑row ↑3#usize
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_MatrixFrame.lean:27:42: error: Application type mismatch: The argument
+  hc
+has type
+  ↑column < 3
+but is expected to have type
+  ↑column < ↑?m.26
+in the application
+  PV_B3P_ArrayWrite227.borrow ?m.27 column hc
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_MatrixFrame.lean:23:98: error: unsolved goals
+sums : Matrix14
+row column : Usize
+value : U64
+hr : ↑row < 3
+hc : ↑column < 3
+⊢ (do
+      let __x ← (↑sums)[↑row].index_mut_usize column
+      Result.ok (Std.Array.set sums row (__x.2 value))) =
+    Result.ok (Std.Array.set sums row ((row_at sums row hr).set column value))
+'PV_B3Q_MatrixFrame.read_set_same' depends on axioms: [propext]
+'PV_B3Q_MatrixFrame.read_set_other' depends on axioms: [propext]
+'PV_B3Q_MatrixFrame.complete_store' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_MatrixFrame.other_row' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_MatrixFrame.other_channel' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_MatrixFrame.link_and_target' depends on axioms: [propext, Classical.choice, Quot.sound]

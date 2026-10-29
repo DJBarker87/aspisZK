@@ -1,0 +1,107 @@
+'PV_B3Q_CompareActual.primitive_comparison_links' depends on axioms: [propext, Quot.sound]
+def Aeneas.Std.WP.spec.{u_1} : {α : Type u_1} → Result α → WP.Post α → WP.Pre :=
+fun {α} x p => WP.theta x p
+theorem Aeneas.Std.core.slice.cmp.PartialEqSlice.eq_homo_spec : ∀ {α : Type} (partialEq : core.cmp.PartialEq α α)
+  (s1 s2 : Slice α),
+  (∀ (x y : α), partialEq.ne x y ⦃ b => b = true ↔ ¬x = y ⦄) →
+    core.slice.cmp.PartialEqSlice.eq partialEq s1 s2 ⦃ b => b = true ↔ s1 = s2 ⦄ :=
+fun {α} partialEq s1 s2 hNe =>
+  id
+    (if hlen : s1.length = s2.length then
+      Eq.mpr
+        (id
+          (congrFun'
+            (congrArg WP.spec
+              (ite_cond_eq_true
+                (List.allM
+                  (fun x =>
+                    match x with
+                    | (x, y) => do
+                      let b ← partialEq.ne x y
+                      Result.ok (decide ¬b = true))
+                  ((↑s1).zip ↑s2))
+                (Result.ok false) (Eq.trans (congrFun' (congrArg Eq hlen) s2.length) (eq_self s2.length))))
+            fun b => b = true ↔ s1 = s2))
+        (WP.spec_mono
+          (Aeneas.Std.core.slice.cmp.allM_pairs_eq_spec✝
+            (fun x y => do
+              let b ← partialEq.ne x y
+              Result.ok (decide ¬b = true))
+            (fun x y =>
+              WP.spec_bind (hNe x y) fun b hb =>
+                Eq.mpr (id (Array.to_slice._simp_1 (decide ¬b = true)))
+                  (Bool.casesOn (motive := fun t => b = t → ((decide ¬b = true) = true ↔ x = y)) b
+                    (fun h =>
+                      Eq.ndrec (motive := fun b => (b = true ↔ ¬x = y) → ((decide ¬b = true) = true ↔ x = y))
+                        (fun hb =>
+                          of_eq_true
+                            (Eq.trans
+                              (congr
+                                (congrArg Iff
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (Decidable.decide.congr_simp (¬false = true) True
+                                            (Eq.trans (congrArg Not Bool.false_eq_true) not_false_eq_true))
+                                          (decide_true instDecidableTrue)))
+                                      true)
+                                    (eq_self true)))
+                                (Eq.trans
+                                  (congrFun'
+                                    (congrArg Eq
+                                      (id
+                                        (Eq.mp
+                                          (Eq.trans
+                                            (Eq.trans (congrFun' (congrArg Iff Bool.false_eq_true) ¬x = y)
+                                              (false_iff ¬x = y))
+                                            Classical.not_not._simp_1)
+                                          hb)))
+                                    y)
+                                  (eq_self y)))
+                              (iff_self True)))
+                        (Eq.symm h) hb)
+                    (fun h =>
+                      Eq.ndrec (motive := fun b => (b = true ↔ ¬x = y) → ((decide ¬b = true) = true ↔ x = y))
+                        (fun hb =>
+                          of_eq_true
+                            (Eq.trans
+                              (congr
+                                (congrArg Iff
+                                  (Eq.trans
+                                    (congrFun'
+                                      (congrArg Eq
+                                        (Eq.trans
+                                          (Decidable.decide.congr_simp (¬true = true) False
+                                            (Eq.trans (congrArg Not (eq_self true)) not_true_eq_false))
+                                          (decide_false instDecidableFalse)))
+                                      true)
+                                    Bool.false_eq_true))
+                                (eq_false
+                                  (id
+                                    (Eq.mp (Eq.trans (congrFun' (congrArg Iff (eq_self true)) ¬x = y) (true_iff ¬x = y))
+                                      hb))))
+                              (iff_self False)))
+                        (Eq.symm h) hb)
+                    (Eq.refl b)))
+            (↑s1) (↑s2) hlen)
+          fun b hb => Eq.mpr (id (congrArg (fun _a => b = true ↔ _a) (propext (Slice.eq_iff s1 s2)))) hb)
+    else
+      Eq.mpr
+        (id
+          (Eq.trans
+            (congrFun'
+              (congrArg WP.spec
+                (ite_cond_eq_false
+                  (List.allM
+                    (fun x =>
+                      match x with
+                      | (x, y) => do
+                        let b ← partialEq.ne x y
+                        Result.ok (decide ¬b = true))
+                    ((↑s1).zip ↑s2))
+                  (Result.ok false) (eq_false hlen)))
+              fun b => b = true ↔ s1 = s2)
+            (Array.to_slice._simp_1 false)))
+        (have hne := fun h => hlen (Eq.mpr (id (congrArg (fun _a => _a.length = s2.length) h)) (Eq.refl s2.length));
+        of_eq_true (Eq.trans (congr (congrArg Iff Bool.false_eq_true) (eq_false hne)) (iff_self False))))

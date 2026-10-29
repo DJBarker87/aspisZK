@@ -1,0 +1,21 @@
+import PV_B3Q_Axioms
+import PV_B3Q_D188Fixture0
+import PV_B3Q_D188Fixture1
+import PV_B3Q_D188Fixture10
+import PV_B3Q_D188Fixture11
+import PV_B3Q_D188Fixture12
+import PV_B3Q_D188Fixture13
+import PV_B3Q_D188Fixture14
+import PV_B3Q_D188Fixture2
+import PV_B3Q_D188Fixture3
+import PV_B3Q_D188Fixture4
+import PV_B3Q_D188Fixture5
+import PV_B3Q_D188Fixture6
+import PV_B3Q_D188Fixture7
+import PV_B3Q_D188Fixture8
+import PV_B3Q_D188Fixture9
+import PV_B3Q_MatrixFixture
+import PV_B3Q_MatrixRawFixture0
+import PV_B3Q_MatrixRawFixture1
+#check PV_B3Q_Combined.joint_scope_witness
+#print axioms PV_B3Q_Combined.joint_scope_witness

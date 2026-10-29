@@ -1,0 +1,54 @@
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_MatrixIntermediate.lean:41:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  fun sums r l => source_accumulate13 sums r l
+in the target expression
+  loop
+      (PV_B3P_Binding9227.usize_body
+        (fun sums index => do
+          let r ← right.index_usize index
+          let l ← (map_array14 to_reference14 left).index_usize index
+          source_accumulate13 sums r l)
+        3#usize)
+      (Array.repeat 3#usize (Array.repeat 3#usize 0#u64), 0#usize) =
+    PV_B3P_Binding9227.usize_plan
+      (fun sums index => do
+        let r ← right.index_usize index
+        let l ← (map_array14 to_reference14 left).index_usize index
+        reference_field.accumulate_prepared227 sums r l)
+      3 0#usize (Array.repeat 3#usize (Array.repeat 3#usize 0#u64))
+
+left : Std.Array NativePrepared14 3#usize
+right : Std.Array aspis_core.field.QM31 3#usize
+terms : native_product_term14 left right = source_product_term13 (map_array14 to_reference14 left) right
+accumulation :
+  (fun sums r l => source_accumulate13 sums r l) = fun sums r l => reference_field.accumulate_prepared227 sums r l
+⊢ loop
+      (PV_B3P_Binding9227.usize_body
+        (fun sums index => do
+          let r ← right.index_usize index
+          let l ← (map_array14 to_reference14 left).index_usize index
+          source_accumulate13 sums r l)
+        3#usize)
+      (Array.repeat 3#usize (Array.repeat 3#usize 0#u64), 0#usize) =
+    PV_B3P_Binding9227.usize_plan
+      (fun sums index => do
+        let r ← right.index_usize index
+        let l ← (map_array14 to_reference14 left).index_usize index
+        reference_field.accumulate_prepared227 sums r l)
+      3 0#usize (Array.repeat 3#usize (Array.repeat 3#usize 0#u64))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (3 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_B3Q_MatrixIntermediate.complete_matrix_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_MatrixIntermediate.all_nine_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_MatrixIntermediate.matrix_link_with_intermediate' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

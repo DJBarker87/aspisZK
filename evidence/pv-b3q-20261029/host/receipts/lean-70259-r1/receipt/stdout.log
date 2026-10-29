@@ -1,0 +1,2160 @@
+Aeneas.Std.core.cmp.EqI64 : Aeneas.Std.core.cmp.Eq Aeneas.Std.I64
+Aeneas.Std.core.cmp.impls.PartialEqI32.ne : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.clone.Clone.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.clone.Clone Self → Sort u} →
+    ((clone : Self → Aeneas.Std.Result Self) →
+        (clone_from : Self → Self → Aeneas.Std.Result Self) → motive { clone := clone, clone_from := clone_from }) →
+      (t : Aeneas.Std.core.clone.Clone Self) → motive t
+Aeneas.Std.core.slice.index.SliceIndex.mk : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.private_slice_index.Sealed Self →
+    (Self → T → Aeneas.Std.Result (Option Output)) →
+      (Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))) →
+        (Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)) →
+          (Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)) →
+            (Self → T → Aeneas.Std.Result Output) →
+              (Self → T → Aeneas.Std.Result (Output × (Output → T))) →
+                Aeneas.Std.core.slice.index.SliceIndex Self T Output
+Aeneas.Std.core.option.Option.unwrap.spec.mvcgen_spec : ∀ {T : Type} (x : Option T),
+  x.isSome = true → ⦃⌜True⌝⦄ Aeneas.Std.core.option.Option.unwrap x ⦃Std.Do.PostCond.noThrow fun r => ⌜x = some r⌝⦄
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize →
+    Aeneas.Std.Slice T →
+      Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × (Option (Aeneas.Std.Slice T) → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.Ord.mk : {Self : Type} →
+  Aeneas.Std.core.cmp.Eq Self →
+    Aeneas.Std.core.cmp.PartialOrd Self Self →
+      (Self → Self → Aeneas.Std.Result Ordering) →
+        (Self → Self → Aeneas.Std.Result Self) →
+          (Self → Self → Aeneas.Std.Result Self) →
+            (Self → Self → Self → Aeneas.Std.Result Self) → Aeneas.Std.core.cmp.Ord Self
+Aeneas.Std.core.cmp.OrdU16 : Aeneas.Std.core.cmp.Ord Aeneas.Std.U16
+Aeneas.Std.core.cmp.impls.PartialEqU16.eq : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.cmp.impls.PartialEqU32.eq : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Slice U → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.Slice.split_at_mut._proof_2 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    ∀ (s' : Aeneas.Std.Slice T × Aeneas.Std.Slice T),
+      s'.1.length = (List.splitAt ↑n ↑s).1.length ∧ s'.2.length = (List.splitAt ↑n ↑s).2.length →
+        (↑s'.1 ++ ↑s'.2).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.index.SliceIndex.mk.inj : ∀ {Self T Output : Type}
+  {sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self}
+  {get : Self → T → Aeneas.Std.Result (Option Output)}
+  {get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))}
+  {get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)}
+  {get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)}
+  {index : Self → T → Aeneas.Std.Result Output} {index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))}
+  {sealedInst_1 : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self}
+  {get_1 : Self → T → Aeneas.Std.Result (Option Output)}
+  {get_mut_1 : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))}
+  {get_unchecked_1 : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)}
+  {get_unchecked_mut_1 : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)}
+  {index_1 : Self → T → Aeneas.Std.Result Output} {index_mut_1 : Self → T → Aeneas.Std.Result (Output × (Output → T))},
+  { sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+        get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut } =
+      { sealedInst := sealedInst_1, get := get_1, get_mut := get_mut_1, get_unchecked := get_unchecked_1,
+        get_unchecked_mut := get_unchecked_mut_1, index := index_1, index_mut := index_mut_1 } →
+    sealedInst = sealedInst_1 ∧
+      get = get_1 ∧
+        get_mut = get_mut_1 ∧
+          get_unchecked = get_unchecked_1 ∧
+            get_unchecked_mut = get_unchecked_mut_1 ∧ index = index_1 ∧ index_mut = index_mut_1
+Aeneas.Std.core.slice.index.private_slice_index.SealedRangeUsize : Aeneas.Std.core.slice.index.private_slice_index.Sealed
+  (Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+Aeneas.Std.core.cmp.impls.PartialEqU128.eq : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.cmp.PartialEq._sizeOf_inst : (Self Rhs : Type) →
+  [SizeOf Self] → [SizeOf Rhs] → SizeOf (Aeneas.Std.core.cmp.PartialEq Self Rhs)
+Aeneas.Std.core.cmp.Ord.min.trait_default_U128.spec : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU128 x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdU128.min x y
+Aeneas.Std.core.option.Option.unwrap_or.eq_1 : ∀ {T : Type u_1} (default : T),
+  Aeneas.Std.core.option.Option.unwrap_or none default = default
+Aeneas.Std.core.cmp.Eq.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.cmp.Eq Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.cmp.Eq Self'} → Self = Self' → t ≍ t' → Aeneas.Std.core.cmp.Eq.noConfusionType P t t'
+Aeneas.Std.core.slice.Slice.split_at_mut._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ (↑s).length →
+    ∀ (s' : Aeneas.Std.Slice T × Aeneas.Std.Slice T),
+      (↑s).length ≤ Aeneas.Std.Usize.max →
+        (↑s'.1).length = min (↑n) (↑s).length ∧ (↑s'.2).length = (↑s).length - ↑n →
+          min (↑n) (↑s).length = min (↑s).length ↑n → ¬(↑s'.1).length + (↑s'.2).length ≤ Aeneas.Std.Usize.max → False
+Aeneas.Std.core.cmp.Ord.min.trait_default_Usize.spec : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdUsize x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdUsize.min x y
+Aeneas.Std.core.cmp.impls.PartialOrdU64.gt : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T →
+      Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × (Option (Aeneas.Std.Slice T) → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.PartialEqShared.eq : {A B : Type} →
+  Aeneas.Std.core.cmp.PartialEq A B → A → B → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.iter.IterMut.noConfusionType : Sort u →
+  {T : Type} → Aeneas.Std.core.slice.iter.IterMut T → {T' : Type} → Aeneas.Std.core.slice.iter.IterMut T' → Sort u
+Aeneas.Std.core.slice.iter.ChunksExact.remainder : {T : Type} →
+  Aeneas.Std.core.slice.iter.ChunksExact T → Aeneas.Std.Slice T
+Aeneas.Std.core.slice.Slice.swap_spec.match_4 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (s1 : Aeneas.Std.Slice T)
+  (motive : (∃ y, s1.update b (↑s)[↑a] = Aeneas.Std.Result.ok y ∧ y = s1.set b (↑s)[↑a]) → Prop)
+  (x : ∃ y, s1.update b (↑s)[↑a] = Aeneas.Std.Result.ok y ∧ y = s1.set b (↑s)[↑a]),
+  (∀ (s' : Aeneas.Std.Slice T) (hs' : s1.update b (↑s)[↑a] = Aeneas.Std.Result.ok s' ∧ s' = s1.set b (↑s)[↑a]),
+      motive ⋯) →
+    motive x
+Aeneas.Std.core.cmp.PartialOrd.ctorIdx : {Self Rhs : Type} → Aeneas.Std.core.cmp.PartialOrd Self Rhs → ℕ
+Aeneas.Std.core.slice.Slice.chunks_exact : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.core.slice.iter.ChunksExact T)
+Aeneas.Std.core.slice.iter.IterMut.mk : {T : Type} → Aeneas.Std.Slice T → ℕ → Aeneas.Std.core.slice.iter.IterMut T
+Aeneas.Std.core.cmp.PartialOrdU64 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.U64 Aeneas.Std.U64
+Aeneas.Std.core.cmp.impls.OrdU16.min.eq_1 : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.core.cmp.impls.OrdU16.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.impls.OrdI16.cmp : Aeneas.Std.I16 → Aeneas.Std.I16 → Ordering
+Aeneas.Std.core.cmp.Eq.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Eq Self → Sort u} →
+    (t : Aeneas.Std.core.cmp.Eq Self) →
+      ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self) →
+          (assert_fields_are_eq : Self → Aeneas.Std.Result Unit) →
+            motive { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq }) →
+        motive t
+Aeneas.Std.core.cmp.impls.OrdU16.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.U16), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.chunks_exact.match_1 : {T : Type} →
+  (result : List (List T) × List T) →
+    (motive : { x // x ∈ result.1 } → Sort u_1) →
+      (x : { x // x ∈ result.1 }) → ((c : List T) → (hc : c ∈ result.1) → motive ⟨c, hc⟩) → motive x
+Aeneas.Std.core.cmp.PartialOrdI8 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.I8 Aeneas.Std.I8
+Aeneas.Std.core.cmp.Ord.mk._flat_ctor : {Self : Type} →
+  Aeneas.Std.core.cmp.Eq Self →
+    Aeneas.Std.core.cmp.PartialOrd Self Self →
+      (Self → Self → Aeneas.Std.Result Ordering) →
+        (Self → Self → Aeneas.Std.Result Self) →
+          (Self → Self → Aeneas.Std.Result Self) →
+            (Self → Self → Self → Aeneas.Std.Result Self) → Aeneas.Std.core.cmp.Ord Self
+Aeneas.Std.core.slice.index.SliceIndex.mk.sizeOf_spec : ∀ {Self T Output : Type} [inst : SizeOf Self]
+  [inst_1 : SizeOf T] [inst_2 : SizeOf Output]
+  (sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self)
+  (get : Self → T → Aeneas.Std.Result (Option Output))
+  (get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T)))
+  (get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output))
+  (get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output))
+  (index : Self → T → Aeneas.Std.Result Output) (index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))),
+  sizeOf
+      { sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+        get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut } =
+    1 + sizeOf sealedInst
+Aeneas.Std.core.cmp.impls.OrdU64.min_val : ∀ (x y : Aeneas.Std.U64),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU64.min x y) = min ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut r s =
+    if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+      Aeneas.Std.Result.ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.impls.PartialOrdI8.le : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.gt : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.cmp.impls.OrdI32.cmp : Aeneas.Std.I32 → Aeneas.Std.I32 → Ordering
+Aeneas.Std.core.cmp.impls.OrdU32.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.U32), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.swap_spec._proof_4 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize),
+  ↑a < s.length → ↑a = ↑b → ↑b < (↑s).length
+Aeneas.Std.core.cmp.EqI32 : Aeneas.Std.core.cmp.Eq Aeneas.Std.I32
+Aeneas.Std.core.slice.iter.ChunksExact.recOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.ChunksExact T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.ChunksExact T) →
+      ((chunks : List (Aeneas.Std.Slice T)) →
+          (remainder : Aeneas.Std.Slice T) → motive { chunks := chunks, remainder := remainder }) →
+        motive t
+Aeneas.Std.core.cmp.impls.PartialOrdI32.lt : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.cmp.impls.OrdUnit.cmp.eq_1 : ∀ (x x_1 : Unit),
+  Aeneas.Std.core.cmp.impls.OrdUnit.cmp x x_1 = Aeneas.Std.Result.ok Ordering.eq
+Aeneas.Std.core.cmp.impls.PartialOrdU32.lt : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.cmp.impls.OrdU32.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.U32), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index r s =
+    if r.start ≤ r.end ∧ ↑r.end ≤ s.length then Aeneas.Std.Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.impls.OrdU8.min.step_spec : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU8.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU8.min x y
+Aeneas.Std.core.cmp.PartialEq.recOn : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialEq Self Rhs → Sort u} →
+    (t : Aeneas.Std.core.cmp.PartialEq Self Rhs) →
+      ((eq ne : Self → Rhs → Aeneas.Std.Result Bool) → motive { eq := eq, ne := ne }) → motive t
+Aeneas.Std.core.slice.cmp.PartialEqSlice.eq_homo_spec : ∀ {α : Type} (partialEq : Aeneas.Std.core.cmp.PartialEq α α)
+  (s1 s2 : Aeneas.Std.Slice α),
+  (∀ (x y : α), Aeneas.Std.WP.spec (partialEq.ne x y) fun b => b = true ↔ ¬x = y) →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.cmp.PartialEqSlice.eq partialEq s1 s2) fun b => b = true ↔ s1 = s2
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut r s =
+    if ↑r.start ≤ s.length then
+      have s1 := s.drop r.start;
+      Aeneas.Std.Result.ok (s1, fun s2 => ⟨(↑s).setSlice! ↑r.start ↑s2, ⋯⟩)
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.PartialOrd.noConfusionType : Sort u →
+  {Self Rhs : Type} →
+    Aeneas.Std.core.cmp.PartialOrd Self Rhs → {Self' Rhs' : Type} → Aeneas.Std.core.cmp.PartialOrd Self' Rhs' → Sort u
+Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.slice.iter.IterMut T × (Aeneas.Std.core.slice.iter.IterMut T → Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Option (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdI8.max.eq_1 : ∀ (x y : Aeneas.Std.I8),
+  Aeneas.Std.core.cmp.impls.OrdI8.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.OrdU8.min_val : ∀ (x y : Aeneas.Std.U8),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU8.min x y) = min ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndex.recOn : {Self T Output : Type} →
+  {motive : Aeneas.Std.core.slice.index.SliceIndex Self T Output → Sort u} →
+    (t : Aeneas.Std.core.slice.index.SliceIndex Self T Output) →
+      ((sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) →
+          (get : Self → T → Aeneas.Std.Result (Option Output)) →
+            (get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))) →
+              (get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)) →
+                (get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)) →
+                  (index : Self → T → Aeneas.Std.Result Output) →
+                    (index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))) →
+                      motive
+                        { sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+                          get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut }) →
+        motive t
+Aeneas.Std.core.cmp.PartialOrdIsize : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.Isize Aeneas.Std.Isize
+Aeneas.Std.core.cmp.impls.PartialOrdU128.lt : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.cmp.OrdIsize : Aeneas.Std.core.cmp.Ord Aeneas.Std.Isize
+Aeneas.Std.core.clone.impls.CloneUsize.clone : Aeneas.Std.Usize → Aeneas.Std.Usize
+Aeneas.Std.core.slice.iter.IterMut.slice : {T : Type} → Aeneas.Std.core.slice.iter.IterMut T → Aeneas.Std.Slice T
+Aeneas.Std.core.cmp.impls.OrdUsize.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.Usize), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.OrdI32.min : Aeneas.Std.I32 → Aeneas.Std.I32 → Aeneas.Std.I32
+Aeneas.Std.core.cmp.impls.OrdI64.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.I64), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdI64.max.eq_1 : ∀ (x y : Aeneas.Std.I64),
+  Aeneas.Std.core.cmp.impls.OrdI64.max x y = if x < y then y else x
+Aeneas.Std.core.clone.impls.CloneI32.clone : Aeneas.Std.I32 → Aeneas.Std.I32
+Aeneas.Std.core.option.Option.is_none : {T : Type} → Option T → Bool
+Aeneas.Std.core.cmp.impls.OrdIsize.clamp : Aeneas.Std.Isize →
+  Aeneas.Std.Isize → Aeneas.Std.Isize → Aeneas.Std.Result Aeneas.Std.Isize
+Aeneas.Std.core.cmp.impls.OrdU16.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.U16), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdIsize.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.Isize), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.PartialOrdI32.le : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.cmp.impls.OrdUsize.min : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize
+Aeneas.Std.core.cmp.impls.OrdIsize.min.eq_1 : ∀ (x y : Aeneas.Std.Isize),
+  Aeneas.Std.core.cmp.impls.OrdIsize.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.impls.OrdU8.max : Aeneas.Std.U8 → Aeneas.Std.U8 → Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.OrdI8.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I8),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI8.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI8.min x y⌝⦄
+Aeneas.Std.core.cmp.Ord.clamp : {Self : Type} →
+  Aeneas.Std.core.cmp.Ord Self → Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.OrdU8.min._simp_1 : ∀ {α : Type u_1} {p : Aeneas.Std.WP.Post α} (x : α),
+  Aeneas.Std.WP.spec (Aeneas.Std.Result.ok x) p = p x
+Aeneas.Std.core.cmp.impls.OrdIsize.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.Isize),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdIsize.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdIsize.min x y⌝⦄
+Aeneas.Std.core.cmp.PartialOrd.ge_body : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.Slice.split_at._proof_3 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  (List.splitAt ↑n ↑s).1.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.clone.impls.CloneI16.clone : Aeneas.Std.I16 → Aeneas.Std.I16
+Aeneas.Std.core.cmp.impls.OrdU8.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.U8), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.clone.impls.CloneU16.clone : Aeneas.Std.U16 → Aeneas.Std.U16
+Aeneas.Std.core.slice.iter.ChunksExact.mk : {T : Type} →
+  List (Aeneas.Std.Slice T) → Aeneas.Std.Slice T → Aeneas.Std.core.slice.iter.ChunksExact T
+Aeneas.Std.core.cmp.PartialOrd.mk.sizeOf_spec : ∀ {Self Rhs : Type} [inst : SizeOf Self] [inst_1 : SizeOf Rhs]
+  (partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs)
+  (partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)) (lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool),
+  sizeOf { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt, ge := ge } =
+    1 + sizeOf partialEqInst
+Aeneas.Std.core.cmp.PartialEqI128 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.I128 Aeneas.Std.I128
+Aeneas.Std.core.cmp.PartialOrd : Type → Type → Type
+Aeneas.Std.core.cmp.impls.OrdI16.min.step_spec : ∀ (x y : Aeneas.Std.I16),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI16.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI16.min x y
+Aeneas.Std.core.cmp.impls.PartialOrdI64.ge : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.cmp.PartialEqI8 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.I8 Aeneas.Std.I8
+Aeneas.Std.core.slice.iter.IterMut.mk.inj : ∀ {T : Type} {slice : Aeneas.Std.Slice T} {i : ℕ}
+  {slice_1 : Aeneas.Std.Slice T} {i_1 : ℕ},
+  { slice := slice, i := i } = { slice := slice_1, i := i_1 } → slice = slice_1 ∧ i = i_1
+Aeneas.Std.core.cmp.impls.OrdU128.min_val : ∀ (x y : Aeneas.Std.U128),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU128.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.Ord.min.trait_default_U64.spec : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU64 x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdU64.min x y
+Aeneas.Std.core.cmp.impls.OrdU32.min : Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32
+Aeneas.Std.core.cmp.impls.OrdI8.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.I8), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.swap_spec._proof_16 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (hb : ↑b < s.length) (i : ℕ), i + 1 ≤ ((↑s).set (↑a) (↑s)[↑b]).length → i < ((↑s).set (↑a) (↑s)[↑b]).length
+Aeneas.Std.core.cmp.OrdI64 : Aeneas.Std.core.cmp.Ord Aeneas.Std.I64
+Aeneas.Std.core.cmp.impls.OrdU128.min.step_spec : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU128.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU128.min x y
+Aeneas.Std.core.cmp.impls.OrdI64.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.I64), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdU8.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U8),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU8.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU8.max x y⌝⦄
+Aeneas.Std.core.slice.iter.Iter.mk.inj : ∀ {T : Type} {slice : Aeneas.Std.Slice T} {i : ℕ}
+  {slice_1 : Aeneas.Std.Slice T} {i_1 : ℕ},
+  { slice := slice, i := i } = { slice := slice_1, i := i_1 } → slice = slice_1 ∧ i = i_1
+Aeneas.Std.core.clone.CloneU32 : Aeneas.Std.core.clone.Clone Aeneas.Std.U32
+Aeneas.Std.core.slice.Slice.swap_spec._proof_14 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (i : ℕ),
+  i + 1 ≤ (↑s).length → i < (↑s).length
+Aeneas.Std.core.cmp.PartialOrd.recOn : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialOrd Self Rhs → Sort u} →
+    (t : Aeneas.Std.core.cmp.PartialOrd Self Rhs) →
+      ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs) →
+          (partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)) →
+            (lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool) →
+              motive
+                { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt,
+                  ge := ge }) →
+        motive t
+Aeneas.Std.core.slice.Slice.is_empty.eq_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.Slice.is_empty s = Aeneas.Std.Result.ok (decide (s.length = 0))
+Aeneas.Std.core.option.Option.is_some : {T : Type} → Option T → Bool
+Aeneas.Std.core.clone.Clone.ctorIdx : {Self : Type} → Aeneas.Std.core.clone.Clone Self → ℕ
+Aeneas.Std.core.cmp.impls.PartialEqI8.eq : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.cmp.Ord.min.trait_default_U16.spec : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU16 x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdU16.min x y
+Aeneas.Std.core.cmp.impls.OrdI16.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.I16), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdU64.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.U64), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.split_at : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice T × Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.impls.PartialEqIsize.eq : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU128.partial_cmp : Aeneas.Std.U128 → Aeneas.Std.U128 → Option Ordering
+Aeneas.Std.core.slice.Slice.swap_spec._proof_17 : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize) (ha : ↑a < s.length) (hb : ↑b < s.length) (i : ℕ),
+  i ≠ ↑a → i ≠ ↑b → (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a])[i]! = (↑s)[i]!
+Aeneas.Std.core.clone.impls.CloneU8.clone : Aeneas.Std.U8 → Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.OrdU8.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U8),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU8.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU8.min x y⌝⦄
+Aeneas.Std.core.slice.iter.ChunksExact.mk.inj : ∀ {T : Type} {chunks : List (Aeneas.Std.Slice T)}
+  {remainder : Aeneas.Std.Slice T} {chunks_1 : List (Aeneas.Std.Slice T)} {remainder_1 : Aeneas.Std.Slice T},
+  { chunks := chunks, remainder := remainder } = { chunks := chunks_1, remainder := remainder_1 } →
+    chunks = chunks_1 ∧ remainder = remainder_1
+Aeneas.Std.core.cmp.impls.OrdU32.clamp : Aeneas.Std.U32 →
+  Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.Result Aeneas.Std.U32
+Aeneas.Std.core.cmp.impls.PartialOrdU16.le : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.cmp.PartialEq : Type → Type → Type
+Aeneas.Std.core.slice.index.private_slice_index.Sealed._sizeOf_1 : {Self : Type} →
+  [SizeOf Self] → Aeneas.Std.core.slice.index.private_slice_index.Sealed Self → ℕ
+Aeneas.Std.core.slice.iter.IterMut.ctorIdx : {T : Type} → Aeneas.Std.core.slice.iter.IterMut T → ℕ
+Aeneas.Std.core.slice.iter.ChunksExact.ctorIdx : {T : Type} → Aeneas.Std.core.slice.iter.ChunksExact T → ℕ
+Aeneas.Std.core.slice.index.Usize.get_unchecked_mut : {T : Type} →
+  Aeneas.Std.Usize → Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr T)
+Aeneas.Std.core.cmp.PartialEq.ne.default.spec._simp_1_1 : ∀ {α : Type u_1} {p : Aeneas.Std.WP.Post α} (x : α),
+  Aeneas.Std.WP.spec (Aeneas.Std.Result.ok x) p = p x
+Aeneas.Std.core.cmp.OrdI8 : Aeneas.Std.core.cmp.Ord Aeneas.Std.I8
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self'} →
+          Self = Self' → t ≍ t' → Aeneas.Std.core.slice.index.private_slice_index.Sealed.noConfusionType P t t'
+Aeneas.Std.core.slice.Slice.swap_spec._proof_15 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (hb : ↑b < s.length) (i : ℕ),
+  i + 1 ≤ (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length → i < (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length
+Aeneas.Std.core.cmp.impls.OrdU8.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.U8), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdU64.min.eq_1 : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.core.cmp.impls.OrdU64.min x y = if x < y then x else y
+Aeneas.Std.core.clone.impls.CloneI64.clone : Aeneas.Std.I64 → Aeneas.Std.I64
+Aeneas.Std.core.clone.impls.CloneShared.clone : {T : Type} → T → Aeneas.Std.Result T
+Aeneas.Std.core.cmp.impls.OrdI128.cmp : Aeneas.Std.I128 → Aeneas.Std.I128 → Ordering
+Aeneas.Std.core.clone.impls.CloneU16.clone_from : Aeneas.Std.U16 → Aeneas.Std.U16 → Aeneas.Std.U16
+Aeneas.Std.core.cmp.Ord.min.trait_default_U8.spec : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU8 x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdU8.min x y
+Aeneas.Std.core.cmp.PartialOrd.noConfusion : {P : Sort u} →
+  {Self Rhs : Type} →
+    {t : Aeneas.Std.core.cmp.PartialOrd Self Rhs} →
+      {Self' Rhs' : Type} →
+        {t' : Aeneas.Std.core.cmp.PartialOrd Self' Rhs'} →
+          Self = Self' → Rhs = Rhs' → t ≍ t' → Aeneas.Std.core.cmp.PartialOrd.noConfusionType P t t'
+Aeneas.Std.core.cmp.impls.OrdI16.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.I16), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.OrdI8.max : Aeneas.Std.I8 → Aeneas.Std.I8 → Aeneas.Std.I8
+Aeneas.Std.core.option.Option.unwrap.spec : ∀ {T : Type} (x : Option T),
+  x.isSome = true → Aeneas.Std.WP.spec (Aeneas.Std.core.option.Option.unwrap x) fun v => x = some v
+Aeneas.Std.core.cmp.impls.OrdI8.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.I8), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.PartialOrd.le.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.PartialEqShared : {A B : Type} →
+  Aeneas.Std.core.cmp.PartialEq A B → Aeneas.Std.core.cmp.PartialEq A B
+Aeneas.Std.core.slice.index.SliceIndex.sealedInst : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output → Aeneas.Std.core.slice.index.private_slice_index.Sealed Self
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T →
+      Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × (Option (Aeneas.Std.Slice T) → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdUsize.max_val : ∀ (x y : Aeneas.Std.Usize),
+  ↑(Aeneas.Std.core.cmp.impls.OrdUsize.max x y) = max ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.PartialOrdU64.ge : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU128.le : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU64.lt : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.cmp.PartialOrd.ge._default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut.step_spec._proof_2 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    ¬↑r.start ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.Result.ok (⟨List.drop ↑r.start ↑s, ⋯⟩, fun s2 => ⟨(↑s).setSlice! ↑r.start ↑s2, ⋯⟩))
+        (Aeneas.Std.WP.uncurry' fun s1 back =>
+          ↑s1 = List.drop ↑r.start ↑s ∧
+            s1.length = s.length - ↑r.start ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! ↑r.start ↑s')
+Aeneas.Std.core.clone.impls.CloneIsize.clone_from : Aeneas.Std.Isize → Aeneas.Std.Isize → Aeneas.Std.Isize
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.impls.OrdU128.min.eq_1 : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.core.cmp.impls.OrdU128.min x y = if x < y then x else y
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_mut._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s s' : Aeneas.Std.Slice T),
+  ((↑s).setSlice! 0 ↑s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.impls.OrdI64.max.step_spec : ∀ (x y : Aeneas.Std.I64),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI64.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI64.max x y
+Aeneas.Std.core.cmp.PartialEq.ne.trait_default.spec.mvcgen_spec : ∀ {T : Type}
+  (PartialEqInst : Aeneas.Std.core.cmp.PartialEq T T) (self other : T),
+  (Aeneas.Std.WP.spec (PartialEqInst.eq self other) fun b => b = true ↔ self = other) →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.cmp.PartialEq.ne.trait_default PartialEqInst self
+        other ⦃Std.Do.PostCond.noThrow fun r => ⌜r = true ↔ self ≠ other⌝⦄
+Aeneas.Std.core.slice.index.SliceIndex._sizeOf_inst : (Self T Output : Type) →
+  [SizeOf Self] → [SizeOf T] → [SizeOf Output] → SizeOf (Aeneas.Std.core.slice.index.SliceIndex Self T Output)
+Aeneas.Std.core.clone.impls.CloneU64.clone : Aeneas.Std.U64 → Aeneas.Std.U64
+Aeneas.Std.core.slice.Slice.swap_spec.match_3 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (hb : ↑b < s.length) (motive : (∃ y, s.update a (↑s)[↑b] = Aeneas.Std.Result.ok y ∧ y = s.set a (↑s)[↑b]) → Prop)
+  (x : ∃ y, s.update a (↑s)[↑b] = Aeneas.Std.Result.ok y ∧ y = s.set a (↑s)[↑b]),
+  (∀ (s1 : Aeneas.Std.Slice T) (hs1 : s.update a (↑s)[↑b] = Aeneas.Std.Result.ok s1 ∧ s1 = s.set a (↑s)[↑b]),
+      motive ⋯) →
+    motive x
+Aeneas.Std.core.cmp.impls.OrdI32.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I32),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI32.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI32.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdU16.max_val : ∀ (x y : Aeneas.Std.U16),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU16.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdUsize.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.Usize),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdUsize.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdUsize.max x y⌝⦄
+Aeneas.Std.core.cmp.Eq.ctorIdx : {Self : Type} → Aeneas.Std.core.cmp.Eq Self → ℕ
+Aeneas.Std.core.clone.CloneU128 : Aeneas.Std.core.clone.Clone Aeneas.Std.U128
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.PartialOrdI128 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.I128 Aeneas.Std.I128
+Aeneas.Std.core.cmp.impls.OrdI16.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.I16), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.PartialOrdI16.gt : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.cmp.impls.OrdIsize.cmp : Aeneas.Std.Isize → Aeneas.Std.Isize → Ordering
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end →
+    ↑r.end ≤ s.length →
+      ⦃⌜True⌝⦄
+        Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut r
+          s ⦃Std.Do.PostCond.noThrow fun r_1 =>
+          ⌜Aeneas.Std.WP.uncurry'
+              (fun s1 index_mut_back =>
+                ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧
+                  s1.length = ↑r.end - ↑r.start ∧
+                    ∀ (s2 : Aeneas.Std.Slice α), index_mut_back s2 = s.setSlice! ↑r.start ↑s2)
+              r_1⌝⦄
+Aeneas.Std.core.cmp.impls.OrdUsize.min.step_spec : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdUsize.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdUsize.min x y
+Aeneas.Std.core.slice.index.SliceIndex._sizeOf_1 : {Self T Output : Type} →
+  [SizeOf Self] → [SizeOf T] → [SizeOf Output] → Aeneas.Std.core.slice.index.SliceIndex Self T Output → ℕ
+Aeneas.Std.core.cmp.Ord.mk.injEq : ∀ {Self : Type} (eqInst : Aeneas.Std.core.cmp.Eq Self)
+  (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self) (cmp : Self → Self → Aeneas.Std.Result Ordering)
+  (max min : Self → Self → Aeneas.Std.Result Self) (clamp : Self → Self → Self → Aeneas.Std.Result Self)
+  (eqInst_1 : Aeneas.Std.core.cmp.Eq Self) (partialOrdInst_1 : Aeneas.Std.core.cmp.PartialOrd Self Self)
+  (cmp_1 : Self → Self → Aeneas.Std.Result Ordering) (max_1 min_1 : Self → Self → Aeneas.Std.Result Self)
+  (clamp_1 : Self → Self → Self → Aeneas.Std.Result Self),
+  ({ eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min, clamp := clamp } =
+      { eqInst := eqInst_1, partialOrdInst := partialOrdInst_1, cmp := cmp_1, max := max_1, min := min_1,
+        clamp := clamp_1 }) =
+    (eqInst = eqInst_1 ∧ partialOrdInst = partialOrdInst_1 ∧ cmp = cmp_1 ∧ max = max_1 ∧ min = min_1 ∧ clamp = clamp_1)
+Aeneas.Std.core.cmp.Ord.min.trait_default_U128.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U128),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU128 x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU128.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdIsize.min_val : ∀ (x y : Aeneas.Std.Isize),
+  ↑(Aeneas.Std.core.cmp.impls.OrdIsize.min x y) = min ↑x ↑y
+Aeneas.Std.core.clone.impls.CloneU32.clone : Aeneas.Std.U32 → Aeneas.Std.U32
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s s2 : Aeneas.Std.Slice T),
+  ((↑s).setSlice! ↑r.start ↑s2).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T)
+Aeneas.Std.core.slice.index.private_slice_index.Sealed._sizeOf_inst : (Self : Type) →
+  [SizeOf Self] → SizeOf (Aeneas.Std.core.slice.index.private_slice_index.Sealed Self)
+Aeneas.Std.core.cmp.impls.OrdI32.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.I32), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.min : {T : Type} → Aeneas.Std.core.cmp.Ord T → T → T → Aeneas.Std.Result T
+Aeneas.Std.core.cmp.Ord.partialOrdInst : {Self : Type} →
+  Aeneas.Std.core.cmp.Ord Self → Aeneas.Std.core.cmp.PartialOrd Self Self
+Aeneas.Std.core.cmp.PartialOrd.lt.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU64.le : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.cmp.impls.OrdU128.clamp : Aeneas.Std.U128 →
+  Aeneas.Std.U128 → Aeneas.Std.U128 → Aeneas.Std.Result Aeneas.Std.U128
+Aeneas.Std.core.cmp.impls.PartialOrdU8.gt : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.clone.CloneI128 : Aeneas.Std.core.clone.Clone Aeneas.Std.I128
+Aeneas.Std.core.cmp.impls.PartialOrdU8.ge : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.slice.iter.IterMut._sizeOf_inst : (T : Type) →
+  [SizeOf T] → SizeOf (Aeneas.Std.core.slice.iter.IterMut T)
+Aeneas.Std.core.cmp.impls.OrdU32.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U32),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU32.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU32.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdIsize.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.Isize), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.clone.impls.CloneU128.clone : Aeneas.Std.U128 → Aeneas.Std.U128
+Aeneas.Std.core.cmp.PartialOrd.mk._flat_ctor : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs →
+    (Self → Rhs → Aeneas.Std.Result (Option Ordering)) →
+      (Self → Rhs → Aeneas.Std.Result Bool) →
+        (Self → Rhs → Aeneas.Std.Result Bool) →
+          (Self → Rhs → Aeneas.Std.Result Bool) →
+            (Self → Rhs → Aeneas.Std.Result Bool) → Aeneas.Std.core.cmp.PartialOrd Self Rhs
+Aeneas.Std.core.clone.impls.CloneU128.clone_from : Aeneas.Std.U128 → Aeneas.Std.U128 → Aeneas.Std.U128
+Aeneas.Std.core.cmp.impls.OrdI8.min.eq_1 : ∀ (x y : Aeneas.Std.I8),
+  Aeneas.Std.core.cmp.impls.OrdI8.min x y = if x < y then x else y
+Aeneas.Std.core.option.Option.expect.spec : ∀ {T : Type} (x : Option T) (msg : Aeneas.Std.Str),
+  x.isSome = true → Aeneas.Std.WP.spec (Aeneas.Std.core.option.Option.expect x msg) fun v => x = some v
+Aeneas.Std.core.clone.CloneI32 : Aeneas.Std.core.clone.Clone Aeneas.Std.I32
+Aeneas.Std.core.cmp.impls.PartialEqShared.ne : {A B : Type} →
+  Aeneas.Std.core.cmp.PartialEq A B → A → B → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU64.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.U64), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.contains : {T : Type} →
+  Aeneas.Std.core.cmp.PartialEq T T → Aeneas.Std.Slice T → T → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU32.min.eq_1 : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.core.cmp.impls.OrdU32.min x y = if x < y then x else y
+Aeneas.Std.core.slice.Slice.fill._proof_1 : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (s : Aeneas.Std.Slice T) (v : T) (val : List T),
+  List.mapM (fun x => cloneInst.clone v) ↑s = Aeneas.Std.Result.ok val → val.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.PartialOrd.le : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.clone.impls.CloneUsize.clone_from : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize
+Aeneas.Std.core.slice.Slice.swap_spec._proof_10 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize),
+  ↑a < s.length →
+    ∀ (hb : ↑b < s.length) (s1 : Aeneas.Std.Slice T),
+      s.update a (↑s)[↑b] = Aeneas.Std.Result.ok s1 ∧ s1 = s.set a (↑s)[↑b] → ↑a < ((↑s).set (↑a) (↑s)[↑b]).length
+Aeneas.Std.core.cmp.impls.PartialOrdU128.gt : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.slice.iter.Iter.i : {T : Type} → Aeneas.Std.core.slice.iter.Iter T → ℕ
+Aeneas.Std.core.cmp.Ord.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Ord Self → Sort u} →
+    (t : Aeneas.Std.core.cmp.Ord Self) →
+      ((eqInst : Aeneas.Std.core.cmp.Eq Self) →
+          (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self) →
+            (cmp : Self → Self → Aeneas.Std.Result Ordering) →
+              (max min : Self → Self → Aeneas.Std.Result Self) →
+                (clamp : Self → Self → Self → Aeneas.Std.Result Self) →
+                  motive
+                    { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min,
+                      clamp := clamp }) →
+        motive t
+Aeneas.Std.core.cmp.impls.OrdUsize.cmp : Aeneas.Std.Usize → Aeneas.Std.Usize → Ordering
+Aeneas.Std.core.cmp.impls.OrdU64.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.U64), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.PartialEqU64.ne : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.slice.Slice.fill.spec.mvcgen_spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (s : Aeneas.Std.Slice T) (v : T),
+  (Aeneas.Std.WP.spec (cloneInst.clone v) fun v' => v' = v) →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.Slice.fill cloneInst s
+        v ⦃Std.Do.PostCond.noThrow fun r => ⌜r.length = s.length ∧ ↑r = List.replicate s.length v⌝⦄
+Aeneas.Std.core.cmp.Ord.ctorIdx : {Self : Type} → Aeneas.Std.core.cmp.Ord Self → ℕ
+Aeneas.Std.core.cmp.PartialOrd._sizeOf_inst : (Self Rhs : Type) →
+  [SizeOf Self] → [SizeOf Rhs] → SizeOf (Aeneas.Std.core.cmp.PartialOrd Self Rhs)
+Aeneas.Std.core.clone.impls.CloneU8.clone_from : Aeneas.Std.U8 → Aeneas.Std.U8 → Aeneas.Std.U8
+Aeneas.Std.core.cmp.Ord.clamp.default : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) →
+    (Self → Self → Aeneas.Std.Result Bool) →
+      (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self → Sort u} →
+    (t : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) → motive { } → motive t
+Aeneas.Std.core.cmp.impls.OrdU128.max.step_spec : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU128.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU128.max x y
+Aeneas.Std.core.slice.Slice.swap_spec.mvcgen_spec : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize),
+  ↑a < s.length →
+    ↑b < s.length →
+      ⦃⌜True⌝⦄
+        Aeneas.Std.core.slice.Slice.swap s a
+          b ⦃Std.Do.PostCond.noThrow fun r =>
+          ⌜r.length = s.length ∧
+              (↑r)[↑a]! = (↑s)[↑b]! ∧ (↑r)[↑b]! = (↑s)[↑a]! ∧ ∀ (i : ℕ), i ≠ ↑a → i ≠ ↑b → (↑r)[i]! = (↑s)[i]!⌝⦄
+Aeneas.Std.core.cmp.Ord.clamp_body : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) →
+    (Self → Self → Aeneas.Std.Result Bool) →
+      (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.index.SliceIndex.get_mut : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output →
+    Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))
+Aeneas.Std.core.slice.iter.Iter.mk.sizeOf_spec : ∀ {T : Type} [inst : SizeOf T] (slice : Aeneas.Std.Slice T) (i : ℕ),
+  sizeOf { slice := slice, i := i } = 1 + sizeOf slice + sizeOf i
+Aeneas.Std.core.slice.cmp.PartialEqSlice.ne : {T U : Type} →
+  Aeneas.Std.core.cmp.PartialEq T U → Aeneas.Std.Slice T → Aeneas.Std.Slice U → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.iter.Iter._sizeOf_1 : {T : Type} → [SizeOf T] → Aeneas.Std.core.slice.iter.Iter T → ℕ
+Aeneas.Std.core.cmp.OrdUsize : Aeneas.Std.core.cmp.Ord Aeneas.Std.Usize
+Aeneas.Std.core.cmp.impls.OrdI8.cmp : Aeneas.Std.I8 → Aeneas.Std.I8 → Ordering
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.noConfusionType : Sort u →
+  {Self : Type} →
+    Aeneas.Std.core.slice.index.private_slice_index.Sealed Self →
+      {Self' : Type} → Aeneas.Std.core.slice.index.private_slice_index.Sealed Self' → Sort u
+Aeneas.Std.core.cmp.impls.OrdI32.min.eq_1 : ∀ (x y : Aeneas.Std.I32),
+  Aeneas.Std.core.cmp.impls.OrdI32.min x y = if x < y then x else y
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec._proof_3 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end → ↑r.end ≤ s.length → ¬(↑r.start ≤ ↑r.end ∧ ↑r.end ≤ (↑s).length) → False
+Aeneas.Std.core.cmp.impls.OrdU128.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.U128), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdI128.max_val : ∀ (x y : Aeneas.Std.I128),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI128.max x y) = max ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut r
+        s ⦃Std.Do.PostCond.noThrow fun r_1 =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s1 back =>
+              ↑s1 = List.slice 0 ↑r.end ↑s ∧
+                s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! 0 ↑s')
+            r_1⌝⦄
+Aeneas.Std.core.cmp.min.eq_1 : ∀ {T : Type} (OrdInst : Aeneas.Std.core.cmp.Ord T) (x y : T),
+  Aeneas.Std.core.cmp.min OrdInst x y = OrdInst.min x y
+Aeneas.Std.core.cmp.PartialOrd.lt_body : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.OrdU64 : Aeneas.Std.core.cmp.Ord Aeneas.Std.U64
+Aeneas.Std.core.cmp.impls.OrdU64.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U64),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU64.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU64.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdIsize.min : Aeneas.Std.Isize → Aeneas.Std.Isize → Aeneas.Std.Isize
+Aeneas.Std.core.cmp.impls.OrdU32.min_val : ∀ (x y : Aeneas.Std.U32),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU32.min x y) = min ↑x ↑y
+Aeneas.Std.core.slice.iter.ChunksExact.casesOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.ChunksExact T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.ChunksExact T) →
+      ((chunks : List (Aeneas.Std.Slice T)) →
+          (remainder : Aeneas.Std.Slice T) → motive { chunks := chunks, remainder := remainder }) →
+        motive t
+Aeneas.Std.core.cmp.Eq.assert_fields_are_eq.default : {Self : Type} →
+  Aeneas.Std.core.cmp.Eq Self → Self → Aeneas.Std.Result Unit
+Aeneas.Std.core.cmp.impls.PartialOrdU16.gt : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut r s =
+    if ↑r.end ≤ s.length then Aeneas.Std.Result.ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩)
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.impls.OrdU32.max.eq_1 : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.core.cmp.impls.OrdU32.max x y = if x < y then y else x
+Aeneas.Std.core.slice.Slice.get_unchecked_SliceIndexUsizeSlice_spec.mvcgen_spec : ∀ {T : Type} {s : Aeneas.Std.Slice T}
+  {i : Aeneas.Std.Usize} [Inhabited T] (h : ↑i < s.length),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.slice.Slice.get_unchecked (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice T) s
+      i ⦃Std.Do.PostCond.noThrow fun r => ⌜r = s[i]⌝⦄
+Aeneas.Std.core.slice.iter.IterMut.mk.injEq : ∀ {T : Type} (slice : Aeneas.Std.Slice T) (i : ℕ)
+  (slice_1 : Aeneas.Std.Slice T) (i_1 : ℕ),
+  ({ slice := slice, i := i } = { slice := slice_1, i := i_1 }) = (slice = slice_1 ∧ i = i_1)
+Aeneas.Std.core.cmp.impls.OrdIsize.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.Isize), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.Eq.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self]
+  (partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self) (assert_fields_are_eq : Self → Aeneas.Std.Result Unit),
+  sizeOf { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq } = 1 + sizeOf partialEqInst
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec._proof_2 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ ↑r.end ∧ ↑r.end ≤ (↑s).length →
+    ¬min ((↑s).length - ↑r.start) (↑r.end - ↑r.start) = ↑r.end - ↑r.start → False
+Aeneas.Std.core.cmp.impls.OrdU128.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.U128), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.OrdUsize.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.Usize), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdI64.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.I64), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.Slice.get_unchecked_SliceIndexUsizeSlice_spec : ∀ {T : Type} {s : Aeneas.Std.Slice T}
+  {i : Aeneas.Std.Usize} [Inhabited T] (h : ↑i < s.length),
+  Aeneas.Std.WP.spec
+    (Aeneas.Std.core.slice.Slice.get_unchecked (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice T) s i) fun x =>
+    x = s[i]
+Aeneas.Std.core.cmp.PartialOrd.gt : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.Slice.split_at.spec.mvcgen_spec : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.Slice.split_at s
+        n ⦃Std.Do.PostCond.noThrow fun r =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s0 s1 => s0.length = ↑n ∧ s1.length = s.length - ↑n ∧ ↑s0 = List.take ↑n ↑s ∧ ↑s1 = List.drop ↑n ↑s)
+            r⌝⦄
+Aeneas.Std.core.cmp.impls.OrdI32.clamp : Aeneas.Std.I32 →
+  Aeneas.Std.I32 → Aeneas.Std.I32 → Aeneas.Std.Result Aeneas.Std.I32
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_mut.match_1 : {T : Type} →
+  (motive : Option (Aeneas.Std.Slice T) → Sort u_1) →
+    (s' : Option (Aeneas.Std.Slice T)) →
+      (Unit → motive none) → ((s' : Aeneas.Std.Slice T) → motive (some s')) → motive s'
+Aeneas.Std.core.cmp.impls.PartialEqU16.ne : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.slice.index.private_slice_index.SealedRangeToUsize : Aeneas.Std.core.slice.index.private_slice_index.Sealed
+  (Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize)
+Aeneas.Std.core.cmp.impls.PartialOrdI32.partial_cmp : Aeneas.Std.I32 → Aeneas.Std.I32 → Option Ordering
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.step_spec._proof_3 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end →
+    ↑r.end ≤ s.length →
+      ¬(↑r.start ≤ ↑r.end ∧ ↑r.end ≤ (↑s).length) →
+        Aeneas.Std.WP.spec (Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+          (Aeneas.Std.WP.uncurry' fun s1 index_mut_back =>
+            ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧
+              (↑s1).length = ↑r.end - ↑r.start ∧
+                ∀ (s2 : Aeneas.Std.Slice α), index_mut_back s2 = s.setSlice! ↑r.start ↑s2)
+Aeneas.Std.core.cmp.PartialOrd.lt._default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.ctorIdx : {Self : Type} →
+  Aeneas.Std.core.slice.index.private_slice_index.Sealed Self → ℕ
+Aeneas.Std.core.clone.CloneUsize : Aeneas.Std.core.clone.Clone Aeneas.Std.Usize
+Aeneas.Std.core.cmp.OrdI128 : Aeneas.Std.core.cmp.Ord Aeneas.Std.I128
+Aeneas.Std.core.slice.iter.Iter.mk : {T : Type} → Aeneas.Std.Slice T → ℕ → Aeneas.Std.core.slice.iter.Iter T
+Aeneas.Std.core.cmp.PartialEqBool : Aeneas.Std.core.cmp.PartialEq Bool Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut.step_spec._proof_2 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length → ↑r.end ≤ (↑s).length
+Aeneas.Std.core.cmp.PartialOrd.partial_cmp : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Self → Rhs → Aeneas.Std.Result (Option Ordering)
+Aeneas.Std.core.cmp.impls.OrdI8.min.step_spec : ∀ (x y : Aeneas.Std.I8),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI8.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI8.min x y
+Aeneas.Std.core.slice.Slice.swap_spec._proof_13 : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize) (ha : ↑a < s.length) (hb : ↑b < s.length) (s1 : Aeneas.Std.Slice T),
+  s.update a (↑s)[↑b] = Aeneas.Std.Result.ok s1 ∧ s1 = s.set a (↑s)[↑b] →
+    (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a])[↑b]! = (↑s)[↑a]!
+Aeneas.Std.core.cmp.PartialEq.eq : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.option.Option.unwrap_or : {T : Type u_1} → Option T → T → T
+Aeneas.Std.core.cmp.EqU64 : Aeneas.Std.core.cmp.Eq Aeneas.Std.U64
+Aeneas.Std.core.clone.CloneI8 : Aeneas.Std.core.clone.Clone Aeneas.Std.I8
+Aeneas.Std.core.cmp.PartialEqU16 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U16 Aeneas.Std.U16
+Aeneas.Std.core.cmp.impls.OrdI128.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.I128), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdI128.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.I128), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end →
+    ↑r.end ≤ s.length →
+      ⦃⌜True⌝⦄
+        Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index r
+          s ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.slice ↑r.start ↑r.end ↑s ∧ r_1.length = ↑r.end - ↑r.start⌝⦄
+Aeneas.Std.core.cmp.impls.PartialOrdIsize.ge : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.cmp.impls.PartialEqBool.eq : Bool → Bool → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdUsize.min.eq_1 : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.core.cmp.impls.OrdUsize.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.EqU128 : Aeneas.Std.core.cmp.Eq Aeneas.Std.U128
+Aeneas.Std.core.cmp.EqU8 : Aeneas.Std.core.cmp.Eq Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.OrdI16.min : Aeneas.Std.I16 → Aeneas.Std.I16 → Aeneas.Std.I16
+Aeneas.Std.core.slice.iter.ChunksExact.chunks : {T : Type} →
+  Aeneas.Std.core.slice.iter.ChunksExact T → List (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.impls.OrdI64.clamp : Aeneas.Std.I64 →
+  Aeneas.Std.I64 → Aeneas.Std.I64 → Aeneas.Std.Result Aeneas.Std.I64
+Aeneas.Std.core.cmp.Eq.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Eq Self → Sort u} →
+    (t : Aeneas.Std.core.cmp.Eq Self) →
+      ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self) →
+          (assert_fields_are_eq : Self → Aeneas.Std.Result Unit) →
+            motive { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq }) →
+        motive t
+Aeneas.Std.core.clone.impls.CloneI128.clone : Aeneas.Std.I128 → Aeneas.Std.I128
+Aeneas.Std.core.slice.iter.IterMut.casesOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.IterMut T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.IterMut T) →
+      ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) → motive t
+Aeneas.Std.core.cmp.impls.OrdI128.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.I128), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.PartialOrdI128.gt : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.slice.Slice.swap : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut r s)
+      (Aeneas.Std.WP.uncurry' fun s1 back =>
+        ↑s1 = List.drop ↑r.start ↑s ∧
+          s1.length = s.length - ↑r.start ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! ↑r.start ↑s')
+Aeneas.Std.core.slice.iter.IteratorChunksExact.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.ChunksExact T →
+    Aeneas.Std.Result (Option (Aeneas.Std.Slice T) × Aeneas.Std.core.slice.iter.ChunksExact T)
+Aeneas.Std.core.slice.iter.IterMut.i : {T : Type} → Aeneas.Std.core.slice.iter.IterMut T → ℕ
+Aeneas.Std.core.slice.Slice.split_at._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  (↑s).length ≤ Aeneas.Std.Usize.max → ¬(↑n ≤ Aeneas.Std.Usize.max ∨ (↑s).length ≤ Aeneas.Std.Usize.max) → False
+Aeneas.Std.core.slice.iter.IterMut.i._default : {T : Type} → ℕ
+Aeneas.Std.core.cmp.PartialEq.ctorIdx : {Self Rhs : Type} → Aeneas.Std.core.cmp.PartialEq Self Rhs → ℕ
+Aeneas.Std.core.slice.Slice.split_at.spec._simp_1 : ∀ {α : Type u} [inst : SemilatticeInf α] {a b : α},
+  (a ⊓ b = a) = (a ≤ b)
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize →
+    Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.Slice.copy_from_slice.step_spec : ∀ {α : Type} (copyInst : Aeneas.Std.core.marker.Copy α)
+  (s0 s1 : Aeneas.Std.Slice α),
+  s0.length = s1.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.copy_from_slice copyInst s0 s1) fun s1' => s1' = s1
+Aeneas.Std.core.cmp.impls.PartialOrdU16.lt.eq_1 : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.core.cmp.impls.PartialOrdU16.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.cmp.impls.OrdIsize.max : Aeneas.Std.Isize → Aeneas.Std.Isize → Aeneas.Std.Isize
+Aeneas.Std.core.slice.iter.ChunksExact._sizeOf_1 : {T : Type} →
+  [SizeOf T] → Aeneas.Std.core.slice.iter.ChunksExact T → ℕ
+Aeneas.Std.core.cmp.impls.OrdU64.clamp : Aeneas.Std.U64 →
+  Aeneas.Std.U64 → Aeneas.Std.U64 → Aeneas.Std.Result Aeneas.Std.U64
+Aeneas.Std.core.cmp.EqU16 : Aeneas.Std.core.cmp.Eq Aeneas.Std.U16
+Aeneas.Std.core.cmp.impls.PartialEqShared.ne.eq_1 : ∀ {A B : Type} (PartialEqInst : Aeneas.Std.core.cmp.PartialEq A B)
+  (x : A) (y : B), Aeneas.Std.core.cmp.impls.PartialEqShared.ne PartialEqInst x y = PartialEqInst.ne x y
+Aeneas.Std.core.cmp.Eq.mk.noConfusion : {Self : Type} →
+  {P : Sort u} →
+    {partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self} →
+      {assert_fields_are_eq : Self → Aeneas.Std.Result Unit} →
+        {partialEqInst' : Aeneas.Std.core.cmp.PartialEq Self Self} →
+          {assert_fields_are_eq' : Self → Aeneas.Std.Result Unit} →
+            { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq } =
+                { partialEqInst := partialEqInst', assert_fields_are_eq := assert_fields_are_eq' } →
+              (partialEqInst ≍ partialEqInst' → assert_fields_are_eq ≍ assert_fields_are_eq' → P) → P
+Aeneas.Std.core.cmp.impls.PartialEqU8.eq : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU16.ge : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.slice.index.SliceIndex.noConfusionType : Sort u →
+  {Self T Output : Type} →
+    Aeneas.Std.core.slice.index.SliceIndex Self T Output →
+      {Self' T' Output' : Type} → Aeneas.Std.core.slice.index.SliceIndex Self' T' Output' → Sort u
+Aeneas.Std.core.cmp.PartialEq.ne.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result Bool) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU64.max : Aeneas.Std.U64 → Aeneas.Std.U64 → Aeneas.Std.U64
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.mk : {Self : Type} →
+  Aeneas.Std.core.slice.index.private_slice_index.Sealed Self
+Aeneas.Std.core.cmp.impls.OrdI64.max_val : ∀ (x y : Aeneas.Std.I64),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI64.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.EqUsize : Aeneas.Std.core.cmp.Eq Aeneas.Std.Usize
+Aeneas.Std.core.cmp.impls.PartialOrdI128.lt : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.slice.Slice.split_at._proof_4 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  (List.splitAt ↑n ↑s).2.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.PartialEqUsize : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.Usize Aeneas.Std.Usize
+Aeneas.Std.core.slice.Slice.split_at_mut : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Usize →
+      Aeneas.Std.Result
+        ((Aeneas.Std.Slice T × Aeneas.Std.Slice T) × (Aeneas.Std.Slice T × Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdI8.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.I8), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.PartialOrdI64.lt : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.cmp.impls.PartialEqU8.ne : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.cmp.PartialOrd.partialEqInst : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Aeneas.Std.core.cmp.PartialEq Self Rhs
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index.step_spec._proof_2 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    ¬↑r.start ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.Result.ok (s.drop r.start)) fun s1 =>
+        ↑s1 = List.drop ↑r.start ↑s ∧ s1.length = s.length - ↑r.start
+Aeneas.Std.core.cmp.impls.OrdUsize.clamp : Aeneas.Std.Usize →
+  Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Result Aeneas.Std.Usize
+Aeneas.Std.core.cmp.Eq.mk.injEq : ∀ {Self : Type} (partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self)
+  (assert_fields_are_eq : Self → Aeneas.Std.Result Unit) (partialEqInst_1 : Aeneas.Std.core.cmp.PartialEq Self Self)
+  (assert_fields_are_eq_1 : Self → Aeneas.Std.Result Unit),
+  ({ partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq } =
+      { partialEqInst := partialEqInst_1, assert_fields_are_eq := assert_fields_are_eq_1 }) =
+    (partialEqInst = partialEqInst_1 ∧ assert_fields_are_eq = assert_fields_are_eq_1)
+Aeneas.Std.core.slice.index.SliceIndex.mk.noConfusion : {Self T Output : Type} →
+  {P : Sort u} →
+    {sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self} →
+      {get : Self → T → Aeneas.Std.Result (Option Output)} →
+        {get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))} →
+          {get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)} →
+            {get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)} →
+              {index : Self → T → Aeneas.Std.Result Output} →
+                {index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))} →
+                  {sealedInst' : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self} →
+                    {get' : Self → T → Aeneas.Std.Result (Option Output)} →
+                      {get_mut' : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))} →
+                        {get_unchecked' :
+                            Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)} →
+                          {get_unchecked_mut' :
+                              Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)} →
+                            {index' : Self → T → Aeneas.Std.Result Output} →
+                              {index_mut' : Self → T → Aeneas.Std.Result (Output × (Output → T))} →
+                                { sealedInst := sealedInst, get := get, get_mut := get_mut,
+                                      get_unchecked := get_unchecked, get_unchecked_mut := get_unchecked_mut,
+                                      index := index, index_mut := index_mut } =
+                                    { sealedInst := sealedInst', get := get', get_mut := get_mut',
+                                      get_unchecked := get_unchecked', get_unchecked_mut := get_unchecked_mut',
+                                      index := index', index_mut := index_mut' } →
+                                  (sealedInst ≍ sealedInst' →
+                                      get ≍ get' →
+                                        get_mut ≍ get_mut' →
+                                          get_unchecked ≍ get_unchecked' →
+                                            get_unchecked_mut ≍ get_unchecked_mut' →
+                                              index ≍ index' → index_mut ≍ index_mut' → P) →
+                                    P
+Aeneas.Std.core.cmp.Eq : Type → Type
+Aeneas.Std.core.slice.iter.IterMut.mk._flat_ctor : {T : Type} →
+  Aeneas.Std.Slice T → ℕ → Aeneas.Std.core.slice.iter.IterMut T
+Aeneas.Std.core.slice.Slice.swap_spec._proof_8 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (hb : ↑b < s.length),
+  ↑a + 1 ≤ (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length →
+    ↑a < (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length
+Aeneas.Std.core.cmp.impls.PartialEqIsize.ne : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.slice.index.Usize.get_mut : {T : Type} →
+  Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Option T × (Option T → Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec._simp_2 : ∀ {α : Type u_1}
+  {p : Aeneas.Std.WP.Post α} (e : Aeneas.Std.Error), Aeneas.Std.WP.spec (Aeneas.Std.Result.fail e) p = False
+Aeneas.Std.core.slice.iter.ChunksExact.noConfusionType : Sort u →
+  {T : Type} →
+    Aeneas.Std.core.slice.iter.ChunksExact T → {T' : Type} → Aeneas.Std.core.slice.iter.ChunksExact T' → Sort u
+Aeneas.Std.core.cmp.Ord.cmp : {Self : Type} → Aeneas.Std.core.cmp.Ord Self → Self → Self → Aeneas.Std.Result Ordering
+Aeneas.Std.core.slice.Slice.reverse._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T),
+  (↑s).reverse.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.Slice.split_at_mut.spec._proof_4 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize)
+  (s0' s1' : Aeneas.Std.Slice T), (↑s1').length = (↑s).length - ↑n → (↑s1').length = (↑s).length - ↑n
+Aeneas.Std.core.cmp.PartialOrd.mk.noConfusion : {Self Rhs : Type} →
+  {P : Sort u} →
+    {partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs} →
+      {partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)} →
+        {lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool} →
+          {partialEqInst' : Aeneas.Std.core.cmp.PartialEq Self Rhs} →
+            {partial_cmp' : Self → Rhs → Aeneas.Std.Result (Option Ordering)} →
+              {lt' le' gt' ge' : Self → Rhs → Aeneas.Std.Result Bool} →
+                { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt, ge := ge } =
+                    { partialEqInst := partialEqInst', partial_cmp := partial_cmp', lt := lt', le := le', gt := gt',
+                      ge := ge' } →
+                  (partialEqInst ≍ partialEqInst' →
+                      partial_cmp ≍ partial_cmp' → lt ≍ lt' → le ≍ le' → gt ≍ gt' → ge ≍ ge' → P) →
+                    P
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index r s =
+    if ↑r.end ≤ s.length then Aeneas.Std.Result.ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩
+    else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.slice.index.Usize.index : {T : Type} → Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result T
+Aeneas.Std.core.slice.Slice.is_empty_spec : ∀ {T : Type} (s : Aeneas.Std.Slice T),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.is_empty s) fun b => (b = true) = (s.length = 0)
+Aeneas.Std.core.clone.CloneU64 : Aeneas.Std.core.clone.Clone Aeneas.Std.U64
+Aeneas.Std.core.clone.impls.CloneI8.clone : Aeneas.Std.I8 → Aeneas.Std.I8
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.impls.OrdU32.max.step_spec : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU32.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU32.max x y
+Aeneas.Std.core.slice.index.SliceIndex.index : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output → Self → T → Aeneas.Std.Result Output
+Aeneas.Std.core.clone.Clone.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self]
+  (clone : Self → Aeneas.Std.Result Self) (clone_from : Self → Self → Aeneas.Std.Result Self),
+  sizeOf { clone := clone, clone_from := clone_from } = 1
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.PartialOrdU16 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.U16 Aeneas.Std.U16
+Aeneas.Std.core.cmp.impls.OrdI32.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.I32), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdI128.max.step_spec : ∀ (x y : Aeneas.Std.I128),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI128.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI128.max x y
+Aeneas.Std.core.cmp.impls.PartialOrdI64.gt : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.clone.impls.CloneI8.clone_from : Aeneas.Std.I8 → Aeneas.Std.I8 → Aeneas.Std.I8
+Aeneas.Std.core.cmp.PartialEq._sizeOf_1 : {Self Rhs : Type} →
+  [SizeOf Self] → [SizeOf Rhs] → Aeneas.Std.core.cmp.PartialEq Self Rhs → ℕ
+Aeneas.Std.core.slice.Slice.chunks_exact._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T)
+  (chunk_size : Aeneas.Std.Usize) (hcs : ↑chunk_size > 0),
+  (Aeneas.Std.List.toChunksExact (↑chunk_size) hcs ↑s).2.length ≤ (↑s).length →
+    (Aeneas.Std.List.toChunksExact (↑chunk_size) hcs ↑s).2.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.index.SliceIndex.get_unchecked : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output →
+    Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)
+Aeneas.Std.core.cmp.impls.OrdI64.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.I64), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.option.Option.is_some.eq_1 : ∀ {T : Type} (self : Option T),
+  Aeneas.Std.core.option.Option.is_some self = self.isSome
+Aeneas.Std.core.cmp.impls.PartialEqUnit.ne : Unit → Unit → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdI128.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.I128), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.Ord.min.trait_default_U32.spec : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU32 x y) fun r =>
+    r = Aeneas.Std.core.cmp.impls.OrdU32.min x y
+Aeneas.Std.core.slice.iter.IterMut.mk.sizeOf_spec : ∀ {T : Type} [inst : SizeOf T] (slice : Aeneas.Std.Slice T) (i : ℕ),
+  sizeOf { slice := slice, i := i } = 1 + sizeOf slice + sizeOf i
+Aeneas.Std.core.option.Option.unwrap_or._simp_1 : ∀ {α : Type u_1} {p : Aeneas.Std.WP.Post α} (x : α),
+  Aeneas.Std.WP.spec (Aeneas.Std.Result.ok x) p = p x
+Aeneas.Std.core.cmp.PartialEqIsize : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.Isize Aeneas.Std.Isize
+Aeneas.Std.core.slice.iter.Iter._sizeOf_inst : (T : Type) → [SizeOf T] → SizeOf (Aeneas.Std.core.slice.iter.Iter T)
+Aeneas.Std.core.option.Option.expect.eq_1 : ∀ {T : Type} (x : Option T) (_msg : Aeneas.Std.Str),
+  Aeneas.Std.core.option.Option.expect x _msg = Aeneas.Std.Result.ofOption x Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.PartialEqUnit : Aeneas.Std.core.cmp.PartialEq Unit Unit
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  (List.slice ↑r.start ↑r.end ↑s).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.option.Option.unwrap_or.eq_2 : ∀ {T : Type u_1} (default self_2 : T),
+  Aeneas.Std.core.option.Option.unwrap_or (some self_2) default = self_2
+Aeneas.Std.core.cmp.EqU32 : Aeneas.Std.core.cmp.Eq Aeneas.Std.U32
+Aeneas.Std.core.clone.Clone.mk.injEq : ∀ {Self : Type} (clone : Self → Aeneas.Std.Result Self)
+  (clone_from : Self → Self → Aeneas.Std.Result Self) (clone_1 : Self → Aeneas.Std.Result Self)
+  (clone_from_1 : Self → Self → Aeneas.Std.Result Self),
+  ({ clone := clone, clone_from := clone_from } = { clone := clone_1, clone_from := clone_from_1 }) =
+    (clone = clone_1 ∧ clone_from = clone_from_1)
+Aeneas.Std.core.clone.Clone.clone_from : {Self : Type} →
+  Aeneas.Std.core.clone.Clone Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.Ord._sizeOf_inst : (Self : Type) → [SizeOf Self] → SizeOf (Aeneas.Std.core.cmp.Ord Self)
+Aeneas.Std.core.slice.Slice.is_empty_spec._simp_2 : ∀ {a b : Prop}, (a = b) = (a ↔ b)
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.le : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.cmp.PartialOrd.lt : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU16.min_val : ∀ (x y : Aeneas.Std.U16),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU16.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.PartialEq.rec : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialEq Self Rhs → Sort u} →
+    ((eq ne : Self → Rhs → Aeneas.Std.Result Bool) → motive { eq := eq, ne := ne }) →
+      (t : Aeneas.Std.core.cmp.PartialEq Self Rhs) → motive t
+Aeneas.Std.core.cmp.impls.OrdUsize.max.step_spec : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdUsize.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdUsize.max x y
+Aeneas.Std.core.cmp.impls.OrdI64.min.eq_1 : ∀ (x y : Aeneas.Std.I64),
+  Aeneas.Std.core.cmp.impls.OrdI64.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.impls.OrdU64.min : Aeneas.Std.U64 → Aeneas.Std.U64 → Aeneas.Std.U64
+Aeneas.Std.core.slice.iter.Iter.slice : {T : Type} → Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Slice T
+Aeneas.Std.core.cmp.PartialOrdUsize : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.Usize Aeneas.Std.Usize
+Aeneas.Std.core.cmp.impls.OrdU64.cmp : Aeneas.Std.U64 → Aeneas.Std.U64 → Ordering
+Aeneas.Std.core.cmp.PartialOrd.gt.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.clone.CloneArray : {T : Type} →
+  (N : Aeneas.Std.Usize) → Aeneas.Std.core.clone.Clone T → Aeneas.Std.core.clone.Clone (Aeneas.Std.Array T N)
+Aeneas.Std.core.slice.iter.ChunksExact.noConfusion : {P : Sort u} →
+  {T : Type} →
+    {t : Aeneas.Std.core.slice.iter.ChunksExact T} →
+      {T' : Type} →
+        {t' : Aeneas.Std.core.slice.iter.ChunksExact T'} →
+          T = T' → t ≍ t' → Aeneas.Std.core.slice.iter.ChunksExact.noConfusionType P t t'
+Aeneas.Std.core.cmp.impls.OrdU16.clamp : Aeneas.Std.U16 →
+  Aeneas.Std.U16 → Aeneas.Std.U16 → Aeneas.Std.Result Aeneas.Std.U16
+Aeneas.Std.core.option.Option.take : {T : Type} → Option T → Option T × Option T
+Aeneas.Std.core.cmp.EqIsize : Aeneas.Std.core.cmp.Eq Aeneas.Std.Isize
+Aeneas.Std.core.cmp.impls.OrdU8.max.step_spec : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU8.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU8.max x y
+Aeneas.Std.core.cmp.OrdI16 : Aeneas.Std.core.cmp.Ord Aeneas.Std.I16
+Aeneas.Std.core.cmp.impls.PartialOrdU16.partial_cmp : Aeneas.Std.U16 → Aeneas.Std.U16 → Option Ordering
+Aeneas.Std.core.slice.Slice.split_at_mut.spec._proof_3 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ (↑s).length →
+    ∀ (s0' s1' : Aeneas.Std.Slice T),
+      (↑s0').length = ↑n →
+        (↑s1').length = (↑s).length - ↑n →
+          ((↑s0').length = min (↑n) (↑s).length → ¬(↑s1').length = (↑s).length - ↑n) →
+            (↑s0').length = min (↑n) (↑s).length
+Aeneas.Std.core.slice.Slice.copy_from_slice.step_spec.mvcgen_spec : ∀ {α : Type}
+  (copyInst : Aeneas.Std.core.marker.Copy α) (s0 s1 : Aeneas.Std.Slice α),
+  s0.length = s1.length →
+    ⦃⌜True⌝⦄ Aeneas.Std.core.slice.Slice.copy_from_slice copyInst s0 s1 ⦃Std.Do.PostCond.noThrow fun r => ⌜r = s1⌝⦄
+Aeneas.Std.core.cmp.impls.PartialEqU128.ne : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.cmp.PartialOrd.gt_body : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.PartialOrd._sizeOf_1 : {Self Rhs : Type} →
+  [SizeOf Self] → [SizeOf Rhs] → Aeneas.Std.core.cmp.PartialOrd Self Rhs → ℕ
+Aeneas.Std.core.slice.Slice.get_mut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result (Option Output × (Option Output → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.PartialOrd.rec : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialOrd Self Rhs → Sort u} →
+    ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs) →
+        (partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)) →
+          (lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool) →
+            motive
+              { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt, ge := ge }) →
+      (t : Aeneas.Std.core.cmp.PartialOrd Self Rhs) → motive t
+Aeneas.Std.core.cmp.Ord.min._default : {Self : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.Eq.noConfusionType : Sort u →
+  {Self : Type} → Aeneas.Std.core.cmp.Eq Self → {Self' : Type} → Aeneas.Std.core.cmp.Eq Self' → Sort u
+Aeneas.Std.core.clone.impls.CloneI16.clone_from : Aeneas.Std.I16 → Aeneas.Std.I16 → Aeneas.Std.I16
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index r s) fun s1 =>
+      ↑s1 = List.slice 0 ↑r.end ↑s ∧ s1.length = ↑r.end
+Aeneas.Std.core.slice.index.SliceIndex.noConfusion : {P : Sort u} →
+  {Self T Output : Type} →
+    {t : Aeneas.Std.core.slice.index.SliceIndex Self T Output} →
+      {Self' T' Output' : Type} →
+        {t' : Aeneas.Std.core.slice.index.SliceIndex Self' T' Output'} →
+          Self = Self' →
+            T = T' → Output = Output' → t ≍ t' → Aeneas.Std.core.slice.index.SliceIndex.noConfusionType P t t'
+Aeneas.Std.core.slice.iter.IterMut.noConfusion : {P : Sort u} →
+  {T : Type} →
+    {t : Aeneas.Std.core.slice.iter.IterMut T} →
+      {T' : Type} →
+        {t' : Aeneas.Std.core.slice.iter.IterMut T'} →
+          T = T' → t ≍ t' → Aeneas.Std.core.slice.iter.IterMut.noConfusionType P t t'
+Aeneas.Std.core.cmp.Ord.min.trait_default.eq_1 : ∀ {Self : Type} (OrdInst : Aeneas.Std.core.cmp.Ord Self) (x y : Self),
+  Aeneas.Std.core.cmp.Ord.min.trait_default OrdInst x y =
+    Aeneas.Std.core.cmp.Ord.min.default OrdInst.partialOrdInst.lt x y
+Aeneas.Std.core.cmp.impls.OrdU64.max.eq_1 : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.core.cmp.impls.OrdU64.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.PartialEqU32 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U32 Aeneas.Std.U32
+Aeneas.Std.core.slice.Slice.split_at_mut.spec.mvcgen_spec : ∀ {T : Type} (s : Aeneas.Std.Slice T)
+  (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.Slice.split_at_mut s
+        n ⦃Std.Do.PostCond.noThrow fun r =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun res back =>
+              res.1.length = ↑n ∧
+                res.2.length = s.length - ↑n ∧
+                  ↑res.1 = List.take ↑n ↑s ∧
+                    ↑res.2 = List.drop ↑n ↑s ∧
+                      ∀ (s0' s1' : Aeneas.Std.Slice T),
+                        s0'.length = ↑n →
+                          s1'.length = s.length - ↑n →
+                            ↑(back (s0', s1')) = ↑s0' ++ ↑s1' ∧ (back (s0', s1')).length = s.length)
+            r⌝⦄
+Aeneas.Std.core.slice.index.Slice.index_mut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.OrdU32 : Aeneas.Std.core.cmp.Ord Aeneas.Std.U32
+Aeneas.Std.core.slice.iter.Iter.noConfusionType : Sort u →
+  {T : Type} → Aeneas.Std.core.slice.iter.Iter T → {T' : Type} → Aeneas.Std.core.slice.iter.Iter T' → Sort u
+Aeneas.Std.core.cmp.impls.OrdIsize.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.Isize),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdIsize.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdIsize.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.ge : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.slice.index.SliceIndex : Type → Type → Type → Type
+Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.Eq.assert_fields_are_eq.default.eq_1 : ∀ {Self : Type} (EqInst : Aeneas.Std.core.cmp.Eq Self)
+  (x : Self), Aeneas.Std.core.cmp.Eq.assert_fields_are_eq.default EqInst x = EqInst.assert_fields_are_eq x
+Aeneas.Std.core.cmp.PartialOrdI16 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.I16 Aeneas.Std.I16
+Aeneas.Std.core.cmp.PartialEqBox : {T : Type} → Aeneas.Std.core.cmp.PartialEq T T → Aeneas.Std.core.cmp.PartialEq T T
+Aeneas.Std.core.cmp.OrdI32 : Aeneas.Std.core.cmp.Ord Aeneas.Std.I32
+Aeneas.Std.core.cmp.impls.OrdI8.min_val : ∀ (x y : Aeneas.Std.I8),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI8.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdI8.max_val : ∀ (x y : Aeneas.Std.I8),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI8.max x y) = max ↑x ↑y
+Aeneas.Std.core.slice.index.Usize.index_mut : {T : Type} →
+  Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (T × (T → Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdU8.max.eq_1 : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.core.cmp.impls.OrdU8.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.OrdI128.max.eq_1 : ∀ (x y : Aeneas.Std.I128),
+  Aeneas.Std.core.cmp.impls.OrdI128.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.OrdUsize.min_val : ∀ (x y : Aeneas.Std.Usize),
+  ↑(Aeneas.Std.core.cmp.impls.OrdUsize.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.impls.PartialEqI64.ne : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU8.lt.eq_1 : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.core.cmp.impls.PartialOrdU8.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.slice.index.Slice.index_mut.eq_1 : ∀ {T I Output : Type}
+  (inst : Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output) (s : Aeneas.Std.Slice T) (i : I),
+  Aeneas.Std.core.slice.index.Slice.index_mut inst s i = inst.index_mut i s
+Aeneas.Std.core.cmp.PartialOrdU8 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.U8 Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.PartialOrdI16.le : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.slice.Slice.split_at_mut.spec._proof_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length → ↑n ≤ (↑s).length
+Aeneas.Std.core.slice.Slice.copy_from_slice.eq_1 : ∀ {T : Type} (x : Aeneas.Std.core.marker.Copy T)
+  (s src : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.Slice.copy_from_slice x s src =
+    if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+Aeneas.Std.core.slice.iter.IterMut.mk.noConfusion : {T : Type} →
+  {P : Sort u} →
+    {slice : Aeneas.Std.Slice T} →
+      {i : ℕ} →
+        {slice' : Aeneas.Std.Slice T} →
+          {i' : ℕ} → { slice := slice, i := i } = { slice := slice', i := i' } → (slice ≍ slice' → i = i' → P) → P
+Aeneas.Std.core.cmp.impls.PartialOrdUnit.partial_cmp.eq_1 : ∀ (x x_1 : Unit),
+  Aeneas.Std.core.cmp.impls.PartialOrdUnit.partial_cmp x x_1 = Aeneas.Std.Result.ok (some Ordering.eq)
+Aeneas.Std.core.cmp.impls.OrdI64.max : Aeneas.Std.I64 → Aeneas.Std.I64 → Aeneas.Std.I64
+Aeneas.Std.core.slice.index.SliceIndex.get : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output → Self → T → Aeneas.Std.Result (Option Output)
+Aeneas.Std.core.cmp.impls.OrdU8.max_val : ∀ (x y : Aeneas.Std.U8),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU8.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.PartialOrd.mk : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs →
+    (Self → Rhs → Aeneas.Std.Result (Option Ordering)) →
+      (Self → Rhs → Aeneas.Std.Result Bool) →
+        (Self → Rhs → Aeneas.Std.Result Bool) →
+          (Self → Rhs → Aeneas.Std.Result Bool) →
+            (Self → Rhs → Aeneas.Std.Result Bool) → Aeneas.Std.core.cmp.PartialOrd Self Rhs
+Aeneas.Std.core.clone.Clone.mk.inj : ∀ {Self : Type} {clone : Self → Aeneas.Std.Result Self}
+  {clone_from : Self → Self → Aeneas.Std.Result Self} {clone_1 : Self → Aeneas.Std.Result Self}
+  {clone_from_1 : Self → Self → Aeneas.Std.Result Self},
+  { clone := clone, clone_from := clone_from } = { clone := clone_1, clone_from := clone_from_1 } →
+    clone = clone_1 ∧ clone_from = clone_from_1
+Aeneas.Std.core.cmp.max : {T : Type} → Aeneas.Std.core.cmp.Ord T → T → T → Aeneas.Std.Result T
+Aeneas.Std.core.clone.Clone._sizeOf_1 : {Self : Type} → [SizeOf Self] → Aeneas.Std.core.clone.Clone Self → ℕ
+Aeneas.Std.core.cmp.PartialOrd.ge : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.Slice.chunks_exact._proof_2 : ∀ {T : Type} (s : Aeneas.Std.Slice T)
+  (chunk_size : Aeneas.Std.Usize) (c : List T), c.length ≤ ↑chunk_size → c.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.clone.Clone.noConfusionType : Sort u →
+  {Self : Type} → Aeneas.Std.core.clone.Clone Self → {Self' : Type} → Aeneas.Std.core.clone.Clone Self' → Sort u
+Aeneas.Std.core.cmp.impls.PartialOrdU16.lt : Aeneas.Std.U16 → Aeneas.Std.U16 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU8.lt : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.slice.iter.Iter.noConfusion : {P : Sort u} →
+  {T : Type} →
+    {t : Aeneas.Std.core.slice.iter.Iter T} →
+      {T' : Type} →
+        {t' : Aeneas.Std.core.slice.iter.Iter T'} →
+          T = T' → t ≍ t' → Aeneas.Std.core.slice.iter.Iter.noConfusionType P t t'
+Aeneas.Std.core.cmp.PartialEq.mk.noConfusion : {Self Rhs : Type} →
+  {P : Sort u} →
+    {eq ne eq' ne' : Self → Rhs → Aeneas.Std.Result Bool} →
+      { eq := eq, ne := ne } = { eq := eq', ne := ne' } → (eq ≍ eq' → ne ≍ ne' → P) → P
+Aeneas.Std.core.cmp.impls.OrdI16.min.eq_1 : ∀ (x y : Aeneas.Std.I16),
+  Aeneas.Std.core.cmp.impls.OrdI16.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.Ord.min.trait_default_Usize.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.Usize),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdUsize x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdUsize.min x y⌝⦄
+Aeneas.Std.core.cmp.PartialOrd.ge.default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.PartialOrdI16.ge : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.cmp.Ord.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Ord Self → Sort u} →
+    (t : Aeneas.Std.core.cmp.Ord Self) →
+      ((eqInst : Aeneas.Std.core.cmp.Eq Self) →
+          (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self) →
+            (cmp : Self → Self → Aeneas.Std.Result Ordering) →
+              (max min : Self → Self → Aeneas.Std.Result Self) →
+                (clamp : Self → Self → Self → Aeneas.Std.Result Self) →
+                  motive
+                    { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min,
+                      clamp := clamp }) →
+        motive t
+Aeneas.Std.core.cmp.impls.PartialOrdUnit.partial_cmp : Unit → Unit → Aeneas.Std.Result (Option Ordering)
+Aeneas.Std.core.slice.iter.IteratorChunksExact.next.eq_1 : ∀ {T : Type}
+  (self : Aeneas.Std.core.slice.iter.ChunksExact T),
+  Aeneas.Std.core.slice.iter.IteratorChunksExact.next self =
+    match self.chunks with
+    | [] => Aeneas.Std.Result.ok (none, self)
+    | chunk :: chunks => Aeneas.Std.Result.ok (some chunk, { chunks := chunks, remainder := self.remainder })
+Aeneas.Std.core.slice.Slice.swap_spec._proof_11 : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize) (ha : ↑a < s.length) (hb : ↑b < s.length),
+  ¬↑a = ↑b → (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a])[↑a]! = (↑s)[↑b]!
+Aeneas.Std.core.clone.Clone.clone_from._default : {Self : Type} →
+  (Self → Aeneas.Std.Result Self) → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.PartialEq.ne.default.spec : ∀ {T : Type} (eq : T → T → Aeneas.Std.Result Bool) (self other : T),
+  (Aeneas.Std.WP.spec (eq self other) fun b => b = true ↔ self = other) →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.PartialEq.ne.default eq self other) fun b => b = true ↔ self ≠ other
+Aeneas.Std.core.slice.index.Usize.get_unchecked : {T : Type} →
+  Aeneas.Std.Usize → Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr T)
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end →
+    ↑r.end ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index r s) fun s1 =>
+        ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧ s1.length = ↑r.end - ↑r.start
+Aeneas.Std.core.cmp.impls.OrdI32.max_val : ∀ (x y : Aeneas.Std.I32),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI32.max x y) = max ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut r
+        s ⦃Std.Do.PostCond.noThrow fun r_1 =>
+        ⌜Aeneas.Std.WP.uncurry'
+            (fun s1 back =>
+              ↑s1 = List.drop ↑r.start ↑s ∧
+                s1.length = s.length - ↑r.start ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! ↑r.start ↑s')
+            r_1⌝⦄
+Aeneas.Std.core.slice.iter.IteratorChunksExact.next.match_1 : {T : Type} →
+  (motive : List (Aeneas.Std.Slice T) → Sort u_1) →
+    (x : List (Aeneas.Std.Slice T)) →
+      (Unit → motive []) →
+        ((chunk : Aeneas.Std.Slice T) → (chunks : List (Aeneas.Std.Slice T)) → motive (chunk :: chunks)) → motive x
+Aeneas.Std.core.cmp.impls.OrdU16.max : Aeneas.Std.U16 → Aeneas.Std.U16 → Aeneas.Std.U16
+Aeneas.Std.core.clone.CloneI16 : Aeneas.Std.core.clone.Clone Aeneas.Std.I16
+Aeneas.Std.core.cmp.impls.OrdU128.max_val : ∀ (x y : Aeneas.Std.U128),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU128.max x y) = max ↑x ↑y
+Aeneas.Std.core.option.Option.unwrap_or_some : ∀ {T : Type u_1} (self default : T),
+  Aeneas.Std.core.option.Option.unwrap_or (some self) default = self
+Aeneas.Std.core.cmp.impls.PartialOrdIsize.lt : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut r s)
+      (Aeneas.Std.WP.uncurry' fun s1 back =>
+        ↑s1 = List.slice 0 ↑r.end ↑s ∧
+          s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! 0 ↑s')
+Aeneas.Std.core.cmp.impls.PartialOrdI32.gt : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.cmp.impls.PartialEqI16.ne : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.cmp.impls.OrdI8.clamp : Aeneas.Std.I8 → Aeneas.Std.I8 → Aeneas.Std.I8 → Aeneas.Std.Result Aeneas.Std.I8
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index r s) fun s1 =>
+      ↑s1 = List.drop ↑r.start ↑s ∧ s1.length = s.length - ↑r.start
+Aeneas.Std.core.cmp.impls.OrdI16.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I16),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI16.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI16.min x y⌝⦄
+Aeneas.Std.core.option.Option.expect : {T : Type} → Option T → Aeneas.Std.Str → Aeneas.Std.Result T
+Aeneas.Std.core.cmp.impls.OrdI32.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.I32), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.step_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  r.start ≤ r.end →
+    ↑r.end ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut r s)
+        (Aeneas.Std.WP.uncurry' fun s1 index_mut_back =>
+          ↑s1 = List.slice ↑r.start ↑r.end ↑s ∧
+            s1.length = ↑r.end - ↑r.start ∧ ∀ (s2 : Aeneas.Std.Slice α), index_mut_back s2 = s.setSlice! ↑r.start ↑s2)
+Aeneas.Std.core.cmp.impls.OrdUsize.max.eq_1 : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.core.cmp.impls.OrdUsize.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.OrdI8.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.I8), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.PartialEqU128 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U128 Aeneas.Std.U128
+Aeneas.Std.core.cmp.Ord.min.trait_default : {Self : Type} →
+  Aeneas.Std.core.cmp.Ord Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.OrdUsize.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.Usize),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdUsize.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdUsize.min x y⌝⦄
+Aeneas.Std.core.slice.cmp.PartialEqSlice.ne_homo_spec : ∀ {α : Type} (partialEq : Aeneas.Std.core.cmp.PartialEq α α)
+  (s1 s2 : Aeneas.Std.Slice α),
+  (∀ (x y : α), Aeneas.Std.WP.spec (partialEq.ne x y) fun b => b = true ↔ ¬x = y) →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.cmp.PartialEqSlice.ne partialEq s1 s2) fun b => b = true ↔ ¬s1 = s2
+Aeneas.Std.core.cmp.impls.PartialOrdU32.ge : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.slice.iter.Iter : Type → Type
+Aeneas.Std.core.cmp.impls.PartialEqI8.ne : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.cmp.Ord.min.trait_default_U8.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U8),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU8 x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU8.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.PartialOrdI8.gt : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.slice.Slice.fill.spec.match_1 : ∀ {T : Type} (motive : Aeneas.Std.Result T → Prop)
+  (x : Aeneas.Std.Result T),
+  (∀ (v' : T), x = Aeneas.Std.Result.ok v' → motive (Aeneas.Std.Result.ok v')) →
+    (∀ (e : Aeneas.Std.Error), x = Aeneas.Std.Result.fail e → motive (Aeneas.Std.Result.fail e)) →
+      (x = Aeneas.Std.Result.div → motive Aeneas.Std.Result.div) → motive x
+Aeneas.Std.core.cmp.PartialEq.mk : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result Bool) → (Self → Rhs → Aeneas.Std.Result Bool) → Aeneas.Std.core.cmp.PartialEq Self Rhs
+Aeneas.Std.core.cmp.PartialEq.ne.trait_default.spec : ∀ {T : Type} (PartialEqInst : Aeneas.Std.core.cmp.PartialEq T T)
+  (self other : T),
+  (Aeneas.Std.WP.spec (PartialEqInst.eq self other) fun b => b = true ↔ self = other) →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.cmp.PartialEq.ne.trait_default PartialEqInst self other) fun b =>
+      b = true ↔ self ≠ other
+Aeneas.Std.core.cmp.impls.OrdIsize.min.step_spec : ∀ (x y : Aeneas.Std.Isize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdIsize.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdIsize.min x y
+Aeneas.Std.core.cmp.PartialOrd.le._default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  (List.slice 0 ↑r.end ↑s).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.Slice.split_at.spec : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.split_at s n)
+      (Aeneas.Std.WP.uncurry' fun s0 s1 =>
+        s0.length = ↑n ∧ s1.length = s.length - ↑n ∧ ↑s0 = List.take ↑n ↑s ∧ ↑s1 = List.drop ↑n ↑s)
+Aeneas.Std.core.slice.Slice.iter : {T : Type} →
+  Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.core.slice.iter.Iter T)
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index r
+        s ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.slice 0 ↑r.end ↑s ∧ r_1.length = ↑r.end⌝⦄
+Aeneas.Std.core.cmp.impls.OrdU128.max.eq_1 : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.core.cmp.impls.OrdU128.max x y = if x < y then y else x
+Aeneas.Std.core.slice.index.SliceIndexUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex Aeneas.Std.Usize (Aeneas.Std.Slice T) T
+Aeneas.Std.core.cmp.impls.OrdI64.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I64),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI64.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI64.min x y⌝⦄
+Aeneas.Std.core.cmp.Eq.mk.inj : ∀ {Self : Type} {partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self}
+  {assert_fields_are_eq : Self → Aeneas.Std.Result Unit} {partialEqInst_1 : Aeneas.Std.core.cmp.PartialEq Self Self}
+  {assert_fields_are_eq_1 : Self → Aeneas.Std.Result Unit},
+  { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq } =
+      { partialEqInst := partialEqInst_1, assert_fields_are_eq := assert_fields_are_eq_1 } →
+    partialEqInst = partialEqInst_1 ∧ assert_fields_are_eq = assert_fields_are_eq_1
+Aeneas.Std.core.cmp.PartialOrdU128 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.U128 Aeneas.Std.U128
+Aeneas.Std.core.cmp.impls.OrdU16.min.step_spec : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU16.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU16.min x y
+Aeneas.Std.core.cmp.PartialEq.ne._default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result Bool) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU64.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U64),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU64.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU64.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdU128.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.U128), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.max.eq_1 : ∀ {T : Type} (OrdInst : Aeneas.Std.core.cmp.Ord T) (x y : T),
+  Aeneas.Std.core.cmp.max OrdInst x y = OrdInst.max x y
+Aeneas.Std.core.cmp.impls.OrdI32.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.I32), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.iter.ChunksExact : Type → Type
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex (Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (Aeneas.Std.Slice T)
+    (Aeneas.Std.Slice T)
+Aeneas.Std.core.slice.index.SliceIndex.mk.injEq : ∀ {Self T Output : Type}
+  (sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self)
+  (get : Self → T → Aeneas.Std.Result (Option Output))
+  (get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T)))
+  (get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output))
+  (get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output))
+  (index : Self → T → Aeneas.Std.Result Output) (index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T)))
+  (sealedInst_1 : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self)
+  (get_1 : Self → T → Aeneas.Std.Result (Option Output))
+  (get_mut_1 : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T)))
+  (get_unchecked_1 : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output))
+  (get_unchecked_mut_1 : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output))
+  (index_1 : Self → T → Aeneas.Std.Result Output) (index_mut_1 : Self → T → Aeneas.Std.Result (Output × (Output → T))),
+  ({ sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+        get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut } =
+      { sealedInst := sealedInst_1, get := get_1, get_mut := get_mut_1, get_unchecked := get_unchecked_1,
+        get_unchecked_mut := get_unchecked_mut_1, index := index_1, index_mut := index_mut_1 }) =
+    (sealedInst = sealedInst_1 ∧
+      get = get_1 ∧
+        get_mut = get_mut_1 ∧
+          get_unchecked = get_unchecked_1 ∧
+            get_unchecked_mut = get_unchecked_mut_1 ∧ index = index_1 ∧ index_mut = index_mut_1)
+Aeneas.Std.core.cmp.impls.OrdI16.clamp : Aeneas.Std.I16 →
+  Aeneas.Std.I16 → Aeneas.Std.I16 → Aeneas.Std.Result Aeneas.Std.I16
+Aeneas.Std.core.clone.impls.CloneBool.clone : Bool → Bool
+Aeneas.Std.core.slice.index.SliceIndex.mk._flat_ctor : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.private_slice_index.Sealed Self →
+    (Self → T → Aeneas.Std.Result (Option Output)) →
+      (Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))) →
+        (Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)) →
+          (Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)) →
+            (Self → T → Aeneas.Std.Result Output) →
+              (Self → T → Aeneas.Std.Result (Output × (Output → T))) →
+                Aeneas.Std.core.slice.index.SliceIndex Self T Output
+Aeneas.Std.core.cmp.impls.OrdU16.cmp : Aeneas.Std.U16 → Aeneas.Std.U16 → Ordering
+Aeneas.Std.core.cmp.impls.OrdI16.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I16),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI16.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI16.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdU128.max : Aeneas.Std.U128 → Aeneas.Std.U128 → Aeneas.Std.U128
+Aeneas.Std.core.cmp.impls.OrdI16.max_val : ∀ (x y : Aeneas.Std.I16),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI16.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdU32.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U32),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU32.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU32.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdI64.min.step_spec : ∀ (x y : Aeneas.Std.I64),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI64.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI64.min x y
+Aeneas.Std.core.slice.Slice.is_empty_spec._simp_1 : ∀ {α : Type u_1} {l : List α}, (l.length = 0) = (l = [])
+Aeneas.Std.core.cmp.Ord.min : {Self : Type} → Aeneas.Std.core.cmp.Ord Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.clone.Clone.mk._flat_ctor : {Self : Type} →
+  (Self → Aeneas.Std.Result Self) → (Self → Self → Aeneas.Std.Result Self) → Aeneas.Std.core.clone.Clone Self
+Aeneas.Std.core.cmp.impls.OrdI16.max.step_spec : ∀ (x y : Aeneas.Std.I16),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI16.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI16.max x y
+Aeneas.Std.core.cmp.Ord.mk.noConfusion : {Self : Type} →
+  {P : Sort u} →
+    {eqInst : Aeneas.Std.core.cmp.Eq Self} →
+      {partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self} →
+        {cmp : Self → Self → Aeneas.Std.Result Ordering} →
+          {max min : Self → Self → Aeneas.Std.Result Self} →
+            {clamp : Self → Self → Self → Aeneas.Std.Result Self} →
+              {eqInst' : Aeneas.Std.core.cmp.Eq Self} →
+                {partialOrdInst' : Aeneas.Std.core.cmp.PartialOrd Self Self} →
+                  {cmp' : Self → Self → Aeneas.Std.Result Ordering} →
+                    {max' min' : Self → Self → Aeneas.Std.Result Self} →
+                      {clamp' : Self → Self → Self → Aeneas.Std.Result Self} →
+                        { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min,
+                              clamp := clamp } =
+                            { eqInst := eqInst', partialOrdInst := partialOrdInst', cmp := cmp', max := max',
+                              min := min', clamp := clamp' } →
+                          (eqInst ≍ eqInst' →
+                              partialOrdInst ≍ partialOrdInst' →
+                                cmp ≍ cmp' → max ≍ max' → min ≍ min' → clamp ≍ clamp' → P) →
+                            P
+Aeneas.Std.core.slice.iter.Iter.mk._flat_ctor : {T : Type} → Aeneas.Std.Slice T → ℕ → Aeneas.Std.core.slice.iter.Iter T
+Aeneas.Std.core.slice.index.Slice.index : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result Output
+Aeneas.Std.core.cmp.OrdU128 : Aeneas.Std.core.cmp.Ord Aeneas.Std.U128
+Aeneas.Std.core.clone.CloneallocvecVec : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.core.clone.Clone (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.core.cmp.impls.PartialEqUsize.eq : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.cmp.EqI128 : Aeneas.Std.core.cmp.Eq Aeneas.Std.I128
+Aeneas.Std.core.cmp.impls.PartialEqU64.eq : Aeneas.Std.U64 → Aeneas.Std.U64 → Bool
+Aeneas.Std.core.cmp.impls.PartialEqI16.eq : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.slice.Slice.split_at_mut.spec : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.split_at_mut s n)
+      (Aeneas.Std.WP.uncurry' fun res back =>
+        res.1.length = ↑n ∧
+          res.2.length = s.length - ↑n ∧
+            ↑res.1 = List.take ↑n ↑s ∧
+              ↑res.2 = List.drop ↑n ↑s ∧
+                ∀ (s0' s1' : Aeneas.Std.Slice T),
+                  s0'.length = ↑n →
+                    s1'.length = s.length - ↑n →
+                      ↑(back (s0', s1')) = ↑s0' ++ ↑s1' ∧ (back (s0', s1')).length = s.length)
+Aeneas.Std.core.clone.impls.CloneI128.clone_from : Aeneas.Std.I128 → Aeneas.Std.I128 → Aeneas.Std.I128
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.mk._flat_ctor : {Self : Type} →
+  Aeneas.Std.core.slice.index.private_slice_index.Sealed Self
+Aeneas.Std.core.cmp.PartialEqU64 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U64 Aeneas.Std.U64
+Aeneas.Std.core.slice.iter.Iter.mk.noConfusion : {T : Type} →
+  {P : Sort u} →
+    {slice : Aeneas.Std.Slice T} →
+      {i : ℕ} →
+        {slice' : Aeneas.Std.Slice T} →
+          {i' : ℕ} → { slice := slice, i := i } = { slice := slice', i := i' } → (slice ≍ slice' → i = i' → P) → P
+Aeneas.Std.core.cmp.impls.OrdU128.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U128),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU128.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU128.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdI32.min.step_spec : ∀ (x y : Aeneas.Std.I32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI32.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI32.min x y
+Aeneas.Std.core.cmp.impls.OrdI16.max : Aeneas.Std.I16 → Aeneas.Std.I16 → Aeneas.Std.I16
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index.step_spec._proof_2 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    ¬↑r.end ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.Result.ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩) fun s1 =>
+        ↑s1 = List.slice 0 ↑r.end ↑s ∧ s1.length = ↑r.end
+Aeneas.Std.core.cmp.impls.OrdI64.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I64),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI64.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI64.max x y⌝⦄
+Aeneas.Std.core.cmp.Ord.eqInst : {Self : Type} → Aeneas.Std.core.cmp.Ord Self → Aeneas.Std.core.cmp.Eq Self
+Aeneas.Std.core.clone.Clone.mk.noConfusion : {Self : Type} →
+  {P : Sort u} →
+    {clone : Self → Aeneas.Std.Result Self} →
+      {clone_from : Self → Self → Aeneas.Std.Result Self} →
+        {clone' : Self → Aeneas.Std.Result Self} →
+          {clone_from' : Self → Self → Aeneas.Std.Result Self} →
+            { clone := clone, clone_from := clone_from } = { clone := clone', clone_from := clone_from' } →
+              (clone ≍ clone' → clone_from ≍ clone_from' → P) → P
+Aeneas.Std.core.clone.Clone.clone_from.default : {Self : Type} →
+  Aeneas.Std.core.clone.Clone Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.step_spec._simp_3 : ∀ {α : Type u_1}
+  (s0 s1 : Aeneas.Std.Slice α), (s0 = s1) = (↑s0 = ↑s1)
+Aeneas.Std.core.slice.Slice.swap_spec._proof_5 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (b : Aeneas.Std.Usize),
+  ↑b + 1 ≤ (↑s).length → ↑b < (↑s).length
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index.step_spec.mvcgen_spec : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.start ≤ s.length →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index r
+        s ⦃Std.Do.PostCond.noThrow fun r_1 => ⌜↑r_1 = List.drop ↑r.start ↑s ∧ r_1.length = s.length - ↑r.start⌝⦄
+Aeneas.Std.core.option.Option.unwrap.eq_1 : ∀ {T : Type} (x : Option T),
+  Aeneas.Std.core.option.Option.unwrap x = Aeneas.Std.Result.ofOption x Aeneas.Std.Error.panic
+Aeneas.Std.core.cmp.impls.OrdI128.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I128),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI128.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI128.max x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdI32.min_val : ∀ (x y : Aeneas.Std.I32),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI32.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdI128.min : Aeneas.Std.I128 → Aeneas.Std.I128 → Aeneas.Std.I128
+Aeneas.Std.core.cmp.Ord.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Ord Self → Sort u} →
+    ((eqInst : Aeneas.Std.core.cmp.Eq Self) →
+        (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self) →
+          (cmp : Self → Self → Aeneas.Std.Result Ordering) →
+            (max min : Self → Self → Aeneas.Std.Result Self) →
+              (clamp : Self → Self → Self → Aeneas.Std.Result Self) →
+                motive
+                  { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min,
+                    clamp := clamp }) →
+      (t : Aeneas.Std.core.cmp.Ord Self) → motive t
+Aeneas.Std.core.option.Option.expect.spec._proof_1_3 : ∀ {T : Type} (x : Option T),
+  x.isSome = true →
+    Aeneas.Std.WP.spec
+      (match x with
+      | some x => Aeneas.Std.Result.ok x
+      | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+      fun v => x = some v
+Aeneas.Std.core.cmp.PartialEqVec : {T U : Type} →
+  Aeneas.Std.core.cmp.PartialEq T U →
+    Aeneas.Std.core.cmp.PartialEq (Aeneas.Std.alloc.vec.Vec T) (Aeneas.Std.alloc.vec.Vec U)
+Aeneas.Std.core.cmp.impls.PartialEqShared.eq.eq_1 : ∀ {A B : Type} (PartialEqInst : Aeneas.Std.core.cmp.PartialEq A B)
+  (x : A) (y : B), Aeneas.Std.core.cmp.impls.PartialEqShared.eq PartialEqInst x y = PartialEqInst.eq x y
+Aeneas.Std.core.slice.iter.ChunksExact.mk.noConfusion : {T : Type} →
+  {P : Sort u} →
+    {chunks : List (Aeneas.Std.Slice T)} →
+      {remainder : Aeneas.Std.Slice T} →
+        {chunks' : List (Aeneas.Std.Slice T)} →
+          {remainder' : Aeneas.Std.Slice T} →
+            { chunks := chunks, remainder := remainder } = { chunks := chunks', remainder := remainder' } →
+              (chunks ≍ chunks' → remainder ≍ remainder' → P) → P
+Aeneas.Std.core.slice.index.SliceIndex.index_mut : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output → Self → T → Aeneas.Std.Result (Output × (Output → T))
+Aeneas.Std.core.slice.index.private_slice_index.SealedUsize : Aeneas.Std.core.slice.index.private_slice_index.Sealed
+  Aeneas.Std.Usize
+Aeneas.Std.core.slice.iter.Iter.ctorIdx : {T : Type} → Aeneas.Std.core.slice.iter.Iter T → ℕ
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.index.private_slice_index.SealedRangeFromUsize : Aeneas.Std.core.slice.index.private_slice_index.Sealed
+  (Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize)
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut._proof_1 : ∀ {T : Type} (s s' : Aeneas.Std.Slice T),
+  ((↑s).setSlice! 0 ↑s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.Slice.swap.eq_1 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize),
+  Aeneas.Std.core.slice.Slice.swap s a b = do
+    let av ← s.index_usize a
+    let bv ← s.index_usize b
+    let s1 ← s.update a bv
+    s1.update b av
+Aeneas.Std.core.cmp.impls.PartialOrdI128.partial_cmp : Aeneas.Std.I128 → Aeneas.Std.I128 → Option Ordering
+Aeneas.Std.core.cmp.impls.PartialOrdU32.partial_cmp : Aeneas.Std.U32 → Aeneas.Std.U32 → Option Ordering
+Aeneas.Std.core.cmp.impls.OrdI32.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I32),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI32.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI32.min x y⌝⦄
+Aeneas.Std.core.clone.Clone : Type → Type
+Aeneas.Std.core.slice.Slice.get : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result (Option Output)
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.Slice.is_empty_spec._simp_3 : ∀ {α : Type u_1} {p : Aeneas.Std.WP.Post α} (x : α),
+  Aeneas.Std.WP.spec (Aeneas.Std.Result.ok x) p = p x
+Aeneas.Std.core.cmp.impls.OrdU8.cmp : Aeneas.Std.U8 → Aeneas.Std.U8 → Ordering
+Aeneas.Std.core.cmp.PartialEq.mk.inj : ∀ {Self Rhs : Type} {eq ne eq_1 ne_1 : Self → Rhs → Aeneas.Std.Result Bool},
+  { eq := eq, ne := ne } = { eq := eq_1, ne := ne_1 } → eq = eq_1 ∧ ne = ne_1
+Aeneas.Std.core.clone.Clone.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.clone.Clone Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.clone.Clone Self'} →
+          Self = Self' → t ≍ t' → Aeneas.Std.core.clone.Clone.noConfusionType P t t'
+Aeneas.Std.core.cmp.Ord.mk.inj : ∀ {Self : Type} {eqInst : Aeneas.Std.core.cmp.Eq Self}
+  {partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self} {cmp : Self → Self → Aeneas.Std.Result Ordering}
+  {max min : Self → Self → Aeneas.Std.Result Self} {clamp : Self → Self → Self → Aeneas.Std.Result Self}
+  {eqInst_1 : Aeneas.Std.core.cmp.Eq Self} {partialOrdInst_1 : Aeneas.Std.core.cmp.PartialOrd Self Self}
+  {cmp_1 : Self → Self → Aeneas.Std.Result Ordering} {max_1 min_1 : Self → Self → Aeneas.Std.Result Self}
+  {clamp_1 : Self → Self → Self → Aeneas.Std.Result Self},
+  { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min, clamp := clamp } =
+      { eqInst := eqInst_1, partialOrdInst := partialOrdInst_1, cmp := cmp_1, max := max_1, min := min_1,
+        clamp := clamp_1 } →
+    eqInst = eqInst_1 ∧ partialOrdInst = partialOrdInst_1 ∧ cmp = cmp_1 ∧ max = max_1 ∧ min = min_1 ∧ clamp = clamp_1
+Aeneas.Std.core.cmp.impls.OrdU16.max.step_spec : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU16.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU16.max x y
+Aeneas.Std.core.cmp.Ord.min_body : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.iter.ChunksExact._sizeOf_inst : (T : Type) →
+  [SizeOf T] → SizeOf (Aeneas.Std.core.slice.iter.ChunksExact T)
+Aeneas.Std.core.slice.iter.ChunksExact.mk.injEq : ∀ {T : Type} (chunks : List (Aeneas.Std.Slice T))
+  (remainder : Aeneas.Std.Slice T) (chunks_1 : List (Aeneas.Std.Slice T)) (remainder_1 : Aeneas.Std.Slice T),
+  ({ chunks := chunks, remainder := remainder } = { chunks := chunks_1, remainder := remainder_1 }) =
+    (chunks = chunks_1 ∧ remainder = remainder_1)
+Aeneas.Std.core.cmp.PartialEq.mk._flat_ctor : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result Bool) → (Self → Rhs → Aeneas.Std.Result Bool) → Aeneas.Std.core.cmp.PartialEq Self Rhs
+Aeneas.Std.core.slice.Slice.swap_spec.match_2 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (motive : (∃ y, s.index_usize a = Aeneas.Std.Result.ok y ∧ y = (↑s)[↑a]) → Prop)
+  (x : ∃ y, s.index_usize a = Aeneas.Std.Result.ok y ∧ y = (↑s)[↑a]),
+  (∀ (av : T) (hav : s.index_usize a = Aeneas.Std.Result.ok av ∧ av = (↑s)[↑a]), motive ⋯) → motive x
+Aeneas.Std.core.cmp.Ord._sizeOf_1 : {Self : Type} → [SizeOf Self] → Aeneas.Std.core.cmp.Ord Self → ℕ
+Aeneas.Std.core.cmp.impls.OrdU16.min : Aeneas.Std.U16 → Aeneas.Std.U16 → Aeneas.Std.U16
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_mut._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s s' : Aeneas.Std.Slice T),
+  s'.length + s.length - ↑r.start ≤ Aeneas.Std.Usize.max → (↑s' ++ List.drop ↑r.start ↑s).length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.impls.OrdU16.max_val._proof_1_3 : ∀ (x y : Aeneas.Std.U16), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.option.Option.unwrap.spec._proof_4 : ∀ {T : Type} (x : Option T),
+  x.isSome = true →
+    Aeneas.Std.WP.spec
+      (match x with
+      | some x => Aeneas.Std.Result.ok x
+      | none => Aeneas.Std.Result.fail Aeneas.Std.Error.panic)
+      fun v => x = some v
+Aeneas.Std.core.cmp.Ord.noConfusionType : Sort u →
+  {Self : Type} → Aeneas.Std.core.cmp.Ord Self → {Self' : Type} → Aeneas.Std.core.cmp.Ord Self' → Sort u
+Aeneas.Std.core.slice.Slice.split_at._proof_2 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  (↑s).length ≤ Aeneas.Std.Usize.max → ¬(↑s).length ≤ Aeneas.Std.Usize.max + ↑n → False
+Aeneas.Std.core.slice.Slice.swap_spec._proof_9 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (hb : ↑b < s.length), ↑a + 1 ≤ ((↑s).set (↑a) (↑s)[↑b]).length → ↑a < ((↑s).set (↑a) (↑s)[↑b]).length
+Aeneas.Std.core.slice.index.SliceIndex.rec : {Self T Output : Type} →
+  {motive : Aeneas.Std.core.slice.index.SliceIndex Self T Output → Sort u} →
+    ((sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) →
+        (get : Self → T → Aeneas.Std.Result (Option Output)) →
+          (get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))) →
+            (get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)) →
+              (get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)) →
+                (index : Self → T → Aeneas.Std.Result Output) →
+                  (index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))) →
+                    motive
+                      { sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+                        get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut }) →
+      (t : Aeneas.Std.core.slice.index.SliceIndex Self T Output) → motive t
+Aeneas.Std.core.cmp.impls.OrdI128.clamp : Aeneas.Std.I128 →
+  Aeneas.Std.I128 → Aeneas.Std.I128 → Aeneas.Std.Result Aeneas.Std.I128
+Aeneas.Std.core.cmp.impls.PartialEqUnit.ne.eq_1 : ∀ (x x_1 : Unit),
+  Aeneas.Std.core.cmp.impls.PartialEqUnit.ne x x_1 = Aeneas.Std.Result.ok false
+Aeneas.Std.core.cmp.impls.OrdIsize.max_val : ∀ (x y : Aeneas.Std.Isize),
+  ↑(Aeneas.Std.core.cmp.impls.OrdIsize.max x y) = max ↑x ↑y
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdU64.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.U64), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.PartialEqU32.ne : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get_unchecked_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize →
+    Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.MutRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.slice.iter.IterMut.rec : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.IterMut T → Sort u} →
+    ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) →
+      (t : Aeneas.Std.core.slice.iter.IterMut T) → motive t
+Aeneas.Std.core.cmp.impls.OrdI64.min : Aeneas.Std.I64 → Aeneas.Std.I64 → Aeneas.Std.I64
+Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.Iter T → Aeneas.Std.Result (Option T × Aeneas.Std.core.slice.iter.Iter T)
+Aeneas.Std.core.cmp.impls.OrdU32.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.U32), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.Ord : Type → Type
+Aeneas.Std.core.cmp.impls.OrdU16.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.U16), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.PartialOrdU8.partial_cmp : Aeneas.Std.U8 → Aeneas.Std.U8 → Option Ordering
+Aeneas.Std.core.cmp.Eq.assert_fields_are_eq._default : {Self : Type} → Self → Aeneas.Std.Result Unit
+Aeneas.Std.core.cmp.impls.OrdI8.max.step_spec : ∀ (x y : Aeneas.Std.I8),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI8.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI8.max x y
+Aeneas.Std.core.cmp.Ord.clamp._default : {Self : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Self → Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.OrdU64.max_val : ∀ (x y : Aeneas.Std.U64),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU64.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdUsize.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.Usize), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.Ord.max._default : {Self : Type} →
+  Aeneas.Std.core.cmp.PartialOrd Self Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.index.private_slice_index.Sealed : Type → Type
+Aeneas.Std.core.cmp.impls.OrdU128.cmp : Aeneas.Std.U128 → Aeneas.Std.U128 → Ordering
+Aeneas.Std.core.slice.Slice.reverse : {T : Type} → Aeneas.Std.Slice T → Aeneas.Std.Slice T
+Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  Aeneas.Std.core.slice.iter.IterMut T →
+    Aeneas.Std.Result
+      (Option T ×
+        Aeneas.Std.core.slice.iter.IterMut T ×
+          (Aeneas.Std.core.slice.iter.IterMut T → Option T → Aeneas.Std.core.slice.iter.IterMut T))
+Aeneas.Std.core.cmp.Eq._sizeOf_1 : {Self : Type} → [SizeOf Self] → Aeneas.Std.core.cmp.Eq Self → ℕ
+Aeneas.Std.core.slice.Slice.split_at_mut.spec._proof_2 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (n : Aeneas.Std.Usize),
+  ↑n ≤ s.length →
+    ∀ (s0' s1' : Aeneas.Std.Slice T),
+      s0'.length = ↑n →
+        s0'.length = (List.splitAt ↑n ↑s).1.length ∧ s1'.length = (List.splitAt ↑n ↑s).2.length →
+          (↑s0').length + (↑s1').length = (↑s).length
+Aeneas.Std.core.cmp.impls.OrdI128.min.eq_1 : ∀ (x y : Aeneas.Std.I128),
+  Aeneas.Std.core.cmp.impls.OrdI128.min x y = if x < y then x else y
+Aeneas.Std.core.option.Option.unwrap : {T : Type} → Option T → Aeneas.Std.Result T
+Aeneas.Std.core.cmp.PartialEq.ne.trait_default : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdU32.max : Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32
+Aeneas.Std.core.cmp.Ord.max : {Self : Type} → Aeneas.Std.core.cmp.Ord Self → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.PartialEqUnit.eq.eq_1 : ∀ (x x_1 : Unit),
+  Aeneas.Std.core.cmp.impls.PartialEqUnit.eq x x_1 = Aeneas.Std.Result.ok true
+Aeneas.Std.core.cmp.impls.OrdI128.min_val : ∀ (x y : Aeneas.Std.I128),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI128.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.PartialOrd.casesOn : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialOrd Self Rhs → Sort u} →
+    (t : Aeneas.Std.core.cmp.PartialOrd Self Rhs) →
+      ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs) →
+          (partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)) →
+            (lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool) →
+              motive
+                { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt,
+                  ge := ge }) →
+        motive t
+Aeneas.Std.core.option.Option.is_none.eq_1 : ∀ {T : Type} (self : Option T),
+  Aeneas.Std.core.option.Option.is_none self = self.isNone
+Aeneas.Std.core.clone.impls.CloneU32.clone_from : Aeneas.Std.U32 → Aeneas.Std.U32 → Aeneas.Std.U32
+Aeneas.Std.core.cmp.impls.OrdI16.max.eq_1 : ∀ (x y : Aeneas.Std.I16),
+  Aeneas.Std.core.cmp.impls.OrdI16.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.Ord.min.trait_default_U64.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U64),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU64 x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU64.min x y⌝⦄
+Aeneas.Std.core.option.Option.unwrap_or.step_spec.mvcgen_spec : ∀ {T : Type u_1} (self : Option T) (default : T),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.option.Option.unwrap_or self
+        default) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.option.Option.unwrap_or self default⌝⦄
+Aeneas.Std.core.cmp.impls.PartialEqI64.eq : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.cmp.Ord.min.trait_default_U16.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U16),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU16 x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU16.min x y⌝⦄
+Aeneas.Std.core.cmp.impls.OrdI16.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.I16), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.OrdU64.min.step_spec : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU64.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU64.min x y
+Aeneas.Std.core.cmp.PartialOrdI64 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.I64 Aeneas.Std.I64
+Aeneas.Std.core.slice.index.SliceIndex.casesOn : {Self T Output : Type} →
+  {motive : Aeneas.Std.core.slice.index.SliceIndex Self T Output → Sort u} →
+    (t : Aeneas.Std.core.slice.index.SliceIndex Self T Output) →
+      ((sealedInst : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) →
+          (get : Self → T → Aeneas.Std.Result (Option Output)) →
+            (get_mut : Self → T → Aeneas.Std.Result (Option Output × (Option Output → T))) →
+              (get_unchecked : Self → Aeneas.Std.ConstRawPtr T → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr Output)) →
+                (get_unchecked_mut : Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)) →
+                  (index : Self → T → Aeneas.Std.Result Output) →
+                    (index_mut : Self → T → Aeneas.Std.Result (Output × (Output → T))) →
+                      motive
+                        { sealedInst := sealedInst, get := get, get_mut := get_mut, get_unchecked := get_unchecked,
+                          get_unchecked_mut := get_unchecked_mut, index := index, index_mut := index_mut }) →
+        motive t
+Aeneas.Std.core.cmp.impls.PartialOrdIsize.le : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.cmp.impls.OrdU64.max.step_spec : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU64.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU64.max x y
+Aeneas.Std.core.cmp.PartialEqI64 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.I64 Aeneas.Std.I64
+Aeneas.Std.core.cmp.impls.OrdI8.min : Aeneas.Std.I8 → Aeneas.Std.I8 → Aeneas.Std.I8
+Aeneas.Std.core.slice.Slice.is_empty_spec.mvcgen_spec : ∀ {T : Type} (s : Aeneas.Std.Slice T),
+  ⦃⌜True⌝⦄ Aeneas.Std.core.slice.Slice.is_empty s ⦃Std.Do.PostCond.noThrow fun r => ⌜(r = true) = (s.length = 0)⌝⦄
+Aeneas.Std.core.slice.iter.IterMut : Type → Type
+Aeneas.Std.core.cmp.impls.OrdI128.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I128),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI128.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI128.min x y⌝⦄
+Aeneas.Std.core.slice.iter.Iter.mk.injEq : ∀ {T : Type} (slice : Aeneas.Std.Slice T) (i : ℕ)
+  (slice_1 : Aeneas.Std.Slice T) (i_1 : ℕ),
+  ({ slice := slice, i := i } = { slice := slice_1, i := i_1 }) = (slice = slice_1 ∧ i = i_1)
+Aeneas.Std.core.clone.CloneI64 : Aeneas.Std.core.clone.Clone Aeneas.Std.I64
+Aeneas.Std.core.slice.iter.IteratorIterMut.next.match_1 : {T : Type} →
+  (motive : Option T → Sort u_1) → (x : Option T) → (Unit → motive none) → ((x : T) → motive (some x)) → motive x
+Aeneas.Std.core.cmp.impls.OrdU32.min.step_spec : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdU32.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdU32.min x y
+Aeneas.Std.core.cmp.PartialOrdU32 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.U32 Aeneas.Std.U32
+Aeneas.Std.core.cmp.impls.OrdIsize.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.Isize), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.clone.Clone._sizeOf_inst : (Self : Type) → [SizeOf Self] → SizeOf (Aeneas.Std.core.clone.Clone Self)
+Aeneas.Std.core.cmp.impls.PartialOrdU32.le : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.cmp.impls.OrdU128.min : Aeneas.Std.U128 → Aeneas.Std.U128 → Aeneas.Std.U128
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.lt.eq_1 : ∀ (x y : Aeneas.Std.Usize),
+  Aeneas.Std.core.cmp.impls.PartialOrdUsize.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut.step_spec._simp_2 : ∀ {ty : Aeneas.Std.UScalarTy}
+  (x y : Aeneas.Std.UScalar ty), (x ≤ y) = (↑x ≤ ↑y)
+Aeneas.Std.core.cmp.impls.PartialOrdU64.lt.eq_1 : ∀ (x y : Aeneas.Std.U64),
+  Aeneas.Std.core.cmp.impls.PartialOrdU64.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.cmp.PartialEqI32 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.I32 Aeneas.Std.I32
+Aeneas.Std.core.cmp.Ord.min_body.eq_1 : ∀ {Self : Type} (lt : Self → Self → Aeneas.Std.Result Bool) (x y : Self),
+  Aeneas.Std.core.cmp.Ord.min_body lt x y = do
+    let __do_lift ← lt x y
+    if __do_lift = true then Aeneas.Std.Result.ok x else Aeneas.Std.Result.ok y
+Aeneas.Std.core.slice.iter.Iter.casesOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.Iter T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.Iter T) →
+      ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) → motive t
+Aeneas.Std.core.cmp.impls.PartialOrdI64.le : Aeneas.Std.I64 → Aeneas.Std.I64 → Bool
+Aeneas.Std.core.cmp.impls.OrdU8.min_val._proof_1_2 : ∀ (x y : Aeneas.Std.U8), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.cmp.impls.OrdU16.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U16),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU16.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU16.max x y⌝⦄
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_mut._proof_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) (s s' : Aeneas.Std.Slice T),
+  ((↑s).setSlice! ↑r.start ↑s').length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.impls.PartialOrdI128.ge : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.cmp.impls.PartialOrdU32.gt : Aeneas.Std.U32 → Aeneas.Std.U32 → Bool
+Aeneas.Std.core.cmp.Eq.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.cmp.Eq Self → Sort u} →
+    ((partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Self) →
+        (assert_fields_are_eq : Self → Aeneas.Std.Result Unit) →
+          motive { partialEqInst := partialEqInst, assert_fields_are_eq := assert_fields_are_eq }) →
+      (t : Aeneas.Std.core.cmp.Eq Self) → motive t
+Aeneas.Std.core.cmp.PartialEqU8 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U8 Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.OrdI32.max.step_spec : ∀ (x y : Aeneas.Std.I32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI32.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI32.max x y
+Aeneas.Std.core.cmp.impls.PartialOrdU64.partial_cmp : Aeneas.Std.U64 → Aeneas.Std.U64 → Option Ordering
+Aeneas.Std.core.slice.Slice.fill.match_1 : {T : Type} →
+  (motive : Aeneas.Std.Result (List T) → Sort u_1) →
+    (x : Aeneas.Std.Result (List T)) →
+      ((val : List T) → x = Aeneas.Std.Result.ok val → motive (Aeneas.Std.Result.ok val)) →
+        ((e : Aeneas.Std.Error) → x = Aeneas.Std.Result.fail e → motive (Aeneas.Std.Result.fail e)) →
+          (x = Aeneas.Std.Result.div → motive Aeneas.Std.Result.div) → motive x
+Aeneas.Std.core.cmp.PartialEq.mk.sizeOf_spec : ∀ {Self Rhs : Type} [inst : SizeOf Self] [inst_1 : SizeOf Rhs]
+  (eq ne : Self → Rhs → Aeneas.Std.Result Bool), sizeOf { eq := eq, ne := ne } = 1
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index.eq_1 : ∀ {T : Type}
+  (r : Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize) (s : Aeneas.Std.Slice T),
+  Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.index r s =
+    if ↑r.start ≤ s.length then Aeneas.Std.Result.ok (s.drop r.start) else Aeneas.Std.Result.fail Aeneas.Std.Error.undef
+Aeneas.Std.core.slice.Slice.get_unchecked : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result Output
+Aeneas.Std.core.clone.impls.CloneI32.clone_from : Aeneas.Std.I32 → Aeneas.Std.I32 → Aeneas.Std.I32
+Aeneas.Std.core.option.Option.unwrap_or.step_spec : ∀ {T : Type u_1} (self : Option T) (default : T),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.option.Option.unwrap_or self default)) fun x =>
+    x = Aeneas.Std.core.option.Option.unwrap_or self default
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self],
+  sizeOf { } = 1
+Aeneas.Std.core.cmp.impls.OrdU16.max.eq_1 : ∀ (x y : Aeneas.Std.U16),
+  Aeneas.Std.core.cmp.impls.OrdU16.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.PartialOrd.mk.inj : ∀ {Self Rhs : Type} {partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs}
+  {partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)} {lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool}
+  {partialEqInst_1 : Aeneas.Std.core.cmp.PartialEq Self Rhs}
+  {partial_cmp_1 : Self → Rhs → Aeneas.Std.Result (Option Ordering)}
+  {lt_1 le_1 gt_1 ge_1 : Self → Rhs → Aeneas.Std.Result Bool},
+  { partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt, ge := ge } =
+      { partialEqInst := partialEqInst_1, partial_cmp := partial_cmp_1, lt := lt_1, le := le_1, gt := gt_1,
+        ge := ge_1 } →
+    partialEqInst = partialEqInst_1 ∧ partial_cmp = partial_cmp_1 ∧ lt = lt_1 ∧ le = le_1 ∧ gt = gt_1 ∧ ge = ge_1
+Aeneas.Std.core.option.Option.unwrap_or.match_1 : {T : Type u_1} →
+  (motive : Option T → Sort u_2) →
+    (self : Option T) → (Unit → motive none) → ((self : T) → motive (some self)) → motive self
+Aeneas.Std.core.cmp.impls.PartialEqI32.eq : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.cmp.impls.OrdUnit.cmp : Unit → Unit → Aeneas.Std.Result Ordering
+Aeneas.Std.core.cmp.impls.OrdUsize.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.Usize), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.PartialOrdIsize.gt : Aeneas.Std.Isize → Aeneas.Std.Isize → Bool
+Aeneas.Std.core.cmp.PartialEq.ne : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self → Sort u} →
+    (t : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) → motive { } → motive t
+Aeneas.Std.core.cmp.PartialEqI16 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.I16 Aeneas.Std.I16
+Aeneas.Std.core.cmp.EqI8 : Aeneas.Std.core.cmp.Eq Aeneas.Std.I8
+Aeneas.Std.core.cmp.impls.PartialEqUsize.ne : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.cmp.Ord.max_body : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.slice.iter.IterMut._sizeOf_1 : {T : Type} → [SizeOf T] → Aeneas.Std.core.slice.iter.IterMut T → ℕ
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index_mut.step_spec._proof_3 : ∀ {α : Type}
+  (r : Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize) (s : Aeneas.Std.Slice α),
+  ↑r.end ≤ s.length →
+    ¬↑r.end ≤ s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.Result.ok (⟨List.slice 0 ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! 0 ↑s', ⋯⟩))
+        (Aeneas.Std.WP.uncurry' fun s1 back =>
+          ↑s1 = List.slice 0 ↑r.end ↑s ∧
+            s1.length = ↑r.end ∧ ∀ (s' : Aeneas.Std.Slice α), ↑(back s') = (↑s).setSlice! 0 ↑s')
+Aeneas.Std.core.slice.Slice.is_empty : {T : Type} → Aeneas.Std.Slice T → Aeneas.Std.Result Bool
+Aeneas.Std.core.slice.index.SliceIndex.ctorIdx : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output → ℕ
+Aeneas.Std.core.cmp.impls.OrdU8.min.eq_1 : ∀ (x y : Aeneas.Std.U8),
+  Aeneas.Std.core.cmp.impls.OrdU8.min x y = if x < y then x else y
+Aeneas.Std.core.cmp.Eq.mk : {Self : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Self → (Self → Aeneas.Std.Result Unit) → Aeneas.Std.core.cmp.Eq Self
+Aeneas.Std.core.cmp.PartialOrd.mk.injEq : ∀ {Self Rhs : Type} (partialEqInst : Aeneas.Std.core.cmp.PartialEq Self Rhs)
+  (partial_cmp : Self → Rhs → Aeneas.Std.Result (Option Ordering)) (lt le gt ge : Self → Rhs → Aeneas.Std.Result Bool)
+  (partialEqInst_1 : Aeneas.Std.core.cmp.PartialEq Self Rhs)
+  (partial_cmp_1 : Self → Rhs → Aeneas.Std.Result (Option Ordering))
+  (lt_1 le_1 gt_1 ge_1 : Self → Rhs → Aeneas.Std.Result Bool),
+  ({ partialEqInst := partialEqInst, partial_cmp := partial_cmp, lt := lt, le := le, gt := gt, ge := ge } =
+      { partialEqInst := partialEqInst_1, partial_cmp := partial_cmp_1, lt := lt_1, le := le_1, gt := gt_1,
+        ge := ge_1 }) =
+    (partialEqInst = partialEqInst_1 ∧ partial_cmp = partial_cmp_1 ∧ lt = lt_1 ∧ le = le_1 ∧ gt = gt_1 ∧ ge = ge_1)
+Aeneas.Std.core.option.Option.take.eq_1 : ∀ {T : Type} (self : Option T),
+  Aeneas.Std.core.option.Option.take self = (self, none)
+Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T) → Aeneas.Std.Result (Aeneas.Std.ConstRawPtr (Aeneas.Std.Slice T))
+Aeneas.Std.core.clone.CloneIsize : Aeneas.Std.core.clone.Clone Aeneas.Std.Isize
+Aeneas.Std.core.slice.index.private_slice_index.Sealed.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self → Sort u} →
+    motive { } → (t : Aeneas.Std.core.slice.index.private_slice_index.Sealed Self) → motive t
+Aeneas.Std.core.slice.Slice.chunks_exact._proof_3 : ∀ {T : Type} (s : Aeneas.Std.Slice T)
+  (chunk_size : Aeneas.Std.Usize) (hcs : ↑chunk_size > 0),
+  ∀ c ∈ (Aeneas.Std.List.toChunksExact (↑chunk_size) hcs ↑s).1, c.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.cmp.impls.OrdU8.clamp : Aeneas.Std.U8 → Aeneas.Std.U8 → Aeneas.Std.U8 → Aeneas.Std.Result Aeneas.Std.U8
+Aeneas.Std.core.cmp.Eq.partialEqInst : {Self : Type} →
+  Aeneas.Std.core.cmp.Eq Self → Aeneas.Std.core.cmp.PartialEq Self Self
+Aeneas.Std.core.cmp.impls.PartialOrdI16.partial_cmp : Aeneas.Std.I16 → Aeneas.Std.I16 → Option Ordering
+Aeneas.Std.core.slice.iter.ChunksExact.mk._flat_ctor : {T : Type} →
+  List (Aeneas.Std.Slice T) → Aeneas.Std.Slice T → Aeneas.Std.core.slice.iter.ChunksExact T
+Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.get : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeTo Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Option (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdU32.cmp : Aeneas.Std.U32 → Aeneas.Std.U32 → Ordering
+Aeneas.Std.core.cmp.impls.PartialOrdI8.partial_cmp : Aeneas.Std.I8 → Aeneas.Std.I8 → Option Ordering
+Aeneas.Std.core.cmp.impls.OrdIsize.max.step_spec : ∀ (x y : Aeneas.Std.Isize),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdIsize.max x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdIsize.max x y
+Aeneas.Std.core.cmp.impls.OrdI32.max.eq_1 : ∀ (x y : Aeneas.Std.I32),
+  Aeneas.Std.core.cmp.impls.OrdI32.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.partial_cmp : Aeneas.Std.Usize → Aeneas.Std.Usize → Option Ordering
+Aeneas.Std.core.cmp.PartialOrdI32 : Aeneas.Std.core.cmp.PartialOrd Aeneas.Std.I32 Aeneas.Std.I32
+Aeneas.Std.core.cmp.EqI16 : Aeneas.Std.core.cmp.Eq Aeneas.Std.I16
+Aeneas.Std.core.slice.Slice.swap_spec : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize),
+  ↑a < s.length →
+    ↑b < s.length →
+      Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.swap s a b) fun s' =>
+        s'.length = s.length ∧
+          (↑s')[↑a]! = (↑s)[↑b]! ∧ (↑s')[↑b]! = (↑s)[↑a]! ∧ ∀ (i : ℕ), i ≠ ↑a → i ≠ ↑b → (↑s')[i]! = (↑s)[i]!
+Aeneas.Std.core.cmp.impls.OrdUsize.max : Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Usize
+Aeneas.Std.core.cmp.impls.PartialOrdU32.lt.eq_1 : ∀ (x y : Aeneas.Std.U32),
+  Aeneas.Std.core.cmp.impls.PartialOrdU32.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.cmp.PartialOrd.gt._default : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.OrdI64.min_val : ∀ (x y : Aeneas.Std.I64),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI64.min x y) = min ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdI64.cmp : Aeneas.Std.I64 → Aeneas.Std.I64 → Ordering
+Aeneas.Std.core.slice.Slice.fill.spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (s : Aeneas.Std.Slice T) (v : T),
+  (Aeneas.Std.WP.spec (cloneInst.clone v) fun v' => v' = v) →
+    Aeneas.Std.WP.spec (Aeneas.Std.core.slice.Slice.fill cloneInst s v) fun s' =>
+      s'.length = s.length ∧ ↑s' = List.replicate s.length v
+Aeneas.Std.core.cmp.impls.PartialOrdUsize.lt : Aeneas.Std.Usize → Aeneas.Std.Usize → Bool
+Aeneas.Std.core.cmp.OrdU8 : Aeneas.Std.core.cmp.Ord Aeneas.Std.U8
+Aeneas.Std.core.cmp.PartialEq.noConfusionType : Sort u →
+  {Self Rhs : Type} →
+    Aeneas.Std.core.cmp.PartialEq Self Rhs → {Self' Rhs' : Type} → Aeneas.Std.core.cmp.PartialEq Self' Rhs' → Sort u
+Aeneas.Std.core.cmp.impls.OrdU32.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.U32), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.cmp.impls.PartialOrdU128.ge : Aeneas.Std.U128 → Aeneas.Std.U128 → Bool
+Aeneas.Std.core.slice.index.SliceIndex.get_unchecked_mut : {Self T Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex Self T Output →
+    Self → Aeneas.Std.MutRawPtr T → Aeneas.Std.Result (Aeneas.Std.MutRawPtr Output)
+Aeneas.Std.core.clone.Clone.mk : {Self : Type} →
+  (Self → Aeneas.Std.Result Self) → (Self → Self → Aeneas.Std.Result Self) → Aeneas.Std.core.clone.Clone Self
+Aeneas.Std.core.slice.Slice.swap_spec._proof_12 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (hb : ↑b < s.length),
+  ↑b + 1 ≤ (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length →
+    ↑b < (((↑s).set (↑a) (↑s)[↑b]).set (↑b) (↑s)[↑a]).length
+Aeneas.Std.core.slice.Slice.fill : {T : Type} →
+  Aeneas.Std.core.clone.Clone T → Aeneas.Std.Slice T → T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.Ord.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.cmp.Ord Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.cmp.Ord Self'} → Self = Self' → t ≍ t' → Aeneas.Std.core.cmp.Ord.noConfusionType P t t'
+Aeneas.Std.core.slice.iter.ChunksExact.mk.sizeOf_spec : ∀ {T : Type} [inst : SizeOf T]
+  (chunks : List (Aeneas.Std.Slice T)) (remainder : Aeneas.Std.Slice T),
+  sizeOf { chunks := chunks, remainder := remainder } = 1 + sizeOf chunks + sizeOf remainder
+Aeneas.Std.core.cmp.impls.OrdU8.min_val._proof_1_3 : ∀ (x y : Aeneas.Std.U8), ¬↑x < ↑y → ¬↑y ≤ ↑x → False
+Aeneas.Std.core.slice.iter.Iter.recOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.Iter T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.Iter T) →
+      ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) → motive t
+Aeneas.Std.core.cmp.Eq._sizeOf_inst : (Self : Type) → [SizeOf Self] → SizeOf (Aeneas.Std.core.cmp.Eq Self)
+Aeneas.Std.core.clone.impls.CloneIsize.clone : Aeneas.Std.Isize → Aeneas.Std.Isize
+Aeneas.Std.core.slice.index.Usize.get : {T : Type} →
+  Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Option T)
+Aeneas.Std.core.slice.iter.ChunksExact.rec : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.ChunksExact T → Sort u} →
+    ((chunks : List (Aeneas.Std.Slice T)) →
+        (remainder : Aeneas.Std.Slice T) → motive { chunks := chunks, remainder := remainder }) →
+      (t : Aeneas.Std.core.slice.iter.ChunksExact T) → motive t
+Aeneas.Std.core.option.Option.unwrap_or_none : ∀ {T : Type u_1} (default : T),
+  Aeneas.Std.core.option.Option.unwrap_or none default = default
+Aeneas.Std.core.cmp.impls.PartialOrdI8.lt : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.cmp.Ord.max.default : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.OrdU128.max_val._proof_1_2 : ∀ (x y : Aeneas.Std.U128), ↑x < ↑y → ¬↑x ≤ ↑y → False
+Aeneas.Std.core.clone.impls.CloneU64.clone_from : Aeneas.Std.U64 → Aeneas.Std.U64 → Aeneas.Std.U64
+Aeneas.Std.core.slice.Slice.get_unchecked_SliceIndexUsizeSlice_spec._proof_1 : ∀ {T : Type} {s : Aeneas.Std.Slice T}
+  {i : Aeneas.Std.Usize}, ↑i < s.length → ↑i < (↑s).length
+Aeneas.Std.core.clone.CloneU8 : Aeneas.Std.core.clone.Clone Aeneas.Std.U8
+Aeneas.Std.core.cmp.Ord.min.trait_default_U32.spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U32),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.core.cmp.Ord.min.trait_default Aeneas.Std.core.cmp.OrdU32 x
+      y ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU32.min x y⌝⦄
+Aeneas.Std.core.cmp.Ord.min.default.eq_1 : ∀ {Self : Type} (lt : Self → Self → Aeneas.Std.Result Bool) (x y : Self),
+  Aeneas.Std.core.cmp.Ord.min.default lt x y = Aeneas.Std.core.cmp.Ord.min_body lt x y
+Aeneas.Std.core.cmp.impls.PartialEqI128.ne : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.cmp.Ord.min.default : {Self : Type} →
+  (Self → Self → Aeneas.Std.Result Bool) → Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.PartialOrdI8.ge : Aeneas.Std.I8 → Aeneas.Std.I8 → Bool
+Aeneas.Std.core.slice.Slice.chunks_exact._proof_4 : ∀ {T : Type} (s : Aeneas.Std.Slice T)
+  (chunk_size : Aeneas.Std.Usize) (hcs : ↑chunk_size > 0),
+  (Aeneas.Std.List.toChunksExact (↑chunk_size) hcs ↑s).2.length ≤ Aeneas.Std.Usize.max
+Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice.get : {T : Type} →
+  Aeneas.Std.core.ops.range.RangeFrom Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Option (Aeneas.Std.Slice T))
+Aeneas.Std.core.cmp.impls.OrdU32.max_val : ∀ (x y : Aeneas.Std.U32),
+  ↑(Aeneas.Std.core.cmp.impls.OrdU32.max x y) = max ↑x ↑y
+Aeneas.Std.core.cmp.impls.OrdU16.min.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U16),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU16.min x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU16.min x y⌝⦄
+Aeneas.Std.core.clone.Clone.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.clone.Clone Self → Sort u} →
+    (t : Aeneas.Std.core.clone.Clone Self) →
+      ((clone : Self → Aeneas.Std.Result Self) →
+          (clone_from : Self → Self → Aeneas.Std.Result Self) → motive { clone := clone, clone_from := clone_from }) →
+        motive t
+Aeneas.Std.core.cmp.impls.PartialOrdI16.lt : Aeneas.Std.I16 → Aeneas.Std.I16 → Bool
+Aeneas.Std.core.clone.Clone.clone : {Self : Type} → Aeneas.Std.core.clone.Clone Self → Self → Aeneas.Std.Result Self
+Aeneas.Std.core.cmp.impls.OrdI32.max : Aeneas.Std.I32 → Aeneas.Std.I32 → Aeneas.Std.I32
+Aeneas.Std.core.cmp.PartialEq.noConfusion : {P : Sort u} →
+  {Self Rhs : Type} →
+    {t : Aeneas.Std.core.cmp.PartialEq Self Rhs} →
+      {Self' Rhs' : Type} →
+        {t' : Aeneas.Std.core.cmp.PartialEq Self' Rhs'} →
+          Self = Self' → Rhs = Rhs' → t ≍ t' → Aeneas.Std.core.cmp.PartialEq.noConfusionType P t t'
+Aeneas.Std.core.cmp.PartialEq.ne.default.spec.mvcgen_spec : ∀ {T : Type} (eq : T → T → Aeneas.Std.Result Bool)
+  (self other : T),
+  (Aeneas.Std.WP.spec (eq self other) fun b => b = true ↔ self = other) →
+    ⦃⌜True⌝⦄
+      Aeneas.Std.core.cmp.PartialEq.ne.default eq self
+        other ⦃Std.Do.PostCond.noThrow fun r => ⌜r = true ↔ self ≠ other⌝⦄
+Aeneas.Std.core.cmp.impls.OrdU8.min : Aeneas.Std.U8 → Aeneas.Std.U8 → Aeneas.Std.U8
+Aeneas.Std.core.cmp.impls.PartialOrdU128.lt.eq_1 : ∀ (x y : Aeneas.Std.U128),
+  Aeneas.Std.core.cmp.impls.PartialOrdU128.lt x y = decide (↑x < ↑y)
+Aeneas.Std.core.cmp.Eq.assert_fields_are_eq : {Self : Type} →
+  Aeneas.Std.core.cmp.Eq Self → Self → Aeneas.Std.Result Unit
+Aeneas.Std.core.clone.Clone.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.clone.Clone Self → Sort u} →
+    (t : Aeneas.Std.core.clone.Clone Self) →
+      ((clone : Self → Aeneas.Std.Result Self) →
+          (clone_from : Self → Self → Aeneas.Std.Result Self) → motive { clone := clone, clone_from := clone_from }) →
+        motive t
+Aeneas.Std.core.cmp.PartialEq.mk.injEq : ∀ {Self Rhs : Type} (eq ne eq_1 ne_1 : Self → Rhs → Aeneas.Std.Result Bool),
+  ({ eq := eq, ne := ne } = { eq := eq_1, ne := ne_1 }) = (eq = eq_1 ∧ ne = ne_1)
+Aeneas.Std.core.cmp.impls.PartialOrdI128.le : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.slice.Slice.swap_spec._proof_6 : ∀ {T : Type} (s : Aeneas.Std.Slice T) (a b : Aeneas.Std.Usize)
+  (ha : ↑a < s.length) (hb : ↑b < s.length) (hab : ↑a = ↑b),
+  ↑b + 1 ≤ (((↑s).set (↑b) (↑s)[↑b]).set (↑b) (↑s)[↑b]).length →
+    ↑b < (((↑s).set (↑b) (↑s)[↑b]).set (↑b) (↑s)[↑b]).length
+Aeneas.Std.core.cmp.impls.PartialOrdI32.ge : Aeneas.Std.I32 → Aeneas.Std.I32 → Bool
+Aeneas.Std.core.cmp.Ord.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self] (eqInst : Aeneas.Std.core.cmp.Eq Self)
+  (partialOrdInst : Aeneas.Std.core.cmp.PartialOrd Self Self) (cmp : Self → Self → Aeneas.Std.Result Ordering)
+  (max min : Self → Self → Aeneas.Std.Result Self) (clamp : Self → Self → Self → Aeneas.Std.Result Self),
+  sizeOf { eqInst := eqInst, partialOrdInst := partialOrdInst, cmp := cmp, max := max, min := min, clamp := clamp } =
+    1 + sizeOf eqInst + sizeOf partialOrdInst
+Aeneas.Std.core.cmp.impls.PartialOrdIsize.partial_cmp : Aeneas.Std.Isize → Aeneas.Std.Isize → Option Ordering
+Aeneas.Std.core.slice.iter.IterMut.recOn : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.IterMut T → Sort u} →
+    (t : Aeneas.Std.core.slice.iter.IterMut T) →
+      ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) → motive t
+Aeneas.Std.core.cmp.impls.OrdI128.max : Aeneas.Std.I128 → Aeneas.Std.I128 → Aeneas.Std.I128
+Aeneas.Std.core.cmp.impls.OrdIsize.max.eq_1 : ∀ (x y : Aeneas.Std.Isize),
+  Aeneas.Std.core.cmp.impls.OrdIsize.max x y = if x < y then y else x
+Aeneas.Std.core.cmp.impls.PartialEqI128.eq : Aeneas.Std.I128 → Aeneas.Std.I128 → Bool
+Aeneas.Std.core.cmp.impls.OrdI128.min.step_spec : ∀ (x y : Aeneas.Std.I128),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (Aeneas.Std.core.cmp.impls.OrdI128.min x y)) fun x_1 =>
+    x_1 = Aeneas.Std.core.cmp.impls.OrdI128.min x y
+Aeneas.Std.core.cmp.impls.PartialOrdI64.partial_cmp : Aeneas.Std.I64 → Aeneas.Std.I64 → Option Ordering
+Aeneas.Std.core.cmp.PartialOrd.le_body : {Self Rhs : Type} →
+  (Self → Rhs → Aeneas.Std.Result (Option Ordering)) → Self → Rhs → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.impls.PartialEqUnit.eq : Unit → Unit → Aeneas.Std.Result Bool
+Aeneas.Std.core.cmp.PartialEq.casesOn : {Self Rhs : Type} →
+  {motive : Aeneas.Std.core.cmp.PartialEq Self Rhs → Sort u} →
+    (t : Aeneas.Std.core.cmp.PartialEq Self Rhs) →
+      ((eq ne : Self → Rhs → Aeneas.Std.Result Bool) → motive { eq := eq, ne := ne }) → motive t
+Aeneas.Std.core.cmp.impls.PartialOrdU8.le : Aeneas.Std.U8 → Aeneas.Std.U8 → Bool
+Aeneas.Std.core.clone.CloneU16 : Aeneas.Std.core.clone.Clone Aeneas.Std.U16
+Aeneas.Std.core.cmp.impls.OrdU128.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.U128),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdU128.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdU128.max x y⌝⦄
+Aeneas.Std.core.slice.iter.Iter.rec : {T : Type} →
+  {motive : Aeneas.Std.core.slice.iter.Iter T → Sort u} →
+    ((slice : Aeneas.Std.Slice T) → (i : ℕ) → motive { slice := slice, i := i }) →
+      (t : Aeneas.Std.core.slice.iter.Iter T) → motive t
+Aeneas.Std.core.clone.impls.CloneI64.clone_from : Aeneas.Std.I64 → Aeneas.Std.I64 → Aeneas.Std.I64
+Aeneas.Std.core.cmp.impls.OrdI8.max.step_spec.mvcgen_spec : ∀ (x y : Aeneas.Std.I8),
+  ⦃⌜True⌝⦄
+    Aeneas.Std.lift
+      (Aeneas.Std.core.cmp.impls.OrdI8.max x
+        y) ⦃Std.Do.PostCond.noThrow fun r => ⌜r = Aeneas.Std.core.cmp.impls.OrdI8.max x y⌝⦄
+Aeneas.Std.core.slice.iter.ChunksExact.getRemainder : {T : Type} →
+  Aeneas.Std.core.slice.iter.ChunksExact T → Aeneas.Std.Result (Aeneas.Std.Slice T)
+Aeneas.Std.core.cmp.impls.OrdI16.min_val : ∀ (x y : Aeneas.Std.I16),
+  ↑(Aeneas.Std.core.cmp.impls.OrdI16.min x y) = min ↑x ↑y
+Aeneas.Std.core.clone.CloneBool : Aeneas.Std.core.clone.Clone Bool
+Aeneas.Std.core.slice.Slice.swap_spec._proof_7 : ∀ {T : Type} [inst : Inhabited T] (s : Aeneas.Std.Slice T)
+  (a b : Aeneas.Std.Usize) (ha : ↑a < s.length) (hb : ↑b < s.length) (s1 : Aeneas.Std.Slice T),
+  s.update a (↑s)[↑b] = Aeneas.Std.Result.ok s1 ∧ s1 = s.set a (↑s)[↑b] →
+    ∀ (hab : ↑a = ↑b), (((↑s).set (↑b) (↑s)[↑b]).set (↑b) (↑s)[↑b])[↑b]! = (↑s)[↑b]!
+Aeneas.Std.core.cmp.Eq.mk._flat_ctor : {Self : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Self → (Self → Aeneas.Std.Result Unit) → Aeneas.Std.core.cmp.Eq Self

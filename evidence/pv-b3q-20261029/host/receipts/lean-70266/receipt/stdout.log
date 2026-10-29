@@ -1,0 +1,21 @@
+'PV_B3Q_CloneActual.primitive_clone_links' does not depend on any axioms
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU32.eq : U32 → U32 → Bool :=
+fun x y => decide (x = y)
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU32.ne : U32 → U32 → Bool :=
+fun x y => decide ¬x = y
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqU64.eq : U64 → U64 → Bool :=
+fun x y => decide (x = y)
+@[reducible] def Aeneas.Std.core.cmp.impls.PartialEqUsize.eq : Usize → Usize → Bool :=
+fun x y => decide (x = y)
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Result.ok false

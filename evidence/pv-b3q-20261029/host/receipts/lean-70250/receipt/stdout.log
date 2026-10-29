@@ -1,0 +1,500 @@
+def Aeneas.Std.core.fmt.Formatter : Type :=
+Unit
+'Aeneas.Std.core.fmt.Formatter' does not depend on any axioms
+Aeneas.Std.core.fmt.DebugShared.fmt : {T : Type} →
+  Aeneas.Std.core.fmt.Debug T →
+    T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugIsize : Aeneas.Std.core.fmt.Debug Aeneas.Std.Isize
+Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt.eq_1 : ∀ (x : Aeneas.Std.Usize) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Debug.ctorIdx : {T : Type u} → Aeneas.Std.core.fmt.Debug T → ℕ
+Aeneas.Std.core.fmt.DebugU128 : Aeneas.Std.core.fmt.Debug Aeneas.Std.U128
+Aeneas.Std.core.fmt.num.DebugI64.fmt : Aeneas.Std.I64 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Error : Type
+Aeneas.Std.core.fmt.num.DebugI128.fmt : Aeneas.Std.I128 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Display.mk : {Self : Type} →
+  (Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.Display Self
+Aeneas.Std.core.fmt.Debug.mk.injEq : ∀ {T : Type u}
+  (fmt fmt_1 :
+    T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  ({ fmt := fmt } = { fmt := fmt_1 }) = (fmt = fmt_1)
+Aeneas.Std.core.fmt.DebugBool : Aeneas.Std.core.fmt.Debug Bool
+Aeneas.Std.core.fmt.LowerHex.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.LowerHex Self → Sort u} →
+    (t : Aeneas.Std.core.fmt.LowerHex Self) →
+      ((fmt :
+            Self →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.num.imp.DisplayI32.fmt : Aeneas.Std.I32 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.rt.Argument.new_lower_hex : {T : Type} →
+  Aeneas.Std.core.fmt.LowerHex T → T → Aeneas.Std.Result Aeneas.Std.core.fmt.rt.Argument
+Aeneas.Std.core.fmt.LowerHex.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.fmt.LowerHex Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.fmt.LowerHex Self'} →
+          Self = Self' → t ≍ t' → Aeneas.Std.core.fmt.LowerHex.noConfusionType P t t'
+Aeneas.Std.core.fmt.num.imp.DisplayI128.fmt.eq_1 : ∀ (x : Aeneas.Std.I128) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayI128.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.DebugU64 : Aeneas.Std.core.fmt.Debug Aeneas.Std.U64
+Aeneas.Std.core.fmt.DebugI32 : Aeneas.Std.core.fmt.Debug Aeneas.Std.I32
+Aeneas.Std.core.fmt.DebugI8 : Aeneas.Std.core.fmt.Debug Aeneas.Std.I8
+Aeneas.Std.core.fmt.Formatter.write_str : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.DebugU16.fmt : Aeneas.Std.U16 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.LowerHex.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self]
+  (fmt :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  sizeOf { fmt := fmt } = 1
+Aeneas.Std.core.fmt.num.imp.DisplayU32.fmt.eq_1 : ∀ (x : Aeneas.Std.U32) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayU32.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.LowerHex.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.LowerHex Self → Sort u} →
+    ((fmt :
+          Self →
+            Aeneas.Std.core.fmt.Formatter →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+        motive { fmt := fmt }) →
+      (t : Aeneas.Std.core.fmt.LowerHex Self) → motive t
+Aeneas.Std.core.fmt.DebugBool.fmt : Bool →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.DebugU8.fmt : Aeneas.Std.U8 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugU16 : Aeneas.Std.core.fmt.Debug Aeneas.Std.U16
+Aeneas.Std.core.fmt.Debug.mk.sizeOf_spec : ∀ {T : Type u} [inst : SizeOf T]
+  (fmt :
+    T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  sizeOf { fmt := fmt } = 1
+Aeneas.Std.core.fmt.num.DebugI8.fmt : Aeneas.Std.I8 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Debug : Type u → Type u
+Aeneas.Std.core.fmt.Formatter.write_fmt : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.core.fmt.Arguments →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI16.fmt.eq_1 : ∀ (x : Aeneas.Std.I16) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayI16.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Formatter.debug_struct_field2_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x x_1 : Aeneas.Std.Str) (x_2 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_3 : Aeneas.Std.Str)
+  (x_4 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_struct_field2_finish x x_1 x_2 x_3 x_4 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.num.LowerHexU16.fmt : Aeneas.Std.U16 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI32.fmt.eq_1 : ∀ (x : Aeneas.Std.I32) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayI32.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.DebugI64 : Aeneas.Std.core.fmt.Debug Aeneas.Std.I64
+Aeneas.Std.core.fmt.Formatter.debug_struct_field1_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Str →
+      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI8.fmt : Aeneas.Std.I8 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.LowerHex.mk.noConfusion : {Self : Type} →
+  {P : Sort u} →
+    {fmt fmt' :
+        Self →
+          Aeneas.Std.core.fmt.Formatter →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)} →
+      { fmt := fmt } = { fmt := fmt' } → (fmt ≍ fmt' → P) → P
+Aeneas.Std.core.fmt.num.DebugU64.fmt : Aeneas.Std.U64 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Debug.mk.noConfusion : {T : Type u} →
+  {P : Sort u_1} →
+    {fmt fmt' :
+        T →
+          Aeneas.Std.core.fmt.Formatter →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)} →
+      { fmt := fmt } = { fmt := fmt' } → (fmt ≍ fmt' → P) → P
+Aeneas.Std.core.fmt.Display.mk.sizeOf_spec : ∀ {Self : Type} [inst : SizeOf Self]
+  (fmt :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  sizeOf { fmt := fmt } = 1
+Aeneas.Std.core.fmt.Display.noConfusionType : Sort u →
+  {Self : Type} → Aeneas.Std.core.fmt.Display Self → {Self' : Type} → Aeneas.Std.core.fmt.Display Self' → Sort u
+Aeneas.Std.core.fmt.Debug._sizeOf_inst : (T : Type u) → [SizeOf T] → SizeOf (Aeneas.Std.core.fmt.Debug T)
+Aeneas.Std.core.fmt.DebugVec : {T : Type} →
+  Aeneas.Std.core.fmt.Debug T → Aeneas.Std.core.fmt.Debug (Aeneas.Std.alloc.vec.Vec T)
+Aeneas.Std.core.fmt.Display.rec : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.Display Self → Sort u} →
+    ((fmt :
+          Self →
+            Aeneas.Std.core.fmt.Formatter →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+        motive { fmt := fmt }) →
+      (t : Aeneas.Std.core.fmt.Display Self) → motive t
+Aeneas.Std.core.fmt.Formatter.debug_struct_field3_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x x_1 : Aeneas.Std.Str) (x_2 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_3 : Aeneas.Std.Str)
+  (x_4 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_5 : Aeneas.Std.Str)
+  (x_6 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_struct_field3_finish x x_1 x_2 x_3 x_4 x_5 x_6 =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.LowerHex.mk.injEq : ∀ {Self : Type}
+  (fmt fmt_1 :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  ({ fmt := fmt } = { fmt := fmt_1 }) = (fmt = fmt_1)
+Aeneas.Std.core.fmt.Debug.mk.inj : ∀ {T : Type u}
+  {fmt fmt_1 :
+    T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)},
+  { fmt := fmt } = { fmt := fmt_1 } → fmt = fmt_1
+Aeneas.Std.core.fmt.Display.ctorIdx : {Self : Type} → Aeneas.Std.core.fmt.Display Self → ℕ
+Aeneas.Std.core.fmt.Formatter.debug_struct_field5_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Str →
+      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+        Aeneas.Std.Str →
+          (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+            Aeneas.Std.Str →
+              (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                Aeneas.Std.Str →
+                  (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                    Aeneas.Std.Str →
+                      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                        Aeneas.Std.Result
+                          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.LowerHex.mk._flat_ctor : {Self : Type} →
+  (Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.LowerHex Self
+Aeneas.Std.core.fmt.Debug.fmt : {T : Type u} →
+  Aeneas.Std.core.fmt.Debug T →
+    T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugI16 : Aeneas.Std.core.fmt.Debug Aeneas.Std.I16
+Aeneas.Std.core.fmt.rt.Argument.new_debug : {T : Type} →
+  Aeneas.Std.core.fmt.Debug T → T → Aeneas.Std.Result Aeneas.Std.core.fmt.rt.Argument
+Aeneas.Std.core.fmt.LowerHex.fmt : {Self : Type} →
+  Aeneas.Std.core.fmt.LowerHex Self →
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayIsize.fmt : Aeneas.Std.Isize →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI64.fmt.eq_1 : ∀ (x : Aeneas.Std.I64) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayI64.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Arguments : Type
+Aeneas.Std.core.fmt.Display : Type → Type
+Aeneas.Std.core.fmt.num.imp.DisplayU8.fmt : Aeneas.Std.U8 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI128.fmt : Aeneas.Std.I128 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Debug.recOn : {T : Type u} →
+  {motive : Aeneas.Std.core.fmt.Debug T → Sort u_1} →
+    (t : Aeneas.Std.core.fmt.Debug T) →
+      ((fmt :
+            T →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.num.imp.DisplayI16.fmt : Aeneas.Std.I16 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.LowerHex.mk.inj : ∀ {Self : Type}
+  {fmt fmt_1 :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)},
+  { fmt := fmt } = { fmt := fmt_1 } → fmt = fmt_1
+Aeneas.Std.core.fmt.Formatter.debug_struct_field3_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Str →
+      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+        Aeneas.Std.Str →
+          (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+            Aeneas.Std.Str →
+              (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugU8 : Aeneas.Std.core.fmt.Debug Aeneas.Std.U8
+Aeneas.Std.core.fmt.Display._sizeOf_1 : {Self : Type} → [SizeOf Self] → Aeneas.Std.core.fmt.Display Self → ℕ
+Aeneas.Std.core.fmt.num.imp.DisplayU8.fmt.eq_1 : ∀ (x : Aeneas.Std.U8) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayU8.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Arguments.new : {N M : Aeneas.Std.Usize} →
+  Aeneas.Std.Array Aeneas.Std.U8 N →
+    Aeneas.Std.Array Aeneas.Std.core.fmt.rt.Argument M → Aeneas.Std.Result Aeneas.Std.core.fmt.Arguments
+Aeneas.Std.core.fmt.DebugShared : {T : Type} → Aeneas.Std.core.fmt.Debug T → Aeneas.Std.core.fmt.Debug T
+Aeneas.Std.core.fmt.num.imp.DisplayIsize.fmt.eq_1 : ∀ (x : Aeneas.Std.Isize) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayIsize.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.DebugU32 : Aeneas.Std.core.fmt.Debug Aeneas.Std.U32
+Aeneas.Std.core.fmt.LowerHex : Type → Type
+Aeneas.Std.core.fmt.num.DebugIsize.fmt : Aeneas.Std.Isize →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.LowerHex._sizeOf_inst : (Self : Type) → [SizeOf Self] → SizeOf (Aeneas.Std.core.fmt.LowerHex Self)
+Aeneas.Std.core.fmt.rt.Argument : Type
+Aeneas.Std.core.fmt.DebugUnit : Aeneas.Std.core.fmt.Debug Unit
+Aeneas.Std.core.fmt.Debug.rec : {T : Type u} →
+  {motive : Aeneas.Std.core.fmt.Debug T → Sort u_1} →
+    ((fmt :
+          T →
+            Aeneas.Std.core.fmt.Formatter →
+              Aeneas.Std.Result
+                (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+        motive { fmt := fmt }) →
+      (t : Aeneas.Std.core.fmt.Debug T) → motive t
+Aeneas.Std.core.fmt.num.imp.DisplayU128.fmt : Aeneas.Std.U128 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugI128 : Aeneas.Std.core.fmt.Debug Aeneas.Std.I128
+Aeneas.Std.core.fmt.LowerHex.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.LowerHex Self → Sort u} →
+    (t : Aeneas.Std.core.fmt.LowerHex Self) →
+      ((fmt :
+            Self →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.LowerHex.ctorIdx : {Self : Type} → Aeneas.Std.core.fmt.LowerHex Self → ℕ
+Aeneas.Std.core.fmt.LowerHex._sizeOf_1 : {Self : Type} → [SizeOf Self] → Aeneas.Std.core.fmt.LowerHex Self → ℕ
+Aeneas.Std.core.fmt.Formatter.debug_struct_field2_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Str →
+      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+        Aeneas.Std.Str →
+          (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.DebugU32.fmt : Aeneas.Std.U32 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.DebugUsize : Aeneas.Std.core.fmt.Debug Aeneas.Std.Usize
+Aeneas.Std.core.fmt.Display.mk.inj : ∀ {Self : Type}
+  {fmt fmt_1 :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)},
+  { fmt := fmt } = { fmt := fmt_1 } → fmt = fmt_1
+Aeneas.Std.core.fmt.Debug.noConfusionType : Sort u_1 →
+  {T : Type u} → Aeneas.Std.core.fmt.Debug T → {T' : Type u} → Aeneas.Std.core.fmt.Debug T' → Sort u_1
+Aeneas.Std.core.fmt.LowerHex.noConfusionType : Sort u →
+  {Self : Type} → Aeneas.Std.core.fmt.LowerHex Self → {Self' : Type} → Aeneas.Std.core.fmt.LowerHex Self' → Sort u
+Aeneas.Std.core.fmt.Display.fmt : {Self : Type} →
+  Aeneas.Std.core.fmt.Display Self →
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Formatter.debug_struct_field5_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x x_1 : Aeneas.Std.Str) (x_2 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_3 : Aeneas.Std.Str)
+  (x_4 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_5 : Aeneas.Std.Str)
+  (x_6 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_7 : Aeneas.Std.Str)
+  (x_8 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_9 : Aeneas.Std.Str)
+  (x_10 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_struct_field5_finish x x_1 x_2 x_3 x_4 x_5 x_6 x_7 x_8 x_9 x_10 =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.DebugTryFromSliceError : Aeneas.Std.core.fmt.Debug Aeneas.Std.core.array.TryFromSliceError
+Aeneas.Std.core.fmt.num.imp.DisplayU16.fmt.eq_1 : ∀ (x : Aeneas.Std.U16) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayU16.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.num.DebugU128.fmt : Aeneas.Std.U128 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Display._sizeOf_inst : (Self : Type) → [SizeOf Self] → SizeOf (Aeneas.Std.core.fmt.Display Self)
+Aeneas.Std.core.fmt.Display.mk._flat_ctor : {Self : Type} →
+  (Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.Display Self
+Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt : Aeneas.Std.Usize →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayU64.fmt.eq_1 : ∀ (x : Aeneas.Std.U64) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayU64.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.num.imp.DisplayU128.fmt.eq_1 : ∀ (x : Aeneas.Std.U128) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayU128.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Formatter.debug_struct_field4_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Str →
+      (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+        Aeneas.Std.Str →
+          (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+            Aeneas.Std.Str →
+              (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                Aeneas.Std.Str →
+                  (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+                    Aeneas.Std.Result
+                      (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Display.mk.injEq : ∀ {Self : Type}
+  (fmt fmt_1 :
+    Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)),
+  ({ fmt := fmt } = { fmt := fmt_1 }) = (fmt = fmt_1)
+Aeneas.Std.core.fmt.Debug.casesOn : {T : Type u} →
+  {motive : Aeneas.Std.core.fmt.Debug T → Sort u_1} →
+    (t : Aeneas.Std.core.fmt.Debug T) →
+      ((fmt :
+            T →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.Formatter.debug_struct_fields_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    Aeneas.Std.Slice Aeneas.Std.Str →
+      Aeneas.Std.Slice (Aeneas.Std.Dyn fun _dyn => Aeneas.Std.core.fmt.Debug _dyn) →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Display.mk.noConfusion : {Self : Type} →
+  {P : Sort u} →
+    {fmt fmt' :
+        Self →
+          Aeneas.Std.core.fmt.Formatter →
+            Aeneas.Std.Result
+              (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)} →
+      { fmt := fmt } = { fmt := fmt' } → (fmt ≍ fmt' → P) → P
+Aeneas.Std.core.fmt.rt.Argument.new_display : {T : Type} →
+  Aeneas.Std.core.fmt.Display T → T → Aeneas.Std.Result Aeneas.Std.core.fmt.rt.Argument
+Aeneas.Std.core.fmt.Debug._sizeOf_1 : {T : Type u} → [SizeOf T] → Aeneas.Std.core.fmt.Debug T → ℕ
+Aeneas.Std.core.fmt.LowerHex.mk : {Self : Type} →
+  (Self →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.LowerHex Self
+Aeneas.Std.core.fmt.num.imp.DisplayI64.fmt : Aeneas.Std.I64 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Formatter : Type
+Aeneas.Std.core.fmt.Display.recOn : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.Display Self → Sort u} →
+    (t : Aeneas.Std.core.fmt.Display Self) →
+      ((fmt :
+            Self →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.num.DebugI16.fmt : Aeneas.Std.I16 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Debug.mk : {T : Type u} →
+  (T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.Debug T
+Aeneas.Std.core.fmt.num.imp.DisplayU16.fmt : Aeneas.Std.U16 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayI8.fmt.eq_1 : ∀ (x : Aeneas.Std.I8) (fmt : Aeneas.Std.core.fmt.Formatter),
+  Aeneas.Std.core.fmt.num.imp.DisplayI8.fmt x fmt = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Formatter.debug_tuple_field1_finish : Aeneas.Std.core.fmt.Formatter →
+  Aeneas.Std.Str →
+    (Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) →
+      Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Formatter.debug_struct_field1_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x x_1 : Aeneas.Std.Str) (x_2 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_struct_field1_finish x x_1 x_2 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.num.DebugUsize.fmt : Aeneas.Std.Usize →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.imp.DisplayU64.fmt : Aeneas.Std.U64 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Formatter.debug_struct_field4_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x x_1 : Aeneas.Std.Str) (x_2 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_3 : Aeneas.Std.Str)
+  (x_4 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_5 : Aeneas.Std.Str)
+  (x_6 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn) (x_7 : Aeneas.Std.Str)
+  (x_8 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_struct_field4_finish x x_1 x_2 x_3 x_4 x_5 x_6 x_7 x_8 =
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Display.casesOn : {Self : Type} →
+  {motive : Aeneas.Std.core.fmt.Display Self → Sort u} →
+    (t : Aeneas.Std.core.fmt.Display Self) →
+      ((fmt :
+            Self →
+              Aeneas.Std.core.fmt.Formatter →
+                Aeneas.Std.Result
+                  (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+          motive { fmt := fmt }) →
+        motive t
+Aeneas.Std.core.fmt.Formatter.debug_tuple_field1_finish.eq_1 : ∀ (fmt : Aeneas.Std.core.fmt.Formatter)
+  (x : Aeneas.Std.Str) (x_1 : Aeneas.Std.Dyn fun dyn => Aeneas.Std.core.fmt.Debug dyn),
+  fmt.debug_tuple_field1_finish x x_1 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), fmt)
+Aeneas.Std.core.fmt.Display.noConfusion : {P : Sort u} →
+  {Self : Type} →
+    {t : Aeneas.Std.core.fmt.Display Self} →
+      {Self' : Type} →
+        {t' : Aeneas.Std.core.fmt.Display Self'} →
+          Self = Self' → t ≍ t' → Aeneas.Std.core.fmt.Display.noConfusionType P t t'
+Aeneas.Std.core.fmt.DebugUnit.fmt : Unit →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.num.DebugI32.fmt : Aeneas.Std.I32 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Debug.noConfusion : {P : Sort u_1} →
+  {T : Type u} →
+    {t : Aeneas.Std.core.fmt.Debug T} →
+      {T' : Type u} →
+        {t' : Aeneas.Std.core.fmt.Debug T'} → T = T' → t ≍ t' → Aeneas.Std.core.fmt.Debug.noConfusionType P t t'
+Aeneas.Std.core.fmt.num.imp.DisplayU32.fmt : Aeneas.Std.U32 →
+  Aeneas.Std.core.fmt.Formatter →
+    Aeneas.Std.Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)
+Aeneas.Std.core.fmt.Arguments.from_str : Aeneas.Std.Str → Aeneas.Std.Result Aeneas.Std.core.fmt.Arguments
+Aeneas.Std.core.fmt.Debug.mk._flat_ctor : {T : Type u} →
+  (T →
+      Aeneas.Std.core.fmt.Formatter →
+        Aeneas.Std.Result
+          (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter)) →
+    Aeneas.Std.core.fmt.Debug T

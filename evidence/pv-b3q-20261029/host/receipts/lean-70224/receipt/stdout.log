@@ -1,0 +1,34 @@
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_FourSlice.lean:34:56: error: Type mismatch
+  rfl
+has type
+  ?m.61 = ?m.61
+but is expected to have type
+  next 0#usize = Result.ok (some 0#usize, 1#usize)
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_FourSlice.lean:44:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let s1 ← step state 0#usize
+    let s2 ← step s1 1#usize
+    let s3 ← step s2 2#usize
+    step s3 3#usize
+is not definitionally equal to the right-hand side
+  do
+    let next ← step state 0#usize
+    let next ← step next (Usize.wrapping_add 0#usize 1#usize)
+    let next ← step next ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize)
+    step next (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize)
+
+step : Four14 → Usize → Result Four14
+state : Four14
+⊢ (do
+      let s1 ← step state 0#usize
+      let s2 ← step s1 1#usize
+      let s3 ← step s2 2#usize
+      step s3 3#usize) =
+    do
+    let next ← step state 0#usize
+    let next ← step next (Usize.wrapping_add 0#usize 1#usize)
+    let next ← step next ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize)
+    step next (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize)
+'PV_B3Q_FourSlice.return_result' does not depend on any axioms
+'PV_B3Q_FourSlice.source_schedule' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_FourSlice.source_link' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

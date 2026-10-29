@@ -1,0 +1,33 @@
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch : {T E : Type} →
+  Aeneas.Std.core.result.Result T E →
+    Aeneas.Std.Result
+      (Aeneas.Std.core.ops.control_flow.ControlFlow (Aeneas.Std.core.result.Result Aeneas.Std.core.convert.Infallible E)
+        T) :=
+fun {T E} x =>
+  match x with
+  | Aeneas.Std.core.result.Result.Ok v => Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Continue v)
+  | Aeneas.Std.core.result.Result.Err e =>
+    Aeneas.Std.Result.ok (Aeneas.Std.core.ops.control_flow.ControlFlow.Break (Aeneas.Std.core.result.Result.Err e))
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_StdInspect.lean:3:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.result.Result.Insts.CoreOpsTry.from_output`
+def Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual : (T : Type) →
+  {E F : Type} →
+    Aeneas.Std.core.convert.From F E →
+      Aeneas.Std.core.result.Result Aeneas.Std.core.convert.Infallible E →
+        Aeneas.Std.Result (Aeneas.Std.core.result.Result T F) :=
+fun T {E F} convertFromInst r =>
+  match r with
+  | Aeneas.Std.core.result.Result.Ok x =>
+    Aeneas.Std.core.convert.Infallible.casesOn (fun x => Aeneas.Std.Result (Aeneas.Std.core.result.Result T F)) x
+  | Aeneas.Std.core.result.Result.Err e => do
+    let v ← convertFromInst.from e
+    Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err v)
+def Aeneas.Std.core.option.Option.unwrap_or.{u_1} : {T : Type u_1} → Option T → T → T :=
+fun {T} self default =>
+  match self with
+  | none => default
+  | some self => self
+def Aeneas.Std.core.option.Option.is_some : {T : Type} → Option T → Bool :=
+fun {T} self => self.isSome
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_StdInspect.lean:7:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.convert.Insts.From.from`
+def Aeneas.Std.Array.{u} : Type u → Aeneas.Std.Usize → Type (max 0 u) :=
+fun α n => { l // l.length = ↑n }

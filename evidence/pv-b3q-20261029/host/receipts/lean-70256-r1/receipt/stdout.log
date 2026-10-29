@@ -1,0 +1,22 @@
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_SliceEqualityValue.lean:21:5: error: unsolved goals
+case neg
+x : U32
+xs : List U32
+ih :
+  ∀ (right : List U32),
+    xs.length = right.length → tail_loop scalar_ne xs.length xs right = Result.ok (decide (xs = right))
+y : U32
+ys : List U32
+same : (x :: xs).length = (y :: ys).length
+lengths : xs.length = ys.length
+equal : ¬x = y
+⊢ ↑x = ↑y → tail_loop scalar_ne xs.length xs ys = Result.ok false
+/home/dombarker/project-offloads/codex-pv-b3q-20261029/lean/PV_B3Q_SliceEqualityValue.lean:30:3: error: Type mismatch
+  tail_value left right same
+has type
+  tail_loop scalar_ne left.length left right = Result.ok (decide (left = right))
+but is expected to have type
+  tail_loop scalar_ne right.length (List.drop 0 left) (List.drop 0 right) = Result.ok (decide (left = right))
+'PV_B3Q_SliceEqualityValue.tail_value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_SliceEqualityValue.source_value' depends on axioms: [propext, sorryAx, Quot.sound]
+'PV_B3Q_SliceEqualityValue.slice_value_link' depends on axioms: [propext, sorryAx, Quot.sound]
