@@ -24,6 +24,9 @@ theorem complete {A B T : Type} (R : A → B → Prop)
     | Ok pair =>
       rcases pair with ⟨p,audit⟩
       have h := step p audit next hp
+      simp only [resume,bind_tc_ok,Aeneas.Std.uncurry]
+      generalize hf : f p=fr at h ⊢
+      generalize hg : g p=gr at h ⊢
       cases h with
       | fail e => exact .fail e
       | div => exact .div
