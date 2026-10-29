@@ -1,6 +1,6 @@
 """Read-only final binding, key retention and evidence audit; no gate replay."""
 from pathlib import Path
-import hashlib,json,stat,subprocess
+import hashlib,json,stat,subprocess,sys
 H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 expected=json.loads((O/'expected-sources.json').read_text());bad=[]
 for p,h in expected.items():
@@ -22,7 +22,13 @@ assert json.loads((O/'fixed-fixture-comparison.json').read_text())['passed']
 a=json.loads((O/'runtime-private/acceptance.json').read_text());assert len(a['runs'])==4 and all(r['accepted'] and r['duplicate_ledger_unchanged'] for r in a['runs'])
 c=json.loads((O/'corpus-6000/pipeline-final.json').read_text());assert c['complete'] and c['passed'] and c['completed_pairs']==1000
 assert json.loads((O/'corpus-ledger-audit.json').read_text())['passed']
-t=json.loads((O/'timing/summary.json').read_text());assert len(t['summary'])==2 and all(r['verdict']=='PASS' for r in t['summary'])
+timing_path=O/'timing/summary.json'
+if timing_path.exists():
+ t=json.loads(timing_path.read_text());assert len(t['summary'])==2 and all(r['verdict']=='PASS' for r in t['summary']);timing_status='PASS'
+else:
+ assert '--timing-pending' in sys.argv
+ assert json.loads((O/'timing-blocker.json').read_text())['status']=='BLOCKED BEFORE LAUNCH'
+ timing_status='BLOCKED BEFORE LAUNCH'
 assert sha(H/'artifacts/baseline-devnet_spend')=='30d883a8d97f12c315898aaf9170eb7a542b5e935881f089506fd4601ddb6a20'
 keys=[]
 for folder in [O/'runtime-private',*(O/x for x in ['elf-default-affinity4','elf-devnet','elf-pool'])]:
@@ -31,5 +37,5 @@ for folder in [O/'runtime-private',*(O/x for x in ['elf-default-affinity4','elf-
    # Retain securely; never inventory/export secret values or destroy keys.
    p.chmod(0o600);keys.append(dict(path=str(p),bytes=p.stat().st_size,mode=oct(stat.S_IMODE(p.stat().st_mode)),disposition='retained securely; no key cleanup authorized; no on-chain balances or authorities touched'))
 fixture=O/'RFC8032-public-fixture-key.json';assert fixture.exists() and stat.S_IMODE(fixture.stat().st_mode)==0o600
-r=dict(source_files_checked=len(expected),source_mismatches=bad,production_source_freeze='ba39168f67',client=build,elfs=elfs,gate_checks_passed=True,retained_keys=keys,public_RFC8032_key_retained=True,keys_deleted=0,release_pins_changed=False,print_axioms='N/A; no Lean or Kani',baseline_client_sha256=sha(H/'artifacts/baseline-devnet_spend'),corpus_resources=c['final_resources'])
-(O/'final-audit.json').write_text(json.dumps(r,indent=2)+'\n');print('FINAL_SOURCE_ARTIFACT_GATE_KEY_RETENTION_AUDIT_PASS',flush=True)
+r=dict(source_files_checked=len(expected),source_mismatches=bad,production_source_freeze='ba39168f67a4445ed60aac4aec2c6587cecc7336',client=build,elfs=elfs,gate_checks_passed=timing_status=='PASS',all_executed_gates_passed=True,timing_status=timing_status,retained_keys=keys,public_RFC8032_key_retained=True,keys_deleted=0,release_pins_changed=False,print_axioms='N/A; no Lean or Kani',baseline_client_sha256=sha(H/'artifacts/baseline-devnet_spend'),corpus_resources=c['final_resources'])
+(O/'final-audit.json').write_text(json.dumps(r,indent=2)+'\n');print('FINAL_SOURCE_ARTIFACT_KEY_RETENTION_AUDIT_PASS timing='+timing_status,flush=True)
