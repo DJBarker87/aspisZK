@@ -55,10 +55,10 @@ theorem source (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment)
     apply PV_RunJoin_ResultBindEq55.complete
     intro idx
     cases ht : t.val with
-    | zero => simp only [ht,bind_assoc_eq]
+    | zero => simp only [ht,bind_assoc_eq] <;> rfl
     | succ n => cases n with
-      | zero => simp only [ht,bind_assoc_eq]
-      | succ n => simp only [ht,bind_assoc_eq]
+      | zero => simp only [ht,bind_assoc_eq] <;> rfl
+      | succ n => simp only [ht,bind_assoc_eq] <;> rfl
 
 #print axioms actual
 #print axioms source
