@@ -14,6 +14,7 @@ theorem first : PV_RunJoin_CircleRawMap52.fallback 0#usize=
   have hidx : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 0#usize=
       ok (PV_RunJoin_CircleRawTower52.field.CM31.ZERO,PV_RunJoin_CircleRawTower52.field.CM31.ONE) := rfl
   simp only [hrem,hidx,bind_tc_ok,hmap]
+  rfl
 
 theorem second : PV_RunJoin_CircleRawMap52.fallback 1#usize=
     PV_RunJoin_CircleFallbackPrograms54.fallback 1#usize := by
@@ -24,6 +25,7 @@ theorem second : PV_RunJoin_CircleRawMap52.fallback 1#usize=
   have hidx : Array.index_usize PV_RunJoin_CircleRawMap52.FALLBACK 1#usize=
       ok (PV_RunJoin_CircleRawTower52.field.CM31.ONE,PV_RunJoin_CircleRawTower52.field.CM31.ONE) := rfl
   simp only [hrem,hidx,bind_tc_ok,hmap]
+  rfl
 #print axioms first
 #print axioms second
 end R1Z.PV_RunJoin_CircleFallbackCompare54
