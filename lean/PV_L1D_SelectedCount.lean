@@ -20,6 +20,7 @@ theorem original_success (owner : Owner S P) (s : S) (p : Published P)
   have count := PV_L1D_CountSuccess.count_eq_entered owner 8 0 s p h
   have entered : p.attempts = (run owner 8 0 s).1.attempts.length := by omega
   refine ⟨⟨p.attempts-1,by omega⟩,rfl,?_⟩
-  simp only [selected,dif_pos ⟨lower,upper,entered⟩]
+  have guard : 1 ≤ p.attempts ∧ p.attempts ≤ 8 ∧ p.attempts = (run owner 8 0 s).1.attempts.length := ⟨lower,upper,entered⟩
+  simp only [selected,dif_pos guard]
 #print axioms original_success
 end PV_L1D_SelectedCount
