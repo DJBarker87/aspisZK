@@ -23,7 +23,6 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_ClaimProducer48.complete base heap box ops columns.val point]
   have room : (alloc.vec.Vec.new U8).length+32*columns.val.length≤Usize.max := by
     have len : columns.val.length=columns.length := rfl
-    have hs := usize_bound
     change 0+32*columns.val.length≤Usize.max
     rw [len]
     scalar_tac
