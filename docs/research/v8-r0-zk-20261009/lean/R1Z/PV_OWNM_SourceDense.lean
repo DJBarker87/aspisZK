@@ -38,7 +38,12 @@ theorem prefix_weight (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
  have hprod := PV_OWNL_PrefixProduct.prefix_weight
   (List.ofFn (fun i : Fin w => decode (point[i.val]?.getD zero)))
   (⟨a.val,by simpa only [List.length_ofFn] using a.isLt⟩)
- simpa only [List.length_ofFn,weight,tail,List.get_eq_getElem,List.getElem_ofFn] using hprod
+ simp only [List.length_ofFn,weight,tail,List.get_eq_getElem,List.getElem_ofFn] at hprod
+ exact hprod.trans (Fin.prod_congr'
+  (fun i : Fin w => if a.val.testBit (w-1-i.val) then decode (point[i.val]?.getD zero)
+   else 1-decode (point[i.val]?.getD zero))
+  (show (List.ofFn (fun i : Fin w => decode (point[i.val]?.getD zero))).length = w
+   from List.length_ofFn))
 
 theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
  (point column : List Q) (hl : point.length=10)
@@ -56,8 +61,11 @@ theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
   have hi : i.val < (point.drop w).length := by rw [htlen]; exact i.isLt
   have hd := PV_OWNL_Suffix.scanner_decoded decode D.zero_eq D.one_eq point ⟨i.val,hi⟩
   have hb : w+i.val < point.length := by omega
-  simpa only [List.get_eq_getElem,List.getElem_drop,htlen,Fin.coe_natAdd,
-   List.getElem?_eq_getElem hb,Option.getD_some,tail,suffix] using hd
+  change decode ((point.drop w).get ⟨i.val,hi⟩) =
+   (if (PV_OWNI_Scanner.suffix point).testBit ((point.drop w).length-1-i.val) then 1 else 0) at hd
+  simp only [List.get_eq_getElem,List.getElem_drop] at hd
+  rw [htlen] at hd
+  simpa only [Fin.val_natAdd,List.getElem?_eq_getElem hb,Option.getD_some,tail,suffix] using hd
  have hd := PV_OWNM_DenseRows.full_dense_sparse w t
   (fun i : Fin (w+t) => decode (point[i.val]?.getD zero)) suffix
   (fun r : Fin (2^(w+t)) => decode (column[r.val]?.getD zero)) hs
@@ -104,10 +112,10 @@ open PV_OWNM_V239
 Actual-input, operational byte-frame and owned-source instances are still named
 hypotheses, not silently supplied by independent model invariants. -/
 theorem concrete_restore {W : Type}
- (wirePoints : List Q → List (List Q)) (isBoolean : Q → Bool)
- (reconstruct879 reconstruct890 : Public → List Q)
- (native : Input → List Q → Nat → Execution PV_OWNK_ConcreteDecoder.K W)
- (resource : Input → List Q → Nat → ResourceExit W)
+ (wirePoints : List PV_OWNI_RawOps.Q → List (List PV_OWNI_RawOps.Q)) (isBoolean : PV_OWNI_RawOps.Q → Bool)
+ (reconstruct879 reconstruct890 : Public → List PV_OWNI_RawOps.Q)
+ (native : Input → List PV_OWNI_RawOps.Q → Nat → Execution PV_OWNK_ConcreteDecoder.K W)
+ (resource : Input → List PV_OWNI_RawOps.Q → Nat → ResourceExit W)
  (failures : List Bool) (left right : Input)
  (inputL : PV_OWNM_Link_ActualInput wirePoints left)
  (inputR : PV_OWNM_Link_ActualInput wirePoints right)
