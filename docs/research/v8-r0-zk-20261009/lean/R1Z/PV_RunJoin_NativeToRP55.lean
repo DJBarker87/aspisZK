@@ -11,6 +11,10 @@ open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.HvzkV
 open R1Z.GamesR1 R1Z.GamesR1PBin R1Z.CouplingR1PBin R1Z.TranscriptR1 R1Z.EventsR1PBin
 open PV_RunJoin_PublishSkeleton54
 open PV_RunJoin_NativeControl55 (Phase)
+def rehash [ExternalTypes] (hash : aspis_core.digest.LegacyHashFn)
+    (i : PV_RunJoin_NativeAttemptPublication55.Input) : PV_RunJoin_NativeAttemptPublication55.Input :=
+  ⟨i.public1,i.compiled,hash,i.attempt,i.store⟩
+
 variable {K CH Aux : Type} [Field K] [Fintype K] [DecidableEq K]
   [Algebra (ZMod AspisCircleGroupOrder.P) K] {F : Subfield K}
 
@@ -32,13 +36,14 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
  :
     PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT
       (fun i : @PV_RunJoin_NativeAttemptPublication55.Input (types base) =>
-        @PV_RunJoin_NativeAttemptPublication55.actual (types base) (selected base heap box ops) {i with hash:=PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1})
+        @PV_RunJoin_NativeAttemptPublication55.actual (types base) (selected base heap box ops) (@rehash (types base) (PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1) i))
       (fun i : @PV_RunJoin_NativeAttemptPublication55.Input (types base) =>
-        @PV_RunJoin_NativeAttemptPublication55.published (types base) (selected base heap box ops) data plans {i with hash:=PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1}) := by
+        @PV_RunJoin_NativeAttemptPublication55.published (types base) (selected base heap box ops) data plans (@rehash (types base) (PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1) i)) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   have native := PV_RunJoin_NativeAttemptPublication55.complete base heap box ops data plans common backend finish query node ordering
   intro i
-  exact native {i with hash:=PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1}
+  exact native (@rehash (types base) (PV_RunJoin_CommonOracle51.hash W (toRP W Pr R h B outputs x w hN s).1) i)
+#print axioms rehash
 #print axioms complete
 end R1Z.PV_RunJoin_NativeToRP55
