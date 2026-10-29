@@ -11,7 +11,7 @@ theorem suffix {T : Type} (k : Codec T) (b : Buffer T) (xs : List T)
   cases i with
   | zero =>
    rw [append]
-   rw [PV_OWND_PushPrefix.prefix k (push k b v (k.encode v)) vs b.length (by change b.length<b.length+1;omega)]
+   rw [PV_OWND_PushPrefix.retained k (push k b v (k.encode v)) vs b.length (by change b.length<b.length+1;omega)]
    simp only [Nat.add_zero,push,ite_true,List.getElem_cons_zero]
   | succ i =>
    have lt:i<vs.length := by simpa only [List.length_cons,Nat.add_lt_add_iff_right] using hi
