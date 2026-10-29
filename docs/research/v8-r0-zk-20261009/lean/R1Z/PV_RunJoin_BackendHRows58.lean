@@ -26,7 +26,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [PV_RunJoin_BackendRows58.c2_h]
   apply PV_RunJoin_BackendFillPure58.complete _ (values (array q hq))
     _ p 26#usize (by decide) 1024 0#usize rfl self
-    (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
+    (hp.trans (congrArg matrix (PV_RunJoin_BackendPrefix58.zero p 26 (values (array q hq)))).symm)
   intro row hi
   rw [index q hq]
   exact read base heap box ops (array q hq) row hi

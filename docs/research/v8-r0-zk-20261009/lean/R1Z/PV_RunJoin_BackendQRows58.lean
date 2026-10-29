@@ -20,7 +20,7 @@ theorem g (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
   rw [PV_RunJoin_BackendRows58.c2_g]
   exact PV_RunJoin_BackendFillPure58.complete _ (values q)
     (read base heap box ops q) p 27#usize (by decide) 1024 0#usize rfl self
-    (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
+    (hp.trans (congrArg matrix (PV_RunJoin_BackendPrefix58.zero p 27 (values q))).symm)
 
 theorem d (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (self : prover.Backend) (p : Nat → Nat → W) (hp : self.messages=matrix p)
@@ -33,7 +33,7 @@ theorem d (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
   rw [PV_RunJoin_BackendRows58.c1_d]
   exact PV_RunJoin_BackendFillPure58.complete _ (values q)
     (read base heap box ops q) p 28#usize (by decide) 1024 0#usize rfl self
-    (by simpa only [PV_RunJoin_BackendPrefix58.zero] using hp)
+    (hp.trans (congrArg matrix (PV_RunJoin_BackendPrefix58.zero p 28 (values q))).symm)
 
 #print axioms g
 #print axioms d

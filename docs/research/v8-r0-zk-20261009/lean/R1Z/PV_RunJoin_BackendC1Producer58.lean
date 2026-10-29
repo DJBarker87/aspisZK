@@ -28,7 +28,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   letI : ExternalFuns := selected base heap box ops
   unfold prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1
   rw [PV_RunJoin_BackendBaseColumns58.complete base heap box ops columns hlen p 26 0#usize rfl self
-    (by simpa only [PV_RunJoin_BackendBasePrefix58.zero] using hp)]
+    (hp.trans (congrArg matrix (PV_RunJoin_BackendBasePrefix58.zero p (values columns hlen))).symm)]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_BackendQRows58.d base heap box ops _ _ rfl d]
   simp only [bind_tc_ok]
