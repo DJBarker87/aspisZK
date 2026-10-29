@@ -1,0 +1,9 @@
+from pathlib import Path
+import subprocess,json,hashlib
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2e-20261029'
+raw=subprocess.check_output(['git','show','HEAD:tools/pv-cblib-20261027/lib.rs']);ref=raw.decode();src=(E/'source/sha256-soft.rs').read_text();const=(E/'source/sha-consts.rs').read_text()
+a=ref.index('pub mod sha_fallback_reference {\n')+len('pub mod sha_fallback_reference {\n');z=ref.index('\npub fn extracted_round(',a);body=ref[a:z];original=src[src.index('#[inline(always)]'):src.index('\npub fn compress(')]
+assert body.replace('super::sha_fallback_consts::K32X4','crate::consts::K32X4').replace('($a >> 10u32)','($a >> 10)')==original
+cb=const[const.index('pub const K32:'):const.index('/// Constants necessary for SHA-512')];assert cb in ref
+r=dict(status='PASS',source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),reference_path='tools/pv-cblib-20261027/lib.rs',reference_blob=subprocess.check_output(['git','rev-parse','HEAD:tools/pv-cblib-20261027/lib.rs'],text=True).strip(),reference_file_sha256=hashlib.sha256(raw).hexdigest(),reference_body_sha256=hashlib.sha256(body.encode()).hexdigest(),shipped_soft_body_sha256=hashlib.sha256(original.encode()).hexdigest(),constants_sha256=hashlib.sha256(cb.encode()).hexdigest(),differences=['K32X4 namespace; exact constants copied','shift macro RHS 10 inferred i32 made explicit10u32; same nonnegative bit count10; separate scalar lemma required'],scope='soft.rs through sha256_digest_block_u32 only; outer compress iterator/copy/state association and SHA-NI remain unproved',evidence_class='partial structural (K-1 substitute); no whole-row credit',composition_trust='reclassification within existing tool trust, never premise removal')
+(E/'fallback-source-binding.json').write_text(json.dumps(r,indent=2));print('PASS software word-block body and constants; explicit literal/namespace ports retained')

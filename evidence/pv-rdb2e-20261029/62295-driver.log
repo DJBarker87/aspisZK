@@ -1,0 +1,39 @@
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:10:65: error: unsupported `do` element (kind: Lean.Parser.Term.doIf)
+  if h : block.length = 64 then 
+    let words ← PV_CBL_ShaBytes.sha_load64 ⟨block, h⟩
+    PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state words
+  else
+    fail .panic
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:17:40: error: unsolved goals
+state : State
+block : List U8
+h : block.length ≠ 64
+⊢ sorry = fail Error.panic
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:17:63: warning: This simp argument is unused:
+  dif_neg h
+
+Hint: Omit it from the simp argument list.
+  simp only [software,̵d̵i̵f̵_̵n̵e̵g̵ ̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:17:54: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:22:86: error: unsolved goals
+state : State
+block : Std.Array U8 64#usize
+⊢ sorry = do
+    let words ← PV_CBL_ShaBytes.sha_load64 block
+    PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state words
+/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean:23:22: warning: This simp argument is unused:
+  dif_pos block.property
+
+Hint: Omit it from the simp argument list.
+  simp only [software,̵d̵i̵f̵_̵p̵o̵s̵ ̵b̵l̵o̵c̵k̵.̵p̵r̵o̵p̵e̵r̵t̵y̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDB2E_ConcreteSoft.wrong_length' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2E_ConcreteSoft.fixed_block' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2E_ConcreteSoft.word_block_total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2E_ConcreteSoft.all_fields' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDB2E_ConcreteSoft.both_backends' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62295/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-62295/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-objects/R1Z/PV_RDB2E_ConcreteSoft.olean", "/home/dombarker/project-offloads/codex-pv-rdb2e-20261029/lean-sources/R1Z/PV_RDB2E_ConcreteSoft.lean", "7000"], "exit": 1, "wall": "0:01.12", "peak_rss_kib": "2637456", "swap": "0", "source_revision": "0503de83a765d1978ba4cf7f567bc5abbd1e794b", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
