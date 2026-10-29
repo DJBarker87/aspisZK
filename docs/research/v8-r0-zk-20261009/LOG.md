@@ -14331,3 +14331,16 @@ The line is parked: worktree removed, branch kept on origin. It will be merged i
 - V256 and V257: association of the restoration models with the original frozen iterator continuations at the deployed call sites;
 - V231: the concrete SHA mutable handles and the deployed compression backend selection, with every runtime-reachable backend treated, since the SHA-NI owner item is pending.
 Rows removed: 0. Privacy target not yet established.
+
+## D425 (Stream B) 2026-10-29 00:10 UTC: pv-fixb and b3p6h results; op227 formatting is panic-only; b3p6i and pv-diag launched
+
+pv-fixb used 40 Lean attempts (62100-62139), all passing under compliant admission, with no ruling (t) violation. V213's restoring theorem was recompiled at 62112, and its focused statement and axioms audit passed at 62113 with standard axioms only. The binding was recompiled earlier at 62012. Sources and proofs are unchanged. 17 modules of pv-rdcd's aggregate chain remain uncompiled, including FinalAudit, FinalReplay, AllAxioms and FinalManifest. The worker therefore reports V213 OPEN, and the lead leaves the classification to recount 9 rather than overrule it. pv-fix was merged into the candidate as cae2a45ae2 and pushed; its worktree and branch were removed. The candidate now also carries the passing rdeac replay 62002.
+
+b3p6h (branch codex/pv-b3p6-20261028, head 884adf0f9d, pushed) used all 100 Lean attempts (83 passing, 17 rejected), three optimized native LLVM compilations and no Kani. All three audits passed with standard axioms only. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or limit options. It adds 83 symbolic supporting theorems (copy, projected Poseidon, preweighted loops and semantic callers). V244 remains SUSPENDED: the public-digest continuation proof reaches the default recursion limit, and composition_parts success and the reference and installed-callback nonvacuity remain. Runjoin's op227 hypothesis is not discharged.
+
+Formatting result (D414 item (e)): the listed core::fmt vtable methods are unreachable from op227. The runtime formatting branches inspected are panic-only and excluded on honest runs by immutable bounds or fixed lengths. No honest-run or witness-dependent formatting was found in the op227 cone. The client-wide D348 question stays open.
+
+Launched:
+- b3p6i (IDs 62300-62399; 100 Lean, 40 native, 0 Kani): V244 only, with the D411 proof-shape direction applied to the digest continuation. That means named per-stage and per-field lemmas, local irreducibility and stage-by-stage composition, with no limits raised.
+- pv-diag (sparse worktree from cae2a45ae2; IDs 62400-62499; 50 Lean, 50 native, 0 Kani): the client half of D348. It enumerates every diagnostic sink in the deployed release build (stderr and stdout, logs, error values crossing the client API, panic hook, backtrace capture) with trigger conditions. It also establishes when anyhow and std capture backtraces in this build, and whether honest-run retries or recoverable errors construct diagnostics whose occurrence, count or content depends on witness data. Each sink is classified as not reached, public-only or a witness-dependent finding.
+Rows removed: 0. Privacy target not yet established.
