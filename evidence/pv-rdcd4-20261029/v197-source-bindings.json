@@ -1,0 +1,113 @@
+{
+  "row": "V197",
+  "application_file": "crates/aspis-core/src/field.rs",
+  "application_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+  "application_bindings": [
+    {
+      "context": "pub fn from_le_bytes(bytes: [u8; 4])",
+      "body": "pub fn from_le_bytes(bytes: [u8; 4]) -> Option<M31> {\n        let v = u32::from_le_bytes(bytes);\n        if v >= P {\n            None\n        } else {\n            Some(M31(v))\n        }\n    }",
+      "expected": "pub fn from_le_bytes(bytes:[u8;4])->Option<M31>{let v=u32::from_le_bytes(bytes);if v>=P{None}else{Some(M31(v))}}",
+      "body_sha256": "61801dea89bcc6f411c3b373fcf966d9f257f4ca5b251f4b896c1c428c1102b7",
+      "model": "R1Z.PV_RDCD4_BytesSource.scalar/scalar_binding",
+      "source_steps": "Decode all four bytes, compare raw representative with P, return None or exact unreduced value."
+    },
+    {
+      "context": "pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31>",
+      "body": "pub fn from_le_bytes(bytes: &[u8]) -> Option<CM31> {\n        let a_bytes = match bytes[0..4].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let a = M31::from_le_bytes(a_bytes)?;\n        let b_bytes = match bytes[4..8].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let b = M31::from_le_bytes(b_bytes)?;\n        Some(CM31 { a, b })\n    }",
+      "expected": "pub fn from_le_bytes(bytes:&[u8])->Option<CM31>{let a_bytes=match bytes[0..4].try_into(){Ok(value)=>value,Err(_)=>return None,};let a=M31::from_le_bytes(a_bytes)?;let b_bytes=match bytes[4..8].try_into(){Ok(value)=>value,Err(_)=>return None,};let b=M31::from_le_bytes(b_bytes)?;Some(CM31{a,b})}",
+      "body_sha256": "9339c7b25fa5476fad3aed6ecf65112ddf503bbdc5155e8d0bd4792f54b94ccd",
+      "model": "R1Z.PV_RDCD4_BytesSource.component/cm",
+      "source_steps": "Checked first range, TryFrom array4 and scalar decode; None short circuit before second range; repeat and construct moved scalar fields."
+    },
+    {
+      "context": "pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31>",
+      "body": "pub fn from_le_bytes(bytes: &[u8]) -> Option<QM31> {\n        let c0 = CM31::from_le_bytes(&bytes[0..8])?;\n        let c1 = CM31::from_le_bytes(&bytes[8..16])?;\n        Some(QM31 { c0, c1 })\n    }",
+      "expected": "pub fn from_le_bytes(bytes:&[u8])->Option<QM31>{let c0=CM31::from_le_bytes(&bytes[0..8])?;let c1=CM31::from_le_bytes(&bytes[8..16])?;Some(QM31{c0,c1})}",
+      "body_sha256": "3e58a8f03ca2ece6801dbfee02fa6b119fcde8c9f3240ab4f0c5e9e0e2b22a56",
+      "model": "R1Z.PV_RDCD4_BytesSource.qm; V197.source_reference/frame",
+      "source_steps": "Take first8 before parsing c0; None returns without second-half range. Only successful c0 evaluates8..16 and c1. Returned QM31 contains no reference."
+    }
+  ],
+  "library_bindings": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index(self, slice: &[T]) -> &[T] {\n        // Using checked_sub is a safe way to get `SubUnchecked` in MIR\n        if let Some(new_len) = usize::checked_sub(self.end, self.start)\n            && self.end <= slice.len()\n        {\n            // SAFETY: `self` is checked to be valid and in bounds above.\n            unsafe { &*get_offset_len_noubcheck(slice, self.start, new_len) }\n        } else {\n            slice_index_fail(self.start, self.end, slice.len())\n        }\n    }",
+      "body_sha256": "9b5a76ec12a277ff155516fde91a974c8b911fb8cf79402aac92e48cff97a804",
+      "source_steps": "Checked stop-start and stop<=length; success forms same readonly range via offset+length; failure is the original indexing failure carrier. Fixed parser bounds are ordered.",
+      "model": "R1Z.PV_RDCD4_SliceRange194.success/reversed/oversized/length; ParserWindows.compose/no_write"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn try_from(slice: &[T]) -> Result<[T; N], TryFromSliceError> {\n        <&Self>::try_from(slice).copied()\n    }",
+      "body_sha256": "981bab997164832c409102758b560f9a938cfd929b99a4a78e4fe4b5c659fb69",
+      "source_steps": "Forward to borrowed-array conversion, then copied; concrete u8 Copy, no Clone callback. Root Err maps to original None.",
+      "model": "R1Z.PV_RDCD4_TryArray194.into/backing/roundtrip"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn try_from(slice: &'a [T]) -> Result<&'a [T; N], TryFromSliceError> {\n        slice.as_array().ok_or(TryFromSliceError(()))\n    }",
+      "body_sha256": "b954cc3dd284c1c4684e885ec0bf7587fece6e7fecdf8412ed3bcbfdb4bc256d",
+      "source_steps": "as_array length check; None becomes zero-sized TryFromSliceError; same backing array reference on success.",
+      "model": "R1Z.PV_RDCD4_TryArray194.success/mismatch/backing"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const fn as_array<const N: usize>(&self) -> Option<&[T; N]> {\n        if self.len() == N {\n            let ptr = self.as_ptr().cast_array();\n\n            // SAFETY: The underlying array of a slice can be reinterpreted as an actual array `[T; N]` if `N` is not greater than the slice's length.\n            let me = unsafe { &*ptr };\n            Some(me)\n        } else {\n            None\n        }\n    }",
+      "body_sha256": "518ccccf8e77f56f37559a1ba861a5fe7538ea44284c25733baa35e5f86a1d7a",
+      "source_steps": "Check slice length=N, cast same pointer to arrayN, borrow it; otherwise None. No write or allocation.",
+      "model": "R1Z.PV_RDCD4_TryArray194.backing; ParserWindows.no_write; pointer primitives at V370"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs",
+      "file_sha256": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc",
+      "body": "pub const fn copied(self) -> Result<T, E>\n    where\n        T: Copy,\n    {\n        // FIXME(const-hack): this implementation, which sidesteps using `Result::map` since it's not const\n        // ready yet, should be reverted when possible to avoid code repetition\n        match self {\n            Ok(&v) => Ok(v),\n            Err(e) => Err(e),\n        }\n    }",
+      "body_sha256": "c7aec12eba6c6cb0bc8f91e396082646310ac747aea031bc148307d07a8e8f5c",
+      "source_steps": "Copy the entire array value in Ok; move unchanged Err. Concrete [u8;4] has no Drop; no reference escapes the parser result.",
+      "model": "R1Z.PV_RDCD4_TryArray194.into; complete caller None conversion"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "body": "pub const fn ok_or<E: [const] Destruct>(self, err: E) -> Result<T, E> {\n        match self {\n            Some(v) => Ok(v),\n            None => Err(err),\n        }\n    }",
+      "body_sha256": "dbcc474410f45ba991dd0f2142fd23edbc90d09d253253eb01f9376604dc07a5",
+      "source_steps": "Some value becomes Ok, None becomes supplied zero-sized error; no arbitrary closure or allocation.",
+      "model": "R1Z.PV_RDCD4_TryArray194.into; source CM match preserves Err=>None"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn from_le_bytes(bytes: [u8; size_of::<Self>()]) -> Self {\n            Self::from_le(Self::from_ne_bytes(bytes))\n        }",
+      "body_sha256": "91c96567a8f5389df93aa740240aa3a61abf203ba656da7f5ff420fdff0ec597",
+      "source_steps": "Native-word read then from_le; u32 size4.",
+      "model": "R1Z.PV_RDCD4_Endian194.binding; imported core.num.U32.from_le_bytes"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn from_ne_bytes(bytes: [u8; size_of::<Self>()]) -> Self {\n            // SAFETY: integers are plain old datatypes so we can always transmute to them\n            unsafe { mem::transmute(bytes) }\n        }",
+      "body_sha256": "fef7cc8cd00b4105820456d347efb75f172ab1ece8f1570911ae719307924f8c",
+      "source_steps": "Transmute exactly four bytes to u32; existing integer-layout/compiler primitive V370 retained.",
+      "model": "R1Z.PV_RDCD4_Endian194.word/binding"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/num/uint_macros.rs",
+      "file_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "body": "pub const fn from_le(x: Self) -> Self {\n            #[cfg(target_endian = \"little\")]\n            {\n                x\n            }\n            #[cfg(not(target_endian = \"little\"))]\n            {\n                x.swap_bytes()\n            }\n        }",
+      "body_sha256": "7638f0dfcfc5fa3bca38249b928a1959f01571d04445c334fc75e9d089f0a53b",
+      "source_steps": "Recorded x86_64 Linux target is little endian: return same word, other cfg branch not selected.",
+      "model": "R1Z.PV_RDCD4_Endian194.binding"
+    }
+  ],
+  "route": "k-prime/own-1 exact owned Lean source reference. Pinned Aeneas escaping-reference loan-validation rejection remains recorded; no modified Rust, new extractor, Kani or loan-validation waiver.",
+  "before": "Complete concrete parser source-to-reference Result law unbound at original arbitrary byte-slice input.",
+  "after_target": "Same input, Option<QM31>, indexing-failure and short-circuit behavior; second-half bounds check stays after c0 None. Immutable input frame preserved, no returned borrow.",
+  "primitive_boundary": "Typed pointer/read-only array4 copy and integer-layout/compiler semantics V370/D381/D386 retained. Native panic/observer/world obligations remain outside original Result abstraction.",
+  "pending": "All six new parser modules, whole Result theorem and coherent source/object checks must pass before any restoration.",
+  "endpoint_premises_removed": [],
+  "endpoint_premises_added": [],
+  "endpoint_premises_changed": []
+}
