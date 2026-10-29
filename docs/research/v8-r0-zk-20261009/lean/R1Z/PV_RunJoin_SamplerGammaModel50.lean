@@ -23,7 +23,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
         ok (PV_B2_E_OrdinaryOriginal.toNative (PV_B2_C_ArrayDigits.raw digits)) := he
     exact eq.trans (congrArg Result.ok (PV_RunJoin_SamplerRaw49.native digits))
   · have bound : AspisR1.SourceSamplerByteRank.rank block % (AspisCircleGroupOrder.P^8-1)+1<
-        AspisCircleGroupOrder.P^8 := by rw [←hv];exact hb
+        AspisCircleGroupOrder.P^8 := by
+      have result := hb
+      rw [hv] at result
+      exact result
     exact PV_RunJoin_SamplerDigitRank50.value_at digits hc' _ bound hv
 #print axioms complete
 end R1Z.PV_RunJoin_SamplerGammaModel50
