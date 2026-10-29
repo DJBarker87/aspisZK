@@ -36,7 +36,8 @@ theorem cyclic_increment (q : Nat) (ds : List Nat) (hq : q≤256)
         (value ds+q)%(P^8-1) = ((value ds+q-(P^8-1))+(P^8-1))%(P^8-1) := by
           rw [Nat.sub_add_cancel hl]
         _ = value ds+q-(P^8-1) := by
-          rw [Nat.add_mod,Nat.mod_self,Nat.add_zero,Nat.mod_eq_of_lt (by omega)]
+          simp only [Nat.add_mod,Nat.mod_self,Nat.add_zero,Nat.mod_mod]
+          exact Nat.mod_eq_of_lt (by omega)
     simp only [PV_L2E_GammaTrace.run,hc,↓reduceIte]
     rw [hm]
     omega
