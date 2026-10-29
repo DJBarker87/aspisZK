@@ -15,8 +15,9 @@ def coordinates (p : Phase) (i : Fin 2) :=
 
 theorem actual (p : Phase) (i : Fin 2)
     (unit : (coordinates p i).1^2+(coordinates p i).2^2=1) :
-    ((data p).ch.circle i).val=coordinates p i :=
-  PV_RunJoin_ActualPoint59.first _ _ unit
+    ((data p).ch.circle i).val=coordinates p i := by
+  change (PV_RunJoin_ActualPoint59.point (coordinates p i).1 (coordinates p i).2).val=coordinates p i
+  exact PV_RunJoin_ActualPoint59.first (coordinates p i).1 (coordinates p i).2 unit
 
 theorem stored (p : Phase)
     (unit0 : (coordinates p 0).1^2+(coordinates p 0).2^2=1)
