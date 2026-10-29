@@ -8,7 +8,7 @@ Worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
 `codex/pv-runjoin-20261026`, entry
 `c8fb38ee734a84e8cdb4a3f8b8de697fd66195e7`. No merge or push. The round exhausted
 100 Lean attempts, IDs 68800–68899, including audit IDs 68897–68899; zero Kani.
-Full commit list: `commits.txt`.
+Source-stage commit list through the collection revision in `boundaries.json`: `commits.txt`; final evidence-only commits follow it.
 
 ## Requested witness: not delivered
 
@@ -155,6 +155,8 @@ direct fingerprints matched. Final: **3,677** pairs and **8,139** fingerprints,
 with all **5,673** external objects and **5,438** IR companions matching.
 The pinned private workspace was reused; no shared/other-job object was written.
 Ten historical uncompiled exclusions remain unchanged. No own scope remains.
+Source/tools/report whitespace checks passed. The full diff reports only EOF
+blank lines in the 18 original rejected-launch logs, retained byte-for-byte.
 There was no package-wide/frozen-release replay, Rust/Kani/SBF build, native
 fixture replay, installation, key operation or push.
 
