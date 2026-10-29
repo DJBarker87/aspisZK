@@ -83,7 +83,7 @@ variable {Public Signal Env A R : Type} [Fintype R] [Nonempty R]
 association with this product is OPEN; it is not inferred from signal marginals. -/
 def realExperiment (adv : Observer Signal A) (w : (h).Instance)
     (r : Env × R) : Signal × Observation A :=
-  PV_EVHD_Headline.real outputs r.1 native nativeSignal adv w r.2
+  PV_EVHD_Headline.real r.1 native nativeSignal adv w r.2
 
 /-- EXPERIMENTAL joint ideal experiment: sample public environment/noise and
 simE coins, then generate all ordered channels using the same completion. -/
@@ -95,7 +95,7 @@ theorem draft_headline_joint
     (links : ∀ env (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
       Links template outputs x completion pubData env native nativeSignal adv w)
     (adv : Observer Signal A) (w : (h).Instance) (hw : (h).public w = x.1) :
-    |mean (fun r => bit (adv.decide (realExperiment outputs native nativeSignal adv w r))) -
+    |mean (fun r => bit (adv.decide (realExperiment native nativeSignal adv w r))) -
       mean (fun r => bit (adv.decide
         (idealExperiment template outputs x completion pubData adv r)))| ≤
       PV_EVHD_Headline.bound template outputs x := by

@@ -77,7 +77,7 @@ def completed (v : ROMView K CommitHandle Aux R1Bat) : Signal × Observation A :
 /-- EXPERIMENTAL: arbitrary event observers are pulled back to existing
 adaptive model observers. Source causality/reachability is a separate P link. -/
 def observer (adv : Observer Signal A) : R1Adv K CommitHandle Aux where
-  prog := fun v log => adv.program (completed completion pubData env ⟨v,log⟩)
+  prog := fun v oracleLog => adv.program (completed completion pubData env ⟨v,oracleLog⟩)
   decide := fun v => adv.decide (completed completion pubData env v)
 
 def modelReal (adv : Observer Signal A) (w : (h).Instance) (r : (source).RealRand) :
@@ -137,7 +137,7 @@ structure Links (adv : Observer Signal A) (w : (h).Instance) where
 def joined (adv : Observer Signal A) (w : (h).Instance)
     (links : Links template outputs x completion pubData env native nativeSignal adv w) :
     ProverCommitFuelJoin22.RunJoin
-      (real outputs env native nativeSignal adv w)
+      (real env native nativeSignal adv w)
       (modelReal template outputs x completion pubData env adv w)
       (QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w)
       (seedQueries template outputs x completion pubData env adv w) :=
@@ -153,7 +153,7 @@ theorem draft_headline
     (links : ∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
       Links template outputs x completion pubData env native nativeSignal adv w) :
     (∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
-      |mean (fun r => bit (adv.decide (real outputs env native nativeSignal adv w r))) -
+      |mean (fun r => bit (adv.decide (real env native nativeSignal adv w r))) -
         mean (fun r => bit (adv.decide (ideal template outputs x completion pubData env adv r)))| ≤
       bound template outputs x) ∧
     modelError (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) L₁ L₂ + 16 / (2 : ℚ)^486 + QueryScanFreshUnion.freshBudget (8 * n1 (R1Z.PhaseLocalityBin.R1PhaseWire.toWire (wire base (List.length (R1Wire.pubBytes base x)) h B outputs x)) (R1Z.PhaseLocalityBin.R1PhaseProver.toProver (prover base (List.length (R1Wire.pubBytes base x)) h B outputs x seed)) + 1) + 2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ≤
@@ -195,7 +195,7 @@ theorem draft_headline
       ProverCommitReencode16.encode _ _ _ _ _ core
     have hmid := mid (observer completion pubData env adv) w hw
     have t₁ := abs_sub_le
-      (mean (fun r => bit (adv.decide (real outputs env native nativeSignal adv w r))))
+      (mean (fun r => bit (adv.decide (real env native nativeSignal adv w r))))
       (mean (realTest h B outputs source (observer completion pubData env adv) x w))
       (mean (idealTestS source (observer completion pubData env adv) x
         (simE (h).transport B outputs x)))
