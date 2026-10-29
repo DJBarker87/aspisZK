@@ -41,6 +41,8 @@ theorem exact_links_zero {S A Signal : Type} [Fintype S]
     apply if_neg
     rintro ⟨hb,hn⟩
     exact hn (agree s hb)
+  change mean (fun s => if ¬bad s ∧ observe (rs s) (real s) ≠ observe (ss s) (sim s)
+    then (1 : ℚ) else 0) = 0
   rw [h]
   simp only [mean, Finset.sum_const_zero, zero_div]
 
@@ -64,6 +66,13 @@ def Link_CausalPrefix {E V L A : Type}
     (complete : E → V → List L → NativeTrace A) : Prop :=
   ∀ e v log suffix, List.IsPrefix (complete e v log).events
     (complete e v (log ++ suffix)).events
+
+/-- EXPERIMENTAL: exact native adaptive-program association at every
+reachable source prefix. Both families range over actual invocation/prefix
+indices; the expected observation is not allowed to contain future data. -/
+def Link_ObserverProgram {I O : Type} (actual : I → R1Z.GamesR1.OProg)
+    (expected : I → O) (program : O → R1Z.GamesR1.OProg) : Prop :=
+  ∀ i, actual i = program (expected i)
 
 /-- EXPERIMENTAL: if an exact surrogate theorem is available but the actual
 joint trace differs, its additional term is explicit. No <2^-100 conclusion

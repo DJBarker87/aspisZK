@@ -76,7 +76,7 @@ No OS failure, retry rejection or divergence is newly declared charged.
 | `ProverCommitModelCore16.core_privacy` | Applied unchanged to the same model and public premise/caller laws. | REUSED unchanged |
 | `ProverCommitReencode16.privacy_transport` | Applied unchanged to the event observer pulled back by `PV_EVHD_Headline.observer`. | REUSED unchanged |
 | `PV_EVHD_Headline.observer` | New program and decision adapter, parameterized by the public completion; no witness input. | DEFINED; native scheduling association OPEN |
-| `PV_EVHD_Residual.Link_CausalPrefix` | Necessary progressive event stability. The actual source query-program equality and absence of future-data use must also be established. | OPEN |
+| `PV_EVHD_Residual.Link_CausalPrefix`, `Link_ObserverProgram` | Necessary progressive event stability. The actual source query-program equality and absence of future-data use must also be established. | OPEN |
 | `PV_EVHD_Headline.Links.cp` | D163 common carrier with both exact marginals and model/seed/fuel coordinates. Old Result-level agreement does not produce this extension. | OPEN |
 | `PV_EVHD_Headline.Links.context` / `PV_EVHD_Interface.Link_Context` | Full non-wall context/order and terminal, including failed/divergent and rejected prefixes. Requires joint mask/count/oracle/DIAG/side-channel simulation, not separate projection marginals. | OPEN |
 | `PV_EVHD_Headline.Links.timing` / `PV_EVHD_Interface.Link_Timing` | D166 timing equality on that same good common sample. Reconstruction lemma is reused from L1C proof text; no native clock law is assumed proved. | OPEN |
