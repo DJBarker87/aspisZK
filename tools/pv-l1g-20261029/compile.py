@@ -56,7 +56,7 @@ if r.returncode!=0 or not admission.get('allowed'):
  if 'error' in admission:
   assert re.search(r'(?:FileNotFoundError|OSError): \[Errno (?:2|19)\]',admission['error']),admission
   assert sum('error' in json.loads(p.read_text()) for p in E.glob(f'refusal-{a}-*.json'))<=3,'fourth scan race'
- print('REFUSED uncharged same ID after cooldown',admission,flush=True);sys.exit(78)
+ print('REFUSED uncharged; use next unused ID after cooldown',admission,flush=True);sys.exit(78)
 transport(['scp','-q',host+':'+P+f'/evidence/reservation-{a}.json',str(E/f'reservation-{a}.json')],check=True)
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=l1g-lean-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',P+f'/evidence/time-{a}.log','python3',P+'/chunk-host.py',P,str(a),json.dumps(mods)]
 intent=dict(attempt=a,chunk=idx,modules=mods,source_revision=plan['modules'][mods[0]].get('revision',plan['source_revision']) if len(mods)==1 else plan['source_revision'],source_revisions={m:plan['modules'][m].get('revision',plan['source_revision']) for m in mods},wrapper_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),command=cmd,reservation=admission,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),old_objects_written=False,external_ir_companions_sha256=hashlib.sha256((E/'external-ir-companions.json').read_bytes()).hexdigest() if (E/'external-ir-companions.json').exists() else None)
