@@ -1,8 +1,11 @@
 """Serial lane-owned validation wrapper; host launcher is copied unchanged."""
 from pathlib import Path
-import subprocess,json,sys,time,hashlib,shlex
+import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose-20261029';H='dombarker@100.108.41.90'
-a,target=sys.argv[1:];assert a.startswith('NED_L') and 1<=int(a[5:])<=150
+a,target=sys.argv[1:];assert a.startswith('NED_L') and 1<=int(a[5:])<=153
+assert len(list(E.glob('NED_L*/receipt.json')))<150
+assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
+moduleRel=target.replace('.','/')
 assert not (E/a).exists();active=E/'NED_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
@@ -27,8 +30,8 @@ print(p.read_text());sys.exit(r.returncode)
  if r.returncode==0 and ad.get('allowed') is True:break
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
-local=E/(target+'.lean')
-imported=E/'NED_imports'/(target+'.lean')
+local=E/(moduleRel+'.lean')
+imported=E/'NED_imports'/(moduleRel+'.lean')
 source=local.read_text() if local.exists() else imported.read_text() if imported.exists() else json.loads((E/'NED_UNCHANGED_BUILD_PLAN.json').read_text())['sources'][target]['source']
 # Dependency pinning resolves the exact LEAN_PATH order, including the Aeneas library.
 code=f'''from pathlib import Path
@@ -52,13 +55,14 @@ print(json.dumps(dict(selected_objects=selected,missing=missing)))
 r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
-command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NED_generated','-o','NED_objects/'+target+'.olean','NED_generated/'+target+'.lean']
-cfg=dict(attempt=a,kind='lean',module=target,sources=['NED_generated/'+target+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NED_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose-cache-20261029/NDM_front4b_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NED_generated','-o','NED_objects/'+moduleRel+'.olean','NED_generated/'+moduleRel+'.lean']
+cfg=dict(attempt=a,kind='lean',module=target,sources=['NED_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NED_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose-cache-20261029/NDM_front4b_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NED_SOURCE.lean.txt').write_text(source)
-files={'NED_generated/'+target+'.lean':source,a+'.json':json.dumps(cfg)}
+files={'NED_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 code=f'''from pathlib import Path
 import json
 b=Path({B!r})
+(b/{('NED_objects/'+moduleRel+'.olean')!r}).parent.mkdir(parents=True,exist_ok=True)
 for n,s in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 '''

@@ -73,3 +73,13 @@ work in progress. No composed NDT row is promoted. Retired generic root
 wrappers are not native evidence. Full-source receipts remain individual;
 NED_ATTEMPTS.jsonl is now a compact index, with an xz -6 archival full log
 and both compressed and uncompressed SHA256 records.
+
+Stage 7 supersedes the pending stage-6 native work: all K001–K040 recorded.
+K034/035 checks the validator's abstract caller Result and ordered calls,
+K036–039 decoder argument windows, K040 address-only getters. Positives pass
+and paired controls fail. No full child-effect or source-to-model root
+association is inferred. NEC afterstate 8cdc45079a was imported and checked
+(NED_AFTER_REVALIDATION.json); its eight Lean modules compile L133–140.
+L141/L146 isolate raw validator tail semantics after L132 heartbeat exhaustion;
+L142/L143 compose the emitted boxed child and exact caller window domain.
+The active production ledger delta is still empty: 0 native roots CLOSED.

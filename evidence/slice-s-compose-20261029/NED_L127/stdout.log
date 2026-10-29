@@ -1,0 +1,72 @@
+NED_generated/NED_ValidatorStatus.lean:27:128: error: unsolved goals
+case h_1
+s : Statement
+x✝ : core.result.Result (Std.Array U8 216#usize) PaymentError
+e✝ : PaymentError
+heq✝ : payment s = core.result.Result.Err e✝
+⊢ (have c := common s;
+    if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+      ok
+        (core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if 8 ≤ ↑c.output_lane then
+        ok
+          (core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+      else do
+        let r ← ok (payment s)
+        match r with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+          | core.result.Result.Ok a => ok (suffix s)) =
+    ok
+      (have c := common s;
+      if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+        core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding
+      else
+        if 8 ≤ ↑c.output_lane then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane
+        else
+          core.result.Result.Err
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e✝))
+
+case h_2
+s : Statement
+x✝ : core.result.Result (Std.Array U8 216#usize) PaymentError
+a✝ : Std.Array U8 216#usize
+heq✝ : payment s = core.result.Result.Ok a✝
+⊢ (have c := common s;
+    if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+      ok
+        (core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      if 8 ≤ ↑c.output_lane then
+        ok
+          (core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane)
+      else do
+        let r ← ok (payment s)
+        match r with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err
+                (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Payment e))
+          | core.result.Result.Ok a => ok (suffix s)) =
+    ok
+      (have c := common s;
+      if c.master_account = zero ∨ c.checkpoint_account = zero ∨ c.selected_lane_account = zero then
+        core.result.Result.Err
+          AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding
+      else
+        if 8 ≤ ↑c.output_lane then
+          core.result.Result.Err
+            AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidOutputLane
+        else suffix s)
+'NED_ValidatorStatus.payment_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NED_ValidatorStatus.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

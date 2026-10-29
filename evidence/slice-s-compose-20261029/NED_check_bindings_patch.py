@@ -29,17 +29,20 @@ def main():
   module_path=b/'crates/aspis-statement/src/pool_v1/NED_bindings.rs';before_extra=module_path.read_text()
   subprocess.run(['git','apply',str(E/'NED_binding_extra.patch')],cwd=b,check=True,capture_output=True)
   module=module_path.read_text();assert module.startswith(before_extra)
+  subprocess.run(['git','apply',str(E/'NED_decode_windows.patch')],cwd=b,check=True,capture_output=True)
   actual=span(module,'fn validator_ref(');assert actual==expected(frozen)
   bad=actual.replace('::HistoricalAnchorMismatch','::CheckpointBindingMismatch');assert bad!=expected(frozen)
   bad=actual.replace('trace.push(3)','trace.push(4)');assert bad!=expected(frozen)
   text=q.read_text();hook='\n#[cfg(kani)]\n#[path="NED_bindings.rs"]\nmod NED_bindings;\n\n'
   assert text.count(hook)==1;text=text.replace(hook,'')
+  decode_hook='\n#[cfg(kani)]\n#[path="NED_decode_windows.rs"]\nmod NED_decode_windows;\n\n'
+  assert text.count(decode_hook)==1;text=text.replace(decode_hook,'')
   lines=text.splitlines(True);out=[];i=0
   while i<len(lines):
-   if lines[i].strip()=='#[cfg(kani)]' and ('NED_windows::' in lines[i+1] or lines[i+1].strip()=='#[path="NED_windows.rs"]'):
-    i+=3 if lines[i+1].strip()=='#[path="NED_windows.rs"]' else 2
+   if lines[i].strip()=='#[cfg(kani)]' and ('NED_windows::' in lines[i+1] or 'NED_decode_windows::' in lines[i+1] or lines[i+1].strip() in ['#[path="NED_windows.rs"]','#[path="NED_decode_windows.rs"]']):
+    i+=3 if lines[i+1].strip().startswith('#[path=') else 2
    else:out.append(lines[i]);i+=1
   assert ''.join(out)==frozen+'\n'
-  report=dict(erasure_exact=True,frozen_revision=rev,frozen_file_sha256=sha(frozen.encode()),reference_exact_frozen_cut=True,reference_sha256=sha(actual.encode()),patch_sha256=sha((E/'NED_bindings.patch').read_bytes()),extra_patch_sha256=sha((E/'NED_binding_extra.patch').read_bytes()),mutation_wrong_error_rejected=True,mutation_wrong_call_order_rejected=True,scope='binding probes and opaque caller Result/call-order only; no functional stub law inferred')
+  report=dict(erasure_exact=True,frozen_revision=rev,frozen_file_sha256=sha(frozen.encode()),reference_exact_frozen_cut=True,reference_sha256=sha(actual.encode()),patch_sha256=sha((E/'NED_bindings.patch').read_bytes()),extra_patch_sha256=sha((E/'NED_binding_extra.patch').read_bytes()),decode_patch_sha256=sha((E/'NED_decode_windows.patch').read_bytes()),mutation_wrong_error_rejected=True,mutation_wrong_call_order_rejected=True,scope='binding probes and opaque caller Result/call-order only; no functional stub law inferred')
   print(json.dumps(report,indent=1))
 if __name__=='__main__':main()

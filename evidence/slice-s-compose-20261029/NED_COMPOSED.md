@@ -154,3 +154,37 @@ work in progress. No composed NDT row is promoted. Retired generic root
 wrappers are not native evidence. Full-source receipts remain individual;
 NED_ATTEMPTS.jsonl is now a compact index, with an xz -6 archival full log
 and both compressed and uncompressed SHA256 records.
+
+## Stage 7: native caller control and imported boxed afterstate
+
+K032/K033, K034/K035, K036/K037 and K038/K039 passed their positives
+and failed their matched assertion controls. K034 checks the actual frozen
+validator's Result and ordered three-call log against a source-checked fission
+with arbitrary cached child replies. It does not assume those replies equal
+the cohort children. Decoder windows establish identical payload slices, tag,
+and (for statement decoding) the earlier immutable common Box pointer.
+K040 checks getter addresses only, with no copied-value or composition credit.
+All 40 allocated native attempts are now recorded; no multiplication or SHA
+was unwound. Graph/lock, deployed features and exact KMX checks remain mandatory.
+`NED_validate_bindings.py` now requires every listed pair to exist.
+
+NEC revision `8cdc45079a` was copied read-only and independently revalidated
+in NED_AFTER_REVALIDATION.json. Its exact frozen afterstate wrapper body and
+five native/control pairs are checked; eight imported Lean modules were
+privately recompiled (L133–140). The child decoder, allocation/library/ABI
+and semantic-transport qualifications are retained. NED_AfterBoxComposition
+(L142) discharges the emitted child execution equality using the total
+instantiated afterstate decoder, including failure/divergence. Its complete
+statement is in the `.lean` source and has no hypotheses beyond typed bytes.
+NED_AfterBoxDomain (L143) proves the SAME 832..1520 afterstate window has
+both imported PacketDomains; it adds no successful-parent hypothesis.
+
+NED_ValidatorStatus (L129) gives a total pure status for the emitted validator.
+NED_StatementCarrierFields (L130) proves the remaining record projections.
+The attempted whole raw-validator simplification L132 hit the unchanged
+200000-heartbeat limit. It was split: NED_RawValidatorTail.result (L141)
+composes the raw output-lane and complete late-encoder transports;
+NED_RawValidatorControl.tail_factor (L146) factors only the exact emitted
+tail's map-error/control-flow operations. No heartbeat or memory cap was raised.
+All accepted new theorems print only standard axioms. L131/132/144/145 are
+failed, excluded evidence. None supplies a native root certificate.

@@ -28,7 +28,17 @@ theorem source (s : Statement) :
   rw [NBN_StatementResult.source]
   unfold NBN_StatementResult.result status
   rw [payment_source]
-  repeat' first | rfl | split
+  dsimp (config := {zeta := true,zetaHave := true}) only
+  simp only [bind_tc_ok]
+  by_cases zero : (common s).master_account = NBN_StatementResult.zero ∨
+      (common s).checkpoint_account = NBN_StatementResult.zero ∨
+      (common s).selected_lane_account = NBN_StatementResult.zero
+  · simp only [if_pos zero]
+  · simp only [if_neg zero]
+    by_cases lane : 8 ≤ (common s).output_lane.val
+    · simp only [if_pos lane]
+    · simp only [if_neg lane]
+      cases h : payment s <;> rfl
 
 #print axioms payment_source
 #print axioms source

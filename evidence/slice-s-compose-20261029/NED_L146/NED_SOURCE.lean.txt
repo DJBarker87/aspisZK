@@ -1,0 +1,73 @@
+import NED_RawValidatorTail
+set_option autoImplicit false
+noncomputable section
+namespace NED_RawValidatorControl
+open Aeneas Aeneas.Std Result NBN_StatementResult
+open AspisR1AdapterReconstruct
+abbrev E := aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1
+
+def tail (s : Statement) : Result (core.result.Result Unit E) := do
+  let common := NED_ReconstructCarriers.toRawCommon (NBN_StatementResult.common s)
+  let nullifier := (parts s).2.2.2.2.1
+  let r2 ←
+    aspis_statement.pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1
+      nullifier
+  let r3 ←
+    core.result.Result.map_err
+      aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_2.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+      r2 ()
+  let cf1 ←
+    core.result.Result.Insts.CoreOpsTry.branch r3
+  match cf1 with
+  | core.ops.control_flow.ControlFlow.Continue val =>
+    if val != common.output_lane
+    then
+      ok (core.result.Result.Err
+        aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+    else
+      let late_bytes := Array.repeat 1520#usize 0#u8
+      let (s, _) ← lift (Array.to_slice_mut late_bytes)
+      let (r4, _) ←
+        aspis_statement.pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+          common.lane_transition s
+      let r5 ←
+        core.result.Result.map_err
+          aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1.closure_3.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairLatePublicStatementErrorV1PoolV1PairForestTerminalFormatErrorV1
+          r4 ()
+      let cf2 ←
+        core.result.Result.Insts.CoreOpsTry.branch r5
+      match cf2 with
+      | core.ops.control_flow.ControlFlow.Continue _ =>
+        ok (core.result.Result.Ok ())
+      | core.ops.control_flow.ControlFlow.Break residual
+        =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          Unit (core.convert.FromSame
+          aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+          residual
+  | core.ops.control_flow.ControlFlow.Break residual =>
+    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+      Unit (core.convert.FromSame
+      aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+      residual
+
+theorem tail_factor (s : Statement) : tail s = NED_RawValidatorTail.run s := by
+  unfold tail NED_RawValidatorTail.run
+  simp only [NED_StatementCarrierFields.lane,NED_LateCarrierFields.common_late]
+  apply NBN_LateFactor.bind_ext
+  intro lane
+  cases lane with
+  | Err e => rfl
+  | Ok val =>
+    simp only [core.result.Result.map_err,bind_tc_ok,core.result.Result.Insts.CoreOpsTry.branch]
+    by_cases same : val = (common s).output_lane
+    · simp only [same,bne_self_eq_false,if_false,ne_eq,not_true_eq_false,
+        Array.to_slice_mut,lift,bind_tc_ok,Aeneas.Std.uncurry]
+      apply NBN_LateFactor.bind_ext
+      intro late
+      rcases late with ⟨r,out⟩
+      cases r <;> rfl
+    · simp only [bne_iff_ne,ne_eq,same,not_false_eq_true,if_true]
+
+#print axioms tail_factor
+end NED_RawValidatorControl

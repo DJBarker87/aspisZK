@@ -1,0 +1,102 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -417,6 +417,8 @@
+     // the full ASF8 fallback available on SBF without overlapping the late
+     // transition, common object and final enum in one 4-KiB frame.
+     let common = decode_terminal_common_boxed_v1(bytes)?;
++    #[cfg(kani)]
++    if NED_decode_windows::window(&bytes[PAYMENT_STATEMENT_OFFSET..], kind, common.as_ref()) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     let statement = match kind {
+         PoolV1TransitionKind::PrivateTransfer => {
+             decode_transfer_statement_boxed_v1(common, &bytes[PAYMENT_STATEMENT_OFFSET..])?
+@@ -482,6 +484,8 @@
+     if bytes[7] != 0 {
+         return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
+     }
++    #[cfg(kani)]
++    if NED_decode_windows::window(&bytes[REQUEST_PAYMENT_OFFSET..], kind, core::ptr::null()) { return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength); }
+     let public = match kind {
+         PoolV1TransitionKind::PrivateTransfer => {
+             PoolV1PairForestTerminalPaymentV1::PrivateTransfer(
+@@ -1496,6 +1500,11 @@
+ #[cfg(kani)]
+ #[path = "asq8_kani.rs"]
+ mod asq8_kani;
++#[cfg(kani)]
++#[path="NED_decode_windows.rs"]
++mod NED_decode_windows;
++
++
+ 
+ // Fixed-admitted-size parser reference: constructor closures avoid the pinned
+ // translator's constructor-coercion name collision. Kani checks all 320 bytes.
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NED_decode_windows.rs
+@@ -0,0 +1,67 @@
++// Domain-only decoder call windows. No decoder value/effects bridge credit.
++#![allow(non_snake_case)]
++use super::*;
++static mut BASE:*const u8=core::ptr::null();
++static mut MODE:u8=0;
++static mut NEG:bool=false;
++static mut PROBE:usize=0;
++static mut SEEN:u8=0;
++static mut COMMON:*const PoolV1PairForestTerminalCommonV1=core::ptr::null();
++pub(super) fn window(payload:&[u8],kind:PoolV1TransitionKind,common:*const PoolV1PairForestTerminalCommonV1)->bool{
++ let offset=unsafe{if MODE==0 {104}else{1664}};let j=unsafe{PROBE};kani::assume(j<216);
++ let same=payload.len()==216 && payload.as_ptr()==unsafe{BASE.add(offset)} && payload[j]==unsafe{*BASE.add(offset+j)};
++ assert!(same!=unsafe{NEG},"NED decode payload window");
++ assert!((kind as u8)==unsafe{*BASE.add(5)});
++ if unsafe{MODE}==1 {assert!(common==unsafe{COMMON});}
++ unsafe{SEEN=kind as u8;} true
++}
++fn zero_common()->PoolV1PairForestTerminalCommonV1{
++ let digest=[M31(0);8];
++ PoolV1PairForestTerminalCommonV1{master_account:[0;32],checkpoint_account:[0;32],selected_lane_account:[0;32],output_lane:0,
++ checkpoint_sequence:0,historical_global_anchor:digest,lane_transition:PoolV1PairLatePublicStatementV1{
++ live_snapshot:super::super::PoolV1PairLiveSnapshotV1{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:digest,frontier:[digest;20]},
++ candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:0,next_root:digest,next_frontier:[digest;20]}}}
++}
++fn common_reply(_: &[u8])->Result<Box<PoolV1PairForestTerminalCommonV1>,PoolV1PairForestTerminalFormatErrorV1>{
++ if kani::any(){let value=Box::new(zero_common());unsafe{COMMON=value.as_ref();}Ok(value)}else{Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)}
++}
++fn run(mode:u8,negative:bool){unsafe{MODE=mode;NEG=negative;PROBE=kani::any();SEEN=0;}
++ if mode==0{let bytes:[u8;320]=kani::any();unsafe{BASE=bytes.as_ptr();}let _=decode_pool_v1_pair_forest_terminal_request_v1(&bytes);}
++ else{let bytes:[u8;1880]=kani::any();unsafe{BASE=bytes.as_ptr();}let _=decode_pool_v1_pair_forest_terminal_statement_v1(&bytes);}
++ kani::cover!(unsafe{SEEN}==PoolV1TransitionKind::PrivateTransfer as u8,"NED decode transfer");
++ kani::cover!(unsafe{SEEN}==PoolV1TransitionKind::Withdrawal as u8,"NED decode withdrawal");
++}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn request_positive(){run(0,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn request_negative(){run(0,true);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(decode_terminal_common_boxed_v1,common_reply)]
++fn statement_positive(){run(1,false);}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++#[kani::stub(decode_terminal_common_boxed_v1,common_reply)]
++fn statement_negative(){run(1,true);}
