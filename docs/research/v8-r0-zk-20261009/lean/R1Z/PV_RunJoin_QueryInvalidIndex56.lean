@@ -18,9 +18,9 @@ theorem cast : UScalar.cast .Usize 262144#u32=262144#usize := by
   rw [PV_B2_D_SmallScalar.cast_val]
   have hb := PV_B2_D_SmallScalar.size_bound
   rw [UScalar.size] at hb
-  change 262144 % UScalar.size .Usize=262144
+  rw [show (262144#u32).val=262144 from by scalar_tac,
+    show (262144#usize).val=262144 from by scalar_tac]
   apply Nat.mod_eq_of_lt
-  rw [UScalar.size]
   omega
 
 variable [ExternalTypes] [ExternalFuns]
