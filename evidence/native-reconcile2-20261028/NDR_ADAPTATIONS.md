@@ -429,3 +429,11 @@ the affected premise/conclusion. This is a source inventory, not new proof credi
      (out : r1_semantic.Verified H)
      (h : verify F D pub bytes hash obs = ok (.Ok out)) :
 ```
+
+## Dependent validation checkpoint
+
+NDR_B009 recompiled NDO_JGi_FinishFields successfully. NDR_B010 recompiled
+NDO_JGi_ClaimArrays successfully with the explicit noneToFirst transport.
+NDO_JHm_SemanticOperands remains ahead in dependency order at index 2209.
+All printed axioms in completed chunks B001–B015 were independently checked
+to be standard only. This checkpoint is not a combined-root replay result.
