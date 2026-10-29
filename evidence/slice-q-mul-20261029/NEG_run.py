@@ -44,13 +44,14 @@ sys.exit(r.returncode)
     raise RuntimeError('STOP host admission')
 files={}
 sources=[]
-env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEG_tmp',LEAN_PATH=B+'/NEG_objects:'+C+'/NEG_exports_20261029:'+C+':'+W+':'+W+'/objects')
+env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEG_tmp',LEAN_PATH=B+'/NEG_objects:'+C+'/NEG_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
 deps={}
 native=[]
 if kind=='lean':
-    n='NEG_generated/'+target+'.lean'; files[n]=(E/(target+'.lean')).read_text();sources=[n]
+    n='NEG_generated/'+target+'.lean'; files[n]=(json.loads((E/'NEG_PREREQUISITES.json').read_text())['sources'][target]['text'] if os.environ.get('NEG_UNCHANGED_MODULE')=='1' else (E/(target+'.lean')).read_text());sources=[n]
     command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NEG_generated','-o','NEG_objects/'+target+'.olean',n]
     library=json.loads((E/'NEG_SOURCE.json').read_text())['library']
+    if os.environ.get('NEG_HEADLINE')=='1':library.update({p['object_path']:p['object_sha256'] for p in json.loads((E/'NEG_HEADLINE_OBJECT_PINS.json').read_text())['entries'] if p['module']=='Aeneas' or p['module'].startswith('Aeneas.')})
     deps['selected_objects']={p:dict(path=p,sha256=h) for p,h in library.items()}
 elif kind=='kani':
     from NEG_restore import native
@@ -68,6 +69,10 @@ elif kind=='kani':
     if os.environ.get('NEG_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NEG_RUST_CFG']
     if os.environ.get('NEG_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEG_gate.py',a+'.json']
+elif kind=='native':
+    for name in ['NEG_native.py','NEG_native_tests.rs']:files[name]=(E/name).read_text()
+    if os.environ.get('NEG_WRONG'):env['NEG_WRONG']=os.environ['NEG_WRONG']
+    sources=list(files);command=['python3','NEG_native.py']
 elif kind=='inspect':
     files['NEG_goto_inspect.py']=(E/'NEG_goto_inspect.py').read_text()
     sources=list(files);command=['python3','NEG_goto_inspect.py']
@@ -129,3 +134,5 @@ rc=json.loads(out[a+'/receipt.json'])
 with (E/'NEG_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
 print(out[a+'/stdout.log'][-(1000 if kind=='kani' else 3500):],flush=True)
+
+sys.exit(rc["exit_status"])

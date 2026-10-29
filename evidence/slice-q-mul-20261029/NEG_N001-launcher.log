@@ -1,0 +1,42 @@
+{"attempt": "NEG_N001", "exit_status": 0, "wall_seconds": 79.17877898097504, "peak_rss_kib": "546864", "swaps": "0", "print_axioms": "N/A: native"}
+{"command": ["/home/dombarker/.cargo/bin/cargo", "test", "--release", "--offline", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029/NEG_isolated/Cargo.toml", "--features", "private-leaf-salts,optimized-terminal,program-build", "-j", "1", "--lib", "--", "--nocapture"], "rustflags": "-Zthreads=1 -C link-arg=-Wl,--threads=1", "source_sha256": "84d565ccc3873ea467a4122a7683960b24b5efed77295c5f3797d39856f8540c", "expected_time": "Optimized compilation of isolated unchanged bodies, then bounded differential tests; no elimination or proof generation"}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029/NEG_src/crates/aspis-
+...
+                 ^^^
+105 |         #[inline(always)] pub fn square(self)->Self {self.mul(self)}
+    |                                  ^^^^^^
+
+warning: module `NEG_native_tests` should have a snake case name
+  --> src/lib.rs:51:54
+   |
+51 | #[cfg(test)] #[path="../../NEG_native_tests.rs"] mod NEG_native_tests;
+   |                                                      ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `neg_native_tests`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: function `NEG_row_native_differential` should have a snake case name
+ --> src/../../NEG_native_tests.rs:6:4
+  |
+6 | fn NEG_row_native_differential(){
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `neg_row_native_differential`
+
+warning: function `NEG_dots_native_differential` should have a snake case name
+  --> src/../../NEG_native_tests.rs:26:4
+   |
+26 | fn NEG_dots_native_differential(){
+   |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `neg_dots_native_differential`
+
+warning: `neg_isolated` (lib test) generated 20 warnings (run `cargo fix --lib -p neg_isolated --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1m 19s
+     Running unittests src/lib.rs (/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029/NEG_extract_target/release/deps/neg_isolated-8025583be91ff100)
+
+running 2 tests
+NEG_dots_native_differential cases=256 includes_all_max_limbs
+NEG_row_native_differential cases=2048 changed_flush_cells=4096
+test NEG_native_tests::NEG_dots_native_differential ... ok
+test NEG_native_tests::NEG_row_native_differential ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+Running as unit: run-r3b2b8aa702d14fe280a7f415e691b57c.scope; invocation ID: 18fb01dda9314f3eb52baab319c9b2a3

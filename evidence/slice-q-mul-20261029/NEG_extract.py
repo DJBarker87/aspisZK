@@ -21,6 +21,7 @@ if cfg.get('isolate'):
  prelude='extern crate alloc;\nuse alloc::vec::Vec;\nuse aspis_core::field::{M31,QM31 as K,WideExact as E};\nconst QUARTER:M31=M31(536870912);\n'
  funcs=['residue_limb_at','power_limb_at','update_residue_row','batch_prefix_products','circle_fold_with_inverses','line_fold_with_inverses']
  prelude+='\n'.join(take(n) for n in funcs)
+ prelude+='\nstruct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }\nimpl BatchedWeights{'+take('push')+'}\n'
  prelude+='\n#[path="../../NEG_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"] mod fast_pairing;\n#[path="../../NEG_src/crates/aspis-r1-cost-probe/src/fast_dots.rs"] mod fast_dots;\n'
  (mini/'src/lib.rs').write_text(prelude)
  manifest=mini/'Cargo.toml'

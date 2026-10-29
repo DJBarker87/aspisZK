@@ -1,0 +1,24 @@
+Aeneas.Std.UScalar.wrapping_mul {ty : UScalarTy} (x y : UScalar ty) : UScalar ty
+NEG_generated/NEG_Inspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.wrapping_mul_val`
+Aeneas.Std.UScalar.mul_spec {ty : UScalarTy} {x y : UScalar ty} (hmax : ↑x * ↑y ≤ UScalar.max ty) :
+  x * y ⦃ z => ↑z = ↑x * ↑y ⦄
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+def Aeneas.Std.core.slice.Slice.iter_mut : {T : Type} →
+  Slice T → Result (core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Slice T)) :=
+fun {T} slice => ok ({ slice := slice }, fun it => it.slice)
+def Aeneas.Std.core.slice.iter.IteratorIterMut.next : {T : Type} →
+  core.slice.iter.IterMut T →
+    Result
+      (Option T × core.slice.iter.IterMut T × (core.slice.iter.IterMut T → Option T → core.slice.iter.IterMut T)) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)
+  else ok (none, it, fun it x => it)
