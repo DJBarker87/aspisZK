@@ -38,12 +38,12 @@ NDR_B020_OBSTRUCTION.json. The TX1 theorem statement and proof remain unchanged.
 Only NDO_JHq_TX1 and its two dependent modules NDO_JHw_Joint and NDO_Joint are
 blocked by this obstruction. NDR_RESIDUAL_PLAN.json splits the remainder into
 eight independent ranges (798 modules), to be attempted as NDR_B021–NDR_B028.
-The serial local transport currently runs NDR_B025; it stops at any failure.
+The serial local transport currently runs NDR_B026; it stops at any failure.
 Recover a submitted attempt read-only after transport/capacity interruption;
 never resubmit it. Passing prefixes of failed chunks count only after their
 own success markers, source pins and axiom lines are checked.
 
-NDR_VERIFICATION.json currently confirms 2,797 passing modules (including NDR_B021–NDR_B024). Full per-chunk
+NDR_VERIFICATION.json currently confirms 2,917 passing modules (including NDR_B021–NDR_B025). Full per-chunk
 receipts retain exact targets, exit/wall/RSS/swap, limits, source revision/hash,
 commands and axiom lines. NDR_BUILD_RECEIPTS.json is a compact index to those
 receipts; its oversized original through B020 is retained as .xz with SHA256.
@@ -89,8 +89,8 @@ release security contract.
 ## Budget and ownership
 
 Predecessor: 6 single-module attempts. This lane: NDR_L001–NDR_L003, so 9/60
-single-module attempts total. Chunks: 24/40 completed (23 fully pass, one fails
-with a 37-module passing prefix), NDR_B025 submitted. Combined: 0/1.
+single-module attempts total. Chunks: 25/40 completed (24 fully pass, one fails
+with a 37-module passing prefix), NDR_B026 submitted. Combined: 0/1.
 Every submitted scope was admitted with allowed:true AND exit 0; normal scopes
 use 6G/8G, swap 0, TasksMax 64, Lean -j1 -M7000, one compiler at a time.
 The retained host cache is /home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028;
