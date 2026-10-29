@@ -1,0 +1,311 @@
+structure R1Z.PV_OWNJ_DecodeFold.Decoder {K : Type} [Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K) : Prop
+number of parameters: 3
+fields:
+  R1Z.PV_OWNJ_DecodeFold.Decoder.zero_eq : decode R1Z.PV_OWNI_RawOps.zero = 0
+  R1Z.PV_OWNJ_DecodeFold.Decoder.one_eq : decode R1Z.PV_OWNI_RawOps.one = 1
+  R1Z.PV_OWNJ_DecodeFold.Decoder.zero_canon : R1Z.PV_OWNJ_DecodeFold.Canon R1Z.PV_OWNI_RawOps.zero
+  R1Z.PV_OWNJ_DecodeFold.Decoder.one_canon : R1Z.PV_OWNJ_DecodeFold.Canon R1Z.PV_OWNI_RawOps.one
+  R1Z.PV_OWNJ_DecodeFold.Decoder.add : ∀ (x y : R1Z.PV_OWNI_RawOps.Q),
+      R1Z.PV_OWNJ_DecodeFold.Canon x →
+        R1Z.PV_OWNJ_DecodeFold.Canon y →
+          R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueAdd x y) ∧
+            decode (R1Z.PV_OWNI_RawOps.valueAdd x y) = decode x + decode y
+  R1Z.PV_OWNJ_DecodeFold.Decoder.mul : ∀ (x y : R1Z.PV_OWNI_RawOps.Q),
+      R1Z.PV_OWNJ_DecodeFold.Canon x →
+        R1Z.PV_OWNJ_DecodeFold.Canon y →
+          R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueMul x y) ∧
+            decode (R1Z.PV_OWNI_RawOps.valueMul x y) = decode x * decode y
+  R1Z.PV_OWNJ_DecodeFold.Decoder.sub : ∀ (x : R1Z.PV_OWNI_RawOps.Q),
+      R1Z.PV_OWNJ_DecodeFold.Canon x →
+        R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x) ∧
+          decode (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x) = 1 - decode x
+constructor:
+  R1Z.PV_OWNJ_DecodeFold.Decoder.mk {K : Type} [Field K] {decode : R1Z.PV_OWNI_RawOps.Q → K}
+    (zero_eq : decode R1Z.PV_OWNI_RawOps.zero = 0) (one_eq : decode R1Z.PV_OWNI_RawOps.one = 1)
+    (zero_canon : R1Z.PV_OWNJ_DecodeFold.Canon R1Z.PV_OWNI_RawOps.zero)
+    (one_canon : R1Z.PV_OWNJ_DecodeFold.Canon R1Z.PV_OWNI_RawOps.one)
+    (add :
+      ∀ (x y : R1Z.PV_OWNI_RawOps.Q),
+        R1Z.PV_OWNJ_DecodeFold.Canon x →
+          R1Z.PV_OWNJ_DecodeFold.Canon y →
+            R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueAdd x y) ∧
+              decode (R1Z.PV_OWNI_RawOps.valueAdd x y) = decode x + decode y)
+    (mul :
+      ∀ (x y : R1Z.PV_OWNI_RawOps.Q),
+        R1Z.PV_OWNJ_DecodeFold.Canon x →
+          R1Z.PV_OWNJ_DecodeFold.Canon y →
+            R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueMul x y) ∧
+              decode (R1Z.PV_OWNI_RawOps.valueMul x y) = decode x * decode y)
+    (sub :
+      ∀ (x : R1Z.PV_OWNI_RawOps.Q),
+        R1Z.PV_OWNJ_DecodeFold.Canon x →
+          R1Z.PV_OWNJ_DecodeFold.Canon (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x) ∧
+            decode (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one x) = 1 - decode x) :
+    R1Z.PV_OWNJ_DecodeFold.Decoder decode
+theorem R1Z.PV_OWNJ_ValueBridge.value_commutes : ∀ {K : Type} [inst : Field K] (decode : R1Z.PV_OWNI_RawOps.Q → K),
+  R1Z.PV_OWNJ_DecodeFold.Decoder decode →
+    ∀ (point column : List R1Z.PV_OWNI_RawOps.Q),
+      (∀ q ∈ point, R1Z.PV_OWNJ_DecodeFold.Canon q) →
+        (∀ q ∈ column, R1Z.PV_OWNJ_DecodeFold.Canon q) →
+          Option.map decode
+              (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point)
+                (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)) =
+            if column.length ≠ 1024 then none else some (R1Z.PV_OWNJ_ValueBridge.sparse decode point column) :=
+fun {K} [Field K] decode D point column hp hc =>
+  id
+    (Decidable.casesOn instDecidableNot
+      (fun h =>
+        Eq.mpr (id (congr (congrArg Eq (congrArg (Option.map decode) (if_neg h))) (if_neg h)))
+          (have hv :=
+            R1Z.PV_OWNJ_DecodeFold.fold decode D column
+              (R1Z.PV_OWNI_BuildTotal.entries point (R1Z.PV_OWNI_Scanner.width point)
+                (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point))
+              R1Z.PV_OWNI_RawOps.zero D.zero_canon fun e he =>
+              ⟨R1Z.PV_OWNJ_ValueBridge.entries_canon decode D point hp (R1Z.PV_OWNI_Scanner.width point)
+                  (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point) e he,
+                Option.casesOn (motive := fun t =>
+                  column[e.1]? = t → R1Z.PV_OWNJ_DecodeFold.Canon (column[e.1]?.getD R1Z.PV_OWNI_RawOps.zero))
+                  column[e.1]?
+                  (fun h =>
+                    Eq.ndrec (motive := fun x =>
+                      column[e.1]? = x → R1Z.PV_OWNJ_DecodeFold.Canon (x.getD R1Z.PV_OWNI_RawOps.zero))
+                      (fun hx => D.zero_canon) (Eq.symm h) (Eq.refl column[e.1]?))
+                  (fun q h =>
+                    Eq.ndrec (motive := fun x =>
+                      column[e.1]? = x → R1Z.PV_OWNJ_DecodeFold.Canon (x.getD R1Z.PV_OWNI_RawOps.zero))
+                      (fun hx => hc q (List.mem_of_getElem? hx)) (Eq.symm h) (Eq.refl column[e.1]?))
+                  (Eq.refl column[e.1]?)⟩;
+          id
+            (Eq.mpr
+              (id (congrArg (fun _a => some _a = some (R1Z.PV_OWNJ_ValueBridge.sparse decode point column)) hv.right))
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      some
+                          (List.foldl
+                            (fun sum e => sum + decode e.2 * decode (column[e.1]?.getD R1Z.PV_OWNI_RawOps.zero)) _a
+                            (R1Z.PV_OWNI_BuildTotal.entries point (R1Z.PV_OWNI_Scanner.width point)
+                              (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point))) =
+                        some (R1Z.PV_OWNJ_ValueBridge.sparse decode point column))
+                    D.zero_eq))
+                (Eq.refl
+                  (some
+                    (List.foldl (fun sum e => sum + decode e.2 * decode (column[e.1]?.getD R1Z.PV_OWNI_RawOps.zero)) 0
+                      (R1Z.PV_OWNI_BuildTotal.entries point (R1Z.PV_OWNI_Scanner.width point)
+                        (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)))))))))
+      fun h =>
+      Eq.mpr (id (congr (congrArg Eq (congrArg (Option.map decode) (if_pos h))) (if_pos h)))
+        (Eq.refl (Option.map decode none)))
+theorem R1Z.PV_OWNJ_Claims.point_claims_wrong : ∀ (point : List R1Z.PV_OWNI_RawOps.Q)
+  (before after : List (List R1Z.PV_OWNI_RawOps.Q)) (bad : List R1Z.PV_OWNI_RawOps.Q),
+  bad.length ≠ 1024 → R1Z.PV_OWNJ_Claims.point_claims (before ++ bad :: after) point = none :=
+fun point before after bad h =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (R1Z.PV_OWNJ_Claims.points.eq_2 (before ++ bad :: after) point
+              [R1Z.PV_OWNJ_Points.successor point, R1Z.PV_OWNJ_Points.xor12 point])
+            (congrFun' (congrArg bind (R1Z.PV_OWNJ_Claims.lanes_first_wrong point before after bad h)) fun claim => do
+              let rest ←
+                do
+                  let claim ← R1Z.PV_OWNJ_Claims.lanes (R1Z.PV_OWNJ_Points.successor point) (before ++ bad :: after)
+                  let rest ←
+                    do
+                      let claim ← R1Z.PV_OWNJ_Claims.lanes (R1Z.PV_OWNJ_Points.xor12 point) (before ++ bad :: after)
+                      let rest ← some []
+                      some (claim :: rest)
+                  some (claim :: rest)
+              some (claim :: rest))))
+        none))
+    (Eq.refl do
+      let claim ← none
+      let rest ←
+        do
+          let claim ← R1Z.PV_OWNJ_Claims.lanes (R1Z.PV_OWNJ_Points.successor point) (before ++ bad :: after)
+          let rest ←
+            do
+              let claim ← R1Z.PV_OWNJ_Claims.lanes (R1Z.PV_OWNJ_Points.xor12 point) (before ++ bad :: after)
+              let rest ← some []
+              some (claim :: rest)
+          some (claim :: rest)
+      some (claim :: rest))
+theorem R1Z.PV_OWNJ_FiatShamir.replay_append : ∀ (hash : R1Z.PV_OWNJ_FiatShamir.Hash)
+  (sample : R1Z.PV_OWNJ_FiatShamir.Bytes → R1Z.PV_OWNI_RawOps.Q) (frames tail : List R1Z.PV_OWNJ_FiatShamir.Bytes)
+  (state : R1Z.PV_OWNJ_FiatShamir.Bytes) (row : ℕ),
+  R1Z.PV_OWNJ_FiatShamir.replay hash sample state row (frames ++ tail) =
+    have prior := R1Z.PV_OWNJ_FiatShamir.replay hash sample state row frames;
+    have suffix := R1Z.PV_OWNJ_FiatShamir.replay hash sample prior.2 (row + frames.length) tail;
+    (prior.1 ++ suffix.1, suffix.2) :=
+fun hash sample frames tail state row =>
+  List.rec (motive := fun frames =>
+    ∀ (state : R1Z.PV_OWNJ_FiatShamir.Bytes) (row : ℕ),
+      R1Z.PV_OWNJ_FiatShamir.replay hash sample state row (frames ++ tail) =
+        let prior := R1Z.PV_OWNJ_FiatShamir.replay hash sample state row frames;
+        let suffix := R1Z.PV_OWNJ_FiatShamir.replay hash sample prior.2 (row + frames.length) tail;
+        (prior.1 ++ suffix.1, suffix.2))
+    (fun state row => of_eq_true (eq_self (R1Z.PV_OWNJ_FiatShamir.replay hash sample state row tail)))
+    (fun f fs ih state row =>
+      of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans (R1Z.PV_OWNJ_FiatShamir.replay.eq_2 hash sample state row f (fs ++ tail))
+                (congr
+                  (congrArg Prod.mk
+                    (congrArg (List.cons (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).1)
+                      (congrArg Prod.fst
+                        (Eq.trans
+                          ((fun state row => ih state row) (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                            (row + 0).succ)
+                          (congr
+                            (congrArg Prod.mk
+                              (congrArg
+                                (HAppend.hAppend
+                                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                      (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ fs).1)
+                                (congrArg Prod.fst
+                                  (congrFun'
+                                    (congrArg
+                                      (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                        (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                            (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ
+                                            fs).2)
+                                      (Nat.succ_add row fs.length))
+                                    tail))))
+                            (congrArg Prod.snd
+                              (congrFun'
+                                (congrArg
+                                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                    (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                        (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ fs).2)
+                                  (Nat.succ_add row fs.length))
+                                tail)))))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      ((fun state row => ih state row) (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                        (row + 0).succ)
+                      (congr
+                        (congrArg Prod.mk
+                          (congrArg
+                            (HAppend.hAppend
+                              (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                  (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ fs).1)
+                            (congrArg Prod.fst
+                              (congrFun'
+                                (congrArg
+                                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                    (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                        (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ fs).2)
+                                  (Nat.succ_add row fs.length))
+                                tail))))
+                        (congrArg Prod.snd
+                          (congrFun'
+                            (congrArg
+                              (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                                    (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2 (row + 0).succ fs).2)
+                              (Nat.succ_add row fs.length))
+                            tail))))))))
+            ((R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).1 ::
+                ((R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                      (row + 0).succ fs).1 ++
+                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                      (R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                          (row + 0).succ fs).2
+                      (row + fs.length).succ tail).1),
+              (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                      (row + 0).succ fs).2
+                  (row + fs.length).succ tail).2))
+          (eq_self
+            ((R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).1 ::
+                ((R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                      (row + 0).succ fs).1 ++
+                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                      (R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                          (row + 0).succ fs).2
+                      (row + fs.length).succ tail).1),
+              (R1Z.PV_OWNJ_FiatShamir.replay hash sample
+                  (R1Z.PV_OWNJ_FiatShamir.replay hash sample (R1Z.PV_OWNJ_FiatShamir.step hash sample state row f).2
+                      (row + 0).succ fs).2
+                  (row + fs.length).succ tail).2))))
+    frames state row
+theorem R1Z.PV_OWNJ_PublicInstance.callback_public : ∀ (sampleValue : ℕ → R1Z.PV_OWNI_RawOps.Q)
+  (hash : R1Z.PV_OWNJ_FiatShamir.Hash) (sample : R1Z.PV_OWNJ_FiatShamir.Bytes → R1Z.PV_OWNI_RawOps.Q)
+  (statementBytes c1 : R1Z.PV_OWNJ_FiatShamir.Bytes) (left right : List R1Z.PV_OWNJ_FiatShamir.Bytes),
+  left = right →
+    ∀ (round index assignment : ℕ) (failures : List Bool) (columnsL columnsR : List (List R1Z.PV_OWNI_RawOps.Q)),
+      List.map List.length columnsL = List.replicate 29 1024 →
+        List.map List.length columnsR = List.replicate 29 1024 →
+          R1Z.PV_OWNJ_PublicInstance.plan
+              (R1Z.PV_OWNJ_PublicInstance.calls
+                (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                  (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 left) round index assignment)
+                (List.map List.length columnsL))
+              failures =
+            R1Z.PV_OWNJ_PublicInstance.plan
+              (R1Z.PV_OWNJ_PublicInstance.calls
+                (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                  (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 right) round index assignment)
+                (List.map List.length columnsR))
+              failures :=
+fun sampleValue hash sample statementBytes c1 left right hp round index assignment failures columnsL columnsR hl hr =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.PV_OWNJ_PublicInstance.plan
+              (R1Z.PV_OWNJ_PublicInstance.calls
+                (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                  (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 left) round index assignment)
+                _a)
+              failures =
+            R1Z.PV_OWNJ_PublicInstance.plan
+              (R1Z.PV_OWNJ_PublicInstance.calls
+                (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                  (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 right) round index assignment)
+                (List.map List.length columnsR))
+              failures)
+        hl))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_OWNJ_PublicInstance.plan
+                (R1Z.PV_OWNJ_PublicInstance.calls
+                  (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                    (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 left) round index assignment)
+                  (List.replicate 29 1024))
+                failures =
+              R1Z.PV_OWNJ_PublicInstance.plan
+                (R1Z.PV_OWNJ_PublicInstance.calls
+                  (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                    (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 right) round index assignment)
+                  _a)
+                failures)
+          hr))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              R1Z.PV_OWNJ_PublicInstance.plan (R1Z.PV_OWNJ_PublicInstance.calls _a (List.replicate 29 1024)) failures =
+                R1Z.PV_OWNJ_PublicInstance.plan
+                  (R1Z.PV_OWNJ_PublicInstance.calls
+                    (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                      (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 right) round index assignment)
+                    (List.replicate 29 1024))
+                  failures)
+            (R1Z.PV_OWNJ_FiatShamir.query_public sampleValue hash sample statementBytes c1 left right hp round index
+              assignment)))
+        (Eq.refl
+          (R1Z.PV_OWNJ_PublicInstance.plan
+            (R1Z.PV_OWNJ_PublicInstance.calls
+              (R1Z.PV_OWNJ_FiatShamir.query sampleValue
+                (R1Z.PV_OWNJ_FiatShamir.alpha hash sample statementBytes c1 right) round index assignment)
+              (List.replicate 29 1024))
+            failures))))
+'R1Z.PV_OWNJ_ValueBridge.value_commutes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNJ_PublicInstance.callback_public' depends on axioms: [propext, Classical.choice, Quot.sound]
