@@ -4,7 +4,7 @@ import PV_B3P_Index3_100227
 import PV_B3P_Index3_101227
 import PV_B3P_Index3_102227
 namespace PV_B3P_Binding10227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 Result
 set_option autoImplicit false
 
 def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
@@ -158,50 +158,50 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m3)
+  apply lift_head_equal9
   rw [index3_0]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m4)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i i1)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_0]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i3 i2)
+  apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m5)
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m6)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i5 i6)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_0]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i8 i7)
+  apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m7)
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m8)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i10 i11)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_0]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i13 i12)
+  apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
   rw [update3_2]
@@ -210,50 +210,50 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m9)
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m10)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i15 i16)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i18 i17)
+  apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m11)
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m12)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i20 i21)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i23 i22)
+  apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m13)
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m14)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i25 i26)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i28 i27)
+  apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
   rw [update3_2]
@@ -262,50 +262,50 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m15)
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m16)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i30 i31)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
   rw [index3_0]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i33 i32)
+  apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m17)
+  apply lift_head_equal9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m18)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i35 i36)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
   rw [index3_1]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i38 i37)
+  apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m19)
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (UScalar.cast .U64 m20)
-  apply lift_head_equal9 (Std.U64.wrapping_mul i40 i41)
+  apply lift_head_equal9
+  apply lift_head_equal9
   rw [index3_2]
   apply equal_ok_head9
   rw [index3_2]
   apply equal_ok_head9
-  apply lift_head_equal9 (Std.U64.wrapping_add i43 i42)
+  apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
   rw [update3_2]
