@@ -99,10 +99,13 @@ theorem draft_headline_joint
       mean (fun r => bit (adv.decide
         (idealExperiment template outputs x completion pubData adv r)))| ≤
       PV_EVHD_Headline.bound template outputs x := by
-  apply average_bound
-  intro env
-  exact (PV_EVHD_Headline.draft_headline template outputs x completion pubData env
-    native nativeSignal (links env)).1 adv w hw
+  exact average_bound (E := Env) (R := R) (I := (source).IdealRand)
+    (fun env r => bit (adv.decide (PV_EVHD_Headline.real env native nativeSignal adv w r)))
+    (fun env r => bit (adv.decide
+      (PV_EVHD_Headline.ideal template outputs x completion pubData env adv r)))
+    (PV_EVHD_Headline.bound template outputs x)
+    (fun env => (PV_EVHD_Headline.draft_headline template outputs x completion pubData env
+      native nativeSignal (links env)).1 adv w hw)
 
 #print axioms average_bound
 #print axioms draft_headline_joint
