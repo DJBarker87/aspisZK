@@ -13,6 +13,9 @@ for p in E.glob('lean-*/receipt.json'):
 code='''from pathlib import Path
 import json,hashlib
 D=Path(DIR);rows=json.loads(ROWS);new=json.loads(NEW);out=[]
+old=Path('/home/dombarker/project-offloads/codex-pv-ownc-20261029')
+assert (D/'env-J.json').read_bytes()==(old/'env-J.json').read_bytes(), 'inherited environment bytes'
+env_sha=hashlib.sha256((D/'env-J.json').read_bytes()).hexdigest()
 for m,r in rows.items():
  p=D/'lean-objects'/(m.replace('.','/')+'.olean');sha=hashlib.sha256(p.read_bytes()).hexdigest()
  if 'object_sha256' in r:assert sha==r['object_sha256'],m
@@ -22,7 +25,7 @@ for m,r in rows.items():
  if m in new:
   s=D/'lean-sources'/(m.replace('.','/')+'.lean');assert hashlib.sha256(s.read_bytes()).hexdigest()==r['source_sha256'],m
  out.append(dict(**r,selected_object=str(p),selected_sha256=sha))
-print(json.dumps(dict(ok=True,project_count=len(rows),new_count=len(new),rows=out)))
+print(json.dumps(dict(ok=True,project_count=len(rows),new_count=len(new),identical_inherited_environment=True,env_sha256=env_sha,rows=out)))
 '''.replace('DIR',repr(D)).replace('ROWS',repr(json.dumps(rows))).replace('NEW',repr(json.dumps([r['module'] for r in spec])))
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True,capture_output=True);assert r.returncode==0,r.stderr
 j=json.loads(r.stdout);j['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();j['scope']='all new and inherited source-pinned project objects, every direct/transitive project edge; inherited env-J unchanged; external cohort checked separately'

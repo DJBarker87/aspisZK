@@ -1,0 +1,2512 @@
+R1Z.PV_OWND_ActualBytes.valid {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (loans : R1Z.PV_OWN_Heap.NoLoans w.memory { address := p, generation := w.memory.generations p + 1 })
+  (agrees :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (payload i v)) :
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec
+    (R1Z.PV_OWND_ActualBytes.initialized
+      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+      { address := p, generation := w.memory.generations p + 1 } owner payload)
+R1Z.PV_OWND_ActualFields.represented {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (loans : R1Z.PV_OWN_Heap.NoLoans w.memory { address := p, generation := w.memory.generations p + 1 })
+  (agrees :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (payload i v))
+  (i : Nat) (hi : i < R1Z.PV_OWND_LegacySource.links.length) :
+  have b :=
+    R1Z.PV_OWND_ActualBytes.initialized
+      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+      { address := p, generation := w.memory.generations p + 1 } owner payload;
+  R1Z.PV_OWNB_LinkCodec.NativeView b.cell (i * 8) R1Z.PV_OWND_LegacySource.links[i]
+R1Z.PV_OWND_ActualHeader.length (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) :
+  (R1Z.PV_OWND_ActualBytes.initialized m t owner payload).length = 127
+R1Z.PV_OWND_ActualHeader.identity (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) :
+  have b := R1Z.PV_OWND_ActualBytes.initialized m t owner payload;
+  b.capacity = 127 ∧
+    b.owner = owner ∧
+      b.token = t ∧ b.memory.generations = m.generations ∧ b.memory.slots = m.slots ∧ b.memory.loans = m.loans
+R1Z.PV_OWND_ActualHeader.values (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner i : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (hi : i < R1Z.PV_OWND_LegacySource.links.length) :
+  (R1Z.PV_OWND_ActualBytes.initialized m t owner payload).values i = R1Z.PV_OWND_LegacySource.links[i]
+R1Z.PV_OWND_ActualInitialized.constructed {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes)
+  (ctx : R1Z.PV_OWND_InitialContext.Context prim w owner)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (agrees :
+    ∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link), R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (payload i v)) :
+  have b :=
+    R1Z.PV_OWND_ActualBytes.initialized
+      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+      { address := p, generation := w.memory.generations p + 1 } owner payload;
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec b ∧
+    b.length = 127 ∧
+      b.capacity = 127 ∧
+        ∀ (i : Nat) (hi : i < R1Z.PV_OWND_LegacySource.links.length),
+          R1Z.PV_OWNB_LinkCodec.NativeView b.cell (i * 8) R1Z.PV_OWND_LegacySource.links[i]
+R1Z.PV_OWND_ActualItems.source (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) :
+  R1Z.PV_OWND_ActualItems.items (R1Z.PV_OWND_ActualBytes.initialized m t owner payload) = R1Z.PV_OWND_LegacySource.links
+R1Z.PV_OWND_AllocationBuffer.valid {S X E T : Type} (k : R1Z.PV_OWN_View.Codec T) (capacity owner : Nat) (default : T)
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (p : Nat) (s : S)
+  (h :
+    prim { size := capacity * k.width, alignment := k.alignment } w.allocator =
+      (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (loans : R1Z.PV_OWN_Heap.NoLoans w.memory { address := p, generation := w.memory.generations p + 1 }) :
+  R1Z.PV_OWNC_Vector.Valid k
+    (R1Z.PV_OWND_AllocationBuffer.buffer k capacity owner
+      (R1Z.PV_OWN_Operations.allocate prim { size := capacity * k.width, alignment := k.alignment } owner
+            w).world.memory
+      { address := p, generation := w.memory.generations p + 1 } default)
+R1Z.PV_OWND_Append00.source : R1Z.PV_OWND_LegacySource.appendLevel 0 = R1Z.PV_OWND_Append00.values
+R1Z.PV_OWND_Append00.count : R1Z.PV_OWND_Append00.values.length = 2
+R1Z.PV_OWND_Append01.source : R1Z.PV_OWND_LegacySource.appendLevel 1 = R1Z.PV_OWND_Append01.values
+R1Z.PV_OWND_Append01.count : R1Z.PV_OWND_Append01.values.length = 2
+R1Z.PV_OWND_Append02.source : R1Z.PV_OWND_LegacySource.appendLevel 2 = R1Z.PV_OWND_Append02.values
+R1Z.PV_OWND_Append02.count : R1Z.PV_OWND_Append02.values.length = 2
+R1Z.PV_OWND_Append03.source : R1Z.PV_OWND_LegacySource.appendLevel 3 = R1Z.PV_OWND_Append03.values
+R1Z.PV_OWND_Append03.count : R1Z.PV_OWND_Append03.values.length = 2
+R1Z.PV_OWND_Append04.source : R1Z.PV_OWND_LegacySource.appendLevel 4 = R1Z.PV_OWND_Append04.values
+R1Z.PV_OWND_Append04.count : R1Z.PV_OWND_Append04.values.length = 2
+R1Z.PV_OWND_Append05.source : R1Z.PV_OWND_LegacySource.appendLevel 5 = R1Z.PV_OWND_Append05.values
+R1Z.PV_OWND_Append05.count : R1Z.PV_OWND_Append05.values.length = 2
+R1Z.PV_OWND_Append06.source : R1Z.PV_OWND_LegacySource.appendLevel 6 = R1Z.PV_OWND_Append06.values
+R1Z.PV_OWND_Append06.count : R1Z.PV_OWND_Append06.values.length = 2
+R1Z.PV_OWND_Append07.source : R1Z.PV_OWND_LegacySource.appendLevel 7 = R1Z.PV_OWND_Append07.values
+R1Z.PV_OWND_Append07.count : R1Z.PV_OWND_Append07.values.length = 2
+R1Z.PV_OWND_Append08.source : R1Z.PV_OWND_LegacySource.appendLevel 8 = R1Z.PV_OWND_Append08.values
+R1Z.PV_OWND_Append08.count : R1Z.PV_OWND_Append08.values.length = 2
+R1Z.PV_OWND_Append09.source : R1Z.PV_OWND_LegacySource.appendLevel 9 = R1Z.PV_OWND_Append09.values
+R1Z.PV_OWND_Append09.count : R1Z.PV_OWND_Append09.values.length = 2
+R1Z.PV_OWND_Append10.source : R1Z.PV_OWND_LegacySource.appendLevel 10 = R1Z.PV_OWND_Append10.values
+R1Z.PV_OWND_Append10.count : R1Z.PV_OWND_Append10.values.length = 2
+R1Z.PV_OWND_Append11.source : R1Z.PV_OWND_LegacySource.appendLevel 11 = R1Z.PV_OWND_Append11.values
+R1Z.PV_OWND_Append11.count : R1Z.PV_OWND_Append11.values.length = 2
+R1Z.PV_OWND_Append12.source : R1Z.PV_OWND_LegacySource.appendLevel 12 = R1Z.PV_OWND_Append12.values
+R1Z.PV_OWND_Append12.count : R1Z.PV_OWND_Append12.values.length = 2
+R1Z.PV_OWND_Append13.source : R1Z.PV_OWND_LegacySource.appendLevel 13 = R1Z.PV_OWND_Append13.values
+R1Z.PV_OWND_Append13.count : R1Z.PV_OWND_Append13.values.length = 2
+R1Z.PV_OWND_Append14.source : R1Z.PV_OWND_LegacySource.appendLevel 14 = R1Z.PV_OWND_Append14.values
+R1Z.PV_OWND_Append14.count : R1Z.PV_OWND_Append14.values.length = 2
+R1Z.PV_OWND_Append15.source : R1Z.PV_OWND_LegacySource.appendLevel 15 = R1Z.PV_OWND_Append15.values
+R1Z.PV_OWND_Append15.count : R1Z.PV_OWND_Append15.values.length = 2
+R1Z.PV_OWND_Append16.source : R1Z.PV_OWND_LegacySource.appendLevel 16 = R1Z.PV_OWND_Append16.values
+R1Z.PV_OWND_Append16.count : R1Z.PV_OWND_Append16.values.length = 2
+R1Z.PV_OWND_Append17.source : R1Z.PV_OWND_LegacySource.appendLevel 17 = R1Z.PV_OWND_Append17.values
+R1Z.PV_OWND_Append17.count : R1Z.PV_OWND_Append17.values.length = 2
+R1Z.PV_OWND_Append18.source : R1Z.PV_OWND_LegacySource.appendLevel 18 = R1Z.PV_OWND_Append18.values
+R1Z.PV_OWND_Append18.count : R1Z.PV_OWND_Append18.values.length = 2
+R1Z.PV_OWND_Append19.source : R1Z.PV_OWND_LegacySource.appendLevel 19 = R1Z.PV_OWND_Append19.values
+R1Z.PV_OWND_Append19.count : R1Z.PV_OWND_Append19.values.length = 2
+R1Z.PV_OWND_AppendPhase.source : R1Z.PV_OWND_LegacySource.appendLinks = R1Z.PV_OWND_AppendPhase.values
+R1Z.PV_OWND_AppendPhase.count : R1Z.PV_OWND_AppendPhase.values.length = 40
+R1Z.PV_OWND_CheckResult.success {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link)
+  (w : R1Z.PV_OWN_Operations.State S X) (h : R1Z.PV_OWND_InitialCheck.checks b = Except.ok ()) :
+  R1Z.PV_OWND_InitialCheck.finish dealloc error b w =
+    { outcome := R1Z.PV_W_Threading.Outcome.ok b, world := w, calls := [] }
+R1Z.PV_OWND_CheckResult.error_cleanup {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link)
+  (w : R1Z.PV_OWN_Operations.State S X) (e : R1Z.PV_OWND_InitialCheck.CheckError)
+  (h : R1Z.PV_OWND_InitialCheck.checks b = Except.error e) :
+  R1Z.PV_OWND_InitialCheck.finish dealloc error b w =
+    R1Z.PV_W_Threading.bind
+      (R1Z.PV_OWN_Operations.dropOwned b.owner fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell)
+      (fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail (error e))) w
+R1Z.PV_OWND_CheckSource.scalar_input (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) :
+  R1Z.PV_OWND_InitialCheck.checks (R1Z.PV_OWND_ActualBytes.initialized m t owner payload) =
+    match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+    | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+      Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+    | Except.ok a => Except.ok ()
+R1Z.PV_OWND_CounterBounds.post_bound (counts next : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (h : R1Z.PV_OWND_EndpointCounter.bump counts row = Except.ok next) (old : ∀ (i : Nat), counts i ≤ 2) (i : Nat) :
+  next i ≤ 2
+R1Z.PV_OWND_CounterBounds.byte_room (counts next : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (h : R1Z.PV_OWND_EndpointCounter.bump counts row = Except.ok next) : next row.toNat ≤ 2
+R1Z.PV_OWND_CounterBranch.range_error (counts : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (h : 1024 ≤ row.toNat) :
+  R1Z.PV_OWND_EndpointCounter.bump counts row = Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row)
+R1Z.PV_OWND_CounterBranch.capacity_error (counts : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (h : 2 ≤ counts row.toNat) :
+  R1Z.PV_OWND_EndpointCounter.bump counts row = Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row)
+R1Z.PV_OWND_CounterBranch.success (counts : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (range : row.toNat < 1024) (room : counts row.toNat < 2) :
+  R1Z.PV_OWND_EndpointCounter.bump counts row = Except.ok fun i => if i = row.toNat then counts i + 1 else counts i
+R1Z.PV_OWND_CounterFrame.other (counts next : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16) (i : Nat)
+  (h : R1Z.PV_OWND_EndpointCounter.bump counts row = Except.ok next) (hne : i ≠ row.toNat) : next i = counts i
+R1Z.PV_OWND_CounterFrame.changed (counts next : R1Z.PV_OWND_EndpointCounter.Counts) (row : UInt16)
+  (h : R1Z.PV_OWND_EndpointCounter.bump counts row = Except.ok next) : next row.toNat = counts row.toNat + 1
+R1Z.PV_OWND_CounterLoop.bounds (xs : List R1Z.PV_OWN_Link.Link) (p c p' c' : R1Z.PV_OWND_EndpointCounter.Counts)
+  (h : R1Z.PV_OWND_EndpointCounter.check xs p c = Except.ok (p', c')) (hp : ∀ (i : Nat), p i ≤ 2)
+  (hc : ∀ (i : Nat), c i ≤ 2) : (∀ (i : Nat), p' i ≤ 2) ∧ ∀ (i : Nat), c' i ≤ 2
+R1Z.PV_OWND_CounterOrder.producer_error (v : R1Z.PV_OWN_Link.Link) (vs : List R1Z.PV_OWN_Link.Link)
+  (p c : R1Z.PV_OWND_EndpointCounter.Counts) (e : R1Z.PV_OWND_EndpointCounter.Error)
+  (h : R1Z.PV_OWND_EndpointCounter.bump p v.producer = Except.error e) :
+  R1Z.PV_OWND_EndpointCounter.check (v :: vs) p c = Except.error e
+R1Z.PV_OWND_CounterOrder.consumer_error (v : R1Z.PV_OWN_Link.Link) (vs : List R1Z.PV_OWN_Link.Link)
+  (p c p' : R1Z.PV_OWND_EndpointCounter.Counts) (e : R1Z.PV_OWND_EndpointCounter.Error)
+  (hp : R1Z.PV_OWND_EndpointCounter.bump p v.producer = Except.ok p')
+  (hc : R1Z.PV_OWND_EndpointCounter.bump c v.consumer = Except.error e) :
+  R1Z.PV_OWND_EndpointCounter.check (v :: vs) p c = Except.error e
+R1Z.PV_OWND_CounterOrder.success (v : R1Z.PV_OWN_Link.Link) (vs : List R1Z.PV_OWN_Link.Link)
+  (p c p' c' : R1Z.PV_OWND_EndpointCounter.Counts) (hp : R1Z.PV_OWND_EndpointCounter.bump p v.producer = Except.ok p')
+  (hc : R1Z.PV_OWND_EndpointCounter.bump c v.consumer = Except.ok c') :
+  R1Z.PV_OWND_EndpointCounter.check (v :: vs) p c = R1Z.PV_OWND_EndpointCounter.check vs p' c'
+R1Z.PV_OWND_FixedPhases.sponge_source : R1Z.PV_OWND_LegacySource.sponge = R1Z.PV_OWND_FixedPhases.spongeValues
+R1Z.PV_OWND_FixedPhases.sponge_count : R1Z.PV_OWND_LegacySource.sponge.length = 7
+R1Z.PV_OWND_FixedPhases.head_count : R1Z.PV_OWND_LegacySource.head.length = 4
+R1Z.PV_OWND_FixedPhases.value_source : R1Z.PV_OWND_LegacySource.valueSources = R1Z.PV_OWND_FixedPhases.valueValues
+R1Z.PV_OWND_FixedPhases.value_count : R1Z.PV_OWND_LegacySource.valueSources.length = 3
+R1Z.PV_OWND_FixedPhases.conservation_count : R1Z.PV_OWND_LegacySource.conservation.length = 4
+R1Z.PV_OWND_FixedPhases.occupancy_count : R1Z.PV_OWND_LegacySource.occupancy.length = 6
+R1Z.PV_OWND_InitialAbort.null_abort {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok none, s)) :
+  R1Z.PV_OWND_InitialProgram.program prim dealloc error owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+      payload w =
+    { outcome := R1Z.PV_W_Threading.Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }
+R1Z.PV_OWND_InitialBytes.valid {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (loans : R1Z.PV_OWN_Heap.NoLoans w.memory { address := p, generation := w.memory.generations p + 1 }) :
+  R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec
+    (R1Z.PV_OWND_InitialBytes.initialized
+      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+      { address := p, generation := w.memory.generations p + 1 } owner)
+R1Z.PV_OWND_InitialBytes.length (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat) :
+  (R1Z.PV_OWND_InitialBytes.initialized m t owner).length = 127
+R1Z.PV_OWND_InitialBytes.capacity (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat) :
+  (R1Z.PV_OWND_InitialBytes.initialized m t owner).capacity = 127
+R1Z.PV_OWND_InitialBytes.values (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner i : Nat)
+  (hi : i < R1Z.PV_OWND_LegacySource.links.length) :
+  (R1Z.PV_OWND_InitialBytes.initialized m t owner).values i = R1Z.PV_OWND_LegacySource.links[i]
+R1Z.PV_OWND_InitialContext.fresh {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S) (ctx : R1Z.PV_OWND_InitialContext.Context prim w owner)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (c : R1Z.PV_OWN_Heap.Cell) : w.memory.heap p = some c → c.live = true → False
+R1Z.PV_OWND_InitialContext.noLoans {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S) (ctx : R1Z.PV_OWND_InitialContext.Context prim w owner)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s)) :
+  R1Z.PV_OWN_Heap.NoLoans w.memory { address := p, generation := w.memory.generations p + 1 }
+R1Z.PV_OWND_InitialDrop.complete {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) (w : R1Z.PV_OWN_Operations.State S X)
+  (owned : w.memory.slots b.owner = some b.token) (nonzero : b.cell.size ≠ 0) :
+  R1Z.PV_OWN_Operations.dropOwned b.owner (fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell) w =
+    have after := { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra };
+    have result := dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } after.allocator;
+    { outcome := result.fst,
+      world :=
+        { memory := R1Z.PV_OWN_Operations.retire b.token b.cell after.memory, allocator := result.snd,
+          extra := after.extra },
+      calls := [(after, R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] }
+R1Z.PV_OWND_InitialFailure.failed {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) (owner : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S) (e : E)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.fail e, s)) :
+  R1Z.PV_OWND_InitialRun.construct prim owner oom payload w =
+    { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := { memory := w.memory, allocator := s, extra := w.extra },
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }
+R1Z.PV_OWND_InitialFailure.diverged {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) (owner : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.div, s)) :
+  R1Z.PV_OWND_InitialRun.construct prim owner oom payload w =
+    { outcome := R1Z.PV_W_Threading.Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }
+R1Z.PV_OWND_InitialIdentity.append_identity {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T)
+  (xs : List T) :
+  (R1Z.PV_OWNC_PushFold.append k b xs).token = b.token ∧
+    (R1Z.PV_OWNC_PushFold.append k b xs).owner = b.owner ∧
+      (R1Z.PV_OWNC_PushFold.append k b xs).memory.generations = b.memory.generations ∧
+        (R1Z.PV_OWNC_PushFold.append k b xs).memory.slots = b.memory.slots ∧
+          (R1Z.PV_OWNC_PushFold.append k b xs).memory.loans = b.memory.loans
+R1Z.PV_OWND_InitialIdentity.initial_identity (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat) :
+  (R1Z.PV_OWND_InitialBytes.initialized m t owner).token = t ∧
+    (R1Z.PV_OWND_InitialBytes.initialized m t owner).owner = owner ∧
+      (R1Z.PV_OWND_InitialBytes.initialized m t owner).memory.generations = m.generations ∧
+        (R1Z.PV_OWND_InitialBytes.initialized m t owner).memory.slots = m.slots ∧
+          (R1Z.PV_OWND_InitialBytes.initialized m t owner).memory.loans = m.loans
+R1Z.PV_OWND_InitialNormal.complete {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (owner p : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s))
+  (checked :
+    R1Z.PV_OWND_InitialCheck.checks
+        (R1Z.PV_OWND_ActualBytes.initialized
+          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+          { address := p, generation := w.memory.generations p + 1 } owner payload) =
+      Except.ok ()) :
+  R1Z.PV_OWND_InitialProgram.program prim dealloc error owner oom payload w =
+    have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+    have b :=
+      R1Z.PV_OWND_ActualBytes.initialized a.world.memory { address := p, generation := w.memory.generations p + 1 }
+        owner payload;
+    { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+      world :=
+        have __src := a.world;
+        { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }
+R1Z.PV_OWND_InitialNull.complete {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) (owner : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok none, s)) :
+  R1Z.PV_OWND_InitialRun.construct prim owner oom payload w =
+    have after := { memory := w.memory, allocator := s, extra := w.extra };
+    { outcome := (oom after).outcome, world := (oom after).world,
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] ++ (oom after).calls }
+R1Z.PV_OWND_InitialSuccess.complete {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) (owner p : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S)
+  (h : prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s)) :
+  R1Z.PV_OWND_InitialRun.construct prim owner oom payload w =
+    have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+    have b :=
+      R1Z.PV_OWND_ActualBytes.initialized a.world.memory { address := p, generation := w.memory.generations p + 1 }
+        owner payload;
+    { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+      world :=
+        have __src := a.world;
+        { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+      calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }
+R1Z.PV_OWND_InitialWorldFrame.retained {S X E : Type} (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) :
+  (R1Z.PV_OWND_InitialRun.stores t owner payload w).world.allocator = w.allocator ∧
+    (R1Z.PV_OWND_InitialRun.stores t owner payload w).world.extra = w.extra ∧
+      (R1Z.PV_OWND_InitialRun.stores t owner payload w).calls = []
+R1Z.PV_OWND_InitialWorldFrame.heap_frame {S X E : Type} (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (address : Nat)
+  (hne : address ≠ t.address) :
+  (R1Z.PV_OWND_InitialRun.stores t owner payload w).world.memory.heap address = w.memory.heap address
+R1Z.PV_OWND_LegacyCount.private_count : R1Z.PV_OWND_LegacySource.privateLinks.length = 63
+R1Z.PV_OWND_LegacyCount.append_count : R1Z.PV_OWND_LegacySource.appendLinks.length = 40
+R1Z.PV_OWND_LegacyCount.count : R1Z.PV_OWND_LegacySource.links.length = 127
+R1Z.PV_OWND_LoanFresh.fresh_noLoans (m : R1Z.PV_OWN_Heap.Memory) (p generation : Nat)
+  (live : R1Z.PV_OWND_LoanFresh.LoansLive m)
+  (fresh : ∀ (c : R1Z.PV_OWN_Heap.Cell), m.heap p = some c → c.live = true → False) :
+  R1Z.PV_OWN_Heap.NoLoans m { address := p, generation := generation }
+R1Z.PV_OWND_PaddedFrame.header {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j : Nat) :
+  have c := (R1Z.PV_OWND_PaddedFold.append k b xs payload j).cell;
+  c.size = b.cell.size ∧
+    c.alignment = b.cell.alignment ∧ c.capacity = b.cell.capacity ∧ c.owner = b.cell.owner ∧ c.live = b.cell.live
+R1Z.PV_OWND_PaddedFrame.other {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j address : Nat) (hne : address ≠ b.token.address) :
+  (R1Z.PV_OWND_PaddedFold.append k b xs payload j).memory.heap address = b.memory.heap address
+R1Z.PV_OWND_PaddedHeader.length {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j : Nat) :
+  (R1Z.PV_OWND_PaddedFold.append k b xs payload j).length = b.length + xs.length
+R1Z.PV_OWND_PaddedHeader.identity {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T)
+  (xs : List T) (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j : Nat) :
+  have a := R1Z.PV_OWND_PaddedFold.append k b xs payload j;
+  a.capacity = b.capacity ∧
+    a.owner = b.owner ∧
+      a.token = b.token ∧
+        a.memory.generations = b.memory.generations ∧ a.memory.slots = b.memory.slots ∧ a.memory.loans = b.memory.loans
+R1Z.PV_OWND_PaddedValid.valid {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j : Nat) (h : R1Z.PV_OWNC_Vector.Valid k b)
+  (room : b.length + xs.length ≤ b.capacity)
+  (bounded : ∀ (v : T) (i : Nat) (z : UInt8), k.encode v i = some z → i < k.width)
+  (agrees : ∀ (i : Nat) (v : T), R1Z.PV_OWNB_Padding.Agrees (k.encode v) (payload i v)) :
+  R1Z.PV_OWNC_Vector.Valid k (R1Z.PV_OWND_PaddedFold.append k b xs payload j)
+R1Z.PV_OWND_PaddedValues.retained {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T)
+  (xs : List T) (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j i : Nat) (hi : i < b.length) :
+  (R1Z.PV_OWND_PaddedFold.append k b xs payload j).values i = b.values i
+R1Z.PV_OWND_PaddedValues.suffix {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (payload : Nat → T → R1Z.PV_OWN_Bytes.Bytes) (j i : Nat) (hi : i < xs.length) :
+  (R1Z.PV_OWND_PaddedFold.append k b xs payload j).values (b.length + i) = xs[i]
+R1Z.PV_OWND_Private00.source : R1Z.PV_OWND_LegacySource.privateLevel 0 = R1Z.PV_OWND_Private00.values
+R1Z.PV_OWND_Private00.base : R1Z.PV_OWND_LegacySource.pathBase 0 = some 865
+R1Z.PV_OWND_Private00.count : R1Z.PV_OWND_Private00.values.length = 3
+R1Z.PV_OWND_Private01.source : R1Z.PV_OWND_LegacySource.privateLevel 1 = R1Z.PV_OWND_Private01.values
+R1Z.PV_OWND_Private01.base : R1Z.PV_OWND_LegacySource.pathBase 1 = some 867
+R1Z.PV_OWND_Private01.count : R1Z.PV_OWND_Private01.values.length = 3
+R1Z.PV_OWND_Private02.source : R1Z.PV_OWND_LegacySource.privateLevel 2 = R1Z.PV_OWND_Private02.values
+R1Z.PV_OWND_Private02.base : R1Z.PV_OWND_LegacySource.pathBase 2 = some 869
+R1Z.PV_OWND_Private02.count : R1Z.PV_OWND_Private02.values.length = 3
+R1Z.PV_OWND_Private03.source : R1Z.PV_OWND_LegacySource.privateLevel 3 = R1Z.PV_OWND_Private03.values
+R1Z.PV_OWND_Private03.base : R1Z.PV_OWND_LegacySource.pathBase 3 = some 871
+R1Z.PV_OWND_Private03.count : R1Z.PV_OWND_Private03.values.length = 3
+R1Z.PV_OWND_Private04.source : R1Z.PV_OWND_LegacySource.privateLevel 4 = R1Z.PV_OWND_Private04.values
+R1Z.PV_OWND_Private04.base : R1Z.PV_OWND_LegacySource.pathBase 4 = some 881
+R1Z.PV_OWND_Private04.count : R1Z.PV_OWND_Private04.values.length = 3
+R1Z.PV_OWND_Private05.source : R1Z.PV_OWND_LegacySource.privateLevel 5 = R1Z.PV_OWND_Private05.values
+R1Z.PV_OWND_Private05.base : R1Z.PV_OWND_LegacySource.pathBase 5 = some 883
+R1Z.PV_OWND_Private05.count : R1Z.PV_OWND_Private05.values.length = 3
+R1Z.PV_OWND_Private06.source : R1Z.PV_OWND_LegacySource.privateLevel 6 = R1Z.PV_OWND_Private06.values
+R1Z.PV_OWND_Private06.base : R1Z.PV_OWND_LegacySource.pathBase 6 = some 885
+R1Z.PV_OWND_Private06.count : R1Z.PV_OWND_Private06.values.length = 3
+R1Z.PV_OWND_Private07.source : R1Z.PV_OWND_LegacySource.privateLevel 7 = R1Z.PV_OWND_Private07.values
+R1Z.PV_OWND_Private07.base : R1Z.PV_OWND_LegacySource.pathBase 7 = some 887
+R1Z.PV_OWND_Private07.count : R1Z.PV_OWND_Private07.values.length = 3
+R1Z.PV_OWND_Private08.source : R1Z.PV_OWND_LegacySource.privateLevel 8 = R1Z.PV_OWND_Private08.values
+R1Z.PV_OWND_Private08.base : R1Z.PV_OWND_LegacySource.pathBase 8 = some 897
+R1Z.PV_OWND_Private08.count : R1Z.PV_OWND_Private08.values.length = 3
+R1Z.PV_OWND_Private09.source : R1Z.PV_OWND_LegacySource.privateLevel 9 = R1Z.PV_OWND_Private09.values
+R1Z.PV_OWND_Private09.base : R1Z.PV_OWND_LegacySource.pathBase 9 = some 899
+R1Z.PV_OWND_Private09.count : R1Z.PV_OWND_Private09.values.length = 3
+R1Z.PV_OWND_Private10.source : R1Z.PV_OWND_LegacySource.privateLevel 10 = R1Z.PV_OWND_Private10.values
+R1Z.PV_OWND_Private10.base : R1Z.PV_OWND_LegacySource.pathBase 10 = some 901
+R1Z.PV_OWND_Private10.count : R1Z.PV_OWND_Private10.values.length = 3
+R1Z.PV_OWND_Private11.source : R1Z.PV_OWND_LegacySource.privateLevel 11 = R1Z.PV_OWND_Private11.values
+R1Z.PV_OWND_Private11.base : R1Z.PV_OWND_LegacySource.pathBase 11 = some 903
+R1Z.PV_OWND_Private11.count : R1Z.PV_OWND_Private11.values.length = 3
+R1Z.PV_OWND_Private12.source : R1Z.PV_OWND_LegacySource.privateLevel 12 = R1Z.PV_OWND_Private12.values
+R1Z.PV_OWND_Private12.base : R1Z.PV_OWND_LegacySource.pathBase 12 = some 913
+R1Z.PV_OWND_Private12.count : R1Z.PV_OWND_Private12.values.length = 3
+R1Z.PV_OWND_Private13.source : R1Z.PV_OWND_LegacySource.privateLevel 13 = R1Z.PV_OWND_Private13.values
+R1Z.PV_OWND_Private13.base : R1Z.PV_OWND_LegacySource.pathBase 13 = some 915
+R1Z.PV_OWND_Private13.count : R1Z.PV_OWND_Private13.values.length = 3
+R1Z.PV_OWND_Private14.source : R1Z.PV_OWND_LegacySource.privateLevel 14 = R1Z.PV_OWND_Private14.values
+R1Z.PV_OWND_Private14.base : R1Z.PV_OWND_LegacySource.pathBase 14 = some 917
+R1Z.PV_OWND_Private14.count : R1Z.PV_OWND_Private14.values.length = 3
+R1Z.PV_OWND_Private15.source : R1Z.PV_OWND_LegacySource.privateLevel 15 = R1Z.PV_OWND_Private15.values
+R1Z.PV_OWND_Private15.base : R1Z.PV_OWND_LegacySource.pathBase 15 = some 919
+R1Z.PV_OWND_Private15.count : R1Z.PV_OWND_Private15.values.length = 3
+R1Z.PV_OWND_Private16.source : R1Z.PV_OWND_LegacySource.privateLevel 16 = R1Z.PV_OWND_Private16.values
+R1Z.PV_OWND_Private16.base : R1Z.PV_OWND_LegacySource.pathBase 16 = some 929
+R1Z.PV_OWND_Private16.count : R1Z.PV_OWND_Private16.values.length = 3
+R1Z.PV_OWND_Private17.source : R1Z.PV_OWND_LegacySource.privateLevel 17 = R1Z.PV_OWND_Private17.values
+R1Z.PV_OWND_Private17.base : R1Z.PV_OWND_LegacySource.pathBase 17 = some 931
+R1Z.PV_OWND_Private17.count : R1Z.PV_OWND_Private17.values.length = 3
+R1Z.PV_OWND_Private18.source : R1Z.PV_OWND_LegacySource.privateLevel 18 = R1Z.PV_OWND_Private18.values
+R1Z.PV_OWND_Private18.base : R1Z.PV_OWND_LegacySource.pathBase 18 = some 933
+R1Z.PV_OWND_Private18.count : R1Z.PV_OWND_Private18.values.length = 3
+R1Z.PV_OWND_Private19.source : R1Z.PV_OWND_LegacySource.privateLevel 19 = R1Z.PV_OWND_Private19.values
+R1Z.PV_OWND_Private19.base : R1Z.PV_OWND_LegacySource.pathBase 19 = some 935
+R1Z.PV_OWND_Private19.count : R1Z.PV_OWND_Private19.values.length = 3
+R1Z.PV_OWND_Private20.source : R1Z.PV_OWND_LegacySource.privateLevel 20 = R1Z.PV_OWND_Private20.values
+R1Z.PV_OWND_Private20.base : R1Z.PV_OWND_LegacySource.pathBase 20 = some 945
+R1Z.PV_OWND_Private20.count : R1Z.PV_OWND_Private20.values.length = 3
+R1Z.PV_OWND_PrivatePhase.source : R1Z.PV_OWND_LegacySource.privateLinks = R1Z.PV_OWND_PrivatePhase.values
+R1Z.PV_OWND_PrivatePhase.count : R1Z.PV_OWND_PrivatePhase.values.length = 63
+R1Z.PV_OWND_PushCompose.append_eq {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T)
+  (xs ys : List T) :
+  R1Z.PV_OWNC_PushFold.append k b (xs ++ ys) = R1Z.PV_OWNC_PushFold.append k (R1Z.PV_OWNC_PushFold.append k b xs) ys
+R1Z.PV_OWND_PushPrefix.retained {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (i : Nat) (hi : i < b.length) : (R1Z.PV_OWNC_PushFold.append k b xs).values i = b.values i
+R1Z.PV_OWND_PushSuffix.suffix {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (xs : List T)
+  (i : Nat) (hi : i < xs.length) : (R1Z.PV_OWNC_PushFold.append k b xs).values (b.length + i) = xs[i]
+R1Z.PV_OWND_SourceBounds.private_aux (level : Nat) (h : level < 21) :
+  864 ≤ R1Z.PV_OWND_LegacySource.aux level ∧ R1Z.PV_OWND_LegacySource.aux level + 1 < 960
+R1Z.PV_OWND_SourceBounds.private_rows (level : Nat) (h : level < 21) :
+  (3 + level) * 16 + 11 < 1024 ∧ (4 + level) * 16 + 12 < 1024 ∧ (4 + level) * 16 < 1024
+R1Z.PV_OWND_SourceBounds.append_rows (level : Nat) (h : level < 20) :
+  (33 + level) * 16 + 11 < 1024 ∧ (34 + level) * 16 + 12 < 1024 ∧ (34 + level) * 16 < 1024
+R1Z.PV_OWND_SourceBounds.helper_success (level : Nat) (h : level < 21) :
+  R1Z.PV_OWND_LegacySource.pathBase level = some (R1Z.PV_OWND_LegacySource.aux level)
+R1Z.PV_OWND_SourceBounds.helper_failure (level : Nat) (h : 21 ≤ level) : R1Z.PV_OWND_LegacySource.pathBase level = none
+R1Z.PV_OWND_SourceBounds.word_room (n : Nat) (h : n < 1024) : n < 65536 ∧ n < 18446744073709551616
+R1Z.PV_OWND_SourceShape.no_shape_error (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) :
+  ¬(R1Z.PV_OWND_ActualBytes.initialized m t owner payload).length ≠ 127
+R1Z.PV_OWND_SourceShape.layout : 127 * 8 = 1016 ∧ 1016 > 0 ∧ 1016 < 9223372036854775807 ∧ 1016 % 2 = 0
+theorem R1Z.PV_OWND_ActualInitialized.constructed : ∀ {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner p : Nat) (s : S)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes),
+  R1Z.PV_OWND_InitialContext.Context prim w owner →
+    prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s) →
+      (∀ (i : Nat) (v : R1Z.PV_OWN_Link.Link),
+          R1Z.PV_OWNB_Padding.Agrees (R1Z.PV_OWNB_LinkBytes.encode v) (payload i v)) →
+        have b :=
+          R1Z.PV_OWND_ActualBytes.initialized
+            (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+            { address := p, generation := w.memory.generations p + 1 } owner payload;
+        R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNB_LinkCodec.codec b ∧
+          b.length = 127 ∧
+            b.capacity = 127 ∧
+              ∀ (i : Nat) (hi : i < R1Z.PV_OWND_LegacySource.links.length),
+                R1Z.PV_OWNB_LinkCodec.NativeView b.cell (i * 8) R1Z.PV_OWND_LegacySource.links[i] :=
+fun {S X E} prim w owner p s payload ctx h agrees =>
+  id
+    (have loans := R1Z.PV_OWND_InitialContext.noLoans prim w owner p s ctx h;
+    ⟨R1Z.PV_OWND_ActualBytes.valid prim w owner p s payload h loans agrees,
+      ⟨R1Z.PV_OWND_ActualHeader.length
+          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+          { address := p, generation := w.memory.generations p + 1 } owner payload,
+        ⟨(R1Z.PV_OWND_ActualHeader.identity
+              (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+              { address := p, generation := w.memory.generations p + 1 } owner payload).left,
+          fun i hi => R1Z.PV_OWND_ActualFields.represented prim w owner p s payload h loans agrees i hi⟩⟩⟩)
+structure R1Z.PV_OWND_InitialContext.Context {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (owner : Nat) : Prop
+number of parameters: 6
+fields:
+  R1Z.PV_OWND_InitialContext.Context.slot_empty : w.memory.slots owner = none
+  R1Z.PV_OWND_InitialContext.Context.loans_live : R1Z.PV_OWND_LoanFresh.LoansLive w.memory
+  R1Z.PV_OWND_InitialContext.Context.live_nonzero : ∀ (q : Nat) (c : R1Z.PV_OWN_Heap.Cell),
+      w.memory.heap q = some c → c.live = true → c.size > 0
+  R1Z.PV_OWND_InitialContext.Context.runtime : R1Z.PV_OWN_Operations.AllocatorAdequate prim
+      { size := 1016, alignment := 2 } w
+constructor:
+  R1Z.PV_OWND_InitialContext.Context.mk {S X E : Type}
+    {prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S}
+    {w : R1Z.PV_OWN_Operations.State S X} {owner : Nat} (slot_empty : w.memory.slots owner = none)
+    (loans_live : R1Z.PV_OWND_LoanFresh.LoansLive w.memory)
+    (live_nonzero : ∀ (q : Nat) (c : R1Z.PV_OWN_Heap.Cell), w.memory.heap q = some c → c.live = true → c.size > 0)
+    (runtime : R1Z.PV_OWN_Operations.AllocatorAdequate prim { size := 1016, alignment := 2 } w) :
+    R1Z.PV_OWND_InitialContext.Context prim w owner
+theorem R1Z.PV_OWND_InitialSuccess.complete : ∀ {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) (owner p : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S),
+  prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s) →
+    R1Z.PV_OWND_InitialRun.construct prim owner oom payload w =
+      have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+      have b :=
+        R1Z.PV_OWND_ActualBytes.initialized a.world.memory { address := p, generation := w.memory.generations p + 1 }
+          owner payload;
+      { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+        world :=
+          have __src := a.world;
+          { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+        calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] } :=
+fun {S X E} prim owner p oom payload w s h =>
+  of_eq_true
+    (Eq.trans
+      (congr
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x.outcome with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b :=
+                    (fun t =>
+                        match t with
+                        | none => oom
+                        | some t => R1Z.PV_OWND_InitialRun.stores t owner payload)
+                      x (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world;
+                  { outcome := b.outcome, world := b.world,
+                    calls :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e,
+                    world := (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world,
+                    calls := (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div,
+                    world := (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world,
+                    calls := (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).calls })
+              (congrFun'
+                (congr
+                  (congrArg R1Z.PV_W_Threading.Run.mk
+                    (congrArg Prod.fst
+                      (Eq.trans
+                        (congrArg
+                          (fun x =>
+                            match x.fst with
+                            | R1Z.PV_W_Threading.Outcome.fail e =>
+                              (R1Z.PV_W_Threading.Outcome.fail e,
+                                { memory := w.memory,
+                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                  extra := w.extra })
+                            | R1Z.PV_W_Threading.Outcome.div =>
+                              (R1Z.PV_W_Threading.Outcome.div,
+                                { memory := w.memory,
+                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                  extra := w.extra })
+                            | R1Z.PV_W_Threading.Outcome.ok none =>
+                              (R1Z.PV_W_Threading.Outcome.ok none,
+                                { memory := w.memory,
+                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                  extra := w.extra })
+                            | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                              have t := { address := p, generation := w.memory.generations p + 1 };
+                              (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                {
+                                  memory :=
+                                    have __src := w.memory;
+                                    {
+                                      heap :=
+                                        R1Z.PV_OWN_Heap.put w.memory.heap p
+                                          (some
+                                            (R1Z.PV_OWN_Heap.emptyCell { size := 1016, alignment := 2 }.size
+                                              { size := 1016, alignment := 2 }.alignment owner)),
+                                      generations := fun a => if a = p then t.generation else w.memory.generations a,
+                                      slots := fun s => if s = owner then some t else w.memory.slots s,
+                                      loans := __src.loans },
+                                  allocator :=
+                                    { memory := w.memory,
+                                        allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                        extra := w.extra }.allocator,
+                                  extra :=
+                                    { memory := w.memory,
+                                        allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                        extra := w.extra }.extra }))
+                          h)
+                        (congrArg
+                          (Prod.mk
+                            (R1Z.PV_W_Threading.Outcome.ok
+                              (some { address := p, generation := w.memory.generations p + 1 })))
+                          (congrFun'
+                            (congr
+                              (congrArg R1Z.PV_OWN_Operations.State.mk
+                                (congrFun'
+                                  (congrFun'
+                                    (congrArg
+                                      (R1Z.PV_OWN_Heap.Memory.mk
+                                        (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                          (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                      (funext fun a =>
+                                        ite_congr (Eq.refl (a = p)) (fun a => Eq.refl (w.memory.generations p + 1))
+                                          fun a_1 => Eq.refl (w.memory.generations a)))
+                                    fun s =>
+                                    if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                                    else w.memory.slots s)
+                                  w.memory.loans))
+                              (congrArg Prod.snd h))
+                            w.extra)))))
+                  (congrArg Prod.snd
+                    (Eq.trans
+                      (congrArg
+                        (fun x =>
+                          match x.fst with
+                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                            (R1Z.PV_W_Threading.Outcome.fail e,
+                              { memory := w.memory,
+                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                extra := w.extra })
+                          | R1Z.PV_W_Threading.Outcome.div =>
+                            (R1Z.PV_W_Threading.Outcome.div,
+                              { memory := w.memory,
+                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                extra := w.extra })
+                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                            (R1Z.PV_W_Threading.Outcome.ok none,
+                              { memory := w.memory,
+                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                extra := w.extra })
+                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                            have t := { address := p, generation := w.memory.generations p + 1 };
+                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                              {
+                                memory :=
+                                  have __src := w.memory;
+                                  {
+                                    heap :=
+                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                        (some
+                                          (R1Z.PV_OWN_Heap.emptyCell { size := 1016, alignment := 2 }.size
+                                            { size := 1016, alignment := 2 }.alignment owner)),
+                                    generations := fun a => if a = p then t.generation else w.memory.generations a,
+                                    slots := fun s => if s = owner then some t else w.memory.slots s,
+                                    loans := __src.loans },
+                                allocator :=
+                                  { memory := w.memory,
+                                      allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                      extra := w.extra }.allocator,
+                                extra :=
+                                  { memory := w.memory,
+                                      allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                      extra := w.extra }.extra }))
+                        h)
+                      (congrArg
+                        (Prod.mk
+                          (R1Z.PV_W_Threading.Outcome.ok
+                            (some { address := p, generation := w.memory.generations p + 1 })))
+                        (congrFun'
+                          (congr
+                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                              (congrFun'
+                                (congrFun'
+                                  (congrArg
+                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                        (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                    (funext fun a =>
+                                      ite_congr (Eq.refl (a = p)) (fun a => Eq.refl (w.memory.generations p + 1))
+                                        fun a_1 => Eq.refl (w.memory.generations a)))
+                                  fun s =>
+                                  if s = owner then some { address := p, generation := w.memory.generations p + 1 }
+                                  else w.memory.slots s)
+                                w.memory.loans))
+                            (congrArg Prod.snd h))
+                          w.extra)))))
+                [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))
+            (congr
+              (congr
+                (congrArg R1Z.PV_W_Threading.Run.mk
+                  (congrArg R1Z.PV_W_Threading.Run.outcome
+                    (congrFun'
+                      (congr
+                        (congrArg R1Z.PV_W_Threading.Run.mk
+                          (congrArg R1Z.PV_W_Threading.Outcome.ok
+                            (congrFun'
+                              (congrFun'
+                                (congrFun'
+                                  (congrArg R1Z.PV_OWND_ActualBytes.initialized
+                                    (congrArg R1Z.PV_OWN_Operations.State.memory
+                                      (congrArg R1Z.PV_W_Threading.Run.world
+                                        (congrFun'
+                                          (congr
+                                            (congrArg R1Z.PV_W_Threading.Run.mk
+                                              (congrArg Prod.fst
+                                                (Eq.trans
+                                                  (congrArg
+                                                    (fun x =>
+                                                      match x.fst with
+                                                      | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                        (R1Z.PV_W_Threading.Outcome.fail e,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.div =>
+                                                        (R1Z.PV_W_Threading.Outcome.div,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                        (R1Z.PV_W_Threading.Outcome.ok none,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                        have t :=
+                                                          { address := p, generation := w.memory.generations p + 1 };
+                                                        (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                          {
+                                                            memory :=
+                                                              have __src := w.memory;
+                                                              {
+                                                                heap :=
+                                                                  R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                    (some
+                                                                      (R1Z.PV_OWN_Heap.emptyCell
+                                                                        { size := 1016, alignment := 2 }.size
+                                                                        { size := 1016, alignment := 2 }.alignment
+                                                                        owner)),
+                                                                generations := fun a =>
+                                                                  if a = p then t.generation
+                                                                  else w.memory.generations a,
+                                                                slots := fun s =>
+                                                                  if s = owner then some t else w.memory.slots s,
+                                                                loans := __src.loans },
+                                                            allocator :=
+                                                              { memory := w.memory,
+                                                                  allocator :=
+                                                                    (prim { size := 1016, alignment := 2 }
+                                                                        w.allocator).snd,
+                                                                  extra := w.extra }.allocator,
+                                                            extra :=
+                                                              { memory := w.memory,
+                                                                  allocator :=
+                                                                    (prim { size := 1016, alignment := 2 }
+                                                                        w.allocator).snd,
+                                                                  extra := w.extra }.extra }))
+                                                    h)
+                                                  (congrArg
+                                                    (Prod.mk
+                                                      (R1Z.PV_W_Threading.Outcome.ok
+                                                        (some
+                                                          { address := p, generation := w.memory.generations p + 1 })))
+                                                    (congrFun'
+                                                      (congr
+                                                        (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrArg
+                                                                (R1Z.PV_OWN_Heap.Memory.mk
+                                                                  (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                    (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                                (funext fun a =>
+                                                                  ite_congr (Eq.refl (a = p))
+                                                                    (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                    fun a_1 => Eq.refl (w.memory.generations a)))
+                                                              fun s =>
+                                                              if s = owner then
+                                                                some
+                                                                  { address := p,
+                                                                    generation := w.memory.generations p + 1 }
+                                                              else w.memory.slots s)
+                                                            w.memory.loans))
+                                                        (congrArg Prod.snd h))
+                                                      w.extra)))))
+                                            (congrArg Prod.snd
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x.fst with
+                                                    | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                      (R1Z.PV_W_Threading.Outcome.fail e,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.div =>
+                                                      (R1Z.PV_W_Threading.Outcome.div,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                      (R1Z.PV_W_Threading.Outcome.ok none,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                      have t :=
+                                                        { address := p, generation := w.memory.generations p + 1 };
+                                                      (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                        {
+                                                          memory :=
+                                                            have __src := w.memory;
+                                                            {
+                                                              heap :=
+                                                                R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                  (some
+                                                                    (R1Z.PV_OWN_Heap.emptyCell
+                                                                      { size := 1016, alignment := 2 }.size
+                                                                      { size := 1016, alignment := 2 }.alignment
+                                                                      owner)),
+                                                              generations := fun a =>
+                                                                if a = p then t.generation else w.memory.generations a,
+                                                              slots := fun s =>
+                                                                if s = owner then some t else w.memory.slots s,
+                                                              loans := __src.loans },
+                                                          allocator :=
+                                                            { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra }.allocator,
+                                                          extra :=
+                                                            { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra }.extra }))
+                                                  h)
+                                                (congrArg
+                                                  (Prod.mk
+                                                    (R1Z.PV_W_Threading.Outcome.ok
+                                                      (some
+                                                        { address := p, generation := w.memory.generations p + 1 })))
+                                                  (congrFun'
+                                                    (congr
+                                                      (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrArg
+                                                              (R1Z.PV_OWN_Heap.Memory.mk
+                                                                (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                  (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                              (funext fun a =>
+                                                                ite_congr (Eq.refl (a = p))
+                                                                  (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                  fun a_1 => Eq.refl (w.memory.generations a)))
+                                                            fun s =>
+                                                            if s = owner then
+                                                              some
+                                                                { address := p,
+                                                                  generation := w.memory.generations p + 1 }
+                                                            else w.memory.slots s)
+                                                          w.memory.loans))
+                                                      (congrArg Prod.snd h))
+                                                    w.extra)))))
+                                          [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                                  { address := p, generation := w.memory.generations p + 1 })
+                                owner)
+                              payload)))
+                        (congr
+                          (congr
+                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                              (congrArg R1Z.PV_OWNC_Vector.Buffer.memory
+                                (congrFun'
+                                  (congrFun'
+                                    (congrFun'
+                                      (congrArg R1Z.PV_OWND_ActualBytes.initialized
+                                        (congrArg R1Z.PV_OWN_Operations.State.memory
+                                          (congrArg R1Z.PV_W_Threading.Run.world
+                                            (congrFun'
+                                              (congr
+                                                (congrArg R1Z.PV_W_Threading.Run.mk
+                                                  (congrArg Prod.fst
+                                                    (Eq.trans
+                                                      (congrArg
+                                                        (fun x =>
+                                                          match x.fst with
+                                                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                            (R1Z.PV_W_Threading.Outcome.fail e,
+                                                              { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra })
+                                                          | R1Z.PV_W_Threading.Outcome.div =>
+                                                            (R1Z.PV_W_Threading.Outcome.div,
+                                                              { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra })
+                                                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                            (R1Z.PV_W_Threading.Outcome.ok none,
+                                                              { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra })
+                                                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                            have t :=
+                                                              { address := p,
+                                                                generation := w.memory.generations p + 1 };
+                                                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                              {
+                                                                memory :=
+                                                                  have __src := w.memory;
+                                                                  {
+                                                                    heap :=
+                                                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                        (some
+                                                                          (R1Z.PV_OWN_Heap.emptyCell
+                                                                            { size := 1016, alignment := 2 }.size
+                                                                            { size := 1016, alignment := 2 }.alignment
+                                                                            owner)),
+                                                                    generations := fun a =>
+                                                                      if a = p then t.generation
+                                                                      else w.memory.generations a,
+                                                                    slots := fun s =>
+                                                                      if s = owner then some t else w.memory.slots s,
+                                                                    loans := __src.loans },
+                                                                allocator :=
+                                                                  { memory := w.memory,
+                                                                      allocator :=
+                                                                        (prim { size := 1016, alignment := 2 }
+                                                                            w.allocator).snd,
+                                                                      extra := w.extra }.allocator,
+                                                                extra :=
+                                                                  { memory := w.memory,
+                                                                      allocator :=
+                                                                        (prim { size := 1016, alignment := 2 }
+                                                                            w.allocator).snd,
+                                                                      extra := w.extra }.extra }))
+                                                        h)
+                                                      (congrArg
+                                                        (Prod.mk
+                                                          (R1Z.PV_W_Threading.Outcome.ok
+                                                            (some
+                                                              { address := p,
+                                                                generation := w.memory.generations p + 1 })))
+                                                        (congrFun'
+                                                          (congr
+                                                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                              (congrFun'
+                                                                (congrFun'
+                                                                  (congrArg
+                                                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                        (some
+                                                                          (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                                    (funext fun a =>
+                                                                      ite_congr (Eq.refl (a = p))
+                                                                        (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                        fun a_1 => Eq.refl (w.memory.generations a)))
+                                                                  fun s =>
+                                                                  if s = owner then
+                                                                    some
+                                                                      { address := p,
+                                                                        generation := w.memory.generations p + 1 }
+                                                                  else w.memory.slots s)
+                                                                w.memory.loans))
+                                                            (congrArg Prod.snd h))
+                                                          w.extra)))))
+                                                (congrArg Prod.snd
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x.fst with
+                                                        | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                          (R1Z.PV_W_Threading.Outcome.fail e,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.div =>
+                                                          (R1Z.PV_W_Threading.Outcome.div,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                          (R1Z.PV_W_Threading.Outcome.ok none,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                          have t :=
+                                                            { address := p, generation := w.memory.generations p + 1 };
+                                                          (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                            {
+                                                              memory :=
+                                                                have __src := w.memory;
+                                                                {
+                                                                  heap :=
+                                                                    R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                      (some
+                                                                        (R1Z.PV_OWN_Heap.emptyCell
+                                                                          { size := 1016, alignment := 2 }.size
+                                                                          { size := 1016, alignment := 2 }.alignment
+                                                                          owner)),
+                                                                  generations := fun a =>
+                                                                    if a = p then t.generation
+                                                                    else w.memory.generations a,
+                                                                  slots := fun s =>
+                                                                    if s = owner then some t else w.memory.slots s,
+                                                                  loans := __src.loans },
+                                                              allocator :=
+                                                                { memory := w.memory,
+                                                                    allocator :=
+                                                                      (prim { size := 1016, alignment := 2 }
+                                                                          w.allocator).snd,
+                                                                    extra := w.extra }.allocator,
+                                                              extra :=
+                                                                { memory := w.memory,
+                                                                    allocator :=
+                                                                      (prim { size := 1016, alignment := 2 }
+                                                                          w.allocator).snd,
+                                                                    extra := w.extra }.extra }))
+                                                      h)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (R1Z.PV_W_Threading.Outcome.ok
+                                                          (some
+                                                            { address := p,
+                                                              generation := w.memory.generations p + 1 })))
+                                                      (congrFun'
+                                                        (congr
+                                                          (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrArg
+                                                                  (R1Z.PV_OWN_Heap.Memory.mk
+                                                                    (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                      (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                                  (funext fun a =>
+                                                                    ite_congr (Eq.refl (a = p))
+                                                                      (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                      fun a_1 => Eq.refl (w.memory.generations a)))
+                                                                fun s =>
+                                                                if s = owner then
+                                                                  some
+                                                                    { address := p,
+                                                                      generation := w.memory.generations p + 1 }
+                                                                else w.memory.slots s)
+                                                              w.memory.loans))
+                                                          (congrArg Prod.snd h))
+                                                        w.extra)))))
+                                              [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                                      { address := p, generation := w.memory.generations p + 1 })
+                                    owner)
+                                  payload)))
+                            (congrArg R1Z.PV_OWN_Operations.State.allocator
+                              (congrArg R1Z.PV_W_Threading.Run.world
+                                (congrFun'
+                                  (congr
+                                    (congrArg R1Z.PV_W_Threading.Run.mk
+                                      (congrArg Prod.fst
+                                        (Eq.trans
+                                          (congrArg
+                                            (fun x =>
+                                              match x.fst with
+                                              | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                (R1Z.PV_W_Threading.Outcome.fail e,
+                                                  { memory := w.memory,
+                                                    allocator :=
+                                                      (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                    extra := w.extra })
+                                              | R1Z.PV_W_Threading.Outcome.div =>
+                                                (R1Z.PV_W_Threading.Outcome.div,
+                                                  { memory := w.memory,
+                                                    allocator :=
+                                                      (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                    extra := w.extra })
+                                              | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                (R1Z.PV_W_Threading.Outcome.ok none,
+                                                  { memory := w.memory,
+                                                    allocator :=
+                                                      (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                    extra := w.extra })
+                                              | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                have t := { address := p, generation := w.memory.generations p + 1 };
+                                                (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                  {
+                                                    memory :=
+                                                      have __src := w.memory;
+                                                      {
+                                                        heap :=
+                                                          R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                            (some
+                                                              (R1Z.PV_OWN_Heap.emptyCell
+                                                                { size := 1016, alignment := 2 }.size
+                                                                { size := 1016, alignment := 2 }.alignment owner)),
+                                                        generations := fun a =>
+                                                          if a = p then t.generation else w.memory.generations a,
+                                                        slots := fun s =>
+                                                          if s = owner then some t else w.memory.slots s,
+                                                        loans := __src.loans },
+                                                    allocator :=
+                                                      { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra }.allocator,
+                                                    extra :=
+                                                      { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra }.extra }))
+                                            h)
+                                          (congrArg
+                                            (Prod.mk
+                                              (R1Z.PV_W_Threading.Outcome.ok
+                                                (some { address := p, generation := w.memory.generations p + 1 })))
+                                            (congrFun'
+                                              (congr
+                                                (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                  (congrFun'
+                                                    (congrFun'
+                                                      (congrArg
+                                                        (R1Z.PV_OWN_Heap.Memory.mk
+                                                          (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                            (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                        (funext fun a =>
+                                                          ite_congr (Eq.refl (a = p))
+                                                            (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                            Eq.refl (w.memory.generations a)))
+                                                      fun s =>
+                                                      if s = owner then
+                                                        some { address := p, generation := w.memory.generations p + 1 }
+                                                      else w.memory.slots s)
+                                                    w.memory.loans))
+                                                (congrArg Prod.snd h))
+                                              w.extra)))))
+                                    (congrArg Prod.snd
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x.fst with
+                                            | R1Z.PV_W_Threading.Outcome.fail e =>
+                                              (R1Z.PV_W_Threading.Outcome.fail e,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.div =>
+                                              (R1Z.PV_W_Threading.Outcome.div,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok none =>
+                                              (R1Z.PV_W_Threading.Outcome.ok none,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                              have t := { address := p, generation := w.memory.generations p + 1 };
+                                              (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                {
+                                                  memory :=
+                                                    have __src := w.memory;
+                                                    {
+                                                      heap :=
+                                                        R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some
+                                                            (R1Z.PV_OWN_Heap.emptyCell
+                                                              { size := 1016, alignment := 2 }.size
+                                                              { size := 1016, alignment := 2 }.alignment owner)),
+                                                      generations := fun a =>
+                                                        if a = p then t.generation else w.memory.generations a,
+                                                      slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                      loans := __src.loans },
+                                                  allocator :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.allocator,
+                                                  extra :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.extra }))
+                                          h)
+                                        (congrArg
+                                          (Prod.mk
+                                            (R1Z.PV_W_Threading.Outcome.ok
+                                              (some { address := p, generation := w.memory.generations p + 1 })))
+                                          (congrFun'
+                                            (congr
+                                              (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrArg
+                                                      (R1Z.PV_OWN_Heap.Memory.mk
+                                                        (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                      (funext fun a =>
+                                                        ite_congr (Eq.refl (a = p))
+                                                          (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                          Eq.refl (w.memory.generations a)))
+                                                    fun s =>
+                                                    if s = owner then
+                                                      some { address := p, generation := w.memory.generations p + 1 }
+                                                    else w.memory.slots s)
+                                                  w.memory.loans))
+                                              (congrArg Prod.snd h))
+                                            w.extra)))))
+                                  [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                          (congrArg R1Z.PV_OWN_Operations.State.extra
+                            (congrArg R1Z.PV_W_Threading.Run.world
+                              (congrFun'
+                                (congr
+                                  (congrArg R1Z.PV_W_Threading.Run.mk
+                                    (congrArg Prod.fst
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x.fst with
+                                            | R1Z.PV_W_Threading.Outcome.fail e =>
+                                              (R1Z.PV_W_Threading.Outcome.fail e,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.div =>
+                                              (R1Z.PV_W_Threading.Outcome.div,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok none =>
+                                              (R1Z.PV_W_Threading.Outcome.ok none,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                              have t := { address := p, generation := w.memory.generations p + 1 };
+                                              (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                {
+                                                  memory :=
+                                                    have __src := w.memory;
+                                                    {
+                                                      heap :=
+                                                        R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some
+                                                            (R1Z.PV_OWN_Heap.emptyCell
+                                                              { size := 1016, alignment := 2 }.size
+                                                              { size := 1016, alignment := 2 }.alignment owner)),
+                                                      generations := fun a =>
+                                                        if a = p then t.generation else w.memory.generations a,
+                                                      slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                      loans := __src.loans },
+                                                  allocator :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.allocator,
+                                                  extra :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.extra }))
+                                          h)
+                                        (congrArg
+                                          (Prod.mk
+                                            (R1Z.PV_W_Threading.Outcome.ok
+                                              (some { address := p, generation := w.memory.generations p + 1 })))
+                                          (congrFun'
+                                            (congr
+                                              (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrArg
+                                                      (R1Z.PV_OWN_Heap.Memory.mk
+                                                        (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                      (funext fun a =>
+                                                        ite_congr (Eq.refl (a = p))
+                                                          (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                          Eq.refl (w.memory.generations a)))
+                                                    fun s =>
+                                                    if s = owner then
+                                                      some { address := p, generation := w.memory.generations p + 1 }
+                                                    else w.memory.slots s)
+                                                  w.memory.loans))
+                                              (congrArg Prod.snd h))
+                                            w.extra)))))
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x.fst with
+                                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                                            (R1Z.PV_W_Threading.Outcome.fail e,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.div =>
+                                            (R1Z.PV_W_Threading.Outcome.div,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                                            (R1Z.PV_W_Threading.Outcome.ok none,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                            have t := { address := p, generation := w.memory.generations p + 1 };
+                                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                              {
+                                                memory :=
+                                                  have __src := w.memory;
+                                                  {
+                                                    heap :=
+                                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some
+                                                          (R1Z.PV_OWN_Heap.emptyCell
+                                                            { size := 1016, alignment := 2 }.size
+                                                            { size := 1016, alignment := 2 }.alignment owner)),
+                                                    generations := fun a =>
+                                                      if a = p then t.generation else w.memory.generations a,
+                                                    slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                    loans := __src.loans },
+                                                allocator :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.allocator,
+                                                extra :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.extra }))
+                                        h)
+                                      (congrArg
+                                        (Prod.mk
+                                          (R1Z.PV_W_Threading.Outcome.ok
+                                            (some { address := p, generation := w.memory.generations p + 1 })))
+                                        (congrFun'
+                                          (congr
+                                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrArg
+                                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                    (funext fun a =>
+                                                      ite_congr (Eq.refl (a = p))
+                                                        (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                        Eq.refl (w.memory.generations a)))
+                                                  fun s =>
+                                                  if s = owner then
+                                                    some { address := p, generation := w.memory.generations p + 1 }
+                                                  else w.memory.slots s)
+                                                w.memory.loans))
+                                            (congrArg Prod.snd h))
+                                          w.extra)))))
+                                [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)])))))
+                      [])))
+                (congrArg R1Z.PV_W_Threading.Run.world
+                  (congrFun'
+                    (congr
+                      (congrArg R1Z.PV_W_Threading.Run.mk
+                        (congrArg R1Z.PV_W_Threading.Outcome.ok
+                          (congrFun'
+                            (congrFun'
+                              (congrFun'
+                                (congrArg R1Z.PV_OWND_ActualBytes.initialized
+                                  (congrArg R1Z.PV_OWN_Operations.State.memory
+                                    (congrArg R1Z.PV_W_Threading.Run.world
+                                      (congrFun'
+                                        (congr
+                                          (congrArg R1Z.PV_W_Threading.Run.mk
+                                            (congrArg Prod.fst
+                                              (Eq.trans
+                                                (congrArg
+                                                  (fun x =>
+                                                    match x.fst with
+                                                    | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                      (R1Z.PV_W_Threading.Outcome.fail e,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.div =>
+                                                      (R1Z.PV_W_Threading.Outcome.div,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                      (R1Z.PV_W_Threading.Outcome.ok none,
+                                                        { memory := w.memory,
+                                                          allocator :=
+                                                            (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                          extra := w.extra })
+                                                    | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                      have t :=
+                                                        { address := p, generation := w.memory.generations p + 1 };
+                                                      (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                        {
+                                                          memory :=
+                                                            have __src := w.memory;
+                                                            {
+                                                              heap :=
+                                                                R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                  (some
+                                                                    (R1Z.PV_OWN_Heap.emptyCell
+                                                                      { size := 1016, alignment := 2 }.size
+                                                                      { size := 1016, alignment := 2 }.alignment
+                                                                      owner)),
+                                                              generations := fun a =>
+                                                                if a = p then t.generation else w.memory.generations a,
+                                                              slots := fun s =>
+                                                                if s = owner then some t else w.memory.slots s,
+                                                              loans := __src.loans },
+                                                          allocator :=
+                                                            { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra }.allocator,
+                                                          extra :=
+                                                            { memory := w.memory,
+                                                                allocator :=
+                                                                  (prim { size := 1016, alignment := 2 }
+                                                                      w.allocator).snd,
+                                                                extra := w.extra }.extra }))
+                                                  h)
+                                                (congrArg
+                                                  (Prod.mk
+                                                    (R1Z.PV_W_Threading.Outcome.ok
+                                                      (some
+                                                        { address := p, generation := w.memory.generations p + 1 })))
+                                                  (congrFun'
+                                                    (congr
+                                                      (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                        (congrFun'
+                                                          (congrFun'
+                                                            (congrArg
+                                                              (R1Z.PV_OWN_Heap.Memory.mk
+                                                                (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                  (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                              (funext fun a =>
+                                                                ite_congr (Eq.refl (a = p))
+                                                                  (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                  fun a_1 => Eq.refl (w.memory.generations a)))
+                                                            fun s =>
+                                                            if s = owner then
+                                                              some
+                                                                { address := p,
+                                                                  generation := w.memory.generations p + 1 }
+                                                            else w.memory.slots s)
+                                                          w.memory.loans))
+                                                      (congrArg Prod.snd h))
+                                                    w.extra)))))
+                                          (congrArg Prod.snd
+                                            (Eq.trans
+                                              (congrArg
+                                                (fun x =>
+                                                  match x.fst with
+                                                  | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                    (R1Z.PV_W_Threading.Outcome.fail e,
+                                                      { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra })
+                                                  | R1Z.PV_W_Threading.Outcome.div =>
+                                                    (R1Z.PV_W_Threading.Outcome.div,
+                                                      { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra })
+                                                  | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                    (R1Z.PV_W_Threading.Outcome.ok none,
+                                                      { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra })
+                                                  | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                    have t :=
+                                                      { address := p, generation := w.memory.generations p + 1 };
+                                                    (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                      {
+                                                        memory :=
+                                                          have __src := w.memory;
+                                                          {
+                                                            heap :=
+                                                              R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                (some
+                                                                  (R1Z.PV_OWN_Heap.emptyCell
+                                                                    { size := 1016, alignment := 2 }.size
+                                                                    { size := 1016, alignment := 2 }.alignment owner)),
+                                                            generations := fun a =>
+                                                              if a = p then t.generation else w.memory.generations a,
+                                                            slots := fun s =>
+                                                              if s = owner then some t else w.memory.slots s,
+                                                            loans := __src.loans },
+                                                        allocator :=
+                                                          { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra }.allocator,
+                                                        extra :=
+                                                          { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra }.extra }))
+                                                h)
+                                              (congrArg
+                                                (Prod.mk
+                                                  (R1Z.PV_W_Threading.Outcome.ok
+                                                    (some { address := p, generation := w.memory.generations p + 1 })))
+                                                (congrFun'
+                                                  (congr
+                                                    (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                      (congrFun'
+                                                        (congrFun'
+                                                          (congrArg
+                                                            (R1Z.PV_OWN_Heap.Memory.mk
+                                                              (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                            (funext fun a =>
+                                                              ite_congr (Eq.refl (a = p))
+                                                                (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                fun a_1 => Eq.refl (w.memory.generations a)))
+                                                          fun s =>
+                                                          if s = owner then
+                                                            some
+                                                              { address := p, generation := w.memory.generations p + 1 }
+                                                          else w.memory.slots s)
+                                                        w.memory.loans))
+                                                    (congrArg Prod.snd h))
+                                                  w.extra)))))
+                                        [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                                { address := p, generation := w.memory.generations p + 1 })
+                              owner)
+                            payload)))
+                      (congr
+                        (congr
+                          (congrArg R1Z.PV_OWN_Operations.State.mk
+                            (congrArg R1Z.PV_OWNC_Vector.Buffer.memory
+                              (congrFun'
+                                (congrFun'
+                                  (congrFun'
+                                    (congrArg R1Z.PV_OWND_ActualBytes.initialized
+                                      (congrArg R1Z.PV_OWN_Operations.State.memory
+                                        (congrArg R1Z.PV_W_Threading.Run.world
+                                          (congrFun'
+                                            (congr
+                                              (congrArg R1Z.PV_W_Threading.Run.mk
+                                                (congrArg Prod.fst
+                                                  (Eq.trans
+                                                    (congrArg
+                                                      (fun x =>
+                                                        match x.fst with
+                                                        | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                          (R1Z.PV_W_Threading.Outcome.fail e,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.div =>
+                                                          (R1Z.PV_W_Threading.Outcome.div,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                          (R1Z.PV_W_Threading.Outcome.ok none,
+                                                            { memory := w.memory,
+                                                              allocator :=
+                                                                (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                              extra := w.extra })
+                                                        | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                          have t :=
+                                                            { address := p, generation := w.memory.generations p + 1 };
+                                                          (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                            {
+                                                              memory :=
+                                                                have __src := w.memory;
+                                                                {
+                                                                  heap :=
+                                                                    R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                      (some
+                                                                        (R1Z.PV_OWN_Heap.emptyCell
+                                                                          { size := 1016, alignment := 2 }.size
+                                                                          { size := 1016, alignment := 2 }.alignment
+                                                                          owner)),
+                                                                  generations := fun a =>
+                                                                    if a = p then t.generation
+                                                                    else w.memory.generations a,
+                                                                  slots := fun s =>
+                                                                    if s = owner then some t else w.memory.slots s,
+                                                                  loans := __src.loans },
+                                                              allocator :=
+                                                                { memory := w.memory,
+                                                                    allocator :=
+                                                                      (prim { size := 1016, alignment := 2 }
+                                                                          w.allocator).snd,
+                                                                    extra := w.extra }.allocator,
+                                                              extra :=
+                                                                { memory := w.memory,
+                                                                    allocator :=
+                                                                      (prim { size := 1016, alignment := 2 }
+                                                                          w.allocator).snd,
+                                                                    extra := w.extra }.extra }))
+                                                      h)
+                                                    (congrArg
+                                                      (Prod.mk
+                                                        (R1Z.PV_W_Threading.Outcome.ok
+                                                          (some
+                                                            { address := p,
+                                                              generation := w.memory.generations p + 1 })))
+                                                      (congrFun'
+                                                        (congr
+                                                          (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                            (congrFun'
+                                                              (congrFun'
+                                                                (congrArg
+                                                                  (R1Z.PV_OWN_Heap.Memory.mk
+                                                                    (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                      (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                                  (funext fun a =>
+                                                                    ite_congr (Eq.refl (a = p))
+                                                                      (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                      fun a_1 => Eq.refl (w.memory.generations a)))
+                                                                fun s =>
+                                                                if s = owner then
+                                                                  some
+                                                                    { address := p,
+                                                                      generation := w.memory.generations p + 1 }
+                                                                else w.memory.slots s)
+                                                              w.memory.loans))
+                                                          (congrArg Prod.snd h))
+                                                        w.extra)))))
+                                              (congrArg Prod.snd
+                                                (Eq.trans
+                                                  (congrArg
+                                                    (fun x =>
+                                                      match x.fst with
+                                                      | R1Z.PV_W_Threading.Outcome.fail e =>
+                                                        (R1Z.PV_W_Threading.Outcome.fail e,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.div =>
+                                                        (R1Z.PV_W_Threading.Outcome.div,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.ok none =>
+                                                        (R1Z.PV_W_Threading.Outcome.ok none,
+                                                          { memory := w.memory,
+                                                            allocator :=
+                                                              (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                            extra := w.extra })
+                                                      | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                                        have t :=
+                                                          { address := p, generation := w.memory.generations p + 1 };
+                                                        (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                          {
+                                                            memory :=
+                                                              have __src := w.memory;
+                                                              {
+                                                                heap :=
+                                                                  R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                    (some
+                                                                      (R1Z.PV_OWN_Heap.emptyCell
+                                                                        { size := 1016, alignment := 2 }.size
+                                                                        { size := 1016, alignment := 2 }.alignment
+                                                                        owner)),
+                                                                generations := fun a =>
+                                                                  if a = p then t.generation
+                                                                  else w.memory.generations a,
+                                                                slots := fun s =>
+                                                                  if s = owner then some t else w.memory.slots s,
+                                                                loans := __src.loans },
+                                                            allocator :=
+                                                              { memory := w.memory,
+                                                                  allocator :=
+                                                                    (prim { size := 1016, alignment := 2 }
+                                                                        w.allocator).snd,
+                                                                  extra := w.extra }.allocator,
+                                                            extra :=
+                                                              { memory := w.memory,
+                                                                  allocator :=
+                                                                    (prim { size := 1016, alignment := 2 }
+                                                                        w.allocator).snd,
+                                                                  extra := w.extra }.extra }))
+                                                    h)
+                                                  (congrArg
+                                                    (Prod.mk
+                                                      (R1Z.PV_W_Threading.Outcome.ok
+                                                        (some
+                                                          { address := p, generation := w.memory.generations p + 1 })))
+                                                    (congrFun'
+                                                      (congr
+                                                        (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                          (congrFun'
+                                                            (congrFun'
+                                                              (congrArg
+                                                                (R1Z.PV_OWN_Heap.Memory.mk
+                                                                  (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                                    (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                                (funext fun a =>
+                                                                  ite_congr (Eq.refl (a = p))
+                                                                    (fun a => Eq.refl (w.memory.generations p + 1))
+                                                                    fun a_1 => Eq.refl (w.memory.generations a)))
+                                                              fun s =>
+                                                              if s = owner then
+                                                                some
+                                                                  { address := p,
+                                                                    generation := w.memory.generations p + 1 }
+                                                              else w.memory.slots s)
+                                                            w.memory.loans))
+                                                        (congrArg Prod.snd h))
+                                                      w.extra)))))
+                                            [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                                    { address := p, generation := w.memory.generations p + 1 })
+                                  owner)
+                                payload)))
+                          (congrArg R1Z.PV_OWN_Operations.State.allocator
+                            (congrArg R1Z.PV_W_Threading.Run.world
+                              (congrFun'
+                                (congr
+                                  (congrArg R1Z.PV_W_Threading.Run.mk
+                                    (congrArg Prod.fst
+                                      (Eq.trans
+                                        (congrArg
+                                          (fun x =>
+                                            match x.fst with
+                                            | R1Z.PV_W_Threading.Outcome.fail e =>
+                                              (R1Z.PV_W_Threading.Outcome.fail e,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.div =>
+                                              (R1Z.PV_W_Threading.Outcome.div,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok none =>
+                                              (R1Z.PV_W_Threading.Outcome.ok none,
+                                                { memory := w.memory,
+                                                  allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                  extra := w.extra })
+                                            | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                              have t := { address := p, generation := w.memory.generations p + 1 };
+                                              (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                                {
+                                                  memory :=
+                                                    have __src := w.memory;
+                                                    {
+                                                      heap :=
+                                                        R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some
+                                                            (R1Z.PV_OWN_Heap.emptyCell
+                                                              { size := 1016, alignment := 2 }.size
+                                                              { size := 1016, alignment := 2 }.alignment owner)),
+                                                      generations := fun a =>
+                                                        if a = p then t.generation else w.memory.generations a,
+                                                      slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                      loans := __src.loans },
+                                                  allocator :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.allocator,
+                                                  extra :=
+                                                    { memory := w.memory,
+                                                        allocator :=
+                                                          (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                        extra := w.extra }.extra }))
+                                          h)
+                                        (congrArg
+                                          (Prod.mk
+                                            (R1Z.PV_W_Threading.Outcome.ok
+                                              (some { address := p, generation := w.memory.generations p + 1 })))
+                                          (congrFun'
+                                            (congr
+                                              (congrArg R1Z.PV_OWN_Operations.State.mk
+                                                (congrFun'
+                                                  (congrFun'
+                                                    (congrArg
+                                                      (R1Z.PV_OWN_Heap.Memory.mk
+                                                        (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                          (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                      (funext fun a =>
+                                                        ite_congr (Eq.refl (a = p))
+                                                          (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                          Eq.refl (w.memory.generations a)))
+                                                    fun s =>
+                                                    if s = owner then
+                                                      some { address := p, generation := w.memory.generations p + 1 }
+                                                    else w.memory.slots s)
+                                                  w.memory.loans))
+                                              (congrArg Prod.snd h))
+                                            w.extra)))))
+                                  (congrArg Prod.snd
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x.fst with
+                                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                                            (R1Z.PV_W_Threading.Outcome.fail e,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.div =>
+                                            (R1Z.PV_W_Threading.Outcome.div,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                                            (R1Z.PV_W_Threading.Outcome.ok none,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                            have t := { address := p, generation := w.memory.generations p + 1 };
+                                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                              {
+                                                memory :=
+                                                  have __src := w.memory;
+                                                  {
+                                                    heap :=
+                                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some
+                                                          (R1Z.PV_OWN_Heap.emptyCell
+                                                            { size := 1016, alignment := 2 }.size
+                                                            { size := 1016, alignment := 2 }.alignment owner)),
+                                                    generations := fun a =>
+                                                      if a = p then t.generation else w.memory.generations a,
+                                                    slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                    loans := __src.loans },
+                                                allocator :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.allocator,
+                                                extra :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.extra }))
+                                        h)
+                                      (congrArg
+                                        (Prod.mk
+                                          (R1Z.PV_W_Threading.Outcome.ok
+                                            (some { address := p, generation := w.memory.generations p + 1 })))
+                                        (congrFun'
+                                          (congr
+                                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrArg
+                                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                    (funext fun a =>
+                                                      ite_congr (Eq.refl (a = p))
+                                                        (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                        Eq.refl (w.memory.generations a)))
+                                                  fun s =>
+                                                  if s = owner then
+                                                    some { address := p, generation := w.memory.generations p + 1 }
+                                                  else w.memory.slots s)
+                                                w.memory.loans))
+                                            (congrArg Prod.snd h))
+                                          w.extra)))))
+                                [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+                        (congrArg R1Z.PV_OWN_Operations.State.extra
+                          (congrArg R1Z.PV_W_Threading.Run.world
+                            (congrFun'
+                              (congr
+                                (congrArg R1Z.PV_W_Threading.Run.mk
+                                  (congrArg Prod.fst
+                                    (Eq.trans
+                                      (congrArg
+                                        (fun x =>
+                                          match x.fst with
+                                          | R1Z.PV_W_Threading.Outcome.fail e =>
+                                            (R1Z.PV_W_Threading.Outcome.fail e,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.div =>
+                                            (R1Z.PV_W_Threading.Outcome.div,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok none =>
+                                            (R1Z.PV_W_Threading.Outcome.ok none,
+                                              { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra })
+                                          | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                            have t := { address := p, generation := w.memory.generations p + 1 };
+                                            (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                              {
+                                                memory :=
+                                                  have __src := w.memory;
+                                                  {
+                                                    heap :=
+                                                      R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some
+                                                          (R1Z.PV_OWN_Heap.emptyCell
+                                                            { size := 1016, alignment := 2 }.size
+                                                            { size := 1016, alignment := 2 }.alignment owner)),
+                                                    generations := fun a =>
+                                                      if a = p then t.generation else w.memory.generations a,
+                                                    slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                    loans := __src.loans },
+                                                allocator :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.allocator,
+                                                extra :=
+                                                  { memory := w.memory,
+                                                      allocator :=
+                                                        (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                      extra := w.extra }.extra }))
+                                        h)
+                                      (congrArg
+                                        (Prod.mk
+                                          (R1Z.PV_W_Threading.Outcome.ok
+                                            (some { address := p, generation := w.memory.generations p + 1 })))
+                                        (congrFun'
+                                          (congr
+                                            (congrArg R1Z.PV_OWN_Operations.State.mk
+                                              (congrFun'
+                                                (congrFun'
+                                                  (congrArg
+                                                    (R1Z.PV_OWN_Heap.Memory.mk
+                                                      (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                        (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                    (funext fun a =>
+                                                      ite_congr (Eq.refl (a = p))
+                                                        (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                        Eq.refl (w.memory.generations a)))
+                                                  fun s =>
+                                                  if s = owner then
+                                                    some { address := p, generation := w.memory.generations p + 1 }
+                                                  else w.memory.slots s)
+                                                w.memory.loans))
+                                            (congrArg Prod.snd h))
+                                          w.extra)))))
+                                (congrArg Prod.snd
+                                  (Eq.trans
+                                    (congrArg
+                                      (fun x =>
+                                        match x.fst with
+                                        | R1Z.PV_W_Threading.Outcome.fail e =>
+                                          (R1Z.PV_W_Threading.Outcome.fail e,
+                                            { memory := w.memory,
+                                              allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                              extra := w.extra })
+                                        | R1Z.PV_W_Threading.Outcome.div =>
+                                          (R1Z.PV_W_Threading.Outcome.div,
+                                            { memory := w.memory,
+                                              allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                              extra := w.extra })
+                                        | R1Z.PV_W_Threading.Outcome.ok none =>
+                                          (R1Z.PV_W_Threading.Outcome.ok none,
+                                            { memory := w.memory,
+                                              allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                              extra := w.extra })
+                                        | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                          have t := { address := p, generation := w.memory.generations p + 1 };
+                                          (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                            {
+                                              memory :=
+                                                have __src := w.memory;
+                                                {
+                                                  heap :=
+                                                    R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                      (some
+                                                        (R1Z.PV_OWN_Heap.emptyCell { size := 1016, alignment := 2 }.size
+                                                          { size := 1016, alignment := 2 }.alignment owner)),
+                                                  generations := fun a =>
+                                                    if a = p then t.generation else w.memory.generations a,
+                                                  slots := fun s => if s = owner then some t else w.memory.slots s,
+                                                  loans := __src.loans },
+                                              allocator :=
+                                                { memory := w.memory,
+                                                    allocator :=
+                                                      (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                    extra := w.extra }.allocator,
+                                              extra :=
+                                                { memory := w.memory,
+                                                    allocator :=
+                                                      (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                    extra := w.extra }.extra }))
+                                      h)
+                                    (congrArg
+                                      (Prod.mk
+                                        (R1Z.PV_W_Threading.Outcome.ok
+                                          (some { address := p, generation := w.memory.generations p + 1 })))
+                                      (congrFun'
+                                        (congr
+                                          (congrArg R1Z.PV_OWN_Operations.State.mk
+                                            (congrFun'
+                                              (congrFun'
+                                                (congrArg
+                                                  (R1Z.PV_OWN_Heap.Memory.mk
+                                                    (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                      (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                                  (funext fun a =>
+                                                    ite_congr (Eq.refl (a = p))
+                                                      (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                      Eq.refl (w.memory.generations a)))
+                                                fun s =>
+                                                if s = owner then
+                                                  some { address := p, generation := w.memory.generations p + 1 }
+                                                else w.memory.slots s)
+                                              w.memory.loans))
+                                          (congrArg Prod.snd h))
+                                        w.extra)))))
+                              [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)])))))
+                    [])))
+              (Eq.trans
+                (congr
+                  (congrArg HAppend.hAppend
+                    (congrArg R1Z.PV_W_Threading.Run.calls
+                      (congrFun'
+                        (congr
+                          (congrArg R1Z.PV_W_Threading.Run.mk
+                            (congrArg Prod.fst
+                              (Eq.trans
+                                (congrArg
+                                  (fun x =>
+                                    match x.fst with
+                                    | R1Z.PV_W_Threading.Outcome.fail e =>
+                                      (R1Z.PV_W_Threading.Outcome.fail e,
+                                        { memory := w.memory,
+                                          allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                          extra := w.extra })
+                                    | R1Z.PV_W_Threading.Outcome.div =>
+                                      (R1Z.PV_W_Threading.Outcome.div,
+                                        { memory := w.memory,
+                                          allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                          extra := w.extra })
+                                    | R1Z.PV_W_Threading.Outcome.ok none =>
+                                      (R1Z.PV_W_Threading.Outcome.ok none,
+                                        { memory := w.memory,
+                                          allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                          extra := w.extra })
+                                    | R1Z.PV_W_Threading.Outcome.ok (some p) =>
+                                      have t := { address := p, generation := w.memory.generations p + 1 };
+                                      (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                        {
+                                          memory :=
+                                            have __src := w.memory;
+                                            {
+                                              heap :=
+                                                R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                  (some
+                                                    (R1Z.PV_OWN_Heap.emptyCell { size := 1016, alignment := 2 }.size
+                                                      { size := 1016, alignment := 2 }.alignment owner)),
+                                              generations := fun a =>
+                                                if a = p then t.generation else w.memory.generations a,
+                                              slots := fun s => if s = owner then some t else w.memory.slots s,
+                                              loans := __src.loans },
+                                          allocator :=
+                                            { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra }.allocator,
+                                          extra :=
+                                            { memory := w.memory,
+                                                allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                                extra := w.extra }.extra }))
+                                  h)
+                                (congrArg
+                                  (Prod.mk
+                                    (R1Z.PV_W_Threading.Outcome.ok
+                                      (some { address := p, generation := w.memory.generations p + 1 })))
+                                  (congrFun'
+                                    (congr
+                                      (congrArg R1Z.PV_OWN_Operations.State.mk
+                                        (congrFun'
+                                          (congrFun'
+                                            (congrArg
+                                              (R1Z.PV_OWN_Heap.Memory.mk
+                                                (R1Z.PV_OWN_Heap.put w.memory.heap p
+                                                  (some (R1Z.PV_OWN_Heap.emptyCell 1016 2 owner))))
+                                              (funext fun a =>
+                                                ite_congr (Eq.refl (a = p))
+                                                  (fun a => Eq.refl (w.memory.generations p + 1)) fun a_1 =>
+                                                  Eq.refl (w.memory.generations a)))
+                                            fun s =>
+                                            if s = owner then
+                                              some { address := p, generation := w.memory.generations p + 1 }
+                                            else w.memory.slots s)
+                                          w.memory.loans))
+                                      (congrArg Prod.snd h))
+                                    w.extra)))))
+                          (congrArg Prod.snd
+                            (Eq.trans
+                              (congrArg
+                                (fun x =>
+                                  match x.fst with
+                                  | ⋯ =>
+                                    (R1Z.PV_W_Threading.Outcome.fail e,
+                                      { memory := w.memory,
+                                        allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                        extra := w.extra })
+                                  | ⋯ =>
+                                    (R1Z.PV_W_Threading.Outcome.div,
+                                      { memory := w.memory,
+                                        allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                        extra := w.extra })
+                                  | ⋯ =>
+                                    (R1Z.PV_W_Threading.Outcome.ok none,
+                                      { memory := w.memory,
+                                        allocator := (prim { size := 1016, alignment := 2 } w.allocator).snd,
+                                        extra := w.extra })
+                                  | ⋯ =>
+                                    have t := { address := p, generation := w.memory.generations p + 1 };
+                                    (R1Z.PV_W_Threading.Outcome.ok (some t),
+                                      {
+                                        memory :=
+                                          have __src := w.memory;
+                                          { heap := R1Z.PV_OWN_Heap.put ⋯.memory.heap ⋯ ⋯, generations := ⋯, slots := ⋯,
+                                            loans := ⋯ },
+                                        allocator := ⋯, extra := ⋯ }))
+                                ⋯)
+                              ⋯)))
+                        ⋯)))
+                  ⋯)
+                ⋯))))
+        ⋯)
+      ⋯)
+theorem R1Z.PV_OWND_InitialNormal.complete : ∀ {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (owner p : Nat)
+  (oom : R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link))
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S),
+  prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok (some p), s) →
+    R1Z.PV_OWND_InitialCheck.checks
+          (R1Z.PV_OWND_ActualBytes.initialized
+            (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+            { address := p, generation := w.memory.generations p + 1 } owner payload) =
+        Except.ok () →
+      R1Z.PV_OWND_InitialProgram.program prim dealloc error owner oom payload w =
+        have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+        have b :=
+          R1Z.PV_OWND_ActualBytes.initialized a.world.memory { address := p, generation := w.memory.generations p + 1 }
+            owner payload;
+        { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+          world :=
+            have __src := a.world;
+            { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+          calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] } :=
+fun {S X E} prim dealloc error owner p oom payload w s h checked =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              let a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+              let b :=
+                R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                  { address := p, generation := w.memory.generations p + 1 } owner payload;
+              { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                world :=
+                  let __src := a.world;
+                  { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+          (R1Z.PV_W_Threading.bind.eq_1 (R1Z.PV_OWND_InitialRun.construct prim owner oom payload)
+            (R1Z.PV_OWND_InitialCheck.finish dealloc error) w)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a.outcome with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b := R1Z.PV_OWND_InitialCheck.finish dealloc error x _a.world;
+                  { outcome := b.outcome, world := b.world, calls := _a.calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := _a.world, calls := _a.calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div, world := _a.world, calls := _a.calls }) =
+                let a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+                let b :=
+                  R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                    { address := p, generation := w.memory.generations p + 1 } owner payload;
+                { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                  world :=
+                    let __src := a.world;
+                    { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (R1Z.PV_OWND_InitialSuccess.complete prim owner p oom payload w s h)))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congr
+                  (congr
+                    (congrArg R1Z.PV_W_Threading.Run.mk
+                      (congrArg R1Z.PV_W_Threading.Run.outcome
+                        (congrArg
+                          (fun x =>
+                            (match x with
+                              | Except.ok PUnit.unit =>
+                                R1Z.PV_W_Threading.lift
+                                  (R1Z.PV_W_Threading.Outcome.ok
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                            w).world.memory
+                                      { address := p, generation := w.memory.generations p + 1 } owner payload))
+                              | Except.error e =>
+                                R1Z.PV_W_Threading.bind
+                                  (R1Z.PV_OWN_Operations.dropOwned
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                        (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                              w).world.memory
+                                        { address := p, generation := w.memory.generations p + 1 } owner payload).owner
+                                    fun x =>
+                                    R1Z.PV_OWN_Operations.dropVecPod dealloc
+                                      (R1Z.PV_OWND_ActualBytes.initialized
+                                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).token
+                                      (R1Z.PV_OWND_ActualBytes.initialized
+                                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).cell)
+                                  fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail (error e)))
+                              (have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+                                have b :=
+                                  R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                                    { address := p, generation := w.memory.generations p + 1 } owner payload;
+                                { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                                  world :=
+                                    have __src := a.world;
+                                    { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }).world)
+                          checked)))
+                    (congrArg R1Z.PV_W_Threading.Run.world
+                      (congrArg
+                        (fun x =>
+                          (match x with
+                            | Except.ok PUnit.unit =>
+                              R1Z.PV_W_Threading.lift
+                                (R1Z.PV_W_Threading.Outcome.ok
+                                  (R1Z.PV_OWND_ActualBytes.initialized
+                                    (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                          w).world.memory
+                                    { address := p, generation := w.memory.generations p + 1 } owner payload))
+                            | Except.error e =>
+                              R1Z.PV_W_Threading.bind
+                                (R1Z.PV_OWN_Operations.dropOwned
+                                  (R1Z.PV_OWND_ActualBytes.initialized
+                                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                            w).world.memory
+                                      { address := p, generation := w.memory.generations p + 1 } owner payload).owner
+                                  fun x =>
+                                  R1Z.PV_OWN_Operations.dropVecPod dealloc
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                        (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                              w).world.memory
+                                        { address := p, generation := w.memory.generations p + 1 } owner payload).token
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                        (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                              w).world.memory
+                                        { address := p, generation := w.memory.generations p + 1 } owner payload).cell)
+                                fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail (error e)))
+                            (have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+                              have b :=
+                                R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                                  { address := p, generation := w.memory.generations p + 1 } owner payload;
+                              { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                                world :=
+                                  have __src := a.world;
+                                  { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }).world)
+                        checked)))
+                  (Eq.trans
+                    (congrArg (HAppend.hAppend [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)])
+                      (congrArg R1Z.PV_W_Threading.Run.calls
+                        (congrArg
+                          (fun x =>
+                            (match x with
+                              | Except.ok PUnit.unit =>
+                                R1Z.PV_W_Threading.lift
+                                  (R1Z.PV_W_Threading.Outcome.ok
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                            w).world.memory
+                                      { address := p, generation := w.memory.generations p + 1 } owner payload))
+                              | Except.error e =>
+                                R1Z.PV_W_Threading.bind
+                                  (R1Z.PV_OWN_Operations.dropOwned
+                                    (R1Z.PV_OWND_ActualBytes.initialized
+                                        (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                              w).world.memory
+                                        { address := p, generation := w.memory.generations p + 1 } owner payload).owner
+                                    fun x =>
+                                    R1Z.PV_OWN_Operations.dropVecPod dealloc
+                                      (R1Z.PV_OWND_ActualBytes.initialized
+                                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).token
+                                      (R1Z.PV_OWND_ActualBytes.initialized
+                                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).cell)
+                                  fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail (error e)))
+                              (have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+                                have b :=
+                                  R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                                    { address := p, generation := w.memory.generations p + 1 } owner payload;
+                                { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                                  world :=
+                                    have __src := a.world;
+                                    { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }).world)
+                          checked)))
+                    (List.append_nil [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+              {
+                outcome :=
+                  R1Z.PV_W_Threading.Outcome.ok
+                    (R1Z.PV_OWND_ActualBytes.initialized
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                      { address := p, generation := w.memory.generations p + 1 } owner payload),
+                world :=
+                  {
+                    memory :=
+                      (R1Z.PV_OWND_ActualBytes.initialized
+                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                          { address := p, generation := w.memory.generations p + 1 } owner payload).memory,
+                    allocator :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.allocator,
+                    extra :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (eq_self
+              {
+                outcome :=
+                  R1Z.PV_W_Threading.Outcome.ok
+                    (R1Z.PV_OWND_ActualBytes.initialized
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                      { address := p, generation := w.memory.generations p + 1 } owner payload),
+                world :=
+                  {
+                    memory :=
+                      (R1Z.PV_OWND_ActualBytes.initialized
+                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                          { address := p, generation := w.memory.generations p + 1 } owner payload).memory,
+                    allocator :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.allocator,
+                    extra :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })))))
+theorem R1Z.PV_OWND_InitialAbort.null_abort : ∀ {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S),
+  prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok none, s) →
+    R1Z.PV_OWND_InitialProgram.program prim dealloc error owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+        payload w =
+      { outcome := R1Z.PV_W_Threading.Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },
+        calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] } :=
+fun {S X E} prim dealloc error owner payload w s h =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+          (R1Z.PV_W_Threading.bind.eq_1
+            (R1Z.PV_OWND_InitialRun.construct prim owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+              payload)
+            (R1Z.PV_OWND_InitialCheck.finish dealloc error) w)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a.outcome with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b := R1Z.PV_OWND_InitialCheck.finish dealloc error x _a.world;
+                  { outcome := b.outcome, world := b.world, calls := _a.calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := _a.world, calls := _a.calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div, world := _a.world, calls := _a.calls }) =
+                { outcome := R1Z.PV_W_Threading.Outcome.div,
+                  world := { memory := w.memory, allocator := s, extra := w.extra },
+                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (R1Z.PV_OWND_InitialNull.complete prim owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+              payload w s h)))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (R1Z.PV_W_Threading.Run.mk R1Z.PV_W_Threading.Outcome.div
+                    { memory := w.memory, allocator := s, extra := w.extra })
+                  (List.append_nil [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)])))
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (eq_self
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })))))
+theorem R1Z.PV_OWND_InitialDrop.complete : ∀ {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) (w : R1Z.PV_OWN_Operations.State S X),
+  w.memory.slots b.owner = some b.token →
+    b.cell.size ≠ 0 →
+      R1Z.PV_OWN_Operations.dropOwned b.owner (fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell) w =
+        have after :=
+          { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra };
+        have result := dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } after.allocator;
+        { outcome := result.fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell after.memory, allocator := result.snd,
+              extra := after.extra },
+          calls := [(after, R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] } :=
+fun {S X E} dealloc b w owned nonzero =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | none =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.ok (),
+                    world :=
+                      { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator,
+                        extra := w.extra },
+                    calls := [] }
+                | some t =>
+                  (fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell) t
+                    { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator,
+                      extra := w.extra })
+              owned)
+            (congrFun
+              (ite_congr (eq_false nonzero) (fun a => Eq.refl R1Z.PV_OWN_Operations.dropPod) fun a =>
+                Eq.refl
+                  (R1Z.PV_W_Threading.emit
+                    (R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment) fun w =>
+                    ((dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+                      { memory := R1Z.PV_OWN_Operations.retire b.token b.cell w.memory,
+                        allocator :=
+                          (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment }
+                              w.allocator).snd,
+                        extra := w.extra })))
+              { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra })))
+        { outcome := (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell (R1Z.PV_OWN_Operations.take b.owner w.memory),
+              allocator :=
+                (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).snd,
+              extra := w.extra },
+          calls :=
+            [({ memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra },
+                R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] })
+      (eq_self
+        { outcome := (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell (R1Z.PV_OWN_Operations.take b.owner w.memory),
+              allocator :=
+                (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).snd,
+              extra := w.extra },
+          calls :=
+            [({ memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra },
+                R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] }))
+theorem R1Z.PV_OWND_CheckSource.scalar_input : ∀ (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes),
+  R1Z.PV_OWND_InitialCheck.checks (R1Z.PV_OWND_ActualBytes.initialized m t owner payload) =
+    match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+    | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+      Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+    | Except.ok a => Except.ok () :=
+fun m t owner payload =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (ite_congr (R1Z.PV_OWND_CheckSource.scalar_input._simp_2 m t owner payload)
+            (fun a => Eq.refl (Except.error R1Z.PV_OWND_InitialCheck.CheckError.shape)) fun a =>
+            congrArg
+              (fun x =>
+                match x with
+                | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+                  Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+                | Except.ok a => Except.ok ())
+              (congrFun'
+                (congrFun'
+                  (congrArg R1Z.PV_OWND_EndpointCounter.check (R1Z.PV_OWND_ActualItems.source m t owner payload))
+                  fun x => 0)
+                fun x => 0)))
+        (match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+        | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+          Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+        | Except.ok a => Except.ok ())))
+    (Eq.refl
+      (match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+      | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+        Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+      | Except.ok a => Except.ok ()))
+def R1Z.PV_OWND_InitialProgram.program : {S X E : Type} →
+  (R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) →
+    (Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S) →
+      (R1Z.PV_OWND_InitialCheck.CheckError → E) →
+        Nat →
+          R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) →
+            (Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) →
+              R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) :=
+fun {S X E} prim dealloc error owner oom payload =>
+  R1Z.PV_W_Threading.bind (R1Z.PV_OWND_InitialRun.construct prim owner oom payload)
+    (R1Z.PV_OWND_InitialCheck.finish dealloc error)

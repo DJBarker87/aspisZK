@@ -40,8 +40,8 @@ theorem constructed {S X E : Type}
  dsimp only
  rw [PV_OWND_InitialSuccess.complete prim owner p oom payload w s h]
  have hb:=PV_OWND_ActualInitialized.constructed prim w owner p s payload ctx h agrees
- refine ⟨_,rfl,hb.1,hb.2.1,hb.2.2.1,rfl,?_,rfl,rfl⟩
- simp only [allocate,emit,h]
+ refine ⟨_,rfl,hb.1,hb.2.1,hb.2.2.1,rfl,?_,?_,rfl⟩
+ all_goals simp only [allocate,emit,h]
 #print axioms constructed
 end R1Z.PV_OWND_FocusedReplay
 ''')
