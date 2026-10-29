@@ -3,7 +3,7 @@ import R1Z.PV_OWNB_U16Agreement
 set_option autoImplicit false
 namespace R1Z.PV_OWNB_LinkUnique
 open PV_OWN_Link PV_OWN_Bytes PV_OWNB_Padding
- theorem unique (a b : Link) (raw : Bytes)
+theorem unique (a b : Link) (raw : Bytes)
  (ha:Agrees (PV_OWNB_LinkBytes.encode a) raw) (hb:Agrees (PV_OWNB_LinkBytes.encode b) raw) : a=b := by
  have hp:=PV_OWNB_U16Agreement.unique a.producer b.producer raw
   (PV_OWNB_LinkFields.producer a raw ha) (PV_OWNB_LinkFields.producer b raw hb)

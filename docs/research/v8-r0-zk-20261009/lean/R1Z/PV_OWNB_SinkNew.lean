@@ -2,7 +2,7 @@ import R1Z.PV_OWNB_Cursor
 set_option autoImplicit false
 namespace R1Z.PV_OWNB_SinkNew
 open PV_OWNB_Cursor PV_OWNB_LinkCodec PV_OWN_Bytes
- theorem initialized (q : Cursor) (v : PV_OWN_Link.Link) (h:Valid q)
+theorem initialized (q : Cursor) (v : PV_OWN_Link.Link) (h:Valid q)
  (room:q.written<q.read) : NativeView (sink q v).cell (q.written*8) v := by
  unfold Valid at h
  unfold sink NativeView

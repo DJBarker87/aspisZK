@@ -5,7 +5,7 @@ import R1Z.PV_OWNB_SinkPrefix
 set_option autoImplicit false
 namespace R1Z.PV_OWNB_SinkValid
 open PV_OWNB_Cursor PV_OWNB_LinkCodec
- theorem valid (q : Cursor) (v : PV_OWN_Link.Link) (h:Valid q)
+theorem valid (q : Cursor) (v : PV_OWN_Link.Link) (h:Valid q)
  (room:q.written<q.read) : Valid (sink q v) := by
  have own:=PV_OWNB_SinkOwnership.owned q v h
  have new:=PV_OWNB_SinkNew.initialized q v h room

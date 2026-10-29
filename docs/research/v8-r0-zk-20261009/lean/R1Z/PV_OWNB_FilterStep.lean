@@ -8,7 +8,7 @@ def step (keep : Link → Bool) (q : Cursor) : Cursor :=
  let next:=advance q
  if keep (q.source q.read) then sink next (q.source q.read) else next
 
- theorem valid (keep : Link → Bool) (q : Cursor) (h:Valid q) (more:q.read<q.length) :
+theorem valid (keep : Link → Bool) (q : Cursor) (h:Valid q) (more:q.read<q.length) :
  Valid (step keep q) := by
  have ha:=PV_OWNB_CursorRead.advance q h more
  unfold step
@@ -19,11 +19,11 @@ def step (keep : Link → Bool) (q : Cursor) : Cursor :=
    exact Nat.lt_succ_of_le h.2.2.2.1
  · exact ha
 
- theorem advances (keep : Link → Bool) (q : Cursor) : (step keep q).read=q.read+1 := by
+theorem advances (keep : Link → Bool) (q : Cursor) : (step keep q).read=q.read+1 := by
  unfold step
  split <;> rfl
 
- theorem generation (keep : Link → Bool) (q : Cursor) :
+theorem generation (keep : Link → Bool) (q : Cursor) :
  (step keep q).token=q.token ∧ (step keep q).memory.generations=q.memory.generations := by
  unfold step
  split <;> exact ⟨rfl,rfl⟩

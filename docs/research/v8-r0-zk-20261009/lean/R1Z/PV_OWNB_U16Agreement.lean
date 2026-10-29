@@ -3,7 +3,7 @@ import R1Z.PV_OWN_U16
 set_option autoImplicit false
 namespace R1Z.PV_OWNB_U16Agreement
 open PV_OWN_Bytes PV_OWNB_Padding
- theorem unique (a b : UInt16) (raw : Bytes)
+theorem unique (a b : UInt16) (raw : Bytes)
  (ha:Agrees (PV_OWN_U16.encode a) raw) (hb:Agrees (PV_OWN_U16.encode b) raw) : a=b := by
  apply PV_OWN_U16.injective
  intro i hi
