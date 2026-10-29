@@ -1,0 +1,52 @@
+{
+  "before_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RunJoin_PublishSkeleton54.lean",
+  "after_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_RJN_NodeContext.lean",
+  "before": "def PV_RunJoin_Link_NodeAppend{I : Type} (runs : I \u2192 Run) : Prop :=\n  \u2200 i (p : prover.Publication), Fields (runs i) p \u2192\n  (runs i).plan.slots.length=6 \u2227\n  (\u2200 begin1 end1 folded, begin1.val\u2264end1.val \u2192 end1.val\u226422 \u2192\n    \u2203 idx, prover.publication_indices p.queries begin1 end1 folded=ok idx \u2227\n      idx.val.map UScalar.val=indices p.queries begin1.val end1.val folded) \u2227\n  (\u2200 out cc1 cc2, p.backend.c1=some cc1 \u2192 p.backend.c2=some cc2 \u2192\n    out.length=(runs i).plan.offNodes \u2192\n    resultBytes (prover.append_node_slots out cc1 cc2 p.tree p.queries)=\n      exceptBytes (ProverCommitPublish43.slots (runs i).plan.slots (bytes out.val)))",
+  "after": "def PV_RJN_Link_NodeAppend{I : Type} (runs : I \u2192 Run) : Prop :=\n  \u2200 i (p : prover.Publication), Fields (runs i) p \u2192 QueryRange p.queries \u2192 QueryContext (runs i) p \u2192\n  (runs i).plan.slots.length=6 \u2227\n  (\u2200 begin1 end1 folded, begin1.val\u2264end1.val \u2192 end1.val\u226422 \u2192\n    \u2203 idx, prover.publication_indices p.queries begin1 end1 folded=ok idx \u2227\n      idx.val.map UScalar.val=indices p.queries begin1.val end1.val folded) \u2227\n  (\u2200 out cc1 cc2, p.backend.c1=some cc1 \u2192 p.backend.c2=some cc2 \u2192\n    out.length=(runs i).plan.offNodes \u2192\n    resultBytes (prover.append_node_slots out cc1 cc2 p.tree p.queries)=\n      exceptBytes (ProverCommitPublish43.slots (runs i).plan.slots (bytes out.val)))",
+  "only_change": "Insert explicit QueryRange and QueryContext preconditions; rename in private prefix",
+  "all_original_conjuncts_verbatim": true,
+  "existing_definitions_edited": false,
+  "separate_obligations": [
+    "PublishSkeleton57.PV_RunJoin_Link_QueryRange",
+    "PublishContext57.PV_RunJoin_Link_QueryContext"
+  ],
+  "candidate_status": "UNVERIFIED as a decomposition; corrected NodeAppend itself and simultaneous-link witness remain open",
+  "standalone_producer_statements": [
+    {
+      "module": "PV_RJN_NodeReject",
+      "name": "PV_RJN_Producer_NodePrimitives",
+      "sha256": "b29053c1a6538c8934235fad76febf28c7eff28cb81cf5fea2e711d93eb6588b",
+      "statement": "def PV_RJN_Producer_NodePrimitives : Prop :=\n  multiproof.LEAF_BITS=ok 18#u32 \u2227 multiproof.MAX_BATCH=ok 16#usize \u2227\n  (\u2200 T : Type, core.option.Option.Insts.CoreOpsTry_traitTry.branch (none : Option T)=\n    ok (core.ops.control_flow.ControlFlow.Break none)) \u2227\n  (\u2200 T : Type, core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual T none=ok none) \u2227\n  core.option.Option.ok_or (none : Option (alloc.vec.Vec U8)) verifier.Error.Allocation=ok (.Err .Allocation)"
+    },
+    {
+      "module": "PV_RJN_NodeObstruction",
+      "name": "PV_RJN_Producer_Publication",
+      "sha256": "d5b8a4550a61787d5bc3487e9b43125e0e24624880224b33de309761bfe4ba35",
+      "statement": "def PV_RJN_Producer_Publication {I : Type} (runs : I \u2192 Run) : Prop :=\n  \u2203 i (p : prover.Publication) (proof : alloc.vec.Vec U8),\n    Fields (runs i) p \u2227 PV_RunJoin_PublishContext57.QueryContext (runs i) p \u2227\n    prover.publish_compact .S2 p=ok (.Ok proof)"
+    },
+    {
+      "module": "PV_RJN_LayoutInstalled",
+      "name": "PV_RJN_Producer_PlanLayout",
+      "sha256": "888f3ecdfdcdf0b09654aea5f130908865de1dd531c0fde25370a5cadd03dbb6",
+      "statement": "def PV_RJN_Producer_PlanLayout {I : Type} [ExternalTypes] (runs : I \u2192 Run) : Prop :=\n  \u2200 i, (runs i).plan.proofBytes=57607 \u2227 (runs i).plan.offOpenings=10055 \u2227\n    (runs i).plan.offNodes=28359 \u2227 (runs i).plan.header=header"
+    },
+    {
+      "module": "PV_RJN_LayoutInstalled",
+      "name": "PV_RJN_Producer_FrontLengths",
+      "sha256": "ba5a6e463a6ccc417a67b1cf8f8b84db10b0df14e100303c502652c42859e618",
+      "statement": "def PV_RJN_Producer_FrontLengths {I : Type} [ExternalTypes] (runs : I \u2192 Run) : Prop :=\n  \u2200 i, (runs i).plan.header.length=16 \u2227 (runs i).plan.semantic.length=7015 \u2227 (runs i).plan.claim.length=464"
+    },
+    {
+      "module": "PV_RJN_Producers",
+      "name": "PV_RJN_Producer_Layout",
+      "sha256": "3d3ecdde106ba790f4cc6fc4568d4dc4f37ac47baacc51ce4c7924d178b2876b",
+      "statement": "def PV_RJN_Producer_Layout {I : Type} (runs : I \u2192 Run) : Prop :=\n  \u2200 i, \u2203 (size openings nodes : Usize) (magic : Array U8 8#usize) (tag : U8),\n    compact.PROOF_BYTES=ok size \u2227 compact.OFF_OPENINGS=ok openings \u2227 compact.OFF_NODES=ok nodes \u2227\n    compact.MAGIC=ok magic \u2227 transport.Variant.tag .S2=ok tag \u2227\n    (runs i).plan.proofBytes=size.val \u2227 (runs i).plan.offOpenings=openings.val \u2227\n    (runs i).plan.offNodes=nodes.val \u2227\n    (runs i).plan.header=bytes magic.val++bytes [tag,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8,0#u8]\n\n/-- Room for the two compact front encoders. The remaining append bounds are\nrecovered from successful source calls, rather than assumed. -/"
+    },
+    {
+      "module": "PV_RJN_Producers",
+      "name": "PV_RJN_Producer_FrontRoom",
+      "sha256": "221329cff167988bb3d2731809c0c0e6e7956d5e6bd1bfabb65caeaa198c0165",
+      "statement": "def PV_RJN_Producer_FrontRoom {I : Type} (runs : I \u2192 Run) : Prop :=\n  \u2200 i, (runs i).plan.header.length+(runs i).plan.semantic.length+(runs i).plan.claim.length\u2264Usize.max"
+    }
+  ]
+}
