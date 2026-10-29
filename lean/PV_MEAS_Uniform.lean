@@ -40,8 +40,12 @@ theorem integral_uniform_product {C R : Type*} [Fintype C] [Nonempty C]
     (∫ₚ p, f p ∂(uniform (C × R) : Measure (C × R))) =
       ∫ₚ c, (∫ₚ r, f (c,r) ∂(uniform R : Measure R)) ∂(uniform C : Measure C) := by
   rw [integral_uniform (C × R) f nonneg,
-    integral_uniform C _ (fun _ => ENNReal.toReal_nonneg)]
-  simp_rw [integral_uniform R _ (fun r => nonneg (_,r))]
+    integral_uniform C (fun c => ∫ₚ r, f (c,r) ∂(uniform R : Measure R))
+      (fun _ => ENNReal.toReal_nonneg)]
+  have inner (c : C) : (∫ₚ r, f (c,r) ∂(uniform R : Measure R)) =
+      (∑ r : R, f (c,r)) / (Fintype.card R : ℝ) :=
+    integral_uniform R _ (fun r => nonneg (c,r))
+  simp_rw [inner]
   simp only [Fintype.card_prod, Nat.cast_mul, Fintype.sum_prod_type]
   rw [← Finset.sum_div]
   ring
