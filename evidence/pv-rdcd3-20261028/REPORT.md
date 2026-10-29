@@ -140,3 +140,15 @@ forward-loop source/finite law (exit0,wall1.24s,peak2,643,348KiB,swap0;
 standard axioms). Next fresh ID60673;60697–60699 remain audit-only.
 The inherited WIP contains uncompiled owned mask drafts; these have no proof
 or row credit until successful focused receipts and complete source binding.
+
+60673–60683 all pass: exact owned fills, exponent tables, array update totality,
+cell/step equality, finite congruence, concrete source fill bodies and full
+fill loops, plus unchecked predecessor binding.60680 has unused-simp warnings
+only. All axioms remain subsets of the three allowed standard axioms.
+New capped v217-source-check passes (exit0,wall0.12s,peak19,272KiB,swap0):
+six application bodies,26 field bodies with deployed ct-host-prover dispatch,
+six extra reverse library bodies and the original eight range/index patterns.
+The checks bind source patterns to named owned definitions; no original checker
+is claimed recovered. Scalar/memory/codegen primitives and panic diagnostics/
+world/observer scope are explicitly retained. The root/closing proof and final
+coherent DAG remain pending, so V217 is still SUSPENDED.
