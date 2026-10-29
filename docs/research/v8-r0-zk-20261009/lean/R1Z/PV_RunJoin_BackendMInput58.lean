@@ -15,7 +15,9 @@ theorem q_from (x : U32) : ProverRwDictionaryScalar.qFrom x=
     AspisR1ProducerRelease47.field.P,rem_source,bind_tc_ok,
     AspisR1ProducerRelease47.field.CM31.from_m31,
     AspisR1ProducerRelease47.field.QM31.from_cm31]
-  rfl
+  simp only [ProverCommitNativeQ48.source,raw,ProverCommitRelease47.convQ,ProverCommitRelease47.convC,
+    ProverCommitPrimitive47.fromQ,ProverCommitPrimitive47.fromC,
+    AspisR1ProducerRelease47.field.M31.ZERO,AspisR1ProducerRelease47.field.CM31.ZERO]
 
 theorem candidate [ExternalTypes] (ops : ExternalFuns) :
     (ProverRwP6BodyCandidate.selected ops).op110=ProverRwDictionaryEmbedding.embed := rfl
@@ -39,6 +41,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   unfold ProverRwDictionaryEmbedding.embed
   rw [q_from]
   simp only [bind_tc_ok]
+  unfold ProverCommitNativeQ48.source
   rw [(ProverCommitNativeOps47.from_qm31 (raw x)).1]
   rfl
 
