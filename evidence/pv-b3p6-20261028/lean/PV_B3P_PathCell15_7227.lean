@@ -53,7 +53,7 @@ theorem path_fold15_7 (path_selector : aspis_core.field.QM31) (openings : aspis_
         [7#usize] state := by
   rw [path_cell15_7 path_selector openings bit minus right state hsub hmul]
   simp only [PV_B3P_Ordered227.fold,PV_B3P_Ordered227.bind_assoc]
-  rfl
+  all_goals rfl
 #print axioms path_cell15_7
 #print axioms path_fold15_7
 end PV_B3P_Native15227

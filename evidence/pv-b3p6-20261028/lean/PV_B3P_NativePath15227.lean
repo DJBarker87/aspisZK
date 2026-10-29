@@ -29,6 +29,6 @@ theorem native_path_binding15 (path_selector : aspis_core.field.QM31) (openings 
   obtain ⟨minus,hsub⟩ := PV_B3P_Success227.qsub aspis_core.field.QM31.ONE p0
   obtain ⟨right,hmul⟩ := PV_B3P_Success227.qmul path_selector p0
   rw [range_as_fold13 _ 0#usize 8#usize 8 _ (by rfl),leading_indices15]
-  exact (path_fold15_0 path_selector openings p0 minus right p4 hsub hmul).symm
+  simpa only [path_tail15_0] using (path_fold15_0 path_selector openings p0 minus right p4 hsub hmul).symm
 #print axioms native_path_binding15
 end PV_B3P_Native15227

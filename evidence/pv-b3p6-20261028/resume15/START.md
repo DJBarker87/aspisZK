@@ -1,0 +1,1 @@
+D500 resume15. Entry 15819d2768. Same branch/worktree. V244 only. IDs 70100–70199, audits 70197–70199. 100 Lean attempts, 20 native scopes, 0 Kani. Scope: 36 changed functions, fields/Vec and terminal; std/dependency catalogue, D188 and deployed matrix state belong to pv-b3q. V370/D381,D386 retained.

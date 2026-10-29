@@ -1,0 +1,1 @@
+FINAL: 100/100 charged Lean attempts, 92 pass / 8 reject. All audits pass. Native association remains incomplete; see FINAL.md, GROUP-STATUS.md and RESIDUALS.md. No further launches are permitted in this budget.
