@@ -40,7 +40,6 @@ theorem factor (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_QueryEncoded63.encode,PV_RunJoin_QueryWindow63.window,
     aspis_core.r0.domain.FibreIndex.get,PV_RunJoin_QueryHead63.get,
     ProverRwDictionaryDomain.fibreGet,bind_tc_ok,bind_assoc_eq]
-  rfl
 
 theorem length (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (cc1 cc2 : host_commitment.Commitment)
