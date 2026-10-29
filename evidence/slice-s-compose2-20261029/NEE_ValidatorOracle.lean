@@ -1,0 +1,70 @@
+import NED_ValidatorCallDomains
+set_option autoImplicit false
+noncomputable section
+namespace NEE_ValidatorOracle
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+open NED_ValidatorTrace
+attribute [local instance] Classical.propDecidable
+def tail (pay : Statement → Result (core.result.Result (Array U8 216#usize) PaymentError))
+    (lane : Array U32 8#usize → Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1))
+    (late : NBN_LateSummary.Statement → Slice U8 → Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 × Slice U8)) (s : Statement) : R × List Call :=
+  let d := (parts s).2.2.2.2.1
+  match lane d with
+  | .fail e => (.fail e,[.lane d])
+  | .div => (.div,[.lane d])
+  | .ok (.Err e) => (ok (.Err (.Account e)),[.lane d])
+  | .ok (.Ok l) =>
+    if l ≠ (common s).output_lane then (ok (.Err .OutputLaneMismatch),[.lane d])
+    else
+      let arg := (common s).lane_transition
+      let out := NBN_LateResult.zero
+      let r : R := do
+        let (status,_) ← late arg out
+        match status with
+        | .Err e => ok (.Err (.LaneTransition e))
+        | .Ok _ => ok (.Ok ())
+      (r,[.lane d,.late arg out])
+
+def bindings (pay : Statement → Result (core.result.Result (Array U8 216#usize) PaymentError))
+    (lane : Array U32 8#usize → Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1))
+    (late : NBN_LateSummary.Statement → Slice U8 → Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 × Slice U8)) (s : Statement) : R × List Call :=
+  if (parts s).1 ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
+  else if (parts s).2.1 ≠ (common s).lane_transition.live_snapshot.deployment_domain then (ok (.Err .DeploymentBindingMismatch),[])
+  else if (common s).lane_transition.live_snapshot.pool ≠ (common s).master_account then (ok (.Err .MasterBindingMismatch),[])
+  else if (parts s).2.2.1 ≠ (common s).checkpoint_sequence then (ok (.Err .CheckpointBindingMismatch),[])
+  else if (parts s).2.2.2.1 ≠ (common s).historical_global_anchor then (ok (.Err .HistoricalAnchorMismatch),[])
+  else tail pay lane late s
+
+def run (pay : Statement → Result (core.result.Result (Array U8 216#usize) PaymentError))
+    (lane : Array U32 8#usize → Result (core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1))
+    (late : NBN_LateSummary.Statement → Slice U8 → Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 × Slice U8)) (s : Statement) : R × List Call :=
+  if (common s).master_account = zero ∨ (common s).checkpoint_account = zero ∨
+      (common s).selected_lane_account = zero then (ok (.Err .NonZeroBinding),[])
+  else if 8 ≤ (common s).output_lane.val then (ok (.Err .InvalidOutputLane),[])
+  else match pay s with
+    | .fail e => (.fail e,[.payment s])
+    | .div => (.div,[.payment s])
+    | .ok (.Err e) => (ok (.Err (.Payment e)),[.payment s])
+    | .ok (.Ok _) => ((bindings pay lane late s).1,.payment s :: (bindings pay lane late s).2)
+
+
+/-- Full oracle substitution, retaining all failed/diverging child prefixes. -/
+theorem substitution (s : Statement) :
+    run NED_ValidatorTrace.payment (NBN_FirstByteDependency.lane enc) (NBN_LateSummary.run enc) s =
+    NED_ValidatorTrace.run s := by rfl
+
+/-- Result projection of the same oracle execution. -/
+theorem result (s : Statement) :
+    (run NED_ValidatorTrace.payment (NBN_FirstByteDependency.lane enc) (NBN_LateSummary.run enc) s).1 =
+    pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s := by
+  rw [substitution,NED_ValidatorTrace.erases]
+
+/-- Exact ordered argument-bearing call log, not only an acceptance decision. -/
+theorem effects (s : Statement) :
+    (run NED_ValidatorTrace.payment (NBN_FirstByteDependency.lane enc) (NBN_LateSummary.run enc) s).2 =
+    (NED_ValidatorTrace.run s).2 := by rw [substitution]
+
+#print axioms substitution
+#print axioms result
+#print axioms effects
+end NEE_ValidatorOracle

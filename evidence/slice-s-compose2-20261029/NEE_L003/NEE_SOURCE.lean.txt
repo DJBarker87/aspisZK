@@ -1,0 +1,28 @@
+import NED_RawValidatorBindings
+import NED_ValidatorStatus
+set_option autoImplicit false
+noncomputable section
+namespace NEE_ValidatorBindings
+open Aeneas Aeneas.Std Result NBN_StatementResult NED_ErrorCarriers
+attribute [local instance] Classical.propDecidable
+
+theorem chain_transport (s : Statement) (t : core.result.Result Unit NBN_StatementResult.Error) :
+    NED_RawValidatorBindings.chain s
+      (ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1 t)) =
+    ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+      (NBN_BindingChecks.chain (common s) (parts s) t)) := by
+  unfold NED_RawValidatorBindings.chain NBN_BindingChecks.chain
+  dsimp (config := {zeta := true,zetaHave := true}) only
+  repeat' first | split | rfl
+  all_goals simp_all only [if_pos,if_neg]
+
+theorem result (s : Statement) :
+    NED_RawValidatorBindings.run s =
+    ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+      (suffix s)) := by
+  rw [NED_RawValidatorBindings.source_factor,NED_RawValidatorControl.tail_factor,
+    NED_RawValidatorTail.result,chain_transport,← NBN_BindingChecks.factor]
+
+#print axioms chain_transport
+#print axioms result
+end NEE_ValidatorBindings
