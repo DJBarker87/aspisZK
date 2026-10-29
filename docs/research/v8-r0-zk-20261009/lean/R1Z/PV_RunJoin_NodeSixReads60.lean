@@ -59,7 +59,7 @@ theorem read10 (base : ExternalTypes) (heap : Heap) (box : Box)
   have hi : Array.index_usize ProverRwDictionaryLayoutSource.compact.SLOT_NODES 3#usize=ok 172#usize := rfl
   rw [hi]
   simp only [bind_tc_ok]
-  exact congrArg Result.ok (PV_RunJoin_LayoutArithmetic41.mul 32#usize 172#usize 5504#usize rfl)
+  exact congrArg Result.ok (PV_RunJoin_LayoutArithmetic41.mul 32#usize 172#usize 5504#usize (by change 32*172=5504; norm_num))
 #print axioms read10
 
 theorem read11 (base : ExternalTypes) (heap : Heap) (box : Box)
@@ -73,7 +73,7 @@ theorem read11 (base : ExternalTypes) (heap : Heap) (box : Box)
   have hi : Array.index_usize ProverRwDictionaryLayoutSource.compact.SLOT_NODES 4#usize=ok 172#usize := rfl
   rw [hi]
   simp only [bind_tc_ok]
-  exact congrArg Result.ok (PV_RunJoin_LayoutArithmetic41.mul 32#usize 172#usize 5504#usize rfl)
+  exact congrArg Result.ok (PV_RunJoin_LayoutArithmetic41.mul 32#usize 172#usize 5504#usize (by change 32*172=5504; norm_num))
 #print axioms read11
 
 theorem read12 (base : ExternalTypes) (heap : Heap) (box : Box)
