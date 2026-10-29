@@ -12,8 +12,8 @@ elab "l1e_safe_callee" : tactic => do
   let s := name.toString
   unless s.endsWith ".produce" do throwError "not a logged producer"
   let m := s.dropEnd 8 |>.toString
-  let lemma := Name.str (Name.mkSimple "PV_L1E_CallbackSafety") ("safe_" ++ m)
-  evalTactic (← `(tactic| apply $(mkIdent lemma)))
+  let lemmaName := Name.str (Name.mkSimple "PV_L1E_CallbackSafety") ("safe_" ++ m)
+  evalTactic (← `(tactic| apply $(mkIdent lemmaName)))
 
 /-- Only an actual observe node may invoke the phase-entry theorem. -/
 elab "l1e_safe_observe" : tactic => do
