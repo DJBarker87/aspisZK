@@ -16,13 +16,13 @@ Every historical object is excluded from the statically traversed retargeted
 combined closure. This does not claim recovery of historical source pins or
 kernel replay of the predicted 16,061-module graph.
 
-Chunk receipts and attempts are appended as work advances. NDR_B001–NDR_B017 passed all
-2,040 modules; every printed axiom audit line has now been independently
+Chunk receipts and attempts are appended as work advances. NDR_B001–NDR_B018 passed all
+2,160 modules; every printed axiom audit line has now been independently
 checked to contain only propext, Classical.choice, Quot.sound. Every chunk
 reports zero swap. The largest completed-chunk peak is 7,077,788 KiB RSS. One admitted 6G/8G scope,
 swap 0, TasksMax 64 and one Lean -j1 -M7000 process at a time are used. Sources,
 revision, commands and timing artifacts are retained per attempt. The serial
-transport currently runs chunk NDR_B018 (indices 2040–2159) using NDR_build_all.py; failure
+transport currently runs chunk NDR_B019 (indices 2160–2279) using NDR_build_all.py; failure
 stops it. Failed chunks must be split and failed/slow modules inspected before
 any replacement. No unchanged failed chunk or timed-out module is authorized
 for rerun.
