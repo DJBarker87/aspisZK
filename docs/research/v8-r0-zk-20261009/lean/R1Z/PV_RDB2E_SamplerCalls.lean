@@ -10,14 +10,16 @@ Rust iterator/reference and deployed-caller associations are separate obligation
 theorem gamma_callback [ExternalTypes] (ops : ExternalFuns) (b : Bytes) :
     mapResult toNative (gamma b)=(PV_B2_E_GammaOriginal.selected ops).op249 b := by
   rw [gamma_complete]
-  exact (PV_RDB2D_SamplerNative.gamma_callback ops b).trans' (by
-    rw [PV_RDB2D_SamplerRestoration.gamma_complete])
+  have h := PV_RDB2D_SamplerNative.gamma_callback ops b
+  rw [PV_RDB2D_SamplerRestoration.gamma_complete] at h
+  exact h
 
 theorem ordinary_callback [ExternalTypes] (ops : ExternalFuns) (b : Bytes) :
     mapResult toNative (ordinary b)=(PV_B2_E_Install250.selected ops).op250 b := by
   rw [ordinary_complete]
-  exact (PV_RDB2D_SamplerNative.ordinary_callback ops b).trans' (by
-    rw [PV_RDB2D_SamplerRestoration.ordinary_complete])
+  have h := PV_RDB2D_SamplerNative.ordinary_callback ops b
+  rw [PV_RDB2D_SamplerRestoration.ordinary_complete] at h
+  exact h
 
 theorem gamma_caller [ExternalTypes] {A : Type} (ops : ExternalFuns)
     (b : Bytes) (caller : Native → Result A) :
