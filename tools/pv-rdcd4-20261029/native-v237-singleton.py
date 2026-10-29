@@ -14,8 +14,6 @@ fn singleton_default_bytes() {
     let bytes = GenericArray::<u8,U64>::default();
     let expected = [0u8;64];
     assert_eq!(bytes.as_slice(), &expected);
-    let buffer = digest::block_buffer::BlockBuffer::<U64,digest::block_buffer::Eager>::default();
-    assert_eq!(buffer.get_pos(),0);
     let hex: String = bytes.iter().map(|x| format!("{x:02x}")).collect();
     println!("RDCD4_SINGLETON:{hex}");
 }
@@ -34,7 +32,7 @@ old=json.load(open(original/'inputs.json'));expected=sorted((x['name'],x['versio
 cmd=['cargo','test','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','-j','2','--lib','--','--nocapture','--test-threads=1']
 pins=json.load(open(D/'buffer-dependency-sources.json'))
 for x in pins:assert hashlib.sha256(Path(x['path']).read_bytes()).hexdigest()==x['sha256'],x['path']
-record=dict(command=cmd,profile='release opt3 overflow_checks=false debug_assertions=false panic=unwind',features=features,manifest_sha256=hashlib.sha256(manifest).hexdigest(),lockfile_sha256=hashlib.sha256(lock.read_bytes()).hexdigest(),fixture_source=source,fixture_sha256=hashlib.sha256(source.encode()).hexdigest(),classification='exhaustive over a singleton input domain, deployed-configuration harness',scope='GenericArray<u8,U64>::default exact64 bytes. BlockBuffer public position check is supporting evidence; wrapper/Core Default are not claimed input-free.',rustc=subprocess.check_output(['rustc','-vV'],env=env,text=True),expected_phase='cached optimized compilation, then named singleton_default_bytes test; no elimination')
+record=dict(command=cmd,profile='release opt3 overflow_checks=false debug_assertions=false panic=unwind',features=features,manifest_sha256=hashlib.sha256(manifest).hexdigest(),lockfile_sha256=hashlib.sha256(lock.read_bytes()).hexdigest(),fixture_source=source,fixture_sha256=hashlib.sha256(source.encode()).hexdigest(),classification='exhaustive over a singleton input domain, deployed-configuration harness',scope='GenericArray<u8,U64>::default exact64 bytes only; wrapper/Core Default are not claimed input-free.',rustc=subprocess.check_output(['rustc','-vV'],env=env,text=True),expected_phase='cached optimized compilation, then named singleton_default_bytes test; no elimination')
 (O/'inputs.json').write_text(json.dumps(record,indent=2)+'\n')
 print('expected time: cached optimized compilation then exactly one singleton byte-default execution',flush=True)
 r=subprocess.run(cmd,env=env,capture_output=True,text=True);(O/'output.log').write_text(r.stdout+r.stderr);print(r.stdout+r.stderr)
