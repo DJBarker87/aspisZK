@@ -45,7 +45,7 @@ theorem leading_fold12_5 (openings : aspis_statement.state_only_poseidon.StateOn
   simp only [PV_B3P_Ordered227.fold,PV_B3P_Ordered227.bind_assoc]
   apply congrArg (fun f => leading_step12 openings.xor12_z state 5#usize >>= f)
   funext next
-  exact leading_fold12_6 openings next
+  simpa only [PV_B3P_Ordered227.fold,PV_B3P_Ordered227.bind_assoc,bind_tc_ok] using leading_fold12_6 openings next
 #print axioms leading_cell12_5
 #print axioms leading_fold12_5
 end PV_B3P_Binding12227
