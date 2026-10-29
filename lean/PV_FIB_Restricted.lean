@@ -36,7 +36,7 @@ theorem offCharged_exact {M : Type} (old : Fin 8 → M → Prop)
 /-- I ranges over COMMON samples of every actual invocation (including
 witness and adversary). good i is OffCharged old queries (cp.toM s).
 No acceptance, success, fixed witness, or fixed native prefix restriction.
-Public equality includes the statement and ALL pubData invocation data.
+Public equality includes the statement and ALL public invocation data.
 Signal is only the owner-option-B failure signal, never elapsed time or a
 secret-dependent prefix. Its native witness independence is a separate link. -/
 def Fibres {I P S R V : Type} (good : I → Prop)
@@ -55,6 +55,19 @@ def SourceFibres {I P S W A : Type} (good : I → Prop)
     (fun i => R1Z.PV_RunJoin_WorldDecode33.returned (run i))
     (fun i => PV_RJ4IDB.actualObservation render (run i))
 
+/-- The precise common-sample requirement. `modelCoins` MUST be cp.toM,
+`run` the actual run at cp.toR; I includes all public-equal invocations and
+witnesses. This excludes exactly the event consumed by RunJoin.agreement. -/
+def Required {I M P S W A : Type}
+    (old : Fin 8 → M → Prop)
+    (queries : M → List ProverCommitSeedEvent19.Entry)
+    (modelCoins : I → (M × OracleAnswer) × ProverCommitFuelJoin22.Tape)
+    (pubData : I → P) (signal : I → S)
+    (run : I → R1Z.PV_W_Threading.Run W PV_RJ4IDB.Event Aeneas.Std.Error A)
+    (render : Aeneas.Std.Error → PV_RJ4IDB.Bytes) : Prop :=
+  SourceFibres (fun i => OffCharged old queries (modelCoins i))
+    pubData signal run render
+
 theorem decoder_implies_fibres {I P S R V : Type} (good : I → Prop)
     (pubData : I → P) (signal : I → S) (returned : I → R) (observe : I → V)
     (decode : P → S → R → V)
@@ -62,6 +75,28 @@ theorem decoder_implies_fibres {I P S R V : Type} (good : I → Prop)
     Fibres good pubData signal returned observe := by
   intro l r hl hr hp hs hout
   rw [← link l hl, ← link r hr, hp, hs, hout]
+
+/-- A fibre law really yields a decoder on EVERY good common sample.
+Bad samples and uninhabited fibres can use a default without changing a
+single good observation. Native association is not supplied by this lemma. -/
+theorem fibres_imply_decoder {I P S R V : Type} [Nonempty V]
+    (good : I → Prop) (pubData : I → P) (signal : I → S)
+    (returned : I → R) (observe : I → V)
+    (hf : Fibres good pubData signal returned observe) :
+    ∃ decode : P → S → R → V,
+      ∀ i, good i → decode (pubData i) (signal i) (returned i) = observe i := by
+  classical
+  let decode := fun p s r =>
+    if h : ∃ i, good i ∧ pubData i = p ∧ signal i = s ∧ returned i = r
+    then observe (Classical.choose h) else Classical.choice (inferInstance : Nonempty V)
+  refine ⟨decode, ?_⟩
+  intro i hi
+  have exists_i : ∃ j, good j ∧ pubData j = pubData i ∧
+      signal j = signal i ∧ returned j = returned i := ⟨i, hi, rfl, rfl, rfl⟩
+  dsimp only [decode]
+  rw [dif_pos exists_i]
+  obtain ⟨hg, hp, hs, hr⟩ := Classical.choose_spec exists_i
+  exact hf _ i hg hi hp hs hr
 
 /-- A single unequal retained component refutes the COMPLETE fibre. -/
 theorem component_obstruction {I P S R V C : Type} (good : I → Prop)
@@ -87,6 +122,7 @@ theorem post_clock_obstruction {I P S R T : Type} (good : I → Prop)
 
 #print axioms offCharged_exact
 #print axioms decoder_implies_fibres
+#print axioms fibres_imply_decoder
 #print axioms component_obstruction
 #print axioms post_clock_obstruction
 end PV_FIB_Restricted
