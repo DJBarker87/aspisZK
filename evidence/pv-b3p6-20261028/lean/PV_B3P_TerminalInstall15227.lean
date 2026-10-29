@@ -10,9 +10,10 @@ def terminal_native15 (base : ExternalTypes) (native : SourcePorts base)
     (point : Array aspis_core.field.QM31 10#usize) (c : aspis_core.state_only_prefix.r0.Challenges) :=
   PV_B3P_Install227.transport (terminal_source15 base native p claims point c)
 
-def source_install15 (base : ExternalTypes)
+@[reducible] def source_install15 (base : ExternalTypes)
     (original : @ExternalFuns (PV_B3P_Install227.Types base)) (native : SourcePorts base) :
     @ExternalFuns (PV_B3P_Install227.Types base) :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   { original with op227 := terminal_native15 base native }
 
 theorem source_install_wrapper15 (base : ExternalTypes)
