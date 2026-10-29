@@ -26,6 +26,7 @@ theorem u16_bound (v : UInt16) (i : Nat) (z : UInt8)
  · by_cases second:i=1
    · subst i;decide
    · simp only [PV_OWN_U16.codec,PV_OWN_U16.encode,first,second,ite_false] at h
+     cases h
 
 /-- Initialized destination transport for the separate TrustedLen allocation.
 Allocation, its ownership token and source destruction remain external stages. -/
