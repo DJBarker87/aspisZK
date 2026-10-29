@@ -62,7 +62,7 @@ theorem complete (s : State) (words : List Nat) (hd : s.draws≠64)
 
 theorem read_safe (s : State) (admitted : Admitted s) (live : stopped s=false) :
     s.draws/8<8 ∧ ∀ i : Nat, i<4 → 4*(s.draws%8)+i<32 := by
-  have hdraw := admitted.2.2
+  have hdraw := admitted.2.2.2.1
   have hn : s.draws≠64 := by
     intro he
     simp [stopped,he] at live
