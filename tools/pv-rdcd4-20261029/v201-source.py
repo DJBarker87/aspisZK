@@ -84,6 +84,9 @@ checks += [
 ('slice/index.rs','const ops::IndexMut<I> for [T]','fn index_mut(&mut self, index: I)',"""fn index_mut(&mut self,index:I)->&mut I::Output{index.index_mut(self)}""",'slice.IndexMut.usize',['dispatch concrete usize at identical storage','retain mutable continuation'], 'PV_RDCD3_ArrayWrite194.complete/read_back/frame'),
 ('slice/index.rs','const SliceIndex<[T]> for usize','fn index_mut(self, slice: &mut [T])',"""fn index_mut(self,slice:&mut[T])->&mut T{&mut(*slice)[self]}""",'usize.SliceIndex.index_mut',['return exactly the selected mutable slot','checked failure branch retained; consumed basis indices are bounded'], 'PV_RDCD3_ArrayWrite194.complete/read_back/frame; compiler checked-memory primitive V370'),
 ]
+checks += [
+('ops/index_range.rs','pub(crate) const fn len(&self)','pub(crate) const fn len(&self)',"""pub(crate) const fn len(&self)->usize{unsafe{crate::intrinsics::unchecked_sub(self.end,self.start)}}""",'IndexRange.len',['source type invariant start<=end discharges unchecked subtraction','return remaining alive count end-start'], 'ArrayIter194.valid/next_active/next_done; ArrayMemory194.binding'),
+]
 records=[]
 for path,context,marker,expected,name,steps,law in checks:
  actual=body(path,context,marker)
