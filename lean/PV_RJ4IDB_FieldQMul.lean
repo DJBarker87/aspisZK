@@ -10,6 +10,6 @@ theorem complete (a b : Q) : source a b = qMul a b := by
  PV_ProverRwP7CurrentComplexBridge.mul,PV_ProverRwP7CurrentComplexBridge.add,
  PV_ProverRwP7CurrentComplexBridge.sub,PV_RJ4IDB_FieldR.complete,
  AspisR1ProducerRelease47.field.QM31.mul,qMul,mapResult_bind,
- bind_assoc_eq,bind_tc_ok,toQ,fromQ]
+ bind_assoc_eq,bind_tc_ok,toQ,fromQ,native_c_roundtrip]
 #print axioms complete
 end R1Z.PV_RJ4IDB_FieldQMul

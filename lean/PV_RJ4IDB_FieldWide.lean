@@ -33,7 +33,7 @@ theorem complete (a b : W) : mul a b = wMul a b := by
  PV_RJ4IDB_FieldQ.sub,mulU_complete,wMul,qMul,qAdd,qSub,
  AspisR1ProducerRelease47.field.wide_exact.WideExact.mul,
  mapResult_bind,bind_assoc_eq,bind_tc_ok,toW,fromW,toQ,fromQ,
- native_q_roundtrip]
+ native_q_roundtrip,native_c_roundtrip]
 #print axioms mulU_complete
 #print axioms complete
 end R1Z.PV_RJ4IDB_FieldWide
