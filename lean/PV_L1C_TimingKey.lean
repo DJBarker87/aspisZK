@@ -11,7 +11,7 @@ def timingSlot : NativeEvent → NativeEvent
 
 def restoreTimes : List NativeEvent → List Bytes → Option (List NativeEvent × List Bytes)
  | [],ts => some ([],ts)
- | .wall _ :: es,[] => none
+ | .wall _ :: _,[] => none
  | .wall _ :: es,t::ts => (restoreTimes es ts).map (fun p => (.wall t::p.1,p.2))
  | e::es,ts => (restoreTimes es ts).map (fun p => (e::p.1,p.2))
 
@@ -20,6 +20,7 @@ theorem restore_times (es : List NativeEvent) (tail : List Bytes) :
  induction es with
  | nil => rfl
  | cons e es ih =>
+   simp only [nativeTimes] at ih
    cases e <;> simp only [List.map_cons,timingSlot,nativeTimes,List.filterMap_cons,
      List.cons_append,List.nil_append,restoreTimes,ih,Option.map_some]
 
