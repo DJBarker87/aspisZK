@@ -28,9 +28,9 @@ theorem current_array_store (mem : Memory) (base : Nat) (current : Words)
     Represents (store mem (address base i.val) value) base (current.set i value) := by
   intro j hj
   by_cases e : j.val=i.val
-  · have ja : j=i := by exact Subtype.ext e
-    subst j
-    rw [store_read,PV_RDB2F_ArrayHandles.readback current i value bound]
+  · have ptr : address base j.val=address base i.val := congrArg (address base) e
+    rw [ptr,store_read]
+    simpa only [e] using (PV_RDB2F_ArrayHandles.readback current i value bound).symm
   · rw [store_frame mem _ _ value ((PV_RDB2E_PointerOffsets.injective base _ _).not.mpr e),
         PV_RDB2F_ArrayHandles.frame current i j value e]
     exact rep j hj
