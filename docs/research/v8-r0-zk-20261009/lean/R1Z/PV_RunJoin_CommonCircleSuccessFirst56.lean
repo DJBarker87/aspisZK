@@ -48,15 +48,16 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     next.hash=hash W (toRP W Pr R h B outputs x w hN s).1 ∧ next.next_row=26#u8 := by
   obtain ⟨q,hx,hy,hm,heq⟩ := PV_RunJoin_CommonCircleFirst55.complete W Pr R N hN h B outputs x w hin hc s hcoll hpub base heap box ops k framed hp
   rw [heq] at success
-  have same := PV_RunJoin_CircleResultSuccess55.complete
-    (@host_wire.parse_record (types base)
-      (selected base heap box (@PV_RunJoin_CircleNeutralSelected52.selected (types base) ops)) 25#u8 framed)
-    q point
-    (⟨block (fieldVal (fc (.absS ⟨25,by decide⟩)) (record W Pr h B outputs x w (s k).2.1)),hash W (toRP W Pr R h B outputs x w hN s).1,25#u8⟩ : host_wire.SemanticTranscript _)
-    (⟨block ((s k).2.1 (.inl (.advS ⟨25,by decide⟩))),hash W (toRP W Pr R h B outputs x w hN s).1,26#u8⟩ : host_wire.SemanticTranscript _)
-    next success
-  rcases same with ⟨hpoint,hnext⟩
-  rw [hpoint,hnext]
-  exact ⟨hx,hy,hm,rfl,rfl,rfl⟩
+  generalize hparsed : @host_wire.parse_record (types base)
+    (selected base heap box (@PV_RunJoin_CircleNeutralSelected52.selected (types base) ops)) 25#u8 framed = parsed at success
+  cases parsed with
+  | fail e => cases success
+  | div => cases success
+  | ok status =>
+    cases status with
+    | Err e => cases success
+    | Ok payload =>
+      cases success
+      exact ⟨hx,hy,hm,rfl,rfl,rfl⟩
 #print axioms complete
 end R1Z.PV_RunJoin_CommonCircleSuccessFirst56
