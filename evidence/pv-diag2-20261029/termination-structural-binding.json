@@ -1,0 +1,69 @@
+{
+  "classification": "structural class-B outer control binding under own-1; open native leaf executions remain P",
+  "toolchain": "rustc 1.94.1",
+  "profile": "release; overflow/debug assertions off; panic unwind",
+  "features": "std; caller devnet_spend r1p-check,aspis-r1-cost-probe/ct-host-prover; dependency features in inherited resolved-build-units.json",
+  "source_files": {
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/process.rs": "6384b820420b1488380a289554f230640acc44e8db81d356db50ee7bd6c8a1fa",
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040"
+  },
+  "complete_bodies": {
+    "result_termination": "impl<T: Termination, E: fmt::Debug> Termination for Result<T, E> {\n    fn report(self) -> ExitCode {\n        match self {\n            Ok(val) => val.report(),\n            Err(err) => {\n                io::attempt_print_to_stderr(format_args_nl!(\"Error: {err:?}\"));\n                ExitCode::FAILURE\n            }\n        }\n    }\n}",
+    "unit_termination": "impl Termination for () {\n    #[inline]\n    fn report(self) -> ExitCode {\n        ExitCode::SUCCESS\n    }\n}",
+    "attempt_print_to_stderr": "pub(crate) fn attempt_print_to_stderr(args: fmt::Arguments<'_>) {\n    if print_to_buffer_if_capture_used(args) {\n        return;\n    }\n\n    // Ignore error if the write fails, for example because stderr is already\n    // closed. There is not much point panicking at this point.\n    let _ = stderr().write_fmt(args);\n}"
+  },
+  "steps": [
+    {
+      "source": "match self, Ok(val)",
+      "model": "terminateOwned .ok ()",
+      "law": "termination_success",
+      "leaf": "Unit::report = ExitCode::SUCCESS; Unit drop has no glue"
+    },
+    {
+      "source": "Err(err), format_args_nl!(\"Error: {err:?}\")",
+      "model": "report e",
+      "leaf": "Borrowed arguments/normal anyhow Debug formatting are supplied by report; no formatting is performed eagerly by format_args_nl"
+    },
+    {
+      "source": "print_to_buffer_if_capture_used(args)",
+      "model": "attemptPrint capture globalWrite",
+      "law": "captured_no_global / uncaptured_global / capture_panic / capture_oom",
+      "leaf": "Whole atomic/thread-local/capture/lock/poison/write/restoration/drop/unwind execution remains capture"
+    },
+    {
+      "source": "true => return",
+      "model": "pureExecution () after retained capture effects",
+      "law": "captured_no_global"
+    },
+    {
+      "source": "false => stderr().write_fmt(args)",
+      "model": "globalWrite",
+      "leaf": "stderr getter, Write::write_fmt, formatting, partial delivery and temporary handle cleanup are supplied, not empty"
+    },
+    {
+      "source": "let _ = <write Result>",
+      "model": "ignoreWriteResult write dropResult inside globalWrite",
+      "law": "ignored_io_error",
+      "leaf": "Result/io::Error drop, handle drop and all abnormal cleanup retained"
+    },
+    {
+      "source": "ExitCode::FAILURE; end Err arm scope",
+      "model": "dropError then pureExecution 1",
+      "law": "report_then_drop / normal_error_exit",
+      "leaf": "Anyhow err object Drop (vtable object_drop, owned message/backtrace frees) remains dropError"
+    },
+    {
+      "source": "reporter unwinds/panics/OOM/diverges",
+      "model": "prepend body.effects (unwindError e abnormal)",
+      "law": "report_panics_unwind",
+      "leaf": "Complete cleanup/hook/abort reporting supplied by unwindError; no ordinary success inferred"
+    }
+  ],
+  "model_sha256": "fdd4e2b5d071ae297514557861a699e075fc3eff38942ac05f86a8e9dd49bff4",
+  "retained_boundaries": [
+    "V370 compiler preservation at owner pending D381/D386 compiler-cohort boundary",
+    "native executions of all listed leaf/drop/unwind interfaces",
+    "raw-byte/abort/crash-memory coverage not established by the original string carrier"
+  ],
+  "new_trust_fields": 0
+}

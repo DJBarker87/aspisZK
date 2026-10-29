@@ -1,0 +1,52 @@
+{
+  "classification": "finite validation of byte-identical frozen retry controller with explicit fixture leaf bodies; not a native proof or an honest proving run",
+  "source_controller": {
+    "path": "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/prover.rs",
+    "sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+    "line": 635,
+    "body": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> {\n    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }\n    let attempt=next_attempt(k)?;\n    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),\n        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),\n        Err(e)=>Err(e),\n    }\n}"
+  },
+  "template_sha256": "02ca2126e6c9a88012d2884df5f7bd11592f49b929c6347cd85b12f44187a35e",
+  "generated_source_sha256": "2223c0044c8f6663518206729f1331ed1403869cc0634f5981ec6f6ef7bdbf5e",
+  "command": [
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+    "--edition=2021",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "debug-assertions=no",
+    "-C",
+    "overflow-checks=no",
+    "-C",
+    "panic=unwind",
+    "--extern",
+    "aspis_r1_cost_probe=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps/libaspis_r1_cost_probe-710e73f0b1aae129.rlib",
+    "-L",
+    "dependency=/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/deps",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/PV_DIAG2_RetryControlGenerated.rs",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag2-20261029/retry-control"
+  ],
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "rlib_sha256": "ba99d3f07282349544a7999f713699f726162de1a270da3e93d02e67c6e5a76e",
+  "features": "exact deployed rlib reused; caller release profile opt3 overflow/debug assertions off panic unwind",
+  "results": {
+    "cases": 87381,
+    "success": 29124,
+    "semantic": 29124,
+    "entropy": 29124,
+    "exhaustion": 9
+  },
+  "exit": 0,
+  "stderr": "",
+  "scope": [
+    "full Result including successful attempts count, error variant and state",
+    "callback invocation history and body history",
+    "closure destructor once on all normal exit routes",
+    "no final Rejected despite arbitrary body rejection sequences"
+  ],
+  "limitations": [
+    "generate/prove leaves are explicit fixture operations, not replacements credited as production callees",
+    "does not establish honest per-attempt diagnostic silence, native unwind/oom effects or joint retry probabilities"
+  ]
+}
