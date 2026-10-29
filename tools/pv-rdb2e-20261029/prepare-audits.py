@@ -11,7 +11,7 @@ def visit(m):
  deps=re.findall(r'^import (\S+)',raw.decode(),re.M)
  modules[m]=dict(source_path=rel,source_sha256=hashlib.sha256(raw).hexdigest(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+rel],text=True).strip(),imports=deps)
  for d in deps:visit(d)
-roots=['R1Z.PV_RDB2E_IndependentRoot']
+roots=['R1Z.'+p.stem for p in sorted(P.glob('PV_RDB2E_*.lean')) if not any(x in p.stem for x in ['Audit','Replay'])]
 for root in roots:visit(root)
 # Collect full declaration names printed by admitted independent focused compiles.
 printed=set()
@@ -45,8 +45,8 @@ assert all(x['name']in printed for x in declared),[x for x in declared if x['nam
 plan=dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),roots=roots,modules=modules,excluded='sampler-cohort-stop.json',named_declarations=sorted(printed),theorems=declared,scope='independent SHA/pointer/from_fn models; no original sampler or native row restoration')
 (E/'frozen-proof-manifest.json').write_text(json.dumps(plan,indent=2))
 (E/'audit-declarations.json').write_text(json.dumps(dict(theorems=declared,printed=sorted(printed)),indent=2))
-base='import R1Z.PV_RDB2E_IndependentRoot\n'
-statements=['R1Z.PV_RDB2E_ShaHandles.complete_typed','R1Z.PV_RDB2E_ShaHandles.callback_run','R1Z.PV_RDB2E_Dispatch.full_dispatch','R1Z.PV_RDB2E_ConcreteSoft.all_fields','R1Z.PV_RDB2E_ConcreteSoft.both_backends','R1Z.PV_RDB2E_IndependentRoot.mutable_projection_with_caller','R1Z.PV_CBL_FallbackBlockTotal.total','R1Z.PV_RDB2E_PointerOffsets.nonempty','R1Z.PV_RDB2E_FromFn.length']
+base=''.join('import '+m+'\n'for m in roots)
+statements=['R1Z.PV_RDB2E_ShaHandles.complete_typed','R1Z.PV_RDB2E_ShaHandles.callback_run','R1Z.PV_RDB2E_Dispatch.full_dispatch','R1Z.PV_RDB2E_ConcreteSoft.all_fields','R1Z.PV_RDB2E_ConcreteSoft.both_backends','R1Z.PV_CBL_FallbackBlockTotal.total','R1Z.PV_RDB2E_PointerOffsets.nonempty','R1Z.PV_RDB2E_FromFn.length']
 (P/'PV_RDB2E_StatementAudit.lean').write_text(base+'\n'.join('#print '+n+'\n#print axioms '+n for n in statements)+'\n')
 (P/'PV_RDB2E_AxiomsAudit.lean').write_text(base+'\n'.join('#print axioms '+n for n in sorted(printed))+'\n')
 (P/'PV_RDB2E_FocusedReplay.lean').write_text(base+'\n'.join('#check '+n+'\n#print axioms '+n for n in statements)+'\n')

@@ -7,8 +7,8 @@ set_option autoImplicit false
 /-- Concrete owned software word-block projection. Invalid list lengths have
 an explicit failure branch; native padding always supplies full64-byte blocks.
 Outer soft::compress iterator/copy/refinement is still a separate obligation. -/
-def software (state : State) (block : List U8) : Result State := do
-  if h : block.length=64 then
+def software (state : State) (block : List U8) : Result State :=
+  if h : block.length=64 then do
     let words ← PV_CBL_ShaBytes.sha_load64 ⟨block,h⟩
     PV_CBL_FallbackBlock.sha_fallback_reference.extracted_block state words
   else fail .panic
