@@ -83,7 +83,6 @@ theorem continuation_composes (base : ExternalTypes) (native : SourcePorts base)
 
 section
 variable (base : ExternalTypes)
-local instance : ExternalTypes := PV_B3P_Install227.Types base
 local notation "terminal" => transported_reference base
 /-- Exact bridge conclusion, specialized to the explicit transported reference.
 This is conditional composition only: no source binding credit is asserted. -/
@@ -95,6 +94,7 @@ theorem selected_callback (ops : @ExternalFuns (PV_B3P_Install227.Types base))
     (parts : PV_B3P_Link_terminal_parts base native)
     (self : @host_semantic.SemanticOracle (PV_B3P_Install227.Types base))
     (point : Array aspis_core.field.QM31 10#usize) :
+    letI : ExternalTypes := PV_B3P_Install227.Types base
     ∀ claims,
       ops.op227 self.«public» claims point self.challenges =
         terminal self.«public» claims point self.challenges := by
