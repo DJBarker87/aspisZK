@@ -47,7 +47,7 @@ theorem integral_uniform_product {C R : Type*} [Fintype C] [Nonempty C]
     integral_uniform R _ (fun r => nonneg (c,r))
   simp_rw [inner]
   simp only [Fintype.card_prod, Nat.cast_mul, Fintype.sum_prod_type]
-  rw [← Finset.sum_div]
+  simp only [div_eq_mul_inv, mul_inv_rev, ← Finset.sum_mul]
   ring
 
 /-- Projection of the finite uniform joint law has the finite uniform marginal. -/
