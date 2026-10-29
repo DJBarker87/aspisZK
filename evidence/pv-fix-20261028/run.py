@@ -11,8 +11,7 @@ rs=[O]+list(map(Path,env['LEAN_PATH'].split(':')));records={r['module'].replace(
 def visit(n):
  if n in deps:return
  q=next((r/(n+'.olean') for r in rs if (r/(n+'.olean')).is_file()),None);
- if q is None:
-  deps[n]=dict(missing=True);return
+ if q is None:raise RuntimeError('missing pinned prerequisite '+n)
  if n in ext:assert sha(q)==ext[n]['object_sha256'];return
  r=records[n];s=Path(r['source']);assert sha(s)==r['source_sha256'],n
  fresh=list(D.glob('receipt-*.json'));fr=[json.loads(f.read_text()) for f in fresh];fr=[f for f in fr if f['module']==n and f.get('exit')==0]
