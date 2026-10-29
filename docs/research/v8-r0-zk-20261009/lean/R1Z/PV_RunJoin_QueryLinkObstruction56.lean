@@ -8,8 +8,7 @@ variable [ExternalTypes] [ExternalFuns]
 
 /-- The fixed Fields predicate does not constrain the backend or queries. -/
 def poison (p : prover.Publication) (cc1 cc2 : host_commitment.Commitment) : prover.Publication :=
-  { p with backend := { p.backend with c1 := some cc1, c2 := some cc2 },
-    queries := PV_RunJoin_QueryInvalidIndex56.badQueries }
+  { p with backend := { p.backend with c1 := some cc1, c2 := some cc2 }, queries := PV_RunJoin_QueryInvalidIndex56.badQueries }
 
 theorem fields (r : Run) (p : prover.Publication) (cc1 cc2 : host_commitment.Commitment)
     (hf : Fields r p) : Fields r (poison p cc1 cc2) := hf
