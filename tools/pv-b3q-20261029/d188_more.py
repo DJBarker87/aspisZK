@@ -69,3 +69,5 @@ p=T/'main.rs';text=p.read_text();text=text.replace('reference_copy_terminal::obs
  for length in 0..=4 {let h=host_terminal_field::qm31_pack_base4(&values[..length]);let r=reference_field::qm31_pack_base4(&values[..length]);assert_eq!(h,r);if length>0 {assert_ne!(r,QM31::ZERO);}
  emit(&format!("host_terminal_field_pack{length}"),seed,&[h]);emit(&format!("reference_field_pack{length}"),seed,&[r]);}
 ''');p.write_text(text)
+
+p=T/'main.rs';text=p.read_text();text=text.replace('fn emit_words(name:&str,seed:u32,values:&[u64]) {println!("{{\\"function\\":\\"{name}\\",\\"seed\\":{seed},\\"limbs\\":{values:?}}}");}','fn emit_words(name:&str,seed:u32,values:&[u64]) {let mut values=values.to_vec();if std::env::args().any(|s|s=="--negative")&&name=="absorption_lanes_literal"&&seed==0 {values[0]^=1;} println!("{{\\"function\\":\\"{name}\\",\\"seed\\":{seed},\\"limbs\\":{values:?}}}");}');p.write_text(text)
