@@ -6,7 +6,6 @@ set_option autoImplicit false
 namespace PV_DIAG6
 open PV_DIAG3
 variable {S A B E : Type}
--- STAGE
 theorem unwind_joint (rel : S → S → Prop) (p : Panic)
  (d e : Op S Unit) (f g : Panic → Panic → Op S A) (s t : S)
  (hd : Coupled rel (d s) (e t))
@@ -26,7 +25,6 @@ theorem unwind_joint (rel : S → S → Prop) (p : Panic)
  | abort c => exact ⟨rfl,hu,rfl⟩
  | diverge => exact ⟨rfl,hu,rfl⟩
 #print axioms unwind_joint
--- STAGE
 theorem scope_joint (rel : S → S → Prop)
  (a b : Op S A) (d e : Op S Unit) (f g : Panic → Panic → Op S A)
  (s t : S) (ha : Coupled rel (a s) (b t))
@@ -49,7 +47,6 @@ theorem scope_joint (rel : S → S → Prop)
  | abort c => exact ⟨rfl,hu,rfl⟩
  | diverge => exact ⟨rfl,hu,rfl⟩
 #print axioms scope_joint
--- STAGE
 theorem write_step_joint (rel : S → S → Prop) (a b : WriteOps S E)
  (ka kb : Bytes → Op S (Except E Unit)) (buf : Bytes) (s t : S) (h : rel s t)
  (hz : a.zeroError = b.zeroError)
@@ -80,7 +77,6 @@ theorem write_step_joint (rel : S → S → Prop) (a b : WriteOps S E)
      | false => exact coupled_pure rel (Except.error e : Except E Unit) x y hxy
      | true => exact coupled_bind rel _ _ _ _ (hd e x y hxy) (fun _ z z' hzz => hk buf z z' hzz)
 #print axioms write_step_joint
--- STAGE
 theorem write_prefix_joint (rel : S → S → Prop) (a b : WriteOps S E)
  (ka kb : Bytes → Op S (Except E Unit)) (n : Nat) (buf : Bytes)
  (s t : S) (h : rel s t) (hz : a.zeroError = b.zeroError)
@@ -94,7 +90,6 @@ theorem write_prefix_joint (rel : S → S → Prop) (a b : WriteOps S E)
  | zero => exact hk buf s t h
  | succ n ih => exact write_step_joint rel a b _ _ buf s t h hz hw hg hd hp (fun bs u v huv => ih bs u v huv)
 #print axioms write_prefix_joint
--- STAGE
 theorem formatter_joint (rel : S → S → Prop) (a b : FmtOps S E)
  (s t : S) (hf : Coupled rel (a.format s) (b.format t))
  (hd : ∀ slot u v, rel u v → Coupled rel (a.dropSlot slot u) (b.dropSlot slot v))
@@ -110,7 +105,6 @@ theorem formatter_joint (rel : S → S → Prop) (a b : FmtOps S E)
    | ok unit => exact hp u v huv
    | error e => exact coupled_pure rel (Except.error e : Except E Unit) u v huv
 #print axioms formatter_joint
--- STAGE
 theorem write_fmt_joint (rel : S → S → Prop) (known : Option Bytes)
  (a b : FmtOps S E) (wa wb : Bytes → Op S (Except E Unit)) (s t : S)
  (hw : ∀ bs, Coupled rel (wa bs s) (wb bs t))
@@ -120,7 +114,6 @@ theorem write_fmt_joint (rel : S → S → Prop) (known : Option Bytes)
  | none => exact hf
  | some bs => exact hw bs
 #print axioms write_fmt_joint
--- STAGE
 theorem adapter_joint (rel : S → S → Prop)
  (wa wb : Bytes → Op S (Except E Unit)) (da db : E → Op S Unit)
  (bs : Bytes) (s t : S) (hw : Coupled rel (wa bs s) (wb bs t))
@@ -132,7 +125,6 @@ theorem adapter_joint (rel : S → S → Prop)
  | ok unit => exact coupled_pure rel (Except.ok () : Except Unit Unit) u v huv
  | error e => exact coupled_bind rel _ _ _ _ (hd e u v huv) (fun _ x y hxy => coupled_pure rel (Except.error () : Except Unit Unit) x y hxy)
 #print axioms adapter_joint
--- STAGE
 theorem stderr_joint (rel : S → S → Prop) (ca cb : Op S Bool) (wa wb : Op S Unit)
  (s t : S) (hc : Coupled rel (ca s) (cb t))
  (hw : ∀ u v, rel u v → Coupled rel (wa u) (wb v)) :
@@ -143,7 +135,6 @@ theorem stderr_joint (rel : S → S → Prop) (ca cb : Op S Bool) (wa wb : Op S 
  | false => exact hw u v huv
  | true => exact coupled_pure rel () u v huv
 #print axioms stderr_joint
--- STAGE
 theorem ignored_write_joint (rel : S → S → Prop)
  (wa wb : Op S (Except E Unit)) (da db : Except E Unit → Op S Unit)
  (s t : S) (hw : Coupled rel (wa s) (wb t))
@@ -151,7 +142,6 @@ theorem ignored_write_joint (rel : S → S → Prop)
  Coupled rel (ignoredWrite wa da s) (ignoredWrite wb db t) :=
  coupled_bind rel _ _ _ _ hw hd
 #print axioms ignored_write_joint
--- STAGE
 theorem report_joint (rel : S → S → Prop) (out : Except E Unit)
  (ra rb da db : E → Op S Unit) (fa fb : Panic → Panic → Op S Unit)
  (s t : S) (h : rel s t)
@@ -165,7 +155,6 @@ theorem report_joint (rel : S → S → Prop) (out : Except E Unit)
    exact coupled_bind rel _ _ _ _ (scope_joint rel (ra e) (rb e) (da e) (db e) fa fb s t (hr e s t h) (hd e) hf)
      (fun _ u v huv => coupled_pure rel 1 u v huv)
 #print axioms report_joint
--- STAGE
 theorem write_leaf_panic
  (o : WriteOps S E) (bs : Bytes) (s t : S) (es : List Event) (p : Panic)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -173,7 +162,6 @@ theorem write_leaf_panic
  writeAllStep o bs k s = ⟨es,t,.panic p⟩ := by
  simp [writeAllStep,hne,sequence,h,PV_DIAG3.bind]
 #print axioms write_leaf_panic
--- STAGE
 theorem write_guard_panic
  (o : WriteOps S E) (bs : Bytes) (s t u : S) (es gs : List Event) (e : E) (p : Panic)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -182,7 +170,6 @@ theorem write_guard_panic
  writeAllStep o bs k s = ⟨es++gs,u,.panic p⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,PV_DIAG3.bind,prepend]
 #print axioms write_guard_panic
--- STAGE
 theorem write_drop_panic
  (o : WriteOps S E) (bs : Bytes) (s t u v : S) (es gs ds : List Event) (e : E) (p : Panic)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -192,14 +179,12 @@ theorem write_drop_panic
  writeAllStep o bs k s = ⟨es++(gs++ds),v,.panic p⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,hd,PV_DIAG3.bind,prepend]
 #print axioms write_drop_panic
--- STAGE
 theorem formatter_leaf_panic
  (o : FmtOps S E) (s t : S) (es : List Event) (p : Panic)
  (h : o.format s = ⟨es,t,.panic p⟩) :
  defaultFmt o s = ⟨es,t,.panic p⟩ := by
  simp [defaultFmt,sequence,h,PV_DIAG3.bind]
 #print axioms formatter_leaf_panic
--- STAGE
 theorem adapter_write_panic
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t : S) (es : List Event) (p : Panic)
@@ -207,7 +192,6 @@ theorem adapter_write_panic
  adapterWrite w d bs s = ⟨es,t,.panic p⟩ := by
  simp [adapterWrite,sequence,h,PV_DIAG3.bind]
 #print axioms adapter_write_panic
--- STAGE
 theorem adapter_store_panic
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t u : S) (es ds : List Event) (e : E) (p : Panic)
@@ -216,14 +200,12 @@ theorem adapter_store_panic
  adapterWrite w d bs s = ⟨es++ds,u,.panic p⟩ := by
  simp [adapterWrite,sequence,hw,hd,PV_DIAG3.bind,prepend]
 #print axioms adapter_store_panic
--- STAGE
 theorem stderr_capture_panic
  (cap : Op S Bool) (w : Op S Unit) (s t : S) (es : List Event) (p : Panic)
  (h : cap s = ⟨es,t,.panic p⟩) :
  attemptStderr cap w s = ⟨es,t,.panic p⟩ := by
  simp [attemptStderr,sequence,h,PV_DIAG3.bind]
 #print axioms stderr_capture_panic
--- STAGE
 theorem ignored_write_panic
  (w : Op S (Except E Unit)) (d : Except E Unit → Op S Unit)
  (s t : S) (es : List Event) (p : Panic)
@@ -231,7 +213,6 @@ theorem ignored_write_panic
  ignoredWrite w d s = ⟨es,t,.panic p⟩ := by
  simp [ignoredWrite,sequence,h,PV_DIAG3.bind]
 #print axioms ignored_write_panic
--- STAGE
 theorem write_leaf_abort
  (o : WriteOps S E) (bs : Bytes) (s t : S) (es : List Event) (p : Crash)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -239,7 +220,6 @@ theorem write_leaf_abort
  writeAllStep o bs k s = ⟨es,t,.abort p⟩ := by
  simp [writeAllStep,hne,sequence,h,PV_DIAG3.bind]
 #print axioms write_leaf_abort
--- STAGE
 theorem write_guard_abort
  (o : WriteOps S E) (bs : Bytes) (s t u : S) (es gs : List Event) (e : E) (p : Crash)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -248,7 +228,6 @@ theorem write_guard_abort
  writeAllStep o bs k s = ⟨es++gs,u,.abort p⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,PV_DIAG3.bind,prepend]
 #print axioms write_guard_abort
--- STAGE
 theorem write_drop_abort
  (o : WriteOps S E) (bs : Bytes) (s t u v : S) (es gs ds : List Event) (e : E) (p : Crash)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -258,7 +237,6 @@ theorem write_drop_abort
  writeAllStep o bs k s = ⟨es++(gs++ds),v,.abort p⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,hd,PV_DIAG3.bind,prepend]
 #print axioms write_drop_abort
--- STAGE
 theorem adapter_write_abort
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t : S) (es : List Event) (p : Crash)
@@ -266,7 +244,6 @@ theorem adapter_write_abort
  adapterWrite w d bs s = ⟨es,t,.abort p⟩ := by
  simp [adapterWrite,sequence,h,PV_DIAG3.bind]
 #print axioms adapter_write_abort
--- STAGE
 theorem adapter_store_abort
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t u : S) (es ds : List Event) (e : E) (p : Crash)
@@ -275,14 +252,12 @@ theorem adapter_store_abort
  adapterWrite w d bs s = ⟨es++ds,u,.abort p⟩ := by
  simp [adapterWrite,sequence,hw,hd,PV_DIAG3.bind,prepend]
 #print axioms adapter_store_abort
--- STAGE
 theorem stderr_capture_abort
  (cap : Op S Bool) (w : Op S Unit) (s t : S) (es : List Event) (p : Crash)
  (h : cap s = ⟨es,t,.abort p⟩) :
  attemptStderr cap w s = ⟨es,t,.abort p⟩ := by
  simp [attemptStderr,sequence,h,PV_DIAG3.bind]
 #print axioms stderr_capture_abort
--- STAGE
 theorem ignored_write_abort
  (w : Op S (Except E Unit)) (d : Except E Unit → Op S Unit)
  (s t : S) (es : List Event) (p : Crash)
@@ -290,7 +265,6 @@ theorem ignored_write_abort
  ignoredWrite w d s = ⟨es,t,.abort p⟩ := by
  simp [ignoredWrite,sequence,h,PV_DIAG3.bind]
 #print axioms ignored_write_abort
--- STAGE
 theorem write_leaf_diverge
  (o : WriteOps S E) (bs : Bytes) (s t : S) (es : List Event)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -298,7 +272,6 @@ theorem write_leaf_diverge
  writeAllStep o bs k s = ⟨es,t,.diverge⟩ := by
  simp [writeAllStep,hne,sequence,h,PV_DIAG3.bind]
 #print axioms write_leaf_diverge
--- STAGE
 theorem write_guard_diverge
  (o : WriteOps S E) (bs : Bytes) (s t u : S) (es gs : List Event) (e : E)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -307,7 +280,6 @@ theorem write_guard_diverge
  writeAllStep o bs k s = ⟨es++gs,u,.diverge⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,PV_DIAG3.bind,prepend]
 #print axioms write_guard_diverge
--- STAGE
 theorem write_drop_diverge
  (o : WriteOps S E) (bs : Bytes) (s t u v : S) (es gs ds : List Event) (e : E)
  (k : Bytes → Op S (Except E Unit)) (hne : bs.isEmpty = false)
@@ -317,14 +289,12 @@ theorem write_drop_diverge
  writeAllStep o bs k s = ⟨es++(gs++ds),v,.diverge⟩ := by
  simp [writeAllStep,hne,sequence,hw,hg,hd,PV_DIAG3.bind,prepend]
 #print axioms write_drop_diverge
--- STAGE
 theorem formatter_leaf_diverge
  (o : FmtOps S E) (s t : S) (es : List Event)
  (h : o.format s = ⟨es,t,.diverge⟩) :
  defaultFmt o s = ⟨es,t,.diverge⟩ := by
  simp [defaultFmt,sequence,h,PV_DIAG3.bind]
 #print axioms formatter_leaf_diverge
--- STAGE
 theorem adapter_write_diverge
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t : S) (es : List Event)
@@ -332,7 +302,6 @@ theorem adapter_write_diverge
  adapterWrite w d bs s = ⟨es,t,.diverge⟩ := by
  simp [adapterWrite,sequence,h,PV_DIAG3.bind]
 #print axioms adapter_write_diverge
--- STAGE
 theorem adapter_store_diverge
  (w : Bytes → Op S (Except E Unit)) (d : E → Op S Unit)
  (bs : Bytes) (s t u : S) (es ds : List Event) (e : E)
@@ -341,14 +310,12 @@ theorem adapter_store_diverge
  adapterWrite w d bs s = ⟨es++ds,u,.diverge⟩ := by
  simp [adapterWrite,sequence,hw,hd,PV_DIAG3.bind,prepend]
 #print axioms adapter_store_diverge
--- STAGE
 theorem stderr_capture_diverge
  (cap : Op S Bool) (w : Op S Unit) (s t : S) (es : List Event)
  (h : cap s = ⟨es,t,.diverge⟩) :
  attemptStderr cap w s = ⟨es,t,.diverge⟩ := by
  simp [attemptStderr,sequence,h,PV_DIAG3.bind]
 #print axioms stderr_capture_diverge
--- STAGE
 theorem ignored_write_diverge
  (w : Op S (Except E Unit)) (d : Except E Unit → Op S Unit)
  (s t : S) (es : List Event)

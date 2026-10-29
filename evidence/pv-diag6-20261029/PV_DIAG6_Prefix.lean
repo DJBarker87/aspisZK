@@ -11,49 +11,40 @@ def EventPrefix (before after : List Event) : Prop := ∃ tail, after = before +
 structure PrefixFamily (S A : Type) where
  sample : Nat → Execution S A
  coherent : ∀ i j, i ≤ j → EventPrefix (sample i).events (sample j).events
--- STAGE
 theorem event_prefix_refl (es : List Event) : EventPrefix es es := ⟨[],(List.append_nil es).symm⟩
 #print axioms event_prefix_refl
--- STAGE
 theorem event_prefix_trans (a b c : List Event) (hab : EventPrefix a b)
  (hbc : EventPrefix b c) : EventPrefix a c := by
  rcases hab with ⟨xs,rfl⟩
  rcases hbc with ⟨ys,rfl⟩
  exact ⟨xs++ys,List.append_assoc a xs ys⟩
 #print axioms event_prefix_trans
--- STAGE
 theorem event_prefix_prepend (es : List Event) (x : Execution S A) :
  EventPrefix es (prepend es x).events := ⟨x.events,rfl⟩
 #print axioms event_prefix_prepend
--- STAGE
 theorem event_prefix_member (a b : List Event) (h : EventPrefix a b)
  (e : Event) (he : e ∈ a) : e ∈ b := by
  rcases h with ⟨tail,rfl⟩
  exact List.mem_append_left tail he
 #print axioms event_prefix_member
--- STAGE
 theorem event_prefix_length (a b : List Event) (h : EventPrefix a b) :
  a.length ≤ b.length := by
  rcases h with ⟨tail,rfl⟩
  rw [List.length_append]
  exact Nat.le_add_right _ _
 #print axioms event_prefix_length
--- STAGE
 theorem recover_complete (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (x : Execution S A) :
  recover x = x.events := lossless x
 #print axioms recover_complete
--- STAGE
 theorem recover_prepend (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (es : List Event) (x : Execution S A) :
  recover (prepend es x) = es ++ recover x := by rw [lossless,lossless]; rfl
 #print axioms recover_prepend
--- STAGE
 theorem recover_terminal_independent (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (es : List Event) (s t : S) (a b : Exit A) :
  recover ⟨es,s,a⟩ = recover ⟨es,t,b⟩ := by rw [lossless,lossless]
 #print axioms recover_terminal_independent
--- STAGE
 theorem recover_bind_abnormal (recover : Execution S B → List Event)
  (lossless : ∀ x, recover x = x.events) (x : Execution S A) (f : A → Op S B)
  (hn : ∀ a, x.exit ≠ .value a) : recover (PV_DIAG3.bind x f) = x.events := by
@@ -66,19 +57,16 @@ theorem recover_bind_abnormal (recover : Execution S B → List Event)
    | abort c => rfl
    | diverge => rfl
 #print axioms recover_bind_abnormal
--- STAGE
 theorem recover_family_sample (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (n : Nat) :
  recover (f.sample n) = (f.sample n).events := lossless _
 #print axioms recover_family_sample
--- STAGE
 theorem recover_family_monotone (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A)
  (i j : Nat) (h : i ≤ j) : EventPrefix (recover (f.sample i)) (recover (f.sample j)) := by
  rw [lossless,lossless]
  exact f.coherent i j h
 #print axioms recover_family_monotone
--- STAGE
 theorem recover_every_emitted_event (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (i j : Nat)
  (h : i ≤ j) (e : Event) (he : e ∈ (f.sample i).events) :
@@ -86,20 +74,17 @@ theorem recover_every_emitted_event (recover : Execution S A → List Event)
  rw [lossless]
  exact event_prefix_member _ _ (f.coherent i j h) e he
 #print axioms recover_every_emitted_event
--- STAGE
 theorem recover_whole_prefix (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (f : PrefixFamily S A) (i j : Nat)
  (h : i ≤ j) : ∃ tail, recover (f.sample j) = (f.sample i).events ++ tail := by
  rw [lossless]
  exact f.coherent i j h
 #print axioms recover_whole_prefix
--- STAGE
 theorem recover_prefix_order (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (x : Execution S A)
  (before middle after : List Event) (h : x.events = before++middle++after) :
  recover x = before++middle++after := (lossless x).trans h
 #print axioms recover_prefix_order
--- STAGE
 theorem recover_all_prefixes_iff (recover : Execution S A → List Event)
  (lossless : ∀ x, recover x = x.events) (f g : PrefixFamily S A) :
  (∀ n, recover (f.sample n) = recover (g.sample n)) ↔
@@ -108,7 +93,6 @@ theorem recover_all_prefixes_iff (recover : Execution S A → List Event)
  · rw [← lossless,← lossless]; exact h n
  · rw [lossless,lossless]; exact h n
 #print axioms recover_all_prefixes_iff
--- STAGE
 theorem recover_scope_drop_panic
  (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
  (a : A) (s t u : S) (bs ds : List Event) (p : Panic)
@@ -117,7 +101,6 @@ theorem recover_scope_drop_panic
  recover (scope body drop dp s) = bs++ds := by
  rw [normal_drop_panics a s t u bs ds p body drop dp hb hd,lossless]
 #print axioms recover_scope_drop_panic
--- STAGE
 theorem recover_scope_drop_abort
  (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
  (a : A) (s t u : S) (bs ds : List Event) (p : Crash)
@@ -126,7 +109,6 @@ theorem recover_scope_drop_abort
  recover (scope body drop dp s) = bs++ds := by
  rw [normal_drop_aborts a s t u bs ds p body drop dp hb hd,lossless]
 #print axioms recover_scope_drop_abort
--- STAGE
 theorem recover_scope_drop_diverge
  (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
  (a : A) (s t u : S) (bs ds : List Event)
@@ -135,7 +117,6 @@ theorem recover_scope_drop_diverge
  recover (scope body drop dp s) = bs++ds := by
  rw [normal_drop_diverges a s t u bs ds body drop dp hb hd,lossless]
 #print axioms recover_scope_drop_diverge
--- STAGE
 theorem recover_scope_panic_unwind
  (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
  (s t : S) (es : List Event) (p : Panic) (body : Op S A) (drop : Op S Unit)
@@ -143,7 +124,6 @@ theorem recover_scope_panic_unwind
  recover (scope body drop dp s) = es ++ recover (unwind p drop dp t) := by
  rw [scope_panic es s t p body drop dp hb,recover_prepend recover lossless]
 #print axioms recover_scope_panic_unwind
--- STAGE
 theorem recover_ignored_error_cleanup
  (recover : Execution S Unit → List Event) (lossless : ∀ x, recover x = x.events)
  (w : Op S (Except B Unit)) (drop : Except B Unit → Op S Unit)
@@ -151,7 +131,6 @@ theorem recover_ignored_error_cleanup
  recover (ignoredWrite w drop s) = es ++ recover (drop (.error e) t) := by
  rw [ignored_write_error_cleanup w drop s t es e hw,recover_prepend recover lossless]
 #print axioms recover_ignored_error_cleanup
--- STAGE
 theorem recover_partial_write_suffix
  (recover : Execution S (Except B Unit) → List Event) (lossless : ∀ x, recover x = x.events)
  (o : WriteOps S B) (buf : Bytes) (s t : S) (es : List Event)
@@ -160,7 +139,6 @@ theorem recover_partial_write_suffix
  recover (writeAllStep o buf k s) = es ++ recover (k (buf.drop (n+1)) t) := by
  rw [write_partial o buf s t es k n hne hn hw,recover_prepend recover lossless]
 #print axioms recover_partial_write_suffix
--- STAGE
 theorem recover_interrupted_drop_suffix
  (recover : Execution S (Except B Unit) → List Event) (lossless : ∀ x, recover x = x.events)
  (o : WriteOps S B) (buf : Bytes) (s t u : S) (es gs : List Event) (e : B)
@@ -171,7 +149,6 @@ theorem recover_interrupted_drop_suffix
  recover (PV_DIAG3.bind (o.dropInterrupted e u) (fun _ => k buf)) := by
  rw [write_interrupted_drop o buf s t u es gs e k hne hw hg,recover_prepend recover lossless]
 #print axioms recover_interrupted_drop_suffix
--- STAGE
 theorem no_finite_summary_for_unbounded_emissions
  (f : PrefixFamily S A) (summary : List Event)
  (unbounded : ∃ n, summary.length < (f.sample n).events.length) :
@@ -180,12 +157,10 @@ theorem no_finite_summary_for_unbounded_emissions
  rcases unbounded with ⟨n,hn⟩
  exact Nat.not_lt_of_ge (event_prefix_length _ _ (h n)) hn
 #print axioms no_finite_summary_for_unbounded_emissions
--- STAGE
 theorem terminal_only_cannot_recover_different_prefixes
  (recover : Exit A → List Event) (out : Exit A) (left right : List Event)
  (hl : recover out = left) (hr : recover out = right) : left = right := hl.symm.trans hr
 #print axioms terminal_only_cannot_recover_different_prefixes
--- STAGE
 theorem recover_family_function
  (recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)
  (f : PrefixFamily S A) :
