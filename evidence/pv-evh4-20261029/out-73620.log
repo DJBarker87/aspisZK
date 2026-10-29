@@ -1,0 +1,79 @@
+'PV_EVH_NonceSource.syncDirectory_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceSource.lean:409:20: error: Tactic `apply` failed: could not unify the conclusion of `fun m k =>
+  fixed_bind m k
+    (if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)) fun r1 =>
+    have this := Result.ok (r1, { directory := self.directory, last_error := none });
+    this`
+  FixedView (PV_EVH_World.bind ?m ?k)
+    (Std.bind (if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error))
+      fun r1 =>
+      have this := Result.ok (r1, { directory := self.directory, last_error := none });
+      this)
+with the goal
+  FixedView
+    (if b = true then do
+      let r1 ← pure (core.result.Result.Ok false)
+      pure (r1, { directory := self.directory, last_error := none })
+    else do
+      let r1 ← pure (core.result.Result.Err error)
+      pure (r1, { directory := self.directory, last_error := none }))
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+
+Note: The full type of `fun m k =>
+  fixed_bind m k
+    (if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)) fun r1 =>
+    have this := Result.ok (r1, { directory := self.directory, last_error := none });
+    this` is
+  ∀ (m : M (core.result.Result Bool std.io.error.Error))
+    (k :
+      core.result.Result Bool std.io.error.Error →
+        M
+          (core.result.Result Bool std.io.error.Error ×
+            aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)),
+    FixedView m
+        (if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)) →
+      (∀ (a : core.result.Result Bool std.io.error.Error),
+          FixedView (k a)
+            (have this := Result.ok (a, { directory := self.directory, last_error := none });
+            this)) →
+        FixedView (PV_EVH_World.bind m k)
+          (Std.bind
+            (if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error))
+            fun r1 =>
+            have this := Result.ok (r1, { directory := self.directory, last_error := none });
+            this)
+
+case hk.hk.hk.hk.hk.hk.Err.hk.hk
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+a : Answers
+h : Compatible a
+self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+statement_digest mask_nonce : Std.Array U8 32#usize
+path : std.path.PathBuf
+options oo : std.fs.OpenOptions
+write_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo1 : std.fs.OpenOptions
+create_new_back : std.fs.OpenOptions → std.fs.OpenOptions
+oo2 : std.fs.OpenOptions := create_new_back oo1
+options1 : std.fs.OpenOptions := write_back oo2
+oo3 : std.fs.OpenOptions
+mode_back : std.fs.OpenOptions → std.fs.OpenOptions
+options2 : std.fs.OpenOptions := mode_back oo3
+error : std.io.error.Error
+ek : core.io.error.ErrorKind
+b : Bool
+⊢ FixedView
+    (if b = true then do
+      let r1 ← pure (core.result.Result.Ok false)
+      pure (r1, { directory := self.directory, last_error := none })
+    else do
+      let r1 ← pure (core.result.Result.Err error)
+      pure (r1, { directory := self.directory, last_error := none }))
+    do
+    let r1 ← if b = true then Result.ok (core.result.Result.Ok false) else Result.ok (core.result.Result.Err error)
+    Result.ok (r1, { directory := self.directory, last_error := none })
+'PV_EVH_NonceSource.reserveFallible_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonceSource.reserve_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

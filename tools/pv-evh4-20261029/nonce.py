@@ -5,8 +5,6 @@ E=Path('evidence/pv-evh4-20261029')
 p='docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean'
 s=subprocess.check_output(['git','show','HEAD:'+p],text=True)
 a=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text())
-ns={};exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),dict(ns,s=s,re=re),ns)
-# Functions must share the same global dictionary for get -> parse helpers.
 g=dict(s=s,re=re)
 exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),g)
 base='aspis_prover.state_only_entropy.'
@@ -32,6 +30,9 @@ def emit(x,n=2,source=False):
 def proof(x,result,n=2):
  pad=' '*n
  if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,result,n)
+ if x.kind=='bind' and x.expr.kind=='if':
+  assert x.expr.yes.kind==x.expr.no.kind==x.next.kind=='pure', 'unsupported effectful structured bind'
+  return pad+'by_cases condition : '+x.expr.cond+'\n'+pad+'· simp only [condition,if_true]\n'+pad+'  intro w; rfl\n'+pad+'· simp only [condition,if_false]\n'+pad+'  intro w; rfl'
  if x.kind=='bind':
   var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
   step='apply fixed_bind'

@@ -405,22 +405,11 @@ theorem reserveFallible_fixed (a : Answers) (h : Compatible a)
                   ·
                     exact fixed_lift _
                   · intro b
-                    try dsimp only
-                    apply fixed_bind (r := (do
-                      if b then
-                        Result.ok (core.result.Result.Ok false)
-                      else
-                        Result.ok (core.result.Result.Err error))) (f := fun r1 => (show Result ((core.result.Result Bool std.io.error.Error) ×
-    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) from do
-                      Result.ok (r1, { self with last_error := none })))
-                    ·
-                      by_cases condition : b
-                      · simp only [condition,if_true]
-                        exact fixed_lift _
-                      · simp only [condition,if_false]
-                        exact fixed_lift _
-                    · intro r1
-                      exact fixed_lift _
+                    by_cases condition : b
+                    · simp only [condition,if_true]
+                      intro w; rfl
+                    · simp only [condition,if_false]
+                      intro w; rfl
 
 #print axioms reserveFallible_fixed
 
