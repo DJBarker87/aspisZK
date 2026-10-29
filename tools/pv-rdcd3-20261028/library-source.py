@@ -34,8 +34,19 @@ for path,context,marker,expected,law in checks:
  bad=expected.replace('self','changed_receiver',1)
  assert tokens(actual)!=tokens(bad),(path,marker)
  records.append(dict(path=str(p),file_sha256=sha(p.read_bytes()),context=context,body=actual,expected_body=expected,law='PV_RDCD3_'+law,negative_control='changed receiver/dispatch rejected'))
-assert sys.byteorder=='little'
+project=Path('/home/dombarker/project-offloads/codex-pv-fscan-20261028/src')
+copy_enums=[]
+for path,name,variants in [
+ ('crates/aspis-core/src/circle.rs','CirclePointError',['SingularParameter','ParameterInCm31Subfield']),
+ ('crates/aspis-core/src/r0_transcript.rs','CircleRow',['First','Second'])]:
+ p=project/path;src=p.read_text();context='pub enum '+name
+ actual=span(src,context,context)
+ expected='pub enum '+name+' {'+','.join(variants)+',}'
+ assert tokens(actual)==tokens(expected),(name,actual)
+ assert '#[derive(Clone, Copy, Debug, PartialEq, Eq)]\n'+context in src,name
+ copy_enums.append(dict(path=str(p),sha256=sha(p.read_bytes()),name=name,body=actual,property='Concrete Copy fieldless enum; Rust Copy coherence excludes user Drop'))
+assert sys.byteorder=='little' 
 features=json.load(open(D/'deployed-client-features.json'))
 assert all(not x['profile']['debug_assertions'] and not x['profile']['overflow_checks'] for x in features)
-j=dict(records=records,toolchain='1.94.1',target='x86_64-unknown-linux-gnu, little endian',scope='Eleven complete concrete library bodies only; row closure also requires full source binding, matching proof receipts, frozen DAG and same-input finite evidence',destructor_qualification='CirclePointError and captured CircleRow are concrete Copy enums with no user Drop; no claim about arbitrary destructor/world effects',primitive_boundary='Integer casts/transmute/layout and checked typed-memory reads/writes retain existing compiler/Aeneas semantics; no LLVM/world/observer theorem',composition='Reclassification within existing tool trust; zero endpoint premise removal',feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()))
+j=dict(copy_enums=copy_enums,records=records,toolchain='1.94.1',target='x86_64-unknown-linux-gnu, little endian',scope='Eleven complete concrete library bodies only; row closure also requires full source binding, matching proof receipts, frozen DAG and same-input finite evidence',destructor_qualification='CirclePointError and captured CircleRow are concrete Copy enums with no user Drop; no claim about arbitrary destructor/world effects',primitive_boundary='Integer casts/transmute/layout and checked typed-memory reads/writes retain existing compiler/Aeneas semantics; no LLVM/world/observer theorem',composition='Reclassification within existing tool trust; zero endpoint premise removal',feature_graph_sha256=sha((D/'deployed-client-features.json').read_bytes()))
 (D/'library-source-result.json').write_text(json.dumps(j,indent=2)+'\n');print('Eleven complete concrete library bodies and rejecting mutation controls matched')
