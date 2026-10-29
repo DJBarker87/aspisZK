@@ -164,6 +164,20 @@ theorem simultaneously_satisfiable (ops : ExternalFuns) (sem : host_semantic.Sem
       Links template outputs x rt :=
   ⟨modelRuntime template outputs x ops sem pt,all_links template outputs x ops sem pt⟩
 
+/-- Closed synthetic witness, using the already checked explicit unit external
+carriers and diverging model operations. This is not a deployed execution. -/
+theorem closed_witness :
+    letI : ExternalTypes := PV_EVH_ModelData.types
+    ∃ rt : Runtime (Public := Unit) (Signal := Bool) (Env := Bool) (A := Unit)
+      (R := ModelCoins template outputs x) (S := ModelCoins template outputs x)
+      (N := Bool × ModelCoins template outputs x) template outputs x,
+      Links template outputs x rt := by
+  letI : ExternalTypes := PV_EVH_ModelData.types
+  exact simultaneously_satisfiable template outputs x PV_EVH_ModelData.operations
+    PV_EVH_ModelData.semantic PV_EVH_ModelData.point
+
+#print axioms closed_witness
+
 /-- adopted by owner decision D502/D478. An inhabitant of the full adversary
 carrier. No theorem restricts observers to this example. -/
 def exampleObserver : Observer Bool Unit := ⟨fun _ => .done,fun _ => false⟩
