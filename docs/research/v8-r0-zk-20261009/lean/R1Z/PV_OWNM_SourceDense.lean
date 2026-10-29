@@ -68,7 +68,7 @@ theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
   rw [split]
   rfl
  rw [hf] at hd
- rw [← hd,PV_OWNM_FoldSum.sparse_sum]
+ rw [hd,PV_OWNM_FoldSum.sparse_sum]
  apply Finset.sum_congr rfl
  intro a ha
  rw [prefix_weight decode D point w hw a hp]
