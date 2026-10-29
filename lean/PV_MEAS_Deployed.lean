@@ -304,12 +304,15 @@ theorem privacy_headline_deployed_events_meas (links : Links template outputs x 
       (hl.1 w)
     change |(∫ₚ n, (bit (adv.decide (PV_EVH_Core.real (rt.acquisition n).1 rt.native rt.signal adv w (rt.acquisition n).2)) : ℝ)
       ∂(rt.acquisitionLaw : Measure N)) - _| ≤ _
-    rw [trans, links.conditional _ (hl.1 w) (fun _ => bounded _)]
+    rw [trans]
+    dsimp only [id]
+    rw [links.conditional _ (hl.1 w) (fun _ => bounded _)]
     exact avg
   · have e : Env := Classical.choice rt.environmentLaw.nonempty
     have hb : PV_EVH_Core.bound template outputs x < (1 : ℚ) / 2^100 :=
       (pointwise e).2.2
-    exact_mod_cast hb
+    simpa only [Rat.cast_div, Rat.cast_pow, Rat.cast_one, Rat.cast_ofNat] using
+      (Rat.cast_lt (K := ℝ)).mpr hb
 
 #print axioms toCoreLinks
 #print axioms privacy_headline_deployed_events_meas
