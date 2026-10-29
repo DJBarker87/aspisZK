@@ -1,3 +1,4 @@
+import R1Z.PV_RunJoin_ByteArrayList51
 import R1Z.PV_RunJoin_TranscriptReseedSource51
 import R1Z.PV_RunJoin_TranscriptTag51
 import R1Z.PV_RunJoin_TranscriptFrames51
@@ -34,7 +35,7 @@ theorem domain_bytes : PV_RunJoin_TranscriptReseedSource51.domain.val.map Prover
   rw [←String.utf8Encode_toList]
   simp [PV_RunJoin_TranscriptReseedSource51.domain,List.utf8Encode,String.utf8EncodeChar,
     Array.to_slice,Array.make,ProverCommitOwnerBytes42.byte,
-    ByteArray.toList,List.toList_data_toByteArray]
+    PV_RunJoin_ByteArrayList51.of_list]
 
 theorem frame (s : Block) (tag : U8) :
     ProverRwOuterFrames.flatten (PV_RunJoin_TranscriptReseedSource51.request s tag)=
