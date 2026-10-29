@@ -75,3 +75,28 @@ for i,n in enumerate(ops):
  text='\n'.join('import R1Z.'+m for m in imports)+'\nimport AspisR72Sampler.Funs\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result ControlFlow\nnamespace R1Z.PV_RunJoin_CircleR72Ops52\nopen PV_RunJoin_CircleR72Carrier52\nattribute [local irreducible] encCM encQ\n'+stmt+f'\n#print axioms op{i}\nend R1Z.PV_RunJoin_CircleR72Ops52\n'
  (L/(stem+'.lean')).write_text(text);mods.append(stem)
 (E/'r72-op-sequence.json').write_text(json.dumps(mods,indent=2)+'\n')
+p=L/'PV_RunJoin_CircleR72Op1652.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.field.CM31.inv PV_RunJoin_CircleR72Raw52.field.CM31.inv
+  have hi : AspisR72Sampler.field.M31.inv = PV_RunJoin_CircleR72Raw52.field.M31.inv := funext op15
+  rw [hi]
+  exact op11 self PV_RunJoin_CircleR72Raw52.field.M31.inv
+
+'''+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op2352.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.field.QM31.try_inv PV_RunJoin_CircleR72Raw52.field.QM31.try_inv
+  rw [op2]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro zero _
+  cases zero with
+  | true => rfl
+  | false =>
+    simp only [Bool.false_eq_true,if_false]
+    simp only [q_c0,q_c1,op19,op7,op22,op16,op20,op21,
+      bind_assoc_eq,bind_tc_ok,Option.map_some]
+    all_goals simp only [encQ]
+    all_goals rfl
+
+'''+s[b:];p.write_text(s)
