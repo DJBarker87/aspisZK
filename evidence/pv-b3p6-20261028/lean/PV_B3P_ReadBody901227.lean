@@ -1,7 +1,7 @@
 import PV_B3P_P227_09
 import PV_B3P_ReadFunctions9227
 namespace PV_B3P_Binding9227
-open Aeneas Aeneas.Std PV_B3P_227
+open Aeneas Aeneas.Std PV_B3P_227 Result ControlFlow Error
 set_option autoImplicit false
 
 /-- Exact emitted body context; only the immutable-read callee is abstracted. -/
