@@ -13,7 +13,7 @@ def model {T : Type} (dst src : List T) : Result (List T) :=
   if dst.length=src.length then ok src else fail .panic
 
 theorem binding {T : Type} (dst src : List T) : wrapper dst src=model dst src := by
-  by_cases h : dst.length=src.length <;> simp only [wrapper,implementation,model,h,not_true_eq_false,not_false_eq_true,if_true,if_false]
+  by_cases h : dst.length=src.length <;> simp [wrapper,implementation,model,Ne,h]
 
 theorem success {T : Type} (dst src : List T) (h : dst.length=src.length) :
     wrapper dst src=ok src := by rw [binding,model,if_pos h]
