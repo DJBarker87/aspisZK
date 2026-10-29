@@ -22,7 +22,7 @@ if kind=='lean':
   assert not (r.get('exit')!=0 and r.get('source_sha256')==sha(src)), 'unchanged failed source'
  obj=D/'objects'/(module.replace('.','/')+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
  assert not obj.is_symlink()
- envfile=D/('env-own.json' if module in {'PV_SKW_OWNM','PV_SKW_OWNM_Statements','PV_SKW_OWNM_Axioms','PV_SKW_OWNM_Replay'} else 'env-J.json')
+ envfile=D/('env-own.json' if module.startswith('R1Z.') or module.startswith('PV_SKW_OWNM') else 'env-l1.json' if module.startswith('PV_SKW_L1') else 'env-J.json')
  env=json.loads(envfile.read_text());deps={}
  for imp in re.findall(r'^import (\S+)',src.read_text(),re.M):
   paths=[Path(p) for p in env['LEAN_PATH'].split(':')]
