@@ -38,8 +38,8 @@ theorem subtract_decode (x : U32) (hx : x.val < 4294967294) :
 
 theorem add_decode (a b : U32) (ha : a.val < 2147483647) (hb : b.val < 2147483647) :
  (add a b).val = (a.val+b.val) % 2147483647 := by
- have hv : (U32.wrapping_add a b).val = a.val+b.val := by
-  rw [U32.wrapping_add_val_eq,UScalar.size]
+ have hv : (core.num.U32.wrapping_add a b).val = a.val+b.val := by
+  rw [core.num.U32.wrapping_add_val_eq,UScalar.size]
   change (a.val+b.val)%4294967296 = a.val+b.val
   omega
  unfold add PV_B2_FieldValue.aspis_core.field.ct.add
@@ -47,8 +47,8 @@ theorem add_decode (a b : U32) (ha : a.val < 2147483647) (hb : b.val < 214748364
 
 theorem sub_decode (a b : U32) (ha : a.val < 2147483647) (hb : b.val < 2147483647) :
  (sub a b).val = (a.val+2147483647-b.val) % 2147483647 := by
- have hv : (U32.wrapping_sub (U32.wrapping_add a P) b).val = a.val+2147483647-b.val := by
-  rw [U32.wrapping_sub_val_eq,U32.wrapping_add_val_eq,UScalar.size]
+ have hv : (core.num.U32.wrapping_sub (core.num.U32.wrapping_add a P) b).val = a.val+2147483647-b.val := by
+  rw [core.num.U32.wrapping_sub_val_eq,core.num.U32.wrapping_add_val_eq,UScalar.size]
   change ((a.val+2147483647)%4294967296+(4294967296-b.val))%4294967296 = _
   omega
  unfold sub PV_B2_FieldValue.aspis_core.field.ct.sub
