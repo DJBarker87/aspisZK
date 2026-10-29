@@ -27,6 +27,7 @@ checks += [
    (lhs: $SelfT = self, rhs: $SelfT = rhs,) => !lhs.overflowing_add(rhs).1,);
   unsafe { intrinsics::unchecked_add(self, rhs) }
  }''','R1Z.PV_RDCD3_Range194.successor_bound/extracted/projection; concrete reached increment is one')]
+checks += [(name.replace('shr','shl'),body.replace('shr','shl'),'R1Z.PV_RDCD3_Word194.boundedShl; V260Bounds and V260RowRange literal shift bounds') for name,body,law in checks if name in ('wrapping_shr','unchecked_shr')]
 p=root/'num/uint_macros.rs';s=p.read_text();out=[]
 for name,expected,law in checks:
  marker='pub const '+('unsafe ' if name.startswith('unchecked') else '')+'fn '+name+'('
@@ -50,6 +51,6 @@ actual=span(sr,'pub fn unwrap(self) -> T','pub fn unwrap(self) -> T')
 assert tokens(actual)==tokens(expected)
 assert tokens(actual)!=tokens(expected.replace('Ok(t) => t','Ok(t) => changed(t)'))
 unwrap=dict(path=str(pr),sha256=sha(pr.read_bytes()),body=actual,law='V260RowResult.complete plus V260Exact.inactive_refactor: reached argument is Ok(bool); native Ok branch returns t with no Debug/fmt call',error_branch='Not discarded: D index error terminates first, and successful row is below 1024, so inactive Err/unwrap_failed is unreachable',negative_control='changed Ok return rejected')
-result=dict(result_unwrap=unwrap,toolchain='1.94.1',uint_macro_file=dict(path=str(p),sha256=sha(p.read_bytes())),num_file=dict(path=str(pmod),sha256=sha(pmod.read_bytes())),methods=out,bindings=bindings,bits_definition='Self::MAX.count_ones(); integer intrinsic boundary retained',scope='Six exact uint bodies, Result.unwrap body, and four concrete macro bindings; not a complete row checker',composition_trust='Reclassification within existing compiler/Aeneas tool trust; zero endpoint premise removal')
+result=dict(result_unwrap=unwrap,toolchain='1.94.1',uint_macro_file=dict(path=str(p),sha256=sha(p.read_bytes())),num_file=dict(path=str(pmod),sha256=sha(pmod.read_bytes())),methods=out,bindings=bindings,bits_definition='Self::MAX.count_ones(); integer intrinsic boundary retained',scope='Eight exact uint bodies, Result.unwrap body, and four concrete macro bindings; not a complete row checker',composition_trust='Reclassification within existing compiler/Aeneas tool trust; zero endpoint premise removal')
 (D/'v260-word-source-result.json').write_text(json.dumps(result,indent=2)+'\n')
-print('Six uint bodies, Result.unwrap and their rejecting controls, plus u16/u32/u64/64-bit-usize macro bindings matched')
+print('Eight uint bodies, Result.unwrap and their rejecting controls, plus u16/u32/u64/64-bit-usize macro bindings matched')
