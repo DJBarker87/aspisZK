@@ -1,0 +1,30 @@
+/home/dombarker/project-offloads/codex-pv-l2e-20261029/sources/PV_L2E_ArrayDigits.lean:27:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern in the current goal
+
+case succ
+width n : ℕ
+ih :
+  ∀ (a : Memory),
+    backwards (run width n a).1 width = (PV_L2E_DigitsTrace.run n (backwards a width)).quotient ∧
+      (run width n a).2 = (PV_L2E_DigitsTrace.run n (backwards a width)).digits
+a : Memory
+hp :
+  (backwards (PV_L2E_ArrayDivision.run width 0 a).1 width, (PV_L2E_ArrayDivision.run width 0 a).2) =
+    pass 0 (backwards a width)
+hq :
+  (backwards (PV_L2E_ArrayDivision.run width 0 a).1 width, (PV_L2E_ArrayDivision.run width 0 a).2).1 =
+    (pass 0 (backwards a width)).1
+hr :
+  (backwards (PV_L2E_ArrayDivision.run width 0 a).1 width, (PV_L2E_ArrayDivision.run width 0 a).2).2 =
+    (pass 0 (backwards a width)).2
+ht :
+  backwards (run width n (PV_L2E_ArrayDivision.run width 0 a).1).1 width =
+      (PV_L2E_DigitsTrace.run n (backwards (PV_L2E_ArrayDivision.run width 0 a).1 width)).quotient ∧
+    (run width n (PV_L2E_ArrayDivision.run width 0 a).1).2 =
+      (PV_L2E_DigitsTrace.run n (backwards (PV_L2E_ArrayDivision.run width 0 a).1 width)).digits
+⊢ backwards (run width n (PV_L2E_ArrayDivision.run width 0 a).1).1 width =
+      (PV_L2E_DigitsTrace.run n (pass 0 (backwards a width)).1).quotient ∧
+    (PV_L2E_ArrayDivision.run width 0 a).2 :: (run width n (PV_L2E_ArrayDivision.run width 0 a).1).2 =
+      (pass 0 (backwards a width)).2 :: (PV_L2E_DigitsTrace.run n (pass 0 (backwards a width)).1).digits
+'PV_L2E_ArrayDigits.complete' depends on axioms: [sorryAx]
+'PV_L2E_ArrayDigits.digit_count' depends on axioms: [propext, sorryAx]
+'PV_L2E_ArrayDigits.residue' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
