@@ -1,0 +1,12 @@
+{
+  "original_source": "evidence/native-compledger-20261028/NCZ_tests.py",
+  "original_sha256": "95ecea064b4758b5c0308eeba61cb57482a2dfb9590f44ecc580c8d14d98d4d2",
+  "transformed_sha256": "a128800e2a1f4bd1378a0cae044882c1b0e692e14e6516b847134e36e520849d",
+  "transformations": {
+    "HERE / 'NCZ_LEDGER.json'": "HERE.parent / 'native-ledger3-20261029/NDT_LEDGER.json'",
+    "HERE / 'NCZ_TEST_RECEIPT.json'": "HERE.parent / 'native-ledger3-20261029/NDT_NCZ_TEST_RECEIPT.json'",
+    "with mock.patch.object(ncz.Path, 'read_bytes', return_value=b'changed evidence'):": "with mock.patch.object(ncz.Path, 'exists', return_value=True), mock.patch.object(ncz.Path, 'read_bytes', return_value=b'changed evidence'):",
+    "assert store.read(p) == (HERE.parent.parent / p).read_bytes()": "assert store.read(p) == store.blob(store.tree[p][0])"
+  },
+  "policy": "Only input/output redirection and sparse-worktree fixture support; original validator, invariant checks and mutation logic unchanged; no prover execution"
+}
