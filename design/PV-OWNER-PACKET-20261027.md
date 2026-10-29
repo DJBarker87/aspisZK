@@ -1,7 +1,7 @@
 # Privacy owner decision packet — 2026-10-27 (B)
 
 Target not yet established. Evidence is frozen by the
-[recount 8 pins](../evidence/privacy-recount-20261026/recount8/pins.json).
+[recount 9 pins](../evidence/privacy-recount-20261026/recount9/pins.json).
 Approvals resolve the named choices; native proof, adoption and release binding
 remain separate obligations. D248 already adopted option B and the capped
 RunJoin trust list, exactly entropy_law, entropy_kernel and observation.
@@ -38,6 +38,31 @@ no additional RunJoin T field. FixturePdaRuntime remains deferred. The standing
 delegation is to the soundness lead and preserves privacy; D396 explicitly
 keeps the privacy choices below with the owner. No later adoption of those
 choices occurs at the recount pins.
+
+The open items at recount9 are the client diagnostic design (D474), the
+headline observation interface (D478), the successful-user/zero-change domain,
+paired throttled timing, V242 compiler cohort, release features and constant-time
+decoding, N7 custody, SHA-NI, DOITM implementation and client scope. No adoption
+of D474 or D478 is recorded at the pins. D474 recommends fixed diagnostics,
+no backtrace capture and a fixed aborting panic hook, with reviewed client
+change, ELF checks, repin and timing re-run. D478 recommends an event-retaining
+headline and joint simulator composition. The decision texts below are unchanged.
+
+The present headline remains conditional on RustRealRefinement and sees only
+the returned Result. It does not establish joint privacy for D159's ordered
+outputs, failure/divergence prefixes and timing. The prove_wall_seconds source
+witness and conditional clock theorem show why Result-fibre recovery cannot
+supply that observation on a good completed path. No paired native non-bad
+execution was certified and no witness-dependent timing leak is claimed.
+Experimental EVHD is separate and unadopted. Its later progress is outside the
+recorded snapshot.
+
+The diagnostic line is paused after diag12 pending D474; no deployed DIAG link
+was discharged. V239 is parked after ownp, with SourceDense proved and four
+deployed links open. Rjdec/rj4idb are parked with conditional decoder/factorization
+results. L1 counts and the publication theorem have compiled skeletons with
+open native/joint links; op227 and L2E remain in progress at their pinned heads.
+These decompositions organize proof work and do not close the endpoint.
 
 The following decisions/actions remain open.
 
@@ -163,10 +188,14 @@ successful canonical preparation, and Coverage31.transfer_iff/withdrawal_iff
 characterizes that codec-first source route. The source conclusion retains its
 canonical codec, pool/deployment and readiness meaning; it is not the missing
 native world/ROMView decoder identification. Runjoin33 repaired the stale-cache
-endpoint, lane and snapshot audit obstruction. Runjoin34–46 adds body,
-serialization and actual-caller-domain proofs, while the full published-proof
-Result, native helper effects/decoders and RustRealRefinement composition remain
-unfinished at the pins. V244/op227 is still a named undischarged dependency.
+endpoint, lane and snapshot audit obstruction. Runjoin34–54 adds body, serialization, weight-constructor, opening and publication
+composition results. RUNJOIN_PUBLISH_COMPACT is conditional on named links:
+R24Sampler is proved; CommonSample, BackendInput, FinishContext, QueryAppend,
+NodeAppend and PublishOrder remain open in the recorded runjoin54 result.
+Native/toRP composition remains unfinished. V244's reference and installed
+callback nonvacuity is now proved at model/original-carrier scope; its complete
+native binding, D188 and library coverage remain open. The op227 hypothesis is
+not discharged.
 The owner domain choice remains open despite this proof progress. Evidence:
 LOG D367/D376/D401/D404/D411/D413, the pinned runjoin reports and recount8
 CORRECTIONS8.md. These choices unblock a precise successful-user domain and
@@ -182,62 +211,41 @@ total deployed encoding/association. Forwarding the model Boolean decision does
 not supply it. D159 includes these observables. This is a coverage gap in the
 current statement, not a new trust item or a theorem already proved inside it.
 
-The options are a total representation in the existing observation carrier
-with a proved deployed association, or an explicitly approved model extension
-with the affected simulation and theorem transport. Omitting published logs,
-error text or witness-dependent occurrence would change the adopted observer
-and is not approved. The chosen route must include the public execution context
-and every observable abort/rejection event, alongside bytes and side channels.
+D474 and D478 now state the representation and implementation choices explicitly.
+The lead recommends D474(C) and D478(1). The complete D159 observer remains the
+target; neither narrowing nor a client change has been approved at these pins.
+Public transaction/context determinism remains a useful verifier-side route.
+Client diagnostics have conditional option-B event laws and three typed DIAG
+skeletons, with fifteen named links. None of the deployed producer links was
+fully discharged through diag12. The reusable syscall, buffering and partial
+write laws retain EINTR, errors and pending-delivery prefixes; they are not
+complete std I/O, format, capture, cleanup or honest joint-distribution bindings.
 
-The lead's D348 recommendation is to prove verifier log/error text determined
-by public transaction bytes and explicit public context, without allocator
-addresses, timing or uninitialized bytes in the text. D414 adds the direction
-to trace each formatting entry to its actual caller and guard and classify it
-as panic-only or honest-path. There is no recorded lead or owner selection of
-a client diagnostic representation, and no recorded claim that these client
-channels are all public. The recommendation unblocks a complete observer
-specification and the subsequent native determinism or simulation proofs;
-approval alone would not establish either property.
+The inspected op227 fmt glue is panic-only on the scoped honest source route,
+with model complete-Result panic exclusions. This does not exclude every panic
+or diagnostic in the deployed client. Error/formatter operands, logger levels,
+captured PCs and frames, TLS, unwinding and native writes still need actual
+bindings and original-L1 coupling. OptionB makes environmental outcomes public
+subject to V400's witness-independence P obligation; it does not make secret
+operands, whole prefixes or elapsed time public inputs by declaration.
 
-D414 identifies core::fmt vtable, vtable_drop_shim, write_str, write_char and
-write_fmt glue in the op227 cone. Panic-message construction on bounds/unwrap
-failure is a proposed explanation, not a proved exclusion from honest runs.
-The candidate's rdeac report and diagnostic-provenance.json identify reachable
-deployed-client anyhow::ensure formatting, strerror and UTF-8-lossy error
-strings, and backtrace symbolization through build-id, debuglink/debugaltlink,
-split-DWARF and addr2line. Known public pieces include the literal69 basename,
-public name/join shapes and /proc paths, template capacity shape, and build-id
-size arithmetic. Their invocation guards are not thereby public. Comparison
-failure/operand lengths, error and invalid-UTF8 guards, selected captured PC,
-module/frame/unit/path, cache-miss selection and metadata provenance remain
-unclassified. The23 recorded contexts and conservative executable-address
-indirect cover are not an exhaustive source reachability certificate.
+No admitted same-public witness pair showing different honest diagnostics was
+established, and no universal native occurrence/content independence was proved.
+V178/V181 remain suspended despite the repaired rdeac focused replay62002.
+Allocator failure and post-world remain under rdea-1 with their explicit public
+failure-event obligation. D348 has both client and verifier coverage remaining.
+Evidence: LOG D425/D432/D456/D458–D479 and recount9/CORRECTIONS9.md.
 
-No admitted same-public witness pair exhibiting different diagnostic events or
-text was established. No proof establishes witness independence of occurrence
-or content either. Honest-run reachability and witness dependence remain open.
-The passing adapter/axioms targets61197/61198 do not close the gap; final endpoint
-replay61199 failed and its corrected source is uncompiled. V178/V181 remain
-suspended. Public-size allocation failure is already under retained runtime/
-allocator primitive adequacy under rdea-1, with explicit failure/post-world
-branches; it does not prove public invocation or allocator outcome independence
-given earlier private state. V268–V270 do not cover this entire diagnostic cone.
-
-Evidence: LOG D159/D348/D399/D410/D414, recount7/D348.md, candidate
-`evidence/pv-rdeac-20261028/REPORT.md` and `diagnostic-provenance.json`, pinned
-b3p6 `resume7/RESIDUALS.md`, and recount8/CORRECTIONS8.md. The privacy lead and
-owner resolve the representation/contract choice; deployed verifier/client
-association remains proof work. The capped T is unchanged.
-
-K-1 and K-2 are evidence corrections, not owner trust-list choices. Exact KMX
-patches and matched failing controls are required for copy-dependent Kani
-credit; function-pointer forms stay quarantined. Historical three-row KMX
-re-credit in D365 does not override deployed-source suspensions. Recount8
-accepts22 of23 claimed restoration packets and rejects V213: its only binding
-compile41466 is void under ruling(t), and final import audits did not recompile
-it. V178/V181 and the remaining native-instance rows stay suspended. These
-results preserve their model/source theorems and do not remove endpoint
-premises. The compiler, runtime, E1/E2, real RunJoin and L1/L2/L3 boundaries remain.
+K-1 and K-2 remain evidence corrections. Exact KMX patches and matched failing
+controls govern copy-dependent Kani credit; function-pointer forms remain
+quarantined. Recount9 confirms scoped restorations V229/V230 under own-2 triple-prime
+with the deployed-configuration harness label, V256/V257 after the exact-path
+replay, and V260/V265/V217 under own-1. V213's compliant binding, restoring law
+and focused audit restore its scoped source/Result credit; seventeen aggregate
+consumers remain unfinished. The36 b3p6 raw-model associations are reclassification
+within existing tool trust, not V244 closure. No endpoint premise is removed.
+The V2 proof-only source supersession is resolved under h5''; it changes no
+statement and does not settle the separate observation-carrier finding.
 
 ## Decision: prover timing evidence on a continuously throttled build host (LOG D359, 2026-10-28)
 
@@ -308,7 +316,7 @@ recorded as a named boundary, because the alternative (re-establishing every nat
 Stream A found that the devnet R1 verifier is immutable and runs the historical fb2fc048, not the proved release (devnet 63ad3e9c, default f8c0ec72), and has put the redeployment question to the owner. No credited privacy result depends on devnet runs. The privacy target is stated for the deployed system, though, so it cannot be claimed until the deployed verifier equals the pinned release ELF. Stream B has no separate decision to ask for here; this pointer only records that the privacy claim depends on the soundness lead's question.
 
 
-## Release checklist and nonvacuity update, recount8
+## Release checklist and nonvacuity update, recount9
 
 The release checklist requires the shipped prover to match its proved source,
 E1/E2 and real RunJoin, the proof-account client route, L1/L2/L3 evidence, final
@@ -323,20 +331,19 @@ from historical devnet transaction behavior.
 D415 corrects D406–D408: JHx_Joint.source establishes historical-forest
 satisfiability only. Its phase/observer carriers differ from the headline;
 identity components alone are not a compiled retargeted joint witness. V045,
-V046 and V047 retain their existing status. The merged pv-2tnv partial result
-constructs a byte-derived transfer13 public statement, canonical matching
-witness, append/payment/lane associations in the headline carrier. Native
-handles/decoders and exact joint-wrapper association are still missing.
+V046 and V047 retain their existing status. The pv-2tnv partial result constructs a byte-derived transfer13 public statement,
+canonical matching witness and append/payment/lane associations. Rj4idb proves
+the byte-pinned typed caller equality and consumes V047's fibre without that
+equality hypothesis. Live native record/handle binding and FixturePdaRuntime
+remain; a joint native headline instance is not obtained.
 FixturePdaRuntime remains deferred and no AGG16 consumer was staged. The owner
 need not approve a mathematical bridge that has not yet been proved.
 
-The full-withdrawal/zero-change domain, paired throttled timing, V242 compiler
-cohort, complete log/error observer, release features/CT decoding, N7 custody,
-SHA-NI route, DOITM implementation and client scope choices remain open. Client
-toolchain selection, D188 narrowing, failure-signal optionB and the capped T
-remain approved. O_EXCL atomicity, durable nonce-store fsync/directory persistence
-and process-state observation remain named proof/adequacy findings, with no new
-trust field silently adopted. Target not yet established.
+The pending choices are listed in the refreshed summary above. Client toolchain
+selection, D188 narrowing, failure-signal optionB and the three-field T remain
+approved. O_EXCL, durable nonce-store persistence, world/ownership and process
+state remain proof/adequacy obligations. Source membership, leaf restoration
+and skeleton compilation do not establish the deployed privacy target.
 
 ## Decision requested (D474, 2026-10-29): how to close the client's local diagnostic channel (D348, client half)
 
