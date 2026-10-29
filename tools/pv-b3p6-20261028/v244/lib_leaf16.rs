@@ -17,3 +17,8 @@ pub use aspis_statement::poseidon2;
 #[path="statement_copy_kani16.rs"] mod statement_copy16;
 
 #[cfg(kani)] mod shared_callee16;
+#[path="deployed_poseidon_kani16.rs"] mod deployed_poseidon16;
+#[path="reference_poseidon_kani16.rs"] mod reference_poseidon16;
+
+mod inputs16;
+#[cfg(all(kani,not(feature="optimized-terminal")))] mod remaining_equivalence16;

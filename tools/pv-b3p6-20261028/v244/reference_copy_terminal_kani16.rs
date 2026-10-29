@@ -1184,6 +1184,13 @@ pub(crate) mod access16 { use super::*;
 pub fn mask(v:&[QM31;16],m:u16)->QM31 { selector_mask_sum_16(*v,m) }
 #[cfg(not(feature="optimized-terminal"))]
 pub fn active(h:[QM31;64],l:[QM31;16])->QM31 { Selectors{high:h,low:l}.active_literal() }
+#[cfg(not(feature="optimized-terminal"))]
 pub fn pattern(v:&[QM31;16],l:QM31)->[QM31;14] { pattern_values_literal(v,l) }
 pub fn masks()->[u16;64] { constants::ACTIVE_ROW_MASKS }
+}
+
+pub(crate) mod remaining16 {use super::*;
+pub fn expand_high(p:&[QM31;10])->[QM31;64] {Selectors::expand(p,0,6)}
+pub fn expand_low(p:&[QM31;10])->[QM31;16] {Selectors::expand(p,6,4)}
+pub fn at_point(p:&[QM31;10])->([QM31;64],[QM31;16]) {let s=Selectors::at_point(p);(s.high,s.low)}
 }
