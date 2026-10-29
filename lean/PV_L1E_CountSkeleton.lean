@@ -40,8 +40,9 @@ theorem count_trace (actualCount : I → List Nat × List Nat)
     PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native := by
   intro i
   rw [acquisition i,body i,retry i,coupling i]
-  exact congrArg₂ Prod.mk (nativeCounts_translation (native i).events)
-    (nativeRejections_translation (native i).events)
+  change (counts ((native i).events.map translateEvent),
+    rejections ((native i).events.map translateEvent)) = _
+  rw [nativeCounts_translation,nativeRejections_translation]
 #print count_trace
 #print axioms count_trace
 end PV_L1E_CountSkeleton
