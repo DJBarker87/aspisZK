@@ -1,0 +1,26 @@
+{
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "--unit=rj4idb-native-statement",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/evidence/native-statement-time.log",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-rj4idb-20261029/native-host.py",
+    "statement"
+  ],
+  "expected_phase": "optimized compilation, then statement finite differential; no extraction",
+  "source_revision": "50c22b5ea567f08c1f14b70cd75cb5cfa00d331f"
+}
