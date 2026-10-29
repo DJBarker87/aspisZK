@@ -32,14 +32,16 @@ theorem zero (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFu
     ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) := by
   change @ExternalFuns.op88 (types base) (selected base heap box ops)=_
   unfold selected
-  rw [PV_B2_F_RawNative.preserved_88,candidate_zero]
+  rw [PV_B2_F_RawNative.preserved_88]
+  exact @candidate_zero (types base) ops
 
 theorem one (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base)) :
   (@aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField (types base) (selected base heap box ops)).ONE=
     ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE) := by
   change @ExternalFuns.op91 (types base) (selected base heap box ops)=_
   unfold selected
-  rw [PV_B2_F_RawNative.preserved_91,candidate_one]
+  rw [PV_B2_F_RawNative.preserved_91]
+  exact @candidate_one (types base) ops
 
 #print axioms candidate_zero
 #print axioms candidate_one
