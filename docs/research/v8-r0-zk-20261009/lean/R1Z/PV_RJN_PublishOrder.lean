@@ -30,6 +30,7 @@ theorem actual {I : Type} (runs : I → Run)
     have h := congrArg bytes (PV_RJN_Bytes.append_success _ _ _ hh1)
     rw [PV_RJN_Bytes.append,h0bytes] at h
     exact h.trans hheader.symm
+  have hfields := fields
   obtain ⟨hc0,hc1bytes,hfbytes,hsemantic,hvalues,hroot,hinactive⟩ := fields
   have len1 : h1.val.length=(runs i).plan.header.length := by
     rw [← PV_RJN_Bytes.length h1.val,h1bytes]
@@ -75,7 +76,7 @@ theorem actual {I : Type} (runs : I → Run)
     rw [h8bytes,h7bytes,h6bytes,h5bytes,h4bytes,h3bytes,hibv,hc0,hc1bytes,hfbytes,hroot]
     rfl
   have offopen : h8.length=(runs i).plan.offOpenings := by rw [hpop]; exact congrArg UScalar.val hopenlen
-  obtain ⟨_,hq⟩ := query i p fields range context
+  obtain ⟨_,hq⟩ := query i p hfields range context
   obtain ⟨q,hq,hqv⟩ := hq h8 cc1 cc2 hc1 hc2 offopen
   have eq := Result.ok.inj (hq.symm.trans hh9)
   subst q
@@ -83,7 +84,7 @@ theorem actual {I : Type} (runs : I → Run)
     rw [← frontbytes]
     exact hqv.symm
   have offnode : h9.length=(runs i).plan.offNodes := by rw [hpnd]; exact congrArg UScalar.val hnodelen
-  have model := (node i p fields).2.2 h9 cc1 cc2 hc1 hc2 offnode
+  have model := (node i p hfields).2.2 h9 cc1 cc2 hc1 hc2 offnode
   rw [hn] at model
   change some (bytes proof.val)=exceptBytes _ at model
   have slots : ProverCommitPublish43.slots (runs i).plan.slots (bytes h9.val)=.ok (bytes proof.val) := by
