@@ -67,7 +67,7 @@ open Aeneas Aeneas.Std ProverRwFull
 variable [ExternalTypes]
 variable {Public Signal Env A R S N : Type}
   [MeasurableSpace Env] [MeasurableSpace R] [MeasurableSpace S] [MeasurableSpace N]
-  [MeasurableSpace Signal] [MeasurableSpace (Observation A)]
+  [MeasurableSpace Signal] [MeasurableSpace (Signal × Observation A)]
 local instance realModelSpace : MeasurableSpace (source).RealRand := ⊤
 local instance idealModelSpace : MeasurableSpace (source).IdealRand := ⊤
 local instance answerSpace : MeasurableSpace OracleAnswer := ⊤

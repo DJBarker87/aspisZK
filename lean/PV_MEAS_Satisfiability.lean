@@ -66,7 +66,7 @@ local instance realModelSpace : MeasurableSpace (source).RealRand := ⊤
 local instance idealModelSpace : MeasurableSpace (source).IdealRand := ⊤
 local instance answerSpace : MeasurableSpace OracleAnswer := ⊤
 local instance tapeSpace : MeasurableSpace ProverCommitFuelJoin22.Tape := ⊤
-local instance observationSpace : MeasurableSpace (Observation Unit) := ⊤
+local instance observationSpace : MeasurableSpace (Bool × Observation Unit) := ⊤
 
 /-- adopted by owner decision D502/D478. Explicit MODEL instance only.
 A nonempty failure prefix includes rejected attempts, oracle bytes, clock bytes,
