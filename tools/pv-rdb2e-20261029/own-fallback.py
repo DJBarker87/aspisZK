@@ -5,7 +5,7 @@ shared={'R1Z.PV_CBL_ArrayKernel','R1Z.PV_CBL_ArrayStep'}
 groups=[]
 const=[m for m in x['order']if re.search(r'FallbackConstant',m)]
 lanes=[m for m in x['order']if re.search(r'Fallback(?:Lane|SmallSigma)',m)]
-canonical=[m for m in x['order']if m.split('.')[-1]in ['PV_CBL_FallbackBoolean','PV_CBL_FallbackAddAlgebra','PV_CBL_FallbackCanonicalT1','PV_CBL_FallbackCanonicalT2','PV_CBL_FallbackCanonicalStep']]
+canonical=[m for m in x['order']if m.split('.')[-1]in ['PV_CBL_FallbackBoolean','PV_CBL_FallbackAddAlgebra','PV_CBL_FallbackCanonicalT1','PV_CBL_FallbackCanonicalT2','PV_CBL_FallbackCanonicalStep','PV_CBL_FallbackRoundsModel','PV_CBL_FallbackStateShift','PV_CBL_FallbackFourModel','PV_CBL_FallbackFourShape','PV_CBL_FallbackFourCanonical']]
 # Groups are emitted at their last component so every dependency stays earlier.
 recurrence=[m for m in x['order'] if m in ['R1Z.PV_CBL_FallbackCanonicalRecurrence','R1Z.PV_CBL_FallbackScheduleCanonical']]
 combined=[('FallbackConstants',const),('FallbackLanes',lanes),('FallbackCanonical',canonical),('FallbackRecurrence',recurrence)]
