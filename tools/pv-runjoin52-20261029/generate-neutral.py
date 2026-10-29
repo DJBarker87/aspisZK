@@ -112,8 +112,7 @@ write('PV_RunJoin_CircleOwnedProjection52',['R1Z.PV_RunJoin_CircleOwnedCarrier52
 whole=(L/'PV_RunJoin_CircleOwnedTower52.lean').read_text()
 chunks=re.split(r'(?=^theorem t\d+)',whole[whole.index('theorem t0'):whole.index('#print axioms t0')],flags=re.M)
 mods=[]
-for i,c in enumerate(chunks):
- if not c.strip():continue
+for i,c in enumerate(c for c in chunks if c.strip()):
  stem='PV_RunJoin_CircleOwnedOp'+str(i)+'52'; prev=mods[-1] if mods else 'PV_RunJoin_CircleOwnedProjection52'
  c=re.sub(r'\bt(\d+)\b',lambda m:'op'+m[1],c)
  c=c.replace(',encCM,encQ',',PV_RunJoin_CircleOwnedProjection52.cm_a,PV_RunJoin_CircleOwnedProjection52.cm_b,PV_RunJoin_CircleOwnedProjection52.q_c0,PV_RunJoin_CircleOwnedProjection52.q_c1')
