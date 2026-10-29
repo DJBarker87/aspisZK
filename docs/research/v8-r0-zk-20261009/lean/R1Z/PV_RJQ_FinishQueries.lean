@@ -39,7 +39,7 @@ theorem run (variant : transport.Variant)
       have bounded := PV_RJQ_TranscriptRange.source
         aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript 31#u8
         (alloc.vec.Vec.deref fbytes) queries next hqueries
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift] at h
+      try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift] at h
       obtain ⟨tag32,htag32,h⟩ := bind_eq_ok h
       obtain ⟨z0,hz0,h⟩ := bind_eq_ok h
       obtain ⟨z1,hz1,h⟩ := bind_eq_ok h
@@ -49,7 +49,7 @@ theorem run (variant : transport.Variant)
       cases checked with
       | Err e => cases h
       | Ok unit =>
-        simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
+        try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
         cases h
         exact bounded
 
