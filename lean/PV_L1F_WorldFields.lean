@@ -14,9 +14,9 @@ theorem runtime_fields {Os Fs S X : Type} (w : World Os Fs S X) (h : Heap) :
 #print axioms runtime_fields
 
 /-- Updating the authoritative heap does not reset the same original OS or
-filesystem, or alter a previously acquired ordered observer prefix. -/
+filesystem, or alter a previously acquired ordered observer prior. -/
 theorem prefix_frame {Os Fs S X C : Type} (w : World Os Fs S X) (h : Heap)
- (prefix : List C) :
- ((commit w h).os,(commit w h).filesystem,prefix)=(w.os,w.filesystem,prefix) := rfl
+ (prior : List C) :
+ ((commit w h).os,(commit w h).filesystem,prior)=(w.os,w.filesystem,prior) := rfl
 #print axioms prefix_frame
 end PV_L1F_WorldFields
