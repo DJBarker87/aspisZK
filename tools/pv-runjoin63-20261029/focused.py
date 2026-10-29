@@ -10,5 +10,5 @@ for retry in range(11):
  while time.time()<deadline:
   print('Cooldown remaining',round(deadline-time.time()),flush=True);time.sleep(min(30,deadline-time.time()))
  r=subprocess.run([sys.executable,str(T/'compile.py'),a,'0',m])
- sys.exit(r.returncode)
+ if r.returncode not in [77,78]: sys.exit(r.returncode)
 raise SystemExit(78)
