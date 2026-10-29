@@ -48,3 +48,16 @@ and divergence. No success-domain or arbitrary arithmetic hypothesis was added.
 records at this Result boundary; it expressly retains panic diagnostics/world/
 observer obligations. Pending complete module, word laws, updated source gate
 and coherent fingerprint prevent whole-row credit at this point.
+
+## V260 row disposition
+
+V260 is RESTORED/B at the complete source-value/Result boundary, evidence class
+`structural (K-1 substitute)`. Both original253 API and existing selected251
+callback are universally quantified, with no success/domain assumptions added.
+All required proof sources match successful capped receipts. The changed closure
+check passes:31 private project objects/imports and5,673 external hashes coherent;
+exit0, wall1.17s, peak38,428KiB, swap0, source revision44431cdf3f, axioms N/A.
+Complete theorem60637: exit0, wall1.14s, peak2,634,172KiB, swap0; standard axioms.
+See rows/V260.md/json for before/after statements and exact scope qualifications.
+Final combined audit/replay remains pending. Endpoint premise changes remain0.
+Next row:V265 static inverse/backend closure; pointer Kani remains quarantined.

@@ -29,7 +29,7 @@
       "method": "wrapping_sub",
       "body": "pub const fn wrapping_sub(self, rhs: Self) -> Self {\n            intrinsics::wrapping_sub(self, rhs)\n        }",
       "expected_body": "pub const fn wrapping_sub(self, rhs: Self) -> Self { intrinsics::wrapping_sub(self, rhs) }",
-      "law": "R1Z.PV_RDCD3_Word194.sub32_binding",
+      "law": "R1Z.PV_RDCD3_Word194.sub32_binding; WordAll194.sub_binding/sub64_binding/subUsize_binding",
       "token_sha256": "0689dabbb74ce99e8c31faaa4ec9fe2de45715bb4e359e3c9b92e68490919629",
       "negative_control": "changed intrinsic/mask rejected"
     },
@@ -64,6 +64,22 @@
       "law": "R1Z.PV_RDCD3_Range194.successor_bound/extracted/projection; concrete reached increment is one",
       "token_sha256": "8ad8e3f1d129e982e3dd3b195627f02cd835d72e7a73b0258105d36c058a8aa1",
       "negative_control": "changed intrinsic/mask rejected"
+    },
+    {
+      "method": "wrapping_shl",
+      "body": "pub const fn wrapping_shl(self, rhs: u32) -> Self {\n            // SAFETY: the masking by the bitsize of the type ensures that we do not shift\n            // out of bounds\n            unsafe {\n                self.unchecked_shl(rhs & (Self::BITS - 1))\n            }\n        }",
+      "expected_body": "pub const fn wrapping_shl(self, rhs: u32) -> Self {\n  unsafe { self.unchecked_shl(rhs & (Self::BITS - 1)) }\n }",
+      "law": "R1Z.PV_RDCD3_Word194.boundedShl; V260Bounds and V260RowRange literal shift bounds",
+      "token_sha256": "585d0ddfc00da45ea4c6fd2e743fb31dd9929ca30f246b3d97a27f9e2a3cc628",
+      "negative_control": "changed intrinsic/mask rejected"
+    },
+    {
+      "method": "unchecked_shl",
+      "body": "pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {\n            assert_unsafe_precondition!(\n                check_language_ub,\n                concat!(stringify!($SelfT), \"::unchecked_shl cannot overflow\"),\n                (\n                    rhs: u32 = rhs,\n                ) => rhs < <$ActualT>::BITS,\n            );\n\n            // SAFETY: this is guaranteed to be safe by the caller.\n            unsafe {\n                intrinsics::unchecked_shl(self, rhs)\n            }\n        }",
+      "expected_body": "pub const unsafe fn unchecked_shl(self, rhs: u32) -> Self {\n  assert_unsafe_precondition!(check_language_ub,\n   concat!(stringify!($SelfT), \"::unchecked_shl cannot overflow\"),\n   (rhs: u32 = rhs,) => rhs < <$ActualT>::BITS,);\n  unsafe { intrinsics::unchecked_shl(self, rhs) }\n }",
+      "law": "R1Z.PV_RDCD3_Word194.boundedShl; V260Bounds and V260RowRange literal shift bounds",
+      "token_sha256": "a46338cb46b3e5263b8ef82ed84b847ec17361092c47590f5fa3beffca911aa4",
+      "negative_control": "changed intrinsic/mask rejected"
     }
   ],
   "bindings": [
@@ -97,6 +113,6 @@
     }
   ],
   "bits_definition": "Self::MAX.count_ones(); integer intrinsic boundary retained",
-  "scope": "Six exact uint bodies, Result.unwrap body, and four concrete macro bindings; not a complete row checker",
+  "scope": "Eight exact uint bodies, Result.unwrap body, and four concrete macro bindings; not a complete row checker",
   "composition_trust": "Reclassification within existing compiler/Aeneas tool trust; zero endpoint premise removal"
 }
