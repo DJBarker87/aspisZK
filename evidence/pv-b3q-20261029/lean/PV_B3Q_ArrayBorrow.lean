@@ -12,7 +12,7 @@ def slice_borrow {α : Type} {n : Usize} (xs : Array α n) (index : Usize) :
  .ok (old,⟨Slice.set (source_view xs) index,by
    intro value
    have same := congrArg (fun view : Slice α => view.val.length) (restore_view xs index value)
-   exact same.symm.trans (Array.set xs index value).property⟩)
+   exact same.symm.trans (Aeneas.Std.Array.set xs index value).property⟩)
 def source_mut {α : Type} {n : Usize} (xs : Array α n) (index : Usize) :
     Result (α × (α → Array α n)) := do
  let (old,back) ← slice_borrow xs index

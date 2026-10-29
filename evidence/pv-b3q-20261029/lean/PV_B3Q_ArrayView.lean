@@ -19,7 +19,7 @@ theorem read_binding {α : Type} {n : Usize} (xs : Array α n) (index : Usize) :
 /-- The logical restoration associated with a mutable slice unsizing retains
 exactly the same list update on the original fixed-size array. -/
 theorem restore_view {α : Type} {n : Usize} (xs : Array α n) (index : Usize) (value : α) :
-    source_view (Array.set xs index value) = Slice.set (source_view xs) index value := by
+    source_view (Aeneas.Std.Array.set xs index value) = Slice.set (source_view xs) index value := by
  apply Subtype.ext
  rfl
 /-- Concrete standard family for both shared/mutable unsizing bodies. -/
