@@ -16,7 +16,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (out : aspis_core.field.wide_exact.WideExact) (next : host_transcript.Transcript H)
     (h : @host_transcript.Transcript.scalar (types base) (selected base heap box ops) H D self row payload nonzero=ok (out,next)) :
     ∃ (block : Array U8 32#usize) (a : Raw),
-      @host_transcript.Transcript.block (types base) (selected base heap box ops) H D self row payload=ok (block,next) ∧
+      @host_transcript.Transcript.block H D self row payload=ok (block,next) ∧
       canonical a ∧ out=ProverRwDictionaryTower.fromW (source a) ∧
       a=PV_RunJoin_SamplerValue49.value base heap box ops block nonzero := by
   rw [PV_RunJoin_ScalarSource49.complete] at h

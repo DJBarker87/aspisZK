@@ -9,7 +9,7 @@ open ProverCommitWideOps48
 def retained (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     {H : Type} (D : aspis_core.digest.Digest32 H) (self : host_transcript.Transcript H)
     (row : U8) (payload : Slice U8) (nonzero : Bool) : Result (aspis_core.field.wide_exact.WideExact × host_transcript.Transcript H) := do
-  let (block,next) ← @host_transcript.Transcript.block (types base) (selected base heap box ops) H D self row payload
+  let (block,next) ← @host_transcript.Transcript.block H D self row payload
   let a := PV_RunJoin_SamplerValue49.value base heap box ops block nonzero
   let i ← Aeneas.Std.lift (UScalar.cast .Usize row)
   let _ ← @trace.value (types base) (selected base heap box ops) 4#u16 i (ProverRwDictionaryTower.fromW (source a))
