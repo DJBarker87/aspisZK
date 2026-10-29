@@ -38,7 +38,6 @@ theorem cursor_fields_binding14 (append : AppendWord13) (out : List U8)
     rw [fields_model13]
     by_cases bad : value ≥ 2147483647#u32
     · simp only [bad,if_true]
-      rfl
     · simp only [bad,if_false]
       cases h : append out value with
       | fail e => rfl
