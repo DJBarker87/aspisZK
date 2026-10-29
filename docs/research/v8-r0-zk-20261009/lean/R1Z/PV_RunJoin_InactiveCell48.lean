@@ -48,10 +48,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     | ok raw =>
       simp only [PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_ok,raw_carrier,
         ProverRwDictionaryWideQM.mul,native_q_roundtrip,PV_RunJoin_OpeningResult48.tower]
-      rw [PV_RunJoin_OpeningResult48.bind_map]
-      apply congrArg (Aeneas.Std.bind _)
-      funext product
-      simp only [ProverRwDictionaryTower.wAdd,native_w_roundtrip,PV_RunJoin_OpeningResult48.tower]
+      cases hp : AspisR1ProducerRelease47.field.wide_exact.WideExact.mul_qm31 (toW value) raw with
+      | fail e => rfl
+      | div => rfl
+      | ok product =>
+        simp only [mapResult,PV_B2_E_OrdinaryOriginal.mapResult,bind_tc_ok,
+          ProverRwDictionaryTower.wAdd,native_w_roundtrip,PV_RunJoin_OpeningResult48.tower]
+
 #print axioms raw_carrier
 #print axioms complete
 end R1Z.PV_RunJoin_InactiveCell48
