@@ -84,37 +84,29 @@ def source_emit(x,n=2):
  if x.kind=='pure':return pad+'Result.ok '+x.expr.replace('\n','\n'+pad+'  ')
  return pad+x.expr.replace('\n','\n'+pad+'  ')
 
+def is_draw(x):
+ return x.kind=='bind' and x.expr.kind=='call' and x.expr.expr.split()[0]=='getrandom.fill'
+fill=node.yes
+while not is_draw(fill):
+ assert fill.kind in ['let','bind']
+ fill=fill.next
+result_type='ControlFlow Usize (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)'
+after='def afterDraw (mask_nonce : Array U8 32#usize) (retry : Usize)\n    (as_mut_back : Slice U8 → zeroize.Zeroizing (Array U8 64#usize))\n    (r : core.result.Result Unit getrandom.error.Error) (s1 : Slice U8) : Result ('+result_type+') := do\n'+source_emit(fill.next)+'\n\n'
+def small_emit(x,n=2):
+ pad=' '*n
+ if is_draw(x):return pad+'let (r, s1) ← draw answers s\n'+pad+'PV_EVH_World.lift (afterDraw mask_nonce retry as_mut_back r s1)'
+ if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+small_emit(x.next,n)
+ if x.kind=='bind':return pad+'let '+x.var+' ← '+emit(x.expr,n+2).lstrip()+'\n'+small_emit(x.next,n)
+ if x.kind=='if':return pad+'if '+x.cond+' then\n'+small_emit(x.yes,n+2)+'\n'+pad+'else\n'+small_emit(x.no,n+2)
+ return emit(x,n)
+body=body.split(':= do\n',1)[0]+':= do\n'+small_emit(node)+'\n'
 def proof(x,n=2):
  pad=' '*n
  if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n)
  if x.kind=='bind':
   var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
-  step='apply fixed_bind'
-  if x.expr.kind=='call' and x.expr.expr.split()[0]=='Aeneas.Std.lift':
-   typ='Result (ControlFlow Usize (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError))'
-   step+=' (r := (do\n'+source_emit(x.expr,n+2)+')) (f := fun '+var+' => (show '+typ+' from do\n'+source_emit(x.next,n+2)+'))'
-  return pad+'try dsimp only\n'+pad+step+'\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
- if x.kind=='if':
-  return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
- if x.kind=='match':
-  out=pad+'try dsimp only\n'+pad+'cases '+x.discr+' with\n'
-  for j,(pattern,child) in enumerate(x.branches):
-   bits=pattern.split();ctor=bits[0].split('.')[-1];args=[('unused'+str(j)) if b=='_' else b for b in bits[1:]]
-   out+=pad+'| '+ctor+(' '+' '.join(args) if args else '')+' =>\n'+proof(child,n+2)+'\n'
-  return out.rstrip()
- if x.kind=='pure':return pad+'exact fixed_lift _'
- return pad+('exact draw_fixed answers h _' if x.expr.split()[0]=='getrandom.fill' else 'exact fixed_lift _')
-theorem='''
-/-- Complete Result equality for this actual emitted iteration, on the fixed
-answer view. This restriction is deliberately not imposed on the world loop. -/
-theorem entropyBody_fixed (answers : EntropyAnswers)
-    (h : ∀ n s, answers n s = getrandom.fill s)
-    (nonce : Array U8 32#usize) (limit retry : Usize) :
-    FixedView (entropyBody answers nonce limit retry)
-      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry) := by
-  unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
-'''+proof(node)+'''
-
-#print axioms entropyBody_fixed
-'''
-p=Path('lean/PV_EVH_Entropy.lean');p.write_text(p.read_text().replace(footer,theorem+footer))
+  return pad+'try dsimp only\n'+pad+'apply fixed_bind\n'+pad+'·\n'+(pad+'  exact draw_fixed answers h _' if is_draw(x) else proof(x.expr,n+2))+'\n'+pad+'· '+intro+'\n'+(pad+'  exact fixed_lift _' if is_draw(x) else proof(x.next,n+2))
+ if x.kind=='if':return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
+ return pad+'exact fixed_lift _'
+theorem='\n/-- Complete Result equality for the actual emitted iteration on the fixed\nanswer view. afterDraw is exact source syntax, not an arbitrary callback. Its\nother effects are NOT interpreted by this entropy-only subprogram. -/\ntheorem entropyBody_fixed (answers : EntropyAnswers)\n    (h : ∀ n s, answers n s = getrandom.fill s)\n    (mask_nonce : Array U8 32#usize) (limit retry : Usize) :\n    FixedView (entropyBody answers mask_nonce limit retry)\n      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body mask_nonce limit retry) := by\n  unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body\n'+proof(node)+'\n\n#print axioms entropyBody_fixed\n'
+Path('lean/PV_EVH_Entropy.lean').write_text(header+after+body+theorem+footer)
