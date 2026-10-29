@@ -21,8 +21,10 @@ theorem specialize (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (room : @FrontRoom (types base) (selected base heap box ops)) :
     @PV_RunJoin_PublishProduced60.PV_RunJoin_Link_PublishOrder
-      (types base) (selected base heap box ops) :=
-  PV_RunJoin_ProducedLinks60.publishOrder base heap box ops room
+      (types base) (selected base heap box ops) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
+  exact PV_RunJoin_ProducedLinks60.publishOrder base heap box ops room
 
 #print axioms FrontRoom
 #print axioms producer_iff
