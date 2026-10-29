@@ -3,13 +3,17 @@
 Branch codex/pv-meas-20261029. Resume 304384c21e (LOG D519).
 
 D519/h4' authority extension was checked before proof attempts. All 203 source
-blobs match pinned Mathlib 81a5d257. All 206 frontier object hashes match the
-unchanged h4 authority. Candidate traces lack per-import input fingerprints, so
-all 203 extension modules are being rebuilt mechanically against the authority,
-one admitted 6G/8G/swap-zero scope per module, IDs 74000-74999. These runs are
-uncharged and each has its original admission/output/time/dependency receipt.
-The incremental addendum is PARTIAL until it has 203 successful entries; it is
-not being used by project proof preparation yet.
+blobs match pinned Mathlib 81a5d257 and all 206 frontier object hashes match
+the unchanged h4 authority. Candidate traces lacked per-import input hashes.
+Fresh per-module rebuilds hit an immutable-source elaboration failure in
+Mathlib.Topology.MetricSpace.Gluing at 74099, after 99 successes.
+
+The current import route uses a COMPLETE 61-module independent addendum for
+nonnegative Lebesgue probability expectations on the same probability-measure
+subtype. Its source/object/dependency hashes and manifest SHA are recorded.
+Every mechanical run has its original admission, output, time and fingerprint
+receipt. All scopes use 6G/8G/swap=0 and Lean -M7000; no candidate object was
+admitted merely because its timestamp or frontier matched.
 
 PV_MEAS_Average passed at 73102: arbitrary-law averaging and equal-law
 transport, with only propext, Classical.choice and Quot.sound. It took 4.04 s,
