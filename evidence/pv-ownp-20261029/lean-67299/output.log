@@ -1,0 +1,56 @@
+R1Z.PV_OWNP_BuilderShape.accepted_lengths (base : List (List Aeneas.Std.U32))
+  (h : R1Z.PV_OWNO_Builder.acceptedBase base = true) (c : List Aeneas.Std.U32) : c ∈ base → c.length = 1024
+R1Z.PV_OWNP_BuilderShape.successful_lengths {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (out : List (List R1Z.PV_OWNK_TowerCanon.Q))
+  (h :
+    R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok out) :
+  List.map List.length out = List.replicate 29 1024
+R1Z.PV_OWNP_BuilderShape.at_array_execution {E : Type} (publicError imbalance : E)
+  (inverse : R1Z.PV_OWNK_TowerCanon.Q → Option R1Z.PV_OWNK_TowerCanon.Q)
+  (base : Aeneas.Std.Array (List Aeneas.Std.U32) 26#usize) (d g : Aeneas.Std.Array R1Z.PV_OWNK_TowerCanon.Q 1024#usize)
+  (setup : Unit → Except E (R1Z.PV_OWNK_TowerCanon.Q × R1Z.PV_OWNK_TowerCanon.Q))
+  (registry : R1Z.PV_OWNK_TowerCanon.Q → Except E (List R1Z.PV_OWNO_HelperArrays.CopyRow))
+  (balanced : List R1Z.PV_OWNK_TowerCanon.Q → Bool) (finish : List R1Z.PV_OWNK_TowerCanon.Q → Except E Unit)
+  (columns : List (List R1Z.PV_OWNK_TowerCanon.Q))
+  (built :
+    R1Z.PV_OWNO_Builder.build publicError imbalance inverse base d g setup registry balanced finish = Except.ok columns)
+  (pub : R1Z.PV_OWNM_V239.Public) (site : R1Z.PV_OWNM_V239.Site)
+  (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64) (writes : List R1Z.PV_OWNO_PointStores.Write) :
+  R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput R1Z.PV_OWNJ_Points.statement_points
+      { pubData := pub, site := site, point := ↑(R1Z.PV_OWNP_PointArray.run combine writes), columns := columns } ∧
+    List.map List.length columns = List.replicate 29 1024
+R1Z.PV_OWNP_PointArray.index_bound (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10) : ↑i < (↑p).length
+R1Z.PV_OWNP_PointArray.store_view (p : R1Z.PV_OWNP_PointArray.Point) (i : Fin 10) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  ↑(R1Z.PV_OWNP_PointArray.store p i q) = (↑p).set (↑i) q
+R1Z.PV_OWNP_PointArray.step_view (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (p : R1Z.PV_OWNP_PointArray.Point) (w : R1Z.PV_OWNO_PointStores.Write) :
+  ↑(R1Z.PV_OWNP_PointArray.step combine p w) = R1Z.PV_OWNO_PointStores.store combine (↑p) w
+R1Z.PV_OWNP_PointArray.fold_view (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (p : R1Z.PV_OWNP_PointArray.Point) :
+  ↑(List.foldl (R1Z.PV_OWNP_PointArray.step combine) p writes) =
+    List.foldl (R1Z.PV_OWNO_PointStores.store combine) (↑p) writes
+R1Z.PV_OWNP_PointArray.run_view (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) :
+  ↑(R1Z.PV_OWNP_PointArray.run combine writes) = R1Z.PV_OWNO_PointStores.run combine writes
+R1Z.PV_OWNP_PointArray.run_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (writes : List R1Z.PV_OWNO_PointStores.Write) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ ↑(R1Z.PV_OWNP_PointArray.run combine writes) → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNP_QueryStores.suffix_bounds (round : Fin 10) (offset : Fin (9 - ↑round)) :
+  ↑round < ↑(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) ∧
+    ↑(R1Z.PV_OWNP_QueryStores.suffixIndex round offset) < 10
+R1Z.PV_OWNP_QueryStores.query_count (rank : Fin 10 → List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28)
+  (assignment : ℕ) : (R1Z.PV_OWNP_QueryStores.queryWrites rank round sample assignment).length = 10
+R1Z.PV_OWNP_QueryStores.terminal_count (rank : Fin 10 → List Aeneas.Std.U32) :
+  (R1Z.PV_OWNP_QueryStores.finalWrites rank).length = 10
+R1Z.PV_OWNP_QueryStores.callback_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : Fin 10 → List Aeneas.Std.U32) (round : Fin 10) (sample : Fin 28) (assignment : ℕ)
+  (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ ↑(R1Z.PV_OWNP_QueryStores.callback combine rank round sample assignment) → R1Z.PV_OWNK_TowerCanon.Canon q
+R1Z.PV_OWNP_QueryStores.terminal_canonical (combine : Aeneas.Std.U64 → Aeneas.Std.U32 → Aeneas.Std.U64)
+  (rank : Fin 10 → List Aeneas.Std.U32) (q : R1Z.PV_OWNK_TowerCanon.Q) :
+  q ∈ ↑(R1Z.PV_OWNP_QueryStores.terminal combine rank) → R1Z.PV_OWNK_TowerCanon.Canon q
