@@ -176,3 +176,10 @@ remains wholly uncredited. Changed proof fully qualifies the Result predicate
 and carrier and supplies direct Eq.mpr transport without rewriting. The prior
 commit’s “Validate fill totality” describes the attempted validation, not a
 success; the failed receipt is preserved unchanged.
+
+60695 passes corrected fill totality (exit0,wall1.14s,peak2,637,508KiB,swap0).
+60696 passes reverse-statistics finite/source/complete totality (exit0,wall2.02s,
+peak2,658,004KiB,swap0). Both use only standard axioms.97/100 Lean attempts
+are charged (83 pass,14 fail); audit IDs60697–60699 remain. The optional
+Horner/whole-function totality and parser drafts are uncompiled, excluded and
+uncredited; see UNCOMPILED-DRAFTS.json.
