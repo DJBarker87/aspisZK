@@ -25,9 +25,9 @@ theorem matrix_read_after_write14 (sums : Matrix14) (row column : Usize) (value 
   simp only [bind_tc_ok]
   rw [PV_B3P_ArrayWrite227.update sums row hr]
   simp only [bind_tc_ok,matrix_read14]
-  rw [PV_B3P_SelectIndex227.index_value _ row hr]
+  rw [PV_B3P_SelectIndex227.index_value (Aeneas.Std.Array.set sums row (Aeneas.Std.Array.set oldRow column value)) row hr]
   simp only [PV_B3P_ArrayWrite227.restored_value sums row hr,bind_tc_ok]
-  rw [PV_B3P_SelectIndex227.index_value _ column hc]
+  rw [PV_B3P_SelectIndex227.index_value (Aeneas.Std.Array.set oldRow column value) column hc]
   exact congrArg Result.ok (PV_B3P_ArrayWrite227.restored_value oldRow column hc value)
 #print axioms matrix_read_after_write14
 end PV_B3P_Binding14227
