@@ -12,8 +12,13 @@ theorem actual (phase : Phase) (p : prover.Publication) (cc1 cc2 : host_commitme
     (hc1 : p.backend.c1=some cc1) (hc2 : p.backend.c2=some cc2) :
     (PV_RunJoin_ActualRun.plans phase).slots=
       PV_RunJoin_NodeSequence60.models (PV_RunJoin_NodeSixSequence60.inputs cc1 cc2 p.tree p.queries) := by
-  have h (i : Fin 6) := PV_RunJoin_NodeSlotCache60.actual phase p i context
-  simp only [PV_RunJoin_NodePayload60.actual p _ _ cc1 cc2 hc1 hc2] at h
+  have h (i : Fin 6) : PV_RunJoin_ActualPlanSources59.slot phase i=
+      PV_RunJoin_NodePayloadModel60.model
+        (PV_RunJoin_NodePayload60.payload cc1 cc2 p.tree p.queries
+          (PV_RunJoin_NodeSlotCache60.batch i) (PV_RunJoin_NodeSlotCache60.tree i))
+        (PV_RunJoin_NodeSlotCache60.capacity i) := by
+    rw [PV_RunJoin_NodeSlotCache60.actual phase p i context]
+    rw [PV_RunJoin_NodePayload60.actual p _ _ cc1 cc2 hc1 hc2]
   change [PV_RunJoin_ActualPlanSources59.slot phase 0,PV_RunJoin_ActualPlanSources59.slot phase 1,
     PV_RunJoin_ActualPlanSources59.slot phase 2,PV_RunJoin_ActualPlanSources59.slot phase 3,
     PV_RunJoin_ActualPlanSources59.slot phase 4,PV_RunJoin_ActualPlanSources59.slot phase 5]=_
