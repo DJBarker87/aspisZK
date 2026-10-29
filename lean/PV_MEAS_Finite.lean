@@ -1,5 +1,6 @@
 import PV_MEAS_Uniform
 import R0Z.FsAbort
+import R0Z.FsGood
 
 set_option autoImplicit false
 noncomputable section
@@ -23,7 +24,7 @@ theorem integral_bit_mean {M : Type} [Fintype M] [Nonempty M]
     [MeasurableSpace M] [MeasurableSingletonClass M] (f : M → Bool) :
     (∫ₚ m, (R0Z.FsStatement.bit (f m) : ℝ) ∂(uniform M : Measure M)) =
       (R0Z.FsAbort.mean (fun m => R0Z.FsStatement.bit (f m)) : ℝ) :=
-  integral_rat_mean _ (fun _ => R0Z.FsStatement.bit_nonneg _)
+  integral_rat_mean _ (fun _ => R0Z.FsGood.bit_nonneg _)
 
 #print axioms integral_bit_mean
 /-- Evaluation of a finite uniform measure, related exactly to rational mass. -/
@@ -35,7 +36,7 @@ theorem uniform_apply_real {X : Type} [Fintype X] [Nonempty X]
   change ((uniformMeasure X) s).toReal = _
   rw [uniformMeasure, Measure.smul_apply, smul_eq_mul, Measure.finsetSum_apply,
     ENNReal.toReal_mul, ENNReal.toReal_inv, ENNReal.toReal_natCast]
-  rw [ENNReal.toReal_sum (by intro a _; simp only [Measure.dirac_apply]; split_ifs <;> simp)]
+  rw [ENNReal.toReal_sum (by intro a _; exact measure_ne_top _ _)]
   simp only [Measure.dirac_apply, Set.indicator_apply, Pi.one_apply]
   unfold R0Z.FsAbort.mean
   push_cast
