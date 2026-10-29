@@ -35,9 +35,6 @@ def draw (answers : EntropyAnswers) (buffer : Slice U8) : M
   | _ => ⟨r,next,[request,
       .side (ascii "entropy-delivery") (ascii (toString w.entropyCursor))]⟩
 
-instance : MonadLift Result M where
-  monadLift := PV_EVH_World.lift
-
 theorem draw_fixed (answers : EntropyAnswers)
     (h : ∀ n s, answers n s = getrandom.fill s) (buffer : Slice U8) :
     FixedView (draw answers buffer) (getrandom.fill buffer) :=
@@ -55,7 +52,7 @@ footer='''
 end PV_EVH_Entropy
 '''
 Path('lean/PV_EVH_Entropy.lean').write_text(header+body+footer)
-Path('evidence/pv-evh4-20261029/entropy-generation.json').write_text(json.dumps(dict(source=p,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(s[start:end].encode()).hexdigest(),changes=['Result return interpreted as M','one getrandom.fill replaced by draw','ok terminals interpreted as pure','other Result actions lifted by MonadLift'],source_body=s[start:end],status='single-body reinterpretation; other helpers still Result-only'),indent=2)+'\n')
+Path('evidence/pv-evh4-20261029/entropy-generation.json').write_text(json.dumps(dict(source=p,revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_sha256=hashlib.sha256(s.encode()).hexdigest(),body_sha256=hashlib.sha256(s[start:end].encode()).hexdigest(),changes=['Result return interpreted as M','one getrandom.fill replaced by draw','ok terminals interpreted as pure','other Result actions lifted explicitly'],source_body=s[start:end],status='single-body reinterpretation; other helpers still Result-only'),indent=2)+'\n')
 # Reuse only the reviewed syntax parser definitions, without executing another
 # job's generator or touching its output/evidence directories.
 import ast
@@ -63,6 +60,19 @@ parser=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text())
 selected=[n for n in parser.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse']]
 ns={};exec(compile(ast.Module(body=selected,type_ignores=[]),'<reviewed-parser>','exec'),ns)
 node=ns['parse'](ns['normalize'](s[start:end].split(':= do\n',1)[1]))
+
+def emit(x,n=2):
+ pad=' '*n
+ if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+emit(x.next,n)
+ if x.kind=='bind':return pad+'let '+x.var+' ← '+emit(x.expr,n+2).lstrip()+'\n'+emit(x.next,n)
+ if x.kind=='if':return pad+'if '+x.cond+' then\n'+emit(x.yes,n+2)+'\n'+pad+'else\n'+emit(x.no,n+2)
+ if x.kind=='match':return pad+'match '+x.discr+' with\n'+'\n'.join(pad+'| '+pat+' =>\n'+emit(child,n+2) for pat,child in x.branches)
+ if x.kind=='pure':return pad+'pure '+x.expr.replace('\n','\n'+pad+'  ')
+ if x.expr.split()[0]=='getrandom.fill':return pad+x.expr.replace('getrandom.fill','draw answers',1)
+ return pad+'PV_EVH_World.lift ('+x.expr.replace('\n','\n'+pad+'  ')+')'
+body=body.split(':= do\n',1)[0]+':= do\n'+emit(node)+'\n'
+Path('lean/PV_EVH_Entropy.lean').write_text(header+body+footer)
+
 def proof(x,n=2):
  pad=' '*n
  if x.kind=='let':return pad+'dsimp only\n'+proof(x.next,n)

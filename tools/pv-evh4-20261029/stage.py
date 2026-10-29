@@ -37,7 +37,7 @@ def resolve(m):
  q=root/(m.replace('.','/')+'.olean');assert q.is_file(),('h6 shadow',m,str(q));return q
 for v in x['checks']+x['external']:
  q=resolve(v['module']);digest=hashlib.sha256(q.read_bytes()).hexdigest();assert digest==v['sha256'],('object changed',v['module'])
- if v in x['checks']:
+ if 'source' in v:
   assert not q.is_symlink(),('h6 plain copy',v['module'])
  effective.append(dict(module=v['module'],path=str(q),sha256=digest))
 (H/('sources/'+x['module']+'.lean')).write_text(x['source'])
