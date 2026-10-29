@@ -14631,3 +14631,17 @@ pv-rj4idb continues in the same worktree on branch codex/pv-rj4idb-20261029 (IDs
 - for (b), the op254 deployed association, with op79 waiting on V201 (pv-rdcd3);
 - for (c), the statement equality.
 Rows removed: 0. Privacy target not yet established.
+
+## D449 (Stream B) 2026-10-29 03:07 UTC: pv-owni results (V239 down to one join); pv-ownj launched
+
+pv-owni used all 100 Lean attempts (94 passed; 6 failed and corrected), one native scope and no Kani. The final audits passed with standard axioms only. 532 native comparisons passed, which is finite validation. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits. It was merged into the candidate as 66672e84fb and pushed. It proved the following:
+- the scanner bounds;
+- ordered raw QM31 evaluation;
+- monadic builder cardinality;
+- initialized Vec ownership;
+- DensePrune, symbolic Boolean-suffix pruning;
+- PublicPlan, which proves that the request and free order, the wrong-length stop and the null or abort prefix are functions of the supplied point, the lengths and the failure position.
+
+V239 remains SUSPENDED on one join: the concrete op222 consuming refinement at state_only_candidate_prefix::r0::point_claims (:749-760, used at :879 and :890). It must identify the raw ordered result with that call's dense multilinear value, and the owned native execution with the same initialized tuple sequence and public resource projection. The worker correctly noted that the sumcheck callback point at :879 and the final alpha at :890 must be bound to public data rather than called public because they are arguments. Allocation-trace witness independence rests on that binding. No witness-dependent allocation pair was found.
+
+pv-ownj (IDs 64700-64799; 100 Lean, 30 native, 0 Kani) proves the decoder and row commuting equation and carries the actual statement points and 29 column lengths through the call. It binds :879 and :890 to the public statement and the published transcript, and a dependence on unpublished witness-derived data would be a finding. It then composes the whole. Rows removed: 0. Privacy target not yet established.
