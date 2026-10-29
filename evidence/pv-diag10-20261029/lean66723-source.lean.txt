@@ -1,0 +1,26 @@
+import PV_B3P_InstalledOk8227
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG10
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Success227
+/-! This module uses the coherent b3p6 cohort. No full prover/checker claim.
+The actual original public family still needs its own producer/association. -/
+variable (base : ProverRwFull.ExternalTypes)
+ (ops : @ProverRwFull.ExternalFuns (PV_B3P_Install227.Types base))
+ (p : reference_terminal.SemanticPublic) (recipient : Array U32 8#usize)
+ (claims : Array (Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize)
+ (point : Array ProverRwFull.aspis_core.field.QM31 10#usize)
+ (c : ProverRwFull.aspis_core.state_only_prefix.r0.Challenges)
+theorem rust_ok_no_panic {A E : Type} (r : Result (core.result.Result A E))
+ (h : ∃ a, r=.ok (.Ok a)) : r ≠ .fail .panic := by
+ obtain ⟨a,ha⟩ := h
+ rw [ha]
+ intro bad
+ cases bad
+#print axioms rust_ok_no_panic
+theorem installed_family_no_panic :
+ @ProverRwFull.ExternalFuns.op227 (PV_B3P_Install227.Types base)
+ (PV_B3P_Install227.actual base ops) (installed_public8 base p recipient) claims point c ≠ .fail .panic :=
+ rust_ok_no_panic _ (installed_success8 base ops p recipient claims point c)
+#print axioms installed_family_no_panic
+end PV_DIAG10
