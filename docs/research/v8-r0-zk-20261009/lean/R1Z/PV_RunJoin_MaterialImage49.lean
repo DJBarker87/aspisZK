@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_MaterialVec49
+import R1Z.PV_RunJoin_ArrayVecImage49
 import R1Z.PV_RunJoin_SourceArray44
 import R1Z.PV_RunJoin_FoldCell44
 set_option autoImplicit false
@@ -9,9 +9,9 @@ open ProverCommitWideOps48 ProverCommitMix48
 theorem complete (w : Nat → Raw) :
     alloc.vec.Vec.deref (PV_RunJoin_MaterialVec49.vec (sourceArray 1024#usize w))=
       Array.to_slice (PV_RunJoin_FoldCell44.array 1024#usize w) := by
-  apply Subtype.ext
-  change (List.ofFn (fun i : Fin 1024 => source (w i.val))).map ProverRwDictionaryTower.fromW=
-    List.ofFn (fun i : Fin 1024 => ProverRwDictionaryTower.fromW (source (w i.val)))
-  simp only [List.map_ofFn,Function.comp_def]
+  trans Array.to_slice (PV_B2_F_ConstructorCarrier.amap ProverRwDictionaryTower.fromW (sourceArray 1024#usize w))
+  · exact PV_RunJoin_ArrayVecImage49.complete 1024#usize ProverRwDictionaryTower.fromW
+      (sourceArray 1024#usize w) _ rfl
+  · exact congrArg Array.to_slice (PV_RunJoin_SourceArray44.map 1024#usize w)
 #print axioms complete
 end R1Z.PV_RunJoin_MaterialImage49
