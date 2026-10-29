@@ -1,0 +1,20 @@
+import PV_B3P_Resume12Axioms
+-- One final frozen focused manifest.
+#check PV_B3P_Binding12227.active_literal_fold12
+#print axioms PV_B3P_Binding12227.active_literal_fold12
+#check PV_B3P_Binding12227.preweighted_operation_binding12
+#print axioms PV_B3P_Binding12227.preweighted_operation_binding12
+#check PV_B3P_Binding12227.preweighted_macro_step_binding12
+#print axioms PV_B3P_Binding12227.preweighted_macro_step_binding12
+#check PV_B3P_Binding12227.value_caller_binding12
+#print axioms PV_B3P_Binding12227.value_caller_binding12
+#check PV_B3P_Binding12227.pattern_values_literal_binding12
+#print axioms PV_B3P_Binding12227.pattern_values_literal_binding12
+#check PV_B3P_Binding12227.prepared_root_binding12
+#print axioms PV_B3P_Binding12227.prepared_root_binding12
+#check PV_B3P_Binding12227.internal_linear_binding12
+#print axioms PV_B3P_Binding12227.internal_linear_binding12
+#check PV_B3P_Binding12227.internal_sum_helper_binding12
+#print axioms PV_B3P_Binding12227.internal_sum_helper_binding12
+#check PV_B3P_Binding12227.leading_rounds_binding12
+#print axioms PV_B3P_Binding12227.leading_rounds_binding12

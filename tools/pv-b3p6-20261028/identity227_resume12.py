@@ -41,6 +41,9 @@ for path,digest in inputs.items():
     local=Path(path)
     if local.is_file():assert sha(local.read_bytes())==digest,path
 inv=json.loads((D/'resume9/body-inventory.json').read_text())
+for entry in inv['files']:
+    for side in ['source','owned']:
+        assert sha(Path(entry[side]).read_bytes())==entry[side+'_sha256'],entry[side]
 reach=json.loads((D/'resume11/reachability.json').read_text())
 expanded={n:(O/('expanded-'+n+'.rs')).read_text() for n in ['owned','statement','deployed']}
 mods={'terminal':('host_terminal','reference_terminal'),'copy':('host_copy_terminal','reference_copy_terminal'),'field':('host_terminal_field','reference_field'),'poseidon':('state_only_poseidon','reference_poseidon')}

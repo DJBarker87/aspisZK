@@ -37,13 +37,14 @@ theorem active_block_source_binding11 (selectors : reference_copy_terminal.Selec
   have hm : MaskAllowed mask := active_masks_allowed mask (List.getElem_mem hlen)
   have hread := PV_B3P_SelectIndex227.index_value reference_copy_terminal.constants.ACTIVE_ROW_MASKS block hb
   have binding := frozen_mask_source11 selectors.low mask hm
+  dsimp only [mask] at binding
   unfold reference_copy_terminal.active_block227 active_block_source11
   rw [hread]
   simp only [bind_tc_ok]
   change (if mask != 0#u16 then _ else _) = (if mask != 0#u16 then _ else _)
   by_cases hz : mask != 0#u16
   · simp only [hz,↓reduceIte,binding]
-  · simp only [hz,↓reduceIte]
+  · simp only [hz,Bool.false_eq_true,if_false]
 #print axioms active_block_source_binding11
 end PV_B3P_Binding11227
 ''';files['PV_B3P_CopyActiveSource11227']=s
