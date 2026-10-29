@@ -15,15 +15,15 @@ def model_ne {ty : UScalarTy} (left right : UScalar ty) : Result Bool :=
 theorem eq_binding {ty : UScalarTy} (left right : UScalar ty) :
     source_eq left right = model_eq left right := by
  by_cases same : left=right
- · subst right; rfl
+ · subst right; simp [source_eq,model_eq]
  · have different : left.val ≠ right.val := fun equal => same (UScalar.eq_of_val_eq equal)
    simp only [source_eq,model_eq,same,different,decide_false]
 theorem ne_binding {ty : UScalarTy} (left right : UScalar ty) :
     source_ne left right = model_ne left right := by
  by_cases same : left=right
- · subst right; rfl
+ · subst right; simp [source_ne,model_ne]
  · have different : left.val ≠ right.val := fun equal => same (UScalar.eq_of_val_eq equal)
-   simp only [source_ne,model_ne,same,different,not_false_eq_true,decide_true]
+   simp only [source_ne,model_ne,ne_eq,same,different,not_false_eq_true,decide_true]
 inductive Body where | eq | ne
 def Signature : (UScalarTy × Body) → Type := fun body =>
  UScalar body.1 → UScalar body.1 → Result Bool
