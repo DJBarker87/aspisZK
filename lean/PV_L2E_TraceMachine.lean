@@ -6,7 +6,7 @@ namespace PV_L2E
 /-! TOP-DOWN SKELETON ONLY. `native` must be the deployed small-step machine,
 `simulator` must be the simE/D163 coupled replay, and `Related` its source
 invariant. These parameters have NOT been instantiated. A step emits an
-ordered list, so failed steps and their prefixes are retained. No whole-trace
+ordered list, so failed steps and their tracePrefixes are retained. No whole-trace
 equality appears in a link. A link is a local forward simulation obligation.
 The native/canonical/simE associations remain open, rather than being axioms. -/
 inductive Site where
@@ -19,10 +19,10 @@ structure Machine (State Event : Type) where
   step : State → List Event × State
 
 /-- State relations must cover both normal and stopped states, with a stopped
-state emitting [] forever. For divergent runs we compare every finite prefix. -/
-def prefix {S E : Type} (m : Machine S E) : Nat → S → List E
+state emitting [] forever. For divergent runs we compare every finite tracePrefix. -/
+def tracePrefix {S E : Type} (m : Machine S E) : Nat → S → List E
   | 0, _ => []
-  | n+1, s => let r := m.step s; r.1 ++ prefix m n r.2
+  | n+1, s => let r := m.step s; r.1 ++ tracePrefix m n r.2
 
 /-- A single source transition and its successor invariant, NOT equality of
 complete traces. This still needs a statement-by-statement native binding. -/
@@ -86,8 +86,8 @@ theorem trace_simulatable {S T E I P C : Type}
     (v365 : PV_L2E_Link_V365 native simulator Related)
     (v367 : PV_L2E_Link_V367 native simulator Related)
     (i : I) (hi : honest i) (hg : good i) :
-    ∀ n, prefix native n (realInit i) =
-      prefix simulator n (simInit (pubData i) (coins i)) := by
+    ∀ n, tracePrefix native n (realInit i) =
+      tracePrefix simulator n (simInit (pubData i) (coins i)) := by
   have step : ∀ s t, Related s t →
       (native.step s).1 = (simulator.step t).1 ∧
       Related (native.step s).2 (simulator.step t).2 := by
@@ -98,7 +98,7 @@ theorem trace_simulatable {S T E I P C : Type}
       v359 s t h hs, v360 s t h hs, v361 s t h hs,
       v362 s t h hs, v363 s t h hs, v364 s t h hs,
       v365 s t h hs, v367 s t h hs]
-  have all : ∀ n s t, Related s t → prefix native n s = prefix simulator n t := by
+  have all : ∀ n s t, Related s t → tracePrefix native n s = tracePrefix simulator n t := by
     intro n
     induction n with
     | zero => intros; rfl
