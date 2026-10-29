@@ -21,7 +21,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
           AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
-  rw [PV_RunJoin_BatchRowThread44.caller,PV_RunJoin_InactiveFields48.zero base heap box ops]
+  have zero : @aspis_core.field.wide_exact.WideExact.ZERO (types base) (selected base heap box ops)=
+      ok (fromW AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) :=
+    PV_RunJoin_InactiveFields48.zero base heap box ops
+  rw [PV_RunJoin_BatchRowThread44.caller,zero]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_GammaCellTransport50.complete base heap box ops c powers row hr 29 0#usize (by decide)]
   rw [PV_RunJoin_GammaSourceCell50.complete c powers row 29 29#u8 rfl 0#usize (by decide)]
