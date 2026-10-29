@@ -28,7 +28,6 @@ theorem complete (c : Columns) (powers : Array Source 29#usize)
     funext value
     apply congrArg (Aeneas.Std.bind _)
     funext next
-    simp only [lift,bind_tc_ok]
     exact ih _ dec next _ (by rw [inc];omega)
 #print axioms complete
 end R1Z.PV_RunJoin_GammaSourceFill50
