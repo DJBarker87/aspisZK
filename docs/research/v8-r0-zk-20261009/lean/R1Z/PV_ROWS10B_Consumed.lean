@@ -75,7 +75,7 @@ theorem consumed [Fintype Raw]
     (coordinates : PV_ROWS10B_Link_Callback callback law)
     (entropy_law : ∀ c raw, law c raw = 1 / (Fintype.card Raw : ℚ)) :
     (∀ w s, native w s = fill (backend w) s) ∧
-    (∀ a b c (sa sb : Slice U8), sa.val.length = sb.val.length →
+    (∀ a b (c : C) (sa sb : Slice U8), sa.val.length = sb.val.length →
       stop (native a sa) = stop (native b sb)) ∧
     (∀ c raw, callback c raw = 1 / (Fintype.card Raw : ℚ)) := by
   have full : ∀ w s, native w s = fill (backend w) s := by
