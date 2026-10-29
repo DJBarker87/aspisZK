@@ -5,6 +5,7 @@ import PV_EVH_Satisfiability
 The historical Result-only endpoint and the simulator are unchanged. -/
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 namespace PV_MEAS_Satisfiability
 open R1Z
 abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)

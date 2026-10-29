@@ -5,6 +5,7 @@ import PV_MEAS_Fuel
 simE, completion, full event observer, original bad event and bound. -/
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 namespace PV_MEAS_Core
 open R1Z
 abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)

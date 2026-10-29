@@ -3,6 +3,7 @@ import R0Z.FsAbort
 
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Finite
 attribute [local instance] Classical.propDecidable

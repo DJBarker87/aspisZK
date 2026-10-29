@@ -3,6 +3,7 @@ import PV_MEAS_Finite
 
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Fuel
 open PV_MEAS_Average PV_MEAS_Uniform PV_MEAS_Finite PV_MEAS_Coupling

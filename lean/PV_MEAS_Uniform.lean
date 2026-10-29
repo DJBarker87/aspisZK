@@ -4,6 +4,7 @@ import Mathlib.MeasureTheory.Integral.Lebesgue.Countable
 /-! Explicit uniform measure for finite carriers; no computation of the carrier. -/
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Uniform
 

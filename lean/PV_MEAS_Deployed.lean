@@ -7,6 +7,7 @@ import R1Z.ProverRwFullFuns
 The historical Result-only endpoint and the simulator are unchanged. -/
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 namespace PV_MEAS_Deployed
 open R1Z
 abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)

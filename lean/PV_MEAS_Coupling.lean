@@ -5,6 +5,7 @@ import PV_EVH_Interface
 carrier and common sample may have unbounded or continuous support. -/
 set_option autoImplicit false
 noncomputable section
+open scoped ENNReal
 open MeasureTheory PV_MEAS_Law
 namespace PV_MEAS_Coupling
 attribute [local instance] Classical.propDecidable
