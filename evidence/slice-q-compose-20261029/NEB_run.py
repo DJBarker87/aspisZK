@@ -7,7 +7,13 @@ H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-slice-q
 CACHE='/home/dombarker/project-offloads/codex-cx-slice-q-compose-cache-20261029'
 COHERENT='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,module=sys.argv[1:];assert a.startswith('NEB_L') and 1<=int(a[-3:])<=150
-assert module.startswith('NEB_') and not (E/a).exists()
+assert not (E/a).exists()
+rel=module.replace('.','/')+'.lean'
+if module.startswith('NEB_'):source_file=E/rel
+else:
+ deps=json.loads((E/'NEB_DEPENDENCIES.json').read_text());dep=deps[module];source_file=E/dep['path']
+ assert hashlib.sha256(source_file.read_bytes()).hexdigest()==dep['sha256']
+ assert source_file.read_bytes()==subprocess.check_output(['git','show',dep['revision']+':'+dep['source_path']],cwd=R)
 active=E/'NEB_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,module=module)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
@@ -32,7 +38,7 @@ print(log.read_text());sys.exit(r.returncode)
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation refused; wait three minutes',flush=True);time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
-source=(E/(module+'.lean')).read_text()
+source=source_file.read_text()
 # Pin the exact direct objects, plus every Aeneas library object in the resolved
 # coherent path; imported-cache hashes are independently recorded at intake.
 code=f'''from pathlib import Path
@@ -52,13 +58,14 @@ print(json.dumps(seen))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stdout+r.stderr
 pins=json.loads(r.stdout)
-cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[module+'.lean'],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module+'.olean',module+'.lean'],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE,COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NEB_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
+cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE,COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NEB_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
-files={module+'.lean':source,a+'.json':json.dumps(cfg)}
+files={rel:source,a+'.json':json.dumps(cfg)}
 r=ssh('python3',f'''from pathlib import Path
 import json
 b=Path({B!r})
-for n,s in json.loads({json.dumps(files)!r}).items():(b/n).write_text(s)
+for n,s in json.loads({json.dumps(files)!r}).items():
+ p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 (b/'lakefile.toml').write_text('name = "neb"\\nversion = "0.1.0"\\n')
 (b/'lean-toolchain').write_text('leanprover/lean4:v4.32.0\\n')
 ''');assert r.returncode==0,r.stderr
@@ -67,7 +74,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 # Submission is never retried, including after transport failure.
 r=ssh('python3',f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'/sources/'+module+'.lean']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'/sources/'+rel]!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
