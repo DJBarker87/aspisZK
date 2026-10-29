@@ -14344,3 +14344,15 @@ Launched:
 - b3p6i (IDs 62300-62399; 100 Lean, 40 native, 0 Kani): V244 only, with the D411 proof-shape direction applied to the digest continuation. That means named per-stage and per-field lemmas, local irreducibility and stage-by-stage composition, with no limits raised.
 - pv-diag (sparse worktree from cae2a45ae2; IDs 62400-62499; 50 Lean, 50 native, 0 Kani): the client half of D348. It enumerates every diagnostic sink in the deployed release build (stderr and stdout, logs, error values crossing the client API, panic hook, backtrace capture) with trigger conditions. It also establishes when anyhow and std capture backtraces in this build, and whether honest-run retries or recoverable errors construct diagnostics whose occurrence, count or content depends on witness data. Each sink is classified as not reached, public-only or a witness-dependent finding.
 Rows removed: 0. Privacy target not yet established.
+
+## D426 (Stream B) 2026-10-29 00:15 UTC: pv-own results (shared ownership interface built); merged; pv-ownb launched on the consumers
+
+pv-own (head 09398479b2) used all 100 Lean attempts (91 passed, 9 failed), 3 capped native scopes and no Kani. Its final statement audit, its 116 axioms queries and its focused replay passed with standard axioms only. As instructed, it wrote the interface specification before any Lean (evidence/pv-own-20261028/INTERFACE.md, commit b00014f717). It then built the shared byte-memory and ownership model on the pv-world calculus:
+- an allocation heap with byte representation relations;
+- explicit ownership operations;
+- checked allocation, store, move and borrow laws;
+- a typed bridge to the proved reserve family;
+- concrete drop evidence from the deployed MIR.
+Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; no large files; shipped-code diff empty. It was merged into the candidate as 07f4f723d8 and pushed. The candidate now also carries the pv-world calculus, so the parked pv-world branch was deleted from origin, its content being on the candidate.
+
+V229, V230, V239 and V178 remain SUSPENDED, with no witness-dependent native finding. The exact next piece for V229 is the native Link codec (representation, variant layout and padding abstraction) and the in-place collector read, write and drop cursor, with its ownership invariant and every continuation, refined into the interface. pv-ownb continues in the same sparse worktree on branch codex/pv-ownb-20261029 (IDs 62500-62599; 100 Lean, 60 native, 0 Kani), on V229, then V230, then V239 and V178, with the D411 proof-shape direction. Rows removed: 0. Privacy target not yet established.
