@@ -160,7 +160,7 @@ def V400 : Prop := ∀ adv,
 /-- adopted by owner decision D502/D478. Exact JOINT native environment/coin
 acquisition law. Neither an identity nor separate timing/signal marginals. -/
 def PublicEnvironment : Prop :=
-  PV_EVH_Residual.Link_PublicEnvironment rt.acquisition
+  PV_EVH_Residual.Link_PublicEnvironment template outputs x rt.acquisition
 
 def CausalPrefix : Prop := PV_EVH_Residual.Link_CausalPrefix
   (fun e v oracleLog => rt.completion.complete rt.publicInput
@@ -193,9 +193,9 @@ structure Links : Prop where
   timing : D166 template outputs x rt
   signal : SignalAgreement template outputs x rt
   publicSignal : V400 template outputs x rt
-  environment : PublicEnvironment rt
-  causal : CausalPrefix rt
-  observer : ObserverProgram rt
+  environment : PublicEnvironment template outputs x rt
+  causal : CausalPrefix template outputs x rt
+  observer : ObserverProgram template outputs x rt
   selectedCallback : op227 template outputs x rt
 
 /-- adopted by owner decision D502/D478. Exact D163/D166 construction;
@@ -220,21 +220,32 @@ def deployedIdeal := PV_EVH_Average.idealExperiment template outputs x rt.comple
 /-- adopted by owner decision D502/D478. Authoritative exact event-retaining
 headline. The historical Result-only privacy_headline_deployed is unchanged.
 All native links are ordinary P, and T has exactly its original three fields. -/
-theorem privacy_headline_deployed_events (links : Links template outputs x rt)
-    (adv : Observer Signal A) (w : (h).Instance) (hw : (h).public w = x.1) :
-    |mean (fun r => bit (adv.decide (deployedReal template outputs x rt adv w r))) -
-      mean (fun r => bit (adv.decide (deployedIdeal template outputs x rt adv r)))| ≤
-      PV_EVH_Core.bound template outputs x := by
-  have transfer := R0Z.LawTransport.mean_eq_of_equalLaws rt.acquisition
-    (fun p : Env × R => p)
-    (fun p => bit (adv.decide (PV_EVH_Average.realExperiment rt.native rt.signal adv w p)))
-    links.environment
-  change |mean (fun n => bit (adv.decide
-    (PV_EVH_Average.realExperiment rt.native rt.signal adv w (rt.acquisition n)))) - _| ≤ _
-  rw [transfer]
-  exact PV_EVH_Average.privacy_headline_events_joint template outputs x
-    rt.completion rt.publicInput rt.native rt.signal
-    (fun e adv w _ => toCoreLinks template outputs x rt links e adv w) adv w hw
+theorem privacy_headline_deployed_events (links : Links template outputs x rt) :
+    (∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
+      |mean (fun r => bit (adv.decide (deployedReal template outputs x rt adv w r))) -
+        mean (fun r => bit (adv.decide (deployedIdeal template outputs x rt adv r)))| ≤
+        PV_EVH_Core.bound template outputs x) ∧
+    PV_EVH_Core.bound template outputs x ≤
+      1 / 2^109 + 1 / 2^137 + 1 / 2^454 +
+        QueryScanFreshUnion.freshBudget (8 * n1 W Pr + 1) +
+        2 * ProverCommitSeedEvent19.budget (2^64) + 2 * ProverCommitFuelMass22.charge ∧
+    PV_EVH_Core.bound template outputs x < 1 / 2^100 := by
+  constructor
+  · intro adv w hw
+    have transfer := R0Z.LawTransport.mean_eq_of_equalLaws rt.acquisition
+      (fun p : Env × R => p)
+      (fun p => bit (adv.decide (PV_EVH_Average.realExperiment rt.native rt.signal adv w p)))
+      links.environment
+    change |mean (fun n => bit (adv.decide
+      (PV_EVH_Average.realExperiment rt.native rt.signal adv w (rt.acquisition n)))) - _| ≤ _
+    rw [transfer]
+    exact PV_EVH_Average.privacy_headline_events_joint template outputs x
+      rt.completion rt.publicInput rt.native rt.signal
+      (fun e adv w _ => toCoreLinks template outputs x rt links e adv w) adv w hw
+  · exact (PV_EVH_Core.privacy_headline_events_model template outputs x
+      rt.completion rt.publicInput (Classical.choice (inferInstance : Nonempty Env))
+      rt.native rt.signal
+      (fun adv w _ => toCoreLinks template outputs x rt links _ adv w)).2
 
 #print axioms toCoreLinks
 #print axioms privacy_headline_deployed_events
