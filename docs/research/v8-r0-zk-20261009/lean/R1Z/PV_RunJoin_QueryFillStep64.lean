@@ -30,17 +30,32 @@ def step (c : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex)
   let x3 ← Array.index_usize row 3#usize
   put values 3#usize lane x3
 
-theorem pair_bind {A B C : Type} (r : Result (A × B)) (f : A → B → Result C) :
-    (do let (a,b) ← r;f a b)=(do let p ← r;f p.1 p.2) := by
-  apply congrArg (Aeneas.Std.bind r)
-  funext p
-  cases p
-  rfl
-
 theorem factor (c : host_commitment.Commitment) (u : aspis_core.r0.domain.FibreIndex)
     (values : Matrix) (j : Usize) :
     PV_RunJoin_FibreFillThread43.step c u values j=step c u values j := by
-  simp only [PV_RunJoin_FibreFillThread43.step,step,put,bind_assoc_eq,bind_tc_ok,Aeneas.Std.uncurry,pair_bind]
+  simp only [PV_RunJoin_FibreFillThread43.step,step,put,bind_assoc_eq,bind_tc_ok,Aeneas.Std.uncurry]
+  apply congrArg (Aeneas.Std.bind _);funext lane
+  apply congrArg (Aeneas.Std.bind _);funext word
+  apply congrArg (Aeneas.Std.bind _);funext row
+  apply congrArg (Aeneas.Std.bind _);funext x0
+  apply congrArg (Aeneas.Std.bind _);funext pair0
+  rcases pair0 with ⟨a0,back0⟩
+  dsimp only
+  apply congrArg (Aeneas.Std.bind _);funext updated0
+  apply congrArg (Aeneas.Std.bind _);funext x1
+  apply congrArg (Aeneas.Std.bind _);funext pair1
+  rcases pair1 with ⟨a1,back1⟩
+  dsimp only
+  apply congrArg (Aeneas.Std.bind _);funext updated1
+  apply congrArg (Aeneas.Std.bind _);funext x2
+  apply congrArg (Aeneas.Std.bind _);funext pair2
+  rcases pair2 with ⟨a2,back2⟩
+  dsimp only
+  apply congrArg (Aeneas.Std.bind _);funext updated2
+  apply congrArg (Aeneas.Std.bind _);funext x3
+  apply congrArg (Aeneas.Std.bind _);funext pair3
+  rcases pair3 with ⟨a3,back3⟩
+  rfl
 
 end R1Z.PV_RunJoin_QueryFillStep64
 namespace R1Z.PV_RunJoin_QueryFillStep64
@@ -84,7 +99,6 @@ theorem total (base : ExternalTypes) (heap : Heap) (box : Box)
 
 #print axioms Domain
 #print axioms step
-#print axioms pair_bind
 #print axioms factor
 #print axioms total
 end R1Z.PV_RunJoin_QueryFillStep64
