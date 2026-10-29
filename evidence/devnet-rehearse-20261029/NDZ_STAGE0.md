@@ -35,7 +35,7 @@ Fresh-state route is supported by existing code: Pool
 fresh master/lanes/vault, and creates their PDAs. Registry
 `processor.rs:910–982` accepts a supplied Pool address, derives a fresh V2
 registry for it and stores its policy/authority. Schedule/activate/freeze are
-`:983`, `:1072`, `:1189`; no old Pool state is referenced. Pool policy's fresh
+`:985`, `:1109`, `:1189`; no old Pool state is referenced. Pool policy's fresh
 registry must be immutable before spending. The spend driver initializes Pool
 before the registry; this is valid because initialization stores policy and
 does not authenticate an existing registry. No migration or old-state rewiring
