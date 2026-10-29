@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_SamplerValueModel50
 import R1Z.PV_RunJoin_ScalarSource49
+import R1Z.PV_RunJoin_ResultMap50
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_ScalarResultModel50
@@ -27,13 +28,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
         (PV_RunJoin_SamplerValueModel50.nonzero i))=retained base heap box ops D self i row payload := by
   rw [PV_RunJoin_ScalarSource49.complete]
   unfold PV_RunJoin_ScalarSource49.retained retained
-  rw [PV_RunJoin_WeightMap46.map_bind]
+  rw [PV_RunJoin_ResultMap50.bind]
   apply congrArg (Aeneas.Std.bind _)
   funext pair
   rcases pair with ⟨block,next⟩
   dsimp only [Aeneas.Std.uncurry]
   simp only [lift,bind_tc_ok]
-  rw [PV_RunJoin_WeightMap46.map_bind]
+  rw [PV_RunJoin_ResultMap50.bind]
   apply congrArg (Aeneas.Std.bind _)
   funext unit
   simp only [mapResult,PV_RunJoin_ScalarRaw50.roundtrip,PV_RunJoin_SamplerValueModel50.complete]
