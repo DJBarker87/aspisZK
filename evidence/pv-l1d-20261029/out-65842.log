@@ -1,0 +1,110 @@
+START 65842 PV_L1D_Source_027
+DONE 65842 PV_L1D_Source_027 exit 1 wall 2.23 RSS 4391002112
+Error.Semantic)
+      else do
+        let coefficients ← prover.opening_coefficients variant backend.messages.deref
+        let scp ← sem.z.index_usize 1#usize
+        let we ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.x
+        let we1 ← aspis_core.field.wide_exact.WideExact.from_qm31 scp.y
+        let y1 ← prover.opening_claim_bytes coefficients.deref { x := we, y := we1 }
+        let a ←
+          host_wire.SemanticTranscript.impl.state aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+              sem.transcript
+        let transcript ←
+          host_transcript.Transcript.new aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 hash a variant
+        let (gamma, transcript1) ←
+          host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 transcript
+              27#u8 y1.deref true
+        let q ← prover.opening_batch coefficients.deref gamma
+        let r ← weights.Weights.new variant sem.alpha sem.z
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let inactive ← prover.opening_inactive q.deref val
+            let a1 ← inactive.to_le_bytes
+            let s5 ← Std.lift a1.to_slice
+            let (kappa, transcript2) ←
+              host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                  transcript1 28#u8 s5 false
+            let r1 ← val.materialize kappa
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let c0 ← prover.round q.deref val1.deref
+                let s8 ← Std.lift c0.to_slice
+                let c0bytes ← prover.encoded_slice s8
+                let (alpha0, transcript3) ←
+                  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
+                      transcript2 29#u8 c0bytes.deref false
+                let q1 ← prover.fold q.deref alpha0 false
+                let w1 ← prover.fold val1.deref alpha0 true
+                let r2 ←
+                  host_commitment.EncodingDomain.evaluate
+                      aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField backend.domain q1.deref
+                      0#usize
+                let r3 ←
+                  core.result.Result.map_err prover.prepare_opening.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      r2 ()
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 =>
+                    ok
+                      (core.result.Result.Ok
+                        { backend := backend, sem := sem, transcript := transcript3, y1 := y1, gamma := gamma,
+                          inactive := inactive, kappa := kappa, alpha0 := alpha0, c0bytes := c0bytes, q1 := q1,
+                          w1 := w1, folded_word := val2 })
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  prover.PreparedOpening (core.convert.FromSame verifier.Error) residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.PreparedOpening
+              (core.convert.FromSame verifier.Error) residual
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_027.lean:131:13: warning: This simp argument is unused:
+  PV_L1D_EraseControl.control
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseC̵o̵n̵t̵r̵o̵l̵.̵c̵o̵n̵t̵r̵o̵l̵,̵P̵V̵_̵L̵1̵D̵_̵E̵r̵a̵s̵e̵If.erase_if, ̲PV_L1D_Projection.prod_case, ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_019.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_021.complete_result, ̲PV_L1D_Source_023.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_024.complete_result, ̲PV_L1D_Source_025.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_026.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_027.lean:131:65: warning: This simp argument is unused:
+  PV_L1D_Projection.prod_case
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseControl.control, ̲PV_L1D_EraseIf.erase_if,P̵V̵_̵L̵1̵D̵_̵P̵r̵o̵j̵e̵c̵t̵i̵o̵n̵.̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵ ̲Aeneas.Std.bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure, ̲PV_L1D_Source_019.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_021.complete_result, ̲PV_L1D_Source_023.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_024.complete_result, ̲PV_L1D_Source_025.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_026.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_027.lean:131:151: warning: This simp argument is unused:
+  erase_coe
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseControl.control, ̲PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_c̵o̵e̵,̵e̵r̵a̵s̵e̵_̵pure,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_019.complete_result, ̲PV_L1D_Source_021.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_023.complete_result, ̲PV_L1D_Source_024.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_025.complete_result, ̲PV_L1D_Source_026.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-l1d-20261029/sources/PV_L1D_Source_027.lean:131:206: warning: This simp argument is unused:
+  PV_L1D_Source_021.complete_result
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_L1D_EraseControl.control, ̲PV_L1D_EraseIf.erase_if, ̲PV_L1D_Projection.prod_case,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, ̲erase_bind, ̲erase_observe, ̲erase_lift, ̲erase_coe, ̲erase_pure,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_019.complete_result, ̲PV_L1D_Source_021̵.̵c̵o̵m̵p̵l̵e̵t̵e̵_̵r̵e̵s̵u̵l̵t̵,̵P̵V̵_̵L̵1̵D̵_̵S̵o̵u̵r̵c̵e̵_̵0̵2̵3.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_024.complete_result, ̲PV_L1D_Source_025.complete_result,
+  ̲ ̲ ̲ ̲ ̲PV_L1D_Source_026.complete_result]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_L1D_Source_027.complete_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

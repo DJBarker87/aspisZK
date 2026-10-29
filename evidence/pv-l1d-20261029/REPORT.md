@@ -37,7 +37,7 @@ continuation cases instead of heartbeat-limit increases or proof-data
 normalization. The final accepted/draft inventories distinguish checked
 complete-Result model laws from unaccepted proposals. Phase markers are not
 native events; spurious callback phase annotations were removed from the
-full-body and body-wrapper drafts. `PV_L1D_RetryFold` retains leaf prefixes
+full-body model and body-wrapper draft. `PV_L1D_RetryFold` retains leaf prefixes
 through recursive retry, failure and divergence, but does not construct native
 leaf effects. No native producer credit follows from Result erasure.
 
@@ -93,3 +93,27 @@ Before/after: headline and deployment premises removed/added/weakened **0/0/0**.
 V347–V351 remain OPEN/P. Trust T stays exactly entropy_law, entropy_kernel,
 observation. No checked honest-native secret-dependent leak finding was
 obtained. **Target not yet established.**
+
+
+## Last focused target and exact remaining join
+
+Attempt 65892 checked `PV_L1D_Source_067.complete_result` for the semantic
+caller, including its helper restoration and later error/guard continuations.
+65893 checked its caller `PV_L1D_Source_068.complete_result`. Attempt 65896
+checked **PV_L1D_Source_069.complete_result**, the full
+`prover.prove_masked_with_attempt` emission/model erasure, with the original
+store and complete Result. This repairs the old Source069 proof frontier; it
+is not a native body-data or event-fidelity theorem. Shared-guard congruence
+and the saved generator templates replace expensive reduction. No cap,
+heartbeat or recursion limit was raised.
+
+The remaining body-wrapper/retry draft and `PV_L1D_RetrySource` proposal were
+not compiled before the focused budget was exhausted. They remain text drafts
+with ZERO theorem credit, rather than an opaque-body workaround. The next
+focused proof target is the logged full-body wrapper Source070, then the
+recursive `RetrySource` join (which must itself be checked), followed by native
+leaf/callback/world association on the original D163 experiment. The successful
+callback count theorem `PV_L1D_RetryCount.successful_callbacks` has an explicit
+per-attempt entry-log association premise; that premise has NOT been proved
+for the deployed producer. The other three inputs remain unopened under the
+requested ordering.
