@@ -70,7 +70,7 @@ theorem average_bound {E R I : Type} [Fintype E] [Nonempty E]
   rw [R0Z.LawTransport.mean_product, R0Z.LawTransport.mean_product,
     R0Z.FsGood.mean_sub]
   exact (R0Z.FsGood.abs_mean_le _).trans
-    ((R0Z.FsGood.mean_mono' _ _ per_env).trans_eq (R0Z.FsAbort.mean_const ε))
+    ((R0Z.FsAbortBounds.mean_mono' _ _ per_env).trans_eq (R0Z.FsAbort.mean_const ε))
 
 variable {Public Signal Env A R : Type} [Fintype R] [Nonempty R]
     [Fintype Env] [Nonempty Env]
