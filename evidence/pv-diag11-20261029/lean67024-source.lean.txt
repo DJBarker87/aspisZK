@@ -1,0 +1,16 @@
+import PV_DIAG11_Execution
+set_option autoImplicit false
+namespace PV_DIAG11
+
+/-! Explicit cleanup on ordinary Rust Result return. Abnormal leaf traces
+already include any unwind/abort cleanup; this function never invents it.
+The drop primitive is a Run, so its effects, panic, OOM and divergence survive. -/
+def dropReturned {V E A : Type} (r : Run V E A) (drop : Run V E Unit) : Run V E A :=
+ match r.exit with
+ | .ok a => pre r.events (seq drop (fun _ => ret a))
+ | .error e => pre r.events (seq drop (fun _ => ⟨[],.error e⟩))
+ | .panic => r | .oom => r | .abort => r | .diverge => r
+
+theorem drop_ok {V E A : Type} (es : List V) (a : A) (d : Run V E Unit) : dropReturned ⟨es,.ok a⟩ d=pre es (seq d (fun _ => ret a)) := rfl
+#print axioms drop_ok
+end PV_DIAG11
