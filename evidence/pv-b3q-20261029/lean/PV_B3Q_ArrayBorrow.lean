@@ -38,8 +38,7 @@ theorem mutable_binding {α : Type} {n : Usize} (xs : Array α n) (index : Usize
    apply congrArg Result.ok
    apply congrArg (fun back : α → Array α n => (old,back))
    funext value
-   apply Subtype.ext
-   exact congrArg Subtype.val (restore_view xs index value).symm
+   rfl
 /-- Concrete array IndexMut wrapper after the source's two delegation steps. -/
 theorem mutable_link (α : Type) (n : Usize) : PV_B3P_Link_std_dependency_closure14
     (fun _ : Unit => Array α n → Usize → Result (α × (α → Array α n)))
