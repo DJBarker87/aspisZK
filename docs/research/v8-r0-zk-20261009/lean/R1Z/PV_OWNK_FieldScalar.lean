@@ -19,7 +19,7 @@ theorem sub (a b : U32) (ha : Canon a) (hb : Canon b) :
  change ((PV_OWNK_CTDecode.sub a b).val : F) = _
  rw [PV_OWNK_CTDecode.sub_decode a b ha hb,ZMod.natCast_mod,
   Nat.cast_sub (show b.val ≤ a.val+2147483647 by unfold Canon at hb; omega),Nat.cast_add]
- rw [show (2147483647 : F)=0 from ZMod.natCast_self 2147483647,add_zero]
+ rw [show ((2147483647 : Nat) : F)=0 from ZMod.natCast_self 2147483647,add_zero]
  rfl
 theorem mul (a b : U32) : decode (PV_B2_FieldValue.aspis_core.field.M31.mul a b) = decode a * decode b := by
  unfold decode
