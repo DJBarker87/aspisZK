@@ -14504,3 +14504,17 @@ Ruling own-2'' (pv-common.txt) is the final form of the input-free rule. The glo
 A read inside the cone outside the black box still disqualifies.
 
 pv-owng (branch codex/pv-owng-20261029 from 4d2d31fa4f; IDs 63700-63799; 60 Lean, 30 native, 0 Kani) applies own-2'' to V229 and V230. Rows removed: 0. Privacy target not yet established.
+
+## D439 (Stream B) 2026-10-29 02:13 UTC: own-2'' check stops on memset; final principle-based ruling own-2'''; pv-ownh launched
+
+pv-owng used no Lean attempts, one capped native scope and no Kani. Its checker accepts all allocator-internal reads under own-2'' and revalidated 49 pinned files. It found two libc memset calls initializing the endpoint_counts arrays (0x19b67, 0x19b79), which fail own-2''(a)'s literal no-foreign-call condition, and stopped V229 and V230. It also noted that its execution was a diagnostic probe, not the shipped client artifact. The evidence was merged into the candidate as b7e35cda1b and pushed.
+
+Lead assessment: this is the third stop on the wording of the input-free rule (own-2, own-2', own-2''). Each version listed what was allowed, and each stop found the next unlisted case. All the stops cost round trips, not budget. memset writes only the buffer it is given and reads no outside state.
+
+Ruling own-2''' (pv-common.txt), the final form, is stated as a principle: whether any information outside the function's own constant computation can influence its result, control flow or observable effects. Callees are classified by influence channel:
+- memory primitives confined to caller-supplied memory are permitted, with their semantics at V370;
+- the allocator is a black box (own-2'');
+- any channel that can feed in outside information disqualifies.
+Execution evidence is a deployed-configuration harness built from identical crate sources, labelled "exhaustive over a singleton input domain, deployed-configuration harness". Codegen of the shipped binary stays at V370. Workers classify unlisted callees by the principle, record their reasoning for lead review and continue, stopping only for a disqualifying channel.
+
+pv-ownh (branch codex/pv-ownh-20261029 from b7e35cda1b; IDs 63800-63899; 60 Lean, 30 native, 0 Kani) completes the checker, address independence, channel closure, the literal value laws and the harness execution for V229 and V230. Rows removed: 0. Privacy target not yet established.
