@@ -42,7 +42,7 @@ theorem exact_links_zero {S A Signal : Type} [Fintype S]
     rintro ⟨hb,hn⟩
     exact hn (agree s hb)
   rw [h]
-  exact R0Z.FsGood.mean_zero
+  simp only [mean, Finset.sum_const_zero, zero_div]
 
 /-- EXPERIMENTAL: named public-environment association. Native joint entropy
 and environment marginals must be identified with the shared public product;
