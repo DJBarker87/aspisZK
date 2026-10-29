@@ -5,9 +5,12 @@ R=Path(__file__).resolve().parents[2]; E=R/'evidence/pv-owni-20261029'
 D='/home/dombarker/project-offloads/codex-pv-owni-20261029'; H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);m=sys.argv[2];assert 64200<=n<=64299
 assert n<64297 or any(x in m for x in ['Audit','Replay'])
-assert m.startswith(('R1Z/PV_OWNI_','R1Z/PV_OWNC_','R1Z/PV_OWNB_','R1Z/PV_OWN_','R1Z/PV_W_','R1Z/PV_RDB2C_PV_RDB1_','R1Z/PV_RDB2D_'))
+deps={r['module']:r for r in json.loads((E/'focused-dependencies.json').read_text())['order']}
+assert m.startswith('R1Z/PV_OWNI_') or m in deps
 assert json.loads((E/'cohort-verification.json').read_text())['ok']
-p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean');b=p.read_bytes()
+p=R/deps[m]['source_path'] if m in deps else R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
+b=subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
+if p.exists():assert p.read_bytes()==b
 assert b==subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])
 assert not (E/f'lean-{n}/receipt.json').exists()
 meta=dict(attempt=n,module=m,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip(),source_path=str(p.relative_to(R)),source_sha256=hashlib.sha256(b).hexdigest(),imports=re.findall(r'^import (\S+)',b.decode(),re.M),authority='h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild')
