@@ -1,4 +1,4 @@
-import Std.Tactic.Omega
+import Lean.Elab.Tactic.Omega
 set_option autoImplicit false
 namespace R1Z.PV_ROWS10_Entropy
 /-- Boundary responses to sys_fill_exact. The positive return count is the
