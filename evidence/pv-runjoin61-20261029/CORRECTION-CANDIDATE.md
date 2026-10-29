@@ -45,3 +45,15 @@ CommonSample.
 No corrected theorem or endpoint is claimed. An existential model instance
 with a properly chosen dictionary remains a permitted alternative; the
 universal counterinstance does not refute that alternative.
+
+## Exact CommonSample scope proposal
+
+Before: discharge `CommonSample (ActualProvenance60.runs)` for
+`selected base heap box ops`, uniformly in residual ops, using Produced alone.
+After: discharge that identical predicate for the *identified native*
+residual dictionary `opsNative`, after independently proving
+`CircleSource61.Source opsNative` (or the sufficient result-specific native
+circle laws). The operation association is a named source-proof obligation;
+it is not inserted as a condition in Produced or in CommonSample's antecedent.
+No such association or theorem is claimed here. A generic variant that merely
+assumes Source would remain conditional and earn no endpoint credit.
