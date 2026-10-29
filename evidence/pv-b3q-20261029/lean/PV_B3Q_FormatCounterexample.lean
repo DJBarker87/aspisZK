@@ -18,7 +18,6 @@ theorem rejecting_instance_false (error : Aeneas.Std.core.fmt.Error) :
  intro binding
  have same := congrFun (congrFun (binding ()) 17#usize) ()
  change rejecting_source error 17#usize () = Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt 17#usize () at same
- rw [Aeneas.Std.core.fmt.num.imp.DisplayUsize.fmt.eq_1] at same
  change Result.ok (Aeneas.Std.core.result.Result.Err error,()) = Result.ok (Aeneas.Std.core.result.Result.Ok (),()) at same
  have impossible : true = false := congrArg (fun observed :
      Result (Aeneas.Std.core.result.Result Unit Aeneas.Std.core.fmt.Error × Aeneas.Std.core.fmt.Formatter) =>
