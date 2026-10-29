@@ -71,7 +71,7 @@ theorem consumed [Fintype Raw]
     (entry : PV_ROWS10B_Link_Entry native source)
     (body : PV_ROWS10B_Link_Body source backend)
     (control : PV_ROWS10B_Link_Control backend word interpret)
-    (public : PV_ROWS10B_Link_Public word)
+    (publicControl : PV_ROWS10B_Link_Public word)
     (coordinates : PV_ROWS10B_Link_Callback callback law)
     (entropy_law : ∀ c raw, law c raw = 1 / (Fintype.card Raw : ℚ)) :
     (∀ w s, native w s = fill (backend w) s) ∧
@@ -84,7 +84,7 @@ theorem consumed [Fintype Raw]
   · intro a b c sa sb len
     rw [full, full, fill_stop, fill_stop]
     unfold requestStop
-    rw [len, control a c sa, control b c sb, public a b c, len]
+    rw [len, control a c sa, control b c sb, publicControl a b c, len]
   · rw [coordinates]; exact entropy_law
 #print axioms fill_stop
 #print axioms consumed
