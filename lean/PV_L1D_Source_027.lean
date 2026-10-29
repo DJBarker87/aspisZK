@@ -131,19 +131,8 @@ theorem complete_result
   simp only [PV_L1D_EraseControl.control,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro b called
-  cases b with
-  | true => rfl
-  | false =>
-    simp only [Bool.false_eq_true,if_false]
-    iterate 11
-      apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-      intro value called
-    cases value <;> simp only [PV_L1D_EraseControl.control,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
-    all_goals
-      repeat' first
-        | split <;> simp only [PV_L1D_EraseControl.control,PV_L1D_EraseIf.erase_if,PV_L1D_Projection.prod_case,Aeneas.Std.bind_tc_ok,erase_bind,erase_observe,erase_lift,erase_coe,erase_pure,PV_L1D_Source_019.complete_result,PV_L1D_Source_021.complete_result,PV_L1D_Source_023.complete_result,PV_L1D_Source_024.complete_result,PV_L1D_Source_025.complete_result,PV_L1D_Source_026.complete_result]
-        | apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
-          intro value called
-        | with_reducible rfl
+  cases b <;> simp only [Bool.false_eq_true,if_false,if_true]
+  all_goals trace_state
+  all_goals done
 #print axioms complete_result
 end PV_L1D_Source_027
