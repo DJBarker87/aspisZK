@@ -15119,3 +15119,16 @@ pv-skwc used 4 of 20 Lean attempts, two of them corrected proof failures, with n
 Under ruling (v), the five skeletons audited in D487 are now verified non-vacuous decompositions: V239 restore, the three DIAG skeletons and L1_COUNT_TRACE. All five are verified by MODEL witnesses; none is a deployed-run witness. The RUNJOIN_PUBLISH_COMPACT skeleton is being corrected and witnessed by runjoin58 from an actual fixture run. The V244 op227 skeleton is being corrected by b3p6o.
 
 The freed slot goes to the critical path. pv-rjn (branch codex/pv-rjn-20261029 from c8fb38ee73; prefix PV_RJN_; PV_RunJoin_ read-only; IDs 69500-69599; 100 Lean, 0 Kani) proves the two publication links nobody owns, NodeAppend and PublishOrder. They are proved as theorems over the data and plan families, with explicit named producer hypotheses, so they specialise in one step when runjoin58's actual-run instance lands. Rows removed: 0. Privacy target not yet established.
+
+## D495 (Stream B) 2026-10-29 08:14 UTC: pv-mf results (proved=shipped manifest; artefacts match pins; 764 stale association records); pv-mfb launched to check credited closures
+
+pv-mf used 3 native scopes, with no Lean or Kani and no proofs. Lead review: nothing outside the worker's evidence and tools; no change under crates or programs. It was merged into the candidate and pushed. It built a machine-checked MANIFEST.json with a checker, PV_MF_check.py. Its integrity checks pass, its controls reject both a corrupted client digest and an unsupported CLOSED status, and its --release-gate deliberately exits 1 while V346 is open.
+
+Artefact identities are confirmed:
+- a fresh capped release build of the client matches pv-l3a's fa888460 exactly (113.75 s, 4.86 GB peak, zero swap);
+- all three retained ELFs match their pins (default f8c0ec72, devnet 63ad3e9c, Pool 121f3e29).
+Twenty structured Rust-span and model identities match exactly. The conservative function inventory has 28,156 keys without an exact discovered extraction association; it does not establish exhaustive privacy-path reachability.
+
+It recorded 764 stale-association records: 284 STALE and 480 needing review. These are evidence receipts whose recorded hash of a Lean source differs from the file at the release revision because the file was edited later; 175 are referenced by recount 9's witnesses. Most are expected to be historical, and the final coherent replay (V397) recompiles from source in any case. The question that matters now is whether any CURRENTLY credited closure depends on a changed source. V346 remains OPEN, as do V397-V399.
+
+pv-mfb (IDs 69600-69699; 60 focused statement checks, no proofs, no whole-manifest replay per AGENTS.md formal-workflow item 4) classifies each stale record as consumed by a credited closure, historical only or undeterminable. For each credited case it runs one focused check of the restoring theorem against the current source; a failure would be a ledger finding. Rows removed: 0. Privacy target not yet established.
