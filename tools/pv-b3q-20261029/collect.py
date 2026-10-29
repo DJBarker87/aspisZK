@@ -15,6 +15,7 @@ for p in sorted(H.glob('native-*')):
  dest=O/'receipts'/p.name
  if dest.exists():shutil.rmtree(dest)
  shutil.copytree(p,dest)
-for p in H.glob('*.json'):shutil.copy2(p,O/p.name)
+for pattern in ['*.json','*.jsonl']:
+ for p in H.glob(pattern):shutil.copy2(p,O/p.name)
 (O/'receipt-index.json').write_text(json.dumps(rows,indent=2)+'\n')
 print(json.dumps(dict(lean=len(rows),passed=sum(r['exit']==0 for r in rows),failed=sum(r['exit']!=0 for r in rows))))
