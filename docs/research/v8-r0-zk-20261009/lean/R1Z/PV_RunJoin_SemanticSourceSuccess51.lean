@@ -28,9 +28,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     dsimp only [Aeneas.Std.uncurry] at h
     cases status with
     | Err e =>
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
-        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-        core.convert.FromSame,core.convert.From.from] at h
+      change (ok ((core.result.Result.Err e : core.result.Result ProverRwFull.aspis_core.field.QM31 r1_wire.Error),after))=ok (.Ok q,next) at h
       cases h
     | Ok b =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
