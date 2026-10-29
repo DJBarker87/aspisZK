@@ -122,3 +122,5 @@ Native scope v265-final-source failed closed in its negative-control generator: 
 V265 RESTORED/B at complete source/Result boundary, structural(K-1 substitute). Closing60655, inverse60653 and final source2 gate all pass;19 project/5,673 external bindings coherent. Pointer Kani remains quarantined. See rows/V265.md/json for before/after, receipt fields and limitations. Current budget56 Lean(44 pass,12 fail),7 native(6 pass,1 fail),0 Kani. Next:V217 owned field/carrier route. Final combined audit/replay remains pending.
 
 V217 candidate carrier dependency60656 passes at the unchanged tracked source (exit0,wall1.23s,peak2,643,104KiB,swap0; no theorem/axiom audit applicable to this declaration-only module). No V217 source or restoration credit from this rebuild.
+
+60657 full carrier types and60658 owned field definitions pass in the three-module private closure.60658:exit0,wall1.41s,peak2,665,780KiB,swap0; declaration-only, no theorem axiom claim. Candidate bodies are unchanged except namespace/import rebinding. V217 remains suspended pending helper proofs, complete source/library structural association and row audit.
