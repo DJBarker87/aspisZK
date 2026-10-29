@@ -16,6 +16,8 @@ def remaining (h : Header) : Nat × Nat := (h.ptr,(h.endPtr-h.ptr)/8)
 /-- Same live generation, bytes and cursor fields with an explicitly moved
 owner. This is the temporary destination-data/source-buffer guard. -/
 def handoff (q : Cursor) (dst : Nat) : Cursor :=
- {q with owner:=dst,cell:={q.cell with owner:=dst},
+ {q with
+  owner:=dst
+  cell:={q.cell with owner:=dst}
   memory:=PV_OWN_Operations.move q.owner dst q.token q.cell q.memory}
 end R1Z.PV_OWNC_GuardState
