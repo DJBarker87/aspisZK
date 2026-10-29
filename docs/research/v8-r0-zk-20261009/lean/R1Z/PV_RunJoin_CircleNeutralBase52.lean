@@ -25,7 +25,8 @@ theorem qzero (a : Q) : PV_RunJoin_CircleRawTower52.field.QM31.is_zero a =
   unfold PV_RunJoin_CircleRawTower52.field.QM31.is_zero PV_RunJoin_CircleR72Raw52.field.QM31.is_zero
   simp only [czero,PV_RunJoin_CircleR72Raw52.field.CM31.is_zero,
     PV_RunJoin_CircleR72Raw52.field.M31.is_zero,bind_tc_ok]
-  by_cases h : a.1.1 = 0#u32 <;> by_cases h1 : a.1.2 = 0#u32 <;> simp [h,h1]
+  by_cases h : a.1.1 = 0#u32 <;> by_cases h1 : a.1.2 = 0#u32 <;>
+    by_cases h2 : a.2.1 = 0#u32 <;> simp [h,h1,h2]
 
 theorem meq (a b : U32) : PV_RunJoin_CircleRawTower52.field.M31.Insts.CoreCmpPartialEqM31.eq a b =
     PV_RunJoin_CircleR72Raw52.field.M31.Insts.CoreCmpPartialEqM31.eq a b := rfl
