@@ -21,7 +21,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       (q1 w1 folded : alloc.vec.Vec W),
       @prover.round (types base) (selected base heap box ops) q w=ok c0 ∧
       @prover.encoded_slice (types base) (selected base heap box ops) (Array.to_slice c0)=ok bytes ∧
-      @host_transcript.Transcript.scalar (types base) (selected base heap box ops)
+      @host_transcript.Transcript.scalar (types base) (selected base heap box ops) _
         (@aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 (types base) (selected base heap box ops))
         transcript2 29#u8 (alloc.vec.Vec.deref bytes) false=ok (a,tr) ∧
       @prover.fold (types base) (selected base heap box ops) q a false=ok q1 ∧
