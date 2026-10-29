@@ -17,8 +17,7 @@ theorem selected_callback (base : ExternalTypes)
       ops.op227 self.«public» claims point self.challenges =
         terminal self.«public» claims point self.challenges := by
   letI : ExternalTypes := PV_B3P_Install227.Types base
-  intro claims
-  exact PV_B3P_Install227.actual_source base original self.«public» claims point self.challenges
+  exact fun claims => PV_B3P_Install227.actual_source base original self.«public» claims point self.challenges
 #print axioms selected_callback
 end
 end PV_B3P_InstalledFit13227
