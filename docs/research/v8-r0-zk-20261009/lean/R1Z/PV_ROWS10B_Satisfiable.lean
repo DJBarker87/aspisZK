@@ -30,10 +30,13 @@ theorem all_links :
   refine ⟨rfl, ?_, ?_, ?_, rfl, ?_⟩
   · intro w s; rfl
   · intro w c s
-    simp only [backend, word, interpret]
-    split <;> simp_all only [stop]
-    split <;> simp_all only [stop]
-    split <;> rfl
+    by_cases h1 : s.val.length = 1
+    · simp only [backend, interpret, if_pos h1, stop]
+    · by_cases h2 : s.val.length = 2
+      · simp only [backend, interpret, if_neg h1, if_pos h2, stop]
+      · by_cases h3 : s.val.length = 3
+        · simp only [backend, interpret, if_neg h1, if_neg h2, if_pos h3, stop]
+        · simp only [backend, interpret, if_neg h1, if_neg h2, if_neg h3, stop]
   · intro a b c; rfl
   · intro c raw; rfl
 
