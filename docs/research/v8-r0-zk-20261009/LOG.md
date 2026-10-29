@@ -14943,3 +14943,23 @@ pv-diag12 used all 100 Lean attempts (94 accepted, 6 rejected; no unchanged fail
 Most of the diagnostic line's remaining work (the std I/O, formatting, capture and cleanup association) is what the owner's pending decision D474 would change: option (C), a client patch, would make it largely unnecessary. To avoid rounds that the decision could discard, the line is PAUSED. Its worktree is removed, and its skeletons and fifteen links stay on the candidate.
 
 The slot goes to work needed whatever the owner decides on D474 and D478: the level-2 side channel. pv-l2d (D384) found no level-2 leak at its ten sites, but its rows stayed open on the RunJoin coupling, and V361-V365 were never proved. Under D478 option (1), the event-retaining simulator must produce exactly these traces. pv-l2e (sparse worktree from 67b128b900; IDs 67900-67999; 100 Lean, 30 native, at most 6 Kani with failing controls) uses the top-down method. Within fifteen attempts it compiles PV_L2E.trace_simulatable: the prover's complete level-2 trace on honest inputs equals a simulator function of public data and simulator coins, on pv-fib's good domain. One named link per site (V353-V365, V367) is then discharged, cheapest first. An honest secret that changes the trace beyond simE is a finding. Rows removed: 0. Privacy target not yet established.
+
+## D480 (Stream B) 2026-10-29 06:30 UTC: pv-l1g results; level-1 count line parked; recount 9 launched
+
+pv-l1g made 99 Lean starts (95 passed, 4 failed and replaced with changed sources), with no native scopes or Kani. All three reserved checks passed with standard axioms only and zero swap. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; link definitions unchanged. It was merged into the candidate as 42760700cb and pushed. Ruling (u)'s object reuse now works: it reused 1,664 verified objects, and recorded that the earlier l1c-l1f host caches were empty.
+
+Status of the count links:
+- Count acquisition: PARTIAL; returned-count publication and earlier-prefix retention proved.
+- Body wrapper: OPEN.
+- Retry and world join: PARTIAL; full-world retry composition and an exact sufficient criterion proved.
+- D163 and simE coupling, with Link_Sites: OPEN.
+The open pieces need the native association of the prover's body (leaf, world, Drop and unwind, terminal), which is runjoin's native refinement and not something this line can supply. After four rounds the level-1 line is PARKED, with its L1_COUNT_TRACE skeleton and links kept on the candidate.
+
+Recount 9 launched (pv-recount9, sparse worktree from research 6474027f52; IDs 68000-68099; statement checks only; candidate pinned at 42760700cb). It re-derives every row and independently and adversarially confirms or rejects the following:
+- V229 and V230 under own-2''', scrutinising the ruling itself;
+- V256 and V257;
+- V260, V265 and V217;
+- V213 after pv-fixb;
+- the 36 b3p6-1 bindings, scrutinising b3p6-1;
+- (h5'') and the HeadlineV2 resolution.
+It records the headline observation-carrier finding (D476, D478) and its effect on what the headline currently establishes, the pending owner decisions D474 and D478, the new skeletons as partial decompositions rather than closures, and the paused and parked lines. Rows removed: 0. Privacy target not yet established.
