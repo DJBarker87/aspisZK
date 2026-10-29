@@ -33,6 +33,7 @@ theorem body (base : ExternalTypes) (heap : Heap) (box : Box)
   funext opening
   rw [PV_RunJoin_OpeningEmit63.complete base heap box ops opening out room]
   simp only [tail,PV_RunJoin_ByteScript63.run,lift,bind_tc_ok,bind_assoc_eq]
+  rfl
 
 #print axioms body
 end R1Z.PV_RunJoin_QueryFactor63
