@@ -23,3 +23,7 @@ These rules govern how deployments are run. They change no proof, protocol or co
 - 7Q2nGsPg8rbjdxKHK4jxTgEWLTyd9o1X4KMSjCieRmue: the July 2026 profile23 devnet program, 8.353 SOL. Its upgrade authority is 8AFmGcC2... (~/.config/solana/id.json, which is present). It can be closed to any recipient. Closing is irreversible and needs owner confirmation.
 - Small balances on retained local keys: 0.463 + 0.463 SOL (profile23 proof accounts), 0.397 SOL (.spend-keys/devnet-payer), 0.042 SOL (id.json).
 - No open buffers under Xjb7roDV..., 8AFmGcC2..., 9Q3FdNJF... or 6xf6m4fJ....
+
+## Retained devnet payer (created 2026-10-29)
+
+CVZJcAv97von8njTJSyLVQ9X33NAKQYbEXFKnAYvst9t: keypair at ~/.config/solana/aspis-deploy/devnet-payer-20261029.json on the lead's Mac (directory 0700, file 0600). It is outside every workspace and offload directory, and it is the payer and buffer authority for the release-verifier devnet deployment. Its secret is never copied into the repository or printed. Back up the aspis-deploy directory before any host cleanup.
