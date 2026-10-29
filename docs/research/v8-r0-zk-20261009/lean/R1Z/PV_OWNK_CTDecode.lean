@@ -73,6 +73,8 @@ theorem reduce_shape (x : U64) :
   show (2147483647#32).toNat = 2147483647 from rfl]
  norm_num only [PV_OWNK_ReduceBits.reduced,PV_OWNK_ReduceBits.word,
   PV_OWNK_ReduceBits.fold64,BitVec.ule,decide_eq_true_eq,apply_ite,HShiftRight.hShiftRight]
+ simp only [show (2147483647#32).toNat = 2147483647 from rfl]
+ split <;> rename_i h <;> simp only [h,if_pos,if_neg]
 
 theorem reduce_decode (x : U64) :
  (PV_B2_FieldValue.aspis_core.field.ct.reduce64 x).val = x.val % 2147483647 := by
