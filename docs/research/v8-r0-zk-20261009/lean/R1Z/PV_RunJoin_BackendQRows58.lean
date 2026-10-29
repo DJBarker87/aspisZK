@@ -13,7 +13,7 @@ theorem g (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
     (q : Array Q 1024#usize) :
     @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2_loop1
       (types base) (selected base heap box ops) self q 0#usize=
-      ok {self with messages:=matrix (prefix p 27 (values q) 1024)} := by
+      ok {self with messages:=matrix (filled p 27 (values q) 1024)} := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_BackendRows58.c2_g]
@@ -26,7 +26,7 @@ theorem d (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns 
     (q : Array Q 1024#usize) :
     @prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1_loop1
       (types base) (selected base heap box ops) self q 0#usize=
-      ok {self with messages:=matrix (prefix p 28 (values q) 1024)} := by
+      ok {self with messages:=matrix (filled p 28 (values q) 1024)} := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   rw [PV_RunJoin_BackendRows58.c1_d]

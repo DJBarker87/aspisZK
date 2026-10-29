@@ -18,9 +18,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (hread : ∀ row : Usize,row.val<1024 → read row=ok (input row.val))
     (p : Nat → Nat → W) (lane : Usize) (hl : lane.val<29)
     (n : Nat) (row : Usize) (bound : row.val+n=1024) (self : prover.Backend)
-    (messages : self.messages=matrix (prefix p lane.val input row.val)) :
+    (messages : self.messages=matrix (filled p lane.val input row.val)) :
     @PV_RunJoin_BackendRows58.run (types base) (selected base heap box ops) read lane self row=
-      ok {self with messages:=matrix (prefix p lane.val input 1024)} := by
+      ok {self with messages:=matrix (filled p lane.val input 1024)} := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   induction n generalizing row self with
@@ -44,7 +44,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     rw [hw]
     simp only [bind_tc_ok,lift]
     have next := ih (Usize.wrapping_add row 1#usize)
-      {self with messages:=matrix (prefix p lane.val input (row.val+1))}
+      {self with messages:=matrix (filled p lane.val input (row.val+1))}
       (by rw [inc];omega) (by rw [inc])
     simpa only [PV_RunJoin_BackendRows58.run] using next
 
