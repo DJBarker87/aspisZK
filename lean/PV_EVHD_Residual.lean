@@ -35,16 +35,13 @@ theorem exact_links_zero {S A Signal : Type} [Fintype S]
       (fun s => observe (ss s) (sim s)) = 0 := by
   have agree := full_agreement bad real sim rs ss context timing signal
   unfold traceResidual eventMass
-  have h : (fun s => if ¬bad s ∧ observe (rs s) (real s) ≠ observe (ss s) (sim s)
-      then (1 : ℚ) else 0) = fun _ => 0 := by
+  trans mean (fun _ : S => (0 : ℚ))
+  · apply congrArg mean
     funext s
     apply if_neg
     rintro ⟨hb,hn⟩
     exact hn (agree s hb)
-  change mean (fun s => if ¬bad s ∧ observe (rs s) (real s) ≠ observe (ss s) (sim s)
-    then (1 : ℚ) else 0) = 0
-  rw [h]
-  simp only [mean, Finset.sum_const_zero, zero_div]
+  · simp only [mean, Finset.sum_const_zero, zero_div]
 
 /-- EXPERIMENTAL: named public-environment association. Native joint entropy
 and environment marginals must be identified with the shared public product;
