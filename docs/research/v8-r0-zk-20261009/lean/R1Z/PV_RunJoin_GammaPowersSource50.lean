@@ -24,7 +24,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   change ProverRwP6PowersInstall.powers ops 29#usize (fromW g)=_
   have source := @ProverRwP6PowersGammaSource.gamma (types base) ops (fromW g)
   change ProverRwP6PowersInstall.powers ops 29#usize (fromW g)=_ at source
-  rw [source,ProverRwDictionaryTower.native_w_roundtrip]
+  rw [source]
+  change ProverRwP6ResultMap.map (ProverRwP6ArrayMap.map fromW)
+    (AspisR1ProducerRelease47.gamma (ProverRwDictionaryTower.toW (fromW g)))=_
+  rw [ProverRwDictionaryTower.native_w_roundtrip]
   rfl
 #print axioms complete
 end R1Z.PV_RunJoin_GammaPowersSource50
