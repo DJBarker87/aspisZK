@@ -17,7 +17,7 @@ theorem borrow3_0 {α : Type} (xs : Array α 3#usize) :
 
 theorem update3_0 {α : Type} (xs : Array α 3#usize) (value : α) :
     Array.update xs 0#usize value = .ok (Aeneas.Std.Array.set xs 0#usize value) :=
-  PV_B3P_ArrayWrite227.update xs 0#usize (by change 0<3; omega)
+  PV_B3P_ArrayWrite227.update xs 0#usize (by change 0<3; omega) value
 #print axioms index3_0
 #print axioms borrow3_0
 #print axioms update3_0
