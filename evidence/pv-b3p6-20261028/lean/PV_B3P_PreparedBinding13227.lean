@@ -89,6 +89,7 @@ theorem source_prepared_binding13 (left : Array reference_field.PreparedQm31Mult
     source_prepared13 left right = reference_field.qm31_sum_products3_prepared left right := by
   rw [prepared_root_binding12]
   unfold source_prepared13 source_prepared12
+  dsimp only
   rw [range_loop_binding13]
   have steps : source_product_term13 left right = source_product_term12 left right := by
     funext sums index
