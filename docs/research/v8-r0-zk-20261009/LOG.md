@@ -14556,3 +14556,15 @@ runjoin50 launched (IDs 63600-63699; 100 Lean, 0 Kani) on those items in order, 
 b3p6j (branch codex/pv-b3p6-20261028, head e5d3eda1b4, pushed) used all 100 Lean attempts (86 passed, 14 rejected), with no native scopes and no Kani. Its three reserved audits passed before an interruption and were recovered without rerunning. Verification covered 100 source snapshots against committed blobs and 121 theorem axiom reports, with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules.
 
 V244 residual (b) advanced: ordered loops, emitted reads, the public-digest continuation and nine matrix stores are accepted. The exhaustive per-body binding is incomplete, and the value-body entry factorization hit the default recursion depth; its rejected proofs are excluded. Residuals (c) and (d) are pending. Runjoin's op227 hypothesis (R1Z.PV_RunJoin_OracleBridge38.selected_callback) is not discharged. b3p6k launched (IDs 64000-64099; 100 Lean, 40 native, 0 Kani), with the D411 direction applied to the value-body factorization, then (b), (c) and (d). Rows removed: 0. Privacy target not yet established.
+
+## D443 (Stream B) 2026-10-29 02:30 UTC: pv-diag2b results; pv-diag3 launched
+
+pv-diag2b used its remaining 85 Lean attempts and 21 of 22 native scopes, with no Kani. Audits 63097-63099 passed with standard axioms only, and the final cohort checks found no mismatch. The h7 obstruction of D431 was resolved by recovering the original generation and dependency hash chain. The unchanged importer elaborated, so step 4 regeneration was not needed.
+
+On the client's diagnostic-effect model, which keeps retry effects, counts, failures, frames and cleanup, it proved three things:
+- the final Rejected is excluded on the concrete client's modelled normal-return path;
+- the local error mapper is silent;
+- the selected exhaustion and error text is fixed.
+Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs or raised limits in hand-written modules; two pin files of 5.4 MB, under the 20 MB rule; shipped-code diff empty. It was merged into the candidate as 344a81b9f0 and pushed.
+
+D348 remains unresolved. The native leaf, drop, unwind, capture and write executions and their joint L1 occurrence and frame law remain, and no diagnostic counterexample was established. pv-diag3 continues in the same sparse worktree on branch codex/pv-diag3-20261029 (IDs 64100-64199; 100 Lean, 40 native, 0 Kani). It covers those native executions under own-1, their joint public law reusing the existing L1 count laws, and the composition at the client observer. Rows removed: 0. Privacy target not yet established.
