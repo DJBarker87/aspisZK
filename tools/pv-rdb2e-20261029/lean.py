@@ -4,11 +4,16 @@ import subprocess,json,hashlib,re,sys
 from cooldown import check_ready, refuse
 check_ready()
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2e-20261029';D='/home/dombarker/project-offloads/codex-pv-rdb2e-20261029';H='dombarker@100.108.41.90'
-n=int(sys.argv[1]);module=sys.argv[2];assert 62200<=n<=62299 and module.startswith(('R1Z/PV_RDB2E_','R1Z/PV_RDB2D_','R1Z/PV_RDB2C_'))
+n=int(sys.argv[1]);module=sys.argv[2];assert 62200<=n<=62299 and module.startswith(('R1Z/PV_RDB2E_','R1Z/PV_RDB2D_','R1Z/PV_RDB2C_','AspisR72Sampler/'))
 assert n<62297 or any(x in module for x in ['Audit','Replay'])
-p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');raw=p.read_bytes()
-blob=subprocess.check_output(['git','rev-parse','HEAD:'+str(p.relative_to(R))],text=True).strip();assert subprocess.check_output(['git','show','HEAD:'+str(p.relative_to(R))])==raw
-meta=dict(attempt=n,module=module,source_path=str(p.relative_to(R)),source_blob=blob,source_sha256=hashlib.sha256(raw).hexdigest(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),authority='h5 git-tracked new module; all external manifest objects preflighted and selected prefixes checked',toolchain='Lean4.32.0 env-J',imports=re.findall(r'^import (\S+)',raw.decode(),re.M))
+resolution=json.loads((E/'inherited-resolution.json').read_text())['modules'].get(module.replace('/','.'))
+if resolution:
+ raw=subprocess.check_output(['git','show',resolution['blob']]);assert hashlib.sha256(raw).hexdigest()==resolution['sha256']
+ p=E/'upload-source.lean';p.write_bytes(raw);blob=resolution['blob'];source_path=resolution['path'];authority=resolution['authority']
+else:
+ p=R/'docs/research/v8-r0-zk-20261009/lean'/(module+'.lean');raw=p.read_bytes();source_path=str(p.relative_to(R));authority='h5 own tracked new module'
+ blob=subprocess.check_output(['git','rev-parse','HEAD:'+source_path],text=True).strip();assert subprocess.check_output(['git','show','HEAD:'+source_path])==raw
+meta=dict(attempt=n,module=module,source_path=source_path,source_blob=blob,source_sha256=hashlib.sha256(raw).hexdigest(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),authority=authority,toolchain='Lean4.32.0 env-J',imports=re.findall(r'^import (\S+)',raw.decode(),re.M))
 (E/f'{n}-submission.json').write_text(json.dumps(meta,indent=2)+'\n')
 g='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 r=subprocess.run(['ssh',H,f'python3 {g}/reservation.py {D}/upload-{n}.json > {D}/upload-{n}.log 2>&1'],capture_output=True,text=True)
