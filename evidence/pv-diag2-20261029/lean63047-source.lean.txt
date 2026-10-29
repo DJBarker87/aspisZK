@@ -1,0 +1,18 @@
+import PV_DIAG2_Termination
+set_option autoImplicit false
+namespace PV_DIAG2
+/-- std::io::print_to outer frame. `write` supplies the complete global
+getter/write_fmt/temporary-handle scope; `panic` supplies formatting, hook,
+Err cleanup and abnormal effects. They are not assumed to be silent. -/
+def printTo {I : Type} (capture : Execution Bool) (write : Execution (Except I Unit))
+    (panic : I → Execution Unit) : Execution Unit :=
+ bind capture (fun captured => if captured then pureExecution () else
+  bind write (fun status => match status with
+   | .ok () => pureExecution ()
+   | .error e => panic e))
+
+
+theorem print_capture_suppresses_global {I : Type} (prior : List Effect) (write : Execution (Except I Unit)) (panic : I → Execution Unit) :
+ printTo ⟨prior,.value true⟩ write panic = ⟨prior,.value ()⟩ := by simp [printTo,bind,prepend,pureExecution]
+#print axioms print_capture_suppresses_global
+end PV_DIAG2

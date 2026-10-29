@@ -1,0 +1,44 @@
+import PV_DIAG2_Sinks
+import PV_DIAG2_Termination
+set_option autoImplicit false
+namespace PV_DIAG2
+open Aeneas Aeneas.Std Result
+open R1Z ProverCommitRetry34
+
+def sampleAttempt (events : List Effect) : Nat → Unit → Observed (Step Unit × Unit) :=
+ fun _ _ => ⟨events,ok (.done (),())⟩
+
+
+theorem sink_append (sink : Sink) (a b : List Effect) : atSink sink (a++b) = atSink sink a ++ atSink sink b := by simp [atSink,List.filter_append]
+#print axioms sink_append
+
+theorem sink_prepend {A : Type} (sink : Sink) (prior : List Effect) (x : Execution A) :
+ atSink sink (prepend prior x).effects = atSink sink prior ++ atSink sink x.effects := sink_append sink prior x.effects
+#print axioms sink_prepend
+
+theorem sink_silence_composes {A : Type} (sink : Sink) (prior : List Effect) (x : Execution A)
+ (hp : atSink sink prior = []) (hx : atSink sink x.effects = []) :
+ atSink sink (prepend prior x).effects = [] := by rw [sink_prepend,hp,hx]; rfl
+#print axioms sink_silence_composes
+
+theorem sink_joint_composition {A B : Type} (sink : Sink) (a b : List Effect) (x : Execution A) (y : Execution B)
+ (hp : atSink sink a = atSink sink b) (ht : atSink sink x.effects = atSink sink y.effects) :
+ atSink sink (prepend a x).effects = atSink sink (prepend b y).effects := by rw [sink_prepend,sink_prepend,hp,ht]
+#print axioms sink_joint_composition
+
+/-- Model counterexample only; no native finding. Even full Result/count
+agreement cannot establish a stderr law while attempt effects are arbitrary. -/
+theorem result_equality_not_stderr_equality :
+ (runEffects (sampleAttempt [.stderr "a"]) 1 0 ()).result = (runEffects (sampleAttempt [.stderr "b"]) 1 0 ()).result ∧
+ atSink .stderr (runEffects (sampleAttempt [.stderr "a"]) 1 0 ()).effects ≠ atSink .stderr (runEffects (sampleAttempt [.stderr "b"]) 1 0 ()).effects := by
+ simp [runEffects,sampleAttempt,atSink,belongs]
+#print axioms result_equality_not_stderr_equality
+
+/-- Model counterexample only; actual native PC lists require their source
+association. Existing L1 count laws are retained, not re-proved or refuted. -/
+theorem result_equality_not_frame_equality :
+ (runEffects (sampleAttempt [.capture [0]]) 1 0 ()).result = (runEffects (sampleAttempt [.capture [1]]) 1 0 ()).result ∧
+ atSink .capture (runEffects (sampleAttempt [.capture [0]]) 1 0 ()).effects ≠ atSink .capture (runEffects (sampleAttempt [.capture [1]]) 1 0 ()).effects := by
+ simp [runEffects,sampleAttempt,atSink,belongs]
+#print axioms result_equality_not_frame_equality
+end PV_DIAG2

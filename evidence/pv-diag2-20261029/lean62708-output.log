@@ -1,0 +1,86 @@
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_Exit.lean:67:13: error: Tactic `rfl` failed: The left-hand side
+  (match fail e with
+    | ok (Step.stop e_1, snd) =>
+      { effects := x.effects ++ (reportError (exportError e_1) c.pcs c.rendered c.enabled).effects, result := fail e }
+    | x_1 => x).result
+is not definitionally equal to the right-hand side
+  fail e
+
+case fail
+S P : Type
+c : Capture
+x : Observed (Step (Published P) × S)
+e : Std.Error
+h : x.result = fail e
+⊢ (match fail e with
+      | ok (Step.stop e_1, snd) =>
+        { effects := x.effects ++ (reportError (exportError e_1) c.pcs c.rendered c.enabled).effects, result := fail e }
+      | x_1 => x).result =
+    fail e
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_Exit.lean:68:10: error: Tactic `rfl` failed: The left-hand side
+  (match div with
+    | ok (Step.stop e, snd) =>
+      { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects, result := div }
+    | x_1 => x).result
+is not definitionally equal to the right-hand side
+  div
+
+case div
+S P : Type
+c : Capture
+x : Observed (Step (Published P) × S)
+h : x.result = div
+⊢ (match div with
+      | ok (Step.stop e, snd) =>
+        { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects, result := div }
+      | x_1 => x).result =
+    div
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_Exit.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  (match ok (Step.done a✝, after) with
+    | ok (Step.stop e, snd) =>
+      { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects,
+        result := ok (Step.done a✝, after) }
+    | x_1 => x).result
+is not definitionally equal to the right-hand side
+  ok (Step.done a✝, after)
+
+case ok.done
+S P : Type
+c : Capture
+x : Observed (Step (Published P) × S)
+after : S
+a✝ : Published P
+h : x.result = ok (Step.done a✝, after)
+⊢ (match ok (Step.done a✝, after) with
+      | ok (Step.stop e, snd) =>
+        { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects,
+          result := ok (Step.done a✝, after) }
+      | x_1 => x).result =
+    ok (Step.done a✝, after)
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_Exit.lean:71:18: error: Tactic `rfl` failed: The left-hand side
+  (match ok (Step.retry, after) with
+    | ok (Step.stop e, snd) =>
+      { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects,
+        result := ok (Step.retry, after) }
+    | x_1 => x).result
+is not definitionally equal to the right-hand side
+  ok (Step.retry, after)
+
+case ok.retry
+S P : Type
+c : Capture
+x : Observed (Step (Published P) × S)
+after : S
+h : x.result = ok (Step.retry, after)
+⊢ (match ok (Step.retry, after) with
+      | ok (Step.stop e, snd) =>
+        { effects := x.effects ++ (reportError (exportError e) c.pcs c.rendered c.enabled).effects,
+          result := ok (Step.retry, after) }
+      | x_1 => x).result =
+    ok (Step.retry, after)
+'PV_DIAG2.success_no_error_report' depends on axioms: [propext]
+'PV_DIAG2.stopped_report' depends on axioms: [propext, Quot.sound]
+'PV_DIAG2.stopped_frames_disabled' depends on axioms: [propext, Quot.sound]
+'PV_DIAG2.exhaustion_requested_text' does not depend on any axioms
+'PV_DIAG2.finish_result' depends on axioms: [propext, sorryAx]
+'PV_DIAG2.final_source_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

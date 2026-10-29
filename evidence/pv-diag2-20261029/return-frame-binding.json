@@ -1,0 +1,157 @@
+{
+  "classification": "source continuation-order binding plus reanalysis of inherited finite controls; source labels are not native PCs",
+  "source_files": {
+    "/home/dombarker/project-offloads/codex-pv-fscan-20261028/src/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs": "f86c9a164db060533b10132502bf16b6b60fa702cab2311d38d574f1c105a5a7",
+    "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/macros.rs": "696e6a8aac614525a29697aedc7561e98beccf3d43aed3ada1cc93daa99da8ba",
+    "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/lib.rs": "ea7f436f6bf4b356ff30ec922b50b40ead0ade28b123341a8de7f310311fd44c",
+    "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/error.rs": "2a78ee4e5f8d6b4476c761f77473362b9ed12f5402e4701001e7d04d628ba030",
+    "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/backtrace.rs": "621ec5d9e2f31883d0384ae00fc536d1ea359da989d2e0d1be1ba03482c8f920",
+    "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/wrapper.rs": "079218e1d8c9374f52311b1c7971f7fbdeba4d7af1b0749c0d535010f1232697",
+    "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc"
+  },
+  "exact_prover_map_err_expression": "RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?",
+  "anyhow_format_err_body": "    pub fn format_err(args: Arguments) -> Error {\n        if let Some(message) = args.as_str() {\n            // anyhow!(\"literal\"), can downcast to &'static str\n            Error::msg(message)\n        } else {\n            // anyhow!(\"interpolate {var}\"), can downcast to String\n            Error::msg(fmt::format(args))\n        }\n    }",
+  "anyhow_msg_body": "    pub fn msg<M>(message: M) -> Self\n    where\n        M: Display + Debug + Send + Sync + 'static,\n    {\n        Error::construct_from_adhoc(message, backtrace!())\n    }",
+  "steps": [
+    "Rust method receiver prove_for_proof_accounts(...) completes before Result::map_err invokes err",
+    "Normal return propagates through retry frames and RealR1_client before plan::err",
+    "Literal-with-capture macro uses __private::format_err(format_args!(...))",
+    "format_err obtains a literal or completes fmt::format(args) before calling Error::msg",
+    "Error::msg evaluates backtrace!() before construct_from_adhoc is called",
+    "There is no new capture in the field-free prover Error value; capture belongs to anyhow conversion",
+    "Normal report capture therefore cannot retain popped prover/retry source frames",
+    "Panic/OOM while proving, formatting, capturing or dropping is a distinct path with actual frame effects retained"
+  ],
+  "source_projection": [
+    "Backtrace::capture",
+    "Error::msg",
+    "__private::format_err",
+    "plan::err",
+    "Result::map_err",
+    "plan::run",
+    "saved outer callers"
+  ],
+  "reused_finite_control_groups": {
+    "{\"RUST_BACKTRACE\": \"1\"}": [
+      {
+        "variant": "Parse",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Semantic",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Transcript",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Relation",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Merkle",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Query",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Checkpoint",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Allocation",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Rejected",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "AttemptsExhausted",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Entropy",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      }
+    ],
+    "{\"RUST_BACKTRACE\": \"0\", \"RUST_LIB_BACKTRACE\": \"1\"}": [
+      {
+        "variant": "Parse",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Semantic",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Transcript",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Relation",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Merkle",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Query",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Checkpoint",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Allocation",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Rejected",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "AttemptsExhausted",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      },
+      {
+        "variant": "Entropy",
+        "suffix_sha256": "c672a12a4a5c81ba2b413205f9d5d1187d9788584e995dbe5be0dde354047a24",
+        "distinct_suffixes_in_group": 1
+      }
+    ]
+  },
+  "model_sha256": "5cabd761c1c8c8d06219d6e7779b26817c40ef6f8c375539be2f2544ee73db7a",
+  "open": [
+    "actual PC/source-spine association under owner V370/D381/D386",
+    "Backtrace::create/unwinder and symbolizer/cache/foreign effects",
+    "earlier captures, environment cache and public joint state law",
+    "panic/oom and drop-glue frame laws; no ordinary-return assertion for those"
+  ]
+}

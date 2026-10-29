@@ -1,0 +1,122 @@
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:14:1: error: Insufficient number of fields for `⟨...⟩` constructor: Constructor `Aeneas.Std.core.ops.function.FnMut.mk` has 2 explicit field, but only 1 was provided
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:14:2: error: Application type mismatch: The argument
+  fun state k => ?m.10
+has type
+  (state : ?m.7) → (k : ?m.11 state) → ?m.12 state k
+but is expected to have type
+  core.ops.function.FnOnce C Usize (core.result.Result ProverRwRetryModel.Secret ProverRwFull.verifier.Error)
+in the application
+  core.ops.function.FnMut.mk fun state k => ?m.10
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:17:23: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Ok` could not be determined
+
+Hint: Using `core.result.Result.Ok would be unambiguous:
+  [apply] `core.result.Result.Ok`
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:18:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.Err` could not be determined
+
+Hint: Using `core.result.Result.Err would be unambiguous:
+  [apply] `core.result.Result.Err`
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:27:10: error: unsolved goals
+case fail
+inst✝¹ : ProverRwFull.ExternalTypes
+inst✝ : ProverRwFull.ExternalFuns
+C E : Type
+generate : C → Usize → Result (core.result.Result ProverRwRetryModel.Secret E × C)
+s after : C
+k : Usize
+e : Std.Error
+h : generate s k = fail e
+⊢ ¬sorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:28:7: error: unsolved goals
+case div
+inst✝¹ : ProverRwFull.ExternalTypes
+inst✝ : ProverRwFull.ExternalFuns
+C E : Type
+generate : C → Usize → Result (core.result.Result ProverRwRetryModel.Secret E × C)
+s after : C
+k : Usize
+h : generate s k = div
+⊢ ¬sorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:29:11: error: unsolved goals
+case ok.Ok
+inst✝¹ : ProverRwFull.ExternalTypes
+inst✝ : ProverRwFull.ExternalFuns
+C E : Type
+generate : C → Usize → Result (core.result.Result ProverRwRetryModel.Secret E × C)
+s after : C
+k : Usize
+next : C
+a✝ : ProverRwRetryModel.Secret
+h : generate s k = ok (core.result.Result.Ok a✝, next)
+⊢ ¬sorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+
+case ok.Err
+inst✝¹ : ProverRwFull.ExternalTypes
+inst✝ : ProverRwFull.ExternalFuns
+C E : Type
+generate : C → Usize → Result (core.result.Result ProverRwRetryModel.Secret E × C)
+s after : C
+k : Usize
+next : C
+a✝ : E
+h : generate s k = ok (core.result.Result.Err a✝, next)
+⊢ ¬sorry () s k = ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:74:9: error: Type mismatch: After simplification, term
+  law
+ has type
+  (do
+      let value ← ok (core.result.Result.Err ProverRwFull.verifier.Error.Rejected, after)
+      ok
+          (match value.1 with
+            | core.result.Result.Ok p => Step.done { proof := (p.proof, p.audit), attempts := ↑p.attempts }
+            | core.result.Result.Err e =>
+              Step.stop
+                (match e with
+                | ProverRwFull.verifier.Error.Parse => AspisR1SimControl21.verifier.Error.Parse
+                | ProverRwFull.verifier.Error.Semantic => AspisR1SimControl21.verifier.Error.Semantic
+                | ProverRwFull.verifier.Error.Transcript => AspisR1SimControl21.verifier.Error.Transcript
+                | ProverRwFull.verifier.Error.Relation => AspisR1SimControl21.verifier.Error.Relation
+                | ProverRwFull.verifier.Error.Merkle => AspisR1SimControl21.verifier.Error.Merkle
+                | ProverRwFull.verifier.Error.Query => AspisR1SimControl21.verifier.Error.Query
+                | ProverRwFull.verifier.Error.Checkpoint => AspisR1SimControl21.verifier.Error.Checkpoint
+                | ProverRwFull.verifier.Error.Allocation => AspisR1SimControl21.verifier.Error.Allocation
+                | ProverRwFull.verifier.Error.Rejected => AspisR1SimControl21.verifier.Error.Rejected
+                | ProverRwFull.verifier.Error.AttemptsExhausted => AspisR1SimControl21.verifier.Error.AttemptsExhausted
+                | ProverRwFull.verifier.Error.Entropy => AspisR1SimControl21.verifier.Error.Entropy),
+            value.2)) =
+    do
+    let value ← ok (Step.stop e, next)
+    ok (value.1, value.2.2)
+but is expected to have type
+  AspisR1SimControl21.verifier.Error.Rejected = e ∧ after = next.2
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:64:24: warning: This simp argument is unused:
+  mapR
+
+Hint: Omit it from the simp argument list.
+  simp [hrun,̵m̵a̵p̵R̵] at law
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:65:21: warning: This simp argument is unused:
+  mapR
+
+Hint: Omit it from the simp argument list.
+  simp [hrun,̵m̵a̵p̵R̵] at law
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:69:26: warning: This simp argument is unused:
+  mapR
+
+Hint: Omit it from the simp argument list.
+  simp [hrun,m̵a̵p̵R̵,̵ ̲ProverRwRetryModel.drop] at law
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-diag2-20261029/sources/PV_DIAG2_ClientRetry.lean:70:25: warning: This simp argument is unused:
+  mapR
+
+Hint: Omit it from the simp argument list.
+  simp [hrun,m̵a̵p̵R̵,̵ ̲ProverRwRetryModel.drop] at law
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_DIAG2.client_entropy_not_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_DIAG2.client_attempt_reject_free' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_DIAG2.client_run_reject_free' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_DIAG2.source_client_no_rejected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
