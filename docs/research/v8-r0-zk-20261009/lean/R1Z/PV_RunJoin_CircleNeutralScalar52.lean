@@ -1,6 +1,5 @@
 import R1Z.PV_RunJoin_CircleNeutralBase52
 import R1Z.PV_B2_C_MachineArithmetic
-import R1Z.PV_B2_C_U32Arithmetic
 set_option autoImplicit false
 open Aeneas Aeneas.Std Result
 namespace R1Z.PV_RunJoin_CircleNeutralScalar52
@@ -25,7 +24,15 @@ theorem subtract_shape (x : U32) :
 
 theorem checked_add (a b : U32) (h : a.val+b.val < 2^32) :
     UScalar.add a b = ok (U32.wrapping_add a b) := by
-  exact PV_B2_C_U32Arithmetic.add_exact a b (by change a.val+b.val ≤ 4294967295; omega)
+  obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U32.add_spec (x := a) (y := b)
+    (by change a.val+b.val ≤ 4294967295; omega))
+  have he : z = U32.wrapping_add a b := by
+    apply UScalar.eq_of_val_eq
+    rw [U32.wrapping_add_val_eq]
+    change z.val = (a.val+b.val)%4294967296
+    rw [Nat.mod_eq_of_lt h]
+    exact hv
+  simpa only [he] using hz
 
 theorem checked_sub (a b : U32) (h : b.val ≤ a.val) :
     UScalar.sub a b = ok (U32.wrapping_sub a b) := by
