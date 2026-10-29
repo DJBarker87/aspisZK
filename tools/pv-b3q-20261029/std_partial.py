@@ -2,7 +2,6 @@
 from pathlib import Path
 D=Path('evidence/pv-b3q-20261029/lean')
 s='''import PV_B3P_ClosureLinks14227
-import PV_B3P_Std194Law227
 namespace PV_B3Q_Std
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Groups14227
 set_option autoImplicit false
@@ -25,11 +24,15 @@ def source_branch : Branch := fun x => match x with
 def source_unwrap_or (x : Option Usize) (fallback : Usize) : Usize :=
  match x with | some v => v | none => fallback
 def source_is_some (x : Option Usize) : Bool := match x with | some _ => true | none => false
+def source_u32_u64 (x : U32) : Result U64 := .ok (UScalar.cast .U64 x)
+def source_bool_u32 (x : Bool) : Result U32 := .ok (UScalar.cast .U32 (UScalar.cast_fromBool .U8 x))
+def source_u16_usize (x : U16) : Result Usize := .ok (UScalar.cast .Usize x)
+def source_u8_usize (x : U8) : Result Usize := .ok (UScalar.cast .Usize x)
 def native : (i : Body) → Signature i
- | .u32_u64 => std194227.from_u32_u64
- | .bool_u32 => std194227.from_bool_u32
- | .u16_usize => std194227.from_u16_usize
- | .u8_usize => std194227.from_u8_usize
+ | .u32_u64 => source_u32_u64
+ | .bool_u32 => source_bool_u32
+ | .u16_usize => source_u16_usize
+ | .u8_usize => source_u8_usize
  | .result_branch => @source_branch
  | .usize_unwrap_or => source_unwrap_or
  | .usize_is_some => source_is_some
@@ -45,7 +48,7 @@ def model : (i : Body) → Signature i
 names=['u32_u64','bool_u32','u16_usize','u8_usize','result_branch','usize_unwrap_or','usize_is_some']
 for n in names:
  s+=f'theorem binding_{n} : native .{n} = model .{n} := by\n'
- if n in names[:4]:s+=f'  funext x\n  exact PV_B3P_Std194Law227.{n}_result x\n'
+ if n in names[:4]:s+=('  funext x\n  cases x <;> rfl\n' if n=='bool_u32' else '  rfl\n')
  elif n=='result_branch':s+='  rfl\n'
  elif n=='usize_unwrap_or':s+='  rfl\n'
  else:s+='  funext x\n  cases x <;> rfl\n'

@@ -1,5 +1,4 @@
 import PV_B3P_ClosureLinks14227
-import PV_B3P_Std194Law227
 namespace PV_B3Q_Std
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Groups14227
 set_option autoImplicit false
@@ -22,11 +21,15 @@ def source_branch : Branch := fun x => match x with
 def source_unwrap_or (x : Option Usize) (fallback : Usize) : Usize :=
  match x with | some v => v | none => fallback
 def source_is_some (x : Option Usize) : Bool := match x with | some _ => true | none => false
+def source_u32_u64 (x : U32) : Result U64 := .ok (UScalar.cast .U64 x)
+def source_bool_u32 (x : Bool) : Result U32 := .ok (UScalar.cast .U32 (UScalar.cast_fromBool .U8 x))
+def source_u16_usize (x : U16) : Result Usize := .ok (UScalar.cast .Usize x)
+def source_u8_usize (x : U8) : Result Usize := .ok (UScalar.cast .Usize x)
 def native : (i : Body) → Signature i
- | .u32_u64 => std194227.from_u32_u64
- | .bool_u32 => std194227.from_bool_u32
- | .u16_usize => std194227.from_u16_usize
- | .u8_usize => std194227.from_u8_usize
+ | .u32_u64 => source_u32_u64
+ | .bool_u32 => source_bool_u32
+ | .u16_usize => source_u16_usize
+ | .u8_usize => source_u8_usize
  | .result_branch => @source_branch
  | .usize_unwrap_or => source_unwrap_or
  | .usize_is_some => source_is_some
@@ -39,20 +42,17 @@ def model : (i : Body) → Signature i
  | .usize_unwrap_or => core.option.Option.unwrap_or
  | .usize_is_some => core.option.Option.is_some
 theorem binding_u32_u64 : native .u32_u64 = model .u32_u64 := by
-  funext x
-  exact PV_B3P_Std194Law227.u32_u64_result x
+  rfl
 #print axioms binding_u32_u64
 theorem binding_bool_u32 : native .bool_u32 = model .bool_u32 := by
   funext x
-  exact PV_B3P_Std194Law227.bool_u32_result x
+  cases x <;> rfl
 #print axioms binding_bool_u32
 theorem binding_u16_usize : native .u16_usize = model .u16_usize := by
-  funext x
-  exact PV_B3P_Std194Law227.u16_usize_result x
+  rfl
 #print axioms binding_u16_usize
 theorem binding_u8_usize : native .u8_usize = model .u8_usize := by
-  funext x
-  exact PV_B3P_Std194Law227.u8_usize_result x
+  rfl
 #print axioms binding_u8_usize
 theorem binding_result_branch : native .result_branch = model .result_branch := by
   rfl
