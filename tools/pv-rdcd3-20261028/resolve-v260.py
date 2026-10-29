@@ -13,7 +13,7 @@ def go(m):
  for dep in deps:
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
-go('R1Z.PV_RDCD3_V260Callback')
+go('R1Z.PV_RDCD3_V260Complete')
 go('R1Z.PV_RDCD3_WordAll194')
 go('R1Z.PV_RDCD3_Control194')
 go('R1Z.PV_RDCD3_V260RowRange')
