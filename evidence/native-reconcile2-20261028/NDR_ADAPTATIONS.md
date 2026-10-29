@@ -465,3 +465,11 @@ the 23-entry inventory stay on that carrier. Direct producer calls in
 `NDO_JHk_QueryPowerStep`, `NDO_JGy_QueryFrontier`, and
 `NDO_JHc_WriterContinuation` remain producer calls; their successful checking
 would not add a cross-carrier adaptive execution theorem.
+
+## NDO_JHq_TX1 diagnostic isolation after NDR_B020
+
+The theorem statement and proof are unchanged. Three full `#print` commands
+become `#check`, proof-body printing is disabled, and a post-import marker is
+added. NDR_B020_OBSTRUCTION.json records the memory failure, proof shape and
+import-union size. This focused diagnostic source is not an unchanged rerun
+of the failed chunk and does not raise the cap.

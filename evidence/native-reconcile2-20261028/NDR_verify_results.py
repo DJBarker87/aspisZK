@@ -27,11 +27,16 @@ for receipt in sorted(E.glob('NDR_B[0-9][0-9][0-9]/receipt.json')):
     if row['exit_status'] == 0:
         assert completed == row['modules'], attempt
         assert axioms <= standard, (attempt, axioms)
-        for name, sha in row['source_hashes'].items():
-            assert hashlib.sha256((R / 'lean' / name).read_bytes()).hexdigest() == sha, name
-        passing.update(completed)
     else:
         failures.append(attempt)
+    # Credit only finished modules, including successful prefixes of failed chunks.
+    segments = dict(re.findall(r'^NDR_BEGIN (\S+)\n(.*?)^NDR_END \1 0$', log, re.M | re.S))
+    for module in completed:
+        name = module + '.lean'
+        assert hashlib.sha256((R / 'lean' / name).read_bytes()).hexdigest() == row['source_hashes'][name], name
+        for used in re.findall(r'depends on axioms: \[([^]]*)\]', segments[module]):
+            assert {x.strip() for x in used.split(',') if x.strip()} <= standard, (attempt, module, used)
+    passing.update(completed)
     keys = ['attempt', 'modules', 'exit_status', 'wall_seconds', 'peak_rss_kib',
             'swaps', 'source_revision', 'limits', 'cgroup_memory_peak_bytes']
     summary = {k: row[k] for k in keys}
