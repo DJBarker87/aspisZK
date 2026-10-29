@@ -14356,3 +14356,23 @@ pv-own (head 09398479b2) used all 100 Lean attempts (91 passed, 9 failed), 3 cap
 Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; no large files; shipped-code diff empty. It was merged into the candidate as 07f4f723d8 and pushed. The candidate now also carries the pv-world calculus, so the parked pv-world branch was deleted from origin, its content being on the candidate.
 
 V229, V230, V239 and V178 remain SUSPENDED, with no witness-dependent native finding. The exact next piece for V229 is the native Link codec (representation, variant layout and padding abstraction) and the in-place collector read, write and drop cursor, with its ownership invariant and every continuation, refined into the interface. pv-ownb continues in the same sparse worktree on branch codex/pv-ownb-20261029 (IDs 62500-62599; 100 Lean, 60 native, 0 Kani), on V229, then V230, then V239 and V178, with the D411 proof-shape direction. Rows removed: 0. Privacy target not yet established.
+
+## D427 (Stream B) 2026-10-29 00:20 UTC: runjoin47 results (weight constructor proved, not assumed); rjdec merged; runjoin48 launched
+
+runjoin47 (head 8acaf72626) used all 100 Lean attempts (67 accepted, 33 rejected; 0 Kani). All three audits passed with standard axioms only. Lead review: no forbidden constructs or limit options; protected prefixes untouched; no large files; shipped-code diff empty.
+
+It completed items (i) to (iii) of WEIGHT-NEXT:
+- the source cell bridge, replacing the rejected WeightCellSource46 with an abstract seven-term fold and a named list-read induction;
+- the complete materialization binding;
+- WeightConstructorInstalled47.complete.
+That last theorem supplies the exact stored object produced, weights53.new returning its state, all seven installed raw Results and the complete op251 materialization on that same object. It quantifies over arbitrary Box and input-dependent heap requests, including denial, failure and divergence. It has no state, table or desired-success premise, so kernelState is now proved, not assumed.
+
+PrepareMaterial47.complete consumes these inside the actual prepare_opening. Its one upstream association, Vec.deref backend.messages = CoefficientsWeight46.messages p, must still be supplied from the actual backend caller. Attempt 61903 hit kernel memory; it was replaced by a different proof shape, not rerun, and no limit was raised.
+
+The lead merged rjdec's last round (fa6e6a6291) into the runjoin branch, which is now 86e74b0a54 and pushed (clean, shipped-code diff empty). runjoin48 launched (IDs 62600-62699; 100 Lean, 0 Kani) on step (iv) per OPENING-NEXT.md:
+- the claim bytes around transcript tags 27 and 28;
+- PrepareOperations47.run;
+- FinishContext47.source through tag 30 and the queries;
+- the query and node appends and publish_compact's proof bytes;
+- the backend messages association.
+Rows removed: 0. Privacy target not yet established.
