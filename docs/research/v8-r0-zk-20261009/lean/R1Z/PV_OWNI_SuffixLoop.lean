@@ -19,7 +19,7 @@ theorem suffix (point : List Q) :
  (point.drop (width point)).foldl
  (fun a x=>2*a+(if equal x one then 1 else 0)) 0=PV_OWNI_Scanner.suffix point := by
  rw [fold]
- rfl
+ simp only [Nat.zero_mul,Nat.zero_add,PV_OWNI_Scanner.suffix]
 #print axioms fold
 #print axioms suffix
 end R1Z.PV_OWNI_SuffixLoop
