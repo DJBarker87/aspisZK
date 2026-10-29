@@ -22,7 +22,9 @@ theorem suffix {T : Type} (k : Codec T) (b : Buffer T) (xs : List T)
  | cons v vs ih =>
   cases i with
   | zero =>
-   rw [append,Nat.add_zero,retained k (push k b v (payload j v)) vs payload (j+1) b.length
+   rw [append]
+   simp only [Nat.add_zero,List.getElem_cons_zero]
+   rw [retained k (push k b v (payload j v)) vs payload (j+1) b.length
     (by change b.length<b.length+1;omega)]
    simp only [push,ite_true,List.getElem_cons_zero]
   | succ i =>
