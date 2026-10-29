@@ -30,7 +30,7 @@
  theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
   (point column : List Q) (hl : point.length=10)
   (hp : ∀ q ∈ point, PV_OWNJ_DecodeFold.Canon q) :
-@@ -53,19 +76,15 @@
+@@ -53,19 +76,20 @@
   let t := trailing point
   have split : w+t=10 := PV_OWNI_Scanner.split point hl
   have hw : w ≤ point.length := by omega
@@ -49,12 +49,17 @@
 -  simp only [List.get_eq_getElem,List.getElem_drop] at hd
 -  rw [htlen] at hd
 -  simpa only [Fin.val_natAdd,List.getElem?_eq_getElem hb,Option.getD_some,tail,suffix] using hd
-+  simpa only [List.get_eq_getElem, List.getElem_drop, Fin.val_cast,
-+   Fin.val_natAdd, List.getElem?_eq_getElem hb, Option.getD_some, tail, suffix] using hd
++  change decode ((point.drop w).get (Fin.cast htlen.symm i)) =
++   (if (PV_OWNI_Scanner.suffix point).testBit (t-1-i.val) then 1 else 0) at hd
++  simp only [List.get_eq_getElem,List.getElem_drop,Fin.val_cast] at hd
++  change decode (point[w+i.val]?.getD zero) =
++   (if (PV_OWNI_Scanner.suffix point).testBit (t-1-i.val) then 1 else 0)
++  rw [List.getElem?_eq_getElem hb,Option.getD_some]
++  exact hd
   have hd := PV_OWNM_DenseRows.full_dense_sparse w t
    (fun i : Fin (w+t) => decode (point[i.val]?.getD zero)) suffix
    (fun r : Fin (2^(w+t)) => decode (column[r.val]?.getD zero)) hs
-@@ -104,6 +123,8 @@
+@@ -104,6 +128,8 @@
  #print axioms concrete_source_dense
  #print axioms take_coordinates
  #print axioms prefix_weight
