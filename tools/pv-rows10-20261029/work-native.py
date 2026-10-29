@@ -6,7 +6,7 @@ pins=json.loads((D/'source-pins.json').read_text());inputs=[]
 for r in pins:
  if r['path'].endswith(('host_work.rs','native_workers.rs')):
   p=F/r['path'];assert sha(p)==r['sha256'];inputs.append(dict(path=str(p),sha256=sha(p)))
-units=json.loads((O/'deployed-units.json').read_text());u=next(u for u in units if '#aspis-r1-cost-probe@' in u['package_id'] and u['target']['name']=='aspis_r1_cost_probe')
+units=json.loads((O/'deployed-units.json').read_text());u=next(u for u in units if '/crates/aspis-r1-cost-probe#' in u['package_id'] and u['target']['name']=='aspis_r1_cost_probe')
 assert 'ct-host-prover' in u['features'] and 'public-work-trace' not in u['features']
 cmd=['rustc','+1.94.1','--edition=2021','-O','-C','debug-assertions=no','-C','overflow-checks=no','-C','panic=unwind',str(D/'work-native.rs'),'-o',str(D/'work-native')]
 env=dict(os.environ,PATH='/home/dombarker/.cargo/bin:'+os.environ['PATH']);print('Expected time: small optimized source harness compilation/link, then range checks and public-sized worker maps',flush=True)
