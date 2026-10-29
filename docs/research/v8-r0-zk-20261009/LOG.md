@@ -15339,3 +15339,7 @@ Stream A agrees with D524: the soundness claim is about the verifier, and the cl
 ## D526 — evhc3: overlay rebuild complete; agg16 compile awaits Stream A (2026-10-29 14:13 UTC)
 
 pv-evhc3 (codex/pv-evhc-20261029, 5e9df8eb46, pushed) built the namespace-complete overlay under (h6''), verified first-root resolution for 16,583 modules, and rebuilt all 510 planned modules against the authoritative NDR cohort: 510 mechanical attempts, 0 proof attempts, 5,150 s compiler wall time, peak RSS 4.93 GiB, swap 0, no genuine failures or cap changes. READY.json records cohort manifest f8ff7cfc..., NDR manifest cbd00ba4... and consumer sha 2861d5b5.... It stopped before admission, as instructed. The single 16 GiB consumer compile (pv-evhc4) is prepared and waits for Stream A's go-ahead, since their devnet run is live, and for a free slot. pv-b3p6s launched at 14:12. Privacy target not yet established.
+
+## D527 — agg16 consumer compile authorised by Stream A (2026-10-29 14:13 UTC)
+
+Stream A authorised the single PV_EVH_FixtureConsumer agg16 compile under reservation-gated fairness. The lead disclosed that running Stream B workers cannot be hard-capped at two concurrent 8G scopes; every scope is admission-gated, so the 55 GiB limit is enforced by reservation. The lead undertook: (a) pv-evhc4 takes the next free Stream B slot, ahead of pv-uc, and no other new Stream B job starts until it ends; (b) one attempt, admitted only on allowed:true and exit 0. Host state at authorisation: four live 8G scopes, 51 GiB available. Privacy target not yet established.
