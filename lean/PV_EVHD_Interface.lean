@@ -32,7 +32,7 @@ def timingKey {A : Type} (t : NativeTrace A) :
  (List NativeEvent × Terminal A) × List Bytes :=
  ((t.events.map timingSlot,t.terminal),nativeTimes t.events)
 
-/-- Counts, oracle, allocation/address/physical/durable/environment events and
+/-- EXPERIMENTAL: Counts, oracle, allocation/address/physical/durable/environment events and
 cross-channel order stay in the context. No success conditioning occurs. -/
 theorem timing_key_injective {A : Type} : Function.Injective (@timingKey A) := by
  intro l r h
