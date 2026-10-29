@@ -27,6 +27,7 @@ theorem residue (n : Nat) (xs : List Nat) (hx : ∀ x∈xs,x<B) :
   have hb := PV_L2E_CarryValue.value_bound (run n xs).digits (bounds n xs hx).2
   rw [digit_count] at hb
   rw [←h,Nat.add_mod,Nat.mul_mod_left,Nat.zero_add,Nat.mod_eq_of_lt hb]
+  exact (Nat.mod_eq_of_lt hb).symm
 
 /-- The high quotient bound consumed by gamma's q+1 and second-wrap proof. -/
 theorem quotient_256 (xs : List Nat) (width : xs.length=8)
