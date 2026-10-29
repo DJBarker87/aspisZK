@@ -52,10 +52,12 @@ theorem mul (x y : C) (hx : CC x) (hy : CC y) :
  have h2 := PV_OWNK_ScalarOps.reduce_canon (cross x y)
  apply QuadraticAlgebra.ext
  · change ds (PV_B2_FieldValue.aspis_core.field.M31.sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a) (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) = _
+   simp only [ds]
    rw [PV_OWNK_FieldScalar.sub _ _ h0 h1,PV_OWNK_FieldScalar.mul,PV_OWNK_FieldScalar.mul]
    simp only [QuadraticAlgebra.re_mul,decode]
    ring
  · change ds (PV_B2_FieldValue.aspis_core.field.M31.sub (PV_B2_FieldValue.aspis_core.field.M31.sub (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)) (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)) (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) = _
+   simp only [ds]
    rw [PV_OWNK_FieldScalar.sub _ _ (PV_OWNK_ScalarOps.sub_canon _ _ h2 h0) h1,
     PV_OWNK_FieldScalar.sub _ _ h2 h0,PV_OWNK_FieldScalar.reduce,
     cross_val x y hx hy, Nat.cast_mul,Nat.cast_add,Nat.cast_add,
@@ -68,11 +70,13 @@ theorem mul_by_r (x : C) (hx : CC x) :
  AspisV8R15.ExactTowerBase.qm31R * decode x := by
  apply QuadraticAlgebra.ext
  · change ds (PV_B2_FieldValue.aspis_core.field.M31.sub (PV_B2_FieldValue.aspis_core.field.M31.double x.a) x.b) = _
+   simp only [ds]
    rw [PV_OWNK_FieldScalar.sub _ _ (PV_OWNK_ScalarOps.double_canon _ hx.1) hx.2,
     PV_OWNK_FieldScalar.double _ hx.1]
    simp only [QuadraticAlgebra.re_mul,decode,AspisV8R15.ExactTowerBase.qm31R]
    ring
  · change ds (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b)) = _
+   simp only [ds]
    rw [PV_OWNK_FieldScalar.add _ _ hx.1 (PV_OWNK_ScalarOps.double_canon _ hx.2),
     PV_OWNK_FieldScalar.double _ hx.2]
    simp only [QuadraticAlgebra.im_mul,decode,AspisV8R15.ExactTowerBase.qm31R]
