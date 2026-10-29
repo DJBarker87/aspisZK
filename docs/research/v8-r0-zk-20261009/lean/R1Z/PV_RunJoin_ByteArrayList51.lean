@@ -11,11 +11,12 @@ theorem loop (bs : ByteArray) (i : Nat) (acc : List UInt8) :
     have hlen : i<bs.data.toList.length := by simpa using hi
     have eq : bs.get! i=bs.data.toList[i]'hlen := by
       simp [ByteArray.get!,hi,ByteArray.getElem_eq_getElem_data]
+      rfl
     rw [eq]
-    exact (List.cons_getElem_drop_succ (l:=bs.data.toList) hlen).symm
+    exact (List.cons_getElem_drop_succ (l:=bs.data.toList) (i:=i) (h:=hlen)).symm
   | case2 i acc hi =>
-    have len : bs.data.toList.length≤i := by simpa using Nat.le_of_not_gt hi
-    rw [List.drop_eq_nil_of_le len,List.append_nil]
+    have bound : bs.data.toList.length ≤ i := by simpa using Nat.le_of_not_gt hi
+    rw [List.drop_eq_nil_of_le bound,List.append_nil]
 
 theorem complete (bs : ByteArray) : bs.toList=bs.data.toList := by
   unfold ByteArray.toList
