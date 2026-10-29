@@ -27,8 +27,7 @@ theorem row_decode (pref trailing suffix : Nat) (hs : suffix < 2^trailing) :
  row / 2^trailing = pref ∧ row % 2^trailing = suffix := by
   constructor
   · exact PV_RDB2D_SparseAddress.quotient trailing suffix pref hs
-  · simp only [PV_RDB2D_SparseAddress.row,Nat.add_mod,Nat.mul_mod_right,
-      Nat.zero_add,Nat.mod_eq_of_lt hs]
+  · exact Nat.mul_add_mod_of_lt hs
 
 theorem takeWhile_take_length {A : Type} (p : A → Bool) (xs : List A) :
  xs.take (xs.takeWhile p).length = xs.takeWhile p := by
