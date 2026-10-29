@@ -132,6 +132,7 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
   L1_RETAINED_SIDECHANNELS := links.L1_RETAINED_SIDECHANNELS
   coupling := by
     intro e adv w
+    dsimp only [ofLegacy]
     refine ⟨measurable_of_finite _,measurable_of_finite _,?_,?_⟩
     · simpa only [Measure.map_id] using map_uniform_of_means
         (rt.toNative e adv w) (id : R → R) (measurable_of_finite _) measurable_id
@@ -155,8 +156,10 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
     exact hl.trans (CouplingR1PBin.mp_fst (fun e => test (rt.completion.signal rt.publicInput e)))
   environment := by
     refine ⟨measurable_of_finite _,?_⟩
-    exact map_uniform_of_means rt.acquisition id (measurable_of_finite _) measurable_id
-      (fun test => R0Z.LawTransport.mean_eq_of_equalLaws _ _ test links.environment)
+    dsimp only [ofLegacy]
+    simpa only [Measure.map_id] using
+      map_uniform_of_means rt.acquisition id (measurable_of_finite _) measurable_id
+        (fun test => R0Z.LawTransport.mean_eq_of_equalLaws _ _ test links.environment)
   conditional := by
     intro f hf hb
     exact integral_uniform_product f (fun p => (hb p).1)
@@ -183,17 +186,17 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
     PV_EVH_Core.bound template outputs x < 1 / 2^100 := by
   constructor
   · intro adv w hw
-    have h := (PV_MEAS_Deployed.privacy_headline_deployed_events_meas template outputs x
+    have measured := (PV_MEAS_Deployed.privacy_headline_deployed_events_meas template outputs x
       (ofLegacy template outputs x rt) (links_of_legacy template outputs x rt links)).1
       adv (by intro s hs; trivial) w hw
     change |(∫ₚ n, (bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w n)) : ℝ)
         ∂(uniform N : Measure N)) -
       (∫ₚ e, (∫ₚ r, (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput e adv r)) : ℝ)
-        ∂(uniform (source).IdealRand : Measure _)) ∂(uniform Env : Measure Env))| ≤
-        (PV_EVH_Core.bound template outputs x : ℝ) at h
+        ∂(uniform (source).IdealRand : Measure (source).IdealRand)) ∂(uniform Env : Measure Env))| ≤
+        (PV_EVH_Core.bound template outputs x : ℝ) at measured
     rw [← integral_uniform_product _ (fun p => by exact_mod_cast bit_nonneg _),
-      integral_bit_mean, integral_bit_mean] at h
-    exact_mod_cast h
+      integral_bit_mean, integral_bit_mean] at measured
+    exact_mod_cast measured
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
       (uniform R) rt.completion rt.publicInput e rt.native rt.signal
