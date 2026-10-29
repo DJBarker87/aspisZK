@@ -32,7 +32,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
         rw [PV_RunJoin_OpeningPrefix63.length];omega)
   have hlen : middle.length=out.length+608 := by
     change middle.val.length=out.val.length+608
-    rw [hv,List.length_append,PV_RunJoin_OpeningPrefix63.length]
+    rw [hv,List.length_append]
+    change out.val.length+(PV_RunJoin_OpeningPrefix63.payload opening).length=out.val.length+608
+    rw [PV_RunJoin_OpeningPrefix63.length]
   obtain ⟨next,hn,hl⟩ := PV_RunJoin_QueryTailTotal64.complete base heap box ops cc1 cc2 s1 s2
     stored1 stored2 size1 size2 folded size salts saltSize u hu middle (by omega)
   refine ⟨next,?_,by omega⟩
