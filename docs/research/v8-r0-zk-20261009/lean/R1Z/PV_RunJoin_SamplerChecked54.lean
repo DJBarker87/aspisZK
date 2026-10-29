@@ -4,7 +4,7 @@ open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_SamplerChecked54
 
 theorem sub_one (i : Usize) (hi : Nat.lt 0 (UScalar.val i)) : i-1#usize=ok (Usize.wrapping_sub i 1#usize) := by
-  obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (Usize.sub_spec (x:=i) (y:=1#usize) (by change Nat.le 1 (UScalar.val i);omega))
+  obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (Usize.sub_spec (x:=i) (y:=1#usize) (by change Nat.le 1 (UScalar.val i);exact Nat.succ_le_of_lt hi))
   have he : z=Usize.wrapping_sub i 1#usize := by
     apply UScalar.eq_of_val_eq
     rw [PV_RunJoin_SamplerCounters54.sub_one i hi]
