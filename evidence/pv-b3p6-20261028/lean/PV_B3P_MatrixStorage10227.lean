@@ -1,4 +1,5 @@
 import PV_B3P_P227_00
+import PV_B3P_PairHead10227
 import PV_B3P_LiftHeadEq9227
 import PV_B3P_Index3_100227
 import PV_B3P_Index3_101227
@@ -172,6 +173,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
@@ -188,6 +190,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
@@ -204,6 +207,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_0]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_2]
   apply equal_ok_head9
   rw [index3_1]
@@ -224,6 +228,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
@@ -240,6 +245,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
@@ -256,6 +262,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_1]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_2]
   apply equal_ok_head9
   rw [index3_2]
@@ -276,6 +283,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_0]
   apply equal_ok_head9
   rw [index3_1]
@@ -292,6 +300,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_1]
   apply equal_ok_head9
   rw [index3_2]
@@ -308,6 +317,7 @@ theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
   apply lift_head_equal9
   rw [borrow3_2]
   apply equal_ok_head9
+  apply pair_head_equal10
   rw [update3_2]
   apply equal_ok_head9
   rfl
