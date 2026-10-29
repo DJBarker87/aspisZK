@@ -32,8 +32,7 @@ theorem complete (a : Q) (ha : QC a) :
     obtain ⟨dbl,hd,hd',hcd⟩ := PV_RunJoin_CircleNeutralQAdd53.complete a a ha ha
     obtain ⟨y,hy,hy',hcy⟩ := PV_RunJoin_CircleNeutralQMul54.complete dbl inv hcd hci
     simp only [hn,hn',hx,hx',hd,hd',hy,hy',bind_tc_ok]
-    have heq := PV_RunJoin_CircleNeutralBase52.ceq a.2 PV_RunJoin_CircleRawTower52.field.CM31.ZERO
-    rw [PV_RunJoin_CircleNeutralBase52.cnull] at heq
-    rw [heq]
+    rw [← PV_RunJoin_CircleNeutralBase52.cnull,PV_RunJoin_CircleNeutralBase52.ceq]
+
 #print axioms complete
 end R1Z.PV_RunJoin_CircleMapCanonical54
