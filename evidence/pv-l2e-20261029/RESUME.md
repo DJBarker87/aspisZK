@@ -12,3 +12,8 @@ Existing RunJoin.agreement only relates views; absorption gives equality in
 law. Neither supplies the missing complete native small-step instrumentation.
 The good domain must be EXACTLY PV_FIB_Restricted.OffCharged on the existing
 cp.toM sample. No independent coins, new bad event or conditioning on success.
+
+Relaunch 2 recovered IDs 67900–67924: 25 Lean launches, 1 native scope,
+0 Kani. Initial budget does not reset. Source work resumes at 67925.
+The first-15 requirement was NOT met: 67901 proved only a schema. That is an
+explicit unmet requirement, not a completed native theorem.
