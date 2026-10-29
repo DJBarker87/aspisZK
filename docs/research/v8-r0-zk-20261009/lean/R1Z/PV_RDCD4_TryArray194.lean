@@ -22,6 +22,8 @@ theorem backing {T : Type} (n : Usize) (xs : List T) :
 theorem roundtrip {T : Type} {n : Usize} (xs : Array T n) :
     into n xs.val = some xs := by
   rw [success n xs.val xs.property]
+  cases xs
+  rfl
 #print axioms success
 #print axioms mismatch
 #print axioms backing
