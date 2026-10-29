@@ -40,7 +40,8 @@ theorem matrix (p : Nat → Nat → W) (columns : Columns)
   by_cases hb : l<26
   · have h26 : l≠26 := by omega
     have h27 : l≠27 := by omega
-    simp only [if_neg h27,if_neg h26,if_pos hb,PV_RunJoin_BackendMRows58.values,PV_RunJoin_BackendMInput58.value]
+    have h28 : l≠28 := by omega
+    simp only [if_neg h28,if_neg h27,if_neg h26,if_pos hb,PV_RunJoin_BackendMRows58.values,PV_RunJoin_BackendMInput58.value]
   · by_cases h26 : l=26
     · subst l
       simp only [show ¬26=27 from by decide,if_false,if_true,show ¬26<26 from by omega,
