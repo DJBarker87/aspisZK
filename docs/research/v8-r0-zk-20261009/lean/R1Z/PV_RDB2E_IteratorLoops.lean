@@ -31,8 +31,10 @@ theorem carry_loop (q : Words) (n : U32) (i : Usize) :
 
 theorem carry_complete (q : Words) (n : U32) :
     carry q n=PV_B2_C_Sampler.host_sampler.add_small_base_p q n := by
-  simp only [carry,carry_loop,PV_RDB2D_SamplerRestoration.carry_complete.symm,
-    PV_RDB2D_SamplerRestoration.carry]
+  unfold carry
+  rw [carry_loop]
+  exact PV_RDB2D_SamplerRestoration.carry_complete q n
+
 
 #print axioms division_complete
 #print axioms carry_loop
