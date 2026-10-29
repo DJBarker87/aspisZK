@@ -30,7 +30,9 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @External
 
 theorem domain_bytes : PV_RunJoin_TranscriptReseedSource51.domain.val.map ProverCommitOwnerBytes42.byte=
     TranscriptR1.openDomain := by
-  simp [PV_RunJoin_TranscriptReseedSource51.domain,TranscriptR1.openDomain,
+  change _ = "UNPROVED:R1:PRIVATE-SALTED:P3".toByteArray.toList
+  rw [←String.utf8Encode_toList]
+  simp [PV_RunJoin_TranscriptReseedSource51.domain,List.utf8Encode,String.utf8EncodeChar,
     Array.to_slice,Array.make,ProverCommitOwnerBytes42.byte]
 
 theorem frame (s : Block) (tag : U8) :
