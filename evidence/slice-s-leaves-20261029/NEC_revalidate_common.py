@@ -43,6 +43,18 @@ for w,n in windows.items():
    assert common(actual)==common(original),'native body changed'
   pair.append(dict(attempt=a,receipt=base+a+'/receipt.json',control=i!=n))
  checks.append(dict(window=w,pair=pair))
+# Exact Box/Common interface fidelity is separately audited; it grants no
+# scalar/fixed-array-only policy expansion and no new verified substitution.
+fidelity=[]
+for n,status in [(60,0),(61,1),(62,0),(63,1),(64,1)]:
+ a=f'NDM_K{n:03d}';r=obj(base+a+'/receipt.json');log=get(base+a+'/stdout.log').decode()
+ assert r['exit_status']==status and 'timed out' not in log.lower(),a
+ assert ('VERIFICATION:- SUCCESSFUL' if status==0 else 'Failed Checks:') in log,a
+ assert r['copy_patch_sha256']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+ assert obj(base+a+'-graph-check.json')['exact_frozen_selected_graph']
+ assert obj(base+a+'-lock-check.json')['unchanged']
+ get(base+a+'/NDM_harness.patch')
+ fidelity.append(dict(attempt=a,exit_status=status,receipt=base+a+'/receipt.json'))
 get('evidence/kani-mitig-20261028/KMX_copy_stubs.patch')
 # Entire adopted Rust body remains identical; annotations alone decorate asq8_common.
 frozen=subprocess.check_output(['git','show','4bb3b3f5:programs/r1-cost-probe/src/r1_pool_adapter.rs']).decode()
@@ -54,5 +66,5 @@ for w in checks:
   unchanged='\n'.join(line[1:] for line in p.splitlines() if line.startswith(' ') or line.startswith('+') and not line.startswith('+++'))
   # Sparse patch context need not contain the entire body; pin original source and exact patch.
 get(base+'NDM_reference.rs.txt');get(base+'NDM_EXTRACTION_PINS.json')
-(E/'NEC_COMMON_REVALIDATION.json').write_text(json.dumps(dict(status='windows audited; native semantic transport remains P6/D188',windows=checks,artifacts=used,frozen_body_sha256=hashlib.sha256(body.encode()).hexdigest(),new_kani_runs=0,new_extraction_runs=0),indent=1)+'\n')
+(E/'NEC_COMMON_REVALIDATION.json').write_text(json.dumps(dict(status='windows audited; native semantic transport remains P6/D188',windows=checks,fidelity=fidelity,artifacts=used,frozen_body_sha256=hashlib.sha256(body.encode()).hexdigest(),new_kani_runs=0,new_extraction_runs=0),indent=1)+'\n')
 print('audited',len(checks),'window pairs')

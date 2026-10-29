@@ -1,0 +1,48 @@
+{"attempt": "NEC_K016", "exit_status": 1, "wall_seconds": 47.350742418086156, "peak_rss_kib": "557576", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-s-leaves-20261029/NEC_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+ong`
+
+warning: function `KMX_growth_correct` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-s-leaves-20261029/NEC_src/crates/aspis-statement/../../KMX_stubs.rs:71:4
+   |
+71 | fn KMX_growth_correct(){let src:[u32;16]=kani::any();let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}let...
+   |    ^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_correct`
+
+warning: function `KMX_growth_wrong` should have a snake case name
+  --> /home/dombarker/project-offloads/codex-cx-slice-s-leaves-20261029/NEC_src/crates/aspis-statement/../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 6.15s
+Checking harness pool_v1::pair_tree_profile::NEC_decode::afterstate_box...
+
+VERIFICATION RESULT:
+ ** 1 of 268 failed (2 unreachable)
+Failed Checks: |r| NEC_decode::post_after(r,bytes)
+ File: "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs", line 676, in pool_v1::pair_tree_profile::decode_pair_afterstate_boxed_v1::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 37.19482s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_tree_profile::NEC_decode::afterstate_box
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rdc35312be7664e70b3fb97aa52ab54ee.scope; invocation ID: bfd6b8fcb59e466e9bb3eb5198b3a9f8

@@ -47,6 +47,32 @@ assert {'r0','pool-v1-kernel'} <= set(features['aspis-statement'])
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'
 out['resolved_features_all_crates']=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=nodes[p['id']]['features']) for p in sorted(m['packages'],key=lambda p:p['id'])]
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n')
-status=subprocess.run(x['native_command'],cwd=B).returncode
+# Validate and record the actual Kani target, in addition to deployed program context.
+cmd=x['native_command'];manifest=cmd[cmd.index('--manifest-path')+1];selected=cmd[cmd.index('--features')+1]
+r2=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',manifest,'--features',selected],cwd=S,capture_output=True,text=True)
+(B/(a+'-actual-graph.stderr')).write_text(r2.stderr)
+assert r2.returncode==0,r2.stderr
+actual_metadata=json.loads(next(l for l in r2.stdout.splitlines() if l.startswith('{')))
+actual_nodes={n['id']:n for n in actual_metadata['resolve']['nodes']}
+actual_features={p['name']:actual_nodes[p['id']]['features'] for p in actual_metadata['packages']}
+actual_check=exact_graph(actual_metadata,lock)
+for reached in ['aspis-statement','aspis-core']:
+ assert actual_features[reached]==features[reached],('reached target feature mismatch',reached,actual_features[reached],features[reached])
+actual_check.update(resolved_features_all_crates=[dict(name=p['name'],version=p['version'],source=p.get('source'),features=actual_nodes[p['id']]['features']) for p in sorted(actual_metadata['packages'],key=lambda p:p['id'])],native_manifest=manifest,native_features=selected,deployed_reached_feature_parity=['aspis-statement','aspis-core'],helper_reason='Target is the statement wrapper only; no verifier library/program bodies are compiled into the selected proof. Exact deployed statement/core features are selected explicitly.')
+(B/(a+'-actual-graph-check.json')).write_text(json.dumps(actual_check,indent=1)+'\n')
+assert sha(S/'Cargo.lock')==frozen,'STOP actual metadata changed lock'
+version=subprocess.run([x['native_command'][0],'kani','--version'],capture_output=True,text=True)
+assert version.returncode==0 and '0.67.0' in version.stdout,(version.returncode,version.stdout,version.stderr)
+tool_files=[Path(x['native_command'][0])]
+for root in [Path('/home/dombarker/.kani/kani-0.67.0/bin'),Path('/home/dombarker/.local/share/kani/0.67.0/bin')]:
+ if root.exists():tool_files.extend(p for p in root.iterdir() if p.is_file())
+(B/(a+'-tool-pins.json')).write_text(json.dumps(dict(version=version.stdout.strip(),tools={str(p):dict(sha256=sha(p),bytes=p.stat().st_size,realpath=str(p.resolve())) for p in tool_files}),indent=1)+'\n')
+if x.get('trace_source_attempt'):
+ from NEC_trace import run_trace
+ status=run_trace(B,x,tool_files)
+else:status=subprocess.run(x['native_command'],cwd=B).returncode
+target=Path(x['native_command'][x['native_command'].index('--target-dir')+1]);base_name=x['module'].split('::')[-1]
+artifacts={str(p):dict(sha256=sha(p),bytes=p.stat().st_size) for p in target.rglob('*') if p.is_file() and (base_name in p.name or p.name.endswith('.kani-metadata.json'))}
+(B/(a+'-native-pins.json')).write_text(json.dumps(artifacts,indent=1)+'\n')
 last=sha(S/'Cargo.lock');(B/(a+'-lock-check.json')).write_text(json.dumps(dict(before=frozen,after=last,unchanged=last==frozen),indent=2)+'\n');assert last==frozen,'STOP Kani changed lock'
 sys.exit(status)
