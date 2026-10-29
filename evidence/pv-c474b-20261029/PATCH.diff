@@ -1,0 +1,117 @@
+diff --git a/scripts/r1_devnet_spend.py b/scripts/r1_devnet_spend.py
+index e7478517cf..6cddcf2eb6 100644
+--- a/scripts/r1_devnet_spend.py
++++ b/scripts/r1_devnet_spend.py
+@@ -2,7 +2,7 @@
+ """Config-driven R1 devnet setup and spends; wallet files stay in retained host private directories.
+ Run inside r1_devnet_receipt.sh and the documented capped scope.
+ """
+-import base64,json,os,pathlib,subprocess,sys,time,hashlib,re
++import base64,json,os,pathlib,subprocess,sys,time,hashlib,re,threading
+ from concurrent.futures import ThreadPoolExecutor
+ from r1_devnet_rpc import rpc
+ from Client64_proof_accounts import proof_plan, retain_key, key_public
+@@ -24,7 +24,35 @@ def account(address):
+     a=rpc(URL,'getAccountInfo',[address,{'encoding':'base64','commitment':'finalized'}])
+     return a
+ 
+-def invoke(q):return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
++def invoke(q):
++    if 'action' in q:
++        return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
++    # Retained Solana key files stay unchanged. Only the Rust boundary changes:
++    # exactly 64 raw bytes per key, in the public request's key-path order.
++    records=[]
++    for path in q['keys']:
++        with open(path) as stream:
++            value=json.load(stream)
++        if not isinstance(value,list) or len(value)!=64 or any(type(b) is not int or not 0<=b<=255 for b in value):
++            raise ValueError('key file must contain exactly 64 bytes')
++        records.append(bytes(value))
++    read_fd,write_fd=os.pipe()
++    failures=[]
++    def write_records():
++        try:
++            with os.fdopen(write_fd,'wb') as stream:
++                for record in records:stream.write(record)
++        except BaseException as error:
++            failures.append(error)
++    writer=threading.Thread(target=write_records)
++    writer.start()
++    try:
++        result=subprocess.check_output([SIGNER],input=json.dumps({**q,'key_bytes_fd':read_fd}).encode(),pass_fds=(read_fd,))
++    finally:
++        os.close(read_fd)
++        writer.join()
++    if failures:raise failures[0]
++    return json.loads(result)
+ def send(name,ixs,keys=['keys/payer.json'],negative=False):
+     done=O/(name+'.json')
+     if done.exists():
+diff --git a/tools/r1-cost-probe/Cargo.toml b/tools/r1-cost-probe/Cargo.toml
+index 8e62aa5239..01214acf05 100644
+--- a/tools/r1-cost-probe/Cargo.toml
++++ b/tools/r1-cost-probe/Cargo.toml
+@@ -16,7 +16,7 @@ private-leaf-salts = ["aspis-r1-cost-probe/private-leaf-salts"]
+ anyhow = "1.0.100"
+ aspis-core = { path = "../../crates/aspis-core", features = ["r0"] }
+ aspis-pool = { path = "../../programs/aspis-pool", features = ["no-entrypoint", "pair-forest-account-evidence", "pair-forest-verifier-lane-invariant-audit"] }
+-aspis-prover = { path = "../../crates/aspis-prover", features = ["r0", "insecure-spend-fixture"] }
++aspis-prover = { path = "../../crates/aspis-prover", features = ["r0"] }
+ aspis-r1-cost-probe = { path = "../../crates/aspis-r1-cost-probe", features = ["prover"] }
+ aspis-registry = { path = "../../programs/aspis-registry", features = ["no-entrypoint"] }
+ aspis-statement = { path = "../../crates/aspis-statement", features = ["r0", "pool-v1-kernel"] }
+diff --git a/tools/r1-cost-probe/build-client.sh b/tools/r1-cost-probe/build-client.sh
+index 71a445aef8..2dd320f05f 100755
+--- a/tools/r1-cost-probe/build-client.sh
++++ b/tools/r1-cost-probe/build-client.sh
+@@ -4,5 +4,5 @@ set -eu
+ cd "$(dirname "$0")"
+ unset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP
+ export RUSTFLAGS='--cfg getrandom_backend="linux_raw" --check-cfg=cfg(getrandom_backend,values("linux_raw")) -C link-arg=-Wl,--threads=4'
+-exec cargo build --profile client --locked --offline -j 4 \
++exec cargo +1.94.1 build --profile client --locked --offline -j 4 \
+   --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend
+diff --git a/tools/r1-cost-probe/src/bin/devnet_spend.rs b/tools/r1-cost-probe/src/bin/devnet_spend.rs
+index a206dbfd57..e3f70ac722 100644
+--- a/tools/r1-cost-probe/src/bin/devnet_spend.rs
++++ b/tools/r1-cost-probe/src/bin/devnet_spend.rs
+@@ -11,7 +11,7 @@ use solana_keypair::Keypair;
+ use solana_signer::Signer;
+ use solana_message::{v1::{Message,TransactionConfig},VersionedMessage};
+ use solana_transaction::versioned::VersionedTransaction;
+-use std::{io::{self,Read},str::FromStr,fs};
++use std::{io::{self,Read},str::FromStr};
+ #[path="devnet_spend/plan.rs"]
+ mod plan;
+ fn main() -> std::process::ExitCode {
+@@ -24,7 +24,19 @@ fn main() -> std::process::ExitCode {
+ fn run()->Result<()> {
+  let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;let q:Value=serde_json::from_str(&s).map_err(err)?;
+  if q.get("action").is_some(){println!("{}",plan::run(&q)?);return Ok(())}
+- let keys:Vec<Keypair>=q["keys"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();
++ // Public paths/count remain in JSON; private bytes arrive only on this inherited FD.
++ let count=q["keys"].as_array().unwrap().len();
++ let fd=i32::try_from(q["key_bytes_fd"].as_u64().ok_or_else(||anyhow!("missing key byte FD"))?).map_err(err)?;
++ ensure!(fd>2,"key byte FD must be inherited separately from stdio");
++ // Linux host client only. No retained key file is opened or parsed in Rust.
++ let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}")).map_err(err)?;
++ let mut keys=Vec::with_capacity(count);
++ for _ in 0..count {
++  let mut record=[0u8;64];channel.read_exact(&mut record).map_err(err)?;
++  let bytes=decode_raw_key_record(&record);
++  keys.push(Keypair::try_from(bytes.as_slice()).map_err(err)?);
++ }
++ let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra key bytes");
+  let ixs:Vec<Instruction>=q["instructions"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i["program"].as_str().unwrap()).unwrap(),accounts:i["accounts"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i["data"].as_str().unwrap())}).collect();
+  let conf=TransactionConfig::empty().with_priority_fee(10000).with_compute_unit_limit(1_400_000).with_loaded_accounts_data_size_limit(8*1024*1024).with_heap_size(256*1024);
+  let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q["blockhash"].as_str().unwrap().parse().map_err(err)?,conf).map_err(err)?;
+@@ -34,3 +46,8 @@ fn run()->Result<()> {
+ }
+ fn unhex(s:&str)->Vec<u8>{(0..s.len()).step_by(2).map(|i|u8::from_str_radix(&s[i..i+2],16).unwrap()).collect()}
+ fn hex(b:&[u8])->String{b.iter().map(|b|format!("{b:02x}")).collect()}
++
++// Raw encoding has no content validity predicate. Fixed-size copy only; keep a
++// named boundary for inspection in the exact optimized client executable.
++#[inline(never)]
++fn decode_raw_key_record(record:&[u8;64])->[u8;64]{*record}
