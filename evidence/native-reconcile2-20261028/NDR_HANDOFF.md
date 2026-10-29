@@ -45,13 +45,18 @@ for the sole final aggregation; do not credit them as standalone module builds.
 
 ## Current build state
 
-NDR_VERIFICATION.json confirms 3,073 passing modules. Successful prefixes of
-failed chunks are credited only by their own success markers, source hashes,
-and axiom audits. NDR_FINAL_INDEPENDENT_PLAN.json replaces the earlier residual
-plan: B028 [3072,3075) passes; B029 [3077,3117) is the CURRENT submitted scope,
-40 remaining independent SHA witness modules. The serial local transport stops
-at any failure. Recover submitted work read-only after interruption; never
-resubmit an unchanged failed chunk or missing-receipt attempt.
+NDR_VERIFICATION.json confirms 3,113 passing modules. B029 passes all 40 final
+independent SHA witness modules: 2384.960082 s, 6,509,080 KiB RSS, swap 0.
+All independent work is complete; no normal scope remains active. Five thin
+standalone modules remain failed/blocked exactly as listed above.
+
+NDR_REBUILT_OBJECT_PINS.json freezes 3,117 task-cache source/object pairs:
+3,113 standalone plan modules plus the four identity/audit modules. Host source
+hashes match the local inputs. The read-only inventory took 7.831269 s.
+NDR_FINAL_PREFLIGHT.json passes, with 16,057 predicted imported modules, all
+76 old gap names excluded statically, and five exact source bodies consolidated.
+NDR_FINAL_IMPORT_PLAN.json pins that predicted import-name set. No final Lean
+compile has run yet; fresh runner hashes and admission remain required.
 
 NDR_BUILD_RECEIPTS.json indexes exact full receipts. Every receipt records
 exit/wall/RSS/swap, limits, source revision/hash, command and axiom lines.
@@ -67,9 +72,8 @@ all independently buildable prerequisites, then reproduces each blocked body's
 non-import bytes verbatim in dependency order. The strict module-import variant
 is preserved as NDR_STRICT_IMPORT_AUDIT.lean, uncompiled.
 
-After B029 succeeds: run offline receipt/source/body checks; run the read-only
-NDR_pin_rebuilt.py to pin successful sources/objects plus the four identity/audit
-modules; commit final preflight; then ONE NDR_agg.py NDR_A001 NDR_CombinedAudit.
+Next: ONE NDR_agg.py NDR_A001 NDR_CombinedAudit. The source, object inventory,
+and offline preflight are committed before submission.
 That script freshly verifies all three inherited lead runner hashes, requires
 allowed:true AND exit 0, and uses one 14G/16G scope, swap 0, TasksMax 64,
 Lean -j1 -M15000. Never rerun it after failure. Normal scopes remain 6G/8G,
@@ -96,8 +100,8 @@ axioms do not establish import-wide standardness or the security target.
 ## Budget / ownership
 
 Predecessor: 6 singles. This lane: L001–L005, total 11/60 single-module attempts.
-28/40 chunks completed (26 fully pass, two failed with 70 passing-prefix modules);
-B029 submitted. Combined 0/1. All admissions allowed:true AND exit 0, zero swap.
+29/40 chunks completed (27 fully pass, two failed with 70 passing-prefix modules).
+Combined 0/1. No normal scope remains active. All admissions allowed:true AND exit 0, zero swap.
 Retain /home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028; never
 delete it. Predecessor caches are read-only. No wallet/key, frozen Rust, protocol,
 release artifact or lead runner changed. No push or merge.
