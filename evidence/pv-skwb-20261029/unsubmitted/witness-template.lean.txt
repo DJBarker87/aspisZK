@@ -1,3 +1,7 @@
+import PV_SKW_DIAG_FILE
+import PV_SKW_DIAG_JSON_STDOUT
+import PV_SKW_DIAG_ERROR_STDERR
+import PV_SKW_L1
 import R1Z.PV_OWNN_SourceDense
 set_option autoImplicit false
 noncomputable section
@@ -25,11 +29,11 @@ theorem actual_input (site : Site) : PV_OWNM_Link_ActualInput wirePoints (input 
  · exact List.length_replicate
  constructor
  · intro p hp
-   simp only [wirePoints,List.mem_cons,List.mem_singleton] at hp
+   simp only [wirePoints,List.mem_cons,List.not_mem_nil,or_false] at hp
    rcases hp with h|h|h <;> subst p <;>
     simp [input,point,List.mem_replicate,ho]
  · intro c hc q hq
-   simp only [input,columns,List.mem_cons,List.mem_singleton] at hc
+   simp only [input,columns,List.mem_cons,List.not_mem_nil,or_false] at hc
    rcases hc with h|h <;> subst c
    · have h := (List.mem_replicate.mp hq).2; subst q; exact ho
    · have h := (List.mem_replicate.mp hq).2; subst q; exact hz
@@ -68,12 +72,42 @@ theorem final_links : PV_OWNM_Link_ActualInput wirePoints (input .final890) ∧
 theorem nondegenerate (site : Site) : (input site).point.length = 10 ∧
  (wirePoints (input site).point).length = 3 ∧
  ((input site).columns.map List.length) = [1024,1024] := by
- simp only [input,point,wirePoints,columns,List.length_replicate,List.length_cons,
-  List.length_nil,List.map_cons,List.map_nil]
- exact ⟨rfl,rfl,rfl⟩
+ simp [input,point,wirePoints,columns]
 #print axioms actual_input
 #print axioms owned
 #print axioms satisfiable
 #print axioms final_links
 #print axioms nondegenerate
 end PV_SKWB_OWNM
+
+set_option pp.proofs false
+#print PV_SKWB_OWNM.satisfiable
+#print axioms PV_SKWB_OWNM.satisfiable
+#print PV_SKWB_OWNM.nondegenerate
+#print axioms PV_SKWB_OWNM.nondegenerate
+#print PV_SKW_DIAG_FILE.satisfiable
+#print axioms PV_SKW_DIAG_FILE.satisfiable
+#print PV_SKW_DIAG_FILE.nondegenerate
+#print axioms PV_SKW_DIAG_FILE.nondegenerate
+#print PV_SKW_DIAG_JSON_STDOUT.satisfiable
+#print axioms PV_SKW_DIAG_JSON_STDOUT.satisfiable
+#print PV_SKW_DIAG_JSON_STDOUT.nondegenerate
+#print axioms PV_SKW_DIAG_JSON_STDOUT.nondegenerate
+#print PV_SKW_DIAG_ERROR_STDERR.satisfiable
+#print axioms PV_SKW_DIAG_ERROR_STDERR.satisfiable
+#print PV_SKW_DIAG_ERROR_STDERR.nondegenerate
+#print axioms PV_SKW_DIAG_ERROR_STDERR.nondegenerate
+#print PV_SKW_L1.satisfiable
+#print axioms PV_SKW_L1.satisfiable
+#print PV_SKW_L1.nondegenerate
+#print axioms PV_SKW_L1.nondegenerate
+#print axioms PV_SKW_DIAG_FILE.project_step
+#print axioms PV_SKW_DIAG_JSON_STDOUT.project_step
+#print axioms PV_SKW_DIAG_ERROR_STDERR.project_step
+#print PV_SKW_L1.generic_satisfiable
+#print axioms PV_SKW_L1.generic_satisfiable
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_ActualInput
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_SourceDense
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript879
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_Transcript890
+#print R1Z.PV_OWNM_V239.PV_OWNM_Link_OwnedPublicPlan
