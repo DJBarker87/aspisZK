@@ -2,7 +2,8 @@
 
 Read-only source audit at candidate `60a288b5461129634a3714d56756a1c64fdca7e4`.
 Runjoin sources were read using `git show origin/codex/pv-runjoin-20261026:<path>`;
-its worktree, branch and objects were not changed or imported by this audit.
+its worktree and branch were not changed. Cached objects were subsequently
+reused read-only after the separately recorded h6 checks.
 
 The route is `devnet_spend::main -> plan::run -> plan::prove ->
 RealR1_client::prove_for_proof_accounts -> prover::prove_masked_retrying_with`.
@@ -23,10 +24,10 @@ At `prover.rs:360`, `opening_batch` calls
 loop, both ZERO initializations, ordered mul/add for each pair, and final
 `p0 + y*p1`, as a complete Result. Existing `PV_DL_EncoderNative.source_reference`
 and `PV_DL_EncoderControl.source_reference` identify it with the owned reference
-and installed control respectively. Draft `lean/PV_RJ4ID_Op79.lean` composes
+and installed control respectively. Checked `lean/PV_RJ4ID_Op79.lean` composes
 these equations and identifies the complete dictionary update with
-`PV_DL_EncoderSelected.selected`. This draft is uncompiled until its own receipt
-exists; its definition does not establish a deployed association on its own.
+`PV_DL_EncoderSelected.selected`. It passed in fresh receipt 64405. Its definition does not establish a deployed
+association on its own.
 
 Runjoin's `ClaimEvaluator48.complete` / `ClaimEvaluation49.complete` consume
 exactly `PV_DL_EncoderSelected.selected ops`. Their source specialization is
@@ -88,7 +89,7 @@ The historical dlib toolchain gap above must not obscure this newer evidence:
 the later native check can be reused at its finite-validation evidence class
 if all relevant source hashes match, while the 145-record blocker remains.
 
-## New symbolic op254 transport draft
+## Checked symbolic op254 transport
 
 The carrier gap above is now addressed by three **checked source/model laws**, with
 fresh receipts 64401–64403: `PV_RJ4ID_PowersControl` defines the indexed deployed-copy
