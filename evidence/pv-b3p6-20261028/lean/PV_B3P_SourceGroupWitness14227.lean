@@ -21,12 +21,12 @@ theorem source_groups_joint_witness14 (base : ExternalTypes)
   constructor
   · exact old.terminal_qm31
   · constructor
-    · exact (root_joint_witness14 base append _ _).private_public
-    · exact (root_joint_witness14 base append _ _).withdrawal_public
+    · exact old.missing_bodies.private_public
+    · exact old.missing_bodies.withdrawal_public
     · rfl
     · exact PV_B3P_Fields14227.fields_source_link14 append
     · intro out values; rfl
-    · exact (root_joint_witness14 base append _ _).semantic
+    · exact old.missing_bodies.semantic
   · exact old.changed_functions
   · exact old.D188
   · exact old.matrix
