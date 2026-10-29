@@ -15142,3 +15142,11 @@ Correction to the lead's D488 direction: demanding that the satisfiability witne
 - declare the actual run's data and plan families symbolically from the source (PV_RunJoin_ActualRun.data and .plans), fixing NativeCallback55.runOf's parameters, which unblocks pv-rjq and pv-rjn;
 - then CommonSample and BackendInput.
 Privacy target not yet established.
+
+## D497 (Stream B) 2026-10-29 08:45 UTC: pv-mfb results (no credited closure fails on current source); pv-mfc launched on the undeterminable records
+
+pv-mfb used 8 of 60 Lean invocations, four of them initial uncredited checks, plus one preflight-only scope and no Kani; there were no proofs, no source edits and no manifest replay. Lead review: nothing outside the worker's evidence. It was merged into the candidate and pushed. STALE-REVIEW.md classifies all 764 stale-association records of D495:
+- A, 4: consumed by credited closures. Focused checks of V187, V234, V235 and V238 against the current source PASS, with standard axioms only.
+- B, 599: historical, superseded or uncredited evidence.
+- C, 161: undeterminable, because of missing cohort objects, unresolved import provenance or incomplete native-source binding chains.
+No checked credited closure failed elaboration. The 161 C records prevent a definitive conclusion that every credited closure survives on current source. pv-mfc (IDs 69800-69899; 60 focused checks and unchanged-source rebuilds, no proofs, no replay) resolves the C records into A or B and checks every new A case against current source. A failure would be a ledger finding. Rows removed: 0. Privacy target not yet established.
