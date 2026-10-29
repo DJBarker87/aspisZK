@@ -23,8 +23,11 @@ theorem actual (base : ExternalTypes) (heap : Heap) (box : Box)
   apply PV_RunJoin_NodeSequence60.complete
   have hs := ProverCommitPairCounter47.usize_large
   rw [UScalar.size_def] at hs
-  rw [offset]
-  change 28359+2*29248≤Usize.max
+  have total : PV_RunJoin_NodeSequence60.capacities
+      (PV_RunJoin_NodeSixSequence60.inputs cc1 cc2 p.tree p.queries)=29248 := by
+    change (4672+(4672+(4096+(5504+(5504+(4800+0))))):Nat)=29248
+    norm_num
+  rw [offset,total]
   omega
 
 #print axioms actual
