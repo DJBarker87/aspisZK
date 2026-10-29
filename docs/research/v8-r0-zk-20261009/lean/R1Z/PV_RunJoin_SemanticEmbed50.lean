@@ -22,10 +22,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (q : aspis_core.field.QM31) :
     @aspis_core.field.wide_exact.WideExact.from_qm31 (types base) (selected base heap box ops) q=
       ok (ProverRwDictionaryTower.fromW
-        (ProverCommitNativeOps47.embedded (PV_RunJoin_SemanticScalar50.raw q))) := by
+        (ProverCommitNativeOps47.embedded (ProverCommitNativeOps47.normalize (PV_RunJoin_SemanticScalar50.raw q)))) := by
   change @ExternalFuns.op45 (types base) (selected base heap box ops) q=_
   rw [field]
-  rw [←PV_RunJoin_SemanticScalar50.source q]
+  unfold ProverRwDictionaryTower.wEmbed
+  have hq : ProverRwDictionaryTower.toQ q=ProverCommitNativeQ48.source (PV_RunJoin_SemanticScalar50.raw q) := by
+    rw [←PV_RunJoin_SemanticScalar50.source q,ProverRwDictionaryTower.native_q_roundtrip]
+  rw [hq,(ProverCommitNativeOps47.from_qm31 (PV_RunJoin_SemanticScalar50.raw q)).1]
   rfl
 #print axioms candidate
 #print axioms field
