@@ -18,7 +18,7 @@ theorem active_body_binding12 (selectors : reference_copy_terminal.Selectors)
   by_cases h : block < 64#usize
   · have hb : block.val < 64 := by scalar_tac
     simp only [h,if_pos,active_step12,active_block_source_binding11 selectors block sum hb]
-  · simp only [h,if_neg]
+  · simp only [h,if_false]
 
 theorem active_loop_binding12 (selectors : reference_copy_terminal.Selectors)
     (sum : aspis_core.field.QM31) (block : Usize) :
