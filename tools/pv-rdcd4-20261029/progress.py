@@ -21,5 +21,5 @@ for n in [201,220,237,236,233,197]:
  old.update(status=old['status'] if current.exists() else 'SUSPENDED',rdcd4_status=old.get('rdcd4_status',old['status']) if current.exists() else 'NOT YET STARTED: required row order retained',endpoint_premises_removed=[],endpoint_premises_added=[],endpoint_premises_changed=[])
  if n==201 and old['status']!='RESTORED':old.update(reason='The new complete source-value/Result theorem passes, but the constructor/generated helper closure and final source/object coherence remain pending.',kernel_theorem='R1Z.PV_RDCD4_V201.source_reference',remaining_modules=association['pending_new_modules'],b3p6_1_reclassifications=0)
  rows.append(old)
-(E/'STATUS.json').write_text(json.dumps(dict(phase='progress snapshot, not a final disposition',rows=rows),indent=2)+'\n')
+(E/'STATUS.json').write_text(json.dumps(dict(phase='final row dispositions; 100 Lean attempts and final coherence complete' if len(lean)==100 and (E/'final-coherence/receipt.json').exists() and json.load(open(E/'final-coherence/receipt.json'))['exit']==0 else 'progress snapshot, not a final disposition',rows=rows),indent=2)+'\n')
 print(json.dumps(json.load(open(E/'RUNS.json'))['counts']))
