@@ -11,6 +11,7 @@ structure Delivery (A : Type) where
   result : Result A
   delivered : Bytes
   errorBytes : Option Bytes
+  createdMode : Option Nat := none
 
 /-- Typed boundary data, with no supplied event trace. The adapter's path,
 delivery and errno fidelity remains an observation/rdea-1 obligation. -/
@@ -20,7 +21,7 @@ structure Answers where
   writeAll : World → std.fs.File → Slice U8 →
     Delivery ((core.result.Result Unit std.io.error.Error) × std.fs.File)
   sync : World → std.fs.File → Delivery (core.result.Result Unit std.io.error.Error)
-  open : {P : Type} → core.convert.AsRef P std.path.Path → P → World →
+  openReply : {P : Type} → core.convert.AsRef P std.path.Path → P → World →
     Bytes × Delivery (core.result.Result std.fs.File std.io.error.Error)
   optionsOpen : {P : Type} → core.convert.AsRef P std.path.Path →
     std.fs.OpenOptions → P → World →
@@ -64,7 +65,7 @@ def sync (a : Answers) (file : std.fs.File) :
 
 def openFile {P : Type} (a : Answers) (convert : core.convert.AsRef P std.path.Path)
     (path : P) : M (core.result.Result std.fs.File std.io.error.Error) := fun w =>
-  let r := a.open convert path w
+  let r := a.openReply convert path w
   ⟨r.2.result,w,[.side (ascii "nonce-open-request") r.1] ++ errors r.1 r.2.errorBytes⟩
 
 /-- Whether create_new succeeded is exposed through the typed answer. The
@@ -73,9 +74,24 @@ def optionsOpen {P : Type} (a : Answers) (convert : core.convert.AsRef P std.pat
     (options : std.fs.OpenOptions) (path : P) :
     M (core.result.Result std.fs.File std.io.error.Error) := fun w =>
   let r := a.optionsOpen convert options path w
-  ⟨r.2.result,w,[.side (ascii "nonce-options-open-request") r.1] ++ errors r.1 r.2.errorBytes⟩
+  let prefix := [.side (ascii "nonce-options-open-request") r.1]
+  match r.2.result, r.2.createdMode with
+  | .ok (.Ok _), some mode =>
+    ⟨r.2.result,deliveredState r.1 [] w,
+      prefix ++ [.otherFile (.create r.1 mode)] ++ errors r.1 r.2.errorBytes⟩
+  | _, _ => ⟨r.2.result,w,prefix ++ errors r.1 r.2.errorBytes⟩
 
 variable [ExternalFuns]
+
+/-- A sufficient fixed-dictionary view. Real state-dependent file replies
+need not satisfy this predicate; it is a source-erasure domain, not T. -/
+structure Compatible (a : Answers) : Prop where
+  write : ∀ w f b, (a.writeAll w f b).result = std.fs.File.Insts.StdIoWrite.write_all f b
+  sync : ∀ w f, (a.sync w f).result = std.fs.File.sync_all f
+  openFile : ∀ {P : Type} (c : core.convert.AsRef P std.path.Path) p w,
+    (a.openReply c p w).2.result = std.fs.File.open c p
+  options : ∀ {P : Type} (c : core.convert.AsRef P std.path.Path) o p w,
+    (a.optionsOpen c o p w).2.result = std.fs.OpenOptions.open c o p
 
 theorem write_fixed (a : Answers) (file : std.fs.File) (bytes : Slice U8)
     (h : ∀ w, (a.writeAll w file bytes).result = std.fs.File.Insts.StdIoWrite.write_all file bytes) :
@@ -89,13 +105,16 @@ theorem sync_fixed (a : Answers) (file : std.fs.File)
   split <;> exact h w
 
 theorem open_fixed {P : Type} (a : Answers) (convert : core.convert.AsRef P std.path.Path)
-    (path : P) (h : ∀ w, (a.open convert path w).2.result = std.fs.File.open convert path) :
+    (path : P) (h : ∀ w, (a.openReply convert path w).2.result = std.fs.File.open convert path) :
     FixedView (openFile a convert path) (std.fs.File.open convert path) := h
 
 theorem options_fixed {P : Type} (a : Answers) (convert : core.convert.AsRef P std.path.Path)
     (options : std.fs.OpenOptions) (path : P)
     (h : ∀ w, (a.optionsOpen convert options path w).2.result = std.fs.OpenOptions.open convert options path) :
-    FixedView (optionsOpen a convert options path) (std.fs.OpenOptions.open convert options path) := h
+    FixedView (optionsOpen a convert options path) (std.fs.OpenOptions.open convert options path) := by
+  intro w
+  unfold optionsOpen
+  split <;> exact h w
 
 theorem write_prefix (a : Answers) (file : std.fs.File) (bytes : Slice U8) (w : World) :
     (writeAll a file bytes w).events =
