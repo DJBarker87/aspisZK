@@ -130,3 +130,13 @@ V217 candidate carrier dependency60656 passes at the unchanged tracked source (e
 60661 owned mask-source definitions pass:exit0,wall1.38s,peak2,650,532KiB,swap0; standard axioms. No V217 restoration follows from definition elaboration; source/library binding remains pending.
 
 Source-mutation controls in the structural gates are syntactic full-body rejection checks; mutated Rust bodies were not separately compiled or used as Kani controls. Their role is fail-closed matching, not a standalone tool-fidelity proof. Native finite fixtures remain the separately recorded native validation.
+
+## Capacity-error resume 2
+
+Recovered60671 read-only from matching host/local receipts: exit0, wall1.18s,
+peak2,632,176KiB, swap0; standard axioms. No resubmission. Actual recovered
+budget72 Lean(60 pass,12 fail),7 native,0 Kani.60672 then passes the generic
+forward-loop source/finite law (exit0,wall1.24s,peak2,643,348KiB,swap0;
+standard axioms). Next fresh ID60673;60697–60699 remain audit-only.
+The inherited WIP contains uncompiled owned mask drafts; these have no proof
+or row credit until successful focused receipts and complete source binding.
