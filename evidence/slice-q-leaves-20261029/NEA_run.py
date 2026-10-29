@@ -63,7 +63,8 @@ elif kind=='kani':
     command=['python3','NEA_gate.py',a+'.json']
 else:
     files['NEA_extract.py']=(E/'NEA_extract.py').read_text()
-    files['NEA_reference.rs']=(E/'NEA_reference.rs.txt').read_text()
+    files['NEA_reference.rs']=(E/os.environ.get('NEA_REFERENCE','NEA_reference.rs.txt')).read_text()
+    if os.environ.get('NEA_EXTRACT_CONFIG'):env['NEA_EXTRACT_CONFIG']=os.environ['NEA_EXTRACT_CONFIG']
     sources=list(files);command=['python3','NEA_extract.py']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 files[a+'.json']=json.dumps(cfg)
@@ -106,7 +107,8 @@ out=json.loads(r.stdout)
 for n,t in out.items():
     p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 assert a+'/receipt.json' in out,'No receipt: stop, do not resubmit'
+if kind=='extract' and 'NEA_EXTRACTION_PINS.json' in out:(E/a/'NEA_EXTRACTION_PINS.json').write_text(out['NEA_EXTRACTION_PINS.json'])
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NEA_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}),flush=True)
-print(out[a+'/stdout.log'][-3500:],flush=True)
+print(out[a+'/stdout.log'][-(1000 if kind=='kani' else 3500):],flush=True)

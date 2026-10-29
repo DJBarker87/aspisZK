@@ -10,6 +10,8 @@ reference={'transcript':'NEA_transcript_reference.rs','registry':'NEA_registry_r
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 roots=['crate::neg_ref','crate::qm_neg_ref','crate::fibre_new_ref','crate::aligned_ref','crate::residue_flush_ref','crate::line_double_sub_ref']
 namespace='NEA_Reference'
+if os.environ.get('NEA_EXTRACT_CONFIG'):
+ cfg=json.loads(os.environ['NEA_EXTRACT_CONFIG']);roots=cfg['roots'];namespace=cfg['namespace']
 dest=B/'NEA_extracted'
 cmd=[str(C),'cargo','--preset','aeneas','--mir','built','--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in roots:cmd+=['--start-from',root]

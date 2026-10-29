@@ -1,0 +1,4 @@
+import R17ActualTableArrayIndexV1
+#print AspisR1QueryGeometryActual.fast_domain.TABLE_A_entries
+#print AspisR1QueryGeometryActual.fast_domain.TABLE_A
+#print AspisR1QueryGeometryActual.fast_domain.TABLE_A_chunk_00
