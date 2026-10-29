@@ -66,7 +66,7 @@ theorem value_sequence_cps10 (packed : Array aspis_core.field.QM31 24#usize)
   conv_rhs => unfold value_owned_cont10_13
   apply bind_equal9
   intro s13
-  rfl
+  unfold value_owned_cont10_14
 
 theorem value_entry_factor10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
