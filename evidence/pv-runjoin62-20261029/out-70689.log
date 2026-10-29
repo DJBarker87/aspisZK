@@ -1,0 +1,21 @@
+START 70689 R1Z.PV_RunJoin_SemanticBound62
+DONE 70689 R1Z.PV_RunJoin_SemanticBound62 exit 1 wall 3.67 RSS 4409876480
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticBound62.lean:18:2: error: unsolved goals
+case isFalse
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+logical : Slice U8
+out : alloc.vec.Vec U8
+layout : compact.LOGICAL_SEMANTIC = ok 13831#usize
+room : out.length + 55 * 13831 ≤ Usize.max
+good : ¬(logical.len != 13831#usize) = true
+length : logical.length = 13831
+a✝ : Slice U8
+⊢ a✝.length ≤ logical.length →
+    Post (fun pair => pair.2.length ≤ out.length + 55 * 13831) do
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out a✝
+      host_compact.compact_semantic_loop logical out1 compact.SEMANTIC_ROWS 32#usize 0#u8
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticBound62.lean:24:16: error: unexpected identifier; expected ':'
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticBound62.lean:25:87: error: unexpected token ')'; expected ':'
+'R1Z.PV_RunJoin_SemanticBound62.encode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

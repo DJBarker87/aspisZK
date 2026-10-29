@@ -1,0 +1,33 @@
+START 70687 R1Z.PV_RunJoin_SemanticLoopBound62
+DONE 70687 R1Z.PV_RunJoin_SemanticLoopBound62 exit 1 wall 5.03 RSS 4418748416
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticLoopBound62.lean:48:6: error: 'change' tactic failed, pattern
+  next.length ≤ out.length + 2 * bound * (n + 1)
+is not definitionally equal to target
+  Post (fun pair => pair.2.length ≤ out.length + 2 * bound * (n + 1))
+    (match ignored with
+    | ControlFlow.cont next =>
+      Std.loop
+        (fun x =>
+          if x.2.2 < count then do
+            let (r, out1) ← host_compact.compact_semantic_row logical x.1 x.2.2 x.2.1
+            let cf ←
+              match r with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let row1 ← lift (x.2.2.wrapping_add 1#u8)
+                ok (ControlFlow.cont (out1, val, row1))
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r1 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame compact.CodecError) residual
+                ok (ControlFlow.done (r1, out1))
+          else
+            if (x.2.1 != logical.len) = true then
+              ok (ControlFlow.done (core.result.Result.Err compact.CodecError.Length, x.1))
+            else ok (ControlFlow.done (core.result.Result.Ok (), x.1)))
+        next
+    | ControlFlow.done out => ok out)
+'R1Z.PV_RunJoin_SemanticLoopBound62.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -38,4 +38,7 @@ for n in res:
  while parents.get(a) is not None:a=parents[a];path.append(a)
  rows.append(dict(field='op'+str(n),number=n,name=fields[n],ledger_row=rowmap.get(n),reachability_path=list(reversed(path))))
 out=dict(source_revision='474daaf0f1857fc01175426409f88c098716f659',dictionary_before='PV_RunJoin_WeightInstalled46.selected base heap box ops',capture_root='PV_RunJoin_NativeControl55.run capture',method='Syntactic declaration graph of the exact native prefix, with external aliases and trait dictionaries followed; conservative across branches, not an executable path solver. Callback parameters/store/hash are additional explicit inputs.',source_hashes={str(f.relative_to(R)):hashlib.sha256(f.read_bytes()).hexdigest(),str(ex.relative_to(R)):hashlib.sha256(ex.read_bytes()).hexdigest()},constructor_chain=chains,reachable_fields=sorted(ops),historically_installed_fields=sorted(selected),residual_fields=rows)
+status=json.loads((E/'residual-status.json').read_text())
+for row in out['residual_fields']:row.update(status['fields'][str(row['number'])])
+for key in ['additional_publication_residuals','open_prefix_obligations','qualification']:out[key]=status[key]
 (E/'residual-ops.json').write_text(json.dumps(out,indent=2)+'\n')

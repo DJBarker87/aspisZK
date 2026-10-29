@@ -1,0 +1,30 @@
+def Aeneas.Std.core.slice.index.Slice.index : {T I Output : Type} →
+  core.slice.index.SliceIndex I (Slice T) Output → Slice T → I → Result Output :=
+fun {T I Output} inst slice i => inst.index i slice
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.Range Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeUsize,
+    get := core.slice.index.SliceIndexRangeUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice : (T : Type) →
+  core.slice.index.SliceIndex (core.ops.range.RangeTo Usize) (Slice T) (Slice T) :=
+fun T =>
+  { sealedInst := core.slice.index.private_slice_index.SealedRangeToUsize,
+    get := core.slice.index.SliceIndexRangeToUsizeSlice.get,
+    get_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_mut,
+    get_unchecked := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked,
+    get_unchecked_mut := core.slice.index.SliceIndexRangeToUsizeSlice.get_unchecked_mut,
+    index := core.slice.index.SliceIndexRangeToUsizeSlice.index,
+    index_mut := core.slice.index.SliceIndexRangeToUsizeSlice.index_mut }
+def Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice.index : {T : Type} →
+  core.ops.range.RangeTo Usize → Slice T → Result (Slice T) :=
+fun {T} r s => if ↑r.end ≤ s.length then Result.ok ⟨List.slice 0 ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
