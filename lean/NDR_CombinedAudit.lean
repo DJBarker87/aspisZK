@@ -168,6 +168,18 @@ run_cmd do
       unless constants.contains required do
         throwError "root {root} does not directly mention {required}"
     logInfo m!"NDR_SAME_WRAPPER_CONSTANTS {root}"
+  for root in #[`AspisR1.JHq_TX1.accepted1_saved, `AspisR1.JHw_Joint.source] do
+    let some info := env.checked.get.find? root | throwError "missing aggregate declaration {root}"
+    unless info.type.getUsedConstants.contains `AspisR1.JHe_SHARealization do
+      throwError "lost original tree-realization binder in {root}"
+    logInfo m!"NDR_TREE_BINDER_RETAINED {root}"
+  let some joint := env.checked.get.find? `AspisR1.NDO_Joint.source |
+    throwError "missing joint source"
+  unless joint.type.getUsedConstants.contains `AspisR1.JHu_FixturePdaRuntime.FixturePdaRuntime do
+    throwError "lost fixture runtime premise"
+  if joint.type.getUsedConstants.contains `AspisR1.JHe_SHARealization then
+    throwError "joint source unexpectedly retains the discharged tree realization"
+  logInfo "NDR_JOINT_RUNTIME_PREMISE_RETAINED"
   let imported := env.header.modules.map (·.module)
   for historical in #[
     `AspisR1CircleSampleWrapper.RawCircleSampleActualPolicyUnconditionalV1,
