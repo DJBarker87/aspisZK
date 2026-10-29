@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_QueryScriptTotal64
 import R1Z.PV_RunJoin_QueryLoop63
+import R1Z.PV_RunJoin_QueryRoom64
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_QueryLoopTotal64
@@ -38,13 +39,14 @@ theorem finite (base : ExternalTypes) (heap : Heap) (box : Box)
     have more : i.val<22 := by omega
     let k : Fin 22 := ⟨i.val,more⟩
     have hk : PV_RunJoin_QueryCell63.index k=i := by apply UScalar.eq_of_val_eq;rfl
+    have roomParts := PV_RunJoin_QueryRoom63.split out.length Usize.max n 832 832 (Nat.le_refl _) room
     obtain ⟨middle,hm,hlen⟩ := PV_RunJoin_QueryScriptTotal64.complete base heap box ops
       cc1 cc2 domain.first domain.second s1 s2 stored1 stored2 size1 size2 queries range folded
-      domain.foldedSize salts domain.saltSize k out (by omega)
+      domain.foldedSize salts domain.saltSize k out roomParts.1
     rw [hk] at hm
     have inc := ProverCommitPairCounter47.next_val i (by change i.val<1024;omega)
-    obtain ⟨next,hn,hl⟩ := ih (Usize.wrapping_add i 1#usize) middle (by rw [inc];omega) (by omega)
-    refine ⟨next,?_,by omega⟩
+    obtain ⟨next,hn,hl⟩ := ih (Usize.wrapping_add i 1#usize) middle (by rw [inc];omega) (roomParts.2 middle.length hlen)
+    refine ⟨next,?_,PV_RunJoin_QueryRoom64.length_step out.length middle.length next.length n 832 hlen hl⟩
     simp only [PV_RunJoin_QueryLoop63.series,PV_RunJoin_ByteSequence63.run,hm,bind_tc_ok,hn]
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
