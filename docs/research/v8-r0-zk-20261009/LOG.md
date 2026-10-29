@@ -14397,3 +14397,17 @@ pv-diag2 continues in the same sparse worktree on branch codex/pv-diag2-20261029
 - per-sink honest-run silence or public-only-content theorems where provable;
 - regeneration or replacement of the two failed MIR artifacts.
 Rows removed: 0. Privacy target not yet established.
+
+## D429 (Stream B) 2026-10-29 00:46 UTC: pv-ownb results; ruling own-1 on what "native association" means for class-B rows; pv-ownc launched
+
+pv-ownb (head of codex/pv-ownb-20261029) used all 100 Lean attempts (89 passed, 11 failed), two capped scopes and no Kani. Its final statement audit, 118-theorem axioms audit and focused replay passed with standard axioms only. It proved the following:
+- the full Link padding-aware codec model;
+- scoped collector read and write invariants;
+- generation and ownership preservation;
+- a symbolic filtering value law;
+- explicit cleanup, error and abort model equations.
+A deployed-layout probe passed 67,086 active-field cases without reading padding; that probe is finite validation. The source scope is the collector's filtering stage and local endpoint stores, not the whole V229 callback. V229, V230, V239 and V178 remain SUSPENDED, with no witness-dependent finding. Lead review: nothing outside the worker's prefixes and evidence; no forbidden constructs; no large files. It was merged into the candidate as 55358c233b and pushed.
+
+Ruling own-1 (in pv-common.txt): for a class-B row, a standard-library or dependency body, "native association" means a statement-by-statement structural binding ((k')) of the deployed source body (rust-src 1.94.1 or the deployed dependency version) onto the model. That covers every control-flow step, store, drop-glue call and error or abort branch. The step from that source to machine code is the existing compiler-preservation obligation (V370) at the owner's pending D381/D386 boundary, named and retained. Machine-code correspondence is not required to restore such a row and is never silently assumed. This matches how the pv-rdb1, pv-rdb2 and pv-rdcd restorations were classed (structural, K-1 substitute), and it stops "native association" from becoming an open-ended target.
+
+pv-ownc continues in the same sparse worktree on branch codex/pv-ownc-20261029 (IDs 62800-62899; 100 Lean, 40 native, 0 Kani). It binds the rest of the deployed in-place collector source under own-1 and composes it with the rdb2d resource law to restore V229. Then come V230, V239 and V178's cleanup half; the diagnostic half stays with pv-diag2. Rows removed: 0. Privacy target not yet established.
