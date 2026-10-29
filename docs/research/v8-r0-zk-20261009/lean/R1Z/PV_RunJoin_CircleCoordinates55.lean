@@ -31,11 +31,13 @@ theorem chosen (block : Array U8 32#usize) (row : Bool) :
   unfold PV_RunJoin_CircleTotal55.chosen
   let t := R0P.SemSource.qm31Sample (AspisV8R19.SqueezeOracleBridge.decodeState block)
   by_cases hi : t.im≠0
-  · cases row <;> simp only [if_pos hi,Bool.false_eq_true,if_false,if_true,
+  · dsimp only [t] at hi
+    cases row <;> simp only [if_pos hi,Bool.false_eq_true,if_false,if_true,
       R0P.SemSource.circleSample0,R0P.SemSource.circleSample1,R0P.SemSource.circleSampleParameter0,
       R0P.SemSource.circleSampleParameter1,R0P.SemSource.circleSampleParameterWith_accepted _ _ hi,
       R0P.SemSource.embedCirclePoint]
   · have hz : t.im=0 := not_ne_iff.mp hi
+    dsimp only [t] at hi hz
     cases row <;> simp only [if_neg hi,Bool.false_eq_true,if_false,if_true,
       R0P.SemSource.circleSample0,R0P.SemSource.circleSample1,R0P.SemSource.circleSampleParameter0,
       R0P.SemSource.circleSampleParameter1,R0P.SemSource.circleSampleParameterWith_rejected _ _ hz,
