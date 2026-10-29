@@ -56,11 +56,13 @@ theorem update_read {n : Usize} (xs ys : Array Q n) (i : Usize) (q z : Q)
   obtain ⟨out, ho, hset⟩ := WP.spec_imp_exists (Array.update_spec xs i q hx)
   rw [ho] at updated
   cases updated
-  have hy : i.val < ys.val.length := by rw [ys.property]; exact inside
-  obtain ⟨value, hv, helement⟩ := WP.spec_imp_exists (Array.index_usize_spec ys i hy)
+  subst ys
+  have hy : i.val < (xs.set i q).val.length := by rw [(xs.set i q).property]; exact inside
+  obtain ⟨value, hv, helement⟩ := WP.spec_imp_exists (Array.index_usize_spec (xs.set i q) i hy)
   rw [hv] at readback
   have hz : value = z := Result.ok.inj readback
-  rw [← hz, helement, hset]
+  rw [← hz, helement]
+  change (xs.val.set i.val q)[i.val]'((by simpa only [List.length_set] using hx)) = q
   exact List.getElem_set_self hx
 
 /-- Top-down V403 consumed domain; no canonicality premise occurs in the
@@ -70,14 +72,14 @@ theorem consumed (limb : Q → Fin 4 → U32)
     (interpolate : Array Q 28#usize → Result (Array Q 28#usize))
     (semantic : Trace → Result ((core.result.Result Q E) × State))
     (caller : PV_ROWS10B_Link_CallerPrefix reached occurs)
-    (prefix : PV_ROWS10B_Link_PrefixEquations occurs interpolate semantic)
+    (prefixEq : PV_ROWS10B_Link_PrefixEquations occurs interpolate semantic)
     (range : PV_ROWS10B_Link_RoundRange occurs)
     (polynomial : PV_ROWS10B_Link_Interpolation limb interpolate)
     (challenge : PV_ROWS10B_Link_Semantic limb semantic) :
     ∀ p q, reached p q → Coefficients limb p ∧ Canonical limb q := by
   intro p q hit
   obtain ⟨e, he, hp, hq⟩ := caller p q hit
-  obtain ⟨hi, hs, hu, hr⟩ := prefix e he
+  obtain ⟨hi, hs, hu, hr⟩ := prefixEq e he
   rw [← hp, ← hq]
   refine ⟨polynomial e.values e.coefficients hi, ?_⟩
   have same := update_read e.point e.updated e.round e.sampled e.read (range e he) hu hr
