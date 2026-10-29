@@ -71,7 +71,9 @@ theorem complete (ops : ExternalFuns) {T0 : Type}
           | Ok published =>
             rcases published with ⟨p,finishedAudit⟩
             obtain ⟨hsem,hbackend,hhash,hpublic,hvariant⟩ := finish
-            refine ⟨hvariant,compiled,noised,maskOnly,d,g_,h1_padding,_,hlen,?_⟩
+            refine ⟨hvariant,compiled,noised,maskOnly,d,g_,h1_padding,
+              {hash:=hash,variant:=.S2,domain:=domain,messages:=messages,c1:=none,c2:=none,
+                c1_salts:=some salts1,c2_salts:=some salts2},hlen,?_⟩
             rw [hpublic,hhash,hbackend]
             rw [hsem] at hbuild
             exact hbuild
