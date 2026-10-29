@@ -160,7 +160,7 @@ def V400 : Prop := ∀ adv,
 /-- adopted by owner decision D502/D478. Exact JOINT native environment/coin
 acquisition law. Neither an identity nor separate timing/signal marginals. -/
 def PublicEnvironment : Prop :=
-  PV_EVH_Residual.Link_PublicEnvironment template outputs x rt.acquisition
+  PV_EVH_Residual.Link_PublicEnvironment rt.acquisition
 
 def CausalPrefix : Prop := PV_EVH_Residual.Link_CausalPrefix
   (fun e v oracleLog => rt.completion.complete rt.publicInput
