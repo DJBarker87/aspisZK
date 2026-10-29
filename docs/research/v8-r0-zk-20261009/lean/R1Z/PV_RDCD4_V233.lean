@@ -44,7 +44,8 @@ theorem source_reference (N : Type) (input : Slice U8) (origin : Nat) :
   apply congrArg Result.ok
   apply Prod.ext
   · apply Subtype.ext
-    rfl
+    simp only [interpreted,source,blockValues,PV_AL_SplitCarrier.reference,
+      PV_AL_SplitCarrier.blockSlice,PV_AL_SplitCarrier.values,PV_CBL_SplitModel.block,Nat.zero_add]
   · apply Subtype.ext
     change (input.val.drop ((input.val.length/64)*64)).take
       (input.val.length-(input.val.length/64)*64)=input.val.drop ((input.val.length/64)*64)
