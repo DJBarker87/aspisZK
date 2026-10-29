@@ -1,5 +1,6 @@
 import R1Z.ProverCommitDeployedFuel22
 import PV_EVH_Interface
+import PV_EVH_Core
 import PV_MEAS_Fuel
 /-! Arbitrary native probability laws, unchanged finite cryptographic model,
 simE, completion, full event observer, original bad event and bound. -/
@@ -71,9 +72,7 @@ variable (μR : ProbabilityMeasure R)
 
 /-- adopted by owner decision D502/D478: both adaptive queries and the final decision see the full
 ordered trace and public failure signal; no successful-return restriction. -/
-structure Observer (Signal A : Type) where
-  program : Signal × Observation A → OProg
-  decide : Signal × Observation A → Bool
+abbrev Observer := PV_EVH_Core.Observer
 
 variable (completion : Completion Public Signal Env (ROMView K CommitHandle Aux R1Bat) A)
     (pubData : Public) (env : Env)
