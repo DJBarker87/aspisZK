@@ -31,7 +31,7 @@ inductive Request where
 inductive Reply where
  | returned (value : Nat)
  | error (errno : Int)
- | cut
+ | pending (visible : Bytes)
  deriving DecidableEq, Repr
 structure Exchange where
  request : Request
@@ -53,7 +53,7 @@ def bindE {A B : Type} (r : Exec A) (f : A → Exec B) : Exec B :=
  | .error e => ⟨r.trace,.error e⟩
  | .cut => ⟨r.trace,.cut⟩
 def call (q : Request) (r : Reply) : Exec Nat :=
- ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .cut => .cut⟩
+ ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .pending _ => .cut⟩
 theorem call_request (q : Request) (r : Reply) : (call q r).trace.map Exchange.request=[q] := rfl''',
 '''theorem advance_zero (s : Span) : advance s 0=s := by cases s; rfl
 theorem advance_add (s : Span) (a b : Nat) : advance (advance s a) b=advance s (a+b) := by
@@ -83,6 +83,7 @@ theorem bind_pure {A B : Type} (a : A) (f : A → Exec B) : bindE (pureE a) f=f 
 def delivered (fd : Int) (es : List Exchange) : Bytes := es.flatMap fun e =>
  match e.request,e.reply with
  | .write out s count,.returned n => if out=fd then s.bytes.take (min count n) else []
+ | .write out _ _,.pending visible => if out=fd then visible else []
  | _,_ => []
 theorem delivered_append (fd : Int) (xs ys : List Exchange) :
  delivered fd (xs++ys)=delivered fd xs++delivered fd ys := by
@@ -90,14 +91,18 @@ theorem delivered_append (fd : Int) (xs ys : List Exchange) :
 '''theorem delivered_error (fd out : Int) (s : Span) (count : Nat) (e : Int) :
  delivered fd [⟨.write out s count,.error e⟩]=[] := rfl
 theorem delivered_cut (fd out : Int) (s : Span) (count : Nat) :
- delivered fd [⟨.write out s count,.cut⟩]=[] := rfl''',
+ delivered fd [⟨.write out s count,.pending []⟩]=[] := by
+ by_cases h : out=fd <;> simp [delivered,h]''',
 '''theorem delivered_write (fd : Int) (s : Span) (count n : Nat) :
  delivered fd [⟨.write fd s count,.returned n⟩]=s.bytes.take (min count n) := by
  simp only [delivered,eq_self,ite_true,List.flatMap_cons,List.flatMap_nil,List.append_nil]''',
 '''theorem requested_append (xs ys : List Exchange) :
  requested (xs++ys)=requested xs++requested ys := by
  simp only [requested,List.map_append]
-theorem advance_base (s : Span) (n : Nat) : (advance s n).base=s.base := rfl''',
+theorem advance_base (s : Span) (n : Nat) : (advance s n).base=s.base := rfl
+theorem delivered_pending (fd : Int) (s : Span) (count : Nat) (visible : Bytes) :
+ delivered fd [⟨.write fd s count,.pending visible⟩]=visible := by
+ simp only [delivered,List.flatMap_cons,List.flatMap_nil,List.append_nil,eq_self,ite_true]''',
 ])
 module('Fd','import PV_DIAG12_Boundary',[
 '''def linuxReadLimit : Nat := 9223372036854775807
@@ -107,7 +112,7 @@ def fdFlush : Exec Unit := pureE ()
 /- OwnedFd::drop ignores close's result, without retry or cvt/errno read.
 A cut is still a missing return, not ordinary completion. -/
 def fdDrop (fd : Int) (r : Reply) : Exec Unit :=
- ⟨[⟨.close fd,r⟩],match r with | .cut => .cut | _ => .ok ()⟩
+ ⟨[⟨.close fd,r⟩],match r with | .pending _ => .cut | _ => .ok ()⟩
 theorem fd_write_request (fd : Int) (s : Span) (r : Reply) :
  requested (fdWrite fd s r).trace=[.write fd s (min s.bytes.length linuxReadLimit)] := rfl''',
 '''theorem fd_write_count_bounded (fd : Int) (s : Span) (r : Reply) :
@@ -134,7 +139,7 @@ theorem std_ebadf_not_delivered (fd : Int) (s : Span) :
 theorem std_write_success (fd : Int) (s : Span) (n : Nat) :
  (stdWrite fd s (.returned n)).result=.ok n := rfl''',
 '''theorem std_cut (fd : Int) (s : Span) :
- (stdWrite fd s .cut).result=.cut := rfl
+ (stdWrite fd s (.pending [])).result=.cut := rfl
 theorem std_write_trace (fd : Int) (s : Span) (r : Reply) :
  (stdWrite fd s r).trace=(fdWrite fd s r).trace := rfl''',
 '''def stdoutWrite := stdWrite 1
@@ -144,7 +149,7 @@ theorem stdout_request (s : Span) (r : Reply) :
 theorem stderr_request (s : Span) (r : Reply) :
  requested (stderrWrite s r).trace=[.write 2 s (min s.bytes.length linuxReadLimit)] := rfl''',
 '''theorem fd_drop_cut (fd : Int) :
- fdDrop fd .cut=⟨[⟨.close fd,.cut⟩],.cut⟩ := rfl
+ fdDrop fd (.pending [])=⟨[⟨.close fd,.pending []⟩],.cut⟩ := rfl
 theorem no_close_stdout (s : Span) (r : Reply) :
  ∀ e ∈ (stdoutWrite s r).trace, e.request≠.close 1 := by
  intro e h; simp only [stdoutWrite,stdWrite,maskBadFd,fdWrite,call,List.mem_singleton] at h
@@ -237,5 +242,8 @@ theorem std_all_error_deliveries (fd : Int) (sig : Signal) (fuel : Nat) (s : Spa
  delivered fd (fdWriteAll fd sig fuel s c).execution.trace := rfl''',
 ])
 exec((D/'parts.py').read_text())
+exec((D/'line.py').read_text())
+exec((D/'channel.py').read_text())
+exec((D/'composition.py').read_text())
 (D/'plans.json').write_text(json.dumps(plans,indent=2)+'\n')
 print(len(plans),'stages')

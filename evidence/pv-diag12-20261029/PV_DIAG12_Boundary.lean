@@ -21,7 +21,7 @@ inductive Request where
 inductive Reply where
  | returned (value : Nat)
  | error (errno : Int)
- | cut
+ | pending (visible : Bytes)
  deriving DecidableEq, Repr
 structure Exchange where
  request : Request
@@ -43,7 +43,7 @@ def bindE {A B : Type} (r : Exec A) (f : A → Exec B) : Exec B :=
  | .error e => ⟨r.trace,.error e⟩
  | .cut => ⟨r.trace,.cut⟩
 def call (q : Request) (r : Reply) : Exec Nat :=
- ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .cut => .cut⟩
+ ⟨[⟨q,r⟩],match r with | .returned n => .ok n | .error e => .error e | .pending _ => .cut⟩
 theorem call_request (q : Request) (r : Reply) : (call q r).trace.map Exchange.request=[q] := rfl
 #print axioms call_request
 
@@ -88,6 +88,7 @@ def requested (es : List Exchange) : List Request := es.map Exchange.request
 def delivered (fd : Int) (es : List Exchange) : Bytes := es.flatMap fun e =>
  match e.request,e.reply with
  | .write out s count,.returned n => if out=fd then s.bytes.take (min count n) else []
+ | .write out _ _,.pending visible => if out=fd then visible else []
  | _,_ => []
 theorem delivered_append (fd : Int) (xs ys : List Exchange) :
  delivered fd (xs++ys)=delivered fd xs++delivered fd ys := by
@@ -97,7 +98,8 @@ theorem delivered_append (fd : Int) (xs ys : List Exchange) :
 theorem delivered_error (fd out : Int) (s : Span) (count : Nat) (e : Int) :
  delivered fd [⟨.write out s count,.error e⟩]=[] := rfl
 theorem delivered_cut (fd out : Int) (s : Span) (count : Nat) :
- delivered fd [⟨.write out s count,.cut⟩]=[] := rfl
+ delivered fd [⟨.write out s count,.pending []⟩]=[] := by
+ by_cases h : out=fd <;> simp [delivered,h]
 #print axioms delivered_error
 #print axioms delivered_cut
 
@@ -110,7 +112,11 @@ theorem requested_append (xs ys : List Exchange) :
  requested (xs++ys)=requested xs++requested ys := by
  simp only [requested,List.map_append]
 theorem advance_base (s : Span) (n : Nat) : (advance s n).base=s.base := rfl
+theorem delivered_pending (fd : Int) (s : Span) (count : Nat) (visible : Bytes) :
+ delivered fd [⟨.write fd s count,.pending visible⟩]=visible := by
+ simp only [delivered,List.flatMap_cons,List.flatMap_nil,List.append_nil,eq_self,ite_true]
 #print axioms requested_append
 #print axioms advance_base
+#print axioms delivered_pending
 
 end PV_DIAG12

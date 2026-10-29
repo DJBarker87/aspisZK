@@ -9,7 +9,7 @@ def fdFlush : Exec Unit := pureE ()
 /- OwnedFd::drop ignores close's result, without retry or cvt/errno read.
 A cut is still a missing return, not ordinary completion. -/
 def fdDrop (fd : Int) (r : Reply) : Exec Unit :=
- ⟨[⟨.close fd,r⟩],match r with | .cut => .cut | _ => .ok ()⟩
+ ⟨[⟨.close fd,r⟩],match r with | .pending _ => .cut | _ => .ok ()⟩
 theorem fd_write_request (fd : Int) (s : Span) (r : Reply) :
  requested (fdWrite fd s r).trace=[.write fd s (min s.bytes.length linuxReadLimit)] := rfl
 #print axioms fd_write_request
@@ -52,7 +52,7 @@ theorem std_write_success (fd : Int) (s : Span) (n : Nat) :
 #print axioms std_write_success
 
 theorem std_cut (fd : Int) (s : Span) :
- (stdWrite fd s .cut).result=.cut := rfl
+ (stdWrite fd s (.pending [])).result=.cut := rfl
 theorem std_write_trace (fd : Int) (s : Span) (r : Reply) :
  (stdWrite fd s r).trace=(fdWrite fd s r).trace := rfl
 #print axioms std_cut
@@ -68,7 +68,7 @@ theorem stderr_request (s : Span) (r : Reply) :
 #print axioms stderr_request
 
 theorem fd_drop_cut (fd : Int) :
- fdDrop fd .cut=⟨[⟨.close fd,.cut⟩],.cut⟩ := rfl
+ fdDrop fd (.pending [])=⟨[⟨.close fd,.pending []⟩],.cut⟩ := rfl
 theorem no_close_stdout (s : Span) (r : Reply) :
  ∀ e ∈ (stdoutWrite s r).trace, e.request≠.close 1 := by
  intro e h; simp only [stdoutWrite,stdWrite,maskBadFd,fdWrite,call,List.mem_singleton] at h
