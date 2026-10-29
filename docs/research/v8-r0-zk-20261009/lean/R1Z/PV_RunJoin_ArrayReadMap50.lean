@@ -12,8 +12,10 @@ theorem array {A B : Type} {n : Usize} (f : A → B) (a : Array A n) (i : Usize)
 
 theorem slice {A B : Type} {n : Usize} (f : A → B) (a : Array A n) (i : Usize) (hi : i.val<n.val) :
     Slice.index_usize (Array.to_slice (amap f a)) i=ok (f (a.val[i.val]'(by rw [a.property];exact hi))) := by
-  rw [PV_RunJoin_ClaimList48.read _ i (by simp only [Array.to_slice,amap,List.length_map,a.property];exact hi)]
-  simp only [Array.to_slice,amap,List.getElem_map]
+  have bound : i.val<a.val.length := by rw [a.property];exact hi
+  simp only [Slice.index_usize,Slice.getElem?_Usize_eq,Array.to_slice,amap,
+    List.getElem?_map,List.getElem?_eq_getElem bound]
+  rfl
 #print axioms array
 #print axioms slice
 end R1Z.PV_RunJoin_ArrayReadMap50
