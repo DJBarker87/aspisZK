@@ -26,13 +26,18 @@ def add(file,anchor,checks,laws,differences):
  b=span(file,anchor);s=b['text'];last=-1
  for check in checks:
   at=s.index(check,last+1);assert at>last;last=at
- b.update(ordered_source_statements=checks,model_laws=laws,differences=differences,status='partial symbolic binding; final compile/audit required')
+ b.update(ordered_source_statements=checks,model_laws=laws,differences=differences,status='partial symbolic binding; not a complete structural gate')
  items.append(b)
 add('into_iter.rs','fn next(&mut self)', ['if T::IS_ZST','if self.ptr == non_null!(self.end, T)','let old = self.ptr','self.ptr = unsafe { old.add(1) }','Some(unsafe { ptr.read() })'],['PV_OWNC_SourceIterator.available','PV_OWNC_SourceIterator.exhausted','PV_OWNC_ReadPointer.advance_pointer'],['ZST branch unreachable for Link size8; symbolic indices use byte address base+8*read; active-byte representation inherited ownb, compiler layout retained'])
 add('into_iter.rs','fn try_fold<B, F, R>', ['if T::IS_ZST','while self.ptr != non_null!(self.end, T)','let tmp = unsafe { self.ptr.read() }','self.ptr = unsafe { self.ptr.add(1) }','accum = f(accum, tmp)?','R::from_output(accum)'],['PV_OWNC_FoldSource.step_binding','PV_OWNC_SourceLoop.snapshot_binding','PV_OWNC_SourceLoop.completed'],['Generic ? branch is specialized to total path filter plus Result<_,!> sink; predicate-panic cleanup must be reviewed independently; no Result/world equality for the whole callback follows'])
 add('into_iter.rs','pub(super) fn forget_allocation_drop_remaining', ['let remaining = self.as_raw_mut_slice()','self.cap = 0','self.buf = RawVec::new().non_null()','self.ptr = self.buf','self.end = self.buf.as_ptr()','ptr::drop_in_place(remaining)'],['PV_OWNC_HeaderStores.cap','PV_OWNC_HeaderStores.buf','PV_OWNC_HeaderStores.ptr','PV_OWNC_HeaderStores.endPtr','PV_OWNC_SourceDetached.reset_no_free'],['Dangling aligned Link pointer represented by2; pointer identity becomes unobservable once header has cap0 and no live slice; saved tail is Link POD; this does not permit omitting non-POD destruction'])
 add('in_place_drop.rs','fn drop(&mut self)', ['ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.inner, self.len()))'],['PV_OWNC_GuardCleanup.prefix_empty'],['No runtime destructor event for Link POD; source drop invocation is retained as a logical control-flow stage'])
 add('in_place_drop.rs','impl<Src, Dest> Drop', ['let _drop_allocation','RawVec::<Src>::from_nonnull_in','drop_in_place(core::ptr::slice_from_raw_parts_mut::<Dest>'],['PV_OWNC_GuardCleanup.original_layout','PV_OWNC_GuardTransfer.owned','PV_OWNC_GuardReturn.returned_valid'],['RawVec allocation guard deallocates original source layout after POD prefix; generic panicking element branches not instantiated for Link'])
+add('in_place_collect.rs','fn from_iter_in_place<I, T>', ['let (src_buf, src_ptr, src_cap', 'SpecInPlaceCollect::collect_in_place', 'let src = unsafe', 'let dst_guard =', 'src.forget_allocation_drop_remaining()', 'if needs_realloc', 'mem::forget(dst_guard)', 'Vec::from_parts'], ['PV_OWNC_Specialization.no_shrink','PV_OWNC_SourceLoop.completed','PV_OWNC_InPlaceResult.guarded','PV_OWNC_CursorVector.initialized'], ['Source header/guard constructor instance is still needed; debug assertions are disabled in deployed release; equal Link layouts select no shrink, so shrink panic/null handler branch is unreachable for this specialization; no arbitrary-layout closure asserted'])
+manifest=json.loads((E/'frozen-proof-manifest.json').read_text())
+for item in items:
+ assert all('R1Z.'+law in manifest['roots'] for law in item['model_laws'])
+ item['local_model_laws_checked']=True
 # Retain every rest-of-callback gap rather than treating token matching as proof.
 gaps=[
  dict(stage='full source carrier',missing='bind typed source Link fields to the padding-aware representation; compiler-chosen layout evidence stays reclassification at retained V370 D381/D386, not a machine-code correspondence task'),

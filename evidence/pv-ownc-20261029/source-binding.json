@@ -1,5 +1,5 @@
 {
-  "source_revision": "6fcdcc94d8e17b0507dbbcaadd33d6e69a6c3e6f",
+  "source_revision": "dfc48ff5b31dc81bcc45b70babc43f7a982f2261",
   "ruling": "own-1 D429",
   "compiler_boundary": "V370 D381/D386 retained",
   "scope": "partial source coverage preflight, not complete structural (K-1 substitute) gate",
@@ -69,7 +69,8 @@
       "differences": [
         "ZST branch unreachable for Link size8; symbolic indices use byte address base+8*read; active-byte representation inherited ownb, compiler layout retained"
       ],
-      "status": "partial symbolic binding; final compile/audit required"
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
     },
     {
       "file": "into_iter.rs",
@@ -93,7 +94,8 @@
       "differences": [
         "Generic ? branch is specialized to total path filter plus Result<_,!> sink; predicate-panic cleanup must be reviewed independently; no Result/world equality for the whole callback follows"
       ],
-      "status": "partial symbolic binding; final compile/audit required"
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
     },
     {
       "file": "into_iter.rs",
@@ -119,7 +121,8 @@
       "differences": [
         "Dangling aligned Link pointer represented by2; pointer identity becomes unobservable once header has cap0 and no live slice; saved tail is Link POD; this does not permit omitting non-POD destruction"
       ],
-      "status": "partial symbolic binding; final compile/audit required"
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
     },
     {
       "file": "in_place_drop.rs",
@@ -136,7 +139,8 @@
       "differences": [
         "No runtime destructor event for Link POD; source drop invocation is retained as a logical control-flow stage"
       ],
-      "status": "partial symbolic binding; final compile/audit required"
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
     },
     {
       "file": "in_place_drop.rs",
@@ -157,7 +161,36 @@
       "differences": [
         "RawVec allocation guard deallocates original source layout after POD prefix; generic panicking element branches not instantiated for Link"
       ],
-      "status": "partial symbolic binding; final compile/audit required"
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
+    },
+    {
+      "file": "in_place_collect.rs",
+      "start_line": 249,
+      "end_line": 334,
+      "sha256": "ecf1c9fad8563fd92efa092e326d44d37a9987210064cfde70f71d97e5026349",
+      "text": "fn from_iter_in_place<I, T>(mut iterator: I) -> Vec<T>\nwhere\n    I: Iterator<Item = T> + InPlaceCollect,\n    <I as SourceIter>::Source: AsVecIntoIter,\n{\n    let (src_buf, src_ptr, src_cap, mut dst_buf, dst_end, dst_cap) = unsafe {\n        let inner = iterator.as_inner().as_into_iter();\n        (\n            inner.buf,\n            inner.ptr,\n            inner.cap,\n            inner.buf.cast::<T>(),\n            inner.end as *const T,\n            // SAFETY: the multiplication can not overflow, since `inner.cap * size_of::<I::SRC>()` is the size of the allocation.\n            inner.cap.unchecked_mul(size_of::<I::Src>()) / size_of::<T>(),\n        )\n    };\n\n    // SAFETY: `dst_buf` and `dst_end` are the start and end of the buffer.\n    let len = unsafe {\n        SpecInPlaceCollect::collect_in_place(&mut iterator, dst_buf.as_ptr() as *mut T, dst_end)\n    };\n\n    let src = unsafe { iterator.as_inner().as_into_iter() };\n    // check if SourceIter contract was upheld\n    // caveat: if they weren't we might not even make it to this point\n    debug_assert_eq!(src_buf, src.buf);\n    // check InPlaceIterable contract. This is only possible if the iterator advanced the\n    // source pointer at all. If it uses unchecked access via TrustedRandomAccess\n    // then the source pointer will stay in its initial position and we can't use it as reference\n    if src.ptr != src_ptr {\n        debug_assert!(\n            unsafe { dst_buf.add(len).cast() } <= src.ptr,\n            \"InPlaceIterable contract violation, write pointer advanced beyond read pointer\"\n        );\n    }\n\n    // The ownership of the source allocation and the new `T` values is temporarily moved into `dst_guard`.\n    // This is safe because\n    // * `forget_allocation_drop_remaining` immediately forgets the allocation\n    // before any panic can occur in order to avoid any double free, and then proceeds to drop\n    // any remaining values at the tail of the source.\n    // * the shrink either panics without invalidating the allocation, aborts or\n    //   succeeds. In the last case we disarm the guard.\n    //\n    // Note: This access to the source wouldn't be allowed by the TrustedRandomIteratorNoCoerce\n    // contract (used by SpecInPlaceCollect below). But see the \"O(1) collect\" section in the\n    // module documentation why this is ok anyway.\n    let dst_guard =\n        InPlaceDstDataSrcBufDrop { ptr: dst_buf, len, src_cap, src: PhantomData::<I::Src> };\n    src.forget_allocation_drop_remaining();\n\n    // Adjust the allocation if the source had a capacity in bytes that wasn't a multiple\n    // of the destination type size.\n    // Since the discrepancy should generally be small this should only result in some\n    // bookkeeping updates and no memmove.\n    if needs_realloc::<I::Src, T>(src_cap, dst_cap) {\n        let alloc = Global;\n        debug_assert_ne!(src_cap, 0);\n        debug_assert_ne!(dst_cap, 0);\n        unsafe {\n            // The old allocation exists, therefore it must have a valid layout.\n            let src_align = align_of::<I::Src>();\n            let src_size = size_of::<I::Src>().unchecked_mul(src_cap);\n            let old_layout = Layout::from_size_align_unchecked(src_size, src_align);\n\n            // The allocation must be equal or smaller for in-place iteration to be possible\n            // therefore the new layout must be \u2264 the old one and therefore valid.\n            let dst_align = align_of::<T>();\n            let dst_size = size_of::<T>().unchecked_mul(dst_cap);\n            let new_layout = Layout::from_size_align_unchecked(dst_size, dst_align);\n\n            let result = alloc.shrink(dst_buf.cast(), old_layout, new_layout);\n            let Ok(reallocated) = result else { handle_alloc_error(new_layout) };\n            dst_buf = reallocated.cast::<T>();\n        }\n    } else {\n        debug_assert_eq!(src_cap * size_of::<I::Src>(), dst_cap * size_of::<T>());\n    }\n\n    mem::forget(dst_guard);\n\n    let vec = unsafe { Vec::from_parts(dst_buf, len, dst_cap) };\n\n    vec\n}",
+      "ordered_source_statements": [
+        "let (src_buf, src_ptr, src_cap",
+        "SpecInPlaceCollect::collect_in_place",
+        "let src = unsafe",
+        "let dst_guard =",
+        "src.forget_allocation_drop_remaining()",
+        "if needs_realloc",
+        "mem::forget(dst_guard)",
+        "Vec::from_parts"
+      ],
+      "model_laws": [
+        "PV_OWNC_Specialization.no_shrink",
+        "PV_OWNC_SourceLoop.completed",
+        "PV_OWNC_InPlaceResult.guarded",
+        "PV_OWNC_CursorVector.initialized"
+      ],
+      "differences": [
+        "Source header/guard constructor instance is still needed; debug assertions are disabled in deployed release; equal Link layouts select no shrink, so shrink panic/null handler branch is unreachable for this specialization; no arbitrary-layout closure asserted"
+      ],
+      "status": "partial symbolic binding; not a complete structural gate",
+      "local_model_laws_checked": true
     }
   ],
   "unclosed": [
