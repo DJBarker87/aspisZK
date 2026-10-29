@@ -41,7 +41,7 @@ theorem produced (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [success] at post
   change Prefix 10 alpha at post
   intro i hi
-  rw [PV_RunJoin_SemanticArray50.raw,dif_pos hi]
+  erw [PV_RunJoin_SemanticArray50.raw,dif_pos hi]
   exact post ⟨i,hi⟩ hi
 #print axioms rounds
 #print axioms complete

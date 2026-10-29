@@ -45,9 +45,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
           | .Err e => ok (core.result.Result.Err e,self)
           | .Ok _ => ok (core.result.Result.Ok q,next)) := by
   dsimp only
-  obtain ⟨q,hq,hc,hmodel⟩ := PV_RunJoin_SemanticSampler51.complete base heap box ops ((s k).2.1 (.inl (.sqS i)))
-  refine ⟨q,hc,hmodel,?_⟩
-  have bound : ¬ row i > 24#u8 := by change ¬24<i.val;omega
+  obtain ⟨q,hq,hcanonical,hmodel⟩ := PV_RunJoin_SemanticSampler51.complete base heap box ops ((s k).2.1 (.inl (.sqS i)))
+  refine ⟨q,hcanonical,hmodel,?_⟩
+  have bound : ¬ row i > 24#u8 := by change ¬ (24 < i.val);omega
   unfold host_wire.SemanticTranscript.semantic host_wire.SemanticTranscript.sample_block
   simp only [if_neg bound,bne_self_eq_false,Bool.false_eq_true,if_false]
   cases run : @host_wire.parse_record (types base) (selected base heap box ops) (row i) framed with
