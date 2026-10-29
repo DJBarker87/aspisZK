@@ -20,12 +20,32 @@ for ix in range(10,15):
  let bytes := Array.repeat 32#usize 0#u8
  let digest := Array.repeat 8#usize 0#u32
  let frontier := Array.repeat 20#usize digest
- { variant := variant, pool := bytes, deployment_domain := bytes, anchor := digest,
-   nullifier := digest, asset_id := 0#u32, recipient := none, change := digest,
-   withdrawal_amount := none, transition := {
-     live_snapshot := { pool := bytes, deployment_domain := bytes, sequence := 0#u64,
-       next_pair_index := 0#u64, current_root := digest, frontier := frontier },
-     candidate_afterstate := { next_pair_index := 0#u64, next_root := digest, next_frontier := frontier } } }
+ {
+   variant := variant
+   pool := bytes
+   deployment_domain := bytes
+   anchor := digest
+   nullifier := digest
+   asset_id := 0#u32
+   recipient := none
+   change := digest
+   withdrawal_amount := none
+   transition := {
+     live_snapshot := {
+       pool := bytes
+       deployment_domain := bytes
+       sequence := 0#u64
+       next_pair_index := 0#u64
+       current_root := digest
+       frontier := frontier
+     }
+     candidate_afterstate := {
+       next_pair_index := 0#u64
+       next_root := digest
+       next_frontier := frontier
+     }
+   }
+ }
 '''
  for seed in [0,1,7,19]:
   n=(seed+1)*131;state=a(16,n);opening='{ z := '+state+', succ_z := '+a(16,n+20)+', xor12_z := '+a(16,n+40)+' }';selectors='{ high := '+a(64,n+100)+', low := '+state+' }'
