@@ -11,13 +11,15 @@ def forward (front past : Nat) : Option (Nat × Nat) :=
 
 theorem back_bounds (front past : Nat) (h : front<past) :
     back front past=some (past-1,past-1) ∧ front≤past-1 ∧ past-1<past := by
-  simp only [back,show front≠past by omega,if_false]
-  omega
+  constructor
+  · simp only [back,show front≠past by omega,if_false]
+  · omega
 
 theorem forward_bounds (front past : Nat) (h : front<past) :
     forward front past=some (front,front+1) ∧ front+1≤past := by
-  simp only [forward,show front≠past by omega,if_false]
-  omega
+  constructor
+  · simp only [forward,show front≠past by omega,if_false]
+  · omega
 
 theorem exact_empty (front past : Nat) (h : front≤past) (base : Nat) :
     address base front=address base past ↔ ¬front<past := by
