@@ -64,6 +64,7 @@ theorem dispatch_congr {N : Usize} (x : W) (out : Array W N) (p : W) (i : Usize)
   · apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro pair hp
     rcases pair with ⟨old,back⟩
+    dsimp only
     split
     · apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
       intro next hn
