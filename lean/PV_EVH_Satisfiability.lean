@@ -130,10 +130,21 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
   · intro adv i; rfl
   · intro i claims; rfl
 
+/-- adopted by owner decision D502/D478. Existential form of ruling (v),
+for exactly the full conjunction consumed by the adopted headline. -/
+theorem simultaneously_satisfiable (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
+    (pt : Array aspis_core.field.QM31 10#usize) :
+    ∃ rt : Runtime (Public := Unit) (Signal := Bool) (Env := Bool) (A := Unit)
+      (R := ModelCoins template outputs x) (S := ModelCoins template outputs x)
+      (N := Bool × ModelCoins template outputs x) template outputs x,
+      Links template outputs x rt :=
+  ⟨modelRuntime template outputs x ops sem pt,all_links template outputs x ops sem pt⟩
+
 /-- adopted by owner decision D502/D478. An inhabitant of the full adversary
 carrier. No theorem restricts observers to this example. -/
 def exampleObserver : Observer Bool Unit := ⟨fun _ => .done,fun _ => false⟩
 
 #print axioms all_links
+#print axioms simultaneously_satisfiable
 #print axioms exampleObserver
 end PV_EVH_Satisfiability
