@@ -49,7 +49,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     obtain ⟨r,hr,h⟩ := PV_RunJoin_ResultPost.bind_eq_ok h
     cases r with
     | Err e =>
-      change ok (.Err e)=ok (.Ok out) at h
+      change (ok (core.result.Result.Err e) : Result (core.result.Result prover.PreparedOpening verifier.Error))=ok (.Ok out) at h
       cases h
     | Ok weight =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
@@ -61,7 +61,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       obtain ⟨rmat,hrmat,h⟩ := PV_RunJoin_ResultPost.bind_eq_ok h
       cases rmat with
       | Err e =>
-        change ok (.Err e)=ok (.Ok out) at h
+        change (ok (core.result.Result.Err e) : Result (core.result.Result prover.PreparedOpening verifier.Error))=ok (.Ok out) at h
         cases h
       | Ok w =>
         simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok] at h
