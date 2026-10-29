@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_Relocate.lean:17:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  overwrite ?m.17 ?m.19 ?m.20 ?m.18 ?m.21
+in the target expression
+  {
+          size :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.size,
+          alignment :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                live := c.live }.alignment,
+          capacity :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.capacity,
+          contents :=
+            overwrite
+              { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                  contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                  live := c.live }.contents
+              (s + 2) 2 (PV_OWN_U16.encode q),
+          owner :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.owner,
+          live :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                live := c.live }.live }.contents
+      (s + i) =
+    c.contents (s + i)
+
+c : Cell
+s : Nat
+p q : UInt16
+i : Nat
+hi : 4 ≤ i
+⊢ {
+          size :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.size,
+          alignment :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                live := c.live }.alignment,
+          capacity :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.capacity,
+          contents :=
+            overwrite
+              { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                  contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                  live := c.live }.contents
+              (s + 2) 2 (PV_OWN_U16.encode q),
+          owner :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner, live := c.live }.owner,
+          live :=
+            { size := c.size, alignment := c.alignment, capacity := c.capacity,
+                contents := overwrite c.contents s 2 (PV_OWN_U16.encode p), owner := c.owner,
+                live := c.live }.live }.contents
+      (s + i) =
+    c.contents (s + i)
+'R1Z.PV_OWNB_Relocate.write' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_OWNB_Relocate.pad' depends on axioms: [sorryAx]
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62566/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62566/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_Relocate.olean", "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_Relocate.lean", "7000"], "exit": 1, "transport_exit": 1, "wall": "0:00.44", "peak_rss_kib": "483592", "swap": "0", "source_revision": "6e664f52b3e1ef1a81314518bd05ce0735f921bd", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
