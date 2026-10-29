@@ -17,7 +17,10 @@ start=time.monotonic()
 with (out/'stdout.log').open('w') as log:
  r=subprocess.run(['/usr/bin/time','-v','-o',str(out/'time.log'),'timeout',str(cfg.get('timeout',180)),*cfg['command']],cwd=base,env=env,stdout=log,stderr=subprocess.STDOUT)
 duration=time.monotonic()-start
-log=(out/'stdout.log').read_text();tim=(out/'time.log').read_text()
+# Inspection output can be large. Never materialize the whole stream.
+with (out/'stdout.log').open('rb') as f:
+ head=f.read(65536); f.seek(max(0,(out/'stdout.log').stat().st_size-65536)); tail=f.read()
+log=(head+b'\n[bounded log excerpt]\n'+tail).decode(errors='replace');tim=(out/'time.log').read_text()
 def metric(name):
  return next((l.split(':',1)[1].strip() for l in tim.splitlines() if name in l),None)
 receipt={**cfg,'exit_status':r.returncode,'wall_seconds':duration,'peak_rss_kib':metric('Maximum resident set size'),'swaps':metric('Swaps'),'cgroup':str(rel),'limits':limits,'cgroup_memory_peak_bytes':(rel/'memory.peak').read_text().strip(),'source_hashes':{f:hashlib.sha256((out/'sources'/f).read_bytes()).hexdigest() for f in cfg['sources']},'deps_fingerprint':cfg.get('deps_fingerprint','Std from pinned Lean sysroot only'),'print_axioms':re.findall(r"'[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms)",log) if cfg['kind']=='lean' else 'N/A: '+cfg['kind']}
