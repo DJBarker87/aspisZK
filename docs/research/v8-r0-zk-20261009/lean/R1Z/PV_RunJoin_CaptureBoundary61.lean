@@ -34,20 +34,20 @@ set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 attribute [local irreducible] PV_RunJoin_WeightInstalled46.selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
 
-theorem selected_preserves_rejection (base : ExternalTypes)
+/-- The selected dictionary already installs native map_err, so the generic
+rejecting diagnostic does not refute nonemptiness for this dictionary. -/
+theorem selected_mapErr (base : ExternalTypes)
     (heap : PV_RunJoin_WeightInstalled46.Heap) (box : PV_RunJoin_WeightInstalled46.Box)
     (ops : @ExternalFuns (PV_RunJoin_WeightInstalled46.types base)) :
-    @ExternalFuns.op12 _ (PV_RunJoin_WeightInstalled46.selected base heap box (@rejecting (PV_RunJoin_WeightInstalled46.types base) ops)) =
-    @ExternalFuns.op12 _ (@rejecting (PV_RunJoin_WeightInstalled46.types base) ops) := by
+    @ExternalFuns.op12 _ (PV_RunJoin_WeightInstalled46.selected base heap box ops) =
+    @ProverRwOuterMapErr.map_err := by
   unfold PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_12]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
-    ProverRwP6FlatInstall.selected ProverRwP6TransitionInstall.selected
-    ProverRwBodyNativeWideInstall.selected
   rfl
 
 #print axioms rejecting
 #print axioms no_produced
 #print axioms no_successfulCapture
-#print axioms selected_preserves_rejection
+#print axioms selected_mapErr
 end R1Z.PV_RunJoin_CaptureBoundary61
