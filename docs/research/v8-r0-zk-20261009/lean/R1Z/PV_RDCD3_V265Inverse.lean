@@ -44,6 +44,14 @@ def inverse (x : M) : Result M := do
 theorem source (x : M) : aspis_core.field.M31.inv x = inverse x := by
   simp only [aspis_core.field.M31.inv,inverse,square_count]
 
+/-- Statically dispatch the exact existing backend. No pointer comparison,
+Option<fn>, or arbitrary inverse hypothesis appears in this statement. -/
+theorem cm_source (x : aspis_core.field.CM31) :
+    aspis_core.field.CM31.inv x = aspis_core.field.CM31.inv_with x inverse := by
+  unfold aspis_core.field.CM31.inv
+  rw [show aspis_core.field.M31.inv = inverse from funext source]
+
+#print axioms cm_source
 #print axioms square_loop
 #print axioms square_count
 #print axioms source
