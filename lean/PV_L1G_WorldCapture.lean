@@ -22,6 +22,7 @@ theorem bind_fail (encode : W × C → List PV_RJ4IDB.Event)
  (h : (m w).outcome = .fail e) :
  word encode (R1Z.PV_W_Threading.bind m k w) = word encode (m w) := by
  rw [R1Z.PV_W_Threading.bind_fail m k w e h]
+ rfl
 #print axioms bind_fail
 
 theorem bind_div (encode : W × C → List PV_RJ4IDB.Event)
@@ -29,5 +30,6 @@ theorem bind_div (encode : W × C → List PV_RJ4IDB.Event)
  (h : (m w).outcome = .div) :
  word encode (R1Z.PV_W_Threading.bind m k w) = word encode (m w) := by
  rw [R1Z.PV_W_Threading.bind_div m k w h]
+ rfl
 #print axioms bind_div
 end PV_L1G_WorldCapture
