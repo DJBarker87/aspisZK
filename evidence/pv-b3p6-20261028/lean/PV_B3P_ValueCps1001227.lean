@@ -34,7 +34,6 @@ theorem value_head_cps10_01 {β : Type} (packed : Array aspis_core.field.QM31 24
   f range5) = (value_owned_stage9_01 packed openings selectors (range_selector,range_input) >>= (fun next => f next.2)) := by
   unfold value_owned_stage9_01 value_read_context9_01
   conv_rhs => simp only [PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
-  rfl
 
 #print axioms value_head_cps10_01
 end PV_B3P_Binding10227

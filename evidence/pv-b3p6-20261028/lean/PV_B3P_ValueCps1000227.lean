@@ -61,7 +61,6 @@ theorem value_head_cps10_00 {β : Type} (packed : Array aspis_core.field.QM31 24
   f range_selector) = (value_selector10 packed openings selectors >>= f) := by
   unfold value_selector10
   conv_rhs => simp only [PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
-  rfl
 
 theorem value_selector_pair10 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
@@ -71,7 +70,6 @@ theorem value_selector_pair10 (packed : Array aspis_core.field.QM31 24#usize)
       .ok (selector,Array.repeat 33#usize aspis_core.field.QM31.ZERO)) := by
   unfold value_owned_stage9_00 value_read_context9_00 value_selector10
   conv_rhs => simp only [PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
-  rfl
 #print axioms value_selector_pair10
 
 #print axioms value_head_cps10_00
