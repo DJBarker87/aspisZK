@@ -12,11 +12,11 @@ theorem index3_2 {α : Type} (xs : Array α 3#usize) :
   PV_B3P_SelectIndex227.index_value xs 2#usize (by change 2<3; omega)
 
 theorem borrow3_2 {α : Type} (xs : Array α 3#usize) :
-    Array.index_mut_usize xs 2#usize = .ok (get3_2 xs,Array.set xs 2#usize) :=
+    Array.index_mut_usize xs 2#usize = .ok (get3_2 xs,Aeneas.Std.Array.set xs 2#usize) :=
   PV_B3P_ArrayWrite227.borrow xs 2#usize (by change 2<3; omega)
 
 theorem update3_2 {α : Type} (xs : Array α 3#usize) (value : α) :
-    Array.update xs 2#usize value = .ok (Array.set xs 2#usize value) :=
+    Array.update xs 2#usize value = .ok (Aeneas.Std.Array.set xs 2#usize value) :=
   PV_B3P_ArrayWrite227.update xs 2#usize (by change 2<3; omega)
 #print axioms index3_2
 #print axioms borrow3_2

@@ -30,8 +30,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a2 := get3_0 sums
   let i3 := get3_0 a2
   let i4 := (Std.U64.wrapping_add i3 i2)
-  let (a3, index_mut_back) := (get3_0 sums,Array.set sums 0#usize)
-  let a4 := Array.set a3 0#usize i4
+  let (a3, index_mut_back) := (get3_0 sums,Aeneas.Std.Array.set sums 0#usize)
+  let a4 := Aeneas.Std.Array.set a3 0#usize i4
   let m5 := get3_1 a
   let i5 := (UScalar.cast .U64 m5)
   let m6 := get3_1 a1
@@ -41,8 +41,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a5 := get3_0 sums1
   let i8 := get3_1 a5
   let i9 := (Std.U64.wrapping_add i8 i7)
-  let (a6, index_mut_back1) := (get3_0 sums1,Array.set sums1 0#usize)
-  let a7 := Array.set a6 1#usize i9
+  let (a6, index_mut_back1) := (get3_0 sums1,Aeneas.Std.Array.set sums1 0#usize)
+  let a7 := Aeneas.Std.Array.set a6 1#usize i9
   let m7 := get3_2 a
   let i10 := (UScalar.cast .U64 m7)
   let m8 := get3_2 a1
@@ -52,8 +52,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a8 := get3_0 sums2
   let i13 := get3_2 a8
   let i14 := (Std.U64.wrapping_add i13 i12)
-  let (a9, index_mut_back2) := (get3_0 sums2,Array.set sums2 0#usize)
-  let a10 := Array.set a9 2#usize i14
+  let (a9, index_mut_back2) := (get3_0 sums2,Aeneas.Std.Array.set sums2 0#usize)
+  let a10 := Aeneas.Std.Array.set a9 2#usize i14
   let a11 := get3_1 left.components
   let m9 := get3_0 a11
   let i15 := (UScalar.cast .U64 m9)
@@ -72,8 +72,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a13 := get3_1 sums3
   let i18 := get3_0 a13
   let i19 := (Std.U64.wrapping_add i18 i17)
-  let (a14, index_mut_back3) := (get3_1 sums3,Array.set sums3 1#usize)
-  let a15 := Array.set a14 0#usize i19
+  let (a14, index_mut_back3) := (get3_1 sums3,Aeneas.Std.Array.set sums3 1#usize)
+  let a15 := Aeneas.Std.Array.set a14 0#usize i19
   let m11 := get3_1 a11
   let i20 := (UScalar.cast .U64 m11)
   let m12 := get3_1 a12
@@ -83,8 +83,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a16 := get3_1 sums4
   let i23 := get3_1 a16
   let i24 := (Std.U64.wrapping_add i23 i22)
-  let (a17, index_mut_back4) := (get3_1 sums4,Array.set sums4 1#usize)
-  let a18 := Array.set a17 1#usize i24
+  let (a17, index_mut_back4) := (get3_1 sums4,Aeneas.Std.Array.set sums4 1#usize)
+  let a18 := Aeneas.Std.Array.set a17 1#usize i24
   let m13 := get3_2 a11
   let i25 := (UScalar.cast .U64 m13)
   let m14 := get3_2 a12
@@ -94,8 +94,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a19 := get3_1 sums5
   let i28 := get3_2 a19
   let i29 := (Std.U64.wrapping_add i28 i27)
-  let (a20, index_mut_back5) := (get3_1 sums5,Array.set sums5 1#usize)
-  let a21 := Array.set a20 2#usize i29
+  let (a20, index_mut_back5) := (get3_1 sums5,Aeneas.Std.Array.set sums5 1#usize)
+  let a21 := Aeneas.Std.Array.set a20 2#usize i29
   let a22 := get3_2 left.components
   let m15 := get3_0 a22
   let i30 := (UScalar.cast .U64 m15)
@@ -114,8 +114,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a24 := get3_2 sums6
   let i33 := get3_0 a24
   let i34 := (Std.U64.wrapping_add i33 i32)
-  let (a25, index_mut_back6) := (get3_2 sums6,Array.set sums6 2#usize)
-  let a26 := Array.set a25 0#usize i34
+  let (a25, index_mut_back6) := (get3_2 sums6,Aeneas.Std.Array.set sums6 2#usize)
+  let a26 := Aeneas.Std.Array.set a25 0#usize i34
   let m17 := get3_1 a22
   let i35 := (UScalar.cast .U64 m17)
   let m18 := get3_1 a23
@@ -125,8 +125,8 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a27 := get3_2 sums7
   let i38 := get3_1 a27
   let i39 := (Std.U64.wrapping_add i38 i37)
-  let (a28, index_mut_back7) := (get3_2 sums7,Array.set sums7 2#usize)
-  let a29 := Array.set a28 1#usize i39
+  let (a28, index_mut_back7) := (get3_2 sums7,Aeneas.Std.Array.set sums7 2#usize)
+  let a29 := Aeneas.Std.Array.set a28 1#usize i39
   let m19 := get3_2 a22
   let i40 := (UScalar.cast .U64 m19)
   let m20 := get3_2 a23
@@ -136,11 +136,11 @@ def accumulate_pure_storage10 (sums : Array (Array U64 3#usize) 3#usize)
   let a30 := get3_2 sums8
   let i43 := get3_2 a30
   let i44 := (Std.U64.wrapping_add i43 i42)
-  let (a31, index_mut_back8) := (get3_2 sums8,Array.set sums8 2#usize)
-  let a32 := Array.set a31 2#usize i44
+  let (a31, index_mut_back8) := (get3_2 sums8,Aeneas.Std.Array.set sums8 2#usize)
+  let a32 := Aeneas.Std.Array.set a31 2#usize i44
   ok (index_mut_back8 a32)
 
-attribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Array.set get3_0 get3_1 get3_2
+attribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Aeneas.Std.Array.set get3_0 get3_1 get3_2
 
 theorem accumulate_storage_binding10 (sums : Array (Array U64 3#usize) 3#usize)
     (right : aspis_core.field.QM31) (left : reference_field.PreparedQm31Multiplier) :

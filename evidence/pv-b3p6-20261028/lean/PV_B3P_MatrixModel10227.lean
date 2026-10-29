@@ -25,7 +25,7 @@ def accumulate_nine_cells10 (sums : Array (Array U64 3#usize) 3#usize)
   let sums_8 ← matrix_cell sums_7 2#usize 2#usize (get3_2 (get3_2 left.components)) (get3_2 (get3_2 channels))
   .ok sums_8
 
-attribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Array.set
+attribute [local irreducible] aspis_core.field.CM31.add aspis_core.field.M31.add UScalar.cast U64.wrapping_add U64.wrapping_mul Aeneas.Std.Array.set
 
 theorem accumulate_pure_nine_cells10 (sums : Array (Array U64 3#usize) 3#usize)
     (right : aspis_core.field.QM31) (left : reference_field.PreparedQm31Multiplier) :
