@@ -1,0 +1,39 @@
+import PV_DIAG12_Fd
+namespace PV_DIAG12
+set_option autoImplicit false
+
+structure Cursor where
+ next : Nat
+ deriving DecidableEq, Repr
+structure WRun (A : Type) where
+ execution : Exec A
+ cursor : Cursor
+ deriving DecidableEq, Repr
+abbrev Signal := Nat → Request → Reply
+abbrev Writer := Span → Reply → Exec Nat
+def writeAll (write : Writer) (request : Span → Request) (signal : Signal) :
+ Nat → Span → Cursor → WRun Unit
+ | 0,_,c => ⟨⟨[],.cut⟩,c⟩
+ | fuel+1,s,c =>
+  if s.bytes.isEmpty then ⟨pureE (),c⟩ else
+  let r := write s (signal c.next (request s))
+  let c' : Cursor := ⟨c.next+1⟩
+  match r.result with
+  | .cut => ⟨⟨r.trace,.cut⟩,c'⟩
+  | .error e =>
+    if e=4 then
+     let tail := writeAll write request signal fuel s c'
+     ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩
+    else ⟨⟨r.trace,.error e⟩,c'⟩
+  | .ok n =>
+    if n=0 then ⟨⟨r.trace,.error (-1)⟩,c'⟩ else
+    if n>s.bytes.length then ⟨⟨r.trace,.error (-2)⟩,c'⟩ else
+    let tail := writeAll write request signal fuel (advance s n) c'
+    ⟨⟨r.trace++tail.execution.trace,tail.execution.result⟩,tail.cursor⟩
+/- -1 and -2 are MODEL errors: WriteZero and invalid Write contract.
+They are not OS errno values and do not identify a native panic/hook. -/
+theorem writeAll_cut (w : Writer) (q : Span → Request) (sig : Signal) (s : Span) (c : Cursor) :
+ writeAll w q sig 0 s c=⟨⟨[],.cut⟩,c⟩ := rfl
+#print axioms writeAll_cut
+
+end PV_DIAG12

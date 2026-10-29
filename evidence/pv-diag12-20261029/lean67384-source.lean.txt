@@ -1,0 +1,19 @@
+import PV_DIAG12_Line
+namespace PV_DIAG12
+set_option autoImplicit false
+
+/-! A streaming composition for ONE serialization followed by ONE newline.
+`chunks` must still be associated to serde_json Value::fmt, including its
+allocated error conversion. This is not a deployed DIAG_JSON_STDOUT instance.
+No decoder, observer, NativeEvent or existing Link is redefined here. -/
+def jsonStream (sig : Signal) (fuel : Nat) : List Span → Buffer → Cursor → BRun Unit
+ | [],b,c => pureB () b c
+ | s::ss,b,c => bindB (lineAll 1 sig fuel s b c) fun _ b c => jsonStream sig fuel ss b c
+def onePrintln (sig : Signal) (fuel : Nat) (chunks : List Span) (newline : Span)
+ (b : Buffer) (c : Cursor) : BRun Unit :=
+ bindB (jsonStream sig fuel chunks b c) fun _ b c => lineAll 1 sig fuel newline b c
+theorem jsonStream_nil (sig : Signal) (fuel : Nat) (b : Buffer) (c : Cursor) :
+ jsonStream sig fuel [] b c=pureB () b c := rfl
+#print axioms jsonStream_nil
+
+end PV_DIAG12

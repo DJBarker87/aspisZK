@@ -1,0 +1,31 @@
+PV_DIAG10.DIAG_FILE_TRACE {I A : Type} (actual : I → List PV_RJ4IDB.FileOp) (native : I → PV_RJ4IDB.NativeTrace A)
+  (raw : I → List PV_RJ4IDB.NativeEvent) (state : I → List PV_RJ4IDB.NativeEvent → List PV_RJ4IDB.FileOp)
+  (initial : PV_DIAG10.PV_DIAG10_Link_Init state (PV_RJ4IDB.nativeFiles []))
+  (step : PV_DIAG10.PV_DIAG10_Link_Step state List.append fun e => PV_RJ4IDB.nativeFiles [e])
+  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)
+  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_FILE_TRACE actual native
+PV_DIAG10.DIAG_JSON_STDOUT_TRACE {I A : Type}
+  (actual : I → List PV_RJ4IDB.Bytes × List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)) (native : I → PV_RJ4IDB.NativeTrace A)
+  (raw : I → List PV_RJ4IDB.NativeEvent)
+  (state : I → List PV_RJ4IDB.NativeEvent → List PV_RJ4IDB.Bytes × List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (initial : PV_DIAG10.PV_DIAG10_Link_Init state ((fun es => (PV_RJ4IDB.nativeJSON es, PV_RJ4IDB.nativeStdout es)) []))
+  (step :
+    PV_DIAG10.PV_DIAG10_Link_Step state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>
+      (fun es => (PV_RJ4IDB.nativeJSON es, PV_RJ4IDB.nativeStdout es)) [e])
+  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)
+  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_JSON_STDOUT_TRACE actual native
+PV_DIAG10.DIAG_ERROR_STDERR_TRACE {I A : Type} (actual : I → List PV_DIAG2.Effect × List PV_DIAG3.Event)
+  (native : I → PV_RJ4IDB.NativeTrace A) (raw : I → List PV_RJ4IDB.NativeEvent)
+  (state : I → List PV_RJ4IDB.NativeEvent → List PV_DIAG2.Effect × List PV_DIAG3.Event)
+  (initial : PV_DIAG10.PV_DIAG10_Link_Init state ((fun es => (PV_RJ4IDB.nativeDiag2 es, PV_RJ4IDB.nativeDiag3 es)) []))
+  (step :
+    PV_DIAG10.PV_DIAG10_Link_Step state (fun a b => (a.1 ++ b.1, a.2 ++ b.2)) fun e =>
+      (fun es => (PV_RJ4IDB.nativeDiag2 es, PV_RJ4IDB.nativeDiag3 es)) [e])
+  (readout : PV_DIAG10.PV_DIAG10_Link_Readout actual state raw)
+  (order : PV_DIAG10.PV_DIAG10_Link_EventOrder raw native) : PV_RJ4IDB.OpenInputs.DIAG_ERROR_STDERR_TRACE actual native
+'PV_DIAG10.DIAG_FILE_TRACE' depends on axioms: [propext]
+'PV_DIAG10.DIAG_JSON_STDOUT_TRACE' depends on axioms: [propext]
+'PV_DIAG10.DIAG_ERROR_STDERR_TRACE' depends on axioms: [propext]
+'PV_DIAG12.jsonStream_append' depends on axioms: [propext, Quot.sound]
+'PV_DIAG12.onePrintln_chunks_append' depends on axioms: [propext, Quot.sound]
+'PV_DIAG12.pending_prefix_readout' depends on axioms: [propext]
