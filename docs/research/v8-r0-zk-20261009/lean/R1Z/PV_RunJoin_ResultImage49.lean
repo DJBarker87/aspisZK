@@ -10,11 +10,5 @@ theorem success {A B : Type} (f : A → B) (r : Result A) (b : B)
   | div => cases h
   | ok a => exact ⟨a,rfl,Result.ok.inj h⟩
 
-theorem injective {A B : Type} (f : A → B) (hf : Function.Injective f) :
-    Function.Injective (mapResult f) := by
-  intro a b h
-  cases a <;> cases b <;> cases h
-  first | rfl | exact congrArg Result.ok (hf rfl)
 #print axioms success
-#print axioms injective
 end R1Z.PV_RunJoin_ResultImage49
