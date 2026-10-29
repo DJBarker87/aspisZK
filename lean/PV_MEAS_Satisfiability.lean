@@ -164,9 +164,9 @@ theorem simultaneously_satisfiable (ops : ExternalFuns) (sem : host_semantic.Sem
       Links template outputs x rt :=
   ⟨modelRuntime template outputs x ops sem pt,all_links template outputs x ops sem pt⟩
 
+omit [ExternalTypes] in
 /-- Closed synthetic witness, using the already checked explicit unit external
 carriers and diverging model operations. This is not a deployed execution. -/
-omit [ExternalTypes] in
 theorem closed_witness :
     letI : ExternalTypes := PV_EVH_ModelData.types
     ∃ rt : Runtime (Public := Unit) (Signal := Bool) (Env := Bool) (A := Unit)
