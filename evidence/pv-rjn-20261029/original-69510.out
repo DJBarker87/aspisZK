@@ -1,0 +1,192 @@
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:78:29: error(lean.unknownIdentifier): Unknown identifier `fields`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:86:26: error(lean.unknownIdentifier): Unknown identifier `fields`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:95:41: error: Type mismatch
+  hs
+has type
+  ProverCommitPublish43.slots (runs i).plan.slots (bytes ↑h9) = Except.ok b
+but is expected to have type
+  Except.ok b = Except.ok b
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:13:69: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+I : Type
+runs : I → Run
+layout : PV_RJN_Producer_Layout runs
+room : PV_RJN_Producer_FrontRoom runs
+query : PV_RunJoin_PublishContext57.PV_RunJoin_Link_QueryAppend runs
+node : PV_RunJoin_Link_NodeAppend runs
+i : I
+p : prover.Publication
+proof : alloc.vec.Vec U8
+range : QueryRange p.queries
+context : QueryContext (runs i) p
+success : prover.publish_compact transport.Variant.S2 p = ok (core.result.Result.Ok proof)
+size openings nodes : Usize
+magic : Std.Array U8 8#usize
+tag : U8
+h0 h1 h2 h3 h4 h5 h6 h7 h8 h9 : PV_RJN_PublishTrace.V
+ib : Std.Array U8 32#usize
+cc1 cc2 : host_commitment.Commitment
+semanticResult valuesResult : core.result.Result Unit compact.CodecError
+hsize : compact.PROOF_BYTES = ok size
+hmagic : compact.MAGIC = ok magic
+htag : transport.Variant.S2.tag = ok tag
+hh0 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 (alloc.vec.Vec.with_capacity U8 size) magic.to_slice = ok h0
+hh1 :
+  alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h0
+      (Array.make 8#usize [tag, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8] ⋯).to_slice =
+    ok h1
+hsem : host_compact.compact_semantic p.semantic_bytes.deref h1 = ok (semanticResult, h2)
+hclaim : host_compact.compact_values p.y1.deref h2 = ok (valuesResult, h3)
+hib : p.inactive.to_le_bytes = ok ib
+hh4 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h3 ib.to_slice = ok h4
+hh5 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h4 p.c0bytes.deref = ok h5
+hh6 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h5 p.root.to_slice = ok h6
+hh7 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h6 p.c1bytes.deref = ok h7
+hh8 : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 h7 p.fbytes.deref = ok h8
+hopen : compact.OFF_OPENINGS = ok openings
+hopenlen : alloc.vec.Vec.len h8 = openings
+hc1 : p.backend.c1 = some cc1
+hc2 : p.backend.c2 = some cc2
+hh9 : prover.append_query_openings h8 cc1 cc2 p.queries p.folded_word.deref p.folded_salts = ok h9
+hnodes : compact.OFF_NODES = ok nodes
+hnodelen : alloc.vec.Vec.len h9 = nodes
+hn : prover.append_node_slots h9 cc1 cc2 p.tree p.queries = ok (core.result.Result.Ok proof)
+hprooflen : proof.len = size
+hsz : compact.PROOF_BYTES = ok size
+hpsize : (runs i).plan.proofBytes = ↑size
+hop : compact.OFF_OPENINGS = ok openings
+hpop : (runs i).plan.offOpenings = ↑openings
+hnd : compact.OFF_NODES = ok nodes
+hpnd : (runs i).plan.offNodes = ↑nodes
+hmg : compact.MAGIC = ok magic
+htg : transport.Variant.S2.tag = ok tag
+hheader : (runs i).plan.header = bytes ↑magic ++ bytes [tag, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8, 0#u8]
+h0bytes : bytes ↑h0 = bytes ↑magic
+h1bytes : bytes ↑h1 = (runs i).plan.header
+hc0 : bytes ↑p.c0bytes = PV_RunJoin_OpeningImages54.round0 (runs i).data
+hc1bytes : bytes ↑p.c1bytes = PV_RunJoin_OpeningImages54.round1 (runs i).data
+hfbytes : bytes ↑p.fbytes = PV_RunJoin_OpeningImages54.finalBytes (runs i).data
+hsemantic :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + List.length (runs i).plan.semantic ≤ Usize.max →
+      ∃ next,
+        host_compact.compact_semantic p.semantic_bytes.deref out = ok (core.result.Result.Ok (), next) ∧
+          bytes ↑next = bytes ↑out ++ (runs i).plan.semantic
+hvalues :
+  ∀ (out : alloc.vec.Vec U8),
+    out.length + List.length (runs i).plan.claim ≤ Usize.max →
+      ∃ next,
+        host_compact.compact_values p.y1.deref out = ok (core.result.Result.Ok (), next) ∧
+          bytes ↑next = bytes ↑out ++ (runs i).plan.claim
+hroot : bytes ↑p.root = (runs i).plan.root
+len1 : (↑h1).length = List.length (runs i).plan.header
+room1 : alloc.vec.Vec.length h1 + List.length (runs i).plan.semantic ≤ Usize.max
+hs✝ : host_compact.compact_semantic p.semantic_bytes.deref h1 = ok (core.result.Result.Ok (), h2)
+hsv✝ : bytes ↑h2 = bytes ↑h1 ++ (runs i).plan.semantic
+h2bytes : bytes ↑h2 = (runs i).plan.header ++ (runs i).plan.semantic
+len2 : (↑h2).length = List.length (runs i).plan.header + List.length (runs i).plan.semantic
+room2 : alloc.vec.Vec.length h2 + List.length (runs i).plan.claim ≤ Usize.max
+hs : host_compact.compact_values p.y1.deref h2 = ok (core.result.Result.Ok (), h3)
+hsv : bytes ↑h3 = bytes ↑h2 ++ (runs i).plan.claim
+h3bytes : bytes ↑h3 = (runs i).plan.header ++ (runs i).plan.semantic ++ (runs i).plan.claim
+hib' : p.inactive.to_le_bytes = ok ib
+hibv : bytes ↑ib = (runs i).plan.inactive
+h4bytes : bytes ↑h4 = bytes (↑h3 ++ ↑ib.to_slice)
+h5bytes : bytes ↑h5 = bytes (↑h4 ++ ↑p.c0bytes.deref)
+h6bytes : bytes ↑h6 = bytes (↑h5 ++ ↑p.root.to_slice)
+h7bytes : bytes ↑h7 = bytes (↑h6 ++ ↑p.c1bytes.deref)
+h8bytes : bytes ↑h8 = bytes (↑h7 ++ ↑p.fbytes.deref)
+frontbytes : bytes ↑h8 = front (runs i)
+offopen : alloc.vec.Vec.length h8 = (runs i).plan.offOpenings
+left✝ : (runs i).plan.queries.length = 22
+hq✝ :
+  ∀ (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment),
+    p.backend.c1 = some cc1 →
+      p.backend.c2 = some cc2 →
+        out.length = (runs i).plan.offOpenings →
+          ∃ next,
+            prover.append_query_openings out cc1 cc2 p.queries p.folded_word.deref p.folded_salts = ok next ∧
+              bytes ↑next = ProverCommitPublish43.queries (runs i).plan.queries (bytes ↑out)
+hq : prover.append_query_openings h8 cc1 cc2 p.queries p.folded_word.deref p.folded_salts = ok h9
+hqv : bytes ↑h9 = ProverCommitPublish43.queries (runs i).plan.queries (bytes ↑h8)
+querybytes : ProverCommitPublish43.queries (runs i).plan.queries (front (runs i)) = bytes ↑h9
+offnode : alloc.vec.Vec.length h9 = (runs i).plan.offNodes
+model : some (bytes ↑proof) = exceptBytes (ProverCommitPublish43.slots (runs i).plan.slots (bytes ↑h9))
+slots : ProverCommitPublish43.slots (runs i).plan.slots (bytes ↑h9) = Except.ok (bytes ↑proof)
+nodeLen : List.length (bytes ↑h9) = (runs i).plan.offNodes
+proofLen : List.length (bytes ↑proof) = (runs i).plan.proofBytes
+⊢ (do
+      let front ← Except.ok (front (runs i))
+      if ¬List.length (ProverCommitPublish43.queries (runs i).plan.queries front) = (runs i).plan.offNodes then
+          Except.error ProverCommitPublish43.Error.parse
+        else do
+          let out ←
+            ProverCommitPublish43.slots (runs i).plan.slots (ProverCommitPublish43.queries (runs i).plan.queries front)
+          if ¬List.length out = (runs i).plan.proofBytes then Except.error ProverCommitPublish43.Error.parse
+            else Except.ok out) =
+    Except.ok (bytes ↑proof)
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:44: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:56: warning: This simp argument is unused:
+  querybytes
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:67: warning: This simp argument is unused:
+  nodeLen
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲Except.bind, ̲querybytes, ̲no̵d̵eL̵e̵n̵,̵n̵e̵_eq, ̲not_true_eq_false,
+  ̲ ̲ ̲ ̲ ̲if_false,
+  ̵  ̵ ̵ ̵slots, ̲proofLen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:81: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:103:99: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵r̵o̵v̵e̵r̵C̵o̵m̵m̵i̵t̵P̵u̵b̵l̵i̵s̵h̵4̵3̵.̵a̵s̵s̵e̵m̵b̵l̵e̵,̵E̵x̵c̵e̵p̵t̵.̵b̵i̵n̵d̵,̵q̵u̵e̵r̵y̵b̵y̵t̵e̵s̵,̵n̵o̵d̵e̵L̵e̵n̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵
+  ̵ ̵ ̵ ̵ ̵s̵l̵o̵t̵s̵,̵p̵r̵o̵o̵f̵L̵e̵n̵]̵[̲P̲r̲o̲v̲e̲r̲C̲o̲m̲m̲i̲t̲P̲u̲b̲l̲i̲s̲h̲4̲3̲.̲a̲s̲s̲e̲m̲b̲l̲e̲,̲ ̲E̲x̲c̲e̲p̲t̲.̲b̲i̲n̲d̲,̲ ̲q̲u̲e̲r̲y̲b̲y̲t̲e̲s̲,̲ ̲n̲o̲d̲e̲L̲e̲n̲,̲ ̲n̲e̲_̲e̲q̲,̲
+  ̲ ̲ ̲ ̲ ̲n̲o̲t̲_̲t̲r̲u̲e̲_̲e̲q̲_̲f̲a̲l̲s̲e̲,̲ ̲s̲l̲o̲t̲s̲,̲ ̲p̲r̲o̲o̲f̲L̲e̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:104:4: warning: This simp argument is unused:
+  slots
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲Except.bind, ̲querybytes, ̲nodeLen, ̲ne_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵s̵l̵o̵t̵s̵,̵proofLen]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rjn-20261029/lean/sources/R1Z/PV_RJN_PublishOrder.lean:104:10: warning: This simp argument is unused:
+  proofLen
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitPublish43.assemble, ̲Except.bind, ̲querybytes, ̲nodeLen, ̲ne_eq,
+  ̲ ̲ ̲ ̲ ̲not_true_eq_false, ̲if_false,
+  ̵  ̵ ̵ ̵slots,̵p̵r̵o̵o̵f̵L̵e̵n̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RJN_PublishOrder.actual' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
