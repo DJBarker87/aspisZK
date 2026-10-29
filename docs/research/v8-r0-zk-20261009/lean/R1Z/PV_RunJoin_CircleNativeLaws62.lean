@@ -27,13 +27,15 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
   obtain ⟨p,hp,hx,hy,hc⟩ := PV_RunJoin_CircleInstalledTotal55.complete
     (baseTypes base) heap box (beforeCircle base ops) block row
   refine ⟨p,hp,hx,hy,?_⟩
-  simp only [hc]
-  trace_state
-  split
-  · trace_state
-    exact PV_RunJoin_CircleUnit62.second block
-  · trace_state
-    exact PV_RunJoin_CircleUnit62.first block
+  let chosen := if PV_RunJoin_CircleNeutralSelected52.row row then
+    R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block)
+    else R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block)
+  have unit : chosen.val.1^2+chosen.val.2^2=1 := by
+    generalize chosen = z
+    simpa only [AspisCircleGroupOrder.OnCircle] using z.property
+  have coordinates : PV_RunJoin_CircleInstalledExact55.coordinates p=chosen.val := hc
+  exact (congrArg (fun q : AspisWideTower.WideExact × AspisWideTower.WideExact =>
+    q.1^2+q.2^2) coordinates).trans unit
 
 #print axioms point_unit
 #print axioms complete
