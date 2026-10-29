@@ -25,7 +25,16 @@ theorem complete {E : Type} (inst : aspis_core.r0.scalar.CodeField E) (f : S →
   simp only [bind_tc_ok]
   rw [PV_DL_EncoderFold.source inst _ _ 512 0#usize _ _ (by decide)]
   rw [PV_RunJoin_EncoderPairs49.complete inst f hm ha q basis 512 0#usize (by decide)]
-  simp only [uncurry]
+  trans (do
+    let p ← mapResult (PV_RunJoin_EncoderPairTransport49.pairMap f)
+      (ProverCommitNativePair48.range q basis 512 0#usize
+        (AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO,AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO))
+    let product ← inst.mul (f y) p.2
+    inst.add p.1 product)
+  · apply congrArg (Aeneas.Std.bind _)
+    funext p
+    rcases p with ⟨a,b⟩
+    rfl
   exact PV_RunJoin_EncoderFinalTransport49.complete f
     AspisR1ProducerRelease47.field.wide_exact.WideExact.mul
     AspisR1ProducerRelease47.field.wide_exact.WideExact.add inst.mul inst.add hm ha _ y
