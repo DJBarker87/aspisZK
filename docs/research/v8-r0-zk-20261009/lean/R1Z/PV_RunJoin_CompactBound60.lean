@@ -21,11 +21,11 @@ theorem loop_bound (logical : Slice U8) (n : Nat) (at1 : Usize) (out : alloc.vec
   | succ n ih =>
     have cap : logical.length≤Usize.max := logical.property
     have more : at1<Slice.len logical := by change at1.val<logical.length; omega
-    have plus16 := PV_RunJoin_CompactStep39.offset at1 16#usize (by change at1.val+16≤Usize.max;omega)
-    have plus32 := PV_RunJoin_CompactStep39.offset at1 32#usize (by change at1.val+32≤Usize.max;omega)
+    have plus16 : (Usize.wrapping_add at1 16#usize).val=at1.val+16 := PV_RunJoin_CompactStep39.offset at1 16#usize (by change at1.val+16≤Usize.max;omega)
+    have plus32 : (Usize.wrapping_add at1 32#usize).val=at1.val+32 := PV_RunJoin_CompactStep39.offset at1 32#usize (by change at1.val+32≤Usize.max;omega)
     obtain ⟨s,mid,hs,hm,hval⟩ := PV_RunJoin_ByteRange39.append logical out at1
       (Usize.wrapping_add at1 16#usize) (by rw [plus16];omega)
-      (by rw [plus16];omega) (by rw [plus16];change out.length+(_-at1.val)≤_;omega)
+      (by rw [plus16];omega) (by rw [plus16];change out.length+(at1.val+16-at1.val)≤_;omega)
     have hlen : mid.length=out.length+16 := by
       change mid.val.length=out.val.length+16
       rw [hval,List.length_append,List.length_take,List.length_drop,plus16]
@@ -54,10 +54,12 @@ where
       (hlen : mid.length=out.length+16) :
       Post (fun pair => pair.1.length≤out.length+16*(n+1))
         (host_compact.compact_values_loop0 logical mid at1) := by
-    cases host_compact.compact_values_loop0 logical mid at1 with
+    cases he : host_compact.compact_values_loop0 logical mid at1 with
     | fail e => trivial
     | div => trivial
-    | ok pair => change pair.1.length≤_ at h ⊢;omega
+    | ok pair =>
+      simp only [he,Post] at h ⊢
+      omega
 
 #print axioms loop_bound
 end R1Z.PV_RunJoin_CompactBound60
