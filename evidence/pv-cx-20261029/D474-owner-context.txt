@@ -1,0 +1,50 @@
+Its V225 finding matters beyond the row. The deployed getrandom 0.3.4 (linux_android_with_fallback) resolves the kernel entry by dlsym(RTLD_DEFAULT, "getrandom") and caches it. A controlled native test under LD_PRELOAD observed one successful zero-byte probe and then two cached calls to the interposed function. This is not a leak in normal operation, but T's entropy_law silently assumes that the client's process environment does not interpose libc symbols. The lead added a note under D474 in the owner packet. It recommends, if option (C) is adopted, including a switch to the direct getrandom(2) syscall backend in the same client patch; otherwise that assumption should be stated explicitly in entropy_law's scope.
+
+To make the D474 decision concrete, pv-c474 (branch codex/pv-c474-draft-20261029 from a9a9781f8a; IDs 69200-69299; 40 native, 0 Lean, 0 Kani) is an EXPERIMENTAL, NOT ADOPTED draft that is never merged, pushed to the candidate or repinned. It drafts a minimal client patch:
+- fixed error codes or literal messages, with no secret operands;
+- backtrace capture disabled regardless of the environment;
+- a fixed panic hook with panic = abort for the client only;
+- the direct getrandom(2) backend;
+- optionally, removal of prove_wall_seconds.
+It then measures the cost. That means the exact diff, confirmation that the three on-chain ELFs are byte-identical, the new client hash, the fixture and differential reruns, and the timing delta against the +10% budget in a quiet window, with the throttling caveat. Rows removed: 0. Privacy target not yet established.
+
+## D492 (Stream B) 2026-10-29 08:02 UTC: pv-skwb results; V239 witness still undetermined; pv-skwc launched
+
+pv-skwb used all 40 Lean attempts: 38 dependency and skeleton compiles succeeded and 2 attempts failed, with no native scopes or Kani. The cache staging was repaired, and the unchanged PV_OWNM_V239.restore skeleton compiled under ruling (u'). The OWNM witness draft keeps the concrete decoder and proves SourceDense. Its first attempt failed on local proof errors, and the final attempt failed because the worker's assembler misplaced the audit imports; the corrected draft is uncompiled. V239's skeleton therefore remains UNDETERMINED, and the combined audit FAILED and earns no credit. The four witnesses from D490 (three DIAG, L1 count) stand, all labelled as model witnesses, and none is a deployed-run witness. No contradiction was found and no link changed. It was merged into the candidate and pushed. pv-skwc (IDs 69300-69399; 20 Lean) reuses the now-staged cache, compiles the corrected OWNM witness and runs the single combined audit. Rows removed: 0. Privacy target not yet established.
+
+## D493 (Stream B) 2026-10-29 08:03 UTC: b3p6n results (core op227 statement compiles and matches runjoin's bridge); b3p6o launched
+
+b3p6n (branch codex/pv-b3p6-20261028, head bb12e1b99e, pushed) used all 100 Lean attempts (77 passed, 23 rejected), 30 native scopes and no Kani. Its three audits passed, covering 129 theorem reports with standard axioms only, and no unchanged failed source was resubmitted. Lead review: no forbidden constructs or raised limits in hand-written modules; link definitions unchanged.
+
+The core selected_callback13 compiled at attempt 14, from explicit wrapper, composition and equality links, with conclusion "for all claims, ops.op227 self.public claims point self.challenges = terminal self.public claims point self.challenges", where terminal is transported_reference base. The lead compared it with runjoin's consumed hypothesis, the op227 argument of R1Z.PV_RunJoin_OracleBridge38.selected_callback: it matches byte for byte, as the worker also recorded (runjoin-hypothesis.txt). When its links are discharged, runjoin's op227 hypothesis is discharged. The core, the scalar root and the 36 function-group skeletons have joint model witnesses. The complete all-group skeleton was not compiled within fifteen attempts.
+
+Coverage is 39 of 79 BOUND, all by reclassification (b3p6-1). Fresh extraction now binds private_public, withdrawal_public and semantic, four missing-model bodies remain, and 18 of the 36 changed-function links have model or context-adapter instances. Native evidence is 16 owned-emission comparisons and 270 instrumented matrix snapshots (2,430 entries), which is finite validation. Two direct native link instances were refuted: the zero-mask helper equality, and the legacy 49-block constructor's equality to the 57-block target. Neither is an op227 counterexample; both are mis-specified links. V244 remains OPEN.
+
+b3p6o (IDs 69400-69499; 100 Lean, 30 native, 0 Kani) corrects those two links under ruling (v), each with its missing precondition and a new named link, and re-proves selected_callback13. It then compiles the complete skeleton with its witness and discharges links cheapest first. Rows removed: 0. Privacy target not yet established.
+
+## D494 (Stream B) 2026-10-29 08:08 UTC: all five audited skeletons verified non-vacuous (model witnesses); pv-rjn launched on NodeAppend and PublishOrder
+
+The owner wrote: "approve your recs". The lead applies this exactly to the owner-packet items that carry a recorded lead recommendation. Full text is in design/PV-OWNER-PACKET-20261027.md, under "OWNER DECISIONS 2026-10-29".
+
+Adopted:
+- D474 (C), with the getrandom direct-syscall switch;
+- D478 (1), an event-retaining headline observer; the Result-only headline is kept as a historical, weaker statement;
+- D338/D342 (A), the zero-change honest-user domain;
+- D359 (A), throttled paired timing evidence for the ratio and the 15 s bound, with unthrottled repetition as later confirmation;
+- D381/D386, V242 and other lowering-only rows credited under V370 with the compiler cohort as a named boundary;
+- the D272/D276 release recipe and constant-time private-input decoding;
+- the D272/D283/D284 N7 raw-keypair custody patch.
+Not covered, and still open: SHA-NI versus a soft backend, and client scope. DOITM was decided earlier and its implementation remains blocked.
+
+Consequences:
+(i) The deployed client changes. The D474(C) patch, the getrandom backend, insecure-spend-fixture off, constant-time private-input decoding and the N7 patch are bundled into ONE client release change. It needs the three on-chain ELFs verified byte-identical, a new client pin, the fixture and differential gates, and a timing re-run under the D359(A) evidence rule. The level-3 binary audit (V373) and the manifest (V346) must be redone on the new client binary.
+(ii) The privacy target is now stated against the event-retaining headline. pv-evhd's draft is the starting point, and the observation decoder (pv-rj4idb) is installed against the new interface.
+(iii) V242 can be credited under V370 once its other evidence holds.
+(iv) The honest-user domain is fixed as "spends the shipped client prepares".
+Privacy target not yet established.
+
+## D503 (Stream B) 2026-10-29 09:38 UTC: retargeted joint TX1+TX2 witness available on the headline's own SDK (closes the D415 caveat); planned use
+
+Stream A reports, and the lead checked on research (merge 06f74c902f; C3-BIN 406df47b63, "L188 obligations 1 and 4 closed (NDR_)"), that AspisR1.NDR_CombinedAudit.sourceOnHeadline (lean/NDR_CombinedAudit.lean) states the joint TX1+TX2 non-vacuity witness over the headline's own SDK. The statement uses stage1_owned and stage2_owned of headlineSdk = DrvC_Installation.sdk (FIp_Install.configuration () (IDa_Deployed.deployedConfiguration missing () (.Ok ())) (.Ok ())), and every observer inside it is the headline's carrier (RPz7_PhaseIso.Phase). It was checked in one shared environment with RPx_Deployed.deployed (16,057 modules, standard axioms, 8.28 GB peak in the 16 GiB scope). Its only hypothesis is FixturePdaRuntime base. This removes D415's caveat that JHx_Joint was historical-forest evidence only.
+
+Caveat from Stream A: NDO_Joint.source and four thin bodies were checked verbatim inside the aggregation rather than as standalone builds. A consumer must import NDR_CombinedAudit's closure, which needs the 16 GiB consumer scope under the D407 rules: agg16 runner, one such compile at a time across both streams after telling Stream A, one compile per module, and full receipts.

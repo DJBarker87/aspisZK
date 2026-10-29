@@ -1,0 +1,44 @@
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
+   Compiling libc v0.2.189
+   Compiling cfg-if v1.0.4
+   Compiling version_check v0.9.5
+   Compiling typenum v1.20.1
+   Compiling generic-array v0.14.7
+   Compiling subtle v2.6.1
+   Compiling const-oid v0.9.6
+   Compiling serde_core v1.0.229
+   Compiling serde v1.0.229
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/home/dombarker/project-offloads/codex-pv-cx-20261029/charon-target/release/build/proc-macro2-c1a84dcad68d4ac7/rustcFwAwe6/symbols.o" "<2 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,libcfg_if-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/home/dombarker/project-offloads/codex-pv-cx-20261029/charon-target/release/build/proc-macro2-c1a84dcad68d4ac7/rustcFwAwe6/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-pv-cx-20261029/charon-target/release/build/proc-macro2-c1a84dcad68d4ac7/build_script_build-c1a84dcad68d4ac7" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace and instructions to reproduce the bug.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec7525a7 llvm::sys::PrintStackTrace(llvm::raw_ostream&, int) + 39
+          1  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec752e9d
+          2  libc.so.6                           0x00007946e6445330
+          3  libc.so.6                           0x00007946e649ec0c pthread_kill + 284
+          4  libc.so.6                           0x00007946e644527e gsignal + 30
+          5  libc.so.6                           0x00007946e64288ff abort + 223
+          6  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec5e0da5 __gnu_cxx::__verbose_terminate_handler() + 245
+          7  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec5e0506 __cxxabiv1::__terminate(void (*)()) + 6
+          8  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec5e0571
+          9  libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec5e06c5
+          10 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec3de3d5 std::__throw_system_error(int) + 129
+          11 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec65f949
+          12 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec6fa66c
+          13 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec6fa0df
+          14 libLLVM.so.22.1-rust-1.98.0-nightly 0x00007946ec65f6b0
+          15 libc.so.6                           0x00007946e649cb84
+          16 libc.so.6                           0x00007946e6529ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+ERROR Code failed to compile
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
