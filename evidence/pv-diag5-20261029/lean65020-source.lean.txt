@@ -1,0 +1,29 @@
+import PV_DIAG3_Client
+/-! Adapter obligations for the real client observer. A decoder of the
+Result alone must receive retained state sufficient to recover every prior
+effect. These theorems do not change runtime.disclosed, simE or RunJoin. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {H S P O : Type}
+open Aeneas Aeneas.Std
+open R1Z ProverCommitRetry34
+
+
+theorem complete_observer_transport
+ (decode : Aeneas.Std.Result (Step (Published P) × S) → List Event → O)
+ (decide : O → Bool) (left right : Aeneas.Std.Result (Step (Published P) × S))
+ (before after : List Event) (hr : left = right) (he : before = after) :
+ (decode left before,decide (decode left before)) =
+ (decode right after,decide (decode right after)) := by cases hr; cases he; rfl
+#print axioms complete_observer_transport
+
+/-- This obstruction is an interface theorem, not a native counterexample:
+result agreement cannot recover two unequal emitting prefixes. -/
+theorem result_only_decoder_requires_prefix_agreement
+ (decode : Aeneas.Std.Result (Step (Published P) × S) → List Event)
+ (out : Aeneas.Std.Result (Step (Published P) × S))
+ (a b : List Event) (ha : decode out = a) (hb : decode out = b) :
+ a = b := ha.symm.trans hb
+#print axioms result_only_decoder_requires_prefix_agreement
+#print axioms complete_observer_transport
+end PV_DIAG3

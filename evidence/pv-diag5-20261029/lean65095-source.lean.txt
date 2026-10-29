@@ -1,0 +1,25 @@
+import PV_DIAG5_Joint
+import R1Z.PV_RunJoin_Deployed
+/-! Exact existing RunJoin Result-only boundary. No decoder is defined or
+installed. These necessities do not prove native prefix recovery, V038 or
+its marginals. PV_RJ4IDB remains the owner of the observation decoder. -/
+set_option autoImplicit false
+noncomputable section
+namespace PV_DIAG5
+open R1Z R0Z R0Z.JointView R0Z.FsStatement R1Z.Batched
+local notation "K" => PrivacyR1AcctBasis.K
+variable [ProverRwFull.ExternalTypes]
+variable {CommitHandle Aux Coins N L C : Type}
+variable (runtime : PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N L C)
+theorem deployed_result_collision_requires_prefix
+ (h : HonestProver K) (x : Statement K CommitHandle) (w v : h.Instance)
+ (r s : PV_RunJoin_Deployed.World runtime)
+ (recover : Aeneas.Std.Result (PV_RunJoin_Deployed.Output N L C) → List PV_DIAG3.Event)
+ (left right : List PV_DIAG3.Event)
+ (same : PV_RunJoin_Deployed.execute runtime h x w r = PV_RunJoin_Deployed.execute runtime h x v s)
+ (hl : recover (PV_RunJoin_Deployed.execute runtime h x w r) = left)
+ (hr : recover (PV_RunJoin_Deployed.execute runtime h x v s) = right) : left = right := by
+ rw [same] at hl
+ exact hl.symm.trans hr
+#print axioms deployed_result_collision_requires_prefix
+end PV_DIAG5
