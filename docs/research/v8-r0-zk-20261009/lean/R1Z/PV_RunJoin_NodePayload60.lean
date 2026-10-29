@@ -1,5 +1,6 @@
 import R1Z.PV_RunJoin_ActualPlanSources59
 import R1Z.PV_RunJoin_NodeSlot41
+import R1Z.PV_RunJoin_ResultBindEq55
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_NodePayload60
 open Aeneas Aeneas.Std Result ProverRwFull
@@ -22,7 +23,14 @@ theorem actual (p : prover.Publication) (batch t : Usize)
     (hc1 : p.backend.c1=some cc1) (hc2 : p.backend.c2=some cc2) :
     PV_RunJoin_ActualPlanSources59.nodeBytes p batch t=payload cc1 cc2 p.tree p.queries batch t := by
   simp only [PV_RunJoin_ActualPlanSources59.nodeBytes,hc1,hc2,core.option.Option.unwrap,ofOption,bind_tc_ok]
-  rfl
+  unfold payload
+  apply PV_RunJoin_ResultBindEq55.complete
+  intro idx
+  cases ht : t.val with
+  | zero => simp only [ht,bind_assoc_eq]
+  | succ n => cases n with
+    | zero => simp only [ht,bind_assoc_eq]
+    | succ n => simp only [ht,bind_assoc_eq]
 
 /-- A single source slot first obtains exactly the cached model payload. -/
 theorem source (out : alloc.vec.Vec U8) (cc1 cc2 : host_commitment.Commitment)
