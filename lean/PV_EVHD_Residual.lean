@@ -1,0 +1,56 @@
+import PV_EVHD_Interface
+/-! EXPERIMENTAL, NOT ADOPTED (D478). An explicit residual charge if exact
+joint trace simulation cannot be established. This module never claims that
+the residual is zero, negligible, or covered by an existing event. -/
+set_option autoImplicit false
+noncomputable section
+namespace PV_EVHD_Residual
+open R0Z R0Z.FsAbort R0Z.FsStatement PV_RJ4IDB PV_EVHD_Interface
+attribute [local instance] Classical.propDecidable
+
+/-- EXPERIMENTAL: charge ONLY additional disagreement outside the old event.
+This covers timing, its JSON/stdout copies, failures, order and terminals. -/
+def traceResidual {S V : Type} [Fintype S] (bad : S → Prop) (real sim : S → V) : ℚ :=
+  eventMass (fun s => ¬bad s ∧ real s ≠ sim s)
+
+theorem with_residual {S V : Type} [Fintype S] (bad : S → Prop)
+    (real sim : S → V) (test : V → ℚ)
+    (bounded : ∀ v, 0 ≤ test v ∧ test v ≤ 1) :
+    |mean (fun s => test (real s)) - mean (fun s => test (sim s))| ≤
+      eventMass bad + traceResidual bad real sim := by
+  have h := until_bad (fun s => test (real s)) (fun s => test (sim s))
+    (fun _ => bounded _) (fun _ => bounded _)
+    (fun s => bad s ∨ (¬bad s ∧ real s ≠ sim s)) (by
+      intro s hs
+      have hb : ¬bad s := fun h => hs (Or.inl h)
+      have he : real s = sim s := Classical.byContradiction (fun h => hs (Or.inr ⟨hb,h⟩))
+      exact congrArg test he)
+  exact h.trans (eventMass_or_le _ _)
+
+theorem exact_links_zero {S A Signal : Type} [Fintype S]
+    (bad : S → Prop) (real sim : S → NativeTrace A) (rs ss : S → Signal)
+    (context : Link_Context bad real sim) (timing : Link_Timing bad real sim)
+    (signal : Link_Signal bad rs ss) :
+    traceResidual bad (fun s => observe (rs s) (real s))
+      (fun s => observe (ss s) (sim s)) = 0 := by
+  have agree := full_agreement bad real sim rs ss context timing signal
+  unfold traceResidual eventMass
+  have h : (fun s => if ¬bad s ∧ observe (rs s) (real s) ≠ observe (ss s) (sim s)
+      then (1 : ℚ) else 0) = fun _ => 0 := by
+    funext s
+    apply if_neg
+    rintro ⟨hb,hn⟩
+    exact hn (agree s hb)
+  rw [h]
+  exact R0Z.FsGood.mean_zero
+
+/-- EXPERIMENTAL: named public-environment association. Native joint entropy
+and environment marginals must be identified with the shared public product;
+separate signal or clock marginal equality is insufficient. -/
+def Link_PublicEnvironment {N E C : Type} [Fintype N] [Fintype E] [Fintype C]
+    (actual : N → E × C) : Prop :=
+  R0Z.EqualLaws actual (fun p : E × C => p)
+
+#print axioms with_residual
+#print axioms exact_links_zero
+end PV_EVHD_Residual
