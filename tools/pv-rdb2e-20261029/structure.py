@@ -16,6 +16,13 @@ checks=[]
 for old,new in [('sha256-soft.rs','soft.rs'),('sha256-x86.rs','x86.rs'),('sha-consts.rs','consts.rs')]:
  a=E/'source'/old;b=N/new;checks.append(dict(original=str(a.relative_to(E)),owned=str(b.relative_to(E)),original_sha256=sha(a),owned_sha256=sha(b),byte_equal=a.read_bytes()==b.read_bytes()))
 a=(E/'source/sha-core-api.rs').read_text();b=(N/'main.rs').read_text()
+for trait,member,value in [('BlockSizeUser','BlockSize','U64'),('BufferKindUser','BufferKind','Eager'),('OutputSizeUser','OutputSize','U32')]:
+ expected=tokens('impl '+trait+' for Sha256VarCore { type '+member+' = '+value+'; }')
+ t=tokens(a);assert any(t[i:i+len(expected)]==expected for i in range(len(t))),trait
+ checks.append(dict(type_binding=trait+'.'+member,value=value,source='sha-core-api.rs',status='exact source token instance'))
+const=(E/'source/sha-consts.rs').read_text();assert 'pub const STATE_LEN: usize = 8;'in const and 'pub type State256 = [u32; STATE_LEN];'in const
+checks.append(dict(core_state='consts::State256=[u32;8]',block_count='u64',owned_buffer='BlockBuffer<U64,Eager>',owned_output='GenericArray<u8,U32>',status='exact source type aliases; native borrow/GenericArray layout association still separate'))
+
 original=body(a,'finalize_variable_core');owned=body(b,'finalize')
 source=' '.join(original).replace('Self :: BlockSize :: U64','64u64')
 assert tokens(source)==owned

@@ -74,5 +74,14 @@ theorem mutable_projection_with_caller {A : Type}
     (PV_RDB2E_ConcreteSoft.both_backends backend shani f valid)
   simpa only [bind_assoc_eq,bind_tc_ok] using h
 
+theorem fixed_carrier_dimensions (f : Frame) :
+    f.core.state.val.length=8 ∧ f.buffer.val.length=64 ∧ f.output.val.length=32 :=
+  ⟨f.core.state.property,f.buffer.property,f.output.property⟩
+
+theorem fixed_block_size_u64 : (64#u64).val=64 := rfl
+
+#print axioms fixed_carrier_dimensions
+#print axioms fixed_block_size_u64
+
 #print axioms mutable_projection_with_caller
 end R1Z.PV_RDB2E_IndependentRoot
