@@ -21,6 +21,18 @@ def block (poly : Array Q 28#usize) (powers : Array Q 3#usize) (i : Nat) : Resul
   let product ← PV_RDCD4_LazyProducts.source powers (Array.make 3#usize [c1,c2,c3])
   F.add c0 product
 
+def reference (poly : Array Q 28#usize) (powers : Array Q 3#usize) (i : Nat) : Result Q := do
+  let c0 ← read poly.val (4*i)
+  let c1 ← read poly.val (4*i+1)
+  let c2 ← read poly.val (4*i+2)
+  let c3 ← read poly.val (4*i+3)
+  let product ← PV_RDCD4_LazyProducts.reference powers (Array.make 3#usize [c1,c2,c3])
+  F.add c0 product
+
+theorem binding (poly : Array Q 28#usize) (powers : Array Q 3#usize) (i : Nat) :
+    block poly powers i = reference poly powers i := by
+  simp only [block,reference,PV_RDCD4_LazyProducts.binding]
+
 theorem index_bound (i offset : Nat) (hi : i < 7) (ho : offset < 4) :
     4*i+offset < 28 := by omega
 
@@ -28,6 +40,7 @@ theorem index_word_bound (i offset : Nat) (hi : i < 7) (ho : offset < 4) :
     4*i+offset < 2^64 := by
   have := index_bound i offset hi ho
   omega
+#print axioms binding
 #print axioms index_bound
 #print axioms index_word_bound
 end R1Z.PV_RDCD4_RadixBlock

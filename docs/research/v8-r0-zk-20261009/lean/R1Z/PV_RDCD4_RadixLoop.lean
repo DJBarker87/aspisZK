@@ -10,6 +10,17 @@ def step (poly : Array Q 28#usize) (powers : Array Q 3#usize)
   let bv ← block poly powers n
   F.add acc bv
 
+def referenceStep (poly : Array Q 28#usize) (powers : Array Q 3#usize)
+    (prepared : Prepared) (n : Nat) (acc : Q) : Result Q := do
+  let acc ← F.pmul prepared acc
+  let bv ← PV_RDCD4_RadixBlock.reference poly powers n
+  F.add acc bv
+
+theorem step_binding (poly : Array Q 28#usize) (powers : Array Q 3#usize)
+    (prepared : Prepared) (n : Nat) (acc : Q) :
+    step poly powers prepared n acc = referenceStep poly powers prepared n acc := by
+  simp only [step,referenceStep,PV_RDCD4_RadixBlock.binding]
+
 def body (poly : Array Q 28#usize) (powers : Array Q 3#usize)
     (prepared : Prepared) (state : Nat × Q) : Result (ControlFlow (Nat × Q) Q) :=
   if state.1 > 0 then do
@@ -45,5 +56,6 @@ theorem binding (poly : Array Q 28#usize) (powers : Array Q 3#usize)
       exact ih out
     | fail e => simp [h]
     | div => simp [h]
+#print axioms step_binding
 #print axioms binding
 end R1Z.PV_RDCD4_RadixLoop

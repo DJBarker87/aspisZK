@@ -1,0 +1,694 @@
+{
+  "row": "V220",
+  "source_revision": "80538084d6e7f9c1d22ada76142e905fffb2bd9a",
+  "field_bindings": [
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn subtract_p(",
+      "body": "pub fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "selected_body": "pub fn subtract_p(x: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((x >= P) as u32);\n    x.wrapping_sub(P & mask)\n}",
+      "expected_body": "pub fn subtract_p(x:u32)->u32{let mask=0u32.wrapping_sub((x>=P)as u32);x.wrapping_sub(P&mask)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.ct.subtract_p",
+      "statement_binding": "Compare x>=P; bool cast; wrapping zero-minus-bit; bitwise P mask; wrapping subtraction.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn reduce64(",
+      "body": "pub fn reduce64(x: u64) -> u32 {\n    let x = (x & P as u64) + (x >> 31);\n    let x = (x & P as u64) + (x >> 31);\n    subtract_p(x as u32)\n}",
+      "selected_body": "pub fn reduce64(x: u64) -> u32 {\n    let x = (x & P as u64) + (x >> 31);\n    let x = (x & P as u64) + (x >> 31);\n    subtract_p(x as u32)\n}",
+      "expected_body": "pub fn reduce64(x:u64)->u32{let x=(x&P as u64)+(x>>31);let x=(x&P as u64)+(x>>31);subtract_p(x as u32)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.ct.reduce64",
+      "statement_binding": "Two ordered mask/shift/add folds; truncating cast; subtract_p. Release additions use wrapping carrier.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn add(",
+      "body": "pub fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "selected_body": "pub fn add(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(b))\n}",
+      "expected_body": "pub fn add(a:u32,b:u32)->u32{subtract_p(a.wrapping_add(b))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.ct.add",
+      "statement_binding": "Wrapping add then subtract_p.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn sub(",
+      "body": "pub fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "selected_body": "pub fn sub(a: u32, b: u32) -> u32 {\n    subtract_p(a.wrapping_add(P).wrapping_sub(b))\n}",
+      "expected_body": "pub fn sub(a:u32,b:u32)->u32{subtract_p(a.wrapping_add(P).wrapping_sub(b))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.ct.sub",
+      "statement_binding": "Wrapping add P, wrapping subtract b, then subtract_p.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field/ct.rs",
+      "source_sha256": "a8071ee2c228ad441b1e36fa67a4ddf3d8ea5645ef347944827164ebb5a1a684",
+      "context": "pub fn neg(",
+      "body": "pub fn neg(a: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((a != 0) as u32);\n    P.wrapping_sub(a) & mask\n}",
+      "selected_body": "pub fn neg(a: u32) -> u32 {\n    let mask = 0u32.wrapping_sub((a != 0) as u32);\n    P.wrapping_sub(a) & mask\n}",
+      "expected_body": "pub fn neg(a:u32)->u32{let mask=0u32.wrapping_sub((a!=0)as u32);P.wrapping_sub(a)&mask}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.ct.neg",
+      "statement_binding": "Nonzero comparison and bool cast, mask subtraction, P-a wrapping subtraction, bitwise and.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }",
+      "selected_body": "pub fn add(self, rhs: Self) -> Self { Self(ct::add(self.0, rhs.0)) }",
+      "expected_body": "pub fn add(self,rhs:Self)->Self{Self(ct::add(self.0,rhs.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.add",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }",
+      "selected_body": "pub fn sub(self, rhs: Self) -> Self { Self(ct::sub(self.0, rhs.0)) }",
+      "expected_body": "pub fn sub(self,rhs:Self)->Self{Self(ct::sub(self.0,rhs.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.sub",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "#[cfg(feature = \"ct-host-prover\")]\nimpl M31 {",
+      "body": "pub fn neg(self) -> Self { Self(ct::neg(self.0)) }",
+      "selected_body": "pub fn neg(self) -> Self { Self(ct::neg(self.0)) }",
+      "expected_body": "pub fn neg(self)->Self{Self(ct::neg(self.0))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.neg",
+      "statement_binding": "Call selected ct helper with raw representatives, then Copy newtype construction.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "body": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "selected_body": "fn reduce_u64(x: u64) -> u32 { ct::reduce64(x) }",
+      "expected_body": "fn reduce_u64(x:u64)->u32{ct::reduce64(x)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.reduce_u64",
+      "statement_binding": "ct-host-prover selects this definition; audit/reference/default body inactive.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: M31) -> M31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);\n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+      "selected_body": "pub fn mul(self, rhs: M31) -> M31 {\n        \n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+      "expected_body": "pub fn mul(self,rhs:M31)->M31{M31(reduce_u64(self.0 as u64*rhs.0 as u64))}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);"
+      ],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.mul",
+      "statement_binding": "Widen both operands; release u64 multiplication; reduce; newtype.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn reduce_u64(value: u64) -> M31 {\n        M31(reduce_u64(value))\n    }",
+      "selected_body": "pub fn reduce_u64(value: u64) -> M31 {\n        M31(reduce_u64(value))\n    }",
+      "expected_body": "pub fn reduce_u64(value:u64)->M31{M31(reduce_u64(value))}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.reduce_u64",
+      "statement_binding": "Call selected reducer; newtype.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl M31 {\n    pub const ZERO",
+      "body": "pub fn double(self) -> M31 {\n        self.add(self)\n    }",
+      "selected_body": "pub fn double(self) -> M31 {\n        self.add(self)\n    }",
+      "expected_body": "pub fn double(self)->M31{self.add(self)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.M31.double",
+      "statement_binding": "Call selected ct add on identical operands.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn new(a: M31, b: M31) -> CM31 {\n        CM31 { a, b }\n    }",
+      "selected_body": "pub fn new(a: M31, b: M31) -> CM31 {\n        CM31 { a, b }\n    }",
+      "expected_body": "pub fn new(a:M31,b:M31)->CM31{CM31{a,b}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.new",
+      "statement_binding": "Construct ordered pair.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn add(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+      "selected_body": "pub fn add(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+      "expected_body": "pub fn add(self,rhs:CM31)->CM31{CM31{a:self.a.add(rhs.a),b:self.b.add(rhs.b),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.add",
+      "statement_binding": "Ordered a then b ct additions.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn sub(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+      "selected_body": "pub fn sub(self, rhs: CM31) -> CM31 {\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+      "expected_body": "pub fn sub(self,rhs:CM31)->CM31{CM31{a:self.a.sub(rhs.a),b:self.b.sub(rhs.b),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.sub",
+      "statement_binding": "Ordered a then b ct subtractions.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: CM31) -> CM31 {\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: CM31) -> CM31 {\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:CM31)->CM31{let m0=self.a.mul(rhs.a);let m1=self.b.mul(rhs.b);let m2=M31::reduce_u64((u64::from(self.a.0)+u64::from(self.b.0))*(u64::from(rhs.a.0)+u64::from(rhs.b.0)),);CM31{a:m0.sub(m1),b:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.mul",
+      "statement_binding": "m0 then m1; left/right raw widening sums, release product, reduction; a subtraction then two b subtractions.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn square(self) -> CM31 {\n        CM31 {\n            // `(a+b)*(a-b)` with raw representatives. Both factors are\n            // below 2P and their product is strictly below 2^64.\n            a: M31::reduce_u64(\n                (u64::from(self.a.0) + u64::from(self.b.0))\n                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),\n            ),\n            b: self.a.mul(self.b).double(),\n        }\n    }",
+      "selected_body": "pub fn square(self) -> CM31 {\n        CM31 {\n            // `(a+b)*(a-b)` with raw representatives. Both factors are\n            // below 2P and their product is strictly below 2^64.\n            a: M31::reduce_u64(\n                (u64::from(self.a.0) + u64::from(self.b.0))\n                    * (u64::from(self.a.0) + u64::from(P) - u64::from(self.b.0)),\n            ),\n            b: self.a.mul(self.b).double(),\n        }\n    }",
+      "expected_body": "pub fn square(self)->CM31{CM31{a:M31::reduce_u64((u64::from(self.a.0)+u64::from(self.b.0))*(u64::from(self.a.0)+u64::from(P)-u64::from(self.b.0)),),b:self.a.mul(self.b).double(),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.square",
+      "statement_binding": "Widening, sums/subtraction/product with release wrap semantics; reduce a; multiply then double b.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn mul_m31(self, rhs: M31) -> CM31 {\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+      "selected_body": "pub fn mul_m31(self, rhs: M31) -> CM31 {\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+      "expected_body": "pub fn mul_m31(self,rhs:M31)->CM31{CM31{a:self.a.mul(rhs),b:self.b.mul(rhs),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.mul_m31",
+      "statement_binding": "Ordered scalar products.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl CM31 {\n    pub const ZERO",
+      "body": "pub fn double(self) -> CM31 {\n        self.add(self)\n    }",
+      "selected_body": "pub fn double(self) -> CM31 {\n        self.add(self)\n    }",
+      "expected_body": "pub fn double(self)->CM31{self.add(self)}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.CM31.double",
+      "statement_binding": "Pair addition with itself.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "fn mul_by_r(",
+      "body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "selected_body": "fn mul_by_r(x: CM31) -> CM31 {\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "expected_body": "fn mul_by_r(x:CM31)->CM31{CM31{a:x.a.double().sub(x.b),b:x.a.add(x.b.double()),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.mul_by_r",
+      "statement_binding": "Double a then subtract b; double b then add a; construct pair.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn add(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);\n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "selected_body": "pub fn add(self, rhs: QM31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+      "expected_body": "pub fn add(self,rhs:QM31)->QM31{QM31{c0:self.c0.add(rhs.c0),c1:self.c1.add(rhs.c1),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);"
+      ],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.QM31.add",
+      "statement_binding": "c0 then c1 pair additions.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);\n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        \n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:QM31)->QM31{let m0=self.c0.mul(rhs.c0);let m1=self.c1.mul(rhs.c1);let m2=self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));QM31{c0:m0.add(mul_by_r(m1)),c1:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);"
+      ],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.QM31.mul",
+      "statement_binding": "m0,m1; left/right sums then m2; mul_by_r then c0 add; ordered two c1 subtractions.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn square(self) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "selected_body": "pub fn square(self) -> QM31 {\n        \n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+      "expected_body": "pub fn square(self)->QM31{let c0_square=self.c0.square();let c1_square=self.c1.square();QM31{c0:c0_square.add(mul_by_r(c1_square)),c1:self.c0.mul(self.c1).double(),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);"
+      ],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.QM31.square",
+      "statement_binding": "Two squares; mul_by_r and c0 add; c0*c1 and double.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl QM31 {\n    pub const ZERO",
+      "body": "pub fn mul_m31(self, rhs: M31) -> QM31 {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);\n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "selected_body": "pub fn mul_m31(self, rhs: M31) -> QM31 {\n        \n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+      "expected_body": "pub fn mul_m31(self,rhs:M31)->QM31{QM31{c0:self.c0.mul_m31(rhs),c1:self.c1.mul_m31(rhs),}}",
+      "inactive_op_count": [
+        "#[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);"
+      ],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.QM31.mul_m31",
+      "statement_binding": "c0 then c1 scalar products.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl PreparedQm31Multiplier {",
+      "body": "pub fn new(value: QM31) -> Self {\n        let prepare = |component: CM31| [component.a, component.b, component.a.add(component.b)];\n        Self {\n            components: [\n                prepare(value.c0),\n                prepare(value.c1),\n                prepare(value.c0.add(value.c1)),\n            ],\n        }\n    }",
+      "selected_body": "pub fn new(value: QM31) -> Self {\n        let prepare = |component: CM31| [component.a, component.b, component.a.add(component.b)];\n        Self {\n            components: [\n                prepare(value.c0),\n                prepare(value.c1),\n                prepare(value.c0.add(value.c1)),\n            ],\n        }\n    }",
+      "expected_body": "pub fn new(value:QM31)->Self{let prepare=|component:CM31|[component.a,component.b,component.a.add(component.b)];Self{components:[prepare(value.c0),prepare(value.c1),prepare(value.c0.add(value.c1)),],}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.PreparedQm31Multiplier.new",
+      "statement_binding": "prepare closure reads a,b and computes add. Calls on c0,c1, then pair sum. Closure and 3x3 arrays are explicit in model; unit closure holds no capture.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    },
+    {
+      "path": "crates/aspis-core/src/field.rs",
+      "source_sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "context": "impl PreparedQm31Multiplier {",
+      "body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        let multiply = |left: [M31; 3], right: CM31| {\n            let m0 = left[0].mul(right.a);\n            let m1 = left[1].mul(right.b);\n            let m2 = left[2].mul(right.a.add(right.b));\n            CM31 {\n                a: m0.sub(m1),\n                b: m2.sub(m0).sub(m1),\n            }\n        };\n        let m0 = multiply(self.components[0], rhs.c0);\n        let m1 = multiply(self.components[1], rhs.c1);\n        let m2 = multiply(self.components[2], rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "selected_body": "pub fn mul(self, rhs: QM31) -> QM31 {\n        let multiply = |left: [M31; 3], right: CM31| {\n            let m0 = left[0].mul(right.a);\n            let m1 = left[1].mul(right.b);\n            let m2 = left[2].mul(right.a.add(right.b));\n            CM31 {\n                a: m0.sub(m1),\n                b: m2.sub(m0).sub(m1),\n            }\n        };\n        let m0 = multiply(self.components[0], rhs.c0);\n        let m1 = multiply(self.components[1], rhs.c1);\n        let m2 = multiply(self.components[2], rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+      "expected_body": "pub fn mul(self,rhs:QM31)->QM31{let multiply=|left:[M31;3],right:CM31|{let m0=left[0].mul(right.a);let m1=left[1].mul(right.b);let m2=left[2].mul(right.a.add(right.b));CM31{a:m0.sub(m1),b:m2.sub(m0).sub(m1),}};let m0=multiply(self.components[0],rhs.c0);let m1=multiply(self.components[1],rhs.c1);let m2=multiply(self.components[2],rhs.c0.add(rhs.c1));QM31{c0:m0.add(mul_by_r(m1)),c1:m2.sub(m0).sub(m1),}}",
+      "inactive_op_count": [],
+      "model": "R1Z.PV_RDCD4_FieldSource.aspis_core.field.PreparedQm31Multiplier.mul",
+      "statement_binding": "multiply closure preserves reads0,1,2 and all ordered operations. Outer closure calls read components0,1,2 then pair sums. Unit closure has no capture; all constant indices have type-level bounds3. No mutable writes or backward continuation.",
+      "reuse": "whole deployed file unchanged; source statement binding retained"
+    }
+  ],
+  "field_model_namespace_only_transport": {
+    "old_sha256": "f2b0d2e87275e882e777e9a84b6737e251f607ff3315c4177e378c6f9e281afc",
+    "new_sha256": "b781498dd53380d41ab53573057ace3f5da002e43c793933e5f6fd04107439ad"
+  },
+  "range_bindings": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "file_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "impl<A: Step> Iterator for ops::Range<A>",
+      "source_body": "fn next(&mut self) -> Option<A> {\n        self.spec_next()\n    }",
+      "source_token_sha256": "4f3b7a4fb9aa95ec94e710a6b807023d6a1a5a209e3f01d39b1724f9899ddcd4",
+      "owned_rust_body": "fn next(&mut self) -> Option<A> { self.spec_next() }",
+      "law": "Range<usize> dispatch to TrustedStep spec_next; body has no feature cfg",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "file_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>",
+      "source_body": "fn spec_next(&mut self) -> Option<T> {\n        if self.start < self.end {\n            let old = self.start;\n            // SAFETY: just checked precondition\n            self.start = unsafe { Step::forward_unchecked(old, 1) };\n            Some(old)\n        } else {\n            None\n        }\n    }",
+      "source_token_sha256": "48cecf10c73e0d2d58eeda4e3117a750b9cd6de9016ec7fd3de87afa3499afa9",
+      "owned_rust_body": "fn spec_next(&mut self) -> Option<T> {\n    if self.start < self.end {\n      let old = self.start;\n      self.start = unsafe { Step::forward_unchecked(old, 1) };\n      Some(old)\n    } else { None }\n  }",
+      "law": "R1Z.PV_RDCD3_RangeFold.next_active/next_empty/increment_bound",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+      "file_sha256": "3ac6d6ed9fd857c524f00bba0bbd762b9f3b6448b5327921aab04246497644b9",
+      "context": "macro_rules! step_unsigned_methods",
+      "source_body": "unsafe fn forward_unchecked(start: Self, n: usize) -> Self {\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+      "source_token_sha256": "813417d303f434aefa98769ae2bb3af3f8713a4c90a3d6351d6bd4ac91323baa",
+      "owned_rust_body": "unsafe fn forward_unchecked(start: Self, n: usize) -> Self {\n    unsafe { start.unchecked_add(n as Self) }\n  }",
+      "law": "usize instantiation, n=1; increment_bound discharges unchecked-add precondition",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+      "file_sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589",
+      "context": "pub trait Iterator",
+      "source_body": "fn fold<B, F>(mut self, init: B, mut f: F) -> B\n    where\n        Self: Sized,\n        F: FnMut(B, Self::Item) -> B,\n    {\n        let mut accum = init;\n        while let Some(x) = self.next() {\n            accum = f(accum, x);\n        }\n        accum\n    }",
+      "source_token_sha256": "c9e699c128e9a937b695445f7ddfd9e3a6e00bcc125a96128528cd0c8430be97",
+      "owned_rust_body": "fn fold<B, F>(mut self, init: B, mut f: F) -> B\n  where Self: Sized, F: FnMut(B, Self::Item) -> B, {\n    let mut accum = init;\n    while let Some(x) = self.next() { accum = f(accum, x); }\n    accum\n  }",
+      "law": "R1Z.PV_RDCD3_RangeLoop.all_endpoints; callback Result retains panic/divergence",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "context": "const Index<I> for [T; N]",
+      "source_body": "fn index(&self, index: I) -> &Self::Output {\n        Index::index(self as &[T], index)\n    }",
+      "source_token_sha256": "f3c9fd40d3e7d6443ebf32ca68afcf32d8fb567129b0994e0273b3d968968c7b",
+      "owned_rust_body": "fn index(&self, index: I) -> &Self::Output { Index::index(self as &[T], index) }",
+      "law": "R1Z.PV_RDCD3_Index194.array_complete; array/slice preserve backing elements and length",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "context": "const ops::Index<I> for [T]",
+      "source_body": "fn index(&self, index: I) -> &I::Output {\n        index.index(self)\n    }",
+      "source_token_sha256": "7d6d351ea0e0935acd674ed65629967ebb9451fc1aa60f5668e1b51496b851ed",
+      "owned_rust_body": "fn index(&self, index: I) -> &I::Output { index.index(self) }",
+      "law": "Concrete I=usize dispatch to the following record; no alternate index dictionary",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "context": "const SliceIndex<[T]> for usize",
+      "source_body": "fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }",
+      "source_token_sha256": "a56dad7cd1c6e9f99e60a1aaf205764929096fa3ce00dc4d391756cb7c0e67cb",
+      "owned_rust_body": "fn index(self, slice: &[T]) -> &T { &(*slice)[self] }",
+      "law": "R1Z.PV_RDCD3_Index194.slice_complete/success/failure; Rust intrinsic indexing is the retained compiler semantic boundary",
+      "matched_negative_control": "rejected"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/collect.rs",
+      "file_sha256": "1dca453947c77c96248f0f18bf5baa9d7f3440195537c85e2cd9149ce00b17de",
+      "context": "impl<I: Iterator> IntoIterator for I",
+      "source_body": "fn into_iter(self) -> I {\n        self\n    }",
+      "source_token_sha256": "ff0d6af587f6666a5ec50c59b9d28766ae5840e8826e27439ca1f2b13cee1e40",
+      "owned_rust_body": "fn into_iter(self) -> I { self }",
+      "law": "Identity on the entire iterator state; not allocation, a copy builtin, or a callback",
+      "matched_negative_control": "rejected"
+    }
+  ],
+  "records": [
+    {
+      "index": 0,
+      "record": {
+        "cohort": "old",
+        "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+        "call": "panicking::panic_fmt::panic_impl",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 0
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 1,
+      "record": {
+        "cohort": "old",
+        "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+        "call": "str::<impl str>::len",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+          "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 2,
+      "record": {
+        "cohort": "old",
+        "function": "aspis_core::qm31_accumulate_product_channels(_1: [[u64; 3]; 3], _2: QM31, _3: QM31) -> [[u64; 3]; 3]",
+        "call": "<core::ops::Range<usize> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 3,
+      "record": {
+        "cohort": "old",
+        "function": "aspis_core::qm31_accumulate_product_channels(_1: [[u64; 3]; 3], _2: QM31, _3: QM31) -> [[u64; 3]; 3]",
+        "call": "<core::ops::Range<usize> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 4,
+      "record": {
+        "cohort": "old",
+        "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 5,
+      "record": {
+        "cohort": "old",
+        "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 6,
+      "record": {
+        "cohort": "old",
+        "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+          "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+        ]
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 7,
+      "record": {
+        "cohort": "old",
+        "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+        "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 49
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 8,
+      "record": {
+        "cohort": "old",
+        "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+        "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 14
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 9,
+      "record": {
+        "cohort": "old",
+        "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+        "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 14
+      },
+      "disposition": "historical comparator; not a deployed body"
+    },
+    {
+      "index": 10,
+      "record": {
+        "cohort": "deployed",
+        "function": "core::panicking::panic_fmt(_1: Arguments<'_>) -> !",
+        "call": "panicking::panic_fmt::panic_impl",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 0
+      },
+      "disposition": "unreachable panic formatting: all fixed array indices and loop bounds valid; release debug assertions disabled, arithmetic wraps"
+    },
+    {
+      "index": 11,
+      "record": {
+        "cohort": "deployed",
+        "function": "core::fmt::<library/core/src/fmt/mod.rs::impl<'a> Arguments<'a>>::from_str(_1: &str) -> Arguments<'_>",
+        "call": "str::<impl str>::len",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "core::str::iter::<library/core/src/str/iter.rs::impl ExactSizeIterator for Bytes<'_>>::len(_1: &str::iter::Bytes<'_>) -> usize",
+          "core::str::<library/core/src/str/mod.rs::impl str>::len(_1: &str) -> usize"
+        ]
+      },
+      "disposition": "unreachable panic formatting: all fixed array indices and loop bounds valid; release debug assertions disabled, arithmetic wraps"
+    },
+    {
+      "index": 12,
+      "record": {
+        "cohort": "deployed",
+        "function": "aspis_core::qm31_accumulate_product_channels(_1: [[u64; 3]; 3], _2: QM31, _3: QM31) -> [[u64; 3]; 3]",
+        "call": "<core::ops::Range<usize> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+        ]
+      },
+      "disposition": "reached Range<usize>::next; source nested channel loop, concrete TrustedStep specialization"
+    },
+    {
+      "index": 13,
+      "record": {
+        "cohort": "deployed",
+        "function": "aspis_core::qm31_accumulate_product_channels(_1: [[u64; 3]; 3], _2: QM31, _3: QM31) -> [[u64; 3]; 3]",
+        "call": "<core::ops::Range<usize> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>"
+        ]
+      },
+      "disposition": "reached Range<usize>::next; source nested channel loop, concrete TrustedStep specialization"
+    },
+    {
+      "index": 14,
+      "record": {
+        "cohort": "deployed",
+        "function": "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> Iterator for ops::Range<A>>::next(_1: &mut ops::range::Range<A>) -> Option<A>",
+        "call": "<ops::range::Range<A> as RangeIteratorImpl>::spec_next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "core::iter::range::<library/core/src/iter/range.rs::impl<A: Step> RangeIteratorImpl for ops::Range<A>>::spec_next(_1: &mut ops::range::Range<A>) -> Option<A>",
+          "core::iter::range::<library/core/src/iter/range.rs::impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T>>::spec_next(_1: &mut ops::range::Range<T>) -> Option<T>"
+        ]
+      },
+      "disposition": "reached TrustedStep usize spec_next; general Step branch not instantiated"
+    },
+    {
+      "index": 15,
+      "record": {
+        "cohort": "deployed",
+        "function": "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>",
+        "call": "<map::Range<'_, T, SetValZST> as Iterator>::next",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+          "alloc::set::<library/alloc/src/collections/btree/set.rs::impl<'a, T> Iterator for Range<'a, T>>::next(_1: &mut set::Range<'_, T>) -> Option<&T>"
+        ]
+      },
+      "disposition": "excluded BTree typed receiver; actual receiver is core::ops::Range<usize>"
+    },
+    {
+      "index": 16,
+      "record": {
+        "cohort": "deployed",
+        "function": "alloc::map::<library/alloc/src/collections/btree/map.rs::impl<'a, K, V> Iterator for Range<'a, K, V>>::next(_1: &mut map::Range<'_, K, V>) -> Option<(&K, &V)>",
+        "call": "LeafRange::<Immut<'_>, K, V>::next_checked",
+        "reason": "ambiguous printed MIR symbol",
+        "candidates": [
+          "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::Immut<'a>, K, V>>::next_checked(_1: &mut LeafRange<Immut<'_>, K, V>) -> Option<(&K, &V)>",
+          "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked(_1: &mut LeafRange<ValMut<'_>, K, V>) -> Option<(&K, &mut V)>"
+        ]
+      },
+      "disposition": "excluded BTree typed receiver; actual receiver is core::ops::Range<usize>"
+    },
+    {
+      "index": 17,
+      "record": {
+        "cohort": "deployed",
+        "function": "alloc::navigate::<library/alloc/src/collections/btree/navigate.rs::impl<'a, K, V> LeafRange<marker::ValMut<'a>, K, V>>::next_checked::{closure#0}(_1: &{closure@library/alloc/src/collections/btree/navigate.rs:60:35: 60:39}, _2: &Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>) -> (&K, &mut V)",
+        "call": "read::<Handle<NodeRef<ValMut<'_>, K, V, LeafOrInternal>, KV>>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 49
+      },
+      "disposition": "excluded BTree typed receiver; actual receiver is core::ops::Range<usize>"
+    },
+    {
+      "index": 18,
+      "record": {
+        "cohort": "deployed",
+        "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+        "call": "core::slice::<impl [MaybeUninit<K>]>::get_unchecked::<usize>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 14
+      },
+      "disposition": "excluded BTree typed receiver; actual receiver is core::ops::Range<usize>"
+    },
+    {
+      "index": 19,
+      "record": {
+        "cohort": "deployed",
+        "function": "alloc::node::<library/alloc/src/collections/btree/node.rs::impl<'a, K: 'a, V: 'a, NodeType> Handle<NodeRef<marker::Immut<'a>, K, V, NodeType>, marker::KV>>::into_kv(_1: Handle<NodeRef<Immut<'_>, K, V, NodeType>, KV>) -> (&K, &V)",
+        "call": "core::slice::<impl [MaybeUninit<V>]>::get_unchecked::<usize>",
+        "reason": "no uniquely resolved body",
+        "candidate_count": 14
+      },
+      "disposition": "excluded BTree typed receiver; actual receiver is core::ops::Range<usize>"
+    }
+  ],
+  "counts": {
+    "historical": 10,
+    "reached": 3,
+    "excluded_typed": 5,
+    "excluded_guard": 2
+  },
+  "profile": "ct-host-prover, release debug_assertions=false overflow_checks=false; inherited exact deployed graph",
+  "b3p6_1_credit": 0,
+  "original_checker": "UNRECOVERED; no source census is relabelled a checker",
+  "status": "partial source closure; lazy/root complete-body literals and whole-row Result bridge pending",
+  "retained": [
+    "V370/D381/D386",
+    "E1/E2",
+    "native RunJoin/world/physical observer",
+    "client route",
+    "L1/L2/L3",
+    "T unchanged"
+  ]
+}
