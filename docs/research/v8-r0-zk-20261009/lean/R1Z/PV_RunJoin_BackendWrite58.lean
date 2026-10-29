@@ -23,7 +23,7 @@ theorem complete [ExternalTypes] (self : prover.Backend) (p : Nat → Nat → W)
   unfold write
   rw [hp,index_mut p lane hl]
   simp only [bind_tc_ok,Aeneas.Std.uncurry]
-  rw [ProverCommitArray49.update _ _ row hr]
+  rw [ProverCommitArray49.update 1024#usize (p lane.val) row hr v]
   simp only [bind_tc_ok]
   rw [PV_RunJoin_BackendMatrix58.set p lane hl]
 
