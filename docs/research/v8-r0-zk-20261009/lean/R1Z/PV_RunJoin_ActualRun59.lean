@@ -25,9 +25,11 @@ def plans (p : Phase) : Plan where
   claim := PV_RunJoin_ActualPlanSources59.publicationBytes p PV_RunJoin_ActualPlanSources59.compactClaim
   inactive := PV_RunJoin_ActualPlanSources59.publicationBytes p (fun publication => do
     let encoded ← aspis_core.field.wide_exact.WideExact.to_le_bytes publication.inactive
-    alloc.slice.Slice.to_vec core.clone.CloneU8 (← Aeneas.Std.lift (Array.to_slice encoded)))
+    let slice ← Aeneas.Std.lift (Array.to_slice encoded)
+    alloc.slice.Slice.to_vec core.clone.CloneU8 slice)
   root := PV_RunJoin_ActualPlanSources59.publicationBytes p (fun publication => do
-    alloc.slice.Slice.to_vec core.clone.CloneU8 (← Aeneas.Std.lift (Array.to_slice publication.root)))
+    let slice ← Aeneas.Std.lift (Array.to_slice publication.root)
+    alloc.slice.Slice.to_vec core.clone.CloneU8 slice)
   queries := List.ofFn (PV_RunJoin_ActualPlanSources59.queryPart p)
   slots := List.ofFn (PV_RunJoin_ActualPlanSources59.slot p)
   offOpenings := 10055
@@ -44,8 +46,7 @@ theorem layout (p : Phase) :
     (runs p).plan.queries.length=22 ∧ (runs p).plan.slots.length=6 ∧
     (runs p).plan.offOpenings=10055 ∧ (runs p).plan.offNodes=28359 ∧
     (runs p).plan.proofBytes=57607 := by
-  simp only [runs,PV_RunJoin_NativeCallback55.runOf,plans,List.length_ofFn]
-  exact ⟨rfl,rfl,rfl,rfl,rfl⟩
+  simp only [runs,PV_RunJoin_NativeCallback55.runOf,plans,List.length_ofFn,and_self]
 
 #print axioms data
 #print axioms statement
