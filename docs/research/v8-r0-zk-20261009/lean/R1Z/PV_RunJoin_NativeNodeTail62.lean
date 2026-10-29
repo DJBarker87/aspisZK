@@ -23,8 +23,10 @@ theorem append (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops
   intro phase p out cc1 cc2 context hc1 hc2 hlen
+  change resultBytes (prover.append_node_slots out cc1 cc2 p.tree p.queries)=
+    exceptBytes (ProverCommitPublish43.slots (PV_RunJoin_ActualRun.plans phase.val).slots (bytes out.val))
   rw [PV_RunJoin_NodeActualSlots60.actual phase.val p cc1 cc2 context hc1 hc2]
-  rw [PV_RunJoin_NodeSixSequence60.source (baseTypes base) heap box (residual base ops)]
+  erw [PV_RunJoin_NodeSixSequence60.source (baseTypes base) heap box (residual base ops)]
   apply PV_RunJoin_NodeSequence60.complete
   change out.length=28359 at hlen
   change out.length+2*(4672+4672+4096+5504+5504+4800)≤Usize.max
