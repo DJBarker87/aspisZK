@@ -18,11 +18,18 @@ def wait(batch,allow_error=False):
     begin=time.monotonic()
     while True:
         status=rpc(URL,'getSignatureStatuses',[[x['signature'] for x in batch],{'searchTransactionHistory':True}])['value']
-        if all(s and s['confirmationStatus']=='finalized' for s in status):break
+        if allow_error and any(s is None for s in status):
+            height=rpc(URL,'getBlockHeight',[{'commitment':'finalized'}])
+            for i,(entry,state) in enumerate(zip(batch,status)):
+                expiry=entry.get('blockhash',{}).get('lastValidBlockHeight')
+                if state is None and expiry is not None and height>expiry:
+                    status[i]={'confirmationStatus':'expired_unlanded','err':None}
+        if all(s and s['confirmationStatus'] in ('finalized','expired_unlanded') for s in status):break
         if time.monotonic()-begin>100:raise RuntimeError('batch finalization timeout; inspect signatures before restarting')
         time.sleep(2)
     for e,s in zip(batch,status):
         e.update(s)
+        if s['confirmationStatus']=='expired_unlanded':continue
         tx=rpc(URL,'getTransaction',[e['signature'],{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}]);write('tx-'+e['signature'],tx)
         if s['err'] and not allow_error:raise RuntimeError(s)
 def submit(name,ixs,keys,bh):
@@ -35,7 +42,7 @@ def submit(name,ixs,keys,bh):
         sim=rpc(URL,'simulateTransaction',[wire,{'encoding':'base64','sigVerify':True,'commitment':'confirmed'}]);write(f'{name}-attempt-{attempt}-simulation',sim)
         if sim['value']['err']=='BlockhashNotFound':continue
         if sim['value']['err']:raise RuntimeError(sim)
-        entry={'signature':s['signature'],'serialized_bytes':s['bytes'],'explorer':f"https://explorer.solana.com/tx/{s['signature']}?cluster=devnet"};write(f'{name}-attempt-{attempt}',entry)
+        entry={'signature':s['signature'],'blockhash':block,'serialized_bytes':s['bytes'],'explorer':f"https://explorer.solana.com/tx/{s['signature']}?cluster=devnet"};write(f'{name}-attempt-{attempt}',entry)
         try:
             sig=rpc(URL,'sendTransaction',[wire,{'encoding':'base64','skipPreflight':False,'maxRetries':5,'preflightCommitment':'confirmed'}]);assert sig==s['signature']
         except Exception as error:
@@ -80,7 +87,7 @@ def deploy_role(role):
     pa=account(program);assert pa['value']['owner']==LOADER and pa['value']['executable'];raw=base64.b64decode(pa['value']['data'][0]);assert int.from_bytes(raw[:4],'little')==2
     # Programdata address encoded in the linked Program account; use the CLI public account output for its base58 form.
     show=subprocess.check_output([str(CLI/'solana'),'--url',URL,'--output','json','program','show',program],text=True);show=json.loads(show);write(role+'-program',show)
-    pd=show['programdataAddress'];pda=account(pd);payload=base64.b64decode(pda['value']['data'][0])[45:];assert payload==elf
+    pd=show['programdataAddress'];assert raw[4:36]==base58(pd);pda=account(pd);assert pda['value']['owner']==LOADER and not pda['value']['executable'] and int.from_bytes(base64.b64decode(pda['value']['data'][0])[:4],'little')==3;payload=base64.b64decode(pda['value']['data'][0])[45:];assert payload==elf
     write(role+'-programdata',{'address':pd,'lamports':pda['value']['lamports'],'bytes':len(payload)+45,'elf_sha256':hashlib.sha256(payload).hexdigest(),'context_slot':pda['context']['slot']})
     if role in ('verifier','registry'):
         # V2 certifies exactly an immutable loader deployment; required by this release.
@@ -104,7 +111,7 @@ for role in roles:
             for receipt in O.glob(role+'-*-attempt-*.json'):
                 value=json.loads(receipt.read_text())
                 if isinstance(value,dict) and value.get('signature'):records.append(value)
-            if records:wait(records,allow_error=True)
+            for first in range(0,len(records),256):wait(records[first:first+256],allow_error=True)
             write(role+'-failure-refund',close_failed_buffer(CLI,URL,PAYER_KEY,C['payer'],buffer,account,lambda n,v:write(role+'-'+n,v)))
             write(role+'-refund-signatures',rpc(URL,'getSignaturesForAddress',[buffer,{'commitment':'finalized','limit':10}]))
         raise

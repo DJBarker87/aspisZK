@@ -1,3 +1,5 @@
+import ast
+import types
 import base64
 import pathlib
 import tempfile
@@ -36,6 +38,27 @@ class Policy(unittest.TestCase):
             result=close_failed_buffer(pathlib.Path('/cli'),'http://127.0.0.1:1','key',PAYER,'buffer',lambda _:next(values),lambda *args:None)
             self.assertEqual(result['remaining_lamports'],0)
             self.assertIn('finalized',run.call_args.args[0]);self.assertIn(PAYER,run.call_args.args[0])
+    def actual_wait(self, height):
+        tree=ast.parse(pathlib.Path(__file__).with_name('r1_devnet_deploy_paced.py').read_text())
+        node=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='wait')
+        def rpc(url,method,args):
+            if method=='getSignatureStatuses':return {'value':[None]}
+            if method=='getBlockHeight':return height
+            raise AssertionError('must not fetch expired or ambiguous transaction metadata')
+        times=iter([0,101])
+        env={'rpc':rpc,'URL':'local','time':types.SimpleNamespace(monotonic=lambda:next(times))}
+        exec(compile(ast.Module(body=[node],type_ignores=[]),'actual-wait','exec'),env)
+        return env['wait']
+    def test_expired_unlanded_attempt_allows_refund_reconciliation(self):
+        row={'signature':'public','blockhash':{'lastValidBlockHeight':100}}
+        self.actual_wait(101)([row],allow_error=True)
+        self.assertEqual(row['confirmationStatus'],'expired_unlanded')
+    def test_ambiguous_attempt_prevents_refund(self):
+        with self.assertRaisesRegex(RuntimeError,'timeout'):
+            self.actual_wait(99)([{'signature':'public','blockhash':{'lastValidBlockHeight':100}}],allow_error=True)
+    def test_legacy_attempt_without_expiry_is_not_assumed_expired(self):
+        with self.assertRaisesRegex(RuntimeError,'timeout'):
+            self.actual_wait(1000)([{'signature':'public'}],allow_error=True)
     def test_cpi_creation_included_but_failed_transaction_excluded(self):
         tx={'meta':{'err':None,'preBalances':[100,0],'postBalances':[90,10]},'transaction':{'message':{'accountKeys':['payer','pda']}}}
         self.assertEqual(created_accounts(tx),['pda']);tx['meta']['err']='failure'
