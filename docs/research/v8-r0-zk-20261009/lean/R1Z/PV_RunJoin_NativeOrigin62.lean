@@ -35,7 +35,9 @@ theorem circles (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap
 
 theorem backend_length (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base))
-    (p : PV_RunJoin_NativeActual62.P base heap box ops) : p.val.backend.messages.length=29 := by
+    (p : PV_RunJoin_NativeActual62.P base heap box ops) :
+    letI : ExternalTypes := types base
+    p.val.backend.messages.length=29 := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops
   obtain ⟨_,compiled,noised,maskOnly,d,g,padding,initial,hlen,built⟩ :=

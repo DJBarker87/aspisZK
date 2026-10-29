@@ -12,6 +12,7 @@ open ProverCommitSubfieldOps47
 theorem point_facts (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base))
     (p : PV_RunJoin_NativeActual62.P base heap box ops) :
+    letI : ExternalTypes := types base
     ∃ z0 z1, p.val.sem.z=Array.make 2#usize [z0,z1] ∧
       PV_RunJoin_CircleChallenge62.Good z0 ∧ PV_RunJoin_CircleChallenge62.Good z1 := by
   letI : ExternalTypes := types base
