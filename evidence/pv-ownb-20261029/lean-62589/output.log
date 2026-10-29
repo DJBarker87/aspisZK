@@ -1,0 +1,87 @@
+/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_NoDoubleCleanup.lean:9:67: error: unsolved goals
+S X E : Type
+dealloc : Nat → Request → S → Outcome E Unit × S
+q : Cursor
+h : PV_OWNB_Cursor.Valid q
+s : S
+x : X
+consumed :
+  (PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world.memory.slots
+      q.owner =
+    none
+⊢ (match
+        (match q.memory.slots q.owner with
+                | none =>
+                  { outcome := Outcome.ok (), world := { memory := take q.owner q.memory, allocator := s, extra := x },
+                    calls := [] }
+                | some t =>
+                  dropVecPod dealloc t q.cell
+                    { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory.slots
+          q.owner with
+      | none =>
+        { outcome := Outcome.ok (),
+          world :=
+            {
+              memory :=
+                take q.owner
+                  (match q.memory.slots q.owner with
+                      | none =>
+                        { outcome := Outcome.ok (),
+                          world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                      | some t =>
+                        dropVecPod dealloc t q.cell
+                          { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory,
+              allocator :=
+                (match q.memory.slots q.owner with
+                    | none =>
+                      { outcome := Outcome.ok (),
+                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                    | some t =>
+                      dropVecPod dealloc t q.cell
+                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.allocator,
+              extra :=
+                (match q.memory.slots q.owner with
+                    | none =>
+                      { outcome := Outcome.ok (),
+                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                    | some t =>
+                      dropVecPod dealloc t q.cell
+                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.extra },
+          calls := [] }
+      | some t =>
+        dropVecPod dealloc t q.cell
+          {
+            memory :=
+              take q.owner
+                (match q.memory.slots q.owner with
+                    | none =>
+                      { outcome := Outcome.ok (),
+                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                    | some t =>
+                      dropVecPod dealloc t q.cell
+                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory,
+            allocator :=
+              (match q.memory.slots q.owner with
+                  | none =>
+                    { outcome := Outcome.ok (),
+                      world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                  | some t =>
+                    dropVecPod dealloc t q.cell
+                      { memory := take q.owner q.memory, allocator := s, extra := x }).world.allocator,
+            extra :=
+              (match q.memory.slots q.owner with
+                  | none =>
+                    { outcome := Outcome.ok (),
+                      world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }
+                  | some t =>
+                    dropVecPod dealloc t q.cell
+                      { memory := take q.owner q.memory, allocator := s, extra := x }).world.extra }).calls =
+    []
+/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_NoDoubleCleanup.lean:11:47: warning: This simp argument is unused:
+  consumed
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵V̵_̵O̵W̵N̵B̵_̵C̵u̵r̵s̵o̵r̵C̵l̵e̵a̵n̵u̵p̵.̵c̵l̵e̵a̵n̵u̵p̵,̵d̵r̵o̵p̵O̵w̵n̵e̵d̵,̵c̵o̵n̵s̵u̵m̵e̵d̵]̵[̲P̲V̲_̲O̲W̲N̲B̲_̲C̲u̲r̲s̲o̲r̲C̲l̲e̲a̲n̲u̲p̲.̲c̲l̲e̲a̲n̲u̲p̲,̲ ̲d̲r̲o̲p̲O̲w̲n̲e̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_OWNB_NoDoubleCleanup.no_second_call' depends on axioms: [propext, sorryAx]

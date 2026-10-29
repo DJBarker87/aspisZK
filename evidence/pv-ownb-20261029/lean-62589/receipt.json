@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62589/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-62589/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-objects/R1Z/PV_OWNB_NoDoubleCleanup.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_NoDoubleCleanup.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.19",
+  "peak_rss_kib": "487300",
+  "swap": "0",
+  "source_revision": "cf6b3d5038433280e02f1512ca7cab2eea25c7ab",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_NoDoubleCleanup.lean:9:67: error: unsolved goals\nS X E : Type\ndealloc : Nat \u2192 Request \u2192 S \u2192 Outcome E Unit \u00d7 S\nq : Cursor\nh : PV_OWNB_Cursor.Valid q\ns : S\nx : X\nconsumed :\n  (PV_OWNB_CursorCleanup.cleanup dealloc q { memory := q.memory, allocator := s, extra := x }).world.memory.slots\n      q.owner =\n    none\n\u22a2 (match\n        (match q.memory.slots q.owner with\n                | none =>\n                  { outcome := Outcome.ok (), world := { memory := take q.owner q.memory, allocator := s, extra := x },\n                    calls := [] }\n                | some t =>\n                  dropVecPod dealloc t q.cell\n                    { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory.slots\n          q.owner with\n      | none =>\n        { outcome := Outcome.ok (),\n          world :=\n            {\n              memory :=\n                take q.owner\n                  (match q.memory.slots q.owner with\n                      | none =>\n                        { outcome := Outcome.ok (),\n                          world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                      | some t =>\n                        dropVecPod dealloc t q.cell\n                          { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory,\n              allocator :=\n                (match q.memory.slots q.owner with\n                    | none =>\n                      { outcome := Outcome.ok (),\n                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                    | some t =>\n                      dropVecPod dealloc t q.cell\n                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.allocator,\n              extra :=\n                (match q.memory.slots q.owner with\n                    | none =>\n                      { outcome := Outcome.ok (),\n                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                    | some t =>\n                      dropVecPod dealloc t q.cell\n                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.extra },\n          calls := [] }\n      | some t =>\n        dropVecPod dealloc t q.cell\n          {\n            memory :=\n              take q.owner\n                (match q.memory.slots q.owner with\n                    | none =>\n                      { outcome := Outcome.ok (),\n                        world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                    | some t =>\n                      dropVecPod dealloc t q.cell\n                        { memory := take q.owner q.memory, allocator := s, extra := x }).world.memory,\n            allocator :=\n              (match q.memory.slots q.owner with\n                  | none =>\n                    { outcome := Outcome.ok (),\n                      world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                  | some t =>\n                    dropVecPod dealloc t q.cell\n                      { memory := take q.owner q.memory, allocator := s, extra := x }).world.allocator,\n            extra :=\n              (match q.memory.slots q.owner with\n                  | none =>\n                    { outcome := Outcome.ok (),\n                      world := { memory := take q.owner q.memory, allocator := s, extra := x }, calls := [] }\n                  | some t =>\n                    dropVecPod dealloc t q.cell\n                      { memory := take q.owner q.memory, allocator := s, extra := x }).world.extra }).calls =\n    []\n/home/dombarker/project-offloads/codex-pv-ownb-20261029/lean-sources/R1Z/PV_OWNB_NoDoubleCleanup.lean:11:47: warning: This simp argument is unused:\n  consumed\n\nHint: Omit it from the simp argument list.\n  simp [\u0335P\u0335V\u0335_\u0335O\u0335W\u0335N\u0335B\u0335_\u0335C\u0335u\u0335r\u0335s\u0335o\u0335r\u0335C\u0335l\u0335e\u0335a\u0335n\u0335u\u0335p\u0335.\u0335c\u0335l\u0335e\u0335a\u0335n\u0335u\u0335p\u0335,\u0335d\u0335r\u0335o\u0335p\u0335O\u0335w\u0335n\u0335e\u0335d\u0335,\u0335c\u0335o\u0335n\u0335s\u0335u\u0335m\u0335e\u0335d\u0335]\u0335[\u0332P\u0332V\u0332_\u0332O\u0332W\u0332N\u0332B\u0332_\u0332C\u0332u\u0332r\u0332s\u0332o\u0332r\u0332C\u0332l\u0332e\u0332a\u0332n\u0332u\u0332p\u0332.\u0332c\u0332l\u0332e\u0332a\u0332n\u0332u\u0332p\u0332,\u0332 \u0332d\u0332r\u0332o\u0332p\u0332O\u0332w\u0332n\u0332e\u0332d\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWNB_NoDoubleCleanup.no_second_call' depends on axioms: [propext, sorryAx]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 62589,
+  "module": "R1Z/PV_OWNB_NoDoubleCleanup",
+  "source_blob": "d7e59310e0853be6d469d1e57b30622d27509d2c",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNB_NoDoubleCleanup.lean",
+  "source_sha256": "ce3e688e51ea4e307eba16ac55dfc96994e8d0c19d953678ae048d30941dd3cf",
+  "imports": [
+    "R1Z.PV_OWNB_CleanupConsumed"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNB_CleanupConsumed": "fa0276125353fe263a2c8c74a2f6cf147ef8a6a0a0f81d4861841751785c7102"
+  },
+  "deps_fingerprint": "a33c0782f5ea4b6131420780267a9b0531960cf11c1d2d6ae546a521776e7409"
+}
