@@ -70,7 +70,7 @@ theorem reference_terminal_validate_transition_loop_body_read_binding9 (index : 
   (a1 : Array (Array aspis_core.field.M31 8#usize) 20#usize)
   (carry : Std.Usize) (level_index : Std.Usize)  :
     reference_terminal.validate_transition_loop.body index a a1 carry level_index = reference_terminal_validate_transition_loop_body_direct_read9 index a a1 carry level_index :=
-  congrArg (fun source_read => reference_terminal_validate_transition_loop_body_read_context9 source_read index a a1 carry level_index) digest_function_binding
+  congrArg (fun (source_read : (Array (Array U32 8#usize) 20#usize → Usize → Result (Array U32 8#usize))) => reference_terminal_validate_transition_loop_body_read_context9 @source_read index a a1 carry level_index) digest_function_binding
 
 #print axioms reference_terminal_validate_transition_loop_body_read_binding9
 end PV_B3P_Binding9227

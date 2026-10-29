@@ -145,7 +145,7 @@ theorem reference_terminal_semantic_initial_and_absorption_read_binding9 (public
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors)  :
     reference_terminal.semantic_initial_and_absorption public1 openings selectors = reference_terminal_semantic_initial_and_absorption_direct_read9 public1 openings selectors :=
-  congrArg (fun source_read => reference_terminal_semantic_initial_and_absorption_read_context9 source_read public1 openings selectors) read_function_binding
+  congrArg (fun (source_read : ({N : Usize} → Array aspis_core.field.QM31 N → Usize → Result aspis_core.field.QM31)) => reference_terminal_semantic_initial_and_absorption_read_context9 @source_read public1 openings selectors) read_function_binding
 
 #print axioms reference_terminal_semantic_initial_and_absorption_read_binding9
 end PV_B3P_Binding9227

@@ -26,7 +26,7 @@ def reference_terminal_sum_interval227_loop_body_direct_read9 (high : Array aspi
 theorem reference_terminal_sum_interval227_loop_body_read_binding9 (high : Array aspis_core.field.QM31 64#usize) (end1 : Std.Usize)
   (sum : aspis_core.field.QM31) (i : Std.Usize)  :
     reference_terminal.sum_interval227_loop.body high end1 sum i = reference_terminal_sum_interval227_loop_body_direct_read9 high end1 sum i :=
-  congrArg (fun source_read => reference_terminal_sum_interval227_loop_body_read_context9 source_read high end1 sum i) read_function_binding
+  congrArg (fun (source_read : ({N : Usize} → Array aspis_core.field.QM31 N → Usize → Result aspis_core.field.QM31)) => reference_terminal_sum_interval227_loop_body_read_context9 @source_read high end1 sum i) read_function_binding
 
 #print axioms reference_terminal_sum_interval227_loop_body_read_binding9
 end PV_B3P_Binding9227

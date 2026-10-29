@@ -1,6 +1,6 @@
 import PV_B3P_HornerBodyBinding8227
 namespace PV_B3P_Binding9227
-open Aeneas Aeneas.Std PV_B3P_227 Result ControlFlow Error
+open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
 
 theorem read_function_binding :

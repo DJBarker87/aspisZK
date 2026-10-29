@@ -315,7 +315,7 @@ theorem reference_terminal_add_value_lanes_read_binding9 (packed : Array aspis_c
   (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
   (selectors : reference_copy_terminal.Selectors)  :
     reference_terminal.add_value_lanes packed openings selectors = reference_terminal_add_value_lanes_direct_read9 packed openings selectors :=
-  congrArg (fun source_read => reference_terminal_add_value_lanes_read_context9 source_read packed openings selectors) read_function_binding
+  congrArg (fun (source_read : ({N : Usize} → Array aspis_core.field.QM31 N → Usize → Result aspis_core.field.QM31)) => reference_terminal_add_value_lanes_read_context9 @source_read packed openings selectors) read_function_binding
 
 #print axioms reference_terminal_add_value_lanes_read_binding9
 end PV_B3P_Binding9227

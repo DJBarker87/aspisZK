@@ -104,7 +104,7 @@ theorem reference_terminal_absorption_lanes_literal_read_binding9 (low : aspis_c
   (nodes : aspis_core.field.QM31)
   (openings : Array aspis_core.field.QM31 16#usize)  :
     reference_terminal.absorption_lanes_literal low fixed chunk_two chunk_eight nodes openings = reference_terminal_absorption_lanes_literal_direct_read9 low fixed chunk_two chunk_eight nodes openings :=
-  congrArg (fun source_read => reference_terminal_absorption_lanes_literal_read_context9 source_read low fixed chunk_two chunk_eight nodes openings) read_function_binding
+  congrArg (fun (source_read : ({N : Usize} → Array aspis_core.field.QM31 N → Usize → Result aspis_core.field.QM31)) => reference_terminal_absorption_lanes_literal_read_context9 @source_read low fixed chunk_two chunk_eight nodes openings) read_function_binding
 
 #print axioms reference_terminal_absorption_lanes_literal_read_binding9
 end PV_B3P_Binding9227
