@@ -5,4 +5,4 @@ writing the next concrete source/Result bridge. No row credit from inspection. -
 open Aeneas Aeneas.Std
 #print Array.update
 #print core.num.U32.from_le_bytes
-#print core.array.Array.index
+#print Array.index_usize
