@@ -11,12 +11,6 @@ carrier or hide its initialization/store obligation. -/
 def bump (counts : Counts) (row : UInt16) : Except Error Counts :=
  if row.toNat≥1024 ∨ counts row.toNat≥2 then .error (.endpointCapacity row)
  else .ok (fun i=>if i=row.toNat then counts i+1 else counts i)
-def scan : List Link → Counts → Except Error Counts
- | [],counts => .ok counts
- | v::vs,counts => do
-  let producers←bump counts v.producer
-  let consumers←bump producers v.consumer
-  scan vs consumers
 /-- Source has separate producer and consumer arrays, not one merged counter. -/
 def check : List Link → Counts → Counts → Except Error (Counts × Counts)
  | [],producers,consumers => .ok (producers,consumers)
@@ -24,5 +18,5 @@ def check : List Link → Counts → Counts → Except Error (Counts × Counts)
   let producers←bump producers v.producer
   let consumers←bump consumers v.consumer
   check vs producers consumers
-attribute [local irreducible] bump scan check
+attribute [local irreducible] bump check
 end R1Z.PV_OWND_EndpointCounter
