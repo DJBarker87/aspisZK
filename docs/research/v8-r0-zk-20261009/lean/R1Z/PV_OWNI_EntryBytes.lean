@@ -13,12 +13,13 @@ theorem row (v : Entry) (i : Fin 8) : encode v i=some (v.1 i) := by
  simp only [encode,i.isLt,dif_pos]
 theorem limbs (v : Entry) (i : Fin 16) : encode v (8+i.val)=some (v.2 i) := by
  simp only [encode,show ¬8+i.val<8 by omega,dif_neg,
-   show 8+i.val<24 by omega,dif_pos,Nat.add_sub_cancel_left]
+   show 8+i.val<24 by omega,dif_pos,Nat.add_sub_cancel_left, dite_false]
 theorem bounded (v : Entry) (i : Nat) (b : UInt8) (h:encode v i=some b) : i<24 := by
- by_contra hn
- have h8:¬i<8 := by omega
- simp only [encode,h8,dif_neg,hn] at h
- contradiction
+ by_cases hn:i<24
+ · exact hn
+ · have h8:¬i<8 := by omega
+   simp only [encode,h8,dite_false,hn] at h
+   cases h
 theorem injective (a b : Entry) (h:∀ i,i<24 → encode a i=encode b i) : a=b := by
  apply Prod.ext
  · funext i
