@@ -572,7 +572,7 @@
       "ordered_steps": [
         "forward same pointer to ptr.read"
       ],
-      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; typed primitive forwarding",
+      "lean_target": "R1Z.PV_RDCD4_Memory194.read_forward/read_at/read_frame; source primitive forwarding and initialized value",
       "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
       "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
     },
@@ -707,6 +707,161 @@
         "return unchanged slice length through compiler ptr_metadata intrinsic"
       ],
       "lean_target": "R1Z.PV_RDCD4_Split194.ranges; compiler metadata primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.raw.from_raw_parts",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs",
+      "file_sha256": "0914968067f7e2bc798680c1edd72bcb032a9fd44ebb2b6fbc082a3a2b16941f",
+      "body": "pub const unsafe fn from_raw_parts<'a, T>(data: *const T, len: usize) -> &'a [T] {\n    // SAFETY: the caller must uphold the safety contract for `from_raw_parts`.\n    unsafe {\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"slice::from_raw_parts requires the pointer to be aligned and non-null, and the total size of the slice not to exceed `isize::MAX`\",\n            (\n                data: *mut () = data as *mut (),\n                size: usize = size_of::<T>(),\n                align: usize = align_of::<T>(),\n                len: usize = len,\n            ) =>\n            ub_checks::maybe_is_aligned_and_not_null(data, align, false)\n                && ub_checks::is_valid_allocation_size(size, len)\n        );\n        &*ptr::slice_from_raw_parts(data, len)\n    }\n}",
+      "body_sha256": "f5cd4df6162d07559a487db5088dccbff1c37f7eb002eec9e00754f7943b915c",
+      "token_sha256": "d5ced8dd0152e70bed4e0ef31cf1bfdefb7d540912171574edf44952d76f6441",
+      "expected_body": "pub const unsafe fn from_raw_parts<'a,T>(data:*const T,len:usize)->&'a[T]{unsafe{ub_checks::assert_unsafe_precondition!(check_language_ub,\"slice::from_raw_parts requires the pointer to be aligned and non-null, and the total size of the slice not to exceed `isize::MAX`\",(data:*mut()=data as *mut(),size:usize=size_of::<T>(),align:usize=align_of::<T>(),len:usize=len,)=>ub_checks::maybe_is_aligned_and_not_null(data,align,false)&&ub_checks::is_valid_allocation_size(size,len));&*ptr::slice_from_raw_parts(data,len)}}",
+      "expected_token_sha256": "d5ced8dd0152e70bed4e0ef31cf1bfdefb7d540912171574edf44952d76f6441",
+      "ordered_steps": [
+        "retain the original valid-reference alignment/non-null/size contract; no arbitrary invalid pointers are admitted",
+        "forward same data and length through ptr.slice_from_raw_parts",
+        "create immutable reference to that same span"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.raw_parts_forward/raw_parts_fields; MemorySplit194.valid_parts/checked_binding; typed pointer/layout contract remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ptr.read",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "body": "pub const unsafe fn read<T>(src: *const T) -> T {\n    // It would be semantically correct to implement this via `copy_nonoverlapping`\n    // and `MaybeUninit`, as was done before PR #109035. Calling `assume_init`\n    // provides enough information to know that this is a typed operation.\n\n    // However, as of March 2023 the compiler was not capable of taking advantage\n    // of that information. Thus, the implementation here switched to an intrinsic,\n    // which lowers to `_0 = *src` in MIR, to address a few issues:\n    //\n    // - Using `MaybeUninit::assume_init` after a `copy_nonoverlapping` was not\n    //   turning the untyped copy into a typed load. As such, the generated\n    //   `load` in LLVM didn't get various metadata, such as `!range` (#73258),\n    //   `!nonnull`, and `!noundef`, resulting in poorer optimization.\n    // - Going through the extra local resulted in multiple extra copies, even\n    //   in optimized MIR.  (Ignoring StorageLive/Dead, the intrinsic is one\n    //   MIR statement, while the previous implementation was eight.)  LLVM\n    //   could sometimes optimize them away, but because `read` is at the core\n    //   of so many things, not having them in the first place improves what we\n    //   hand off to the backend.  For example, `mem::replace::<Big>` previously\n    //   emitted 4 `alloca` and 6 `memcpy`s, but is now 1 `alloc` and 3 `memcpy`s.\n    // - In general, this approach keeps us from getting any more bugs (like\n    //   #106369) that boil down to \"`read(p)` is worse than `*p`\", as this\n    //   makes them look identical to the backend (or other MIR consumers).\n    //\n    // Future enhancements to MIR optimizations might well allow this to return\n    // to the previous implementation, rather than using an intrinsic.\n\n    // SAFETY: the caller must guarantee that `src` is valid for reads.\n    unsafe {\n        #[cfg(debug_assertions)] // Too expensive to always enable (for now?)\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::read requires that the pointer argument is aligned and non-null\",\n            (\n                addr: *const () = src as *const (),\n                align: usize = align_of::<T>(),\n                is_zst: bool = T::IS_ZST,\n            ) => ub_checks::maybe_is_aligned_and_not_null(addr, align, is_zst)\n        );\n        crate::intrinsics::read_via_copy(src)\n    }\n}",
+      "body_sha256": "0638fa83d5b5da093110511d686842bc36bbdad8b6c5638bed0cb7e7613fbe12",
+      "token_sha256": "2079c6b1e0ee93ad6b5745c4024080a6fb1c0879e4e7ce76137b98e8b1d9bbc8",
+      "expected_body": "pub const unsafe fn read<T>(src:*const T)->T{unsafe{#[cfg(debug_assertions)]ub_checks::assert_unsafe_precondition!(check_language_ub,\"ptr::read requires that the pointer argument is aligned and non-null\",(addr:*const()=src as *const(),align:usize=align_of::<T>(),is_zst:bool=T::IS_ZST,)=>ub_checks::maybe_is_aligned_and_not_null(addr,align,is_zst));crate::intrinsics::read_via_copy(src)}}",
+      "expected_token_sha256": "2079c6b1e0ee93ad6b5745c4024080a6fb1c0879e4e7ce76137b98e8b1d9bbc8",
+      "ordered_steps": [
+        "release debug_assertions=false removes debug-only precondition call",
+        "one typed read_via_copy at the original pointer",
+        "Copy WideExact requires no moved-value destructor; remaining alive range already advanced"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.ptrRead/read_at/read_frame; ArrayMemory194.binding; compiler intrinsic semantics V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "const_ptr.add",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "body": "pub const unsafe fn add(self, count: usize) -> Self\n    where\n        T: Sized,\n    {\n        #[cfg(debug_assertions)]\n        #[inline]\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_add_nowrap(this: *const (), count: usize, size: usize) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), count: usize, size: usize } -> bool:\n                if const {\n                    true\n                } else {\n                    let Some(byte_offset) = count.checked_mul(size) else {\n                        return false;\n                    };\n                    let (_, overflow) = this.addr().overflowing_add(byte_offset);\n                    byte_offset <= (isize::MAX as usize) && !overflow\n                }\n            )\n        }\n\n        #[cfg(debug_assertions)] // Expensive, and doesn't catch much in the wild.\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::add requires that the address calculation does not overflow\",\n            (\n                this: *const () = self as *const (),\n                count: usize = count,\n                size: usize = size_of::<T>(),\n            ) => runtime_add_nowrap(this, count, size)\n        );\n\n        // SAFETY: the caller must uphold the safety contract for `offset`.\n        unsafe { intrinsics::offset(self, count) }\n    }",
+      "body_sha256": "6e8ef9c9453163c071515b82c8302e776d944e5a660fc456d10f6e4ef271a6a5",
+      "token_sha256": "1980be39a3e8bb5271284ccda59c171462b547f7ff456b76e1ae80f418c58624",
+      "expected_body": "pub const unsafe fn add(self,count:usize)->Self where T:Sized,{#[cfg(debug_assertions)]#[inline]#[rustc_allow_const_fn_unstable(const_eval_select)]const fn runtime_add_nowrap(this:*const(),count:usize,size:usize)->bool{const_eval_select!(@capture{this:*const(),count:usize,size:usize}->bool:if const{true}else{let Some(byte_offset)=count.checked_mul(size)else{return false;};let(_,overflow)=this.addr().overflowing_add(byte_offset);byte_offset<=(isize::MAX as usize)&&!overflow})}#[cfg(debug_assertions)]ub_checks::assert_unsafe_precondition!(check_language_ub,\"ptr::add requires that the address calculation does not overflow\",(this:*const()=self as *const(),count:usize=count,size:usize=size_of::<T>(),)=>runtime_add_nowrap(this,count,size));unsafe{intrinsics::offset(self,count)}}",
+      "expected_token_sha256": "1980be39a3e8bb5271284ccda59c171462b547f7ff456b76e1ae80f418c58624",
+      "ordered_steps": [
+        "release debug_assertions=false removes helper and debug-only check",
+        "intrinsic offset on the same typed pointer",
+        "count is within the original live allocation by the caller split bound"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.advance; MemorySplit194.aliases/valid_parts; typed offset/layout primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "array.Index.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn index(&self, index: I) -> &Self::Output {\n        Index::index(self as &[T], index)\n    }",
+      "body_sha256": "7c882a5eb44e6bccca48cf58790aef6eb171408e54aa3a7c1ab41786df50a51e",
+      "token_sha256": "f3c9fd40d3e7d6443ebf32ca68afcf32d8fb567129b0994e0273b3d968968c7b",
+      "expected_body": "fn index(&self,index:I)->&Self::Output{Index::index(self as &[T],index)}",
+      "expected_token_sha256": "f3c9fd40d3e7d6443ebf32ca68afcf32d8fb567129b0994e0273b3d968968c7b",
+      "ordered_steps": [
+        "coerce same array storage and length to slice",
+        "dispatch concrete usize SliceIndex"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.array_complete; caller bounds from EncoderBounds.cells/EncoderRange.even/odd",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.Index.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index(&self, index: I) -> &I::Output {\n        index.index(self)\n    }",
+      "body_sha256": "44e53d91ceedd32e458e6f6b4dfb18b8349d177e5e3b788c014608bea060273a",
+      "token_sha256": "7d6d351ea0e0935acd674ed65629967ebb9451fc1aa60f5668e1b51496b851ed",
+      "expected_body": "fn index(&self,index:I)->&I::Output{index.index(self)}",
+      "expected_token_sha256": "7d6d351ea0e0935acd674ed65629967ebb9451fc1aa60f5668e1b51496b851ed",
+      "ordered_steps": [
+        "forward same slice and concrete usize index"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.slice_complete/success/failure",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.SliceIndex.index",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }",
+      "body_sha256": "97a9f42a5913d85e5bdc5de713568893a9b25bc0fdf8f68a7ed27d7c3a0e62f0",
+      "token_sha256": "a56dad7cd1c6e9f99e60a1aaf205764929096fa3ce00dc4d391756cb7c0e67cb",
+      "expected_body": "fn index(self,slice:&[T])->&T{&(*slice)[self]}",
+      "expected_token_sha256": "a56dad7cd1c6e9f99e60a1aaf205764929096fa3ce00dc4d391756cb7c0e67cb",
+      "ordered_steps": [
+        "compiler intrinsic checked read at identical index",
+        "out-of-bounds panic arm retained in the Result projection, proved unreachable for every consumed index"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.slice_complete/success/failure; compiler checked-memory primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "array.IndexMut.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }",
+      "body_sha256": "3efc95c7ec60fea7cbbaf85e9322e4b83da92c0998a8f8b132a3bb2ef4581b4e",
+      "token_sha256": "2d028901a04d618d9e5c428fb7ba053c3eadea216aa671fdcc1b70d49fb650d9",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut Self::Output{IndexMut::index_mut(self as &mut[T],index)}",
+      "expected_token_sha256": "2d028901a04d618d9e5c428fb7ba053c3eadea216aa671fdcc1b70d49fb650d9",
+      "ordered_steps": [
+        "coerce same mutable array storage to slice",
+        "retain the write-back continuation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame; EncoderMutation.restoration",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.IndexMut.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index_mut(&mut self, index: I) -> &mut I::Output {\n        index.index_mut(self)\n    }",
+      "body_sha256": "78cbca4e3f48a7604570d67b508fff2b23ff29ba1446b5164014fe9b99c28c79",
+      "token_sha256": "5c378d0874611016d392526a00ebf6627df99cd5db969e0bcd15b0e2a571b334",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut I::Output{index.index_mut(self)}",
+      "expected_token_sha256": "5c378d0874611016d392526a00ebf6627df99cd5db969e0bcd15b0e2a571b334",
+      "ordered_steps": [
+        "dispatch concrete usize at identical storage",
+        "retain mutable continuation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.SliceIndex.index_mut",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }",
+      "body_sha256": "a842fe2144b84fa89b3791cedf19d0c4f943ce8cdc6fc71304ff72c83e4ac30b",
+      "token_sha256": "1295a84804829c1dc2929eb1a539c57e1378e3420b27a13c6e7088b4449138d4",
+      "expected_body": "fn index_mut(self,slice:&mut[T])->&mut T{&mut(*slice)[self]}",
+      "expected_token_sha256": "1295a84804829c1dc2929eb1a539c57e1378e3420b27a13c6e7088b4449138d4",
+      "ordered_steps": [
+        "return exactly the selected mutable slot",
+        "checked failure branch retained; consumed basis indices are bounded"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame; compiler checked-memory primitive V370",
       "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
       "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
     }
