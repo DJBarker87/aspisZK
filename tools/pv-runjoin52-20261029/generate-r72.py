@@ -125,3 +125,62 @@ s=s[:a]+''' := by
     all_goals rfl
 
 '''+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3552.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.circle.secure_circle_point_from_parameter
+    PV_RunJoin_CircleR72Raw52.circle.secure_circle_point_from_parameter
+  rw [op26]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro square _
+  rw [op34,op33]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro denominator _
+  rw [op23]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro inverse _
+  cases inverse with
+  | none => rfl
+  | some inv =>
+    simp only [Option.map_some,AspisR72Sampler.core.option.Option.ok_or,
+      PV_RunJoin_CircleR72Raw52.core.option.Option.ok_or,bind_tc_ok,
+      core.result.Result.Insts.CoreOpsTry.branch]
+    rw [op34,op32]
+    simp only [bind_assoc_eq,bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro numerator _
+    rw [op31]
+    simp only [bind_assoc_eq,bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro x _
+    rw [op33]
+    simp only [bind_assoc_eq,bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro doubled _
+    rw [op31]
+    simp only [bind_assoc_eq,bind_tc_ok]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro y _
+    rfl
+
+'''+s[b:];p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3952.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+s=s[:a]+''' := by
+  unfold AspisR72Sampler.circle.secure_ood_circle_point_from_parameter
+    PV_RunJoin_CircleR72Raw52.circle.secure_ood_circle_point_from_parameter
+  rw [op35]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+  intro r _
+  cases r with
+  | Err e => cases e <;> rfl
+  | Ok point =>
+    simp only [encOutcome,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    rw [q_c1,op36,op38]
+    apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
+    intro bad _
+    cases bad <;> rfl
+
+'''+s[b:];p.write_text(s)
