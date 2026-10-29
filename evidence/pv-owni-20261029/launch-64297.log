@@ -1,0 +1,225 @@
+_OWNI_NumericBytes.limb_bytes : ∀ (entry : ℕ × R1Z.PV_OWNI_RawOps.Q) (bank i : ℕ) (hb : bank < 4) (hi : i < 4),
+  (R1Z.PV_OWNI_NumericBytes.encode entry).2 ⟨bank * 4 + i, ⋯⟩ =
+    R1Z.PV_OWNI_ByteWord.byte (↑(R1Z.PV_OWNI_NumericBytes.limb entry.2 bank)) i
+@R1Z.PV_OWNI_PublicPlan.same_public : ∀ {K : Type} (isBoolean : K → Bool) (left right : List K),
+  left = right →
+    ∀ (lengths other : List ℕ),
+      lengths = other →
+        ∀ (failures : List Bool),
+          R1Z.PV_OWNI_PublicPlan.plan isBoolean left lengths failures =
+            R1Z.PV_OWNI_PublicPlan.plan isBoolean right other failures
+@R1Z.PV_OWNI_PublicPlan.one_success : ∀ {K : Type} (isBoolean : K → Bool) (point : List K),
+  R1Z.PV_OWNI_PublicPlan.plan isBoolean point [1024] [false] =
+    [R1Z.PV_RDB2D_CollectorTrace.Action.allocate (24 * R1Z.PV_RDB2D_SparseShape.capacity isBoolean point) 8,
+      R1Z.PV_RDB2D_CollectorTrace.Action.deallocate (24 * R1Z.PV_RDB2D_SparseShape.capacity isBoolean point) 8]
+@R1Z.PV_OWNI_PublicPlan.one_null : ∀ {K : Type} (isBoolean : K → Bool) (point : List K),
+  R1Z.PV_OWNI_PublicPlan.plan isBoolean point [1024] [true] =
+    [R1Z.PV_RDB2D_CollectorTrace.Action.allocate (24 * R1Z.PV_RDB2D_SparseShape.capacity isBoolean point) 8,
+      R1Z.PV_RDB2D_CollectorTrace.Action.abort (24 * R1Z.PV_RDB2D_SparseShape.capacity isBoolean point) 8]
+@R1Z.PV_OWNI_PublicPlan.wrong_length : ∀ {K : Type} (isBoolean : K → Bool) (point : List K) (len : ℕ) (rest : List ℕ)
+  (failures : List Bool), len ≠ 1024 → R1Z.PV_OWNI_PublicPlan.plan isBoolean point (len :: rest) failures = []
+R1Z.PV_OWNI_RawConsumer.result : ∀ (point column : List R1Z.PV_OWNI_RawOps.Q) (width trailing suffix : ℕ),
+  width + trailing = 10 →
+    suffix < 2 ^ trailing →
+      R1Z.PV_OWNI_RawConsumer.source point column width trailing suffix =
+        Aeneas.Std.Result.ok (R1Z.PV_OWNI_RawConsumer.value point column width trailing suffix)
+R1Z.PV_OWNI_RawFold.term_result : ∀ (column : List R1Z.PV_OWNI_RawOps.Q) (sum : R1Z.PV_OWNI_RawOps.Q)
+  (entry : ℕ × R1Z.PV_OWNI_RawOps.Q),
+  entry.1 < column.length →
+    R1Z.PV_RDB2D_SparseFold.term R1Z.PV_OWNI_RawOps.ops.toOps column sum entry =
+      Aeneas.Std.Result.ok (R1Z.PV_OWNI_RawFold.term column sum entry)
+R1Z.PV_OWNI_RawFold.result : ∀ (column : List R1Z.PV_OWNI_RawOps.Q) (xs : List (ℕ × R1Z.PV_OWNI_RawOps.Q))
+  (sum : R1Z.PV_OWNI_RawOps.Q),
+  (∀ e ∈ xs, e.1 < column.length) →
+    R1Z.PV_RDB2D_SparseFold.source R1Z.PV_OWNI_RawOps.ops.toOps column xs sum =
+      Aeneas.Std.Result.ok (List.foldl (R1Z.PV_OWNI_RawFold.term column) sum xs)
+R1Z.PV_OWNI_RawOps.mul : ∀ (a b : R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_OWNI_RawOps.ops.mul a b = Aeneas.Std.Result.ok (R1Z.PV_OWNI_RawOps.valueMul a b)
+R1Z.PV_OWNI_RawOps.add : ∀ (a b : R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_OWNI_RawOps.ops.add a b = Aeneas.Std.Result.ok (R1Z.PV_OWNI_RawOps.valueAdd a b)
+R1Z.PV_OWNI_RawOps.sub : ∀ (a : R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_OWNI_RawOps.ops.subOne a = Aeneas.Std.Result.ok (R1Z.PV_OWNI_RawOps.valueSub R1Z.PV_OWNI_RawOps.one a)
+R1Z.PV_OWNI_RawOps.zero_value : R1Z.PV_OWNI_RawOps.ops.zero = R1Z.PV_OWNI_RawOps.zero
+R1Z.PV_OWNI_RawOps.one_value : R1Z.PV_OWNI_RawOps.ops.one = R1Z.PV_OWNI_RawOps.one
+R1Z.PV_OWNI_Rows.bounded : ∀ (point : List R1Z.PV_OWNI_RawOps.Q) (width trailing suffix : ℕ),
+  width + trailing = 10 →
+    suffix < 2 ^ trailing → ∀ entry ∈ R1Z.PV_OWNI_BuildTotal.entries point width trailing suffix, entry.1 < 1024
+R1Z.PV_OWNI_ScannedResult.result : ∀ (point column : List R1Z.PV_OWNI_RawOps.Q),
+  point.length = 10 →
+    R1Z.PV_OWNI_RawConsumer.source point column (R1Z.PV_OWNI_Scanner.width point) (R1Z.PV_OWNI_Scanner.trailing point)
+        (R1Z.PV_OWNI_Scanner.suffix point) =
+      Aeneas.Std.Result.ok
+        (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point)
+          (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point))
+R1Z.PV_OWNI_Scanner.bits_bound : ∀ (xs : List R1Z.PV_OWNI_RawOps.Q), R1Z.PV_OWNI_Scanner.bits xs < 2 ^ xs.length
+R1Z.PV_OWNI_Scanner.split : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  point.length = 10 → R1Z.PV_OWNI_Scanner.width point + R1Z.PV_OWNI_Scanner.trailing point = 10
+R1Z.PV_OWNI_Scanner.suffix_bound : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_OWNI_Scanner.suffix point < 2 ^ R1Z.PV_OWNI_Scanner.trailing point
+R1Z.PV_OWNI_Stores.complete : ∀ (m : R1Z.PV_OWN_Heap.Memory) (p owner capacity : ℕ)
+  (xs : List R1Z.PV_OWNI_EntryBytes.Entry),
+  R1Z.PV_OWN_Heap.NoLoans m (R1Z.PV_OWNI_EmptyVec.token m p) →
+    xs.length = capacity →
+      R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNI_EntryBytes.codec
+          (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNI_EntryBytes.codec (R1Z.PV_OWNI_EmptyVec.buffer m p owner capacity)
+            xs) ∧
+        (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNI_EntryBytes.codec (R1Z.PV_OWNI_EmptyVec.buffer m p owner capacity)
+                xs).length =
+            capacity ∧
+          (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNI_EntryBytes.codec (R1Z.PV_OWNI_EmptyVec.buffer m p owner capacity)
+                xs).capacity =
+            capacity
+R1Z.PV_OWNI_SuffixLoop.fold : ∀ (xs : List R1Z.PV_OWNI_RawOps.Q) (acc : ℕ),
+  List.foldl (fun a x => 2 * a + if R1Z.PV_OWNI_Scanner.equal x R1Z.PV_OWNI_RawOps.one = true then 1 else 0) acc xs =
+    acc * 2 ^ xs.length + R1Z.PV_OWNI_Scanner.bits xs
+R1Z.PV_OWNI_SuffixLoop.suffix : ∀ (point : List R1Z.PV_OWNI_RawOps.Q),
+  List.foldl (fun a x => 2 * a + if R1Z.PV_OWNI_Scanner.equal x R1Z.PV_OWNI_RawOps.one = true then 1 else 0) 0
+      (List.drop (R1Z.PV_OWNI_Scanner.width point) point) =
+    R1Z.PV_OWNI_Scanner.suffix point
+@R1Z.PV_OWNI_Transfer.valid : ∀ {T : Type} (k : R1Z.PV_OWN_View.Codec T) (b : R1Z.PV_OWNC_Vector.Buffer T) (dst : ℕ),
+  R1Z.PV_OWNC_Vector.Valid k b →
+    b.memory.slots dst = none → dst ≠ b.owner → R1Z.PV_OWNC_Vector.Valid k (R1Z.PV_OWNI_Transfer.moved b dst)
+@R1Z.PV_OWNI_Transfer.source_empty : ∀ {T : Type} (b : R1Z.PV_OWNC_Vector.Buffer T) (dst : ℕ),
+  (R1Z.PV_OWNI_Transfer.moved b dst).memory.slots b.owner = none
+@R1Z.PV_OWNI_Transfer.bytes : ∀ {T : Type} (b : R1Z.PV_OWNC_Vector.Buffer T) (dst : ℕ),
+  (R1Z.PV_OWNI_Transfer.moved b dst).cell.contents = b.cell.contents ∧
+    (R1Z.PV_OWNI_Transfer.moved b dst).token = b.token ∧
+      (R1Z.PV_OWNI_Transfer.moved b dst).length = b.length ∧ (R1Z.PV_OWNI_Transfer.moved b dst).capacity = b.capacity
+R1Z.PV_OWNI_WeightTotal.step_result : ∀ (width pref : ℕ) (acc : R1Z.PV_OWNI_RawOps.Q × ℕ)
+  (coordinate : R1Z.PV_OWNI_RawOps.Q),
+  R1Z.PV_RDB2D_SparseWeights.step R1Z.PV_OWNI_RawOps.ops width pref acc coordinate =
+    Aeneas.Std.Result.ok (R1Z.PV_OWNI_WeightTotal.step width pref acc coordinate)
+R1Z.PV_OWNI_WeightTotal.source_result : ∀ (width pref : ℕ) (coordinates : List R1Z.PV_OWNI_RawOps.Q)
+  (acc : R1Z.PV_OWNI_RawOps.Q × ℕ),
+  R1Z.PV_RDB2D_SparseWeights.source R1Z.PV_OWNI_RawOps.ops width pref coordinates acc =
+    Aeneas.Std.Result.ok (List.foldl (R1Z.PV_OWNI_WeightTotal.step width pref) acc coordinates)
+theorem R1Z.PV_OWNI_ScannedResult.result : ∀ (point column : List R1Z.PV_OWNI_RawOps.Q),
+  point.length = 10 →
+    R1Z.PV_OWNI_RawConsumer.source point column (R1Z.PV_OWNI_Scanner.width point) (R1Z.PV_OWNI_Scanner.trailing point)
+        (R1Z.PV_OWNI_Scanner.suffix point) =
+      Aeneas.Std.Result.ok
+        (R1Z.PV_OWNI_RawConsumer.value point column (R1Z.PV_OWNI_Scanner.width point)
+          (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point)) :=
+fun point column len =>
+  R1Z.PV_OWNI_RawConsumer.result point column (R1Z.PV_OWNI_Scanner.width point) (R1Z.PV_OWNI_Scanner.trailing point)
+    (R1Z.PV_OWNI_Scanner.suffix point) (R1Z.PV_OWNI_Scanner.split point len) (R1Z.PV_OWNI_Scanner.suffix_bound point)
+theorem R1Z.PV_OWNI_InitializedResult.initialized : ∀ (point : List R1Z.PV_OWNI_RawOps.Q) (p owner : ℕ)
+  (m : R1Z.PV_OWN_Heap.Memory),
+  R1Z.PV_OWN_Heap.NoLoans m (R1Z.PV_OWNI_EmptyVec.token m p) →
+    R1Z.PV_OWNC_Vector.Valid R1Z.PV_OWNI_EntryBytes.codec
+      (R1Z.PV_OWNC_PushFold.append R1Z.PV_OWNI_EntryBytes.codec
+        (R1Z.PV_OWNI_EmptyVec.buffer m p owner (2 ^ R1Z.PV_OWNI_Scanner.width point))
+        (List.map R1Z.PV_OWNI_NumericBytes.encode
+          (R1Z.PV_OWNI_BuildTotal.entries point (R1Z.PV_OWNI_Scanner.width point) (R1Z.PV_OWNI_Scanner.trailing point)
+            (R1Z.PV_OWNI_Scanner.suffix point)))) :=
+fun point p owner m loans =>
+  (R1Z.PV_OWNI_BuilderStores.initialized R1Z.PV_OWNI_NumericBytes.encode point (R1Z.PV_OWNI_Scanner.width point)
+      (R1Z.PV_OWNI_Scanner.trailing point) (R1Z.PV_OWNI_Scanner.suffix point) p owner m loans).left
+theorem R1Z.PV_OWNI_Drop.backing : ∀ {S X E : Type}
+  (primitive : ℕ → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (w : R1Z.PV_OWN_Operations.State S X) (t : R1Z.PV_OWN_Heap.Token) (c : R1Z.PV_OWN_Heap.Cell),
+  0 < c.size →
+    R1Z.PV_OWN_Operations.dropVecPod primitive t c w =
+      { outcome := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).1,
+        world :=
+          { memory := R1Z.PV_OWN_Operations.retire t c w.memory,
+            allocator := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).2,
+            extra := w.extra },
+        calls := [(w, R1Z.PV_OWN_Operations.Event.deallocate t.address c.size c.alignment)] } :=
+fun {S X E} primitive w t c positive =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a w =
+            { outcome := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).1,
+              world :=
+                { memory := R1Z.PV_OWN_Operations.retire t c w.memory,
+                  allocator := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).2,
+                  extra := w.extra },
+              calls := [(w, R1Z.PV_OWN_Operations.Event.deallocate t.address c.size c.alignment)] })
+        (R1Z.PV_OWN_Operations.dropVecPod.eq_1 primitive t c)))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a w =
+              { outcome := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).1,
+                world :=
+                  { memory := R1Z.PV_OWN_Operations.retire t c w.memory,
+                    allocator := (primitive t.address { size := c.size, alignment := c.alignment } w.allocator).2,
+                    extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.deallocate t.address c.size c.alignment)] })
+          (if_neg fun a => R1Z.PV_OWNI_Drop.backing._proof_1 c positive a)))
+      (Eq.refl (R1Z.PV_OWN_Operations.free primitive t c w)))
+theorem R1Z.PV_OWNI_PublicPlan.same_public : ∀ {K : Type} (isBoolean : K → Bool) (left right : List K),
+  left = right →
+    ∀ (lengths other : List ℕ),
+      lengths = other →
+        ∀ (failures : List Bool),
+          R1Z.PV_OWNI_PublicPlan.plan isBoolean left lengths failures =
+            R1Z.PV_OWNI_PublicPlan.plan isBoolean right other failures :=
+fun {K} isBoolean left right hl lengths other hn failures =>
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          R1Z.PV_OWNI_PublicPlan.plan isBoolean _a lengths failures =
+            R1Z.PV_OWNI_PublicPlan.plan isBoolean right other failures)
+        hl))
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            R1Z.PV_OWNI_PublicPlan.plan isBoolean right _a failures =
+              R1Z.PV_OWNI_PublicPlan.plan isBoolean right other failures)
+          hn))
+      (Eq.refl (R1Z.PV_OWNI_PublicPlan.plan isBoolean right other failures)))
+theorem R1Z.PV_OWNI_DensePrune.dense_sparse : ∀ {K : Type} [inst : Field K] {I J : Type} [inst_1 : Fintype I]
+  [inst_2 : Fintype J] [inst_3 : DecidableEq I] [inst_4 : DecidableEq J] (p : I → K) (suffix : J → Bool)
+  (column : (I → Bool) → (J → Bool) → K),
+  ∑ a,
+      ∑ b,
+        R1Z.PV_OWNI_DensePrune.weight p a *
+            R1Z.PV_OWNI_DensePrune.weight (fun j => if suffix j = true then 1 else 0) b *
+          column a b =
+    ∑ a, R1Z.PV_OWNI_DensePrune.weight p a * column a suffix :=
+fun {K} [Field K] {I J} [Fintype I] [Fintype J] [DecidableEq I] [DecidableEq J] p suffix column =>
+  Finset.sum_congr rfl fun a ha =>
+    Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Eq
+            (Finset.sum_congr (Eq.refl Finset.univ) fun x a_1 =>
+              congrFun'
+                (congrArg HMul.hMul
+                  (congrArg (HMul.hMul (R1Z.PV_OWNI_DensePrune.weight p a))
+                    (R1Z.PV_OWNI_DensePrune.boolean_weight suffix x)))
+                (column a x)))
+          (R1Z.PV_OWNI_DensePrune.weight p a * column a suffix)))
+      (of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (Eq.trans
+                  (Finset.sum_congr (Eq.refl Finset.univ) fun x a_1 =>
+                    Eq.trans
+                      (Eq.trans
+                        (congrFun'
+                          (congrArg HMul.hMul
+                            (Eq.trans (mul_ite (x = suffix) (R1Z.PV_OWNI_DensePrune.weight p a) 1 0)
+                              (ite_congr (Eq.refl (x = suffix)) (fun a_2 => mul_one (R1Z.PV_OWNI_DensePrune.weight p a))
+                                fun a_2 => mul_zero (R1Z.PV_OWNI_DensePrune.weight p a))))
+                          (column a x))
+                        (ite_mul (x = suffix) (R1Z.PV_OWNI_DensePrune.weight p a) 0 (column a x)))
+                      (ite_congr (Eq.refl (x = suffix))
+                        (fun a_2 => Eq.refl (R1Z.PV_OWNI_DensePrune.weight p a * column a x)) fun a_2 =>
+                        zero_mul (column a x)))
+                  (Finset.sum_ite_eq' Finset.univ suffix fun x => R1Z.PV_OWNI_DensePrune.weight p a * column a x))
+                (ite_cond_eq_true (R1Z.PV_OWNI_DensePrune.weight p a * column a suffix) 0
+                  (Finset.mem_univ._simp_1 suffix))))
+            (R1Z.PV_OWNI_DensePrune.weight p a * column a suffix))
+          (eq_self (R1Z.PV_OWNI_DensePrune.weight p a * column a suffix))))
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-64297/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-64297/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-owni-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-objects/R1Z/PV_OWNI_StatementsAudit.olean", "/home/dombarker/project-offloads/codex-pv-owni-20261029/lean-sources/R1Z/PV_OWNI_StatementsAudit.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.24", "peak_rss_kib": "2658668", "swap": "0", "source_revision": "2c97d8346f7daa6cddb8d29edbd5e0e0f78bbbd6", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}
