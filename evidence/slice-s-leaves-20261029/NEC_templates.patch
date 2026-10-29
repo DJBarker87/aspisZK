@@ -364,3 +364,108 @@
 + unsafe{INPUT=bytes.as_ptr() as usize;INDEX=i;ROW=row;NEXT=0;ERROR=kani::any();FAIL_AT=fail;DIGESTS=core::mem::transmute(kani::any::<[u8;672]>());}
 + let _=super::decode_pool_v1_pair_live_snapshot_v1(&bytes);
 +}
+--- /dev/null
++++ b/NEC_emit.rs
+@@ -0,0 +1,37 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++#[path="NEC_emit_reference.rs"]mod reference;
++static mut VALID:bool=false;static mut ENCODE_OK:bool=false;
++static mut ENCODED:[u8;792]=[0;792];
++pub static mut CALLS:u8=0;
++static mut INPUT:usize=0;static mut INDEX:usize=0;static mut ROW:usize=0;static mut FIELD:u8=0;
++const GROUP:u8=NEC_EMIT_GROUP;
++fn value_word(v:&PoolV1PairForestTerminalResultV1)->u64{
++ let(i,row,f)=unsafe{(INDEX,ROW,FIELD)};
++ match GROUP{0=>if f%2==0{v.output_lane as u64}else{v.verified_afterstate.next_pair_index},1=>(if f%2==0{v.master_account[i]}else{v.selected_lane_account[i]})as u64,_=>{let j=i%8;(match f%3{0=>v.nullifier[j],1=>v.verified_afterstate.next_root[j],_=>v.verified_afterstate.next_frontier[row][j]}).0 as u64}}
++}
++fn expected()->(u8,u64){let s=unsafe{&*(INPUT as *const PoolV1PairForestTerminalStatementV1)};let c=s.common();let(i,row,f)=unsafe{(INDEX,ROW,FIELD)};let kind=s.transition_kind() as u8;
++ let w=match GROUP{0=>if f%2==0{c.output_lane as u64}else{c.lane_transition.candidate_afterstate.next_pair_index},1=>(if f%2==0{c.master_account[i]}else{c.selected_lane_account[i]})as u64,_=>{let j=i%8;(match f%3{0=>s.nullifier()[j],1=>c.lane_transition.candidate_afterstate.next_root[j],_=>c.lane_transition.candidate_afterstate.next_frontier[row][j]}).0 as u64}};(kind,w)
++}
++fn observe(v:&PoolV1PairForestTerminalResultV1){let(k,w)=expected();assert_eq!(v.transition_kind as u8,k,"NEC_emit_same_kind");assert_eq!(value_word(v),w,"NEC_emit_same_result_field");}
++fn validate(s:&PoolV1PairForestTerminalStatementV1,v:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(s as *const _ as usize,unsafe{INPUT},"NEC_emit_same_statement");observe(v);if unsafe{VALID}{Ok(())}else{Err(kani::any())}}
++fn encode(v:&PoolV1PairForestTerminalResultV1)->Result<[u8;792],PoolV1PairForestTerminalFormatErrorV1>{observe(v);if unsafe{ENCODE_OK}{Ok(unsafe{ENCODED})}else{Err(kani::any())}}
++fn sink(bytes:&[u8]){assert_eq!(bytes.len(),792,"NEC_emit_runtime_length");let j=unsafe{INDEX};assert_eq!(bytes[j],unsafe{ENCODED[j]},"NEC_emit_runtime_byte");unsafe{CALLS+=1;}}
++pub fn post(r:&ProgramResult)->bool{
++ let magic=unsafe{ENCODED[0]==65 && ENCODED[1]==83 && ENCODED[2]==82 && ENCODED[3]==56};
++ let rr=reference::emit_ref(unsafe{VALID},unsafe{ENCODE_OK},magic);
++ let same=match(rr,r){(Ok(()),Ok(()))=>unsafe{CALLS==1},(Err(_),Err(ProgramError::InvalidInstructionData))=>unsafe{CALLS==0},_=>false};same != NEC_EMIT_NEGATIVE
++}
++#[kani::proof_for_contract(super::emit_result)]
++#[kani::stub(aspis_statement::pool_v1::validate_pool_v1_pair_forest_terminal_result_against_statement_v1,validate)]
++#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_result_v1,encode)]
++#[kani::stub(solana_program::program::set_return_data,sink)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn emit_contract(){
++ let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};
++ let s=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())}}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())}}};
++ let i:usize=kani::any();let row:usize=kani::any();let f:u8=kani::any();kani::assume(i<if GROUP==0{792}else{32});kani::assume(row<20 && f<3);
++ unsafe{INPUT=&s as *const _ as usize;INDEX=i;ROW=row;FIELD=f;CALLS=0;VALID=kani::any();ENCODE_OK=kani::any();ENCODED=kani::any();}
++ let _=super::emit_result(&s);
++}
+--- /dev/null
++++ b/NEC_emit_reference.rs
+@@ -0,0 +1,1 @@
++pub fn emit_ref(validation:bool,encoded:bool,magic:bool)->Result<(),u8>{if !validation || !encoded || !magic{Err(0)}else{Ok(())}}
+--- /dev/null
++++ b/NEC_recon.rs
+@@ -0,0 +1,36 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++#[path="NEC_recon_reference.rs"]mod reference;
++static mut AUTH:usize=0;static mut CANDIDATE:usize=0;
++fn common(a:&AuthenticatedAsq8Accounts,c:&PoolV1PairVerifiedAfterstateV1)->Box<PoolV1PairForestTerminalCommonV1>{
++ assert_eq!(a as *const _ as usize,unsafe{AUTH},"NEC_recon_auth_input");assert_eq!(c as *const _ as usize,unsafe{CANDIDATE},"NEC_recon_candidate_input");kani::cover!(true,"NEC_recon_good_gate_reached");kani::assume(false);unreachable!()
++}
++fn requested(r:&PoolV1PairForestTerminalRequestV1)->u32{match r.public{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p.asset_id.0,PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>p.asset_id.0}}
++pub fn post(r:&Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>,request:&PoolV1PairForestTerminalRequestV1,a:&AuthenticatedAsq8Accounts,c:&PoolV1PairVerifiedAfterstateV1)->bool{
++ let gate=reference::reconstruction_gate_ref(a.live_snapshot.next_pair_index,c.next_pair_index,a.master.identity.asset_id.0,requested(request));
++ let same=match(gate,r){(1,Err(ProgramError::InvalidAccountData))=>true,(2,Err(ProgramError::InvalidInstructionData))=>true,_=>false};same != NEC_RECON_NEGATIVE
++}
++fn account()->AuthenticatedAsq8Accounts {
++ let master=PoolV1PairForestMasterV1 {
++  bump:kani::any(),
++  identity:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolIdentityV1>()]>())},
++  verifier_policy:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::VerifierPolicyV1>()]>())},
++  initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
++ };
++ let checkpoint:PoolV1PairForestCheckpointV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestCheckpointV1>()]>())};
++ let selected_lane:PoolV1PairForestLaneStateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestLaneStateV1>()]>())};
++ let live_snapshot:PoolV1PairLiveSnapshotV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairLiveSnapshotV1>()]>())};
++ AuthenticatedAsq8Accounts {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(master),checkpoint:Box::new(checkpoint),selected_lane:Box::new(selected_lane),live_snapshot:Box::new(live_snapshot)}
++}
++
++#[kani::proof_for_contract(super::reconstruct_asq8_statement)]
++#[kani::stub(super::asq8_common,common)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn reconstruct_contract(){
++ let a=account();let c:PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())};
++ let public=if kani::any(){PoolV1PairForestTerminalPaymentV1::PrivateTransfer(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())})}else{PoolV1PairForestTerminalPaymentV1::Withdrawal(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())})};
++ let request=PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
++ unsafe{AUTH=&a as *const _ as usize;CANDIDATE=&c as *const _ as usize;}
++ let _=super::reconstruct_asq8_statement(&request,&a,&c);
++}
+--- /dev/null
++++ b/NEC_recon_reference.rs
+@@ -0,0 +1,6 @@
++pub fn next_gate_ref(live:u64,next:u64)->bool {
++ match live.checked_add(1) {Some(incremented)=>incremented==next,None=>false}
++}
++pub fn reconstruction_gate_ref(live:u64,next:u64,asset:u32,requested:u32)->u8 {
++ if !next_gate_ref(live,next) {1} else if asset!=requested {2} else {0}
++}
+--- /dev/null
++++ b/NEC_program_fidelity.rs
+@@ -0,0 +1,10 @@
++use super::*;
++pub static mut COUNT:u8=0;
++#[kani::ensures(|r| NEC_PROGRAM_FIDELITY_ENSURES)]
++#[kani::modifies(NEC_PROGRAM_FIDELITY_MODIFIES)]
++fn shape(_bytes:&[u8])->ProgramResult{unsafe{COUNT+=1;}Ok(())}
++#[kani::proof_for_contract(shape)]
++fn shape_contract(){unsafe{COUNT=0;}let bytes:[u8;4]=kani::any();let _=shape(&bytes);}
++#[kani::proof]
++NEC_PROGRAM_FIDELITY_STUB
++fn shape_client(){unsafe{COUNT=0;}let bytes:[u8;4]=kani::any();let r=shape(&bytes);assert!(matches!(r,Ok(())),"NEC_program_unimplied_ok");}

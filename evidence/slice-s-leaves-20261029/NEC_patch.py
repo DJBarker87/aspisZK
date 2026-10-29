@@ -6,6 +6,11 @@ def files():
  def frozen(n):return subprocess.check_output(['git','show',R+':'+n],text=True)
  from NEC_arbitrary import additions
  out=additions()
+ # Reset every previously instrumented frozen entry file on each attempt.
+ # Inherited module declarations must never load a newly selected helper
+ # from an old parent module in the persistent scratch workspace.
+ for reset in ['crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs','programs/r1-cost-probe/src/r1_pool_adapter.rs','programs/r1-cost-probe/src/lib.rs']:
+  out[reset]=frozen(reset)
  n='crates/aspis-statement/src/lib.rs'
  out[n]='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen(n)+'\n#[cfg(kani)] mod NEC_kmx { extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n'
  out['crates/aspis-statement/src/pool_v1/NEC_decode.rs']=template('NEC_decode').replace('if kani::any(){let x:',('if false{let x:' if os.environ.get('NEC_BRANCH')=='error' else 'if true{let x:' if os.environ.get('NEC_BRANCH')=='success' else 'if kani::any(){let x:')).replace('NEC_OBLIGATION',os.environ.get('NEC_OBLIGATION','same && calls')).replace('NEC_GROUP',os.environ.get('NEC_GROUP','0')).replace('NEC_NEGATIVE','true' if os.environ.get('NEC_INVERT') else 'false')
@@ -109,6 +114,13 @@ def files():
    v+='\npub fn derived(s:&PoolV1PairForestTerminalStatementV1)->PoolV1PairForestTerminalResultV1 {PoolV1PairForestTerminalResultV1{transition_kind:s.transition_kind(),master_account:s.common().master_account,selected_lane_account:s.common().selected_lane_account,output_lane:s.common().output_lane,nullifier:*s.nullifier(),verified_afterstate:s.common().lane_transition.candidate_afterstate}}\n'
    v=v.replace('mismatch(s,v),PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch','false,PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch')
    out[path]=out[path].replace('#[cfg_attr(kani,kani::ensures(|r| NEC_binding::post', '#[cfg_attr(kani,kani::requires(*result==NEC_binding::derived(statement)))]\n#[cfg_attr(kani,kani::ensures(|r| NEC_binding::post')
+  if os.environ.get('NEC_BINDING_ERROR'):
+   mode=os.environ['NEC_BINDING_ERROR']
+   if mode=='first':v=v.replace('FIRST=if kani::any(){Ok(())}else{Err(kani::any())};','FIRST=Err(kani::any());')
+   else:v=v.replace('FIRST=if kani::any(){Ok(())}else{Err(kani::any())};SECOND=if kani::any(){Ok(())}else{Err(kani::any())};','FIRST=Ok(());SECOND=Err(kani::any());')
+   v=v.replace('mismatch(s,v),PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch','false,PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch')
+   v+='\npub fn error_domain()->bool {matches!(unsafe{FIRST},Err(_))'+('' if mode=='first' else ' || matches!(unsafe{SECOND},Err(_))')+'}\n'
+   out[path]=out[path].replace('#[cfg_attr(kani,kani::ensures(|r| NEC_binding::post','#[cfg_attr(kani,kani::requires(NEC_binding::error_domain()))]\n#[cfg_attr(kani,kani::ensures(|r| NEC_binding::post')
   out['crates/aspis-statement/src/pool_v1/NEC_binding.rs']=v
   out['crates/aspis-statement/src/pool_v1/NEC_binding_reference.rs']=template('NEC_binding_reference')
  if os.environ.get('NEC_STATIC'):
@@ -135,6 +147,30 @@ def files():
   out['crates/aspis-statement/src/pool_v1/NEC_live_decode.rs']=v
   out['crates/aspis-statement/src/pool_v1/NEC_live_value_reference.rs']=template('NEC_pure_reference')
   out['crates/aspis-statement/src/pool_v1/NEC_live_header_reference.rs']=template('NEC_live_header_reference')
+ if os.environ.get('NEC_PREFIX'):
+  from NEC_prefix import files as prefix_files
+  out.update(prefix_files(os.environ['NEC_PREFIX']))
+ if os.environ.get('NEC_EMIT'):
+  path='programs/r1-cost-probe/src/lib.rs';out[path]='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen(path)+'\n#[cfg(kani)]mod NEC_kmx {extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));}\n'
+  path='programs/r1-cost-probe/src/r1_pool_adapter.rs';v=frozen(path)
+  attr='#[cfg_attr(kani,kani::ensures(|r| NEC_emit::post(r)))]\n#[cfg_attr(kani,kani::modifies(&raw mut NEC_emit::CALLS))]\n'
+  out[path]=v.replace('fn emit_result(',attr+'fn emit_result(',1)+'\n#[cfg(kani)]#[path="NEC_emit.rs"]mod NEC_emit;\n'
+  v=template('NEC_emit').replace('NEC_EMIT_GROUP',os.environ.get('NEC_GROUP','0')).replace('NEC_EMIT_NEGATIVE','true' if os.environ.get('NEC_INVERT') else 'false')
+  if os.environ.get('NEC_EMIT_FIELD'):v=v.replace('let f:u8=kani::any();','let f:u8='+os.environ['NEC_EMIT_FIELD']+';')
+  out['programs/r1-cost-probe/src/NEC_emit.rs']=v
+  out['programs/r1-cost-probe/src/NEC_emit_reference.rs']=template('NEC_emit_reference')
+ if os.environ.get('NEC_RECON'):
+  path='programs/r1-cost-probe/src/lib.rs';out[path]='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen(path)+'\n#[cfg(kani)]mod NEC_kmx {extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));}\n'
+  path='programs/r1-cost-probe/src/r1_pool_adapter.rs';v=frozen(path)
+  attr='#[cfg_attr(kani,kani::ensures(|r| NEC_recon::post(r,request,authenticated,candidate_afterstate)))]\n#[cfg_attr(kani,kani::modifies())]\n'
+  out[path]=v.replace('fn reconstruct_asq8_statement(',attr+'fn reconstruct_asq8_statement(',1)+'\n#[cfg(kani)]#[path="NEC_recon.rs"]mod NEC_recon;\n'
+  out['programs/r1-cost-probe/src/NEC_recon.rs']=template('NEC_recon').replace('NEC_RECON_NEGATIVE','true' if os.environ.get('NEC_INVERT') else 'false')
+  out['programs/r1-cost-probe/src/NEC_recon_reference.rs']=template('NEC_recon_reference')
+ if os.environ.get('NEC_PROGRAM_FIDELITY'):
+  path='programs/r1-cost-probe/src/lib.rs';out[path]='#![cfg_attr(kani, feature(allocator_api))]\n'+frozen(path)+'\n#[cfg(kani)]mod NEC_kmx {extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));}\n'
+  path='programs/r1-cost-probe/src/r1_pool_adapter.rs';out[path]=frozen(path)+'\n#[cfg(kani)]#[path="NEC_program_fidelity.rs"]mod NEC_program_fidelity;\n'
+  v=template('NEC_program_fidelity').replace('NEC_PROGRAM_FIDELITY_ENSURES','false' if os.environ.get('NEC_FIDELITY_INVERT') else 'true').replace('NEC_PROGRAM_FIDELITY_MODIFIES','' if os.environ.get('NEC_FIDELITY_BAD_MODIFIES') else '&raw mut COUNT').replace('NEC_PROGRAM_FIDELITY_STUB','#[kani::stub_verified(shape)]' if os.environ.get('NEC_FIDELITY_STUB') else '')
+  out['programs/r1-cost-probe/src/NEC_program_fidelity.rs']=v
  patch=[]
  for n,s in out.items():
   r=subprocess.run(['git','show',R+':'+n],capture_output=True,text=True);b=r.stdout if r.returncode==0 else ''

@@ -15,317 +15,230 @@ set_option maxRecDepth 2048
 
 namespace NEC_LiveHeaderRef
 
+/-- [nco_reference::magic_ok]:
+    Source: 'src/lib.rs', lines 2:0-2:160 -/
+def magic_ok (bytes : Array Std.U8 48#usize) : Result Bool := do
+  let i ← Array.index_usize bytes 0#usize
+  if i = 65#u8
+  then
+    let i1 ← Array.index_usize bytes 1#usize
+    if i1 = 83#u8
+    then
+      let i2 ← Array.index_usize bytes 2#usize
+      if i2 = 80#u8
+      then
+        let i3 ← Array.index_usize bytes 3#usize
+        if i3 = 76#u8
+        then
+          let i4 ← Array.index_usize bytes 4#usize
+          if i4 = 73#u8
+          then
+            let i5 ← Array.index_usize bytes 5#usize
+            if i5 = 86#u8
+            then
+              let i6 ← Array.index_usize bytes 6#usize
+              if i6 = 69#u8
+              then let i7 ← Array.index_usize bytes 7#usize
+                   ok (i7 = 49#u8)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [nco_reference::binding0_ok]:
+    Source: 'src/lib.rs', lines 3:0-3:171 -/
+def binding0_ok (bytes : Array Std.U8 48#usize) : Result Bool := do
+  let i ← Array.index_usize bytes 16#usize
+  if i = 65#u8
+  then
+    let i1 ← Array.index_usize bytes 17#usize
+    if i1 = 83#u8
+    then
+      let i2 ← Array.index_usize bytes 18#usize
+      if i2 = 80#u8
+      then
+        let i3 ← Array.index_usize bytes 19#usize
+        if i3 = 80#u8
+        then
+          let i4 ← Array.index_usize bytes 20#usize
+          if i4 = 65#u8
+          then
+            let i5 ← Array.index_usize bytes 21#usize
+            if i5 = 73#u8
+            then
+              let i6 ← Array.index_usize bytes 22#usize
+              if i6 = 82#u8
+              then let i7 ← Array.index_usize bytes 23#usize
+                   ok (i7 = 49#u8)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [nco_reference::binding1_ok]:
+    Source: 'src/lib.rs', lines 4:0-4:165 -/
+def binding1_ok (bytes : Array Std.U8 48#usize) : Result Bool := do
+  let i ← Array.index_usize bytes 24#usize
+  if i = 1#u8
+  then
+    let i1 ← Array.index_usize bytes 25#usize
+    if i1 = 20#u8
+    then
+      let i2 ← Array.index_usize bytes 26#usize
+      if i2 = 21#u8
+      then
+        let i3 ← Array.index_usize bytes 27#usize
+        if i3 = 7#u8
+        then
+          let i4 ← Array.index_usize bytes 28#usize
+          if i4 = 1#u8
+          then
+            let i5 ← Array.index_usize bytes 29#usize
+            if i5 = 1#u8
+            then
+              let i6 ← Array.index_usize bytes 30#usize
+              if i6 = 1#u8
+              then let i7 ← Array.index_usize bytes 31#usize
+                   ok (i7 = 1#u8)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [nco_reference::binding2_ok]:
+    Source: 'src/lib.rs', lines 5:0-5:163 -/
+def binding2_ok (bytes : Array Std.U8 48#usize) : Result Bool := do
+  let i ← Array.index_usize bytes 32#usize
+  if i = 0#u8
+  then
+    let i1 ← Array.index_usize bytes 33#usize
+    if i1 = 0#u8
+    then
+      let i2 ← Array.index_usize bytes 34#usize
+      if i2 = 0#u8
+      then
+        let i3 ← Array.index_usize bytes 35#usize
+        if i3 = 0#u8
+        then
+          let i4 ← Array.index_usize bytes 36#usize
+          if i4 = 0#u8
+          then
+            let i5 ← Array.index_usize bytes 37#usize
+            if i5 = 0#u8
+            then
+              let i6 ← Array.index_usize bytes 38#usize
+              if i6 = 0#u8
+              then let i7 ← Array.index_usize bytes 39#usize
+                   ok (i7 = 0#u8)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
+/-- [nco_reference::binding3_ok]:
+    Source: 'src/lib.rs', lines 6:0-6:163 -/
+def binding3_ok (bytes : Array Std.U8 48#usize) : Result Bool := do
+  let i ← Array.index_usize bytes 40#usize
+  if i = 0#u8
+  then
+    let i1 ← Array.index_usize bytes 41#usize
+    if i1 = 0#u8
+    then
+      let i2 ← Array.index_usize bytes 42#usize
+      if i2 = 0#u8
+      then
+        let i3 ← Array.index_usize bytes 43#usize
+        if i3 = 0#u8
+        then
+          let i4 ← Array.index_usize bytes 44#usize
+          if i4 = 0#u8
+          then
+            let i5 ← Array.index_usize bytes 45#usize
+            if i5 = 0#u8
+            then
+              let i6 ← Array.index_usize bytes 46#usize
+              if i6 = 0#u8
+              then let i7 ← Array.index_usize bytes 47#usize
+                   ok (i7 = 0#u8)
+              else ok false
+            else ok false
+          else ok false
+        else ok false
+      else ok false
+    else ok false
+  else ok false
+
 /-- [nco_reference::live_header_ref]:
-    Source: 'src/lib.rs', lines 2:0-9:1
+    Source: 'src/lib.rs', lines 7:0-14:1
     Visibility: public -/
 def live_header_ref
   (length : Std.Usize) (bytes : Array Std.U8 48#usize) : Result Std.U8 := do
   if length != 800#usize
   then ok 1#u8
   else
-    let i ← Array.index_usize bytes 0#usize
-    if i != 65#u8
-    then ok 2#u8
-    else
-      let i1 ← Array.index_usize bytes 1#usize
-      if i1 != 83#u8
-      then ok 2#u8
+    let b ← magic_ok bytes
+    if b
+    then
+      let i ← Array.index_usize bytes 8#usize
+      if i != 1#u8
+      then ok 3#u8
       else
-        let i2 ← Array.index_usize bytes 2#usize
-        if i2 != 80#u8
-        then ok 2#u8
+        let i1 ← Array.index_usize bytes 9#usize
+        if i1 != 0#u8
+        then ok 4#u8
         else
-          let i3 ← Array.index_usize bytes 3#usize
-          if i3 != 76#u8
-          then ok 2#u8
+          let i2 ← Array.index_usize bytes 10#usize
+          if i2 != 0#u8
+          then ok 4#u8
           else
-            let i4 ← Array.index_usize bytes 4#usize
-            if i4 != 73#u8
-            then ok 2#u8
+            let i3 ← Array.index_usize bytes 11#usize
+            if i3 != 0#u8
+            then ok 4#u8
             else
-              let i5 ← Array.index_usize bytes 5#usize
-              if i5 != 86#u8
-              then ok 2#u8
+              let i4 ← Array.index_usize bytes 12#usize
+              if i4 != 0#u8
+              then ok 4#u8
               else
-                let i6 ← Array.index_usize bytes 6#usize
-                if i6 != 69#u8
-                then ok 2#u8
+                let i5 ← Array.index_usize bytes 13#usize
+                if i5 != 0#u8
+                then ok 4#u8
                 else
-                  let i7 ← Array.index_usize bytes 7#usize
-                  if i7 != 49#u8
-                  then ok 2#u8
+                  let i6 ← Array.index_usize bytes 14#usize
+                  if i6 != 0#u8
+                  then ok 4#u8
                   else
-                    let i8 ← Array.index_usize bytes 8#usize
-                    if i8 != 1#u8
-                    then ok 3#u8
+                    let i7 ← Array.index_usize bytes 15#usize
+                    if i7 != 0#u8
+                    then ok 4#u8
                     else
-                      let i9 ← Array.index_usize bytes 9#usize
-                      if i9 != 0#u8
-                      then ok 4#u8
-                      else
-                        let i10 ← Array.index_usize bytes 10#usize
-                        if i10 != 0#u8
-                        then ok 4#u8
-                        else
-                          let i11 ← Array.index_usize bytes 11#usize
-                          if i11 != 0#u8
-                          then ok 4#u8
-                          else
-                            let i12 ← Array.index_usize bytes 12#usize
-                            if i12 != 0#u8
-                            then ok 4#u8
-                            else
-                              let i13 ← Array.index_usize bytes 13#usize
-                              if i13 != 0#u8
-                              then ok 4#u8
-                              else
-                                let i14 ← Array.index_usize bytes 14#usize
-                                if i14 != 0#u8
-                                then ok 4#u8
-                                else
-                                  let i15 ← Array.index_usize bytes 15#usize
-                                  if i15 != 0#u8
-                                  then ok 4#u8
-                                  else
-                                    let i16 ←
-                                      Array.index_usize bytes 16#usize
-                                    if i16 != 65#u8
-                                    then ok 5#u8
-                                    else
-                                      let i17 ←
-                                        Array.index_usize bytes 17#usize
-                                      if i17 != 83#u8
-                                      then ok 5#u8
-                                      else
-                                        let i18 ←
-                                          Array.index_usize bytes 18#usize
-                                        if i18 != 80#u8
-                                        then ok 5#u8
-                                        else
-                                          let i19 ←
-                                            Array.index_usize bytes 19#usize
-                                          if i19 != 80#u8
-                                          then ok 5#u8
-                                          else
-                                            let i20 ←
-                                              Array.index_usize bytes 20#usize
-                                            if i20 != 65#u8
-                                            then ok 5#u8
-                                            else
-                                              let i21 ←
-                                                Array.index_usize bytes
-                                                  21#usize
-                                              if i21 != 73#u8
-                                              then ok 5#u8
-                                              else
-                                                let i22 ←
-                                                  Array.index_usize bytes
-                                                    22#usize
-                                                if i22 != 82#u8
-                                                then ok 5#u8
-                                                else
-                                                  let i23 ←
-                                                    Array.index_usize bytes
-                                                      23#usize
-                                                  if i23 != 49#u8
-                                                  then ok 5#u8
-                                                  else
-                                                    let i24 ←
-                                                      Array.index_usize bytes
-                                                        24#usize
-                                                    if i24 != 1#u8
-                                                    then ok 5#u8
-                                                    else
-                                                      let i25 ←
-                                                        Array.index_usize bytes
-                                                          25#usize
-                                                      if i25 != 20#u8
-                                                      then ok 5#u8
-                                                      else
-                                                        let i26 ←
-                                                          Array.index_usize
-                                                            bytes 26#usize
-                                                        if i26 != 21#u8
-                                                        then ok 5#u8
-                                                        else
-                                                          let i27 ←
-                                                            Array.index_usize
-                                                              bytes 27#usize
-                                                          if i27 != 7#u8
-                                                          then ok 5#u8
-                                                          else
-                                                            let i28 ←
-                                                              Array.index_usize
-                                                                bytes 28#usize
-                                                            if i28 != 1#u8
-                                                            then ok 5#u8
-                                                            else
-                                                              let i29 ←
-                                                                Array.index_usize
-                                                                  bytes
-                                                                  29#usize
-                                                              if i29 != 1#u8
-                                                              then ok 5#u8
-                                                              else
-                                                                let i30 ←
-                                                                  Array.index_usize
-                                                                    bytes
-                                                                    30#usize
-                                                                if i30 != 1#u8
-                                                                then ok 5#u8
-                                                                else
-                                                                  let i31 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    31#usize
-                                                                  if i31 !=
-                                                                    1#u8
-                                                                  then ok 5#u8
-                                                                  else
-                                                                    let i32 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    32#usize
-                                                                    if i32 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i33 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    33#usize
-                                                                    if i33 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i34 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    34#usize
-                                                                    if i34 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i35 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    35#usize
-                                                                    if i35 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i36 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    36#usize
-                                                                    if i36 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i37 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    37#usize
-                                                                    if i37 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i38 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    38#usize
-                                                                    if i38 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i39 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    39#usize
-                                                                    if i39 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i40 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    40#usize
-                                                                    if i40 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i41 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    41#usize
-                                                                    if i41 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i42 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    42#usize
-                                                                    if i42 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i43 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    43#usize
-                                                                    if i43 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i44 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    44#usize
-                                                                    if i44 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i45 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    45#usize
-                                                                    if i45 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i46 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    46#usize
-                                                                    if i46 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    let i47 ←
-                                                                    Array.index_usize
-                                                                    bytes
-                                                                    47#usize
-                                                                    if i47 !=
-                                                                    0#u8
-                                                                    then
-                                                                    ok 5#u8
-                                                                    else
-                                                                    ok 0#u8
+                      let b1 ← binding0_ok bytes
+                      if b1
+                      then
+                        let b2 ← binding1_ok bytes
+                        if b2
+                        then
+                          let b3 ← binding2_ok bytes
+                          if b3
+                          then
+                            let b4 ← binding3_ok bytes
+                            if b4
+                            then ok 0#u8
+                            else ok 5#u8
+                          else ok 5#u8
+                        else ok 5#u8
+                      else ok 5#u8
+    else ok 2#u8
 
 end NEC_LiveHeaderRef

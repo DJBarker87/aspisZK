@@ -40,7 +40,7 @@ elif kind=='kani':
  (E/a/'NEC_harness.patch').write_text((E/'NEC_native.patch').read_text())
  cmd=['python3','NEC_gate.py',a+'.json']
 elif kind=='extract':
- script,ref={'NEC_BindingRef':('NEC_extract_binding.py','NEC_binding_reference'),'NEC_PairRef':('NEC_extract_pair.py','NEC_pair_reference'),'NEC_ReplyRef':('NEC_extract_pure.py','NEC_pure_reference'),'NEC_LiveHeaderRef':('NEC_extract_live_header.py','NEC_live_header_reference')}.get(target,('NEC_extract.py','NEC_reference'))
+ script,ref={'NEC_EmitRef':('NEC_extract_emit.py','NEC_emit_reference'),'NEC_BindingRef':('NEC_extract_binding.py','NEC_binding_reference'),'NEC_PairRef':('NEC_extract_pair.py','NEC_pair_reference'),'NEC_ReplyRef':('NEC_extract_pure.py','NEC_pure_reference'),'NEC_LiveHeaderRef':('NEC_extract_live_header.py','NEC_live_header_reference')}.get(target,('NEC_extract.py','NEC_reference'))
  files[script]=(E/script).read_text()
  files[ref+'.rs']=template(ref)
  cmd=['python3',script]
@@ -88,7 +88,7 @@ sys.exit(r.returncode)
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 r=remote(f'''from pathlib import Path
 import json
-b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in {[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-actual-graph-check.json',a+'-actual-graph.stderr',a+'-lock-check.json',a+'-tool-pins.json',a+'-native-pins.json',a+'-properties.json',a+'-properties.stderr',a+'-trace-command.json',a+'-source-check.json',a+'-graph.stderr','NEC_EXTRACTION_PINS.json']!r} if (b/n).exists()}}))
+b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in {[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-actual-graph-check.json',a+'-actual-graph.stderr',a+'-lock-check.json',a+'-tool-pins.json',a+'-native-pins.json',a+'-properties.json',a+'-properties.stderr',a+'-trace-command.json',a+'-source-check.json',a+'-full-source-pins.json',a+'-graph.stderr','NEC_EXTRACTION_PINS.json']!r} if (b/n).exists()}}))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)

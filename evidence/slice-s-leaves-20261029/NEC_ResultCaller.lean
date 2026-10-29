@@ -1,4 +1,4 @@
-import S2K_ResultBinding
+import JHb_S2K_ResultBinding
 set_option autoImplicit false
 namespace NEC_ResultCaller
 open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
@@ -19,7 +19,7 @@ theorem fields (s : Statement) :
  (derived s).master_account=(AspisR1.S2K.StatementAdmission.common s).master_account ∧
  (derived s).selected_lane_account=(AspisR1.S2K.StatementAdmission.common s).selected_lane_account ∧
  (derived s).output_lane=(AspisR1.S2K.StatementAdmission.common s).output_lane ∧
- (derived s).nullifier=AspisR1.S2K.StatementAdmission.nullifier s ∧
+ (derived s).nullifier=AspisR1.S2K.StatementChecks.nullifier s ∧
  (derived s).verified_afterstate=(AspisR1.S2K.StatementAdmission.common s).lane_transition.candidate_afterstate := by
  cases s <;> exact ⟨rfl,rfl,rfl,rfl,rfl,rfl⟩
 

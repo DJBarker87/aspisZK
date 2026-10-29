@@ -118,7 +118,7 @@ theorem emitted (length : Usize) (bytes : Array U8 48#usize) :
  have i45 : Array.index_usize bytes 45#usize=ok (read bytes ⟨45,by decide⟩) := index_read bytes ⟨45,by decide⟩
  have i46 : Array.index_usize bytes 46#usize=ok (read bytes ⟨46,by decide⟩) := index_read bytes ⟨46,by decide⟩
  have i47 : Array.index_usize bytes 47#usize=ok (read bytes ⟨47,by decide⟩) := index_read bytes ⟨47,by decide⟩
- simp only [NEC_LiveHeaderRef.live_header_ref,code,i0,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43,i44,i45,i46,i47,bind_tc_ok]
+ simp only [NEC_LiveHeaderRef.live_header_ref,NEC_LiveHeaderRef.magic_ok,NEC_LiveHeaderRef.binding0_ok,NEC_LiveHeaderRef.binding1_ok,NEC_LiveHeaderRef.binding2_ok,NEC_LiveHeaderRef.binding3_ok,code,i0,i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16,i17,i18,i19,i20,i21,i22,i23,i24,i25,i26,i27,i28,i29,i30,i31,i32,i33,i34,i35,i36,i37,i38,i39,i40,i41,i42,i43,i44,i45,i46,i47,bind_tc_ok]
  all_goals repeat' first | split | rfl
 
 #print axioms index_read
