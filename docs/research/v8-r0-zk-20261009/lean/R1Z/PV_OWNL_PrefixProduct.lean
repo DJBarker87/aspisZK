@@ -31,7 +31,7 @@ theorem factors_product (width pref : Nat) (xs : List K) (index : Nat) :
  | nil => simp only [factors,List.prod_nil,List.length_nil,Fin.prod_univ_zero]
  | cons x xs ih =>
   simp only [factors,List.prod_cons,List.length_cons,Fin.prod_univ_succ,
-   List.get_cons_zero,List.get_cons_succ,Fin.val_zero,Fin.val_succ,Nat.add_zero]
+   List.get_cons_zero,List.get_cons_succ',Fin.val_zero,Fin.val_succ,Nat.add_zero]
   rw [ih]
   congr 1
   apply Finset.prod_congr rfl

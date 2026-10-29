@@ -41,8 +41,9 @@ theorem decoded_bits {K : Type} [Zero K] [One K] (decode : Q → K)
       rw [he];rfl
     · rw [ho,show equal one one = true from (PV_OWNJ_Rows.equal_iff _ _).mpr rfl]
   · have ht := ih (fun y hy => hb y (List.mem_cons_of_mem _ hy)) j
-    simpa only [List.get_cons_succ,List.length_cons,Fin.val_succ,
-     Nat.add_sub_add_right,tail_bit x xs (xs.length-1-j.val) (by omega)] using ht
+    simpa only [List.get_cons_succ',List.length_cons,Fin.val_succ,
+     show xs.length+1-1-(j.val+1) = xs.length-1-j.val from by omega,
+     tail_bit x xs (xs.length-1-j.val) (by omega)] using ht
 
 /-- Exactly the raw scanner suffix, with no equality-modulo-P substitution. -/
 theorem scanner_decoded {K : Type} [Zero K] [One K] (decode : Q → K)
