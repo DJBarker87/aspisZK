@@ -36,11 +36,14 @@ def loader_rent(address, account, payer, immutable_program=False):
                 raise ValueError('short ProgramData')
             authority = raw[12]
             recovery = 'permanently locked' if authority == 0 else 'retained upgrade authority loader close'
+    from r1_devnet_release_gate import base58
+    recoverable=(kind=='buffer' and len(raw)>=37 and raw[4]==1 and raw[5:37]==base58(payer)) or (kind=='programdata' and len(raw)>=45 and raw[12]==1 and raw[13:45]==base58(payer))
     return {'address': address, 'lamports': account['lamports'], 'kind': kind,
             'recovery': recovery, 'recovery_public_destination': payer,
             'authority_option': authority,
             'locked_lamports': account['lamports'] if recovery=='permanently locked' else 0,
-            'recoverability_requires_authority_check': recovery!='permanently locked'}
+            'recoverable_lamports': account['lamports'] if recoverable else 0,
+            'recoverability_requires_authority_check': recovery!='permanently locked' and not recoverable}
 
 
 def close_failed_buffer(cli, url, payer_key, payer, buffer, fetch, output):

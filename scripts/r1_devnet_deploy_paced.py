@@ -72,6 +72,7 @@ def deploy_role(role):
         create=(0).to_bytes(4,'little')+rent.to_bytes(8,'little')+size.to_bytes(8,'little')+base58(LOADER)
         e=submit(role+'-buffer-create',[ix(SYSTEM,[[C['payer'],True,True],[buf,True,True]],create),ix(LOADER,[[buf,False,True],[C['payer'],False,False]],bytes(4))],[PAYER_KEY,str(path)],bh);wait([e]);sigs.append(e);ba=account(buf)['value']
     assert ba['owner']==LOADER and not ba['executable']
+    write(role+'-buffer-rent',loader_rent(buf,ba,C['payer']))
     body=base64.b64decode(ba['data'][0])[37:];assert len(body)==len(elf)
     pending=[i for i in range(0,len(elf),900) if body[i:i+900]!=elf[i:i+900]];write(role+'-plan',{'buffer':buf,'missing_chunks':len(pending),'sha256':spec['sha256']})
     for first in range(0,len(pending),60):

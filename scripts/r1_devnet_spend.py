@@ -26,6 +26,15 @@ def account(address):
     a=rpc(URL,'getAccountInfo',[address,{'encoding':'base64','commitment':'finalized'}])
     return a
 
+def record_rent(transaction):
+    addresses=created_accounts(transaction)
+    if not addresses:return
+    path=O/'rent-ledger.json'
+    rows={row['address']:row for row in json.loads(path.read_text())} if path.exists() else {}
+    for address in addresses:
+        value=account(address)['value']
+        if value:rows[address]=state_rent(address,value,C['payer'],globals().get('gov'))
+    write('rent-ledger',list(rows.values()))
 def invoke(q):return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
 def send(name,ixs,keys=[PAYER_KEY],negative=False):
     done=O/(name+'.json')
@@ -45,7 +54,7 @@ def send(name,ixs,keys=[PAYER_KEY],negative=False):
             if status and status['confirmationStatus']=='finalized':
                 tx=rpc(URL,'getTransaction',[sig,{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}])
                 if not tx:raise RuntimeError(f'{name}: finalized metadata not yet available')
-                write(name+'-transaction',tx)
+                write(name+'-transaction',tx);record_rent(tx)
                 origin=attempt_record.get('started_unix',path.stat().st_mtime)
                 result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.time()-origin,'wall_seconds_kind':'reconciled_since_signed_receipt','serialized_bytes':attempt_record['serialized_bytes'],'finalized':True,'negative':negative,'reconciled':True}
                 write(name,result)
@@ -84,7 +93,7 @@ def send(name,ixs,keys=[PAYER_KEY],negative=False):
             if tx:break
             time.sleep(2)
         if not tx:raise RuntimeError('finalized tx metadata unavailable')
-        write(name+'-transaction',tx)
+        write(name+'-transaction',tx);record_rent(tx)
         result={'signature':sig,'explorer':f'https://explorer.solana.com/tx/{sig}?cluster=devnet','slot':tx['slot'],'compute_units':tx['meta'].get('computeUnitsConsumed'),'fee':tx['meta']['fee'],'error':tx['meta']['err'],'wall_seconds':time.monotonic()-start,'serialized_bytes':signed['bytes'],'finalized':True,'negative':negative}
         write(name,result)
         if bool(result['error'])!=negative:raise RuntimeError(f'{name} unexpected finalized result: {result}')
