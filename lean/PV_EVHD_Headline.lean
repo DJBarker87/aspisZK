@@ -5,6 +5,7 @@ No deployed Runtime, simulator, observer, bound or trust field is edited. -/
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVHD_Headline
+open R1Z
 abbrev ownedDecode := ProverCommitOwnedDecoder.decoder (K := PrivacyR1AcctBasis.K)
 open R0P R0Z R0Z.JointView R0Z.FsStatement R0Z.FsAbort R0Z.FsGood R0Z.HvzkV R0Z.HvzkS R0Z.RefPayload
   R1Z.Batched R1Z.PredicateR1 R1Z.MaskImageVR1 R1Z.PoleMassR1 R1Z.ModelsVR1 R1Z.SimulatorR1
