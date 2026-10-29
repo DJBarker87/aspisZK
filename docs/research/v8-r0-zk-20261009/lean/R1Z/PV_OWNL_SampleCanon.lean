@@ -30,7 +30,9 @@ theorem pass_canonical (rank : List U32) (remainder : U64) :
  | nil => exact rem_canonical remainder
  | cons w ws ih => exact ih _
 
-/-- Four successive quotient/remainder passes, starting from high words. -/
+/-- First four of the eight base_p_digits passes in core r0_transcript.rs.
+The input may be any reduced rank: reduction correctness is unnecessary
+for the canonical-output invariant. -/
 def sample (rank : List U32) : Q :=
  let a := pass rank 0#u64
  let b := pass a.1 0#u64

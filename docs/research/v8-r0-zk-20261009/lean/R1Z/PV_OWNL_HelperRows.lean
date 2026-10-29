@@ -58,6 +58,50 @@ theorem helper_canonical (inverse : Q → Option Q) (chi : Q) (rs : List Row)
  intro q hq
  have hzero := List.eq_of_mem_replicate hq
  exact hzero ▸ zero_canon
+/-- Actual logup.rs Vec-push traversal, distinct from the host array-store loop. -/
+def vector (inverse : Q → Option Q) (chi : Q) : List Row → Option (List Q)
+ | [] => some []
+ | r::rs => do
+  let value ← row inverse chi r
+  let rest ← vector inverse chi rs
+  some (value::rest)
+
+theorem vector_canonical (inverse : Q → Option Q) (chi : Q) (rs : List Row)
+ (out : List Q) (h : vector inverse chi rs = some out) : ∀ q ∈ out, Canon q := by
+ induction rs generalizing out with
+ | nil => cases Option.some.inj h; simp
+ | cons r rs ih =>
+  simp only [vector] at h
+  cases hr : row inverse chi r with
+  | none => simp only [hr,Option.bind_none] at h; cases h
+  | some value =>
+   cases ht : vector inverse chi rs with
+   | none => simp only [hr,ht,Option.bind_some,Option.bind_none] at h; cases h
+   | some rest =>
+    simp only [hr,ht,Option.bind_some] at h
+    cases Option.some.inj h
+    intro q hq
+    rcases List.mem_cons.mp hq with rfl | hq
+    · exact row_canonical inverse chi value r hr
+    · exact ih rest ht q hq
+
+theorem vector_length (inverse : Q → Option Q) (chi : Q) (rs : List Row)
+ (out : List Q) (h : vector inverse chi rs = some out) : out.length = rs.length := by
+ induction rs generalizing out with
+ | nil => cases Option.some.inj h; rfl
+ | cons r rs ih =>
+  simp only [vector] at h
+  cases hr : row inverse chi r with
+  | none => simp only [hr,Option.bind_none] at h; cases h
+  | some value =>
+   cases ht : vector inverse chi rs with
+   | none => simp only [hr,ht,Option.bind_some,Option.bind_none] at h; cases h
+   | some rest =>
+    simp only [hr,ht,Option.bind_some] at h
+    cases Option.some.inj h
+    simp only [List.length_cons,ih rest ht]
+#print axioms vector_canonical
+#print axioms vector_length
 #print axioms row_canonical
 #print axioms store_canonical
 #print axioms rows_canonical
