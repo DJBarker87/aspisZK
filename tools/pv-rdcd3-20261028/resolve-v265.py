@@ -13,7 +13,10 @@ def go(m):
  for dep in deps:
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
-go('R1Z.PV_RDCD3_V265Inverse')
+go('R1Z.PV_RDCD3_V265')
+go('R1Z.PV_RDCD3_WordAll194')
+go('R1Z.PV_RDCD3_Index194')
+go('R1Z.PV_RDCD3_Control194')
 checks={}
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json','docs/research/100bit-spend-path-20261013/evidence/prover-commit47-20261022/final-source-freeze.json']:
  raw=git('show','research:'+ref);j=json.loads(raw);hits=[]
