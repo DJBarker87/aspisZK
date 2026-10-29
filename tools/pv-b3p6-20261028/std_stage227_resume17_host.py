@@ -1,7 +1,7 @@
 from run import H
 import json,time,subprocess
 R=H/'resume17'
-while not (R/'N73925/receipt/receipt.json').exists():time.sleep(15)
+while not any(R.glob('N73925*/receipt/receipt.json')):time.sleep(15)
 for i,g in enumerate(['host-mask','statement-mask','reconstruct','transition','external','internal']):
  for retry in range(11):
   p=H/'admission-not-before.json'

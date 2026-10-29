@@ -1,0 +1,237 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:87:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+selector : aspis_core.field.QM31
+opened : Std.Array aspis_core.field.QM31 16#usize
+start : Usize
+expected : Std.Array aspis_core.field.M31 8#usize
+tweak : Bool
+cursor : Usize
+output : Std.Array aspis_core.field.QM31 8#usize
+h : cursor < 8#usize
+⊢ ↑cursor + ↑1#usize < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:93:27: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:93:27: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:93:27: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:93:27: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:87:2: error: unsolved goals
+case pos.false
+selector : aspis_core.field.QM31
+opened : Std.Array aspis_core.field.QM31 16#usize
+start : Usize
+expected : Std.Array aspis_core.field.M31 8#usize
+cursor : Usize
+output : Std.Array aspis_core.field.QM31 8#usize
+h : cursor < 8#usize
+inc : ↑(cursor.wrapping_add 1#usize) = ↑cursor + ↑1#usize
+edge : cursor.wrapping_add 1#usize = 8#usize ↔ cursor = 7#usize
+last : cursor = 7#usize
+⊢ (do
+      let __x ←
+        if 7#usize < 8#usize then ok (some 7#usize, { start := Usize.wrapping_add 7#usize 1#usize, «end» := 8#usize })
+          else ok (none, { start := 7#usize, «end» := 8#usize })
+      match __x.1 with
+        | none => ok (done output)
+        | some lane => do
+          let target1 ← expected.index_usize lane
+          let q ← output.index_usize lane
+          let i1 ← lift (start.wrapping_add lane)
+          let q1 ← opened.index_usize i1
+          let x ← aspis_core.field.CM31.from_m31 target1
+          let q2 ← aspis_core.field.QM31.from_cm31 x
+          let q3 ← q1.sub q2
+          let q4 ← selector.mul q3
+          let q5 ← q.add q4
+          let output1 ← output.update lane q5
+          ok (cont (__x.2, output1))) =
+    if 7#usize < 8#usize then do
+      let x ← expected.index_usize 7#usize
+      let x_1 ← output.index_usize 7#usize
+      let x_2 ← lift (start.wrapping_add 7#usize)
+      let x_3 ← opened.index_usize x_2
+      let x ← aspis_core.field.CM31.from_m31 x
+      let x ← aspis_core.field.QM31.from_cm31 x
+      let x ← x_3.sub x
+      let x ← selector.mul x
+      let x ← x_1.add x
+      let next ← output.update 7#usize x
+      ok (cont ({ start := Usize.wrapping_add 7#usize 1#usize, «end» := 8#usize }, next))
+    else ok (done output)
+
+case pos.true
+selector : aspis_core.field.QM31
+opened : Std.Array aspis_core.field.QM31 16#usize
+start : Usize
+expected : Std.Array aspis_core.field.M31 8#usize
+cursor : Usize
+output : Std.Array aspis_core.field.QM31 8#usize
+h : cursor < 8#usize
+inc : ↑(cursor.wrapping_add 1#usize) = ↑cursor + ↑1#usize
+edge : cursor.wrapping_add 1#usize = 8#usize ↔ cursor = 7#usize
+last : cursor = 7#usize
+⊢ (do
+      let __x ←
+        if 7#usize < 8#usize then ok (some 7#usize, { start := Usize.wrapping_add 7#usize 1#usize, «end» := 8#usize })
+          else ok (none, { start := 7#usize, «end» := 8#usize })
+      match __x.1 with
+        | none => ok (done output)
+        | some lane => do
+          let target ← expected.index_usize lane
+          let i1 ← lift (Usize.wrapping_add lane 1#usize)
+          if i1 = 8#usize then do
+              let target1 ← target.add aspis_statement.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+              let q ← output.index_usize lane
+              let i1 ← lift (start.wrapping_add lane)
+              let q1 ← opened.index_usize i1
+              let x ← aspis_core.field.CM31.from_m31 target1
+              let q2 ← aspis_core.field.QM31.from_cm31 x
+              let q3 ← q1.sub q2
+              let q4 ← selector.mul q3
+              let q5 ← q.add q4
+              let output1 ← output.update lane q5
+              ok (cont (__x.2, output1))
+            else do
+              let q ← output.index_usize lane
+              let i1 ← lift (start.wrapping_add lane)
+              let q1 ← opened.index_usize i1
+              let x ← aspis_core.field.CM31.from_m31 target
+              let q2 ← aspis_core.field.QM31.from_cm31 x
+              let q3 ← q1.sub q2
+              let q4 ← selector.mul q3
+              let q5 ← q.add q4
+              let output1 ← output.update lane q5
+              ok (cont (__x.2, output1))) =
+    if 7#usize < 8#usize then do
+      let x ← expected.index_usize 7#usize
+      let x_1 ← lift (Usize.wrapping_add 7#usize 1#usize)
+      let x ←
+        if x_1 = aspis_statement.poseidon2.DIGEST_ELEMS then
+            x.add aspis_statement.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+          else ok x
+      let x_2 ← output.index_usize 7#usize
+      let x_3 ← lift (start.wrapping_add 7#usize)
+      let x_4 ← opened.index_usize x_3
+      let x ← aspis_core.field.CM31.from_m31 x
+      let x ← aspis_core.field.QM31.from_cm31 x
+      let x ← x_4.sub x
+      let x ← selector.mul x
+      let x ← x_2.add x
+      let next ← output.update 7#usize x
+      ok (cont ({ start := Usize.wrapping_add 7#usize 1#usize, «end» := 8#usize }, next))
+    else ok (done output)
+
+case neg.true
+selector : aspis_core.field.QM31
+opened : Std.Array aspis_core.field.QM31 16#usize
+start : Usize
+expected : Std.Array aspis_core.field.M31 8#usize
+cursor : Usize
+output : Std.Array aspis_core.field.QM31 8#usize
+h : cursor < 8#usize
+inc : ↑(cursor.wrapping_add 1#usize) = ↑cursor + ↑1#usize
+edge : cursor.wrapping_add 1#usize = 8#usize ↔ cursor = 7#usize
+last : ¬cursor = 7#usize
+⊢ (do
+      let target ← expected.index_usize cursor
+      let i1 ← lift (cursor.wrapping_add 1#usize)
+      if i1 = 8#usize then do
+          let target1 ← target.add aspis_statement.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+          let q ← output.index_usize cursor
+          let i1 ← lift (start.wrapping_add cursor)
+          let q1 ← opened.index_usize i1
+          let x ← aspis_core.field.CM31.from_m31 target1
+          let q2 ← aspis_core.field.QM31.from_cm31 x
+          let q3 ← q1.sub q2
+          let q4 ← selector.mul q3
+          let q5 ← q.add q4
+          let output1 ← output.update cursor q5
+          ok (cont ({ start := cursor.wrapping_add 1#usize, «end» := 8#usize }, output1))
+        else do
+          let q ← output.index_usize cursor
+          let i1 ← lift (start.wrapping_add cursor)
+          let q1 ← opened.index_usize i1
+          let x ← aspis_core.field.CM31.from_m31 target
+          let q2 ← aspis_core.field.QM31.from_cm31 x
+          let q3 ← q1.sub q2
+          let q4 ← selector.mul q3
+          let q5 ← q.add q4
+          let output1 ← output.update cursor q5
+          ok (cont ({ start := cursor.wrapping_add 1#usize, «end» := 8#usize }, output1))) =
+    do
+    let x ← expected.index_usize cursor
+    let x_1 ← lift (cursor.wrapping_add 1#usize)
+    let x ←
+      if x_1 = aspis_statement.poseidon2.DIGEST_ELEMS then
+          x.add aspis_statement.poseidon2.MERKLE_NODE_COMPRESSION_V3_TWEAK
+        else ok x
+    let x_2 ← output.index_usize cursor
+    let x_3 ← lift (start.wrapping_add cursor)
+    let x_4 ← opened.index_usize x_3
+    let x ← aspis_core.field.CM31.from_m31 x
+    let x ← aspis_core.field.QM31.from_cm31 x
+    let x ← x_4.sub x
+    let x ← selector.mul x
+    let x ← x_2.add x
+    let next ← output.update cursor x
+    ok (cont ({ start := cursor.wrapping_add 1#usize, «end» := 8#usize }, next))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:92:59: warning: This simp argument is unused:
+  edge
+
+Hint: Omit it from the simp argument list.
+  simp only [host_terminal.add_digest_binding_loop.body, ̲range_next_extraction17, ̲h,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵if_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲if_false, ̲bind_tc_ok, ̲digest_store_cell11, ̲reference_terminal.tweak227,
+          host_terminal.lift_m31, ̲reference_terminal.lift_m31,e̵d̵g̵e̵,̵ ̲last,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵Bool.false_eq_true,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Bool.true_eq_true, ̲PV_B3P_Ordered227.bind_assoc]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:113:64: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+selector : aspis_core.field.QM31
+opened : Std.Array aspis_core.field.QM31 16#usize
+start : Usize
+expected : Std.Array aspis_core.field.M31 8#usize
+tweak : Bool
+n : ℕ
+ih :
+  ∀ (cursor : Usize) (output : Std.Array aspis_core.field.QM31 8#usize),
+    ↑cursor + n = 8 →
+      host_terminal.add_digest_binding_loop 8#usize { start := cursor, «end» := 8#usize } output selector opened start
+          expected tweak =
+        usize_plan (digest_store_cell11 selector opened start expected tweak) n cursor output
+cursor : Usize
+output : Std.Array aspis_core.field.QM31 8#usize
+bound : ↑cursor + (n + 1) = 8
+inside : cursor < 8#usize
+⊢ ↑cursor + ↑1#usize < UScalar.size UScalarTy.Usize
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:114:66: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  a ≥ 0
+  0 ≤ a ≤ 7
+where
+ a := ↑↑(cursor.wrapping_add 1#usize)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:110:43: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵g̵e̵s̵t̵_̵b̵o̵d̵y̵1̵7̵,̵s̵t̵o̵p̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵u̵s̵i̵z̵e̵_̵p̵l̵a̵n̵]̵[̲d̲i̲g̲e̲s̲t̲_̲b̲o̲d̲y̲1̲7̲,̲ ̲s̲t̲o̲p̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲u̲s̲i̲z̲e̲_̲p̲l̲a̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectDigest17227.lean:117:55: warning: This simp argument is unused:
+  PV_B3P_Ordered227.bind_assoc
+
+Hint: Omit it from the simp argument list.
+  simp only [̵d̵i̵g̵e̵s̵t̵_̵b̵o̵d̵y̵1̵7̵,̵i̵n̵s̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵u̵s̵i̵z̵e̵_̵p̵l̵a̵n̵,̵P̵V̵_̵B̵3̵P̵_̵O̵r̵d̵e̵r̵e̵d̵2̵2̵7̵.̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵]̵[̲d̲i̲g̲e̲s̲t̲_̲b̲o̲d̲y̲1̲7̲,̲ ̲i̲n̲s̲i̲d̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲u̲s̲i̲z̲e̲_̲p̲l̲a̲n̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_Direct17227.digest_body17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.digest_loop_plan17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.digest_extraction_reference17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

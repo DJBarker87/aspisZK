@@ -1,0 +1,61 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectAbsorption17227.lean:69:103: error: unsolved goals
+low fixed two eight nodes : aspis_core.field.QM31
+opened output : Std.Array aspis_core.field.QM31 16#usize
+lane : Usize
+⊢ (if lane < 16#usize then
+      if lane < 2#usize then do
+        let q ← low.mul fixed
+        let q1 ← opened.index_usize lane
+        let q2 ← q.mul q1
+        let output1 ← output.update lane q2
+        let lane1 ← lift (lane.wrapping_add 1#usize)
+        ok (ControlFlow.cont (output1, lane1))
+      else
+        if lane < aspis_statement.poseidon2.RATE then do
+          let blocks ← fixed.add two
+          let q ← low.mul blocks
+          let q1 ← opened.index_usize lane
+          let q2 ← q.mul q1
+          let output1 ← output.update lane q2
+          let lane1 ← lift (lane.wrapping_add 1#usize)
+          ok (ControlFlow.cont (output1, lane1))
+        else do
+          let q ← fixed.add two
+          let q1 ← q.add eight
+          let blocks ← q1.add nodes
+          let q ← low.mul blocks
+          let q1 ← opened.index_usize lane
+          let q2 ← q.mul q1
+          let output1 ← output.update lane q2
+          let lane1 ← lift (lane.wrapping_add 1#usize)
+          ok (ControlFlow.cont (output1, lane1))
+    else ok (ControlFlow.done output)) =
+    if lane < 16#usize then do
+      let x ←
+        if lane < 2#usize then do
+            let scaled ← low.mul fixed
+            let opened ← opened.index_usize lane
+            scaled.mul opened
+          else
+            if lane < aspis_statement.poseidon2.RATE then do
+              let blocks ← fixed.add two
+              let scaled ← low.mul blocks
+              let opened ← opened.index_usize lane
+              scaled.mul opened
+            else do
+              let a ← fixed.add two
+              let b ← a.add eight
+              let blocks ← b.add nodes
+              let scaled ← low.mul blocks
+              let opened ← opened.index_usize lane
+              scaled.mul opened
+      let next ← output.update lane x
+      let i ← lift (lane.wrapping_add 1#usize)
+      ok (ControlFlow.cont (next, i))
+    else ok (ControlFlow.done output)
+'PV_B3P_Direct17227.absorption_body17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.absorption_loop17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.absorption_extraction_reference17' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
