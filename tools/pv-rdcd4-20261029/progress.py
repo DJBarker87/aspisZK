@@ -10,6 +10,9 @@ assert len(lean)<=100 and len(native)<=40
 actual_ids=[x['attempt'] for x in lean];assert len(set(actual_ids))==len(actual_ids)
 assert all(66300<=n<=66399 for n in actual_ids)
 (E/'RUNS.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),counts=dict(lean_actual=len(lean),lean_pass=sum(x['exit']==0 for x in lean),lean_fail=sum(x['exit']!=0 for x in lean),native_actual=len(native),native_pass=sum(x['exit']==0 for x in native),native_fail=sum(x['exit']!=0 for x in native),kani=0),receipts=receipts),indent=2)+'\n')
+reuse=E/'reused-projects.json'
+if reuse.exists():
+ data=json.load(open(E/'RUNS.json'));data['reused_project_objects']=len(json.load(open(reuse))['modules']);(E/'RUNS.json').write_text(json.dumps(data,indent=2)+'\n')
 association=json.load(open(E/'v201-proof-association.json'))
 rows=[]
 for n in [201,220,237,236,233,197]:
