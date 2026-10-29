@@ -14,7 +14,8 @@ assert not conflicts,conflicts
 for m,v in rows.items():
  p=Path(v['object']);assert sha(p)==v['sha256'],m
  q=D/'objects'/(m.replace('.','/')+'.olean');q.parent.mkdir(parents=True,exist_ok=True)
- if not q.exists():q.symlink_to(p)
+ for src,dst in [(p,q),(Path(str(p)+'.server'),Path(str(q)+'.server')),(Path(str(p)+'.private'),Path(str(q)+'.private')),(p.with_suffix('.ir'),q.with_suffix('.ir'))]:
+  if src.is_file() and not dst.exists():dst.symlink_to(src)
 env=json.loads((D/'env-l1.json').read_text());env['LEAN_PATH']=str(D/'objects')+':'+env['LEAN_PATH'];(D/'env-audit.json').write_text(json.dumps(env,indent=2)+'\n')
 (D/'merged-cohort.json').write_text(json.dumps(dict(project_objects=len(rows),overlap_hash_mismatches=conflicts,policy='original prefixes retained after identical private read-only object copies'),indent=2)+'\n')
 print('merged',len(rows),'project objects')

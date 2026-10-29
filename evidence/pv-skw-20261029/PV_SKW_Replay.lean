@@ -1,2 +1,1 @@
-import PV_SKW_Statements
 import PV_SKW_Axioms
