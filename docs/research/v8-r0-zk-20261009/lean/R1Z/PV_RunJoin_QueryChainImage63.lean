@@ -71,6 +71,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       (by rw [nextIndex];omega) tailRoom htail
     rw [tailBytes,firstBytes,nextIndex]
     simp only [PV_RunJoin_QueryStream63.stream,PV_RunJoin_QueryStream63.part,dif_pos more,List.append_assoc]
+    rfl
 
 #print axioms complete
 end R1Z.PV_RunJoin_QueryChainImage63
