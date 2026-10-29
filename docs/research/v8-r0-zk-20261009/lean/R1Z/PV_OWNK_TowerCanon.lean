@@ -14,12 +14,12 @@ abbrev QM := PV_B2_FieldValue.aspis_core.field.QM31
 def CC (x : C) : Prop := PV_OWNK_ScalarOps.Canon x.a ∧ PV_OWNK_ScalarOps.Canon x.b
 def Canon (x : Q) : Prop := CC x.c0 ∧ CC x.c1
 
-theorem cm_add (x y : C) (hx : CC x) (hy : CC y) : CC (CM.add x y) :=
+theorem cm_add (x y : C) (hx : CC x) (hy : CC y) : CC (PV_B2_FieldValue.aspis_core.field.CM31.add x y) :=
  ⟨PV_OWNK_ScalarOps.add_canon _ _ hx.1 hy.1,PV_OWNK_ScalarOps.add_canon _ _ hx.2 hy.2⟩
-theorem cm_sub (x y : C) (hx : CC x) (hy : CC y) : CC (CM.sub x y) :=
+theorem cm_sub (x y : C) (hx : CC x) (hy : CC y) : CC (PV_B2_FieldValue.aspis_core.field.CM31.sub x y) :=
  ⟨PV_OWNK_ScalarOps.sub_canon _ _ hx.1 hy.1,PV_OWNK_ScalarOps.sub_canon _ _ hx.2 hy.2⟩
 /-- The three partial products are reduced even for arbitrary raw inputs. -/
-theorem cm_mul (x y : C) : CC (CM.mul x y) := by
+theorem cm_mul (x y : C) : CC (PV_B2_FieldValue.aspis_core.field.CM31.mul x y) := by
  change PV_OWNK_ScalarOps.Canon _ ∧ PV_OWNK_ScalarOps.Canon _
  constructor
  · exact PV_OWNK_ScalarOps.sub_canon _ _

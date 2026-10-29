@@ -30,16 +30,16 @@ theorem mul (x y : Q) (hx : Canon x) (hy : Canon y) :
  have hm1 := cm_mul x.c1 y.c1
  have hsx := cm_add x.c0 x.c1 hx.1 hx.2
  have hsy := cm_add y.c0 y.c1 hy.1 hy.2
- have hm2 := cm_mul (CM.add x.c0 x.c1) (CM.add y.c0 y.c1)
+ have hm2 := cm_mul (PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1) (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1)
  apply QuadraticAlgebra.ext
- · change dc (CM.add (CM.mul x.c0 y.c0)
-    (PV_B2_FieldValue.aspis_core.field.mul_by_r (CM.mul x.c1 y.c1))) = _
+ · change dc (PV_B2_FieldValue.aspis_core.field.CM31.add (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0)
+    (PV_B2_FieldValue.aspis_core.field.mul_by_r (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1))) = _
    rw [PV_OWNK_CMDecode.add _ _ hm0 (mul_by_r _ hm1),
     PV_OWNK_CMDecode.mul_by_r _ hm1,
     PV_OWNK_CMDecode.mul _ _ hx.1 hy.1,PV_OWNK_CMDecode.mul _ _ hx.2 hy.2]
    rfl
- · change dc (CM.sub (CM.sub (CM.mul (CM.add x.c0 x.c1) (CM.add y.c0 y.c1))
-    (CM.mul x.c0 y.c0)) (CM.mul x.c1 y.c1)) = _
+ · change dc (PV_B2_FieldValue.aspis_core.field.CM31.sub (PV_B2_FieldValue.aspis_core.field.CM31.sub (PV_B2_FieldValue.aspis_core.field.CM31.mul (PV_B2_FieldValue.aspis_core.field.CM31.add x.c0 x.c1) (PV_B2_FieldValue.aspis_core.field.CM31.add y.c0 y.c1))
+    (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c0 y.c0)) (PV_B2_FieldValue.aspis_core.field.CM31.mul x.c1 y.c1)) = _
    rw [PV_OWNK_CMDecode.sub _ _ (cm_sub _ _ hm2 hm0) hm1,
     PV_OWNK_CMDecode.sub _ _ hm2 hm0,
     PV_OWNK_CMDecode.mul _ _ hsx hsy,
