@@ -7,17 +7,17 @@ open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Groups14227
 set_option autoImplicit false
 inductive Body where
  | u32_u64 | bool_u32 | u16_usize | u8_usize | result_branch | usize_unwrap_or | usize_is_some
-abbrev Branch := {T E : Type} → core.result.Result T E → Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T)
-def Signature : Body → Type
+abbrev Branch (T E : Type) := core.result.Result T E → Result (core.ops.control_flow.ControlFlow (core.result.Result core.convert.Infallible E) T)
+def Signature (T E : Type) : Body → Type
  | .u32_u64 => U32 → Result U64
  | .bool_u32 => Bool → Result U32
  | .u16_usize => U16 → Result Usize
  | .u8_usize => U8 → Result Usize
- | .result_branch => Branch
+ | .result_branch => Branch T E
  | .usize_unwrap_or => Option Usize → Usize → Usize
  | .usize_is_some => Option Usize → Bool
 /-- The two-arm 1.94.1 source match; neither payload is dropped. -/
-def source_branch : Branch := fun x => match x with
+def source_branch {T E : Type} : Branch T E := fun x => match x with
  | .Ok v => .ok (.Continue v)
  | .Err e => .ok (.Break (.Err e))
 /-- Selected payload is Copy, so the unused alternative has no destructor. -/
@@ -28,35 +28,35 @@ def source_u32_u64 (x : U32) : Result U64 := .ok (UScalar.cast .U64 x)
 def source_bool_u32 (x : Bool) : Result U32 := .ok (UScalar.cast .U32 (UScalar.cast_fromBool .U8 x))
 def source_u16_usize (x : U16) : Result Usize := .ok (UScalar.cast .Usize x)
 def source_u8_usize (x : U8) : Result Usize := .ok (UScalar.cast .Usize x)
-def native : (i : Body) → Signature i
+def native (T E : Type) : (i : Body) → Signature T E i
  | .u32_u64 => source_u32_u64
  | .bool_u32 => source_bool_u32
  | .u16_usize => source_u16_usize
  | .u8_usize => source_u8_usize
- | .result_branch => @source_branch
+ | .result_branch => @source_branch T E
  | .usize_unwrap_or => source_unwrap_or
  | .usize_is_some => source_is_some
-def model : (i : Body) → Signature i
+def model (T E : Type) : (i : Body) → Signature T E i
  | .u32_u64 => fun x => .ok (UScalar.cast .U64 x)
  | .bool_u32 => fun x => .ok (if x then 1#u32 else 0#u32)
  | .u16_usize => fun x => .ok (UScalar.cast .Usize x)
  | .u8_usize => fun x => .ok (UScalar.cast .Usize x)
- | .result_branch => @core.result.Result.Insts.CoreOpsTry.branch
+ | .result_branch => @core.result.Result.Insts.CoreOpsTry.branch T E
  | .usize_unwrap_or => core.option.Option.unwrap_or
  | .usize_is_some => core.option.Option.is_some
 '''
 names=['u32_u64','bool_u32','u16_usize','u8_usize','result_branch','usize_unwrap_or','usize_is_some']
 for n in names:
- s+=f'theorem binding_{n} : native .{n} = model .{n} := by\n'
+ s+=f'theorem binding_{n} (T E : Type) : native T E .{n} = model T E .{n} := by\n'
  if n in names[:4]:s+=('  funext x\n  cases x <;> rfl\n' if n=='bool_u32' else '  rfl\n')
  elif n=='result_branch':s+='  rfl\n'
- elif n=='usize_unwrap_or':s+='  rfl\n'
+ elif n=='usize_unwrap_or':s+='  funext x fallback\n  cases x <;> rfl\n'
  else:s+='  funext x\n  cases x <;> rfl\n'
  s+=f'#print axioms binding_{n}\n'
 s+='''/-- Seven concrete rows only. This is NOT the full reached-cone catalogue. -/
-theorem partial_catalogue_link : PV_B3P_Link_std_dependency_closure14 Signature native model := by
+theorem partial_catalogue_link (T E : Type) : PV_B3P_Link_std_dependency_closure14 (Signature T E) (native T E) (model T E) := by
  intro i
  cases i
 '''
-for n in names:s+=f' · exact binding_{n}\n'
+for n in names:s+=f' · exact binding_{n} T E\n'
 s+='#print axioms partial_catalogue_link\nend PV_B3Q_Std\n';(D/'PV_B3Q_StdPartial.lean').write_text(s)
