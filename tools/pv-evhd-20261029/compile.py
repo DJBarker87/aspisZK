@@ -1,4 +1,4 @@
-"""Single-module capped invocation; admission and original receipt recovery."""
+"""EXPERIMENTAL, NOT ADOPTED: Single-module capped invocation; admission and original receipt recovery."""
 from pathlib import Path
 import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-evhd-20261029'); H='/home/dombarker/project-offloads/codex-pv-evhd-20261029';host='dombarker@100.108.41.90'

@@ -1,4 +1,4 @@
-"""Read-only source/cohort verification, followed by staging own committed source."""
+"""EXPERIMENTAL, NOT ADOPTED: Read-only source/cohort verification, followed by staging own committed source."""
 from pathlib import Path
 import json, hashlib, subprocess, shlex, sys
 E=Path('evidence/pv-evhd-20261029'); O=Path('evidence/pv-rj4idb-20261029')
