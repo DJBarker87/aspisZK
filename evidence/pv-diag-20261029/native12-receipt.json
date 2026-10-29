@@ -1,0 +1,37 @@
+{
+  "target": [
+    "scan",
+    "10"
+  ],
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag-20261029/native12-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-diag-20261029/audit.py",
+    "scan",
+    "10"
+  ],
+  "exit": 0,
+  "wall_seconds": 3.5001425743103027,
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "revision": "4f9bed93da318657c0e6ae31324569cffe33b05c",
+  "audit_sha256": "d40e70a4f40beadefbcba96d28c1acb5060c6d110d4ab9683ebd5f14bb8b93a0",
+  "print_axioms": "N/A: native artifact/source analysis; no Lean theorem"
+}
