@@ -1,0 +1,14 @@
+structure R1Z.PV_RunJoin_SourceSelectionContract.Data {CommitHandle : Type} : Type 1
+number of parameters: 1
+fields:
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.selection : PV_RunJoin_InstalledFamily.Selection CommitHandle
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.publicBinding : PV_RunJoin_InstalledFamily.PublicBinding self.selection
+constructor:
+  R1Z.PV_RunJoin_SourceSelectionContract.Data.mk {CommitHandle : Type}
+    (selection : PV_RunJoin_InstalledFamily.Selection CommitHandle)
+    (publicBinding : PV_RunJoin_InstalledFamily.PublicBinding selection) : Data
+def R1Z.PV_RunJoin_SourceSelectionContract.selectedRecord : {CommitHandle : Type} →
+  Data → Statement K CommitHandle → endpointHonest.Instance → PV_Src_NativeInput.Input :=
+fun {CommitHandle} d x w => d.selection.selected endpointHonest x w
+'R1Z.PV_RunJoin_SourceSelectionContract.installed_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SourceSelectionContract.selected_public' depends on axioms: [propext, Classical.choice, Quot.sound]

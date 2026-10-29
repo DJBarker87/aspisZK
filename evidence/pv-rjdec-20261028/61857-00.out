@@ -1,0 +1,25 @@
+def R1Z.PV_RunJoin_InstalledEndpoint.runtime : {CommitHandle Aux Coins N C : Type} →
+  (base : ExternalTypes) →
+    (PV_RunJoin_NativeSelectedInputs.LedgerState base N C → ExternalFuns) →
+      (Statement K CommitHandle → Slice (Slice U8) → Result (Std.Array U8 32#usize)) →
+        PV_RunJoin_InstalledFamily.Selection CommitHandle →
+          ProverCommitLedger36.Schedule →
+            Bool →
+              PV_RunJoin_LedgerWorld.Address →
+                PV_RunJoin_CompletedWorld.Data Coins N PV_RunJoin_LedgerWorld.World C →
+                  ProverRwEffectCallback.Account N →
+                    (R1Adv K CommitHandle Aux →
+                        Statement K CommitHandle →
+                          Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                            View K CommitHandle Aux R1Bat) →
+                      (R1Adv K CommitHandle Aux →
+                          Statement K CommitHandle →
+                            Result (PV_RunJoin_Deployed.Output N PV_RunJoin_LedgerWorld.World C) →
+                              List (Bytes × OracleAnswer)) →
+                        ((Challenges K → Tape K F → View K CommitHandle Aux R1Bat) →
+                            R1Adv K CommitHandle Aux → Statement K CommitHandle → ROMView K CommitHandle Aux R1Bat) →
+                          PV_RunJoin_Deployed.Runtime CommitHandle Aux Coins N PV_RunJoin_LedgerWorld.World C :=
+fun {CommitHandle Aux Coins N C} base ops hash selection schedule unix address world policy disclosed oracle ideal =>
+  PV_RunJoin_LedgerConstructor.runtime schedule unix address world policy
+    (PV_RunJoin_InstalledFamily.inputs base ops hash selection) disclosed oracle ideal
+'R1Z.PV_RunJoin_InstalledEndpoint.runtime' depends on axioms: [propext, Classical.choice, Quot.sound]

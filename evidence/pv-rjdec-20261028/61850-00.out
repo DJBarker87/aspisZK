@@ -1,0 +1,18 @@
+structure R1Z.PV_RunJoin_InstalledFamily.Selection (CommitHandle : Type) : Type 1
+number of parameters: 1
+fields:
+  R1Z.PV_RunJoin_InstalledFamily.Selection.selected : (h : HonestProver K) →
+      Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input
+  R1Z.PV_RunJoin_InstalledFamily.Selection.publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input
+constructor:
+  R1Z.PV_RunJoin_InstalledFamily.Selection.mk {CommitHandle : Type}
+    (selected : (h : HonestProver K) → Statement K CommitHandle → h.Instance → PV_Src_NativeInput.Input)
+    (publicRecord : Statement K CommitHandle → PV_Src_NativeInput.Input) : Selection CommitHandle
+def R1Z.PV_RunJoin_InstalledFamily.PublicBinding : {CommitHandle : Type} → Selection CommitHandle → Prop :=
+fun {CommitHandle} selection =>
+  ∀ (h : HonestProver K) (x : Statement K CommitHandle) (w : h.Instance),
+    h.public w = x.1 →
+      PV_Src_NativeInput.publicInput (selection.selected h x w) =
+        PV_Src_NativeInput.publicInput (selection.publicRecord x)
+'R1Z.PV_RunJoin_InstalledFamily.public_common' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_InstalledFamily.map_error' depends on axioms: [propext, Classical.choice, Quot.sound]

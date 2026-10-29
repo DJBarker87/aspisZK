@@ -1,0 +1,133 @@
+/home/dombarker/project-offloads/codex-pv-rjdec-20261028/sources/R1Z/PV_RunJoin_TrustEndpoint.lean:145:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_TrustEndpoint.complete_view`:
+  [DecidableEq File]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [DecidableEq File] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+structure R1Z.PV_RunJoin_TrustEndpoint.ProofObligations {CommitHandle Aux : Type} (template : R1Wire K CommitHandle Aux)
+  (outputs : Statement K CommitHandle → Challenges K → Aux) (x : Statement K CommitHandle) [ProverRwFull.ExternalTypes]
+  {N Ledger Client Context Rest : Type}
+  (runtime : PV_RunJoin_Deployed.Runtime CommitHandle Aux (ModelCoins template outputs x) N Ledger Client)
+  (boundary : PV_RunJoin_Boundary.Data runtime Context Rest)
+  (extracted :
+    ModelCoins template outputs x → R1Adv K CommitHandle Aux → h.Instance → ROMView K CommitHandle Aux R1Bat) :
+  Prop
+number of parameters: 14
+fields:
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.source_V045 : (∀ (w : h.Instance),
+        h.public w = x.1 → PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) ∧
+      (∀ (s : State) (k : Aeneas.Std.Usize) (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (next : State),
+          runtime.account.call_mut s k = Aeneas.Std.Result.ok (nonce, next) → next.provider = s.provider) ∧
+        ∀ (w : h.Instance),
+          h.public w = x.1 →
+            ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+              (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+              runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) → next.provider = s.provider
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.fill : ∀ (p : ProverRwRngCaller.Tape),
+      ↑p.used < (↑p.replies).length →
+        boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+          ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8)
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.ledger : ∀ (w : h.Instance),
+      h.public w = x.1 →
+        ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+          (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+          runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) →
+            boundary.ledger next =
+              match boundary.reservation secret s with
+              | none => boundary.ledger s
+              | some path => (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.byte_blind : (∀ (secret : ProverRwRetryModel.Secret) (s : State)
+        (kind : ProverCommitEnvironment35.Kind),
+        boundary.fault secret s kind =
+          boundary.schedule (List.length (boundary.ledger s).history) kind (boundary.ledger s).history) ∧
+      (∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+          boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+            boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))) ∧
+        ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+          (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest)
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.trace : ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+      h.public w = x.1 →
+        ∀ (r : World),
+          (¬∃ i,
+                ProverCommitFuelJoin22.bad
+                  (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 h B outputs x w)
+                  (queries adv w) i r.coins) →
+            extracted r.coins adv w =
+              (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                    (prover base (base.pubBytes x).length h B outputs x
+                        (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                          opens)).toProver
+                    8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1
+constructor:
+  R1Z.PV_RunJoin_TrustEndpoint.ProofObligations.mk {CommitHandle Aux : Type} {template : R1Wire K CommitHandle Aux}
+    {outputs : Statement K CommitHandle → Challenges K → Aux} {x : Statement K CommitHandle}
+    [ProverRwFull.ExternalTypes] {N Ledger Client Context Rest : Type}
+    {runtime : PV_RunJoin_Deployed.Runtime CommitHandle Aux (ModelCoins template outputs x) N Ledger Client}
+    {boundary : PV_RunJoin_Boundary.Data runtime Context Rest}
+    {extracted :
+      ModelCoins template outputs x → R1Adv K CommitHandle Aux → h.Instance → ROMView K CommitHandle Aux R1Bat}
+    (source_V045 :
+      (∀ (w : h.Instance),
+          h.public w = x.1 → PV_RunJoin_UnifiedRetry.BodySourceLaw (boundary.sourceBody h x w) (runtime.body h x w)) ∧
+        (∀ (s : State) (k : Aeneas.Std.Usize) (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (next : State),
+            runtime.account.call_mut s k = Aeneas.Std.Result.ok (nonce, next) → next.provider = s.provider) ∧
+          ∀ (w : h.Instance),
+            h.public w = x.1 →
+              ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+                (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+                runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) → next.provider = s.provider)
+    (fill :
+      ∀ (p : ProverRwRngCaller.Tape),
+        ↑p.used < (↑p.replies).length →
+          boundary.draw.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8) =
+            ProverRwRngCaller.Tape.Insts.Prover_rw_rng_callerDraw64.fill p (Aeneas.Std.Array.repeat 64#usize 0#u8))
+    (ledger :
+      ∀ (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (secret : ProverRwRetryModel.Secret) (s next : State)
+            (status : Aeneas.Std.core.result.Result ProverRwRetryModel.Proof ProverRwFull.verifier.Error),
+            runtime.body h x w secret s = Aeneas.Std.Result.ok (status, next) →
+              boundary.ledger next =
+                match boundary.reservation secret s with
+                | none => boundary.ledger s
+                | some path =>
+                  (ProverCommitLedger36.reserve boundary.schedule boundary.unix path (boundary.ledger s)).2)
+    (byte_blind :
+      (∀ (secret : ProverRwRetryModel.Secret) (s : State) (kind : ProverCommitEnvironment35.Kind),
+          boundary.fault secret s kind =
+            boundary.schedule (List.length (boundary.ledger s).history) kind (boundary.ledger s).history) ∧
+        (∀ (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (t, rest))) =
+              boundary.ledger (PV_RunJoin_Deployed.initialState runtime (boundary.coordinates.symm (u, rest)))) ∧
+          ∀ (i : Fin 128) (t u : Fin 128 → ProverCommitPublicNonce40.Raw) (rest : Rest),
+            (∀ (j : Fin 128), ↑j < ↑i → t j = u j) → boundary.frame i (t, rest) = boundary.frame i (u, rest))
+    (trace :
+      ∀ (adv : R1Adv K CommitHandle Aux) (w : h.Instance),
+        h.public w = x.1 →
+          ∀ (r : World),
+            (¬∃ i,
+                  ProverCommitFuelJoin22.bad
+                    (QueryScanRealLazyBound.realBad (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 h B outputs x w)
+                    (queries adv w) i r.coins) →
+              extracted r.coins adv w =
+                (ProverCommitReencode16.experiment (wire base (base.pubBytes x).length h B outputs x).toWire
+                      (prover base (base.pubBytes x).length h B outputs x
+                          (PrivacyR1AcctModel.seed (wire base (base.pubBytes x).length h B outputs x).toWire decode fib
+                            opens)).toProver
+                      8 eight_pos (P_R1 h.transport B hB) (fun h' => VR1 h') ProverCommitReencode16.encode).real
+                  h B outputs (RomObserverBin.observerMap rust observer_program adv) x w r.coins.1.1) :
+    ProofObligations template outputs x runtime boundary extracted
+'R1Z.PV_RunJoin_TrustEndpoint.complete_view' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.toPremises' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_TrustEndpoint.privacy_headline_deployed_candidate' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
