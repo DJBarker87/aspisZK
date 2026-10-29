@@ -15058,3 +15058,15 @@ Almost every line now depends on runjoin's native association, so the lead moves
 - runjoin58 (IDs 68800-68899; 100 Lean) first builds the satisfiability witness from an ACTUAL fixture run, pv-2tnv's transfer-13 encoding and canonical witness through the model. Any link false even there is corrected under (v). It then does CommonSample and BackendInput.
 - pv-rjq (new branch codex/pv-rjq-20261029 from c8fb38ee73; prefix PV_RJQ_; PV_RunJoin_ read-only; IDs 68900-68999; 100 Lean) proves QueryRange (from the transcript query derivation), the corrected QueryAppend and FinishContext as theorems about the actual run's data, in parallel. It will be merged back into the runjoin branch after review.
 Privacy target not yet established.
+
+## D489 (Stream B) 2026-10-29 07:48 UTC: pv-rjq results (QueryRange proved for the actual run); rjq held for runjoin58; proved=shipped manifest (pv-mf) launched
+
+pv-rjq (branch codex/pv-rjq-20261029, head c9cb177d7e, pushed) used 17 Lean attempts (10 accepted, 7 rejected) and no Kani. Its three audits passed with standard axioms only. Peak RSS was 4.49 GB, with zero swap. Lead review: no PV_RunJoin_ source changed; no forbidden constructs.
+
+PV_RJQ_QueryRange.actual concludes exactly the unchanged link PV_RunJoin_Link_QueryRange: it derives q < 262144 from the sampler's mask and carries it through successful actual finishes. The corrected QueryAppend needs the actual Plan.queries producer binding. For FinishContext the actual finish trace is proved, but its association with the model Data and Plan is not. Neither link was shown false for an actual run. Both need a declaration fixing the actual data and plan families, which NativeCallback55.runOf still takes as parameters, and that is the actual-run instance runjoin58 is building for the fixture witness. To avoid duplicate construction, rjq is HELD (branch pushed, worktree removed) and will be merged into the runjoin branch after runjoin58.
+
+The freed slot goes to V346, the proved=shipped manifest, which V397-V399 need and which is independent of the pending owner decisions. pv-mf (sparse worktree from the candidate; IDs 69000-69099; statement checks only, no proofs; 30 native scopes for reproducible builds and hashing) is to produce a machine-checked MANIFEST.json with a checker script:
+- the shipped client and the three ELFs, with their identities (the client rebuild is compared with pv-l3a's fa888460);
+- a proof-to-source map for every privacy-relevant module, with git blob hashes and evidence class, flagging any module bound to source that differs from the shipped revision as a stale association;
+- the gaps: shipped privacy-path functions that no module binds.
+Rows removed: 0. Privacy target not yet established.
