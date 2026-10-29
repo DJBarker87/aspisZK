@@ -20,8 +20,10 @@ theorem native_product_term_binding14 (left : Array NativePrepared14 3#usize)
       native_product_term14 left right sums index := by
   unfold source_product_term13 native_product_term14
   rw [map_array_index14]
+  apply congrArg (Aeneas.Std.bind _)
+  funext r
   rw [PV_B3P_Ordered227.bind_assoc]
-  rfl
+  simp only [bind_tc_ok]
 
 def native_prepared14 (left : Array NativePrepared14 3#usize)
     (right : Array aspis_core.field.QM31 3#usize) : Result aspis_core.field.QM31 := do
