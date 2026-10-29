@@ -33,6 +33,7 @@ theorem run (variant : transport.Variant)
     obtain ⟨fbytes,hfbytes,h⟩ := bind_eq_ok h
     obtain ⟨pair,hqueries,h⟩ := bind_eq_ok h
     rcases pair with ⟨r,next⟩
+    simp only [Aeneas.Std.uncurry_apply_pair] at h
     cases r with
     | Err e => cases h
     | Ok queries =>
