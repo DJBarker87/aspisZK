@@ -5,7 +5,7 @@ E=Path('evidence/pv-l1e-20261029');H='/home/dombarker/project-offloads/codex-pv-
 plan=json.loads((E/'build-plan.json').read_text()) if (E/'build-plan.json').exists() else dict(source_revision=rev,modules={},chunks=[])
 payload={}
 for name in sys.argv[1:]:
- upstream={m:v['path'] for m,v in json.loads((E/'focused-resolution.json').read_text())['resolved'].items() if 'imports' in v}
+ upstream={m:v['path'] for m,v in json.loads((E/'focused-resolution.json').read_text())['resolved'].items() if 'imports' in v} if (E/'focused-resolution.json').exists() else {}
  assert name.startswith('PV_L1E_') or name in upstream
  path=upstream.get(name,'lean/'+name+'.lean');b=(json.loads((E/'focused-project-sources.json').read_text())[name].encode() if name in upstream else subprocess.check_output(['git','show',rev+':'+path]));assert name in upstream or b==Path(path).read_bytes()
  plan['modules'][name]=dict(path=path,revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),sha256=hashlib.sha256(b).hexdigest(),imports=re.findall(r'^import (\S+)',b.decode(),re.M))
