@@ -14769,3 +14769,7 @@ Still unresolved: native invocation and operand bindings, V400 itself, witness-d
 - captured frames on honest-reachable error paths;
 - what V400 requires of the deployed client, proved as far as the world, ownership and allocation results allow.
 Rows removed: 0. Privacy target not yet established.
+
+## D462 (Stream B) 2026-10-29 04:45 UTC: runjoin52 results (import collision bridged); runjoin53 launched
+
+runjoin52 (head d37ca7187e, pushed) used all 100 Lean attempts (81 accepted, 19 rejected; 0 Kani). All three axiom audits passed with standard axioms only. Lead review: no forbidden constructs or raised limits in hand-written modules; no edits to protected prefixes or to either colliding generated Types module. The D457 separation design worked: the owned and R72 source-to-neutral laws are proved in separate modules without co-importing the colliding instance, and the combined module CircleInstalled52 imports successfully. Its projection proof failed and is uncredited. The common-sample association, the backend hinput producer, FinishContext, the appends and the publication equation remain open. Rows removed: 0. runjoin53 launched (IDs 66100-66199; 100 Lean, 0 Kani): it repairs the projection proof with a changed source using named projection lemmas, then continues per OPENING-NEXT.md through to the named publication equation. Privacy target not yet established.
