@@ -1,6 +1,6 @@
 """Read-only source/cohort verification, followed by staging own committed source."""
 from pathlib import Path
-import json, hashlib, subprocess, shlex
+import json, hashlib, subprocess, shlex, sys
 E=Path('evidence/pv-fib-20261029'); O=Path('evidence/pv-rj4idb-20261029')
 H='/home/dombarker/project-offloads/codex-pv-fib-20261029'
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
@@ -33,9 +33,11 @@ edges+=reuse['dependencies']+own['dependencies']
 edges += [dict(module=m,dependency=d,sha256=v['sha256']) for m,r in extra['records'].items() for d,v in r['dependencies'].items()]
 external=json.loads(subprocess.check_output(['git','show',rev+':evidence/pv-rj4id-20261029/external-authority.json']))
 # Only load the recorded import closure, not every object in a cache.
-new=Path('lean/PV_FIB_Restricted.lean');b=new.read_bytes()
+module=sys.argv[1] if len(sys.argv)>1 else 'PV_FIB_Restricted'
+assert module in ['PV_FIB_Restricted','PV_FIB_Termination']
+new=Path('lean/'+module+'.lean');b=new.read_bytes()
 assert subprocess.check_output(['git','show',rev+':'+str(new)])==b
-payload=dict(H=H,revision=rev,projects=projects,edges=edges,external=external,source=b.decode(),sha256=sha(b))
+payload=dict(H=H,revision=rev,projects=projects,edges=edges,external=external,source=b.decode(),sha256=sha(b),module=module)
 code=r'''
 import pathlib,json,sys,hashlib,subprocess,re
 x=json.load(sys.stdin);p=pathlib.Path(x['H']);old=pathlib.Path('/home/dombarker/project-offloads/codex-pv-rj4idb-20261029')
@@ -66,13 +68,13 @@ def visit(m):
 for m,v in auth.items():
  q=resolve(m);assert sha(q)==v['object_sha256'],('external',m)
  used.append(dict(module=m,path=str(q),sha256=v['object_sha256']))
-for m in ['R1Z.ProverCommitFuelJoin22','PV_RJ4IDB_SourceTrace']:visit(m)
+for m in re.findall(r'^import (\S+)',x['source'],re.M):visit(m)
 for n in ['sources','objects','evidence']:(p/n).mkdir(parents=True,exist_ok=True)
-(p/'sources/PV_FIB_Restricted.lean').write_text(x['source'])
+(p/('sources/'+x['module']+'.lean')).write_text(x['source'])
 env['LEAN_PATH']=str(p/'objects')+':'+env['LEAN_PATH'];(p/'J.json').write_text(json.dumps(env))
 print(json.dumps(dict(project_checks=list(visited.values()),external_checks=used,toolchain=env['LEAN_GITHASH'],inherited_prefix=':'.join(str(q) for q in roots),LEAN_PATH=env['LEAN_PATH'],source_revision=x['revision'],source_sha256=x['sha256'],shared_written=False)))
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
-(E/'prepare-result.json').write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
+(E/('prepare-'+module+'.json')).write_text(json.dumps(dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout),indent=2)+'\n')
 assert r.returncode==0,r.stderr+r.stdout
 print('PASS verified and staged')

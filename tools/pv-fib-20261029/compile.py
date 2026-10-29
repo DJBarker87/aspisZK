@@ -4,9 +4,11 @@ import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-fib-20261029'); H='/home/dombarker/project-offloads/codex-pv-fib-20261029';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);assert 67500<=a<=67599
 assert not (E/f'submission-{a}.json').exists()
-source=Path('lean/PV_FIB_Restricted.lean').read_bytes()
-assert hashlib.sha256(source).hexdigest()==json.load(open(E/'prepare-result.json'))['result']['source_sha256']
-assert subprocess.check_output(['git','show','HEAD:lean/PV_FIB_Restricted.lean'])==source
+module=sys.argv[2] if len(sys.argv)>2 else 'PV_FIB_Restricted'
+assert module in ['PV_FIB_Restricted','PV_FIB_Termination']
+source=Path('lean/'+module+'.lean').read_bytes()
+assert hashlib.sha256(source).hexdigest()==json.load(open(E/('prepare-'+module+'.json')))['result']['source_sha256']
+assert subprocess.check_output(['git','show','HEAD:lean/'+module+'.lean'])==source
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 def ssh(c):return subprocess.run(['ssh',host,c],text=True,capture_output=True)
 code="""import pathlib,re,json
@@ -22,8 +24,8 @@ print(json.dumps(dict(attempt=a,receipt_hits=hits,sent_hits=lines)))
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
 idcheck=json.loads(r.stdout);(E/f'id-audit-{a}.json').write_text(r.stdout)
 assert not idcheck['receipt_hits'] and not idcheck['sent_hits']
-cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-fib-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/time-{a}.log','timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',H+'/J.json',H+'/objects',H+'/sources',H+'/objects/PV_FIB_Restricted.olean',H+'/sources/PV_FIB_Restricted.lean','7000']
-intent=dict(attempt=a,target='PV_FIB_Restricted',source_revision=rev,source_sha256=hashlib.sha256(source).hexdigest(),command=cmd)
+cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-fib-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/time-{a}.log','timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',H+'/J.json',H+'/objects',H+'/sources',H+'/objects/'+module+'.olean',H+'/sources/'+module+'.lean','7000']
+intent=dict(attempt=a,target=module,source_revision=rev,source_sha256=hashlib.sha256(source).hexdigest(),command=cmd)
 (E/f'submission-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 admit=f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {H}/evidence/admission-{a}.json > {H}/evidence/admission-{a}.log 2>&1'
 check='python3 -c '+shlex.quote('import json; assert json.load(open('+repr(H+f'/evidence/admission-{a}.json')+'))["allowed"] is True')
