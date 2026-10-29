@@ -56,9 +56,9 @@ theorem tail {A T : Type} (f : Phase → Result (core.result.Result A verifier.E
               (Phase × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
             ok (r1,store)) := by
   cases hf : f p with
-  | fail e => simp only [Rel,resume,capture,bind_tc_ok,hf];rfl
-  | div => simp only [Rel,resume,capture,bind_tc_ok,hf];rfl
-  | ok result => cases result <;> simp only [Rel,resume,capture,bind_tc_ok,hf] <;> rfl
+  | fail e => simp only [Rel,resume,capture,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,hf];rfl
+  | div => simp only [Rel,resume,capture,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,hf];rfl
+  | ok result => cases result <;> simp only [Rel,resume,capture,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,Aeneas.Std.uncurry,hf] <;> rfl
 
 #print axioms same_bind
 #print axioms error
