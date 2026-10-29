@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65149/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65149/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects/R1Z/PV_OWNK_CTDecode.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CTDecode.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.79",
+  "peak_rss_kib": "2638764",
+  "swap": "0",
+  "source_revision": "e45df08710cdc8abbaaf2a5126041abb7639c0d8",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CTDecode.lean:24:29: warning: This simp argument is unused:\n  if_neg\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335h\u0335,\u0335d\u0335e\u0335c\u0335i\u0335d\u0335e\u0335_\u0335f\u0335a\u0335l\u0335s\u0335e\u0335,\u0335i\u0335f\u0335_\u0335n\u0335e\u0335g\u0335]\u0335[\u0332h\u0332,\u0332 \u0332d\u0332e\u0332c\u0332i\u0332d\u0332e\u0332_\u0332f\u0332a\u0332l\u0332s\u0332e\u0332]\u0332\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CTDecode.lean:62:44: error: unsolved goals\nx : U64\n\u22a2 if\n      (2147483647#32).toNat \u2264\n        (BitVec.setWidth 32\n            (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n              ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31)).toNat then\n    (if\n          2147483647 \u2264\n            (BitVec.setWidth 32\n                (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                  ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31)).toNat then\n        (BitVec.setWidth 32\n              (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n            (2147483647#32 &&& 0#32 - 1#32)).toNat\n      else\n        (BitVec.setWidth 32\n              (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n            (2147483647#32 &&& 0#32 - 0#32)).toNat) =\n      (BitVec.setWidth 32\n            (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n              ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n          (2147483647#32 &&& 0#32 - 1#32)).toNat\n  else\n    (if\n          2147483647 \u2264\n            (BitVec.setWidth 32\n                (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                  ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31)).toNat then\n        (BitVec.setWidth 32\n              (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n            (2147483647#32 &&& 0#32 - 1#32)).toNat\n      else\n        (BitVec.setWidth 32\n              (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n                ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n            (2147483647#32 &&& 0#32 - 0#32)).toNat) =\n      (BitVec.setWidth 32\n            (((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31 &&& 2147483647#64) +\n              ((x.bv &&& 2147483647#64) + x.bv.ushiftRight 31).ushiftRight 31) -\n          (2147483647#32 &&& 0#32 - 0#32)).toNat\n/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CTDecode.lean:66:12: warning: This simp argument is unused:\n  UScalar.lt_equiv\n\nHint: Omit it from the simp argument list.\n  simp only [\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335l\u0335t\u0335_\u0335e\u0335q\u0335u\u0335i\u0335v\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335l\u0335e\u0335_\u0335e\u0335q\u0335u\u0335i\u0335v\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335v\u0335a\u0335l\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335c\u0335a\u0335s\u0335t\u0335,\u0335\n  \u0335 \u0335 \u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335c\u0335a\u0335s\u0335t\u0335_\u0335f\u0335r\u0335o\u0335m\u0335B\u0335o\u0335o\u0335l\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335s\u0335h\u0335r\u0335,\u0335c\u0335o\u0335r\u0335e\u0335.\u0335n\u0335u\u0335m\u0335.\u0335U\u03353\u03352\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335s\u0335u\u0335b\u0335,\u0335\n  \u0335 \u0335 \u0335U\u03356\u03354\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335a\u0335d\u0335d\u0335,\u0335U\u03356\u03354\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335s\u0335h\u0335r\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335a\u0335d\u0335d\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335w\u0335r\u0335a\u0335p\u0335p\u0335i\u0335n\u0335g\u0335_\u0335s\u0335u\u0335b\u0335,\u0335\n  \u0335 \u0335 \u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335.\u0335b\u0335v\u0335_\u0335a\u0335n\u0335d\u0335,\u0335U\u0335S\u0335c\u0335a\u0335l\u0335a\u0335r\u0335T\u0335y\u0335.\u0335n\u0335u\u0335m\u0335B\u0335i\u0335t\u0335s\u0335,\u0335B\u0335i\u0335t\u0335V\u0335e\u0335c\u0335.\u0335z\u0335e\u0335r\u0335o\u0335E\u0335x\u0335t\u0335e\u0335n\u0335d\u0335_\u0335e\u0335q\u0335_\u0335s\u0335e\u0335t\u0335W\u0335i\u0335d\u0335t\u0335h\u0335,\u0335d\u0335e\u0335c\u0335i\u0335d\u0335e\u0335_\u0335e\u0335q\u0335_\u0335t\u0335r\u0335u\u0335e\u0335_\u0335e\u0335q\u0335,\u0335[\u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332l\u0332e\u0332_\u0332e\u0332q\u0332u\u0332i\u0332v\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332v\u0332a\u0332l\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332c\u0332a\u0332s\u0332t\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332c\u0332a\u0332s\u0332t\u0332_\u0332f\u0332r\u0332o\u0332m\u0332B\u0332o\u0332o\u0332l\u0332,\u0332\n  \u0332 \u0332 \u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332s\u0332h\u0332r\u0332,\u0332 \u0332c\u0332o\u0332r\u0332e\u0332.\u0332n\u0332u\u0332m\u0332.\u0332U\u03323\u03322\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332s\u0332u\u0332b\u0332,\u0332 \u0332U\u03326\u03324\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332a\u0332d\u0332d\u0332,\u0332 \u0332U\u03326\u03324\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332s\u0332h\u0332r\u0332,\u0332\n  \u0332 \u0332 \u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332a\u0332d\u0332d\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332w\u0332r\u0332a\u0332p\u0332p\u0332i\u0332n\u0332g\u0332_\u0332s\u0332u\u0332b\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332.\u0332b\u0332v\u0332_\u0332a\u0332n\u0332d\u0332,\u0332 \u0332U\u0332S\u0332c\u0332a\u0332l\u0332a\u0332r\u0332T\u0332y\u0332.\u0332n\u0332u\u0332m\u0332B\u0332i\u0332t\u0332s\u0332,\u0332\n  \u0332 \u0332 \u0332 \u0332B\u0332i\u0332t\u0332V\u0332e\u0332c\u0332.\u0332z\u0332e\u0332r\u0332o\u0332E\u0332x\u0332t\u0332e\u0332n\u0332d\u0332_\u0332e\u0332q\u0332_\u0332s\u0332e\u0332t\u0332W\u0332i\u0332d\u0332t\u0332h\u0332,\u0332 \u0332d\u0332e\u0332c\u0332i\u0332d\u0332e\u0332_\u0332e\u0332q\u0332_\u0332t\u0332r\u0332u\u0332e\u0332_\u0332e\u0332q\u0332,\u0332 U32.ofNat_bv]\n\nNote: This linter can be disabled with `set_option linter.unusedSimpArgs false`\n'R1Z.PV_OWNK_CTDecode.reduce_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.reduce_decode' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.reduce_canon' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.add_canon' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.sub_canon' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.sub_zero' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.subtract_shape' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.subtract_decode' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.add_decode' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CTDecode.sub_decode' depends on axioms: [propext, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 65149,
+  "module": "R1Z/PV_OWNK_CTDecode",
+  "source_blob": "2085cbd916408f2ce2525614821bbe542f87e7e3",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNK_CTDecode.lean",
+  "source_sha256": "f8b179d28fad291dbe2d998278daca31aaedecf4ec41f334b9aa499be5cf7651",
+  "imports": [
+    "R1Z.PV_B2_Total_QM31_mul",
+    "R1Z.PV_OWNK_ReduceBits"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_B2_Total_QM31_mul": "96a11c651d988dacf7a24d6f88d2e9f178ccfc7d1d121d4811b08e33bd75c58e",
+    "R1Z.PV_OWNK_ReduceBits": "4a134018626be4fd2383225890a2b38a0cb8eb6625e17dba815a2ff5091e87af"
+  },
+  "deps_fingerprint": "e92904e3a0162f12c50f487ef3c1f640fc0af55dabde0b28bf8e3343ac34ef62"
+}

@@ -1,0 +1,62 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65159/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-65159/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects/R1Z/PV_OWNK_CMDecode.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:01.45",
+  "peak_rss_kib": "3027260",
+  "swap": "0",
+  "source_revision": "d48cc8d3feeb8f220badcb4383ea0da1f3eb4f54",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:55:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  PV_OWNK_FieldScalar.decode\n    ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b))\nin the target expression\n  ds ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =\n    (decode x * decode y).re\n\ncase re\nx y : C\nhx : CC x\nhy : CC y\nh0 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)\nh1 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)\nh2 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y))\n\u22a2 ds ((PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a).sub (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =\n    (decode x * decode y).re\n/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:59:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  PV_OWNK_FieldScalar.decode\n    (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub\n          (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub\n      (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b))\nin the target expression\n  ds\n      (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub\n            (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub\n        (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =\n    (decode x * decode y).im\n\ncase im\nx y : C\nhx : CC x\nhy : CC y\nh0 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)\nh1 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)\nh2 : PV_OWNK_ScalarOps.Canon (PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y))\n\u22a2 ds\n      (((PV_B2_FieldValue.aspis_core.field.M31.reduce_u64 (cross x y)).sub\n            (PV_B2_FieldValue.aspis_core.field.M31.mul x.a y.a)).sub\n        (PV_B2_FieldValue.aspis_core.field.M31.mul x.b y.b)) =\n    (decode x * decode y).im\n/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:71:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  PV_OWNK_FieldScalar.decode ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b)\nin the target expression\n  ds ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b) = (AspisV8R15.ExactTowerBase.qm31R * decode x).re\n\ncase re\nx : C\nhx : CC x\n\u22a2 ds ((PV_B2_FieldValue.aspis_core.field.M31.double x.a).sub x.b) = (AspisV8R15.ExactTowerBase.qm31R * decode x).re\n/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-sources/R1Z/PV_OWNK_CMDecode.lean:76:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  PV_OWNK_FieldScalar.decode\n    (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b))\nin the target expression\n  ds (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b)) =\n    (AspisV8R15.ExactTowerBase.qm31R * decode x).im\n\ncase im\nx : C\nhx : CC x\n\u22a2 ds (PV_B2_FieldValue.aspis_core.field.M31.add x.a (PV_B2_FieldValue.aspis_core.field.M31.double x.b)) =\n    (AspisV8R15.ExactTowerBase.qm31R * decode x).im\n'R1Z.PV_OWNK_CMDecode.add' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CMDecode.sub' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CMDecode.cross_val' depends on axioms: [propext, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CMDecode.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n'R1Z.PV_OWNK_CMDecode.mul_by_r' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 65159,
+  "module": "R1Z/PV_OWNK_CMDecode",
+  "source_blob": "e6fd9fb148b4368ae059ffae25acea5a71b27649",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWNK_CMDecode.lean",
+  "source_sha256": "93451d9c69c82fb1e23e012da3c6c73a37d223a3f2854a0bc87abe34f75fec10",
+  "imports": [
+    "R1Z.PV_OWNK_TowerCanon",
+    "R1Z.PV_OWNK_FieldScalar"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWNK_TowerCanon": "78169e8035d648fdf78384349044d34245d9cfd1577693a4ea9fe73b8ba3a2a4",
+    "R1Z.PV_OWNK_FieldScalar": "4d975d34c9ca0e28a28a59a7092cab607e54a019873ec8468348c3551d2eb7e4"
+  },
+  "deps_fingerprint": "a91baf2d9988223d834d8db3d7a4fe653913879820df2741318ac58ff0186c0a"
+}

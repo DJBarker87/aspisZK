@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+StopIteration
+Traceback (most recent call last):
+  File "/Users/dominic/ZK/.worktrees/pv-own/tools/pv-ownk-20261029/lean.py", line 22, in <module>
+    q=subprocess.check_output(['ssh',H,"python3 -c \"import json,pathlib,hashlib; roots=[pathlib.Path("+repr(D+'/lean-objects')+")]+[pathlib.Path(x) for x in json.load(open("+repr(D+'/env-J.json')+"))['LEAN_PATH'].split(':')]; p=next(r/("+repr(dep.replace('.','/')+'.olean')+") for r in roots if (r/("+repr(dep.replace('.','/')+'.olean')+")).exists()); print(hashlib.sha256(p.read_bytes()).hexdigest())\""],text=True).strip()
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 466, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['ssh', 'dombarker@100.108.41.90', 'python3 -c "import json,pathlib,hashlib; roots=[pathlib.Path(\'/home/dombarker/project-offloads/codex-pv-ownk-20261029/lean-objects\')]+[pathlib.Path(x) for x in json.load(open(\'/home/dombarker/project-offloads/codex-pv-ownk-20261029/env-J.json\'))[\'LEAN_PATH\'].split(\':\')]; p=next(r/(\'R1Z/PV_OWNI_RawOps.olean\') for r in roots if (r/(\'R1Z/PV_OWNI_RawOps.olean\')).exists()); print(hashlib.sha256(p.read_bytes()).hexdigest())"']' returned non-zero exit status 1.
