@@ -37,3 +37,14 @@ selected251-cohort row lookup transport with standard axioms, no source changes
 to dictionaries. At resume:30 charged Lean attempts (23 pass,7 fail),4 native;
 after60630:31 charged Lean attempts (24 pass,7 fail). No Kani.
 The host cache survives this relaunch. No credited object was resubmitted.
+
+Focused continuation60631–60635: selected-cohort ordered folds, owned raw match,
+rejection-preserving reference, callback carrier transport and generic terminal
+Result/iterator identity laws all pass. The selected callback statement is
+`∀ w kind j, PV_B2_251c1.host_weights.raw_value w kind j =
+PV_RDCD3_V260C_Exact.original w kind j`; its full Result carrier includes errors
+and divergence. No success-domain or arbitrary arithmetic hypothesis was added.
+`v260-cone-disposition.json` addresses all eighteen conservative unresolved
+records at this Result boundary; it expressly retains panic diagnostics/world/
+observer obligations. Pending complete module, word laws, updated source gate
+and coherent fingerprint prevent whole-row credit at this point.
