@@ -3,16 +3,18 @@
 import base64,hashlib,json,os,pathlib,subprocess,sys,time
 from r1_devnet_rpc import rpc
 from r1_devnet_release_gate import base58
+from r1_devnet_policy import require_key, loader_rent, close_failed_buffer
 C=json.load(open(sys.argv[1]));O=pathlib.Path(sys.argv[2]);O.mkdir(exist_ok=False,mode=0o700)
-URL=C['rpc_url'];CLI=pathlib.Path.home()/'.local/share/solana/install/active_release/bin'
+URL=C['rpc_url'];CLI=pathlib.Path(C.get('cli_dir',str(pathlib.Path.home()/'.local/share/solana/install/active_release/bin')))
+KEYS=pathlib.Path(C.get('key_dir','keys'));PAYER_KEY=str(C.get('payer_key',KEYS/'payer.json'));SIGNER=C.get('signer','native-target/release/devnet_spend')
 LOADER='BPFLoaderUpgradeab1e11111111111111111111111';SYSTEM='11111111111111111111111111111111'
 def pub(path):return subprocess.check_output([str(CLI/'solana-keygen'),'pubkey',str(path)],text=True).strip()
 def write(name,v):(O/(name+'.json')).write_text(json.dumps(v,indent=2)+'\n')
 def account(key):return rpc(URL,'getAccountInfo',[key,{'encoding':'base64','commitment':'finalized'}])
 def signed(ixs,keys,bh):
-    q={'keys':keys,'blockhash':bh,'instructions':ixs};return json.loads(subprocess.check_output(['native-target/release/devnet_spend'],input=json.dumps(q).encode()))
+    q={'keys':keys,'blockhash':bh,'instructions':ixs};return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
 def ix(program,accounts,data):return {'program':program,'accounts':accounts,'data':data.hex()}
-def wait(batch):
+def wait(batch,allow_error=False):
     begin=time.monotonic()
     while True:
         status=rpc(URL,'getSignatureStatuses',[[x['signature'] for x in batch],{'searchTransactionHistory':True}])['value']
@@ -21,7 +23,8 @@ def wait(batch):
         time.sleep(2)
     for e,s in zip(batch,status):
         e.update(s)
-        if s['err']:raise RuntimeError(s)
+        tx=rpc(URL,'getTransaction',[e['signature'],{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}]);write('tx-'+e['signature'],tx)
+        if s['err'] and not allow_error:raise RuntimeError(s)
 def submit(name,ixs,keys,bh):
     t=time.monotonic()
     for attempt in range(3):
@@ -46,20 +49,21 @@ def submit(name,ixs,keys,bh):
             if not status:continue
         entry['submit_wall_seconds']=time.monotonic()-t;write(name,entry);return entry
     raise RuntimeError(f'{name}: blockhash retry cap')
-assert pub('keys/payer.json')==C['payer']
+roles=sys.argv[3:] or ['verifier','pool','registry','carrier']
+write('retained-keys',[require_key(PAYER_KEY,CLI,C['payer'])]+[require_key(KEYS/(role+'.json'),CLI,C['programs'].get(role,C.get(role))) for role in roles])
 assert rpc(URL,'getGenesisHash',[])==C['genesis_hash']
-for role in sys.argv[3:] or ['verifier','pool','registry','carrier']:
+def deploy_role(role):
     started=time.monotonic();spec=C['release_artifacts']['devnet_verifier' if role=='verifier' else role];elf=pathlib.Path(spec['path']).read_bytes();assert hashlib.sha256(elf).hexdigest()==spec['sha256']
     program=C['programs'].get(role,C.get(role));assert program
-    assert pub(f'keys/{role}.json')==program
+    assert pub(str(KEYS/(role+'.json')))==program
     if account(program)['value']:raise RuntimeError(f'{role} exists; inspect instead of redeploying')
-    path=pathlib.Path('keys')/(role+'-deploy-buffer.json')
+    path=KEYS/(role+'-deploy-buffer.json')
     if not path.exists():subprocess.run([str(CLI/'solana-keygen'),'new','--no-bip39-passphrase','--silent','-o',str(path)],stdout=subprocess.DEVNULL,check=True)
     os.chmod(path,0o600);buf=pub(path);ba=account(buf)['value'];sigs=[]
     if ba is None:
         size=len(elf)+37;rent=rpc(URL,'getMinimumBalanceForRentExemption',[size]);bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']['blockhash']
         create=(0).to_bytes(4,'little')+rent.to_bytes(8,'little')+size.to_bytes(8,'little')+base58(LOADER)
-        e=submit(role+'-buffer-create',[ix(SYSTEM,[[C['payer'],True,True],[buf,True,True]],create),ix(LOADER,[[buf,False,True],[C['payer'],False,False]],bytes(4))],['keys/payer.json',str(path)],bh);wait([e]);sigs.append(e);ba=account(buf)['value']
+        e=submit(role+'-buffer-create',[ix(SYSTEM,[[C['payer'],True,True],[buf,True,True]],create),ix(LOADER,[[buf,False,True],[C['payer'],False,False]],bytes(4))],[PAYER_KEY,str(path)],bh);wait([e]);sigs.append(e);ba=account(buf)['value']
     assert ba['owner']==LOADER and not ba['executable']
     body=base64.b64decode(ba['data'][0])[37:];assert len(body)==len(elf)
     pending=[i for i in range(0,len(elf),900) if body[i:i+900]!=elf[i:i+900]];write(role+'-plan',{'buffer':buf,'missing_chunks':len(pending),'sha256':spec['sha256']})
@@ -67,10 +71,10 @@ for role in sys.argv[3:] or ['verifier','pool','registry','carrier']:
         bh=rpc(URL,'getLatestBlockhash',[{'commitment':'confirmed'}])['value']['blockhash'];batch=[]
         for offset in pending[first:first+60]:
             chunk=elf[offset:offset+900];data=(1).to_bytes(4,'little')+offset.to_bytes(4,'little')+len(chunk).to_bytes(8,'little')+chunk
-            e=submit(f'{role}-write-{offset}',[ix(LOADER,[[buf,False,True],[C['payer'],True,False]],data)],['keys/payer.json'],bh);e['offset']=offset;sigs.append(e);batch.append(e);write(role+'-signatures',sigs);time.sleep(.2)
+            e=submit(f'{role}-write-{offset}',[ix(LOADER,[[buf,False,True],[C['payer'],True,False]],data)],[PAYER_KEY],bh);e['offset']=offset;sigs.append(e);batch.append(e);write(role+'-signatures',sigs);time.sleep(C.get('write_delay_seconds',.2))
         wait(batch);write(role+'-signatures',sigs);print(f'{role}: {first+len(batch)}/{len(pending)} repaired',flush=True)
     body=base64.b64decode(account(buf)['value']['data'][0])[37:];assert body==elf;write(role+'-buffer-verified',{'sha256':hashlib.sha256(body).hexdigest(),'bytes':len(body),'slot':account(buf)['context']['slot']})
-    cmd=[str(CLI/'solana'),'--url',URL,'--keypair','keys/payer.json','--commitment','finalized','--output','json','program','deploy',spec['path'],'--program-id',f'keys/{role}.json','--buffer',str(path),'--max-len',str(len(elf)),'--use-rpc','--max-sign-attempts','2'];write(role+'-deploy-command',cmd)
+    cmd=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','deploy',spec['path'],'--program-id',str(KEYS/(role+'.json')),'--buffer',str(path),'--max-len',str(len(elf)),'--use-rpc','--max-sign-attempts','2'];write(role+'-deploy-command',cmd)
     with open(O/(role+'-deploy.json'),'w') as stdout,open(O/(role+'-deploy-stderr.txt'),'w') as stderr:status=subprocess.run(cmd,stdout=stdout,stderr=stderr).returncode
     if status:raise RuntimeError(f'{role} deploy CLI exit {status}')
     pa=account(program);assert pa['value']['owner']==LOADER and pa['value']['executable'];raw=base64.b64decode(pa['value']['data'][0]);assert int.from_bytes(raw[:4],'little')==2
@@ -80,7 +84,33 @@ for role in sys.argv[3:] or ['verifier','pool','registry','carrier']:
     write(role+'-programdata',{'address':pd,'lamports':pda['value']['lamports'],'bytes':len(payload)+45,'elf_sha256':hashlib.sha256(payload).hexdigest(),'context_slot':pda['context']['slot']})
     if role in ('verifier','registry'):
         # V2 certifies exactly an immutable loader deployment; required by this release.
-        final=[str(CLI/'solana'),'--url',URL,'--keypair','keys/payer.json','--commitment','finalized','--output','json','program','set-upgrade-authority',program,'--final']
+        final=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','set-upgrade-authority',program,'--final']
         with open(O/(role+'-immutable.json'),'w') as stdout,open(O/(role+'-immutable-stderr.txt'),'w') as stderr:subprocess.run(final,stdout=stdout,stderr=stderr,check=True)
         finaldata=base64.b64decode(account(pd)['value']['data'][0]);assert finaldata[12]==0 and finaldata[45:]==elf
-    write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
+    write(role+'-rent-ledger',[loader_rent(program,account(program)['value'],C['payer']),loader_rent(pd,account(pd)['value'],C['payer'])]);write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
+
+for role in roles:
+    try:
+        deploy_role(role)
+    except BaseException:
+        path=KEYS/(role+'-deploy-buffer.json')
+        if path.exists():
+            buffer=pub(path)
+            # Finalization wait reconciles all retained submitted signatures. On
+            # ambiguity it fails closed and keeps the buffer/key for recovery.
+            records=[]
+            for receipt in O.glob(role+'-*-attempt-*.json'):
+                value=json.loads(receipt.read_text())
+                if isinstance(value,dict) and value.get('signature'):records.append(value)
+            if records:wait(records,allow_error=True)
+            write(role+'-failure-refund',close_failed_buffer(CLI,URL,PAYER_KEY,C['payer'],buffer,account,lambda n,v:write(role+'-'+n,v)))
+            write(role+'-refund-signatures',rpc(URL,'getSignaturesForAddress',[buffer,{'commitment':'finalized','limit':10}]))
+        raise
+    finally:
+        command=[str(CLI/'solana'),'--url',URL,'--output','json','program','show','--buffers','--buffer-authority',C['payer']]
+        result=subprocess.run(command,text=True,capture_output=True)
+        write(role+'-final-buffers',{'command':command,'exit':result.returncode,'stdout':result.stdout,'stderr':result.stderr})
+        if result.returncode:raise RuntimeError('buffer inventory failed; retain all keys')
+        inventory=json.loads(result.stdout)
+        entries=inventory.get('buffers',[]) if isinstance(inventory,dict) else inventory
+        if entries:raise RuntimeError('buffers remain; inspect retained keys and receipts')
