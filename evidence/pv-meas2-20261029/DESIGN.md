@@ -67,3 +67,30 @@ axioms, and final frozen import-manifest replay. Zero Kani/native runs.
 First proof compile: PV_MEAS_Average, then Uniform/Finite, Coupling/Fuel, Core,
 Deployed, simultaneous witness, Legacy corollary. No project draft earns credit
 until elaborated. Failed proof sources are changed before any resubmission.
+
+## Checked obstruction and equivalent expectation representation
+
+Mechanical attempt 74099 reached elaboration and failed in the unchanged pinned
+Mathlib.Topology.MetricSpace.Gluing source: private helper identifiers were
+unavailable in three metric definitions. No pinned source was changed; the
+failed source was not resubmitted. Both originally planned Bochner import roots
+transitively require that module. 99 predecessors had rebuilt successfully.
+
+The independent exact probability-law API needs only 57 authorized extension
+modules (lebegue-plan.json). The remaining five required modules were rebuilt
+at 74100-74104; earlier required objects are reused by fingerprint. Its complete
+57-entry addendum replaces the earlier PARTIAL 203-entry build attempt, without
+editing the original authority. The receipts of all 105 mechanical attempts,
+including the failure, remain evidence. The other 148 authorized candidates are
+not admitted as new external imports for this route.
+
+For [0,1]-valued decision probabilities, the expectation is represented by
+`ENNReal.toReal (lintegral (ENNReal.ofReal o p))`, written `∫ₚ`. This is the
+nonnegative Lebesgue expectation, not an approximation, finite support
+restriction or conditioning. The probability-law bundle is the subtype of
+Measure carrying IsProbabilityMeasure; it omits the topological API that caused
+the blocked dependency. All laws and measurable spaces remain arbitrary. The
+averaging lemma now states [0,1] boundedness explicitly, as appropriate for the
+pre-registered decision PROBABILITIES. No bound on timing or trace length is
+introduced. The exact joint-law and finite-uniform event corollary targets are
+unchanged. No Bochner-equivalence theorem is claimed without elaboration.
