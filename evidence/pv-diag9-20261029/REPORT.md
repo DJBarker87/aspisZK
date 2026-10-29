@@ -6,7 +6,7 @@
 
 `PV_DIAG9_Result` proves that an outer Aeneas `.ok` excludes `.fail .panic`, divergence and every outer failure, including when the returned Rust Result is an error. Successful monadic bind forces both its prefix and its reached continuation to terminate normally. An allowed-outer-error classification also excludes panic when its allowed predicate excludes `.panic`. These preserve the actual Result; no success-only projection is substituted. `post_does_not_exclude_panic` checks that a success-conditional postcondition alone is insufficient.
 
-`PV_DIAG9_Honest.honest_compiler_no_panic` (namespace `PV_DIAG9`, file `PV_DIAG9_Honest.lean`) applies `PV_RunJoin_HonestIdentification26.success` to **every HonestInput compiler invocation**, with no same-public restriction or additional success premise. `canonical_transfer_no_panic` and `canonical_withdrawal_no_panic` obtain this family from `CanonicalHonest31` on the original successful canonical preparations. The entire compiler invocation is covered at once; no enumeration of its panic payloads or guards is needed. This is the compiler/builder model named by `PV_Src_NativeInput.run`, not a theorem about the complete `prover.prove_masked_attempt`.
+`PV_DIAG9.honest_compiler_no_panic` (file `PV_DIAG9_Honest.lean`) applies `PV_RunJoin_HonestIdentification26.success` to **every HonestInput compiler invocation**, with no same-public restriction or additional success premise. `canonical_transfer_no_panic` and `canonical_withdrawal_no_panic` obtain this family from `CanonicalHonest31` on the original successful canonical preparations. The entire compiler invocation is covered at once; no enumeration of its panic payloads or guards is needed. This is the compiler/builder model named by `PV_Src_NativeInput.run`, not a theorem about the complete `prover.prove_masked_attempt`.
 
 `PV_DIAG9_Encoders` derives full-invocation panic/divergence exclusion from `EncodedComplete41.encode` and `SemanticComplete40.encode`. `actual_caller_encoder_no_panic` uses **step-1's actual `CallerSuccess43.success` Domain**, then the complete semantic encoder theorem. Its explicit output-capacity obligation remains. `CallerDomain43.post` itself permits outer failure/divergence and is not credited as a termination theorem.
 
@@ -62,3 +62,33 @@ A deployed V400 instance must establish those public request laws on the actual 
 | Panic/OOM/unwind/abort, foreign/fatal/crash/register/raw-memory reporters; final visible state | **OPEN** outside the explicitly covered complete-Result cones. No channel is discarded. |
 
 Endpoint premises removed/added/weakened/changed: **0/0/0/0**. Before and after: full native observer acquisition, original joint L1 law, V400 deployed independence and actual prover/checker producers remain. V038, V178/V181, V336–V339, V347–V351 and V370 remain. T is exactly entropy_law, entropy_kernel, observation. No simulator/observer/soundness/crate/program/release-pin change, key/account/nonce operation, merge or push.
+
+## Verification, rejected work and stop
+
+**100/100 Lean attempts**, IDs **66200–66299**, **91 accepted / 9 rejected**; audits exclusively 66297–66299. **4/30 capped native scopes**, **0 Kani**. All compiler/scope launches required admission exit 0 and allowed:true in the same wrapper. No reservation refusal, void launch, cap increase, resource kill or unchanged failed-source resubmission occurred. Every scope used MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0, TasksMax64; Lean -M7000.
+
+| ID | Exact target | Exit | GNU wall | Peak RSS KiB | Swap | Launch revision |
+|---|---|---:|---:|---:|---:|---|
+| 66297 | PV_DIAG9_Audit | 0 | 0:03.08 | 4974092 | 0 | `e803cc2fdda63892eb27d592d71aaa15fe95646c` |
+| 66298 | PV_DIAG9_CohortAudit | 0 | 0:01.62 | 2615948 | 0 | `e803cc2fdda63892eb27d592d71aaa15fe95646c` |
+| 66299 | PV_DIAG9_FinalManifest | 0 | 0:01.86 | 4996420 | 0 | `e803cc2fdda63892eb27d592d71aaa15fe95646c` |
+
+Lean scopes total wrapper wall **188.40s**, peak RSS **4,996,420 KiB**, swap **0**. All 88 new top-level theorem names are covered by the reserved audits; every printed accepted axiom set is a subset of {propext, Classical.choice, Quot.sound}. `summary.json` and individual receipts retain exact targets/commands, source snapshots and hashes, dependency-object fingerprints, launch revision, exit, wall/RSS/swap and full axioms. Failed internal sorryAx diagnostics are retained and never credited.
+
+Proof sources freeze at **e803cc2fdd**; `proof-source-commit-binding.json` checks all twelve final sources against that commit, and the final summary binds them to accepted snapshots. Earlier receipt launch labels identify the clean base from which the dirty work began; they do not claim the new proof sources existed at that base. The snapshots and freeze binding supply the exact proof-source identity.
+
+Before compilation, 5,673 external objects were checked and the imported read-only project source/object/dependency cohort was verified. `reuse.json` records 2,117 selected runjoin closure modules, and `decoder-reuse.json` records eleven rj4idb modules with byte-identical candidate sources and accepted objects. Pre-audit native03 checks **2,069** actually consumed closure objects; post-audit native04 checks **2,072**, with **zero mismatches**, and rechecks all 5,673 external objects. The three new audits are focused source/model checks; 66299 is the single final diag9 manifest, not the frozen privacy-release manifest. No unchanged full regression was run.
+
+Rejected Lean: 66215 missing Outer30 namespace opening; 66216 an incorrectly qualified generated namespace, causing the entire combined open command to fail; 66236 premature unfolding under local lets in the frame theorem; 66249 reserved binder `prefix`; 66267 unreduced recursive zero/stop branches before arithmetic; 66270 dependent case substitution requiring reflexive branch witnesses; 66277 noncomputable proposition equality in a tiny model obstruction; 66278 missing Decidable synthesis through the named event predicate; 66296 missing codomain annotation in the catch-control example. Corrected predecessors pass at 66217, 66237, 66250, 66268, 66271 and 66279 respectively. The final failed example was excluded: Scope is restored byte-for-byte to accepted 66295. No rejected source was resubmitted unchanged.
+
+Native01 rejected the scanner's handling of deployed cfg attributes on unit error variants. Native02 uses a corrected, hash-distinct scanner that explicitly checks those attributes and the deployed prover scope. Native03 and native04 accepted the closure/identity checks. Setup-time import parsing was corrected before any project-dependent compile: ignore nested Lean comments, handle multiple import names and allow recorded implicit imports. These are private scanner/input fixes, not changes to the shared launcher, source authority or proof toolchain.
+
+`cleanup.json` records removal of only twelve private compiler products after all checks. Shared/cached objects, source snapshots, receipts and read-only links are retained. No key was created, unlinked, burned or deleted; no funds or live authorities were touched.
+
+Stop: **Lean budget exhausted**. The next concrete deliverable is the existing runjoin step-(2) complete per-attempt producer and a complete honest native public-check cone law, followed by actual public error-site/operand/constructor-frame and adaptive request-history association. Only those native producers can discharge the three DIAG acquisition Props and the deployed V400 instance; generic criteria do not do so.
+
+## Commits
+
+`e803cc2fdd Derive complete-Result panic exclusions and adaptive diagnostic criteria`
+
+The final evidence-only commit records these receipts and the completed report. No push or merge.
