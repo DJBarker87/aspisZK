@@ -1,5 +1,4 @@
 import PV_B3P_Install227
-import R1Z.ProverRwFullFuns
 namespace PV_B3P_TopDown13227
 open Aeneas Aeneas.Std ProverRwFull
 set_option autoImplicit false
