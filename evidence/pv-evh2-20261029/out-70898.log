@@ -1,0 +1,89 @@
+theorem PV_EVH_OwnedLaws.causal_of_step : ∀ {E V L A : Type} (complete : E → V → List L → PV_RJ4IDB.NativeTrace A),
+  (∀ (e : E) (v : V) (history : List L) (answer : L),
+      (complete e v history).events <+: (complete e v (history ++ [answer])).events) →
+    PV_EVH_Residual.Link_CausalPrefix complete :=
+fun {E V L A} complete step e v history suffix =>
+  List.rec (motive := fun suffix =>
+    ∀ (history : List L), (complete e v history).events <+: (complete e v (history ++ suffix)).events)
+    (fun history =>
+      Eq.mpr
+        (id
+          (congrArg (complete e v history).events.IsPrefix
+            (congrArg PV_RJ4IDB.NativeTrace.events (congrArg (complete e v) (List.append_nil history)))))
+        (Exists.intro [] (List.append_nil (complete e v history).events)))
+    (fun answer suffix ih history =>
+      have h := List.IsPrefix.trans (step e v history answer) (ih (history ++ [answer]));
+      Eq.mp
+        (congrArg (complete e v history).events.IsPrefix
+          (congrArg PV_RJ4IDB.NativeTrace.events (congrArg (complete e v) (List.append_assoc history [answer] suffix))))
+        h)
+    suffix history
+theorem PV_EVH_OwnedLaws.environment_of_equiv : ∀ {N E C : Type} [inst : Fintype N] [inst_1 : Fintype E]
+  [inst_2 : Fintype C] (actual : N → E × C) (split : N ≃ E × C),
+  (∀ (n : N), actual n = split n) → PV_EVH_Residual.Link_PublicEnvironment actual :=
+fun {N E C} [Fintype N] [Fintype E] [Fintype C] actual split source value =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => _a = R0Z.mean fun r => if (fun p => p) r = value then 1 else 0)
+          (R0Z.FsAbort.mean_equiv split fun r => if actual r = value then 1 else 0)))
+      (congrArg R0Z.mean
+        (funext fun pair =>
+          Eq.mpr
+            (id
+              (congrArg (fun _a => (if _a = value then 1 else 0) = if (fun p => p) pair = value then 1 else 0)
+                (source (split.symm pair))))
+            (Eq.mpr
+              (id
+                (congrArg (fun _a => (if _a = value then 1 else 0) = if (fun p => p) pair = value then 1 else 0)
+                  (Equiv.apply_symm_apply split pair)))
+              (Eq.refl (if pair = value then 1 else 0))))))
+theorem PV_EVH_OwnedLaws.product_expectation : ∀ {N E C : Type} [inst : Fintype N] [inst_1 : Fintype E]
+  [inst_2 : Fintype C] (actual : N → E × C),
+  PV_EVH_Residual.Link_PublicEnvironment actual →
+    ∀ (test : E × C → ℚ), (R0Z.mean fun n => test (actual n)) = R0Z.mean fun e => R0Z.mean fun c => test (e, c) :=
+fun {N E C} [Fintype N] [Fintype E] [Fintype C] actual joint test =>
+  Eq.trans (R0Z.LawTransport.mean_eq_of_equalLaws actual (fun p => p) test joint) (R0Z.LawTransport.mean_product test)
+theorem PV_EVH_OwnedLaws.public_signal_of_factorization : ∀ {N E C W P Signal : Type} [inst : Fintype N]
+  [inst_1 : Fintype E] [inst_2 : Fintype C] (actual : N → E × C),
+  PV_EVH_Residual.Link_PublicEnvironment actual →
+    ∀ (pub : W → P) (p : P) (signal : W → N → Signal) (publicSignal : E → Signal),
+      (∀ (w : W), pub w = p → ∀ (n : N), signal w n = publicSignal (actual n).1) →
+        PV_EVH_Residual.Link_PublicSignal pub p signal fun pair => publicSignal pair.1 :=
+fun {N E C W P Signal} [Fintype N] [Fintype E] [Fintype C] actual joint pub p signal publicSignal source w hw value =>
+  id
+    (have transport :=
+      R0Z.LawTransport.mean_eq_of_equalLaws actual (fun pair => pair)
+        (fun pair => if publicSignal pair.1 = value then 1 else 0) joint;
+    Eq.mpr
+      (eq_of_heq
+        ((fun α a a' e'_2 a_1 =>
+            let ⟨⟩ := a'
+            e'_2)
+          ℚ (R0Z.mean fun r => if signal w r = value then 1 else 0)
+          (R0Z.mean fun r => if publicSignal (actual r).1 = value then 1 else 0)
+          (congrArg R0Z.mean
+            (funext fun n =>
+              Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a => (if _a = value then 1 else 0) = if publicSignal (actual n).1 = value then 1 else 0)
+                    (source w hw n)))
+                (Eq.refl (if publicSignal (actual n).1 = value then 1 else 0))))
+          (R0Z.mean fun r => if (fun pair => publicSignal pair.1) r = value then 1 else 0)))
+      transport)
+theorem PV_EVH_OwnedLaws.finite_environment_bounded : ∀ {N : Type} [Fintype N] (read : N → ℕ),
+  ∃ bound, ∀ (n : N), read n ≤ bound :=
+fun {N} [Fintype N] read => Exists.intro (Finset.univ.sup read) fun n => Finset.le_sup (Finset.mem_univ n)
+theorem PV_EVH_OwnedLaws.no_unbounded_environment : ∀ {N : Type} [Fintype N] (read : N → ℕ),
+  (∀ (bound : ℕ), ∃ n, bound < read n) → False :=
+fun {N} [Fintype N] read unbounded =>
+  let ⟨bound, bounded⟩ := PV_EVH_OwnedLaws.finite_environment_bounded read
+  let ⟨n, hn⟩ := unbounded bound
+  Nat.not_lt_of_ge (bounded n) hn
+'PV_EVH_OwnedLaws.causal_of_step' depends on axioms: [propext]
+'PV_EVH_OwnedLaws.environment_of_equiv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_OwnedLaws.product_expectation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_OwnedLaws.public_signal_of_factorization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_OwnedLaws.finite_environment_bounded' depends on axioms: [propext, Quot.sound]
+'PV_EVH_OwnedLaws.no_unbounded_environment' depends on axioms: [propext, Quot.sound]

@@ -14,10 +14,10 @@ The read-only object chain is in `runjoin-resolution-*.json` and `prepare-*.json
 
 | Runtime field | Existing source definition and provenance | Status |
 |---|---|---|
-| native | `NativeTrace`/`sourceTrace`, NativeTrace pin; Result-only `NativePublication55.execute` | OPEN `native_OPEN`: no full native event-producing family selected. A Result cannot supply lost prefixes. |
+| native | `NativeTrace`, NativeTrace pin; `sourceTrace`, SourceTrace pin; Result-only `NativePublication55.execute` | OPEN `native_OPEN`: no full native event-producing family selected. A Result cannot supply lost prefixes. |
 | signal | `PV_OptB_DeployedSignal.conditional_independence`, OptionB pin | OPEN `signal_OPEN`: the existing definition is a conditional theorem over runtime/read/decode/relation/step inputs, not a selected live D159 failure event function. Its decode/OS-world binding and synchronization are still missing. |
 | acquisition | `Runtime.acquisition`, Runtime pin | OPEN `acquisition_OPEN`: no actual native joint environment/coin acquisition supplied. |
-| completion | `PV_EVH_Interface.Completion`, imported by Runtime pin | OPEN `completion_OPEN`: no source-associated public progressive completion supplied. |
+| completion | `PV_EVH_Interface.Completion`, Completion pin | OPEN `completion_OPEN`: no source-associated public progressive completion supplied. |
 | publicInput | invocation's public data, Runtime pin | OPEN `publicInput_OPEN`: no invocation/template/handle/world selection supplied. |
 | toNative | `Runtime.toNative`, Runtime pin | OPEN `toNative_OPEN`: no D163 sample map supplied. |
 | toModel | `Runtime.toModel`, Runtime pin | OPEN `toModel_OPEN`: no D163 model/seed/fuel map supplied. |
