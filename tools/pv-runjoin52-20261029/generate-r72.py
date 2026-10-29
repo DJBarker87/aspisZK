@@ -207,3 +207,23 @@ s=s[:a]+''' := by
   all_goals rfl
 
 '''+s[b:];p.write_text(s)
+# split_ifs invokes a global simplification pass over the long cell. Split
+# only its eight explicit guards, with two targeted rewrites per guard.
+p=L/'PV_RunJoin_CircleR72Op3052.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
+proof=''' := by
+  unfold AspisR72Sampler.field.r24_canonical_mul PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul
+  simp only [q_c0,q_c1,cm_a,cm_b,op3]
+'''
+coords=['left.1.1','left.1.2','left.2.1','left.2.2','right.1.1','right.1.2','right.2.1','right.2.2']
+for i,c in enumerate(coords):
+ pad='  '+'  '*i
+ proof+=pad+f'by_cases h{i} : {c} ≥ PV_RunJoin_CircleR72Raw52.field.P\n'
+ proof+=pad+'· rw [if_pos h'+str(i)+']\n'+pad+'  all_goals rfl\n'
+ proof+=pad+'· rw [if_neg h'+str(i)+']\n'
+pad='  '+'  '*8
+proof+=pad+'''repeat' (first
+'''
+for tactic in ['rw [op27]','rw [op28]','rw [op29]','rw [bind_assoc_eq]','rw [bind_tc_ok]','(apply (Aeneas.Std.bind_eq_iff _ _ _).mpr; intro value reachable)']:
+ proof+=pad+'  | '+tactic+'\n'
+proof=proof.rstrip()+')\n'+pad+'all_goals simp only [Option.map_none,Option.map_some,encQ,encCM]\n'+pad+'all_goals rfl\n\n'
+s=s[:a]+proof+s[b:];p.write_text(s)
