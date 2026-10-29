@@ -7,7 +7,7 @@ open PV_RunJoin_WeightFactorWrite47 (Matrix)
 open PV_B2_F_ConstructorCarrier (K)
 
 def Frame (m m1 : Matrix) (start n : Nat) : Prop :=
-  ∀ i, i<5 → (i<start ∨ start+n≤i) → m.val[i]?=m1.val[i]?
+  ∀ i, i < 5 → (i < start ∨ start + n ≤ i) → m.val[i]? = m1.val[i]?
 
 theorem done (m m1 : Matrix) (start : Nat) (h : Frame m m1 start 0) : m=m1 := by
   apply Subtype.ext
@@ -15,8 +15,8 @@ theorem done (m m1 : Matrix) (start : Nat) (h : Frame m m1 start 0) : m=m1 := by
   intro i
   by_cases hi : i<5
   · exact h i hi (by omega)
-  · rw [List.getElem?_eq_none (by rw [m.property];omega),
-      List.getElem?_eq_none (by rw [m1.property];omega)]
+  · rw [List.getElem?_eq_none (by rw [m.property];scalar_tac),
+      List.getElem?_eq_none (by rw [m1.property];scalar_tac)]
 #print axioms done
 
 theorem step (m m1 : Matrix) (d : Usize) (n : Nat) (row : Array K 4#usize)
