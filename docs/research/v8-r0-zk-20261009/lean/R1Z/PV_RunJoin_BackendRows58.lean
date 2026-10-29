@@ -35,7 +35,8 @@ theorem c2_g (self : prover.Backend) (g : Array Q 1024#usize) (row : Usize) :
     apply congrArg (Aeneas.Std.bind _)
     funext value
     apply congrArg (Aeneas.Std.bind _)
-    rintro ⟨a,back⟩
+    funext borrow
+    rcases borrow with ⟨a,back⟩
     rfl
   · simp only [if_neg hit]
 
@@ -55,7 +56,8 @@ theorem c2_h (self : prover.Backend) (h : Slice Q) (row : Usize) :
     apply congrArg (Aeneas.Std.bind _)
     funext value
     apply congrArg (Aeneas.Std.bind _)
-    rintro ⟨a,back⟩
+    funext borrow
+    rcases borrow with ⟨a,back⟩
     rfl
   · simp only [if_neg hit]
 
@@ -75,7 +77,8 @@ theorem c1_d (self : prover.Backend) (d : Array Q 1024#usize) (row : Usize) :
     apply congrArg (Aeneas.Std.bind _)
     funext value
     apply congrArg (Aeneas.Std.bind _)
-    rintro ⟨a,back⟩
+    funext borrow
+    rcases borrow with ⟨a,back⟩
     rfl
   · simp only [if_neg hit]
 
@@ -101,7 +104,8 @@ theorem c1_base (self : prover.Backend) (columns : Array (alloc.vec.Vec aspis_co
     apply congrArg (Aeneas.Std.bind _)
     funext value
     apply congrArg (Aeneas.Std.bind _)
-    rintro ⟨a,back⟩
+    funext borrow
+    rcases borrow with ⟨a,back⟩
     rfl
   · simp only [if_neg hit]
 
