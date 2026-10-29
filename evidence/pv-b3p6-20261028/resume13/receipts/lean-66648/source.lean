@@ -1,0 +1,9 @@
+import PV_B3P_LinkDefinitions13227
+import PV_B3P_Operations12227
+namespace PV_B3P_Binding13227
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Links13227 PV_B3P_Binding9227 PV_B3P_Binding10227 PV_B3P_Binding11227 PV_B3P_Binding12227
+set_option autoImplicit false
+theorem digeststore_link13 : PV_B3P_Link_terminal_add_digest_binding (source_digest_store12) :=
+  digest_store_operation12.symm
+#print axioms digeststore_link13
+end PV_B3P_Binding13227

@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_FourStores13227.lean:25:89: error: unsolved goals
+α : Type
+compute : Usize → Result α
+output : Std.Array α 4#usize
+⊢ (do
+      let x ← compute 0#usize
+      let next ← output.update 0#usize x
+      let x ← compute (Usize.wrapping_add 0#usize 1#usize)
+      let next ← next.update (Usize.wrapping_add 0#usize 1#usize) x
+      let x ← compute ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize)
+      let next ← next.update ((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize) x
+      let value ← compute (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize)
+      next.update (((Usize.wrapping_add 0#usize 1#usize).wrapping_add 1#usize).wrapping_add 1#usize) value) =
+    do
+    let a ← compute 0#usize
+    let output ← output.update 0#usize a
+    let b ← compute 1#usize
+    let output ← output.update 1#usize b
+    let c ← compute 2#usize
+    let output ← output.update 2#usize c
+    let d ← compute 3#usize
+    output.update 3#usize d
+'PV_B3P_Binding13227.four_store_unroll13' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Binding13227.four_store_literal13' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Binding13227.slice_four_literal13' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,106 @@
+{
+  "rows": [
+    {
+      "body": "iter_next",
+      "versions": [
+        {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+          "file_sha256": "3d02121faa057f039d2d677829b2d8e04d1d772c6891b5b5c66514e4e7f185dc",
+          "line": 157,
+          "text": "fn next(&mut self) -> Option<$elem> {\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+          "body_sha256": "3b37162db329a17d970d012b3ea78f7216a8d70ad76d55bdcb3bca01d4dccb29",
+          "tokens_sha256": "ca2275e911ab1517b1a065fecf8ff30fc30c551707a776f3d116dc0093648f79"
+        },
+        {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+          "file_sha256": "0ac47d295999ba8847d0df93557292fbad65d256db0c6521c396798d2e37677d",
+          "line": 157,
+          "text": "fn next(&mut self) -> Option<$elem> {\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+          "body_sha256": "3b37162db329a17d970d012b3ea78f7216a8d70ad76d55bdcb3bca01d4dccb29",
+          "tokens_sha256": "ca2275e911ab1517b1a065fecf8ff30fc30c551707a776f3d116dc0093648f79"
+        }
+      ],
+      "token_identical": true
+    },
+    {
+      "body": "enumerate_next",
+      "versions": [
+        {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/enumerate.rs",
+          "file_sha256": "82b139ab80c433cb095adca865ddd19db80ebdd6e0c05be95f097401877d0a3a",
+          "line": 79,
+          "text": "fn next(&mut self) -> Option<(usize, <I as Iterator>::Item)> {\n        let a = self.iter.next()?;\n        let i = self.count;\n        self.count += 1;\n        Some((i, a))\n    }",
+          "body_sha256": "0397224fa293b917327540b4613b1ff2b8d585ec8015657cd4d29a762266681f",
+          "tokens_sha256": "e413398b995b00ce4f5f5ed9185b7d897e367f2639c9d038d63907ac843eece8"
+        },
+        {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/enumerate.rs",
+          "file_sha256": "b64a625b876695472133816d411fc3fce3e2d5221178ff30a34370ab24ab9c95",
+          "line": 79,
+          "text": "fn next(&mut self) -> Option<(usize, <I as Iterator>::Item)> {\n        let a = self.iter.next()?;\n        let i = self.count;\n        self.count += 1;\n        Some((i, a))\n    }",
+          "body_sha256": "0397224fa293b917327540b4613b1ff2b8d585ec8015657cd4d29a762266681f",
+          "tokens_sha256": "e413398b995b00ce4f5f5ed9185b7d897e367f2639c9d038d63907ac843eece8"
+        }
+      ],
+      "token_identical": true
+    },
+    {
+      "body": "iter_mut_new",
+      "versions": [
+        {
+          "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+          "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+          "line": 221,
+          "text": "pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+          "body_sha256": "d2a3a86acea4b1267a61f12c2b9aaafd55209ad6ebd4be4c67645b4a5e46de15",
+          "tokens_sha256": "448899b87a45bd97cfd814893bbdb32dd752931ab75873a6c2ced20cc3e3eb2f"
+        },
+        {
+          "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+          "file_sha256": "83205f82241154964b1aecef87913ec92ce8c0b99285337c04e37840594f9251",
+          "line": 219,
+          "text": "pub(super) const fn new(slice: &'a mut [T]) -> Self {\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_mut(slice).cast();\n        // SAFETY: There are several things here:\n        //\n        // `ptr` has been obtained by `slice.as_ptr()` where `slice` is a valid\n        // reference thus it is non-NUL and safe to use and pass to\n        // `NonNull::new_unchecked` .\n        //\n        // Adding `slice.len()` to the starting pointer gives a pointer\n        // at the end of `slice`. `end` will never be dereferenced, only checked\n        // for direct pointer equality with `ptr` to check if the iterator is\n        // done.\n        //\n        // In the case of a ZST, the end pointer is just the length.  It's never\n        // used as a pointer at all, and thus it's fine to have no provenance.\n        //\n        // See the `next_unchecked!` and `is_empty!` macros as well as the\n        // `post_inc_start` method for more information.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance_mut(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+          "body_sha256": "d2a3a86acea4b1267a61f12c2b9aaafd55209ad6ebd4be4c67645b4a5e46de15",
+          "tokens_sha256": "448899b87a45bd97cfd814893bbdb32dd752931ab75873a6c2ced20cc3e3eb2f"
+        }
+      ],
+      "token_identical": true
+    }
+  ],
+  "caller": "state_only_poseidon.evaluate_state_only_poseidon_oracle_projected: four QM31 packed outputs",
+  "specialization": {
+    "non_zst": true,
+    "size_bytes": 16,
+    "region": "one valid four-element mutable array, offset 0 to 4",
+    "direction": "next only; no next_back; no alias escapes; callback never reads old destination"
+  },
+  "step_map": [
+    {
+      "source": "IterMut::new len, ptr, end_or_len",
+      "model": "SlotPointer13 region 0; slot_end13 region; size nonzero selects end pointer",
+      "remaining": "complete source pointer/borrow constructor transport"
+    },
+    {
+      "source": "next: cache ptr and end; non-ZST branch pointer equality",
+      "model": "same_region_end13 / slice_next13 index=4"
+    },
+    {
+      "source": "next: ptr.add(1); return reference to old slot",
+      "model": "cursor_increment13 + exclusive slot token; pointer intrinsic boundary V370"
+    },
+    {
+      "source": "Enumerate::next: next()?; copy count; increment count; Some((i,a))",
+      "model": "enumerate_next13 / enumerate_step13 / enumerate_finish13"
+    },
+    {
+      "source": "callback *output = computed",
+      "model": "slice_store13; back continuation retained; slot_store_binding13"
+    },
+    {
+      "source": "loop exit and iterator fields cleanup",
+      "model": "slice_loop_plan13 / slice_iterator_drop_total13; native cleanup source association remains"
+    }
+  ],
+  "compiler_boundary": "V370 / pending owner D381,D386 retained",
+  "complete_std_binding": false
+}
