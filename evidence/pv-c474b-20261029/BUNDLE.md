@@ -20,7 +20,7 @@ New client SHA-256: **`da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c551732
 | N7 signing/transport | PASS: exact Python invoke produces the same 158-byte signed transaction as current shipped client; short/extra records reject | `signing-fixture.json`, `shape-and-diagnostic-errors.json`, N73507 |
 | CT private-input decoder | PASS, evidence class **instruction-trace comparison** | `ct-decoding.json`, `decoder-disassembly.txt`, N73507 |
 | New combined-client paired timing | **BLOCKED BEFORE LAUNCH**, not measured | `timing-blocker.json` |
-| Final source/artifact/key retention binding | Pending collection | N73511 / `final-audit.json` |
+| Final source/artifact/key retention binding | PASS: 1284 staged files; no mismatches; three literal ELF byte comparisons; keys retained | N73511 / `final-audit.json` |
 
 The prior D474 paired medians **−1.01% transfer and −0.70% withdrawal PASS under adopted D359(A)** for both the ratio and 15 s gate, labelled **measured under throttling, paired**. They are historical first-half evidence, not a new combined-client measurement. They are not UNDECIDED. `OPTIONAL-remove-timing.diff` is not applied; stdout timing remains, and the observer still sees external wall time.
 
@@ -91,3 +91,5 @@ No premise of `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` or T fie
 The first N73510 barrier encountered a vanished foreign session cgroup (`FileNotFoundError`, session-468733.scope) before audit work started. Its refusal is preserved under `refusals/native73510-scan-race-01`; the same unlaunched ID is retried after the conservative full 180 s cooldown, under the documented transient-scan rule and unchanged caps. No proof, compile or timing run is resubmitted. Count the extra pre-work scope conservatively against the 40-scope ceiling.
 
 N73510 then caught an inherited stale expected hash for `tools/pv-c474-validation/Cargo.toml`, an audit-only input changed by the already-recorded harness-manifest repair. `audit-manifest-correction.json` reconstructs the exact expected bytes from the generation recipe and checks literal host equality. N73511 repeats only the read-only binding audit with the corrected inventory. No production source, compiled harness or successful gate is changed or replayed.
+
+Final accounting: 11 completed native scope IDs plus one pre-work transient barrier-refusal scope (12 capped invocations conservatively, within 40); zero Lean, zero Kani. N73509 is unused. N73511 passes the source/artifact/key audit while explicitly setting `gate_checks_passed=false` and `timing_status="BLOCKED BEFORE LAUNCH"`; this is not release readiness. No cleanup removes outputs needed by the dependent timing run.
