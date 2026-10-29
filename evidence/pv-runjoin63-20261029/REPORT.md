@@ -1,4 +1,4 @@
-# Runjoin63 — work in progress; target not established
+# Runjoin63 — target not established
 
 Entry 65a5f8ecf3ea29c7c919eb5298edab247729f261, LOG D515.
 Worktree /Users/dominic/ZK/.worktrees/pv-runjoin; branch codex/pv-runjoin-20261026.
@@ -103,3 +103,18 @@ is not claimed merely because an older selected value callback is present.
 | V228 | Install132.reference/value_law/count_law/nonvacuity; all3803 ordered cells, exact capacity/source predicates, original carrier and261 frames. | CONFIRM selected structural source/value packet |
 | V243 | Closure226.complete_result/value/nonvacuity; all raw public inputs, both variants,1427/1455-byte ordered layout, complete Result and carriers. | CONFIRM selected structural source/value packet |
 | V234,V235 | dlib2 DigestFinal/FixedFinal.selected_native; complete Result/carrier, explicit finalizer/compression parameters. fscan STANDS at that boundary. | CONFIRM selected structural K-1 substitutes; SHA-NI unchanged |
+
+## Instruction completion limits
+
+The first stage used IDs73400–73402 on MODEL atoms and then moved to packet
+work without completing the requested explicit existential dictionary/world,
+nonempty Produced and joint nine-link witness. This did not satisfy order (1).
+No failed MODEL link or contradiction under ruling(v) was established.
+
+The op132/V228 value packet and world-indexed op32/V183 family are selected;
+this is not completion of all22 qualified restoration compositions into the
+dynamic run. Two minimal arbitrary-input successes have a checked residual
+dictionary obstruction; the requested implication at the fully bound native
+interpreter remains unproved. Successful query image and finish frame/fold
+association are partial source results, not closure of QueryAppend or
+FinishContext. Rows removed: none.

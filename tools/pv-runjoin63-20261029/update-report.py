@@ -29,7 +29,9 @@ conditions (HighZero/whole-cell length, not installed as run assumptions);
 the successful finish constructor frame; and exact tag30 reconstruction and
 stored final-scalar association where the corresponding modules are accepted.
 NativeFinalFold63 {'IS CHECKED' if fold else 'IS NOT ESTABLISHED'}.
-The full c0/c1/f source-to-model opening image join remains open. CommonSample,
+The full c0/c1/f source-to-model opening image join remains open. The 22
+qualified restorations have not all been composed into the dynamic native
+capture; the copied CONFIRM table is not installation evidence by itself. CommonSample,
 BackendInput and NodeAppend also remain open; the new raw lift cell/row work, if
 accepted, is a local prerequisite, never full hinput credit. QueryContext,
 QueryRange, FrontRoom and PublishOrder are checked at the new world-indexed
