@@ -2,15 +2,16 @@ import PV_B3P_DigestFields227
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
-abbrev Digest8Q := Array aspis_core.field.QM31 8#usize
 def digest_stage_03 (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) (output : Digest8Q) : Result Digest8Q := do
   let i4 ← lift (Std.Usize.wrapping_mul 32#usize 16#usize)
   let i5 ← lift (Std.Usize.wrapping_add i4 11#usize)
   let q2 ← reference_copy_terminal.Selectors.row selectors i5
-    reference_terminal.add_digest_binding output q2 openings.z 0#usize
-      public1.change false
+  reference_terminal.add_digest_binding output q2 openings.z 0#usize
+    public1.change false
+
+attribute [local irreducible] reference_terminal.add_digest_binding reference_copy_terminal.Selectors.row reference_terminal.empty_root reference_terminal.digest227 reference_terminal.bounded_append_carry
 
 theorem digest_stage_03_success (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
