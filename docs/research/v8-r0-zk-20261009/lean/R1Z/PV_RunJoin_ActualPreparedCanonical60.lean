@@ -9,7 +9,7 @@ open ProverCommitWideOps48
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (phase : @PV_RunJoin_NativeControl55.Phase (types base))
-    (prepared : prover.PreparedOpening)
+    (prepared : @prover.PreparedOpening (types base))
     (success : @prover.prepare_opening (types base) (selected base heap box ops) .S2
       phase.hash phase.backend phase.sem=ok (.Ok prepared)) :
     canonical (@PV_RunJoin_ActualRun.data (types base) (selected base heap box ops) phase).g ∧
