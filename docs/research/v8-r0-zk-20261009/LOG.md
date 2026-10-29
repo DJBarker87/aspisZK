@@ -14982,3 +14982,7 @@ The freed slot goes to work independent of both pending decisions: ledger row V3
 - audit the machine code for secret-dependent branches, addresses and variable-latency operations by a stated taint method with honest limits;
 - locate every try_inv on a witness-bearing path and show its zero branch is reached only on a charged bad event, or report a finding.
 V371 and DOITM remain owner items and are not discharged. Rows removed: 0. Privacy target not yet established.
+
+## D482 (Stream B) 2026-10-29 07:03 UTC: runjoin55 results; runjoin56 launched
+
+runjoin55 (head 6ecb132a54, pushed) used all 100 Lean attempts with no Kani. Its three final audits passed with standard axioms only. One overlapping attempt was excluded from credit and replaced. Lead review: no forbidden constructs or raised limits in hand-written modules; link definitions unchanged; protected prefixes untouched. The conditional typed RUNJOIN_PUBLISH_COMPACT theorem now covers prove_masked_attempt, including native initialization, and its original toRP hash specialization compiles. Within the links, both circle transcript calls of CommonSample and the C1 and C2 length preservation of BackendInput are proved. All six links (CommonSample, BackendInput, FinishContext, QueryAppend, NodeAppend, PublishOrder) remain OPEN. Rows removed: 0. runjoin56 launched (IDs 68200-68299; 100 Lean, 0 Kani; one scope at a time) to discharge them cheapest first. Privacy target not yet established.
