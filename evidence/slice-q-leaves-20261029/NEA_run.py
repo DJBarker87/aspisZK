@@ -61,6 +61,9 @@ elif kind=='kani':
         native[native.index('--features')+1]='r0'
     if os.environ.get('NEA_RUST_CFG'):env['RUSTFLAGS']+=' --cfg '+os.environ['NEA_RUST_CFG']
     command=['python3','NEA_gate.py',a+'.json']
+elif kind=='inspect':
+    files['NEA_goto_inspect.py']=(E/'NEA_goto_inspect.py').read_text()
+    sources=list(files);command=['python3','NEA_goto_inspect.py']
 else:
     files['NEA_extract.py']=(E/'NEA_extract.py').read_text()
     files['NEA_reference.rs']=(E/os.environ.get('NEA_REFERENCE','NEA_reference.rs.txt')).read_text()
