@@ -28,11 +28,14 @@ for p in (D/'classification-target/release/deps').glob('pv_fscan_deployed_projec
 meta=subprocess.run(['cargo','metadata','--manifest-path',str(P/'Cargo.toml'),'--offline','--locked','--format-version','1'],env=env,capture_output=True,text=True)
 assert meta.returncode==0,meta.stderr;m=json.loads(meta.stdout);nodes={x['id']:x for x in m['resolve']['nodes']}
 features=sorted((x['name'],x['version'],sorted(nodes[x['id']]['features'])) for x in m['packages'])
-old=json.load(open(original/'inputs.json'));expected=sorted((x['name'],x['version'],sorted(x['features'])) for x in old['features']);assert features==expected,(features,expected)
+old=json.load(open(original/'inputs.json'))
+for key in ['RUSTFLAGS','CARGO_ENCODED_RUSTFLAGS','RUSTC_BOOTSTRAP','RUSTC_WRAPPER','RUSTC_WORKSPACE_WRAPPER']:
+ assert env.get(key)==old['env'].get(key),('codegen environment changed',key)
+expected=sorted((x['name'],x['version'],sorted(x['features'])) for x in old['features']);assert features==expected,(features,expected)
 cmd=['cargo','test','--manifest-path',str(P/'Cargo.toml'),'--release','--locked','-j','2','--lib','--','--nocapture','--test-threads=1']
 pins=json.load(open(D/'buffer-dependency-sources.json'))
 for x in pins:assert hashlib.sha256(Path(x['path']).read_bytes()).hexdigest()==x['sha256'],x['path']
-record=dict(command=cmd,profile='release opt3 overflow_checks=false debug_assertions=false panic=unwind',features=features,manifest_sha256=hashlib.sha256(manifest).hexdigest(),lockfile_sha256=hashlib.sha256(lock.read_bytes()).hexdigest(),fixture_source=source,fixture_sha256=hashlib.sha256(source.encode()).hexdigest(),classification='exhaustive over a singleton input domain, deployed-configuration harness',scope='GenericArray<u8,U64>::default exact64 bytes only; wrapper/Core Default are not claimed input-free.',rustc=subprocess.check_output(['rustc','-vV'],env=env,text=True),expected_phase='cached optimized compilation, then named singleton_default_bytes test; no elimination')
+record=dict(command=cmd,env={k:v for k,v in env.items() if k.startswith(('RUST','CARGO'))},profile='release opt3 overflow_checks=false debug_assertions=false panic=unwind',features=features,manifest_sha256=hashlib.sha256(manifest).hexdigest(),lockfile_sha256=hashlib.sha256(lock.read_bytes()).hexdigest(),fixture_source=source,fixture_sha256=hashlib.sha256(source.encode()).hexdigest(),classification='exhaustive over a singleton input domain, deployed-configuration harness',scope='GenericArray<u8,U64>::default exact64 bytes only; wrapper/Core Default are not claimed input-free.',rustc=subprocess.check_output(['rustc','-vV'],env=env,text=True),expected_phase='cached optimized compilation, then named singleton_default_bytes test; no elimination')
 (O/'inputs.json').write_text(json.dumps(record,indent=2)+'\n')
 print('expected time: cached optimized compilation then exactly one singleton byte-default execution',flush=True)
 r=subprocess.run(cmd,env=env,capture_output=True,text=True);(O/'output.log').write_text(r.stdout+r.stderr);print(r.stdout+r.stderr)
