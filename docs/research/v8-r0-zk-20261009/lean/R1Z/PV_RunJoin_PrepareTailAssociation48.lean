@@ -54,9 +54,14 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     rw [PV_RunJoin_EncodedInstalled48.complete base heap box ops]
     exact hbytes
   refine ⟨c0,bytes,hcc,?_,hmodel,himage⟩
-  simp only [PV_RunJoin_PrepareTail48.run,hc,bind_tc_ok,lift,hb,retained,
-    PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ false (@PV_RunJoin_SourceLength48.first (types base) q),
-    PV_RunJoin_FoldInstalled48.complete base heap box ops _ _ true (@PV_RunJoin_SourceLength48.first (types base) w)]
+  simp only [PV_RunJoin_PrepareTail48.run,hc,bind_tc_ok,lift,hb,retained]
+  apply congrArg (Aeneas.Std.bind _)
+  funext pair
+  rcases pair with ⟨a,transcript3⟩
+  dsimp only [Aeneas.Std.uncurry]
+  rw [PV_RunJoin_FoldInstalled48.complete base heap box ops _ a false (@PV_RunJoin_SourceLength48.first (types base) q),
+    PV_RunJoin_FoldInstalled48.complete base heap box ops _ a true (@PV_RunJoin_SourceLength48.first (types base) w)]
+
 #print axioms retained
 #print axioms complete
 end R1Z.PV_RunJoin_PrepareTailAssociation48
