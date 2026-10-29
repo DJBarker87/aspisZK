@@ -16,7 +16,9 @@ theorem first : Array.index_usize badQueries 0#usize=ok 262144#u32 :=
 theorem cast : UScalar.cast .Usize 262144#u32=262144#usize := by
   apply UScalar.eq_of_val_eq
   rw [PV_B2_D_SmallScalar.cast_val]
-  have hb := PV_B2_D_SmallScalar.size_bound
+  have hb : 2^32≤UScalar.size .Usize := by
+    rw [UScalar.size_def]
+    exact Nat.pow_le_pow_right (by decide) System.Platform.le_numBits
   rw [UScalar.size] at hb
   rw [show (262144#u32).val=262144 from by scalar_tac,
     show (262144#usize).val=262144 from by scalar_tac]
