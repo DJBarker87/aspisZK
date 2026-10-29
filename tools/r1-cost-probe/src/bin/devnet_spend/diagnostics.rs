@@ -31,3 +31,29 @@ pub fn initialize() {
 pub fn report(_: Error) {
     let _ = std::io::stderr().write_all(b"client error\n");
 }
+
+// The default std allocation-error handler prints the requested layout size,
+// bypassing the panic hook. Never return null to that handler in this client.
+struct Allocator;
+#[global_allocator]
+static ALLOCATOR: Allocator = Allocator;
+unsafe impl std::alloc::GlobalAlloc for Allocator {
+    unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
+        let p = std::alloc::System.alloc(layout);
+        if p.is_null() { std::process::abort(); }
+        p
+    }
+    unsafe fn alloc_zeroed(&self, layout: std::alloc::Layout) -> *mut u8 {
+        let p = std::alloc::System.alloc_zeroed(layout);
+        if p.is_null() { std::process::abort(); }
+        p
+    }
+    unsafe fn realloc(&self, p: *mut u8, layout: std::alloc::Layout, size: usize) -> *mut u8 {
+        let q = std::alloc::System.realloc(p, layout, size);
+        if q.is_null() { std::process::abort(); }
+        q
+    }
+    unsafe fn dealloc(&self, p: *mut u8, layout: std::alloc::Layout) {
+        std::alloc::System.dealloc(p, layout);
+    }
+}
