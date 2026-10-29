@@ -27,10 +27,14 @@ fn owned(v:Vec<Link>,mut keep:impl FnMut(&Link)->bool)->Vec<Link>{
  mem::forget(source); // Link POD; storage responsibility is now guard's.
  mem::forget(guard);unsafe{Vec::from_raw_parts(p,len,cap)}
 }
-fn values(v:&[Link])->Vec<(u16,u16)>{v.iter().map(|x|(x.producer_row,x.consumer_row)).collect()}
-fn input(n:usize)->Vec<Link>{let mut v=Vec::with_capacity(n+7);for i in 0..n{v.push(Link{kind:Kind::SpongeCarry{from:i as u8,to:(!i) as u8},producer_row:i as u16,consumer_row:(i*31) as u16});}v}
+fn values(v:&[Link])->Vec<Link>{v.to_vec()}
+fn input(n:usize)->Vec<Link>{let mut v=Vec::with_capacity(n+7);for i in 0..n{v.push(Link{kind:match i%21{
+ 0=>Kind::SpongeCarry{from:i as u8,to:(!i) as u8},1=>Kind::OwnerOutput,2=>Kind::NullifierKey,3=>Kind::InputSaltHead,4=>Kind::InputSaltTail,
+ 5=>Kind::PrivatePathCurrent{level:i as u8},6=>Kind::PrivatePathLeft{level:i as u8},7=>Kind::PrivatePathRight{level:i as u8},8=>Kind::ValueSource{value:i as u8},
+ 9=>Kind::ConservationInput,10=>Kind::ConservationRecipient,11=>Kind::ConservationChange,12=>Kind::ConservationPartial,13=>Kind::InputSecondCommitment,14=>Kind::InputSelectedSide,
+ 15=>Kind::OutputSecondCommitment,16=>Kind::OutputPairFirst,17=>Kind::OutputPairFirstWithdrawal,18=>Kind::OutputPairSecond,19=>Kind::AppendCurrentLeft{level:i as u8},_=>Kind::AppendCurrentRight{level:i as u8}},producer_row:i as u16,consumer_row:(i*31) as u16});}v}
 fn run(n:usize,mode:usize,reference:bool,panic_at:Option<usize>){
- let v=input(n);let p=v.as_ptr() as usize;let cap=v.capacity();let expected=values(&v).into_iter().filter(|x|x.0 as usize%7<mode).collect::<Vec<_>>();
+ let v=input(n);let p=v.as_ptr() as usize;let cap=v.capacity();let expected=values(&v).into_iter().filter(|x|x.producer_row as usize%7<mode).collect::<Vec<_>>();
  WATCH.store(p,Ordering::SeqCst);FREES.store(0,Ordering::SeqCst);
  let mut count=0;let keep=|x:&Link|{if panic_at==Some(count){panic!("controlled predicate panic")};count+=1;x.producer_row as usize%7<mode};
  let result=std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| if reference{owned(v,keep)}else{v.into_iter().filter(keep).collect::<Vec<_>>()}));
@@ -42,5 +46,5 @@ fn main(){
  std::panic::set_hook(Box::new(|_|{}));let mut cases=0;
  for n in 0..=256{for mode in 0..=7{for reference in [false,true]{run(n,mode,reference,None);cases+=1;}}}
  for n in [1,2,7,16,64,127,128]{for k in 0..n{for reference in [false,true]{run(n,3,reference,Some(k));cases+=1;}}}
- println!("collector lifecycle cases={cases}; original/owned values, pointer, capacity, single free and predicate-unwind prefix; finite validation only");
+ println!("collector lifecycle cases={cases}; original/owned full-Link values (all21 kinds), pointer, capacity, single free and predicate-unwind prefix; finite validation only");
 }

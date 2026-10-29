@@ -20,7 +20,7 @@ theorem original_layout {S X E : Type}
  (h:PV_OWNB_Cursor.Valid q) (s : S) (x : X) (nz:q.cell.size≠0) :
  (destination dealloc q ⟨q.memory,s,x⟩).calls=
  [(⟨take q.owner q.memory,s,x⟩,.deallocate q.token.address q.cell.size q.cell.alignment)] := by
- simpa only [destination,headDrop,dropPod,lift,bind,List.nil_append] using
+ simpa only [destination,headDrop,dropPod,lift,PV_W_Threading.bind,List.nil_append] using
   PV_OWNB_CursorCleanup.positive dealloc q h s x nz
 #print axioms prefix_empty
 #print axioms original_layout
