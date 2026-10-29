@@ -85,14 +85,17 @@ assert 'for row in pool_v1_pair_forest_copy_active_rows_v1()?' in forest
 assert 'libc::malloc(layout.size())' in texts['std/src/sys/alloc/unix.rs']
 assert 'libc::free(ptr as *mut libc::c_void)' in texts['std/src/sys/alloc/unix.rs']
 j.update(
+ checker_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+ branch='codex/pv-ownf-20261029',
+ worktree=str(R),
  source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
  prior_capture=dict(path=str(prior_path.relative_to(R)),sha256=hashlib.sha256(prior_raw).hexdigest()),
- classification='own-2\u2032 qualification REJECTED: OTHER process/thread state; own-1 retained',
+ classification='own-2′ qualification REJECTED: OTHER process/thread state; own-1 retained',
  readonly_inspection=dict(exit=0,wall_seconds=time.monotonic()-start,peak_rss='N/A (no formal/native execution result)',swap='N/A',print_axioms='N/A; no Lean declarations'),
  lean_attempts=0,native_scopes=0,kani_runs=0,artifact_executed=False,
  external_reads=[
-  dict(instruction='malloc 0xad764',state='malloc initialization byte 0x20b188',classification='ALLOCATOR-INTERNAL; newly permitted by own-2\u2032'),
-  dict(instruction='malloc 0xad79a',state='tcache allocator TLS',classification='ALLOCATOR-INTERNAL; newly permitted by own-2\u2032'),
+  dict(instruction='malloc 0xad764',state='malloc initialization byte 0x20b188',classification='ALLOCATOR-INTERNAL; newly permitted by own-2′'),
+  dict(instruction='malloc 0xad79a',state='tcache allocator TLS',classification='ALLOCATOR-INTERNAL; newly permitted by own-2′'),
   dict(instruction='malloc 0xad7b5',state='__libc_single_threaded 0x20c040',classification='OTHER',reason='Process-wide thread-count optimization flag, exported in sys/single_threaded.h, writable by pthread_create at 0x9d336 outside allocator entry points'),
   dict(instruction='free 0xade59',state='incoming errno TLS, through offset slot 0x203df8',classification='OTHER',reason='Same TLS location returned by __errno_location; general per-thread error state, saved and restored across successful free at 0xadeae, not allocator-owned state'),
   dict(instruction='std rust_oom HOOK.load',state='allocation failure handler',classification='FAILURE-ONLY retained under rdea-1; no success-path exemption or new trust item asserted'),
