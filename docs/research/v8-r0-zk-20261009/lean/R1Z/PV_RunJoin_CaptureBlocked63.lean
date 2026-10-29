@@ -25,9 +25,9 @@ theorem no_capture (base : ExternalTypes) (heap : Heap) (box : Box)
     noised maskOnly d g padding initial p.hash .S2
   erw [built] at traced
   obtain ⟨columns,first,root1,root2,h,hfirst,_⟩ := traced
-  have blocked := PV_RunJoin_BackendBlocked63.c1 (selected base heap box ops)
+  have blocked := @PV_RunJoin_BackendBlocked63.c1 (types base) (selected base heap box ops)
     (PV_RunJoin_CaptureBoundary61.selected_mapErr base heap box ops) denied initial columns d
-  rw [hfirst] at blocked
+  erw [hfirst] at blocked
   exact blocked
 
 #print axioms no_capture
