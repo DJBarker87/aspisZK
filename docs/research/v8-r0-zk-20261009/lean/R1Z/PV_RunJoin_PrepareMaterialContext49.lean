@@ -72,10 +72,6 @@ def run
       | core.ops.control_flow.ControlFlow.Continue val1 =>
         tail transcript2 y1 gamma inactive kappa (alloc.vec.Vec.deref q) (alloc.vec.Vec.deref val1)
       | core.ops.control_flow.ControlFlow.Break residual =>
-          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-            prover.PreparedOpening (core.convert.FromSame verifier.Error)
-            residual
-      | core.ops.control_flow.ControlFlow.Break residual =>
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
           prover.PreparedOpening (core.convert.FromSame verifier.Error)
           residual

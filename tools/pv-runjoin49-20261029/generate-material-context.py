@@ -11,7 +11,7 @@ new='''    Result aspis_core.field.wide_exact.WideExact)
     aspis_core.field.wide_exact.WideExact → Slice aspis_core.field.wide_exact.WideExact →
     Slice aspis_core.field.wide_exact.WideExact → Result (core.result.Result prover.PreparedOpening verifier.Error)) :'''
 assert body.count(old)==1;body=body.replace(old,new)
-a=body.index('        let s6 := alloc.vec.Vec.deref q');b=body.index('      | core.ops.control_flow.ControlFlow.Break residual =>',a)
+a=body.index('        let s6 := alloc.vec.Vec.deref q');b=body.index('\n      | core.ops.control_flow.ControlFlow.Break residual =>',a)+1
 removed=body[a:b];body=body[:a]+'''        tail transcript2 y1 gamma inactive kappa (alloc.vec.Vec.deref q) (alloc.vec.Vec.deref val1)
 '''+body[b:]
 header='''import R1Z.PV_RunJoin_PrepareClaimContext48
