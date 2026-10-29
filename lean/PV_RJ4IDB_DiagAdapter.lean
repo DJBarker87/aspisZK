@@ -13,7 +13,13 @@ def diagTrace (x : PV_DIAG3.Execution S A) : Trace A :=
 
 theorem diag_events (x : PV_DIAG3.Execution S A) :
  (decoder (diagTrace x)).errorsStderr3 = x.events := by
- simp [decoder,diagTrace,diagnostics3,List.filterMap_map]
+ change diagnostics3 (x.events.map Event.diagnostic3) = x.events
+ have aux : ∀ es : List PV_DIAG3.Event, diagnostics3 (es.map Event.diagnostic3) = es := by
+  intro es
+  induction es with
+  | nil => rfl
+  | cons e es ih => change e :: diagnostics3 (es.map Event.diagnostic3) = e :: es; rw [ih]
+ exact aux x.events
 
 theorem diag_prefix (before : List PV_DIAG3.Event) (x : PV_DIAG3.Execution S A) :
  (diagTrace (PV_DIAG3.prepend before x)).events =
