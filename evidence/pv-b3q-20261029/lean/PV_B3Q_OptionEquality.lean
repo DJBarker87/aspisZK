@@ -41,7 +41,8 @@ theorem option_links : PV_B3P_Link_std_dependency_closure14 Signature source mod
  | option_eq => funext left right; exact eq_binding left right
  | option_ne =>
    funext left right
-   unfold source model source_ne
+   change source_ne source_eq left right = source_ne model_eq left right
+   unfold source_ne
    rw [eq_binding]
 #print axioms eq_binding
 #print axioms ne_binding
