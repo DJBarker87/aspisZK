@@ -1,5 +1,5 @@
 import PV_B3P_DigestStage03227
-import PV_B3P_DigestAssoc227
+import PV_B3P_DigestBranch227
 import PV_B3P_DigestSuffix04227
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
@@ -21,7 +21,7 @@ theorem digest_suffix_03_equation (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) (output : Digest8Q) :
     digest_suffix_03 public1 openings selectors output = digest_stage_03 public1 openings selectors output >>= digest_suffix_04 public1 openings selectors := by
-  simp only [digest_suffix_03,digest_stage_03,digest_assoc]
+  simp only [digest_suffix_03,digest_stage_03,digest_assoc,digest_if_bind,digest_option_bind]
 
 theorem digest_suffix_03_success (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
