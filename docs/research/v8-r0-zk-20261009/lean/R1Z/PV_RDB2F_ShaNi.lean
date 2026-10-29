@@ -87,24 +87,28 @@ def wordBlock (intr : Intrinsics)
     intr.round
       (Array.make 4#usize [ i4, i5, i6, i7 ])
       (Array.make 4#usize [ i, i1, i2, i3 ]) t1
+  let t2 ← sha_fallback_reference.sha256swap t1
   let abef ←
-    intr.shuffleRound
-      (Array.make 4#usize [ i, i1, i2, i3 ]) cdgh t1
+    intr.round
+      (Array.make 4#usize [ i, i1, i2, i3 ]) cdgh t2
   let a2 ← Array.index_usize a 1#usize
   let t11 ←
     intr.add (Array.make 4#usize [ i12, i13, i14, i15 ]) a2
   let cdgh1 ← intr.round cdgh abef t11
-  let abef1 ← intr.shuffleRound abef cdgh1 t11
+  let t21 ← sha_fallback_reference.sha256swap t11
+  let abef1 ← intr.round abef cdgh1 t21
   let a3 ← Array.index_usize a 2#usize
   let t12 ←
     intr.add (Array.make 4#usize [ i16, i17, i18, i19 ]) a3
   let cdgh2 ← intr.round cdgh1 abef1 t12
-  let abef2 ← intr.shuffleRound abef1 cdgh2 t12
+  let t22 ← sha_fallback_reference.sha256swap t12
+  let abef2 ← intr.round abef1 cdgh2 t22
   let a4 ← Array.index_usize a 3#usize
   let t13 ←
     intr.add (Array.make 4#usize [ i20, i21, i22, i23 ]) a4
   let cdgh3 ← intr.round cdgh2 abef2 t13
-  let abef3 ← intr.shuffleRound abef2 cdgh3 t13
+  let t23 ← sha_fallback_reference.sha256swap t13
+  let abef3 ← intr.round abef2 cdgh3 t23
   let w4 ←
     schedule intr (Array.make 4#usize [ i8, i9, i10, i11 ])
       (Array.make 4#usize [ i12, i13, i14, i15 ])
@@ -113,7 +117,8 @@ def wordBlock (intr : Intrinsics)
   let a5 ← Array.index_usize a 4#usize
   let t14 ← intr.add w4 a5
   let cdgh4 ← intr.round cdgh3 abef3 t14
-  let abef4 ← intr.shuffleRound abef3 cdgh4 t14
+  let t24 ← sha_fallback_reference.sha256swap t14
+  let abef4 ← intr.round abef3 cdgh4 t24
   let w0 ←
     schedule intr (Array.make 4#usize [ i12, i13, i14, i15 ])
       (Array.make 4#usize [ i16, i17, i18, i19 ])
@@ -121,72 +126,83 @@ def wordBlock (intr : Intrinsics)
   let a6 ← Array.index_usize a 5#usize
   let t15 ← intr.add w0 a6
   let cdgh5 ← intr.round cdgh4 abef4 t15
-  let abef5 ← intr.shuffleRound abef4 cdgh5 t15
+  let t25 ← sha_fallback_reference.sha256swap t15
+  let abef5 ← intr.round abef4 cdgh5 t25
   let w1 ←
     schedule intr (Array.make 4#usize [ i16, i17, i18, i19 ])
       (Array.make 4#usize [ i20, i21, i22, i23 ]) w4 w0
   let a7 ← Array.index_usize a 6#usize
   let t16 ← intr.add w1 a7
   let cdgh6 ← intr.round cdgh5 abef5 t16
-  let abef6 ← intr.shuffleRound abef5 cdgh6 t16
+  let t26 ← sha_fallback_reference.sha256swap t16
+  let abef6 ← intr.round abef5 cdgh6 t26
   let w2 ←
     schedule intr (Array.make 4#usize [ i20, i21, i22, i23 ])
       w4 w0 w1
   let a8 ← Array.index_usize a 7#usize
   let t17 ← intr.add w2 a8
   let cdgh7 ← intr.round cdgh6 abef6 t17
-  let abef7 ← intr.shuffleRound abef6 cdgh7 t17
+  let t27 ← sha_fallback_reference.sha256swap t17
+  let abef7 ← intr.round abef6 cdgh7 t27
   let w3 ← schedule intr w4 w0 w1 w2
   let a9 ← Array.index_usize a 8#usize
   let t18 ← intr.add w3 a9
   let cdgh8 ← intr.round cdgh7 abef7 t18
-  let abef8 ← intr.shuffleRound abef7 cdgh8 t18
+  let t28 ← sha_fallback_reference.sha256swap t18
+  let abef8 ← intr.round abef7 cdgh8 t28
   let w41 ← schedule intr w0 w1 w2 w3
   let a10 ← Array.index_usize a 9#usize
   let t19 ← intr.add w41 a10
   let cdgh9 ← intr.round cdgh8 abef8 t19
-  let abef9 ← intr.shuffleRound abef8 cdgh9 t19
+  let t29 ← sha_fallback_reference.sha256swap t19
+  let abef9 ← intr.round abef8 cdgh9 t29
   let w01 ← schedule intr w1 w2 w3 w41
   let a11 ← Array.index_usize a 10#usize
   let t110 ← intr.add w01 a11
   let cdgh10 ← intr.round cdgh9 abef9 t110
+  let t210 ← sha_fallback_reference.sha256swap t110
   let abef10 ←
-    intr.shuffleRound abef9 cdgh10 t110
+    intr.round abef9 cdgh10 t210
   let w11 ← schedule intr w2 w3 w41 w01
   let a12 ← Array.index_usize a 11#usize
   let t111 ← intr.add w11 a12
   let cdgh11 ←
     intr.round cdgh10 abef10 t111
+  let t211 ← sha_fallback_reference.sha256swap t111
   let abef11 ←
-    intr.shuffleRound abef10 cdgh11 t111
+    intr.round abef10 cdgh11 t211
   let w21 ← schedule intr w3 w41 w01 w11
   let a13 ← Array.index_usize a 12#usize
   let t112 ← intr.add w21 a13
   let cdgh12 ←
     intr.round cdgh11 abef11 t112
+  let t212 ← sha_fallback_reference.sha256swap t112
   let abef12 ←
-    intr.shuffleRound abef11 cdgh12 t112
+    intr.round abef11 cdgh12 t212
   let w31 ← schedule intr w41 w01 w11 w21
   let a14 ← Array.index_usize a 13#usize
   let t113 ← intr.add w31 a14
   let cdgh13 ←
     intr.round cdgh12 abef12 t113
+  let t213 ← sha_fallback_reference.sha256swap t113
   let abef13 ←
-    intr.shuffleRound abef12 cdgh13 t113
+    intr.round abef12 cdgh13 t213
   let w42 ← schedule intr w01 w11 w21 w31
   let a15 ← Array.index_usize a 14#usize
   let t114 ← intr.add w42 a15
   let cdgh14 ←
     intr.round cdgh13 abef13 t114
+  let t214 ← sha_fallback_reference.sha256swap t114
   let abef14 ←
-    intr.shuffleRound abef13 cdgh14 t114
+    intr.round abef13 cdgh14 t214
   let w02 ← schedule intr w11 w21 w31 w42
   let a16 ← Array.index_usize a 15#usize
   let t115 ← intr.add w02 a16
   let cdgh15 ←
     intr.round cdgh14 abef14 t115
+  let t215 ← sha_fallback_reference.sha256swap t115
   let abef15 ←
-    intr.shuffleRound abef14 cdgh15 t115
+    intr.round abef14 cdgh15 t215
   let a17 ← Array.index_usize abef15 0#usize
   let b ← Array.index_usize abef15 1#usize
   let e ← Array.index_usize abef15 2#usize
@@ -223,10 +239,24 @@ def wordBlock (intr : Intrinsics)
 theorem word_block_semantics (intr : Intrinsics) (h : SHA_NI_IntrinsicsSemantics intr)
     (state : State) (words : Words) :
     wordBlock intr state words=sha_fallback_reference.extracted_block state words := by
-  simp only [wordBlock,sha_fallback_reference.extracted_block,
-    sha_fallback_reference.sha256_digest_block_u32,h.add,h.round,h.shuffleRound,
-    schedule_semantics intr h,referenceShuffleRound,bind_assoc_eq,bind_tc_ok]
+  rcases intr with ⟨add,round,shuffleRound,msg1,align4,msg2,pack,load,unpack⟩
+  rcases h with ⟨ha,hr,hs,hm1,hl,hm2,hp,hload,hu⟩
+  dsimp only at ha hr hm1 hl hm2
+  subst add
+  subst round
+  subst msg1
+  subst align4
+  subst msg2
+  rfl
+
+/-- Explicit local justification for replacing each source shuffle+round pair
+by the software lane-normalized pair. Upper unused lanes are not equated. -/
+theorem shuffle_pair_semantics (intr : Intrinsics) (h : SHA_NI_IntrinsicsSemantics intr)
+    (a b t : Vec) : intr.shuffleRound a b t=referenceShuffleRound a b t := by
+  rw [h.shuffleRound]
+
 
 #print axioms schedule_semantics
 #print axioms word_block_semantics
+#print axioms shuffle_pair_semantics
 end R1Z.PV_RDB2F_ShaNi

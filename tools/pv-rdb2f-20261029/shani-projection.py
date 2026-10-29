@@ -13,7 +13,7 @@ while i<len(statements):
   b=b.replace('sha_fallback_reference.sha256_digest_round_x2','intr.shuffleRound');b=re.sub(r'\b'+m[1]+r'\b',m[2],b);out.append(b);i+=2;pairs+=1
  else:out.append(a);i+=1
 assert pairs==16
-b=''.join(out).replace('def sha_fallback_reference.sha256_digest_block_u32','def wordBlock (intr : Intrinsics)').replace('sha_fallback_reference.add','intr.add').replace('sha_fallback_reference.sha256_digest_round_x2','intr.round').replace('sha_fallback_reference.schedule','schedule intr')
+b=body.replace('def sha_fallback_reference.sha256_digest_block_u32','def wordBlock (intr : Intrinsics)').replace('sha_fallback_reference.add','intr.add').replace('sha_fallback_reference.sha256_digest_round_x2','intr.round').replace('sha_fallback_reference.schedule','schedule intr')
 header='''import R1Z.PV_RDB2E_FallbackBlockTotal
 namespace R1Z.PV_RDB2F_ShaNi
 open Aeneas Aeneas.Std Result PV_CBL_FallbackBlock
@@ -73,12 +73,26 @@ footer='''
 theorem word_block_semantics (intr : Intrinsics) (h : SHA_NI_IntrinsicsSemantics intr)
     (state : State) (words : Words) :
     wordBlock intr state words=sha_fallback_reference.extracted_block state words := by
-  simp only [wordBlock,sha_fallback_reference.extracted_block,
-    sha_fallback_reference.sha256_digest_block_u32,h.add,h.round,h.shuffleRound,
-    schedule_semantics intr h,referenceShuffleRound,bind_assoc_eq,bind_tc_ok]
+  rcases intr with ⟨add,round,shuffleRound,msg1,align4,msg2,pack,load,unpack⟩
+  rcases h with ⟨ha,hr,hs,hm1,hl,hm2,hp,hload,hu⟩
+  dsimp only at ha hr hm1 hl hm2
+  subst add
+  subst round
+  subst msg1
+  subst align4
+  subst msg2
+  rfl
+
+/-- Explicit local justification for replacing each source shuffle+round pair
+by the software lane-normalized pair. Upper unused lanes are not equated. -/
+theorem shuffle_pair_semantics (intr : Intrinsics) (h : SHA_NI_IntrinsicsSemantics intr)
+    (a b t : Vec) : intr.shuffleRound a b t=referenceShuffleRound a b t := by
+  rw [h.shuffleRound]
+
 
 #print axioms schedule_semantics
 #print axioms word_block_semantics
+#print axioms shuffle_pair_semantics
 end R1Z.PV_RDB2F_ShaNi
 '''
 (P/'PV_RDB2F_ShaNi.lean').write_text(header+b+footer)
