@@ -1,0 +1,33 @@
+NDM_generated/NDM_AdoptedReconstruction.lean:19:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let result ←
+      NDM_CohortReconstruction.direct (toRequest request) (toAuthenticatedAsq8Accounts a)
+          (toPoolV1PairVerifiedAfterstateV1 c)
+    match result with
+      | core.result.Result.Ok statement =>
+        ok (core.result.Result.Ok (fromPoolV1PairForestTerminalStatementV1 statement))
+      | core.result.Result.Err error => ok (core.result.Result.Err (AspisR1.JHf_ProgramErrorCarrier.fromRaw error))
+is not definitionally equal to the right-hand side
+  do
+    let raw ←
+      NDM_CohortReconstruction.direct (toRequest request) (toAuthenticatedAsq8Accounts a)
+          (toPoolV1PairVerifiedAfterstateV1 c)
+    ok (NDM_CohortStatement.transport raw)
+
+request : aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1
+a : r1_pool_adapter.AuthenticatedAsq8Accounts
+c : NDM_CommonCarrier.Candidate
+⊢ (do
+      let result ←
+        NDM_CohortReconstruction.direct (toRequest request) (toAuthenticatedAsq8Accounts a)
+            (toPoolV1PairVerifiedAfterstateV1 c)
+      match result with
+        | core.result.Result.Ok statement =>
+          ok (core.result.Result.Ok (fromPoolV1PairForestTerminalStatementV1 statement))
+        | core.result.Result.Err error => ok (core.result.Result.Err (AspisR1.JHf_ProgramErrorCarrier.fromRaw error))) =
+    do
+    let raw ←
+      NDM_CohortReconstruction.direct (toRequest request) (toAuthenticatedAsq8Accounts a)
+          (toPoolV1PairVerifiedAfterstateV1 c)
+    ok (NDM_CohortStatement.transport raw)
+'NDM_AdoptedReconstruction.selected' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -53,7 +53,12 @@ if kind=='kani':
 elif kind=='extract':
  files['NDM_extract.py']=(E/'NDM_extract.py').read_text();files['NDM_src/programs/r1-cost-probe/src/NDM_reference.rs']=(E/'NDM_reference.rs.txt').read_text();sources=['NDM_extract.py','NDM_src/programs/r1-cost-probe/src/NDM_reference.rs'];native=[];command=['python3','NDM_extract.py']
 else:
- files['NDM_generated/'+target+'.lean']=(E/(target+'.lean')).read_text();sources=['NDM_generated/'+target+'.lean']
+ source_path=E/(target+'.lean')
+ if not target.startswith('NDM_'):
+  source_path=E/'NDM_import'/(target+'.lean')
+  imported=json.loads((E/'NDM_IMPORT_PINS.json').read_text())[target]
+  assert imported['unchanged'] and hashlib.sha256(source_path.read_bytes()).hexdigest()==imported['sha256']
+ files['NDM_generated/'+target+'.lean']=source_path.read_text();sources=['NDM_generated/'+target+'.lean']
  native=[];command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NDM_generated','-o','NDM_objects/'+target+'.olean',sources[0]]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NDM_tmp',LEAN_PATH=B+'/NDM_objects:/home/dombarker/project-offloads/codex-cx-native-front4-20261028/NDG_objects:/home/dombarker/project-offloads/codex-cx-front4-cache-20261028:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects')
 if os.environ.get('NDM_EXTRA'):env['NDM_EXTRA']=os.environ['NDM_EXTRA']

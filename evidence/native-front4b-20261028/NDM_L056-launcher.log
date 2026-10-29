@@ -1,0 +1,51 @@
+{"attempt": "NDM_L056", "exit_status": 1, "wall_seconds": 2.326450187014416, "peak_rss_kib": "5371056", "swaps": "0", "print_axioms": ["'NDM_CohortReconstruction.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NDM_generated/NDM_CohortReconstruction.lean:39:37: error: unsolved goals
+case pos
+a : Auth
+c : Candidate
+gate :
+  core.cmp.PartialEq.ne.trait_default (NDM_CohortGate.RawOptionEq core.cmp.PartialEqU64)
+      (a.live_snapshot.next_pair_index.checked_add 1#u64) (some c.next_pair_index) =
+    ok !decide (↑a.live_snapshot.next_pair_index + 1 = ↑c.next_pair_index)
+profile release program : Std.Array U8 32#usize
+a✝ : payment_relation.PoolV1PrivateTransferPublicV1
+step : ↑a.live_snapshot.next_pair_index + 1 = ↑c.next_pair_index
+⊢ (if ↑a.master.identity.asset_id = ↑a✝.asset_id then do
+      let common ← r1_pool_adapter.asq8_common a c
+      r1_pool_adapter.transfer_statement_box common a✝
+    else ok
+...
+shot.next_pair_index + 1 = ↑c.next_pair_index)
+profile release program : Std.Array U8 32#usize
+a✝ : payment_relation.PoolV1PrivateTransferPublicV1
+step : ↑a.live_snapshot.next_pair_index + 1 = ↑c.next_pair_index
+⊢ (if ↑a.master.identity.asset_id = ↑a✝.asset_id then do
+      let common ← r1_pool_adapter.asq8_common a c
+      r1_pool_adapter.transfer_statement_box common a✝
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)) =
+    if a.master.identity.asset_id = a✝.asset_id then do
+      let common ← r1_pool_adapter.asq8_common a c
+      r1_pool_adapter.transfer_statement_box common a✝
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+
+case pos
+a : Auth
+c : Candidate
+gate :
+  core.cmp.PartialEq.ne.trait_default (NDM_CohortGate.RawOptionEq core.cmp.PartialEqU64)
+      (a.live_snapshot.next_pair_index.checked_add 1#u64) (some c.next_pair_index) =
+    ok !decide (↑a.live_snapshot.next_pair_index + 1 = ↑c.next_pair_index)
+profile release program : Std.Array U8 32#usize
+a✝ : payment_relation.PoolV1WithdrawalPublicV1
+step : ↑a.live_snapshot.next_pair_index + 1 = ↑c.next_pair_index
+⊢ (if ↑a.master.identity.asset_id = ↑a✝.asset_id then do
+      let common ← r1_pool_adapter.asq8_common a c
+      r1_pool_adapter.withdrawal_statement_box common a✝
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)) =
+    if a.master.identity.asset_id = a✝.asset_id then do
+      let common ← r1_pool_adapter.asq8_common a c
+      r1_pool_adapter.withdrawal_statement_box common a✝
+    else ok (core.result.Result.Err solana_program_error.ProgramError.InvalidInstructionData)
+'NDM_CohortReconstruction.control' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3c3e95789c9d451194ff5f7ac71d36f1.scope; invocation ID: fc7e3b1edc434e58bbc895e93dee3957

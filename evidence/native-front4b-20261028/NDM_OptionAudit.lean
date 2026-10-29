@@ -1,0 +1,4 @@
+import NDM_CohortCommon
+#print axioms AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq
+#print axioms AspisR1AdapterReconstruct.r1_pool_adapter.reconstruct_asq8_statement
+#print AspisR1AdapterReconstruct.optionDiscriminantInst

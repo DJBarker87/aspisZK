@@ -1,0 +1,40 @@
+{"attempt": "NDM_L048", "exit_status": 0, "wall_seconds": 1.158364920062013, "peak_rss_kib": "2628540", "swaps": "0", "print_axioms": []}
+@[reducible] def AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption : {T : Type} →
+  Aeneas.Std.core.cmp.PartialEq T T → Aeneas.Std.core.cmp.PartialEq (Option T) (Option T) :=
+fun {T} cmpPartialEqInst =>
+  { eq := AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq cmpPartialEqInst,
+    ne := fun self other =>
+      Aeneas.Std.core.cmp.PartialEq.ne.default
+        (AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq cmpPartialEqInst) self other }
+def AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq : {T : Type} →
+  Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bo
+...
+CoreCmpPartialEqOption.eq cmpPartialEqInst) self other }
+def AspisR1AdapterReconstruct.core.option.Option.Insts.CoreCmpPartialEqOption.eq : {T : Type} →
+  Aeneas.Std.core.cmp.PartialEq T T → Option T → Option T → Aeneas.Std.Result Bool :=
+fun {T} cmpPartialEqInst self other =>
+  match self with
+  | none =>
+    have other1 := Aeneas.Std.read_discriminant other;
+    Aeneas.Std.Result.ok (decide (other1 = 0#isize))
+  | some l =>
+    match other with
+    | none => Aeneas.Std.Result.ok false
+    | some r => cmpPartialEqInst.eq l r
+@[reducible] def AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 : Aeneas.Std.core.cmp.PartialEq
+  AspisR1AdapterReconstruct.aspis_core.field.M31 AspisR1AdapterReconstruct.aspis_core.field.M31 :=
+{ eq := AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+  ne := fun self other =>
+    Aeneas.Std.core.cmp.PartialEq.ne.default AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq
+      self other }
+def AspisR1AdapterReconstruct.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq : AspisR1AdapterReconstruct.aspis_core.field.M31 →
+  AspisR1AdapterReconstruct.aspis_core.field.M31 → Aeneas.Std.Result Bool :=
+fun self other => Aeneas.Std.Result.ok (decide (self = other))
+def Aeneas.Std.core.cmp.PartialEq.ne.trait_default : {Self Rhs : Type} →
+  Aeneas.Std.core.cmp.PartialEq Self Rhs → Self → Rhs → Aeneas.Std.Result Bool :=
+fun {Self Rhs} PartialEqInst self other => Aeneas.Std.core.cmp.PartialEq.ne.default PartialEqInst.eq self other
+@[reducible] def Aeneas.Std.core.cmp.PartialEqU64 : Aeneas.Std.core.cmp.PartialEq Aeneas.Std.U64 Aeneas.Std.U64 :=
+{ eq := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU64.eq,
+  ne := Aeneas.Std.liftFun2 Aeneas.Std.core.cmp.impls.PartialEqU64.ne }
+
+Running as unit: run-r874988ceb28a4157b239c6397a9dac74.scope; invocation ID: 608ca76cf49e468893814d1ea69c445e
