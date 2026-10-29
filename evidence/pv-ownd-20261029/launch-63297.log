@@ -1,0 +1,224 @@
+                                 (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).token
+                                      (R1Z.PV_OWND_ActualBytes.initialized
+                                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner
+                                                w).world.memory
+                                          { address := p, generation := w.memory.generations p + 1 } owner
+                                          payload).cell)
+                                  fun x => R1Z.PV_W_Threading.lift (R1Z.PV_W_Threading.Outcome.fail (error e)))
+                              (have a := R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w;
+                                have b :=
+                                  R1Z.PV_OWND_ActualBytes.initialized a.world.memory
+                                    { address := p, generation := w.memory.generations p + 1 } owner payload;
+                                { outcome := R1Z.PV_W_Threading.Outcome.ok b,
+                                  world :=
+                                    have __src := a.world;
+                                    { memory := b.memory, allocator := __src.allocator, extra := __src.extra },
+                                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] }).world)
+                          checked)))
+                    (List.append_nil [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)]))))
+              {
+                outcome :=
+                  R1Z.PV_W_Threading.Outcome.ok
+                    (R1Z.PV_OWND_ActualBytes.initialized
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                      { address := p, generation := w.memory.generations p + 1 } owner payload),
+                world :=
+                  {
+                    memory :=
+                      (R1Z.PV_OWND_ActualBytes.initialized
+                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                          { address := p, generation := w.memory.generations p + 1 } owner payload).memory,
+                    allocator :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.allocator,
+                    extra :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (eq_self
+              {
+                outcome :=
+                  R1Z.PV_W_Threading.Outcome.ok
+                    (R1Z.PV_OWND_ActualBytes.initialized
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                      { address := p, generation := w.memory.generations p + 1 } owner payload),
+                world :=
+                  {
+                    memory :=
+                      (R1Z.PV_OWND_ActualBytes.initialized
+                          (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.memory
+                          { address := p, generation := w.memory.generations p + 1 } owner payload).memory,
+                    allocator :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.allocator,
+                    extra :=
+                      (R1Z.PV_OWN_Operations.allocate prim { size := 1016, alignment := 2 } owner w).world.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })))))
+theorem R1Z.PV_OWND_InitialAbort.null_abort : ∀ {S X E : Type}
+  (prim : R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S)
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (error : R1Z.PV_OWND_InitialCheck.CheckError → E) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) (w : R1Z.PV_OWN_Operations.State S X) (s : S),
+  prim { size := 1016, alignment := 2 } w.allocator = (R1Z.PV_W_Threading.Outcome.ok none, s) →
+    R1Z.PV_OWND_InitialProgram.program prim dealloc error owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+        payload w =
+      { outcome := R1Z.PV_W_Threading.Outcome.div, world := { memory := w.memory, allocator := s, extra := w.extra },
+        calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] } :=
+fun {S X E} prim dealloc error owner payload w s h =>
+  id
+    (Eq.mpr
+      (id
+        (congrArg
+          (fun _a =>
+            _a =
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+          (R1Z.PV_W_Threading.bind.eq_1
+            (R1Z.PV_OWND_InitialRun.construct prim owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+              payload)
+            (R1Z.PV_OWND_InitialCheck.finish dealloc error) w)))
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a =>
+              (match _a.outcome with
+                | R1Z.PV_W_Threading.Outcome.ok x =>
+                  have b := R1Z.PV_OWND_InitialCheck.finish dealloc error x _a.world;
+                  { outcome := b.outcome, world := b.world, calls := _a.calls ++ b.calls }
+                | R1Z.PV_W_Threading.Outcome.fail e =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.fail e, world := _a.world, calls := _a.calls }
+                | R1Z.PV_W_Threading.Outcome.div =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.div, world := _a.world, calls := _a.calls }) =
+                { outcome := R1Z.PV_W_Threading.Outcome.div,
+                  world := { memory := w.memory, allocator := s, extra := w.extra },
+                  calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (R1Z.PV_OWND_InitialNull.complete prim owner (R1Z.PV_W_Threading.lift R1Z.PV_W_Threading.Outcome.div)
+              payload w s h)))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg
+                  (R1Z.PV_W_Threading.Run.mk R1Z.PV_W_Threading.Outcome.div
+                    { memory := w.memory, allocator := s, extra := w.extra })
+                  (List.append_nil [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)])))
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })
+            (eq_self
+              { outcome := R1Z.PV_W_Threading.Outcome.div,
+                world := { memory := w.memory, allocator := s, extra := w.extra },
+                calls := [(w, R1Z.PV_OWN_Operations.Event.allocate 1016 2)] })))))
+theorem R1Z.PV_OWND_InitialDrop.complete : ∀ {S X E : Type}
+  (dealloc : Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S)
+  (b : R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) (w : R1Z.PV_OWN_Operations.State S X),
+  w.memory.slots b.owner = some b.token →
+    b.cell.size ≠ 0 →
+      R1Z.PV_OWN_Operations.dropOwned b.owner (fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell) w =
+        have after :=
+          { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra };
+        have result := dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } after.allocator;
+        { outcome := result.fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell after.memory, allocator := result.snd,
+              extra := after.extra },
+          calls := [(after, R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] } :=
+fun {S X E} dealloc b w owned nonzero =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (Eq.trans
+            (congrArg
+              (fun x =>
+                match x with
+                | none =>
+                  { outcome := R1Z.PV_W_Threading.Outcome.ok (),
+                    world :=
+                      { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator,
+                        extra := w.extra },
+                    calls := [] }
+                | some t =>
+                  (fun x => R1Z.PV_OWN_Operations.dropVecPod dealloc b.token b.cell) t
+                    { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator,
+                      extra := w.extra })
+              owned)
+            (congrFun
+              (ite_congr (eq_false nonzero) (fun a => Eq.refl R1Z.PV_OWN_Operations.dropPod) fun a =>
+                Eq.refl
+                  (R1Z.PV_W_Threading.emit
+                    (R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment) fun w =>
+                    ((dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+                      { memory := R1Z.PV_OWN_Operations.retire b.token b.cell w.memory,
+                        allocator :=
+                          (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment }
+                              w.allocator).snd,
+                        extra := w.extra })))
+              { memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra })))
+        { outcome := (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell (R1Z.PV_OWN_Operations.take b.owner w.memory),
+              allocator :=
+                (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).snd,
+              extra := w.extra },
+          calls :=
+            [({ memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra },
+                R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] })
+      (eq_self
+        { outcome := (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).fst,
+          world :=
+            { memory := R1Z.PV_OWN_Operations.retire b.token b.cell (R1Z.PV_OWN_Operations.take b.owner w.memory),
+              allocator :=
+                (dealloc b.token.address { size := b.cell.size, alignment := b.cell.alignment } w.allocator).snd,
+              extra := w.extra },
+          calls :=
+            [({ memory := R1Z.PV_OWN_Operations.take b.owner w.memory, allocator := w.allocator, extra := w.extra },
+                R1Z.PV_OWN_Operations.Event.deallocate b.token.address b.cell.size b.cell.alignment)] }))
+theorem R1Z.PV_OWND_CheckSource.scalar_input : ∀ (m : R1Z.PV_OWN_Heap.Memory) (t : R1Z.PV_OWN_Heap.Token) (owner : Nat)
+  (payload : Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes),
+  R1Z.PV_OWND_InitialCheck.checks (R1Z.PV_OWND_ActualBytes.initialized m t owner payload) =
+    match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+    | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+      Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+    | Except.ok a => Except.ok () :=
+fun m t owner payload =>
+  Eq.mpr
+    (id
+      (congrFun'
+        (congrArg Eq
+          (ite_congr (R1Z.PV_OWND_CheckSource.scalar_input._simp_2 m t owner payload)
+            (fun a => Eq.refl (Except.error R1Z.PV_OWND_InitialCheck.CheckError.shape)) fun a =>
+            congrArg
+              (fun x =>
+                match x with
+                | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+                  Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+                | Except.ok a => Except.ok ())
+              (congrFun'
+                (congrFun'
+                  (congrArg R1Z.PV_OWND_EndpointCounter.check (R1Z.PV_OWND_ActualItems.source m t owner payload))
+                  fun x => 0)
+                fun x => 0)))
+        (match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+        | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+          Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+        | Except.ok a => Except.ok ())))
+    (Eq.refl
+      (match R1Z.PV_OWND_EndpointCounter.check R1Z.PV_OWND_LegacySource.links (fun x => 0) fun x => 0 with
+      | Except.error (R1Z.PV_OWND_EndpointCounter.Error.endpointCapacity row) =>
+        Except.error (R1Z.PV_OWND_InitialCheck.CheckError.endpoint row)
+      | Except.ok a => Except.ok ()))
+def R1Z.PV_OWND_InitialProgram.program : {S X E : Type} →
+  (R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E (Option Nat) × S) →
+    (Nat → R1Z.PV_OWN_Operations.Request → S → R1Z.PV_W_Threading.Outcome E Unit × S) →
+      (R1Z.PV_OWND_InitialCheck.CheckError → E) →
+        Nat →
+          R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) →
+            (Nat → R1Z.PV_OWN_Link.Link → R1Z.PV_OWN_Bytes.Bytes) →
+              R1Z.PV_OWN_Operations.Action S X E (R1Z.PV_OWNC_Vector.Buffer R1Z.PV_OWN_Link.Link) :=
+fun {S X E} prim dealloc error owner oom payload =>
+  R1Z.PV_W_Threading.bind (R1Z.PV_OWND_InitialRun.construct prim owner oom payload)
+    (R1Z.PV_OWND_InitialCheck.finish dealloc error)
+
+{"target": ["systemd-run", "--user", "--scope", "-q", "-p", "MemoryHigh=6G", "-p", "MemoryMax=8G", "-p", "MemorySwapMax=0", "-p", "TasksMax=64", "python3", "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63297/admission-barrier.json", "/usr/bin/time", "-v", "-o", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63297/time.log", "timeout", "900", "python3", "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_StatementsAudit.olean", "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_StatementsAudit.lean", "7000"], "exit": 0, "transport_exit": 0, "wall": "0:01.10", "peak_rss_kib": "495944", "swap": "0", "source_revision": "9fa885237579fa0aa790be5cd569414dc96901bc", "expected_phase": "focused Lean compilation", "print_axioms": "N/A native/extraction; Lean results separately audited", "limits": {"MemoryHigh": "6G", "MemoryMax": "8G", "MemorySwapMax": 0, "TasksMax": 64}}

@@ -1,0 +1,60 @@
+{
+  "target": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "-q",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63207/admission-barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-63207/time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-objects/R1Z/PV_OWND_PushSuffix.olean",
+    "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PushSuffix.lean",
+    "7000"
+  ],
+  "exit": 1,
+  "transport_exit": 1,
+  "wall": "0:00.21",
+  "peak_rss_kib": "486980",
+  "swap": "0",
+  "source_revision": "2ba709f8883c55f0aa4af661a6a80ef456e0ac1f",
+  "expected_phase": "focused Lean compilation",
+  "print_axioms": "/home/dombarker/project-offloads/codex-pv-ownd-20261029/lean-sources/R1Z/PV_OWND_PushSuffix.lean:14:7: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern\n  (append k (push k b v (k.encode v)) vs).values b.length\nin the target expression\n  (append k (push k b v (k.encode v)) vs).values (b.length + 0) = (v :: vs)[0]\n\ncase cons.zero\nT : Type\nk : Codec T\nv : T\nvs : List T\nih : \u2200 (b : Buffer T) (i : Nat) (hi : i < vs.length), (append k b vs).values (b.length + i) = vs[i]\nb : Buffer T\nhi : 0 < (v :: vs).length\n\u22a2 (append k (push k b v (k.encode v)) vs).values (b.length + 0) = (v :: vs)[0]\n'R1Z.PV_OWND_PushSuffix.suffix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]\n",
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "attempt": 63207,
+  "module": "R1Z/PV_OWND_PushSuffix",
+  "source_blob": "d937b827a263e031ec7a47d9db4791c4a1cbc41a",
+  "source_path": "docs/research/v8-r0-zk-20261009/lean/R1Z/PV_OWND_PushSuffix.lean",
+  "source_sha256": "445eee27494b1abbf70e6eb1f0af6398e6f879e6da6c033cb487d5ce6dcd0b2b",
+  "imports": [
+    "R1Z.PV_OWND_PushPrefix"
+  ],
+  "authority": "h5 tracked source; inherited W calculus checked against merged candidate; no external rebuild",
+  "dependency_objects": {
+    "R1Z.PV_OWND_PushPrefix": "33c1494682502dfc3900aeb7922500deb5d065578dadefd9c0604bb8cd520b58"
+  },
+  "deps_fingerprint": "37734d5c5e2dffe178e6c9731543dc4e0f273c9d7cbb6d680738376b84bb29a9"
+}
