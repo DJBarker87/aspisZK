@@ -26,10 +26,12 @@ theorem complete {S : Type} (f : S → Nat → Result S) (fuel : Nat)
     have h : ¬r.start.val < r.«end».val := by omega
     rw [source,loop.eq_def]
     simp only [body,PV_RDCD3_Range194.extracted,PV_RDCD3_Range194.source,dif_neg h,bind_tc_ok,PV_RDCD3_RangeFold.ordered]
+    rfl
   | succ fuel ih =>
     have h : r.start.val < r.«end».val := by omega
     rw [source,loop.eq_def]
     simp only [body,PV_RDCD3_Range194.extracted,PV_RDCD3_Range194.source,dif_pos h,bind_tc_ok,PV_RDCD3_RangeFold.ordered]
+    dsimp only
     cases hf : f acc r.start.val with
     | fail e => simp [hf]
     | div => simp [hf]
