@@ -1,5 +1,6 @@
 import PV_L1E_Source_070
 import PV_L1D_CallbackSafe
+import PV_L1E_SafeObserve
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1E_CallbackSafety
@@ -20,7 +21,7 @@ theorem safe_PV_L1D_Source_030
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -37,7 +38,7 @@ theorem safe_PV_L1D_Source_003
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -52,7 +53,7 @@ theorem safe_PV_L1D_Source_004
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -69,7 +70,7 @@ theorem safe_PV_L1D_Source_005
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -86,7 +87,7 @@ theorem safe_PV_L1D_Source_006
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -102,7 +103,7 @@ theorem safe_PV_L1D_Source_007
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -117,7 +118,7 @@ theorem safe_PV_L1D_QueryAbsorb
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -133,7 +134,7 @@ theorem safe_PV_L1D_QueryProducer
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -149,7 +150,7 @@ theorem safe_PV_L1D_Source_008
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -165,7 +166,7 @@ theorem safe_PV_L1D_Source_009
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -180,7 +181,7 @@ theorem safe_PV_L1D_Source_015
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -196,7 +197,7 @@ theorem safe_PV_L1D_Source_017
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -212,7 +213,7 @@ theorem safe_PV_L1D_Source_018
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -229,7 +230,7 @@ theorem safe_PV_L1D_Source_019
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -251,7 +252,7 @@ theorem safe_PV_L1D_Source_020
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -265,7 +266,7 @@ theorem safe_PV_L1D_Source_021
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -280,7 +281,7 @@ theorem safe_PV_L1D_Source_023
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -296,7 +297,7 @@ theorem safe_PV_L1D_Source_024
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -311,7 +312,7 @@ theorem safe_PV_L1D_Source_025
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -327,7 +328,7 @@ theorem safe_PV_L1D_Source_026
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -350,7 +351,7 @@ theorem safe_PV_L1D_Source_027
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -374,7 +375,7 @@ theorem safe_PV_L1D_Source_031
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -388,7 +389,7 @@ theorem safe_PV_L1D_Source_033
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -408,7 +409,7 @@ theorem safe_PV_L1D_Source_037
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -422,7 +423,7 @@ theorem safe_PV_L1D_Source_038
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -437,7 +438,7 @@ theorem safe_PV_L1D_Source_039
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -455,7 +456,7 @@ theorem safe_PV_L1D_Source_041
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -474,7 +475,7 @@ theorem safe_PV_L1D_Source_042
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -492,7 +493,7 @@ theorem safe_PV_L1D_Source_043
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -508,7 +509,7 @@ theorem safe_PV_L1D_Source_044
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -523,7 +524,7 @@ theorem safe_PV_L1D_Source_045
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -538,7 +539,7 @@ theorem safe_PV_L1D_Source_046
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -554,7 +555,7 @@ theorem safe_PV_L1D_Source_047
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -570,7 +571,7 @@ theorem safe_PV_L1D_Source_049
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -584,7 +585,7 @@ theorem safe_PV_L1D_Source_051
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -601,7 +602,7 @@ theorem safe_PV_L1D_Source_052
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -616,7 +617,7 @@ theorem safe_PV_L1D_Source_053
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -631,7 +632,7 @@ theorem safe_PV_L1D_Source_054
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -647,7 +648,7 @@ theorem safe_PV_L1D_Source_055
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -662,7 +663,7 @@ theorem safe_PV_L1D_Source_056
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -676,7 +677,7 @@ theorem safe_PV_L1D_Source_058
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -690,7 +691,7 @@ theorem safe_PV_L1D_Source_062
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -708,7 +709,7 @@ theorem safe_PV_L1D_Source_063
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -723,7 +724,7 @@ theorem safe_PV_L1D_Source_065
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -739,7 +740,7 @@ theorem safe_PV_L1D_Source_066
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -775,7 +776,7 @@ theorem safe_PV_L1D_Source_067
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -803,7 +804,7 @@ theorem safe_PV_L1D_Source_068
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -832,7 +833,7 @@ theorem safe_PV_L1D_Source_069
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
@@ -854,7 +855,7 @@ theorem safe_PV_L1E_Source_070
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]

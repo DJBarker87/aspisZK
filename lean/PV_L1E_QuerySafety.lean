@@ -1,5 +1,6 @@
 import PV_L1E_Source_070
 import PV_L1D_CallbackSafe
+import PV_L1E_SafeObserve
 set_option autoImplicit false
 noncomputable section
 namespace PV_L1E_QuerySafety
@@ -18,7 +19,7 @@ theorem safe_PV_L1D_QueryAbsorb
     | with_reducible exact safe_lift _
     | with_reducible exact safe_coe _
     | with_reducible exact safe_pure _
-    | with_reducible apply safe_observe; rfl
+    | with_reducible exact PV_L1E_SafeObserve.phase _ _ _ (by intro h; cases h)
     | with_reducible apply safe_bind
     | intro value
     | split <;> try simp only [PV_L1D_Projection.prod_case]
