@@ -1,7 +1,7 @@
 import PV_B3P_ValueRead914227
 import PV_B3P_PreweightedLoop12227
 namespace PV_B3P_Binding12227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 PV_B3P_Binding11227 Result
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 Result
 set_option autoImplicit false
 def value_context12_14 (operation : {N : Usize} → Array aspis_core.field.QM31 24#usize → Usize → Array aspis_core.field.QM31 N → Result (Array aspis_core.field.QM31 24#usize)) (source_read : ({N : Usize} → Array aspis_core.field.QM31 N → Usize → Result aspis_core.field.QM31)) (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)

@@ -2,8 +2,9 @@ import PV_B3P_ValueCallerStage1207227
 import PV_B3P_ValueCallerStage1214227
 import PV_B3P_ValueScalingBridge11227
 namespace PV_B3P_Binding12227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 PV_B3P_Binding11227 Result
+open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 Result
 set_option autoImplicit false
+open PV_B3P_Binding11227
 attribute [local irreducible] value_direct_stage9_00 value_direct_stage9_01 value_direct_stage9_02 value_direct_stage9_03 value_direct_stage9_04 value_direct_stage9_05 value_direct_stage9_06 value_direct_stage9_07 value_direct_stage9_08 value_direct_stage9_09 value_direct_stage9_10 value_direct_stage9_11 value_direct_stage9_12 value_direct_stage9_13 value_direct_stage9_14 value_stage12_07 value_stage12_14 scale_frame11
 def value_source12 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
