@@ -7,8 +7,8 @@ open PV_RunJoin_ActualProvenance60 (capture)
 variable [ExternalTypes] [ExternalFuns]
 
 def resume {A T : Type} (f : Phase → Result (core.result.Result A verifier.Error))
-    (prefix : Result (core.result.Result (Phase × prover.MaskedFixtureAudit) verifier.Error × T)) := do
-  let (status,store) ← prefix
+    (beforeResult : Result (core.result.Result (Phase × prover.MaskedFixtureAudit) verifier.Error × T)) := do
+  let (status,store) ← beforeResult
   match status with
   | .Err e => ok (.Err e,store)
   | .Ok (p,audit) => do
@@ -55,9 +55,9 @@ theorem tail {A T : Type} (f : Phase → Result (core.result.Result A verifier.E
               (Phase × prover.MaskedFixtureAudit) (core.convert.FromSame verifier.Error) residual
             ok (r1,store)) := by
   cases hf : f p with
-  | fail e => rfl
-  | div => rfl
-  | ok result => cases result <;> rfl
+  | fail e => simp only [Rel,resume,capture,bind_tc_ok,hf];rfl
+  | div => simp only [Rel,resume,capture,bind_tc_ok,hf];rfl
+  | ok result => cases result <;> simp only [Rel,resume,capture,bind_tc_ok,hf] <;> rfl
 
 #print axioms same_bind
 #print axioms error
