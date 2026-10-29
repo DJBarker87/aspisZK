@@ -16,13 +16,6 @@ theorem internal_output_cell12_15 (full_sum : InternalSum12) (state : InternalSt
   have hsub : Usize.wrapping_sub 15#usize 1#usize = 14#usize := previous_exact _ _ rfl
   unfold internal_output_tail12_15
   conv_rhs => simp only [internal_output_step12,hsub,lift,bind_tc_ok,PV_B3P_Ordered227.bind_assoc,bind_return12]
-  apply bind_equal9
-  intro x0
-  apply bind_equal9
-  intro x1
-  apply bind_equal9
-  intro x2
-  rfl
 theorem internal_output_fold12_15 (full_sum : InternalSum12) (state : InternalState12) :
     internal_output_tail12_15 full_sum state =
       PV_B3P_Ordered227.fold (internal_output_step12 full_sum) [15#usize] state := by
