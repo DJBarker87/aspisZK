@@ -26,7 +26,6 @@ import PV_B3P_DigestStage24227
 namespace PV_B3P_Success227
 open Aeneas Aeneas.Std PV_B3P_227
 set_option autoImplicit false
-abbrev Digest8Q := Array aspis_core.field.QM31 8#usize
 def digest_sequence (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) : Result Digest8Q := do
@@ -55,6 +54,8 @@ def digest_sequence (public1 : reference_terminal.SemanticPublic)
   let d22 ← digest_stage_22 public1 openings selectors d21
   let d23 ← digest_stage_23 public1 openings selectors d22
   digest_stage_24 public1 openings selectors d23
+
+attribute [local irreducible] digest_stage_00 digest_stage_01 digest_stage_02 digest_stage_03 digest_stage_04 digest_stage_05 digest_stage_06 digest_stage_07 digest_stage_08 digest_stage_09 digest_stage_10 digest_stage_11 digest_stage_12 digest_stage_13 digest_stage_14 digest_stage_15 digest_stage_16 digest_stage_17 digest_stage_18 digest_stage_19 digest_stage_20 digest_stage_21 digest_stage_22 digest_stage_23 digest_stage_24
 theorem digest_factor (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) :
