@@ -27,8 +27,7 @@ theorem no_capture (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨columns,first,root1,root2,h,hfirst,_⟩ := traced
   have blocked := @PV_RunJoin_BackendBlocked63.c1 (types base) (selected base heap box ops)
     (PV_RunJoin_CaptureBoundary61.selected_mapErr base heap box ops) denied initial columns d
-  erw [hfirst] at blocked
-  exact blocked
+  exact PV_RunJoin_ResultPost41.success _ _ _ blocked hfirst
 
 #print axioms no_capture
 end R1Z.PV_RunJoin_CaptureBlocked63
