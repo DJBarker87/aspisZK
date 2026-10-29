@@ -28,7 +28,6 @@ theorem row (logical : Slice U8) (out : alloc.vec.Vec U8) (row : U8) (at1 : Usiz
     intro head headBound
     apply PV_RunJoin_PostBind62.bind _ _ _ _ (PV_RunJoin_SliceBound62.append out head)
     intro mid midLength
-    simp only [lift,bind_tc_ok]
     apply PV_RunJoin_ResultPost41.bind
     intro compressed
     cases compressed with
