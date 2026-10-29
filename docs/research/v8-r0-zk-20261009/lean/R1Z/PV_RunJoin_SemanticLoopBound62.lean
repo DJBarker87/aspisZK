@@ -20,11 +20,13 @@ theorem loop (logical : Slice U8) (bound : Nat) (small : logical.length≤bound)
   | succ n ih =>
     have more : row<count := by change row.val<count.val;omega
     have nextrow : (U8.wrapping_add row 1#u8).val=row.val+1 := by
-      rw [U8.wrapping_add_val_eq]
+      rw [U8.wrapping_add_val_eq,show (1#u8).val=1 from rfl]
+      have hsize : UScalar.size .U8=256 := by norm_num [UScalar.size_def]
+      rw [hsize]
       change (row.val+1)%256=row.val+1
       apply Nat.mod_eq_of_lt
       have hc := count.hSize
-      change count.val<256 at hc
+      rw [hsize] at hc
       omega
     have remainingRoom : out.length+2*bound≤Usize.max := by
       simp only [Nat.mul_add,Nat.mul_one] at room
@@ -36,18 +38,20 @@ theorem loop (logical : Slice U8) (bound : Nat) (small : logical.length≤bound)
     apply PV_RunJoin_PostBind62.bind _ _ _ _
       (PV_RunJoin_SemanticRowBound62.row logical out row at1 bound small remainingRoom)
     rintro ⟨status,next⟩ nextBound
+    change next.length≤out.length+2*bound at nextBound
     dsimp only [Aeneas.Std.uncurry]
     cases status with
     | Err e =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
       apply PV_RunJoin_ResultPost41.bind
       intro ignored
-      simp only [bind_tc_ok]
       change next.length≤out.length+2*bound*(n+1)
       simp only [Nat.mul_add,Nat.mul_one]
       omega
     | Ok pos =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,lift,bind_tc_ok]
+      change Post (fun pair => pair.2.length≤out.length+2*bound*(n+1))
+        (host_compact.compact_semantic_loop logical next count pos (U8.wrapping_add row 1#u8))
       have tailRoom : next.length+2*bound*n≤Usize.max := by
         simp only [Nat.mul_add,Nat.mul_one] at room
         omega
