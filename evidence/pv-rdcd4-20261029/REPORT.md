@@ -19,3 +19,11 @@ The initial generated record087 application was a valid mutable-wrapper model le
 The 64-case WideExact differential passes under the recorded deployed configuration. It is finite validation. The original M31/QM31 fixtures remain finite validation and were not promoted to WideExact coverage.
 
 The current cooldown audit records 36 launches, a minimum gap of187.3765 seconds and zero violations. Later launches need the final audit. Failed Lean elaborations remain in their original receipts, uncredited, and were followed by changed source. No Kani or new extractor run occurred.
+
+## V201 row closure
+
+**RESTORED / B at the original source/Result and CodeField boundary.** The op79 association should consume **`R1Z.PV_RDCD4_V201.source_reference`** with [source association](v201-proof-association.json) and [coherent source/object measurement](v201-coherence-result.json). Exact before/after and retained obligations are in [the row record](rows/V201.md). Final combined audit and focused replay remain scheduled for66397–66399.
+
+The independent capped check verifies55 successful private source modules, their complete actual launch dependency snapshots, all5673 external object hashes and all22 captured deployed Rust library files. Exit0, wall2.77s, peak39708KiB, swap0. This is source/Result reclassification within existing tool trust, never endpoint premise removal. T and all native-world/compiler/physical-observer obligations remain.
+
+Next in the required order: V220, the complete radix-four evaluator and qm31_sum_products3 concrete lazy-accumulation/source-library transport.
