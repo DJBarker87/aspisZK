@@ -3,6 +3,9 @@ namespace PV_B3P_Binding13227
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Success227 PV_B3P_Binding11227
 set_option autoImplicit false
 noncomputable section
+local instance mask_decidable13 (mask : U16) : Decidable (MaskAllowed mask) := by
+  unfold MaskAllowed
+  infer_instance
 /-- Explicit contextual adapter. It is NOT the total native helper: it keeps
 native source behavior on every actual caller mask and rejects other masks.
 The unrestricted Link definition is left byte-identical. -/
@@ -18,7 +21,15 @@ theorem owned_mask_outside13 (values : Array aspis_core.field.QM31 16#usize)
   all_goals
     exfalso
     apply outside
-    simp_all only [MaskAllowed]
+    unfold MaskAllowed
+    first
+    | exact Or.inl rfl
+    | exact Or.inr (Or.inl rfl)
+    | exact Or.inr (Or.inr (Or.inl rfl))
+    | exact Or.inr (Or.inr (Or.inr (Or.inl rfl)))
+    | exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))
+    | exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))
+    | exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl)))))
 
 theorem frozen_mask_adapter_binding13 (values : Array aspis_core.field.QM31 16#usize) (mask : U16) :
     frozen_mask_adapter13 values mask = reference_copy_terminal.selector_mask_sum_16 values mask := by
