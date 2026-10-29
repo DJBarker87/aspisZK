@@ -18,7 +18,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (backend : prover.Backend) (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
     (coefficients : alloc.vec.Vec Column) (small : coefficients.length≤14336)
     (request : Result Unit) (w : PV_RunJoin_WeightCarrier46.W) (hs : w.variant=.S2)
-    (material : weights.Weights → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)) :
+    (material : @weights.Weights (types base) → W → Result (core.result.Result (alloc.vec.Vec W) verifier.Error)) :
     @PV_RunJoin_PrepareOperations47.run (types base) (selected base heap box ops)
       .S2 hash backend sem (ok coefficients) (do let _ ← request;ok (.Ok w)) material=
     @PV_RunJoin_PrepareClaimContext48.run (types base) (selected base heap box ops)
