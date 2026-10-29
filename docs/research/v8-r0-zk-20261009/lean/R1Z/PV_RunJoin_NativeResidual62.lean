@@ -29,6 +29,7 @@ serializer's concrete afterstate carrier. Both records have the same fields. -/
 def late (base : ExternalTypes)
     (p : @aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 (types base)) :
     PV_CB_Op229Transport.SourceLate :=
+  letI : ExternalTypes := types base
   ⟨PV_CB_Op229Transport.snapshot p.live_snapshot,
     ⟨p.candidate_afterstate.next_pair_index,p.candidate_afterstate.next_root,
       p.candidate_afterstate.next_frontier⟩⟩
