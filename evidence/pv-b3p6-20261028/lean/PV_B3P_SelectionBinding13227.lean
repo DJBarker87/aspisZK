@@ -35,9 +35,11 @@ def source_selection13 (claims : Array (Array SQ 29#usize) 3#usize) : Result (Ar
 theorem source_selection_binding13 : source_selection13 = reference_terminal.select227 := by
   funext claims
   unfold source_selection13 reference_terminal.select227 reference_terminal.select227_loop
-  congr 1
-  funext state
-  exact source_selection_step_binding13 claims state.1 state.2
+  have steps : (fun (state : Array SQ 84#usize × Usize) => source_selection_step13 claims state.1 state.2) =
+      (fun state => reference_terminal.select227_loop.body claims state.1 state.2) := by
+    funext state
+    exact source_selection_step_binding13 claims state.1 state.2
+  exact congrArg (fun step => loop step (Array.repeat 84#usize aspis_core.field.QM31.ZERO,0#usize)) steps
 
 def with_selection13 (base : ProverRwFull.ExternalTypes) (native : SourcePorts base) : SourcePorts base :=
   {native with select := source_selection13}
