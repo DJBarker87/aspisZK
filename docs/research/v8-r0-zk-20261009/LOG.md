@@ -15202,3 +15202,11 @@ Consequences:
 (iii) V242 can be credited under V370 once its other evidence holds.
 (iv) The honest-user domain is fixed as "spends the shipped client prepares".
 Privacy target not yet established.
+
+## D503 (Stream B) 2026-10-29 09:38 UTC: retargeted joint TX1+TX2 witness available on the headline's own SDK (closes the D415 caveat); planned use
+
+Stream A reports, and the lead checked on research (merge 06f74c902f; C3-BIN 406df47b63, "L188 obligations 1 and 4 closed (NDR_)"), that AspisR1.NDR_CombinedAudit.sourceOnHeadline (lean/NDR_CombinedAudit.lean) states the joint TX1+TX2 non-vacuity witness over the headline's own SDK. The statement uses stage1_owned and stage2_owned of headlineSdk = DrvC_Installation.sdk (FIp_Install.configuration () (IDa_Deployed.deployedConfiguration missing () (.Ok ())) (.Ok ())), and every observer inside it is the headline's carrier (RPz7_PhaseIso.Phase). It was checked in one shared environment with RPx_Deployed.deployed (16,057 modules, standard axioms, 8.28 GB peak in the 16 GiB scope). Its only hypothesis is FixturePdaRuntime base. This removes D415's caveat that JHx_Joint was historical-forest evidence only.
+
+Caveat from Stream A: NDO_Joint.source and four thin bodies were checked verbatim inside the aggregation rather than as standalone builds. A consumer must import NDR_CombinedAudit's closure, which needs the 16 GiB consumer scope under the D407 rules: agg16 runner, one such compile at a time across both streams after telling Stream A, one compile per module, and full receipts.
+
+Planned use: the adoption of the event-retaining headline (owner decision D478) must define the deployed rust instance and show that its premises are satisfiable (vacuity suspects V045-V047). This witness is the natural non-vacuity input for the two-transaction fixture path, with FixturePdaRuntime base as an explicit named hypothesis, not discharged, since its adoption was for soundness non-vacuity only. The lead will run any 16 GiB consumer compile itself after clearing it with Stream A. Rows removed: 0. Privacy target not yet established.
