@@ -25,7 +25,8 @@ theorem digest_suffix_02_equation (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) (output : Digest8Q) :
     digest_suffix_02 public1 openings selectors output = digest_stage_02 public1 openings selectors output >>= digest_suffix_03 public1 openings selectors := by
-  simp only [digest_suffix_02,digest_stage_02,digest_assoc,digest_if_bind,digest_option_bind]
+  cases hr : public1.recipient <;>
+    simp only [digest_suffix_02,digest_stage_02,hr,digest_assoc,bind_tc_ok]
 
 theorem digest_suffix_02_success (public1 : reference_terminal.SemanticPublic)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
