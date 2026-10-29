@@ -35,7 +35,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨salt1,h1⟩ := PV_RunJoin_QuerySaltTotal64.complete base heap box ops cc1 s1 stored1 size1 u bound
   obtain ⟨salt2,h2⟩ := PV_RunJoin_QuerySaltTotal64.complete base heap box ops cc2 s2 stored2 size2 u bound
   obtain ⟨out1,ho1,hl1⟩ := append out salt1 (by omega)
+  change out1.length=out.length+32 at hl1
   obtain ⟨out2,ho2,hl2⟩ := append out1 salt2 (by omega)
+  change out2.length=out1.length+32 at hl2
   obtain ⟨encoded,he,hencoded⟩ := PV_RunJoin_QueryEncodedTotal64.complete base heap box ops folded size u bound
   obtain ⟨out3,ho3,hv3⟩ := PV_RunJoin_ByteAppend38.append out2 (alloc.vec.Vec.deref encoded)
     (by change out2.length+encoded.length≤Usize.max;omega)
@@ -45,8 +47,10 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     change out2.val.length+encoded.length=out2.val.length+128
     rw [hencoded]
   obtain ⟨quarter,hquarter,hval⟩ := UScalar.div_spec u (y:=4#usize) (by decide)
+  have hv : quarter.val=u.val/4 := hval
   obtain ⟨salt4,h4⟩ := PV_RunJoin_QueryAccess64.salt salts quarter (by omega)
   obtain ⟨out4,ho4,hl4⟩ := append out3 salt4 (by omega)
+  change out4.length=out3.length+32 at hl4
   refine ⟨out4,?_,by omega⟩
   unfold PV_RunJoin_QueryTail63.run
   simp only [h1,h2,core.option.Option.unwrap,bind_tc_ok,ho1,ho2,he,ho3]
