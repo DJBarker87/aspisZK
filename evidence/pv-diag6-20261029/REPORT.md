@@ -66,3 +66,36 @@ Before/after: no premise of `PrivacyR1HeadlineDeployedReal.privacy_headline_depl
 Next concrete deliverable: instantiate the complete primitive native couplings, including allocations/cleanup, locks/TLS/errno, raw unwinder/resolver/formatter and foreign/crash effects, then prove the native event/terminal and every-prefix laws on the original L1 coupling. Integrate the existing PV_RJ4IDB adapter and recover runtime.disclosed/observerOracle with V036–V038. The pending option-B failure event must itself be witness-independent.
 
 Final verification and source identities follow below.
+
+## Final verification and stop condition
+
+**100/100 Lean attempts**,65200–65299; **6/40 capped native scopes**, **0 Kani**. **96 pass**, four failed/uncredited sources corrected before use:65208,65211,65244,65279, described above. No refused admission, cooldown slip, VOID run or overlapping scope occurred. Every scope has same-wrapper allowed:true AND admission exit0, MemoryHigh6G,MemoryMax8G,MemorySwapMax0,TasksMax64; Lean-M7000. All raw target/source/dependency/command/revision/exit/wall/RSS/swap/axiom records are in `attempts.json` and individual receipts.
+
+Aggregate measured scope wall is **60.66s**, peak RSS **2,449,276KiB**, swap **0**. The native total includes source/closure validation and cleanup scopes as well as the optimized four-case Rust harness.
+
+| Audit | Target | Exit | GNU wall | Peak RSS KiB | Swap | Launch revision label |
+|---|---|---:|---:|---:|---:|---|
+| 65297 | `PV_DIAG6_Audit` | 0 | 0:00.99 | 2431504 | 0 | `73978a1abdc38af41ee7b0e9c66ccea1c5226862` |
+| 65298 | `PV_DIAG6_CohortAudit` | 0 | 0:01.09 | 2433056 | 0 | `73978a1abdc38af41ee7b0e9c66ccea1c5226862` |
+| 65299 | `PV_DIAG6_FinalManifest` | 0 | 0:00.95 | 2429772 | 0 | `73978a1abdc38af41ee7b0e9c66ccea1c5226862` |
+
+65297 audits all85 new theorems and prints the full honest joint-law statement with both native hypotheses intact.65298 audits the reused finite-law transport and the joint source-control statements.65299 is the **single final diagnostic-job manifest replay**, not a full privacy-release replay. All accepted theorem axiom sets are subsets of {propext,Classical.choice,Quot.sound}. The41-object preflight and44-object final closure have zero source/object/dependency mismatches (`final-pre.json`, `final-post.json`); all5,673 external authority objects were checked before compilation.
+
+Launch revisions label the base/earlier source state, not a claim that dirty inputs existed at those commits. The final module files are restored byte-for-byte from their accepted compiler snapshots: incremental staging comments were removed without any proof-text change. `final-source-identity.json` resolves all six final modules, accepted attempt IDs, SHA256s and git blobs to committed source revision **fab8b0eec27fce7874dff53eb81d493cb82facec**. Audits consume those same accepted bytes. The final report/evidence commit changes no proved source.
+
+`cleanup.json` records deletion of18 private objects/links/executable only; shared cache targets, all sources and receipts remain. No wallet, account key or nonce-state operation occurred. No crates/programs, existing proved source, simulator, observer, soundness cone or trust-list definition was edited. All evidence files are below20MB. No binary, object, archive, push or merge. A local report reconciliation initially passed an absolute path to git show and was corrected to repository-relative paths; no compiler or host run was involved.
+
+Stop condition: the **100-attempt Lean budget is exhausted**. The unused native allowance cannot replace a missing universal native law. **Target not yet established.** Native joint-event/terminal privacy, concrete failure/divergence prefix recovery and the whole honest native distribution remain explicit obligations.
+
+## Commits
+
+`git log --oneline 19b2164e3d..HEAD` before the final report commit:
+
+```
+fab8b0eec2 Audit final diagnostic laws and preserve accepted source bytes
+33908bfe95 Transport complete diagnostic prefix laws on original L1 coordinates
+73978a1abd Preserve every finite diagnostic prefix across failure and divergence
+524be14f82 Prove joint diagnostic write and cleanup control laws
+```
+
+The final branch-tip commit records this report and evidence only.
