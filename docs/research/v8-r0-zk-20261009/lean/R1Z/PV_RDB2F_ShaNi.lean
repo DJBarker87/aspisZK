@@ -247,6 +247,9 @@ theorem word_block_semantics (intr : Intrinsics) (h : SHA_NI_IntrinsicsSemantics
   subst msg1
   subst align4
   subst msg2
+  unfold wordBlock sha_fallback_reference.extracted_block
+    sha_fallback_reference.sha256_digest_block_u32
+  repeat' (apply (Aeneas.Std.bind_eq_iff _ _ _).mpr; intro next hnext)
   rfl
 
 /-- Explicit local justification for replacing each source shuffle+round pair
