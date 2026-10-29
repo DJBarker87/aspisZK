@@ -55,6 +55,15 @@ theorem source_read_bounds (leftLen rightLen index remaining : Nat)
     (same : leftLen = rightLen) (measure : index+remaining=leftLen)
     (step : 0<remaining) : index<leftLen ∧ index<rightLen ∧ index+1≤leftLen := by
  omega
+theorem cursor_increment (index length : Usize) (bound : index.val < length.val) :
+    (Usize.wrapping_add index 1#usize).val = index.val+1 := by
+ rw [Usize.wrapping_add_val_eq]
+ apply Nat.mod_eq_of_lt
+ have maximum : length.val < UScalar.size .Usize := by
+   simpa only [UScalar.size] using length.hBounds
+ change index.val+1 < UScalar.size .Usize
+ omega
+
 /-- Concrete family of source slice-equality bodies, indexed by comparator. -/
 theorem source_link (α β : Type) :
     PV_B3P_Link_std_dependency_closure14
@@ -66,5 +75,6 @@ theorem source_link (α β : Type) :
 #print axioms loop_binding
 #print axioms source_binding
 #print axioms source_read_bounds
+#print axioms cursor_increment
 #print axioms source_link
 end PV_B3Q_SliceEqual

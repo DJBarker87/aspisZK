@@ -1,0 +1,7 @@
+# Deployed slice equality source map
+
+Authority: rust-src 1.94.1 `core/src/slice/cmp.rs`, `impl<A,B> SlicePartialEq<B> for [A]` generic `equal`, the deployed item retained in the pinned stdcone capture, row 125. Nightly `equal_same_length` is not substituted.
+
+`PV_B3Q_SliceEqual.source` retains the length mismatch return. The source `idx=0` and `while idx < self.len()` are represented by index and proof measure `remaining=len-index`. `source_read_bounds` proves both source accesses in range and the next cursor at most len. `cursor_increment` proves the release usize addition is the natural successor, including the last permitted step. The two shared indexed reads run left then right; `compare_at` preserves their complete Results and the comparator Result. `different=true` returns false immediately. Otherwise the recursive step increments the cursor. Empty remainder returns true. `loop_binding` preserves first inequality and every fail/div branch, and `source_link` is an instance of the existing standard/dependency link.
+
+No element is moved or mutated. Both slice loans remain shared and their backing storage is unchanged. No allocation, user destructor, error conversion or formatting appears in this body. Source indexing and comparison are explicit callee interfaces; their separate own-1 bodies still need inclusion in the full catalogue. The source-to-machine-code and pointer intrinsic semantics remain V370 / D381,D386. This local body map does not establish the full catalogue or endpoint.
