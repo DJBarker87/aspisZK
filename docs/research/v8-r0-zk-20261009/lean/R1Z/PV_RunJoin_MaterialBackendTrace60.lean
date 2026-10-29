@@ -14,7 +14,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (noised : aspis_statement.state_only_trace.StateOnlyTraceFoundation)
     (maskOnly : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize)
     (d g padding : Array Q 1024#usize) (commitments : T) (hash : H) (variant : transport.Variant) :
-    Post (fun pair => match pair.1 with | .Err _ => True | .Ok built => ∃ columns, PV_RunJoin_BackendBuildTrace60.Trace commitInst columns d g commitments pair.2 built)
+    Post (fun pair => match pair.1 with | .Err _ => True | .Ok built => ∃ columns, @PV_RunJoin_BackendBuildTrace60.Trace (types base) (selected base heap box ops) H T commitInst columns d g commitments pair.2 built)
       (@host_semantic.build_with_material (types base) (selected base heap box ops)
         H T D commitInst public1 compiled noised maskOnly d g padding commitments hash variant) := by
   letI : ExternalTypes := types base

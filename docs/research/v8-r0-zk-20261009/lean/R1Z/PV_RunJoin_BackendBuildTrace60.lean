@@ -9,7 +9,7 @@ open PV_RunJoin_WeightInstalled46 PV_RunJoin_ResultPost41
 open PV_RunJoin_PointPrefix51 (Prefix)
 abbrev Q := ProverRwFull.aspis_core.field.QM31
 
-def Trace {H T : Type} (commitInst : host_semantic.Commitments T)
+def Trace [ExternalTypes] [ExternalFuns] {H T : Type} (commitInst : host_semantic.Commitments T)
     (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
     (d g : Array Q 1024#usize) (initial next : T) (built : host_semantic.BuiltSemantics H) : Prop :=
   ∃ (first : T) (root1 root2 : Array U8 32#usize) (h : alloc.vec.Vec Q),
@@ -24,7 +24,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (public1 : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public (types base))
     (c1 : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
     (d g padding : Array Q 1024#usize) (helper : T1) (commitments : T2) (hash : H) (variant : transport.Variant) :
-    Post (fun pair => match pair.1 with | .Err _ => True | .Ok built => Trace commitInst c1 d g commitments pair.2 built)
+    Post (fun pair => match pair.1 with | .Err _ => True | .Ok built => @Trace (types base) (selected base heap box ops) H T2 commitInst c1 d g commitments pair.2 built)
       (@host_semantic.build_with_helper_mode (types base) (selected base heap box ops)
         H T1 T2 D helperInst commitInst public1 c1 d g padding helper commitments hash variant) := by
   letI : ExternalTypes := types base
