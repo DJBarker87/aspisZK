@@ -57,7 +57,7 @@ theorem visited (hash : aspis_core.digest.LegacyHashFn) (tag : U8)
     subst other
     exact ⟨payload,hpayload⟩
   have result : P target.val := PV_RunJoin_LoopVisit64.visited step (fun a => a.2.val) P
-    count.val target.val progress bound (target.val-i.val) (leaves,i) (by omega) out success
+    count.val target.val progress bound (target.val-i.val) (leaves,i) (by change i.val+(target.val-i.val)=target.val;omega) out success
   exact result target rfl
 
 #print axioms increment
