@@ -3,8 +3,8 @@
 Assigned cwd/branch unchanged. All pv-common rulings read; no local Lean;
 no crates/programs/dictionary/simulator/observer edits, no Kani or key operations.
 
-Current charged budget:56 Lean (44 PASS,12 FAIL),5 native scopes. Actual Lean
-IDs60600–60655 consumed. 60630 prior barrier refusal was recovered and retried
+Current charged budget:57 Lean (45 PASS,12 FAIL),7 native scopes. Actual Lean
+IDs60600–60656 consumed. 60630 prior barrier refusal was recovered and retried
 compliantly, same ID; no compiler had launched before the refusal. No new
 cooldown violation. `scope.py` enforces180s after completion and refusal. Inspect
 predecessor results before dependent submissions. Audit IDs60697–60699 reserved.
@@ -16,7 +16,7 @@ focused replay still mandatory. Receipt60637 closes `PV_RDCD3_V260Complete`;
 Complete scope and limitations in rows/V260.md/json; zero endpoint premise
 changes, all original observer/native world obligations retained.
 
-V265 inverse passes60653; complete closing theorem passes60655 (failed60652 and60654 retained). Next scope is v265-final-source (not a Lean ID), with library/source/hash scripts uploaded and latest v265-source-resolution.json. Wait180s since60655 before it. Then collect v265/library/fingerprint result JSON, run v265-cone.py and v265-proof-association.py. V265 remains suspended until that gate passes. Next Lean ID60656, then60657,60658 should compile R1Z/ProverRwFullExternalTypes, R1Z/ProverRwFullTypes, R1Z/PV_RDCD3_FieldSource, respectively, for the V217 private source route.
+V265 RESTORED/B at source/Result boundary:inverse60653, closing60655, source2 gate all pass; pointer Kani remains quarantined. V260 and V265 final combined audit/replay due at job end. Original v265 source gate failed its own mutation-generator control and is retained; corrected source2 gate passes. Next60657 compiles R1Z/ProverRwFullTypes, then60658 FieldSource; FullExternalTypes passed60656.
 
 V217 owned candidates are drafted by prepare-v217.py, with30 derived modules, plus FieldSource, Total, FieldTotal. They are UNCOMPILED and receive no row credit. Existing modules unchanged; all new prefixes PV_RDCD3_. Minimal carrier files in docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023 were added with sparse-checkout add (never full checkout). Canonical carrier and pv-b3p6 variant hashes are identical. resolve-v217.py now emits the full candidate DAG and order; field totality must be compiled before dependent mask modules. The candidate programs preserve original definition bodies apart from namespace/import rebinding. Direct FieldTotal proofs replace legacy totality imports; no source/dictionary change. Further complete native structural binding is still required before any V217 restoration, especially concrete library map/initialization/iterator cone; do not grant credit merely from copied proofs.
 
