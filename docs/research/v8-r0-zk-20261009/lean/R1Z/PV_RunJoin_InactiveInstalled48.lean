@@ -31,7 +31,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   rw [ProverCommitGamma48.source_zero,hz] at actual
   change @prover.opening_inactive (types base) (selected base heap box ops) (input q) w=ok (fromW (source z)) at actual
   refine ⟨z,actual,hcz,?_,?_⟩
-  · simpa only [ProverCommitGamma48.zero_value,zero_add] using hdz
+  · simpa only [ProverCommitGamma48.zero_value,zero_add,show (0#usize).val=0 from rfl] using hdz
   · rw [actual]
     simp only [bind_tc_ok]
     exact PV_RunJoin_ClaimFields48.serializer base heap box ops _
