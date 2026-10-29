@@ -37,7 +37,7 @@ theorem base_canonical (base : List (List U32)) (h : acceptedBase base = true) :
  ∀ c ∈ base, ∀ x ∈ c, x.val < 2147483647 := by
  intro c hc x hx
  have hrow := (List.all_eq_true.mp h) c hc
- have hlimbs := (Bool.and_eq_true.mp hrow).2
+ have hlimbs := (Bool.and_eq_true_iff.mp hrow).2
  exact of_decide_eq_true ((List.all_eq_true.mp hlimbs) x hx)
 
 theorem extensions_canonical (d g : List Q) (h : acceptedExtensions d g = true) :
@@ -56,7 +56,7 @@ theorem successful_canonical {E : Type} (publicError imbalance : E)
  unfold build at h
  split at h
  · rename_i accepted
-   have hh := Bool.and_eq_true.mp accepted
+   have hh := Bool.and_eq_true_iff.mp accepted
    have hb := base_canonical base.val hh.1
    have he := extensions_canonical d.val g.val hh.2
    cases hs : setup () with
