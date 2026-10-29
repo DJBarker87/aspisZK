@@ -15070,3 +15070,16 @@ The freed slot goes to V346, the proved=shipped manifest, which V397-V399 need a
 - a proof-to-source map for every privacy-relevant module, with git blob hashes and evidence class, flagging any module bound to source that differs from the shipped revision as a stale association;
 - the gaps: shipped privacy-path functions that no module binds.
 Rows removed: 0. Privacy target not yet established.
+
+## D490 (Stream B) 2026-10-29 07:49 UTC: pv-skw results (four skeletons satisfiable by model witnesses; V239 undetermined); ruling (u'); pv-skwb launched
+
+pv-skw used 14 Lean attempts, with no native scopes or Kani and zero swap. Lead review: nothing outside the worker's prefix and evidence; existing skeletons and links unchanged; no forbidden constructs. It was merged into the candidate and pushed.
+
+Ruling (v) satisfiability witnesses:
+- the three DIAG skeletons are SATISFIABLE (PV_SKW_DIAG_FILE.satisfiable, PV_SKW_DIAG_JSON_STDOUT.satisfiable, PV_SKW_DIAG_ERROR_STDERR.satisfiable), on the full NativeTrace carrier with concrete non-empty channel examples, and with twelve explicit link applications plus three proved projection-step laws;
+- the L1_COUNT_TRACE skeleton is SATISFIABLE (PV_SKW_L1.satisfiable, with a generic variant also proved), on a recursive model run that rejects once, then succeeds with count 2, keeps the rejection and advances its state.
+These are MODEL witnesses, not deployed-run witnesses: the fixture records did not supply the required joint observation families. All twelve accepted propositions print [propext] only. So the three DIAG skeletons and the count skeleton are now verified as non-vacuous decompositions at model level.
+
+V239's restore is UNDETERMINED. Its unchanged skeleton replay failed on a missing dependency caused by the worker's cache staging, and ruling (u)'s guard then refused to resubmit the unchanged source. The combined closure audits also failed on cache companions, dynamic imports and an object-cohort mismatch, and earn no credit. No contradiction was found.
+
+Ruling (u') (pv-common.txt): the failed-hash guard applies to proof and elaboration failures. A pre-elaboration environment failure, once corrected and recorded, makes resubmitting the unchanged source a changed input, as under (t). pv-skwb (IDs 69100-69199; 40 Lean) fixes the staging, compiles V239's witness, runs one combined statement and axioms audit over all five witnesses, and labels each as a model or deployed-run witness. Rows removed: 0. Privacy target not yet established.
