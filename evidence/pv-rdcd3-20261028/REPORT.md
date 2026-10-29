@@ -108,3 +108,5 @@ explicit sampler writes inspected under ruling(n); no write result is dropped.
 unwrap_or_else control laws:exit0, wall1.11s, peak2,633,884KiB, swap0;
 no axioms. These preserve the concrete error carrier and all continuation
 failure/divergence. Whole V265 is still suspended until its full cone passes.
+
+60647 passes explicit four-byte little-endian primitive binding:exit0, wall1.08s, peak2,631,556KiB, swap0; standard axioms. Integer layout/transmute remain the existing compiler semantic boundary; no machine-level or observer claim.
