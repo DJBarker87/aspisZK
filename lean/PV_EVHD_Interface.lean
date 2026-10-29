@@ -97,7 +97,7 @@ def eventJoin {R M A Signal : Type} [Fintype R] [Fintype M]
     (real : R → NativeTrace A) (sim : M → NativeTrace A)
     (rs : R → Signal) (ss : M → Signal)
     (old : Fin 8 → M → Prop) (queries : M → List ProverCommitSeedEvent19.Entry)
-    (cp : R0Z.FsGood.Coupling R ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
+    (cp : R0Z.FsAbort.Coupling R ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape))
     (context : Link_Context (fun s => ∃ i, ProverCommitFuelJoin22.bad old queries i (cp.toM s))
       (fun s => real (cp.toR s)) (fun s => sim (cp.toM s).1.1))
     (timing : Link_Timing (fun s => ∃ i, ProverCommitFuelJoin22.bad old queries i (cp.toM s))
