@@ -22,7 +22,7 @@ model's representation:
 * BuilderShape proves the successful build's actual output length vector is
   exactly29 copies of1024. It preserves the existing early base/d/g rejection,
   setup/helper/balance/finish failures, and the ordered26 lifts/h1/g/d output.
-* SampleCarrier and PassShape target the exact U64 dividend/quotient/remainder
+* The uncredited SampleCarrier draft and unsubmitted PassShape draft target the exact U64 dividend/quotient/remainder
   casts and all quotient-word stores. They do not prove the full native
   array-iterator source association merely by proving word bounds.
 
@@ -47,8 +47,8 @@ length theorem proves model shape; it does not discharge this association.
 
 `r0_transcript.rs:126–155`: native high-word-first iter_mut writes each quotient
 back to the same word, executes all8 passes, then selects digits0–3. The model
-uses a high-word-first List view, and new word equations make wrapping and
-cast obligations explicit. No discarded restoration is permitted. Native
+uses a high-word-first List view, and the uncredited word-equation draft identifies wrapping and
+cast obligations. No discarded restoration is permitted. Native
 comparisons of exact returned samples are finite validation, not proof of
 all write-back continuations or a generation receipt.
 
