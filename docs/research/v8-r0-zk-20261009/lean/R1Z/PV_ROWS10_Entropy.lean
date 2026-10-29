@@ -109,8 +109,10 @@ def buffer : Outcome → List UInt8
         split <;> rename_i h
         · simp [buffer]
         · rw [ih, List.length_append, List.length_drop]
-          simp only [Bool.or_eq_false_iff, decide_eq_false_iff_not] at h
-          have hp := h.2
+          have hp : ¬ (x::xs).length < p.length := by
+            intro hp
+            apply h
+            simp [hp]
           simp only [List.length_cons] at hp ⊢
           omega
  theorem public_control_suffices (a b : List Reply)
