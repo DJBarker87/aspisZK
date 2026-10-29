@@ -7,7 +7,6 @@ open Aeneas Aeneas.Std R0Z.FsStatement
 open ProverCommitOwnerBytes42 (byte)
 
 theorem byte_encode (b : Fin 256) : byte (AspisV8R19.SqueezeOracleBridge.encodeByte b)=UInt8.ofFin b := by
-  apply UInt8.eq_of_toNat_eq
   rfl
 
 theorem bytes (b : OracleAnswer) :
