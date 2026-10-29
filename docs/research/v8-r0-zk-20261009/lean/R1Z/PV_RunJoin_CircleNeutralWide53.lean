@@ -6,6 +6,8 @@ open Aeneas Aeneas.Std Result ControlFlow
 namespace R1Z.PV_RunJoin_CircleNeutralWide53
 open PV_RunJoin_CircleNeutralShape53 PV_RunJoin_CircleNeutralCast53
 
+theorem from32 (a : U32) : core.convert.num.FromU64U32.from a = UScalar.cast .U64 a := rfl
+
 def sum (a : U32 × U32) : U64 :=
   U64.wrapping_add (UScalar.cast .U64 a.1) (UScalar.cast .U64 a.2)
 def mix (a : U32 × U32) : U64 :=
@@ -54,6 +56,7 @@ theorem mix_checked (a : U32 × U32) (ha : CC a) :
   · rw [up_val,up_val];change a.2.val ≤ a.1.val+2147483647;omega
   · rw [up_val,up_val];change a.1.val+2147483647 < 18446744073709551616;omega
 
+#print axioms from32
 #print axioms sum
 #print axioms mix
 #print axioms sum_val
