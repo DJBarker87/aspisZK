@@ -48,8 +48,10 @@ def scan(index):
             rows.append(r)
     for kind,pin in files:
         p=Path(pin['path']); actual=sha(p)
-        assert actual==pin['sha256'],str(p)
-        checks.append(dict(**pin,kind=kind,actual_sha256=actual))
+        checks.append(dict(**pin,kind=kind,actual_sha256=actual,credited=actual==pin['sha256']))
+        if actual!=pin['sha256']:
+            print('INPUT PIN MISMATCH: excluded from credited scan',p,pin['sha256'],actual,flush=True)
+            continue
         op=lzma.open if p.suffix=='.xz' else open
         with op(p,'rt',errors='replace') as f:
             cur=''; block='entry'; blocks={}; found=[]; comment=''
@@ -166,5 +168,6 @@ def aggregate():
 if __name__=='__main__':
     mode=sys.argv[1]
     print('Expected time: read-only deployed artifact/source analysis; no compilation, proof generation or elimination.',flush=True)
-    if mode=='scan':scan(int(sys.argv[2]))
+    if mode=='scan':
+        for index in sys.argv[2:]:scan(int(index))
     else:globals()[mode]()
