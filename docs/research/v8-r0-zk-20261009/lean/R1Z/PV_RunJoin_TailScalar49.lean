@@ -30,6 +30,9 @@ theorem source (variant : transport.Variant) (hash : Slice (Slice U8) → Result
 
 end R1Z.PV_RunJoin_TailScalar49
 namespace R1Z.PV_RunJoin_TailScalar49
+open Aeneas Aeneas.Std Result ProverRwFull
+open PV_RunJoin_WeightInstalled46
+open PV_RunJoin_PreparedDomain48 (W)
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
