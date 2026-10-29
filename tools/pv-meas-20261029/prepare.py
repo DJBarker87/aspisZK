@@ -71,7 +71,9 @@ auth={v['module'].replace('/','.'):v for v in ext}
 addendum_path=p/'evidence/external-addendum-manifest.json'
 assert sha(addendum_path)==(p/'evidence/external-addendum-manifest.sha256').read_text().strip()
 addendum=json.load(open(addendum_path))
-assert len(addendum['modules'])==addendum['required_count']==57
+plan=json.load(open(p/'evidence/lebegue-plan.json'))
+assert len(addendum['modules'])==addendum['required_count']==len(plan['required'])
+assert {v['target'] for v in addendum['modules']}==set(plan['required'])
 for v in addendum['modules']:
  auth[v['target']]=dict(module=v['target'],object_sha256=v['object_sha256'])
 visited={};used=[]

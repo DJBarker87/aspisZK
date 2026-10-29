@@ -1,4 +1,5 @@
 import PV_MEAS_Average
+import Mathlib.MeasureTheory.Integral.Lebesgue.Countable
 
 /-! Explicit uniform measure for finite carriers; no computation of the carrier. -/
 set_option autoImplicit false
