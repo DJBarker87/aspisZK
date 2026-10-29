@@ -44,9 +44,9 @@ for dotted in meta['compile_order']:
  if mismatches:rejected[module]=mismatches;continue
  # Every project dependency must itself have a checked old source record or
  # be one of this job's original successful private modules.
- for dep in checked:
-  if dep.startswith('R1Z/') and dep not in reused and dep not in existing:
-   raise AssertionError(('incomplete project fingerprint',module,dep))
+ unverified=[dep for dep in checked if dep.startswith('R1Z/') and dep not in reused and dep not in existing]
+ if unverified:
+  rejected[module]=[dict(reason='project dependency was not verified in this private cohort',modules=unverified)];continue
  dest=D/'lean-objects'/(module+'.olean');dest.parent.mkdir(parents=True,exist_ok=True)
  assert not dest.exists(),module
  companions={}
