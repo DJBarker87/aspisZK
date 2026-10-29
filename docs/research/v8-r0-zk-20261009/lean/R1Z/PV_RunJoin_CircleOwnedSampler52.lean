@@ -7,6 +7,7 @@ open PV_RunJoin_CircleOwnedCarrier52
 theorem s0 (rank : Array Std.U32 8#usize) (remainder : Std.U64) (j : Std.Usize) :
     PV_AL_CircleOwned.shipped_sampler.qm31_div_pass_loop.body rank remainder j = PV_RunJoin_CircleRawSampler52.shipped_sampler.qm31_div_pass_loop.body rank remainder j := by
   unfold PV_AL_CircleOwned.shipped_sampler.qm31_div_pass_loop.body PV_RunJoin_CircleRawSampler52.shipped_sampler.qm31_div_pass_loop.body
+  simp only [PV_RunJoin_CircleOwnedScalar52.f0]
   all_goals rfl
 
 theorem s1 (rank : Array Std.U32 8#usize) (remainder : Std.U64) (j : Std.Usize) :

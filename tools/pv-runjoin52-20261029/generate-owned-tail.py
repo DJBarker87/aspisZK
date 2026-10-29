@@ -25,6 +25,7 @@ for i,(n,d) in enumerate(sampler.items()):
  body+=f'theorem s{i} {binder} :\n    PV_AL_CircleOwned.{n} '+out+' = '+rhs+' := by\n'
  body+='  unfold PV_AL_CircleOwned.'+n+' '+raw+'.'+n+'\n'
  deps=['s'+str(j) for j,(m,_) in enumerate(list(sampler.items())[:i]) if m in d[len('def '+n):]]
+ if 'aspis_core.field.P' in d: deps+=['PV_RunJoin_CircleOwnedScalar52.f0']
  if n.endswith('qm31_sample'):deps+=['PV_RunJoin_CircleOwnedOps52.op3','bind_assoc_eq','bind_tc_ok','encQ']
  if deps:body+='  simp only ['+','.join(deps)+']\n'
  body+='  all_goals rfl\n\n'
