@@ -1,4 +1,4 @@
-import PV_B3P_InternalSum1201227
+import PV_B3P_InternalPrefix12227
 namespace PV_B3P_Binding12227
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227 Result
 set_option autoImplicit false
@@ -19,12 +19,9 @@ attribute [local irreducible] Array.index_usize Array.update
 
 theorem internal_linear_binding12 (state : InternalState12) :
     reference_poseidon.internal_linear_lazy state = source_internal12 state := by
-  unfold reference_poseidon.internal_linear_lazy source_internal12
-  apply bind_equal9
-  intro first
-  apply bind_equal9
-  intro old_zero
-  exact internal_sum_fold12_01 state old_zero (Array.repeat 4#usize 0#u64)
+  rw [internal_entry_factor12]
+  unfold internal_entry_prefix12 source_internal12
+  simp only [internal_sum_sequence_fold12]
 
 #print axioms internal_linear_binding12
 end PV_B3P_Binding12227
