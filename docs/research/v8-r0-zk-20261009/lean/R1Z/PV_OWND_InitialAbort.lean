@@ -13,7 +13,7 @@ theorem null_abort {S X E : Type}
  PV_OWND_InitialProgram.program prim dealloc error owner (lift .div) payload w=
  ⟨.div,{w with allocator:=s},[(w,.allocate 1016 2)]⟩ := by
  unfold PV_OWND_InitialProgram.program
- rw [bind,PV_OWND_InitialNull.complete prim owner (lift .div) payload w s h]
+ rw [PV_W_Threading.bind,PV_OWND_InitialNull.complete prim owner (lift .div) payload w s h]
  simp only [lift,List.append_nil]
 #print axioms null_abort
 end R1Z.PV_OWND_InitialAbort

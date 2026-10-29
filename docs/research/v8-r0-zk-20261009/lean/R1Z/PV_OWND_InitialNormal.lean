@@ -16,7 +16,7 @@ theorem complete {S X E : Type}
  let b:=PV_OWND_ActualBytes.initialized a.world.memory ⟨p,w.memory.generations p+1⟩ owner payload
  ⟨.ok b,{a.world with memory:=b.memory},[(w,.allocate 1016 2)]⟩ := by
  unfold PV_OWND_InitialProgram.program
- rw [bind,PV_OWND_InitialSuccess.complete prim owner p oom payload w s h]
+ rw [PV_W_Threading.bind,PV_OWND_InitialSuccess.complete prim owner p oom payload w s h]
  simp only [PV_OWND_InitialCheck.finish,checked,lift,List.append_nil]
 #print axioms complete
 end R1Z.PV_OWND_InitialNormal

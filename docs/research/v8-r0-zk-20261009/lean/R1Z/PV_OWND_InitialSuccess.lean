@@ -11,6 +11,6 @@ theorem complete {S X E : Type}
  let a:=allocate prim ⟨1016,2⟩ owner w
  let b:=PV_OWND_ActualBytes.initialized a.world.memory ⟨p,w.memory.generations p+1⟩ owner payload
  ⟨.ok b,{a.world with memory:=b.memory},[(w,.allocate 1016 2)]⟩ := by
- simp only [construct,bind,allocate,emit,h,stores,List.append_nil]
+ simp only [construct,PV_W_Threading.bind,allocate,emit,h,stores,List.append_nil]
 #print axioms complete
 end R1Z.PV_OWND_InitialSuccess

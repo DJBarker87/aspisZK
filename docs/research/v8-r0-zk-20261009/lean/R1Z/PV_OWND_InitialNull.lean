@@ -10,6 +10,6 @@ theorem complete {S X E : Type}
  construct prim owner oom payload w =
  let after:= {w with allocator:=s}
  ⟨(oom after).outcome,(oom after).world,[(w,.allocate 1016 2)]++(oom after).calls⟩ := by
- simp only [construct,bind,allocate,emit,h]
+ simp only [construct,PV_W_Threading.bind,allocate,emit,h]
 #print axioms complete
 end R1Z.PV_OWND_InitialNull
