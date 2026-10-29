@@ -1,0 +1,57 @@
+START 61942 R1Z.PV_RunJoin_WeightFactorWrite47
+DONE 61942 R1Z.PV_RunJoin_WeightFactorWrite47 exit 1 wall 1.77 RSS 4438593536
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightFactorWrite47.lean:22:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let __x ← Array.index_mut_usize ?a ?i
+    match __x with
+      | (x, back) => ?k x back
+in the target expression
+  (do
+      let (m, back) ← Array.index_mut_usize fs slot
+      let m1 ← m.update d row
+      ok (back m1)) =
+    do
+    let m ← Array.index_usize fs slot
+    let m1 ← m.update d row
+    ok (Std.Array.set fs slot m1)
+
+fs : Factors
+slot d : Usize
+row : Std.Array K 4#usize
+⊢ (do
+      let (m, back) ← Array.index_mut_usize fs slot
+      let m1 ← m.update d row
+      ok (back m1)) =
+    do
+    let m ← Array.index_usize fs slot
+    let m1 ← m.update d row
+    ok (Std.Array.set fs slot m1)
+'R1Z.PV_RunJoin_WeightFactorWrite47.equation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightFactorWrite47.lean:26:68: error: unsolved goals
+fs : Factors
+slot : Usize
+m : Matrix
+hs : ↑slot < 5
+hb : ↑slot < (↑fs).length
+⊢ (match (↑(Std.Array.set fs slot m))[↑slot]? with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok m
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightFactorWrite47.lean:29:37: warning: This simp argument is unused:
+  Array.set
+
+Hint: Omit it from the simp argument list.
+  simp only [Array.getElem?_Usize_eq,A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵ ̲List.getElem?_set_self hb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightFactorWrite47.lean:29:47: warning: This simp argument is unused:
+  List.getElem?_set_self hb
+
+Hint: Omit it from the simp argument list.
+  simp only [̵A̵r̵r̵a̵y̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵U̵s̵i̵z̵e̵_̵e̵q̵,̵A̵r̵r̵a̵y̵.̵s̵e̵t̵,̵L̵i̵s̵t̵.̵g̵e̵t̵E̵l̵e̵m̵?̵_̵s̵e̵t̵_̵s̵e̵l̵f̵ ̵h̵b̵]̵[̲A̲r̲r̲a̲y̲.̲g̲e̲t̲E̲l̲e̲m̲?̲_̲U̲s̲i̲z̲e̲_̲e̲q̲,̲ ̲A̲r̲r̲a̲y̲.̲s̲e̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_WeightFactorWrite47.read_set' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightFactorWrite47.lean:36:2: error: `simp` made no progress
+'R1Z.PV_RunJoin_WeightFactorWrite47.overwrite' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,84 @@
+START 61908 R1Z.PV_RunJoin_WeightCellSource47
+DONE 61908 R1Z.PV_RunJoin_WeightCellSource47 exit 1 wall 1.85 RSS 4441305088
+'R1Z.PV_RunJoin_WeightCellSource47.powers_elim' does not depend on any axioms
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightCellSource47.lean:56:4: error: Tactic `apply` failed: could not unify the conclusion of `@PV_RunJoin_WeightReadFold47.map_read`
+  List.foldlM
+      (fun acc term => do
+        let b ← ?raw term.2
+        let p ← ?mul term.1 b
+        ?add acc p)
+      ?sum ?xs =
+    List.foldlM
+      (fun acc term => do
+        let p ← ?mul term.1 term.2
+        ?add acc p)
+      ?sum ?ys
+with the goal
+  List.foldlM
+      (fun acc term => do
+        let q ← PV_B2_251c1.host_weights.raw_value w term.2 j
+        let product ← PV_B2_251c1.host_weights.mul_qm31 term.1 q
+        PV_B2_251c1.aspis_core.field.wide_exact.WideExact.add acc product)
+      PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO
+      [(k0, 0#usize), (k1, 1#usize), (k2, 2#usize), (k3, 3#usize), (k4, 4#usize), (k5, 5#usize), (k6, 6#usize)] =
+    List.foldlM
+      (fun acc term => do
+        let p ← PV_B2_251c1.host_weights.mul_qm31 term.1 term.2
+        acc.add p)
+      PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO
+      [(k0, q0), (k1, q1), (k2, q2), (k3, q3), (k4, q4), (k5, q5), (k6, q6)]
+
+Note: The full type of `@PV_RunJoin_WeightReadFold47.map_read` is
+  ∀ {A B C I : Type} (raw : I → Result B) (mul : A → B → Result C) (add : C → C → Result C) (xs : List (A × I))
+    (ys : List (A × B)),
+    List.Forall₂ (fun x y => x.1 = y.1 ∧ raw x.2 = ok y.2) xs ys →
+      ∀ (sum : C),
+        List.foldlM
+            (fun acc term => do
+              let b ← raw term.2
+              let p ← mul term.1 b
+              add acc p)
+            sum xs =
+          List.foldlM
+            (fun acc term => do
+              let p ← mul term.1 term.2
+              add acc p)
+            sum ys
+
+w : W
+hs : w.variant = PV_B2_251c1.transport.Variant.S2
+j : Usize
+hj : ↑j < 1024
+k0 k1 k2 k3 k4 k5 k6 : PV_B2_C_MutationStep.E
+q0 : PV_B2_251c1.aspis_core.field.QM31
+h0 : PV_B2_251c1.host_weights.raw_value w 0#usize j = ok q0
+q1 : PV_B2_251c1.aspis_core.field.QM31
+h1 : PV_B2_251c1.host_weights.raw_value w 1#usize j = ok q1
+q2 : PV_B2_251c1.aspis_core.field.QM31
+h2 : PV_B2_251c1.host_weights.raw_value w 2#usize j = ok q2
+q3 : PV_B2_251c1.aspis_core.field.QM31
+h3 : PV_B2_251c1.host_weights.raw_value w 3#usize j = ok q3
+q4 : PV_B2_251c1.aspis_core.field.QM31
+h4 : PV_B2_251c1.host_weights.raw_value w 4#usize j = ok q4
+q5 : PV_B2_251c1.aspis_core.field.QM31
+h5 : PV_B2_251c1.host_weights.raw_value w 5#usize j = ok q5
+q6 : PV_B2_251c1.aspis_core.field.QM31
+h6 : PV_B2_251c1.host_weights.raw_value w 6#usize j = ok q6
+row : Std.Array Q 7#usize := Array.make 7#usize [q0, q1, q2, q3, q4, q5, q6] ⋯
+hr : PV_RunJoin_WeightRowArray46.run w j = ok row
+hm : AspisR1ProducerRelease47.weights53.row (state w) j = ok (amap toQ row)
+⊢ List.foldlM
+      (fun acc term => do
+        let q ← PV_B2_251c1.host_weights.raw_value w term.2 j
+        let product ← PV_B2_251c1.host_weights.mul_qm31 term.1 q
+        PV_B2_251c1.aspis_core.field.wide_exact.WideExact.add acc product)
+      PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO
+      [(k0, 0#usize), (k1, 1#usize), (k2, 2#usize), (k3, 3#usize), (k4, 4#usize), (k5, 5#usize), (k6, 6#usize)] =
+    List.foldlM
+      (fun acc term => do
+        let p ← PV_B2_251c1.host_weights.mul_qm31 term.1 term.2
+        acc.add p)
+      PV_B2_251c1.aspis_core.field.wide_exact.WideExact.ZERO
+      [(k0, q0), (k1, q1), (k2, q2), (k3, q3), (k4, q4), (k5, q5), (k6, q6)]
+'R1Z.PV_RunJoin_WeightCellSource47.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

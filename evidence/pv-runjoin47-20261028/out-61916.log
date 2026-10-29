@@ -1,0 +1,66 @@
+START 61916 R1Z.PV_RunJoin_WeightPowersLoop47
+DONE 61916 R1Z.PV_RunJoin_WeightPowersLoop47 exit 1 wall 3.16 RSS 4449443840
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightPowersLoop47.lean:49:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (amap ?f ?a).set ?i (?f ?x)
+in the target expression
+  (let (_, index_mut_back) := (toWide old, (amap toWide out).set i)
+    AspisR1ProducerRelease47.power_fill (index_mut_back (toWide p)) (toWide x)
+      (toWide (PV_B2_C_251WideValue.aspis_core.field.wide_exact.WideExact.mul p x)) (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8)) =
+    mapResult (amap toWide)
+      (PV_B2_251c1.prover_powers.powers_loop x (out.set i p)
+        (PV_B2_C_251WideValue.aspis_core.field.wide_exact.WideExact.mul p x) (i.wrapping_add 1#usize))
+
+case neg
+N : Usize
+x : E
+n : ℕ
+ih :
+  ∀ (p : E) (out : Std.Array E N) (i : Usize) (left : U8),
+    ↑left = n →
+      ↑i + n = ↑N →
+        AspisR1ProducerRelease47.power_fill (amap toWide out) (toWide x) (toWide p) i left =
+          mapResult (amap toWide) (PV_B2_251c1.prover_powers.powers_loop x out p i)
+p : E
+out : Std.Array E N
+i : Usize
+left : U8
+hl : ↑left = n + 1
+hb : ↑i + (n + 1) = ↑N
+hi : i < N
+hv : ↑(i.wrapping_add 1#usize) = ↑i + 1
+old : E
+hr : out.index_usize i = ok old
+hread : (amap toWide out).index_usize i = ok (toWide old)
+hn : ¬n = 0
+hzero : left ≠ 0#u8
+hone : left ≠ 1#u8
+hm : i.wrapping_add 1#usize < N
+hd : ↑(left.wrapping_sub 1#u8) = n
+⊢ (let (_, index_mut_back) := (toWide old, (amap toWide out).set i)
+    AspisR1ProducerRelease47.power_fill (index_mut_back (toWide p)) (toWide x)
+      (toWide (PV_B2_C_251WideValue.aspis_core.field.wide_exact.WideExact.mul p x)) (i.wrapping_add 1#usize)
+      (left.wrapping_sub 1#u8)) =
+    mapResult (amap toWide)
+      (PV_B2_251c1.prover_powers.powers_loop x (out.set i p)
+        (PV_B2_C_251WideValue.aspis_core.field.wide_exact.WideExact.mul p x) (i.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (1 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_WeightPowersLoop47.lean:32:17: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [if_f̵a̵l̵s̵e̵,̵i̵f̵_̵true, ̲Array.index_mut_usize, ̲hread, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_WeightPowersLoop47.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

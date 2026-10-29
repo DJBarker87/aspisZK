@@ -1,0 +1,56 @@
+START 61988 R1Z.PV_RunJoin_PrepareWeight47
+DONE 61988 R1Z.PV_RunJoin_PrepareWeight47 exit 1 wall 1.94 RSS 4448153600
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareWeight47.lean:12:15: error: Function expected at
+  prover.Backend
+but this term has type
+  Type
+
+Note: Expected a function because this term is being applied to the argument
+  (types base)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareWeight47.lean:13:41: error: Application type mismatch: The argument
+  types base
+has type
+  ExternalTypes
+but is expected to have type
+  Type
+in the application
+  host_semantic.BuiltSemantics (types base)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareWeight47.lean:24:73: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : sorry
+sem : sorry
+kw : Weight
+z0 z1 : Point
+h0 : (amap fromPoint sorry).index_usize 0#usize = ok z0
+h1 : (amap fromPoint sorry).index_usize 1#usize = ok z1
+hn :
+  ExternalFuns.op252 transport.Variant.S2 sorry sorry = do
+    box transport.Variant.S2 sorry sorry
+    ok (core.result.Result.Ok (toWeight kw))
+hm :
+  AspisR1ProducerRelease47.weights53.new (amap PV_RunJoin_WeightKernel46.toQ (amap fromQ sorry))
+      (PV_RunJoin_WeightKernel46.toQ z0.x) (PV_RunJoin_WeightKernel46.toQ z0.y) (PV_RunJoin_WeightKernel46.toQ z1.x)
+      (PV_RunJoin_WeightKernel46.toQ z1.y) =
+    ok (PV_RunJoin_WeightCarrier46.state (toWeight kw))
+left✝ :
+  ∀ (kind j : Usize),
+    ↑kind < 7 →
+      ExternalFuns.op253 (toWeight kw) kind j =
+        PV_RunJoin_WeightMap46.mapResult PV_RunJoin_WeightRawInstalled46.nativeQ
+          (AspisR1ProducerRelease47.weights53.raw (PV_RunJoin_WeightCarrier46.state (toWeight kw)) kind j)
+right✝ :
+  ∀ (x : aspis_core.field.wide_exact.WideExact),
+    ExternalFuns.op251 (toWeight kw) x =
+      PV_RunJoin_WeightMap46.mapResult PV_RunJoin_WeightMaterialInstalled47.nativeRust
+        (PV_RunJoin_WeightMaterialResult47.run (heap (toWeight kw) x) (toWeight kw)
+          (PV_B2_F_MaterializeNative.fromNative x))
+⊢ prover.prepare_opening transport.Variant.S2 hash sorry sorry =
+    PV_RunJoin_PrepareContext47.run transport.Variant.S2 hash sorry sorry do
+      box transport.Variant.S2 sorry sorry
+      ok (core.result.Result.Ok (toWeight kw))
+'R1Z.PV_RunJoin_PrepareWeight47.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

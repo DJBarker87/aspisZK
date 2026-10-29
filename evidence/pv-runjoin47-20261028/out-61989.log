@@ -1,0 +1,50 @@
+START 61989 R1Z.PV_RunJoin_PrepareWeight47
+DONE 61989 R1Z.PV_RunJoin_PrepareWeight47 exit 1 wall 1.83 RSS 4448784384
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PrepareWeight47.lean:29:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op252 transport.Variant.S2 sem.alpha sem.z
+in the target expression
+  PV_RunJoin_PrepareContext47.run transport.Variant.S2 hash backend sem
+      (weights.Weights.new transport.Variant.S2 sem.alpha sem.z) =
+    PV_RunJoin_PrepareContext47.run transport.Variant.S2 hash backend sem do
+      box transport.Variant.S2 sem.alpha sem.z
+      ok (core.result.Result.Ok (toWeight kw))
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+backend : prover.Backend
+sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn
+kw : Weight
+z0 z1 : Point
+h0 : (amap fromPoint sem.z).index_usize 0#usize = ok z0
+h1 : (amap fromPoint sem.z).index_usize 1#usize = ok z1
+hn :
+  ExternalFuns.op252 transport.Variant.S2 sem.alpha sem.z = do
+    box transport.Variant.S2 sem.alpha sem.z
+    ok (core.result.Result.Ok (toWeight kw))
+hm :
+  AspisR1ProducerRelease47.weights53.new (amap PV_RunJoin_WeightKernel46.toQ (amap fromQ sem.alpha))
+      (PV_RunJoin_WeightKernel46.toQ z0.x) (PV_RunJoin_WeightKernel46.toQ z0.y) (PV_RunJoin_WeightKernel46.toQ z1.x)
+      (PV_RunJoin_WeightKernel46.toQ z1.y) =
+    ok (PV_RunJoin_WeightCarrier46.state (toWeight kw))
+left✝ :
+  ∀ (kind j : Usize),
+    ↑kind < 7 →
+      ExternalFuns.op253 (toWeight kw) kind j =
+        PV_RunJoin_WeightMap46.mapResult PV_RunJoin_WeightRawInstalled46.nativeQ
+          (AspisR1ProducerRelease47.weights53.raw (PV_RunJoin_WeightCarrier46.state (toWeight kw)) kind j)
+right✝ :
+  ∀ (x : aspis_core.field.wide_exact.WideExact),
+    ExternalFuns.op251 (toWeight kw) x =
+      PV_RunJoin_WeightMap46.mapResult PV_RunJoin_WeightMaterialInstalled47.nativeRust
+        (PV_RunJoin_WeightMaterialResult47.run (heap (toWeight kw) x) (toWeight kw)
+          (PV_B2_F_MaterializeNative.fromNative x))
+⊢ PV_RunJoin_PrepareContext47.run transport.Variant.S2 hash backend sem
+      (weights.Weights.new transport.Variant.S2 sem.alpha sem.z) =
+    PV_RunJoin_PrepareContext47.run transport.Variant.S2 hash backend sem do
+      box transport.Variant.S2 sem.alpha sem.z
+      ok (core.result.Result.Ok (toWeight kw))
+'R1Z.PV_RunJoin_PrepareWeight47.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
