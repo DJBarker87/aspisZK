@@ -28,7 +28,7 @@ theorem op35 (parameter1 : Q) :
     simp only [Option.map_some,AspisR72Sampler.core.option.Option.ok_or,
       PV_RunJoin_CircleR72Raw52.core.option.Option.ok_or,bind_tc_ok,
       core.result.Result.Insts.CoreOpsTry.branch]
-    rw [op34,op32]
+    rw [op32]
     simp only [bind_assoc_eq,bind_tc_ok]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro numerator _

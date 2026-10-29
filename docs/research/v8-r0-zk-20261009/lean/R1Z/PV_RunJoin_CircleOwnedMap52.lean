@@ -38,7 +38,7 @@ theorem complete (q : Q) :
   | none => rfl
   | some inv =>
     simp only [Option.map_some]
-    rw [op14,op16]
+    rw [op16]
     simp only [bind_assoc_eq,bind_tc_ok]
     apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
     intro numerator _

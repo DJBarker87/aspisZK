@@ -234,3 +234,4 @@ for i in range(8):
 s=s.replace('| rw [op27]','| rw [op18]\n                    | rw [op27]')
 s=s.replace('all_goals simp only [Option.map_none,Option.map_some,encQ,encCM]', 'all_goals first | (apply congrArg; funext value; rfl) | simp only [Option.map_none,Option.map_some,encQ,encCM]')
 p.write_text(s)
+p=L/'PV_RunJoin_CircleR72Op3552.lean';s=p.read_text().replace('rw [op34,op32]','rw [op32]');p.write_text(s)
