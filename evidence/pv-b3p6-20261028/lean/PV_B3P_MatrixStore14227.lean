@@ -25,10 +25,10 @@ theorem matrix_store_binding14 (sums : Matrix14) (row column : Usize) (value : U
   unfold source_matrix_store14 model_matrix_store14
   rw [PV_B3P_ArrayWrite227.borrow sums row hr,PV_B3P_SelectIndex227.index_value sums row hr]
   simp only [bind_tc_ok]
-  let rowValue : Array U64 3#usize := sums.val[row.val]'(by simpa only [sums.property] using hr)
+  let rowValue : Array U64 3#usize := sums.val[row.val]'(by have h := sums.property; scalar_tac)
   change (do
     let (_old,back_row) ← Array.index_mut_usize rowValue column
-    .ok (Array.set sums row (back_row value))) = (do
+    .ok (Aeneas.Std.Array.set sums row (back_row value))) = (do
     let next_row ← Array.update rowValue column value
     Array.update sums row next_row)
   rw [PV_B3P_ArrayWrite227.borrow rowValue column hc,
