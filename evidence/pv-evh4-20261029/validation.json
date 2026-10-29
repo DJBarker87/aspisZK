@@ -1,0 +1,218 @@
+{
+  "branch": "codex/pv-evh-20261029",
+  "source_revision": "f55dc04450819b5e91680672788f841e001ad5e5",
+  "lean_attempts": 17,
+  "accepted": 9,
+  "failed": 8,
+  "native": 0,
+  "kani": 0,
+  "ids": [
+    73604,
+    73607,
+    73608,
+    73609,
+    73610,
+    73611,
+    73612,
+    73614,
+    73616,
+    73617,
+    73618,
+    73619,
+    73620,
+    73621,
+    73622,
+    73697,
+    73698
+  ],
+  "refusals": [
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73600-1793281966.json",
+      "epoch": 1793281966.404941
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73601-1793282158.json",
+      "epoch": 1793282158.7830698
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73602-1793282341.json",
+      "epoch": 1793282341.036451
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73603-1793282523.json",
+      "epoch": 1793282523.202123
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73606-1793282758.json",
+      "epoch": 1793282758.99085
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73613-1793283320.json",
+      "epoch": 1793283320.0853288
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73615-1793283539.json",
+      "epoch": 1793283539.316392
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73622-1793284283.json",
+      "epoch": 1793284283.806126
+    },
+    {
+      "path": "evidence/pv-evh4-20261029/refusal-history-73622-1793284466.json",
+      "epoch": 1793284466.030988
+    }
+  ],
+  "subprograms": [
+    {
+      "module": "PV_EVH_World",
+      "path": "lean/PV_EVH_World.lean",
+      "source_sha256": "34659256f25ea141c2616f715e296d87b40c448f9b08573a498b735282332ec2",
+      "theorems": [
+        "bind_fail",
+        "bind_div",
+        "bind_assoc",
+        "fixed_lift",
+        "fixed_bind",
+        "query_model",
+        "oracle_projection",
+        "count_projection",
+        "nonce_projection"
+      ]
+    },
+    {
+      "module": "PV_EVH_WorldLoop",
+      "path": "lean/PV_EVH_WorldLoop.lean",
+      "source_sha256": "e78fac62fe662022d28abd50e9e0780fa73e456a5268979da5c8bccb4d0ad04b",
+      "theorems": [
+        "zero_exhausted",
+        "exhausted_prefix",
+        "fixed_finished"
+      ]
+    },
+    {
+      "module": "PV_EVH_Entropy",
+      "path": "lean/PV_EVH_Entropy.lean",
+      "source_sha256": "ce7286a1010bca3ee89af8f2812d48a23ae1f3fc52d537b9cb08925a0e843122",
+      "theorems": [
+        "draw_fixed",
+        "entropyBody_fixed"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyLoop",
+      "path": "lean/PV_EVH_EntropyLoop.lean",
+      "source_sha256": "6e8283df9c454015a7f0bc9b4df012ed4d23fc7351bed3f89d3a48abd1db8adc",
+      "theorems": [
+        "entropyRun_fixed"
+      ]
+    },
+    {
+      "module": "PV_EVH_NonceWorld",
+      "path": "lean/PV_EVH_NonceWorld.lean",
+      "source_sha256": "34ac81d4fcc5461982593ca5ad5bc09c550c844d56c06491962c1e48a5f8fae0",
+      "theorems": [
+        "write_fixed",
+        "sync_fixed",
+        "open_fixed",
+        "options_fixed",
+        "write_prefix"
+      ]
+    },
+    {
+      "module": "PV_EVH_NonceSource",
+      "path": "lean/PV_EVH_NonceSource.lean",
+      "source_sha256": "95a9a3fcd8f882e2e6cdd95e0772a91ade38d988860142e575ab2d5fedbeca05",
+      "theorems": [
+        "syncDirectory_fixed",
+        "reserveFallible_fixed",
+        "reserve_fixed"
+      ]
+    },
+    {
+      "module": "PV_EVH_ViewModel",
+      "path": "lean/PV_EVH_ViewModel.lean",
+      "source_sha256": "d002dad089777db4ae1923b3ba6feb57de226c17b52f330bde782f5390a40b5a",
+      "theorems": [
+        "entropy_agrees",
+        "files_agree",
+        "joint_view"
+      ]
+    }
+  ],
+  "axioms": {
+    "PV_EVH_World": [
+      "'PV_EVH_World.bind_fail' depends on axioms: [propext]",
+      "'PV_EVH_World.bind_div' depends on axioms: [propext]",
+      "'PV_EVH_World.bind_assoc' depends on axioms: [propext, Quot.sound]",
+      "'PV_EVH_World.fixed_lift' does not depend on any axioms",
+      "'PV_EVH_World.fixed_bind' depends on axioms: [propext]",
+      "'PV_EVH_World.query_model' does not depend on any axioms",
+      "'PV_EVH_World.oracle_projection' depends on axioms: [propext]",
+      "'PV_EVH_World.count_projection' depends on axioms: [propext]",
+      "'PV_EVH_World.nonce_projection' depends on axioms: [propext]"
+    ],
+    "PV_EVH_Entropy": [
+      "'PV_EVH_Entropy.entropyBody_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_Entropy.draw_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_WorldLoop": [
+      "'PV_EVH_WorldLoop.zero_exhausted' does not depend on any axioms",
+      "'PV_EVH_WorldLoop.exhausted_prefix' depends on axioms: [propext]",
+      "'PV_EVH_WorldLoop.fixed_finished' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_EntropyLoop": [
+      "'PV_EVH_EntropyLoop.entropyRun_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_NonceWorld": [
+      "'PV_EVH_NonceWorld.write_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.sync_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.open_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.options_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.write_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_NonceSource": [
+      "'PV_EVH_NonceSource.syncDirectory_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceSource.reserveFallible_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceSource.reserve_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_ViewModel": [
+      "'PV_EVH_ViewModel.entropy_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_ViewModel.files_agree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_ViewModel.joint_view' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_WorldAudit": [
+      "'PV_EVH_World.bind_fail' depends on axioms: [propext]",
+      "'PV_EVH_World.bind_div' depends on axioms: [propext]",
+      "'PV_EVH_World.bind_assoc' depends on axioms: [propext, Quot.sound]",
+      "'PV_EVH_World.fixed_lift' does not depend on any axioms",
+      "'PV_EVH_World.fixed_bind' depends on axioms: [propext]",
+      "'PV_EVH_World.query_model' does not depend on any axioms",
+      "'PV_EVH_World.oracle_projection' depends on axioms: [propext]",
+      "'PV_EVH_World.count_projection' depends on axioms: [propext]",
+      "'PV_EVH_World.nonce_projection' depends on axioms: [propext]",
+      "'PV_EVH_WorldLoop.zero_exhausted' does not depend on any axioms",
+      "'PV_EVH_WorldLoop.exhausted_prefix' depends on axioms: [propext]",
+      "'PV_EVH_WorldLoop.fixed_finished' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_Entropy.draw_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_Entropy.entropyBody_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_EntropyLoop.entropyRun_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.write_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.sync_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.open_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.options_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceWorld.write_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceSource.syncDirectory_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceSource.reserveFallible_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_NonceSource.reserve_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_ViewModel.entropy_agrees' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_ViewModel.files_agree' depends on axioms: [propext, Classical.choice, Quot.sound]",
+      "'PV_EVH_ViewModel.joint_view' depends on axioms: [propext, Classical.choice, Quot.sound]"
+    ],
+    "PV_EVH_WorldReplay": []
+  },
+  "full_prover_worldRun": false,
+  "opsNative_joint_success_witness": false,
+  "privacy_rows_removed": [],
+  "no_keys_or_accounts_used": true
+}

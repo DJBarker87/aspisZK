@@ -1,0 +1,30 @@
+PV_EVH_Entropy.entropyBody_fixed [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (answers : PV_EVH_Entropy.EntropyAnswers)
+  (h : ∀ (n : ℕ) (s : Aeneas.Std.Slice Aeneas.Std.U8), answers n s = ProverRwFull.getrandom.fill s)
+  (mask_nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (limit retry : Aeneas.Std.Usize) :
+  PV_EVH_World.FixedView (PV_EVH_Entropy.entropyBody answers mask_nonce limit retry)
+    (ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body mask_nonce
+      limit retry)
+PV_EVH_EntropyLoop.entropyRun_fixed [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] (fuel : ℕ)
+  (answers : PV_EVH_Entropy.EntropyAnswers)
+  (same : ∀ (n : ℕ) (s : Aeneas.Std.Slice Aeneas.Std.U8), answers n s = ProverRwFull.getrandom.fill s)
+  (nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) (limit retry : Aeneas.Std.Usize) (w : PV_EVH_World.World)
+  (r :
+    Aeneas.Std.Result
+      (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+        ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError))
+  (finished :
+    (PV_EVH_EntropyLoop.entropyRun fuel answers nonce limit retry w).status = PV_EVH_WorldLoop.Status.finished r) :
+  ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit retry =
+    r
+PV_EVH_NonceSource.reserve_fixed [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns]
+  (a : PV_EVH_NonceWorld.Answers) (h : PV_EVH_NonceWorld.Compatible a)
+  (self : ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
+  (statement_digest mask_nonce : Aeneas.Std.Array Aeneas.Std.U8 32#usize) :
+  PV_EVH_World.FixedView (PV_EVH_NonceSource.reserve a self statement_digest mask_nonce)
+    (ProverRwFull.aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve
+      self statement_digest mask_nonce)
+PV_EVH_ViewModel.joint_view [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] :
+  (∀ (n : ℕ) (input : Aeneas.Std.Slice Aeneas.Std.U8),
+      PV_EVH_ViewModel.entropy n input = ProverRwFull.getrandom.fill input) ∧
+    PV_EVH_NonceWorld.Compatible PV_EVH_ViewModel.files
