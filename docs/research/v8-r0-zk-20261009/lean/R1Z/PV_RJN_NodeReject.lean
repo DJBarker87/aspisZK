@@ -16,6 +16,7 @@ theorem erase_ten : (List.replicate 10 262144).eraseDups=[262144] := by decide
 theorem indices : PV_RunJoin_PublishSkeleton54.indices badQueries 0 10 false=[262144] := by
   unfold PV_RunJoin_PublishSkeleton54.indices badQueries PV_RunJoin_QueryInvalidIndex56.badQueries
     ProverCommitArray49.array
+  dsimp only
   rw [List.ofFn_const]
   simp only [List.drop_zero,List.take_replicate,List.map_replicate,Bool.false_eq_true,if_false]
   change ((List.replicate 10 262144).mergeSort (· ≤ ·)).eraseDups=[262144]
@@ -68,9 +69,10 @@ theorem first_slot (laws : PV_RJN_Producer_NodePrimitives) (out : alloc.vec.Vec 
     prover.append_node_slot out cc1 cc2 t badQueries 0#usize 0#usize=ok (.Err .Allocation) := by
   have he := unique idx hv
   subst idx
-  simp only [prover.append_node_slot,show (0#usize)=(0#usize) from rfl,if_true,bind_tc_ok,
+  have ht : host_tree.BinaryTree.multiproof cc1.tree (alloc.vec.Vec.deref badIndex)=ok none := tree laws cc1.tree
+  simp only [prover.append_node_slot,if_true,bind_tc_ok,
     show ¬(0#usize)=(2#usize) from by decide,decide_false,show (0#usize).val=0 from rfl,hidx,host_commitment.Commitment.multiproof,
-    tree laws,laws.2.2.2.2,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+    ht,laws.2.2.2.2,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
   rfl
 
 theorem source (laws : PV_RJN_Producer_NodePrimitives) (out : alloc.vec.Vec U8)
