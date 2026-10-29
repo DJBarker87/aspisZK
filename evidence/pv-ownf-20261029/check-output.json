@@ -1,0 +1,35 @@
+{
+  "ok": true,
+  "classification": "own-2\u2032 qualification REJECTED: OTHER process/thread state; own-1 retained",
+  "sources": 44,
+  "reads": [
+    {
+      "instruction": "malloc 0xad764",
+      "state": "malloc initialization byte 0x20b188",
+      "classification": "ALLOCATOR-INTERNAL; newly permitted by own-2\u2032"
+    },
+    {
+      "instruction": "malloc 0xad79a",
+      "state": "tcache allocator TLS",
+      "classification": "ALLOCATOR-INTERNAL; newly permitted by own-2\u2032"
+    },
+    {
+      "instruction": "malloc 0xad7b5",
+      "state": "__libc_single_threaded 0x20c040",
+      "classification": "OTHER",
+      "reason": "Process-wide thread-count optimization flag, exported in sys/single_threaded.h, writable by pthread_create at 0x9d336 outside allocator entry points"
+    },
+    {
+      "instruction": "free 0xade59",
+      "state": "incoming errno TLS, through offset slot 0x203df8",
+      "classification": "OTHER",
+      "reason": "Same TLS location returned by __errno_location; general per-thread error state, saved and restored across successful free at 0xadeae, not allocator-owned state"
+    },
+    {
+      "instruction": "std rust_oom HOOK.load",
+      "state": "allocation failure handler",
+      "classification": "FAILURE-ONLY retained under rdea-1; no success-path exemption or new trust item asserted"
+    }
+  ],
+  "wall": 0.3599176248535514
+}
