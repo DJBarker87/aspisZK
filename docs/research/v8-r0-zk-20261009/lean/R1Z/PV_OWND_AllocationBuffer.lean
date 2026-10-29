@@ -20,6 +20,7 @@ theorem valid {S X E T : Type} (k : Codec T) (capacity owner : Nat) (default : T
  · simp [Owned,Live,allocate,emit,h,put,emptyCell]
  · simpa only [NoLoans,allocate,emit,h] using loans
  · intro i hi
+   change i<0 at hi
    omega
 attribute [local irreducible] buffer
 #print axioms valid
