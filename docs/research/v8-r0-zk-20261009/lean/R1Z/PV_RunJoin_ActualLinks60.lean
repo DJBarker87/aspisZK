@@ -23,8 +23,7 @@ theorem planLayout : PV_RJN_LayoutInstalled.PV_RJN_Producer_PlanLayout PV_RunJoi
 unconditional ordering discharge; malformed Phase defaults remain total. -/
 theorem publishOrder (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
-    (producer_room : @PV_RJN_Producers.PV_RJN_Producer_FrontRoom (types base)
-      (selected base heap box ops) _ (@PV_RunJoin_ActualRun.runs (types base) (selected base heap box ops))) :
+    (producer_room : @PV_RJN_Producers.PV_RJN_Producer_FrontRoom (types base) _ (@PV_RunJoin_ActualRun.runs (types base) (selected base heap box ops))) :
     @PV_RunJoin_PublishActual60.PV_RunJoin_Link_PublishOrder (types base) (selected base heap box ops) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
