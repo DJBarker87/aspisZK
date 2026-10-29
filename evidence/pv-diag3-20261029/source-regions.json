@@ -90,6 +90,42 @@
     "text_sha256": "8d3d80b770c89a331b20cea06aa77bf7c4d4be03f07e018b715a207a90c46876"
   },
   {
+    "name": "lazy_drop",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sync/lazy_lock.rs",
+    "file_sha256": "63d689dc1740418bcc2de8f1ea5969c8b9ccebe427c22d4ff9152649cd166b32",
+    "line_start": 333,
+    "line_end": 347,
+    "text": "impl<T, F> Drop for LazyLock<T, F> {\n    fn drop(&mut self) {\n        match self.once.state() {\n            OnceExclusiveState::Incomplete => unsafe {\n                ManuallyDrop::drop(&mut self.data.get_mut().f)\n            },\n            OnceExclusiveState::Complete => unsafe {\n                ManuallyDrop::drop(&mut self.data.get_mut().value)\n            },\n            OnceExclusiveState::Poisoned => {}\n        }\n    }\n}\n\n",
+    "text_sha256": "bdfa6e2f8d5cfbd224095b56721dbd343f0a205766ca5515dea8613ee71d9e4e"
+  },
+  {
+    "name": "box_drop",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/boxed.rs",
+    "file_sha256": "25d54ba919797977110ff0e5b4c4c4cec15c42ecfae3e37f6d8ed0c6fc13fe65",
+    "line_start": 1877,
+    "line_end": 1893,
+    "text": "unsafe impl<#[may_dangle] T: ?Sized, A: Allocator> Drop for Box<T, A> {\n    #[inline]\n    fn drop(&mut self) {\n        // the T in the Box is dropped by the compiler before the destructor is run\n\n        let ptr = self.0;\n\n        unsafe {\n            let layout = Layout::for_value_raw(ptr.as_ptr());\n            if layout.size() != 0 {\n                self.1.deallocate(From::from(ptr.cast()), layout);\n            }\n        }\n    }\n}\n\n",
+    "text_sha256": "14bc24b13db942994e55a97a19cf5f049d15063445b68e07517a288bd3869c18"
+  },
+  {
+    "name": "vec_drop",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs",
+    "file_sha256": "4a27ab4bcce0908cb3338cb0c94983a00fb01bb3b25f70d37f62750eff3fd5ae",
+    "line_start": 4154,
+    "line_end": 4166,
+    "text": "unsafe impl<#[may_dangle] T, A: Allocator> Drop for Vec<T, A> {\n    fn drop(&mut self) {\n        unsafe {\n            // use drop for [T]\n            // use a raw slice to refer to the elements of the vector as weakest necessary type;\n            // could avoid questions of validity in certain cases\n            ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.as_mut_ptr(), self.len))\n        }\n        // RawVec handles deallocation\n    }\n}\n\n",
+    "text_sha256": "be65f42487afc448c1cc1d5ab1f18676bf554e42324646fa4c783a24e8ee1968"
+  },
+  {
+    "name": "rawvec_drop",
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+    "file_sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+    "line_start": 404,
+    "line_end": 412,
+    "text": "unsafe impl<#[may_dangle] T, A: Allocator> Drop for RawVec<T, A> {\n    /// Frees the memory owned by the `RawVec` *without* trying to drop its contents.\n    fn drop(&mut self) {\n        // SAFETY: We are in a Drop impl, self.inner will not be used again.\n        unsafe { self.inner.deallocate(T::LAYOUT) }\n    }\n}\n\n",
+    "text_sha256": "d3c81465217d17f38e9a48455ee9473ec48377f811b22f2594d1e06ab5ff2173"
+  },
+  {
     "name": "anyhow_ptr",
     "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/anyhow-1.0.104/src/ptr.rs",
     "file_sha256": "a114639d26f4feca7e186106342334cdf2e2176f892149aa331ace72e5d81410",

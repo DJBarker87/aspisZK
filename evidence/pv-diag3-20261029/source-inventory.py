@@ -20,6 +20,10 @@ specs=[
 ('backtrace_resolve',R/'std/src/backtrace.rs','mod helper {','use helper::*;'),
 ('anyhow_drop',A/'error.rs','impl Drop for Error {','// Safety: requires layout of *e to match ErrorImpl<E>.\nunsafe fn object_drop_front'),
 ('anyhow_layout',A/'error.rs','pub(crate) struct ErrorImpl<E = ()>','impl<E> ErrorImpl<E>'),
+('lazy_drop',R/'std/src/sync/lazy_lock.rs','impl<T, F> Drop for LazyLock<T, F>',"#[stable(feature = \"lazy_cell\", since = \"1.80.0\")]\nimpl<T, F: FnOnce() -> T> Deref"),
+('box_drop',R/'alloc/src/boxed.rs','unsafe impl<#[may_dangle] T: ?Sized, A: Allocator> Drop for Box<T, A>','#[cfg(not(no_global_oom_handling))]'),
+('vec_drop',R/'alloc/src/vec/mod.rs','unsafe impl<#[may_dangle] T, A: Allocator> Drop for Vec<T, A>','#[stable(feature = \"rust1\", since = \"1.0.0\")]'),
+('rawvec_drop',R/'alloc/src/raw_vec/mod.rs','unsafe impl<#[may_dangle] T, A: Allocator> Drop for RawVec<T, A>','#[rustc_const_unstable'),
 ('anyhow_ptr',A/'ptr.rs','impl<T> Own<T>',"impl<'a, T> Copy for Ref"),
 ]
 rows=[]

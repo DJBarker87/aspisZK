@@ -470,6 +470,216 @@ th('''theorem report_panic_keeps_cleanup (e : E) (r d : E → Op S Unit)
  bind (prepend es (unwind p (d e) dp t)) (fun _ => pure 1) := by
  simp only [reportOwned,sequence,scope_panic es s t p (r e) (d e) dp h]''')])
 
+plan('Joint',['PV_DIAG3_Reporting','PV_DIAG3_Capture'],'''/-! Public-law composition over one retained L1 coupling. These are
+conditional transport theorems; no concrete native leaf law is asserted.
+The simulator coins and count function are inputs from the existing L1
+experiment. This file introduces neither an experiment nor fresh coins. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S A B P C W R : Type}
+def Coupled (rel : S → S → Prop) (x y : Execution S A) : Prop :=
+ x.events = y.events ∧ rel x.state y.state ∧ x.exit = y.exit
+/-- One joint carrier retains count and the entire ordered diagnostic trace.
+A marginal count theorem cannot supply the second component. -/
+def jointObservation (count : Nat) (events : List Event) := (count,events)
+def selectedFrames (es : List Event) : List (List Nat) := es.filterMap (fun e =>
+ match e with
+ | .capture pcs => some pcs
+ | .panic p => some p.frames
+ | .crash c => some c.frames
+ | .foreign _ pcs => some pcs
+ | _ => none)
+def deliveredBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .delivered fd bytes => some (fd,bytes) | _ => none)
+def requestedBytes (es : List Event) : List (Nat × Bytes) := es.filterMap (fun e =>
+ match e with | .requested fd bytes => some (fd,bytes) | _ => none)
+''',[
+th('''theorem coupled_prepend (rel : S → S → Prop) (es : List Event)
+ (x y : Execution S A) (h : Coupled rel x y) :
+ Coupled rel (prepend es x) (prepend es y) := by
+ exact ⟨congrArg (fun tail => es++tail) h.1,h.2.1,h.2.2⟩'''),
+th('''theorem coupled_pure (rel : S → S → Prop) (a : A) (s t : S) (h : rel s t) :
+ Coupled rel (pure a s) (pure a t) := ⟨rfl,h,rfl⟩'''),
+th('''theorem coupled_bind (rel : S → S → Prop) (x y : Execution S A)
+ (f g : A → Op S B) (h : Coupled rel x y)
+ (hf : ∀ a s t, rel s t → Coupled rel (f a s) (g a t)) :
+ Coupled rel (bind x f) (bind y g) := by
+ rcases x with ⟨xe,xs,xt⟩
+ rcases y with ⟨ye,ys,yt⟩
+ rcases h with ⟨he,hs,ht⟩
+ dsimp at he hs ht
+ cases he
+ cases ht
+ cases xt with
+ | value a => exact coupled_prepend rel xe (f a xs) (g a ys) (hf a xs ys hs)
+ | panic p => exact ⟨rfl,hs,rfl⟩
+ | abort c => exact ⟨rfl,hs,rfl⟩
+ | diverge => exact ⟨rfl,hs,rfl⟩'''),
+th('''theorem coupled_events (rel : S → S → Prop) (x y : Execution S A)
+ (h : Coupled rel x y) : x.events = y.events := h.1'''),
+th('''theorem joint_from_existing_count (actualCount simulatedCount : Nat)
+ (actual simulated : List Event)
+ (existingL1CountLaw : actualCount = simulatedCount)
+ (diagnosticLaw : actual = simulated) :
+ jointObservation actualCount actual = jointObservation simulatedCount simulated := by
+ cases existingL1CountLaw; cases diagnosticLaw; rfl'''),
+th('''theorem public_joint_function (honest : W → Prop) (pub : W → P)
+ (coins : W → R → C) (actualCount : W → R → Nat) (l1Count : P → C → Nat)
+ (actualEvents : W → R → List Event) (diagnostics : P → C → List Event)
+ (existingL1CountLaw : ∀ w r, honest w → actualCount w r = l1Count (pub w) (coins w r))
+ (leafComposedLaw : ∀ w r, honest w → actualEvents w r = diagnostics (pub w) (coins w r))
+ (w : W) (r : R) (hw : honest w) :
+ jointObservation (actualCount w r) (actualEvents w r) =
+ jointObservation (l1Count (pub w) (coins w r)) (diagnostics (pub w) (coins w r)) :=
+ joint_from_existing_count _ _ _ _ (existingL1CountLaw w r hw) (leafComposedLaw w r hw)'''),
+th('''theorem public_occurrence (a b : List Event) (h : a = b) :
+ (a = []) ↔ (b = []) := by cases h; rfl'''),
+th('''theorem public_emission_count (a b : List Event) (h : a = b) :
+ a.length = b.length := congrArg List.length h'''),
+th('''theorem public_frame_selection (a b : List Event) (h : a = b) :
+ selectedFrames a = selectedFrames b := congrArg selectedFrames h'''),
+th('''theorem public_delivered_content (a b : List Event) (h : a = b) :
+ deliveredBytes a = deliveredBytes b := congrArg deliveredBytes h'''),
+th('''theorem public_requested_content (a b : List Event) (h : a = b) :
+ requestedBytes a = requestedBytes b := congrArg requestedBytes h'''),
+th('''theorem public_same_coupling (diagnostics : P → C → List Event)
+ (p q : P) (c d : C) (hp : p = q) (hc : c = d) :
+ diagnostics p c = diagnostics q d := by cases hp; cases hc; rfl''')])
+
+plan('Syswrite',['PV_DIAG3_Write'],'''/-! Linux std FileDesc::write and cvt. libc::write and errno are external
+influence channels under the final input-free ruling; they remain native operations with their
+full returned state and effects, never fresh independent simulator coins. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {S E : Type}
+structure SysWriteOps (S E : Type) where
+ readLimit : Nat
+ syscall : Nat → Bytes → Nat → Op S Int
+ lastError : Op S E
+ castUsize : Int → Nat
+def cvtWrite (o : SysWriteOps S E) (ret : Int) : Op S (Except E Nat) :=
+ if ret = -1 then sequence o.lastError (fun e => pure (.error e))
+ else pure (.ok (o.castUsize ret))
+def fdWrite (o : SysWriteOps S E) (fd : Nat) (buf : Bytes) : Op S (Except E Nat) :=
+ sequence (o.syscall fd buf (min buf.length o.readLimit)) (cvtWrite o)
+/-- sys::stdio::Stderr uses ManuallyDrop<FileDesc>; it must not close fd2
+when the borrowed temporary ends. No ownership of the descriptor moves. -/
+def rawStderrWrite (o : SysWriteOps S E) (buf : Bytes) : Op S (Except E Nat) :=
+ fdWrite o 2 buf
+''',[
+th('''theorem syscall_error_reads_errno (o : SysWriteOps S E) :
+ cvtWrite o (-1) = sequence o.lastError (fun e => pure (.error e)) := by
+ simp [cvtWrite]'''),
+th('''theorem syscall_success_no_errno (o : SysWriteOps S E) (ret : Int) (h : ret ≠ -1) :
+ cvtWrite o ret = pure (.ok (o.castUsize ret)) := by simp [cvtWrite,h]'''),
+th('''theorem fd_write_uses_limit (o : SysWriteOps S E) (fd : Nat) (buf : Bytes) :
+ fdWrite o fd buf = sequence (o.syscall fd buf (min buf.length o.readLimit)) (cvtWrite o) := rfl'''),
+th('''theorem stderr_descriptor_exact (o : SysWriteOps S E) (buf : Bytes) :
+ rawStderrWrite o buf = fdWrite o 2 buf := rfl'''),
+th('''theorem fd_write_error_prefix (o : SysWriteOps S E) (fd : Nat) (buf : Bytes)
+ (s t : S) (es : List Event)
+ (h : o.syscall fd buf (min buf.length o.readLimit) s = ⟨es,t,.value (-1)⟩) :
+ fdWrite o fd buf s = prepend es
+ (bind (o.lastError t) (fun e => pure (.error e))) := by
+ simp [fdWrite,sequence,h,bind,cvtWrite]'''),
+th('''theorem fd_write_success_prefix (o : SysWriteOps S E) (fd : Nat) (buf : Bytes)
+ (s t : S) (es : List Event) (ret : Int) (hne : ret ≠ -1)
+ (h : o.syscall fd buf (min buf.length o.readLimit) s = ⟨es,t,.value ret⟩) :
+ fdWrite o fd buf s = ⟨es,t,.value (.ok (o.castUsize ret))⟩ := by
+ simp [fdWrite,sequence,h,bind,cvtWrite,hne,prepend,pure]'''),
+th('''theorem fd_write_abort_no_errno (o : SysWriteOps S E) (fd : Nat) (buf : Bytes)
+ (s t : S) (es : List Event) (c : Crash)
+ (h : o.syscall fd buf (min buf.length o.readLimit) s = ⟨es,t,.abort c⟩) :
+ fdWrite o fd buf s = ⟨es,t,.abort c⟩ := by simp [fdWrite,sequence,h,bind]'''),
+th('''theorem fd_write_divergent_prefix (o : SysWriteOps S E) (fd : Nat) (buf : Bytes)
+ (s t : S) (es : List Event)
+ (h : o.syscall fd buf (min buf.length o.readLimit) s = ⟨es,t,.diverge⟩) :
+ fdWrite o fd buf s = ⟨es,t,.diverge⟩ := by simp [fdWrite,sequence,h,bind]''')])
+
+plan('Client',['PV_DIAG3_Joint','R1Z.ProverRwRetryModel'],'''/-! Concrete retry Result, plus native diagnostic continuation. The cached
+retry cohort is checked separately; the full deployed observer cohort is not
+imported when its source associations fail. No claim of installing RunJoin. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+open Aeneas Aeneas.Std
+open R1Z ProverCommitRetry34
+variable {H S P : Type}
+structure ClientHandlers (H S P : Type) where
+ success : Published P → S → Op H Nat
+ report : ProverCommitRetry34.Error → S → Op H Nat
+ runtime : Aeneas.Std.Error → Op H Nat
+ divergence : Op H Nat
+ unexpectedRetry : S → Op H Nat
+def clientAfter (o : ClientHandlers H S P) :
+ Aeneas.Std.Result (Step (Published P) × S) → Op H Nat
+ | .ok (.done p,s) => o.success p s
+ | .ok (.stop e,s) => o.report e s
+ | .ok (.retry,s) => o.unexpectedRetry s
+ | .fail e => o.runtime e
+ | .div => o.divergence
+def clientExecute (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) : Op H Nat := sequence retry (clientAfter o)
+/-- Calling the model does not manufacture the native prefix: that prefix
+and its result association must be supplied by actualRetry. -/
+def modelClient (a : Attempt S P) (n k : Nat) (s : S)
+ (o : ClientHandlers H S P) : Op H Nat := clientAfter o (run a n k s)
+''',[
+th('''theorem client_success_count_retained (o : ClientHandlers H S P) (p : Published P) (s : S) :
+ clientAfter o (.ok (.done p,s)) = o.success p s := rfl'''),
+th('''theorem client_stop_state_retained (o : ClientHandlers H S P)
+ (e : ProverCommitRetry34.Error) (s : S) :
+ clientAfter o (.ok (.stop e,s)) = o.report e s := rfl'''),
+th('''theorem client_runtime_failure_retained (o : ClientHandlers H S P) (e : Aeneas.Std.Error) :
+ clientAfter o (.fail e) = o.runtime e := rfl'''),
+th('''theorem client_divergence_retained (o : ClientHandlers H S P) :
+ clientAfter o .div = o.divergence := rfl'''),
+th('''theorem client_native_abort (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) (s t : H) (es : List Event) (c : Crash)
+ (h : retry s = ⟨es,t,.abort c⟩) :
+ clientExecute retry o s = ⟨es,t,.abort c⟩ := by simp [clientExecute,sequence,h,bind]'''),
+th('''theorem client_native_normal_model (retry : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (o : ClientHandlers H S P) (a : Attempt S P) (n k : Nat) (state : S)
+ (s t : H) (es : List Event)
+ (h : retry s = ⟨es,t,.value (run a n k state)⟩) :
+ clientExecute retry o s = prepend es (modelClient a n k state o t) := by
+ simp only [clientExecute,sequence,h,bind,modelClient]'''),
+th('''theorem client_cap_reports_exhaustion (a : Attempt S P) (k : Nat) (s : S)
+ (o : ClientHandlers H S P) :
+ modelClient a 0 k s o = o.report .AttemptsExhausted s := rfl'''),
+th('''theorem client_joint_trace_transport (rel : H → H → Prop)
+ (left right : Op H (Aeneas.Std.Result (Step (Published P) × S)))
+ (a b : ClientHandlers H S P) (s t : H)
+ (hr : Coupled rel (left s) (right t))
+ (hc : ∀ out u v, rel u v → Coupled rel (clientAfter a out u) (clientAfter b out v)) :
+ Coupled rel (clientExecute left a s) (clientExecute right b t) :=
+ coupled_bind rel (left s) (right t) (clientAfter a) (clientAfter b) hr hc''')])
+
+plan('Observer',['PV_DIAG3_Client'],'''/-! Adapter obligations for the real client observer. A decoder of the
+Result alone must receive retained state sufficient to recover every prior
+effect. These theorems do not change runtime.disclosed, simE or RunJoin. -/
+set_option autoImplicit false
+namespace PV_DIAG3
+variable {H S P O : Type}
+open Aeneas Aeneas.Std
+open R1Z ProverCommitRetry34
+''',[
+th('''theorem complete_observer_transport
+ (decode : Aeneas.Std.Result (Step (Published P) × S) → List Event → O)
+ (decide : O → Bool) (left right : Aeneas.Std.Result (Step (Published P) × S))
+ (before after : List Event) (hr : left = right) (he : before = after) :
+ (decode left before,decide (decode left before)) =
+ (decode right after,decide (decode right after)) := by cases hr; cases he; rfl
+#print axioms complete_observer_transport
+
+/-- This obstruction is an interface theorem, not a native counterexample:
+result agreement cannot recover two unequal emitting prefixes. -/
+theorem result_only_decoder_requires_prefix_agreement
+ (decode : Aeneas.Std.Result (Step (Published P) × S) → List Event)
+ (out : Aeneas.Std.Result (Step (Published P) × S))
+ (a b : List Event) (ha : decode out = a) (hb : decode out = b) :
+ a = b := ha.symm.trans hb
+#print axioms result_only_decoder_requires_prefix_agreement''')])
+
 def write_plans():
  (E/'proof-plans.json').write_text(json.dumps(plans,indent=2)+'\n')
 if __name__=='__main__':
