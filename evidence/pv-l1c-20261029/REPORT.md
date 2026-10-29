@@ -1,6 +1,6 @@
 # L1 native observation inputs — D456
 
-Work in progress. Branch `codex/pv-l1c-20261029`, base `f2caad8ab2`.
+Final partial handoff. Branch `codex/pv-l1c-20261029`, base `f2caad8ab2`.
 The four concrete native producer obligations remain open. New compositional
 model lemmas do not supply native producers or remove endpoint premises.
 
@@ -166,3 +166,91 @@ D456 producer inputs remain open, with the named blockers above. Headline and
 deployment premises removed/added/weakened: **0/0/0**. T stays exactly
 `entropy_law`, `entropy_kernel`, `observation`; the failure event, witness domain,
 observer and simE are unchanged. **Target not yet established.**
+
+
+## Verification and AGENTS section 6 receipts
+
+The exact commands, module targets, source revisions/blobs/SHA256s, dependency
+fingerprints, exit statuses, wall times, peak RSS, swaps and complete axioms
+lines are committed in `receipt-ID.json` and `modules-ID.json`. Original
+per-module compiler output and GNU time logs are `raw-ID.output` and
+`raw-ID.time`, fetched and hash-checked against their original host receipts.
+Final source/object/dependency checks are in `final-validation.json`.
+
+| Attempt | Exact target | Exit | Module wall seconds | Peak RSS bytes | Swaps |
+|---|---|---:|---:|---:|---:|
+| 65497 | `PV_L1C_Statements` | 0 | 1.01 | 2491809792 | 0 |
+| 65498 | `PV_L1C_Axioms` | 0 | 0.97 | 2489696256 | 0 |
+| 65499 | `PV_L1C_FocusedReplay` | 0 | 0.95 | 2491416576 | 0 |
+
+All three final audit targets use exact source revision
+`59fe34f815` (the full hash is recorded in each receipt). `PV_L1C_Statements`
+prints the twenty theorem signatures and the exact four original input types;
+`PV_L1C_Axioms` audits all twenty new theorems and reused native_factorization;
+`PV_L1C_FocusedReplay` imports that final closure once. Accepted theorem axioms
+are subsets of **propext, Classical.choice, Quot.sound** only. Failed compiler
+output containing elaborator-generated sorryAx is preserved and earns no credit.
+
+**13/100 Lean compiler starts: nine pass, four fail; nine final accepted
+modules; twenty new model theorems. Zero native scopes, zero Kani.**
+Attempts are 65400–65409 and reserved audit IDs 65497–65499 only. Each attempt
+compiled one module. Maximum module peak RSS 2,501,394,432 bytes, aggregate
+module-command wall 8.75 seconds, swaps zero. Four small proof failures were
+changed before retry: beta reduction in splice; symbolic tail matching in
+timing reconstruction; then two indicator/Decidable-instance mismatches.
+No memory kill, timeout, unchanged retry, admission refusal, transport outage,
+or ruling-(t) slip occurred. The immediate admission check and launch are in
+the same fail-closed shell command; both allowed:true and zero admission exit
+are required. ID audits found no other-job receipt or sent-table collisions.
+All scopes used 6G/8G/swap0/TasksMax64 and Lean -M7000, one scope at a time.
+No local Lean compile, cold dependency build or package/full frozen regression.
+
+Before compilation h6 verified the selected inherited source/object/dependency
+cohort, exact Lean githash and inherited LEAN_PATH; h4 verified all 5,673 external
+objects. The final required import set has fifteen inherited project modules
+and forty-two recorded edges. The selected source bytes equal their retained
+cohort records; no stale EJR/proof-only exception was needed, so h5'' did not
+license any substitution. No external object was rebuilt, no shared or other
+job source/object was written, and the runjoin branch remained read-only.
+`source-audit.json` is source inspection, not deployed-feature/build evidence;
+therefore no deployed Rust body receives native association credit here.
+
+The exact worktree/branch/base are as requested; sparse paths were added with
+`git sparse-checkout add`. No new file exceeds 20 MB; no binary/object is
+committed. No crates/programs, protected soundness file, native definition,
+wallet/key, other worktree, simulator or observer was changed. No push or merge.
+`COMMITS.txt` records the proof-stage `git log --oneline f2caad8ab2..HEAD`;
+subsequent commits contain only final receipts/reporting.
+
+## Stop and next concrete deliverable
+
+This is a PARTIAL/OPEN handoff under the requested per-input classification,
+not a budget-exhaustion claim. 87 Lean slots and all native slots remain unused.
+The concrete items stop at the four named producer/coupling blockers above;
+more unconditional list lemmas or timing samples cannot supply those missing
+native associations or the pending owner evidence decision. No checked native
+witness-dependent finding was obtained. No claim is made that the D456 target
+has been completed.
+
+Next: construct the complete original-input native retry/body/world event
+producer through `prove_for_proof_accounts`, preserving every earlier callback,
+query/answer and terminal prefix, and connect that producer to the D163 joint
+experiment. The existing Source069/071/020 parked gaps must not be bypassed by
+phase tags or returned-Result projections. Then derive the actual successful
+count/account/proof-length/upload/operation fields on that SAME experiment.
+For timing, obtain the D359 disposition and the scoped native clock/serde/noise
+law; for retained effects, instantiate the existing pv-own/rdea interfaces at
+actual native continuations and prove their source/public provenance. Only
+then can the four exact concrete Props and the full ordered joint law be
+installed and the endpoint premises reconsidered.
+
+`cache-cleanup.json` records post-verification removal of only this job's
+rebuildable `PV_L1C_*` compiler objects/IR companions. Original host sources and
+compiler/time receipts remain; inherited read-only caches and all wallet/key
+material were untouched. `final-validation.json` hashes describe the verified
+objects before that cleanup. No additional compilation was run afterward.
+
+The splice lemmas concern raw event-word concatenation, with the right terminal;
+they do not assert that a program resumes after a failed left stage. Native
+success/failure continuation and world compatibility must be proved by the
+missing producer before applying those algebraic equations to an execution.

@@ -1,0 +1,82 @@
+PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE {I A : Type} (actual : I → List ℕ × List ℕ) (native : I → PV_RJ4IDB.NativeTrace A) :
+  Prop
+PV_RJ4IDB.OpenInputs.L1_TIME_TRACE {I A : Type} (actual : I → List PV_RJ4IDB.Bytes)
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS {I A : Type} (actual : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (native : I → PV_RJ4IDB.NativeTrace A) : Prop
+PV_L1C.counts_append (l r : List PV_RJ4IDB.NativeEvent) :
+  PV_RJ4IDB.nativeCounts (l ++ r) = PV_RJ4IDB.nativeCounts l ++ PV_RJ4IDB.nativeCounts r
+PV_L1C.rejections_append (l r : List PV_RJ4IDB.NativeEvent) :
+  PV_RJ4IDB.nativeRejections (l ++ r) = PV_RJ4IDB.nativeRejections l ++ PV_RJ4IDB.nativeRejections r
+PV_L1C.times_append (l r : List PV_RJ4IDB.NativeEvent) :
+  PV_RJ4IDB.nativeTimes (l ++ r) = PV_RJ4IDB.nativeTimes l ++ PV_RJ4IDB.nativeTimes r
+PV_L1C.oracle_append (l r : List PV_RJ4IDB.NativeEvent) :
+  PV_RJ4IDB.nativeOracle (l ++ r) = PV_RJ4IDB.nativeOracle l ++ PV_RJ4IDB.nativeOracle r
+PV_L1C.side_append (l r : List PV_RJ4IDB.NativeEvent) :
+  PV_RJ4IDB.nativeSide (l ++ r) = PV_RJ4IDB.nativeSide l ++ PV_RJ4IDB.nativeSide r
+PV_L1C.count_splice {I A : Type} (actualL actualR : I → List ℕ × List ℕ) (l r : I → PV_RJ4IDB.NativeTrace A)
+  (hl : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualL l) (hr : PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE (fun i => ((actualL i).1 ++ (actualR i).1, (actualL i).2 ++ (actualR i).2))
+    fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.time_splice {I A : Type} (actualL actualR : I → List PV_RJ4IDB.Bytes) (l r : I → PV_RJ4IDB.NativeTrace A)
+  (hl : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE actualL l) (hr : PV_RJ4IDB.OpenInputs.L1_TIME_TRACE actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_TIME_TRACE (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.oracle_splice {I A : Type} (actualL actualR : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (l r : I → PV_RJ4IDB.NativeTrace A) (hl : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX actualL l)
+  (hr : PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.side_splice {I A : Type} (actualL actualR : I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes))
+  (l r : I → PV_RJ4IDB.NativeTrace A) (hl : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS actualL l)
+  (hr : PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS actualR r) :
+  PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS (fun i => actualL i ++ actualR i) fun i => PV_L1C.splice (l i) (r i)
+PV_L1C.four_inputs_do_not_fix_order :
+  (PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE
+      (fun x => (PV_RJ4IDB.nativeCounts PV_L1C.orderLeft.events, PV_RJ4IDB.nativeRejections PV_L1C.orderLeft.events))
+      fun x => PV_L1C.orderRight) ∧
+    (PV_RJ4IDB.OpenInputs.L1_TIME_TRACE (fun x => PV_RJ4IDB.nativeTimes PV_L1C.orderLeft.events) fun x =>
+        PV_L1C.orderRight) ∧
+      (PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX (fun x => PV_RJ4IDB.nativeOracle PV_L1C.orderLeft.events) fun x =>
+          PV_L1C.orderRight) ∧
+        (PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS (fun x => PV_RJ4IDB.nativeSide PV_L1C.orderLeft.events) fun x =>
+            PV_L1C.orderRight) ∧
+          PV_RJ4IDB.nativeObservation PV_L1C.orderLeft ≠ PV_RJ4IDB.nativeObservation PV_L1C.orderRight
+PV_L1C.duplicate_failure_prefix (a b : PV_RJ4IDB.Bytes) :
+  PV_RJ4IDB.nativeOracle [PV_RJ4IDB.NativeEvent.oracle a b, PV_RJ4IDB.NativeEvent.oracle a b] = [(a, b), (a, b)]
+PV_L1C.terminal_does_not_erase (es : List PV_RJ4IDB.NativeEvent) (t : PV_RJ4IDB.Terminal Unit) :
+  (PV_RJ4IDB.nativeObservation { events := es, terminal := t }).queryPrefix = PV_RJ4IDB.nativeOracle es
+PV_L1C.restore_times (es : List PV_RJ4IDB.NativeEvent) (tail : List PV_RJ4IDB.Bytes) :
+  PV_L1C.restoreTimes (List.map PV_L1C.timingSlot es) (PV_RJ4IDB.nativeTimes es ++ tail) = some (es, tail)
+PV_L1C.timing_key_injective {A : Type} : Function.Injective PV_L1C.timingKey
+PV_L1C.law_map {S T V U : Type} [Fintype S] [Fintype T] (left : S → V) (right : T → V) (f : V → U)
+  (h : R0Z.EqualLaws left right) : R0Z.EqualLaws (fun s => f (left s)) fun t => f (right t)
+PV_L1C.timing_law_iff_tests {S T A : Type} [Fintype S] [Fintype T] (real : S → PV_RJ4IDB.NativeTrace A)
+  (sim : T → PV_RJ4IDB.NativeTrace A) :
+  PV_L1C.JointTimingLaw real sim ↔
+    ∀ (test : (List PV_RJ4IDB.NativeEvent × PV_RJ4IDB.Terminal A) × List PV_RJ4IDB.Bytes → ℚ),
+      (R0Z.mean fun s => test (PV_L1C.timingKey (real s))) = R0Z.mean fun t => test (PV_L1C.timingKey (sim t))
+PV_L1C.full_law_iff_timing_law {S T A : Type} [Fintype S] [Fintype T] (real : S → PV_RJ4IDB.NativeTrace A)
+  (sim : T → PV_RJ4IDB.NativeTrace A) : R0Z.EqualLaws real sim ↔ PV_L1C.JointTimingLaw real sim
+PV_L1C.timing_extension_iff {S A : Type} (real sim : S → PV_RJ4IDB.NativeTrace A) (bad : S → Prop)
+  (context : ∀ (s : S), ¬bad s → (PV_L1C.timingKey (real s)).1 = (PV_L1C.timingKey (sim s)).1) :
+  (∀ (s : S), ¬bad s → real s = sim s) ↔
+    ∀ (s : S), ¬bad s → PV_RJ4IDB.nativeTimes (real s).events = PV_RJ4IDB.nativeTimes (sim s).events
+PV_L1C.same_bad_event_agreement {S A : Type} (real sim : S → PV_RJ4IDB.NativeTrace A) (bad : S → Prop)
+  (context : ∀ (s : S), ¬bad s → (PV_L1C.timingKey (real s)).1 = (PV_L1C.timingKey (sim s)).1)
+  (times : ∀ (s : S), ¬bad s → PV_RJ4IDB.nativeTimes (real s).events = PV_RJ4IDB.nativeTimes (sim s).events) (s : S) :
+  ¬bad s → PV_RJ4IDB.nativeObservation (real s) = PV_RJ4IDB.nativeObservation (sim s)
+PV_L1C.combined_observer_law {S T A : Type} [Fintype S] [Fintype T] (real : S → PV_RJ4IDB.NativeTrace A)
+  (sim : T → PV_RJ4IDB.NativeTrace A) (timing_and_context : PV_L1C.JointTimingLaw real sim) :
+  R0Z.EqualLaws (fun s => PV_RJ4IDB.nativeObservation (real s)) fun t =>
+    PV_RJ4IDB.decoder (PV_RJ4IDB.modelTrace (sim t))
+def PV_L1C.PendingNativeInputs : {I A : Type} →
+  (I → List ℕ × List ℕ) →
+    (I → List PV_RJ4IDB.Bytes) →
+      (I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)) →
+        (I → List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)) → (I → PV_RJ4IDB.NativeTrace A) → Prop :=
+fun {I A} actualCount actualTime actualOracle actualSide native =>
+  PV_RJ4IDB.OpenInputs.L1_COUNT_TRACE actualCount native ∧
+    PV_RJ4IDB.OpenInputs.L1_TIME_TRACE actualTime native ∧
+      PV_RJ4IDB.OpenInputs.L1_ORACLE_PREFIX actualOracle native ∧
+        PV_RJ4IDB.OpenInputs.L1_RETAINED_SIDECHANNELS actualSide native
