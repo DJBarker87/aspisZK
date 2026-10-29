@@ -1,0 +1,51 @@
+START 76041 R1Z.PV_RunJoin_QueryScriptTotal64
+DONE 76041 R1Z.PV_RunJoin_QueryScriptTotal64 exit 1 wall 1.78 RSS 4426326016
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryScriptTotal64.lean:35:30: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (PV_RunJoin_OpeningPrefix63.payload ?opening).length
+in the target expression
+  (↑out).length + (↑(PV_RunJoin_QueryScript63.openingSlice opening)).length = (↑out).length + 608
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+cc1 cc2 : host_commitment.Commitment
+domain1 : PV_RunJoin_QueryFillStep64.Domain cc1
+domain2 : PV_RunJoin_QueryFillStep64.Domain cc2
+s1 s2 : host_commitment.PrivateSalts
+stored1 : cc1.private_salts = some s1
+stored2 : cc2.private_salts = some s2
+size1 : 262144 ≤ alloc.vec.Vec.length s1
+size2 : 262144 ≤ alloc.vec.Vec.length s2
+queries : Std.Array U32 22#usize
+range : PV_RunJoin_PublishSkeleton57.QueryRange queries
+folded : Slice aspis_core.field.wide_exact.WideExact
+size : 262144 ≤ folded.length
+salts : host_commitment.PrivateSalts
+saltSize : 65536 ≤ alloc.vec.Vec.length salts
+i : Fin 22
+out : alloc.vec.Vec U8
+room : out.length + 832 ≤ Usize.max
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+u : aspis_core.r0.domain.FibreIndex
+opening : aspis_core.r0.wire.FibreOpening
+hh : PV_RunJoin_QueryScript63.head cc1 cc2 queries (PV_RunJoin_QueryCell63.index i) = ok (u, opening)
+hu : ↑(u, opening).1 < 262144
+middle : alloc.vec.Vec U8
+hm : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out (PV_RunJoin_QueryScript63.openingSlice opening) = ok middle
+hv : ↑middle = ↑out ++ ↑(PV_RunJoin_QueryScript63.openingSlice opening)
+⊢ (↑out).length + (↑(PV_RunJoin_QueryScript63.openingSlice opening)).length = (↑out).length + 608
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+'R1Z.PV_RunJoin_QueryScriptTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,107 @@
+START 76031 R1Z.PV_RunJoin_QueryFillStep64
+DONE 76031 R1Z.PV_RunJoin_QueryFillStep64 exit 1 wall 1.96 RSS 4435042304
+his : ExternalFuns := selected base heap box ops
+lane : Usize := (↑c.lanes)[↑j]
+wordsBound : ↑j < c.words.length
+word : host_commitment.Word := (↑c.words)[↑j]
+hl : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Usize) c.lanes j = ok (↑c.lanes)[↑j]
+hw : alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) c.words j = ok (↑c.words)[↑j]
+laneBound : ↑lane < 29
+wordSize : 1048576 ≤ PV_RunJoin_QueryWordTotal64.length word
+row : Std.Array aspis_core.field.wide_exact.WideExact 4#usize
+hrow : host_commitment.opening_lane_values word u = ok row
+x0 : aspis_core.field.wide_exact.WideExact
+h0 : row.index_usize 0#usize = ok x0
+x1 : aspis_core.field.wide_exact.WideExact
+h1 : row.index_usize 1#usize = ok x1
+x2 : aspis_core.field.wide_exact.WideExact
+h2 : row.index_usize 2#usize = ok x2
+x3 : aspis_core.field.wide_exact.WideExact
+h3 : row.index_usize 3#usize = ok x3
+v0 : PV_RunJoin_FibreFillThread43.Matrix
+hv0 : put values 0#usize lane x0 = ok v0
+v1 : PV_RunJoin_FibreFillThread43.Matrix
+hv1 : put v0 1#usize lane x1 = ok v1
+v2 : PV_RunJoin_FibreFillThread43.Matrix
+hv2 : put v1 2#usize lane x2 = ok v2
+v3 : PV_RunJoin_FibreFillThread43.Matrix
+hv3 : put v2 3#usize lane x3 = ok v3
+⊢ (do
+      let row ← host_commitment.opening_lane_values (↑c.words)[↑j] u
+      let x0 ← row.index_usize 0#usize
+      let values ← put values 0#usize (↑c.lanes)[↑j] x0
+      let x1 ← row.index_usize 1#usize
+      let values ← put values 1#usize (↑c.lanes)[↑j] x1
+      let x2 ← row.index_usize 2#usize
+      let values ← put values 2#usize (↑c.lanes)[↑j] x2
+      let x3 ← row.index_usize 3#usize
+      put values 3#usize (↑c.lanes)[↑j] x3) =
+    ok v3
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:35: warning: This simp argument is unused:
+  hrow
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:40: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:43: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:46: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:49: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:52: warning: This simp argument is unused:
+  hv0
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:56: warning: This simp argument is unused:
+  hv1
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲2̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:60: warning: This simp argument is unused:
+  hv2
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲3̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:75:64: warning: This simp argument is unused:
+  hv3
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵t̵e̵p̵,̵h̵l̵,̵h̵w̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵h̵r̵o̵w̵,̵h̵0̵,̵h̵1̵,̵h̵2̵,̵h̵3̵,̵h̵v̵0̵,̵h̵v̵1̵,̵h̵v̵2̵,̵h̵v̵3̵]̵[̲s̲t̲e̲p̲,̲ ̲h̲l̲,̲ ̲h̲w̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲r̲o̲w̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲h̲2̲,̲ ̲h̲3̲,̲ ̲h̲v̲0̲,̲ ̲h̲v̲1̲,̲ ̲h̲v̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryFillStep64.Domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

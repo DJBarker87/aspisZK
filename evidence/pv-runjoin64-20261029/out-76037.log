@@ -1,0 +1,39 @@
+START 76037 R1Z.PV_RunJoin_QueryHeadTotal64
+DONE 76037 R1Z.PV_RunJoin_QueryHeadTotal64 exit 1 wall 1.8 RSS 4428115968
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:18:86: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+cc1 cc2 : host_commitment.Commitment
+domain1 : PV_RunJoin_QueryFillStep64.Domain cc1
+domain2 : PV_RunJoin_QueryFillStep64.Domain cc2
+queries : Std.Array U32 22#usize
+range : PV_RunJoin_PublishSkeleton57.QueryRange queries
+i : Fin 22
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+hi : ↑i < (↑queries).length
+q : U32 := (↑queries)[↑i]
+u : UScalar UScalarTy.Usize := UScalar.cast UScalarTy.Usize q
+bound : ↑u < 262144
+read : queries.index_usize (PV_RunJoin_QueryCell63.index i) = ok q
+new :
+  aspis_core.r0.domain.FibreIndex.new (UScalar.cast UScalarTy.Usize q) =
+    ok (core.result.Result.Ok (UScalar.cast UScalarTy.Usize q))
+zero : aspis_core.field.wide_exact.WideExact
+hzero : aspis_core.field.wide_exact.WideExact.ZERO = ok zero
+opening : aspis_core.r0.wire.FibreOpening :=
+  { values := Array.repeat 4#usize (Array.repeat 29#usize zero),
+    paths := Array.repeat 2#usize (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8))) }
+first : aspis_core.r0.wire.FibreOpening
+hfirst :
+  cc1.fill_opening (UScalar.cast UScalarTy.Usize q)
+      { values := Array.repeat 4#usize (Array.repeat 29#usize zero),
+        paths := Array.repeat 2#usize (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8))) } =
+    ok first
+second : aspis_core.r0.wire.FibreOpening
+hsecond : cc2.fill_opening (UScalar.cast UScalarTy.Usize q) first = ok second
+⊢ ok (UScalar.cast UScalarTy.Usize q, second) = ok (u, second)
+'R1Z.PV_RunJoin_QueryHeadTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

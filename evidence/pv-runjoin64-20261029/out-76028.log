@@ -1,0 +1,46 @@
+START 76028 R1Z.PV_RunJoin_QueryMatrixTotal64
+DONE 76028 R1Z.PV_RunJoin_QueryMatrixTotal64 exit 1 wall 3.57 RSS 4428533760
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryMatrixTotal64.lean:18:43: error: Application type mismatch: The argument
+  rowBound
+has type
+  ↑row < 4
+but is expected to have type
+  ↑row < Array.length values
+in the application
+  Array.index_mut_usize_spec values row rowBound
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryMatrixTotal64.lean:19:74: error: Application type mismatch: The argument
+  laneBound
+has type
+  ↑lane < 29
+but is expected to have type
+  ↑lane < a.length
+in the application
+  Array.update_spec a lane x laneBound
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryMatrixTotal64.lean:16:45: error: unsolved goals
+values : PV_RunJoin_FibreFillThread43.Matrix
+row lane : Usize
+x : W
+rowBound : ↑row < 4
+laneBound : ↑lane < 29
+a : Std.Array W 29#usize
+back : Std.Array W 29#usize → Std.Array (Std.Array W 29#usize) 4#usize
+hr : Array.index_mut_usize values row = ok (a, back)
+hpost : WP.uncurry' (fun x back => x = (↑values)[↑row] ∧ back = Std.Array.set values row) (a, back)
+a' : Std.Array W 29#usize
+ha : a.update lane x = ok a'
+hvalue : a' = a.set lane x
+⊢ (let (a, back) := (a, back)
+    do
+    let a' ← a.update lane x
+    ok (back a')) =
+    ok (back a')
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryMatrixTotal64.lean:21:20: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [put, ̲hr,h̵a̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryMatrixTotal64.put' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryMatrixTotal64.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

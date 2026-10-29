@@ -1,0 +1,65 @@
+START 76026 R1Z.PV_RunJoin_QueryLaneTotal64
+DONE 76026 R1Z.PV_RunJoin_QueryLaneTotal64 exit 1 wall 4.39 RSS 4430270464
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:20:2: warning: 'change (4 * u.val + k.val) % UScalar.size .Usize < 1048576' tactic does nothing
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:27:107: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+word : host_commitment.Word
+size : 1048576 ≤ PV_RunJoin_QueryWordTotal64.length word
+u : aspis_core.r0.domain.FibreIndex
+bound : ↑u < 262144
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+at1 : Usize := Usize.wrapping_mul 4#usize u
+h0✝ : ↑at1 < 1048576
+w0 : aspis_core.field.wide_exact.WideExact
+h0 : word.value at1 = ok w0
+w1 : aspis_core.field.wide_exact.WideExact
+h1 : word.value (at1.wrapping_add 1#usize) = ok w1
+w2 : aspis_core.field.wide_exact.WideExact
+h2 : word.value (at1.wrapping_add 2#usize) = ok w2
+w3 : aspis_core.field.wide_exact.WideExact
+h3 : word.value (at1.wrapping_add 3#usize) = ok w3
+⊢ (do
+      let w0 ← word.value (Usize.wrapping_mul 4#usize u)
+      let w1 ← word.value ((Usize.wrapping_mul 4#usize u).wrapping_add 1#usize)
+      let w2 ← word.value ((Usize.wrapping_mul 4#usize u).wrapping_add 2#usize)
+      let w3 ← word.value ((Usize.wrapping_mul 4#usize u).wrapping_add 3#usize)
+      ok (Array.make 4#usize [w0, w1, w2, w3] ⋯)) =
+    ok (Array.make 4#usize [w0, w1, w2, w3] ⋯)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:52:63: warning: This simp argument is unused:
+  h0
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryDomain.fibreGet, ̲lift, ̲bind_tc_ok, ̲h0̵,̵h̵1, ̲h2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:52:66: warning: This simp argument is unused:
+  h1
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryDomain.fibreGet, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1̵,̵h̵2, ̲h3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:52:69: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryDomain.fibreGet, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1, ̲h2̵,̵h̵3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryLaneTotal64.lean:52:72: warning: This simp argument is unused:
+  h3
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryDomain.fibreGet, ̲lift, ̲bind_tc_ok, ̲h0, ̲h1, ̲h2,̵h̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryLaneTotal64.first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryLaneTotal64.offset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryLaneTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

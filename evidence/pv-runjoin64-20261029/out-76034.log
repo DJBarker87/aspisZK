@@ -1,0 +1,71 @@
+START 76034 R1Z.PV_RunJoin_QueryFillTotal64
+DONE 76034 R1Z.PV_RunJoin_QueryFillTotal64 exit 1 wall 2.65 RSS 4410056704
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillTotal64.lean:36:81: error: Tactic `rfl` failed: The left-hand side
+  ↑0#usize + c.lanes.length
+is not definitionally equal to the right-hand side
+  c.lanes.length
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+c : host_commitment.Commitment
+domain : PV_RunJoin_QueryFillStep64.Domain c
+u : aspis_core.r0.domain.FibreIndex
+bound : ↑u < 262144
+initial : PV_RunJoin_FibreFillThread43.Matrix
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+⊢ ↑0#usize + c.lanes.length = c.lanes.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillTotal64.lean:37:81: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.36 = ?m.36
+but is expected to have type
+  ↑0#usize + c.lanes.length = c.lanes.length
+in the application
+  finite base heap box ops c domain u bound c.lanes.length initial 0#usize rfl
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillTotal64.lean:53:93: error: Application type mismatch: The argument
+  hbound
+has type
+  ↑path < 2
+but is expected to have type
+  ↑path < opening.paths.length
+in the application
+  Array.update_spec opening.paths path (Array.repeat 6#usize (Array.repeat 7#usize zero)) hbound
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillTotal64.lean:45:29: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+c : host_commitment.Commitment
+domain : PV_RunJoin_QueryFillStep64.Domain c
+u : aspis_core.r0.domain.FibreIndex
+bound : ↑u < 262144
+opening : aspis_core.r0.wire.FibreOpening
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+matrix : Std.Array (Std.Array aspis_core.field.wide_exact.WideExact 29#usize) 4#usize
+hm : host_commitment.fill_opening_values c u opening.values 0#usize = ok matrix
+path : Usize
+hpath : host_commitment.opening_path c.time = ok path
+hbound : ↑path < 2
+zero : Std.Array (UScalar UScalarTy.U8) 32#usize := Array.repeat 32#usize 0#u8
+paths : Std.Array (Std.Array (Std.Array (Std.Array U8 32#usize) 7#usize) 6#usize) 2#usize
+hpaths : opening.paths.update path (Array.repeat 6#usize (Array.repeat 7#usize zero)) = ok paths
+hpost : paths = opening.paths.set path (Array.repeat 6#usize (Array.repeat 7#usize zero))
+⊢ (do
+      let a4 ← opening.paths.update path (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8)))
+      ok { values := matrix, paths := a4 }) =
+    ok { values := matrix, paths := paths }
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillTotal64.lean:55:73: warning: This simp argument is unused:
+  hpaths
+
+Hint: Omit it from the simp argument list.
+  simp only [host_commitment.Commitment.fill_opening, ̲hm, ̲hpath, ̲bind_tc_ok,̵h̵p̵a̵t̵h̵s̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryFillTotal64.finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillTotal64.values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

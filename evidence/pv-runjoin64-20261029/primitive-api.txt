@@ -1,0 +1,110 @@
+def Aeneas.Std.alloc.vec.Vec.resize : {T : Type} →
+  Aeneas.Std.core.clone.Clone T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → T → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T) :=
+fun {T} cloneInst v new_len value =>
+  if ↑new_len < v.length then Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+  else do
+    let value ← cloneInst.clone value
+    Aeneas.Std.Result.ok ⟨(↑v).resize (↑new_len) value, ⋯⟩
+theorem Aeneas.Std.alloc.vec.Vec.resize_spec : ∀ {T : Type} (cloneInst : Aeneas.Std.core.clone.Clone T)
+  (v : Aeneas.Std.alloc.vec.Vec T) (new_len : Aeneas.Std.Usize) (value : T),
+  cloneInst.clone value = Aeneas.Std.Result.ok value →
+    Aeneas.Std.WP.spec (Aeneas.Std.alloc.vec.Vec.resize cloneInst v new_len value) fun nv =>
+      ↑nv = (↑v).resize (↑new_len) value :=
+fun {T} cloneInst v new_len value hClone =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => Aeneas.Std.WP.spec _a fun nv => ↑nv = (↑v).resize (↑new_len) value)
+        (Aeneas.Std.alloc.vec.Vec.resize.eq_1 cloneInst v new_len value)))
+    (Decidable.casesOn ((↑new_len).decLt v.length)
+      (fun h =>
+        Eq.mpr (id (congrFun' (congrArg Aeneas.Std.WP.spec (if_neg h)) fun nv => ↑nv = (↑v).resize (↑new_len) value))
+          (of_eq_true
+            (Eq.trans
+              (Eq.trans
+                (congrFun'
+                  (congrArg Aeneas.Std.WP.spec
+                    (Eq.trans
+                      (congrFun' (congrArg bind hClone) fun value =>
+                        Aeneas.Std.Result.ok
+                          ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩)
+                      (Aeneas.Std.bind_tc_ok value fun y =>
+                        Aeneas.Std.Result.ok
+                          ⟨(↑v).resize (↑new_len) y, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len y⟩)))
+                  fun nv => ↑nv = (↑v).resize (↑new_len) value)
+                (Aeneas.Std.WP.spec_ok._simp_1
+                  ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩))
+              (eq_self ((↑v).resize (↑new_len) value)))))
+      fun h =>
+      Eq.mpr (id (congrFun' (congrArg Aeneas.Std.WP.spec (if_pos h)) fun nv => ↑nv = (↑v).resize (↑new_len) value))
+        (of_eq_true
+          (Eq.trans
+            (Aeneas.Std.WP.spec_ok._simp_1
+              ⟨(↑v).resize (↑new_len) value, Aeneas.Std.alloc.vec.Vec.resize._proof_1 v new_len value⟩)
+            (eq_self ((↑v).resize (↑new_len) value)))))
+theorem Aeneas.Std.alloc.vec.Vec.index_mut_usize_spec.{u} : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length),
+  Aeneas.Std.WP.spec (v.index_mut_usize i) (Aeneas.Std.WP.uncurry' fun x y => x = (↑v)[↑i] ∧ y = v.set i) :=
+fun {α} v i hbound =>
+  id
+    (match Aeneas.Std.WP.spec_imp_exists (Aeneas.Std.alloc.vec.Vec.index_usize_spec v i hbound) with
+    | Exists.intro x h =>
+      of_eq_true
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg Aeneas.Std.WP.spec
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | Aeneas.Std.Result.ok x => Aeneas.Std.Result.ok (x, v.set i)
+                    | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+                    | Aeneas.Std.Result.div => Aeneas.Std.Result.div)
+                  (Eq.trans h.1 (congrArg Aeneas.Std.Result.ok h.2))))
+              (Aeneas.Std.WP.uncurry' fun x y => x = (↑v)[↑i] ∧ y = v.set i))
+            (Aeneas.Std.WP.spec_ok._simp_1 ((↑v)[↑i], v.set i)))
+          (Eq.trans (Aeneas.Std.WP.uncurry'_pair (↑v)[↑i] (v.set i) fun x y => x = (↑v)[↑i] ∧ y = v.set i)
+            (Eq.trans (congr (congrArg And (eq_self (↑v)[↑i])) (eq_self (v.set i))) (and_self True)))))
+theorem Aeneas.Std.alloc.vec.Vec.index_usize_spec.{u} : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α)
+  (i : Aeneas.Std.Usize) (hbound : ↑i < v.length), Aeneas.Std.WP.spec (v.index_usize i) fun x => x = (↑v)[↑i] :=
+fun {α} v i hbound =>
+  id
+    (Eq.mpr
+      (id
+        (congrFun'
+          (congrArg Aeneas.Std.WP.spec
+            (congrArg
+              (fun x =>
+                match x with
+                | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+                | some x => Aeneas.Std.Result.ok x)
+              (Aeneas.Std.alloc.vec.Vec.getElem?_Nat_eq v ↑i)))
+          fun x => x = (↑v)[↑i]))
+      (of_eq_true
+        (Eq.trans
+          (Eq.trans
+            (congrFun'
+              (congrArg Aeneas.Std.WP.spec
+                (congrArg
+                  (fun x =>
+                    match x with
+                    | none => Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+                    | some x => Aeneas.Std.Result.ok x)
+                  (getElem?_pos (↑v) (↑i) hbound)))
+              fun x => x = (↑v)[↑i])
+            (Aeneas.Std.WP.spec_ok._simp_1 (↑v)[↑i]))
+          (eq_self (↑v)[↑i]))))
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then Aeneas.Std.Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+@[irreducible] def Aeneas.Std.alloc.vec.Vec.push.{u} : {α : Type u} →
+  Aeneas.Std.alloc.vec.Vec α → α → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec α) :=
+fun {α} v x =>
+  let nlen := (↑v).length + 1;
+  if h : (decide (nlen ≤ Aeneas.Std.U32.max) || decide (nlen ≤ Aeneas.Std.Usize.max)) = true then
+    Aeneas.Std.Result.ok ⟨(↑v).concat x, ⋯⟩
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.maximumSizeExceeded
+'Aeneas.Std.alloc.vec.Vec.resize' depends on axioms: [propext, Quot.sound]
+'Aeneas.Std.alloc.vec.Vec.resize_spec' depends on axioms: [propext, Quot.sound]

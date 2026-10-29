@@ -1,0 +1,209 @@
+START 76039 R1Z.PV_RunJoin_QueryTailTotal64
+DONE 76039 R1Z.PV_RunJoin_QueryTailTotal64 exit 1 wall 1.78 RSS 4427620352
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:20:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a).length
+in the target expression
+  (↑out).length + (↑a.to_slice).length = (↑out).length + ↑n
+
+n : Usize
+out : alloc.vec.Vec U8
+a : Std.Array U8 n
+room : out.length + ↑n ≤ Usize.max
+next : alloc.vec.Vec U8
+hr : alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out a.to_slice = ok next
+hv : ↑next = ↑out ++ ↑a.to_slice
+⊢ (↑out).length + (↑a.to_slice).length = (↑out).length + ↑n
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    out
+  has type
+    alloc.vec.Vec U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:37:48: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  f ≥ 0
+  f - g ≥ 224
+  f - g - h ≤ -1
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑out.length
+ h := ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:38:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≥ 0
+  f ≥ 0
+  f - g - h ≤ -1
+  f - g + h ≥ 224
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑out1.length
+ h := ↑↑32#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:41:52: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  h ≥ 0
+  g ≥ 0
+  g - h ≤ 0
+  2*g - h ≤ 0
+  f ≥ 0
+  f - h ≤ 127
+  f + 2*g - h ≥ 224
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑↑32#usize
+ h := ↑out2.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:48:71: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 128
+  g ≥ 0
+  g - h ≤ -128
+  2*g - h ≤ -128
+  f ≥ 0
+  f + 2*g - h ≥ 96
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  d - i ≤ 0
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑↑32#usize
+ h := ↑out3.length
+ i := ↑↑u / ↑↑4#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:49:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 128
+  g ≥ 0
+  g - h ≤ -128
+  2*g - h ≤ -128
+  f ≥ 0
+  f - g - h ≤ -1
+  f + 2*g - h ≥ 96
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑↑32#usize
+ h := ↑out3.length
+ i := ↑↑u / ↑↑4#usize
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:50:21: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  i ≥ 0
+  h ≥ 0
+  g ≥ 128
+  -31 ≤ g - i ≤ 0
+  2*g - i ≥ 128
+  3*g - 2*i ≥ 128
+  f ≥ 0
+  f - 3*g + 2*i ≥ 96
+  0 ≤ e ≤ 262143
+  d ≥ 65536
+  c ≥ 262144
+  b ≥ 262144
+  a ≥ 262144
+where
+ a := ↑(alloc.vec.Vec.length s1)
+ b := ↑(alloc.vec.Vec.length s2)
+ c := ↑folded.length
+ d := ↑(alloc.vec.Vec.length salts)
+ e := ↑↑u
+ f := ↑Usize.max
+ g := ↑out3.length
+ h := ↑↑u / ↑↑4#usize
+ i := ↑out4.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:53:2: error: 'change' tactic failed, pattern
+  (do
+      let quarter ← u / 4#usize
+      let salt ← salts.get quarter
+      alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out3 salt.to_slice) =
+    ok out4
+is not definitionally equal to target
+  (do
+      let salt1 ← ofOption (some salt1) Error.panic
+      let out1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out salt1.to_slice
+      let salt2 ← ofOption (some salt2) Error.panic
+      let out2 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out1 salt2.to_slice
+      let out3 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out2 encoded.deref
+      let quarter ← u / 4#usize
+      let salt ← salts.get quarter
+      let out4 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out3 salt.to_slice
+      ok out4) =
+    ok out4
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:52:56: warning: This simp argument is unused:
+  ho1
+
+Hint: Omit it from the simp argument list.
+  simp only [h1, ̲h2, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲ho1̵,̵h̵o̵2, ̲he, ̲ho3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:52:60: warning: This simp argument is unused:
+  ho2
+
+Hint: Omit it from the simp argument list.
+  simp only [h1, ̲h2, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲ho1, ̲ho̵2̵,̵h̵e, ̲ho3]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryTailTotal64.lean:52:67: warning: This simp argument is unused:
+  ho3
+
+Hint: Omit it from the simp argument list.
+  simp only [h1, ̲h2, ̲core.option.Option.unwrap, ̲bind_tc_ok, ̲ho1, ̲ho2, ̲he,̵h̵o̵3̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryTailTotal64.append' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_RunJoin_QueryTailTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

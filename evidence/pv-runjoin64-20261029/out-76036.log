@@ -1,0 +1,74 @@
+START 76036 R1Z.PV_RunJoin_QueryHeadTotal64
+DONE 76036 R1Z.PV_RunJoin_QueryHeadTotal64 exit 1 wall 3.31 RSS 4417613824
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:29:60: error: Application type mismatch: The argument
+  i.isLt
+has type
+  ↑i < 22
+but is expected to have type
+  ↑?m.79 < ↑22#usize
+in the application
+  ProverCommitArrayIndex25.array_index_usize_ok queries ?m.79 i.isLt
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:18:86: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+cc1 cc2 : host_commitment.Commitment
+domain1 : PV_RunJoin_QueryFillStep64.Domain cc1
+domain2 : PV_RunJoin_QueryFillStep64.Domain cc2
+queries : Std.Array U32 22#usize
+range : PV_RunJoin_PublishSkeleton57.QueryRange queries
+i : Fin 22
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+hi : ↑i < (↑queries).length
+q : U32 := (↑queries)[↑i]
+u : UScalar UScalarTy.Usize := UScalar.cast UScalarTy.Usize q
+bound : ↑u < 262144
+read : queries.index_usize (PV_RunJoin_QueryCell63.index i) = ok q
+new : aspis_core.r0.domain.FibreIndex.new u = ok (core.result.Result.Ok u)
+zero : aspis_core.field.wide_exact.WideExact
+hzero : aspis_core.field.wide_exact.WideExact.ZERO = ok zero
+opening : aspis_core.r0.wire.FibreOpening :=
+  { values := Array.repeat 4#usize (Array.repeat 29#usize zero),
+    paths := Array.repeat 2#usize (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8))) }
+first : aspis_core.r0.wire.FibreOpening
+hfirst : cc1.fill_opening u opening = ok first
+second : aspis_core.r0.wire.FibreOpening
+hsecond : cc2.fill_opening u first = ok second
+⊢ (do
+      let r ← aspis_core.r0.domain.FibreIndex.new (UScalar.cast UScalarTy.Usize q)
+      let u ←
+        match r with
+          | core.result.Result.Ok v => ok v
+          | core.result.Result.Err a => fail Error.panic
+      let opening ←
+        cc1.fill_opening u
+            { values := Array.repeat 4#usize (Array.repeat 29#usize zero),
+              paths := Array.repeat 2#usize (Array.repeat 6#usize (Array.repeat 7#usize (Array.repeat 32#usize 0#u8))) }
+      let opening ← cc2.fill_opening u opening
+      ok (u, opening)) =
+    ok (u, second)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:42:59: warning: This simp argument is unused:
+  new
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_QueryScript63.head, ̲read, ̲bind_tc_ok,n̵e̵w̵,̵ ̲unwrapSlice, ̲hzero, ̲hfirst, ̲hsecond]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:42:81: warning: This simp argument is unused:
+  hfirst
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_QueryScript63.head, ̲read, ̲bind_tc_ok, ̲new, ̲unwrapSlice, ̲hzero, ̲hf̵i̵r̵st̵,̵h̵s̵econd]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryHeadTotal64.lean:42:88: warning: This simp argument is unused:
+  hsecond
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_QueryScript63.head, ̲read, ̲bind_tc_ok, ̲new, ̲unwrapSlice, ̲hzero, ̲hfirst,̵h̵s̵e̵c̵o̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryHeadTotal64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

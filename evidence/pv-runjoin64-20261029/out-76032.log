@@ -1,0 +1,64 @@
+START 76032 R1Z.PV_RunJoin_QueryFillStep64
+DONE 76032 R1Z.PV_RunJoin_QueryFillStep64 exit 1 wall 2.52 RSS 4432527360
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:33:0: warning: automatically included section variable(s) unused in theorem `R1Z.PV_RunJoin_QueryFillStep64.pair_bind`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:42:72: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+c : host_commitment.Commitment
+u : aspis_core.r0.domain.FibreIndex
+values : PV_RunJoin_FibreFillThread43.Matrix
+j : Usize
+⊢ (do
+      let lane ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Usize) c.lanes j
+      let w ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) c.words j
+      let row ← host_commitment.opening_lane_values w u
+      let we ← row.index_usize 0#usize
+      let (a, index_mut_back) ← Array.index_mut_usize values 0#usize
+      let a1 ← a.update lane we
+      let we1 ← row.index_usize 1#usize
+      let (a2, index_mut_back1) ← (index_mut_back a1).index_mut_usize 1#usize
+      let a3 ← a2.update lane we1
+      let we2 ← row.index_usize 2#usize
+      let (a4, index_mut_back2) ← (index_mut_back1 a3).index_mut_usize 2#usize
+      let a5 ← a4.update lane we2
+      let we3 ← row.index_usize 3#usize
+      let (a6, index_mut_back3) ← (index_mut_back2 a5).index_mut_usize 3#usize
+      let a7 ← a6.update lane we3
+      ok (index_mut_back3 a7)) =
+    do
+    let lane ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice Usize) c.lanes j
+    let word ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice host_commitment.Word) c.words j
+    let row ← host_commitment.opening_lane_values word u
+    let x0 ← row.index_usize 0#usize
+    let x ← Array.index_mut_usize values 0#usize
+    let x_1 ← x.1.update lane x0
+    let x1 ← row.index_usize 1#usize
+    let x ← (x.2 x_1).index_mut_usize 1#usize
+    let x_2 ← x.1.update lane x1
+    let x2 ← row.index_usize 2#usize
+    let x ← (x.2 x_2).index_mut_usize 2#usize
+    let x_3 ← x.1.update lane x2
+    let x3 ← row.index_usize 3#usize
+    let (a, back) ← (x.2 x_3).index_mut_usize 3#usize
+    let a' ← a.update lane x3
+    ok (back a')
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_QueryFillStep64.lean:43:100: warning: This simp argument is unused:
+  pair_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_FibreFillThread43.step, ̲step, ̲put, ̲bind_assoc_eq, ̲bind_tc_ok,
+  ̲ ̲ ̲ ̲ ̲Aeneas.Std.uncurry,̵p̵a̵i̵r̵_̵b̵i̵n̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_QueryFillStep64.Domain' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.pair_bind' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.factor' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_QueryFillStep64.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
