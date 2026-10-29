@@ -1,3 +1,8 @@
+> D508 follow-up: the authoritative specialised list is now
+> [`../pv-evh2-20261029/LINKS.md`](../pv-evh2-20261029/LINKS.md), at the
+> partial `PV_EVH_RuntimeBinding.rtDeployed`. Its missing native DATA selections
+> and lack of an actual joint witness are explicit; no live-runtime credit.
+
 # Adopted event-retaining privacy links — D502 / D478
 
 This map supersedes `evidence/pv-top-20261029/LINKS.md` for the privacy target.
