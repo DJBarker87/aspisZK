@@ -36,6 +36,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
             (@aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 (types base) (selected base heap box incoming))) := by
   dsimp only
   let incoming := @PV_DL_EncoderSelected.selected (types base) (@PV_RunJoin_GammaPowers44.inputs (types base) ops)
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box incoming
   obtain ⟨coeff,kw,hs,hv,hl,hr⟩ := PV_RunJoin_PrepareClaimsActual50.complete base heap box
     (@PV_RunJoin_GammaPowers44.inputs (types base) ops) hash backend s small
   refine ⟨coeff,kw,hs,hv,hl,?_⟩
