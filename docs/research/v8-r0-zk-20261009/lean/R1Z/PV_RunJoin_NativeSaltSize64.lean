@@ -1,4 +1,5 @@
 import R1Z.PV_RunJoin_NativeResultMap64
+import R1Z.PV_RunJoin_LayoutConstants64
 import R1Z.PV_RunJoin_Packets63
 import R1Z.PV_RunJoin_SaltLoopSize64
 set_option autoImplicit false
@@ -7,9 +8,7 @@ namespace R1Z.PV_RunJoin_NativeSaltSize64
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual63 PV_RunJoin_ResultPost41
 attribute [local irreducible] opsNative PV_RunJoin_WeightInstalled46.selected
 
-theorem count : aspis_core.r0.FIBRE_COUNT=ok 262144#usize := by
-  unfold aspis_core.r0.FIBRE_COUNT
-  scalar_tac
+theorem count : aspis_core.r0.FIBRE_COUNT=ok 262144#usize := PV_RunJoin_LayoutConstants64.fibres
 
 theorem source {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))

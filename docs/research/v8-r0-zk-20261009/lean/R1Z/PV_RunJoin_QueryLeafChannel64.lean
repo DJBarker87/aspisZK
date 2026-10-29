@@ -58,7 +58,7 @@ theorem visited (words : Slice host_commitment.Word) (lanes : Slice Usize)
     subst other
     exact hread
   have h : P target.val := PV_RunJoin_LoopVisit64.visited step (fun a => a.2.2.val) P
-    lanes.length target.val progress bound (target.val-i.val) (bytes,at1,i) (by omega) out success
+    lanes.length target.val progress bound (target.val-i.val) (bytes,at1,i) (by change i.val+(target.val-i.val)=target.val;omega) out success
   exact h target rfl
 
 #print axioms Read

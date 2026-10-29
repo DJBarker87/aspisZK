@@ -7,13 +7,11 @@ variable [ExternalTypes] [ExternalFuns]
 
 theorem push {T : Type} (v : alloc.vec.Vec T) (x : T) :
     Post (fun next => next.length=v.length+1) (alloc.vec.Vec.push v x) := by
-  by_cases room : v.length+1≤Usize.max
-  · obtain ⟨next,hr,hv⟩ := PV_RunJoin_Vector44.push v x room
-    rw [hr]
-    change next.val.length=v.val.length+1
-    rw [hv,List.length_append,List.length_singleton]
-  · simp only [alloc.vec.Vec.push,dif_neg room]
-    trivial
+  unfold alloc.vec.Vec.push
+  split
+  · change (v.val.concat x).length=v.val.length+1
+    simp only [List.length_concat]
+  · trivial
 
 theorem step (reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
     (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
