@@ -1,0 +1,26 @@
+import PV_DIAG3_Joint
+/-! Complete event/terminal control laws. Each callee contract includes its
+state, emitted prefix and abnormal terminal. These are own-1 control laws;
+they do not supply witness independence of the concrete callees. V370 stays P. -/
+set_option autoImplicit false
+namespace PV_DIAG6
+open PV_DIAG3
+variable {S A B E : Type}
+theorem unwind_joint (rel : S → S → Prop) (p : Panic)
+ (d e : Op S Unit) (f g : Panic → Panic → Op S A) (s t : S)
+ (hd : Coupled rel (d s) (e t))
+ (hf : ∀ q u v, rel u v → Coupled rel (f p q u) (g p q v)) :
+ Coupled rel (unwind p d f s) (unwind p e g t) := by
+ rcases hds : d s with ⟨es,u,ex⟩
+ rcases hes : e t with ⟨fs,v,ey⟩
+ rw [hds,hes] at hd
+ rcases hd with ⟨he,hu,hx⟩
+ dsimp at he hu hx
+ cases he; cases hx
+ cases ex with
+ | value a => cases a; exact ⟨rfl,hu,rfl⟩
+ | panic q => exact coupled_prepend rel es _ _ (hf q u v hu)
+ | abort c => exact ⟨rfl,hu,rfl⟩
+ | diverge => exact ⟨rfl,hu,rfl⟩
+#print axioms unwind_joint
+end PV_DIAG6
