@@ -24,12 +24,15 @@ for dotted in meta['compile_order']:
  module=dotted.replace('.','/');pin=records[module];authority=pin['authority'];rec=pin['recorded'];o=pin['object_record'];s=pin['source_record']
  current=obj(module)
  if current and current.resolve()==(D/'lean-objects'/(module+'.olean')).resolve():
+  assert sha(D/'lean-sources'/(module+'.lean'))==authority['sha256'],('existing private source changed',module)
   existing[module]=dict(path=str(current),sha256=sha(current));continue
  if not rec or not o or not s:
   rejected[module]=['missing original successful source/object/import receipt'];continue
  assert rec['source_sha256']==authority['sha256']==o['source_sha256']==s['source_sha256'],module
  source=D/'h6-staged-sources'/(module+'.lean');assert sha(source)==authority['sha256'],module
- original=Path(o['object_path']);assert sha(original)==o['object_sha256'],module
+ original=Path(o['object_path'])
+ if not original.exists() or sha(original)!=o['object_sha256']:
+  rejected[module]=[dict(reason='recorded cache object missing or changed',recorded=o['object_sha256'],current=sha(original) if original.exists() else None)];continue
  imports=re.findall(r'^import\s+(\S+)',source.read_text(),re.M)
  assert set(x.replace('.','/') for x in imports)==set(s['imports']),module
  mismatches=[];checked={}
