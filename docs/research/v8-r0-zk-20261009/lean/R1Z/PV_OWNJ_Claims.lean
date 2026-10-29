@@ -32,8 +32,9 @@ theorem evaluate_wrong (p c : List Q) (h : c.length ≠ 1024) : evaluate p c = n
 theorem lanes_first_wrong (p : List Q) (before after : List (List Q)) (bad : List Q)
  (h : bad.length ≠ 1024) : lanes p (before ++ bad::after) = none := by
  induction before with
- | nil => simp only [List.nil_append,lanes,evaluate_wrong p bad h,Option.bind_none]
-   rfl
+ | nil =>
+  simp only [List.nil_append,lanes,evaluate_wrong p bad h]
+  rfl
  | cons c cs ih =>
   simp only [List.cons_append,lanes,ih]
   cases evaluate p c <;> rfl
