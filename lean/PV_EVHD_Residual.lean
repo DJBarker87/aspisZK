@@ -51,6 +51,33 @@ def Link_PublicEnvironment {N E C : Type} [Fintype N] [Fintype E] [Fintype C]
     (actual : N → E × C) : Prop :=
   R0Z.EqualLaws actual (fun p : E × C => p)
 
+/-- EXPERIMENTAL: native option-B signal law must be witness independent for
+all equal-public witnesses. This marginal law alone never proves prefix privacy. -/
+def Link_PublicSignal {W P N E Signal : Type} [Fintype N] [Fintype E]
+    (pub : W → P) (p : P) (actual : W → N → Signal) (signal : E → Signal) : Prop :=
+  ∀ w, pub w = p → R0Z.EqualLaws (actual w) signal
+
+/-- EXPERIMENTAL: progressive completion cannot rewrite events already shown
+to the observer. Source association and the native query schedule are still
+required; this necessary prefix law does not supply those facts. -/
+def Link_CausalPrefix {E V L A : Type}
+    (complete : E → V → List L → NativeTrace A) : Prop :=
+  ∀ e v log suffix, List.IsPrefix (complete e v log).events
+    (complete e v (log ++ suffix)).events
+
+/-- EXPERIMENTAL: if an exact surrogate theorem is available but the actual
+joint trace differs, its additional term is explicit. No <2^-100 conclusion
+is transferred without a separate bound for deltaTrace. -/
+theorem headline_plus_trace {S I : Type} [Fintype S] [Fintype I]
+    (actual exact : S → ℚ) (ideal : I → ℚ) (B deltaTrace : ℚ)
+    (trace_link : |mean actual - mean exact| ≤ deltaTrace)
+    (headline : |mean exact - mean ideal| ≤ B) :
+    |mean actual - mean ideal| ≤ B + deltaTrace := by
+  have h := (abs_sub_le (mean actual) (mean exact) (mean ideal)).trans
+    (add_le_add trace_link headline)
+  simpa only [add_comm] using h
+
 #print axioms with_residual
 #print axioms exact_links_zero
+#print axioms headline_plus_trace
 end PV_EVHD_Residual
