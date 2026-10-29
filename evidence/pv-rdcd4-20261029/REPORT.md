@@ -7,7 +7,7 @@ were read; no crates/programs/dictionary/simulator/observer/T changes.
 | Row | Current disposition |
 |---|---|
 | [V201](rows/V201.md) | RESTORED / B at original source/Result and CodeField boundary. |
-| [V220](rows/V220.md) | SUSPENDED pending the root/forwarding kernel targets and coherent closure; all other new helpers pass. |
+| [V220](rows/V220.md) | RESTORED / B at exact source/Result boundary; source_reference and coherent68-module closure pass. |
 | [V237](rows/V237.md) | SUSPENDED pending current-cohort value proof and singleton byte-default execution; source influence inspection prepared. |
 | V236 | SUSPENDED: complete BlockBuffer.digest_blocks/copy/index transport remains open. |
 | V233 | SUSPENDED: raw-parts/offset/transmute and GenericArray byte-block alias/representation transport remains open. |
@@ -26,8 +26,8 @@ cgroup scan race was recorded before any compiler started. The latest
 contains actual attempts, failures, source revisions, targets, wall times, peak RSS,
 swap and printed axioms. No Kani has run; failed Lean sources were edited before retry.
 
-The13 concrete V220 source/reference modules and modern range wrappers are being
-closed under own-1. The V237 own-2 principle applies only to the fixed byte-array
+The13 concrete V220 source/reference modules and modern range wrappers pass
+under own-1; the original checker remains unrecovered. The V237 own-2 principle applies only to the fixed byte-array
 helper; Core::default remains the original complete Result parameter. Prior
 finite native tests are not promoted to unbounded proofs or rerun unchanged.
 
