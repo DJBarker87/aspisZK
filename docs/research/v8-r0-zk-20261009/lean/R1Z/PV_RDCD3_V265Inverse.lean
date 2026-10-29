@@ -42,7 +42,10 @@ def inverse (x : M) : Result M := do
   aspis_core.field.M31.mul a x
 
 theorem source (x : M) : aspis_core.field.M31.inv x = inverse x := by
-  simp only [aspis_core.field.M31.inv,inverse,square_count]
+  have h2 : (2#usize).val = 2 := by scalar_tac
+  have h4 : (4#usize).val = 4 := by scalar_tac
+  have h8 : (8#usize).val = 8 := by scalar_tac
+  simp only [aspis_core.field.M31.inv,inverse,square_count,h2,h4,h8]
 
 /-- Statically dispatch the exact existing backend. No pointer comparison,
 Option<fn>, or arbitrary inverse hypothesis appears in this statement. -/

@@ -112,3 +112,5 @@ failure/divergence. Whole V265 is still suspended until its full cone passes.
 60647 passes explicit four-byte little-endian primitive binding:exit0, wall1.08s, peak2,631,556KiB, swap0; standard axioms. Integer layout/transmute remain the existing compiler semantic boundary; no machine-level or observer claim.
 
 60648–60651 rebuild retained circle types, functions, control and native source theorem in the own pinned cache. All pass; receipts retain exact timing/RSS/source/axioms. No changed source or alternate compiler/library cohort was substituted.
+
+60652 failed only in the final inverse-chain equality on residual usize literal projections2/4/8. Generic square_loop and square_count elaborate; the failed module is wholly uncredited. Changed proof adds explicit scalar literal-value facts. Receipt:exit1,wall1.18s,peak2,629,796KiB,swap0.
