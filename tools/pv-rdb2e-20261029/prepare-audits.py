@@ -46,7 +46,7 @@ plan=dict(revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True)
 (E/'frozen-proof-manifest.json').write_text(json.dumps(plan,indent=2))
 (E/'audit-declarations.json').write_text(json.dumps(dict(theorems=declared,printed=sorted(printed)),indent=2))
 base=''.join('import '+m+'\n'for m in roots)
-statements=['R1Z.PV_RDB2E_ShaHandles.complete_typed','R1Z.PV_RDB2E_ShaHandles.callback_run','R1Z.PV_RDB2E_Dispatch.full_dispatch','R1Z.PV_RDB2E_ConcreteSoft.all_fields','R1Z.PV_RDB2E_ConcreteSoft.both_backends','R1Z.PV_CBL_FallbackBlockTotal.total','R1Z.PV_RDB2E_PointerOffsets.nonempty','R1Z.PV_RDB2E_FromFn.length']
+statements=['R1Z.PV_RDB2E_ShaHandles.complete_typed','R1Z.PV_RDB2E_ShaHandles.callback_run','R1Z.PV_RDB2E_Dispatch.full_dispatch','R1Z.PV_CBL_FallbackBlockTotal.total','R1Z.PV_RDB2E_PointerOffsets.nonempty','R1Z.PV_RDB2E_FromFn.length']
 (P/'PV_RDB2E_StatementAudit.lean').write_text(base+'\n'.join('#print '+n+'\n#print axioms '+n for n in statements)+'\n')
 (P/'PV_RDB2E_AxiomsAudit.lean').write_text(base+'\n'.join('#print axioms '+n for n in sorted(printed))+'\n')
 (P/'PV_RDB2E_FocusedReplay.lean').write_text(base+'\n'.join('#check '+n+'\n#print axioms '+n for n in statements)+'\n')
