@@ -1,10 +1,30 @@
-# PV_DIAG2 — D428 diagnostic effect refinement
+# PV_DIAG2 — D428 diagnostic-effect refinement
 
-Work in progress. Branch `codex/pv-diag2-20261029`; base `9dab53f366`.
-The L1 attempt-count law is reused, not re-raised as a finding. Side channels,
-errors, panic, OOM and frames remain in scope. T is unchanged.
+**The global D348 diagnostic obligation remains UNRESOLVED.** No checked same-public honest-witness counterexample was obtained. This deliverable adds a Result-preserving retry instrumentation, explicit process/reporting continuations, fixed-variant text evidence and a replacement argument for the two unbound MIR inputs. It does not establish the privacy target.
 
-## Scope and evidence
+Branch `codex/pv-diag2-20261029`, base `9dab53f366`, exact sparse worktree `/Users/dominic/ZK/.worktrees/pv-diag`. Receipts and sources are in this directory; private host workspace `/home/dombarker/project-offloads/codex-pv-diag2-20261029/`. No changes under `crates/` or `programs/`, no simulator/observer changes, no wallet/key operations. T remains exactly `entropy_law`, `entropy_kernel`, `observation`. Diagnostic occurrence, timing, allocation, failures, panic/OOM and frames remain in scope.
 
-New model and native binding under development. No release-wide conclusion
-or premise removal is claimed by this draft.
+## What the new proofs establish
+
+* `PV_DIAG2_Effects.lean` distinguishes normal exit status, panic payload/frames, allocation size/frames, divergence and diagnostic effects. `stderr` denotes a **requested formatted write**, not guaranteed delivery. `report_disabled` gives the fixed requested string for a selected unit variant with capture disabled; `success_report_silent` excludes only the returned-error reporting arm after a successful main result. Neither theorem assumes every honest run succeeds.
+* `PV_DIAG2_Retry.lean` consumes **`ProverCommitRetry34.run` and `ProverRwRetryModel.retry`**, rather than their old `published` projection. `erase_run` proves equality of the full Result projection. `source_retry_result` installs the actual emitted retry theorem with an explicit per-attempt Result equation. Proof/audit, successful attempt count, callback/store state, error variants, backend failure and divergence remain represented. Entry/rejection records retain the failed/exhausted attempt history; they are administrative control records, not invented stdout/stderr writes. `rejected_effects` retains every earlier callee effect even if the suffix fails. `fatal_effects_retained` retains the prefix on backend failure. `mask_exhaustion_rejected` concerns the actual emitted enum comparison.
+* `PV_DIAG2_Exit.lean` adds the selected unit-error reporting continuation. `final_source_result` still consumes the source retry equation. `success_no_error_report` and `stopped_report` separate success and error reporting; they do not erase earlier effects, post-proof filesystem errors or success stdout.
+* `PV_DIAG2_Process.lean` explicitly accepts the **whole execution** of reporting, success output and runtime-failure continuations. `reporting_oom_retained` and `reporting_panic_retained` preserve a failure inside formatting/backtrace/reporting itself, its frames, the earlier prefix and the original prover Result. `normal_report_request` is explicitly the normal reporting subcase. These continuation arguments are data requiring native refinement, not extra trust fields or proofs of publicness.
+
+**Boundary:** this is a proved instrumentation/refinement of the existing Result model and a source/compiled-structure binding of its local controller/reporting path. A complete deployed native effect refinement is still missing. The per-attempt effect list and process continuations must be supplied from actual execution, including implicit drops, foreign calls and allocation/runtime hooks. They are not set to empty. Aeneas failure is not identified with a particular native panic/OOM. Divergence is represented with its recorded finite prefix; a complete law for all finite prefixes of an emitting divergent native execution remains required. No new Aeneas mutable-borrow body is credited as a native source law under ruling (n).
+
+## Deployed native binding
+
+`candidate-source-pins.json` and `candidate-host-check.json` associate **551 project inputs** with base `9dab53f366` and the inherited frozen host source; every hash matches, including all inputs previously pinned at `cae2a45ae2`. The inherited client identity remains `fa888460b2c37bee087afd6289cd55219fe2732ea1e1c75011147ed15c260348`. No client rebuild or source change is claimed.
+
+The target remains `devnet_spend`, rustc **1.94.1**, features **`r1p-check,aspis-r1-cost-probe/ct-host-prover`**, release opt-level 3, overflow/debug assertions off, panic unwind. The inherited `resolved-build-units.json` in `../pv-diag-20261029/` retains each crate's resolved features/profile. Native probes reuse the exact deployed anyhow and prover rlibs and record their hashes. No extractor or Kani was used; no substitution for the (x') extractor/toolchain boundary is made.
+
+`native-binding.json` pins six complete local source bodies and the std Termination source. The actual chain is:
+
+`RealR1_client::prove_for_proof_accounts` → `prove_masked_retrying_with(S2)` → `retry_attempt` → returned `verifier::Error` → `plan::err` at the prover `.map_err(err)?` → `main`'s propagated anyhow error → `Termination::report` → attempted stderr `Error: {err:?}\n` and exit 1.
+
+Only **body** `Rejected` retries. An entropy callback error propagates immediately, even if an arbitrary model callback returned `Rejected`; the concrete client maps entropy failures to `Entropy`. `ActivePole` and mask exhaustion map to unit `Rejected`; P_R1 rejection also has that unit value. At the cap the controller returns unit `AttemptsExhausted`. No controller-level print/log/anyhow call occurs on an individual rejection. **That direct-source fact does not establish silence of its callees or implicit destructors.**
+
+`debug-unit-binding.json` retains the complete deployed MIR `verifier::Error::fmt` body, its source/hash and all eleven literal choices. There is a discriminant switch and a literal `Formatter::write_str`; no witness field is formatted. `error-exit-validation.json` records **60 finite native controls**, all eleven actual variants plus success under five environment settings. They exercise the exact `plan::err` body, actual Error Debug, anyhow and std Termination; every exit/stdout/error-prefix/backtrace-enable check passes. They are not honest proving runs and do not prove the native occurrence/frame law.
+
+Backtrace enablement and reuse rules are inherited unchanged from the prior report: anyhow 1.0.104 `default,std`, ordinary Debug in Termination, `RUST_LIB_BACKTRACE` precedence for anyhow capture; the panic/OOM hook separately consults `RUST_BACKTRACE`. Fixed variant text does not determine frame selection or symbolization. The process model retains the selected PCs and rendered suffix rather than replacing them with an enable bit.

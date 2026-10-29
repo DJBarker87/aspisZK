@@ -1,0 +1,26 @@
+import PV_DIAG2_Process
+#print axioms PV_DIAG2.message_public
+#print axioms PV_DIAG2.report_disabled
+#print axioms PV_DIAG2.disabled_frames_irrelevant
+#print axioms PV_DIAG2.success_report_silent
+#print axioms PV_DIAG2.error_report_exact
+#print axioms PV_DIAG2.bind_panic
+#print axioms PV_DIAG2.bind_oom
+#print axioms PV_DIAG2.prior_panic
+#print axioms PV_DIAG2.erase_run
+#print axioms PV_DIAG2.rejected_effects
+#print axioms PV_DIAG2.cap_no_direct_effects
+#print axioms PV_DIAG2.fatal_effects_retained
+#print axioms PV_DIAG2.source_retry_result
+#print axioms PV_DIAG2.mask_exhaustion_rejected
+#print axioms PV_DIAG2.success_no_error_report
+#print axioms PV_DIAG2.stopped_report
+#print axioms PV_DIAG2.stopped_frames_disabled
+#print axioms PV_DIAG2.exhaustion_requested_text
+#print axioms PV_DIAG2.finish_result
+#print axioms PV_DIAG2.final_source_result
+#print axioms PV_DIAG2.process_retains_result
+#print axioms PV_DIAG2.reporting_oom_retained
+#print axioms PV_DIAG2.reporting_panic_retained
+#print axioms PV_DIAG2.normal_report_request
+#print axioms R1Z.ProverRwRetryModel.retry

@@ -31,6 +31,9 @@ def visit(m):
   r=records[m];pin=plan['modules'].get(m);s=Path(r['_source_path']);p=C/'objects'/(m.replace('.','/')+'.olean')
   out=dict(module=m,path=str(p),sha256=sha(p) if p.is_file() else None,source_sha256=sha(s) if s.is_file() else None,authority='h6 recorded rjdec',record_source_sha256=r['source_sha256'],expected=r['object_sha256'],record_dependencies=r['dependencies'])
   if (pin and out['source_sha256']!=pin['sha256']) or (not pin and m not in graph) or out['source_sha256']!=r['source_sha256'] or out['sha256']!=r['object_sha256']:bad.append(out)
+  if pin is None and m in graph:
+   gp=Path(graph[m]['path'])
+   if not gp.is_file() or sha(gp)!=out['sha256']:bad.append(dict(module=m,reason='h7 graph object mismatch',path=str(gp),actual=out))
   for dep,old in r['dependencies'].items():
    got=visit(dep)
    if got.get('sha256')!=old['sha256']:bad.append(dict(module=m,dependency=dep,recorded=old,actual=got))
