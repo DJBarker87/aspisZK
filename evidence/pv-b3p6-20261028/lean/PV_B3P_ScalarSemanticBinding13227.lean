@@ -58,13 +58,14 @@ theorem withdrawal_public_binding13 (base : ExternalTypes) : PV_B3P_Link_withdra
 
 /-- The two source match arms, interpreted with the exact new extracted callees.
 Loan/return correspondence is structural own-1 evidence, not an extractor output. -/
-def semantic_source13 (base : ExternalTypes) (p : Public base) : Result SP := do
+def semantic_source13 (base : ExternalTypes) (p : Public base) : Result SP :=
   letI : ExternalTypes := PV_B3P_Install227.Types base
   let source := match p with
     | .Transfer public1 transition => PV_B3P_ScalarSemantic13.reference_terminal.r0.Public.Transfer (toPrivate public1) (toLate base transition)
     | .Withdrawal public1 transition => PV_B3P_ScalarSemantic13.reference_terminal.r0.Public.Withdrawal (toWithdrawal public1) (toLate base transition)
-  let result ← PV_B3P_ScalarSemantic13.reference_terminal.r0.Public.semantic source
-  .ok (fromSemantic result)
+  do
+    let result ← PV_B3P_ScalarSemantic13.reference_terminal.r0.Public.semantic source
+    .ok (fromSemantic result)
 
 theorem semantic_source_binding13 (base : ExternalTypes) (p : Public base) :
     semantic_source13 base p = .ok (PV_B3P_Carrier227.semantic base p) := by
