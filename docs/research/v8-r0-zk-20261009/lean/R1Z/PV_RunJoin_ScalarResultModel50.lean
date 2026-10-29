@@ -37,7 +37,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
   rw [PV_RunJoin_ResultMap50.bind]
   apply congrArg (Aeneas.Std.bind _)
   funext unit
-  simp only [mapResult,PV_RunJoin_ScalarRaw50.roundtrip,PV_RunJoin_SamplerValueModel50.complete]
+  simp only [mapResult,PV_B2_E_OrdinaryOriginal.mapResult,PV_RunJoin_ScalarRaw50.roundtrip,PV_RunJoin_SamplerValueModel50.complete]
 #print axioms retained
 #print axioms complete
 end R1Z.PV_RunJoin_ScalarResultModel50
