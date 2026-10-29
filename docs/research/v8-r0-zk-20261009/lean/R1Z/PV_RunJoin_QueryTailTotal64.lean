@@ -17,7 +17,9 @@ theorem append {n : Usize} (out : alloc.vec.Vec U8) (a : Array U8 n)
     (by simpa only [Array.to_slice,Slice.length,a.property] using room)
   refine ⟨next,hr,?_⟩
   change next.val.length=out.val.length+n.val
-  rw [hv,List.length_append,a.property]
+  rw [hv,List.length_append]
+  change out.val.length+a.val.length=out.val.length+n.val
+  rw [a.property]
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (cc1 cc2 : host_commitment.Commitment)
@@ -34,9 +36,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   letI : ExternalFuns := selected base heap box ops
   obtain ⟨salt1,h1⟩ := PV_RunJoin_QuerySaltTotal64.complete base heap box ops cc1 s1 stored1 size1 u bound
   obtain ⟨salt2,h2⟩ := PV_RunJoin_QuerySaltTotal64.complete base heap box ops cc2 s2 stored2 size2 u bound
-  obtain ⟨out1,ho1,hl1⟩ := append out salt1 (by omega)
+  obtain ⟨out1,ho1,hl1⟩ := append out salt1 (by change out.length+32≤Usize.max;omega)
   change out1.length=out.length+32 at hl1
-  obtain ⟨out2,ho2,hl2⟩ := append out1 salt2 (by omega)
+  obtain ⟨out2,ho2,hl2⟩ := append out1 salt2 (by change out1.length+32≤Usize.max;omega)
   change out2.length=out1.length+32 at hl2
   obtain ⟨encoded,he,hencoded⟩ := PV_RunJoin_QueryEncodedTotal64.complete base heap box ops folded size u bound
   obtain ⟨out3,ho3,hv3⟩ := PV_RunJoin_ByteAppend38.append out2 (alloc.vec.Vec.deref encoded)
@@ -49,15 +51,11 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨quarter,hquarter,hval⟩ := UScalar.div_spec u (y:=4#usize) (by decide)
   have hv : quarter.val=u.val/4 := hval
   obtain ⟨salt4,h4⟩ := PV_RunJoin_QueryAccess64.salt salts quarter (by omega)
-  obtain ⟨out4,ho4,hl4⟩ := append out3 salt4 (by omega)
+  obtain ⟨out4,ho4,hl4⟩ := append out3 salt4 (by change out3.length+32≤Usize.max;omega)
   change out4.length=out3.length+32 at hl4
   refine ⟨out4,?_,by omega⟩
-  unfold PV_RunJoin_QueryTail63.run
-  simp only [h1,h2,core.option.Option.unwrap,bind_tc_ok,ho1,ho2,he,ho3]
-  change (do let quarter ← u/4#usize
-             let salt ← host_commitment.PrivateSalts.get salts quarter
-             alloc.vec.Vec.extend_from_slice core.clone.CloneU8 out3 (Array.to_slice salt))=ok out4
-  simp only [hquarter,h4,bind_tc_ok,ho4]
+  simp only [PV_RunJoin_QueryTail63.run,h1,h2,core.option.Option.unwrap,ofOption,
+    bind_tc_ok,ho1,ho2,he,ho3,hquarter,h4,ho4]
 
 #print axioms append
 #print axioms complete
