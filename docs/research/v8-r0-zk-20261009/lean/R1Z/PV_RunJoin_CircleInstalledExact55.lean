@@ -20,7 +20,7 @@ theorem canonical (p : Point) (hx : PV_RunJoin_CircleNeutralShape53.QC p.1)
     (hy : PV_RunJoin_CircleNeutralShape53.QC p.2) :
     Canonical (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_CircleNeutralSelected52.point p).x) ∧
     Canonical (PV_RunJoin_SemanticScalar50.raw (PV_RunJoin_CircleNeutralSelected52.point p).y) :=
-  ⟨⟨hx.1.1,hx.1.2,hx.2.1,hx.2.2⟩,⟨hy.1.1,hy.1.2,hy.2.1,hy.2.2⟩⟩
+  ⟨hx,hy⟩
 
 theorem source (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (b : Array U8 32#usize) (row : aspis_core.r0_transcript.CircleRow) :
