@@ -1,0 +1,62 @@
+START 65400 PV_L1C_Prefix
+DONE 65400 PV_L1C_Prefix exit 1 wall 0.2 RSS 490020864
+/home/dombarker/project-offloads/codex-pv-l1c-20261029/sources/PV_L1C_Prefix.lean:37:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  actualL i
+in the target expression
+  (fun i => ((actualL i).fst ++ (actualR i).fst, (actualL i).snd ++ (actualR i).snd)) i =
+    (nativeCounts ((fun i => splice (l i) (r i)) i).events, nativeRejections ((fun i => splice (l i) (r i)) i).events)
+
+I A : Type
+actualL actualR : I → List Nat × List Nat
+l r : I → NativeTrace A
+hl : OpenInputs.L1_COUNT_TRACE actualL l
+hr : OpenInputs.L1_COUNT_TRACE actualR r
+i : I
+⊢ (fun i => ((actualL i).fst ++ (actualR i).fst, (actualL i).snd ++ (actualR i).snd)) i =
+    (nativeCounts ((fun i => splice (l i) (r i)) i).events, nativeRejections ((fun i => splice (l i) (r i)) i).events)
+/home/dombarker/project-offloads/codex-pv-l1c-20261029/sources/PV_L1C_Prefix.lean:46:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  actualL i
+in the target expression
+  (fun i => actualL i ++ actualR i) i = nativeTimes ((fun i => splice (l i) (r i)) i).events
+
+I A : Type
+actualL actualR : I → List Bytes
+l r : I → NativeTrace A
+hl : OpenInputs.L1_TIME_TRACE actualL l
+hr : OpenInputs.L1_TIME_TRACE actualR r
+i : I
+⊢ (fun i => actualL i ++ actualR i) i = nativeTimes ((fun i => splice (l i) (r i)) i).events
+/home/dombarker/project-offloads/codex-pv-l1c-20261029/sources/PV_L1C_Prefix.lean:56:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  actualL i
+in the target expression
+  (fun i => actualL i ++ actualR i) i = nativeOracle ((fun i => splice (l i) (r i)) i).events
+
+I A : Type
+actualL actualR : I → List (Bytes × Bytes)
+l r : I → NativeTrace A
+hl : OpenInputs.L1_ORACLE_PREFIX actualL l
+hr : OpenInputs.L1_ORACLE_PREFIX actualR r
+i : I
+⊢ (fun i => actualL i ++ actualR i) i = nativeOracle ((fun i => splice (l i) (r i)) i).events
+/home/dombarker/project-offloads/codex-pv-l1c-20261029/sources/PV_L1C_Prefix.lean:66:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  actualL i
+in the target expression
+  (fun i => actualL i ++ actualR i) i = nativeSide ((fun i => splice (l i) (r i)) i).events
+
+I A : Type
+actualL actualR : I → List (Bytes × Bytes)
+l r : I → NativeTrace A
+hl : OpenInputs.L1_RETAINED_SIDECHANNELS actualL l
+hr : OpenInputs.L1_RETAINED_SIDECHANNELS actualR r
+i : I
+⊢ (fun i => actualL i ++ actualR i) i = nativeSide ((fun i => splice (l i) (r i)) i).events
+'PV_L1C.counts_append' depends on axioms: [propext]
+'PV_L1C.rejections_append' depends on axioms: [propext]
+'PV_L1C.times_append' depends on axioms: [propext]
+'PV_L1C.oracle_append' depends on axioms: [propext]
+'PV_L1C.side_append' depends on axioms: [propext]
+'PV_L1C.count_splice' depends on axioms: [propext, sorryAx]
+'PV_L1C.time_splice' depends on axioms: [propext, sorryAx]
+'PV_L1C.oracle_splice' depends on axioms: [propext, sorryAx]
+'PV_L1C.side_splice' depends on axioms: [propext, sorryAx]
+

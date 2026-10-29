@@ -34,6 +34,7 @@ theorem count_splice (actualL actualR : I → List Nat × List Nat)
   (fun i => ((actualL i).1 ++ (actualR i).1,(actualL i).2 ++ (actualR i).2))
   (fun i => splice (l i) (r i)) := by
  intro i
+ dsimp only [splice]
  rw [hl i,hr i]
  exact Prod.ext (counts_append _ _).symm (rejections_append _ _).symm
 
@@ -43,6 +44,7 @@ theorem time_splice (actualL actualR : I → List Bytes) (l r : I → NativeTrac
  OpenInputs.L1_TIME_TRACE (fun i => actualL i ++ actualR i)
   (fun i => splice (l i) (r i)) := by
  intro i
+ dsimp only [splice]
  rw [hl i,hr i]
  exact (times_append _ _).symm
 
@@ -53,6 +55,7 @@ theorem oracle_splice (actualL actualR : I → List (Bytes × Bytes))
  OpenInputs.L1_ORACLE_PREFIX (fun i => actualL i ++ actualR i)
   (fun i => splice (l i) (r i)) := by
  intro i
+ dsimp only [splice]
  rw [hl i,hr i]
  exact (oracle_append _ _).symm
 
@@ -63,6 +66,7 @@ theorem side_splice (actualL actualR : I → List (Bytes × Bytes))
  OpenInputs.L1_RETAINED_SIDECHANNELS (fun i => actualL i ++ actualR i)
   (fun i => splice (l i) (r i)) := by
  intro i
+ dsimp only [splice]
  rw [hl i,hr i]
  exact (side_append _ _).symm
 
