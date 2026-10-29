@@ -17,7 +17,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (hlen : commitments.messages.length=29) :
     Post (fun pair => match pair.1 with | .Err _ => True | .Ok _ => pair.2.messages.length=29)
       (@host_semantic.build_with_helper_mode (types base) (selected base heap box ops)
-        H T1 prover.Backend D helperInst prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments public1 c1 d g padding helper commitments hash variant) := by
+        H T1 prover.Backend D helperInst
+          (@prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments (types base) (selected base heap box ops)) public1 c1 d g padding helper commitments hash variant) := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := selected base heap box ops
   unfold host_semantic.build_with_helper_mode
