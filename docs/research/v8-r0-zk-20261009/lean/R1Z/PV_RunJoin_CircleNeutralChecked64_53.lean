@@ -7,8 +7,8 @@ open PV_RunJoin_CircleNeutralWord53
 theorem add (a b : U64) (h : a.val+b.val < 18446744073709551616) :
     a+b = ok (U64.wrapping_add a b) := by
   apply PV_B2_C_MachineArithmetic.u64_add_exact
-  rw [U64.max]
-  exact Nat.le_of_lt_succ h
+  norm_num only [U64.max,U64.numBits,UScalarTy.numBits]
+  omega
 
 theorem sub (a b : U64) (h : b.val ≤ a.val) :
     a-b = ok (U64.wrapping_sub a b) := by
@@ -22,7 +22,7 @@ theorem sub (a b : U64) (h : b.val ≤ a.val) :
 theorem mul (a b : U64) (h : a.val*b.val < 18446744073709551616) :
     a*b = ok (U64.wrapping_mul a b) := by
   obtain ⟨z,hz,hv⟩ := WP.spec_imp_exists (U64.mul_spec (x := a) (y := b)
-    (by rw [U64.max]; exact Nat.le_of_lt_succ h))
+    (by norm_num only [U64.max,U64.numBits,UScalarTy.numBits];omega))
   have he : z = U64.wrapping_mul a b := by
     apply UScalar.eq_of_val_eq
     rw [mul64 _ _ h]
