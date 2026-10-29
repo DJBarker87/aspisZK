@@ -32,3 +32,11 @@ REPORT.md and LINKS.md explicitly say every whole link is OPEN, no endpoint
 premise removed, and the first15 instantiated-native-theorem requirement was
 NOT met. Run validate-final.py only after all100 receipts exist; it launches no
 compiler. Commit the final evidence/report. Do not rerun the final manifest.
+
+FINAL: all39 replay rows67958–67996 and audits67997–67999 passed.
+validate-final.py verified all100 receipts, all standard axioms, zero swaps,
+all fresh object hashes equal preflight, no unchanged-failed resubmission,
+and no crates/programs changes. FINAL-VALIDATION.json records the result.
+Stop:100/100 Lean attempts exhausted. Native1/30, Kani0/6. No more Lean
+attempts are authorized in this ID block. No endpoint premise removed; all
+whole links remain OPEN. Do not restart or repeat the final manifest.

@@ -96,6 +96,10 @@ leak was found; this is not a no-leak theorem.
 
 ## Validation and failure replacement
 
+Budget exhausted: **100/100 Lean attempts** (58 focused, including 18 failures;
+39 final replay targets; three audits), **1/30 native scopes**, **0/6 Kani**.
+All 42 final targets pass. Peak accepted RSS 4,201,500 KiB; all-attempt peak
+7,168,684 KiB (the replaced gamma failure); total swaps zero.
 Final numbers are in `FINAL-VALIDATION.json`; all individual receipts record
 target, source revision/SHA, exit, wall time, RSS, swaps and printed axioms.
 The launch guard SHA is recorded there. It refuses an unchanged source SHA
