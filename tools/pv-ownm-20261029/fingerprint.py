@@ -6,8 +6,9 @@ rows={}
 for p in sorted(E.glob('lean-*/receipt.json')):
  j=json.loads(p.read_text())
  if j['exit']==0:
-  b=subprocess.check_output(['git','show','HEAD:'+j['source_path']]);assert hashlib.sha256(b).hexdigest()==j['source_sha256'],j['module']
   rows[j['module']]=j
+for j in rows.values():
+ b=subprocess.check_output(['git','show','HEAD:'+j['source_path']]);assert hashlib.sha256(b).hexdigest()==j['source_sha256'],j['module']
 old=json.loads((R/'evidence/pv-ownc-20261029/final-fingerprint.json').read_text())['rows']
 external=json.loads((R/'evidence/pv-world-20261028/external-object-manifest.json').read_text())
 code='''from pathlib import Path
