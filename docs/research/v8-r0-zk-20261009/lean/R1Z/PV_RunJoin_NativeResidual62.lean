@@ -34,9 +34,9 @@ def late (base : ExternalTypes)
     ⟨p.candidate_afterstate.next_pair_index,p.candidate_afterstate.next_root,
       p.candidate_afterstate.next_frontier⟩⟩
 
-def residual (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @ExternalFuns (types base) :=
+def beforeCircle (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @ExternalFuns (types base) :=
   letI : ExternalTypes := types base
-  PV_RunJoin_CircleNeutralSelected52.selected {ops with
+  {ops with
     op78 := @ProverRwP7FibreSource.fibre,
     op79 := (PV_DL_EncoderSelected.selected ops).op79,
     op117 := (PV_B3_Install117.selected ops).op117,
@@ -52,6 +52,9 @@ def residual (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @Extern
     op247 := PV_TraceValueSource.trace.value,
     op254 := (PV_B1_ActualInstall.selected ops).op254}
 
+def residual (base : ExternalTypes) (ops : @ExternalFuns (types base)) : @ExternalFuns (types base) :=
+  @PV_RunJoin_CircleNeutralSelected52.selected (types base) (beforeCircle base ops)
+
 /-- Existing installations composed onto the residual dictionary. -/
 def opsNative (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
@@ -61,6 +64,7 @@ def opsNative (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
 #print axioms baseTypes
 #print axioms types
 #print axioms late
+#print axioms beforeCircle
 #print axioms residual
 #print axioms opsNative
 end R1Z.PV_RunJoin_NativeResidual62
