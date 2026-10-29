@@ -38,13 +38,10 @@ def run {E S : Type} (step : (List E × E) → S → Result S) :
 theorem done {E S : Type} (step : (List E × E) → S → Result S)
     (s : Iter E) (fuel : Nat) (acc : S) (h : (next s).1=none) :
     loop step (fuel+1) s acc=ok acc := by
-  rw [loop]
   cases hn : next s with
   | mk entry rest =>
-    rw [hn] at h
-    cases entry with
-    | none => rfl
-    | some e => cases h
+    have he : entry=none := by simpa only [hn] using h
+    rw [loop,hn,he]
 
 theorem advance {E S : Type} (step : (List E × E) → S → Result S)
     (s s' : Iter E) (e : List E × E) (fuel : Nat) (acc : S)

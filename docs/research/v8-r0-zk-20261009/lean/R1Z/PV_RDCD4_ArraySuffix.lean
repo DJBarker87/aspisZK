@@ -24,7 +24,7 @@ theorem done {E : Type} (s : State E) (h : s.start=s.stop)
   · exact next_done s h
 
 theorem new_remaining {E : Type} (xs : List E) : remaining (new xs)=xs := by
-  exact List.drop_zero
+  simp only [remaining,new,List.drop_zero]
 
 /-- Native unchecked_add cannot overflow in the deployed 512-entry iterator. -/
 theorem increment_bound (start stop limit : Nat) (h : start<stop)
