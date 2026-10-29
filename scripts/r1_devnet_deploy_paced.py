@@ -14,6 +14,13 @@ def account(key):return rpc(URL,'getAccountInfo',[key,{'encoding':'base64','comm
 def signed(ixs,keys,bh):
     q={'keys':keys,'blockhash':bh,'instructions':ixs};return json.loads(subprocess.check_output([SIGNER],input=json.dumps(q).encode()))
 def ix(program,accounts,data):return {'program':program,'accounts':accounts,'data':data.hex()}
+def record_tx(signature):
+    for _ in range(10):
+        tx=rpc(URL,'getTransaction',[signature,{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}])
+        if tx is not None:
+            write('tx-'+signature,tx);return tx
+        time.sleep(2)
+    raise RuntimeError('finalized transaction metadata unavailable: '+signature)
 def wait(batch,allow_error=False):
     begin=time.monotonic()
     while True:
@@ -30,7 +37,7 @@ def wait(batch,allow_error=False):
     for e,s in zip(batch,status):
         e.update(s)
         if s['confirmationStatus']=='expired_unlanded':continue
-        tx=rpc(URL,'getTransaction',[e['signature'],{'encoding':'json','commitment':'finalized','maxSupportedTransactionVersion':1}]);write('tx-'+e['signature'],tx)
+        record_tx(e['signature'])
         if s['err'] and not allow_error:raise RuntimeError(s)
 def submit(name,ixs,keys,bh):
     t=time.monotonic()
@@ -85,6 +92,7 @@ def deploy_role(role):
     cmd=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','deploy',spec['path'],'--program-id',str(KEYS/(role+'.json')),'--buffer',str(path),'--max-len',str(len(elf)),'--use-rpc','--max-sign-attempts','2'];write(role+'-deploy-command',cmd)
     with open(O/(role+'-deploy.json'),'w') as stdout,open(O/(role+'-deploy-stderr.txt'),'w') as stderr:status=subprocess.run(cmd,stdout=stdout,stderr=stderr).returncode
     if status:raise RuntimeError(f'{role} deploy CLI exit {status}')
+    deployed=json.loads((O/(role+'-deploy.json')).read_text());record_tx(deployed['signature'])
     pa=account(program);assert pa['value']['owner']==LOADER and pa['value']['executable'];raw=base64.b64decode(pa['value']['data'][0]);assert int.from_bytes(raw[:4],'little')==2
     # Programdata address encoded in the linked Program account; use the CLI public account output for its base58 form.
     show=subprocess.check_output([str(CLI/'solana'),'--keypair',PAYER_KEY,'--url',URL,'--output','json','program','show',program],text=True);show=json.loads(show);write(role+'-program',show)
@@ -92,8 +100,12 @@ def deploy_role(role):
     write(role+'-programdata',{'address':pd,'lamports':pda['value']['lamports'],'bytes':len(payload)+45,'elf_sha256':hashlib.sha256(payload).hexdigest(),'context_slot':pda['context']['slot']})
     if role in ('verifier','registry'):
         # V2 certifies exactly an immutable loader deployment; required by this release.
+        before={row['signature'] for row in rpc(URL,'getSignaturesForAddress',[pd,{'commitment':'finalized','limit':20}])}
         final=[str(CLI/'solana'),'--url',URL,'--keypair',PAYER_KEY,'--commitment','finalized','--output','json','program','set-upgrade-authority',program,'--final']
         with open(O/(role+'-immutable.json'),'w') as stdout,open(O/(role+'-immutable-stderr.txt'),'w') as stderr:subprocess.run(final,stdout=stdout,stderr=stderr,check=True)
+        changes=[row for row in rpc(URL,'getSignaturesForAddress',[pd,{'commitment':'finalized','limit':20}]) if row['signature'] not in before]
+        assert len(changes)==1 and changes[0]['err'] is None,'ambiguous finalization history; retain keys and inspect'
+        write(role+'-immutable-signatures',changes);record_tx(changes[0]['signature'])
         finaldata=base64.b64decode(account(pd)['value']['data'][0]);assert finaldata[12]==0 and finaldata[45:]==elf
     write(role+'-rent-ledger',[loader_rent(program,account(program)['value'],C['payer'],role in ('verifier','registry')),loader_rent(pd,account(pd)['value'],C['payer'])]);write(role+'-complete',{'program':program,'buffer':buf,'wall_seconds':time.monotonic()-started,'key_retained':True});print(role+' deployment verified',flush=True)
 
@@ -114,7 +126,8 @@ for role in roles:
                 if isinstance(value,dict) and value.get('signature'):records.append(value)
             for first in range(0,len(records),256):wait(records[first:first+256],allow_error=True)
             write(role+'-failure-refund',close_failed_buffer(CLI,URL,PAYER_KEY,C['payer'],buffer,account,lambda n,v:write(role+'-'+n,v)))
-            write(role+'-refund-signatures',rpc(URL,'getSignaturesForAddress',[buffer,{'commitment':'finalized','limit':10}]))
+            refunds=rpc(URL,'getSignaturesForAddress',[buffer,{'commitment':'finalized','limit':10}]);write(role+'-refund-signatures',refunds)
+            for row in refunds:record_tx(row['signature'])
         raise
     finally:
         command=[str(CLI/'solana'),'--keypair',PAYER_KEY,'--url',URL,'--output','json','program','show','--buffers','--buffer-authority',C['payer']]
