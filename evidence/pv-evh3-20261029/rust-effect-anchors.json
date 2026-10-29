@@ -1,0 +1,805 @@
+{
+  "scope": "Direct textual anchors only, macro/dependency/internal callees are not certified covered.",
+  "anchors": [
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 14,
+      "kind": "stdin",
+      "source": " let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;",
+      "planned_event": "side",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 15,
+      "kind": "stdout",
+      "source": " if q.get(\"action\").is_some(){println!(\"{}\",plan::run(&q)?);return Ok(())}",
+      "planned_event": "printed",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 16,
+      "kind": "file",
+      "source": " let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 16,
+      "kind": "panic",
+      "source": " let keys:Vec<Keypair>=q[\"keys\"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 17,
+      "kind": "panic",
+      "source": " let ixs:Vec<Instruction>=q[\"instructions\"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i[\"program\"].as_str().unwrap()).unwrap(),accounts:i[\"accounts\"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i[\"data\"].as_str().unwrap())}).collect();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 19,
+      "kind": "panic",
+      "source": " let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q[\"blockhash\"].as_str().unwrap().parse()?,conf)?;",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 22,
+      "kind": "stdout",
+      "source": " println!(\"{}\",serde_json::json!({\"hex\":hex(&b),\"signature\":tx.signatures[0].to_string(),\"bytes\":b.len()}));Ok(())",
+      "planned_event": "printed",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+      "line": 24,
+      "kind": "panic",
+      "source": "fn unhex(s:&str)->Vec<u8>{(0..s.len()).step_by(2).map(|i|u8::from_str_radix(&s[i..i+2],16).unwrap()).collect()}",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 16,
+      "kind": "panic",
+      "source": "fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(q[k].as_str().unwrap()).unwrap()}",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 25,
+      "kind": "panic",
+      "source": "fn note(n:u32)->(Digest,Digest,Digest){let mut found=0;for j in 0..10000{let k=digest(10+j);let salt=digest(100+j);let cm=pool_v1_note_commitment(&derive_owner_key(&k),1000,M31(77),&salt);let nf=pool_v1_nullifier(&k,&salt);if pool_v1_pair_forest_deposit_lane_v1(&cm).unwrap()==pool_v1_pair_forest_output_lane_v1(&nf).unwrap(){if found==n{return(k,salt,cm)}found+=1;}}panic!(\"fixture note search exhausted\")}",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 27,
+      "kind": "panic",
+      "source": "fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(q[k].as_str().unwrap())}",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 32,
+      "kind": "panic",
+      "source": " let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 37,
+      "kind": "panic",
+      "source": " match q[\"action\"].as_str().unwrap(){",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 41,
+      "kind": "panic",
+      "source": " let slot=q[\"activation_slot\"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER)?;",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 43,
+      "kind": "panic",
+      "source": " let rh:[u8;32]=bytes(q,\"registry_hash\").try_into().unwrap();let vh:[u8;32]=bytes(q,\"verifier_hash\").try_into().unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 51,
+      "kind": "result/publication",
+      "source": " Ok(json!({\"master\":master.to_string(),\"lanes\":lanes.iter().map(ToString::to_string).collect::<Vec<_>>(),\"vault\":vault.to_string(),\"vault_authority\":authority.to_string(),\"registry_account\":reg.to_string(),\"entry\":entry.to_string(),\"initialize\":ix(pool,a,encode_pair_forest_initialize_instruction_v1(&init).map_err(err)?),\"registry_initialize\":reginit,\"schedule\":schedule,\"activate\":activate,\"freeze\":freeze}))",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 54,
+      "kind": "panic",
+      "source": " let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)?;",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 57,
+      "kind": "panic",
+      "source": " if q[\"genesis\"].as_bool().unwrap(){a.extend([meta(payer,true,true),ro(system)])}",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 60,
+      "kind": "result/publication",
+      "source": " Ok(json!({\"instruction\":ix(pool,a,d),\"lane_id\":lane,\"lane\":lanes[lane as usize].to_string(),\"page\":page.to_string(),\"output_lane_id\":out,\"output_lane\":lanes[out as usize].to_string(),\"output_page\":pool_v1_root_page_address(&pool,&lanes[out as usize],0).0.to_string()}))",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 62,
+      "kind": "panic",
+      "source": " \"checkpoint\"=>{let seq=q[\"sequence\"].as_u64().unwrap();let cp=pool_v1_pair_forest_checkpoint_address(&pool,&master,seq).0;let mut a=vec![rw(master)];a.extend(lanes.iter().copied().map(ro));a.extend([rw(cp),meta(payer,true,true),ro(system)]);Ok(json!({\"checkpoint\":cp.to_string(),\"instruction\":ix(pool,a,encode_pair_forest_checkpoint_instruction_v1())}))},",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 62,
+      "kind": "result/publication",
+      "source": " \"checkpoint\"=>{let seq=q[\"sequence\"].as_u64().unwrap();let cp=pool_v1_pair_forest_checkpoint_address(&pool,&master,seq).0;let mut a=vec![rw(master)];a.extend(lanes.iter().copied().map(ro));a.extend([rw(cp),meta(payer,true,true),ro(system)]);Ok(json!({\"checkpoint\":cp.to_string(),\"instruction\":ix(pool,a,encode_pair_forest_checkpoint_instruction_v1())}))},",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 67,
+      "kind": "panic",
+      "source": " let(k,salt,_)=note(q[\"note\"].as_u64().unwrap() as u32);",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 70,
+      "kind": "result/publication",
+      "source": " Ok(json!({\"marker_matches\":true,\"lane_matches\":true,\"next_pair_index\":after.next_pair_index,\"root\":super::hex(&encode_digest_canonical(&after.next_root))}))",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 84,
+      "kind": "clock",
+      "source": " let started=Instant::now();let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);",
+      "planned_event": "wall / side",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 84,
+      "kind": "panic",
+      "source": " let started=Instant::now();let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 101,
+      "kind": "panic",
+      "source": " let withdrawal=q[\"withdrawal\"].as_bool().unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 108,
+      "kind": "panic",
+      "source": " let dir=Path::new(q[\"proof_dir\"].as_str().unwrap());",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 109,
+      "kind": "file",
+      "source": " {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 113,
+      "kind": "file",
+      "source": " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 116,
+      "kind": "result/publication",
+      "source": " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 119,
+      "kind": "file",
+      "source": " fs::write(dir.join(\"proof.bin\"),&proof)?;fs::write(dir.join(\"statement.bin\"),public)?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "kind": "clock",
+      "source": " Ok(json!({\"client_route\":\"selected64-proof-account-v1\",\"proof_account\":proof_account.to_string(),\"attempt_index\":attempt_index,\"prove_wall_seconds\":started.elapsed().as_secs_f64(),\"attempts\":result.attempts,\"p_r1\":true,\"mask_audit\":format!(\"{:?}\",result.audit),\"proof_bytes\":proof.len(),\"proof_upload_count\":proof.len().div_ceil(3763),\"statement_upload_count\":1,\"marker\":marker.to_string(),\"output_lane\":lanes[output_lane as usize].to_string(),\"page\":page.to_string(),\"needs_zero_page\":lane.tree.next_leaf_index==0,\"settle\":ix(pool,a,data),\"stage1\":ix(pk(q,\"verifier\"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))",
+      "planned_event": "wall / side",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "kind": "panic",
+      "source": " Ok(json!({\"client_route\":\"selected64-proof-account-v1\",\"proof_account\":proof_account.to_string(),\"attempt_index\":attempt_index,\"prove_wall_seconds\":started.elapsed().as_secs_f64(),\"attempts\":result.attempts,\"p_r1\":true,\"mask_audit\":format!(\"{:?}\",result.audit),\"proof_bytes\":proof.len(),\"proof_upload_count\":proof.len().div_ceil(3763),\"statement_upload_count\":1,\"marker\":marker.to_string(),\"output_lane\":lanes[output_lane as usize].to_string(),\"page\":page.to_string(),\"needs_zero_page\":lane.tree.next_leaf_index==0,\"settle\":ix(pool,a,data),\"stage1\":ix(pk(q,\"verifier\"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+      "line": 129,
+      "kind": "result/publication",
+      "source": " Ok(json!({\"client_route\":\"selected64-proof-account-v1\",\"proof_account\":proof_account.to_string(),\"attempt_index\":attempt_index,\"prove_wall_seconds\":started.elapsed().as_secs_f64(),\"attempts\":result.attempts,\"p_r1\":true,\"mask_audit\":format!(\"{:?}\",result.audit),\"proof_bytes\":proof.len(),\"proof_upload_count\":proof.len().div_ceil(3763),\"statement_upload_count\":1,\"marker\":marker.to_string(),\"output_lane\":lanes[output_lane as usize].to_string(),\"page\":page.to_string(),\"needs_zero_page\":lane.tree.next_leaf_index==0,\"settle\":ix(pool,a,data),\"stage1\":ix(pk(q,\"verifier\"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 42,
+      "kind": "result/publication",
+      "source": "        Ok(json!([proof, [public.to_string(), false, false],",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 59,
+      "kind": "panic",
+      "source": "            let q = request(); let mut policy = Accounts::parse(&q).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 61,
+      "kind": "panic",
+      "source": "            let (index, key) = policy.selected(attempts).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 66,
+      "kind": "panic",
+      "source": "            let stage1 = policy.publication(attempts, &mut settlement, public, checkpoint).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+      "line": 93,
+      "kind": "result/publication",
+      "source": "        assert_eq!(planner.matches(\"RealR1_client::prove_for_proof_accounts(\").count(), 1);",
+      "planned_event": "count / returned / publication binding",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 7,
+      "kind": "file",
+      "source": "use std::fs::{self, File, OpenOptions};",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 12,
+      "kind": "file",
+      "source": "use std::os::unix::fs::OpenOptionsExt;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 189,
+      "kind": "entropy",
+      "source": "            getrandom::fill(bytes.as_mut())?;",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 227,
+      "kind": "entropy",
+      "source": "            getrandom::fill(bytes.as_mut())?;",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 840,
+      "kind": "panic",
+      "source": "        u32::from_le_bytes(self.block[start..start + 4].try_into().unwrap())",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 936,
+      "kind": "file",
+      "source": "        fs::create_dir_all(directory.as_ref())?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 937,
+      "kind": "file",
+      "source": "        let metadata = fs::metadata(directory.as_ref())?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 984,
+      "kind": "file",
+      "source": "        file.write_all(RESERVATION_MAGIC)?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 985,
+      "kind": "file",
+      "source": "        file.write_all(&statement_digest)?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 986,
+      "kind": "file",
+      "source": "        file.write_all(&mask_nonce)?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 987,
+      "kind": "file",
+      "source": "        file.sync_all()?;",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1039,
+      "kind": "panic",
+      "source": "        getrandom::fill(&mut random).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1039,
+      "kind": "entropy",
+      "source": "        getrandom::fill(&mut random).unwrap();",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1080,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1083,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1088,
+      "kind": "panic",
+      "source": "                .unwrap(),",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1094,
+      "kind": "panic",
+      "source": "                .unwrap(),",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1131,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1164,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1170,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1196,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1202,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1203,
+      "kind": "panic",
+      "source": "        let forest_active = pool_v1_pair_forest_copy_active_row_masks_v1().unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1221,
+      "kind": "panic",
+      "source": "        let attempt = StateOnlyAttemptSecrets::generate().unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1233,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1236,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1239,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1242,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1245,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1252,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1255,
+      "kind": "panic",
+      "source": "            .unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1276,
+      "kind": "panic",
+      "source": "        let mut first = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1281,
+      "kind": "panic",
+      "source": "        let mut reopened = DurableStateOnlyMaskNonceStore::open(&directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1285,
+      "kind": "file",
+      "source": "        fs::remove_dir_all(directory).unwrap();",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1285,
+      "kind": "panic",
+      "source": "        fs::remove_dir_all(directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1291,
+      "kind": "file",
+      "source": "        fs::create_dir_all(&directory).unwrap();",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1291,
+      "kind": "panic",
+      "source": "        fs::create_dir_all(&directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1298,
+      "kind": "panic",
+      "source": "                let mut store = DurableStateOnlyMaskNonceStore::open(directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1306,
+      "kind": "panic",
+      "source": "            .map(|handle| handle.join().unwrap())",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1310,
+      "kind": "file",
+      "source": "        fs::remove_dir_all(directory).unwrap();",
+      "planned_event": "otherFile / proofWrite / statementWrite",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1310,
+      "kind": "panic",
+      "source": "        fs::remove_dir_all(directory).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1628,
+      "kind": "panic",
+      "source": "            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1705,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1710,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1715,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1720,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1725,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1730,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1735,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1740,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1746,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1761,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1842,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, small_fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1859,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, small_fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1867,
+      "kind": "panic",
+      "source": "        let secret = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1877,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, small_fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1894,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, small_fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1903,
+      "kind": "panic",
+      "source": "        let secret = StateOnlyAttemptSecrets::generate_for_mask_nonce(nonce).unwrap();",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1920,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, zero_fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1936,
+      "kind": "panic",
+      "source": "            .unwrap_or(core::num::NonZeroI32::new(1).unwrap());",
+      "planned_event": "diag3 / terminal panic",
+      "status": "NO executable writer binding"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 1986,
+      "kind": "entropy",
+      "source": "    #[kani::stub(getrandom::fill, fill)]",
+      "planned_event": "side (visible metadata only)",
+      "status": "NO executable writer binding"
+    }
+  ]
+}
