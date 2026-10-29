@@ -24,9 +24,9 @@ theorem col_bound {T : Type} (rows : List (List T)) (h : shape rows)
 theorem read_guards {T : Type} (rows : List (List T)) (h : shape rows)
     (i j : Nat) (hi : i < 3) (hj : j < 3) :
     ∃ row, read rows i=ok row ∧ ∃ value, read row j=ok value := by
-  refine ⟨rows[i]'(row_bound rows h i hi),PV_RDCD3_Index194.success _ _ _,?_⟩
+  refine ⟨rows[i]'(row_bound rows h i hi),PV_RDCD3_Index194.success rows i (row_bound rows h i hi),?_⟩
   exact ⟨(rows[i]'(row_bound rows h i hi))[j]'(col_bound rows h i j hi hj),
-    PV_RDCD3_Index194.success _ _ _⟩
+    PV_RDCD3_Index194.success _ j (col_bound rows h i j hi hj)⟩
 
 theorem all_set {T : Type} (p : T → Prop) (xs : List T) (i : Nat) (v : T)
     (hx : ∀ x ∈ xs,p x) (hv : p v) : ∀ x ∈ xs.set i v,p x := by
