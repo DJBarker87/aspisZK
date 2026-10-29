@@ -48,6 +48,7 @@ theorem alpha_length (hash : Hash) (sample : Bytes → Q) (statementBytes c1 : B
  (frames : List Bytes) (h : frames.length = 25) :
  (alpha hash sample statementBytes c1 frames).length = 10 := by
  simp only [alpha,List.length_take,List.length_drop,challenges,replay_length,h]
+ rfl
 
 theorem query_public (sampleValue : Nat → Q) (hash : Hash) (sample : Bytes → Q) (statementBytes c1 : Bytes)
  (left right : List Bytes) (h : left = right) (round index assignment : Nat) :
