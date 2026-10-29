@@ -1,4 +1,5 @@
 import PV_B3P_EqualityBinding9227
+import PV_B3P_SelectIndex227
 import PV_B3P_LinkDefinitions13227
 namespace PV_B3P_Binding13227
 open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
