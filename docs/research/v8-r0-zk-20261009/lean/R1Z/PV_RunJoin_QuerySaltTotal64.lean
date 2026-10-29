@@ -3,6 +3,9 @@ import R1Z.PV_RunJoin_QueryHead63
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_QuerySaltTotal64
+attribute [local irreducible] PV_RunJoin_WeightInstalled46.selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
+set_option allowUnsafeReducibility true in
+attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)

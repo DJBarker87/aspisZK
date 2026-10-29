@@ -2,6 +2,9 @@ import R1Z.PV_RunJoin_QueryMatrixTotal64
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_QueryFillStep64
+attribute [local irreducible] PV_RunJoin_WeightInstalled46.selected PV_B2_F_RawNative.selected PV_B2_F_ResourceFamilies.selected
+set_option allowUnsafeReducibility true in
+attribute [local irreducible] ProverRwP6BoundaryInstall.selected
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
 open PV_RunJoin_FibreFillThread43 (Matrix)
 open PV_RunJoin_QueryMatrixTotal64 (put)
