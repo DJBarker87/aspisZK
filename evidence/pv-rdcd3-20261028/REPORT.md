@@ -128,3 +128,5 @@ V217 candidate carrier dependency60656 passes at the unchanged tracked source (e
 60659 generic totality helpers pass without axioms.60660 directly proves totality of every needed current field body on all inputs, without legacy arithmetic/BodyFibre imports:exit0,wall2.68s,peak2,671,568KiB,swap0; standard axioms. This validates an actual proof cut, not an assumed totality interface. V217 source/library correspondence remains unestablished.
 
 60661 owned mask-source definitions pass:exit0,wall1.38s,peak2,650,532KiB,swap0; standard axioms. No V217 restoration follows from definition elaboration; source/library binding remains pending.
+
+Source-mutation controls in the structural gates are syntactic full-body rejection checks; mutated Rust bodies were not separately compiled or used as Kani controls. Their role is fail-closed matching, not a standalone tool-fidelity proof. Native finite fixtures remain the separately recorded native validation.
