@@ -26,8 +26,13 @@ for imp in re.findall(r'^import (\S+)',p.read_text(),re.M):
  q=next((d/(imp.replace('.','/')+'.olean')for d in search if(d/(imp.replace('.','/')+'.olean')).exists()),None);assert q,imp
  deps[imp]=dict(path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest())
 cmd=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',str(H/'env-J-private.json'),str(O),str(S),str(O/(m+'.olean')),str(p),'7000']
-status=run(f'lean-{a}',cmd,'one focused Lean module; pinned run2.py, -M7000; inherited validated objects read-only')
-R=H/f'lean-{a}';(R/'source.lean').write_bytes(p.read_bytes())
+label=f'lean-{a}'
+retry=0
+while (H/label).exists():
+ assert not (H/label/'receipt/receipt.json').exists(),'charged ID cannot be retried'
+ retry+=1;label=f'lean-{a}-r{retry}'
+status=run(label,cmd,'one focused Lean module; pinned run2.py, -M7000; inherited validated objects read-only')
+R=H/label;(R/'source.lean').write_bytes(p.read_bytes())
 if(R/'receipt/receipt.json').exists():
  q=R/'receipt/receipt.json';r=json.loads(q.read_text());r.update(module=m,attempt=a,source_sha256=srcsha,dependency_objects=deps,source_revision=(H/'revision').read_text().strip(),guard_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
  log=(R/'receipt/stdout.log').read_text()+'\n'+(R/'receipt/stderr.log').read_text();r['print_axioms']=re.findall(r"^.*(?:depends on axioms|does not depend on any axioms).*",log,re.M);q.write_text(json.dumps(r,indent=2)+'\n')
