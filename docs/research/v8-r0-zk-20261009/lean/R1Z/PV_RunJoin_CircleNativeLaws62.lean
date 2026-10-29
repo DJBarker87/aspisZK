@@ -5,6 +5,12 @@ noncomputable section
 namespace R1Z.PV_RunJoin_CircleNativeLaws62
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual62
 open ProverCommitSubfieldOps47
+attribute [local irreducible] R0P.SemSource.circleSample0 R0P.SemSource.circleSample1
+  AspisV8R19.SqueezeOracleBridge.decodeState
+
+theorem point_unit {K : Type} [Field K] (p : AspisR0.ChordGeometry.Point K) :
+    p.val.1^2+p.val.2^2=1 := p.property
+
 
 /-- Complete native-bound circle success and coordinate laws, all blocks and
 both rows. CircleBinding62 records the inherited structural native boundary. -/
@@ -22,8 +28,9 @@ theorem complete (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Hea
   refine ⟨p,hp,hx,hy,?_⟩
   rw [hc]
   split
-  · exact (R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block)).property
-  · exact (R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block)).property
+  · exact point_unit (R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState block))
+  · exact point_unit (R0P.SemSource.circleSample0 (AspisV8R19.SqueezeOracleBridge.decodeState block))
 
+#print axioms point_unit
 #print axioms complete
 end R1Z.PV_RunJoin_CircleNativeLaws62
