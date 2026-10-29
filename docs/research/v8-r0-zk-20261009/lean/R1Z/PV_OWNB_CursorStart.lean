@@ -12,6 +12,8 @@ theorem valid (m : Memory) (t : Token) (owner : Nat) (c : Cell) (len cap : Nat)
  (size:c.size=cap*8) (align:c.alignment=2) (bound:len≤cap)
  (initialized:∀ i, i<len → NativeView c (i*8) (values i)) :
  PV_OWNB_Cursor.Valid (start m t owner c len cap values) := by
+ unfold PV_OWNB_Cursor.Valid start
+ dsimp only
  refine ⟨h,size,align,by omega,by omega,bound,?_,?_⟩
  · intro i _ hi; exact initialized i hi
  · intro i hi; change i<0 at hi; omega
