@@ -42,7 +42,13 @@ theorem actual (phase : PV_RunJoin_NativeControl55.Phase) (publication : prover.
         omega))=ok out)
     (size : out.length=832) :
     ProverCommitPublish43.queryBytes (PV_RunJoin_ActualPlanSources59.queryPart phase i)=bytes out.val := by
-  have hp := PV_RunJoin_ActualPublication60.projection phase publication context _ out success
+  have hp := PV_RunJoin_ActualPublication60.projection phase publication context
+    (fun p => PV_RunJoin_ActualPlanSources59.queryBytes p
+      (UScalar.ofNatCore i.val (by
+        have hs := ProverCommitPairCounter47.usize_large
+        rw [UScalar.size_def] at hs
+        have := i.isLt
+        omega))) out success
   change ProverCommitPublish43.queryBytes (split
     (PV_RunJoin_ActualPlanSources59.publicationBytes phase _))=bytes out.val
   rw [hp]
