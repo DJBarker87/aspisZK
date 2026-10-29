@@ -44,6 +44,6 @@ end PV_L1F_Statements
 Path('lean/PV_L1F_Statements.lean').write_text(imports+combined)
 links=['PV_L1E_CountSkeleton.PV_L1E_Link_CountAcquisition','PV_L1E_CountSkeleton.PV_L1E_Link_BodyWrapper','PV_L1E_OriginalCountSkeleton.PV_L1E_Link_OriginalRetry','PV_L1E_OriginalCountSkeleton.PV_L1E_Link_NativeD163','PV_DIAG10.PV_DIAG10_Link_Sites']
 Path('lean/PV_L1F_Axioms.lean').write_text('import PV_L1F_Statements\n'+''.join('#print axioms '+n+'\n' for n in names+['PV_L1F_Statements.combined'])+''.join('#print '+n+'\n' for n in links))
-Path('lean/PV_L1F_FocusedReplay.lean').write_text('import PV_L1F_Axioms\n/-- Focused accepted closure only; no deployed privacy release claim. -/\n#check PV_L1F_Statements.combined\n'+''.join('#check '+n+'\n' for n in names)+'#print axioms PV_L1F_Statements.combined\n')
+Path('lean/PV_L1F_FocusedReplay.lean').write_text('import PV_L1F_Axioms\n/-! Focused accepted closure only; no deployed privacy release claim. -/\n#check PV_L1F_Statements.combined\n'+''.join('#check '+n+'\n' for n in names)+'#print axioms PV_L1F_Statements.combined\n')
 (E/'final-source-manifest.json').write_text(json.dumps(dict(roots=roots,theorems=names,sources=sources,drafts=drafts),indent=2))
 print('Accepted roots',len(roots),'theorems',len(names),'drafts',len(drafts))

@@ -18,6 +18,7 @@ theorem reached_producer {S P : Type} (a : PV_L1D_RetryFold.Attempt S P)
  (link : ReachedOwner a owner start initial) :
  PV_DIAG10.PV_DIAG10_Link_ReachedAttempt (fun j t => (a j t).result) start initial := by
  intro k s reached
+ change ∃ out, (a k s).result = .ok out
  rw [link k s reached]
  exact ⟨_,rfl⟩
 #print axioms reached_producer
