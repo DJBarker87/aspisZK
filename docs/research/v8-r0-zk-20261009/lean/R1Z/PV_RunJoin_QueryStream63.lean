@@ -34,9 +34,6 @@ theorem plan (phase : PV_RunJoin_NativeControl55.Phase) (out : Bytes) :
     ProverCommitPublish43.queryBytes).flatten=out++_
   rw [List.map_ofFn]
   congr 2
-  apply congrArg List.ofFn
-  funext i
-  simp only [part,Nat.zero_add,dif_pos i.isLt]
 
 #print axioms stream
 #print axioms indexed
