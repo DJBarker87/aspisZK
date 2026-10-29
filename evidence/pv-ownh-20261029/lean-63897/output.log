@@ -1,0 +1,67 @@
+R1Z.PV_OWNH_Address.same_allocation_eq (base i j : ℕ) :
+  R1Z.PV_OWNH_Address.position base i = R1Z.PV_OWNH_Address.position base j ↔ i = j
+R1Z.PV_OWNH_Address.same_allocation_lt (base i j : ℕ) :
+  R1Z.PV_OWNH_Address.position base i < R1Z.PV_OWNH_Address.position base j ↔ i < j
+R1Z.PV_OWNH_Address.same_allocation_le (base i j : ℕ) :
+  R1Z.PV_OWNH_Address.position base i ≤ R1Z.PV_OWNH_Address.position base j ↔ i ≤ j
+R1Z.PV_OWNH_Address.cursor_distance (base i j : ℕ) :
+  R1Z.PV_OWNH_Address.position base j - R1Z.PV_OWNH_Address.position base i = j - i
+R1Z.PV_OWNH_Address.rebase_equality (a b i j : ℕ) :
+  R1Z.PV_OWNH_Address.position a i = R1Z.PV_OWNH_Address.position a j ↔
+    R1Z.PV_OWNH_Address.position b i = R1Z.PV_OWNH_Address.position b j
+R1Z.PV_OWNH_Address.rebase_order (a b i j : ℕ) :
+  R1Z.PV_OWNH_Address.position a i < R1Z.PV_OWNH_Address.position a j ↔
+    R1Z.PV_OWNH_Address.position b i < R1Z.PV_OWNH_Address.position b j
+R1Z.PV_OWNH_Address.rebase_distance (a b i j : ℕ) :
+  R1Z.PV_OWNH_Address.position a j - R1Z.PV_OWNH_Address.position a i =
+    R1Z.PV_OWNH_Address.position b j - R1Z.PV_OWNH_Address.position b i
+R1Z.PV_OWNH_Address.block_bound (r : ℕ) (h : r < 1024) : r / 16 < 64
+R1Z.PV_OWNH_Address.shift_bound (r : ℕ) : r % 16 < 16
+R1Z.PV_OWNH_Address.no_state_channel {Owned State Value : Type} (read : Owned → Value) (memory : Owned)
+  (before after : State) : (fun x => read x.1) (memory, before) = (fun x => read x.1) (memory, after)
+R1Z.PV_OWNH_Literals.v229_result : PV_B3P_SortedResult133.active = Except.ok R1Z.PV_OWNH_Literals.rowsLiteral
+R1Z.PV_OWNH_Literals.v229_selected (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) :
+  ProverRwFull.ExternalFuns.op133 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PV_B3P_Install133.value)
+R1Z.PV_OWNH_Literals.v229_selected_values :
+  List.map (fun x => ↑x) ↑PV_B3P_Install133.value = R1Z.PV_OWNH_Literals.rowsLiteral
+R1Z.PV_OWNH_Literals.v230_result : R1Z.PV_OWNH_Literals.masksModel = Except.ok R1Z.PV_OWNH_Literals.masksLiteral
+R1Z.PV_OWNH_Literals.row_length : R1Z.PV_OWNH_Literals.rowsLiteral.length = 214
+R1Z.PV_OWNH_Literals.mask_length : List.length R1Z.PV_OWNH_Literals.masksLiteral = 64
+R1Z.PV_OWNH_Literals.request_layouts (address : ℕ) :
+  R1Z.PV_RDB2D_CollectorTrace.publicRequest R1Z.PV_RDB2D_CollectorRequests.first =
+      R1Z.PV_RDB2D_CollectorTrace.Action.allocate 1016 2 ∧
+    R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_CollectorRequests.second address) =
+        R1Z.PV_RDB2D_CollectorTrace.Action.reallocate 1016 2 2032 ∧
+      R1Z.PV_RDB2D_CollectorTrace.publicRequest R1Z.PV_RDB2D_CollectorRequests.third =
+        R1Z.PV_RDB2D_CollectorTrace.Action.allocate 544 2
+theorem R1Z.PV_OWNH_Literals.v229_result : PV_B3P_SortedResult133.active = Except.ok R1Z.PV_OWNH_Literals.rowsLiteral :=
+PV_B3P_SortedResult133.complete_result
+theorem R1Z.PV_OWNH_Literals.v229_selected : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns),
+  ProverRwFull.ExternalFuns.op133 = Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok PV_B3P_Install133.value) :=
+fun base ops => PV_B3P_Install133.source base ops
+theorem R1Z.PV_OWNH_Literals.v229_selected_values : List.map (fun x => ↑x) ↑PV_B3P_Install133.value =
+  R1Z.PV_OWNH_Literals.rowsLiteral :=
+PV_B3P_Closure133.value_nat
+theorem R1Z.PV_OWNH_Literals.v230_result : R1Z.PV_OWNH_Literals.masksModel =
+  Except.ok R1Z.PV_OWNH_Literals.masksLiteral :=
+id
+  (Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          (match _a with
+            | Except.error e => Except.error e
+            | Except.ok rows => Except.ok (R1Z.PV_RDB2D_MasksLoop.run rows R1Z.PV_RDB2D_MasksValue.initial)) =
+            Except.ok R1Z.PV_OWNH_Literals.masksLiteral)
+        R1Z.PV_OWNH_Literals.v229_result))
+    (congrArg Except.ok R1Z.PV_RDB2D_MasksValue.concrete))
+theorem R1Z.PV_OWNH_Literals.request_layouts : ∀ (address : ℕ),
+  R1Z.PV_RDB2D_CollectorTrace.publicRequest R1Z.PV_RDB2D_CollectorRequests.first =
+      R1Z.PV_RDB2D_CollectorTrace.Action.allocate 1016 2 ∧
+    R1Z.PV_RDB2D_CollectorTrace.publicRequest (R1Z.PV_RDB2D_CollectorRequests.second address) =
+        R1Z.PV_RDB2D_CollectorTrace.Action.reallocate 1016 2 2032 ∧
+      R1Z.PV_RDB2D_CollectorTrace.publicRequest R1Z.PV_RDB2D_CollectorRequests.third =
+        R1Z.PV_RDB2D_CollectorTrace.Action.allocate 544 2 :=
+fun address =>
+  ⟨R1Z.PV_RDB2D_CollectorRequests.first_public,
+    ⟨R1Z.PV_RDB2D_CollectorRequests.second_public address, R1Z.PV_RDB2D_CollectorRequests.third_public⟩⟩
