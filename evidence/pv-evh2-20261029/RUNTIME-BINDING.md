@@ -32,7 +32,7 @@ The read-only object chain is in `runjoin-resolution-*.json` and `prepare-*.json
 | oraclePrefix | `nativeOracle`, NativeTrace pin | OPEN `oraclePrefix_OPEN`; actual ordered, duplicate, rejected/failure/divergence prefixes. |
 | retained | `nativeSide`, NativeTrace pin | OPEN `retained_OPEN`; allocation/address/durable/environment/physical effects. |
 | actualProgram | unrestricted observer `program`, Runtime pin | OPEN `actualProgram_OPEN`; actual ROM driver and no-future-data source equation absent. |
-| ops | `Runtime.ops`, Runtime pin | OPEN `ops_OPEN`; V244 selected callback association retained; publication's separate ExternalFuns dictionary also remains an explicit input. |
+| ops | the SAME `ExternalFuns` instance passed to `NativePublication55.actual/published` | BOUND to the publication dictionary parameter; deployed dictionary installation and V244 callback law remain OPEN. No separate op227 dictionary is allowed. |
 | terminal | `Runtime.terminal`, Runtime pin | OPEN `terminal_OPEN`; selected source semantic terminal law. |
 | semantic | `Runtime.semantic`, Runtime pin | OPEN `semantic_OPEN`; actual caller/public/challenges selection. |
 | point | `Runtime.point`, Runtime pin | OPEN `point_OPEN`; actual caller point selection. |
@@ -50,3 +50,7 @@ Option-B's existing source counterexample theorem
 hypotheses. It does not provide two admitted deployed equal-public witnesses;
 we do not promote it to a deployed V400 refutation or replace the full signal
 by its coarse entropy-error Boolean.
+
+`LivePublication` names the separate nonempty actual publication-domain obligation
+for this exact binding. It is unproved, is not added to T, and is not silently
+assumed by the specialised theorem.

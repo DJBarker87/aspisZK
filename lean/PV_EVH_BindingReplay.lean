@@ -1,0 +1,12 @@
+import PV_EVH_RuntimeBinding
+import PV_EVH_OwnedLaws
+set_option autoImplicit false
+#check @PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at
+#check @PV_EVH_RuntimeBinding.LivePublication
+#check @PV_EVH_OwnedLaws.causal_of_step
+#check @PV_EVH_OwnedLaws.environment_of_equiv
+#check @PV_EVH_OwnedLaws.product_expectation
+#check @PV_EVH_OwnedLaws.public_signal_of_factorization
+#check @PV_EVH_OwnedLaws.no_unbounded_environment
+#print axioms PV_EVH_RuntimeBinding.privacy_headline_deployed_events_at
+#print axioms PV_EVH_OwnedLaws.no_unbounded_environment

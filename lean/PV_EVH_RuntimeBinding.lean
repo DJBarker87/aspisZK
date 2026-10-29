@@ -94,7 +94,6 @@ structure OpenDeploymentInputs (T : Type) where
     List (PV_RJ4IDB.Bytes × PV_RJ4IDB.Bytes)
   actualProgram_OPEN : Observer Signal A → Env × View K CommitHandle Aux R1Bat ×
     List (R0Z.FsStatement.Bytes × OracleAnswer) → OProg
-  ops_OPEN : ExternalFuns
   terminal_OPEN : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public →
     Array (Array aspis_core.field.QM31 29#usize) 3#usize →
     Array aspis_core.field.QM31 10#usize →
@@ -131,13 +130,21 @@ def rtDeployed : Runtime (Public := Public) (Signal := Signal) (Env := Env)
   oraclePrefix := missing.oraclePrefix_OPEN
   retained := missing.retained_OPEN
   actualProgram := missing.actualProgram_OPEN
-  ops := missing.ops_OPEN
+  ops := inferInstance
   terminal := missing.terminal_OPEN
   semantic := missing.semantic_OPEN
   point := missing.point_OPEN
   compact := fun i => PV_RunJoin_NativePublication55.actual store (missing.invocation_OPEN i)
   published := fun i => PV_RunJoin_NativePublication55.published
     PV_RunJoin_ActualRun.data PV_RunJoin_ActualRun.plans store (missing.invocation_OPEN i)
+
+/-- Separate live-domain obligation. Neither finite nonempty sample carriers
+nor consistency of phase-restricted links supplies this witness. -/
+def LivePublication : Prop :=
+  ∃ (i : Env × Observer Signal A × (h).Instance × R)
+    (bytes : PV_RJ4IDB.Bytes) (publication : PublicationInput),
+    (rtDeployed template outputs x missing store).compact i = some bytes ∧
+    (rtDeployed template outputs x missing store).published i = some publication
 
 /-- Authoritative specialised obligations, still without a joint witness. -/
 abbrev DeployedLinks := Links template outputs x (rtDeployed template outputs x missing store)
@@ -156,5 +163,6 @@ theorem privacy_headline_deployed_events_at (links : DeployedLinks template outp
     (rtDeployed template outputs x missing store) links
 
 #print axioms rtDeployed
+#print axioms LivePublication
 #print axioms privacy_headline_deployed_events_at
 end PV_EVH_RuntimeBinding

@@ -1,0 +1,14 @@
+import PV_EVH_OwnedLaws
+set_option autoImplicit false
+#print PV_EVH_OwnedLaws.causal_of_step
+#print PV_EVH_OwnedLaws.environment_of_equiv
+#print PV_EVH_OwnedLaws.product_expectation
+#print PV_EVH_OwnedLaws.public_signal_of_factorization
+#print PV_EVH_OwnedLaws.finite_environment_bounded
+#print PV_EVH_OwnedLaws.no_unbounded_environment
+#print axioms PV_EVH_OwnedLaws.causal_of_step
+#print axioms PV_EVH_OwnedLaws.environment_of_equiv
+#print axioms PV_EVH_OwnedLaws.product_expectation
+#print axioms PV_EVH_OwnedLaws.public_signal_of_factorization
+#print axioms PV_EVH_OwnedLaws.finite_environment_bounded
+#print axioms PV_EVH_OwnedLaws.no_unbounded_environment
