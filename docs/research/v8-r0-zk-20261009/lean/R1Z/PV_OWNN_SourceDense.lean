@@ -83,8 +83,13 @@ theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
   intro i
   have hd := scanner_decoded_cast decode D point i
   have hb : w+i.val < point.length := by omega
-  simpa only [List.get_eq_getElem, List.getElem_drop, Fin.val_cast,
-   Fin.val_natAdd, List.getElem?_eq_getElem hb, Option.getD_some, tail, suffix] using hd
+  change decode ((point.drop w).get (Fin.cast htlen.symm i)) =
+   (if (PV_OWNI_Scanner.suffix point).testBit (t-1-i.val) then 1 else 0) at hd
+  simp only [List.get_eq_getElem,List.getElem_drop,Fin.val_cast] at hd
+  change decode (point[w+i.val]?.getD zero) =
+   (if (PV_OWNI_Scanner.suffix point).testBit (t-1-i.val) then 1 else 0)
+  rw [List.getElem?_eq_getElem hb,Option.getD_some]
+  exact hd
  have hd := PV_OWNM_DenseRows.full_dense_sparse w t
   (fun i : Fin (w+t) => decode (point[i.val]?.getD zero)) suffix
   (fun r : Fin (2^(w+t)) => decode (column[r.val]?.getD zero)) hs

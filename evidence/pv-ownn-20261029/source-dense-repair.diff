@@ -1,0 +1,65 @@
+--- unsubmitted-ownm
++++ PV_OWNN_SourceDense
+@@ -45,6 +45,29 @@
+   (show (List.ofFn (fun i : Fin w => decode (point[i.val]?.getD zero))).length = w
+    from List.length_ofFn))
+ 
++/-- The scanner partitions the point into its non-Boolean prefix and Boolean suffix. -/
++theorem scanner_suffix_length (point : List Q) :
++ (point.drop (width point)).length = trailing point := by
++ have hs := PV_RDB2D_SparseShape.split_length boolean point
++ have hw : width point ≤ point.length := by
++  unfold width PV_RDB2D_SparseShape.prefixLen
++  omega
++ simp only [List.length_drop]
++ change width point + trailing point = point.length at hs
++ omega
++
++/-- Transport the suffix index before applying the dependent scanner theorem. -/
++theorem scanner_decoded_cast (decode : Q → K)
++ (D : PV_OWNJ_DecodeFold.Decoder decode) (point : List Q)
++ (i : Fin (trailing point)) :
++ decode ((point.drop (width point)).get
++  (Fin.cast (scanner_suffix_length point).symm i)) =
++ if (suffix point).testBit (trailing point-1-i.val) then 1 else 0 := by
++ have h := PV_OWNL_Suffix.scanner_decoded decode D.zero_eq D.one_eq point
++  (Fin.cast (scanner_suffix_length point).symm i)
++ exact h.trans (congrArg (fun n => if (suffix point).testBit (n-1-i.val)
++   then (1 : K) else 0) (scanner_suffix_length point))
++
+ theorem sparse_dense (decode : Q → K) (D : PV_OWNJ_DecodeFold.Decoder decode)
+  (point column : List Q) (hl : point.length=10)
+  (hp : ∀ q ∈ point, PV_OWNJ_DecodeFold.Canon q) :
+@@ -53,19 +76,15 @@
+  let t := trailing point
+  have split : w+t=10 := PV_OWNI_Scanner.split point hl
+  have hw : w ≤ point.length := by omega
+- have htlen : (point.drop w).length = t := by rw [List.length_drop]; omega
++ have htlen : (point.drop w).length = t := scanner_suffix_length point
+  let suffix : Fin (2^t) := ⟨PV_OWNI_Scanner.suffix point,suffix_bound point⟩
+  have hs : ∀ i : Fin t,
+   decode (point[(Fin.natAdd w i).val]?.getD zero) = if tail t suffix i then 1 else 0 := by
+   intro i
+-  have hi : i.val < (point.drop w).length := by rw [htlen]; exact i.isLt
+-  have hd := PV_OWNL_Suffix.scanner_decoded decode D.zero_eq D.one_eq point ⟨i.val,hi⟩
++  have hd := scanner_decoded_cast decode D point i
+   have hb : w+i.val < point.length := by omega
+-  change decode ((point.drop w).get ⟨i.val,hi⟩) =
+-   (if (PV_OWNI_Scanner.suffix point).testBit ((point.drop w).length-1-i.val) then 1 else 0) at hd
+-  simp only [List.get_eq_getElem,List.getElem_drop] at hd
+-  rw [htlen] at hd
+-  simpa only [Fin.val_natAdd,List.getElem?_eq_getElem hb,Option.getD_some,tail,suffix] using hd
++  simpa only [List.get_eq_getElem, List.getElem_drop, Fin.val_cast,
++   Fin.val_natAdd, List.getElem?_eq_getElem hb, Option.getD_some, tail, suffix] using hd
+  have hd := PV_OWNM_DenseRows.full_dense_sparse w t
+   (fun i : Fin (w+t) => decode (point[i.val]?.getD zero)) suffix
+   (fun r : Fin (2^(w+t)) => decode (column[r.val]?.getD zero)) hs
+@@ -104,6 +123,8 @@
+ #print axioms concrete_source_dense
+ #print axioms take_coordinates
+ #print axioms prefix_weight
++#print axioms scanner_suffix_length
++#print axioms scanner_decoded_cast
+ #print axioms sparse_dense
+ #print axioms source_dense
+ open PV_OWNM_V239

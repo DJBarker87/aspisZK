@@ -21,3 +21,11 @@ symbol or pv-l1d path is in candidate 64ff4f9240. Existing runjoin and ownj
 laws inspected read-only; no future branch/object consumed. ownj query_public
 and final_public are model replay equations, not operational reconstruction.
 No checked witness-dependent allocation or unpublished-point finding.
+
+Operational transcript detail: the closure at :879 is also called once after
+all ten rounds by `if oracle(&point)? != running`. That terminal callback uses
+alpha itself. Reconstruction879 must therefore distinguish the round<10
+sample/assignment queries from this terminal callback (for example round=10).
+The existing ownj query formula adds a sampled coordinate and only has its
+length theorem under round<10; applying it to that terminal callback would be
+wrong. This is a binding obligation, not evidence of an unpublished influence.
