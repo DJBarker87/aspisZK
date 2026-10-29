@@ -2,7 +2,7 @@ from pathlib import Path
 import json,re,hashlib,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdb2e-20261029';P=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'
 # Record exact current source closure. No source locator fallback is used.
-external={r['module'].replace('/','.')for r in json.loads(subprocess.check_output(['git','show','HEAD:evidence/pv-replay-20261027/receipts/external-object-manifest.json']))}
+external=set(json.loads((E/'inherited-resolution.json').read_text())['external'])
 modules={}
 def visit(m):
  if m in external or m in modules:return
