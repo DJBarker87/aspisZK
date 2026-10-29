@@ -21,6 +21,10 @@ Native valid same-allocation pointer arithmetic remains the V370 boundary. -/
 theorem address_independent (base offset length : Nat) :
     (base+offset=base+length) ↔ offset=length := by omega
 
+theorem address_distance (base length : Nat) : (base+length)-base=length := by omega
+
+theorem iterator_word_bound (i : Nat) (h : i ≤ 64) : i < 2^64 := by omega
+
 /-- Full Result transport of the original Core::default parameter. The
 byte-buffer constructor is fixed; no arbitrary buffer callback is added. -/
 theorem complete {T : Type} (core : Result T) :
@@ -50,6 +54,8 @@ theorem result_literal {T : Type} (core : Result T) :
 #print axioms PV_DL_DefaultNative.consumed
 #print axioms buffer_literal
 #print axioms address_independent
+#print axioms address_distance
+#print axioms iterator_word_bound
 #print axioms complete
 #print axioms result_literal
 end R1Z.PV_RDCD4_V237
