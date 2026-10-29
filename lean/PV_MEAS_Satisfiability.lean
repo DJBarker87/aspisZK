@@ -137,6 +137,7 @@ theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
   · intro e adv w s _; rfl
   · intro e adv w s _; rfl
   · intro adv w _
+    refine ⟨measurable_of_finite _,measurable_of_finite _,?_⟩
     change Measure.map Prod.fst (uniform (Bool × ModelCoins template outputs x) : Measure _) =
       Measure.map id (uniform Bool : Measure Bool)
     exact uniform_fst _ _
