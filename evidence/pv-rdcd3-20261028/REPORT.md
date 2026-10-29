@@ -124,3 +124,5 @@ V265 RESTORED/B at complete source/Result boundary, structural(K-1 substitute). 
 V217 candidate carrier dependency60656 passes at the unchanged tracked source (exit0,wall1.23s,peak2,643,104KiB,swap0; no theorem/axiom audit applicable to this declaration-only module). No V217 source or restoration credit from this rebuild.
 
 60657 full carrier types and60658 owned field definitions pass in the three-module private closure.60658:exit0,wall1.41s,peak2,665,780KiB,swap0; declaration-only, no theorem axiom claim. Candidate bodies are unchanged except namespace/import rebinding. V217 remains suspended pending helper proofs, complete source/library structural association and row audit.
+
+60659 generic totality helpers pass without axioms.60660 directly proves totality of every needed current field body on all inputs, without legacy arithmetic/BodyFibre imports:exit0,wall2.68s,peak2,671,568KiB,swap0; standard axioms. This validates an actual proof cut, not an assumed totality interface. V217 source/library correspondence remains unestablished.
