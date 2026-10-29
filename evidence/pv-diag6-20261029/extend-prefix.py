@@ -1,0 +1,18 @@
+from pathlib import Path
+p=Path(__file__).with_name('PV_DIAG6_Prefix.lean');s=p.read_text().removesuffix('end PV_DIAG6\n')
+def add(name,body):
+ global s
+ s+='-- STAGE\ntheorem '+name+'\n '+body+'\n#print axioms '+name+'\n'
+for kind,ty,ctor in [('panic','Panic','.panic p'),('abort','Crash','.abort p'),('diverge',None,'.diverge')]:
+ extra=' (p : '+ty+')' if ty else ''
+ theorem={'panic':'normal_drop_panics','abort':'normal_drop_aborts','diverge':'normal_drop_diverges'}[kind]
+ args='a s t u bs ds'+(' p' if ty else '')+' body drop dp hb hd'
+ add('recover_scope_drop_'+kind,'(recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)\n (a : A) (s t u : S) (bs ds : List Event)'+extra+'\n (body : Op S A) (drop : Op S Unit) (dp : Panic → Panic → Op S A)\n (hb : body s = ⟨bs,t,.value a⟩) (hd : drop t = ⟨ds,u,'+ctor+'⟩) :\n recover (scope body drop dp s) = bs++ds := by\n rw ['+theorem+' '+args+',lossless]')
+add('recover_scope_panic_unwind','(recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)\n (s t : S) (es : List Event) (p : Panic) (body : Op S A) (drop : Op S Unit)\n (dp : Panic → Panic → Op S A) (hb : body s = ⟨es,t,.panic p⟩) :\n recover (scope body drop dp s) = es ++ recover (unwind p drop dp t) := by\n rw [scope_panic es s t p body drop dp hb,recover_prepend recover lossless]')
+add('recover_ignored_error_cleanup','(recover : Execution S Unit → List Event) (lossless : ∀ x, recover x = x.events)\n (w : Op S (Except B Unit)) (drop : Except B Unit → Op S Unit)\n (s t : S) (es : List Event) (e : B) (hw : w s = ⟨es,t,.value (.error e)⟩) :\n recover (ignoredWrite w drop s) = es ++ recover (drop (.error e) t) := by\n rw [ignored_write_error_cleanup w drop s t es e hw,recover_prepend recover lossless]')
+add('recover_partial_write_suffix','(recover : Execution S (Except B Unit) → List Event) (lossless : ∀ x, recover x = x.events)\n (o : WriteOps S B) (buf : Bytes) (s t : S) (es : List Event)\n (k : Bytes → Op S (Except B Unit)) (n : Nat) (hne : buf.isEmpty = false)\n (hn : n+1 ≤ buf.length) (hw : o.write buf s = ⟨es,t,.value (.ok (n+1))⟩) :\n recover (writeAllStep o buf k s) = es ++ recover (k (buf.drop (n+1)) t) := by\n rw [write_partial o buf s t es k n hne hn hw,recover_prepend recover lossless]')
+add('recover_interrupted_drop_suffix','(recover : Execution S (Except B Unit) → List Event) (lossless : ∀ x, recover x = x.events)\n (o : WriteOps S B) (buf : Bytes) (s t u : S) (es gs : List Event) (e : B)\n (k : Bytes → Op S (Except B Unit)) (hne : buf.isEmpty = false)\n (hw : o.write buf s = ⟨es,t,.value (.error e)⟩)\n (hg : o.interruptedGuard e t = ⟨gs,u,.value true⟩) :\n recover (writeAllStep o buf k s) = (es++gs) ++\n recover (PV_DIAG3.bind (o.dropInterrupted e u) (fun _ => k buf)) := by\n rw [write_interrupted_drop o buf s t u es gs e k hne hw hg,recover_prepend recover lossless]')
+add('no_finite_summary_for_unbounded_emissions','(f : PrefixFamily S A) (summary : List Event)\n (unbounded : ∃ n, summary.length < (f.sample n).events.length) :\n ¬ (∀ n, EventPrefix (f.sample n).events summary) := by\n intro h\n rcases unbounded with ⟨n,hn⟩\n exact Nat.not_lt_of_ge (event_prefix_length _ _ (h n)) hn')
+add('terminal_only_cannot_recover_different_prefixes','(recover : Exit A → List Event) (out : Exit A) (left right : List Event)\n (hl : recover out = left) (hr : recover out = right) : left = right := hl.symm.trans hr')
+add('recover_family_function','(recover : Execution S A → List Event) (lossless : ∀ x, recover x = x.events)\n (f : PrefixFamily S A) :\n (fun n => recover (f.sample n)) = (fun n => (f.sample n).events) := by\n funext n; exact lossless _')
+p.write_text(s+'end PV_DIAG6\n')
