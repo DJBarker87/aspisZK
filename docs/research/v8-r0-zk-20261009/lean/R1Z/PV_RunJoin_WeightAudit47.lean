@@ -1,0 +1,9 @@
+import R1Z.PV_RunJoin_WeightConstructorInstalled47
+#print axioms R1Z.PV_RunJoin_WeightCellSource47.complete
+#print axioms R1Z.PV_RunJoin_WeightMutation47.remaining
+#print axioms R1Z.PV_RunJoin_WeightPowersSeven47.complete
+#print axioms R1Z.PV_RunJoin_WeightMaterialInstalled47.complete
+#print axioms R1Z.PV_RunJoin_WeightPoints47.complete
+#print axioms R1Z.PV_RunJoin_WeightConstructorRows47.complete
+#print axioms R1Z.PV_RunJoin_WeightNew47.complete
+#print axioms R1Z.PV_RunJoin_WeightConstructorInstalled47.complete
