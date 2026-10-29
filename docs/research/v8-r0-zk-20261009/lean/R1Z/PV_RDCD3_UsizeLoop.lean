@@ -35,8 +35,12 @@ theorem complete {S : Type} (f : S → Nat → Result S) (fuel : Nat)
     | div => simp [hf]
     | ok out =>
       simp only [hf,bind_tc_ok]
-      apply ih
-      simpa using (show r.«end».val = (r.start.val+1)+fuel from by omega)
+      let next : Range :=
+        { start := UScalar.ofNatCore (r.start.val+1)
+            (by have := r.«end».hBounds; omega), «end» := r.«end» }
+      have hb : next.«end».val = next.start.val+fuel := by
+        simpa [next] using (show r.«end».val = (r.start.val+1)+fuel from by omega)
+      simpa [source,next] using ih next out hb
 
 #print axioms complete
 end R1Z.PV_RDCD3_UsizeLoop
