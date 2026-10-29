@@ -31,6 +31,7 @@ theorem complete (a b : Q) (ha : QC a) (hb : QC b) :
     let lo ← PV_RunJoin_CircleR72Raw52.field.CM31.new c0 c1
     let hi ← PV_RunJoin_CircleR72Raw52.field.CM31.new c2 c3
     ok (some (lo,hi)))=ok _
+  unfold u v at h0 h1 h2 h3
   rw [h0,bind_tc_ok,h1,bind_tc_ok,h2,bind_tc_ok,h3,bind_tc_ok]
   rfl
 #print axioms complete
