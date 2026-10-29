@@ -14,7 +14,7 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
   have hy : PV_RunJoin_CircleRawScalar52.field.M31.add a b=ok y := by
     unfold PV_RunJoin_CircleRawScalar52.field.M31.add PV_RunJoin_CircleRawScalar52.field.ct.add
     simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralWrappers53.add32,
-      PV_RunJoin_CircleNeutralSubtract53.source]
+      PV_RunJoin_CircleNeutralSubtract53.source,y]
   refine ⟨y,hy,PV_RunJoin_CircleNeutralSubtract53.canonical _ (by rw [hv];exact sum),?_⟩
   change scalar (PV_RunJoin_CircleNeutralSubtract53.output (U32.wrapping_add a b))=_
   rw [subtract _ (by rw [hv];exact sum)]

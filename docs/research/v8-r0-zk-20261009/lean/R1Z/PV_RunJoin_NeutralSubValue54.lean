@@ -20,7 +20,7 @@ theorem complete (a b : U32) (ha : Canon a) (hb : Canon b) :
   have hy : PV_RunJoin_CircleRawScalar52.field.M31.sub a b=ok y := by
     unfold PV_RunJoin_CircleRawScalar52.field.M31.sub PV_RunJoin_CircleRawScalar52.field.ct.sub PV_RunJoin_CircleRawScalar52.field.P
     simp only [lift,bind_tc_ok,PV_RunJoin_CircleNeutralWrappers53.add32,
-      PV_RunJoin_CircleNeutralWrappers53.sub32,PV_RunJoin_CircleNeutralSubtract53.source]
+      PV_RunJoin_CircleNeutralWrappers53.sub32,PV_RunJoin_CircleNeutralSubtract53.source,y]
   refine ⟨y,hy,PV_RunJoin_CircleNeutralSubtract53.canonical _ hsmall,?_⟩
   change scalar (PV_RunJoin_CircleNeutralSubtract53.output _)=_
   rw [subtract _ hsmall]
