@@ -145,3 +145,9 @@ ExternalTypes/ExternalFuns interface, link function 310 by carrier/type identity
 to the existing prover, classify all operations and compile Types then Funs
 and the link with standard axioms. Lean 73200–73299 and audits 73297–73299 are
 entirely unused. Do not rewrite source or use 562e1f51… as a shortcut.
+
+Final handoff checks are in final-validation.json. The refusal-to-admitted-barrier
+interval is 197.232983 seconds. cleanup.json records removal of this job's
+compiled Rust target cache only; frozen source and raw/compressed LLBC evidence
+remain. No host scope remains running for this job. Stage commits are available
+with `git log --oneline 27b582ca44..HEAD`; nothing was pushed.
