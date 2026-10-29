@@ -1,0 +1,30 @@
+theorem PV_DIAG8.DIAG8_inputs_given_native_binding : ∀ {P W O : Type} (native : P → W → PV_DIAG8.DIAG8Inputs)
+  (decode : PV_DIAG8.DIAG8Inputs → O) (messages : P → List PV_DIAG8.ClientGuard) (path : P → List PV_DIAG8.PathStep)
+  (stack : P → List ℕ) (requests : P → List PV_DIAG8.Request)
+  (world : PV_DIAG8.History → PV_DIAG8.Request → PV_DIAG8.Reply),
+  (∀ (p : P) (w : W), native p w = PV_DIAG8.publicInputs messages path stack requests world p) →
+    ∀ (p : P) (w w' : W), decode (native p w) = decode (native p w') :=
+fun {P W O} native decode messages path stack requests world sourceBinding p w w' =>
+  Eq.mpr (id (congrArg (fun _a => decode _a = decode (native p w')) (sourceBinding p w)))
+    (Eq.mpr
+      (id
+        (congrArg (fun _a => decode (PV_DIAG8.publicInputs messages path stack requests world p) = decode _a)
+          (sourceBinding p w')))
+      (Eq.refl (decode (PV_DIAG8.publicInputs messages path stack requests world p))))
+theorem PV_DIAG8.DIAG8_prefix_family : ∀ {P W O : Type} (native : P → W → ℕ → PV_DIAG8.DIAG8Inputs)
+  (decode : PV_DIAG8.DIAG8Inputs → O) (publicFamily : P → ℕ → PV_DIAG8.DIAG8Inputs),
+  (∀ (p : P) (w : W) (n : ℕ), native p w n = publicFamily p n) →
+    ∀ (p : P) (w w' : W), (fun n => decode (native p w n)) = fun n => decode (native p w' n) :=
+fun {P W O} native decode publicFamily sourceBinding p w w' =>
+  funext fun n =>
+    Eq.mpr (id (congrArg (fun _a => decode _a = decode (native p w' n)) (sourceBinding p w n)))
+      (Eq.mpr (id (congrArg (fun _a => decode (publicFamily p n) = decode _a) (sourceBinding p w' n)))
+        (Eq.refl (decode (publicFamily p n))))
+'PV_DIAG8.cursor_panic_guard_false' depends on axioms: [propext, Quot.sound]
+'PV_DIAG8.array_all_cursor_bytes_safe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_DIAG8.audit_success_literal' depends on axioms: [propext]
+'PV_DIAG8.audit_formatter_public' depends on axioms: [propext]
+'PV_DIAG8.world_byte_blind_transport' depends on axioms: [Quot.sound]
+'PV_DIAG8.frames_same_message_insufficient' depends on axioms: [propext]
+'PV_DIAG8.frames_same_config_insufficient' depends on axioms: [propext]
+'PV_DIAG8.DIAG8_audit_joint' depends on axioms: [propext]

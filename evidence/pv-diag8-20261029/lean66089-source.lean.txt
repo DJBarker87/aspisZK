@@ -1,0 +1,32 @@
+import PV_DIAG8_World
+set_option autoImplicit false
+namespace PV_DIAG8
+/-! Error-path capture requires the live stack at the capture point, not only
+public formatted text or public backtrace configuration. No PCs are put into
+option B's environment-failure input by this model. -/
+inductive PathStep
+ | enter (frame : Nat)
+ | leave
+ | capture (enabled : Bool)
+ deriving DecidableEq
+def stackStep (stack : List Nat) : PathStep → List Nat
+ | .enter f => f::stack
+ | .leave => stack.tail
+ | .capture _ => stack
+def captures (stack : List Nat) : List PathStep → List (List Nat)
+ | [] => []
+ | s::rest => (match s with | .capture true => [stack] | _ => []) ++ captures (stackStep stack s) rest
+
+theorem frames_no_capture_empty (s : List Nat) : captures s []=[] := rfl
+#print axioms frames_no_capture_empty
+theorem frames_capture_here (s : List Nat) (rest : List PathStep) : captures s (.capture true::rest) = s::captures s rest := rfl
+#print axioms frames_capture_here
+theorem frames_disabled_here (s : List Nat) (rest : List PathStep) : captures s (.capture false::rest)=captures s rest := rfl
+#print axioms frames_disabled_here
+theorem frames_enter (s : List Nat) (f : Nat) (rest : List PathStep) : captures s (.enter f::rest)=captures (f::s) rest := rfl
+#print axioms frames_enter
+theorem frames_leave (s : List Nat) (rest : List PathStep) : captures s (.leave::rest)=captures s.tail rest := rfl
+#print axioms frames_leave
+theorem frames_public_path {P W : Type} (path : P → List PathStep) (stack : P → List Nat) (p : P) (w w' : W) : (fun _ : W => captures (stack p) (path p)) w = (fun _ : W => captures (stack p) (path p)) w' := rfl
+#print axioms frames_public_path
+end PV_DIAG8

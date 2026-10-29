@@ -1,0 +1,12 @@
+import PV_DIAG8_Audit
+set_option autoImplicit false
+#print PV_DIAG8.DIAG8_inputs_given_native_binding
+#print PV_DIAG8.DIAG8_prefix_family
+#print axioms PV_DIAG8.cursor_panic_guard_false
+#print axioms PV_DIAG8.array_all_cursor_bytes_safe
+#print axioms PV_DIAG8.audit_success_literal
+#print axioms PV_DIAG8.audit_formatter_public
+#print axioms PV_DIAG8.world_byte_blind_transport
+#print axioms PV_DIAG8.frames_same_message_insufficient
+#print axioms PV_DIAG8.frames_same_config_insufficient
+#print axioms PV_DIAG8.DIAG8_audit_joint

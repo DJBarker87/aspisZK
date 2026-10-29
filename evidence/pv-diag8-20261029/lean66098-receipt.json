@@ -1,0 +1,58 @@
+{
+  "kind": "lean",
+  "admission_exit": 0,
+  "admission_allowed": true,
+  "source_revision": "124dca3b72357a919b393ccfe24223a91ca07123",
+  "runner_sha256": "3c7e60bbf361f9cd2d35da7d18226dbeac506270d3e98250e17d50b3cd58f1d5",
+  "resource_caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "module": "PV_DIAG8_CohortAudit",
+  "attempt": 66098,
+  "source_sha256": "bb5d88fa38cb445f74aa08243335af1c0c7c1ef13b4ceb070e75473691159ff1",
+  "environment_sha256": "e73713c1c398a0e9c9ff1c6a20624b254a464244ac4a3566c93bc9053b16028d",
+  "dependency_objects": {
+    "PV_DIAG8_Audit": {
+      "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects/PV_DIAG8_Audit.olean": "d6daf0922fcd7713d512bedf4f155dce5f902e6bb66ef1e0959305ca32398ce7"
+    }
+  },
+  "Lean_M": 7000,
+  "command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--quiet",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/lean66098-time.log",
+    "timeout",
+    "900",
+    "python3",
+    "/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/env-J.json",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/objects/PV_DIAG8_CohortAudit.olean",
+    "/home/dombarker/project-offloads/codex-pv-diag8-20261029/sources/PV_DIAG8_CohortAudit.lean",
+    "7000"
+  ],
+  "exit": 0,
+  "wall_seconds": 1.5163185596466064,
+  "peak_rss_kib": "3780756",
+  "swaps": "0",
+  "gnu_wall": "0:01.48",
+  "print_axioms": "theorem PV_DIAG8.DIAG8_inputs_given_native_binding : \u2200 {P W O : Type} (native : P \u2192 W \u2192 PV_DIAG8.DIAG8Inputs)\n  (decode : PV_DIAG8.DIAG8Inputs \u2192 O) (messages : P \u2192 List PV_DIAG8.ClientGuard) (path : P \u2192 List PV_DIAG8.PathStep)\n  (stack : P \u2192 List \u2115) (requests : P \u2192 List PV_DIAG8.Request)\n  (world : PV_DIAG8.History \u2192 PV_DIAG8.Request \u2192 PV_DIAG8.Reply),\n  (\u2200 (p : P) (w : W), native p w = PV_DIAG8.publicInputs messages path stack requests world p) \u2192\n    \u2200 (p : P) (w w' : W), decode (native p w) = decode (native p w') :=\nfun {P W O} native decode messages path stack requests world sourceBinding p w w' =>\n  Eq.mpr (id (congrArg (fun _a => decode _a = decode (native p w')) (sourceBinding p w)))\n    (Eq.mpr\n      (id\n        (congrArg (fun _a => decode (PV_DIAG8.publicInputs messages path stack requests world p) = decode _a)\n          (sourceBinding p w')))\n      (Eq.refl (decode (PV_DIAG8.publicInputs messages path stack requests world p))))\ntheorem PV_DIAG8.DIAG8_prefix_family : \u2200 {P W O : Type} (native : P \u2192 W \u2192 \u2115 \u2192 PV_DIAG8.DIAG8Inputs)\n  (decode : PV_DIAG8.DIAG8Inputs \u2192 O) (publicFamily : P \u2192 \u2115 \u2192 PV_DIAG8.DIAG8Inputs),\n  (\u2200 (p : P) (w : W) (n : \u2115), native p w n = publicFamily p n) \u2192\n    \u2200 (p : P) (w w' : W), (fun n => decode (native p w n)) = fun n => decode (native p w' n) :=\nfun {P W O} native decode publicFamily sourceBinding p w w' =>\n  funext fun n =>\n    Eq.mpr (id (congrArg (fun _a => decode _a = decode (native p w' n)) (sourceBinding p w n)))\n      (Eq.mpr (id (congrArg (fun _a => decode (publicFamily p n) = decode _a) (sourceBinding p w' n)))\n        (Eq.refl (decode (publicFamily p n))))\n'PV_DIAG8.cursor_panic_guard_false' depends on axioms: [propext, Quot.sound]\n'PV_DIAG8.array_all_cursor_bytes_safe' depends on axioms: [propext, Classical.choice, Quot.sound]\n'PV_DIAG8.audit_success_literal' depends on axioms: [propext]\n'PV_DIAG8.audit_formatter_public' depends on axioms: [propext]\n'PV_DIAG8.world_byte_blind_transport' depends on axioms: [Quot.sound]\n'PV_DIAG8.frames_same_message_insufficient' depends on axioms: [propext]\n'PV_DIAG8.frames_same_config_insufficient' depends on axioms: [propext]\n'PV_DIAG8.DIAG8_audit_joint' depends on axioms: [propext]\n",
+  "object_sha256": "bb21bf8877e31e2941abd7ecb8209deeba997762b1ec568299851e66c2aa0c8f"
+}

@@ -1,0 +1,33 @@
+import R1Z.ProverCommitArrayIndex25
+import PV_DIAG8_Cursor
+set_option autoImplicit false
+namespace PV_DIAG8
+open Aeneas Aeneas.Std
+/-! Existing extracted array-index theorem, specialized to reached fixed sizes.
+These are index laws, not a claim that every native caller supplies the bound. -/
+
+theorem array_no_bounds_failure {α : Type} {n : Usize} (a : Aeneas.Std.Array α n) (i : Usize) (h : i.val < n.val) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := by rw [R1Z.ProverCommitArrayIndex25.array_index_usize_ok a i h]; intro bad; cases bad
+#print axioms array_no_bounds_failure
+theorem array_4_safe {α : Type} (a : Aeneas.Std.Array α 4#usize) (i : Usize) (h : i.val < 4) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_4_safe
+theorem array_8_safe {α : Type} (a : Aeneas.Std.Array α 8#usize) (i : Usize) (h : i.val < 8) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_8_safe
+theorem array_20_safe {α : Type} (a : Aeneas.Std.Array α 20#usize) (i : Usize) (h : i.val < 20) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_20_safe
+theorem array_22_safe {α : Type} (a : Aeneas.Std.Array α 22#usize) (i : Usize) (h : i.val < 22) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_22_safe
+theorem array_26_safe {α : Type} (a : Aeneas.Std.Array α 26#usize) (i : Usize) (h : i.val < 26) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_26_safe
+theorem array_29_safe {α : Type} (a : Aeneas.Std.Array α 29#usize) (i : Usize) (h : i.val < 29) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_29_safe
+theorem array_32_safe {α : Type} (a : Aeneas.Std.Array α 32#usize) (i : Usize) (h : i.val < 32) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_32_safe
+theorem array_56_safe {α : Type} (a : Aeneas.Std.Array α 56#usize) (i : Usize) (h : i.val < 56) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_56_safe
+theorem array_64_safe {α : Type} (a : Aeneas.Std.Array α 64#usize) (i : Usize) (h : i.val < 64) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_64_safe
+theorem array_512_safe {α : Type} (a : Aeneas.Std.Array α 512#usize) (i : Usize) (h : i.val < 512) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_512_safe
+theorem array_1024_safe {α : Type} (a : Aeneas.Std.Array α 1024#usize) (i : Usize) (h : i.val < 1024) : Aeneas.Std.Array.index_usize a i ≠ .fail .arrayOutOfBounds := array_no_bounds_failure a i (by simpa using h)
+#print axioms array_1024_safe
+end PV_DIAG8

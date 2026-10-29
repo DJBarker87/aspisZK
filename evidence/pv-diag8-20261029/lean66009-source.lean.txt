@@ -1,0 +1,32 @@
+import Mathlib.Tactic
+set_option autoImplicit false
+namespace PV_DIAG8
+/-! Source guards only: no panic payload is evaluated. The caller invariant
+is proved inductively from new(word=8), not postulated for an entire client. -/
+def slot (word : Nat) : Nat := if word = 8 then 0 else word
+def nextCursor (word : Nat) : Nat := slot word + 1
+def cursorRun : Nat → Nat
+ | 0 => 8
+ | n+1 => nextCursor (cursorRun n)
+
+theorem cursor_initial : cursorRun 0 = 8 := rfl
+#print axioms cursor_initial
+theorem cursor_slot_lt (w : Nat) (h : w ≤ 8) : slot w < 8 := by unfold slot; split <;> omega
+#print axioms cursor_slot_lt
+theorem cursor_next_bound (w : Nat) (h : w ≤ 8) : nextCursor w ≤ 8 := by have := cursor_slot_lt w h; unfold nextCursor; omega
+#print axioms cursor_next_bound
+theorem cursor_invariant (n : Nat) : cursorRun n ≤ 8 := by induction n with | zero => decide | succ n ih => exact cursor_next_bound _ ih
+#print axioms cursor_invariant
+theorem cursor_start (w : Nat) (h : w ≤ 8) : 4 * slot w ≤ 28 := by have := cursor_slot_lt w h; omega
+#print axioms cursor_start
+theorem cursor_end (w : Nat) (h : w ≤ 8) : 4 * slot w + 4 ≤ 32 := by have := cursor_start w h; omega
+#print axioms cursor_end
+theorem cursor_length (w : Nat) : (4 * slot w + 4) - 4 * slot w = 4 := by omega
+#print axioms cursor_length
+theorem cursor_byte0 (w : Nat) (h : w ≤ 8) : 4 * slot w < 32 := by have := cursor_start w h; omega
+#print axioms cursor_byte0
+theorem cursor_byte1 (w : Nat) (h : w ≤ 8) : 4 * slot w + 1 < 32 := by have := cursor_start w h; omega
+#print axioms cursor_byte1
+theorem cursor_byte2 (w : Nat) (h : w ≤ 8) : 4 * slot w + 2 < 32 := by have := cursor_start w h; omega
+#print axioms cursor_byte2
+end PV_DIAG8
