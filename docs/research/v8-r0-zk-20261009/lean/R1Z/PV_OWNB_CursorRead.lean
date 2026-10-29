@@ -11,6 +11,7 @@ theorem advance (q : Cursor) (h:Valid q) (notEnd:q.read<q.length) :
  Valid (PV_OWNB_Cursor.advance q) := by
  unfold Valid at h ⊢
  unfold PV_OWNB_Cursor.advance
+ dsimp only
  refine ⟨h.1,h.2.1,h.2.2.1,by omega,by omega,h.2.2.2.2.2.1,?_,h.2.2.2.2.2.2.2⟩
  intro i hi hil
  exact h.2.2.2.2.2.2.1 i (by omega) hil
