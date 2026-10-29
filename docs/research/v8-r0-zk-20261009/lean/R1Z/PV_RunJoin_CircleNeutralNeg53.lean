@@ -17,7 +17,11 @@ theorem complete (a : U32) (ha : Canon a) :
       unfold PV_RunJoin_CircleRawScalar52.field.M31.neg PV_RunJoin_CircleRawScalar52.field.ct.neg
       simp only [hbool,lift,bind_tc_ok,PV_RunJoin_CircleRawScalar52.field.P]
       change ok (⟨(U32.wrapping_sub 2147483647#u32 a).bv &&& (-1#32)⟩ : U32) = _
-      simp
+      apply congrArg ok
+      apply UScalar.eq_of_val_eq
+      change (((U32.wrapping_sub 2147483647#u32 a).bv &&& BitVec.allOnes 32).toNat) =
+        (U32.wrapping_sub 2147483647#u32 a).val
+      rw [BitVec.and_allOnes]
     · unfold PV_RunJoin_CircleR72Raw52.field.M31.neg PV_RunJoin_CircleR72Raw52.field.P
       rw [if_neg hz,PV_RunJoin_CircleNeutralScalar52.checked_sub _ _ hp,bind_tc_ok]
     · unfold Canon
