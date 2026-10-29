@@ -26,6 +26,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_WeightConstructorInstalled47.complete base heap box ops sem.alpha sem.z
   refine ⟨kw,z0,z1,h0,h1,hm,?_⟩
   rw [@PV_RunJoin_PrepareContext47.source (types base) (selected base heap box ops) .S2 hash backend sem]
-  rw [hn]
+  exact congrArg (@PV_RunJoin_PrepareContext47.run (types base)
+    (selected base heap box ops) .S2 hash backend sem) hn
 #print axioms complete
 end R1Z.PV_RunJoin_PrepareWeight47
