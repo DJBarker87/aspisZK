@@ -8,7 +8,6 @@ attribute [local irreducible] aspis_core.field.QM31.add aspis_core.field.M31.add
 theorem full_round_packed_entry10 (state : RoundState10) (constants1 : Array aspis_core.field.QM31 16#usize) :
     reference_poseidon.full_round_packed state constants1 =
       (round_q_group10_00 constants1 state >>= round_q_source10_04 reference_poseidon.external_linear_packed constants1) := by
-  unfold reference_poseidon.full_round_packed
   conv_rhs => simp only [round_q_group10_00,PV_B3P_Ordered227.fold,round_q_step10,PV_B3P_Ordered227.bind_assoc,bind_tc_ok]
   apply bind_equal9
   intro head_0
