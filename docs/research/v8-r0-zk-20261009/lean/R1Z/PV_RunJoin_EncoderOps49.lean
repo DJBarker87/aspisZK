@@ -55,7 +55,9 @@ theorem add (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFun
 theorem sub (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base)) (a b : S) :
   (@aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField (types base) (selected base heap box ops)).sub (fromW a) (fromW b)=
     mapResult fromW (AspisR1ProducerRelease47.field.wide_exact.WideExact.sub a b) := by
-  rw [sub_field base heap box ops,native_w_roundtrip,native_w_roundtrip,maps]
+  rw [sub_field base heap box ops]
+  dsimp only
+  rw [native_w_roundtrip,native_w_roundtrip,maps]
 #print axioms maps
 #print axioms mul_field
 #print axioms add_field
