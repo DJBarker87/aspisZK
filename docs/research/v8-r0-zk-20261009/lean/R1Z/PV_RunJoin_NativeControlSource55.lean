@@ -1,15 +1,9 @@
-import R1Z.PV_RunJoin_NativeControl55
+import R1Z.PV_RunJoin_NativePhaseSource55
 import R1Z.PV_RunJoin_ResultBindEq55
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_NativeControlSource55
 open Aeneas Aeneas.Std Result ProverRwFull
 variable [ExternalTypes] [ExternalFuns]
-attribute [local irreducible] prover.prove_from_semantics host_semantic.build_with_material
-attribute [local irreducible] prover.audit_masks prover.fixed_k_column prover.derive_private_salts
-attribute [local irreducible] host_commitment.EncodingDomain.new
-attribute [local irreducible] aspis_statement.state_only_semantic.state_only_copy_helper_sum
-attribute [local irreducible] core.option.Option.Insts.CoreCmpPartialEqOption.eq
-
 theorem complete
   {T0 : Type} (aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst :
   aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0)
@@ -28,8 +22,8 @@ theorem complete
       aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst
       public1 compiled variant hash context binding attempt nonce_store := by
   unfold prover.prove_masked_with_attempt PV_RunJoin_NativeControl55.run
-  simp only [PV_RunJoin_NativeControl55.source]
-  rfl
+  simp only [PV_RunJoin_NativePhaseSource55.complete]
+  all_goals rfl
 
 #print axioms complete
 end R1Z.PV_RunJoin_NativeControlSource55
