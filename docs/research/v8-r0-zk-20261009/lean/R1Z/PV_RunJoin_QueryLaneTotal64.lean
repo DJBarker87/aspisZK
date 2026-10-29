@@ -48,6 +48,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
              let d ← Aeneas.Std.lift (Usize.wrapping_add a 3#usize)
              let w3 ← host_commitment.Word.value word d
              ok (Array.make 4#usize [w0,w1,w2,w3]))=_
+  dsimp only [at1] at h0 h1 h2 h3
   rw [PV_RunJoin_QueryHead63.get]
   simp only [ProverRwDictionaryDomain.fibreGet,lift,bind_tc_ok,h0,h1,h2,h3]
 
