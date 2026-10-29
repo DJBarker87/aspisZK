@@ -33,7 +33,7 @@ for q in list(Path('evidence/pv-evhd-20261029').glob('receipt-*.json')) + list(E
  obj=('/home/dombarker/project-offloads/codex-pv-evhd-20261029' if m.startswith('PV_EVHD_') else H)+'/objects/'+m.replace('.','/')+'.olean'
  r=subprocess.check_output(['ssh','dombarker@100.108.41.90','sha256sum '+obj],text=True)
  assert r.split()[0]==v['object_sha256'],('own object changed',m)
- projects[m]=dict(module=m,path=path,revision=rev,source_sha256=sha(b),object_sha256=v['object_sha256'],object_path=obj)
+ projects[m]=dict(module=m,path=path,revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),source_sha256=sha(b),object_sha256=v['object_sha256'],object_path=obj)
  prep=json.load(open(q.parent/('prepare-'+m+'.json')))['result']
  for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):
   found=next(t for t in prep['project_checks'] if t['module']==d)

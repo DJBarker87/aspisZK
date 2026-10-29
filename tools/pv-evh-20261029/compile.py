@@ -7,6 +7,8 @@ assert not (E/f'submission-{a}.json').exists()
 module=sys.argv[2] if len(sys.argv)>2 else 'PV_EVH_Interface'
 assert module.startswith('PV_EVH_')
 assert module != 'PV_EVH_FixtureConsumer', 'lead-only 16 GiB consumer; worker launch forbidden'
+if a >= 70497:
+ assert module in ['PV_EVH_Statements','PV_EVH_Axioms','PV_EVH_Replay'], 'reserved audit ID'
 source=Path('lean/'+module+'.lean').read_bytes()
 assert hashlib.sha256(source).hexdigest()==json.load(open(E/('prepare-'+module+'.json')))['result']['source_sha256']
 # Ruling (u): source-only guard, including all failures in this line.
@@ -40,7 +42,7 @@ if refused.exists() and not json.loads(refused.read_text())['compiler_started']:
  (E/f'id-audit-{a}.json').write_text(json.dumps(idcheck))
 assert not idcheck['receipt_hits'] and not idcheck['sent_hits']
 cmd=['systemd-run','--user','--scope','--quiet',f'--unit=pv-evh-{a}','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','/usr/bin/time','-v','-o',H+f'/evidence/time-{a}.log','timeout','600','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',H+'/J.json',H+'/objects',H+'/sources',H+'/objects/'+module+'.olean',H+'/sources/'+module+'.lean','7000']
-intent=dict(attempt=a,target=module,source_revision=rev,source_sha256=hashlib.sha256(source).hexdigest(),command=cmd)
+intent=dict(attempt=a,target=module,source_revision=rev,source_path='lean/'+module+'.lean',source_git_blob=subprocess.check_output(['git','rev-parse',rev+':lean/'+module+'.lean'],text=True).strip(),source_sha256=hashlib.sha256(source).hexdigest(),command=cmd)
 (E/f'submission-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 admit=f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {H}/evidence/admission-{a}.json > {H}/evidence/admission-{a}.log 2>&1'
 check='python3 -c '+shlex.quote('import json; assert json.load(open('+repr(H+f'/evidence/admission-{a}.json')+'))["allowed"] is True')
