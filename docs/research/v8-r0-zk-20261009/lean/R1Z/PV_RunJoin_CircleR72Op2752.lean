@@ -10,7 +10,7 @@ theorem op27 (c : Unit) (tupled_args : Std.U64) :
     AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call c tupled_args = PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call c tupled_args := by
   unfold AspisR72Sampler.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call PV_RunJoin_CircleR72Raw52.field.r24_canonical_mul.closure.Insts.CoreOpsFunctionFnTupleU64U64.call
   simp only [op3,cm_a,cm_b,q_c0,q_c1,bind_assoc_eq,bind_tc_ok]
-  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]
+  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op27

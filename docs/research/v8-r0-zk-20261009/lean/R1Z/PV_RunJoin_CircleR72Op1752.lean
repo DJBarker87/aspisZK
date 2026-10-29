@@ -10,7 +10,7 @@ theorem op17 (left : Std.U64) (right : Std.U64) :
     AspisR72Sampler.field.r23_product_u32_bounded left right = PV_RunJoin_CircleR72Raw52.field.r23_product_u32_bounded left right := by
   unfold AspisR72Sampler.field.r23_product_u32_bounded PV_RunJoin_CircleR72Raw52.field.r23_product_u32_bounded
   simp only [cm_a,cm_b,q_c0,q_c1,bind_assoc_eq,bind_tc_ok]
-  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]
+  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op17

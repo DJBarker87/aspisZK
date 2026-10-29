@@ -14,7 +14,7 @@ theorem complete (block : Array U8 32#usize) (second : Bool) :
       let p ← PV_RunJoin_CircleRawMap52.circle_owned block second
       ok (encPoint p)) := by
   unfold PV_AL_CircleOwned.circle_owned PV_RunJoin_CircleRawMap52.circle_owned
-  rw [PV_RunJoin_CircleOwnedSampler52.s7]
+  rw [PV_RunJoin_CircleOwnedSampler52.s8]
   simp only [bind_assoc_eq,bind_tc_ok]
   apply (Aeneas.Std.bind_eq_iff _ _ _).mpr
   intro parameter _

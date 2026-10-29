@@ -10,7 +10,7 @@ theorem op13 (iter : core.ops.range.Range Std.Usize) (value : U32) :
     AspisR72Sampler.field.square_n_loop iter value = PV_RunJoin_CircleR72Raw52.field.square_n_loop iter value := by
   unfold AspisR72Sampler.field.square_n_loop PV_RunJoin_CircleR72Raw52.field.square_n_loop
   simp only [op12,cm_a,cm_b,q_c0,q_c1,bind_assoc_eq,bind_tc_ok]
-  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]
+  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op13

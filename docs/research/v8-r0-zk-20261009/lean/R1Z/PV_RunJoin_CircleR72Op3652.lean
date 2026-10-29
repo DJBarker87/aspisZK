@@ -9,7 +9,7 @@ attribute [local irreducible] encCM encQ
 theorem op36  :
     AspisR72Sampler.field.CM31.ZERO  = encCM (PV_RunJoin_CircleR72Raw52.field.CM31.ZERO ) := by
   unfold AspisR72Sampler.field.CM31.ZERO PV_RunJoin_CircleR72Raw52.field.CM31.ZERO
-  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]
+  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]
   all_goals rfl
 
 #print axioms op36

@@ -70,10 +70,13 @@ for i,n in enumerate(ops):
  deps=['op'+str(j) for j,m in enumerate(ops[:i]) if m in d[len('def '+n):]]
  simp=deps+['cm_a','cm_b','q_c0','q_c1','bind_assoc_eq','bind_tc_ok']
  if deps or args:stmt+='  simp only ['+','.join(simp)+']\n'
- stmt+='  all_goals simp only [encCM,encQ,encPoint,encOutcome,encError]\n  all_goals rfl\n'
+ stmt+='  all_goals first | rfl | simp only [encCM,encQ,encPoint,encOutcome,encError]\n  all_goals rfl\n'
  stem='PV_RunJoin_CircleR72Op'+str(i)+'52';imports=[mods[-1] if mods else 'PV_RunJoin_CircleR72Carrier52',raw]
  text='\n'.join('import R1Z.'+m for m in imports)+'\nimport AspisR72Sampler.Funs\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result ControlFlow\nnamespace R1Z.PV_RunJoin_CircleR72Ops52\nopen PV_RunJoin_CircleR72Carrier52\nattribute [local irreducible] encCM encQ\n'+stmt+f'\n#print axioms op{i}\nend R1Z.PV_RunJoin_CircleR72Ops52\n'
- (L/(stem+'.lean')).write_text(text);mods.append(stem)
+ target=L/(stem+'.lean')
+ accepted={v['module'] for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
+ if 'R1Z.'+stem not in accepted: target.write_text(text)
+ mods.append(stem)
 (E/'r72-op-sequence.json').write_text(json.dumps(mods,indent=2)+'\n')
 p=L/'PV_RunJoin_CircleR72Op1652.lean';s=p.read_text();a=s.index(' := by\n');b=s.index('#print axioms')
 s=s[:a]+''' := by
