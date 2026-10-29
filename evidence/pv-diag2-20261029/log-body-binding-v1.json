@@ -1,0 +1,84 @@
+{
+  "family": "log",
+  "classification": "deployed-source outer-frame structural binding under own-1; open native leaf and ownership laws are not restored rows",
+  "sources": [
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.33/src/macros.rs",
+      "file_sha256": "6917080cd9c4a2ca8128024f562a2bfdbbcd43616e41ef125289a30c6a9a4be2",
+      "line": 119,
+      "body": "macro_rules! __log {\n    // log!(logger: my_logger, target: \"my_target\", Level::Info, key1:? = 42, key2 = true; \"a {} event\", \"log\");\n    (logger: $logger:expr, target: $target:expr, $lvl:expr, $($key:tt $(:$capture:tt)? $(= $value:expr)?),+; $($arg:tt)+) => ({\n        let lvl = $lvl;\n        if lvl <= $crate::STATIC_MAX_LEVEL && lvl <= $crate::max_level() {\n            $crate::__private_api::log(\n                $logger,\n                $crate::__private_api::format_args!($($arg)+),\n                lvl,\n                &($target, $crate::__private_api::module_path!(), $crate::__private_api::loc()),\n                &[$(($crate::__log_key!($key), $crate::__log_value!($key $(:$capture)* = $($value)*))),+] as &[_],\n            );\n        }\n    });\n\n    // log!(logger: my_logger, target: \"my_target\", Level::Info, \"a {} event\", \"log\");\n    (logger: $logger:expr, target: $target:expr, $lvl:expr, $($arg:tt)+) => ({\n        let lvl = $lvl;\n        if lvl <= $crate::STATIC_MAX_LEVEL && lvl <= $crate::max_level() {\n            $crate::__private_api::log(\n                $logger,\n                $crate::__private_api::format_args!($($arg)+),\n                lvl,\n                &($target, $crate::__private_api::module_path!(), $crate::__private_api::loc()),\n                (),\n            );\n        }\n    });\n}"
+    },
+    {
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/log-0.4.33/src/lib.rs",
+      "file_sha256": "7b605f1702b0a97c5ba5371aba62d6297cad21c00f1097040d201eb7cc28fa7e",
+      "line": 1422,
+      "body": "pub fn max_level() -> LevelFilter {\n    // Since `LevelFilter` is `repr(usize)`,\n    // this transmute is sound if and only if `MAX_LOG_LEVEL_FILTER`\n    // is set to a usize that is a valid discriminant for `LevelFilter`.\n    // Since `MAX_LOG_LEVEL_FILTER` is private, the only time it's set\n    // is by `set_max_level` above, i.e. by casting a `LevelFilter` to `usize`.\n    // So any usize stored in `MAX_LOG_LEVEL_FILTER` is a valid discriminant.\n    unsafe { mem::transmute(MAX_LOG_LEVEL_FILTER.load(Ordering::Relaxed)) }\n}"
+    },
+    {
+      "path": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/.fingerprint/log-63de565935581dd6/lib-log.json",
+      "fingerprint": {
+        "path": "/home/dombarker/project-offloads/codex-pv-rdea-20261028/client-target/release/.fingerprint/log-63de565935581dd6/lib-log.json",
+        "sha256": "193fbd91c023fa64c0d08f61b36f0e76f316b390ea815250e3f82996d18fcee4",
+        "record": {
+          "rustc": 5391851738765093524,
+          "features": "[]",
+          "declared_features": "[\"alloc\", \"kv\", \"kv_serde\", \"kv_std\", \"kv_sval\", \"kv_unstable\", \"kv_unstable_serde\", \"kv_unstable_std\", \"kv_unstable_sval\", \"max_level_debug\", \"max_level_error\", \"max_level_info\", \"max_level_off\", \"max_level_trace\", \"max_level_warn\", \"release_max_level_debug\", \"release_max_level_error\", \"release_max_level_info\", \"release_max_level_off\", \"release_max_level_trace\", \"release_max_level_warn\", \"serde\", \"serde_core\", \"std\", \"sval\", \"sval_ref\", \"value-bag\"]",
+          "target": 6550155848337067049,
+          "profile": 2040997289075261528,
+          "path": 8880664984425957472,
+          "deps": [],
+          "local": [
+            {
+              "CheckDepInfo": {
+                "dep_info": "release/.fingerprint/log-63de565935581dd6/dep-lib-log",
+                "checksum": false
+              }
+            }
+          ],
+          "rustflags": [],
+          "config": 8247474407144887393,
+          "compile_kind": 0
+        }
+      }
+    }
+  ],
+  "models": {
+    "PV_DIAG2_LogControl": "e03696abab5173017ab108e71326f1e70e419373fb0a1d848af9dc04c8e0bd46"
+  },
+  "steps": [
+    [
+      "let lvl=$lvl",
+      "logMacro.level",
+      "level-expression effects retained; a disabled macro does not erase its earlier effects"
+    ],
+    [
+      "static max comparison, short circuit",
+      "logMacro staticMax=5",
+      "features[] + release => STATIC_MAX_LEVEL Trace"
+    ],
+    [
+      "max_level AtomicUsize relaxed load",
+      "logMacro.loadMax",
+      "source initial0 Off; no global proof that dependencies never call set_max_level"
+    ],
+    [
+      "runtime max comparison, short circuit",
+      "log_runtime_off_skips_arguments",
+      "Level Error..Trace are1..5; max0 suppresses subsequent argument construction/dispatch"
+    ],
+    [
+      "logger/format_args/target/location/kv values and private log call",
+      "logMacro.dispatch",
+      "all native argument evaluation, Record builder state, logger calls/output and temporary cleanup retained; kv feature disabled"
+    ]
+  ],
+  "open_native_obligations": [
+    "global filter/logger configuration stability and complete caller closure",
+    "actual level expression provenance",
+    "enabled dispatch argument/content/output and foreign logger effects"
+  ],
+  "toolchain": "rustc 1.94.1 sources; no extractor/toolchain substitution",
+  "profile": "deployed release opt3 overflow/debug assertions off panic unwind",
+  "compiler_boundary": "V370 at owner pending D381/D386; no LLVM or machine equality silently assumed",
+  "new_trust_fields": 0
+}

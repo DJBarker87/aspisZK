@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,hashlib,re
+D=Path('/home/dombarker/project-offloads/codex-pv-diag2-20261029');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();r=json.loads((D/'recovered-wrapper-body-parity.json').read_text());s=D.parent/'codex-pv-fscan-20261028/src/crates/aspis-r1-cost-probe/src/sampler.rs';assert sha(s)==r['candidate_file_sha256'] and r['function_body'] in s.read_text()
+rec=json.loads((D/'lean63000-receipt.json').read_text());assert rec['exit']==0 and rec['source_sha256']=='5d1b131ed8be869faa5814712dd46e684b205abe512a90c0272c41e957b4eed6' and rec['object_sha256']=='7abf97410a440730bfc40ad253cd5d3c2bb01c4a1cd09e4f4bfd89086cd09e9d'
+cache=json.loads((D/'resume-cache-preflight.json').read_text());assert cache['mismatches']==[]
+R=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs');text=R.read_text();m=re.search(r'(?m)^\s*pub (?:const )?fn unwrap_or_else<',text);assert m;a=m.start();j=text.index('{',a);k=j+1;depth=1
+while depth:depth+=(text[k]=='{')-(text[k]=='}');k+=1
+body=text[a:k];assert 'Ok(t) => t' in body and 'Err(e) => op(e)' in body
+adapter=cache['rows']['AspisR1CircleSampleWrapper.FunsExternal'];assert adapter['source_sha256']=='333c99752d98b2b195203bddbb781549c8bd4114d6dc271f8897378230a38374' and adapter['sha256']=='0712bbc418070215c15fc2d82f0340807f662e20a4cf9989256b7f805366543a'
+result=dict(ruling='h7(2) source generation/adapter association recovered, h6 modern dependency fingerprints verified, unchanged generated importer elaborated; STEP4 not needed',wrapper_body_parity=r,unchanged_importer=rec,adapter=adapter,std_unwrap_or_else=dict(path=str(R),file_sha256=sha(R),body=body,model='hand-written adapter exact Ok return / Err FnOnce once; row/point/error are Copy carriers; opaque callees remain separate'),h6_checked=cache['checked'],historical_binary_cohort_recreated=False,original_graph_adapter_mismatch_retained='5b2ad417... differs; no graph object substituted',source_refinement_scope='generated/source Result model and complete local controller bridges; no whole prover native effect or mutable-borrow fidelity credit')
+(D/'recovery-final.json').write_text(json.dumps(result,indent=2)+'\n');print('recovered source association and deployed wrapper identity; unchanged importer0; modern h6 closure',cache['checked'])
