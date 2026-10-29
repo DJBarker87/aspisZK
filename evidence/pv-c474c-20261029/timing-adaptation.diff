@@ -1,0 +1,31 @@
+diff --git a/tools/pv-c474b-20261029/timing.py b/tools/pv-c474c-20261029/timing.py
+index 9d59cc3cec..3f979a8f0e 100644
+--- a/tools/pv-c474b-20261029/timing.py
++++ b/tools/pv-c474c-20261029/timing.py
+@@ -1,13 +1,15 @@
+-"""Actual baseline/draft clients, alternating paired fixture calls in own quiet window."""
++"""Actual baseline/draft clients, alternating paired fixture calls under D359(A) and ruling (e′)."""
+ from pathlib import Path
+ import hashlib,json,os,statistics,subprocess,time
+-H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle/timing';O.mkdir(exist_ok=False)
++H=Path('/home/dombarker/project-offloads/codex-pv-c474-20261029');O=H/'bundle/timing-c474c';O.mkdir(exist_ok=False)
+ M=H.parent/'QUIET_WINDOW.json';owner='pv-c474-20261029'
+ B={'baseline':H/'artifacts/baseline-devnet_spend','draft':H/'native-target/client/devnet_spend'}
+ rows=[]
+ def write(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+ def guard(label):
+- m=json.loads(M.read_text());assert m['owner']==owner and time.time()+40<m['until'],m
++ now=time.time();m=json.loads(M.read_text()) if M.exists() else None
++ write(O/(label+'-marker.json'),dict(current_epoch=now,marker=m,in_force=m is not None and now<float(m['until']),ruling="e-prime D533: expired marker is not in force; unchanged"))
++ assert m is None or now>=float(m['until']),m
+  subprocess.run(['python3',str(H/'quiet-preflight.py'),str(O/(label+'-quiet.json'))],check=True,stdout=subprocess.DEVNULL)
+ def thermal():
+  d={}
+@@ -16,6 +18,7 @@ def thermal():
+  assert d,'thermal counters unavailable'
+  return d
+ assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()=='30d883a8d97f12c315898aaf9170eb7a542b5e935881f089506fd4601ddb6a20'
++assert hashlib.sha256(B['draft'].read_bytes()).hexdigest()=='da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0'
+ pins={k:dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for k,p in B.items()};write(O/'binary-pins.json',pins)
+ # Requests were produced by the existing actual-client/SBF fixture gate.
+ requests={f:json.loads((H/'runtime-private-final/default'/f/'request.json').read_text()) for f in ['transfer','withdrawal']}
