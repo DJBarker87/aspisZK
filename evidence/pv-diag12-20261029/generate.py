@@ -155,7 +155,7 @@ theorem no_close_stdout (s : Span) (r : Reply) :
  intro e h; simp only [stdoutWrite,stdWrite,maskBadFd,fdWrite,call,List.mem_singleton] at h
  cases h; intro h; cases h''',
 ])
-# write_all has a cursor indexed by completed ABI calls, so retries cannot reset signal.
+# write_all has a cursor indexed by issued ABI calls, so retries cannot reset signal.
 module('WriteAll','import PV_DIAG12_Fd',[
 '''structure Cursor where
  next : Nat
