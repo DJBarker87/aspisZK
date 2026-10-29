@@ -2,6 +2,10 @@
 from pathlib import Path
 import subprocess, json, sys, time, shlex, hashlib, os
 E=Path(__file__).resolve().parent
+# Own orchestration lock; does not wrap or alter the shared host launcher.
+import fcntl
+serial_lock=(E/'NEG_serial.lock').open('a')
+fcntl.flock(serial_lock,fcntl.LOCK_EX)
 B='/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029'
 H='dombarker@100.108.41.90'
 C='/home/dombarker/project-offloads/codex-cx-slice-q-mul-cache-20261029'
@@ -83,7 +87,7 @@ import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
-pins=json.loads((b/'NEG_SOURCE_PINS.json').read_text())
+pins=json.loads((b/'NEG_SOURCE_PINS.json').read_text()) if (b/'NEG_SOURCE_PINS.json').exists() else {{}}
 for n in files:
  if n.startswith('NEG_src/'):pins[n[8:]]=hashlib.sha256((b/n).read_bytes()).hexdigest()
 (b/'NEG_SOURCE_PINS.json').write_text(json.dumps(pins))
@@ -109,7 +113,10 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
-names=[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NEG_EXTRACTION_PINS.json',a+'.json']
+names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NEG_EXTRACTION_PINS.json',a+'.json']
+
+if {kind!r}=='extract':
+ names += [str(p.relative_to(b)) for p in (b/'NEG_extracted').rglob('*.lean')]
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr
