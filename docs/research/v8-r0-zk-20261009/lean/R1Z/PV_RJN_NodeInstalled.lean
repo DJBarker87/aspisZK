@@ -25,8 +25,11 @@ theorem primitive_branch [ExternalTypes] (ops : ExternalFuns) (T : Type) :
 
 theorem primitive_residual [ExternalTypes] (ops : ExternalFuns) (T : Type) :
     @ExternalFuns.op10 _ (ProverRwP6BodyCandidate.selected ops) T none=ok none := by
-  unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
-  exact ProverRwDictionaryOption.residual_none _ T
+  have entry : @ExternalFuns.op10 _ (ProverRwP6BodyCandidate.selected ops)=ProverRwDictionaryOption.Src.residual := by
+    unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
+    rfl
+  rw [entry]
+  exact ProverRwDictionaryOption.residual_none ops T
 
 theorem primitive_okor [ExternalTypes] (ops : ExternalFuns) :
     @ExternalFuns.op7 _ (ProverRwP6BodyCandidate.selected ops) (alloc.vec.Vec U8) verifier.Error
@@ -37,26 +40,28 @@ theorem primitive_okor [ExternalTypes] (ops : ExternalFuns) :
 theorem actual (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @PV_RJN_NodeReject.PV_RJN_Producer_NodePrimitives (types base) (selected base heap box ops) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   refine ⟨?_,?_,?_,?_,?_⟩
-  · change @ExternalFuns.op235 _ (selected base heap box ops)=_
+  · change @ExternalFuns.op235 (types base) (selected base heap box ops)=_
     unfold selected
     rw [PV_B2_F_RawNative.preserved_235]
     exact primitive_bits ops
-  · change @ExternalFuns.op236 _ (selected base heap box ops)=_
+  · change @ExternalFuns.op236 (types base) (selected base heap box ops)=_
     unfold selected
     rw [PV_B2_F_RawNative.preserved_236]
     exact primitive_batch ops
   · intro T
-    change @ExternalFuns.op9 _ (selected base heap box ops) T none=_
+    change @ExternalFuns.op9 (types base) (selected base heap box ops) T none=_
     unfold selected
     rw [PV_B2_F_RawNative.preserved_9]
     exact primitive_branch ops T
   · intro T
-    change @ExternalFuns.op10 _ (selected base heap box ops) T none=_
+    change @ExternalFuns.op10 (types base) (selected base heap box ops) T none=_
     unfold selected
     rw [PV_B2_F_RawNative.preserved_10]
     exact primitive_residual ops T
-  · change @ExternalFuns.op7 _ (selected base heap box ops) _ _ none verifier.Error.Allocation=_
+  · change @ExternalFuns.op7 (types base) (selected base heap box ops) _ _ none verifier.Error.Allocation=_
     unfold selected
     rw [PV_B2_F_RawNative.preserved_7]
     exact primitive_okor ops
