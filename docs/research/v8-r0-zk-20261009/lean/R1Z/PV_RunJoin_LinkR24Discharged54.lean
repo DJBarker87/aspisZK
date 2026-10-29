@@ -19,8 +19,10 @@ theorem publication {I : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ordering : @PV_RunJoin_Link_PublishOrder (types base) (selected base heap box ops) I runs) :
     PV_RJ4IDB.OpenInputs.RUNJOIN_PUBLISH_COMPACT
       (@actual (types base) (selected base heap box ops) I runs)
-      (@published (types base) (selected base heap box ops) I runs) :=
-  PV_RunJoin_PublishSkeleton54.complete base heap box ops runs complete common backend finish query node ordering
+      (@published (types base) (selected base heap box ops) I runs) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
+  exact PV_RunJoin_PublishSkeleton54.complete base heap box ops runs complete common backend finish query node ordering
 #print axioms complete
 #print axioms publication
 end R1Z.PV_RunJoin_LinkR24Discharged54
