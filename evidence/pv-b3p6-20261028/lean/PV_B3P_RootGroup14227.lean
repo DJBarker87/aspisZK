@@ -13,8 +13,10 @@ structure RootPorts14 (base : ExternalTypes) where
   frontier : List U8 → Array (Array U32 8#usize) 20#usize → Result FieldState13
 
 def PV_B3P_Link_private_public14 (base : ExternalTypes) (root : RootPorts14 base) : Prop :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   ∀ p t, root.private_public p t = .ok (PV_B3P_Carrier227.semantic base (.Transfer p t))
 def PV_B3P_Link_withdrawal_public14 (base : ExternalTypes) (root : RootPorts14 base) : Prop :=
+  letI : ExternalTypes := PV_B3P_Install227.Types base
   ∀ p t, root.withdrawal_public p t = .ok (PV_B3P_Carrier227.semantic base (.Withdrawal p t))
 def PV_B3P_Link_transition14 (base : ExternalTypes) (root : RootPorts14 base) : Prop :=
   root.transition = PV_B3P_ScalarBinding13227.transition_source13 base
