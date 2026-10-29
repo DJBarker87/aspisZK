@@ -43,7 +43,6 @@ theorem finite_total (ops : ExternalFuns) {N : Usize} (x : W) (fuel : Nat)
    have inc := increment i hi
    have b1 : (Usize.wrapping_add i 1#usize).val+fuel=N.val := by omega
    simp only [finite,dispatch,hi,if_true,hv,bind_tc_ok]
-   dsimp only
    split
    · obtain ⟨q,hq⟩ := mul_total ops p x
      rw [hq]
