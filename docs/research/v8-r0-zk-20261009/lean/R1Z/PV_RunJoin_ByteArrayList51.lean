@@ -13,7 +13,7 @@ theorem loop (bs : ByteArray) (i : Nat) (acc : List UInt8) :
       simp [ByteArray.get!,hi,ByteArray.getElem_eq_getElem_data]
       rfl
     rw [eq]
-    exact (List.cons_getElem_drop_succ (l:=bs.data.toList) (i:=i) (h:=hlen)).symm
+    exact (List.cons_getElem_drop_succ (l:=bs.data.toList) (n:=i) (h:=hlen)).symm
   | case2 i acc hi =>
     have bound : bs.data.toList.length ≤ i := by simpa using Nat.le_of_not_gt hi
     rw [List.drop_eq_nil_of_le bound,List.append_nil]
