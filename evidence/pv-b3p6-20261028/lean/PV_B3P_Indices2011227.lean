@@ -1,7 +1,7 @@
 import PV_B3P_PlanFold11227
 import PV_B3P_IndexSteps9227
 namespace PV_B3P_Binding11227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
+open Aeneas Aeneas.Std PV_B3P_Binding9227
 set_option autoImplicit false
 theorem next11_20_0 : Usize.wrapping_add 0#usize 1#usize = 1#usize := next_exact _ _ (Eq.refl _)
 #print axioms next11_20_0

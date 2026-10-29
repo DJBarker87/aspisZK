@@ -1,7 +1,7 @@
 import PV_B3P_UsizeLoop9227
 import PV_B3P_Ordered227
 namespace PV_B3P_Binding11227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
+open Aeneas Aeneas.Std PV_B3P_Binding9227
 set_option autoImplicit false
 
 def usize_indices11 : Nat → Usize → List Usize

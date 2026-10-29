@@ -1,8 +1,9 @@
 import PV_B3P_ScaleCompose11227
 import PV_B3P_Indices3311227
 namespace PV_B3P_Binding11227
-open Aeneas Aeneas.Std PV_B3P_227 PV_B3P_Binding9227
+open Aeneas Aeneas.Std PV_B3P_Binding9227
 set_option autoImplicit false
+open PV_B3P_227
 theorem scaling_stages_loop11 (packed : Array aspis_core.field.QM31 24#usize)
     (openings : aspis_statement.state_only_poseidon.StateOnlyPoseidonOpenings)
     (selectors : reference_copy_terminal.Selectors) (state : ValueState9) :
