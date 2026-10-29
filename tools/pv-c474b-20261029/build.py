@@ -19,7 +19,7 @@ subprocess.run(['sh','./build-client.sh'],cwd=C,env=env,check=True)
 p=H/'native-target/client/devnet_spend';b=p.read_bytes()
 (O/'client-build.json').write_text(json.dumps(dict(sha256=hashlib.sha256(b).hexdigest(),bytes=len(b),path=str(p),recipe=(C/'build-client.sh').read_text(),toolchain=subprocess.check_output(['rustc','+1.94.1','-vV'],env=env,text=True),unit_graph_command=cmd,bootstrap_scope='graph-only; no bootstrap on production compilation',insecure_spend_fixture=False,ct_host_prover=True),indent=2)+'\n')
 # Same manifest and lock as actual client, only register the unchanged audit binaries.
-V=R/'tools/pv-c474-validation';s=(C/'Cargo.toml').read_text()+'''\n[[bin]]\nname = "pv-c474-differential"\npath = "../../crates/aspis-r1-cost-probe/examples/prover_rw_differential.rs"\n[[bin]]\nname = "pv-c474-fixture"\npath = "../../crates/aspis-r1-cost-probe/examples/prover_rw_gate.rs"\n''';(V/'Cargo.toml').write_text(s)
+V=R/'tools/pv-c474-validation';s=(C/'Cargo.toml').read_text().replace('default-run = "aspis-r1-cu-probe"\n','')+'''\n[[bin]]\nname = "pv-c474-differential"\npath = "../../crates/aspis-r1-cost-probe/examples/prover_rw_differential.rs"\n[[bin]]\nname = "pv-c474-fixture"\npath = "../../crates/aspis-r1-cost-probe/examples/prover_rw_gate.rs"\n''';(V/'Cargo.toml').write_text(s)
 assert (C/'Cargo.lock').read_bytes()==(V/'Cargo.lock').read_bytes()
 cmd=['cargo','+1.94.1','build','--profile','client','--locked','--offline','-j','4','--features',features+',aspis-r1-cost-probe/insecure-spend-fixture','--bin','pv-c474-differential','--bin','pv-c474-fixture']
 subprocess.run(cmd,cwd=V,env=env,check=True)
