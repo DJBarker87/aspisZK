@@ -14,7 +14,7 @@ attribute [local irreducible] selected PV_B2_F_RawNative.selected PV_B2_F_Resour
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (b : OracleAnswer) :
     ∃ q : aspis_core.field.QM31,
-      @sampler.qm31_sample (types base) (selected base heap box ops) (PV_RunJoin_OpeningSampler50.block b)=ok q ∧
+      @ProverRwFull.sampler.qm31_sample (types base) (selected base heap box ops) (PV_RunJoin_OpeningSampler50.block b)=ok q ∧
       Canonical (PV_RunJoin_SemanticScalar50.raw q) ∧
       ProverCommitValueRange47.embed (AspisR1.ExtractedCurrentQM31Exact.decode (PV_RunJoin_SemanticScalar50.raw q))=
         PhaseSamplerParserBin.scalar b := by
