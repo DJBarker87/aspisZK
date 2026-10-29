@@ -27,9 +27,13 @@ theorem source (p : Point) (fs : Factors) (slot : Usize) (hs : slot.val<5) :
 
 theorem model (p : Point) : AspisR1ProducerRelease47.point_rows.all (amap toQ p)=
     mapResult (amap (amap toQ)) (run p) := by
-  unfold AspisR1ProducerRelease47.point_rows.all run
-  rw [PV_RunJoin_WeightConstructorZero47.complete]
-  rw [←PV_RunJoin_WeightArray46.replicate,←PV_RunJoin_WeightArray46.replicate]
-  exact PV_RunJoin_WeightPointRows46.complete p 5 seed 0#usize 5#u8 rfl
+  have hseed : amap (amap toQ) seed=Array.repeat 5#usize
+      (Array.repeat 4#usize AspisR1ProducerRelease47.field.QM31.ZERO) := by
+    unfold seed
+    rw [PV_RunJoin_WeightArray46.replicate,PV_RunJoin_WeightArray46.replicate,
+      ←PV_RunJoin_WeightConstructorZero47.complete]
+  have h := PV_RunJoin_WeightPointRows46.complete p 5 seed 0#usize 5#u8 rfl
+  rw [hseed] at h
+  exact h
 #print axioms model
 end R1Z.PV_RunJoin_WeightPointRows47
