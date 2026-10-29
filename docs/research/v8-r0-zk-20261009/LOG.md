@@ -14318,3 +14318,16 @@ Item (2) is done: pv-rdeac's final focused replay passed at 62002, with standard
 Item (1) is partial. V213's binding was recompiled compliantly at 62012, and Funs and Exact at 62013-62014. Deleted prerequisite caches prevented finishing the remaining consumers and the restoring-theorem audit within budget. V213 stays OPEN.
 
 pv-fixb continues item (1) only in the same worktree (IDs 62100-62199; 40 Lean). It rebuilds missing unchanged prerequisites compliantly, reusing only objects whose source hash and full import closure it has verified, then recompiles the consumers and audits V213. Privacy target not yet established.
+
+## D424 (Stream B) 2026-10-29 00:05 UTC: pv-rjdecc results (decoders are caller-supplied, so they belong to runjoin step 4); rjdec parked; pv-rdb2e launched for V231, V256, V257
+
+pv-rjdecc (branch codex/pv-rjdec-20261028, head fa6e6a6291, pushed) used all 100 Lean attempts (99 accepted, 1 rejected), no native scopes, no Kani and no void attempts. Its three audits passed with standard axioms only. Peak RSS was 4.74 GB, with zero swap. Lead review: nothing outside the worker's prefix and evidence; no forbidden constructs; no large files.
+
+Structural result for item (a): the runtime constructors do not contain their own decoders. They forward caller-supplied disclosed and observerOracle functions. Checked forwarding equations and PV_RJDec_CommonCases.complete_pair expose the six decoder clauses that the Common hypotheses need, without erasing or discharging any observation. The actual native implementations are therefore whatever the deployed caller passes when it constructs the Runtime. That identification is part of runjoin's step (4), the endpoint composition and RustRealRefinement, not a stand-alone decoder proof. Item (a) stays OPEN on that basis.
+
+Item (c): PV_RJDec_V047Native.consume now supplies the original transfer-13 fibre to PV_RJDec_V047.consume. Given the single equality actual = PV_2TNV_PublicEncoding.x native_handle, it concludes that some H.Instance w has H.public w = actual.1. The retained request-source gap is resolved, and the equality itself remains OPEN. The older concrete decoder route still meets the unresolved AspisR1SelectedMaskProbe cohort. FixturePdaRuntime remains undischarged.
+
+The line is parked: worktree removed, branch kept on origin. It will be merged into the runjoin branch once runjoin47 finishes. The freed slot goes to pv-rdb2e (sparse worktree from candidate 1a3cd3de26; IDs 62200-62299; 100 Lean, 60 native, 0 Kani). Its rows are:
+- V256 and V257: association of the restoration models with the original frozen iterator continuations at the deployed call sites;
+- V231: the concrete SHA mutable handles and the deployed compression backend selection, with every runtime-reachable backend treated, since the SHA-NI owner item is pending.
+Rows removed: 0. Privacy target not yet established.
