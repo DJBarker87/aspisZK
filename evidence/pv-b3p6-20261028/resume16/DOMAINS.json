@@ -321,5 +321,20 @@
     "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:1195:    add_preweighted(&mut packed, 92, &scalars);",
     "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:1801:            add_preweighted(&mut literal, 49, &selected);",
     "crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs:1802:            add_preweighted_shared_selector(&mut factored, 49, &residuals, selector);"
-  ]
+  ],
+  "canonical_fields": {
+    "definition": "all four M31 limbs of each supplied value are <P; symbolic values with explicit assume, never input stubs",
+    "reason": "K72127 finds checked-MIR subtraction failures for raw u32 representatives outside the documented M31 representation [0,P); this is not a deployed release counterexample",
+    "source_invariant": "crates/aspis-core/src/field.rs:21 documents canonical representation but M31(pub u32) does not enforce it",
+    "obligation": "PV_B3P_Link_callers_canonical16: every actual deployed caller of each narrowed helper supplies canonical values in the narrowed arguments",
+    "status": "NAMED, OPEN: a type comment is not a proof; every grep site retained in CLASSIFY.json; no complete binding credit for a canonical-only gate until its caller obligation is discharged",
+    "affected": [
+      "add_preweighted values",
+      "add_preweighted_shared_selector values",
+      "external_local_packed_raw input",
+      "external_linear_lazy input",
+      "internal_linear_lazy input",
+      "external_linear_packed input"
+    ]
+  }
 }

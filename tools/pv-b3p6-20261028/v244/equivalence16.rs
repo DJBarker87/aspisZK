@@ -3,6 +3,7 @@ use crate::{host_copy_terminal::access16 as dcopy,reference_copy_terminal::acces
  host_terminal::access16 as dep,reference_terminal::access16 as reference};
 pub(crate) fn q()->QM31 { let x:[u32;4]=kani::any(); QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}} }
 pub(crate) fn qs<const N:usize>()->[QM31;N] { let mut a=[QM31::ZERO;N];let mut i=0;while i<N {a[i]=q();i+=1;}a }
+fn canonical<const N:usize>()->[QM31;N] {let a=qs();let mut i=0;while i<N {kani::assume(a[i].c0.a.0<aspis_core::field::P);kani::assume(a[i].c0.b.0<aspis_core::field::P);kani::assume(a[i].c1.a.0<aspis_core::field::P);kani::assume(a[i].c1.b.0<aspis_core::field::P);i+=1;}a}
 fn frozen(m:u16)->bool { matches!(m,1749|2048|2049|4097|6144|6145|26214) }
 #[kani::proof] #[kani::unwind(70)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -21,14 +22,15 @@ fn equality_value() {let a=qs();let b=qs();assert_eq!(dep::equality(&a,&b),refer
 #[kani::proof] #[kani::unwind(70)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn sum_high() { let h=qs();let l=qs();let a:usize=kani::any();let b:usize=kani::any();let c:usize=kani::any();let d:usize=kani::any();kani::assume(a<=64&&b<=64&&c<=64&&d<=64);let r=[a..b,c..d];assert_eq!(dep::sum(h,l,&r),reference::sum(h,l,&r)); }
-fn pre<const N:usize>(start:usize) {let mut a=qs();let mut b=a;let v=qs::<N>();dep::pre(&mut a,start,&v);reference::pre(&mut b,start,&v);let k:usize=kani::any();kani::assume(k<24);assert_eq!(a[k],b[k]);}
+fn pre<const N:usize>(start:usize) {let mut a=qs();let mut b=a;let v=canonical::<N>();dep::pre(&mut a,start,&v);reference::pre(&mut b,start,&v);let k:usize=kani::any();kani::assume(k<24);assert_eq!(a[k],b[k]);}
 #[kani::proof] #[kani::unwind(100)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn add_preweighted() {let case:u8=kani::any();kani::assume(case<8);match case {0=>pre::<16>(0),1=>pre::<16>(16),2=>pre::<17>(32),3=>pre::<33>(49),4=>pre::<2>(82),5=>pre::<12>(0),6=>pre::<8>(84),_=>pre::<2>(92)}}
 #[cfg(feature="optimized-terminal")]
 #[kani::proof] #[kani::unwind(100)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-fn add_preweighted_shared_selector() {let mut a=qs();let mut b=a;let v=qs::<33>();let q=q();dep::shared(&mut a,49,&v,q);reference::shared(&mut b,49,&v,q);assert_eq!(a,b);}
+#[kani::stub(QM31::mul,crate::shared_callee16::mul)]
+fn add_preweighted_shared_selector() {let mut a=qs();let mut b=a;let v=canonical::<33>();let q=q();dep::shared(&mut a,49,&v,q);reference::shared(&mut b,49,&v,q);assert_eq!(a,b);}
 
 #[kani::proof] #[kani::unwind(70)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -100,19 +102,19 @@ fn selector_mask_statement_26214() {let v=qs();assert_eq!(crate::statement_copy1
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-fn external_linear_lazy() {let s=qs::<16>();assert_eq!(crate::deployed_poseidon16::access16::external(s),crate::reference_poseidon16::access16::external(s));}
+fn external_linear_lazy() {let s=canonical::<16>();assert_eq!(crate::deployed_poseidon16::access16::external(s),crate::reference_poseidon16::access16::external(s));}
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-fn internal_linear_lazy() {let s=qs::<16>();assert_eq!(crate::deployed_poseidon16::access16::internal(s),crate::reference_poseidon16::access16::internal(s));}
+fn internal_linear_lazy() {let s=canonical::<16>();assert_eq!(crate::deployed_poseidon16::access16::internal(s),crate::reference_poseidon16::access16::internal(s));}
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-fn external_linear_packed() {let s=qs::<16>();assert_eq!(crate::deployed_poseidon16::access16::packed(s),crate::reference_poseidon16::access16::packed(s));}
+fn external_linear_packed() {let s=canonical::<16>();assert_eq!(crate::deployed_poseidon16::access16::packed(s),crate::reference_poseidon16::access16::packed(s));}
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-fn external_local_packed_raw() {let s=qs::<4>();assert_eq!(crate::deployed_poseidon16::access16::raw(s),crate::reference_poseidon16::access16::raw(s));}
+fn external_local_packed_raw() {let s=canonical::<4>();assert_eq!(crate::deployed_poseidon16::access16::raw(s),crate::reference_poseidon16::access16::raw(s));}
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
@@ -140,7 +142,7 @@ fn full_round_m31_constants_packed() {let s=qs();let c=kani::any();assert_eq!(cr
 
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(QM31::mul,crate::shared_callee16::mul)]
-fn shared_repeat16() {let a=q();let b=q();assert_eq!(a.mul(b),a.mul(b));}
+fn shared_repeat16() {crate::shared_callee16::roundtrip16();let a=q();let b=q();assert_eq!(a.mul(b),a.mul(b));}
 #[kani::proof] #[kani::unwind(128)]
 #[kani::stub(QM31::mul,crate::shared_callee16::mul)]
 fn shared_wrong16() {let a=q();let b=q();assert_eq!(a.mul(b),QM31::ZERO);}
