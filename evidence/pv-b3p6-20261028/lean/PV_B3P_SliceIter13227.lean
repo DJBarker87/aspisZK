@@ -1,4 +1,4 @@
-import PV_B3P_UsizeLoop9227
+import PV_B3P_RangeBinding13227
 namespace PV_B3P_Binding13227
 open Aeneas Aeneas.Std Result
 set_option autoImplicit false
@@ -41,11 +41,8 @@ theorem enumerate_step13 (index : Usize) (bound : index.val < 4) :
 
 theorem cursor_increment13 (index : Usize) (bound : index.val < 4) :
     (Usize.wrapping_add index 1#usize).val = index.val+1 :=
-  PV_B3P_Offset226V3.add_value index 1#usize (by
-    change index.val+1 < UScalar.size .Usize
-    have h4 := Usize.cMax_bound_concrete.1
-    simp only [UScalar.size, UScalar.cMax] at *
-    omega)
+  PV_B3P_Offset226V3.add_value index 1#usize
+    (range_increment_safe13 index 4#usize (by scalar_tac))
 
 /-- Explicit empty iterator cleanup. Its two pointer fields and PhantomData
 have no user destructor; data stores occur only in the consuming callback. -/
