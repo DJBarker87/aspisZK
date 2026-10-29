@@ -67,3 +67,41 @@ All inherited scoped proofs retain their original assumptions. No conservative s
 New refinements: the Backtrace::Display short-slice panic is **NOT REACHED (proved)** for finite normally completed capture-callback states, with the native constructor/resolve length association retained. Disabled/unsupported display has **public-only selected literal (proved at source control level)**; full delivered-content/occurrence is UNRESOLVED. Captured full/short formatting and CWD cleanup remain **UNRESOLVED** for native honest joint privacy; their conditional complete-exit control laws are proved. All other dispositions above are unchanged.
 
 No checked same-public honest-witness native diagnostic leak was found. The stale-EJR finding was resolved by h5 double-prime, not concealed or converted into a native leak finding.
+
+## Verification, failures and stop condition
+
+**100/100 Lean attempts**, IDs 65000–65099; **5/40 capped native scopes**, **0 Kani**. 95 Lean attempts pass. Each launch has allowed:true AND admission exit0 in the same wrapper. No refusal, cooldown slip, VOID run or overlapping scope occurred. All scopes use MemoryHigh6G,MemoryMax8G,MemorySwapMax0,TasksMax64; Lean -M7000. Total GNU-time wall **162.31s**, maximum peak RSS **4,338,448KiB**, all swaps **0**. `attempts.json` and raw receipts retain every target/command, source and dependency hash, revision label, exit, wall, RSS, swaps and printed axioms.
+
+| Audit | Exact target | Exit | GNU wall | Peak RSS KiB | Swap | Launch revision label |
+|---|---|---:|---:|---:|---:|---|
+| 65097 | `PV_DIAG5_Audit` | 0 | 0:01.89 | 4311368 | 0 | `b02602fa2399d513db5fbdf755ac01f7c3d15bb3` |
+| 65098 | `PV_DIAG5_CohortAudit` | 0 | 0:01.69 | 4284432 | 0 | `c3fc280bf9f704e0833cc73aeb3ea4c728f8f9cc` |
+| 65099 | `PV_DIAG5_FinalManifest` | 0 | 0:01.81 | 4287192 | 0 | `c3fc280bf9f704e0833cc73aeb3ea4c728f8f9cc` |
+
+65097 audits all **73 new theorems**, including the final disclosed/oracle pair and complete-decision equalities at the actual deployed interface. 65098 audits V2 and the deployed roots. All final axiom sets are subsets of {propext, Classical.choice, Quot.sound}. 65099 is the **single final diagnostic-job manifest replay**, not a full privacy-release replay. `final-pre.json` checks 1,016 objects; `final-post.json` checks **1,019 objects with zero source/object/dependency mismatches**. The reused sampler sources explicitly match diag4's recovered h7 generation chain. No same-source cache was reused across a changed dependency fingerprint.
+
+The launch revision labels are baseline labels, NOT claims that dirty inputs existed at those commits. Actual inputs are pinned by their raw snapshots/hashes. `final-source-identity.json` resolves every final new module byte-for-byte to committed source revision **`724fcc7d844c504651a8c850cf4e9c6a9af67437`**, with git blobs and accepted compile IDs. No proved source is changed by the final report/evidence commit. A local documentation reconciliation initially passed an absolute path to git show and was corrected to repository-relative paths; no source, compiler or host action was involved.
+
+Failed/uncredited: 65022 (insufficient unfolding in the bound), 65053 (missing explicit Except result type), 65055 (Lean indentation), 65091 (reserved identifier prefix), 65096 (missing GamesR1 namespace for R1Adv). Each replacement changed its source/proof input. 65096's two additional observer lemmas were corrected and freshly checked in audit65097. Endpoint itself is restored exactly to accepted65095 source/object; final-pre verifies this. No failed source or sorryAx object is consumed.
+
+The smallest changed file was compiled first; new laws were added incrementally and consumers compiled after dependencies' final accepted forms. The full import-only job manifest ran once. No unchanged full regression or release rebuild was launched. No crates/programs, existing proof, simulator, observer, soundness cone or trust-list definition was edited. All evidence files are below20MB. No binary, object or archive is committed. Nothing was pushed or merged.
+
+`cleanup.json` records removal of **33 private compiled artifacts/executable** and **871 private links** only. All shared cache targets, source, receipts and keys are retained. No wallet, key or nonce-state operation was performed.
+
+**Before/after:** the stale EJR obstruction is resolved. No premise of `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` or its native/deployment refinement is removed, added, weakened or reclassified as trust. Local capture slice safety is proved under its stated constructor association; whole native joint diagnostics and full observer recovery remain P. V038,V178/V181,V336–V339,V347–V351 and V370 remain named. Existing V229,V230,V256,V257 credit is not withdrawn or re-adjudicated. T remains exactly entropy_law,entropy_kernel,observation.
+
+Stop condition: the fresh **100-attempt Lean budget is exhausted**. The unused native ceiling does not justify redundant finite checks or replace a missing universal source law. **Target not yet established.**
+
+Next concrete deliverable: prove complete native clone/push/unwind/resolve/formatter/CWD-drop operations, including every failure and emitting divergent prefix; instantiate nativeDiagnosticLaw/nativeTerminalLaw on the original L1 coupling; feed the named execution/events/terminal pieces into the existing PV_RJ4IDB decoder after source/cohort integration; establish disclosed/observerOracle recovery and V036–V038. The whole honest diagnostic distribution is not established by the conditional composition lemmas.
+
+## Commits
+
+`git log --oneline b02602fa23..HEAD` before this final report/evidence commit:
+
+```
+724fcc7d84 Audit diagnostic laws and replay the final diagnostic manifest
+c3fc280bf9 Prove capture frame bounds and retained diagnostic execution laws
+6c7f1f29f8 Resolve stale V2 source and rebuild the blocked privacy consumers
+```
+
+The final report/evidence commit is the branch tip; it changes no proved source.
