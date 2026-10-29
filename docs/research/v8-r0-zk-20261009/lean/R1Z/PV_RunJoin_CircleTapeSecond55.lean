@@ -13,7 +13,6 @@ theorem model (b : R0Z.FsStatement.OracleAnswer) :
     (PhaseSamplerParserBin.circle ⟨1,by decide⟩ b).1=
       (R0P.SemSource.circleSample1 (AspisV8R19.SqueezeOracleBridge.decodeState (PV_RunJoin_OpeningSampler50.block b))).1 := by
   rw [PV_RunJoin_CircleSelector55.second,PV_RunJoin_CircleTapeState55.decode]
-  rfl
 
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @ExternalFuns (types base))
     (b : R0Z.FsStatement.OracleAnswer) :
