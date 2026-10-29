@@ -7,7 +7,7 @@ open PV_RunJoin_CircleNeutralShape53
 abbrev M := ZMod AspisV8R19.PartialProduct.p
 def scalar (x : U32) : M := x.val
 
-theorem prime_zero : (2147483647 : M)=0 := ZMod.natCast_self _
+theorem prime_zero : ((2147483647 : Nat) : M)=0 := ZMod.natCast_self _
 theorem injective (a b : U32) (ha : Canon a) (hb : Canon b) (h : scalar a=scalar b) : a=b := by
   have hv := congrArg ZMod.val h
   change a.val%2147483647=b.val%2147483647 at hv
