@@ -195,7 +195,14 @@ theorem privacy_headline_events_model
     have hr_bound := add_le_add (add_le_add
       ((ProverCommitModelCore16.real_bad_mass base h B outputs x seed hc₁ hc₂ w).trans
         (add_le_add (le_refl _) hscan)) (le_refl (ProverCommitSeedEvent19.budget (2^64)))) (le_refl ProverCommitFuelMass22.charge)
-    have hr := hr₀.trans (by exact_mod_cast hr_bound)
+    have hr_bound_real :
+        ((eventMass (fun r : (source).RealRand => ∃ i,
+          QueryScanRealLazyBound.realBad W Pr 8 h B outputs x w i r) +
+          ProverCommitSeedEvent19.budget (2^64) + ProverCommitFuelMass22.charge : ℚ) : ℝ) ≤
+        ((QueryScanRealLazyBound.lazyBudget (8 * n1 W Pr) + 8 / (2 : ℚ)^486 +
+          ProverCommitSeedEvent19.budget (2^64) + ProverCommitFuelMass22.charge : ℚ) : ℝ) := by
+      exact_mod_cast hr_bound
+    have hr := hr₀.trans hr_bound_real
     obtain ⟨hpub, hs⟩ := PrivacyR1HeadlineOwnedClosed.Admitted.builder_premises (x := x) w hw
     have core := ProverCommitModelCore16.core_privacy base h B outputs x seed hB hpub hs
       ProverCommitSourceDecoder.quotientFibreSize (by
