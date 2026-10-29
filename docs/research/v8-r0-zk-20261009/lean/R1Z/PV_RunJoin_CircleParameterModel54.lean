@@ -18,7 +18,7 @@ theorem complete (block : Array U8 32#usize) :
   obtain ⟨q,hq,hc⟩ := PV_RunJoin_SamplerCanonical54.complete block
   have hpublic : AspisR1PublicPreparation.sampler.qm31_sample block=ok (PV_RunJoin_PublicSampler54.encode q) := by
     rw [PV_RunJoin_PublicSampler54.complete,hq,bind_tc_ok]
-  have sampled : AspisR1CircleSampleWrapper.sampler.qm31_sample block=ok (wrapper q) := by
+  have sampled : _root_.sampler.qm31_sample block=ok (wrapper q) := by
     rw [AspisR1CircleSampleWrapper.RawCircleSampleEmittedWrapperLaw.sampler_qm31_sample_eq_public,
       hpublic,bind_tc_ok]
     rfl
