@@ -1,0 +1,12 @@
+# Devnet deployment result (lead-executed runbook, 2026-10-29)
+
+The owner approved the deployment ("approved", 2026-10-29) and gave the go ("go") after the lead's runbook review. Steps 1-4 of NDZ_DEVNET_RUNBOOK.md were run by the lead from this worktree through NDZ_writer.sh, unmodified. All receipts are in NDZ_devnet_receipts/.
+
+1. Funding and identity gate: funding_pass true. Payer 18.353204080 SOL, conservative peak 16.781526200, headroom 1.571677880. Loaded Pool ELF 121f3e29..., registry ELF 7ad46f0d... (immutable), carrier ELF 9d45bbcb...; TxV1 active.
+2. Verifier deployed with 1738/1738 chunks, buffer bytes verified, then finalised. NDZ_IMMUTABLE.json, checked independently by the lead with solana program show: program CSnhzGdHQuzMW512CSunJzHrutcmh8ZAFzqx2z1zKorQ, ProgramData 7GVKbnPt1XkYvnZURDLRKJqC89qbgfqP912hM3aUojRk, authority none, 1,563,728 bytes, SHA256 63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299 (the pinned release).
+3. Fresh registry CRqLcv1MfBq73gQ3unk7s7EArnUQqZvUbDdqTX8We2Pu, frozen, with active entry 6Hd8P6negaxMLFqY3t1Q34PDwz32D8rD7qxkutP993V1. Fresh Pool master 4GQ9Gnmi71ZonpVSJRsmRxyK2UMdVJJCXjYrbTetha1G under the unchanged Pool program BmsNik...; mint EhZ4nakdh7U1SivMhKjZy5XhYxHMNMXgmfZESa2RU5VM, vault 4kjEXoJ7YdwgZJaome64VX8fyqNNbdVWXbCFB4LT3Eyu. Honest transfer and withdrawal both settled, each through TX1 then TX2: stage CU 1214746/1145305 (transfer) and 1206747/1154975 (withdrawal). Both replays were rejected with Custom 0x41532026 (NullifierAlreadyConsumed); both mutated stage-1 proofs were rejected with InvalidInstructionData.
+4. Read-only association at finalized slot 516454111: fresh_pool, frozen_registry, active_release_entry and immutable_release_programdata all true, elf_sha256 63ad3e9c.... The final buffer inventory under the payer is empty.
+
+Payer afterwards: 9.58883932 SOL. Locked as planned: the verifier's 7.945450200 SOL, plus fixture accounts with no close path. The old Pool state 8YRunNHb... still runs the historical verifier Gk16sp... (fb2fc048). It is outside the proved release: not migrated, not rewired.
+
+Scope of this evidence: operational execution and chain association of the release artifact on devnet (Agave 4.4.0-beta.1). It discharges the L188 deployment-association obligation for the devnet instance only. No mainnet deployment exists. It is not a soundness theorem. RPC/finality and loader/runtime behaviour remain trusted, as before.
