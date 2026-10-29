@@ -1,7 +1,7 @@
 """Stage one committed new PV module for a focused attempt in the fresh workspace."""
 from pathlib import Path
 import sys,json,subprocess,hashlib,re,shlex
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin58-20261029';m=sys.argv[1];assert m.startswith(('R1Z.PV_','PV_2TNV_','JFx_','JHb_'))
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin58-20261029';m=sys.argv[1];assert m.startswith(('R1Z.PV_','PV_2TNV_','JFx_','JHb_','JHg_'))
 fixture=json.loads((E/'fixture-pins.json').read_text())['modules']
 s=R/fixture[m]['path'] if m in fixture else R/'docs/research/v8-r0-zk-20261009/lean'/(m.replace('.','/')+'.lean');path=str(s.relative_to(R));rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();b=subprocess.check_output(['git','show',rev+':'+path]);assert b==s.read_bytes(),'commit exact source first'
 plan=json.loads((E/'build-plan.json').read_text());external={v['module'].replace('/','.') for v in json.loads((E/'external-authority.json').read_text())};imports=re.findall(r'^(?:public )?import\s+(\S+)',b.decode(),re.M)
