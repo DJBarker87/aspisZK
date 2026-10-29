@@ -144,3 +144,122 @@ then prove `Links.context` for one full successful **and failed** prefix family
 on the D163 common sample, synchronizing wrapper timing/JSON/stdout. That will
 determine whether the exact D166 route suffices or a separately justified
 joint trace error is needed. See COST.md for the obligation-level estimate.
+
+The event interface also retains native `.panic`/`.abort` tags. The existing
+`actual_factors` source carrier has only `.ok`/`.fail`/`.div`; it does not
+magically recover a distinct panic/abort tag from an undifferentiated source
+failure. For such paths native acquisition uses `native_factorization` and
+the DIAG terminal association in `Links.context`. `Link_Source` is usable only
+where its exact source/native terminal equation is actually proved. No panic
+or abort tag is silently collapsed in the experimental native experiment.
+
+## Validation and receipts
+
+All four final modules PASS. Successful final receipts are **67801**
+(Interface), **67804** (Headline), **67807** (Residual), **67809** (Average).
+Their original output includes every added theorem's `#print axioms`; only
+`propext`, `Classical.choice`, `Quot.sound` occur in accepted results.
+`eventJoin` and `joined` definitions are audited too. `final-manifest.json`
+checks each current source against its accepted receipt, every theorem's
+audit line, exact bound-token equality, and unchanged protected files.
+
+| ID | Exact target | Exit | Wall | Peak RSS KiB | Swaps | Source revision |
+|---|---|---:|---:|---:|---:|---|
+| 67800 | PV_EVHD_Interface | 1 | 0:01.75 | 4180836 | 0 | `eac10d07f1fe47088d42353409b298ffaad3e931` |
+| 67801 | PV_EVHD_Interface | 0 | 0:01.94 | 4207436 | 0 | `e37ec93e7bc6f8b43aabddfbbf3384dbc0411433` |
+| 67802 | PV_EVHD_Headline | 1 | 0:03.45 | 4276324 | 0 | `c9079f93b4f10f2fccbee1ee22f06feb8831cf6a` |
+| 67803 | PV_EVHD_Headline | 1 | 0:11.78 | 4303516 | 0 | `c4a39bf04aa3f088b892175377a4fa99e8d935a6` |
+| 67804 | PV_EVHD_Headline | 0 | 0:14.01 | 4359852 | 0 | `256af53b05c5e7e90f2199220fa00c238b641446` |
+| 67805 | PV_EVHD_Residual | 1 | 0:01.65 | 4170996 | 0 | `ae2954eef6ae589290431f30635a80dcdd5c08a4` |
+| 67806 | PV_EVHD_Residual | 1 | 0:01.68 | 4170696 | 0 | `eb50d0310700394716bdfea809835c935ca730df` |
+| 67807 | PV_EVHD_Residual | 0 | 0:01.73 | 4193324 | 0 | `54a52b06205179a1737456f5394338cf7617faee` |
+| 67808 | PV_EVHD_Average | 1 | 0:16.74 | 4332452 | 0 | `1183106862a62c060debc70f3db1f65c7947cdeb` |
+| 67809 | PV_EVHD_Average | 0 | 0:07.41 | 4318776 | 0 | `6f39a32b2b16ae11bd27113ad6d045e9be520779` |
+
+Failures were retained, never retried unchanged: 67800 ambiguous Bytes;
+67802 missing R1Z namespace opening; 67803 local log-notation collision and
+elided unused parameters; 67805/67806 decidability-instance-sensitive
+rewriting of a zero indicator (replaced by pointwise equality); 67808
+heartbeat exhaustion in higher-order inference at `apply average_bound`
+(replaced by explicit carriers/functions, successful 67809). No memory cap,
+heartbeat, recursion or exponentiation threshold was raised. Failed elaboration
+logs may print `sorryAx` recovery placeholders; none is accepted evidence and
+no such placeholder occurs in the successful audits.
+
+Lean 4.32 githash `8c9756b28d64dab099da31a4c09229a9e6a2ef35`,
+-M7000; one scope at a time, MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64. Every launch chains admission exit 0,
+JSON allowed:true check, then scope in the SAME shell command. All admissions
+were allowed; no quiet-window/refusal/cooldown bypass occurred.
+Original time/output/admission logs and ID scans (all codex-pv job evidence
+directories plus shared sent.txt) are retained per attempt.
+
+The source-only failed-attempt guard is in `tools/pv-evhd-20261029/compile.py`.
+Its SHA-256 is
+`de57f57608caf62e273fef96829589fbfac904332e58e422add3554b3ec50195`.
+The final checker executes that actual guard against ALL SIX failed source
+hashes and confirms refusal. No unchanged failed source was resubmitted.
+
+Reuse is read-only under (h6): preparations verify the selected EJR/freeze/
+tracked/read-only-runjoin source SHA, actual toolchain and LEAN_PATH prefix,
+every recorded project import edge, and ALL 5,673 coherent-replay external
+object hashes before compilation. Successful own predecessor objects are
+SHA-pinned and reused; no inherited module is rebuilt or overwritten.
+The Interface object's hash was recovered read-only after its original receipt
+and compared before dependent reuse; that timing is marked in receipt-67801.
+Preparations are retained per module. Historical dependency vectors point to
+the unchanged import closures in those preparations (the source import lists
+were mechanically compared at each historical revision); the original
+per-launch preparation-file fingerprint is also retained.
+
+- `PV_EVHD_Interface`: 602 project/import object checks; 5673 external hashes.
+- `PV_EVHD_Headline`: 811 project/import object checks; 5673 external hashes.
+- `PV_EVHD_Residual`: 603 project/import object checks; 5673 external hashes.
+- `PV_EVHD_Average`: 812 project/import object checks; 5673 external hashes.
+
+The L1C cache had explicitly deleted its timing objects (its committed
+cache-cleanup.json, confirmed by read-only host lookup). Therefore only the
+small generic timing reconstruction PROOF TEXT is reused under new PV_EVHD_
+names; no nonexistent L1C object is claimed reused. Existing native decoder
+and model objects are reused from the pinned RJ4IDB cohort and its verified
+Stream B dependency caches. Earlier pv-top had no accepted composed skeleton;
+pv-fib's fibre/termination objects are not dependencies of this new carrier,
+so no own earlier theorem is needlessly rebuilt.
+
+Budget used: **10/100 Lean attempts**, **0 native scopes**, **0 Kani**.
+Only 67800–67809 were launched; audit reserve 67897–67899 is unused because
+every focused module includes its full axioms audit. No local Lean, native
+measurement, extraction, Rust build, large generated-certificate aggregation
+or deployed frozen-manifest replay ran. The final own-source manifest was
+checked once after focused targets were green, without repeating Lean builds.
+Python syntax and git whitespace checks pass; no evidence file exceeds 20 MB;
+no binary/object/archive is committed.
+
+This stopping point is completion of the requested experimental cost draft,
+not budget exhaustion, native closure or adoption. Further Lean attempts cannot
+instantiate an unspecified clock/failure probability model. The exact open
+links and next concrete deliverable are recorded above; the deployed privacy
+target is **not yet established**.
+
+Work commits before the final evidence commit (`git log --oneline e90651e952..HEAD`):
+
+```
+6f39a32b2b Instantiate averaging carriers explicitly to avoid large type normalization
+1183106862 Exercise refusal for every recorded failed source hash
+54a52b0620 Prove zero residual pointwise without changing decidability instances
+e729634b6f Use the finite mean monotonicity lemma from abort bounds
+eb50d03107 Make residual beta reduction explicit and name native query association
+ae2954eef6 Add final bound, axiom and failed-source guard checks
+256af53b05 Pin successful own objects before dependent reuse
+d922fe876e Use explicit event parameters and avoid the model log notation
+c4a39bf04a Resolve R1Z names and document experimental integration costs
+c9079f93b4 Expose public failure, causal prefix and residual composition obligations
+9939335202 Retain the exact headline bound under shared public noise
+e37ec93e7b Name the additional joint trace charge when exact links fail
+bc5ae5c9f2 Qualify event bytes and retain the source decoder association
+eac10d07f1 Compose experimental trace simulator with the unchanged model proof
+834968f355 Use the coupling namespace of the charged-event model
+ad49740352 Draft experimental event observation and exact joint trace links
+```
+
+No push, merge, shared-source edit or root-worktree edit was performed.
