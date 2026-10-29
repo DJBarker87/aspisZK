@@ -13,7 +13,6 @@ theorem complete (a b : U64) :
   · rw [if_pos ha]
     by_cases hb : b ≤ core.convert.num.FromU64U32.from core.num.U32.MAX
     · rw [if_pos hb]
-      simp only [lift,bind_tc_ok]
       change UScalar.cast .U64 (UScalar.cast .U32 a) * UScalar.cast .U64 (UScalar.cast .U32 b) = a*b
       rw [up_down a (by change a.val ≤ 4294967295 at ha;omega),
         up_down b (by change b.val ≤ 4294967295 at hb;omega)]
