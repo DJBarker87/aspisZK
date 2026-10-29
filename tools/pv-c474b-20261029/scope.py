@@ -24,7 +24,7 @@ out=E/name;out.mkdir(exist_ok=True)
 assert not (out/'receipt.json').exists()
 def ssh(c,retry=True):
  if os.environ.get('PV_C474_QUIET_OWNER')=='1':
-  assert name=='native73504' and cmd[-1]==D+'/bundle/timing.py'
+  assert name=='native73507' and cmd[-1]==D+'/bundle/timing.py'
   check="import json,time; x=json.load(open('/home/dombarker/project-offloads/QUIET_WINDOW.json')); assert x['owner']=='pv-c474-20261029' and time.time()<x['until']"
   c='python3 -c '+shlex.quote(check)+' && export QUIET_WINDOW_OWNER=1 && '+c
  for attempt in range(1,11):

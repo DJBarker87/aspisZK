@@ -6,6 +6,8 @@ version.workspace = true
 description = "UNPROVED R1 COST PROBE, isolated P2 experiments"
 
 [features]
+# Audit-only deterministic constructors and simulator; never in the client recipe.
+insecure-spend-fixture = ["aspis-prover/insecure-spend-fixture"]
 # Audit only: public schedule and callback-count receipts; no operands.
 public-work-trace = ["ct-host-prover"]
 # Adoption candidate: host only; never enable for verifier builds.
@@ -45,7 +47,7 @@ program-build = []
 [dependencies]
 aspis-core = { path = "../aspis-core", features = ["r0"] }
 aspis-statement = { path = "../aspis-statement", features = ["r0", "pool-v1-kernel"] }
-aspis-prover = { path = "../aspis-prover", features = ["r0", "insecure-spend-fixture"], optional = true }
+aspis-prover = { path = "../aspis-prover", features = ["r0"], optional = true }
 serde_json = { workspace = true, optional = true }
 sha2 = { workspace = true, optional = true }
 aspis-z4b-probe = { path = "../../docs/research/v8-r0-zk-20261009/z4", optional = true }
@@ -60,7 +62,7 @@ required-features = ["prover", "audit-eight-way"]
 
 [[example]]
 name = "proof_size_s2"
-required-features = ["prover"]
+required-features = ["insecure-spend-fixture", "prover"]
 
 [[example]]
 name = "readbudget_count"
@@ -78,11 +80,11 @@ required-features = ["prover", "audit-eight-way"]
 
 [[example]]
 name = "masked_fixture_gate"
-required-features = ["prover"]
+required-features = ["insecure-spend-fixture", "prover"]
 
 [[example]]
 name = "authenticated_tx2_gate"
-required-features = ["prover"]
+required-features = ["insecure-spend-fixture", "prover"]
 
 [[example]]
 name = "secure_attempt_gate"
@@ -94,16 +96,16 @@ required-features = ["r1p-check"]
 
 [[example]]
 name = "r1p_sim_gate"
-required-features = ["r1p-check"]
+required-features = ["insecure-spend-fixture", "r1p-check"]
 
 [[example]]
 name = "ct_fixture_gate"
-required-features = ["r1p-check"]
+required-features = ["insecure-spend-fixture", "r1p-check"]
 
 [[example]]
 name = "prover_rw_gate"
-required-features = ["ct-host-prover"]
+required-features = ["insecure-spend-fixture", "ct-host-prover"]
 
 [[example]]
 name = "prover_rw_differential"
-required-features = ["r1p-check"]
+required-features = ["insecure-spend-fixture", "r1p-check"]
