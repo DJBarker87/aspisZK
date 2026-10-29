@@ -81,12 +81,12 @@ def source_emit(x,n=2):
   return pad+'let '+x.var+' ← '+('do\n'+source_emit(x.expr,n+2) if structured else source_emit(x.expr,n+2).lstrip())+'\n'+source_emit(x.next,n)
  if x.kind=='if':return pad+'if '+x.cond+' then\n'+source_emit(x.yes,n+2)+'\n'+pad+'else\n'+source_emit(x.no,n+2)
  if x.kind=='match':return pad+'match '+x.discr+' with\n'+'\n'.join(pad+'| '+pat+' =>\n'+source_emit(child,n+2) for pat,child in x.branches)
- if x.kind=='pure':return pad+'ok '+x.expr.replace('\n','\n'+pad+'  ')
+ if x.kind=='pure':return pad+'Result.ok '+x.expr.replace('\n','\n'+pad+'  ')
  return pad+x.expr.replace('\n','\n'+pad+'  ')
 
 def proof(x,n=2):
  pad=' '*n
- if x.kind=='let':return pad+'try dsimp only\n'+proof(x.next,n)
+ if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n)
  if x.kind=='bind':
   var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
   return pad+'try dsimp only\n'+pad+'apply fixed_bind (r := (do\n'+source_emit(x.expr,n+2)+')) (f := fun '+var+' => do\n'+source_emit(x.next,n+2)+')\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)

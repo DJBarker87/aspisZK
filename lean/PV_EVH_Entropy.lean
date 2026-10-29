@@ -125,6 +125,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
   unfold entropyBody aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body
   by_cases condition : retry < limit
   · simp only [condition,if_true]
+    let a := Array.repeat 64#usize 0#u8
     try dsimp only
     try dsimp only
     apply fixed_bind (r := (do
@@ -178,7 +179,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
               U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
           let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
           if b1 then
-            ok (done (core.result.Result.Ok
+            Result.ok (done (core.result.Result.Ok
               {
               mask_nonce,
               field_mask_entropy := field_mask_entropy1,
@@ -186,16 +187,16 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
               }))
           else
             let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-            ok (cont retry1)
+            Result.ok (cont retry1)
         else
           let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-          ok (cont retry1)
+          Result.ok (cont retry1)
       | core.ops.control_flow.ControlFlow.Break residual =>
         let r1 ← core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
             aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
             residual
-        ok (done r1))
+        Result.ok (done r1))
     ·
       exact fixed_lift _
     · intro bytes
@@ -249,7 +250,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                 U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
             let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
             if b1 then
-              ok (done (core.result.Result.Ok
+              Result.ok (done (core.result.Result.Ok
                 {
                 mask_nonce,
                 field_mask_entropy := field_mask_entropy1,
@@ -257,16 +258,16 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                 }))
             else
               let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-              ok (cont retry1)
+              Result.ok (cont retry1)
           else
             let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-            ok (cont retry1)
+            Result.ok (cont retry1)
         | core.ops.control_flow.ControlFlow.Break residual =>
           let r1 ← core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
               aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
               aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
               residual
-          ok (done r1))
+          Result.ok (done r1))
       ·
         exact fixed_lift _
       · rintro ⟨s, as_mut_back⟩
@@ -316,7 +317,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                   U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
               let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
               if b1 then
-                ok (done (core.result.Result.Ok
+                Result.ok (done (core.result.Result.Ok
                   {
                   mask_nonce,
                   field_mask_entropy := field_mask_entropy1,
@@ -324,16 +325,16 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                   }))
               else
                 let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                ok (cont retry1)
+                Result.ok (cont retry1)
             else
               let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-              ok (cont retry1)
+              Result.ok (cont retry1)
           | core.ops.control_flow.ControlFlow.Break residual =>
             let r1 ← core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                 aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
                 aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
                 residual
-            ok (done r1))
+            Result.ok (done r1))
         ·
           exact draw_fixed answers h _
         · rintro ⟨r, s1⟩
@@ -382,7 +383,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                     U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                 let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                 if b1 then
-                  ok (done (core.result.Result.Ok
+                  Result.ok (done (core.result.Result.Ok
                     {
                     mask_nonce,
                     field_mask_entropy := field_mask_entropy1,
@@ -390,23 +391,25 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                     }))
                 else
                   let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                  ok (cont retry1)
+                  Result.ok (cont retry1)
               else
                 let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                ok (cont retry1)
+                Result.ok (cont retry1)
             | core.ops.control_flow.ControlFlow.Break residual =>
               let r1 ← core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
                   aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
                   aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
                   residual
-              ok (done r1))
+              Result.ok (done r1))
           ·
             exact fixed_lift _
           · intro cf
             try dsimp only
             cases cf with
             | Continue unused0 =>
+              let bytes1 := as_mut_back s1
               try dsimp only
+              let a1 := Array.repeat 32#usize 0#u8
               try dsimp only
               try dsimp only
               apply fixed_bind (r := (do
@@ -448,7 +451,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                       U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                   let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                   if b1 then
-                    ok (done (core.result.Result.Ok
+                    Result.ok (done (core.result.Result.Ok
                       {
                       mask_nonce,
                       field_mask_entropy := field_mask_entropy1,
@@ -456,13 +459,14 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                       }))
                   else
                     let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                    ok (cont retry1)
+                    Result.ok (cont retry1)
                 else
                   let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                  ok (cont retry1))
+                  Result.ok (cont retry1))
               ·
                 exact fixed_lift _
               · intro field_mask_entropy
+                let a2 := Array.repeat 32#usize 0#u8
                 try dsimp only
                 try dsimp only
                 apply fixed_bind (r := (do
@@ -501,7 +505,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                         U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                     let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                     if b1 then
-                      ok (done (core.result.Result.Ok
+                      Result.ok (done (core.result.Result.Ok
                         {
                         mask_nonce,
                         field_mask_entropy := field_mask_entropy1,
@@ -509,10 +513,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                         }))
                     else
                       let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                      ok (cont retry1)
+                      Result.ok (cont retry1)
                   else
                     let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                    ok (cont retry1))
+                    Result.ok (cont retry1))
                 ·
                   exact fixed_lift _
                 · intro leaf_salt_seed
@@ -551,7 +555,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                           U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                       let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                       if b1 then
-                        ok (done (core.result.Result.Ok
+                        Result.ok (done (core.result.Result.Ok
                           {
                           mask_nonce,
                           field_mask_entropy := field_mask_entropy1,
@@ -559,10 +563,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                           }))
                       else
                         let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                        ok (cont retry1)
+                        Result.ok (cont retry1)
                     else
                       let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                      ok (cont retry1))
+                      Result.ok (cont retry1))
                   ·
                     exact fixed_lift _
                   · rintro ⟨a3, deref_mut_back⟩
@@ -598,7 +602,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                             U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                         let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                         if b1 then
-                          ok (done (core.result.Result.Ok
+                          Result.ok (done (core.result.Result.Ok
                             {
                             mask_nonce,
                             field_mask_entropy := field_mask_entropy1,
@@ -606,10 +610,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                             }))
                         else
                           let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                          ok (cont retry1)
+                          Result.ok (cont retry1)
                       else
                         let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                        ok (cont retry1))
+                        Result.ok (cont retry1))
                     ·
                       exact fixed_lift _
                     · rintro ⟨s2, to_slice_mut_back⟩
@@ -644,7 +648,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                               U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                           let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                           if b1 then
-                            ok (done (core.result.Result.Ok
+                            Result.ok (done (core.result.Result.Ok
                               {
                               mask_nonce,
                               field_mask_entropy := field_mask_entropy1,
@@ -652,10 +656,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                               }))
                           else
                             let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                            ok (cont retry1)
+                            Result.ok (cont retry1)
                         else
                           let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                          ok (cont retry1))
+                          Result.ok (cont retry1))
                       ·
                         exact fixed_lift _
                       · intro a4
@@ -687,7 +691,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                 U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                             let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                             if b1 then
-                              ok (done (core.result.Result.Ok
+                              Result.ok (done (core.result.Result.Ok
                                 {
                                 mask_nonce,
                                 field_mask_entropy := field_mask_entropy1,
@@ -695,10 +699,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                 }))
                             else
                               let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                              ok (cont retry1)
+                              Result.ok (cont retry1)
                           else
                             let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                            ok (cont retry1))
+                            Result.ok (cont retry1))
                         ·
                           exact fixed_lift _
                         · intro s3
@@ -727,7 +731,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                   U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                               let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                               if b1 then
-                                ok (done (core.result.Result.Ok
+                                Result.ok (done (core.result.Result.Ok
                                   {
                                   mask_nonce,
                                   field_mask_entropy := field_mask_entropy1,
@@ -735,14 +739,16 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                   }))
                               else
                                 let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                ok (cont retry1)
+                                Result.ok (cont retry1)
                             else
                               let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                              ok (cont retry1))
+                              Result.ok (cont retry1))
                           ·
                             exact fixed_lift _
                           · intro s4
+                            let a5 := to_slice_mut_back s4
                             try dsimp only
+                            let field_mask_entropy1 := deref_mut_back a5
                             try dsimp only
                             try dsimp only
                             apply fixed_bind (r := (do
@@ -766,7 +772,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                     U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                 let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                 if b1 then
-                                  ok (done (core.result.Result.Ok
+                                  Result.ok (done (core.result.Result.Ok
                                     {
                                     mask_nonce,
                                     field_mask_entropy := field_mask_entropy1,
@@ -774,10 +780,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                     }))
                                 else
                                   let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                  ok (cont retry1)
+                                  Result.ok (cont retry1)
                               else
                                 let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                ok (cont retry1))
+                                Result.ok (cont retry1))
                             ·
                               exact fixed_lift _
                             · rintro ⟨a6, deref_mut_back1⟩
@@ -800,7 +806,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                       U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                   let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                   if b1 then
-                                    ok (done (core.result.Result.Ok
+                                    Result.ok (done (core.result.Result.Ok
                                       {
                                       mask_nonce,
                                       field_mask_entropy := field_mask_entropy1,
@@ -808,10 +814,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                       }))
                                   else
                                     let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                    ok (cont retry1)
+                                    Result.ok (cont retry1)
                                 else
                                   let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                  ok (cont retry1))
+                                  Result.ok (cont retry1))
                               ·
                                 exact fixed_lift _
                               · rintro ⟨s5, to_slice_mut_back1⟩
@@ -833,7 +839,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                         U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                     let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                     if b1 then
-                                      ok (done (core.result.Result.Ok
+                                      Result.ok (done (core.result.Result.Ok
                                         {
                                         mask_nonce,
                                         field_mask_entropy := field_mask_entropy1,
@@ -841,10 +847,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                         }))
                                     else
                                       let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                      ok (cont retry1)
+                                      Result.ok (cont retry1)
                                   else
                                     let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                    ok (cont retry1))
+                                    Result.ok (cont retry1))
                                 ·
                                   exact fixed_lift _
                                 · intro s6
@@ -863,7 +869,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                           U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                       let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                       if b1 then
-                                        ok (done (core.result.Result.Ok
+                                        Result.ok (done (core.result.Result.Ok
                                           {
                                           mask_nonce,
                                           field_mask_entropy := field_mask_entropy1,
@@ -871,14 +877,16 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                           }))
                                       else
                                         let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                        ok (cont retry1)
+                                        Result.ok (cont retry1)
                                     else
                                       let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                      ok (cont retry1))
+                                      Result.ok (cont retry1))
                                   ·
                                     exact fixed_lift _
                                   · intro s7
+                                    let a7 := to_slice_mut_back1 s7
                                     try dsimp only
+                                    let leaf_salt_seed1 := deref_mut_back1 a7
                                     try dsimp only
                                     try dsimp only
                                     apply fixed_bind (r := (do
@@ -892,7 +900,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                             U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                         let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                         if b1 then
-                                          ok (done (core.result.Result.Ok
+                                          Result.ok (done (core.result.Result.Ok
                                             {
                                             mask_nonce,
                                             field_mask_entropy := field_mask_entropy1,
@@ -900,10 +908,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                             }))
                                         else
                                           let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                          ok (cont retry1)
+                                          Result.ok (cont retry1)
                                       else
                                         let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                        ok (cont retry1))
+                                        Result.ok (cont retry1))
                                     ·
                                       exact fixed_lift _
                                     · intro a8
@@ -916,7 +924,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                               U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
                                           let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                           if b1 then
-                                            ok (done (core.result.Result.Ok
+                                            Result.ok (done (core.result.Result.Ok
                                               {
                                               mask_nonce,
                                               field_mask_entropy := field_mask_entropy1,
@@ -924,10 +932,10 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                               }))
                                           else
                                             let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                            ok (cont retry1)
+                                            Result.ok (cont retry1)
                                         else
                                           let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                          ok (cont retry1))
+                                          Result.ok (cont retry1))
                                       ·
                                         exact fixed_lift _
                                       · intro b
@@ -940,7 +948,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                               U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1)) (f := fun a9 => do
                                             let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
                                             if b1 then
-                                              ok (done (core.result.Result.Ok
+                                              Result.ok (done (core.result.Result.Ok
                                                 {
                                                 mask_nonce,
                                                 field_mask_entropy := field_mask_entropy1,
@@ -948,7 +956,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                                 }))
                                             else
                                               let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                              ok (cont retry1))
+                                              Result.ok (cont retry1))
                                           ·
                                             exact fixed_lift _
                                           · intro a9
@@ -956,7 +964,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                             apply fixed_bind (r := (do
                                               aspis_prover.state_only_entropy.entropy_nonzero32 a9)) (f := fun b1 => do
                                               if b1 then
-                                                ok (done (core.result.Result.Ok
+                                                Result.ok (done (core.result.Result.Ok
                                                   {
                                                   mask_nonce,
                                                   field_mask_entropy := field_mask_entropy1,
@@ -964,7 +972,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                                   }))
                                               else
                                                 let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
-                                                ok (cont retry1))
+                                                Result.ok (cont retry1))
                                             ·
                                               exact fixed_lift _
                                             · intro b1
@@ -975,7 +983,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                                 try dsimp only
                                                 apply fixed_bind (r := (do
                                                   Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize))) (f := fun retry1 => do
-                                                  ok (cont retry1))
+                                                  Result.ok (cont retry1))
                                                 ·
                                                   exact fixed_lift _
                                                 · intro retry1
@@ -984,7 +992,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                                           try dsimp only
                                           apply fixed_bind (r := (do
                                             Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize))) (f := fun retry1 => do
-                                            ok (cont retry1))
+                                            Result.ok (cont retry1))
                                           ·
                                             exact fixed_lift _
                                           · intro retry1
@@ -996,7 +1004,7 @@ theorem entropyBody_fixed (answers : EntropyAnswers)
                   aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
                   aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
                   residual)) (f := fun r1 => do
-                ok (done r1))
+                Result.ok (done r1))
               ·
                 exact fixed_lift _
               · intro r1
