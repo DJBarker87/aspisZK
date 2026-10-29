@@ -1,0 +1,27 @@
+import PV_MEAS_Statements
+set_option autoImplicit false
+#print axioms PV_MEAS_Average.average_bound
+#print axioms PV_MEAS_Average.expectation_eq_of_equal_laws
+#print axioms PV_MEAS_Average.decision_integrable
+#print axioms PV_MEAS_Average.decision_probability_bounds
+#print axioms PV_MEAS_Uniform.uniform_probability
+#print axioms PV_MEAS_Uniform.integral_uniform
+#print axioms PV_MEAS_Uniform.integral_uniform_product
+#print axioms PV_MEAS_Uniform.uniform_fst
+#print axioms PV_MEAS_Finite.integral_rat_mean
+#print axioms PV_MEAS_Finite.uniform_apply_real
+#print axioms PV_MEAS_Finite.map_uniform_of_means
+#print axioms PV_MEAS_Coupling.integral_native
+#print axioms PV_MEAS_Coupling.integral_model
+#print axioms PV_MEAS_Coupling.until_bad
+#print axioms PV_MEAS_Coupling.finite_model_bound
+#print axioms PV_MEAS_Fuel.test_bound
+#print axioms PV_MEAS_Core.joined
+#print axioms PV_MEAS_Core.privacy_headline_events_model
+#print axioms PV_MEAS_Deployed.toCoreLinks
+#print axioms PV_MEAS_Deployed.privacy_headline_deployed_events_meas
+#print axioms PV_MEAS_Satisfiability.all_links
+#print axioms PV_MEAS_Satisfiability.simultaneously_satisfiable
+#print axioms PV_MEAS_Legacy.links_of_legacy
+#print axioms PV_MEAS_Legacy.finite_uniform_corollary
+#print axioms PV_MEAS_Corollary.finite_uniform_average
