@@ -14,7 +14,9 @@ theorem causal_of_step {E V L A : Type}
       (complete e v (history ++ [answer])).events) : Link_CausalPrefix complete := by
   intro e v history suffix
   induction suffix generalizing history with
-  | nil => exact ⟨[], List.append_nil _⟩
+  | nil =>
+    simp only [List.append_nil]
+    exact ⟨[], List.append_nil _⟩
   | cons answer suffix ih =>
     have h := (step e v history answer).trans (ih (history ++ [answer]))
     simpa only [List.append_assoc, List.singleton_append] using h
@@ -56,7 +58,6 @@ theorem public_signal_of_factorization {N E C W P Signal : Type}
     (fun pair : E × C => if publicSignal pair.1 = value then (1 : ℚ) else 0) joint
   convert transport using 1 <;> apply congrArg mean <;> funext n
   · rw [source w hw n]
-  · rfl
 
 /-- A precise representability obstruction: finite native carriers cannot
 model an unbounded Nat-valued environmental read exactly. No native bound is
