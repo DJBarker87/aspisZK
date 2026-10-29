@@ -75,7 +75,7 @@ abbrev ModelCoins := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoi
 /-- adopted by owner decision D502/D478. All model data are explicit.
 The op227 reference is the supplied operation itself, so its law is consistent
 for ALL claims, including errors; this proves no deployed callback identity. -/
-def instance (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
+def modelRuntime (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
     (pt : Array aspis_core.field.QM31 10#usize) :
     Runtime (Public := Unit) (Signal := Bool) (Env := Bool) (A := Unit)
       (R := ModelCoins template outputs x) (S := ModelCoins template outputs x)
@@ -108,7 +108,7 @@ link of the adopted theorem, at exactly the same model instance. There are no
 link hypotheses, no assumed privacy conclusion and no change of observer type. -/
 theorem all_links (ops : ExternalFuns) (sem : host_semantic.SemanticOracle)
     (pt : Array aspis_core.field.QM31 10#usize) :
-    Links template outputs x (instance template outputs x ops sem pt) := by
+    Links template outputs x (modelRuntime template outputs x ops sem pt) := by
   constructor
   · intro i; rfl
   · intro i; rfl
