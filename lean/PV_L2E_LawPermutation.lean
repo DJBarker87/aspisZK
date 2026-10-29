@@ -3,6 +3,7 @@ import Mathlib.Logic.Equiv.Sum
 set_option autoImplicit false
 noncomputable section
 namespace PV_L2E_LawPermutation
+attribute [local instance] Classical.propDecidable
 
 /-- Equal finite laws on the SAME coin carrier give equal fibre cardinalities.
 No output space is enumerated and no giant finite tape is normalized. -/
