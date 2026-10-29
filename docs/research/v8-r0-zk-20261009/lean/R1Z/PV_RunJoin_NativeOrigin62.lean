@@ -45,7 +45,7 @@ theorem backend_length (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled
   have h := PV_RunJoin_BuildMaterialBackendLength58.complete (baseTypes base) heap box
     (residual base ops) aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
       p.val.public1 compiled noised maskOnly d g padding initial p.val.hash .S2 hlen
-  rw [built] at h
+  erw [built] at h
   exact h
 
 #print axioms circleSource
