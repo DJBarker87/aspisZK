@@ -14,31 +14,26 @@ theorem f1 (x : Std.U32) :
     PV_AL_CircleOwned.aspis_core.field.ct.subtract_p x= PV_RunJoin_CircleRawScalar52.field.ct.subtract_p x := by
   unfold PV_AL_CircleOwned.aspis_core.field.ct.subtract_p PV_RunJoin_CircleRawScalar52.field.ct.subtract_p
   simp only [f0]
-  rfl
 
 theorem f2 (x : Std.U64) :
     PV_AL_CircleOwned.aspis_core.field.ct.reduce64 x= PV_RunJoin_CircleRawScalar52.field.ct.reduce64 x := by
   unfold PV_AL_CircleOwned.aspis_core.field.ct.reduce64 PV_RunJoin_CircleRawScalar52.field.ct.reduce64
   simp only [f0,f1]
-  rfl
 
 theorem f3 (a : Std.U32) (b : Std.U32) :
     PV_AL_CircleOwned.aspis_core.field.ct.add a b= PV_RunJoin_CircleRawScalar52.field.ct.add a b := by
   unfold PV_AL_CircleOwned.aspis_core.field.ct.add PV_RunJoin_CircleRawScalar52.field.ct.add
   simp only [f1]
-  rfl
 
 theorem f4 (a : Std.U32) (b : Std.U32) :
     PV_AL_CircleOwned.aspis_core.field.ct.sub a b= PV_RunJoin_CircleRawScalar52.field.ct.sub a b := by
   unfold PV_AL_CircleOwned.aspis_core.field.ct.sub PV_RunJoin_CircleRawScalar52.field.ct.sub
   simp only [f0,f1]
-  rfl
 
 theorem f5 (a : Std.U32) :
     PV_AL_CircleOwned.aspis_core.field.ct.neg a= PV_RunJoin_CircleRawScalar52.field.ct.neg a := by
   unfold PV_AL_CircleOwned.aspis_core.field.ct.neg PV_RunJoin_CircleRawScalar52.field.ct.neg
   simp only [f0]
-  rfl
 
 theorem f6 (a : Std.U32) :
     PV_AL_CircleOwned.aspis_core.field.ct.is_zero a= PV_RunJoin_CircleRawScalar52.field.ct.is_zero a := by
@@ -54,73 +49,61 @@ theorem f8 (x : Std.U64) :
     PV_AL_CircleOwned.aspis_core.field.reduce_u64 x= PV_RunJoin_CircleRawScalar52.field.reduce_u64 x := by
   unfold PV_AL_CircleOwned.aspis_core.field.reduce_u64 PV_RunJoin_CircleRawScalar52.field.reduce_u64
   simp only [f2]
-  rfl
 
 theorem f9 (self : O) (rhs : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.mul self rhs= PV_RunJoin_CircleRawScalar52.field.M31.mul self rhs := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.mul PV_RunJoin_CircleRawScalar52.field.M31.mul
   simp only [f8]
-  rfl
 
 theorem f10 (iter : core.ops.range.Range Std.Usize) (value : O) :
     PV_AL_CircleOwned.aspis_core.field.square_n_loop.body iter value= PV_RunJoin_CircleRawScalar52.field.square_n_loop.body iter value := by
   unfold PV_AL_CircleOwned.aspis_core.field.square_n_loop.body PV_RunJoin_CircleRawScalar52.field.square_n_loop.body
   simp only [f9]
-  rfl
 
 theorem f11 (iter : core.ops.range.Range Std.Usize) (value : O) :
     PV_AL_CircleOwned.aspis_core.field.square_n_loop iter value= PV_RunJoin_CircleRawScalar52.field.square_n_loop iter value := by
   unfold PV_AL_CircleOwned.aspis_core.field.square_n_loop PV_RunJoin_CircleRawScalar52.field.square_n_loop
   simp only [f10]
-  rfl
 
 theorem f12 (value : O) (count : Std.Usize) :
     PV_AL_CircleOwned.aspis_core.field.square_n value count= PV_RunJoin_CircleRawScalar52.field.square_n value count := by
   unfold PV_AL_CircleOwned.aspis_core.field.square_n PV_RunJoin_CircleRawScalar52.field.square_n
   simp only [f11]
-  rfl
 
 theorem f13 (value : Std.U64) :
     PV_AL_CircleOwned.aspis_core.field.M31.reduce_u64 value= PV_RunJoin_CircleRawScalar52.field.M31.reduce_u64 value := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.reduce_u64 PV_RunJoin_CircleRawScalar52.field.M31.reduce_u64
   simp only [f8]
-  rfl
 
 theorem f14 (self : O) (rhs : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.add self rhs= PV_RunJoin_CircleRawScalar52.field.M31.add self rhs := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.add PV_RunJoin_CircleRawScalar52.field.M31.add
   simp only [f3]
-  rfl
 
 theorem f15 (self : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.double self= PV_RunJoin_CircleRawScalar52.field.M31.double self := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.double PV_RunJoin_CircleRawScalar52.field.M31.double
   simp only [f14]
-  rfl
 
 theorem f16 (self : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.inv self= PV_RunJoin_CircleRawScalar52.field.M31.inv self := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.inv PV_RunJoin_CircleRawScalar52.field.M31.inv
   simp only [f9,f12]
-  rfl
 
 theorem f17 (self : O) (rhs : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.sub self rhs= PV_RunJoin_CircleRawScalar52.field.M31.sub self rhs := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.sub PV_RunJoin_CircleRawScalar52.field.M31.sub
   simp only [f4]
-  rfl
 
 theorem f18 (self : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.neg self= PV_RunJoin_CircleRawScalar52.field.M31.neg self := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.neg PV_RunJoin_CircleRawScalar52.field.M31.neg
   simp only [f5]
-  rfl
 
 theorem f19 (self : O) :
     PV_AL_CircleOwned.aspis_core.field.M31.is_zero self= PV_RunJoin_CircleRawScalar52.field.M31.is_zero self := by
   unfold PV_AL_CircleOwned.aspis_core.field.M31.is_zero PV_RunJoin_CircleRawScalar52.field.M31.is_zero
   simp only [f6]
-  rfl
 
 
 #print axioms f0

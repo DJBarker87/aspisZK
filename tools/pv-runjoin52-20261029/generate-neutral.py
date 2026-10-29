@@ -35,7 +35,7 @@ for i,n in enumerate(scalar):
  prev=[f'f{j}' for j in range(i) if scalar[j] in d[len('def '+n):]]
  statement+='  unfold PV_AL_CircleOwned.'+n+' '+raw+'.'+rawname+'\n'
  if prev: statement+='  simp only ['+','.join(prev)+']\n'
- statement+='  rfl\n'
+ if not prev: statement+='  rfl\n'
  body+=statement+'\n';proofs.append('f'+str(i))
 write('PV_RunJoin_CircleOwnedScalar52',['R1Z.PV_AL_CircleOwnedFuns','R1Z.'+raw],body,proofs)
 (E/'neutral-generation.json').write_text(json.dumps(dict(source_sha256=hashlib.sha256((L/'PV_AL_CircleOwnedFuns.lean').read_bytes()).hexdigest(),scalar_functions=scalar,tower_functions=tower,method='Proof-native neutral reification; original generated sources read-only; no authority substitution'),indent=2)+'\n')
