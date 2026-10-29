@@ -14,10 +14,11 @@ theorem stored (p : Phase) :
       R0Z.HonestView.alpha (data p).ch := by
   funext i
   have hi : i.val<10 := i.isLt
+  have hiword : i.val<(10#usize).val := hi
   have hlen : i.val<p.sem.alpha.val.length := by rw [p.sem.alpha.property];exact hi
   simp only [data,challenges,R0Z.HonestView.alpha,semantic,
     ProverCommitSuccessorPoint49.decoded,PV_RunJoin_SemanticMaterialInputs50.alpha,
-    PV_RunJoin_SemanticArray50.raw,dif_pos hi,if_pos hi,
+    PV_RunJoin_SemanticArray50.raw,dif_pos hiword,Option.getD_some,
     show ¬15+i.val=0 from by omega,show ¬15+i.val=1 from by omega,
     show ¬15+i.val=2 from by omega,show ¬15+i.val<13 from by omega,
     show ¬15+i.val=13 from by omega,show ¬15+i.val=14 from by omega,
