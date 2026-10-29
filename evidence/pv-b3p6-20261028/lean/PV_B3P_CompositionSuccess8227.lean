@@ -48,6 +48,7 @@ theorem composition_success8 (p : reference_terminal.SemanticPublic)
   · exact semantic_success8 (valid_public p) _ selectors
   intro semantic
   rw [selected_h1_column_value]
+  simp only [bind_tc_ok]
   apply rust_bind
   · apply selected_claim_total <;> scalar_tac
   intro h1
@@ -73,6 +74,7 @@ theorem composition_success8 (p : reference_terminal.SemanticPublic)
     scalar_tac
   intro composition1
   rw [selected_g_column_value]
+  simp only [bind_tc_ok]
   apply rust_bind
   · apply selected_claim_total <;> scalar_tac
   intro g

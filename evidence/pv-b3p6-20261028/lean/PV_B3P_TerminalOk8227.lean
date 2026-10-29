@@ -53,7 +53,8 @@ theorem reference_success8 (p : reference_terminal.SemanticPublic)
     (point : Array aspis_core.field.QM31 10#usize)
     (c : aspis_core.state_only_prefix.r0.Challenges) :
     RustOk (reference_terminal.reference227 (valid_public p) claims point c) := by
-  obtain ⟨selected,hselected,_⟩ := PV_B3P_SelectValue227.nonvacuity claims
+  obtain ⟨selected, a0, a1, a2, mask, selectors, _, hselected, _, _, _, _, _⟩ :=
+    preparation_success p claims point
   obtain ⟨parts,hparts⟩ := terminal_parts_success8 p selected point c.zc c.lambda c.chi c.theta c.mu
   unfold reference_terminal.reference227
   rw [hselected]
@@ -63,6 +64,15 @@ theorem reference_success8 (p : reference_terminal.SemanticPublic)
   rcases parts with ⟨value,c1,mask,g⟩
   exact rust_ok value
 
+theorem reference_nonvacuity8
+    (claims : Array (Array aspis_core.field.QM31 29#usize) 3#usize)
+    (point : Array aspis_core.field.QM31 10#usize)
+    (c : aspis_core.state_only_prefix.r0.Challenges) :
+    ∃ p value, reference_terminal.reference227 p claims point c = .ok (.Ok value) := by
+  obtain ⟨value,hvalue⟩ := reference_success8 seed_public claims point c
+  exact ⟨valid_public seed_public,value,hvalue⟩
+
+#print axioms reference_nonvacuity8
 #print axioms terminal_parts_success8
 #print axioms reference_success8
 end PV_B3P_Success227
