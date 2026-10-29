@@ -15,7 +15,7 @@ theorem integral_rat_mean {M : Type} [Fintype M] [Nonempty M]
     [MeasurableSpace M] [MeasurableSingletonClass M] (f : M → ℚ)
     (nonneg : ∀ m, 0 ≤ f m) :
     (∫ₚ m, (f m : ℝ) ∂(uniform M : Measure M)) = (R0Z.FsAbort.mean f : ℝ) := by
-  rw [integral_uniform _ (fun m => by exact_mod_cast nonneg m)]
+  rw [integral_uniform M _ (fun m => by exact_mod_cast nonneg m)]
   unfold R0Z.FsAbort.mean
   push_cast
   rfl
