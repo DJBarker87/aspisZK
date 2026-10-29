@@ -37,8 +37,9 @@ def chunkSource {E : Type} (s : PV_RDCD4_Chunks194.State E) :=
 
 theorem next_binding {E : Type} (s : PV_RDCD4_Chunks194.State E) :
     chunkSource s = PV_RDCD4_Chunks194.next s := by
-  unfold chunkSource checked PV_RDCD4_Chunks194.next
-  split <;> rfl
+  by_cases h : 2 ≤ s.v.length <;>
+    simp only [chunkSource, checked, PV_RDCD4_Chunks194.next, h,
+      if_true, if_false, unchecked]
 
 #print axioms ranges
 #print axioms success
