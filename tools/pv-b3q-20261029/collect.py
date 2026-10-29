@@ -3,7 +3,7 @@ from pathlib import Path
 import json,shutil,re,hashlib
 H=Path('/home/dombarker/project-offloads/codex-pv-b3q-20261029');O=H/'export';O.mkdir(exist_ok=True);rows=[]
 for p in sorted(H.glob('lean-*')):
- if not p.is_dir():continue
+ if not p.is_dir() or not re.fullmatch(r'lean-\d+(?:-r\d+)?',p.name):continue
  q=p/'receipt/receipt.json'
  if q.exists():
   r=json.loads(q.read_text());rows.append(dict(attempt=r['attempt'],module=r['module'],exit=r['exit_status'],source_sha256=r['source_sha256'],receipt='receipts/'+p.name+'/receipt/receipt.json'))
