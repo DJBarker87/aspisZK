@@ -16,11 +16,16 @@ theorem complete {A B C T : Type} (decode : A → C) (encode : B → C)
   cases h with
   | fail e => rfl
   | div => rfl
-  | ok hr =>
+  | @ok aa bb hr =>
+    rcases aa with ⟨ar,ast⟩
+    rcases bb with ⟨br,bst⟩
     rcases hr with ⟨hc,hs⟩
     cases hc with
     | err e => rfl
-    | ok hv => exact congrArg some hv.1
+    | @ok x y hv =>
+      rcases x with ⟨av,auditA⟩
+      rcases y with ⟨bv,auditB⟩
+      exact congrArg some hv.1
 #print axioms observe
 #print axioms complete
 end R1Z.PV_RunJoin_NativeProjection55
