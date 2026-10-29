@@ -5,7 +5,8 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_NativeCallback55
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_WeightInstalled46
-open PV_RunJoin_PublishSkeleton54 PV_RunJoin_NativeControl55 (Phase)
+open PV_RunJoin_PublishSkeleton54
+open PV_RunJoin_NativeControl55 (Phase)
 open PV_RunJoin_ResultRelation55
 attribute [local irreducible] prover.prove_from_semantics
 
@@ -27,13 +28,13 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (data : @Phase (types base) → PV_RunJoin_OpeningImages54.Data)
     (plans : @Phase (types base) → Plan)
-    (common : @PV_RunJoin_Link_CommonSample (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (backend : @PV_RunJoin_Link_BackendInput (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (finish : @PV_RunJoin_Link_FinishContext (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (query : @PV_RunJoin_Link_QueryAppend (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (node : @PV_RunJoin_Link_NodeAppend (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (ordering : @PV_RunJoin_Link_PublishOrder (types base) (selected base heap box ops) (@Phase (types base)) (runOf data plans))
-    (p : @Phase (types base)) (hv : p.variant=.S2) :
+    (common : @PV_RunJoin_Link_CommonSample (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (backend : @PV_RunJoin_Link_BackendInput (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (finish : @PV_RunJoin_Link_FinishContext (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (query : @PV_RunJoin_Link_QueryAppend (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (node : @PV_RunJoin_Link_NodeAppend (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (ordering : @PV_RunJoin_Link_PublishOrder (types base) (selected base heap box ops) (@Phase (types base)) (@runOf (types base) data plans))
+    (p : @Phase (types base)) (hv : @Phase.variant (types base) p=transport.Variant.S2) :
     Rel (CoreRel (fun proof pub => decode proof=PV_RJ4IDB.PublicationInput.publish_compact pub))
       (@PV_RunJoin_NativeControl55.source (types base) (selected base heap box ops) p)
       (@model (types base) (selected base heap box ops) data plans p) := by

@@ -143,10 +143,13 @@ theorem complete
                                   apply PV_RunJoin_ResultBindEq55.complete
                                   intro balanced
                                   cases balanced with
-                                  | false => simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+                                  | false => simp only [Bool.false_eq_true,if_false]
                                   | true =>
+                                    simp only [if_true]
                                     rw [PV_RunJoin_NativePhaseSource55.complete]
-                                    all_goals rfl
+                                    apply PV_RunJoin_ResultBindEq55.complete
+                                    intro proofStatus
+                                    cases proofStatus <;> simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
 
 #print axioms complete
 end R1Z.PV_RunJoin_NativeControlSource55
