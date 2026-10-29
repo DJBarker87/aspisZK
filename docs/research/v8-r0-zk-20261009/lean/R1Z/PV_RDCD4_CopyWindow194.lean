@@ -22,6 +22,7 @@ theorem binding {T : Type} (dst : List T) (base : Nat) (src : List T)
   rw [source,if_pos (show base ≤ dst.length from by omega),
     if_pos (show src.length ≤ dst.length-base from by omega),
     PV_RDCD4_Copy194.success _ src hl,bind_tc_ok]
+  rfl
 
 theorem length {T : Type} (dst : List T) (base : Nat) (src : List T)
     (h : base+src.length ≤ dst.length) : (splice dst base src).length=dst.length := by
@@ -29,7 +30,7 @@ theorem length {T : Type} (dst : List T) (base : Nat) (src : List T)
   omega
 
 theorem empty {T : Type} (dst : List T) (base : Nat) : splice dst base []=dst := by
-  simp only [splice,List.length_nil,Nat.add_zero,List.nil_append,List.take_append_drop]
+  simp only [splice,List.length_nil,Nat.add_zero,List.append_nil,List.nil_append,List.take_append_drop]
 
 theorem short_position (pos n : Nat) (hp : pos < 64) (hn : n < 64-pos) :
     pos+n < 64 ∧ pos+n < 256 := by omega
