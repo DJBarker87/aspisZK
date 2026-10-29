@@ -31,10 +31,9 @@ theorem complete_matrix_binding (left : Array NativePrepared14 3#usize)
      source_product_term13 (map_array14 to_reference14 left) right := by
    funext sums index
    exact (native_product_term_binding14 left right sums index).symm
- rw [terms,range_loop_binding13]
+ rw [terms,range_plan13 _ _ _ 3 _ (by rfl)]
  unfold emitted_intermediate source_product_term13
- have accumulation : (fun sums r l => source_accumulate13 sums r l) =
-     (fun sums r l => reference_field.accumulate_prepared227 sums r l) := by
+ have accumulation : source_accumulate13 = reference_field.accumulate_prepared227 := by
    funext sums r l
    rw [source_accumulate_binding13]
    exact (accumulate_nested_binding12 sums r l).symm
