@@ -10,6 +10,6 @@ fn main() {
  let masks=std::hint::black_box(PV_OWNG_masks()).unwrap();
  println!("rows={:?}\nmasks={:?}",rows,masks);
  println!("rows_fingerprint={:016x}",pool_v1_pair_forest_copy_active_rows_fingerprint_v1().unwrap());
- // The crate has no dedicated active-mask fingerprint; inactive mask uses complemented values.
- println!("inactive_masks_fingerprint={:016x}",pool_v1_pair_forest_copy_inactive_row_masks_fingerprint_v1().unwrap());
+ // The crate exposes a schedule fingerprint as an additional cross-check.
+ println!("schedule_fingerprint={:016x}",pool_v1_pair_forest_copy_row_schedule_fingerprint_v1().unwrap());
 }
