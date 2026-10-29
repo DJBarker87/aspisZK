@@ -1,0 +1,86 @@
+START 68859 R1Z.PV_RunJoin_BackendFill58
+DONE 68859 R1Z.PV_RunJoin_BackendFill58 exit 1 wall 1.74 RSS 4454412288
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BackendFill58.lean:47:6: error: invalid {...} notation, structure type expected
+  ↑(row.wrapping_add 1#usize) + n = 1024
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BackendFill58.lean:48:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ↑(row.wrapping_add 1#usize)
+in the target expression
+  prover.Backend
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+read : Usize → Result W
+input : ℕ → W
+hread : ∀ (row : Usize), ↑row < 1024 → read row = ok (input ↑row)
+p : ℕ → ℕ → W
+lane : Usize
+hl : ↑lane < 29
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+n : ℕ
+ih :
+  ∀ (row : Usize),
+    ↑row + n = 1024 →
+      ∀ (self : prover.Backend),
+        self.messages = matrix (filled p (↑lane) input ↑row) →
+          PV_RunJoin_BackendRows58.run read lane self row =
+            ok
+              { hash := self.hash, variant := self.variant, domain := self.domain,
+                messages := matrix (filled p (↑lane) input 1024), c1 := self.c1, c2 := self.c2,
+                c1_salts := self.c1_salts, c2_salts := self.c2_salts }
+row : Usize
+bound : ↑row + (n + 1) = 1024
+self : prover.Backend
+messages : self.messages = matrix (filled p (↑lane) input ↑row)
+hi : ↑row < 1024
+hir : row < 1024#usize
+inc : ↑(row.wrapping_add 1#usize) = ↑row + 1
+hw :
+  PV_RunJoin_BackendWrite58.write self lane row (input ↑row) =
+    ok
+      { hash := self.hash, variant := self.variant, domain := self.domain,
+        messages := matrix (filled p (↑lane) input (↑row + 1)), c1 := self.c1, c2 := self.c2, c1_salts := self.c1_salts,
+        c2_salts := self.c2_salts }
+⊢ prover.Backend
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BackendFill58.lean:48:27: error: unsolved goals
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+read : Usize → Result W
+input : ℕ → W
+hread : ∀ (row : Usize), ↑row < 1024 → read row = ok (input ↑row)
+p : ℕ → ℕ → W
+lane : Usize
+hl : ↑lane < 29
+this✝ : ExternalTypes := types base
+this : ExternalFuns := selected base heap box ops
+n : ℕ
+ih :
+  ∀ (row : Usize),
+    ↑row + n = 1024 →
+      ∀ (self : prover.Backend),
+        self.messages = matrix (filled p (↑lane) input ↑row) →
+          PV_RunJoin_BackendRows58.run read lane self row =
+            ok
+              { hash := self.hash, variant := self.variant, domain := self.domain,
+                messages := matrix (filled p (↑lane) input 1024), c1 := self.c1, c2 := self.c2,
+                c1_salts := self.c1_salts, c2_salts := self.c2_salts }
+row : Usize
+bound : ↑row + (n + 1) = 1024
+self : prover.Backend
+messages : self.messages = matrix (filled p (↑lane) input ↑row)
+hi : ↑row < 1024
+hir : row < 1024#usize
+inc : ↑(row.wrapping_add 1#usize) = ↑row + 1
+hw :
+  PV_RunJoin_BackendWrite58.write self lane row (input ↑row) =
+    ok
+      { hash := self.hash, variant := self.variant, domain := self.domain,
+        messages := matrix (filled p (↑lane) input (↑row + 1)), c1 := self.c1, c2 := self.c2, c1_salts := self.c1_salts,
+        c2_salts := self.c2_salts }
+⊢ sorry.messages = matrix (filled p (↑lane) input (↑row + 1))
+'R1Z.PV_RunJoin_BackendFill58.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

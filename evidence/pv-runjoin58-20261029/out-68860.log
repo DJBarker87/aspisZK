@@ -1,0 +1,34 @@
+START 68860 R1Z.PV_RunJoin_BackendFill58
+DONE 68860 R1Z.PV_RunJoin_BackendFill58 exit 1 wall 1.67 RSS 4457078784
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_BackendFill58.lean:49:4: error: Type mismatch: After simplification, term
+  next
+ has type
+  @Eq (Result prover.Backend)
+    (loop (fun x => PV_RunJoin_BackendRows58.body read lane x.1 x.2)
+      ({ hash := self.hash, variant := self.variant, domain := self.domain,
+          messages := matrix (filled p (↑lane) input (↑row + 1)), c1 := self.c1, c2 := self.c2,
+          c1_salts := self.c1_salts, c2_salts := self.c2_salts },
+        row.wrapping_add 1#usize))
+    (ok
+      { hash := self.hash, variant := self.variant, domain := self.domain,
+        messages := matrix (filled p (↑lane) input 1024), c1 := self.c1, c2 := self.c2, c1_salts := self.c1_salts,
+        c2_salts := self.c2_salts })
+but is expected to have type
+  @Eq (Result prover.Backend)
+    (loop
+      (fun x =>
+        if x.2 < 1024#usize then do
+          let value ← read x.2
+          let next ← PV_RunJoin_BackendWrite58.write x.1 lane x.2 value
+          ok (cont (next, x.2.wrapping_add 1#usize))
+        else ok (done x.1))
+      ({ hash := self.hash, variant := self.variant, domain := self.domain,
+          messages := matrix (filled p (↑lane) input (↑row + 1)), c1 := self.c1, c2 := self.c2,
+          c1_salts := self.c1_salts, c2_salts := self.c2_salts },
+        row.wrapping_add 1#usize))
+    (ok
+      { hash := self.hash, variant := self.variant, domain := self.domain,
+        messages := matrix (filled p (↑lane) input 1024), c1 := self.c1, c2 := self.c2, c1_salts := self.c1_salts,
+        c2_salts := self.c2_salts })
+'R1Z.PV_RunJoin_BackendFill58.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
