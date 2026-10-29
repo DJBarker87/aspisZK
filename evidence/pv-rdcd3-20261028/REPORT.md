@@ -103,3 +103,8 @@ bindings themselves use none). No Kani, dictionary or shipped source changes.
 assignment readback/frame laws, including invalid-index failure:exit0,
 wall1.39s, peak2,638,764KiB, swap0; only standard axioms. This matches all
 explicit sampler writes inspected under ruling(n); no write result is dropped.
+
+60646 proves the concrete Result question-mark, Option::ok_or and
+unwrap_or_else control laws:exit0, wall1.11s, peak2,633,884KiB, swap0;
+no axioms. These preserve the concrete error carrier and all continuation
+failure/divergence. Whole V265 is still suspended until its full cone passes.

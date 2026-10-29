@@ -3,8 +3,8 @@
 Assigned cwd/branch unchanged. All pv-common rulings read; no local Lean;
 no crates/programs/dictionary/simulator/observer edits, no Kani or key operations.
 
-Current charged budget:43 Lean (33 PASS,10 FAIL),5 native scopes. Actual Lean
-IDs60600–60642 consumed.60630 prior barrier refusal was recovered and retried
+Current charged budget:47 Lean (37 PASS,10 FAIL),5 native scopes. Actual Lean
+IDs60600–60646 consumed.60630 prior barrier refusal was recovered and retried
 compliantly, same ID; no compiler had launched before the refusal. No new
 cooldown violation. `scope.py` enforces180s after completion and refusal. Inspect
 predecessor results before dependent submissions. Audit IDs60697–60699 reserved.
@@ -17,9 +17,10 @@ Complete scope and limitations in rows/V260.md/json; zero endpoint premise
 changes, all original observer/native world obligations retained.
 
 Next row V265; concrete UsizeLoop passed60641 (failed60638–60640 retained).
-ShiftLiterals passed60642. NextID60643 compiles PV_RDCD3_ArrayInspect
-(the actual array/update/endian/widening definitions), then Cast194, then new
-array-write laws as needed before the circle cone.
+ShiftLiterals passed60642. ArrayInspect passed60643 after the full cooldown
+retry of one uncharged ENOENT cgroup race; Cast194 passed60644,
+ArrayWrite194 passed60645, Result194 passed60646. Next60647 compiles
+PV_RDCD3_Endian194, then the retained circle dependency types/funs/control/native.
 Then compile dependencies not present in own lean-objects, one target per ID:
 R1Z/PV_AL_ShiftLiterals, PV_AL_CircleOwnedTypes, PV_AL_CircleOwnedFuns,
 PV_AL_CircleControl, PV_AL_CircleNative, PV_RDCD3_V265Inverse, PV_RDCD3_V265.
