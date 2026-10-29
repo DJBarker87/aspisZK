@@ -106,9 +106,9 @@ source hashes and revisions remain. Failed-elaboration sorryAx earns no credit.
 
 The requested older host directories l1c/l1d/l1e/l1f contained **zero compiled
 objects**: their committed cleanup receipts had removed them. This absence
-is recorded, not silently counted as reuse. All **1,665 surviving compatible
-objects** were reused read-only: 1,640 from the pinned runjoin cohort, plus
-25 diagnostic/decoder objects. Their selected source hashes, every import's
+is recorded, not silently counted as reuse. All **1,664 distinct surviving compatible
+objects** were reused read-only: 1,640 from the pinned runjoin cohort and
+25 diagnostic/decoder checks, with one overlapping object. Their selected source hashes, every import's
 object fingerprint, toolchain and effective object prefix were checked before
 use. Only 81 missing inherited prerequisites were rebuilt, unchanged and
 privately, to connect the new rules to the actual source/retry definitions.
