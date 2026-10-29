@@ -42,7 +42,9 @@ theorem test_bound (μR : ProbabilityMeasure R)
     (by intro m; exact ⟨by exact_mod_cast (bounded (model m.1.1)).1,
       by exact_mod_cast (bounded (model m.1.1)).2⟩)
     (fun s hs => congrArg (fun v => (test v : ℝ)) (agreement s hs))
-  rw [integral_rat_mean _ (fun m => (bounded (model m.1.1)).1)] at ht
+  rw [integral_rat_mean
+    (fun m : (M × OracleAnswer) × ProverCommitFuelJoin22.Tape => test (model m.1.1))
+    (fun m => (bounded (model m.1.1)).1)] at ht
   have hm : (∫ₚ m, (if ∃ i, ProverCommitFuelJoin22.bad old queries i m then (1 : ℝ) else 0)
       ∂(uniform ((M × OracleAnswer) × ProverCommitFuelJoin22.Tape) : Measure _)) =
       (eventMass (fun m => ∃ i, ProverCommitFuelJoin22.bad old queries i m) : ℝ) := by
