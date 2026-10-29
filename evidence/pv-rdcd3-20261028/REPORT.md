@@ -78,3 +78,9 @@ consumed and no sorryAx output is credited.
 `dsimp only` reports no progress (its reduction is already performed by the
 preceding step). Removed that redundant tactic for60641; zero case now closes.
 60640:exit1, wall1.17s, peak2,629,464KiB, swap0; uncredited.
+
+60641 passes the corrected concrete usize loop law:exit0, wall1.25s,
+peak2,643,828KiB, swap0; only propext/Classical.choice/Quot.sound. It preserves
+all callback failure/divergence with arbitrary endpoints. Failed60638–60640
+remain uncredited. Next: retained static circle dependency modules, then the
+concrete inverse chain and closing source/Result law.
