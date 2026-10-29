@@ -84,7 +84,7 @@ theorem consumed_signal {W : Type} (length : W → Nat)
         simp only [run, List.map_cons, control, List.length_cons, signal]
         by_cases h : p = []
         · subst p; simp [failed]
-        · have hp : p.isEmpty = false := List.isEmpty_eq_false.mpr h
+        · have hp : p.isEmpty = false := by cases p <;> simp_all
           have hn : ¬ p.length = 0 := by simpa using h
           simp only [hp, Bool.false_or, hn, decide_false, Bool.false_or]
           split <;> rename_i hc
