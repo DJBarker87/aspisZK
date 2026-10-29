@@ -26,7 +26,7 @@ theorem source {E S : Type} (step : (List E × E) → S → Result S)
       cases xs with
       | nil => simp only [List.length_cons,List.length_nil] at hx; omega
       | cons b tail =>
-        have ha : it.start<it.stop := by omega
+        have ha : it.start < it.stop := by omega
         obtain ⟨v,hrem,hnext⟩ := PV_RDCD4_ArraySuffix.active it hs ha
         rw [advance step _ _ ([a,b],v) (fuel+1) acc
           (PV_RDCD4_EncoderNext.pair a b v tail it _ i n hnext)]

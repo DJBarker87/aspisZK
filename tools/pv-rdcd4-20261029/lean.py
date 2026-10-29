@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess,json,hashlib,sys,re
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029';D='/home/dombarker/project-offloads/codex-pv-rdcd4-20261029';H='dombarker@100.108.41.90'
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029';D='/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029';H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);m=sys.argv[2];assert 66300<=n<=66399
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 if not p.exists():p=R/'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023'/(m.split('/')[-1]+'.lean')
@@ -28,7 +28,7 @@ subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True
 # retain their original fields; final closure verification is separately labelled.
 code = """from pathlib import Path
 import json,hashlib,re
-D=Path('/home/dombarker/project-offloads/codex-pv-rdcd4-20261029')
+D=Path('/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029')
 env=json.load(open(D/'env-J.json'));roots=[Path(x) for x in env['LEAN_PATH'].split(':')];seen={}
 def go(module):
  if module in seen:return

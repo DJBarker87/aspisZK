@@ -1,7 +1,7 @@
 """Serial capped proof/native launch using the standing admission tools."""
 from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys,time
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029';D='/home/dombarker/project-offloads/codex-pv-rdcd4-20261029';H='dombarker@100.108.41.90';G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd4-20261029';D='/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029';H='dombarker@100.108.41.90';G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 name,phase,*cmd=sys.argv[1:];assert re.fullmatch(r'[A-Za-z0-9_-]+',name) and cmd
 # A refusal imposes a job-wide180s cooldown, even if later host admission would allow.
 from datetime import datetime,timezone

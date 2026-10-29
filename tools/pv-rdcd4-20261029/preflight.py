@@ -1,7 +1,7 @@
 """Read-only h4 external verification before the first Lean compile."""
 from pathlib import Path
 import json,hashlib
-D=Path('/home/dombarker/project-offloads/codex-pv-rdcd4-20261029')
+D=Path('/home/dombarker/project-offloads/codex-pv-rdcd3-20261028/rdcd4-20261029')
 e=json.load(open('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json'))
 roots=[Path(x) for x in e['LEAN_PATH'].split(':')]
 manifest=json.load(open(D/'external-object-manifest.json'));out=[];bad=[]
