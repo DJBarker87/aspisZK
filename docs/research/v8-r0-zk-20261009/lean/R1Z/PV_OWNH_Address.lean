@@ -2,30 +2,30 @@ import Init.Omega
 set_option autoImplicit false
 namespace R1Z.PV_OWNH_Address
 /-- A pointer inside a live, nonwrapping allocation, in element coordinates. -/
-def at (base offset : Nat) : Nat := base + offset
+def position (base offset : Nat) : Nat := base + offset
 
 theorem same_allocation_eq (base i j : Nat) :
-    at base i = at base j ↔ i = j := Nat.add_left_cancel_iff
+    position base i = position base j ↔ i = j := by unfold position; omega
 
 theorem same_allocation_lt (base i j : Nat) :
-    at base i < at base j ↔ i < j := Nat.add_lt_add_iff_left
+    position base i < position base j ↔ i < j := by unfold position; omega
 
 theorem same_allocation_le (base i j : Nat) :
-    at base i ≤ at base j ↔ i ≤ j := Nat.add_le_add_iff_left
+    position base i ≤ position base j ↔ i ≤ j := by unfold position; omega
 
 theorem cursor_distance (base i j : Nat) :
-    at base j - at base i = j - i := Nat.add_sub_add_left _ _ _
+    position base j - position base i = j - i := by unfold position; omega
 
 theorem rebase_equality (a b i j : Nat) :
-    (at a i = at a j) ↔ (at b i = at b j) := by
+    (position a i = position a j) ↔ (position b i = position b j) := by
   rw [same_allocation_eq, same_allocation_eq]
 
 theorem rebase_order (a b i j : Nat) :
-    (at a i < at a j) ↔ (at b i < at b j) := by
+    (position a i < position a j) ↔ (position b i < position b j) := by
   rw [same_allocation_lt, same_allocation_lt]
 
 theorem rebase_distance (a b i j : Nat) :
-    at a j - at a i = at b j - at b i := by
+    position a j - position a i = position b j - position b i := by
   rw [cursor_distance, cursor_distance]
 
 theorem block_bound (r : Nat) (h : r < 1024) : r / 16 < 64 := by omega
