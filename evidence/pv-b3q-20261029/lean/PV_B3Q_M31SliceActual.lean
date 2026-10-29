@@ -13,10 +13,9 @@ theorem model_value (left right : Slice U32) : model left right = .ok (decide (l
  have specification := Aeneas.Std.core.slice.cmp.PartialEqSlice.eq_homo_spec
    PV_B3P_227.aspis_core.field.M31.Insts.CoreCmpPartialEqM31 left right (by
      intro x y
-     simp only [PV_B3P_227.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.ne,
-       Aeneas.Std.core.cmp.PartialEq.ne.trait_default,
+     simp only [Aeneas.Std.core.cmp.PartialEq.ne.default,
        PV_B3P_227.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
-       WP.spec,WP.theta,bind_tc_ok]
+       WP.spec,WP.theta,WP.wp_return,bind_tc_ok]
      simp)
  change WP.spec (model left right) _ at specification
  cases evaluated : model left right with
