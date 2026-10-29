@@ -18,7 +18,7 @@ theorem leading_cell12_7 (openings : aspis_statement.state_only_poseidon.StateOn
     leading_tail12_7 openings state =
       (leading_step12 openings.xor12_z state 7#usize >>= leading_finish12) := by
   unfold leading_tail12_7
-  conv_rhs => unfold leading_step12
+  conv_rhs => simp only [leading_step12,PV_B3P_Ordered227.bind_assoc]
   apply PV_B3P_Binding9227.bind_equal9
   intro v0
   apply PV_B3P_Binding9227.bind_equal9
