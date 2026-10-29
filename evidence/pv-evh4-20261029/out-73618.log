@@ -1,0 +1,53 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:77:5: error: unexpected token 'prefix'; expected '(', ':=', 'rec', '|' or term
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:77:12: error: unexpected token ':='; expected ':'
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:81:12: error: unexpected token '++'; expected ':'
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:82:32: error: unexpected token '++'; expected ':'
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:105:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+a : Answers
+file : std.fs.File
+h : ∀ (w : World), (a.sync w file).result = file.sync_all
+w : World
+⊢ (have r := a.sync w file;
+      have path := a.pathOf file;
+      match r.result with
+      | Result.ok (core.result.Result.Ok PUnit.unit) =>
+        { result := r.result, world := syncedState path w,
+          events :=
+            [NativeEvent.side (ascii "nonce-sync-request") path, NativeEvent.otherFile (PV_RJ4IDB.FileOp.sync path)] ++
+              errors path r.errorBytes }
+      | x =>
+        { result := r.result, world := w,
+          events := [NativeEvent.side (ascii "nonce-sync-request") path] ++ errors path r.errorBytes }).result =
+    file.sync_all
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:117:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+P : Type
+a : Answers
+convert : core.convert.AsRef P std.path.Path
+options : std.fs.OpenOptions
+path : P
+h : ∀ (w : World), (a.optionsOpen convert options path w).2.result = std.fs.OpenOptions.open convert options path
+w : World
+⊢ (have r := a.optionsOpen convert options path w;
+      sorry).result =
+    std.fs.OpenOptions.open convert options path
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonceWorld.lean:119:0: warning: automatically included section variable(s) unused in theorem `PV_EVH_NonceWorld.write_prefix`:
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+'PV_EVH_NonceWorld.write_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_NonceWorld.sync_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonceWorld.open_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_NonceWorld.options_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonceWorld.write_prefix' depends on axioms: [propext, Classical.choice, Quot.sound]

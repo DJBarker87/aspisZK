@@ -74,12 +74,12 @@ def optionsOpen {P : Type} (a : Answers) (convert : core.convert.AsRef P std.pat
     (options : std.fs.OpenOptions) (path : P) :
     M (core.result.Result std.fs.File std.io.error.Error) := fun w =>
   let r := a.optionsOpen convert options path w
-  let prefix := [.side (ascii "nonce-options-open-request") r.1]
+  let requestEvents := [.side (ascii "nonce-options-open-request") r.1]
   match r.2.result, r.2.createdMode with
   | .ok (.Ok _), some mode =>
     ⟨r.2.result,deliveredState r.1 [] w,
-      prefix ++ [.otherFile (.create r.1 mode)] ++ errors r.1 r.2.errorBytes⟩
-  | _, _ => ⟨r.2.result,w,prefix ++ errors r.1 r.2.errorBytes⟩
+      requestEvents ++ [.otherFile (.create r.1 mode)] ++ errors r.1 r.2.errorBytes⟩
+  | _, _ => ⟨r.2.result,w,requestEvents ++ errors r.1 r.2.errorBytes⟩
 
 variable [ExternalFuns]
 
@@ -101,8 +101,13 @@ theorem sync_fixed (a : Answers) (file : std.fs.File)
     (h : ∀ w, (a.sync w file).result = std.fs.File.sync_all file) :
     FixedView (sync a file) (std.fs.File.sync_all file) := by
   intro w
-  unfold sync
-  split <;> exact h w
+  cases hr : (a.sync w file).result with
+  | ok v =>
+    cases v with
+    | Ok u => cases u; simpa only [sync,hr] using h w
+    | Err e => simpa only [sync,hr] using h w
+  | fail e => simpa only [sync,hr] using h w
+  | div => simpa only [sync,hr] using h w
 
 theorem open_fixed {P : Type} (a : Answers) (convert : core.convert.AsRef P std.path.Path)
     (path : P) (h : ∀ w, (a.openReply convert path w).2.result = std.fs.File.open convert path) :
@@ -113,8 +118,21 @@ theorem options_fixed {P : Type} (a : Answers) (convert : core.convert.AsRef P s
     (h : ∀ w, (a.optionsOpen convert options path w).2.result = std.fs.OpenOptions.open convert options path) :
     FixedView (optionsOpen a convert options path) (std.fs.OpenOptions.open convert options path) := by
   intro w
-  unfold optionsOpen
-  split <;> exact h w
+  cases hr : (a.optionsOpen convert options path w).2.result with
+  | ok v =>
+    cases v with
+    | Ok f =>
+      cases hm : (a.optionsOpen convert options path w).2.createdMode <;>
+        simpa only [optionsOpen,hr,hm] using h w
+    | Err e =>
+      cases hm : (a.optionsOpen convert options path w).2.createdMode <;>
+        simpa only [optionsOpen,hr,hm] using h w
+  | fail e =>
+    cases hm : (a.optionsOpen convert options path w).2.createdMode <;>
+      simpa only [optionsOpen,hr,hm] using h w
+  | div =>
+    cases hm : (a.optionsOpen convert options path w).2.createdMode <;>
+      simpa only [optionsOpen,hr,hm] using h w
 
 theorem write_prefix (a : Answers) (file : std.fs.File) (bytes : Slice U8) (w : World) :
     (writeAll a file bytes w).events =
