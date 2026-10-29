@@ -46,7 +46,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     have next := ih (Usize.wrapping_add row 1#usize) (by rw [inc];omega)
       {self with messages:=matrix (filled p lane.val input (row.val+1))}
       (by rw [inc])
-    simpa only [PV_RunJoin_BackendRows58.run] using next
+    simpa only [PV_RunJoin_BackendRows58.run,PV_RunJoin_BackendRows58.body,lift,bind_tc_ok] using next
 
 #print axioms complete
 end R1Z.PV_RunJoin_BackendFill58
