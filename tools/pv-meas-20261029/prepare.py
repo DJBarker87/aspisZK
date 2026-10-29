@@ -5,13 +5,18 @@ E=Path('evidence/pv-meas2-20261029'); O=Path('evidence/pv-rj4idb-20261029')
 H='/home/dombarker/project-offloads/codex-pv-meas-20261029'
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 sha=lambda b:hashlib.sha256(b).hexdigest()
-base=json.load(open(O/'source-resolution.json'))['projects']
-checks={v['module']:v for v in json.load(open(O/'h6-result.json'))['result']['checks']}
+def tracked_json(p):
+ return json.loads(p.read_text() if p.exists() else subprocess.check_output(['git','show',rev+':'+str(p)],text=True))
+def tracked_glob(d,pattern):
+ import fnmatch
+ return [Path(p) for p in subprocess.check_output(['git','ls-tree','-r','--name-only',rev,str(d)],text=True).splitlines() if fnmatch.fnmatch(Path(p).name,pattern)]
+base=tracked_json(O/'source-resolution.json')['projects']
+checks={v['module']:v for v in tracked_json(O/'h6-result.json')['result']['checks']}
 records={}
-for f in sorted(O.glob('modules-*.json')):
- for v in json.load(open(f)):
+for f in sorted(tracked_glob(O,'modules-*.json')):
+ for v in tracked_json(f):
   if v['accepted']: records[v['module']]=v
-plan=json.load(open(O/'build-plan.json'))['modules']
+plan=tracked_json(O/'build-plan.json')['modules']
 projects={}; edges=[]
 for m,v in base.items():
  p=v['path']; selected=v['revision'] if 'runjoin' in v['authority'] else rev
@@ -24,8 +29,8 @@ for m,v in records.items():
  projects[m]=dict(module=m,path=p,revision=rev,source_sha256=sha(b),object_sha256=v['object_sha256'],object_path='/home/dombarker/project-offloads/codex-pv-rj4idb-20261029'+'/objects/'+m.replace('.','/')+'.olean')
  for d,r in v['dependencies'].items():edges.append(dict(module=m,dependency=d,sha256=r['sha256']))
 # Reuse successful own objects; never rebuild an unchanged predecessor.
-for q in list(Path('evidence/pv-evhd-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh-20261029').glob('receipt-*.json')) + list(E.glob('receipt-731*.json')):
- v=json.loads(q.read_text())
+for q in tracked_glob(Path('evidence/pv-evhd-20261029'),'receipt-*.json') + tracked_glob(Path('evidence/pv-evh-20261029'),'receipt-*.json') + list(E.glob('receipt-731*.json')):
+ v=tracked_json(q)
  if not v.get('accepted'): continue
  m=v['target']; path='lean/'+m+'.lean'
  b=subprocess.check_output(['git','show',rev+':'+path])
@@ -34,7 +39,7 @@ for q in list(Path('evidence/pv-evhd-20261029').glob('receipt-*.json')) + list(P
  r=subprocess.check_output(['ssh','dombarker@100.108.41.90','sha256sum '+obj],text=True)
  assert r.split()[0]==v['object_sha256'],('own object changed',m)
  projects[m]=dict(module=m,path=path,revision=rev,git_blob=subprocess.check_output(['git','rev-parse',rev+':'+path],text=True).strip(),source_sha256=sha(b),object_sha256=v['object_sha256'],object_path=obj)
- prep=json.load(open(q.parent/('prepare-'+m+'.json')))['result']
+ prep=tracked_json(q.parent/('prepare-'+m+'.json'))['result']
  for d in __import__('re').findall(r'^import (\S+)',b.decode(),__import__('re').M):
   found=next(t for t in prep['project_checks'] if t['module']==d)
   edges.append(dict(module=m,dependency=d,sha256=found['sha256']))
