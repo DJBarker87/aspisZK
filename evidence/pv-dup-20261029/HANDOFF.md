@@ -1,0 +1,15 @@
+# D535 duplicate-census handoff
+
+Worktree /Users/dominic/ZK/.worktrees/pv-evhc; branch codex/pv-evhc-20261029; original base 4318dfa797. Do not push. All task artifacts are in this directory. Read REPORT.md for findings and recommendations and RESUME-VERIFICATION.json before allocating an ID.
+
+The exact declared-constant census and syntax comparison are complete: 11,928 names, 11,816 identical across all providers, 112 nonidentical; 126,057 provider pairs. CENSUS.json + SOURCES-COMPLETED.json + GROUPS.json give names, modules, source filenames and comparison classes. The source-binding qualifications of four project providers remain open; historical Aeneas paths are recorded even where sources disappeared. Do not mistake filenames for a recovered source-to-object binding proof.
+
+Three Rust-type instance collisions are real. The compiled verifier error has 8 cases on NDR and 11 on privacy. That checked counterexample rules out unqualified constructor-preserving transport. DISAGREEMENTS.md was committed immediately by the earlier session; six-carrier inspection 70765 confirms it. Payment/tree constructor names match, but carriers and elaborated instances differ. The complete unification is PROPOSED ONLY, on privacy; the soundness graph and objects are unchanged. No theorem/premise removal or privacy headline is claimed.
+
+Budget: 12/20 Lean runs consumed (70750, 70752, 70753, 70754, 70756, 70757, 70758, 70759, 70761, 70763, 70764, 70765); 4/6 native scopes consumed (70751, 70755, 70760, 70766). All 70750–70766 are forbidden for reuse, including conservatively retired unlaunched 70762. Next candidate 70767 requires a fresh local/host/sent-file audit. No Kani, no 16 GiB scope. 70759 has no final receipt: deliberate stop snapshot and empty time.log retained; do not resubmit.
+
+No host scope was launched during this resume. Native 70766 and source_audit.py appeared during the resume without an edit/submission by this session. The completed receipt was recovered and counted; there was no active pv-dup scope at recovery. The user was asked about a possible concurrent writer; no substantive answer arrived before this handoff. Resolve this before any new launch or host mutation. unlaunched-resume-audit-config.json and resume_audit.py were preparation only; never count them as executed evidence and never overwrite the actual 70766 config with them.
+
+The receipt-recovery commit is c3d187fd6b. All edits remain task-local. Host raw logs and exact exports remain under /home/dombarker/project-offloads/codex-pv-dup-20261029; the largest logs are not downloaded or committed. Host objects and Stream A files must remain read-only. No cleanup of keys/accounts occurred.
+
+Next: confirm one writer, recover the four source/object binding chains if required, then commission a privacy-only ae1 shared-type boundary and a proved domain/observation bridge for the 11/8 error interface. Do not rename collisions away. The checked counterexample is the task's stopping condition with unused compile budget; do not spend runs on redundant census replays.
