@@ -23,6 +23,8 @@ for f in E.glob('**/admission-*.json'):
 assert re.fullmatch(r'native751[0-9]{2}',name) and cmd
 out=E/name;out.mkdir(exist_ok=True)
 assert not (out/'receipt.json').exists()
+inputs={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'tools/r1-cost-probe/src/bin').rglob('*.rs')}
+(out/'source-inputs.json').write_text(json.dumps(dict(revision=source_revision_at_launch,files=inputs,dirty=subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),indent=2)+'\n')
 def ssh(c,retry=True):
  if os.environ.get('PV_C474_QUIET_OWNER')=='1':
   assert name.startswith('native751') and cmd[-1]==D+'/bundle/timing.py'
