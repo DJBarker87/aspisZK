@@ -1,39 +1,48 @@
-# D523 composition status
+# D535 composition status (supersedes the interrupted draft)
 
-Target not yet established. No endpoint premise or T field is removed, added,
-or weakened. V370 / owner D381,D386 and the D159 observer remain unchanged.
+Target not yet established. V244 and runjoin op227 remain OPEN. No endpoint
+premise or T field is removed, added or weakened. V370 / D381,D386 and the
+D159 observer remain unchanged.
 
-`STD-PARITY.json` checks every standard code symbol from the retained selected
-Kani symbol tables. The exact nightly rust-src files were recovered from the
-bundled compiler commit and byte-checked against the official dated rust-src
-component (`std-source-authority.json`); no toolchain was installed or changed.
-Compiler intrinsic names remain explicit V370 compiler-cohort items.
+All 36 direct trials are inventoried in PER-FUNCTION-D535.json with verbatim
+refusals and original host receipts: 4 EXTRACTED, 32 REFUSED. The initial empty
+active_literal output was not an extraction; the corrected method-root trial
+refused. The statement mask copy is ancillary to this denominator.
 
-| Deployed function | Source/reference evidence | Existing Lean reference link | Composition |
-|---|---|---|---|
-| host selector_mask_sum_16 | K72106–K72112; raw symbolic limbs, all seven actual masks; four reached standard items identical | `PV_B3P_Correct14227.mask_direct14`, `native_mask_link14` | P6 association restored on the frozen caller domain; separate direct-emission Lean equation still being worked |
-| statement selector_mask_sum_16 (ancillary copy) | K72113–K72119; separate verbatim source prefix, same full seven-mask domain and four identical standard items | same immutable reference law; separate source identity | P6 association restored; ancillary, outside the historical 36 denominator |
-| reconstruct_10 | K72122; all raw fixed-array inputs; both reached wrapping arithmetic bodies identical | `PV_B3P_Binding13227.reconstruct_link13`, `source_reconstruct` | P6 association restored, no narrowed input domain |
-| absorption_lanes_literal | new direct Charon/Aeneas extraction of deployed source; shared emitted declarations and types token-identical | `PV_B3P_Native15227.absorption_source_binding15` | `PV_B3P_Direct17227.absorption_extraction_reference17`, compile73801, standard axioms only |
+* absorption_lanes_literal: absorption_extraction_reference17, Lean73801 PASS.
+* add_digest_binding: digest_extraction_reference17, Lean73805 PASS. Complete
+  Result equality, all raw inputs, named range/loop composition. Axioms exactly
+  propext, Classical.choice, Quot.sound; no external template compiled.
+* add_preweighted: exact emitted definitions ported with all 15 shared
+  declarations token-checked. Inner-loop proof73806 FAILED; new branch-split
+  draft is UNCOMPILED. Inclusive iterator lemma is also UNCOMPILED.
+* selector_mask_sum_16: emitted count_ones and trailing_zeros are EXTERNAL
+  HOLES, not accepted axioms. Direct Lean equation remains OPEN. Existing P6
+  equivalence on the seven frozen actual caller masks has passing std parity.
 
-The P6 label is **Kani equivalence (P6), std parity checked 1.93-nightly to
-1.94.1, compiler cohort under V370**. All associations are **reclassification
-within existing Charon/Aeneas tool trust (owner fifth amendment)**, not premise
-removal or a proof of the privacy endpoint. The source/model interpretation
-uses the existing extraction provenance, not an invented Lean-native model.
+Direct-extraction deployment credit is conservatively HELD: concurrent edits
+identified a missing getrandom/std feature in the terminal manifest. A proposed
+N73926 feature-reproduction script exists, but this session neither ran it nor
+verified a receipt. The source-level Lean equations above remain valid about
+their recorded emissions. No feature-correct deployment claim is made before
+that recheck. Do not rerun unchanged full suites.
 
-The two mask caller tables and sole nonzero-guarded call sites are already
-checked in resume16/DOMAINS.json; their source hashes remain unchanged. The
-reference's panic outside those seven masks is not silently generalized.
+STD-PARITY.json was reproduced locally from the recovered exact symbol sets
+and source pins. Both mask copies and reconstruct_10 pass; their prior P6 plus
+Lean reference-link associations are reusable under k-double-prime. Label:
+"Kani equivalence (P6), std parity checked 1.93-nightly to 1.94.1, compiler
+cohort under V370". The host-mask and reconstruct rows are 2/36 association
+candidates restored by parity; the statement mask is ancillary. Their source
+and call-domain evidence remains in resume16. No endpoint law follows yet.
 
-Deployment credit remains withheld for validate_transition,
-external_local_packed_raw and internal_linear_lazy. Their exact reached sets
-contain differing bodies (including `core::ub_checks::check_language_ub`) and
-unresolved mappings. The canonical-only helpers also retain the independent
-OPEN caller-canonicality obligation from resume16. No semantic-similarity
-argument substitutes for k'' token identity.
+validate_transition, external_local_packed_raw and internal_linear_lazy are
+WITHHELD for differing/unresolved reached std bodies; see STD-PARITY.json.
+The canonical helpers also retain the OPEN caller-canonicality link. All
+formatting dependencies remain subject to fmt-1; no Unit writer is credited.
 
-Formatting: none of the credited direct absorption body or passing P6
-standard sets uses Aeneas.Std core::fmt. Formatting/error-state models are not
-used to close any row; the other functions keep their obligations open under
-fmt-1.
+K73930 timed out at180s, exit124, no positive credit. It was not restarted.
+No Kani function-pointer quarantine is silently waived. Shared callee and KMX
+conditions remain those of resume16/SHARED-CALLEES.json and the pinned patch.
+
+Evidence classes are reclassification within existing Charon/Aeneas tool
+trust (owner fifth amendment), or P6 as labelled, never premise removal.

@@ -98,8 +98,10 @@ theorem preweighted_inner_body17 {N : Usize} (start : Usize)
     host_terminal.add_preweighted_loop0_loop0.body start values group output slot =
       usize_body (window_store12 (preweighted_window12 start values group)) 4#usize (output,slot) := by
   by_cases h : slot < 4#usize <;>
+    by_cases lower : (Usize.wrapping_add (Usize.wrapping_mul 4#usize group) slot) ≥ start <;>
+    by_cases upper : (Usize.wrapping_add (Usize.wrapping_mul 4#usize group) slot) < Usize.wrapping_add start N <;>
     simp only [host_terminal.add_preweighted_loop0_loop0.body,usize_body,
-      window_store12,preweighted_window12,h,if_true,if_false,PV_B3P_Ordered227.bind_assoc,
+      window_store12,preweighted_window12,h,lower,upper,if_true,if_false,PV_B3P_Ordered227.bind_assoc,
       lift,bind_tc_ok]
 
 theorem preweighted_inner_loop17 {N : Usize} (start : Usize)

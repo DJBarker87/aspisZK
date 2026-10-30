@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectPreweighted17227.lean:99:101: error: unsolved goals
+case pos
+N start : Usize
+values : Std.Array aspis_core.field.QM31 N
+group : Usize
+output : Std.Array aspis_core.field.QM31 4#usize
+slot : Usize
+h : slot < 4#usize
+⊢ (if (Usize.wrapping_mul 4#usize group).wrapping_add slot ≥ start then
+      if (Usize.wrapping_mul 4#usize group).wrapping_add slot < start.wrapping_add N then do
+        let q ← values.index_usize (((Usize.wrapping_mul 4#usize group).wrapping_add slot).wrapping_sub start)
+        let output1 ← output.update slot q
+        ok (cont (output1, slot.wrapping_add 1#usize))
+      else do
+        let output1 ← output.update slot aspis_core.field.QM31.ZERO
+        ok (cont (output1, slot.wrapping_add 1#usize))
+    else do
+      let output1 ← output.update slot aspis_core.field.QM31.ZERO
+      ok (cont (output1, slot.wrapping_add 1#usize))) =
+    do
+    let x ←
+      if (Usize.wrapping_mul 4#usize group).wrapping_add slot ≥ start then
+          if (Usize.wrapping_mul 4#usize group).wrapping_add slot < start.wrapping_add N then
+            values.index_usize (((Usize.wrapping_mul 4#usize group).wrapping_add slot).wrapping_sub start)
+          else ok aspis_core.field.QM31.ZERO
+        else ok aspis_core.field.QM31.ZERO
+    let next ← output.update slot x
+    ok (cont (next, slot.wrapping_add 1#usize))
+'PV_B3P_Direct17227.preweighted_inner_body17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.preweighted_inner_loop17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.preweighted_four17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
