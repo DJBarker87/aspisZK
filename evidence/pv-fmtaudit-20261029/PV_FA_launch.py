@@ -10,7 +10,7 @@ for base,dirs,files in os.walk(H.parent):
  for name in dirs+files:assert not re.search(r'(?<![A-Za-z0-9])'+str(id)+r'(?![A-Za-z0-9])',name),('ID collision',base,name)
  for name in files:
   if name=='sent.txt':assert not any(len(f:=l.split())>2 and f[2]==str(id)for l in(Path(base)/name).read_text().splitlines())
-if kind in ['inventory','source','claim_inventory','find_claim_objects','fmt_physical','receipt_find','post']:cmd=['python3',str(H/('PV_FA_'+kind+'.py'))]
+if kind in ['inventory','source','claim_inventory','find_claim_objects','fmt_physical','receipt_find','post','resume_provenance','receiptcheck','resume_prepare']:cmd=['python3',str(H/('PV_FA_'+kind+'.py'))]
 elif kind=='pincompile':
  module=sys.argv[3];assert module.startswith(('Aeneas/','AeneasMeta/'));src=H/'pinned-source/backends/lean'/(module+'.lean');sha=hashlib.sha256(src.read_bytes()).hexdigest();cohort='pinned';
  for q in H.glob('pincompile-*/receipt/receipt.json'):

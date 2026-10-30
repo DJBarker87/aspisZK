@@ -1,0 +1,7 @@
+# Supplementary pinned-source failure
+
+Attempt 73766 compiled the unedited patched-pin Aeneas/Tactic/Step/StepArraySpec.lean (SHA-256 4092e866ec5f32a4a24d6a2758cbc4562f8f250acfa3e91a52b3e64fd6fdd429) under the pinned Lean 4.32 and private namespace-complete overlay. It reached elaboration and failed: TSyntax `Lean.Parser.Command.declModifiers` versus TSyntax `declModifiers` at lines 112, 115, 117 and 122, followed by the unimplemented command elaborator at line 139. The source was not edited or retried. This is evidence that this source/overlay combination does not reproduce that module, not proof that the historical object came from any particular alternative source. The copied baseline object remains outside fresh-source credit.
+
+The batch stopped on that failure; the independent Global source compilation uses the next never-used ID 73767. The last remaining Lean run is reserved for supplementary object comparison, not an unchanged retry or a package replay.
+
+A completed post-integrity scope 73758 appeared after the first recovery inventory. Its host journal dates the scope 2026-10-29 19:47:29–19:47:37 UTC. It is charged as a seventh native scope, and its ID was already present when the resumed batch chose its first source ID 73759. Its receipts and result are retained; it was never submitted again by this resume. Two SSH resets occurred after later submissions; the existing results were recovered rather than re-launched.
