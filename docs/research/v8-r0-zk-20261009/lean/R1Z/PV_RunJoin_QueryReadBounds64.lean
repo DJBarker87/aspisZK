@@ -11,7 +11,11 @@ theorem vector {T : Type} (v : alloc.vec.Vec T) (i : Usize) (x : T)
   change (match v.val[i.val]? with
     | none => Result.fail Error.arrayOutOfBounds
     | some y => Result.ok y)=ok x at success
-  rw [List.getElem?_eq_none (by change v.val.length≤i.val;omega)] at success
+  have hnone : v.val[i.val]?=none := by
+    simp only [List.getElem?_eq_none]
+    change v.length≤i.val
+    omega
+  rw [hnone] at success
   cases success
 
 theorem word (w : host_commitment.Word) (i : Usize)

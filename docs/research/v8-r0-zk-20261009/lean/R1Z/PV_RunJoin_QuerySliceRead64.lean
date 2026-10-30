@@ -9,7 +9,11 @@ theorem bound {T : Type} (s : Slice T) (i : Usize) (x : T) (success : Slice.inde
   change (match s.val[i.val]? with
     | none => Result.fail Error.arrayOutOfBounds
     | some y => Result.ok y)=ok x at success
-  rw [List.getElem?_eq_none (by change s.val.length≤i.val;omega)] at success
+  have hnone : s.val[i.val]?=none := by
+    simp only [List.getElem?_eq_none]
+    change s.length≤i.val
+    omega
+  rw [hnone] at success
   cases success
 
 theorem value {T : Type} (s : Slice T) (i : Usize) (x : T) (success : Slice.index_usize s i=ok x) :
