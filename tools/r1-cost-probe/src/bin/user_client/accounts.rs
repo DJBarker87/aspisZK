@@ -5,6 +5,7 @@ use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
 
 pub const CAP: usize = 8;
+#[derive(Clone, Copy)]
 pub struct Accounts {
     keys: [Pubkey; CAP],
 }
