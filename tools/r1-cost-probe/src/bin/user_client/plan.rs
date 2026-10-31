@@ -64,7 +64,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let common=PoolV1PairForestTerminalCommonV1{master_account:master.to_bytes(),checkpoint_account:pk(q,"checkpoint").to_bytes(),selected_lane_account:lanes[output_lane as usize].to_bytes(),output_lane,checkpoint_sequence:cp.checkpoint_sequence,historical_global_anchor:cp.global_root,lane_transition:compiled.public_statement};
  let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};
  let public_dir=crate::public_text(q,"proof_dir");let dir=Path::new(&public_dir);
- {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)?;}
+ super::create_private_directory(dir)?;
  // Retain the exact wallet record for recovery with restrictive permissions.
  super::wallet::retain(dir,&secrets.record)?;
  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
