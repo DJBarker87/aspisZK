@@ -1,0 +1,11 @@
+import PV_B3P_DirectAbsorption17227
+import PV_B3P_DirectDigest17227
+import PV_B3P_DirectPreweightedCallers17227
+import PV_B3P_DirectMaskBridge17227
+#print axioms PV_B3P_Direct17227.absorption_extraction_reference17
+#print axioms PV_B3P_Direct17227.digest_extraction_reference17
+#print axioms PV_B3P_Direct17227.preweighted_extraction_reference17
+#print axioms PV_B3P_Direct17227.preweighted_actual_bounds17
+#print axioms PV_B3P_Direct17227.preweighted_actual_extraction_reference17
+#print axioms PV_B3P_Direct17227.mask_extraction_reference_on_domain17
+#print axioms PV_B3P_Direct17227.mask_integer_laws_consistent17
