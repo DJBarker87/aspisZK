@@ -1,48 +1,50 @@
-# Measure strengthening — work in progress, target not yet established
+# Measured event headline — checked strengthening, final audits pending
 
-Branch codex/pv-meas-20261029. Resume 304384c21e (LOG D519).
+Branch `codex/pv-meas-20261029`, base `946718387d`.
+Receipts stay in this directory. The source implementation is frozen; no
+PV_EVH source, shipped Rust, shared object or original authority was edited.
 
-D519/h4' authority extension was checked before proof attempts. All 203 source
-blobs match pinned Mathlib 81a5d257 and all 206 frontier object hashes match
-the unchanged h4 authority. Candidate traces lacked per-import input hashes.
-Fresh per-module rebuilds hit an immutable-source elaboration failure in
-Mathlib.Topology.MetricSpace.Gluing at 74099, after 99 successes.
+The arbitrary-law averaging and exact equal-pushforward transport are checked
+in PV_MEAS_Average (73102). The measured native/common coupling, finite-model
+bad-event charge and pointwise composition are checked in Coupling (73109),
+Fuel (73113), Core (73117) and Deployed (73120). The measured deployed headline
+retains the same observer, simE/completion, bad event, bound and strict 2^-100
+threshold. It requires arbitrary probability laws on measurable Env/R/N/S;
+only cryptographic model coins retain their prescribed finite uniform law.
 
-The current import route uses a COMPLETE 61-module independent addendum for
-nonnegative Lebesgue probability expectations on the same probability-measure
-subtype. Its source/object/dependency hashes and manifest SHA are recorded.
-Every mechanical run has its original admission, output, time and fingerprint
-receipt. All scopes use 6G/8G/swap=0 and Lean -M7000; no candidate object was
-admitted merely because its timestamp or frontier matched.
+The full simultaneous synthetic link witness is checked at 73123. This proves
+consistency of the conjunction, not that a native deployed execution satisfies it.
+The finite link adapter and full rational finite-uniform corollary passed at
+73130 (12.74 s, peak 4,268,228 KiB RSS, zero swaps). They derive the former
+finite conclusion from the measured theorem and exact integral/cast conversion,
+without invoking the former headline theorem. Both report only propext,
+Classical.choice and Quot.sound. See BEFORE-AFTER.md for the complete comparison.
 
-PV_MEAS_Average passed at 73102: arbitrary-law averaging and equal-law
-transport, with only propext, Classical.choice and Quot.sound. It took 4.04 s,
-peaked at 2,242,588 KiB RSS and used zero swap. The remaining sources are
-DRAFTS pending focused elaboration. They cover
-averaging, exact pushforward transport, finite-uniform integral conversion,
-arbitrary native/common coupling, the unchanged finite model bad-event bound,
-measured deployed composition, a simultaneous synthetic witness, and the full
-former finite statement as a corollary. No other project module earns checked theorem credit yet.
+The resume audit independently matched every 73100–73126 admission JSON,
+output and timing file against the host. No live measured scope or Lean process
+remained. The uncommitted prior audit is retained. IDs 73100–73130 are consumed;
+no ID was reused. 73124–73129 were rejected, including 73126 with sorryAx;
+none of these failed sources was resubmitted unchanged.
 
-Before: finite uniform rational environment/native/common/acquisition carriers.
-After: still the old accepted theorem; the stronger measured theorem is pending.
-Rows removed: NONE. Native source, joint acquisition, D163/D166, V400, causal
-prefix, observer, selected callback and the original three-field T all remain.
-No PV_EVH_ source, shipped source, shared object or original authority manifest
-has been changed.
+Before: finite uniform rational Env/R/N/S and joint acquisition. After:
+arbitrary measurable laws with explicit exact joint/conditional law and
+measurable decision probabilities. The finite-carrier representability
+restriction is removed at the conditional event theorem. Rows removed: NONE.
+All nine native source-event associations, D163/D166, V400, causality,
+observer-program and selected-callback links remain ordinary P obligations;
+T retains exactly its original three fields. The overall deployed privacy
+target is not yet established.
 
-Charged Lean proof attempts: 4/100 (73100-73103); 73104 admission pending. Kani: 0. The three reserved audits
-73197-73199 have not run. See receipt-74*.json for the exact mechanical targets,
-exits, wall times, RSS, swap, source revisions and dependency fingerprints.
-No axioms result for a project theorem is claimed until it compiles.
+D519/h4' cohort checks and the complete independent 61-module addendum are
+retained, with their own manifest SHA. Of 111 uncharged mechanical runs,
+107 were accepted, 74099 failed in immutable Mathlib Gluing and three early
+runs (74105–74107) were void for cooldown violation and replaced compliantly
+at 74108–74110 before any consumer. Both violation and replacement evidence
+remain. No invalid object earns proof credit.
 
-The original 203-module rebuild stopped at immutable Mathlib Gluing (74099).
-A complete independent 61-module addendum supports exact nonnegative Lebesgue
-probability expectations on the same probability-measure subtype. See DESIGN.md.
-Three early mechanical runs 74105-74107 were voided for starting during the
-73100 refusal cooldown. They were replaced compliantly at 74108-74110 before
-any proof consumer. Both the violation and replacement receipts are retained.
-
-Next: finish the symbolic uniform bridge, then follow DESIGN.md's focused sequence. After all
-focused stages succeed, run the statement and axioms audits and one final
-frozen import-manifest consumer.
+Charged proof attempts before reserved audits: 31/100; native 0/0; Kani 0/0.
+All host scopes use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64,
+Lean -M7000. Receipts name targets, source revisions/hashes, commands, admission,
+exit, wall, peak RSS, swaps, dependencies and complete axioms output.
+Next: reserved statements 73197, axioms 73198 and one frozen-manifest consumer
+73199; then final evidence freeze and report.
