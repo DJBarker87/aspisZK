@@ -94,6 +94,15 @@ theorem mask_loop_step17 (zeros : U16 → Result U32)
     simp only [bind_tc_ok]
     cases add : aspis_core.field.QM31.add sum q <;> rfl
 
+theorem mask_entry17 (ones zeros : U16 → Result U32)
+    (values : Array aspis_core.field.QM31 16#usize) (mask : U16)
+    (count : U32) (law : ones mask = .ok count) (small : ¬ count > 8#u32) :
+    host_copy_terminal.selector_mask_sum_16 ones zeros values mask =
+      host_copy_terminal.selector_mask_sum_16_loop zeros values mask false aspis_core.field.QM31.ZERO := by
+  simp only [host_copy_terminal.selector_mask_sum_16,law,bind_tc_ok,small,if_false,
+    Bool.false_eq_true]
+
+#print axioms mask_entry17
 #print axioms mask_loop_stop17
 #print axioms mask_loop_step17
 end PV_B3P_Direct17227
