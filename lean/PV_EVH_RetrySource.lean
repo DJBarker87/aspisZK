@@ -2,6 +2,9 @@ import PV_EVH_RetryBody
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVH_RetrySource
+set_option pp.all true
+set_option pp.notation false
+set_option pp.match false
 open Aeneas Aeneas.Std ProverRwFull PV_EVH_RetryBody
 variable [ExternalTypes] [ExternalFuns]
 
@@ -42,6 +45,7 @@ theorem source_unfold
       | Err e => rfl
       | Ok val =>
           simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [prod_case, core.result.Result.Insts.CoreOpsTry.branch, Aeneas.Std.bind_tc_ok]
+          trace_state
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
           | fail e => rfl
           | div => rfl
