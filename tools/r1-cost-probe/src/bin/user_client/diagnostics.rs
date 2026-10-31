@@ -27,7 +27,7 @@ pub fn initialize() {
     // changes cannot enable Backtrace::capture (also used by anyhow).
     std::env::set_var("RUST_BACKTRACE", "0");
     std::env::set_var("RUST_LIB_BACKTRACE", "0");
-    if Backtrace::capture().status() != BacktraceStatus::Disabled {
+    if !matches!(Backtrace::capture().status(), BacktraceStatus::Disabled) {
         // Fail closed if an earlier constructor ever primes the std cache.
         std::process::abort();
     }
