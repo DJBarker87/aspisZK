@@ -39,7 +39,7 @@ fn prove(_: &Value,_:Pubkey,_:Pubkey,_:&[Pubkey],_:Pubkey,_:Pubkey,_:Pubkey,_:Pu
 fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pubkey,vault:Pubkey,authority:Pubkey,token:Pubkey,system:Pubkey)->Result<Value>{
  use aspis_r1_cost_probe::RealR1_client;
  let accounts=client64_accounts::Accounts::parse(q)?;
- use aspis_prover::{host_hashv as HOST_HASH,state_only_entropy::DurableStateOnlyMaskNonceStore};
+ use aspis_prover::{state_only_entropy::DurableStateOnlyMaskNonceStore};
  let started=Instant::now();let secrets=super::wallet::read(q)?;
  let k=secrets.input_key;let salt=secrets.input_salt;let asset=secrets.asset;
  let input_value=u32::try_from(secrets.input_value).map_err(err)?;
@@ -69,7 +69,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  super::wallet::retain(dir,&secrets.record)?;
  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
  let mut store=DurableStateOnlyMaskNonceStore::open(crate::path_join(dir,"mask-nonce-ledger")).map_err(err)?;
- let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;
+ let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public() ,&compiled,crate::client_hash(),&mut store,|k| accounts.nonce(k)).map_err(err)?;
  let (attempt_index,proof_account)=accounts.selected(result.attempts)?;
  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);
  fs::write(crate::path_join(dir,"proof.bin"),&proof).map_err(err)?;fs::write(crate::path_join(dir,"statement.bin"),public).map_err(err)?;
