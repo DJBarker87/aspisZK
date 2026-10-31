@@ -55,7 +55,8 @@ fn prepare(v:&Value,cm:Digest)->Result<Lane>{
 }
 fn push_lane(out:Result<Vec<Lane>>,v:&Value,cm:Digest)->Result<Vec<Lane>>{let mut out=out?;out.push(prepare(v,cm)?);Ok(out)}
 pub fn input(q:&Value,cm:Digest,k:Digest,salt:Digest,value:u32,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
- let all=q["lane_leaf_sets"].as_array().ok_or_else(||anyhow!("missing complete public lane leaf sets"))?;
+ let public_leaves=crate::public_field(q,"lane_leaf_sets");
+ let all=public_leaves.as_array().ok_or_else(||anyhow!("missing complete public lane leaf sets"))?;
  ensure!(all.len()==8,"all eight public lane leaf sets required");
  let mut prepared=Ok(Vec::with_capacity(8));for v in all{prepared=push_lane(prepared,v,cm);}let prepared=prepared?;
  let mut roots:Vec<Digest>=prepared.iter().map(|l|l.root).collect();

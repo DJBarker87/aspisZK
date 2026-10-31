@@ -24,3 +24,6 @@ fn run()->Result<()>{
 }
 fn unhex(s:&str)->Vec<u8>{(0..s.len()).step_by(2).map(|i|u8::from_str_radix(&s[i..i+2],16).unwrap()).collect()}
 fn hex(b:&[u8])->String{b.iter().map(|b|format!("{b:02x}")).collect()}
+
+// Owned projection keeps JSON indexing lifetimes at the public input boundary.
+fn public_field(q:&Value,k:&str)->Value{q[k].clone()}

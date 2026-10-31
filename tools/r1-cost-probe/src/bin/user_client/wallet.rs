@@ -30,7 +30,7 @@ fn canonical(w:&Wallet)->bool{
  }valid
 }
 pub fn read(q:&Value)->Result<Wallet>{
- let fd=i32::try_from(q["wallet_bytes_fd"].as_u64().ok_or_else(||anyhow!("missing wallet FD"))?).map_err(err)?;
+ let fd=i32::try_from(crate::public_field(q,"wallet_bytes_fd").as_u64().ok_or_else(||anyhow!("missing wallet FD"))?).map_err(err)?;
  ensure!(fd>2,"wallet FD must be inherited separately from stdio");
  let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}")).map_err(err)?;
  let mut record=[0u8;WIDTH];channel.read_exact(&mut record).map_err(err)?;

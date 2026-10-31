@@ -11,7 +11,7 @@ const TOKEN:&str="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 
 const PROFILE:[u8;32]=[0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3];
 const RELEASE:[u8;32]=[0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a];
-fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(q[k].as_str().unwrap()).unwrap()}
+fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(crate::public_field(q,k).as_str().unwrap()).unwrap()}
 fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(vec![Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)])}
 fn ro(p:Pubkey)->Value{meta(p,false,false)}
 fn rw(p:Pubkey)->Value{meta(p,false,true)}
@@ -20,9 +20,9 @@ fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{
 }
 fn number(n:usize)->Value{Value::Number(serde_json::Number::from(n as u64))}
 
-fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(q[k].as_str().unwrap())}
+fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(crate::public_field(q,k).as_str().unwrap())}
 pub fn run(q:&Value)->Result<Value>{
- ensure!(q["action"].as_str()==Some("prove"),"user client supports prove only");
+ ensure!(crate::public_field(q,"action").as_str()==Some("prove"),"user client supports prove only");
  let pool=pk(q,"pool");let mint=pk(q,"mint");let registry=pk(q,"registry");
  let master=pool_v1_pair_forest_master_address(&pool,&mint).0;
  let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();
@@ -54,8 +54,8 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let input=super::membership::input(q,cm,k,salt,input_value,cp.global_root)?;
  let live=PoolV1PairLiveSnapshotV1{pool:master.to_bytes(),deployment_domain:cp.deployment_domain,sequence:lane.tree.next_leaf_index,next_pair_index:lane.tree.next_leaf_index,current_root:lane.tree.root,frontier:lane.tree.frontier};
  let context=PoolV1PaymentRelationContextV1{runtime_binding:PoolV1PaymentRuntimeBindingV1{pool:master.to_bytes(),deployment_domain:cp.deployment_domain,anchor_sequence:cp.checkpoint_sequence,anchor_root:cp.global_root,asset_id:asset},spent_nullifiers:&[]};
- let withdrawal=q["withdrawal"].as_bool().unwrap();
- let output_value=if withdrawal{u32::try_from(q["withdrawal_amount"].as_u64().ok_or_else(||anyhow!("missing withdrawal amount"))?).map_err(err)?}else{recipient_value};
+ let withdrawal=crate::public_field(q,"withdrawal").as_bool().unwrap();
+ let output_value=if withdrawal{u32::try_from(crate::public_field(q,"withdrawal_amount").as_u64().ok_or_else(||anyhow!("missing withdrawal amount"))?).map_err(err)?}else{recipient_value};
  let change_value=input_value.checked_sub(output_value).ok_or_else(||anyhow!("insufficient input value"))?;
  let change=PoolV1OutputNoteWitnessV1{owner_key:derive_owner_key(&secrets.change_key),salt:secrets.change_salt,value:change_value};
  let recipient=PoolV1OutputNoteWitnessV1{owner_key:secrets.recipient_owner,salt:secrets.recipient_salt,value:recipient_value};
@@ -63,7 +63,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let compiled=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&p,&PoolV1PairForestPrivateTransferWitnessV1{input,recipient,change},context,live),PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(&p,&PoolV1PairForestWithdrawalWitnessV1{input,change},context,live)}.map_err(err)?;
  let common=PoolV1PairForestTerminalCommonV1{master_account:master.to_bytes(),checkpoint_account:pk(q,"checkpoint").to_bytes(),selected_lane_account:lanes[output_lane as usize].to_bytes(),output_lane,checkpoint_sequence:cp.checkpoint_sequence,historical_global_anchor:cp.global_root,lane_transition:compiled.public_statement};
  let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};
- let dir=Path::new(q["proof_dir"].as_str().unwrap());
+ let public_dir=crate::public_field(q,"proof_dir");let dir=Path::new(public_dir.as_str().unwrap());
  {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)?;}
  // Retain the exact wallet record for recovery with restrictive permissions.
  super::wallet::retain(dir,&secrets.record)?;
