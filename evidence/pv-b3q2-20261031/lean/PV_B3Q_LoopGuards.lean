@@ -36,7 +36,7 @@ theorem machine_increment (index : Usize) (upper : Nat) (guard : index.val < upp
  apply Nat.mod_eq_of_lt
  change index.val+1 < UScalar.size .Usize
  have big : 1024 < UScalar.size .Usize := by
-   simpa [UScalar.size] using (1024#usize).hBounds
+   simpa [UScalar.size,Usize.size,Usize.numBits] using (1024#usize).hBounds
  omega
 
 /-- A source chunk-loop visits only elements before its min(start+4,end).

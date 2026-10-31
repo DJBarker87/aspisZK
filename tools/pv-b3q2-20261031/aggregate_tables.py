@@ -1,5 +1,6 @@
 from pathlib import Path
-O=Path('evidence/pv-b3q2-20261031/lean')
+import os
+O=Path(os.environ.get('PV_B3Q_OUTPUT','evidence/pv-b3q2-20261031'))/'lean'
 s=''.join(f'import PV_B3Q_LinkTable{i}\n'for i in range(9))+'import PV_B3Q_PatternTable\nnamespace PV_B3Q_FrozenTables\n'
 s+='def links : List Link := '+ ' ++ '.join(f'links{i}' for i in range(9))+'\n'
 s+='theorem links_safe : links.all linkSafe = true := by\n simp only [links,List.all_append,'+','.join(f'links{i}_safe'for i in range(9))+',Bool.true_and]\n'

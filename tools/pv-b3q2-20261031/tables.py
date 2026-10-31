@@ -2,8 +2,8 @@
 Each leaf reduces at most sixteen small records, never a recurrence or field term.
 """
 from pathlib import Path
-import re,json,hashlib,subprocess
-D=Path('evidence/pv-b3q2-20261031'); O=D/'lean'
+import re,json,hashlib,subprocess,os
+D=Path(os.environ.get('PV_B3Q_OUTPUT','evidence/pv-b3q2-20261031')); O=D/'lean'
 p=Path('tools/pv-b3p6-20261028/v244/host_copy_terminal_constants.rs');s=p.read_text()
 shipped='crates/aspis-r1-cost-probe/src/host_copy_terminal_constants.rs'
 assert subprocess.check_output(['git','show','HEAD:'+shipped])==p.read_bytes()

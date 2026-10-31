@@ -1,6 +1,6 @@
 """Job-private invocation/receipt wrapper; shared launchers stay unchanged."""
 from pathlib import Path
-import os,sys,json,subprocess,time
+import os,sys,json,subprocess,time,hashlib
 H=Path('/home/dombarker/project-offloads/codex-pv-b3q2-20261031')
 G=Path('/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy')
 def run(label,cmd,note,extra=None):
@@ -9,6 +9,10 @@ def run(label,cmd,note,extra=None):
   assert not (H/label/"receipt/receipt.json").exists(), "charged scope cannot be rerun"
   retry+=1;label=original_label+"-r"+str(retry)
  O=H/label;O.mkdir(exist_ok=False)
+ marker=H.parent/'QUIET_WINDOW.json'; now=time.time()
+ raw=marker.read_bytes() if marker.exists() else None
+ quiet=dict(observed_epoch=now,path=str(marker),marker=json.loads(raw) if raw else None,sha256=hashlib.sha256(raw).hexdigest() if raw else None)
+ (O/'quiet-window.json').write_text(json.dumps(quiet,indent=2)+'\n')
  cooldown=H/"admission-not-before.json"
  if cooldown.exists() and time.time()<json.loads(cooldown.read_text())["epoch"]:
   (O/"cooldown-refusal.json").write_text(cooldown.read_text());return 78
@@ -28,6 +32,8 @@ def run(label,cmd,note,extra=None):
   admission=json.loads((O/'barrier.json').read_text())
   if admission.get('allowed') is not True:
    cooldown.write_text(json.dumps(dict(epoch=time.time()+180,reason='inside reservation refusal',label=label)));return 78
+ if (O/'receipt/receipt.json').exists():
+  p=O/'receipt/receipt.json'; rec=json.loads(p.read_text());rec['quiet_window']=quiet;p.write_text(json.dumps(rec,indent=2)+'\n')
  return r.returncode
 if __name__=='__main__':
  label=sys.argv[1];cmd=sys.argv[2:]

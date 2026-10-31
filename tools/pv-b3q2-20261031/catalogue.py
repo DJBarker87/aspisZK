@@ -1,0 +1,18 @@
+from pathlib import Path
+import json,lzma,hashlib,collections
+D=Path('evidence/pv-b3q2-20261031');old=json.load(open('evidence/pv-b3q-20261029/catalogue-status.json'));x=json.load(open(D/'direct3-instantiated-callcone.json'));r=json.load(lzma.open(D/'PV_B3Q_DirectCone3.llbc.xz','rt'));assert r['has_errors']is False
+t=r['translated'];funs={f['def_id']:f for f in t['fun_decls']if f};flags=json.load(open(D/'direct3-feature-association.json'));assert not flags['mismatches']; rows=[]
+for key,i in x['instances'].items():
+ f=funs[i['id']];meta=f['item_meta'];crate=meta['name'][0]['Ident'][0];span=meta['span'];file=t['files'][span['data']['file_id']]
+ rows.append(dict(instance=key,function_id=i['id'],display_name=i['name'],rust_origin=dict(crate=crate,file=file,span=span,qualified_components=meta['name'],features=(flags['actual_rustc_features'].get(crate.replace('_','-')))),environment=i['environment'],signature=f['signature'],opaque=i['opaque'],status='OPEN: no whole-caller/source-to-model instance is claimed for this node',body_source='Pinned Charon optimized MIR at extractor nightly; deployed feature cfg checked. Differing 1.94.1 bodies require own-1 laws; no Aeneas translation was invoked.'))
+for e in old['entries']:
+ e['resume_status']=e['status']
+ if e['name']=='core::slice::len':
+  e['new_local_actual_model_instance']='PV_B3Q_MetadataActual.actual_metadata_link'
+  e['resume_status']='Compiled exact Slice carrier/value law and metadata wrapper interpretation; pointer intrinsic V370 retained; complete caller cone still OPEN'
+ if 'fmt'in e['name'] or'encode_utf8'in e['name']:
+  e['resume_status']='OPEN under fmt-1(a): local panic guards proved, but complete source/event association has not been proved. No infallible-writer or faithful-writer certificate is supplied.'
+old.update(status='PARTIAL: actual reached-cone closure14 is NOT instantiated',entries=old['entries'],formatter_correction=dict(carrier='def Unit',repair_source_sha256='daeafff88224be0870aadb6c3bad73ae7c9375c2de9bbceb177ed2d183d6bdc5',old_reported_axiom='stale export-time axiom metadata; not an actual Formatter axiom',actual_function_quarantine='retained; no coherent formatter consumer rebuild and no fmt-1 credit'),refuted_candidate='Generic rejecting-writer/always-Ok mismatch is retained as a semantic limitation. The Formatter-axiom interpretation is superseded.',actual_direct_cone=dict(root='aspis_r1_cost_probe::host_public::terminal_qm31',instances=len(rows),function_declarations=len({a['function_id']for a in rows}),unresolved_dictionary_calls=len(x['unresolved']),opaque_instances=sum(a['opaque']for a in rows),complete=False),new_partial_family=dict(theorem='PV_B3Q_PartialCatalogue2.partial_dependency_link',joint_witness='PV_B3Q_PartialCatalogue2.joint_instance',entries=['Range<usize>::next','RangeInclusive<usize>::next','slice::len / ptr_metadata interpretation','Range<usize> slice index','shared forward slice iterator under constructor invariant'],scope='Five local source/control projections onto actual pinned model roots; not the complete deployed catalogue'),actual_entries=rows,omission_certificate=False,source_cone_completeness=False,source_guard_certificate='PARTIAL: 336 original application index-site arithmetic prerequisites, frozen tables and specific panic continuations; new closure/source/caller associations remain open')
+(D/'catalogue-status.json').write_text(json.dumps(old,indent=2)+'\n')
+opaque=[a for a in rows if a['opaque']];(D/'opaque-helper-status.json').write_text(json.dumps(dict(instances=opaque,by_name=dict(collections.Counter(a['display_name']for a in opaque)),all_open=True),indent=2)+'\n')
+print(json.dumps(old['actual_direct_cone']))

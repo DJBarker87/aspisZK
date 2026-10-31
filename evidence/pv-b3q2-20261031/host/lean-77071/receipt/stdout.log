@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:22:1: error: unsolved goals
+case pos
+range : Range Usize
+clone : ∀ (x : Usize), core.clone.CloneUsize.clone x = Result.ok x
+lt_ : ∀ (x y : Usize), core.cmp.PartialOrdUsize.lt x y = Result.ok (decide (↑x < ↑y))
+h : ↑range.start < ↑range.end
+item : Option (UScalar UScalarTy.Usize)
+next : Range (UScalar UScalarTy.Usize)
+post : item = some range.start ∧ ↑next.start = ↑range.start + 1 ∧ next.end = range.end
+wrap : ↑(range.start.wrapping_add 1#usize) = ↑range.start + 1
+startSame : next.start = range.start.wrapping_add 1#usize
+nextSame : next = { start := range.start.wrapping_add 1#usize, «end» := range.end }
+run : model range = Result.ok (item, next)
+⊢ (if range.start < range.end then
+      Result.ok (some range.start, { start := range.start.wrapping_add 1#usize, «end» := range.end })
+    else Result.ok (none, range)) =
+    Result.ok (some range.start, { start := range.start.wrapping_add 1#usize, «end» := range.end })
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:37:1: error: unsolved goals
+case neg
+range : Range Usize
+clone : ∀ (x : Usize), core.clone.CloneUsize.clone x = Result.ok x
+lt_ : ∀ (x y : Usize), core.cmp.PartialOrdUsize.lt x y = Result.ok (decide (↑x < ↑y))
+h : ¬↑range.start < ↑range.end
+item : Option (UScalar UScalarTy.Usize)
+next : Range (UScalar UScalarTy.Usize)
+post : item = none ∧ next = range
+run : model range = Result.ok (item, next)
+⊢ (if range.start < range.end then
+      Result.ok (some range.start, { start := range.start.wrapping_add 1#usize, «end» := range.end })
+    else Result.ok (none, range)) =
+    Result.ok (none, range)
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:35:21: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [source,h̵,̵ ̲if_pos]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:35:23: warning: This simp argument is unused:
+  if_pos
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵o̵u̵r̵c̵e̵,̵h̵,̵i̵f̵_̵p̵o̵s̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:42:21: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [source,h̵,̵ ̲if_neg]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeActual.lean:42:23: warning: This simp argument is unused:
+  if_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵s̵o̵u̵r̵c̵e̵,̵h̵,̵i̵f̵_̵n̵e̵g̵]̵[̲s̲o̲u̲r̲c̲e̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3Q_RangeActual.increment_safe' depends on axioms: [propext, Quot.sound]
+'PV_B3Q_RangeActual.binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_RangeActual.actual_range_link' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -3,8 +3,8 @@ These are arithmetic prerequisites: source-to-event and caller certificates rema
 separate. No row is promoted to a full source binding by this generator.
 """
 from pathlib import Path
-import json,hashlib
-D=Path('evidence/pv-b3q2-20261031');O=D/'lean';x=json.loads((D/'index-obligations.json').read_text())
+import json,hashlib,os
+D=Path(os.environ.get('PV_B3Q_OUTPUT','evidence/pv-b3q2-20261031'));O=D/'lean';x=json.loads(Path('evidence/pv-b3q2-20261031/index-obligations.json').read_text())
 # Header, proposition, and predecessor proof for each genuinely dynamic shape.
 C={
 0:('(i : Nat) (h : Emitted 84 i)','i / 28 < 3 ∧ i % 28 < 29 ∧ i < 84','have b := h.2\n  omega'),
