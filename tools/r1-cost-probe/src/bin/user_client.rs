@@ -27,3 +27,5 @@ fn hex(b:&[u8])->String{b.iter().map(|b|format!("{b:02x}")).collect()}
 
 // Owned projection keeps JSON indexing lifetimes at the public input boundary.
 fn public_field(q:&Value,k:&str)->Value{q[k].clone()}
+
+fn public_text(q:&Value,k:&str)->String{q[k].as_str().unwrap().to_owned()}
