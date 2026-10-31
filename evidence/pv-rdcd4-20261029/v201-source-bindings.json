@@ -1,0 +1,890 @@
+{
+  "records": [
+    {
+      "name": "chunks_exact",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const fn chunks_exact(&self, chunk_size: usize) -> ChunksExact<'_, T> {\n        assert!(chunk_size != 0, \"chunk size must be non-zero\");\n        ChunksExact::new(self, chunk_size)\n    }",
+      "body_sha256": "881a7f65efccc30e300ca566d88c5a0f5d04b8eb74b6ac1dc5a26bbb322a2a6e",
+      "token_sha256": "b1daba645f1dae2233c5d09f01d1e59ba270a434f6b0ec3c35f337c2ac10dfa0",
+      "expected_body": "pub const fn chunks_exact(&self,chunk_size:usize)->ChunksExact<'_,T>{assert!(chunk_size!=0,\"chunk size must be non-zero\");ChunksExact::new(self,chunk_size)}",
+      "expected_token_sha256": "b1daba645f1dae2233c5d09f01d1e59ba270a434f6b0ec3c35f337c2ac10dfa0",
+      "ordered_steps": [
+        "chunk_size=2, assertion cannot fail",
+        "call ChunksExact::new"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Chunks194.message_new",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ChunksExact.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "body": "pub(super) const fn new(slice: &'a [T], chunk_size: usize) -> Self {\n        let rem = slice.len() % chunk_size;\n        let fst_len = slice.len() - rem;\n        // SAFETY: 0 <= fst_len <= slice.len() by construction above\n        let (fst, snd) = unsafe { slice.split_at_unchecked(fst_len) };\n        Self { v: fst, rem: snd, chunk_size }\n    }",
+      "body_sha256": "2773dec67962d417e8d4bd0f5feefd0f9074293dc20fb0680efcffcf4bf76564",
+      "token_sha256": "90f15114182c745135b20b77a6b6888b2234cb964b9ead0befbb611e821e0ba8",
+      "expected_body": "pub(super) const fn new(slice:&'a[T],chunk_size:usize)->Self{let rem=slice.len()%chunk_size;let fst_len=slice.len()-rem;let(fst,snd)=unsafe{slice.split_at_unchecked(fst_len)};Self{v:fst,rem:snd,chunk_size}}",
+      "expected_token_sha256": "90f15114182c745135b20b77a6b6888b2234cb964b9ead0befbb611e821e0ba8",
+      "ordered_steps": [
+        "length modulo two",
+        "fst_len subtraction is bounded",
+        "split_at_unchecked(fst_len)",
+        "store all three fields, chunk_size fixed2"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Chunks194.new/new_even",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ChunksExact.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+      "file_sha256": "c309e04ca3da2fc4220ee3f93b4466c578ea7f3f2ef52cca6a3fdf8ac28e53d3",
+      "body": "fn next(&mut self) -> Option<&'a [T]> {\n        self.v.split_at_checked(self.chunk_size).and_then(|(chunk, rest)| {\n            self.v = rest;\n            Some(chunk)\n        })\n    }",
+      "body_sha256": "5e1c48d4e93a57e372a599099410d12920b0afa3b3211a42a1aa8c699d336a10",
+      "token_sha256": "01f2770b6af6cec3e9405fdf1d4423c84d1bc90a68d8def486f3bfbdd57b9421",
+      "expected_body": "fn next(&mut self)->Option<&'a[T]>{self.v.split_at_checked(self.chunk_size).and_then(|(chunk,rest)|{self.v=rest;Some(chunk)})}",
+      "expected_token_sha256": "01f2770b6af6cec3e9405fdf1d4423c84d1bc90a68d8def486f3bfbdd57b9421",
+      "ordered_steps": [
+        "split checked",
+        "None: leave entire iterator unchanged",
+        "Some: store rest to v, retain rem and chunk_size",
+        "yield chunk"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Chunks194.next/next_pair/next_empty/next_single",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.split_at_checked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const fn split_at_checked(&self, mid: usize) -> Option<(&[T], &[T])> {\n        if mid <= self.len() {\n            // SAFETY: `[ptr; mid]` and `[mid; len]` are inside `self`, which\n            // fulfills the requirements of `split_at_unchecked`.\n            Some(unsafe { self.split_at_unchecked(mid) })\n        } else {\n            None\n        }\n    }",
+      "body_sha256": "7c72c0c9ea0962a57af6817d5d7d955251cfa815b4833004dd944b562bbf34e6",
+      "token_sha256": "53197b4f550f96322e6f4adea7d959267d42f5a6d7bca1e380e0d6aa8ce4d1a9",
+      "expected_body": "pub const fn split_at_checked(&self,mid:usize)->Option<(&[T],&[T])>{if mid<=self.len(){Some(unsafe{self.split_at_unchecked(mid)})}else{None}}",
+      "expected_token_sha256": "53197b4f550f96322e6f4adea7d959267d42f5a6d7bca1e380e0d6aa8ce4d1a9",
+      "ordered_steps": [
+        "check mid<=length",
+        "Some: invoke unchecked split with established precondition",
+        "None: no call/store"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_pending split lemma; Chunks194.next currently interpreted through take/drop",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "array.into_iter",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "body": "fn into_iter(self) -> Self::IntoIter {\n        // SAFETY: The transmute here is actually safe. The docs of `MaybeUninit`\n        // promise:\n        //\n        // > `MaybeUninit<T>` is guaranteed to have the same size and alignment\n        // > as `T`.\n        //\n        // The docs even show a transmute from an array of `MaybeUninit<T>` to\n        // an array of `T`.\n        //\n        // With that, this initialization satisfies the invariants.\n        //\n        // FIXME: If normal `transmute` ever gets smart enough to allow this\n        // directly, use it instead of `transmute_unchecked`.\n        let data: [MaybeUninit<T>; N] = unsafe { transmute_unchecked(self) };\n        // SAFETY: The original array was entirely initialized and the the alive\n        // range we're passing here represents that fact.\n        let inner = unsafe { InnerSized::new_unchecked(IndexRange::zero_to(N), data) };\n        IntoIter { inner: ManuallyDrop::new(inner) }\n    }",
+      "body_sha256": "35cd30affe2fc7d008055b29af7f5f248bb4886a16dcaba69407974d2f092c64",
+      "token_sha256": "b4706bf02b135001a78eb977594b7fa2937b64b856bc95311519b1d729b7e9ca",
+      "expected_body": "fn into_iter(self)->Self::IntoIter{let data:[MaybeUninit<T>;N]=unsafe{transmute_unchecked(self)};let inner=unsafe{InnerSized::new_unchecked(IndexRange::zero_to(N),data)};IntoIter{inner:ManuallyDrop::new(inner)}}",
+      "expected_token_sha256": "b4706bf02b135001a78eb977594b7fa2937b64b856bc95311519b1d729b7e9ca",
+      "ordered_steps": [
+        "transmute initialized array to MaybeUninit array, same ordered storage at V370",
+        "zero_to(N) initializes start0,endN",
+        "new_unchecked stores alive,data",
+        "ManuallyDrop wrapper initialized"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.new/new_valid; representation primitives retained at V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IntoIter.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "body": "fn next(&mut self) -> Option<Self::Item> {\n        self.unsize_mut().next()\n    }",
+      "body_sha256": "dea4cbad28303bba97cef629eb53ee4ef5a7b15bc03006146d9835bd11dcf3ee",
+      "token_sha256": "a6ef51492debfb8459fb1bb8350a373d3fb5a4baa967dbe765af49bdb4e72c10",
+      "expected_body": "fn next(&mut self)->Option<Self::Item>{self.unsize_mut().next()}",
+      "expected_token_sha256": "a6ef51492debfb8459fb1bb8350a373d3fb5a4baa967dbe765af49bdb4e72c10",
+      "ordered_steps": [
+        "unsize_mut retains alive and data",
+        "call PolymorphicIter.next"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next; wrapper binding pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "PolymorphicIter.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter/iter_inner.rs",
+      "file_sha256": "b12ffcb34aeac42367411691e5dd9fedf723140cbd9d6c0bfbcfb9694cbe4105",
+      "body": "pub(super) fn next(&mut self) -> Option<T> {\n        // Get the next index from the front.\n        //\n        // Increasing `alive.start` by 1 maintains the invariant regarding\n        // `alive`. However, due to this change, for a short time, the alive\n        // zone is not `data[alive]` anymore, but `data[idx..alive.end]`.\n        self.alive.next().map(|idx| {\n            // Read the element from the array.\n            // SAFETY: `idx` is an index into the former \"alive\" region of the\n            // array. Reading this element means that `data[idx]` is regarded as\n            // dead now (i.e. do not touch). As `idx` was the start of the\n            // alive-zone, the alive zone is now `data[alive]` again, restoring\n            // all invariants.\n            unsafe { self.data.get_unchecked(idx).assume_init_read() }\n        })\n    }",
+      "body_sha256": "2a90dce506e625e1e26b6387e1e43a6bf1a78c96ced5e077d99123cfa337df94",
+      "token_sha256": "92215221808143381d060c619ec32c4ea6edd344facd7e3ff79c36a0c7858b93",
+      "expected_body": "pub(super) fn next(&mut self)->Option<T>{self.alive.next().map(|idx|{unsafe{self.data.get_unchecked(idx).assume_init_read()}})}",
+      "expected_token_sha256": "92215221808143381d060c619ec32c4ea6edd344facd7e3ff79c36a0c7858b93",
+      "ordered_steps": [
+        "advance alive before read",
+        "None: no read",
+        "Some idx: read initialized data[idx]",
+        "alive range updated, backing ordered data retained for Copy"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next/next_active/next_done",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IndexRange.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs",
+      "file_sha256": "be7f1a663156319aa4762288c44b726338276f0bcb1c36a5ced5003d329deb8f",
+      "body": "fn next(&mut self) -> Option<usize> {\n        if self.len() > 0 {\n            // SAFETY: We just checked that the range is non-empty\n            unsafe { Some(self.next_unchecked()) }\n        } else {\n            None\n        }\n    }",
+      "body_sha256": "c5b2c30dd49d33f8001a04c0279f687486a5952783d4d9fe5a63cf67a4e2a3e5",
+      "token_sha256": "6997c7599e27b78b2539a252f5bd3a8dbdf94ed09e65f138045d494404f5b823",
+      "expected_body": "fn next(&mut self)->Option<usize>{if self.len()>0{unsafe{Some(self.next_unchecked())}}else{None}}",
+      "expected_token_sha256": "6997c7599e27b78b2539a252f5bd3a8dbdf94ed09e65f138045d494404f5b823",
+      "ordered_steps": [
+        "len=stop-start",
+        "active iff start<stop by valid invariant",
+        "None retains start and stop",
+        "active invokes next_unchecked"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next/next_active/next_done",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IndexRange.next_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs",
+      "file_sha256": "be7f1a663156319aa4762288c44b726338276f0bcb1c36a5ced5003d329deb8f",
+      "body": "const unsafe fn next_unchecked(&mut self) -> usize {\n        debug_assert!(self.start < self.end);\n\n        let value = self.start;\n        // SAFETY: The range isn't empty, so this cannot overflow\n        self.start = unsafe { value.unchecked_add(1) };\n        value\n    }",
+      "body_sha256": "3b7a4497c0eb250dc0bc7137067af02730f8098aceb41964d54ebdf358eaf3b3",
+      "token_sha256": "70d064e34ffba24ef6b358139177006534cb248a31329dccdf4a2276a0e47416",
+      "expected_body": "const unsafe fn next_unchecked(&mut self)->usize{debug_assert!(self.start<self.end);let value=self.start;self.start=unsafe{value.unchecked_add(1)};value}",
+      "expected_token_sha256": "70d064e34ffba24ef6b358139177006534cb248a31329dccdf4a2276a0e47416",
+      "ordered_steps": [
+        "release debug assertion disabled",
+        "save old start",
+        "store start+1 before returning old start",
+        "active start<stop<=512 discharges overflow"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; machine-usize bound pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IndexRange.zero_to",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs",
+      "file_sha256": "be7f1a663156319aa4762288c44b726338276f0bcb1c36a5ced5003d329deb8f",
+      "body": "pub(crate) const fn zero_to(end: usize) -> Self {\n        IndexRange { start: 0, end }\n    }",
+      "body_sha256": "1b21100c3adadeeb8f9e2e1a6c236b2787f37b486fd2bf5d0654984f0ea892e6",
+      "token_sha256": "078bd72e12fddc4922665270b7aa43236e742b611747bc4d9aaadb631ca2064c",
+      "expected_body": "pub(crate) const fn zero_to(end:usize)->Self{IndexRange{start:0,end}}",
+      "expected_token_sha256": "078bd72e12fddc4922665270b7aa43236e742b611747bc4d9aaadb631ca2064c",
+      "ordered_steps": [
+        "store start0",
+        "store endN"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.new",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "PolymorphicIter.new_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter/iter_inner.rs",
+      "file_sha256": "b12ffcb34aeac42367411691e5dd9fedf723140cbd9d6c0bfbcfb9694cbe4105",
+      "body": "pub(super) const unsafe fn new_unchecked(alive: IndexRange, data: [MaybeUninit<T>; N]) -> Self {\n        Self { alive, data }\n    }",
+      "body_sha256": "4009dcfd1ac0af30e27ad1b924c597dabdf27b073b7456fedc1683e4468d0f8e",
+      "token_sha256": "764ef5c9f6803912cb508c6384702a161acb4038f8ab005808cdfd19e6686177",
+      "expected_body": "pub(super) const unsafe fn new_unchecked(alive:IndexRange,data:[MaybeUninit<T>;N])->Self{Self{alive,data}}",
+      "expected_token_sha256": "764ef5c9f6803912cb508c6384702a161acb4038f8ab005808cdfd19e6686177",
+      "ordered_steps": [
+        "store initialized alive",
+        "store initialized data"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.new",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IntoIter.drop",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "body": "fn drop(&mut self) {\n        if crate::mem::needs_drop::<T>() {\n            // SAFETY: This is the only place where we drop this field.\n            unsafe { ManuallyDrop::drop(&mut self.inner) }\n        }\n    }",
+      "body_sha256": "e4533cc681b15b94f1f1b95162ee6ee3564ec6283213b2254de31c89d91b1680",
+      "token_sha256": "fa3ceafe5459880c7d08bf7301c79ff4f4c3adecc618ccb6a61a53319ea95d0b",
+      "expected_body": "fn drop(&mut self){if crate::mem::needs_drop::<T>(){unsafe{ManuallyDrop::drop(&mut self.inner)}}}",
+      "expected_token_sha256": "fa3ceafe5459880c7d08bf7301c79ff4f4c3adecc618ccb6a61a53319ea95d0b",
+      "ordered_steps": [
+        "WideExact:Copy has no user Drop",
+        "needs_drop<WideExact> false",
+        "no PolymorphicIter.drop/partial_drop call on normal completion or unwind"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.drop_copy",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Iterator.zip",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/iterator.rs",
+      "file_sha256": "d1e767ee2018c20100362f56e35dbcb1efa592a31e972ccba0a469c9b5832589",
+      "body": "fn zip<U>(self, other: U) -> Zip<Self, U::IntoIter>\n    where\n        Self: Sized,\n        U: IntoIterator,\n    {\n        Zip::new(self, other.into_iter())\n    }",
+      "body_sha256": "fcad888b48479c65a390597e550c2944019c0c9e28715316eb2dc9ff19241198",
+      "token_sha256": "484cd9b1d01ed50feb450e3a0bc1eca910d6c339808b65a12b36a24a7590ec00",
+      "expected_body": "fn zip<U>(self,other:U)->Zip<Self,U::IntoIter>where Self:Sized,U:IntoIterator,{Zip::new(self,other.into_iter())}",
+      "expected_token_sha256": "484cd9b1d01ed50feb450e3a0bc1eca910d6c339808b65a12b36a24a7590ec00",
+      "ordered_steps": [
+        "into_iter array before Zip.new",
+        "call Zip.new"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.new; concrete constructor application pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Iterator.into_iter",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/collect.rs",
+      "file_sha256": "1dca453947c77c96248f0f18bf5baa9d7f3440195537c85e2cd9149ce00b17de",
+      "body": "fn into_iter(self) -> I {\n        self\n    }",
+      "body_sha256": "e208123749396b4d8bcf18e8b03da4961cb08398dc975b174ffb9999ee46ebf2",
+      "token_sha256": "ff0d6af587f6666a5ec50c59b9d28766ae5840e8826e27439ca1f2b13cee1e40",
+      "expected_body": "fn into_iter(self)->I{self}",
+      "expected_token_sha256": "ff0d6af587f6666a5ec50c59b9d28766ae5840e8826e27439ca1f2b13cee1e40",
+      "ordered_steps": [
+        "identity move of complete iterator state"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.new; identity move boundary",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Zip.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "body": "pub(in crate::iter) fn new(a: A, b: B) -> Zip<A, B> {\n        ZipImpl::new(a, b)\n    }",
+      "body_sha256": "72a1f1437d53f2438a6b04111b76f1e620a3b2c6a35efb6a0d44f53cc17ee8c8",
+      "token_sha256": "ec916e17d8920cfa98d3a7ff3d18482ada52ad91b21ca86f76931fb3ad137620",
+      "expected_body": "pub(in crate::iter) fn new(a:A,b:B)->Zip<A,B>{ZipImpl::new(a,b)}",
+      "expected_token_sha256": "ec916e17d8920cfa98d3a7ff3d18482ada52ad91b21ca86f76931fb3ad137620",
+      "ordered_steps": [
+        "dispatch to NoCoerce general-default new"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.new",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Zip.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "body": "fn next(&mut self) -> Option<Self::Item> {\n        ZipImpl::next(self)\n    }",
+      "body_sha256": "5b1ed154c2fb36ed6b3077604da4e7ff6c37fa805271f4835a381408b7048890",
+      "token_sha256": "4c3566e1cf2c332f3aab42cced7df83f86a0a5a4130b26fc00efad41744f971f",
+      "expected_body": "fn next(&mut self)->Option<Self::Item>{ZipImpl::next(self)}",
+      "expected_token_sha256": "4c3566e1cf2c332f3aab42cced7df83f86a0a5a4130b26fc00efad41744f971f",
+      "ordered_steps": [
+        "dispatch to NoCoerce general-default next"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.next",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ZipImpl.general.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "body": "default fn new(a: A, b: B) -> Self {\n            Zip {\n                a,\n                b,\n                index: 0, // unused\n                len: 0,   // unused\n            }\n        }",
+      "body_sha256": "3ced344096596882ee51ce8f3ff8004d8d706c2ffb6417b9b559664144c948c3",
+      "token_sha256": "0cc49ce0d3f61c01d69b4822e9dc4a3177319dd598286485204d7d20719388b4",
+      "expected_body": "default fn new(a:A,b:B)->Self{Zip{a,b,index:0,len:0,}}",
+      "expected_token_sha256": "0cc49ce0d3f61c01d69b4822e9dc4a3177319dd598286485204d7d20719388b4",
+      "ordered_steps": [
+        "store a,b",
+        "initialize unused index0,len0"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.new",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ZipImpl.general.next",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/adapters/zip.rs",
+      "file_sha256": "f7a0331d0fac0a60dd3d39adeebe7768760f60ca4653df5b281c3c9f4134dc84",
+      "body": "default fn next(&mut self) -> Option<(A::Item, B::Item)> {\n            let x = self.a.next()?;\n            let y = self.b.next()?;\n            Some((x, y))\n        }",
+      "body_sha256": "71d3681fd565909cda9e7975ac8c53ec78d18b50e882f702ec294b88a3e2b3a0",
+      "token_sha256": "9e52dbfce9d34a23fdcc2db9167b574f6f6929ef6fababca3c6ed4640c031bf8",
+      "expected_body": "default fn next(&mut self)->Option<(A::Item,B::Item)>{let x=self.a.next()?;let y=self.b.next()?;Some((x,y))}",
+      "expected_token_sha256": "9e52dbfce9d34a23fdcc2db9167b574f6f6929ef6fababca3c6ed4640c031bf8",
+      "ordered_steps": [
+        "a.next before b.next",
+        "first None returns immediately without b.next",
+        "second None keeps already advanced a and b",
+        "Some yields ordered pair, unused index/len retained"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.first_none/second_none/both_some",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Option.map",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "body": "pub const fn map<U, F>(self, f: F) -> Option<U>\n    where\n        F: [const] FnOnce(T) -> U + [const] Destruct,\n    {\n        match self {\n            Some(x) => Some(f(x)),\n            None => None,\n        }\n    }",
+      "body_sha256": "bd5094407c9af19acc4b29483b786bd49600eb22bce053cdbe602834f66b65be",
+      "token_sha256": "3bf71836dc71525fd61f14bd8d739b95ae2da7bf689bd17015aaba24890cd9af",
+      "expected_body": "pub const fn map<U,F>(self,f:F)->Option<U>where F:[const]FnOnce(T)->U+[const]Destruct,{match self{Some(x)=>Some(f(x)),None=>None,}}",
+      "expected_token_sha256": "3bf71836dc71525fd61f14bd8d739b95ae2da7bf689bd17015aaba24890cd9af",
+      "ordered_steps": [
+        "Some invokes closure once",
+        "None does not invoke closure",
+        "concrete captured reference closure has no user Drop"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Option194.map_binding pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Option.and_then",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "body": "pub const fn and_then<U, F>(self, f: F) -> Option<U>\n    where\n        F: [const] FnOnce(T) -> Option<U> + [const] Destruct,\n    {\n        match self {\n            Some(x) => f(x),\n            None => None,\n        }\n    }",
+      "body_sha256": "ef5f2eac0ff3070bd92e9d796cc9d3548bfe9db6f2589e90026f6e539a6ff00b",
+      "token_sha256": "6b45331aa8f19ee3896caab2dac361363190459a30827a9bea33252a33679001",
+      "expected_body": "pub const fn and_then<U,F>(self,f:F)->Option<U>where F:[const]FnOnce(T)->Option<U>+[const]Destruct,{match self{Some(x)=>f(x),None=>None,}}",
+      "expected_token_sha256": "6b45331aa8f19ee3896caab2dac361363190459a30827a9bea33252a33679001",
+      "ordered_steps": [
+        "Some invokes state-restoring closure once",
+        "None does not invoke closure",
+        "concrete captured reference closure has no user Drop"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.next_binding; Option194.and_then_binding pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Option.Try.branch",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "body": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            Some(v) => ControlFlow::Continue(v),\n            None => ControlFlow::Break(None),\n        }\n    }",
+      "body_sha256": "c9e41ebb9248971fd4c468208c92bc71e32bdee8c4875afcc8155c1e912a5901",
+      "token_sha256": "0f21df1e74b48d97c9818fa6d0c8d043b6e7edcb44c04b12f5c2b832a17c1460",
+      "expected_body": "fn branch(self)->ControlFlow<Self::Residual,Self::Output>{match self{Some(v)=>ControlFlow::Continue(v),None=>ControlFlow::Break(None),}}",
+      "expected_token_sha256": "0f21df1e74b48d97c9818fa6d0c8d043b6e7edcb44c04b12f5c2b832a17c1460",
+      "ordered_steps": [
+        "Some continues with value",
+        "None breaks with None residual"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.next match branches",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "Option.FromResidual",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs",
+      "file_sha256": "296e9937df5c429a4c7370e1bb6e5a1a6052ba549754e6fdef754db103a0b002",
+      "body": "fn from_residual(residual: Option<convert::Infallible>) -> Self {\n        match residual {\n            None => None,\n        }\n    }",
+      "body_sha256": "0357e6239aa0b4594dfad0c242d0109246b3a36587b9191868f482cded103b20",
+      "token_sha256": "0aa0e7be2b578a27653e5254ec03ab591da3c566d5625bcc7abddae90c078e7f",
+      "expected_body": "fn from_residual(residual:Option<convert::Infallible>)->Self{match residual{None=>None,}}",
+      "expected_token_sha256": "0aa0e7be2b578a27653e5254ec03ab591da3c566d5625bcc7abddae90c078e7f",
+      "ordered_steps": [
+        "None maps to None",
+        "Infallible Some impossible"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Zip194.first_none/second_none",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ManuallyDrop.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "body": "pub const fn new(value: T) -> ManuallyDrop<T> {\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+      "body_sha256": "691c737feee1f3a342afb087f8a3d3f9e7052ef278ebaaab42bf195b987314f3",
+      "token_sha256": "d01e29cbd3d5f9a706ccc72959176b877702eae9f545fab9931720eb0947d7ff",
+      "expected_body": "pub const fn new(value:T)->ManuallyDrop<T>{ManuallyDrop{value:MaybeDangling::new(value)}}",
+      "expected_token_sha256": "d01e29cbd3d5f9a706ccc72959176b877702eae9f545fab9931720eb0947d7ff",
+      "ordered_steps": [
+        "wrap initialized storage in MaybeDangling",
+        "store value"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.new; wrapper identity pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ManuallyDrop.deref_mut",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/manually_drop.rs",
+      "file_sha256": "17e8e41866d3eadcfdc6f1a516e4ed9dd5555e10ad725aac3b04aec7c759731b",
+      "body": "fn deref_mut(&mut self) -> &mut T {\n        self.value.as_mut()\n    }",
+      "body_sha256": "b012c3fa94926b2b130447f6f1e9330af42707a3d296f561b5e58985c272c88a",
+      "token_sha256": "c8c4fd06fa3714eba33ccbb3f4f54ba6041992eb10325e4e24770432413c16a7",
+      "expected_body": "fn deref_mut(&mut self)->&mut T{self.value.as_mut()}",
+      "expected_token_sha256": "c8c4fd06fa3714eba33ccbb3f4f54ba6041992eb10325e4e24770432413c16a7",
+      "ordered_steps": [
+        "project value",
+        "MaybeDangling.as_mut projection"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next; wrapper identity pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "MaybeDangling.new",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_dangling.rs",
+      "file_sha256": "f5aad27a540c58b44377e4b80819dc00c1487fecf07fb9eb54b6ac1efb259286",
+      "body": "pub const fn new(x: P) -> Self\n    where\n        P: Sized,\n    {\n        MaybeDangling(x)\n    }",
+      "body_sha256": "501b172396e296246f983769621d133f68fb6e1e52650e588637a4f7e2214c88",
+      "token_sha256": "a39b202531f34538a483e127038367aaed611c882738e2f889034d11c4d333ef",
+      "expected_body": "pub const fn new(x:P)->Self where P:Sized,{MaybeDangling(x)}",
+      "expected_token_sha256": "a39b202531f34538a483e127038367aaed611c882738e2f889034d11c4d333ef",
+      "ordered_steps": [
+        "wrap value without changing storage"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.new; wrapper identity pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "MaybeDangling.as_mut",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_dangling.rs",
+      "file_sha256": "f5aad27a540c58b44377e4b80819dc00c1487fecf07fb9eb54b6ac1efb259286",
+      "body": "pub const fn as_mut(&mut self) -> &mut P {\n        &mut self.0\n    }",
+      "body_sha256": "7fda7af6bdccbdf8009356bdb24cf6a7ba4d632680f1dcb09277bb4be396b54a",
+      "token_sha256": "aded167dbbd9265b706e28e474e759d57ab629404b8886d3b022d219a05bbf05",
+      "expected_body": "pub const fn as_mut(&mut self)->&mut P{&mut self.0}",
+      "expected_token_sha256": "aded167dbbd9265b706e28e474e759d57ab629404b8886d3b022d219a05bbf05",
+      "ordered_steps": [
+        "project stored value, preserves mutable continuation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next; wrapper identity pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IntoIter.unsize_mut",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "file_sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "body": "fn unsize_mut(&mut self) -> &mut InnerUnsized<T> {\n        self.inner.deref_mut()\n    }",
+      "body_sha256": "fae4029c1864a490219f2e41c3c1cf3277a9aa57ab8c5bc370d6bc7bbcc59439",
+      "token_sha256": "962a434fe40fa4a6a46e379a0b92abad7aa153fa3f5901830fb9d0dd8c43ebf9",
+      "expected_body": "fn unsize_mut(&mut self)->&mut InnerUnsized<T>{self.inner.deref_mut()}",
+      "expected_token_sha256": "962a434fe40fa4a6a46e379a0b92abad7aa153fa3f5901830fb9d0dd8c43ebf9",
+      "ordered_steps": [
+        "ManuallyDrop.deref_mut",
+        "unsize initialized array to slice, retaining data and alive"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next; wrapper identity pending",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.split_at_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const unsafe fn split_at_unchecked(&self, mid: usize) -> (&[T], &[T]) {\n        // FIXME(const-hack): the const function `from_raw_parts` is used to make this\n        // function const; previously the implementation used\n        // `(self.get_unchecked(..mid), self.get_unchecked(mid..))`\n\n        let len = self.len();\n        let ptr = self.as_ptr();\n\n        assert_unsafe_precondition!(\n            check_library_ub,\n            \"slice::split_at_unchecked requires the index to be within the slice\",\n            (mid: usize = mid, len: usize = len) => mid <= len,\n        );\n\n        // SAFETY: Caller has to check that `0 <= mid <= self.len()`\n        unsafe { (from_raw_parts(ptr, mid), from_raw_parts(ptr.add(mid), unchecked_sub(len, mid))) }\n    }",
+      "body_sha256": "cea94157d9fc4f178c75fe52273480ce5b6a3e924ceff1b6ac94cc4b6a439525",
+      "token_sha256": "59fb3da8ad9d0cb842496e09216e704b807bd138e122cea085682500f849a953",
+      "expected_body": "pub const unsafe fn split_at_unchecked(&self,mid:usize)->(&[T],&[T]){let len=self.len();let ptr=self.as_ptr();assert_unsafe_precondition!(check_library_ub,\"slice::split_at_unchecked requires the index to be within the slice\",(mid:usize=mid,len:usize=len)=>mid<=len,);unsafe{(from_raw_parts(ptr,mid),from_raw_parts(ptr.add(mid),unchecked_sub(len,mid)))}}",
+      "expected_token_sha256": "59fb3da8ad9d0cb842496e09216e704b807bd138e122cea085682500f849a953",
+      "ordered_steps": [
+        "read source length and pointer",
+        "bind UB precondition mid<=length from checked guard/constructor remainder bound",
+        "first slice starts at original pointer, length mid",
+        "second slice starts at pointer+mid, length len-mid",
+        "return both in original order"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.ranges/success; offset/layout/read primitives remain V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.get_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const unsafe fn get_unchecked<I>(&self, index: I) -> &I::Output\n    where\n        I: [const] SliceIndex<Self>,\n    {\n        // SAFETY: the caller must uphold most of the safety requirements for `get_unchecked`;\n        // the slice is dereferenceable because `self` is a safe reference.\n        // The returned pointer is safe because impls of `SliceIndex` have to guarantee that it is.\n        unsafe { &*index.get_unchecked(self) }\n    }",
+      "body_sha256": "8e2d0be058f170aa40bf1fe65d40a7b41b917edf9c264a28e0833dea9b33db16",
+      "token_sha256": "c3e4dd7b7fc1d2f2735ea018e1cb431cc3d651f4cb789592a9dc95baa35e5712",
+      "expected_body": "pub const unsafe fn get_unchecked<I>(&self,index:I)->&I::Output where I:[const]SliceIndex<Self>,{unsafe{&*index.get_unchecked(self)}}",
+      "expected_token_sha256": "c3e4dd7b7fc1d2f2735ea018e1cb431cc3d651f4cb789592a9dc95baa35e5712",
+      "ordered_steps": [
+        "dispatch concrete usize index",
+        "returned reference points at checked live element"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; typed-memory read primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.SliceIndex.get_unchecked",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "unsafe fn get_unchecked(self, slice: *const [T]) -> *const T {\n        assert_unsafe_precondition!(\n            check_language_ub, // okay because of the `assume` below\n            \"slice::get_unchecked requires that the index is within the slice\",\n            (this: usize = self, len: usize = slice.len()) => this < len\n        );\n        // SAFETY: the caller guarantees that `slice` is not dangling, so it\n        // cannot be longer than `isize::MAX`. They also guarantee that\n        // `self` is in bounds of `slice` so `self` cannot overflow an `isize`,\n        // so the call to `add` is safe.\n        unsafe {\n            // Use intrinsics::assume instead of hint::assert_unchecked so that we don't check the\n            // precondition of this function twice.\n            crate::intrinsics::assume(self < slice.len());\n            slice_get_unchecked(slice, self)\n        }\n    }",
+      "body_sha256": "890a35eb422da7a0ae3ea454f8bb476c3a72696ee5cfe9ff917eeee7c2e1e09b",
+      "token_sha256": "6db1b1c04b0b5c81620fc50ad0ab92adaec35620538b825746b95c39f6266206",
+      "expected_body": "unsafe fn get_unchecked(self,slice:*const[T])->*const T{assert_unsafe_precondition!(check_language_ub,\"slice::get_unchecked requires that the index is within the slice\",(this:usize=self,len:usize=slice.len())=>this<len);unsafe{crate::intrinsics::assume(self<slice.len());slice_get_unchecked(slice,self)}}",
+      "expected_token_sha256": "6db1b1c04b0b5c81620fc50ad0ab92adaec35620538b825746b95c39f6266206",
+      "ordered_steps": [
+        "assert/assume self<length, proved from alive range",
+        "return intrinsic pointer to the same element, not another allocation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; direct intrinsic memory access remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "MaybeUninit.assume_init_read",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "body": "pub const unsafe fn assume_init_read(&self) -> T {\n        // SAFETY: the caller must guarantee that `self` is initialized.\n        // Reading from `self.as_ptr()` is safe since `self` should be initialized.\n        unsafe {\n            intrinsics::assert_inhabited::<T>();\n            self.as_ptr().read()\n        }\n    }",
+      "body_sha256": "594b10e5d754cd11d7ee7d2bc4223b973edb39e715b51f0b57d4de7ed8841426",
+      "token_sha256": "fdb77513ad062ba49201417dcce24a04702301bb3488728011d9c286d0c4ae48",
+      "expected_body": "pub const unsafe fn assume_init_read(&self)->T{unsafe{intrinsics::assert_inhabited::<T>();self.as_ptr().read()}}",
+      "expected_token_sha256": "fdb77513ad062ba49201417dcce24a04702301bb3488728011d9c286d0c4ae48",
+      "ordered_steps": [
+        "WideExact is inhabited, also witnessed by the initialized live slot",
+        "as_ptr preserves stored element",
+        "read returns the initialized slot value"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; initialized typed read remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "MaybeUninit.as_ptr",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/maybe_uninit.rs",
+      "file_sha256": "7d588bf99e1bd7293b4b9c40fd71a6d5ed71ec6945920b166fc0c90547785702",
+      "body": "pub const fn as_ptr(&self) -> *const T {\n        // `MaybeUninit` and `ManuallyDrop` are both `repr(transparent)` so we can cast the pointer.\n        self as *const _ as *const T\n    }",
+      "body_sha256": "364a17b0291233dfde49742fb8998aa1572bb0c4a88259b066b373e1a771b14b",
+      "token_sha256": "86baddc43594798a5126335169b3f1f13d637683e9b03f569e6b1c32905b4228",
+      "expected_body": "pub const fn as_ptr(&self)->*const T{self as *const _ as *const T}",
+      "expected_token_sha256": "86baddc43594798a5126335169b3f1f13d637683e9b03f569e6b1c32905b4228",
+      "ordered_steps": [
+        "transparent pointer cast, no address-to-integer cast or comparison"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.next_active; transparent typed layout remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "const_ptr.read",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "body": "pub const unsafe fn read(self) -> T\n    where\n        T: Sized,\n    {\n        // SAFETY: the caller must uphold the safety contract for `read`.\n        unsafe { read(self) }\n    }",
+      "body_sha256": "ed0dd5c265764a0e709678ed72647f68f183b58b7caa95812d3900ef2cd2de6c",
+      "token_sha256": "9f418f4ffe988409eab843960f4960c30f3ccb33629501ec0c2597607e320158",
+      "expected_body": "pub const unsafe fn read(self)->T where T:Sized,{unsafe{read(self)}}",
+      "expected_token_sha256": "9f418f4ffe988409eab843960f4960c30f3ccb33629501ec0c2597607e320158",
+      "ordered_steps": [
+        "forward same pointer to ptr.read"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.read_forward/read_at/read_frame; source primitive forwarding and initialized value",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ptr.slice_from_raw_parts",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "body": "pub const fn slice_from_raw_parts<T>(data: *const T, len: usize) -> *const [T] {\n    from_raw_parts(data, len)\n}",
+      "body_sha256": "528bd5efd814257f1102922483aad639bee84dc32c70e3815e08851a0528f613",
+      "token_sha256": "2fee535042c5ff18a75e45971e614dcdaec7dae2475f6197ddf4cf1968bbcef7",
+      "expected_body": "pub const fn slice_from_raw_parts<T>(data:*const T,len:usize)->*const[T]{from_raw_parts(data,len)}",
+      "expected_token_sha256": "2fee535042c5ff18a75e45971e614dcdaec7dae2475f6197ddf4cf1968bbcef7",
+      "ordered_steps": [
+        "forward identical data pointer and length to metadata constructor"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.ranges; typed pointer/metadata construction remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ptr.metadata.from_raw_parts",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/metadata.rs",
+      "file_sha256": "97d94065abf5054505768dcccbe09a07b71570dddb4c1d7775d5d09e605e26a9",
+      "body": "pub const fn from_raw_parts<T: PointeeSized>(\n    data_pointer: *const impl Thin,\n    metadata: <T as Pointee>::Metadata,\n) -> *const T {\n    aggregate_raw_ptr(data_pointer, metadata)\n}",
+      "body_sha256": "267ed9e6d610a157b0165d9a3bdaafe4f751a8bb290b38f84641bf0a7ebbe126",
+      "token_sha256": "29c150e6c275178184af9238a5f46de28cf5bf0cbb9599d0046c0166846f3d37",
+      "expected_body": "pub const fn from_raw_parts<T:PointeeSized>(data_pointer:*const impl Thin,metadata:<T as Pointee>::Metadata,)->*const T{aggregate_raw_ptr(data_pointer,metadata)}",
+      "expected_token_sha256": "29c150e6c275178184af9238a5f46de28cf5bf0cbb9599d0046c0166846f3d37",
+      "ordered_steps": [
+        "aggregate original data pointer and supplied slice length",
+        "no read from an external address"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.ranges; compiler aggregate_raw_ptr primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.Ord.min",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs",
+      "file_sha256": "f94d6401c6bd086f99c93014d6e936ff7c8573157939a1a07f9bd78930ae86db",
+      "body": "fn min(self, other: Self) -> Self\n    where\n        Self: Sized + [const] Destruct,\n    {\n        if other < self { other } else { self }\n    }",
+      "body_sha256": "e874177eea572e5dc3703ab92d65c9977ec37f3d8e4ae953b52c485e742f4e9f",
+      "token_sha256": "cdf11b29cf59e0b04c4455ab76383392e5d9f2776fc182f02d85d011a2466d36",
+      "expected_body": "fn min(self,other:Self)->Self where Self:Sized+[const]Destruct,{if other<self{other}else{self}}",
+      "expected_token_sha256": "cdf11b29cf59e0b04c4455ab76383392e5d9f2776fc182f02d85d011a2466d36",
+      "ordered_steps": [
+        "concrete usize uses Ord default min, no override in ord_impl",
+        "primitive lt comparison",
+        "select other iff other<self; otherwise self",
+        "both values Copy: no destructor branch"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_DL_EncoderBasis.native_min; primitive comparison remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.PartialOrd.lt",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/cmp.rs",
+      "file_sha256": "f94d6401c6bd086f99c93014d6e936ff7c8573157939a1a07f9bd78930ae86db",
+      "body": "fn lt(&self, other: &Self) -> bool { *self <  *other }",
+      "body_sha256": "68f37deea11a68178cc2456b1b9559c616d13f7e98b5c7ba1c367c2433475a92",
+      "token_sha256": "be20fc737ab54857248c4e8cf078fcdc33357ffcd42eae8523fa8b1004684c36",
+      "expected_body": "fn lt(&self,other:&Self)->bool{*self<*other}",
+      "expected_token_sha256": "be20fc737ab54857248c4e8cf078fcdc33357ffcd42eae8523fa8b1004684c36",
+      "ordered_steps": [
+        "ord_impl includes usize and expands this exact macro",
+        "primitive unsigned comparison of same two values"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_RangeFold.next_active/next_empty; native_min, unsigned comparison primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "mem.needs_drop",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/mem/mod.rs",
+      "file_sha256": "ad70d291fcddf9bd91e7b3d75d6d432d1473e078ab92bf21741fc1d47f786b78",
+      "body": "pub const fn needs_drop<T: ?Sized>() -> bool {\n    const { intrinsics::needs_drop::<T>() }\n}",
+      "body_sha256": "57ca0ba8a038aed5cd72683bb107d6233f8868dae82015e8526b2069660a0101",
+      "token_sha256": "8ebf7bc540a9d331c69868e5c0f1734b829241920be58266f5b4e88f2a9d256a",
+      "expected_body": "pub const fn needs_drop<T:?Sized>()->bool{const{intrinsics::needs_drop::<T>()}}",
+      "expected_token_sha256": "8ebf7bc540a9d331c69868e5c0f1734b829241920be58266f5b4e88f2a9d256a",
+      "ordered_steps": [
+        "compiler type property",
+        "WideExact satisfies Copy through the concrete CodeField implementation; Drop is forbidden by Rust Copy coherence"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.drop_copy; type/property compiler primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.as_ptr",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const fn as_ptr(&self) -> *const T {\n        self as *const [T] as *const T\n    }",
+      "body_sha256": "8920f82b4e0f6f94e594491fee0e892f110ebacad49577269d71ffe7037d8889",
+      "token_sha256": "ad487f47580fcacac82a20086a1ec20f5af6ac43ec794213192adbf53357472a",
+      "expected_body": "pub const fn as_ptr(&self)->*const T{self as *const[T] as *const T}",
+      "expected_token_sha256": "ad487f47580fcacac82a20086a1ec20f5af6ac43ec794213192adbf53357472a",
+      "ordered_steps": [
+        "project original backing data pointer with no integer cast or external read"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.ranges; typed data pointer primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.len",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+      "file_sha256": "d39047243321a69a9dd3bc22babbf03ce46621160ad28bf6de15475b90647c13",
+      "body": "pub const fn len(&self) -> usize {\n        ptr::metadata(self)\n    }",
+      "body_sha256": "d695aa30f17660613bd0c64dbd54e756d11bdee980b4ea2431434058ea96c585",
+      "token_sha256": "398dd82c4c3045698e0b70940f68e11302da2fe53d65f6e792561c18d7b63c98",
+      "expected_body": "pub const fn len(&self)->usize{ptr::metadata(self)}",
+      "expected_token_sha256": "398dd82c4c3045698e0b70940f68e11302da2fe53d65f6e792561c18d7b63c98",
+      "ordered_steps": [
+        "return original slice length metadata"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Chunks194.new/next; ArrayIter194.next_active; typed length primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ptr.metadata",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/metadata.rs",
+      "file_sha256": "97d94065abf5054505768dcccbe09a07b71570dddb4c1d7775d5d09e605e26a9",
+      "body": "pub const fn metadata<T: PointeeSized>(ptr: *const T) -> <T as Pointee>::Metadata {\n    ptr_metadata(ptr)\n}",
+      "body_sha256": "ead3dddb7e9b4da53286ad5e44bda6ecc87027704111a75c281d47ab703f4f99",
+      "token_sha256": "7b787aa01697f9a752e1f18e6a5c91a17fe5997d341c46848c46d6b6f3f63c00",
+      "expected_body": "pub const fn metadata<T:PointeeSized>(ptr:*const T)-><T as Pointee>::Metadata{ptr_metadata(ptr)}",
+      "expected_token_sha256": "7b787aa01697f9a752e1f18e6a5c91a17fe5997d341c46848c46d6b6f3f63c00",
+      "ordered_steps": [
+        "return unchanged slice length through compiler ptr_metadata intrinsic"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Split194.ranges; compiler metadata primitive remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.raw.from_raw_parts",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/raw.rs",
+      "file_sha256": "0914968067f7e2bc798680c1edd72bcb032a9fd44ebb2b6fbc082a3a2b16941f",
+      "body": "pub const unsafe fn from_raw_parts<'a, T>(data: *const T, len: usize) -> &'a [T] {\n    // SAFETY: the caller must uphold the safety contract for `from_raw_parts`.\n    unsafe {\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"slice::from_raw_parts requires the pointer to be aligned and non-null, and the total size of the slice not to exceed `isize::MAX`\",\n            (\n                data: *mut () = data as *mut (),\n                size: usize = size_of::<T>(),\n                align: usize = align_of::<T>(),\n                len: usize = len,\n            ) =>\n            ub_checks::maybe_is_aligned_and_not_null(data, align, false)\n                && ub_checks::is_valid_allocation_size(size, len)\n        );\n        &*ptr::slice_from_raw_parts(data, len)\n    }\n}",
+      "body_sha256": "f5cd4df6162d07559a487db5088dccbff1c37f7eb002eec9e00754f7943b915c",
+      "token_sha256": "d5ced8dd0152e70bed4e0ef31cf1bfdefb7d540912171574edf44952d76f6441",
+      "expected_body": "pub const unsafe fn from_raw_parts<'a,T>(data:*const T,len:usize)->&'a[T]{unsafe{ub_checks::assert_unsafe_precondition!(check_language_ub,\"slice::from_raw_parts requires the pointer to be aligned and non-null, and the total size of the slice not to exceed `isize::MAX`\",(data:*mut()=data as *mut(),size:usize=size_of::<T>(),align:usize=align_of::<T>(),len:usize=len,)=>ub_checks::maybe_is_aligned_and_not_null(data,align,false)&&ub_checks::is_valid_allocation_size(size,len));&*ptr::slice_from_raw_parts(data,len)}}",
+      "expected_token_sha256": "d5ced8dd0152e70bed4e0ef31cf1bfdefb7d540912171574edf44952d76f6441",
+      "ordered_steps": [
+        "retain the original valid-reference alignment/non-null/size contract; no arbitrary invalid pointers are admitted",
+        "forward same data and length through ptr.slice_from_raw_parts",
+        "create immutable reference to that same span"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.raw_parts_forward/raw_parts_fields; MemorySplit194.valid_parts/checked_binding; typed pointer/layout contract remains V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "ptr.read",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/mod.rs",
+      "file_sha256": "e7af7b17ffc8d7667d3d6768236af09b3f569375b2306ac6cc354660cb266780",
+      "body": "pub const unsafe fn read<T>(src: *const T) -> T {\n    // It would be semantically correct to implement this via `copy_nonoverlapping`\n    // and `MaybeUninit`, as was done before PR #109035. Calling `assume_init`\n    // provides enough information to know that this is a typed operation.\n\n    // However, as of March 2023 the compiler was not capable of taking advantage\n    // of that information. Thus, the implementation here switched to an intrinsic,\n    // which lowers to `_0 = *src` in MIR, to address a few issues:\n    //\n    // - Using `MaybeUninit::assume_init` after a `copy_nonoverlapping` was not\n    //   turning the untyped copy into a typed load. As such, the generated\n    //   `load` in LLVM didn't get various metadata, such as `!range` (#73258),\n    //   `!nonnull`, and `!noundef`, resulting in poorer optimization.\n    // - Going through the extra local resulted in multiple extra copies, even\n    //   in optimized MIR.  (Ignoring StorageLive/Dead, the intrinsic is one\n    //   MIR statement, while the previous implementation was eight.)  LLVM\n    //   could sometimes optimize them away, but because `read` is at the core\n    //   of so many things, not having them in the first place improves what we\n    //   hand off to the backend.  For example, `mem::replace::<Big>` previously\n    //   emitted 4 `alloca` and 6 `memcpy`s, but is now 1 `alloc` and 3 `memcpy`s.\n    // - In general, this approach keeps us from getting any more bugs (like\n    //   #106369) that boil down to \"`read(p)` is worse than `*p`\", as this\n    //   makes them look identical to the backend (or other MIR consumers).\n    //\n    // Future enhancements to MIR optimizations might well allow this to return\n    // to the previous implementation, rather than using an intrinsic.\n\n    // SAFETY: the caller must guarantee that `src` is valid for reads.\n    unsafe {\n        #[cfg(debug_assertions)] // Too expensive to always enable (for now?)\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::read requires that the pointer argument is aligned and non-null\",\n            (\n                addr: *const () = src as *const (),\n                align: usize = align_of::<T>(),\n                is_zst: bool = T::IS_ZST,\n            ) => ub_checks::maybe_is_aligned_and_not_null(addr, align, is_zst)\n        );\n        crate::intrinsics::read_via_copy(src)\n    }\n}",
+      "body_sha256": "0638fa83d5b5da093110511d686842bc36bbdad8b6c5638bed0cb7e7613fbe12",
+      "token_sha256": "2079c6b1e0ee93ad6b5745c4024080a6fb1c0879e4e7ce76137b98e8b1d9bbc8",
+      "expected_body": "pub const unsafe fn read<T>(src:*const T)->T{unsafe{#[cfg(debug_assertions)]ub_checks::assert_unsafe_precondition!(check_language_ub,\"ptr::read requires that the pointer argument is aligned and non-null\",(addr:*const()=src as *const(),align:usize=align_of::<T>(),is_zst:bool=T::IS_ZST,)=>ub_checks::maybe_is_aligned_and_not_null(addr,align,is_zst));crate::intrinsics::read_via_copy(src)}}",
+      "expected_token_sha256": "2079c6b1e0ee93ad6b5745c4024080a6fb1c0879e4e7ce76137b98e8b1d9bbc8",
+      "ordered_steps": [
+        "release debug_assertions=false removes debug-only precondition call",
+        "one typed read_via_copy at the original pointer",
+        "Copy WideExact requires no moved-value destructor; remaining alive range already advanced"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.ptrRead/read_at/read_frame; ArrayMemory194.binding; compiler intrinsic semantics V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "const_ptr.add",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ptr/const_ptr.rs",
+      "file_sha256": "a50ae219d63dc49bb2da48fa9bc607e3e1227c556376a00ae6e906205051073d",
+      "body": "pub const unsafe fn add(self, count: usize) -> Self\n    where\n        T: Sized,\n    {\n        #[cfg(debug_assertions)]\n        #[inline]\n        #[rustc_allow_const_fn_unstable(const_eval_select)]\n        const fn runtime_add_nowrap(this: *const (), count: usize, size: usize) -> bool {\n            const_eval_select!(\n                @capture { this: *const (), count: usize, size: usize } -> bool:\n                if const {\n                    true\n                } else {\n                    let Some(byte_offset) = count.checked_mul(size) else {\n                        return false;\n                    };\n                    let (_, overflow) = this.addr().overflowing_add(byte_offset);\n                    byte_offset <= (isize::MAX as usize) && !overflow\n                }\n            )\n        }\n\n        #[cfg(debug_assertions)] // Expensive, and doesn't catch much in the wild.\n        ub_checks::assert_unsafe_precondition!(\n            check_language_ub,\n            \"ptr::add requires that the address calculation does not overflow\",\n            (\n                this: *const () = self as *const (),\n                count: usize = count,\n                size: usize = size_of::<T>(),\n            ) => runtime_add_nowrap(this, count, size)\n        );\n\n        // SAFETY: the caller must uphold the safety contract for `offset`.\n        unsafe { intrinsics::offset(self, count) }\n    }",
+      "body_sha256": "6e8ef9c9453163c071515b82c8302e776d944e5a660fc456d10f6e4ef271a6a5",
+      "token_sha256": "1980be39a3e8bb5271284ccda59c171462b547f7ff456b76e1ae80f418c58624",
+      "expected_body": "pub const unsafe fn add(self,count:usize)->Self where T:Sized,{#[cfg(debug_assertions)]#[inline]#[rustc_allow_const_fn_unstable(const_eval_select)]const fn runtime_add_nowrap(this:*const(),count:usize,size:usize)->bool{const_eval_select!(@capture{this:*const(),count:usize,size:usize}->bool:if const{true}else{let Some(byte_offset)=count.checked_mul(size)else{return false;};let(_,overflow)=this.addr().overflowing_add(byte_offset);byte_offset<=(isize::MAX as usize)&&!overflow})}#[cfg(debug_assertions)]ub_checks::assert_unsafe_precondition!(check_language_ub,\"ptr::add requires that the address calculation does not overflow\",(this:*const()=self as *const(),count:usize=count,size:usize=size_of::<T>(),)=>runtime_add_nowrap(this,count,size));unsafe{intrinsics::offset(self,count)}}",
+      "expected_token_sha256": "1980be39a3e8bb5271284ccda59c171462b547f7ff456b76e1ae80f418c58624",
+      "ordered_steps": [
+        "release debug_assertions=false removes helper and debug-only check",
+        "intrinsic offset on the same typed pointer",
+        "count is within the original live allocation by the caller split bound"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_Memory194.advance; MemorySplit194.aliases/valid_parts; typed offset/layout primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "array.Index.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn index(&self, index: I) -> &Self::Output {\n        Index::index(self as &[T], index)\n    }",
+      "body_sha256": "7c882a5eb44e6bccca48cf58790aef6eb171408e54aa3a7c1ab41786df50a51e",
+      "token_sha256": "f3c9fd40d3e7d6443ebf32ca68afcf32d8fb567129b0994e0273b3d968968c7b",
+      "expected_body": "fn index(&self,index:I)->&Self::Output{Index::index(self as &[T],index)}",
+      "expected_token_sha256": "f3c9fd40d3e7d6443ebf32ca68afcf32d8fb567129b0994e0273b3d968968c7b",
+      "ordered_steps": [
+        "coerce same array storage and length to slice",
+        "dispatch concrete usize SliceIndex"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.array_complete; caller bounds from EncoderBounds.cells/EncoderRange.even/odd",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.Index.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index(&self, index: I) -> &I::Output {\n        index.index(self)\n    }",
+      "body_sha256": "44e53d91ceedd32e458e6f6b4dfb18b8349d177e5e3b788c014608bea060273a",
+      "token_sha256": "7d6d351ea0e0935acd674ed65629967ebb9451fc1aa60f5668e1b51496b851ed",
+      "expected_body": "fn index(&self,index:I)->&I::Output{index.index(self)}",
+      "expected_token_sha256": "7d6d351ea0e0935acd674ed65629967ebb9451fc1aa60f5668e1b51496b851ed",
+      "ordered_steps": [
+        "forward same slice and concrete usize index"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.slice_complete/success/failure",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.SliceIndex.index",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index(self, slice: &[T]) -> &T {\n        // N.B., use intrinsic indexing\n        &(*slice)[self]\n    }",
+      "body_sha256": "97a9f42a5913d85e5bdc5de713568893a9b25bc0fdf8f68a7ed27d7c3a0e62f0",
+      "token_sha256": "a56dad7cd1c6e9f99e60a1aaf205764929096fa3ce00dc4d391756cb7c0e67cb",
+      "expected_body": "fn index(self,slice:&[T])->&T{&(*slice)[self]}",
+      "expected_token_sha256": "a56dad7cd1c6e9f99e60a1aaf205764929096fa3ce00dc4d391756cb7c0e67cb",
+      "ordered_steps": [
+        "compiler intrinsic checked read at identical index",
+        "out-of-bounds panic arm retained in the Result projection, proved unreachable for every consumed index"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_Index194.slice_complete/success/failure; compiler checked-memory primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "array.IndexMut.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+      "file_sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "body": "fn index_mut(&mut self, index: I) -> &mut Self::Output {\n        IndexMut::index_mut(self as &mut [T], index)\n    }",
+      "body_sha256": "3efc95c7ec60fea7cbbaf85e9322e4b83da92c0998a8f8b132a3bb2ef4581b4e",
+      "token_sha256": "2d028901a04d618d9e5c428fb7ba053c3eadea216aa671fdcc1b70d49fb650d9",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut Self::Output{IndexMut::index_mut(self as &mut[T],index)}",
+      "expected_token_sha256": "2d028901a04d618d9e5c428fb7ba053c3eadea216aa671fdcc1b70d49fb650d9",
+      "ordered_steps": [
+        "coerce same mutable array storage to slice",
+        "retain the write-back continuation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame; EncoderMutation.restoration",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "slice.IndexMut.usize",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index_mut(&mut self, index: I) -> &mut I::Output {\n        index.index_mut(self)\n    }",
+      "body_sha256": "78cbca4e3f48a7604570d67b508fff2b23ff29ba1446b5164014fe9b99c28c79",
+      "token_sha256": "5c378d0874611016d392526a00ebf6627df99cd5db969e0bcd15b0e2a571b334",
+      "expected_body": "fn index_mut(&mut self,index:I)->&mut I::Output{index.index_mut(self)}",
+      "expected_token_sha256": "5c378d0874611016d392526a00ebf6627df99cd5db969e0bcd15b0e2a571b334",
+      "ordered_steps": [
+        "dispatch concrete usize at identical storage",
+        "retain mutable continuation"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "usize.SliceIndex.index_mut",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+      "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+      "body": "fn index_mut(self, slice: &mut [T]) -> &mut T {\n        // N.B., use intrinsic indexing\n        &mut (*slice)[self]\n    }",
+      "body_sha256": "a842fe2144b84fa89b3791cedf19d0c4f943ce8cdc6fc71304ff72c83e4ac30b",
+      "token_sha256": "1295a84804829c1dc2929eb1a539c57e1378e3420b27a13c6e7088b4449138d4",
+      "expected_body": "fn index_mut(self,slice:&mut[T])->&mut T{&mut(*slice)[self]}",
+      "expected_token_sha256": "1295a84804829c1dc2929eb1a539c57e1378e3420b27a13c6e7088b4449138d4",
+      "ordered_steps": [
+        "return exactly the selected mutable slot",
+        "checked failure branch retained; consumed basis indices are bounded"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_PV_RDCD3_ArrayWrite194.complete/read_back/frame; compiler checked-memory primitive V370",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    },
+    {
+      "name": "IndexRange.len",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/ops/index_range.rs",
+      "file_sha256": "be7f1a663156319aa4762288c44b726338276f0bcb1c36a5ced5003d329deb8f",
+      "body": "pub(crate) const fn len(&self) -> usize {\n        // SAFETY: By invariant, this cannot wrap\n        // Using the intrinsic because a UB check here impedes LLVM optimization. (#131563)\n        unsafe { crate::intrinsics::unchecked_sub(self.end, self.start) }\n    }",
+      "body_sha256": "2d3f22a992affe693ca97652c4f8c8e3ae44f00b41417f6ea8240b82c4455a0c",
+      "token_sha256": "9678e4dc0ecc95d3776465bd106dec3d632a7123655a079070a4d601f3993bb4",
+      "expected_body": "pub(crate) const fn len(&self)->usize{unsafe{crate::intrinsics::unchecked_sub(self.end,self.start)}}",
+      "expected_token_sha256": "9678e4dc0ecc95d3776465bd106dec3d632a7123655a079070a4d601f3993bb4",
+      "ordered_steps": [
+        "source type invariant start<=end discharges unchecked subtraction",
+        "return remaining alive count end-start"
+      ],
+      "lean_target": "R1Z.PV_RDCD4_ArrayIter194.valid/next_active/next_done; ArrayMemory194.binding",
+      "negative_control": "changed whole body rejected by token comparison; syntactic control, not compiled semantic validation",
+      "binding_credit": "pending complete proof/primitive/wrapper closure; no whole-row credit"
+    }
+  ],
+  "toolchain": "1.94.1",
+  "profile": "release; debug_assertions=false; overflow_checks=false",
+  "scope": "Own-1 statement binding preflight; pending laws are explicitly labelled. Body hashes before macro expansion; no b3p6-1 inference.",
+  "compiler_boundary": "V370/D381/D386 retained"
+}
