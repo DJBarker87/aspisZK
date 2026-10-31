@@ -2,9 +2,6 @@ import PV_EVH_RetryBody
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVH_RetrySource
-set_option pp.all true
-set_option pp.notation false
-set_option pp.match false
 open Aeneas Aeneas.Std ProverRwFull PV_EVH_RetryBody
 variable [ExternalTypes] [ExternalFuns]
 
@@ -44,8 +41,78 @@ theorem source_unfold
       cases r with
       | Err e => rfl
       | Ok val =>
-          simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [prod_case, core.result.Result.Insts.CoreOpsTry.branch, Aeneas.Std.bind_tc_ok]
-          trace_state
+          change (show Result Outcome from do
+            let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val
+                nonce_store
+            match r1 with
+            | core.result.Result.Ok p =>
+              let (proof, audit) := p
+              let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+              Result.ok (core.result.Result.Ok { proof, audit, attempts := i },
+nonce_store1)
+            | core.result.Result.Err e =>
+              match e with
+              | verifier.Error.Parse =>
+                Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+              | verifier.Error.Semantic =>
+                Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+              | verifier.Error.Transcript =>
+                Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+              | verifier.Error.Relation =>
+                Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+              | verifier.Error.Merkle =>
+                Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+              | verifier.Error.Query =>
+                Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+              | verifier.Error.Checkpoint =>
+                Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+              | verifier.Error.Allocation =>
+                Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+              | verifier.Error.Rejected =>
+                let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+                prover.retry_attempt
+                  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst
+                  public1 compiled variant hash nonce_store1 c i
+              | verifier.Error.AttemptsExhausted =>
+                Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted,
+nonce_store1)
+              | verifier.Error.Entropy =>
+                Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) =
+            Aeneas.Std.bind (show Result (ControlFlow (State T0) Outcome) from do
+              let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val
+                  nonce_store
+              match r1 with
+              | core.result.Result.Ok p =>
+                let (proof, audit) := p
+                let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+                Result.ok (ControlFlow.done ((core.result.Result.Ok { proof, audit, attempts := i },
+nonce_store1)))
+              | core.result.Result.Err e =>
+                match e with
+                | verifier.Error.Parse =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Parse, nonce_store1)))
+                | verifier.Error.Semantic =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Semantic, nonce_store1)))
+                | verifier.Error.Transcript =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Transcript, nonce_store1)))
+                | verifier.Error.Relation =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Relation, nonce_store1)))
+                | verifier.Error.Merkle =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Merkle, nonce_store1)))
+                | verifier.Error.Query =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Query, nonce_store1)))
+                | verifier.Error.Checkpoint =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)))
+                | verifier.Error.Allocation =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Allocation, nonce_store1)))
+                | verifier.Error.Rejected =>
+                  let i ← Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)
+                  Result.ok (ControlFlow.cont (nonce_store1, c, i))
+                | verifier.Error.AttemptsExhausted =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.AttemptsExhausted,
+nonce_store1)))
+                | verifier.Error.Entropy =>
+                  Result.ok (ControlFlow.done ((core.result.Result.Err verifier.Error.Entropy, nonce_store1)))) (fun cf => match cf with | .done a => .ok a | .cont (st,c,i) => prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
           | fail e => rfl
           | div => rfl
