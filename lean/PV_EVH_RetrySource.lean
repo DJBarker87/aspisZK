@@ -39,11 +39,11 @@ theorem source_unfold
       | Ok val =>
           dsimp only [core.result.Result.Insts.CoreOpsTry.branch]
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
-          | fail e => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-          | div => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+          | fail e => rfl
+          | div => rfl
           | ok pair =>
             rcases pair with ⟨p,st⟩
-            simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+            dsimp only
             cases p with
             | Ok pair =>
               rcases pair with ⟨proof,audit⟩
