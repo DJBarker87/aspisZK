@@ -1,0 +1,423 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:8:8: warning: automatically included section variable(s) unused in theorem `_private.PV_EVH_RetrySource.0.PV_EVH_RetrySource.prod_case`:
+  [ExternalTypes]
+  [ExternalFuns]
+consider restructuring your `variable` declarations so that the variables are not in scope or explicitly omit them:
+  omit [ExternalTypes] [ExternalFuns] in theorem ...
+
+Note: This linter can be disabled with `set_option linter.unusedSectionVars false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:123:22: error: unsolved goals
+case neg.ok.Ok.ok.Ok.ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+condition : ¬k ≥ prover.ATTEMPT_CAP
+c : T0
+val : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hn :
+  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k =
+    Result.ok (core.result.Result.Ok val, c)
+st : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+proof : alloc.vec.Vec U8
+audit : prover.MaskedFixtureAudit
+hp :
+  prover.prove_masked_attempt public1 compiled variant hash val nonce_store =
+    Result.ok (core.result.Result.Ok (proof, audit), st)
+v✝ : Usize
+hi : lift (k.wrapping_add 1#usize) = Result.ok v✝
+⊢ (let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      Result.ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := v✝ }, nonce_store1)
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+      | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+      | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+      | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+      | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+      | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+      | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+      | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+      | verifier.Error.Rejected =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash nonce_store1 c v✝
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+      | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) =
+    match
+      let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+      match r1 with
+      | core.result.Result.Ok p =>
+        let (proof, audit) := p
+        Result.ok
+          (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := v✝ }, nonce_store1))
+      | core.result.Result.Err e =>
+        match e with
+        | verifier.Error.Parse =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+        | verifier.Error.Semantic =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+        | verifier.Error.Transcript =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+        | verifier.Error.Relation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+        | verifier.Error.Merkle =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+        | verifier.Error.Query =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+        | verifier.Error.Checkpoint =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+        | verifier.Error.Allocation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+        | verifier.Error.Rejected => Result.ok (ControlFlow.cont (nonce_store1, c, v✝))
+        | verifier.Error.AttemptsExhausted =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+        | verifier.Error.Entropy =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) with
+    | Result.ok v =>
+      match v with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+    | Result.fail v => Result.fail v
+    | Result.div => Result.div
+
+case neg.ok.Ok.ok.Ok.fail
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+condition : ¬k ≥ prover.ATTEMPT_CAP
+c : T0
+val : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hn :
+  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k =
+    Result.ok (core.result.Result.Ok val, c)
+st : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+proof : alloc.vec.Vec U8
+audit : prover.MaskedFixtureAudit
+hp :
+  prover.prove_masked_attempt public1 compiled variant hash val nonce_store =
+    Result.ok (core.result.Result.Ok (proof, audit), st)
+e✝ : Error
+hi : lift (k.wrapping_add 1#usize) = Result.fail e✝
+⊢ (let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      Result.fail e✝
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+      | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+      | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+      | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+      | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+      | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+      | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+      | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+      | verifier.Error.Rejected => Result.fail e✝
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+      | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) =
+    match
+      let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+      match r1 with
+      | core.result.Result.Ok p =>
+        let (proof, audit) := p
+        Result.fail e✝
+      | core.result.Result.Err e =>
+        match e with
+        | verifier.Error.Parse =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+        | verifier.Error.Semantic =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+        | verifier.Error.Transcript =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+        | verifier.Error.Relation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+        | verifier.Error.Merkle =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+        | verifier.Error.Query =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+        | verifier.Error.Checkpoint =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+        | verifier.Error.Allocation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+        | verifier.Error.Rejected => Result.fail e✝
+        | verifier.Error.AttemptsExhausted =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+        | verifier.Error.Entropy =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) with
+    | Result.ok v =>
+      match v with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+    | Result.fail v => Result.fail v
+    | Result.div => Result.div
+
+case neg.ok.Ok.ok.Ok.div
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+condition : ¬k ≥ prover.ATTEMPT_CAP
+c : T0
+val : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hn :
+  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k =
+    Result.ok (core.result.Result.Ok val, c)
+st : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+proof : alloc.vec.Vec U8
+audit : prover.MaskedFixtureAudit
+hp :
+  prover.prove_masked_attempt public1 compiled variant hash val nonce_store =
+    Result.ok (core.result.Result.Ok (proof, audit), st)
+hi : lift (k.wrapping_add 1#usize) = Result.div
+⊢ (let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      Result.div
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+      | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+      | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+      | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+      | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+      | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+      | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+      | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+      | verifier.Error.Rejected => Result.div
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+      | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) =
+    match
+      let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), st)
+      match r1 with
+      | core.result.Result.Ok p =>
+        let (proof, audit) := p
+        Result.div
+      | core.result.Result.Err e =>
+        match e with
+        | verifier.Error.Parse =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+        | verifier.Error.Semantic =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+        | verifier.Error.Transcript =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+        | verifier.Error.Relation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+        | verifier.Error.Merkle =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+        | verifier.Error.Query =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+        | verifier.Error.Checkpoint =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+        | verifier.Error.Allocation =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+        | verifier.Error.Rejected => Result.div
+        | verifier.Error.AttemptsExhausted =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+        | verifier.Error.Entropy =>
+          Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)) with
+    | Result.ok v =>
+      match v with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+    | Result.fail v => Result.fail v
+    | Result.div => Result.div
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:129:14: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:116: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [condition,
+  ̲ ̲ ̲ ̲ ̲if_true,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵ Aeneas.Std.bind_̵t̵c̵_̵o̵k̵, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:139: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [condition,
+  ̲ ̲ ̲ ̲ ̲if_true, ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_f̵a̵i̵l̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d.̵b̵in̵d̵_̵t̵c̵_̵d̵i̵v, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:164: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [condition,
+  ̲ ̲ ̲ ̲ ̲if_true, ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵ ̵prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:188: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [condition,
+  ̲ ̲ ̲ ̲ ̲if_true, ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲Aeneas.Std.bind_tc_div,̵ ̵p̵r̵o̵d̵_̵c̵a̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:93: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp (config :=
+  ̲  ̲ ̲ ̲ ̲ ̲{ zeta := true, zetaDelta := true, zetaHave := true }) only [h̵n̵,̵Aeneas.Std.bind,
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:113: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_̵t̵c̵_̵o̵k̵, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:161: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵ ̵prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:185: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div,̵ ̵p̵r̵o̵d̵_̵c̵a̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:37:90: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp (config :=
+  ̲  ̲ ̲ ̲ ̲ ̲{ zeta := true, zetaDelta := true, zetaHave := true }) only [h̵n̵,̵Aeneas.Std.bind,
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:37:110: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_̵t̵c̵_̵o̵k̵, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:37:133: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_f̵a̵i̵l̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d.̵b̵in̵d̵_̵t̵c̵_̵d̵i̵v, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:37:182: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div,̵ ̵p̵r̵o̵d̵_̵c̵a̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:40:83: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [h̵n̵,̵Aeneas.Std.bind,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:40:126: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:40:151: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵ ̵prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:40:175: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hn,
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div,̵ ̵p̵r̵o̵d̵_̵c̵a̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:121:89: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config :=
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲{ zeta := true, zetaDelta := true, zetaHave := true }) only [̵p̵r̵o̵d̵_̵c̵a̵s̵e̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:126:93: warning: This simp argument is unused:
+  hi
+
+Hint: Omit it from the simp argument list.
+  simp (config :=
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲{ zeta := true, zetaDelta := true, zetaHave := true }) only [̵h̵i̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:126:185: warning: This simp argument is unused:
+  prod_case
+
+Hint: Omit it from the simp argument list.
+  simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [̵h̵i̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲i̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵,̵ ̵p̵r̵o̵d̵_̵c̵a̵s̵e̵]̵A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲d̲i̲v̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_RetrySource.source_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

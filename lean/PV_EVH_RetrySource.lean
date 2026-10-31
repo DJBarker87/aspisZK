@@ -123,11 +123,11 @@ nonce_store1)))
             | Ok pair =>
               rcases pair with ⟨proof,audit⟩
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+                simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case] <;> rfl
             | Err e =>
               cases e <;> try rfl
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+                simp (config := { zeta := true, zetaDelta := true, zetaHave := true }) only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case] <;> rfl
 
 #print axioms source_unfold
 end PV_EVH_RetrySource
