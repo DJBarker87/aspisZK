@@ -14,10 +14,14 @@ macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { 
 pub(super) use {anyhow, ensure};
 impl Error { pub fn literal(_: &'static str) -> Self { Self } }
 
-pub fn initialize() {
+// Public startup boundary: isolate the boxed dynamic std panic-hook API.
+fn install_literal_panic_hook() {
     std::panic::set_hook(Box::new(|_| {
         let _ = std::io::stderr().write_all(b"client panic\n");
     }));
+}
+pub fn initialize() {
+    install_literal_panic_hook();
     // First operation before input, errors, workers or witness processing.
     // Rust 1.94.1 caches this disabled state process-wide. Later environment
     // changes cannot enable Backtrace::capture (also used by anyhow).
