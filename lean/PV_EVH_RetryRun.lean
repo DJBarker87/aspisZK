@@ -21,7 +21,7 @@ def run (fuel : Nat)
   (nonce_store :
   aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   (next_attempt : T0) (k : Std.Usize) (next_OPEN : Next T0) (prove_OPEN : Prove) : World → Prefix Outcome :=
-  loop (fun (st,c,i) => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN)
+  PV_EVH_WorldLoop.loop (fun (st,c,i) => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN)
     fuel (nonce_store,next_attempt,k)
 
 theorem run_fixed (fuel : Nat)
