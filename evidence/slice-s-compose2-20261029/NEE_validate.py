@@ -73,6 +73,8 @@ def direct_contract(c,expected,ledger):
         assert isinstance(d['alternative_targets_resolved'],list)
         f=d['function'];binding=read(E/'NEE_MODEL_BINDINGS.json')[f]
         assert d['proof_target']==binding['proof_target']
+        admission=read(E/'NEE_SHAPE_ADMISSIONS.json').get(binding['shape'],{})
+        assert admission.get('admitted') is True,('unadmitted contract shape',binding['shape'])
         assert [t['name'] for t in d['domain_and_model_theorems']]==binding['model_theorems']
         assert d['positive']['receipt']['sha256']==binding['positive_receipt_sha256']
         assert d['negative']['receipt']['sha256']==binding['negative_receipt_sha256']

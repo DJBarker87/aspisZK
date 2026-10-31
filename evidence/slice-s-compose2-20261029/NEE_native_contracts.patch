@@ -1,45 +1,53 @@
---- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
-@@ -163,13 +163,21 @@
- }
- 
- #[inline]
-+#[cfg_attr(kani,kani::requires(unsafe {NEE_loop_frame::START<=8 && NEE_loop_frame::END==NEE_loop_frame::START}))]
-+#[cfg_attr(kani,kani::modifies(unsafe { &mut NEE_loop_frame::END }))]
-+#[cfg_attr(kani,kani::ensures(|r| unsafe { let i=NEE_loop_frame::START; let good=i>=8||digest[i].0<P;
-+ *r==good && NEE_loop_frame::END==if i<8&&good {i+1} else {i} }))]
- fn digest_is_canonical(digest: &Digest) -> bool {
-     let mut i = 0;
-+    #[cfg(kani)]
-+    { i = unsafe { NEE_loop_frame::START }; }
-     while i < digest.len() {
-         if digest[i].0 >= P {
-             return false;
-         }
-         i += 1;
-+        #[cfg(kani)]
-+        { unsafe { NEE_loop_frame::END = i; } return true; }
-     }
-     true
- }
-@@ -819,3 +827,7 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
          );
      }
  }
 +
 +#[cfg(kani)]
-+#[path="NEE_forest_loop_frame.rs"]
-+mod NEE_loop_frame;
++#[path="NEE_shape.rs"]
++mod NEE_shape;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEE_forest_loop_frame.rs
-@@ -0,0 +1,10 @@
-+#![allow(non_snake_case)]
++++ b/crates/aspis-statement/src/pool_v1/NEE_shape.rs
+@@ -0,0 +1,40 @@
++#![allow(non_snake_case,unused_variables)]
 +use super::*;
-+pub(super) static mut START:usize=0;
-+pub(super) static mut END:usize=0;
-+fn d()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
-+#[kani::proof_for_contract(digest_is_canonical)]
-+#[kani::unwind(2)]
++use crate::pool_v1::{PoolV1PairForestTerminalCommonV1,PoolV1PairLatePublicStatementV1,PoolV1PairVerifiedAfterstateV1};
++fn NEE_digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn NEE_frontier()->[Digest;20] {[NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest()]}
++fn NEE_common()->PoolV1PairForestTerminalCommonV1 {PoolV1PairForestTerminalCommonV1{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:NEE_digest(),lane_transition:PoolV1PairLatePublicStatementV1{live_snapshot:super::super::PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:NEE_digest(),frontier:NEE_frontier()},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:NEE_digest(),next_frontier:NEE_frontier()}}}}
++
++type A=PoolV1PairForestTerminalCommonV1;
++fn same(x:&A,y:&A)->bool{core::ptr::eq(x,y)}
++#[kani::modifies()]
++#[kani::ensures(|_| true)]
++fn weak(x:&A)->&A {x}
++#[kani::modifies(&mut buf[0])]
++#[kani::ensures(|_| true)]
++fn bad_frame<'a>(buf:&mut[u8;2],x:&'a A)->&'a A {buf[1]=buf[1].wrapping_add(1);x}
++#[kani::proof_for_contract(weak)]
 +#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-+fn step_frame(){let input=d();let i:usize=kani::any();kani::assume(i<=8);unsafe{START=i;END=i;}let _=digest_is_canonical(&input);}
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn native_weak(){let x=NEE_common();let r=weak(&x);assert!(same(r,&x),"NEE weak real-body reference identity");}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn unimplied(){let x=NEE_common();let r=weak(&x);assert!(same(r,&x),"NEE weak reference replacement cannot imply identity");}
++#[kani::proof_for_contract(bad_frame)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn frame_violation(){let mut b:[u8;2]=kani::any();let x=NEE_common();let _=bad_frame(&mut b,&x);}

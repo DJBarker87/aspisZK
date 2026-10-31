@@ -1,0 +1,18 @@
+def Aeneas.Std.WP.Post.{u_1} : Sort u_1 → Sort (max 1 u_1) :=
+fun α => α → Prop
+def Aeneas.Std.WP.spec.{u_1} : {α : Type u_1} → Result α → Post α → Pre :=
+fun {α} x p => theta x p
+theorem Aeneas.Std.loop.spec_decr_nat.{u, v} : ∀ {α : Type u} {β : Type v} (measure : α → ℕ) (inv : α → Prop)
+  (post : β → Prop) (body : α → Result (ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        body x ⦃ r =>
+          match r with
+          | ControlFlow.done y => post y
+          | ControlFlow.cont x' => inv x' ∧ measure x' < measure x ⦄) →
+    inv x → loop body x ⦃ post ⦄ :=
+fun {α} {β} measure inv post body x hBody hInv =>
+  have this := loop.spec measure inv post body x hBody hInv;
+  this
+Aeneas.Std.bind_assoc_eq.{u} {a b c : Type u} (e : Result a) (g : a → Result b) (h : b → Result c) :
+  e >>= g >>= h = e >>= fun x => g x >>= h

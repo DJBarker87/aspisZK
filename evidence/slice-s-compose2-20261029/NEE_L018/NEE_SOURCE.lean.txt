@@ -1,0 +1,54 @@
+import NED_ScannerCohorts
+set_option autoImplicit false
+noncomputable section
+namespace NEE_CanonicalFrame
+open Aeneas Aeneas.Std Result WP AspisR1AdapterReconstruct
+attribute [local instance] Classical.propDecidable
+
+/-- The external state is threaded unchanged through the exact emitted
+iteration. Native modifies verification independently checks this frame. -/
+def body {State : Type} (d : Array U32 8#usize) (p : Usize × State) :
+    Result (ControlFlow (Usize × State) (Bool × State)) := do
+  let r ← aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d p.1
+  match r with
+  | .cont i => ok (.cont (i,p.2))
+  | .done b => ok (.done (b,p.2))
+
+def run {State : Type} (d : Array U32 8#usize) (state : State) : Result (Bool × State) :=
+  loop (body d) (0#usize,state)
+
+/-- Whole-loop frame by decreasing-index induction, without native unwinding.
+No claim about a native state is supplied as a hypothesis. -/
+theorem frame {State : Type} (d : Array U32 8#usize) (state : State) :
+    ∃ b : Bool, run d state = ok (b,state) := by
+  have spec : run d state ⦃ r => r.2 = state ⦄ := by
+    unfold run
+    refine loop.spec_decr_nat (fun p : Usize × State => 8-p.1.val)
+      (fun p : Usize × State => p.1.val ≤ 8 ∧ p.2 = state)
+      (fun r : Bool × State => r.2 = state) (body d) (0#usize,state) ?_ ?_
+    · intro p hp
+      rcases p with ⟨i,σ⟩
+      rcases hp with ⟨bound,same⟩
+      unfold body aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body
+      step*
+      all_goals simp_all
+      all_goals scalar_tac
+    · exact ⟨by scalar_tac,rfl⟩
+  obtain ⟨p,call,same⟩ := WP.spec_imp_exists spec
+  rcases p with ⟨b,σ⟩
+  dsimp only at same
+  rw [same] at call
+  exact ⟨b,call⟩
+
+/-- Both frozen scanner bodies share this state-frame step, including reject
+and exhaustion. Their independently checked value inductions are reused. -/
+theorem tree_body {State : Type} (d : Array U32 8#usize) (p : Usize × State) :
+    body d p = (do
+      let r ← aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical_loop.body d p.1
+      match r with
+      | .cont i => ok (.cont (i,p.2))
+      | .done b => ok (.done (b,p.2))) := by rfl
+
+#print axioms frame
+#print axioms tree_body
+end NEE_CanonicalFrame

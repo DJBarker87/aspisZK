@@ -1,0 +1,34 @@
+NEE_generated/NEE_CanonicalFrame.lean:35:16: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+State : Type
+d : Std.Array U32 8#usize
+state : State
+i : Usize
+σ : State
+x : Slice U32
+_ : [> let x ← lift d.to_slice <]
+bound : ↑i ≤ 8
+same : σ = state
+x_post : x = d.to_slice
+⊢ (do
+      let r ←
+        if ↑i < 8 then do
+            let m ← d.index_usize i
+            if ↑aspis_core.field.P ≤ ↑m then ok (ControlFlow.done false)
+              else do
+                let i2 ← i + 1#usize
+                ok (ControlFlow.cont i2)
+          else ok (ControlFlow.done true)
+      match r with
+        | ControlFlow.cont i => ok (ControlFlow.cont (i, state))
+        | ControlFlow.done b => ok (ControlFlow.done (b, state))) ⦃
+    r =>
+    match r with
+    | ControlFlow.done y => y.2 = state
+    | ControlFlow.cont x' => ↑x'.1 ≤ 8 ∧ x'.2 = state ∧ 8 - ↑x'.1 < 8 - ↑i ⦄
+'NEE_CanonicalFrame.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEE_CanonicalFrame.tree_body' depends on axioms: [propext, Classical.choice, Quot.sound]

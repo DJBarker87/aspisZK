@@ -28,6 +28,7 @@ changed+=hook
 patch=''.join(difflib.unified_diff(frozen.splitlines(True),changed.splitlines(True),fromfile='a/'+path,tofile='b/'+path))
 module='''#![allow(non_snake_case)]
 use super::*;
+use aspis_core::field::M31;
 pub(super) static mut START:usize=0;
 pub(super) static mut END:usize=0;
 fn d()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
