@@ -12,9 +12,10 @@ mod plan;
 mod wallet;
 #[path="user_client/membership.rs"]
 mod membership;
-fn main()->std::process::ExitCode{
+fn main(){
  diagnostics::initialize();
- match run(){Ok(())=>std::process::ExitCode::SUCCESS,Err(e)=>{diagnostics::report(e);std::process::ExitCode::FAILURE}}
+ let code=match run(){Ok(())=>0,Err(e)=>{diagnostics::report(e);1}};
+ std::process::exit(code);
 }
 fn run()->Result<()>{
  let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;

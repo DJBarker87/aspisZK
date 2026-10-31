@@ -61,8 +61,8 @@ if True:
   if q.returncode==0:
    r.returncode=int(q.stdout.strip());break
   if q.returncode!=1:raise SystemExit(q.returncode)
-  print(q.stdout.strip() or 'Arithmetic gate admitted; waiting for first completed pair',flush=True)
-  time.sleep(50)
+  print(q.stdout.strip() or 'Scope admitted; awaiting completion',flush=True)
+  time.sleep(10)
 else:
  r=ssh(launch,retry=False)
 if r.returncode==255:
