@@ -25,6 +25,7 @@ for group,crate in [('terminal','aspis-r1-cost-probe'),('field','aspis-core'),('
  for k,v in parity.items():
   if k.startswith('aspis-'):continue
   if k not in deps:deps[k]=v
+  elif k=='getrandom':deps[k]['features']=sorted(set(deps[k].get('features',[])+v.get('features',[])))
  s='[package]\nname="pv-b3p6-reference227"\nversion="0.0.0"\nedition="2021"\n[workspace]\n[lib]\npath='+val(os.path.relpath((C/'src/lib.rs').resolve(),D.resolve()))+'\n[dependencies]\n'
  s+=''.join(json.dumps(k)+'='+val(v)+'\n'for k,v in deps.items())
  if (C/'build.rs').exists():

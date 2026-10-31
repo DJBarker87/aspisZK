@@ -5,9 +5,9 @@ extraction driver. No source, LLBC, translator, or generated output is edited.
 from pathlib import Path
 from run import H,run
 import json,hashlib,subprocess,sys,shutil
-kind,ident=sys.argv[1:3];assert kind in ('terminal','copy','field','poseidon','statement-copy','copy-methods','poseidon-methods','field-retry','poseidon-retry','statement-copy-retry');assert 73900<=int(ident)<=73929
+kind,ident=sys.argv[1:3];assert kind in ('terminal','copy','field','poseidon','statement-copy','copy-methods','poseidon-methods','field-retry','poseidon-retry','statement-copy-retry','terminal-features','copy-features');assert 73900<=int(ident)<=73929
 R=H/'resume17';O=R/('direct-'+kind);O.mkdir(exist_ok=True)
-basekind=kind.replace('-methods','').replace('-retry','')
+basekind=kind.replace('-methods','').replace('-retry','').replace('-features','')
 if '--inside' not in sys.argv:
  label='N'+ident;retry=0
  while (R/label).exists():
@@ -30,6 +30,8 @@ pkgs={p['id']:p for p in meta['packages']};nodes=[dict(name=pkgs[n['id']]['name'
 (O/'inputs.json').write_text(json.dumps(dict(kind=kind,scope='N'+ident,charon=str(c),charon_sha256=sha(c),aeneas=str(a),aeneas_sha256=sha(a),translator_identity='functionally identical rebuild (ae1-2)',sources=sources,manifest=str(manifest),manifest_sha256=sha(manifest),lock_sha256=sha(manifest.with_name('Cargo.lock')),nodes=nodes,features=features,lib_path=__import__('tomllib').loads(manifest.read_text())['lib']['path'],extractor_toolchain='nightly-2026-06-01',deployed_toolchain='1.94.1',release=dict(opt_level=3,debug_assertions=False,overflow_checks=False)),indent=2)+'\n')
 roots=json.loads((R/'direct-roots.json').read_text())[basekind];results=[]
 if kind.endswith('-methods'):roots=[n for n in roots if '::' in n]
+if kind=='terminal-features':roots=[n for n in roots if n in ('absorption_lanes_literal','add_digest_binding','add_preweighted')]
+if kind=='copy-features':roots=['selector_mask_sum_16']
 for name in roots:
  out=O/name.replace('::','__');out.mkdir(exist_ok=True);assert not (out/'charon/receipt.json').exists(),'unchanged body trial cannot be repeated'
  llbc=out/'Deployed17.llbc';gen=out/'generated';gen.mkdir(exist_ok=True)
