@@ -10,9 +10,7 @@ theorem bound {T : Type} (s : Slice T) (i : Usize) (x : T) (success : Slice.inde
     | none => Result.fail Error.arrayOutOfBounds
     | some y => Result.ok y)=ok x at success
   have hnone : s.val[i.val]?=none := by
-    simp only [List.getElem?_eq_none]
-    change s.length≤i.val
-    omega
+    exact List.getElem?_eq_none (Nat.le_of_not_gt denied)
   rw [hnone] at success
   cases success
 

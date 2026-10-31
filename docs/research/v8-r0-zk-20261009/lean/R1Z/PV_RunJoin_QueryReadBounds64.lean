@@ -12,9 +12,7 @@ theorem vector {T : Type} (v : alloc.vec.Vec T) (i : Usize) (x : T)
     | none => Result.fail Error.arrayOutOfBounds
     | some y => Result.ok y)=ok x at success
   have hnone : v.val[i.val]?=none := by
-    simp only [List.getElem?_eq_none]
-    change v.length≤i.val
-    omega
+    exact List.getElem?_eq_none (Nat.le_of_not_gt denied)
   rw [hnone] at success
   cases success
 
