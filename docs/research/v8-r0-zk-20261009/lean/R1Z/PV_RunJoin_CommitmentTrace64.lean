@@ -9,8 +9,9 @@ def Trace (hash : aspis_core.digest.LegacyHashFn) (time : host_commitment.Commit
     (salts : Option host_commitment.PrivateSalts) (c : host_commitment.Commitment) : Prop :=
   c.time=time ∧ c.private_salts=salts ∧
   host_commitment.commitment_lanes time=ok (.Ok c.lanes) ∧
+  ∃ saltRef, core.option.Option.as_ref salts=ok saltRef ∧
   ∃ leaves, host_commitment.commitment_leaves hash time (alloc.vec.Vec.deref c.lanes)
-    (alloc.vec.Vec.deref c.words) salts=ok (.Ok leaves)
+    (alloc.vec.Vec.deref c.words) saltRef=ok (.Ok leaves)
 
 theorem source (hash : aspis_core.digest.LegacyHashFn) (domain : host_commitment.EncodingDomain)
     (time : host_commitment.CommitmentTime)
@@ -23,8 +24,8 @@ theorem source (hash : aspis_core.digest.LegacyHashFn) (domain : host_commitment
   intro laneCount
   split
   · trivial
-  · apply PV_RunJoin_ResultPost41.bind
-    intro saltRef
+  · apply PV_RunJoin_PostEquation60.bind
+    intro saltRef href
     apply PV_RunJoin_ResultPost41.bind
     intro denied
     cases denied with
@@ -51,10 +52,12 @@ theorem source (hash : aspis_core.digest.LegacyHashFn) (domain : host_commitment
             simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
             apply PV_RunJoin_ResultPost41.bind
             intro treeOption
-            cases treeOption with
-            | none => trivial
-            | some tree =>
-              exact ⟨rfl,rfl,hlane,leaves,hleaf⟩
+            apply PV_RunJoin_ResultPost41.bind
+            intro treeStatus
+            cases treeStatus with
+            | Err e => trivial
+            | Ok tree =>
+              exact ⟨rfl,rfl,hlane,saltRef,href,leaves,hleaf⟩
 
 theorem complete (hash : aspis_core.digest.LegacyHashFn) (domain : host_commitment.EncodingDomain)
     (time : host_commitment.CommitmentTime)

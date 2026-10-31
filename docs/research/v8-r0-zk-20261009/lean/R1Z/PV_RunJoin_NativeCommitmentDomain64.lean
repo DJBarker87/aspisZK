@@ -1,6 +1,7 @@
 import R1Z.PV_RunJoin_NativeCommitmentLeaves64
 import R1Z.PV_RunJoin_CommitmentLanes64
 import R1Z.PV_RunJoin_CommitmentTrace64
+import R1Z.PV_RunJoin_NativeOptionRef64
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_NativeCommitmentDomain64
@@ -20,8 +21,12 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_QueryFillStep64.Domain c ∧ c.private_salts=some salts := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops runtime world
-  obtain ⟨htime,hstored,hlanes,leaves,hleaves⟩ :=
+  obtain ⟨htime,hstored,hlanes,saltRef,href,leaves,hleaves⟩ :=
     PV_RunJoin_CommitmentTrace64.complete hash domain time messages variant (some salts) c success
+  change (opsNative base heap box ops runtime world).op6 (some salts)=ok saltRef at href
+  rw [PV_RunJoin_NativeOptionRef64.complete] at href
+  have same : some salts=saltRef := Result.ok.inj href
+  subst saltRef
   obtain ⟨small,lanes⟩ := PV_RunJoin_CommitmentLanes64.complete time c.lanes hlanes
   have reached : host_commitment.commitment_leaves hash c.time (alloc.vec.Vec.deref c.lanes)
       (alloc.vec.Vec.deref c.words) (some salts)=ok (.Ok leaves) := by
