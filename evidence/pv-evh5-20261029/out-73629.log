@@ -1,0 +1,511 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:42:22: error: Tactic `rfl` failed: The left-hand side
+  let (r, next_attempt1) := (core.result.Result.Ok val, c)
+  do
+  let cf ←
+    match r with
+      | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+      | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+      match r1 with
+        | core.result.Result.Ok p =>
+          let (proof, audit) := p
+          do
+          let i ← lift (k.wrapping_add 1#usize)
+          Result.ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+        | core.result.Result.Err e =>
+          match e with
+          | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+          | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+          | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+          | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+          | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+          | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+          | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+          | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+          | verifier.Error.Rejected => do
+            let i ← lift (k.wrapping_add 1#usize)
+            prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+                variant hash nonce_store1 next_attempt1 i
+          | verifier.Error.AttemptsExhausted =>
+            Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+          | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+            (core.convert.FromSame verifier.Error) residual
+      Result.ok (r1, nonce_store)
+is not definitionally equal to the right-hand side
+  match
+    let (r, next_attempt1) := (core.result.Result.Ok val, c)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+        match r1 with
+          | core.result.Result.Ok p =>
+            let (proof, audit) := p
+            do
+            let i ← lift (k.wrapping_add 1#usize)
+            Result.ok
+                (ControlFlow.done
+                  (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+          | core.result.Result.Err e =>
+            match e with
+            | verifier.Error.Parse =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+            | verifier.Error.Semantic =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+            | verifier.Error.Transcript =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+            | verifier.Error.Relation =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+            | verifier.Error.Merkle =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+            | verifier.Error.Query =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+            | verifier.Error.Checkpoint =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+            | verifier.Error.Allocation =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+            | verifier.Error.Rejected => do
+              let i ← lift (k.wrapping_add 1#usize)
+              Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+            | verifier.Error.AttemptsExhausted =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+            | verifier.Error.Entropy =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+              (core.convert.FromSame verifier.Error) residual
+        Result.ok (ControlFlow.done (r1, nonce_store)) with
+  | Result.ok v =>
+    match v with
+    | ControlFlow.done a => Result.ok a
+    | ControlFlow.cont (st, c, i) =>
+      prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+        variant hash st c i
+  | Result.fail v => Result.fail v
+  | Result.div => Result.div
+
+case neg.ok.Ok.fail
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+condition : ¬k ≥ prover.ATTEMPT_CAP
+c : T0
+val : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hn :
+  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k =
+    Result.ok (core.result.Result.Ok val, c)
+e : Error
+hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store = Result.fail e
+⊢ (let (r, next_attempt1) := (core.result.Result.Ok val, c)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+        match r1 with
+          | core.result.Result.Ok p =>
+            let (proof, audit) := p
+            do
+            let i ← lift (k.wrapping_add 1#usize)
+            Result.ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+          | core.result.Result.Err e =>
+            match e with
+            | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+            | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+            | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+            | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+            | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+            | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+            | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+            | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+            | verifier.Error.Rejected => do
+              let i ← lift (k.wrapping_add 1#usize)
+              prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1
+                  compiled variant hash nonce_store1 next_attempt1 i
+            | verifier.Error.AttemptsExhausted =>
+              Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+            | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+              (core.convert.FromSame verifier.Error) residual
+        Result.ok (r1, nonce_store)) =
+    match
+      let (r, next_attempt1) := (core.result.Result.Ok val, c)
+      do
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+          match r1 with
+            | core.result.Result.Ok p =>
+              let (proof, audit) := p
+              do
+              let i ← lift (k.wrapping_add 1#usize)
+              Result.ok
+                  (ControlFlow.done
+                    (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+            | core.result.Result.Err e =>
+              match e with
+              | verifier.Error.Parse =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+              | verifier.Error.Semantic =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+              | verifier.Error.Transcript =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+              | verifier.Error.Relation =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+              | verifier.Error.Merkle =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+              | verifier.Error.Query =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+              | verifier.Error.Checkpoint =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+              | verifier.Error.Allocation =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+              | verifier.Error.Rejected => do
+                let i ← lift (k.wrapping_add 1#usize)
+                Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+              | verifier.Error.AttemptsExhausted =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+              | verifier.Error.Entropy =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+                (core.convert.FromSame verifier.Error) residual
+          Result.ok (ControlFlow.done (r1, nonce_store)) with
+    | Result.ok v =>
+      match v with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+    | Result.fail v => Result.fail v
+    | Result.div => Result.div
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:43:19: error: Tactic `rfl` failed: The left-hand side
+  let (r, next_attempt1) := (core.result.Result.Ok val, c)
+  do
+  let cf ←
+    match r with
+      | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+      | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+  match cf with
+    | core.ops.control_flow.ControlFlow.Continue val => do
+      let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+      match r1 with
+        | core.result.Result.Ok p =>
+          let (proof, audit) := p
+          do
+          let i ← lift (k.wrapping_add 1#usize)
+          Result.ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+        | core.result.Result.Err e =>
+          match e with
+          | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+          | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+          | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+          | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+          | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+          | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+          | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+          | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+          | verifier.Error.Rejected => do
+            let i ← lift (k.wrapping_add 1#usize)
+            prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+                variant hash nonce_store1 next_attempt1 i
+          | verifier.Error.AttemptsExhausted =>
+            Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+          | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+    | core.ops.control_flow.ControlFlow.Break residual => do
+      let r1 ←
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+            (core.convert.FromSame verifier.Error) residual
+      Result.ok (r1, nonce_store)
+is not definitionally equal to the right-hand side
+  match
+    let (r, next_attempt1) := (core.result.Result.Ok val, c)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+        match r1 with
+          | core.result.Result.Ok p =>
+            let (proof, audit) := p
+            do
+            let i ← lift (k.wrapping_add 1#usize)
+            Result.ok
+                (ControlFlow.done
+                  (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+          | core.result.Result.Err e =>
+            match e with
+            | verifier.Error.Parse =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+            | verifier.Error.Semantic =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+            | verifier.Error.Transcript =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+            | verifier.Error.Relation =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+            | verifier.Error.Merkle =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+            | verifier.Error.Query =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+            | verifier.Error.Checkpoint =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+            | verifier.Error.Allocation =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+            | verifier.Error.Rejected => do
+              let i ← lift (k.wrapping_add 1#usize)
+              Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+            | verifier.Error.AttemptsExhausted =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+            | verifier.Error.Entropy =>
+              Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1))
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+              (core.convert.FromSame verifier.Error) residual
+        Result.ok (ControlFlow.done (r1, nonce_store)) with
+  | Result.ok v =>
+    match v with
+    | ControlFlow.done a => Result.ok a
+    | ControlFlow.cont (st, c, i) =>
+      prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+        variant hash st c i
+  | Result.fail v => Result.fail v
+  | Result.div => Result.div
+
+case neg.ok.Ok.div
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+condition : ¬k ≥ prover.ATTEMPT_CAP
+c : T0
+val : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+hn :
+  coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k =
+    Result.ok (core.result.Result.Ok val, c)
+hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store = Result.div
+⊢ (let (r, next_attempt1) := (core.result.Result.Ok val, c)
+    do
+    let cf ←
+      match r with
+        | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val => do
+        let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+        match r1 with
+          | core.result.Result.Ok p =>
+            let (proof, audit) := p
+            do
+            let i ← lift (k.wrapping_add 1#usize)
+            Result.ok (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)
+          | core.result.Result.Err e =>
+            match e with
+            | verifier.Error.Parse => Result.ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)
+            | verifier.Error.Semantic => Result.ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)
+            | verifier.Error.Transcript => Result.ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)
+            | verifier.Error.Relation => Result.ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)
+            | verifier.Error.Merkle => Result.ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)
+            | verifier.Error.Query => Result.ok (core.result.Result.Err verifier.Error.Query, nonce_store1)
+            | verifier.Error.Checkpoint => Result.ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)
+            | verifier.Error.Allocation => Result.ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)
+            | verifier.Error.Rejected => do
+              let i ← lift (k.wrapping_add 1#usize)
+              prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1
+                  compiled variant hash nonce_store1 next_attempt1 i
+            | verifier.Error.AttemptsExhausted =>
+              Result.ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1)
+            | verifier.Error.Entropy => Result.ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)
+      | core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+              (core.convert.FromSame verifier.Error) residual
+        Result.ok (r1, nonce_store)) =
+    match
+      let (r, next_attempt1) := (core.result.Result.Ok val, c)
+      do
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => Result.ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => Result.ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let (r1, nonce_store1) ← prover.prove_masked_attempt public1 compiled variant hash val nonce_store
+          match r1 with
+            | core.result.Result.Ok p =>
+              let (proof, audit) := p
+              do
+              let i ← lift (k.wrapping_add 1#usize)
+              Result.ok
+                  (ControlFlow.done
+                    (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+            | core.result.Result.Err e =>
+              match e with
+              | verifier.Error.Parse =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+              | verifier.Error.Semantic =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+              | verifier.Error.Transcript =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+              | verifier.Error.Relation =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+              | verifier.Error.Merkle =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+              | verifier.Error.Query =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+              | verifier.Error.Checkpoint =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+              | verifier.Error.Allocation =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+              | verifier.Error.Rejected => do
+                let i ← lift (k.wrapping_add 1#usize)
+                Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+              | verifier.Error.AttemptsExhausted =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+              | verifier.Error.Entropy =>
+                Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual prover.RetriedProof
+                (core.convert.FromSame verifier.Error) residual
+          Result.ok (ControlFlow.done (r1, nonce_store)) with
+    | Result.ok v =>
+      match v with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+    | Result.fail v => Result.fail v
+    | Result.div => Result.div
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:46:12: error: `dsimp` made no progress
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:29:50: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵n̵d̵i̵t̵i̵o̵n̵,̵i̵f̵_̵t̵r̵u̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲c̲o̲n̲d̲i̲t̲i̲o̲n̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:29:73: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵n̵d̵i̵t̵i̵o̵n̵,̵i̵f̵_̵t̵r̵u̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲c̲o̲n̲d̲i̲t̲i̲o̲n̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:29:98: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵n̵d̵i̵t̵i̵o̵n̵,̵i̵f̵_̵t̵r̵u̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲c̲o̲n̲d̲i̲t̲i̲o̲n̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:32:27: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:32:47: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:32:95: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:24: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:44: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:33:67: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:17: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [h̵n̵,̵Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail,
+  ̲  ̲ ̲ ̲ ̲ ̲ ̲ ̲Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:60: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_fail
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵Aeneas.Std.bind_tc_div]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetrySource.lean:36:85: warning: This simp argument is unused:
+  Aeneas.Std.bind_tc_div
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵n̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵,̵[̲h̲n̲,̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲,̲ Aeneas.Std.bind_tc_ok, A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵f̵a̵i̵l̵,̵ ̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵b̵i̵n̵d̵_̵t̵c̵_̵d̵i̵v̵]̵A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲b̲i̲n̲d̲_̲t̲c̲_̲f̲a̲i̲l̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_RetrySource.source_unfold' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

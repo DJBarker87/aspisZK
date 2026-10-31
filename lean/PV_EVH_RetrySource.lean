@@ -5,6 +5,10 @@ namespace PV_EVH_RetrySource
 open Aeneas Aeneas.Std ProverRwFull PV_EVH_RetryBody
 variable [ExternalTypes] [ExternalFuns]
 
+private theorem prod_case {A B C : Type} (p : A × B) (f : A → B → C) :
+    (match p with | (a,b) => f a b) = f p.1 p.2 := by
+  cases p; rfl
+
 theorem source_unfold
   {T0 : Type}
   (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
@@ -26,33 +30,33 @@ theorem source_unfold
   rw [prover.retry_attempt.eq_def]
   unfold sourceBody
   by_cases condition : k ≥ prover.ATTEMPT_CAP
-  · simp only [condition,if_true,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+  · simp only [condition,if_true,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
   · simp only [condition,if_false]
     cases hn : coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k with
-    | fail e => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-    | div => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+    | fail e => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
+    | div => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
     | ok pair =>
       rcases pair with ⟨r,c⟩
-      simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+      simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
       cases r with
       | Err e => rfl
       | Ok val =>
-          dsimp only [core.result.Result.Insts.CoreOpsTry.branch]
+          simp only [prod_case, core.result.Result.Insts.CoreOpsTry.branch, Aeneas.Std.bind_tc_ok]
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
           | fail e => rfl
           | div => rfl
           | ok pair =>
             rcases pair with ⟨p,st⟩
-            dsimp only
+            simp only [prod_case, Aeneas.Std.bind_tc_ok]
             cases p with
             | Ok pair =>
               rcases pair with ⟨proof,audit⟩
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
             | Err e =>
               cases e <;> try rfl
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div, prod_case]
 
 #print axioms source_unfold
 end PV_EVH_RetrySource
