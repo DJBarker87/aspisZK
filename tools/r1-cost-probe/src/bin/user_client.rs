@@ -37,3 +37,6 @@ fn path_join(dir:&std::path::Path,name:&str)->std::path::PathBuf{dir.join(name)}
 fn client_hash()->aspis_core::HashFn{aspis_prover::HOST_HASH}
 
 fn triple(a:Value,b:Value,c:Value)->Vec<Value>{let mut out=Vec::with_capacity(3);out.push(a);out.push(b);out.push(c);out}
+
+fn public_array(v:&Value)->Result<Vec<Value>>{match v.as_array(){Some(a)=>Ok(a.clone()),None=>Err(diagnostics::Error::new())}}
+fn value_text(v:&Value)->Result<String>{match v.as_str(){Some(s)=>Ok(s.to_owned()),None=>Err(diagnostics::Error::new())}}
