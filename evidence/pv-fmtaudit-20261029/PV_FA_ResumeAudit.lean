@@ -109,7 +109,7 @@ run_cmd do
       match graph.find? n with
       | some deps => cs := deps.toList ++ cs
       | none =>
-        if (toString n).startsWith "Aeneas" || (toString n).startsWith "R1Z" || (toString n).startsWith "PV_" || (toString n).startsWith "Aspis" || (toString n).startsWith "ProverRw" || (toString n).startsWith "_private.Aeneas" || (toString n).startsWith "_private.R1Z" || (toString n).startsWith "_private.PV_" then unresolved := unresolved.insert n
+        if (toString n).startsWith "Aeneas" || (toString n).startsWith "R1Z" || (toString n).startsWith "PV_" || (toString n).startsWith "Aspis" then unresolved := unresolved.insert n
     let j := Json.mkObj [("id",toJson id),("theorem",toJson root),("fmt_constants",toJson (fmt.toArray.map toString)),("used_nonstandard_axioms",toJson (usedAxs.toArray.map toString)),("unresolved_project_constants",toJson (unresolved.toArray.map toString)),("import_gaps",toJson gaps),("objects",toJson objects),("visited_constants",toJson seen.size)]
     logInfo m!"PV_FA_FOOTPRINT {j.compress}"
 
