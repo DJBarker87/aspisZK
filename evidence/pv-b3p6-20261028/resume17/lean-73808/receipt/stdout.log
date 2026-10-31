@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectInclusive17227.lean:85:4: error: unsolved goals
+case pos
+α : Type
+step : α → Usize → Result α
+last : Usize
+limit : ↑last < 24
+state : α
+ih :
+  ∀ (first : Usize) (state : α),
+    ↑first + 0 = ↑last + 1 →
+      inclusive_std_loop17 step first last state = PV_B3P_Ordered227.fold step (usize_indices11 0 first) state
+count : ↑last + (0 + 1) = ↑last + 1
+⊢ (match do
+      let next ← step state last
+      ok (cont ({ start := last, «end» := last, exhausted := true }, next)) with
+    | ok r =>
+      match r with
+      | cont x => loop (inclusive_std_body17 step) x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    do
+    let x ← step state last
+    ok x
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectInclusive17227.lean:104:19: error: Type mismatch: After simplification, term
+  ih
+ has type
+  ∀ (first : Usize) (state : α),
+    ↑first + n = ↑last + 1 →
+      loop (inclusive_std_body17 step) ({ start := first, «end» := last, exhausted := false }, state) =
+        PV_B3P_Ordered227.fold step (usize_indices11 n first) state
+but is expected to have type
+  loop (inclusive_std_body17 step) ({ start := first.wrapping_add 1#usize, «end» := last, exhausted := false }, next) =
+    PV_B3P_Ordered227.fold step (usize_indices11 n (first.wrapping_add 1#usize)) next
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectInclusive17227.lean:90:67: warning: This simp argument is unused:
+  inclusive_exhausted17
+
+Hint: Omit it from the simp argument list.
+  simp only [̵i̵n̵c̵l̵u̵s̵i̵v̵e̵_̵s̵t̵d̵_̵b̵o̵d̵y̵1̵7̵,̵i̵n̵c̵l̵u̵s̵i̵v̵e̵_̵f̵i̵n̵a̵l̵1̵7̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵i̵n̵c̵l̵u̵s̵i̵v̵e̵_̵e̵x̵h̵a̵u̵s̵t̵e̵d̵1̵7̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵u̵s̵i̵z̵e̵_̵i̵n̵d̵i̵c̵e̵s̵1̵1̵,̵P̵V̵_̵B̵3̵P̵_̵O̵r̵d̵e̵r̵e̵d̵2̵2̵7̵.̵f̵o̵l̵d̵]̵[̲i̲n̲c̲l̲u̲s̲i̲v̲e̲_̲s̲t̲d̲_̲b̲o̲d̲y̲1̲7̲,̲ ̲i̲n̲c̲l̲u̲s̲i̲v̲e̲_̲f̲i̲n̲a̲l̲1̲7̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲u̲s̲i̲z̲e̲_̲i̲n̲d̲i̲c̲e̲s̲1̲1̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲P̲V̲_̲B̲3̲P̲_̲O̲r̲d̲e̲r̲e̲d̲2̲2̲7̲.̲f̲o̲l̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectInclusive17227.lean:105:13: error: unexpected token '('; expected command
+'PV_B3P_Direct17227.inclusive_next_extraction17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.inclusive_exhausted17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.inclusive_more17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.inclusive_final17' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.inclusive_std_fold17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
