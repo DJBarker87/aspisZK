@@ -8,6 +8,7 @@ variable [ExternalTypes] [ExternalFuns]
 theorem push {T : Type} (v : alloc.vec.Vec T) (x : T) :
     Post (fun next => next.length=v.length+1) (alloc.vec.Vec.push v x) := by
   unfold alloc.vec.Vec.push
+  dsimp only
   split
   · change (v.val.concat x).length=v.val.length+1
     simp only [List.length_concat]
