@@ -1,10 +1,11 @@
 """One static-free refused-function gate per scope, controls before positives."""
 from run import H,run
 from pathlib import Path
-import sys,json,hashlib,subprocess,re
-ident=int(sys.argv[1]);assert 73944<=ident<=73949
+import sys,json,hashlib,subprocess,re,os
+os.environ["PATH"]="/home/dombarker/.cargo/bin:/usr/bin:/bin"
+ident=int(sys.argv[1]);assert 73945<=ident<=73950
 names=['sum_high_nodes_wrong','sum_high_nodes','sum_high_path_wrong','sum_high_path','sum_high_zero_57_wrong','sum_high_zero_57']
-name=names[ident-73944];control=ident%2==0;seconds=900 if ident>=73948 else 180
+name=names[ident-73945];control=ident%2==1;seconds=900 if ident>=73949 else 180
 R=H/'resume17';label=f'K{ident}';assert not any(R.glob(label+'*')),'never reuse any existing ID'
 assert len(list(R.glob('K*/receipt/receipt.json')))<30
 if not control:
