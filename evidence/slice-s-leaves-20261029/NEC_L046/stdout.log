@@ -1,0 +1,40 @@
+@[implicit_reducible] def Aeneas.Std.instGetElem?ArrayUsizeLtNatValLengthValListEq.{u} : {α : Type u} →
+  {n : Usize} → GetElem? (Std.Array α n) Usize α fun a i => ↑i < (↑a).length :=
+fun {α} {n} => { toGetElem := instGetElemArrayUsizeLtNatValLengthValListEq, getElem? := fun a i => (↑a)[↑i]? }
+NEC_generated/NEC_HeaderIndex.lean:12:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑a)[↑i]?
+in the target expression
+  (match (↑a).get?Internal ↑i with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑a)[↑i]
+
+α : Type
+n : Usize
+a : Std.Array α n
+i : Usize
+hi : ↑i < ↑n
+hidx : ↑i < (↑a).length
+⊢ (match (↑a).get?Internal ↑i with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x) =
+    ok (↑a)[↑i]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    a
+  has type
+    Std.Array α n
+  but is expected to have type
+    { l // l.length = ↑n }
+  in the application
+    ↑a
+NEC_generated/NEC_HeaderIndex.lean:11:21: warning: This simp argument is unused:
+  instGetElem?ArrayUsizeLtNatValLengthValListEq
+
+Hint: Omit it from the simp argument list.
+  simp only [getElem?,̵i̵n̵s̵t̵G̵e̵t̵E̵l̵e̵m̵?̵A̵r̵r̵a̵y̵U̵s̵i̵z̵e̵L̵t̵N̵a̵t̵V̵a̵l̵L̵e̵n̵g̵t̵h̵V̵a̵l̵L̵i̵s̵t̵E̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEC_HeaderIndex.index_read' depends on axioms: [propext, sorryAx]

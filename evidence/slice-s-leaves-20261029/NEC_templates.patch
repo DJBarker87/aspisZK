@@ -1,0 +1,486 @@
+--- /dev/null
++++ b/NEC_decode.rs
+@@ -0,0 +1,47 @@
++use alloc::boxed::Box;
++use crate::pool_v1::{PoolV1PairVerifiedAfterstateV1 as After,PoolV1PairLiveSnapshotV1 as Live,PoolV1PairVerifierTransportErrorV1 as AfterError,PoolV1PairLiveSnapshotErrorV1 as LiveError,PoolV1PairLatePublicStatementErrorV1 as LateError};
++#[path="NEC_reference.rs"] mod reference;
++pub static mut INDEX:usize=0;
++pub static mut ROW:usize=0;
++pub static mut CALLS:u8=0;
++pub static mut PTR:*const u8=core::ptr::null();
++pub static mut LEN:usize=0;
++pub static mut WORD:u64=0;
++pub static mut AFTER_ERROR:Option<AfterError>=None;
++pub static mut LIVE_ERROR:Option<LiveError>=None;
++const GROUP:u8=NEC_GROUP;
++fn after_word(x:&After)->u64 {let (i,r)=unsafe{(INDEX,ROW)};match GROUP {0=>x.next_pair_index,1=>x.next_root[i].0 as u64,_=>x.next_frontier[r][i].0 as u64}}
++fn live_word(x:&Live)->u64 {let (i,r)=unsafe{(INDEX,ROW)};match GROUP {0=>x.sequence,1=>x.next_pair_index,2=>x.pool[i] as u64,3=>x.deployment_domain[i] as u64,4=>x.current_root[i].0 as u64,_=>x.frontier[r][i].0 as u64}}
++fn after_child(bytes:&[u8])->Result<After,AfterError>{
++ unsafe{CALLS=CALLS.wrapping_add(1);PTR=bytes.as_ptr();LEN=bytes.len();}
++ if kani::any(){let x:After=kani::any();unsafe{WORD=after_word(&x);AFTER_ERROR=None;}Ok(x)}
++ else {let e:AfterError=kani::any();unsafe{AFTER_ERROR=Some(e);}Err(e)}
++}
++fn live_child(bytes:&[u8])->Result<Live,LiveError>{
++ unsafe{CALLS=CALLS.wrapping_add(1);PTR=bytes.as_ptr();LEN=bytes.len();}
++ if kani::any(){let x:Live=kani::any();unsafe{WORD=live_word(&x);LIVE_ERROR=None;}Ok(x)}
++ else {let e:LiveError=kani::any();unsafe{LIVE_ERROR=Some(e);}Err(e)}
++}
++fn prepare(limit:usize){let i:usize=kani::any();let row:usize=kani::any();kani::assume(i<limit && row<20);unsafe{INDEX=i;ROW=row;CALLS=0;PTR=core::ptr::null();LEN=0;WORD=0;AFTER_ERROR=None;LIVE_ERROR=None;}}
++pub fn post_after(result:&Result<Box<After>,LateError>,bytes:&[u8])->bool {
++ let reference=reference::boxed_ref(match unsafe{AFTER_ERROR}{Some(e)=>Err(e),None=>Ok(unsafe{WORD})});
++ let same=match (result,&reference){(Ok(x),Ok(y))=>after_word(x)==**y,(Err(LateError::Afterstate(e)),Err(reference::ChildError::Child(f)))=>e==f,_=>false};
++ let calls=unsafe{CALLS==1 && PTR==bytes.as_ptr() && LEN==bytes.len()};
++ NEC_OBLIGATION!=NEC_NEGATIVE
++}
++pub fn post_live(result:&Result<Box<Live>,LateError>,bytes:&[u8])->bool {
++ let reference=reference::boxed_ref(match unsafe{LIVE_ERROR}{Some(e)=>Err(e),None=>Ok(unsafe{WORD})});
++ let same=match (result,&reference){(Ok(x),Ok(y))=>live_word(x)==**y,(Err(LateError::Snapshot(e)),Err(reference::ChildError::Child(f)))=>e==f,_=>false};
++ let calls=unsafe{CALLS==1 && PTR==bytes.as_ptr() && LEN==bytes.len()};
++ NEC_OBLIGATION!=NEC_NEGATIVE
++}
++#[kani::proof_for_contract(super::decode_pair_afterstate_boxed_v1)]
++#[kani::stub(crate::pool_v1::decode_pool_v1_pair_verified_afterstate_v1,after_child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn afterstate_box(){prepare(8);let bytes:[u8;688]=kani::any();let _=super::decode_pair_afterstate_boxed_v1(&bytes);}
++#[kani::proof_for_contract(super::decode_pair_live_snapshot_boxed_v1)]
++#[kani::stub(crate::pool_v1::decode_pool_v1_pair_live_snapshot_v1,live_child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn live_box(){prepare(if GROUP==2 || GROUP==3 {32}else{8});let bytes:[u8;800]=kani::any();let _=super::decode_pair_live_snapshot_boxed_v1(&bytes);}
+--- /dev/null
++++ b/NEC_reference.rs
+@@ -0,0 +1,10 @@
++extern crate alloc;
++use alloc::boxed::Box;
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++pub enum ChildError<E> { Child(E) }
++pub fn boxed_ref<T,E>(reply:Result<T,E>)->Result<Box<T>,ChildError<E>> {
++ match reply { Ok(v)=>Ok(Box::new(v)), Err(e)=>Err(ChildError::Child(e)) }
++}
++pub fn relay_ref<T,E>(reply:Result<Box<T>,E>)->Result<Box<T>,ChildError<E>> {
++ match reply { Ok(v)=>Ok(v), Err(e)=>Err(ChildError::Child(e)) }
++}
+--- /dev/null
++++ b/NEC_pair_reference.rs
+@@ -0,0 +1,7 @@
++extern crate alloc;
++use alloc::boxed::Box;
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++pub enum ChildError<E> { Child(E) }
++pub fn pair_ref<C,P,E>(common:C,reply:Result<P,E>)->Result<Box<(C,P)>,ChildError<E>> {
++ match reply { Ok(public)=>Ok(Box::new((common,public))), Err(e)=>Err(ChildError::Child(e)) }
++}
+--- /dev/null
++++ b/NEC_live_step.rs
+@@ -0,0 +1,28 @@
++use crate::poseidon2::Digest;
++use crate::atomic_statement::AtomicStatementError;
++static mut SOURCE:*const u8=core::ptr::null();
++static mut SLOT:usize=0;
++static mut BYTE:usize=0;
++static mut COUNT:usize=0;
++fn digest_window(bytes:&[u8;32])->Result<Digest,AtomicStatementError>{
++ let n=unsafe{COUNT};unsafe{COUNT=n+1;}
++ if n==unsafe{SLOT}{
++  let j=unsafe{BYTE};let expected=unsafe{SOURCE.add(128+32*n+j).read()};
++  let same=bytes[j]==expected;
++  kani::cover!(same);
++  assert_eq!(same,!NEC_NEGATIVE);
++  kani::assume(false);
++ }
++ let value:Digest=unsafe{core::mem::transmute(kani::any::<[u8;32]>())};Ok(value)
++}
++#[kani::proof]
++#[kani::stub(crate::atomic_statement::decode_digest_canonical,digest_window)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn selected_window(){
++ let bytes:[u8;800]=kani::any();let slot:usize=kani::any();let byte:usize=kani::any();
++ kani::assume(slot<21 && byte<32);
++ unsafe{SOURCE=bytes.as_ptr();SLOT=slot;BYTE=byte;COUNT=0;}
++ let _=crate::pool_v1::decode_pool_v1_pair_live_snapshot_v1(&bytes);
++ // All accepted-header paths stop at their selected call before the large constructor.
++}
+--- /dev/null
++++ b/NEC_pure_reference.rs
+@@ -0,0 +1,5 @@
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++pub enum ChildError<E> { Child(E) }
++pub fn reply_ref<T,E>(reply:Result<T,E>)->Result<T,ChildError<E>> {
++ match reply { Ok(value)=>Ok(value),Err(error)=>Err(ChildError::Child(error)) }
++}
+--- /dev/null
++++ b/NEC_fidelity.rs
+@@ -0,0 +1,23 @@
++use alloc::boxed::Box;
++use crate::pool_v1::{PoolV1PairVerifiedAfterstateV1 as After,PoolV1PairLatePublicStatementErrorV1 as Error};
++pub static mut COUNT:u8=0;
++#[kani::ensures(|r| r.is_ok()!=NEC_FIDELITY_INVERT)]
++#[kani::modifies(NEC_FIDELITY_MODIFIES)]
++fn shape(_bytes:&[u8])->Result<Box<After>,Error>{
++ unsafe{COUNT=COUNT.wrapping_add(1);}
++ let mut value:After=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<After>()]>())};
++ value.next_pair_index=0;
++ Ok(Box::new(value))
++}
++#[kani::proof_for_contract(shape)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn shape_contract(){unsafe{COUNT=0;}let bytes:[u8;688]=kani::any();let _=shape(&bytes);}
++#[kani::proof]
++NEC_FIDELITY_STUB
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn shape_client(){
++ unsafe{COUNT=0;}let bytes:[u8;688]=kani::any();let reply=shape(&bytes);
++ match reply {Ok(value)=>kani::assert(value.next_pair_index==0,"NEC_unimplied_word"),Err(_)=>kani::assert(false,"NEC_unexpected_error")}
++}
+--- /dev/null
++++ b/NEC_live_header_reference.rs
+@@ -0,0 +1,14 @@
++pub const LIVE_BINDING:[u8;32]=[65,83,80,80,65,73,82,49,1,20,21,7,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
++fn magic_ok(bytes:&[u8;48])->bool {bytes[0]==65 && bytes[1]==83 && bytes[2]==80 && bytes[3]==76 && bytes[4]==73 && bytes[5]==86 && bytes[6]==69 && bytes[7]==49}
++fn binding0_ok(bytes:&[u8;48])->bool {bytes[16]==65 && bytes[17]==83 && bytes[18]==80 && bytes[19]==80 && bytes[20]==65 && bytes[21]==73 && bytes[22]==82 && bytes[23]==49}
++fn binding1_ok(bytes:&[u8;48])->bool {bytes[24]==1 && bytes[25]==20 && bytes[26]==21 && bytes[27]==7 && bytes[28]==1 && bytes[29]==1 && bytes[30]==1 && bytes[31]==1}
++fn binding2_ok(bytes:&[u8;48])->bool {bytes[32]==0 && bytes[33]==0 && bytes[34]==0 && bytes[35]==0 && bytes[36]==0 && bytes[37]==0 && bytes[38]==0 && bytes[39]==0}
++fn binding3_ok(bytes:&[u8;48])->bool {bytes[40]==0 && bytes[41]==0 && bytes[42]==0 && bytes[43]==0 && bytes[44]==0 && bytes[45]==0 && bytes[46]==0 && bytes[47]==0}
++pub fn live_header_ref(length:usize,bytes:&[u8;48])->u8 {
++ if length!=800{return 1;}
++ if !magic_ok(bytes){return 2;}
++ if bytes[8]!=1{return 3;}
++ if bytes[9]!=0 || bytes[10]!=0 || bytes[11]!=0 || bytes[12]!=0 || bytes[13]!=0 || bytes[14]!=0 || bytes[15]!=0{return 4;}
++ if !binding0_ok(bytes) || !binding1_ok(bytes) || !binding2_ok(bytes) || !binding3_ok(bytes){return 5;}
++ 0
++}
+--- /dev/null
++++ b/NEC_live_header.rs
+@@ -0,0 +1,29 @@
++use crate::pool_v1::{PoolV1PairLiveSnapshotV1 as Live,PoolV1PairLiveSnapshotErrorV1 as Error};
++use crate::poseidon2::Digest;
++use crate::atomic_statement::AtomicStatementError;
++#[path="NEC_live_header_reference.rs"]mod reference;
++static mut EXPECTED:u8=0;
++fn error_code(error:&Error)->u8 {match error {Error::WrongLength=>1,Error::WrongMagic=>2,Error::WrongVersion=>3,Error::NonZeroReserved=>4,Error::WrongFormatBinding=>5,_=>255}}
++fn expected(bytes:&[u8])->u8 {
++ if bytes.len()!=800 {1}else{reference::live_header_ref(bytes.len(),bytes[..48].try_into().unwrap())}
++}
++pub fn post(reply:&Result<Live,Error>,bytes:&[u8])->bool {
++ let want=expected(bytes);
++ let good=match reply {Err(error)=>want!=0 && error_code(error)==want,Ok(_)=>false};
++ good!=NEC_HEADER_NEGATIVE
++}
++fn first_digest(_bytes:&[u8;32])->Result<Digest,AtomicStatementError>{
++ let good=unsafe{EXPECTED}==0;
++ kani::cover!(good);
++ kani::assert(good!=NEC_HEADER_NEGATIVE,"NEC_LiveHeaderCut");
++ kani::assume(false);unreachable!()
++}
++#[kani::proof_for_contract(super::decode_pool_v1_pair_live_snapshot_v1)]
++#[kani::stub(crate::atomic_statement::decode_digest_canonical,first_digest)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn header_cut(){
++ let data:[u8;800]=kani::any();let length:usize=kani::any();kani::assume(length<=800);
++ let bytes=&data[..length];unsafe{EXPECTED=expected(bytes);}
++ let _=super::decode_pool_v1_pair_live_snapshot_v1(bytes);
++}
+--- /dev/null
++++ b/NEC_ctor.rs
+@@ -0,0 +1,59 @@
++#[path="NEC_ctor_reference.rs"]mod reference;
++use super::*;
++use aspis_statement::pool_v1::{PoolV1PrivateTransferPublicV1 as Transfer,PoolV1WithdrawalPublicV1 as Withdrawal,PoolV1PairForestTerminalFormatErrorV1 as Error};
++pub static mut CALLS:u8=0;
++pub static mut SEEN:u64=0;
++pub static mut SEEN_KIND:u8=0;
++static mut VALID:bool=false;
++static mut GROUP:usize=0;
++static mut FIELD:usize=0;
++static mut INDEX:usize=0;
++static mut ROW:usize=0;
++const MODE:u8=NEC_CTOR_MODE;
++fn params()->(usize,usize,usize,usize){unsafe{(GROUP,FIELD,INDEX,ROW)}}
++pub fn common_word(c:&PoolV1PairForestTerminalCommonV1)->u64 {
++ let (g,f,i,row)=params();let l=&c.lane_transition.live_snapshot;let a=&c.lane_transition.candidate_afterstate;
++ match g {
++  0=>match f {0=>c.output_lane as u64,1=>c.checkpoint_sequence,2=>l.sequence,3=>l.next_pair_index,_=>a.next_pair_index},
++  1=>{let x=match f {0=>c.master_account[i],1=>c.checkpoint_account[i],2=>c.selected_lane_account[i],3=>l.pool[i],_=>l.deployment_domain[i]};x as u64},
++  _=>{let j=i%8;let x=match f {0=>c.historical_global_anchor[j],1=>l.current_root[j],2=>l.frontier[row][j],3=>a.next_root[j],_=>a.next_frontier[row][j]};x.0 as u64}
++ }
++}
++pub fn transfer_word(p:&Transfer)->u64 {
++ let (g,f,i,_)=params();
++ match g {0=>if f%2==0 {p.anchor_sequence}else{p.asset_id.0 as u64},
++  1=>(if f%2==0 {p.pool[i]}else{p.deployment_domain[i]}) as u64,
++  _=>{let j=i%8;(match f%4 {0=>p.anchor_root[j],1=>p.nullifier[j],2=>p.recipient_commitment[j],_=>p.change_commitment[j]}).0 as u64}}
++}
++pub fn withdrawal_word(p:&Withdrawal)->u64 {
++ let (g,f,i,_)=params();
++ match g {0=>match f%3 {0=>p.anchor_sequence,1=>p.asset_id.0 as u64,_=>p.amount as u64},
++  1=>(match f%3 {0=>p.pool[i],1=>p.deployment_domain[i],_=>p.destination_token_account[i]}) as u64,
++  _=>{let j=i%8;(match f%3 {0=>p.anchor_root[j],1=>p.nullifier[j],_=>p.change_commitment[j]}).0 as u64}}
++}
++pub fn expected_transfer(c:&PoolV1PairForestTerminalCommonV1,p:&Transfer)->u64 {if MODE==0 {common_word(c)}else{transfer_word(p)}}
++pub fn expected_withdrawal(c:&PoolV1PairForestTerminalCommonV1,p:&Withdrawal)->u64 {if MODE==0 {common_word(c)}else{withdrawal_word(p)}}
++fn observe(s:&PoolV1PairForestTerminalStatementV1)->(u8,u64){
++ match s {PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public}=>(0,expected_transfer(common,public)),PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}=>(1,expected_withdrawal(common,public))}
++}
++fn validator(s:&PoolV1PairForestTerminalStatementV1)->Result<(),Error>{
++ let (kind,word)=observe(s);unsafe{CALLS=CALLS.wrapping_add(1);SEEN=word;SEEN_KIND=kind;}
++ if unsafe{VALID}{Ok(())}else{Err(kani::any())}
++}
++pub fn post(r:&Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>,word:u64,kind:u8)->bool {
++ let valid=unsafe{VALID};let reference=reference::validation_ref(if MODE==0 {word}else{0},if MODE==1 {word}else{0},valid);
++ let value=match (reference,r) { (Ok((c,p)),Ok(s))=>{let (k,x)=observe(s);k==kind && x==if MODE==0 {c}else{p}},(Err(_),Err(ProgramError::InvalidInstructionData))=>true,_=>false};
++ let call=unsafe{CALLS==1 && SEEN_KIND==kind && SEEN==word};
++ (value && call) != cfg!(NEC_ctor_negative)
++}
++fn prepare(){let g:u8=kani::any();let f:u8=kani::any();let i:u8=kani::any();let row:u8=kani::any();kani::assume(g<3 && f<5 && i<32 && row<20);unsafe{GROUP=g as usize;FIELD=f as usize;INDEX=i as usize;ROW=row as usize;CALLS=0;SEEN=0;SEEN_KIND=0;VALID=kani::any();}}
++#[kani::proof_for_contract(super::transfer_statement_box)]
++#[kani::stub(aspis_statement::pool_v1::validate_pool_v1_pair_forest_terminal_statement_v1,validator)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn transfer_contract(){prepare();let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};let public:Transfer=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<Transfer>()]>())};let _=transfer_statement_box(Box::new(common),public);}
++#[kani::proof_for_contract(super::withdrawal_statement_box)]
++#[kani::stub(aspis_statement::pool_v1::validate_pool_v1_pair_forest_terminal_statement_v1,validator)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn withdrawal_contract(){prepare();let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};let public:Withdrawal=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<Withdrawal>()]>())};let _=withdrawal_statement_box(Box::new(common),public);}
+--- /dev/null
++++ b/NEC_ctor_reference.rs
+@@ -0,0 +1,3 @@
++pub fn validation_ref<C,P>(common:C,public:P,valid:bool)->Result<(C,P),u8> {
++ if valid {Ok((common,public))} else {Err(0)}
++}
+--- /dev/null
++++ b/NEC_binding.rs
+@@ -0,0 +1,25 @@
++use super::*;
++#[path="NEC_binding_reference.rs"]mod reference;
++static mut FIRST:Result<(),PoolV1PairForestTerminalFormatErrorV1>=Ok(());
++static mut SECOND:Result<(),PoolV1PairForestTerminalFormatErrorV1>=Ok(());
++static mut STMT:usize=0;static mut RESULT:usize=0;
++fn first(s:&PoolV1PairForestTerminalStatementV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(s as *const _ as usize,unsafe{STMT},"NEC_statement_input");unsafe{FIRST}}
++fn second(r:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(r as *const _ as usize,unsafe{RESULT},"NEC_result_input");unsafe{SECOND}}
++fn mismatch(s:&PoolV1PairForestTerminalStatementV1,r:&PoolV1PairForestTerminalResultV1)->bool {
++ let c=s.common();r.transition_kind!=s.transition_kind() || r.master_account!=c.master_account || r.selected_lane_account!=c.selected_lane_account || r.output_lane!=c.output_lane || r.nullifier!=*s.nullifier() || r.verified_afterstate!=c.lane_transition.candidate_afterstate
++}
++pub fn post(r:&Result<(),PoolV1PairForestTerminalFormatErrorV1>,s:&PoolV1PairForestTerminalStatementV1,v:&PoolV1PairForestTerminalResultV1)->bool {
++ (*r==reference::binding_ref(unsafe{FIRST},unsafe{SECOND},mismatch(s,v),PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch)) != NEC_BINDING_NEGATIVE
++}
++#[kani::proof_for_contract(super::validate_pool_v1_pair_forest_terminal_result_against_statement_v1)]
++#[kani::stub(super::validate_pool_v1_pair_forest_terminal_statement_v1,first)]
++#[kani::stub(super::validate_result,second)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn binding_contract(){
++ let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};
++ let s=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())}}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())}}};
++ let v=PoolV1PairForestTerminalResultV1{transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:kani::any(),verified_afterstate:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())}};
++ unsafe{FIRST=if kani::any(){Ok(())}else{Err(kani::any())};SECOND=if kani::any(){Ok(())}else{Err(kani::any())};STMT=&s as *const _ as usize;RESULT=&v as *const _ as usize;}
++ let _=super::validate_pool_v1_pair_forest_terminal_result_against_statement_v1(&s,&v);
++}
+--- /dev/null
++++ b/NEC_binding_reference.rs
+@@ -0,0 +1,1 @@
++pub fn binding_ref<E>(first:Result<(),E>,second:Result<(),E>,mismatch:bool,error:E)->Result<(),E>{first?;second?;if mismatch{Err(error)}else{Ok(())}}
+--- /dev/null
++++ b/NEC_static_decode.rs
+@@ -0,0 +1,26 @@
++use super::*;
++use crate::pool_v1::{PoolV1PairVerifiedAfterstateV1 as After,PoolV1PairLiveSnapshotV1 as Live,PoolV1PairVerifierTransportErrorV1 as AfterError,PoolV1PairLiveSnapshotErrorV1 as LiveError};
++use alloc::boxed::Box;
++use aspis_core::field::M31;
++#[path="NEC_static_reference.rs"]mod reference;
++static mut AFTER:After=After{next_pair_index:0,next_root:[M31(0);8],next_frontier:[[M31(0);8];20]};
++static mut LIVE:Live=Live{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:[M31(0);8],frontier:[[M31(0);8];20]};
++static mut INPUT:usize=0;static mut INDEX:usize=0;static mut ROW:usize=0;
++const GROUP:u8=NEC_STATIC_GROUP;
++fn after_word(x:&After)->u64{let(i,r)=unsafe{(INDEX,ROW)};match GROUP{0=>x.next_pair_index,1=>x.next_root[i].0 as u64,_=>x.next_frontier[r][i].0 as u64}}
++fn live_word(x:&Live)->u64{let(i,r)=unsafe{(INDEX,ROW)};match GROUP{0=>x.sequence,1=>x.next_pair_index,2=>x.pool[i] as u64,3=>x.deployment_domain[i] as u64,4=>x.current_root[i].0 as u64,_=>x.frontier[r][i].0 as u64}}
++fn after_child(bytes:&[u8])->Result<After,AfterError>{assert_eq!(bytes.as_ptr() as usize,unsafe{INPUT},"NEC_static_same_pointer");assert_eq!(bytes.len(),688,"NEC_static_same_length");Ok(unsafe{AFTER})}
++fn live_child(bytes:&[u8])->Result<Live,LiveError>{assert_eq!(bytes.as_ptr() as usize,unsafe{INPUT},"NEC_static_same_pointer");assert_eq!(bytes.len(),800,"NEC_static_same_length");Ok(unsafe{LIVE})}
++pub fn after_post(r:&Result<Box<After>,PoolV1PairLatePublicStatementErrorV1>)->bool{let expected=reference::reply_ref::<u64,AfterError>(Ok(after_word(unsafe{&*(&raw const AFTER)})));(match(r,expected){(Ok(x),Ok(y))=>after_word(x)==y,_=>false}) != NEC_STATIC_NEGATIVE}
++pub fn live_post(r:&Result<Box<Live>,PoolV1PairLatePublicStatementErrorV1>)->bool{let expected=reference::reply_ref::<u64,LiveError>(Ok(live_word(unsafe{&*(&raw const LIVE)})));(match(r,expected){(Ok(x),Ok(y))=>live_word(x)==y,_=>false}) != NEC_STATIC_NEGATIVE}
++fn prepare(){let i:usize=kani::any();let r:usize=kani::any();kani::assume(i<if GROUP==2||GROUP==3{32}else{8});kani::assume(r<20);unsafe{INDEX=i;ROW=r;}}
++#[kani::proof_for_contract(super::decode_pair_afterstate_boxed_v1)]
++#[kani::stub(crate::pool_v1::decode_pool_v1_pair_verified_afterstate_v1,after_child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn after_contract(){prepare();let bytes:[u8;688]=kani::any();unsafe{AFTER=core::mem::transmute(kani::any::<[u8;core::mem::size_of::<After>()]>());INPUT=bytes.as_ptr() as usize;}let _=super::decode_pair_afterstate_boxed_v1(&bytes);}
++#[kani::proof_for_contract(super::decode_pair_live_snapshot_boxed_v1)]
++#[kani::stub(crate::pool_v1::decode_pool_v1_pair_live_snapshot_v1,live_child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn live_contract(){prepare();let bytes:[u8;800]=kani::any();unsafe{LIVE=core::mem::transmute(kani::any::<[u8;core::mem::size_of::<Live>()]>());INPUT=bytes.as_ptr() as usize;}let _=super::decode_pair_live_snapshot_boxed_v1(&bytes);}
+--- /dev/null
++++ b/NEC_live_decode.rs
+@@ -0,0 +1,47 @@
++use super::*;
++use crate::poseidon2::Digest;
++use crate::atomic_statement::AtomicStatementError;
++use aspis_core::field::M31;
++#[path="NEC_live_value_reference.rs"]mod reference;
++static mut INPUT:usize=0;static mut INDEX:usize=0;static mut ROW:usize=0;
++static mut DIGESTS:[Digest;21]=[[M31(0);8];21];
++static mut NEXT:usize=0;
++static mut ERROR:PoolV1PairLiveSnapshotErrorV1=PoolV1PairLiveSnapshotErrorV1::WrongMagic;
++static mut FAIL_AT:usize=21;
++const GROUP:u8=NEC_LIVE_VALUE_GROUP;
++const REJECT:bool=NEC_LIVE_REJECT;
++const DIGEST_REJECT:bool=NEC_LIVE_DIGEST_REJECT;
++fn digest(bytes:&[u8;32])->Result<Digest,AtomicStatementError>{
++ let slot=unsafe{NEXT};assert!(slot<21,"NEC_live_slot");
++ let base=unsafe{INPUT};assert_eq!(bytes.as_ptr() as usize,base+128+32*slot,"NEC_live_exact_digest_pointer");
++ unsafe{NEXT=slot+1;}
++ if DIGEST_REJECT && slot==unsafe{FAIL_AT}{Err(AtomicStatementError::NonCanonicalDigest)}else{Ok(unsafe{DIGESTS[slot]})}
++}
++fn word(x:&PoolV1PairLiveSnapshotV1)->u64{let(i,r)=unsafe{(INDEX,ROW)};match GROUP{0=>x.sequence,1=>x.next_pair_index,2=>x.pool[i] as u64,3=>x.deployment_domain[i] as u64,4=>x.current_root[i].0 as u64,_=>x.frontier[r][i].0 as u64}}
++fn expected()->u64{
++ let bytes=unsafe{core::slice::from_raw_parts(INPUT as *const u8,800)};let(i,r)=unsafe{(INDEX,ROW)};
++ match GROUP{0=>u64::from_le_bytes(bytes[112..120].try_into().unwrap()),1=>u64::from_le_bytes(bytes[120..128].try_into().unwrap()),2=>bytes[48+i] as u64,3=>bytes[80+i] as u64,4=>unsafe{DIGESTS[0][i].0 as u64},_=>unsafe{DIGESTS[r+1][i].0 as u64}}
++}
++fn validator(x:&PoolV1PairLiveSnapshotV1)->Result<(),PoolV1PairLiveSnapshotErrorV1>{
++ assert_eq!(unsafe{NEXT},21,"NEC_live_all_digest_calls");
++ assert_eq!(word(x),expected(),"NEC_live_validator_same_record");
++ if REJECT{Err(unsafe{ERROR})}else{Ok(())}
++}
++pub fn post(r:&Result<PoolV1PairLiveSnapshotV1,PoolV1PairLiveSnapshotErrorV1>)->bool{
++ let same=if DIGEST_REJECT{*r==Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest) && unsafe{NEXT==FAIL_AT+1}}
++ else if REJECT{*r==Err(unsafe{ERROR}) && unsafe{NEXT==21}}
++ else{let rr=reference::reply_ref::<u64,PoolV1PairLiveSnapshotErrorV1>(Ok(expected()));match(r,rr){(Ok(x),Ok(v))=>word(x)==v && unsafe{NEXT==21},_=>false}};
++ same != NEC_LIVE_VALUE_NEGATIVE
++}
++fn make_bytes()->[u8;800]{let mut b:[u8;800]=kani::any();NEC_LIVE_HEADER_ASSIGNMENTS b}
++#[kani::proof_for_contract(super::decode_pool_v1_pair_live_snapshot_v1)]
++#[kani::stub(crate::atomic_statement::decode_digest_canonical,digest)]
++#[kani::stub(super::validate_pool_v1_pair_live_snapshot_v1,validator)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn live_contract(){
++ let bytes=make_bytes();let i:usize=kani::any();let row:usize=kani::any();kani::assume(i<if GROUP==2||GROUP==3{32}else{8});kani::assume(row<20);
++ let fail:usize=kani::any();kani::assume(fail<21);
++ unsafe{INPUT=bytes.as_ptr() as usize;INDEX=i;ROW=row;NEXT=0;ERROR=kani::any();FAIL_AT=fail;DIGESTS=core::mem::transmute(kani::any::<[u8;672]>());}
++ let _=super::decode_pool_v1_pair_live_snapshot_v1(&bytes);
++}
+--- /dev/null
++++ b/NEC_emit.rs
+@@ -0,0 +1,37 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++#[path="NEC_emit_reference.rs"]mod reference;
++static mut VALID:bool=false;static mut ENCODE_OK:bool=false;
++static mut ENCODED:[u8;792]=[0;792];
++pub static mut CALLS:u8=0;
++static mut INPUT:usize=0;static mut INDEX:usize=0;static mut ROW:usize=0;static mut FIELD:u8=0;
++const GROUP:u8=NEC_EMIT_GROUP;
++fn value_word(v:&PoolV1PairForestTerminalResultV1)->u64{
++ let(i,row,f)=unsafe{(INDEX,ROW,FIELD)};
++ match GROUP{0=>if f%2==0{v.output_lane as u64}else{v.verified_afterstate.next_pair_index},1=>(if f%2==0{v.master_account[i]}else{v.selected_lane_account[i]})as u64,_=>{let j=i%8;(match f%3{0=>v.nullifier[j],1=>v.verified_afterstate.next_root[j],_=>v.verified_afterstate.next_frontier[row][j]}).0 as u64}}
++}
++fn expected()->(u8,u64){let s=unsafe{&*(INPUT as *const PoolV1PairForestTerminalStatementV1)};let c=s.common();let(i,row,f)=unsafe{(INDEX,ROW,FIELD)};let kind=s.transition_kind() as u8;
++ let w=match GROUP{0=>if f%2==0{c.output_lane as u64}else{c.lane_transition.candidate_afterstate.next_pair_index},1=>(if f%2==0{c.master_account[i]}else{c.selected_lane_account[i]})as u64,_=>{let j=i%8;(match f%3{0=>s.nullifier()[j],1=>c.lane_transition.candidate_afterstate.next_root[j],_=>c.lane_transition.candidate_afterstate.next_frontier[row][j]}).0 as u64}};(kind,w)
++}
++fn observe(v:&PoolV1PairForestTerminalResultV1){let(k,w)=expected();assert_eq!(v.transition_kind as u8,k,"NEC_emit_same_kind");assert_eq!(value_word(v),w,"NEC_emit_same_result_field");}
++fn validate(s:&PoolV1PairForestTerminalStatementV1,v:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert_eq!(s as *const _ as usize,unsafe{INPUT},"NEC_emit_same_statement");observe(v);if unsafe{VALID}{Ok(())}else{Err(kani::any())}}
++fn encode(v:&PoolV1PairForestTerminalResultV1)->Result<[u8;792],PoolV1PairForestTerminalFormatErrorV1>{observe(v);if unsafe{ENCODE_OK}{Ok(unsafe{ENCODED})}else{Err(kani::any())}}
++fn sink(bytes:&[u8]){assert_eq!(bytes.len(),792,"NEC_emit_runtime_length");let j=unsafe{INDEX};assert_eq!(bytes[j],unsafe{ENCODED[j]},"NEC_emit_runtime_byte");unsafe{CALLS+=1;}}
++pub fn post(r:&ProgramResult)->bool{
++ let magic=unsafe{ENCODED[0]==65 && ENCODED[1]==83 && ENCODED[2]==82 && ENCODED[3]==56};
++ let rr=reference::emit_ref(unsafe{VALID},unsafe{ENCODE_OK},magic);
++ let same=match(rr,r){(Ok(()),Ok(()))=>unsafe{CALLS==1},(Err(_),Err(ProgramError::InvalidInstructionData))=>unsafe{CALLS==0},_=>false};same != NEC_EMIT_NEGATIVE
++}
++#[kani::proof_for_contract(super::emit_result)]
++#[kani::stub(aspis_statement::pool_v1::validate_pool_v1_pair_forest_terminal_result_against_statement_v1,validate)]
++#[kani::stub(aspis_statement::pool_v1::encode_pool_v1_pair_forest_terminal_result_v1,encode)]
++#[kani::stub(solana_program::program::set_return_data,sink)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn emit_contract(){
++ let common:PoolV1PairForestTerminalCommonV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestTerminalCommonV1>()]>())};
++ let s=if kani::any(){PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())}}}else{PoolV1PairForestTerminalStatementV1::Withdrawal{common,public:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())}}};
++ let i:usize=kani::any();let row:usize=kani::any();let f:u8=kani::any();kani::assume(i<if GROUP==0{792}else{32});kani::assume(row<20 && f<3);
++ unsafe{INPUT=&s as *const _ as usize;INDEX=i;ROW=row;FIELD=f;CALLS=0;VALID=kani::any();ENCODE_OK=kani::any();ENCODED=kani::any();}
++ let _=super::emit_result(&s);
++}
+--- /dev/null
++++ b/NEC_emit_reference.rs
+@@ -0,0 +1,1 @@
++pub fn emit_ref(validation:bool,encoded:bool,magic:bool)->Result<(),u8>{if !validation || !encoded || !magic{Err(0)}else{Ok(())}}
+--- /dev/null
++++ b/NEC_recon.rs
+@@ -0,0 +1,36 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++#[path="NEC_recon_reference.rs"]mod reference;
++static mut AUTH:usize=0;static mut CANDIDATE:usize=0;
++fn common(a:&AuthenticatedAsq8Accounts,c:&PoolV1PairVerifiedAfterstateV1)->Box<PoolV1PairForestTerminalCommonV1>{
++ assert_eq!(a as *const _ as usize,unsafe{AUTH},"NEC_recon_auth_input");assert_eq!(c as *const _ as usize,unsafe{CANDIDATE},"NEC_recon_candidate_input");kani::cover!(true,"NEC_recon_good_gate_reached");kani::assume(false);unreachable!()
++}
++fn requested(r:&PoolV1PairForestTerminalRequestV1)->u32{match r.public{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>p.asset_id.0,PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>p.asset_id.0}}
++pub fn post(r:&Result<Box<PoolV1PairForestTerminalStatementV1>,ProgramError>,request:&PoolV1PairForestTerminalRequestV1,a:&AuthenticatedAsq8Accounts,c:&PoolV1PairVerifiedAfterstateV1)->bool{
++ let gate=reference::reconstruction_gate_ref(a.live_snapshot.next_pair_index,c.next_pair_index,a.master.identity.asset_id.0,requested(request));
++ let same=match(gate,r){(1,Err(ProgramError::InvalidAccountData))=>true,(2,Err(ProgramError::InvalidInstructionData))=>true,_=>false};same != NEC_RECON_NEGATIVE
++}
++fn account()->AuthenticatedAsq8Accounts {
++ let master=PoolV1PairForestMasterV1 {
++  bump:kani::any(),
++  identity:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolIdentityV1>()]>())},
++  verifier_policy:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::VerifierPolicyV1>()]>())},
++  initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
++ };
++ let checkpoint:PoolV1PairForestCheckpointV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestCheckpointV1>()]>())};
++ let selected_lane:PoolV1PairForestLaneStateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestLaneStateV1>()]>())};
++ let live_snapshot:PoolV1PairLiveSnapshotV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairLiveSnapshotV1>()]>())};
++ AuthenticatedAsq8Accounts {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(master),checkpoint:Box::new(checkpoint),selected_lane:Box::new(selected_lane),live_snapshot:Box::new(live_snapshot)}
++}
++
++#[kani::proof_for_contract(super::reconstruct_asq8_statement)]
++#[kani::stub(super::asq8_common,common)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn reconstruct_contract(){
++ let a=account();let c:PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())};
++ let public=if kani::any(){PoolV1PairForestTerminalPaymentV1::PrivateTransfer(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PrivateTransferPublicV1>()]>())})}else{PoolV1PairForestTerminalPaymentV1::Withdrawal(unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1WithdrawalPublicV1>()]>())})};
++ let request=PoolV1PairForestTerminalRequestV1{verifier_profile:kani::any(),verifier_release:kani::any(),pool_program:kani::any(),public};
++ unsafe{AUTH=&a as *const _ as usize;CANDIDATE=&c as *const _ as usize;}
++ let _=super::reconstruct_asq8_statement(&request,&a,&c);
++}
+--- /dev/null
++++ b/NEC_recon_reference.rs
+@@ -0,0 +1,6 @@
++pub fn next_gate_ref(live:u64,next:u64)->bool {
++ match live.checked_add(1) {Some(incremented)=>incremented==next,None=>false}
++}
++pub fn reconstruction_gate_ref(live:u64,next:u64,asset:u32,requested:u32)->u8 {
++ if !next_gate_ref(live,next) {1} else if asset!=requested {2} else {0}
++}
+--- /dev/null
++++ b/NEC_program_fidelity.rs
+@@ -0,0 +1,10 @@
++use super::*;
++pub static mut COUNT:u8=0;
++#[kani::ensures(|r| NEC_PROGRAM_FIDELITY_ENSURES)]
++#[kani::modifies(NEC_PROGRAM_FIDELITY_MODIFIES)]
++fn shape(_bytes:&[u8])->ProgramResult{unsafe{COUNT+=1;}Ok(())}
++#[kani::proof_for_contract(shape)]
++fn shape_contract(){unsafe{COUNT=0;}let bytes:[u8;4]=kani::any();let _=shape(&bytes);}
++#[kani::proof]
++NEC_PROGRAM_FIDELITY_STUB
++fn shape_client(){unsafe{COUNT=0;}let bytes:[u8;4]=kani::any();let r=shape(&bytes);assert!(matches!(r,Ok(())),"NEC_program_unimplied_ok");}
+--- /dev/null
++++ b/NEC_result_encode.rs
+@@ -0,0 +1,12 @@
++use super::*;
++static mut EXPECTED:usize=0;
++fn child(r:&PoolV1PairForestTerminalResultV1)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{kani::cover!(true,"NEC_encode_validator_reached");assert!((r as *const _ as usize==unsafe{EXPECTED}) != NEC_ENCODE_NEGATIVE,"NEC_encode_same_result");kani::assume(false);unreachable!()}
++#[kani::proof_for_contract(super::encode_pool_v1_pair_forest_terminal_result_v1)]
++#[kani::stub(super::validate_result,child)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEC_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn encode_contract(){
++ let r=PoolV1PairForestTerminalResultV1{transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:kani::any(),verified_afterstate:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairVerifiedAfterstateV1>()]>())}};
++ unsafe{EXPECTED=&r as *const _ as usize;}
++ let _=super::encode_pool_v1_pair_forest_terminal_result_v1(&r);
++}

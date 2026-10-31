@@ -1,0 +1,270 @@
+NEC_generated/NEC_EmitModel.lean:22:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement)
+in the target expression
+  (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+A E : Type
+runtime : AspisR1.S2I.ReturnData.State A E → List U8 → Result (AspisR1.S2I.ReturnData.State A E)
+state : AspisR1.S2I.ReturnData.State A E
+statement : Statement
+error : Error
+child :
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement) =
+    ok (core.result.Result.Err error)
+⊢ (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 792#usize
+  but is expected to have type
+    { l // l.length = ↑792#usize }
+  in the application
+    ↑bytes
+NEC_generated/NEC_EmitModel.lean:32:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement)
+in the target expression
+  (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+A E : Type
+runtime : AspisR1.S2I.ReturnData.State A E → List U8 → Result (AspisR1.S2I.ReturnData.State A E)
+state : AspisR1.S2I.ReturnData.State A E
+statement : Statement
+error : Error
+first :
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement) =
+    ok (core.result.Result.Ok ())
+second : encode_pool_v1_pair_forest_terminal_result_v1 (derived statement) = ok (core.result.Result.Err error)
+⊢ (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 792#usize
+  but is expected to have type
+    { l // l.length = ↑792#usize }
+  in the application
+    ↑bytes
+NEC_generated/NEC_EmitModel.lean:44:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement)
+in the target expression
+  (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Ok (AspisR1.S2I.ReturnData.set state ↑bytes))
+
+A E : Type
+runtime : AspisR1.S2I.ReturnData.State A E → List U8 → Result (AspisR1.S2I.ReturnData.State A E)
+runtimeLaw : AspisR1.S2I.ReturnData.RuntimePremise runtime
+state : AspisR1.S2I.ReturnData.State A E
+statement : Statement
+bytes : Std.Array U8 792#usize
+first :
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement) =
+    ok (core.result.Result.Ok ())
+second : encode_pool_v1_pair_forest_terminal_result_v1 (derived statement) = ok (core.result.Result.Ok bytes)
+magic : List.take 4 ↑bytes = [65#u8, 83#u8, 82#u8, 56#u8]
+⊢ (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Ok (AspisR1.S2I.ReturnData.set state ↑bytes))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 792#usize
+  but is expected to have type
+    { l // l.length = ↑792#usize }
+  in the application
+    ↑bytes
+NEC_generated/NEC_EmitModel.lean:58:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement)
+in the target expression
+  (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+A E : Type
+runtime : AspisR1.S2I.ReturnData.State A E → List U8 → Result (AspisR1.S2I.ReturnData.State A E)
+state : AspisR1.S2I.ReturnData.State A E
+statement : Statement
+bytes : Std.Array U8 792#usize
+first :
+  validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement) =
+    ok (core.result.Result.Ok ())
+second : encode_pool_v1_pair_forest_terminal_result_v1 (derived statement) = ok (core.result.Result.Ok bytes)
+magic : List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8]
+⊢ (have result := AspisR1.S2K.ResultAdmission.value statement;
+    do
+    let validated ← validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement result
+    match validated with
+      | core.result.Result.Err a =>
+        ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+      | core.result.Result.Ok PUnit.unit => do
+        let encoded ← encode_pool_v1_pair_forest_terminal_result_v1 result
+        match encoded with
+          | core.result.Result.Err a =>
+            ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+          | core.result.Result.Ok bytes =>
+            if (↑bytes).length ≠ 792 then
+              ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+            else
+              if List.take 4 ↑bytes ≠ [65#u8, 83#u8, 82#u8, 56#u8] then
+                ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+              else do
+                let state' ← runtime state ↑bytes
+                ok (core.result.Result.Ok state')) =
+    ok (core.result.Result.Err AdapterRw.solana_program_error.ProgramError.InvalidInstructionData)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Std.Array U8 792#usize
+  but is expected to have type
+    { l // l.length = ↑792#usize }
+  in the application
+    ↑bytes
+'NEC_EmitModel.validation_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEC_EmitModel.encode_error' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEC_EmitModel.runtime_output' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEC_EmitModel.bad_magic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
