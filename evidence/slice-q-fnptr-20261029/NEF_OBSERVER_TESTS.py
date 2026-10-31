@@ -16,6 +16,8 @@ test('eight way enabled',None,None,None,('aspis-r1-cost-probe','audit-eight-way'
 test('observer Some backend',P,'{None}','{Some(mark)}')
 test('mark unconditional effect',V,'if let Some(f)=obs {f(p);}','panic!("effect"); if let Some(f)=obs {f(p);}')
 test('mark branch flipped',V,'if let Some(f)=obs','if let None=obs')
+test('extra injected callback call',C,'let i = a.next;','mark(Some(|_| panic!()), Phase::Parsed); let i = a.next;')
+test('owned route changed',A,'r1_pool_adapter_owned.rs','r1_pool_adapter_original.rs')
 test('query observer changed',C,'mark(obs, Phase::Query(i));','mark(None, Phase::Query(i));')
 test('query writes observer',C,'let i = a.next;','let obs = Some(|_| panic!()); let i = a.next;')
 test('query loop backend replaced',C,'a, g, obs, geometry, pending);','a, g, Some(|_| panic!()), geometry, pending);')

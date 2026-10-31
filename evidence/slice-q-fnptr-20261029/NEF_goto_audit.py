@@ -5,7 +5,7 @@ T=Path('/home/dombarker/.kani/kani-0.67.0')
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 tools={n:dict(path=str(T/'bin'/n),sha256=sha(T/'bin'/n)) for n in ['kani-compiler','kani-driver','cbmc','goto-instrument']}
 results=[]
-for a in ['NEF_K009','NEF_K011','NEF_K013','NEF_K017','NEF_K019']:
+for a in ['NEF_K021','NEF_K023','NEF_K027','NEF_K033']:
  cfg=json.loads((B/(a+'.json')).read_text());name=cfg['module'].split('::')[-1]
  archived=list((B/a/'NEF_artifacts').glob('*.out'))
  current=[p for p in (B/'NEF_target').rglob('*.out') if name in p.name and not p.name.endswith('.symtab.out')]

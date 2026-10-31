@@ -64,6 +64,22 @@ def uses(b,var):
   result.append((callee,hits[0],len(args)))
  return result
 
+def calls(b):
+ stack=[];out=[]
+ for i,x in enumerate(b):
+  if x=='(':stack.append(i)
+  elif x==')':
+   assert stack;l=stack.pop();callee=b[l-1] if l else '';j=l-2
+   while j>=1 and b[j]=='::':callee=b[j-1]+'::'+callee;j-=2
+   args=[];start=l+1;depth=0
+   for k in range(l+1,i):
+    if b[k] in ['(','[','{']:depth+=1
+    elif b[k] in [')',']','}']:depth-=1
+    elif b[k]==',' and depth==0:args.append(b[start:k]);start=k+1
+   if start<i:args.append(b[start:i])
+   out.append((callee,args))
+ return out
+
 EXPECTED={
  (C,'query_values'):[('mark',0,2)],
  (C,'query_loop'):[('query_values',4,7)],
@@ -102,6 +118,20 @@ def validate(src,feature_nodes):
    require(h.count('obs'),1,('unique parameter',p,n))
    got=uses(b,'obs');require(got,want,('observer flow',p,n))
    edges.extend(dict(path=p,caller=n,callee=c,argument=i,arity=k) for c,i,k in got)
+ # Check ALL calls to observer-taking children, including newly injected calls
+ # which do not mention the obs parameter and would evade occurrence-only checks.
+ positions={'mark':0,'query_values':4,'query_loop':4,'prepare':3,'tx2_common':4,'finish_relation':3,'crate::r1_semantic::verify_observed':3,'verify_finish':4,'verify_observed':3}
+ for path in [C,V,S]:
+  for name,defs in functions(src[path]).items():
+   for header,b in defs:
+    for callee,args in calls(b):
+     if callee not in positions:continue
+     index=positions[callee];assert index<len(args),('missing observer argument',path,name,callee)
+     expected=['obs'] if 'obs' in header else ['None']
+     require(args[index],expected,('all incoming observer edges',path,name,callee))
+ assert '#[path = "r1_pool_adapter_owned.rs"]\nmod owned;\nuse owned::{stage1, stage2};' in src[A]
+ assert '=> stage1(program_id, accounts, data)' in src[A] and '=> stage2(program_id, accounts, data)' in src[A]
+ assert src[O].count('super::super::first_decoded(')==1
  # Root construction sites are checked on exact syntax, including the original ABI.
  require(src[P].count('observer()'),3,'all program construction sites') # definition + TX1 + inactive TX2
  require(src[O].count('observer()'),1,'one owned TX2 construction')
