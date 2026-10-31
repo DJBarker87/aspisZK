@@ -73,10 +73,6 @@ variable {Public Signal Env A R S N : Type} [Fintype R] [Nonempty R]
 
 
 open MeasureTheory PV_MEAS_Law PV_MEAS_Uniform PV_MEAS_Finite
--- Three tiny input aliases have the same frozen body. Expose only those aliases
--- to elaborator instance matching; no protocol term or bound is evaluated.
-attribute [local reducible] PV_EVH_Core.input PV_EVH_Average.input
-  PrivacyR1HeadlineDeployedEvents.input
 local instance nativeSpace : MeasurableSpace R := ⊤
 local instance commonSpace : MeasurableSpace S := ⊤
 local instance environmentSpace : MeasurableSpace Env := ⊤
@@ -141,7 +137,8 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
     · simpa only [Measure.map_id] using map_uniform_of_means
         (rt.toNative e adv w) (id : R → R) (measurable_of_finite _) measurable_id
         (links.coupling e adv w).1
-    · simpa only [Measure.map_id] using map_uniform_of_means
+    · simpa only [Measure.map_id, PV_MEAS_Deployed.input, PV_EVH_Core.input,
+        PrivacyR1HeadlineDeployedEvents.input, PV_MEAS_Deployed.ownedDecode, ownedDecode] using map_uniform_of_means
         (Z := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape))
         (rt.toModel e adv w) (id : (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape) → _)
         (measurable_of_finite _) measurable_id (links.coupling e adv w).2
@@ -201,8 +198,8 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
     have product := integral_uniform_product
       (fun p : Env × (source).IdealRand =>
         (bit (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput p.1 adv p.2)) : ℝ))
-      (fun p => by exact_mod_cast bit_nonneg
-        (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput p.1 adv p.2)))
+      (fun p => by exact_mod_cast (bit_nonneg
+        (adv.decide (PV_EVH_Core.ideal template outputs x rt.completion rt.publicInput p.1 adv p.2))))
     rw [← product, integral_bit_mean, integral_bit_mean] at measured
     have casted :
         ((|mean (fun n => bit (adv.decide
@@ -210,7 +207,8 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
           mean (fun p => bit (adv.decide
           (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv p)))| : ℚ) : ℝ) ≤
           (PV_EVH_Core.bound template outputs x : ℝ) := by
-      simpa only [Rat.cast_abs, Rat.cast_sub] using measured
+      simpa only [Rat.cast_abs, Rat.cast_sub,
+        PrivacyR1HeadlineDeployedEvents.deployedIdeal, PV_EVH_Average.idealExperiment] using measured
     exact Rat.cast_le.mp casted
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
