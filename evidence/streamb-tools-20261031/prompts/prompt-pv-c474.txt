@@ -1,0 +1,15 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-common.txt first and obey it. Worktree: EXACTLY /Users/dominic/ZK/.worktrees/pv-c474 (SPARSE checkout: add paths with git sparse-checkout add, never a full checkout). Branch codex/pv-c474-draft-20261029, created from prover candidate a9a9781f8a. THIS IS AN EXPERIMENTAL, NOT ADOPTED DRAFT. Never merge, never push to the candidate or research, never repin. Env-J IDs 69200-69299 ONLY. Host dir /home/dombarker/project-offloads/codex-pv-c474-20261029/ (create). Budget: up to 40 capped native scopes (optimized release builds, ELF builds, timing runs), 0 Lean, 0 Kani.
+
+PURPOSE (LOG D491): give the owner the exact diff and cost of D474 option (C) before deciding (owner packet design/PV-OWNER-PACKET-20261027.md, item D474). Draft a minimal client patch so that the deployed client's local diagnostics cannot depend on the witness by construction. Read pv-diag10 and pv-diag11's reports for the sink inventory, and pv-rows10b's report for the getrandom finding.
+(1) Errors: every error that can reach main, stderr or the returned API carries only a fixed code or a literal message. No Debug or Display of secret-derived operands, including plan.rs's err() using "{e:?}" and any ensure!/anyhow! with formatted operands. List each change.
+(2) No backtrace capture: disable anyhow and std backtrace capture regardless of environment variables. State exactly how, and why the environment cannot re-enable it.
+(3) Panics: a fixed panic hook printing a constant message, with panic = abort for the client binary only. Check whether a profile change would also affect the on-chain program builds.
+(4) Entropy: make getrandom call the kernel getrandom(2) syscall directly instead of dlsym(RTLD_DEFAULT,"getrandom"), using getrandom 0.3.4's supported backend selection (for example the cfg getrandom_backend="linux_getrandom"), removing the LD_PRELOAD interposition path pv-rows10b found. Record how the backend is selected.
+(5) prove_wall_seconds in the stdout JSON: list it as an OPTIONAL separate change (removing the field). Note that timing stays an observable side channel either way, under D478.
+For the draft:
+- the exact diff, kept minimal;
+- confirmation that the three on-chain ELFs are byte-identical (default f8c0ec72, devnet 63ad3e9c, Pool 121f3e29) by rebuilding them, or the exact reason any changes;
+- the new client binary hash;
+- the existing fixture tests and the 1,000-pair differential subset that the client gate uses, rerun;
+- the timing delta against the +10% prover performance budget, measured only in a quiet window (QUIET_WINDOW.json), with its throttling caveat stated honestly.
+Write evidence/pv-c474-20261029/REPORT.md and PATCH.diff. Final answer under 400 words.

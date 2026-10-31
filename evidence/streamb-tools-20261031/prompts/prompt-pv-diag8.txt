@@ -1,0 +1,10 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-diag7.txt and obey it in full (same SPARSE worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-diag, same rules, option B) EXCEPT: branch is now codex/pv-diag8-20261029 (already checked out, created from candidate 124dca3b72, which contains your merged diag7 work); new modules use prefix PV_DIAG8_; Env-J IDs 66000-66099 ONLY (audit IDs 66097-66099); receipts and report under evidence/pv-diag8-20261029/. Then read evidence/pv-diag7-20261029/REPORT.md.
+
+RESUME (LOG D461). Fresh budget: 100 Lean attempts, up to 40 capped native scopes, 0 Kani.
+Work on the remaining privacy-relevant sinks, in this order:
+(1) PANIC PAYLOADS: do not analyse payload content. Prove each reachable panic site UNREACHABLE on honest inputs after successful canonical preparation (bounds, canonical lengths, fixed sizes; reuse existing honest-family and canonicality theorems). For any site you cannot exclude, report the exact site and whether a witness-derived value can enter its message. A reachable site whose message carries witness data is a FINDING.
+(2) WITNESS-DERIVED FORMATTING: for every error-construction and format site reachable on honest runs, prove that no witness-derived operand reaches the formatted text, or report a FINDING with the exact site.
+(3) LOGGER: enumerate reached dependency log macros. The level and configuration come from the environment (option B); prove each message's operands are public, or report.
+(4) CAPTURED FRAMES: backtrace capture occurs only on error paths. Given option B and (1) and (2), show the captured control path on honest-reachable error paths is a function of public data and the public signal, or name the exact remaining obligation.
+(5) V400, option B's P row: record precisely what "failure event witness-independent" requires of the deployed client (for example, I/O issued at points and with sizes fixed by public data), and prove as much of it as the existing world, ownership and allocation results allow.
+State the updated coverage for pv-rj4idb's DIAG_* inputs. Final answer under 400 words.

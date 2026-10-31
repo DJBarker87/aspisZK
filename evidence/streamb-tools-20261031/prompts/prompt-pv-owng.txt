@@ -1,0 +1,8 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-ownf.txt and obey it in full (same SPARSE worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-own, same rules) EXCEPT: branch is now codex/pv-owng-20261029 (already checked out, created from candidate 4d2d31fa4f, which contains your merged ownf check); new modules use prefix PV_OWNG_; Env-J IDs 63700-63799 ONLY (audit IDs 63797-63799); receipts and report under evidence/pv-owng-20261029/. Re-read pv-common.txt: NEW ruling own-2'' REPLACES the read-classification wording of own-2 and own-2' with a black-box influence-channel statement for the allocator. Then read your evidence/pv-ownf-20261029/REPORT.md and STATIC-CHECK.md.
+
+RESUME (LOG D438). Fresh budget: 60 Lean attempts, up to 30 capped native scopes, 0 Kani.
+The two reads you found (__libc_single_threaded in malloc at 0xad7b5, errno in free at 0xade59) are inside the allocator black box, so under own-2'' they do not disqualify. Re-run your checker with the black-box boundary at the allocator entry points. Then prove own-2'' (a), (b) and (c) for V229 and V230: no external read and no foreign call in the cone outside the black box; address independence; and channel (iii) closed (the cone never reads errno or any other state the allocator writes). Then do own-2 items (a) to (c):
+- the literal value laws by named lemmas;
+- one deployed release execution per function, compared byte for byte and cross-checked against the crate fingerprints;
+- allocation and abort under rdea-1.
+RESTORE each row with the exact evidence class, or report the exact reason not. Final answer under 300 words.

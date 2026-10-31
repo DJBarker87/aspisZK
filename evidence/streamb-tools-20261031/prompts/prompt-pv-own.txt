@@ -1,0 +1,20 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-common.txt first and obey it, including every LEAD RULING (in particular (x'), (k), (k'), (r''), (t), rdea-1). Worktree: EXACTLY /Users/dominic/ZK/.worktrees/pv-own (SPARSE checkout: add paths with git sparse-checkout add, never a full checkout; no committed file over 20 MB). Branch codex/pv-own-20261028, created from prover candidate 1a3cd3de26 with the parked pv-world branch merged in (6a2c273f22). Module prefix PV_OWN_. Env-J IDs 61700-61799 ONLY (audit IDs 61797-61799). Host dir /home/dombarker/project-offloads/codex-pv-own-20261028/ (create; reuse verified objects under (h6)). Budget: 100 Lean attempts, up to 60 capped native scopes, 0 Kani.
+COMPOSITION TRUST (owner, fifth amendment): label every step resting on Kani, Aeneas or Charon agreeing on Rust semantics as reclassification within existing tool trust.
+
+WHY (LOG D419; AGENTS.md section 7, a shared obstruction): several workers stopped on the same missing interface:
+- pv-rdb2d on V229 (typed collector to byte memory, ownership and destructor continuation), V230 (drop) and V239 (Vec byte initialization and ownership);
+- pv-rdeac on V178 (owned-argument cleanup);
+- the world line (world3, D374), which left "native ownership and backend adequacy" open.
+D362 recorded that drop cannot be modelled generically WITHOUT a world. Build the shared interface ONCE instead of another row wrapper.
+
+THE WORK:
+(1) Read the pv-world modules (world calculus: state, error and trace threading; W-CARRIER-1), evidence/pv-rdb2d-20261028/REPORT.md with V229.md, V230.md and V239.md, the PV_RDB2C_ FullResources and Box modules, and evidence/pv-rdeac-20261028/REPORT.md (on the candidate). Write evidence/pv-own-20261028/INTERFACE.md BEFORE any Lean. It specifies one typed byte-memory and ownership refinement for the deployed runtime:
+- a heap of live allocations (address, layout, initialized-byte map, owner);
+- typed views (Vec<T>, Box<T>, arrays, String) as relations to byte ranges;
+- moves and borrows as ownership transfers;
+- drop as an explicit destructor event sequence on the world, by type, with drop-glue order taken from the deployed MIR;
+- allocation and deallocation through the retained runtime/allocator primitive adequacy item (rdea-1, BoxAdequacy).
+The interface must state exactly which facts are proved from source, which are tool-trust reclassifications, and which sit under the retained runtime item. Nothing new goes into T.
+(2) Prove the generic laws once: allocation, initialization, typed read and write, move, Vec growth via the proved reserve family, truncate, and per-type drop-glue sequencing for the concrete types the rows reach (not a universal drop, which D362 refutes).
+(3) First consumer, V229: the deployed forest-collector in-place writes, typed ownership and destructor continuation, refined to the interface, together with rdb2d's resource-program/value law. Restore V229 if its consumed law is met. Then V230's drop, V239's Vec initialization and ownership, and V178's owned-argument cleanup as consumers, in that order, restoring each when met.
+Per row RESTORED, SUSPENDED (exact blocker) or FINDING. If any destructor or allocation event's occurrence, order or size depends on witness data, that is a FINDING for the D159 observer: stop that row. No change under crates/ or programs/. No sorry/admit/native_decide/implemented_by/axiom; no XR* imports; no dictionary, simulator or observer edits; T unchanged. Commit path-limited. End with a combined statement/axioms audit and a focused replay; write evidence/pv-own-20261028/REPORT.md with AGENTS.md section 6 fields. Use the full budget. Final answer under 400 words.

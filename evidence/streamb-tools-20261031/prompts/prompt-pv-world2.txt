@@ -1,0 +1,9 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-world.txt and obey it in full (same worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-world, same branch, same ID block 36000-36199 minus used IDs, same rules). Then read your evidence/pv-world-20261028/REPORT.md.
+
+RESUME (LOG D364), head 937b8f561d. Remaining budget: 96 Lean compile attempts, 0 Kani.
+LEAD CLARIFICATION OF THE STOP RULE: "a checked counterexample" means a counterexample to a LEDGER ROW statement as written in ROWS7/rows7.json, or to the privacy endpoint. W-CARRIER-1 refutes a candidate DESIGN (a world that projects only to OS state), which you correctly retain as a finding; it is not a stop. Continue:
+1. Enrich the world carrier with the process-local state that destructors and callbacks can reach (statics, atomics, heap allocator state, thread-local state as relevant to the shipped prover), or, where that is not needed, cite pv-fxmem2's proof (branch codex/pv-fxmem-20261028, in progress) that the destructors actually reached are trivial or pure. Re-check W-CARRIER-1's witness against the enriched carrier (it should now be representable).
+2. Prove the threading theorem for the extracted prover: its ordered external calls, interpreted in your state/error/trace calculus, produce exactly the tagged-call list and world sequence of the trust field observation, by composition over the extracted control flow with named lemmas.
+3. Keep the OS-fact obligations (O_EXCL exclusive creation; file sync versus directory-entry durability per the fsync semantics) as explicit owner findings with what depends on them (nonce non-reuse across a crash), never assumed.
+4. Then close whichever of V171, V172, V175, V176, V267, V268, V271, V221, V222 rest only on the threading theorem plus facts you have.
+Same rules otherwise.

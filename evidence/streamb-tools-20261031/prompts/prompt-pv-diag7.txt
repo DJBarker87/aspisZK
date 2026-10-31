@@ -1,0 +1,14 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-diag6.txt and obey it in full (same SPARSE worktree EXACTLY /Users/dominic/ZK/.worktrees/pv-diag, same rules) EXCEPT: branch is now codex/pv-diag7-20261029 (already checked out, created from candidate 444380cd27, which contains your merged diag6 work); new modules use prefix PV_DIAG7_; Env-J IDs 65700-65799 ONLY (audit IDs 65797-65799); receipts and report under evidence/pv-diag7-20261029/. Then read evidence/pv-diag6-20261029/REPORT.md and, in design/PRIVACY-LEDGER-20261026.md, the owner decision "OS-failure repair: option B adopted" (D215) and its P row.
+
+RESUME (LOG D458). Fresh budget: 100 Lean attempts, up to 40 capped native scopes, 0 Kani.
+LEAD DIRECTION: apply the owner's adopted OPTION B uniformly to the diagnostic sinks. The environment-failure signal is a PUBLIC input to BOTH the real and the ideal experiment, with the observer complete and the error bound unchanged. This is conditional on one P row: the failure event is witness-independent. Most of your UNRESOLVED sinks are driven by operating-system outcomes:
+- write, flush and delivery failures (fd 1 and 2, Interrupted retries);
+- nonce-store and file I/O errors and last_error;
+- print_to failures;
+- environment-dependent logger, level and backtrace configuration;
+- strerror and UTF-8-lossy error content.
+For each such sink:
+(1) model its OS-outcome inputs as components of the public environment-failure signal, exactly as option B defines it, never as new trust and never as fixed or empty outcomes;
+(2) prove that its occurrence, order and content are functions of that public signal plus public data, so that what remains is the single shared option-B P row;
+(3) relate the sink to that P row by name.
+Where a sink also depends on something that is NOT an environment outcome (for example witness-derived formatted operands, or a panic payload derived from witness values), that part stays UNRESOLVED or becomes a FINDING. Then state, as one named theorem for pv-rj4idb's DIAG_* inputs, the conditional law "given option B's public signal and its P row, the diagnostic channels are a function of public data", and list exactly which sinks it covers and which it does not. Final answer under 400 words.
