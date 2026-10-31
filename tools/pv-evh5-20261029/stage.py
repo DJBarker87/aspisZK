@@ -45,5 +45,9 @@ print(json.dumps(dict(project_checks=x['checks'],external_checks=x['external'],e
 '''
 r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,capture_output=True)
 result=dict(exit=r.returncode,stderr=r.stderr,result=json.loads(r.stdout) if r.returncode==0 else r.stdout)
+prior=E/('prepare-'+module+'.json')
+if prior.exists():
+ archive=E/'prepare-history';archive.mkdir(exist_ok=True)
+ (archive/(sha(prior.read_bytes())+'.json')).write_bytes(prior.read_bytes())
 (E/('prepare-'+module+'.json')).write_text(json.dumps(result,indent=2)+'\n');assert r.returncode==0,r.stderr+r.stdout
 print('PASS same-cohort stage',module)
