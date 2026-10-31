@@ -26,41 +26,41 @@ theorem source_unfold
   rw [prover.retry_attempt.eq_def]
   unfold sourceBody
   by_cases condition : k ≥ prover.ATTEMPT_CAP
-  · simp only [condition,if_true,Aeneas.Std.bind]
+  · simp only [condition,if_true,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
   · simp only [condition,if_false]
     cases hn : coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut next_attempt k with
-    | fail e => simp only [hn,Aeneas.Std.bind]
-    | div => simp only [hn,Aeneas.Std.bind]
+    | fail e => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+    | div => simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
     | ok pair =>
       rcases pair with ⟨r,c⟩
-      simp only [hn,Aeneas.Std.bind]
+      simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
       cases hb : core.result.Result.Insts.CoreOpsTry.branch r with
-      | fail e => simp only [hb,Aeneas.Std.bind]
-      | div => simp only [hb,Aeneas.Std.bind]
+      | fail e => simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+      | div => simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
       | ok cf =>
         cases cf with
         | Break e =>
-          simp only [hb,Aeneas.Std.bind]
+          simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
           cases hr : core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
             prover.RetriedProof (core.convert.FromSame verifier.Error) e <;>
-            simp only [hr,Aeneas.Std.bind]
+            simp only [hr,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
         | Continue val =>
-          simp only [hb,Aeneas.Std.bind]
+          simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
-          | fail e => simp only [hp,Aeneas.Std.bind]
-          | div => simp only [hp,Aeneas.Std.bind]
+          | fail e => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+          | div => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
           | ok pair =>
             rcases pair with ⟨p,st⟩
-            simp only [hp,Aeneas.Std.bind]
+            simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
             cases p with
             | Ok pair =>
               rcases pair with ⟨proof,audit⟩
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp only [hi,Aeneas.Std.bind]
+                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
             | Err e =>
               cases e <;> try rfl
               cases hi : Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize) <;>
-                simp only [hi,Aeneas.Std.bind]
+                simp only [hi,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
 
 #print axioms source_unfold
 end PV_EVH_RetrySource
