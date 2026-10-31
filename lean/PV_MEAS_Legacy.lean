@@ -119,7 +119,6 @@ def ofLegacy : PV_MEAS_Deployed.Runtime (Public := Public) (Signal := Signal)
 
 /-- Every old finite conjunction supplies the measured conjunction. No new
 native obligation is required in this finite specialization. -/
-set_option pp.explicit true in
 theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template outputs x rt) :
     PV_MEAS_Deployed.Links template outputs x (ofLegacy template outputs x rt) where
   RUNJOIN_PUBLISH_COMPACT := links.RUNJOIN_PUBLISH_COMPACT
@@ -138,11 +137,12 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
     · simpa only [Measure.map_id] using map_uniform_of_means
         (rt.toNative e adv w) (id : R → R) (measurable_of_finite _) measurable_id
         (links.coupling e adv w).1
-    · simpa only [Measure.map_id, input, PV_MEAS_Deployed.input, PV_EVH_Core.input,
-        PrivacyR1HeadlineDeployedEvents.input, PV_MEAS_Deployed.ownedDecode, PV_EVH_Core.ownedDecode, ownedDecode] using map_uniform_of_means
+    · have law := map_uniform_of_means
         (Z := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape))
         (rt.toModel e adv w) (id : (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape) → _)
         (measurable_of_finite _) measurable_id (links.coupling e adv w).2
+      rw [Measure.map_id] at law
+      convert law using 1 <;> rfl
   context := links.context
   timing := links.timing
   signal := links.signal
@@ -176,7 +176,6 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
 /-- The full former finite deployed event inequality follows from the measured
 headline and exact integral/mean conversion. This proof never calls the former
 privacy_headline_deployed_events theorem. -/
-set_option pp.explicit true in
 theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links template outputs x rt) :
     (∀ (adv : Observer Signal A) (w : (h).Instance), (h).public w = x.1 →
       |mean (fun r => bit (adv.decide (PrivacyR1HeadlineDeployedEvents.deployedReal template outputs x rt adv w r))) -
@@ -209,12 +208,8 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
           mean (fun p => bit (adv.decide
           (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv p)))| : ℚ) : ℝ) ≤
           (PV_EVH_Core.bound template outputs x : ℝ) := by
-      simpa only [Rat.cast_abs, Rat.cast_sub,
-        PrivacyR1HeadlineDeployedEvents.deployedIdeal, PV_EVH_Average.idealExperiment,
-        input, PV_MEAS_Deployed.input, PV_EVH_Core.input, PV_EVH_Average.input,
-        PrivacyR1HeadlineDeployedEvents.input, PV_MEAS_Deployed.ownedDecode,
-        PV_EVH_Average.ownedDecode, PV_EVH_Core.ownedDecode,
-        PrivacyR1HeadlineDeployedEvents.ownedDecode, ownedDecode] using measured
+      rw [Rat.cast_abs, Rat.cast_sub]
+      convert measured using 1 <;> rfl
     exact Rat.cast_le.mp casted
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
