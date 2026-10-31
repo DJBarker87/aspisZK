@@ -1,0 +1,47 @@
+{"attempt": "NEF_K037", "exit_status": 1, "wall_seconds": 5.425654306891374, "peak_rss_kib": "441060", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+is-r1-cost-probe/src/NEF_native.rs:42:73 in function verifier::candidate::NEF_native::NEF_Log::call
+
+Check 70: verifier::candidate::NEF_native::NEF_Log::call.pointer_dereference.22
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NEF_native.rs:42:73 in function verifier::candidate::NEF_native::NEF_Log::call
+
+Check 71: verifier::candidate::NEF_native::NEF_Log::call.pointer_dereference.23
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NEF_native.rs:42:73 in function verifier::candidate::NEF_native::NEF_Log::call
+
+Check 72: verifier::candidate::NEF_native::NEF_Log::call.pointer_dereference.24
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NEF_native.rs:42:73 in function verifier::candidate::NEF_native::NEF_Log::call
+
+Check 73: verifier::candidate::NEF_native::NEF_Log::call.array_bounds.2
+	 - Status: SUCCESS
+	 - Description: "index out of bounds: the length is less than or equal to the given index"
+	 - Location: crates/aspis-r1-cost-probe/src/NEF_native.rs:42:73 in function verifier::candidate::NEF_native::NEF_Log::call
+
+
+SUMMARY:
+ ** 1 of 73 failed
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs", line 439, in core::panicking::assert_failed_inner
+
+VERIFICATION:- FAILED
+Verification Time: 0.33303744s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NEF_native::NEF_inv_log
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb97f94e1f34449b0a7f1858fff5c2a39.scope; invocation ID: c9af2b0b1669418baa900495d92692fe

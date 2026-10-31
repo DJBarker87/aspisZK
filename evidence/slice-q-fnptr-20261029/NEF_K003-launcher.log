@@ -1,0 +1,44 @@
+{"attempt": "NEF_K003", "exit_status": 1, "wall_seconds": 4.907263370929286, "peak_rss_kib": "292364", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+tion: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 56: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 57: core::option::Option::<fn(verifier::Phase)>::is_some.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<fn(verifier::Phase)>::is_some
+
+Check 58: core::panicking::assert_failed_inner.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:433:11 in function core::panicking::assert_failed_inner
+
+
+SUMMARY:
+ ** 1 of 58 failed (10 unreachable)
+Failed Checks: assertion failed: obs.is_some()
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.32311273s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ref0049ebe3594e529c51bb86800828e6.scope; invocation ID: f9d3f40acbd9467985ac179545d61ae8

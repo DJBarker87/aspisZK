@@ -1,0 +1,50 @@
+{"attempt": "NEF_K001", "exit_status": 1, "wall_seconds": 26.411568859010004, "peak_rss_kib": "533572", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+none.pointer_dereference.8
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:7:9 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+Check 55: verifier::candidate::NBZ_native::NBZ_mark_none.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:7:9 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+Check 56: verifier::candidate::NBZ_native::NBZ_mark_none.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:7:9 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+Check 57: verifier::candidate::NBZ_native::NBZ_mark_none.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:7:9 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+Check 58: verifier::candidate::NBZ_native::NBZ_mark_none.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:7:9 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+
+SUMMARY:
+ ** 1 of 58 failed (1 unreachable)
+Failed Checks: assertion failed: obs.is_none()
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.31460527s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf02826811a344c8b812bc91442651a1b.scope; invocation ID: 12a020afd0ab4fff9ad1064dab1ca26b

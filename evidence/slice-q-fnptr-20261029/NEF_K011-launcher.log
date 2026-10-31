@@ -1,0 +1,43 @@
+{"attempt": "NEF_K011", "exit_status": 0, "wall_seconds": 6.987858098931611, "peak_rss_kib": "361096", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+null::<aspis_core::field::QM31>.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>
+
+Check 125: alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>
+
+Check 126: alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>
+
+Check 127: alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs:504:9 in function alloc::raw_vec::RawVecInner::non_null::<aspis_core::field::QM31>
+
+
+SUMMARY:
+ ** 0 of 127 failed (2 unreachable)
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.8610684s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r55a2abf5b43a4aa1819777118c53bfad.scope; invocation ID: ce3ba1d793684caa94ee3872030c53f1

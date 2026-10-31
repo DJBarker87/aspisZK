@@ -1,0 +1,50 @@
+{"attempt": "NEF_K015", "exit_status": 0, "wall_seconds": 11.44310066010803, "peak_rss_kib": "476032", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+d"
+	 - Location: crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:9:67 in function core::slice::<impl [u32]>::copy_from_slice
+
+Check 20: core::slice::<impl [u32]>::copy_from_slice.pointer_dereference.9
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:9:67 in function core::slice::<impl [u32]>::copy_from_slice
+
+Check 21: core::slice::<impl [u32]>::copy_from_slice.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:9:67 in function core::slice::<impl [u32]>::copy_from_slice
+
+Check 22: core::slice::<impl [u32]>::copy_from_slice.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:9:67 in function core::slice::<impl [u32]>::copy_from_slice
+
+Check 23: core::slice::<impl [u32]>::copy_from_slice.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/../../../KMX_stubs.rs:9:67 in function core::slice::<impl [u32]>::copy_from_slice
+
+Check 24: core::panicking::assert_failed_inner.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/panicking.rs:433:11 in function core::panicking::assert_failed_inner
+
+
+SUMMARY:
+ ** 0 of 24 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.30952597s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+
+Running as unit: run-r4b3c628c82d34fffac5772a5853f7d27.scope; invocation ID: 2081f91f07624ec3acde705b19e84537

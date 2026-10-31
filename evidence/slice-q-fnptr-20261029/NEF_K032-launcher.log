@@ -1,0 +1,42 @@
+{"attempt": "NEF_K032", "exit_status": 1, "wall_seconds": 6.759785444941372, "peak_rss_kib": "440404", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `
+...
+ightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:1597:55 in function alloc::vec::Vec::<[u64; 4]>::as_slice
+
+Check 450: alloc::vec::Vec::<[u64; 4]>::as_slice.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:1597:55 in function alloc::vec::Vec::<[u64; 4]>::as_slice
+
+Check 451: alloc::vec::Vec::<[u64; 4]>::as_slice.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:1597:55 in function alloc::vec::Vec::<[u64; 4]>::as_slice
+
+Check 452: alloc::vec::Vec::<[u64; 4]>::as_slice.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:1597:55 in function alloc::vec::Vec::<[u64; 4]>::as_slice
+
+
+SUMMARY:
+ ** 1 of 452 failed (8 unreachable)
+Failed Checks: index out of bounds: the length is less than or equal to the given index
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs", line 272, in <usize as core::slice::SliceIndex<[aspis_core::field::QM31]>>::index
+
+VERIFICATION:- FAILED
+Verification Time: 1.0075337s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NEF_native::NEF_query_nonempty_tail
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rab3ef0d6e08544808646833f3c40cce2.scope; invocation ID: bc255854c10747caae3b1d94a7939713

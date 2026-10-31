@@ -1,0 +1,37 @@
+{"attempt": "NEF_E002", "exit_status": 0, "wall_seconds": 0.9391570180887356, "peak_rss_kib": "128128", "swaps": "0", "print_axioms": "N/A: extract"}
+{"charon_sha256": "daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8", "aeneas_sha256": "c0cf4fccb0879db4ce342da991f6215732a19fc01345b9eec84e632f4673b958", "rust_reference_sha256": "c3f975fd0ac7ff7ebc4c16f8e8ee7d70cfc5c14131401e3b47f8fe687b55b269", "charon_command": ["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/charon", "cargo", "--preset", "aeneas", "--mir", "built", "--sysroot", "default", "--include", "core::option::Option", "--include", "core::result::Result", "--include", "core::option::_::ok_or", "--start-from", "crate::observer", "--start-from", "crate::verifier::mark", "--start-from", "crate::release_mark", "--dest-file", "/home/dombark
+...
+ng: function `release_mark` is never used
+  --> src/lib.rs:11:4
+   |
+11 | fn release_mark(p:verifier::Phase) { verifier::mark(observer(),p); }
+   |    ^^^^^^^^^^^^
+
+warning: enum `Phase` is never used
+ --> src/lib.rs:3:10
+  |
+3 | pub enum Phase { Parsed,Semantic,SemanticPart(u8),Prepare,CheckpointRead,Merkle(usize),Query(usize),QueryPart(usize,u8),CheckpointWri...
+  |          ^^^^^
+
+warning: type alias `Observer` is never used
+ --> src/lib.rs:4:10
+  |
+4 | pub type Observer=Option<fn(Phase)>;
+  |          ^^^^^^^^
+
+warning: function `mark` is never used
+ --> src/lib.rs:5:8
+  |
+5 | pub fn mark(obs:Observer,p:Phase) { if let Some(f)=obs {f(p);} }
+  |        ^^^^
+
+warning: `nef_reference` (lib) generated 7 warnings
+    Finished `release` profile [optimized] target(s) in 0.12s
+["/home/dombarker/project-offloads/codex-cx-extraction-repro1-20261027/XRa_bin/aeneas-b59d5188-extended", "-sequential", "-no-progress-bar", "-abort-on-error", "-backend", "lean", "-namespace", "NEF_ObserverRef", "-dest", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted", "-subdir", "NEF_ObserverRef", "-split-files", "/home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc"]
+[[92mInfo[39m ] Imported: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_reference.llbc
+[[92mInfo[39m ] Creating missing directory: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_ObserverRef
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_ObserverRef/Types.lean
+[[92mInfo[39m ] Generated: /home/dombarker/project-offloads/codex-cx-slice-q-fnptr-20261029/NEF_extracted/NEF_ObserverRef/Funs.lean
+[[92mInfo[39m ] Total execution time: 0.410085 seconds
+
+Running as unit: run-rce163a1a4cd74674a98276d24b77b46f.scope; invocation ID: 5aa5a202e5fd4c988ee0710139d62e53

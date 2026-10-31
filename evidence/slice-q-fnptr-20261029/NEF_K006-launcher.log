@@ -1,0 +1,43 @@
+{"attempt": "NEF_K006", "exit_status": 1, "wall_seconds": 6.831362153985538, "peak_rss_kib": "294020", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+ - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 50: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.10
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 51: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.11
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 52: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.12
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/macros/mod.rs:46:22 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 1 of 52 failed (10 unreachable)
+Failed Checks: assertion failed: obs[0] == 1
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 5, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.49380648s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rb8a6a554bb2849f6a13ac11038fbf688.scope; invocation ID: 3e0b118737294eff90ed249dfe5afe6d
