@@ -1,7 +1,7 @@
 #[path="accounts.rs"]
 mod client64_accounts;
 use super::diagnostics::{anyhow,ensure,Result,err};
-use serde_json::{Value,json};
+use serde_json::Value;
 use solana_program::pubkey::Pubkey;
 use std::{str::FromStr,fs,path::Path,time::Instant};
 use aspis_pool::*;
@@ -12,10 +12,14 @@ const TOKEN:&str="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 const PROFILE:[u8;32]=[0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3];
 const RELEASE:[u8;32]=[0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a];
 fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(q[k].as_str().unwrap()).unwrap()}
-fn meta(p:Pubkey,s:bool,w:bool)->Value{json!([p.to_string(),s,w])}
+fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(vec![Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)])}
 fn ro(p:Pubkey)->Value{meta(p,false,false)}
 fn rw(p:Pubkey)->Value{meta(p,false,true)}
-fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{json!({"program":p.to_string(),"accounts":a,"data":super::hex(d.as_ref())})}
+fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{
+ let mut o=serde_json::Map::new();o.insert("program".to_owned(),Value::String(p.to_string()));o.insert("accounts".to_owned(),Value::Array(a));o.insert("data".to_owned(),Value::String(super::hex(d.as_ref())));Value::Object(o)
+}
+fn number(n:usize)->Value{Value::Number(serde_json::Number::from(n as u64))}
+
 fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(q[k].as_str().unwrap())}
 pub fn run(q:&Value)->Result<Value>{
  ensure!(q["action"].as_str()==Some("prove"),"user client supports prove only");
@@ -78,5 +82,21 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
  if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}
  a.push(ro(pk(q,"verifier_checkpoint")));
- Ok(json!({"client_route":"selected64-proof-account-v1","proof_account":proof_account.to_string(),"attempt_index":attempt_index,"prove_wall_seconds":started.elapsed().as_secs_f64(),"attempts":result.attempts,"p_r1":true,"proof_bytes":proof.len(),"proof_upload_count":proof.len().div_ceil(3763),"statement_upload_count":1,"marker":marker.to_string(),"output_lane":lanes[output_lane as usize].to_string(),"page":page.to_string(),"needs_zero_page":lane.tree.next_leaf_index==0,"settle":ix(pool,a,data),"stage1":ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))
+ let mut out=serde_json::Map::new();
+ out.insert("client_route".to_owned(),Value::String("selected64-proof-account-v1".to_owned()));
+ out.insert("proof_account".to_owned(),Value::String(proof_account.to_string()));
+ out.insert("attempt_index".to_owned(),number(attempt_index));
+ out.insert("prove_wall_seconds".to_owned(),Value::Number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));
+ out.insert("attempts".to_owned(),number(result.attempts));
+ out.insert("p_r1".to_owned(),Value::Bool(true));
+ out.insert("proof_bytes".to_owned(),number(proof.len()));
+ out.insert("proof_upload_count".to_owned(),number(proof.len().div_ceil(3763)));
+ out.insert("statement_upload_count".to_owned(),number(1));
+ out.insert("marker".to_owned(),Value::String(marker.to_string()));
+ out.insert("output_lane".to_owned(),Value::String(lanes[output_lane as usize].to_string()));
+ out.insert("page".to_owned(),Value::String(page.to_string()));
+ out.insert("needs_zero_page".to_owned(),Value::Bool(lane.tree.next_leaf_index==0));
+ out.insert("settle".to_owned(),ix(pool,a,data));
+ out.insert("stage1".to_owned(),ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10]));
+ Ok(Value::Object(out))
 }

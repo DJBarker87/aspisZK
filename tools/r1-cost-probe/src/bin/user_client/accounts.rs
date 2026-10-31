@@ -1,6 +1,6 @@
 //! Concrete retained-key policy, not a restriction on the adapter's public policy.
 use crate::diagnostics::{anyhow, ensure, Result, err};
-use serde_json::{json, Value};
+use serde_json::Value;
 use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
 
@@ -32,10 +32,9 @@ impl Accounts {
                        public: Pubkey, checkpoint: Pubkey) -> Result<Value> {
         ensure!(settlement.len() == 10, "unexpected settlement proof-account position");
         let (_, key) = self.selected(attempts)?;
-        let proof = json!([key.to_string(), false, false]);
+        let proof = Value::Array(vec![Value::String(key.to_string()),Value::Bool(false),Value::Bool(false)]);
         settlement.push(proof.clone());
-        Ok(json!([proof, [public.to_string(), false, false],
-                  [checkpoint.to_string(), false, true]]))
+        Ok(Value::Array(vec![proof,Value::Array(vec![Value::String(public.to_string()),Value::Bool(false),Value::Bool(false)]),Value::Array(vec![Value::String(checkpoint.to_string()),Value::Bool(false),Value::Bool(true)])]))
     }
     pub fn selected(&self, attempts: usize) -> Result<(usize, Pubkey)> {
         ensure!((1..=CAP).contains(&attempts), "invalid successful attempt count");
