@@ -19,7 +19,8 @@ theorem weight_format_unreachable {α : Type} (kind : Nat) (guard : kind < 5)
     (one transfer withdrawal left right : α) (first second : Unit → α) :
  weight_dispatch kind one transfer withdrawal left right first =
  weight_dispatch kind one transfer withdrawal left right second := by
- interval_cases kind <;> rfl
+ have cases : kind = 0 ∨ kind = 1 ∨ kind = 2 ∨ kind = 3 ∨ kind = 4 := by omega
+ rcases cases with h|h|h|h|h <;> subst kind <;> rfl
 /-- No input guard is added: every compiled link is an immutable table member. -/
 theorem frozen_weight_format_unreachable {α : Type} (link : Link) (member : link ∈ links)
     (one transfer withdrawal left right : α) (first second : Unit → α) :
@@ -32,7 +33,7 @@ theorem dot_assert_format_unreachable {α β γ δ ε : Type} (rows : List α)
     (f : α → β) (g : α → γ) (h : α → δ) (value : ε) (panicFormat : Unit → ε) :
  checked (decide ((rows.map f).length = (rows.map g).length ∧
                  (rows.map f).length = (rows.map h).length)) value panicFormat = value := by
- simp only [List.length_map,decide_true,checked,if_true]
+ simp only [List.length_map,checked,and_self,decide_true,if_true]
 /-- Dynamic pattern-column bounds in the original source, not an inference
 from optimized absence. Immutable table membership supplies the branch test. -/
 theorem pattern_column_format_unreachable {α : Type} (column : Nat)
@@ -54,7 +55,7 @@ theorem endpoint_format_unreachable {α : Type} (link : Link) (member : link ∈
     link.2.2.1.2.1 < 2 ∧ link.2.2.1.2.2 < 14 ∧
     link.2.2.2.1 / 16 < 64 ∧ link.2.2.2.1 % 16 < 16 ∧
     link.2.2.2.2.1 < 2 ∧ link.2.2.2.2.2 < 14 := by omega
- simp only [checked,all,decide_true,if_true]
+ simp only [checked,all,and_self,decide_true,if_true]
 #print axioms checked_unreachable
 #print axioms weight_format_unreachable
 #print axioms frozen_weight_format_unreachable

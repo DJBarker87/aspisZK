@@ -3,9 +3,9 @@ Never treats a signature/trait/vtable reference as a runtime call. Opaque leaves
 unresolved dispatch, and global initializer dependencies are explicit gaps.
 """
 from pathlib import Path
-import lzma,json,hashlib,collections
-P=Path('evidence/pv-b3p6-20261028/llbc-resume5/PV_B3P_227_resume5.llbc.xz')
-raw=lzma.decompress(P.read_bytes());x=json.loads(raw);t=x['translated'];assert not x['has_errors']
+import lzma,json,hashlib,collections,sys
+P=Path(sys.argv[1]) if len(sys.argv)>1 else Path('evidence/pv-b3p6-20261028/llbc-resume5/PV_B3P_227_resume5.llbc.xz')
+raw=lzma.decompress(P.read_bytes()) if P.suffix=='.xz' else P.read_bytes();x=json.loads(raw);t=x['translated'];assert not x['has_errors']
 funs={f['def_id']:f for f in t['fun_decls'] if f is not None}
 def name(f):
  return '::'.join(c['Ident'][0] if 'Ident'in c else '{impl}' for c in f['item_meta']['name'])
@@ -34,7 +34,7 @@ while todo:
   if 'Drop'in v:drops.append(dict(caller=i,value=v['Drop'],path=path))
 rows=[dict(id=i,name=name(funs[i]),opaque=not isinstance(funs[i]['body'],dict),source=funs[i]['item_meta'].get('source_text'),span=funs[i]['item_meta']['span'],signature=funs[i]['signature'])for i in sorted(seen)]
 x=dict(input=str(P),llbc_sha256=hashlib.sha256(raw).hexdigest(),compressed_sha256=hashlib.sha256(P.read_bytes()).hexdigest(),root=0,root_name=name(funs[0]),options=t['options'],functions=rows,edges=edges,builtins=builtins,unresolved_calls=unresolved,global_references=globals,aborts=aborts,drops=drops,complete=False,reason='Opaque callees and global initializers must be resolved before completeness; original extraction source authority/configuration and source-to-deployed association are separate checks.')
-Path('evidence/pv-b3q2-20261031/original-callcone.json').write_text(json.dumps(x,indent=2)+'\n')
+(Path(sys.argv[2]) if len(sys.argv)>2 else Path('evidence/pv-b3q2-20261031/original-callcone.json')).write_text(json.dumps(x,indent=2)+'\n')
 print(json.dumps(dict(functions=len(rows),edges=len(edges),opaque=sum(r['opaque']for r in rows),unresolved=len(unresolved),builtins=len(builtins),globals=len(globals),aborts=len(aborts),drops=len(drops))))
 for r in rows:
  if r['opaque']:print('OPAQUE',r['id'],r['name'])

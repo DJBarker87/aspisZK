@@ -1,0 +1,64 @@
+@[reducible] def Aeneas.Std.Slice.len.{u} : {α : Type u} → Slice α → Usize :=
+fun {α} v => Usize.ofNatCore (↑v).length ⋯
+def Aeneas.Std.Slice.subslice.{u} : {α : Type u} → Slice α → core.ops.range.Range Usize → Result (Slice α) :=
+fun {α} s r =>
+  if ↑r.start < ↑r.end ∧ ↑r.end ≤ s.length then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩
+  else Result.fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index : {T : Type} →
+  core.ops.range.Range Usize → Slice T → Result (Slice T) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.get_unchecked : {T : Type} →
+  core.ops.range.Range Usize → ConstRawPtr (Slice T) → Result (ConstRawPtr (Slice T)) :=
+fun {T} x x_1 => Result.fail Error.undef
+def Aeneas.Std.RawPtr.cast_scalar : {T : Type} →
+  {M : Mutability} →
+    (T' : Type) → (M' : Mutability) → [IsScalar T] → [IsScalar T'] → RawPtr T M → Result (RawPtr T' M') :=
+fun {T} {M} T' M' [IsScalar T] [IsScalar T'] x => Result.fail Error.undef
+structure Aeneas.Std.core.slice.iter.Iter (T : Type) : Type
+number of parameters: 1
+fields:
+  Aeneas.Std.core.slice.iter.Iter.slice : Slice T
+  Aeneas.Std.core.slice.iter.Iter.i : ℕ
+constructor:
+  Aeneas.Std.core.slice.iter.Iter.mk {T : Type} (slice : Slice T) (i : ℕ) : core.slice.iter.Iter T
+def Aeneas.Std.core.slice.iter.IteratorSliceIter.next : {T : Type} →
+  core.slice.iter.Iter T → Result (Option T × core.slice.iter.Iter T) :=
+fun {T} it =>
+  if h : it.i < ↑it.slice.len then
+    have x := it.slice[it.i];
+    have it := { slice := it.slice, i := it.i + 1 };
+    Result.ok (some x, it)
+  else Result.ok (none, it)
+def Aeneas.Std.core.slice.Slice.iter : {T : Type} → Slice T → Result (core.slice.iter.Iter T) :=
+fun {T} s => Result.ok { slice := s, i := 0 }
+def Aeneas.Std.SharedArray.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter : {T : Type} →
+  {N : Usize} → Std.Array T N → Result (core.slice.iter.Iter T) :=
+fun {T} {N} a => Result.ok { slice := ⟨↑a, ⋯⟩, i := 0 }
+def Aeneas.Std.SharedSlice.Insts.CoreIterTraitsCollectIntoIteratorSharedIter.into_iter : {T : Type} →
+  Slice T → Result (core.slice.iter.Iter T) :=
+fun {T} s => Result.ok { slice := s, i := 0 }
+structure Aeneas.Std.core.iter.traits.collect.IntoIterator (Self Item IntoIter : Type) : Type
+number of parameters: 3
+fields:
+  Aeneas.Std.core.iter.traits.collect.IntoIterator.iteratorInst : core.iter.traits.iterator.Iterator IntoIter Item
+  Aeneas.Std.core.iter.traits.collect.IntoIterator.into_iter : Self → Result IntoIter
+constructor:
+  Aeneas.Std.core.iter.traits.collect.IntoIterator.mk {Self Item IntoIter : Type}
+    (iteratorInst : core.iter.traits.iterator.Iterator IntoIter Item) (into_iter : Self → Result IntoIter) :
+    core.iter.traits.collect.IntoIterator Self Item IntoIter
+def Aeneas.Std.core.iter.traits.iterator.Iterator.step_by.trait_default : {Self Item : Type} →
+  core.iter.traits.iterator.Iterator Self Item → Self → Usize → Result (core.iter.adapters.step_by.StepBy Self) :=
+fun {Self Item} _IteratorInst self step_by => core.iter.traits.iterator.Iterator.step_by.default self step_by
+def Aeneas.Std.core.slice.cmp.PartialEqSlice.eq : {T U : Type} →
+  core.cmp.PartialEq T U → Slice T → Slice U → Result Bool :=
+fun {T U} partialEqInst s0 s1 =>
+  if s0.length = s1.length then
+    List.allM
+      (fun x =>
+        match x with
+        | (x, y) => do
+          let b ← partialEqInst.ne x y
+          Result.ok (decide ¬b = true))
+      ((↑s0).zip ↑s1)
+  else Result.ok false

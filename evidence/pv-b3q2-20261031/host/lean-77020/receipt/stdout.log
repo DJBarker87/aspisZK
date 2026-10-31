@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:22:3: error: unsolved goals
+case pos
+α : Type
+s : Slice α
+r : Range Usize
+hs : ↑r.start ≤ ↑r.end
+he : ↑r.end ≤ (↑s).length
+h : r.start ≤ r.end ∧ ↑r.end ≤ s.length
+⊢ Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ =
+    if True ∧ True then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:24:3: error: unsolved goals
+case neg
+α : Type
+s : Slice α
+r : Range Usize
+hs : ↑r.start ≤ ↑r.end
+he : ¬↑r.end ≤ (↑s).length
+h : ¬(r.start ≤ r.end ∧ ↑r.end ≤ s.length)
+⊢ (if h : False then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic) =
+    if r.start ≤ r.end ∧ False then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:28:1: error: unsolved goals
+case neg
+α : Type
+s : Slice α
+r : Range Usize
+hs : ¬↑r.start ≤ ↑r.end
+h : ¬(r.start ≤ r.end ∧ ↑r.end ≤ s.length)
+⊢ (if h : False then
+      if hend : ↑r.end ≤ (↑s).length then Result.ok ⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩ else Result.fail Error.panic
+    else Result.fail Error.panic) =
+    Result.fail Error.panic
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:23:32: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵h̵e̵,̵d̵i̵f̵_̵p̵o̵s̵,̵h̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲h̲s̲,̲ ̲h̲e̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:27:30: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵h̵e̵,̵d̵i̵f̵_̵p̵o̵s̵,̵d̵i̵f̵_̵n̵e̵g̵,̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲s̲,̲ ̲h̲e̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲,̲ ̲h̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:27:38: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [hs, ̲he, ̲dif_pos, ̲dif_neg,h̵,̵ ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:27:40: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵h̵e̵,̵d̵i̵f̵_̵p̵o̵s̵,̵d̵i̵f̵_̵n̵e̵g̵,̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲s̲,̲ ̲h̲e̲,̲ ̲d̲i̲f̲_̲p̲o̲s̲,̲ ̲d̲i̲f̲_̲n̲e̲g̲,̲ ̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3q2-20261031/lean/PV_B3Q_RangeIndexSource.lean:31:17: warning: This simp argument is unused:
+  dif_neg
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵s̵,̵d̵i̵f̵_̵n̵e̵g̵,̵h̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲s̲,̲ ̲h̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3Q_RangeIndexSource.binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3Q_RangeIndexSource.projected_group_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3Q_RangeIndexSource.all_range_link' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

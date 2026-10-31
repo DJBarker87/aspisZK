@@ -1,0 +1,16 @@
+"""Extend original LLBC's opaque dependency frontier using pinned Charon only.
+No Aeneas binary is invoked (ae1). No source or old cache is written.
+"""
+from pathlib import Path
+import json,hashlib,sys
+from run import H,run
+B=H.parent/'codex-pv-b3p6-20261028';src=B/'source';p=src/'tools/pv-b3p6-20261028/v244';charon=H.parent/'codex-pv-extract-20261027/charon'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+assert sha(charon)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
+features=json.loads((B/'features227-resume4.json').read_text());assert features['feature_differences']==[]
+files=[p/'Cargo.toml',src/'Cargo.lock',src/'crates/aspis-core/src/field.rs',src/'crates/aspis-statement/src/state_only_poseidon.rs',p/'host_terminal.rs',p/'host_copy_terminal.rs',p/'host_terminal_field.rs']
+cmd=['timeout','300','taskset','--cpu-list','0-3',str(charon),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default','--start-from','crate::host_terminal::r0::Public::terminal_qm31']
+for n in ['pv_b3p6_reference227::host_terminal::*','pv_b3p6_reference227::host_copy_terminal::*','pv_b3p6_reference227::host_terminal_field::*','aspis_core::field::*','aspis_statement::state_only_poseidon::*','aspis_statement::poseidon2::*','aspis_statement::pool_v1::pair_tree_profile::*','core::result::*::branch','core::result::*::from_residual','core::slice::*::len','core::array::equality::*::ne','core::num::*::checked_add','core::cmp::PartialEq::ne','core::iter::traits::collect::*::into_iter','core::iter::range::*::next','core::array::iter::*::into_iter','core::array::iter::*::fold','core::ops::range::*::new','core::iter::range::*::fold','core::array::*::map','core::array::from_fn','core::option::*::unwrap_or','core::option::*::is_some','core::convert::num::*::from','core::iter::traits::iterator::Iterator::step_by','core::slice::iter::*::into_iter','core::slice::iter::*::next','core::ops::range::*::clone','core::array::*::into_iter','core::fmt::*::from_str_nonconst','core::iter::adapters::step_by::*::next','core::cmp::min','core::num::*::wrapping_add','core::num::*::wrapping_sub','core::num::*::count_ones','core::num::*::trailing_zeros']:cmd+=['--include',n]
+cmd+=['--dest-file',str(H/'PV_B3Q_TargetedCone.llbc'),'--','--manifest-path',str(p/'Cargo.toml'),'--release','--locked','--offline','--lib','--jobs','4']
+(H/'targeted-cone-extraction-input.json').write_text(json.dumps(dict(command=cmd,charon_sha256=sha(charon),files={str(f):sha(f)for f in files},feature_parity=features,source_revision=(H/'revision').read_text(),aeneas_invoked=False),indent=2)+'\n')
+raise SystemExit(run('N77108',cmd,'optimized-MIR extraction on pinned Charon/nightly; expected time in dependency compilation and translation, no arithmetic gate',{'RUSTUP_TOOLCHAIN':'nightly-2026-06-01','CARGO_TARGET_DIR':str(H/'charon-target')}))
