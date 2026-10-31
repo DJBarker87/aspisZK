@@ -1,0 +1,74 @@
+START 76082 R1Z.PV_RunJoin_NativeSaltSize64
+DONE 76082 R1Z.PV_RunJoin_NativeSaltSize64 exit 1 wall 1.96 RSS 4437655552
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeSaltSize64.lean:28:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ExternalFuns.op32 ?Allocator ?v ?n
+in the target expression
+  Post
+    (fun status =>
+      match status with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok salts => alloc.vec.Vec.length salts = 262144)
+    do
+    let (r, salts) ← alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (Std.Array U8 32#usize)) 262144#usize
+    let r1 ←
+      core.result.Result.map_err
+          prover.derive_private_salts.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let result ←
+          prover.derive_private_salts_loop reserved context hash tag 262144#usize (core.result.Result.Ok salts) 0#usize
+        core.result.Result.map (BuiltinFnOnce (alloc.vec.Vec (Std.Array U8 32#usize)) host_commitment.PrivateSalts)
+            result host_commitment.PrivateSalts.new
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual host_commitment.PrivateSalts
+          (core.convert.FromSame verifier.Error) residual
+
+S F : Type
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+runtime : PV_RunJoin_AllocatorWorld63.Runtime S F
+world : PV_FXM_ReserveWorld.World S F
+reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+hash : aspis_core.digest.LegacyHashFn
+tag : U8
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box ops runtime world
+⊢ Post
+    (fun status =>
+      match status with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok salts => alloc.vec.Vec.length salts = 262144)
+    do
+    let (r, salts) ← alloc.vec.Vec.try_reserve_exact Global (alloc.vec.Vec.new (Std.Array U8 32#usize)) 262144#usize
+    let r1 ←
+      core.result.Result.map_err
+          prover.derive_private_salts.closure.Insts.CoreOpsFunctionFnOnceTupleTryReserveErrorError r ()
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue a => do
+        let result ←
+          prover.derive_private_salts_loop reserved context hash tag 262144#usize (core.result.Result.Ok salts) 0#usize
+        core.result.Result.map (BuiltinFnOnce (alloc.vec.Vec (Std.Array U8 32#usize)) host_commitment.PrivateSalts)
+            result host_commitment.PrivateSalts.new
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual host_commitment.PrivateSalts
+          (core.convert.FromSame verifier.Error) residual
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (262144 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_NativeSaltSize64.count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativeSaltSize64.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativeSaltSize64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

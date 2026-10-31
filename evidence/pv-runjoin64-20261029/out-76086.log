@@ -1,0 +1,81 @@
+START 76086 R1Z.PV_RunJoin_CommitmentTrace64
+DONE 76086 R1Z.PV_RunJoin_CommitmentTrace64 exit 1 wall 1.36 RSS 2638123008
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommitmentTrace64.lean:55:22: error: Tactic `assumption` failed
+
+case isFalse.false.Ok.Ok.Ok.none
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+hash : aspis_core.digest.LegacyHashFn
+domain : host_commitment.EncodingDomain
+time : host_commitment.CommitmentTime
+messages : Slice (Std.Array aspis_core.field.wide_exact.WideExact 1024#usize)
+variant : transport.Variant
+salts : Option host_commitment.PrivateSalts
+laneCount : Usize
+h✝ : ¬(messages.len != laneCount) = true
+saltRef : Option host_commitment.PrivateSalts
+lanes : alloc.vec.Vec Usize
+hlane : host_commitment.commitment_lanes time = ok (core.result.Result.Ok lanes)
+words : alloc.vec.Vec host_commitment.Word
+leaves : alloc.vec.Vec (Std.Array U8 32#usize)
+hleaf : host_commitment.commitment_leaves hash time lanes.deref words.deref saltRef = ok (core.result.Result.Ok leaves)
+⊢ Post
+    (fun status =>
+      match status with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok c => Trace hash time salts c)
+    do
+    let r3 ← core.option.Option.ok_or none aspis_core.r0.Error.WrongLength
+    let cf3 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf3 with
+      | core.ops.control_flow.ControlFlow.Continue val3 =>
+        ok
+          (core.result.Result.Ok { time := time, lanes := lanes, words := words, tree := val3, private_salts := salts })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual host_commitment.Commitment
+          (core.convert.FromSame aspis_core.r0.Error) residual
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommitmentTrace64.lean:57:20: error: Invalid `⟨...⟩` notation: The expected type
+  match do
+    let r3 ← core.option.Option.ok_or (some tree) aspis_core.r0.Error.WrongLength
+    let cf3 ←
+      match r3 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf3 with
+      | core.ops.control_flow.ControlFlow.Continue val3 =>
+        ok
+          (core.result.Result.Ok { time := time, lanes := lanes, words := words, tree := val3, private_salts := salts })
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual host_commitment.Commitment
+          (core.convert.FromSame aspis_core.r0.Error) residual with
+  | ok a =>
+    (fun status =>
+        match status with
+        | core.result.Result.Err a => True
+        | core.result.Result.Ok c => Trace hash time salts c)
+      a
+  | fail e => True
+  | div => True
+is not an inductive type
+
+Note: This notation can only be used when the expected type is an inductive type with a single constructor
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommitmentTrace64.lean:45:21: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CommitmentTrace64.lean:51:23: warning: This simp argument is unused:
+  core.result.Result.Insts.CoreOpsTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_CommitmentTrace64.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CommitmentTrace64.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

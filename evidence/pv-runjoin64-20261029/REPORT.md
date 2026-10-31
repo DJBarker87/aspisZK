@@ -1,4 +1,4 @@
-# Runjoin64 — work in progress; target not established
+# Runjoin64 — budget exhausted; target not established
 
 Entry `d02f64c15fa293f6206fd09341e8ddb2134e7c36`, LOG D528.
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
@@ -91,5 +91,77 @@ observations are not discharged by these lemmas. The op79 packet's structural
 source association remains separately cited. No Rust/SBF/Kani/ELF rebuild ran.
 No keys or balances were created, moved, or destroyed.
 
-Rows removed: none. Privacy target not established. This report is interim;
-final budget, audit, source-status and stopping evidence will replace this note.
+Rows removed: none. Privacy target not established. The final accounting and stopping evidence follow.
+
+
+## Session-1 recovery and final accounting
+
+Resume entry `dd7b0bc15e`; first action was git status. Commit `786d7a9349`
+retains the 23 dirty evidence paths and original receipts for 76053–76054.
+`resume-session1-reconciliation.json` verifies 55 charged results and 165 matching
+host/local files, no live scope/cgroup, no cross-job ID hits, and an expired quiet
+window. Nothing was duplicated or resubmitted unchanged. All post-handoff commits
+are retained; exact original-round and session histories are in `COMMITS.txt`
+and `SESSION1-COMMITS.txt` (snapshot at their recorded source revision).
+
+Final IDs 76000–76099 are ALL spent, including audits 76097–76099. Exactly
+100 charged Lean attempts: 66 accepted, 34 rejected, zero Kani. This resumed
+session consumed 45 attempts, 29 accepted and 16 rejected. Seven historical
+admission refusals remain uncharged; their IDs are also never reusable.
+`SUMMARY.json` records 279.75 aggregate host wall seconds, maximum peak RSS
+4530192384 bytes, zero swaps. Individual target, command, source revision,
+exit, wall time, RSS, swap and axioms records are in receipt-/modules-/time-
+files; original module output is preserved in `original-module-logs.json.xz`.
+`final-session1-reconciliation.json` matches all 100 host results and 300 files,
+with no live scope/cgroup and no other-job receipt collisions. Budget exhausted;
+no new attempt is authorized in this block.
+
+## Additional checked source facts
+
+`NativeCommitmentQuery64.complete` (76093) proves that, at opsNative with the
+allocator world, a successful salted Commitment.build produces BOTH
+QueryFillStep64.Domain c and an existential stored salt vector of length at
+least 262144. Before: the generic query totality theorem assumed these primitive
+bounds. After: this named theorem produces those bounds from the successful
+source constructor, without adding a run/endpoint hypothesis. Installing that
+constructor provenance for each contextual backend commitment remains open.
+The source trace retains the actual external option reference and ok_or calls;
+the native option reference is separately identified, never assumed generally.
+The lane vectors are recovered from successful copies, and backward loop
+visitation recovers word and salt reads at the last leaf. No large concrete
+recurrence was evaluated.
+
+`NativeSaltContext64.complete` (76084) proves folded_salts.length=262144 for
+EVERY QueryContext publication at opsNative. Its producer is derive_private_salts,
+with allocator-preserved empty state, symbolic push/loop length, and the actual
+Result map installation. `FoldedLeafWord64.complete` (76094) proves length at
+least 262144 from the populated inner leaf call at u=65535. This last result
+still needs installation from the outer successful folded_leaves call.
+`FoldedLeafLimits64` passed 76096. `FoldedWordSize64` is a committed, UNCOMPILED
+outer-loop draft; it has no credit. `final-source-status.json` inventories every
+round64 source and its accepted matching hash; this is its sole unchecked file.
+
+Audits 76097–76099 all passed, covering the new source bounds and the retained
+op79, sequential scheduling and conditional query interfaces. Only propext,
+Classical.choice and Quot.sound occur. This is a focused import/axioms audit,
+not a full frozen-manifest source replay or a release result. No unchanged
+full regression was repeated. The failed shift proofs were replaced by an
+explicit signed-guard/platform/bitvector argument; all failures remain recorded.
+
+## Remaining obligations and next deliverable
+
+Skeleton consistency: reduced to non-emptiness. Actual NativeControl.run binding
+and sequential reached-input op227/op257 success sufficiency yielding Nonempty P
+remain UNPROVED. QueryAppend remains open: install both backend commitment
+construction traces and the contextual folded-word bound, then consume the
+already checked primitive totality and exact-byte theorem. FinishContext,
+CommonSample, BackendInput and NodeAppend remain open. QueryContext, QueryRange,
+FrontRoom and PublishOrder retain their prior conditional credit. The op79
+installation retains its own-1 structural qualification.
+
+Premises removed: none. Premises added/changed: none. Exactly three TrustItems,
+the observer, simulator and release pins remain unchanged. No Rust/program
+implementation edit, SBF rebuild, Kani, funds operation, key cleanup or push ran.
+The next concrete deliverable is to compile FoldedWordSize64 in a newly assigned
+ID block, derive its contextual frame from FinishTrace.source, then recover
+backend commitment provenance. No further use of 76000–76099 is permitted.

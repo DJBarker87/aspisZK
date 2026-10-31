@@ -1,59 +1,40 @@
-# D535 resume handoff — single-writer hold
+# Runjoin65 session-1 handoff — budget exhausted
 
-Worktree: `/Users/dominic/ZK/.worktrees/pv-runjoin`.
-Branch: `codex/pv-runjoin-20261026`. Do not push.
+Exact worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`; branch
+`codex/pv-runjoin-20261026`. Sole writer authorization was supplied by the user.
+No push. Recovery receipts and evidence are committed; see REPORT.md.
 
-The first action was git status. The stalled session's uncommitted evidence
-was reconciled read-only against the host, then committed path-limited in
-`ccd6950057`. `resume-reconciliation.json` records all 51 original results,
-153 matching host/local evidence files, no running pv64 scope/cgroup, no
-cross-job ID hits, and the expired quiet-window marker. The build-plan
-reconciliation records 3958 common pins matching and all 21 round64 staging
-pins matching. Historical local-only and host-only plan entries are listed;
-neither plan was silently substituted. Original module logs were recovered
-with their hashes. No evidence file exceeded 20 MiB.
+ALL IDs76000–76099 spent, audits76097–76099 included. 100 charged Lean attempts,
+66 accepted,34 rejected,0 Kani,7 historical uncharged refusals. No remaining ID
+or attempt in this block. Never reuse an ID. Final host reconciliation verifies
+100 original results,300 matching files,no active pv64 scope/cgroup,no other-job
+ID hits. No unresolved submitted scope remains to collect.
 
-`b34c5817f7` exposes the tuple projection in QueryLeafVisit64's symbolic
-starting-rank arithmetic. Attempt76051 accepted this source, standard axioms
-only, 2.53 seconds and 4416245760 bytes peak RSS, swaps0. This is a local
-successful-loop visitation fact, not QueryAppend closure.
+Checked additions: NativeCommitmentQuery64.complete produces the word/lane and
+stored-salt bounds from successful native salted Commitment.build;
+NativeSaltContext64.complete proves contextual folded salts have length262144;
+FoldedLeafWord64.complete derives folded-word size from successful inner leaf
+construction at65535. FoldedLeafLimits64 passed76096. Three axioms audits passed
+76097–76099 with only propext,Classical.choice,Quot.sound.
 
-Another Codex process remains attached to this exact worktree: PIDs98941
-and98942, original runjoin64 prompt, started2026-10-29 14:25:39 local time.
-Commit84c7234194 and receipt76052 appeared during this resume. The attempted
-queue invocation stopped at the failed-source guard before another launch.
-The host journal records only one scope launch for76051; no duplicate
-compile is established. Do not infer exclusive ownership merely because
-no capped scope is currently active. `resume-single-writer-hold.json`
-records process identity and the read-only host check. The user was asked
-to have the lead stop the earlier process; no confirmation has arrived.
-Further source mutations and launches are held to prevent competing writers.
+NEXT, only after a fresh ID allocation: compile the committed UNCHECKED
+PV_RunJoin_FoldedWordSize64.lean (the only round64 source without an accepted
+matching receipt). It symbolically visits outer folded_leaves at65535 and
+consumes FoldedLeafWord64. Stop and change the source on any proof failure.
+Then use FinishTrace.source plus FinishFrame63 to derive contextual folded-word
+size; recover both backend commitments' successful salted constructor
+provenance, consuming NativeCommitmentQuery64; join with NativeQueryPrimitive64
+for full QueryAppend. FinishContext still requires its full field association.
 
-Latest receipt accounting: 53 charged attempts,37 accepted,16 rejected,
-IDs76000–76052 spent,47 attempts remaining,0 Kani. Next unused ID76053;
-audits76097–76099 remain reserved. Seven historical refusals are uncharged.
-Never reuse any ID; recheck disk AND host receipts before resuming. Reconcile
-any newer receipts first. Retain the one-scope,6G/8G/swap0/TasksMax64,
-Lean-M7000 admission and failed-source-hash guards. No limits were raised.
+Nonempty P at opsNative remains unproved: Sequential64 and SequentialSource64
+are generic scheduling tools only; bind actual NativeControl.run and prove the
+sequential op227/op257 residual success conditions on reached inputs plus the
+allocator world. No separate model witness is needed under(v').
 
-Next local failure:76052, QueryReadBounds64.vector, the application of
-List.getElem?_eq_none. Its argument is being elaborated as a type/InitialSeg
-instead of the desired length bound. Inspect that theorem's actual pinned
-signature and use the correctly typed argument; do not resubmit unchanged.
-Then compile QuerySliceRead64, QueryLeafChannel64, QueryLeafRows64,
-QueryLeafWordBounds64, QueryStoredWords64, QueryCommitmentWords64 in dependency
-order, stopping and fixing each rejected source. Other existing uncompiled
-drafts include salt length and allocator-backed vector size proofs. They
-are not credited until accepted against this same coherent cohort.
-
-Skeleton consistency: reduced to non-emptiness under(v'). No separate model
-witness is required. The qualified op79 source installation is retained.
-Sequential64 and SequentialSource64 remain generic schedule tools; the
-actual NativeControl.run binding and sufficient reached-input residual
-success conditions yielding Nonempty P are still unproved. QueryAppend
-still needs primitive stored-state bounds for every contextual publication;
-QueryLoopTotal64 and NativeQueryPrimitive64 are conditional local prerequisites.
-FinishContext, CommonSample, BackendInput and NodeAppend remain open.
-Rows removed:none. Endpoint premise reduction:zero. Target not established.
-The three TrustItems, observer, simulator and release pins remain unchanged.
-No Rust/SBF/Kani, push, key cleanup or funds operation ran.
+CommonSample,BackendInput,FinishContext,QueryAppend,NodeAppend remain open.
+No ledger row or endpoint premise removed,added or changed. Three TrustItems,
+observer,simulator and release pins retained. Target not yet established.
+No implementation/Rust/SBF/Kani/key/funds/push operation ran. One scope,
+6G/8G/swap0/TasksMax64,Lean-M7000,admission and failed-source guards retained.
+The coherent pinned host cache remains available for dependent continuation;
+receipts are not cache and must be retained.
