@@ -38,11 +38,11 @@ theorem complete (time : host_commitment.CommitmentTime) (lanes : alloc.vec.Vec 
   cases time <;> constructor
   · decide
   · intro lane member
-    simp only [values,List.mem_cons,List.mem_singleton] at member
+    simp only [values,List.mem_cons,List.not_mem_nil,or_false] at member
     rcases member with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl <;> decide
   · decide
   · intro lane member
-    simp only [values,List.mem_cons,List.mem_singleton] at member
+    simp only [values,List.mem_cons,List.not_mem_nil,or_false] at member
     rcases member with rfl|rfl <;> decide
 
 #print axioms source
