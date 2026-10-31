@@ -1,7 +1,9 @@
 # Before and after: event probability laws
 
-Status: the generic layers are checked; the composed statements below remain
-TARGETS until their own receipts and the simultaneous witness are green.
+Status: generic layers, measured composition (73120), simultaneous closed
+synthetic witness (73123), and full finite adapter/corollary (73130) are checked.
+Statement audit 73197 confirms the quantifiers printed below. Final axioms and
+frozen import-manifest audits follow separately.
 
 ## Before — full existing event endpoint
 
@@ -44,10 +46,10 @@ TARGETS until their own receipts and the simultaneous witness are green.
 
 ## Exact finite specialization and unchanged obligations
 
-`PV_MEAS_Legacy.links_of_legacy` must construct every measured link from the
+`PV_MEAS_Legacy.links_of_legacy` constructs every measured link from the
 old finite link conjunction, installing symbolic uniform measures. Thus the
 new measurability and joint-law fields impose no extra finite-source premise.
-`PV_MEAS_Legacy.finite_uniform_corollary` must recover the WHOLE original
+`PV_MEAS_Legacy.finite_uniform_corollary` recovers the WHOLE original
 rational statement, including its numerical envelope and strict threshold,
 by the measured headline and exact expectation/cast identities. It never calls
 the former headline theorem.
@@ -60,6 +62,8 @@ observer-program association, selected callback and original three-field T
 are retained. No native source or deployment row is discharged by this work.
 Rows removed: NONE. No additional trust field or numerical error term.
 
-The full new conjunction requires a checked simultaneous explicit model
-witness. A synthetic witness proves consistency only; it is not an execution
-of the deployed prover or a proof of a native link.
+`PV_MEAS_Satisfiability.closed_witness` supplies the full conjunction in an
+explicit synthetic model, with external carriers and operations instantiated.
+This proves consistency only; it is not an execution of the deployed prover
+or a proof of a native link. The overall deployed privacy target is not yet
+established.
