@@ -1,0 +1,33 @@
+{"attempt": "NEG_L029", "exit_status": 0, "wall_seconds": 2.9062336100032553, "peak_rss_kib": "2570424", "swaps": "0", "print_axioms": []}
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | ok r =>
+        match r with
+        | ControlFlow.cont x => f x
+        | ControlFlow.done x => ok x
+      | fail e => fail e
+      | div => div)
+    ⋯
+Aeneas.Std.Result.ok [1, 2, 3, 4]
+
+...
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | ok r =>
+        match r with
+        | ControlFlow.cont x => f x
+        | ControlFlow.done x => ok x
+      | fail e => fail e
+      | div => div)
+    ⋯
+Aeneas.Std.Result.ok [1, 2, 3, 4]
+
+Running as unit: run-r8c3dfac62390419eb22948afff0fcd95.scope; invocation ID: 570d3610ee4a4f9c8ed80783b6655962

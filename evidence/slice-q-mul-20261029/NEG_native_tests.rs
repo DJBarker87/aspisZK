@@ -40,3 +40,5 @@ fn NEG_dots_native_differential(){
  }
  println!("NEG_dots_native_differential cases=256 includes_all_max_limbs");
 }
+
+include!("NEG_fixture_tests.rs");

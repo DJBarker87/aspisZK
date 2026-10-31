@@ -1,0 +1,49 @@
+{"attempt": "NEG_N003", "exit_status": 101, "wall_seconds": 1.1502913309959695, "peak_rss_kib": "204400", "swaps": "0", "print_axioms": "N/A: native"}
+{"command": ["/home/dombarker/.cargo/bin/cargo", "test", "--release", "--offline", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029/NEG_isolated/Cargo.toml", "--features", "private-leaf-salts,optimized-terminal,program-build", "-j", "1", "--lib", "NEG_shared", "--", "--nocapture"], "rustflags": "-Zthreads=1 -C link-arg=-Wl,--threads=1", "source_sha256": "84d565ccc3873ea467a4122a7683960b24b5efed77295c5f3797d39856f8540c", "expected_time": "Optimized compilation of isolated unchanged bodies, then bounded differential tests; no elimination or proof generation"}
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-s
+...
+ke case: `neg_dots_native_differential`
+
+warning: function `NEG_shared_rows` should have a snake case name
+ --> src/../../NEG_fixture_tests.rs:2:12
+  |
+2 | #[test] fn NEG_shared_rows(){
+  |            ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `neg_shared_rows`
+
+warning: function `NEG_shared_dots` should have a snake case name
+  --> src/../../NEG_fixture_tests.rs:28:12
+   |
+28 | #[test] fn NEG_shared_dots(){
+   |            ^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `neg_shared_dots`
+
+warning: `neg_isolated` (lib test) generated 22 warnings (run `cargo fix --lib -p neg_isolated --tests` to apply 1 suggestion)
+    Finished `release` profile [optimized] target(s) in 1.09s
+     Running unittests src/lib.rs (/home/dombarker/project-offloads/codex-cx-slice-q-mul-20261029/NEG_extract_target/release/deps/neg_isolated-8025583be91ff100)
+
+running 2 tests
+
+thread 'NEG_native_tests::NEG_shared_dots' (1238059) panicked at src/../../NEG_fixture_tests.rs:30:115:
+assertion `left == right` failed: shared dots 0 slot 0
+  left: [0, 0, 0, 0, 0, 0, 0, 0]
+ right: [1, 0, 0, 0, 0, 0, 0, 0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'NEG_native_tests::NEG_shared_rows' (1238060) panicked at src/../../NEG_fixture_tests.rs:3:264:
+assertion `left == right` failed: shared row 0
+  left: [2147483648, 2147483649, 2147483650, 2147483651]
+ right: [2147483649, 2147483649, 2147483650, 2147483651]
+test NEG_native_tests::NEG_shared_dots ... FAILED
+test NEG_native_tests::NEG_shared_rows ... FAILED
+
+failures:
+
+failures:
+    NEG_native_tests::NEG_shared_dots
+    NEG_native_tests::NEG_shared_rows
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+
+Running as unit: run-ra8d0dee610914ea1b91ba3633116e2c6.scope; invocation ID: 850c633dbfd14404addae2dab4d21ed6

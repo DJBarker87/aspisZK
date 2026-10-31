@@ -1,0 +1,6 @@
+import NEG_PushActual.Types
+import NEG_RowIsolated.FunsExternal
+namespace NEG_PushActual
+abbrev MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter :=
+  @NEG_RowIsolated.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter
+end NEG_PushActual

@@ -70,8 +70,9 @@ elif kind=='kani':
     if os.environ.get('NEG_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEG_gate.py',a+'.json']
 elif kind=='native':
-    for name in ['NEG_native.py','NEG_native_tests.rs']:files[name]=(E/name).read_text()
+    for name in ['NEG_native.py','NEG_native_tests.rs','NEG_fixture_tests.rs']:files[name]=(E/name).read_text()
     if os.environ.get('NEG_WRONG'):env['NEG_WRONG']=os.environ['NEG_WRONG']
+    if os.environ.get('NEG_FIXTURE_NEGATIVE'):env['NEG_FIXTURE_NEGATIVE']=os.environ['NEG_FIXTURE_NEGATIVE']
     sources=list(files);command=['python3','NEG_native.py']
 elif kind=='inspect':
     files['NEG_goto_inspect.py']=(E/'NEG_goto_inspect.py').read_text()
@@ -83,6 +84,7 @@ else:
         from NEG_restore import references
         references()
     files['NEG_reference.rs']=reference_path.read_text()
+    if (E/'NEG_row_reference.rs').exists():files['NEG_row_reference.rs']=(E/'NEG_row_reference.rs').read_text()
     if os.environ.get('NEG_EXTRACT_CONFIG'):env['NEG_EXTRACT_CONFIG']=os.environ['NEG_EXTRACT_CONFIG']
     sources=list(files);command=['python3','NEG_extract.py']
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized reference compilation and Charon/Aeneas IR generation; no arithmetic execution' if kind=='extract' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
@@ -118,7 +120,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
-names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NEG_EXTRACTION_PINS.json',a+'.json']
+names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NEG_EXTRACTION_PINS.json','NEG_NATIVE_METADATA.json',a+'.json']
 
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NEG_extracted').rglob('*.lean')]
