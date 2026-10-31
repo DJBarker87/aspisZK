@@ -7,7 +7,7 @@ open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_ResultPost41
 
 theorem list_resize {T : Type} (xs : List T) (n : Nat) (x : T) :
     (xs.resize n x).length=n := by
-  simp only [List.resize,List.length_append,List.length_take,List.length_replicate]
+  simp [List.resize,List.length_append,List.length_take,List.length_replicate]
   omega
 
 theorem resize {T : Type} (clone : core.clone.Clone T) (v : alloc.vec.Vec T)
