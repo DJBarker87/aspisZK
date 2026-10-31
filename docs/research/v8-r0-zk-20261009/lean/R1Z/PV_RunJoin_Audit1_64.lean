@@ -1,0 +1,19 @@
+import R1Z.PV_RunJoin_QueryReadBounds64
+import R1Z.PV_RunJoin_QuerySliceRead64
+import R1Z.PV_RunJoin_QueryLeafChannel64
+import R1Z.PV_RunJoin_QueryLeafRows64
+import R1Z.PV_RunJoin_QueryLeafWordBounds64
+import R1Z.PV_RunJoin_QueryStoredWords64
+import R1Z.PV_RunJoin_QueryCommitmentWords64
+import R1Z.PV_RunJoin_FoldedLeafWord64
+
+#print axioms R1Z.PV_RunJoin_QueryReadBounds64.vector
+#print axioms R1Z.PV_RunJoin_QueryReadBounds64.word
+#print axioms R1Z.PV_RunJoin_QuerySliceRead64.bound
+#print axioms R1Z.PV_RunJoin_QuerySliceRead64.value
+#print axioms R1Z.PV_RunJoin_QueryLeafChannel64.visited
+#print axioms R1Z.PV_RunJoin_QueryLeafRows64.last_row
+#print axioms R1Z.PV_RunJoin_QueryLeafWordBounds64.complete
+#print axioms R1Z.PV_RunJoin_QueryStoredWords64.complete
+#print axioms R1Z.PV_RunJoin_QueryCommitmentWords64.complete
+#print axioms R1Z.PV_RunJoin_FoldedLeafWord64.complete
