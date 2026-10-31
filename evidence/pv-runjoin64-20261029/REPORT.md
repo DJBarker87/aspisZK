@@ -51,9 +51,14 @@ The old arbitrary-input two-existential form remains refuted by runjoin63.
 
 ## QueryAppend and FinishContext
 
-The fixed Link definitions are unchanged. Local totality work derives bounded
-salt/word reads, folded windows and their serialization, lane fills and matrix
-writebacks from explicit primitive stored-state bounds. These bounds are not
+The fixed Link definitions are unchanged. QueryLoopTotal64.complete (76045) proves full22-query totality from primitive
+stored-state bounds. NativeQueryPrimitive64.complete (76046) joins that totality
+to the exact actual-plan byte equation at opsNative. Its Domain contains the
+first two commitment lane/word bounds, stored salt bounds, folded-word length
+and folded-salt length; only words reached by actual lane indices are required.
+All832 bytes per cell and18304 query bytes are derived symbolically.
+The source salt/word reads, folded windows, serialization, finite lane fills and
+all four matrix borrow restorations are checked prerequisites. These bounds are not
 installed as new run or endpoint assumptions. Backward symbolic loop visitation
 is being used to recover them from successful source commitment construction;
 no262144-cell execution is kernel-replayed.

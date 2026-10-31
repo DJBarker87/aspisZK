@@ -1,0 +1,20 @@
+START 76054 R1Z.PV_RunJoin_IndexApi64
+DONE 76054 R1Z.PV_RunJoin_IndexApi64 exit 1 wall 1.14 RSS 2626023424
+theorem List.getElem?_eq_none.{u_1} : ∀ {α : Type u_1} {l : List α} {i : ℕ}, l.length ≤ i → l[i]? = none :=
+fun {α} {l} {i} h => List.getElem?_eq_none_iff.mpr h
+theorem List.getElem?_eq_none_iff.{u_1} : ∀ {α : Type u_1} {l : List α} {i : ℕ}, l[i]? = none ↔ l.length ≤ i :=
+fun {α} {l} {i} =>
+  List.brecOn (motive := fun {l} => ∀ {i : ℕ}, l[i]? = none ↔ l.length ≤ i) l (@List.getElem?_eq_none_iff._f α)
+def Aeneas.Std.alloc.vec.Vec.{u} : Type u → Type (max 0 u) :=
+fun α => { l // l.length ≤ Aeneas.Std.Usize.max }
+theorem Aeneas.Std.alloc.vec.Vec.getElem?_Nat_eq.{u} : ∀ {α : Type u} (v : Aeneas.Std.alloc.vec.Vec α) (i : ℕ),
+  v[i]? = (↑v)[i]? :=
+fun {α} v i => Eq.refl v[i]?
+theorem Aeneas.Std.Slice.getElem?_Usize_eq.{u} : ∀ {α : Type u} (v : Aeneas.Std.Slice α) (i : Aeneas.Std.Usize),
+  v[i]? = (↑v)[↑i]? :=
+fun {α} v i => Eq.refl v[i]?
+def Aeneas.Std.core.slice.Slice.copy_from_slice : {T : Type} →
+  Aeneas.Std.core.marker.Copy T → Aeneas.Std.Slice T → Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T) :=
+fun {T} x s src => if s.len = src.len then Aeneas.Std.Result.ok src else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_IndexApi64.lean:8:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.core.slice.Slice.copy_from_slice_spec`
+
