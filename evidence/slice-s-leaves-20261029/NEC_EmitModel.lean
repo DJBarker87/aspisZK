@@ -19,6 +19,7 @@ theorem validation_error {A E : Type}
  (child : validate_pool_v1_pair_forest_terminal_result_against_statement_v1 statement (derived statement)=ok (.Err error)) :
  AspisR1.JHb_Emit.source runtime state statement=ok (.Err .InvalidInstructionData) := by
  unfold AspisR1.JHb_Emit.source
+ dsimp only
  rw [child]
  rfl
 
@@ -29,6 +30,7 @@ theorem encode_error {A E : Type}
  (second : encode_pool_v1_pair_forest_terminal_result_v1 (derived statement)=ok (.Err error)) :
  AspisR1.JHb_Emit.source runtime state statement=ok (.Err .InvalidInstructionData) := by
  unfold AspisR1.JHb_Emit.source
+ dsimp only
  rw [first,bind_tc_ok,second]
  rfl
 
@@ -41,6 +43,7 @@ theorem runtime_output {A E : Type}
  (magic : bytes.val.take 4=[65#u8,83#u8,82#u8,56#u8]) :
  AspisR1.JHb_Emit.source runtime state statement=ok (.Ok (AspisR1.S2I.ReturnData.set state bytes.val)) := by
  unfold AspisR1.JHb_Emit.source
+ dsimp only
  rw [first,bind_tc_ok,second,bind_tc_ok]
  dsimp only
  rw [if_neg (by exact not_not_intro bytes.property)]
@@ -55,6 +58,7 @@ theorem bad_magic {A E : Type}
  (magic : bytes.val.take 4≠[65#u8,83#u8,82#u8,56#u8]) :
  AspisR1.JHb_Emit.source runtime state statement=ok (.Err .InvalidInstructionData) := by
  unfold AspisR1.JHb_Emit.source
+ dsimp only
  rw [first,bind_tc_ok,second,bind_tc_ok]
  dsimp only
  rw [if_neg (by exact not_not_intro bytes.property),if_pos magic]

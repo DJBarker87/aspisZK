@@ -1,0 +1,21 @@
+NEC_generated/NEC_HeaderIndex.lean:5:17: error: failed to set `[local reducible]` for `Std.Array`, recall that `[reducible]` affects the term indexing datastructures used by `simp` and type class resolution
+
+Note: Use `set_option allowUnsafeReducibility true` to override reducibility status validation
+@[implicit_reducible] def Aeneas.Std.instGetElem?ArrayUsizeLtNatValLengthValListEq.{u} : {α : Type u} →
+  {n : Usize} → GetElem? (Std.Array α n) Usize α fun a i => ↑i < (↑a).length :=
+fun {α} {n} => { toGetElem := instGetElemArrayUsizeLtNatValLengthValListEq, getElem? := fun a i => (↑a)[↑i]? }
+NEC_generated/NEC_HeaderIndex.lean:15:1: error: Type mismatch: After simplification, term
+  lifted
+ has type
+  @Eq (Result α)
+    (match (↑a).get?Internal ↑i with
+    | none => fail Error.arrayOutOfBounds
+    | some value => ok value)
+    (ok (↑a)[↑i])
+but is expected to have type
+  @Eq (Result α)
+    (match (↑a).get?Internal ↑i with
+    | none => fail Error.arrayOutOfBounds
+    | some x => ok x)
+    (ok (↑a)[↑i])
+'NEC_HeaderIndex.index_read' depends on axioms: [propext, sorryAx]

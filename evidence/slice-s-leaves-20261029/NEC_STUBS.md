@@ -14,3 +14,7 @@ No field multiplication is reached or stubbed in this lane. Therefore no multipl
 | NEC_binding::first/second | Same original statement/result pointers, arbitrary typed validator errors or success | NCS_R159/NCS_R171; NEC_ResultCaller | K031 full arbitrary-result timeout; derived-result caller split pending |
 | core::ptr::copy_nonoverlapping | Exact KMX_copy_nonoverlapping from immutable KMX patch | Existing KMX value/frame laws; standard library physical interpretation retained | Only a positive with intended matched failing control receives copy-dependent credit |
 
+
+Caller join K068/069: NEC_recon::common cuts only after proving the original authenticated/candidate pointers at the actual common call and covering its good-gate continuation. It does not substitute a common return value or discharge constructor outputs. NEC::asq8_common admits every typed pair, so this caller establishes its numeric domain without a stronger premise. Safe gate reference/accepted extraction provenance is NEC_RECON_REUSE.json; the coherent source selection remains NDM_AdoptedReconstruction.selected.
+
+Result<(),ProgramError> controls K061–066: K061/K063 positive, K062 inverted ensures failure, K065 modifies failure, K066 real-client inverse failure. K064 verified-client is a compiler rejection because the foreign return type lacks kani::Arbitrary, so this interface remains OPEN for verified composition. No such verified callee use is claimed. K067 full emission contract TIMEOUT; no credit/control.
