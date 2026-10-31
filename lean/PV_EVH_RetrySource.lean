@@ -38,7 +38,6 @@ theorem source_unfold
       | Err e => rfl
       | Ok val =>
           dsimp only [core.result.Result.Insts.CoreOpsTry.branch]
-          simp only [Aeneas.Std.bind_tc_ok]
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
           | fail e => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
           | div => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
