@@ -33,9 +33,9 @@ impl Accounts {
                        public: Pubkey, checkpoint: Pubkey) -> Result<Value> {
         ensure!(settlement.len() == 10, "unexpected settlement proof-account position");
         let (_, key) = self.selected(attempts)?;
-        let proof = Value::Array(vec![Value::String(key.to_string()),Value::Bool(false),Value::Bool(false)]);
+        let proof = Value::Array(crate::triple(Value::String(key.to_string()),Value::Bool(false),Value::Bool(false)));
         settlement.push(proof.clone());
-        Ok(Value::Array(vec![proof,Value::Array(vec![Value::String(public.to_string()),Value::Bool(false),Value::Bool(false)]),Value::Array(vec![Value::String(checkpoint.to_string()),Value::Bool(false),Value::Bool(true)])]))
+        Ok(Value::Array(crate::triple(proof,Value::Array(crate::triple(Value::String(public.to_string()),Value::Bool(false),Value::Bool(false))),Value::Array(crate::triple(Value::String(checkpoint.to_string()),Value::Bool(false),Value::Bool(true))))))
     }
     pub fn selected(&self, attempts: usize) -> Result<(usize, Pubkey)> {
         ensure!((1..=CAP).contains(&attempts), "invalid successful attempt count");

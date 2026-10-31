@@ -12,7 +12,7 @@ const TOKEN:&str="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 const PROFILE:[u8;32]=[0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3];
 const RELEASE:[u8;32]=[0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a];
 fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(&crate::public_text(q,k)).unwrap()}
-fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(vec![Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)])}
+fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(crate::triple(Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)))}
 fn ro(p:Pubkey)->Value{meta(p,false,false)}
 fn rw(p:Pubkey)->Value{meta(p,false,true)}
 fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{
@@ -78,7 +78,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);
  let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;
  let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf)).map_err(err)?.0;
- let mut a=vec![ro(master),ro(pk(q,"checkpoint")),rw(lanes[output_lane as usize]),rw(page),rw(marker),meta(pk(q,"payer"),true,true),ro(system),ro(reg),ro(entry),ro(pk(q,"verifier"))];
+ let mut a=Vec::with_capacity(16);a.push(ro(master));a.push(ro(pk(q,"checkpoint")));a.push(rw(lanes[output_lane as usize]));a.push(rw(page));a.push(rw(marker));a.push(meta(pk(q,"payer"),true,true));a.push(ro(system));a.push(ro(reg));a.push(ro(entry));a.push(ro(pk(q,"verifier")));
  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
  if withdrawal{a.push(ro(pk(q,"mint")));a.push(rw(vault));a.push(rw(pk(q,"destination")));a.push(ro(authority));a.push(ro(token));}
  a.push(ro(pk(q,"verifier_checkpoint")));

@@ -35,3 +35,5 @@ fn create_private_directory(dir:&std::path::Path)->Result<()>{use std::os::unix:
 fn path_join(dir:&std::path::Path,name:&str)->std::path::PathBuf{dir.join(name)}
 
 fn client_hash()->aspis_core::HashFn{aspis_prover::HOST_HASH}
+
+fn triple(a:Value,b:Value,c:Value)->Vec<Value>{let mut out=Vec::with_capacity(3);out.push(a);out.push(b);out.push(c);out}
