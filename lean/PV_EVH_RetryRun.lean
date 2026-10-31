@@ -21,7 +21,7 @@ def run (fuel : Nat)
   (nonce_store :
   aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   (next_attempt : T0) (k : Std.Usize) (next_OPEN : Next T0) (prove_OPEN : Prove) : World → Prefix Outcome :=
-  PV_EVH_WorldLoop.loop (fun (st,c,i) => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN)
+  PV_EVH_WorldLoop.loop (fun s => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash s.1 s.2.1 s.2.2 next_OPEN prove_OPEN)
     fuel (nonce_store,next_attempt,k)
 
 theorem run_fixed (fuel : Nat)
@@ -45,9 +45,9 @@ theorem run_fixed (fuel : Nat)
     (finished : (run fuel coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k next_OPEN prove_OPEN w).status = .finished r) :
     prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k = r := by
   exact PV_EVH_WorldRecursion.fixed_finished_recursive (S := State T0) (A := Outcome)
-    (fun (st,c,i) => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN)
-    (fun (st,c,i) => sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
-    (fun (st,c,i) => prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
+    (fun s => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash s.1 s.2.1 s.2.2 next_OPEN prove_OPEN)
+    (fun s => sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash s.1 s.2.1 s.2.2)
+    (fun s => prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash s.1 s.2.1 s.2.2)
     (by
       rintro ⟨st,c,i⟩
       rw [PV_EVH_RetrySource.source_unfold coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i]
@@ -56,7 +56,7 @@ theorem run_fixed (fuel : Nat)
       cases cf with
       | done a => rfl
       | cont next => rcases next with ⟨st,c,i⟩; rfl)
-    (fun (st,c,i) => body_fixed coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN next_fixed prove_fixed)
+    (fun s => body_fixed coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash s.1 s.2.1 s.2.2 next_OPEN prove_OPEN next_fixed prove_fixed)
     fuel (nonce_store,next_attempt,k) w r finished
 
 #print axioms run_fixed

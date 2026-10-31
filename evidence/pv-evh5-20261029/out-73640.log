@@ -1,0 +1,71 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryRun.lean:53:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant
+    hash st c i
+in the target expression
+  (match (st, c, i) with
+    | (st, c, i) =>
+      prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+        variant hash st c i) =
+    Std.bind
+      (match (st, c, i) with
+      | (st, c, i) =>
+        sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+          st c i)
+      fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next =>
+        match next with
+        | (st, c, i) =>
+          prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+            variant hash st c i
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+fuel : ℕ
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+next_OPEN : Next T0
+prove_OPEN : Prove
+next_fixed :
+  ∀ (c : T0) (k : Usize),
+    FixedView (next_OPEN c k) (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut c k)
+prove_fixed :
+  ∀ (a : Secrets) (st : Store),
+    FixedView (prove_OPEN a st) (prover.prove_masked_attempt public1 compiled variant hash a st)
+w : World
+r : Result Outcome
+finished :
+  (run fuel coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+        nonce_store next_attempt k next_OPEN prove_OPEN w).status =
+    Status.finished r
+st : Store
+c : T0
+i : Usize
+⊢ (match (st, c, i) with
+    | (st, c, i) =>
+      prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+        variant hash st c i) =
+    Std.bind
+      (match (st, c, i) with
+      | (st, c, i) =>
+        sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+          st c i)
+      fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next =>
+        match next with
+        | (st, c, i) =>
+          prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+            variant hash st c i
+'PV_EVH_RetryRun.run_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
