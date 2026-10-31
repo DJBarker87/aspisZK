@@ -22,8 +22,8 @@ fn run()->Result<()>{
  let q:Value=serde_json::from_str(&s).map_err(err)?;
  println!("{}",plan::run(&q)?);Ok(())
 }
-fn unhex(s:&str)->Vec<u8>{(0..s.len()).step_by(2).map(|i|u8::from_str_radix(&s[i..i+2],16).unwrap()).collect()}
-fn hex(b:&[u8])->String{b.iter().map(|b|format!("{b:02x}")).collect()}
+fn unhex(s:&str)->Vec<u8>{let mut out=Vec::new();let mut i=0;while i<s.len(){out.push(u8::from_str_radix(&s[i..i+2],16).unwrap());i+=2;}out}
+fn hex(b:&[u8])->String{let digits=b"0123456789abcdef";let mut out=Vec::with_capacity(2*b.len());let mut i=0;while i<b.len(){out.push(digits[(b[i]>>4) as usize]);out.push(digits[(b[i]&15) as usize]);i+=1;}String::from_utf8(out).unwrap()}
 
 // Owned projection keeps JSON indexing lifetimes at the public input boundary.
 fn public_field(q:&Value,k:&str)->Value{q[k].clone()}

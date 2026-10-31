@@ -80,7 +80,7 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf)).map_err(err)?.0;
  let mut a=vec![ro(master),ro(pk(q,"checkpoint")),rw(lanes[output_lane as usize]),rw(page),rw(marker),meta(pk(q,"payer"),true,true),ro(system),ro(reg),ro(entry),ro(pk(q,"verifier"))];
  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
- if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}
+ if withdrawal{a.push(ro(pk(q,"mint")));a.push(rw(vault));a.push(rw(pk(q,"destination")));a.push(ro(authority));a.push(ro(token));}
  a.push(ro(pk(q,"verifier_checkpoint")));
  let mut out=serde_json::Map::new();
  out.insert("client_route".to_owned(),Value::String("selected64-proof-account-v1".to_owned()));
