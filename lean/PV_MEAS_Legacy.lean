@@ -137,7 +137,7 @@ theorem links_of_legacy (links : PrivacyR1HeadlineDeployedEvents.Links template 
     · simpa only [Measure.map_id] using map_uniform_of_means
         (rt.toNative e adv w) (id : R → R) (measurable_of_finite _) measurable_id
         (links.coupling e adv w).1
-    · simpa only [Measure.map_id, PV_MEAS_Deployed.input, PV_EVH_Core.input,
+    · simpa only [Measure.map_id, input, PV_MEAS_Deployed.input, PV_EVH_Core.input,
         PrivacyR1HeadlineDeployedEvents.input, PV_MEAS_Deployed.ownedDecode, ownedDecode] using map_uniform_of_means
         (Z := (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape))
         (rt.toModel e adv w) (id : (((source).RealRand × OracleAnswer) × ProverCommitFuelJoin22.Tape) → _)
@@ -208,7 +208,10 @@ theorem finite_uniform_corollary (links : PrivacyR1HeadlineDeployedEvents.Links 
           (PrivacyR1HeadlineDeployedEvents.deployedIdeal template outputs x rt adv p)))| : ℚ) : ℝ) ≤
           (PV_EVH_Core.bound template outputs x : ℝ) := by
       simpa only [Rat.cast_abs, Rat.cast_sub,
-        PrivacyR1HeadlineDeployedEvents.deployedIdeal, PV_EVH_Average.idealExperiment] using measured
+        PrivacyR1HeadlineDeployedEvents.deployedIdeal, PV_EVH_Average.idealExperiment,
+        input, PV_MEAS_Deployed.input, PV_EVH_Core.input, PV_EVH_Average.input,
+        PrivacyR1HeadlineDeployedEvents.input, PV_MEAS_Deployed.ownedDecode,
+        PV_EVH_Average.ownedDecode, PrivacyR1HeadlineDeployedEvents.ownedDecode, ownedDecode] using measured
     exact Rat.cast_le.mp casted
   · let e : Env := Classical.choice (inferInstance : Nonempty Env)
     exact (PV_MEAS_Core.privacy_headline_events_model template outputs x
