@@ -68,11 +68,11 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  // Retain the exact wallet record for recovery with restrictive permissions.
  super::wallet::retain(dir,&secrets.record)?;
  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
- let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger")).map_err(err)?;
+ let mut store=DurableStateOnlyMaskNonceStore::open(crate::path_join(dir,"mask-nonce-ledger")).map_err(err)?;
  let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;
  let (attempt_index,proof_account)=accounts.selected(result.attempts)?;
  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);
- fs::write(dir.join("proof.bin"),&proof).map_err(err)?;fs::write(dir.join("statement.bin"),public).map_err(err)?;
+ fs::write(crate::path_join(dir,"proof.bin"),&proof).map_err(err)?;fs::write(crate::path_join(dir,"statement.bin"),public).map_err(err)?;
  let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};
  let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);
  let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);

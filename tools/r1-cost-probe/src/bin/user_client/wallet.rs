@@ -40,6 +40,6 @@ pub fn read(q:&Value)->Result<Wallet>{
 }
 pub fn retain(dir:&Path,record:&[u8;WIDTH])->Result<()>{
  use std::os::unix::fs::OpenOptionsExt;
- let mut file=std::fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join("wallet-recovery.bin")).map_err(err)?;
+ let mut file=std::fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(crate::path_join(dir,"wallet-recovery.bin")).map_err(err)?;
  file.write_all(record).map_err(err)?;file.sync_all().map_err(err)?;Ok(())
 }

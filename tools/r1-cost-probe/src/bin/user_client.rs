@@ -31,3 +31,5 @@ fn public_field(q:&Value,k:&str)->Value{q[k].clone()}
 fn public_text(q:&Value,k:&str)->String{q[k].as_str().unwrap().to_owned()}
 
 fn create_private_directory(dir:&std::path::Path)->Result<()>{use std::os::unix::fs::DirBuilderExt;std::fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)}
+
+fn path_join(dir:&std::path::Path,name:&str)->std::path::PathBuf{dir.join(name)}
