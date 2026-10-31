@@ -1,0 +1,45 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryRun.lean:53:42: error: Application type mismatch: The argument
+  finished
+has type
+  (run fuel coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+        nonce_store next_attempt k next_OPEN prove_OPEN w).status =
+    Status.finished r
+but is expected to have type
+  (PV_EVH_WorldLoop.loop (fun x => ?m.36) fuel (nonce_store, next_attempt, k) w).status = Status.finished r
+in the application
+  PV_EVH_WorldRecursion.fixed_finished_recursive (fun x => ?m.36) (fun x => ?m.39) (fun x => ?m.42) (fun x => ?m.45)
+    (fun x => ?m.48) fuel (nonce_store, next_attempt, k) w r finished
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryRun.lean:51:21: error: Type mismatch
+  PV_EVH_RetrySource.source_unfold coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1
+    compiled variant hash st c i
+has type
+  prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant
+      hash st c i =
+    Std.bind
+      (sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+        st c i)
+      fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont (st, c, i) =>
+        prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+          variant hash st c i
+but is expected to have type
+  (match (st, c, i) with
+    | (st, c, i) =>
+      prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+        variant hash st c i) =
+    Std.bind
+      (match (st, c, i) with
+      | (st, c, i) =>
+        sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash
+          st c i)
+      fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next =>
+        match next with
+        | (st, c, i) =>
+          prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled
+            variant hash st c i
+'PV_EVH_RetryRun.run_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

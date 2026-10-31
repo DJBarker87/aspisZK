@@ -44,11 +44,18 @@ theorem run_fixed (fuel : Nat)
     (w : World) (r : Result Outcome)
     (finished : (run fuel coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k next_OPEN prove_OPEN w).status = .finished r) :
     prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash nonce_store next_attempt k = r := by
-  exact PV_EVH_WorldRecursion.fixed_finished_recursive
+  exact PV_EVH_WorldRecursion.fixed_finished_recursive (S := State T0) (A := Outcome)
     (fun (st,c,i) => body coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN)
     (fun (st,c,i) => sourceBody coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
     (fun (st,c,i) => prover.retry_attempt coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
-    (fun (st,c,i) => PV_EVH_RetrySource.source_unfold coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i)
+    (by
+      rintro ⟨st,c,i⟩
+      rw [PV_EVH_RetrySource.source_unfold coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i]
+      congr 1
+      funext cf
+      cases cf with
+      | done a => rfl
+      | cont next => rcases next with ⟨st,c,i⟩; rfl)
     (fun (st,c,i) => body_fixed coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst public1 compiled variant hash st c i next_OPEN prove_OPEN next_fixed prove_fixed)
     fuel (nonce_store,next_attempt,k) w r finished
 
