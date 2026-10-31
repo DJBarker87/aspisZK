@@ -5,11 +5,11 @@ open Aeneas Aeneas.Std Result ProverRwFull
 
 theorem fibres : aspis_core.r0.FIBRE_COUNT=ok 262144#usize := by
   unfold aspis_core.r0.FIBRE_COUNT
-  decide
+  rfl
 
 theorem words : aspis_core.r0.WORD_LEN=ok 1048576#usize := by
   unfold aspis_core.r0.WORD_LEN
-  decide
+  rfl
 
 #print axioms fibres
 #print axioms words
