@@ -82,5 +82,14 @@ out+='\ntheorem body_fixed\n  '+worldhead+'''
       (sourceBody '''+app+''') := by
   unfold body sourceBody
 '''+proof(node)+'\n\n#print axioms body_fixed\nend PV_EVH_RetryBody\n'
-Path('lean/PV_EVH_RetryBody.lean').write_text(out)
-(E/'retry-generation.json').write_text(json.dumps(dict(source=p,revision='8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7',source_sha256=hashlib.sha256(s.encode()).hexdigest(),function='prover.retry_attempt',body=body,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),scope='source retry spine only; next_OPEN and prove_OPEN uninstantiated'),indent=2)+'\n')
+target=Path('lean/PV_EVH_RetryBody.lean')
+if '--check' in __import__('sys').argv:
+ assert target.read_text()==out, 'generated retry source differs'
+ print('PASS retry generation byte identity')
+else:
+ target.write_text(out)
+record=json.dumps(dict(source=p,revision='8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7',source_sha256=hashlib.sha256(s.encode()).hexdigest(),function='prover.retry_attempt',body=body,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),scope='source retry spine only; next_OPEN and prove_OPEN uninstantiated'),indent=2)+'\n'
+if '--check' in __import__('sys').argv:
+ assert (E/'retry-generation.json').read_text()==record
+else:
+ (E/'retry-generation.json').write_text(record)
