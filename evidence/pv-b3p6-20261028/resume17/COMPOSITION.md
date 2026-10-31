@@ -17,9 +17,11 @@ and start+N<=96; resume16/DOMAINS.json records the actual caller tuples.
 axioms are propext, Classical.choice, Quot.sound. Failed 73808/73809/73811
 are retained and earn no credit. No template axiom is installed.
 
-Direct mask extraction remains OPEN on count_ones and trailing_zeros source
-laws. Its port explicitly parameterizes both externals and cannot supply
-unconditional deployment credit. The earlier P6 seven-mask result remains
+Direct mask bridge mask_extraction_reference_on_domain17 PASS73826 combines
+all seven cells. It remains conditional on MaskIntegerLaws17 for count_ones
+and trailing_zeros; its consistency witness is mathematical only. Its port
+explicitly parameterizes both externals and supplies no unconditional
+deployment credit. The earlier P6 seven-mask result remains
 usable through its separate source/reference route.
 
 K3-AUDIT-D537.json checks 18 historical passing harnesses: seven host masks,
@@ -45,3 +47,16 @@ or P6 under the fifth amendment, not endpoint premise removal. The preferred
 direct mask route is still incomplete. Historical 79 reachable / 41 bound
 inventory is retained separately; source-cone std, D188, matrix and full
 callback composition remain outstanding. No complete release replay claimed.
+
+
+Final validation: focused direct-body closure import and combined audit73897
+PASS, seven top declarations, only standard axioms. This is not a full release
+manifest replay. No unchanged regression was repeated. Exact target, exit,
+wall, RSS, swaps, h5 revision, source hash and axioms for every new Lean job
+are in verification-summary-D537.json and the retained raw receipts.
+
+Fresh sum_high nodes/path gates pass with intended failing controls. Their
+own strict reached-item std audit FAILS: check_language_ub changed operand
+order; Clone/Step/conversion/runtime items remain unresolved. Deployed credit
+is WITHHELD, and the third interval was not run once this common blocker was
+verified. No Kani pass is promoted through a non-identical std body.
