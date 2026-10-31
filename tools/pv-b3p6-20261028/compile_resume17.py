@@ -110,7 +110,7 @@ if charged:
  t.setdefault('receipts',[]).append(dict(attempt=a,module=module,exit=status,receipt=str(R/'receipt/receipt.json')))
 else:
  t.setdefault('refusals',[]).append(dict(attempt=a,module=module,exit=status,charged_lean_attempts=0,label=label,ruling='m\u2032'))
- # D535: refusal IDs remain spent; budget is charged only by receipts.
+ # D537 resume instructions: preserve every observed ID, including refusals.
  if not is_audit:t['next_unused_id']=next((i for i in range(73800,73897) if i not in t['used_ids']),73897)
 state.write_text(json.dumps(t,indent=2)+'\n');print(json.dumps(dict(attempt=a,module=module,exit=status,charged=charged,lean_attempts=t['lean_attempts'],next_unused_id=t['next_unused_id'])),flush=True)
 sys.exit(status)

@@ -1,0 +1,81 @@
+status 0
+
+_sum_products4(left: [QM31; 4], right: [QM31; 4]) -> QM31 {
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `lift` is never used
+  --> reference_poseidon.rs:57:4
+   |
+57 | fn lift(value: M31) -> QM31 {
+   |    ^^^^
+
+warning: function `leading_pair` is never used
+   --> reference_poseidon.rs:646:4
+    |
+646 | fn leading_pair(openings: &StateOnlyPoseidonOpenings) -> [QM31; POSEIDON2_WIDTH] {
+    |    ^^^^^^^^^^^^
+
+warning: function `interpolated_full_pair` is never used
+   --> reference_poseidon.rs:752:4
+    |
+752 | fn interpolated_full_pair(
+    |    ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `ROWS` is never used
+   --> reference_poseidon.rs:796:11
+    |
+796 |     const ROWS: [usize; 7] = [2, 3, 4, 5, 6, 7, 8];
+    |           ^^^^
+
+warning: function `evaluate_state_only_poseidon_oracle` is never used
+   --> reference_poseidon.rs:812:8
+    |
+812 | pub fn evaluate_state_only_poseidon_oracle(
+    |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (IterMut<'a, T>: Iterator<&'a T>)
+            got: impl_Iterator_for_IterMut<'a, T>: Iterator<IterMut<'a, T>, &'a mut T>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl5), TraitClause1: (@Adt17<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>: @TraitDecl0<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl29<missing('_Bound(2, 0)), missing(@TypeBound(2, 0))>::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <'a, T>
+ --> /rustc/library/core/src/slice/iter/macros.rs:153:9
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Enumerate<I>: Iterator<&'a T>)
+            got: impl_Iterator_for_Enumerate<I, Clause0_Item>[TraitClause0]: Iterator<Enumerate<I>, (usize, Clause0_Item)>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl5), TraitClause1: (@Adt16<missing(@TypeBound(2, 0))>: @TraitDecl0<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl30<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1))>[missing(TraitClauseBound(2, 0))]::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <I, Clause0_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl0<missing(@TypeBound(1, 1))>)>
+ --> /rustc/library/core/src/iter/adapters/enumerate.rs:62:1
+
+error: Type error after transformations:
+       Mismatched trait clause:
+       expected: TraitClause0_1: (Zip<A, B>: Iterator<&'a T>)
+            got: impl_Iterator_for_Zip<A, B, Clause0_Item, Clause1_Item>[TraitClause0, TraitClause1]: Iterator<Zip<A, B>, (Clause0_Item, Clause1_Item)>
+       Visitor stack:
+         charon_lib::ast::gast::FunDeclRef
+         charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>
+         charon_lib::ids::index_map::IndexMap<charon_lib::ast::gast::TraitMethodId, charon_lib::ast::types::Binder<charon_lib::ast::gast::FunDeclRef>>
+         charon_lib::ast::gast::TraitImpl
+       Binding stack (depth 2):
+         0: <'a, T, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl5), TraitClause1: (@Adt35<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1))>: @TraitDecl0<missing(@TypeBound(1, 1))>), TypeOutlives0: missing(@TypeBound(1, 0)): missing('_Bound(1, 0)), TypeConstraint0: @TraitImpl74<missing(@TypeBound(2, 0)), missing(@TypeBound(2, 1)), missing(@TypeBound(2, 2)), missing(@TypeBound(2, 3))>[missing(TraitClauseBound(2, 0)), missing(TraitClauseBound(2, 1))]::@AssocType0 = &missing('_Bound(1, 0)) missing(@TypeBound(1, 0))>
+         1: <A, B, Clause0_Item, Clause1_Item, TraitClause0: (missing(@TypeBound(1, 0)): @TraitDecl0<missing(@TypeBound(1, 2))>), TraitClause1: (missing(@TypeBound(1, 1)): @TraitDecl0<missing(@TypeBound(1, 3))>)>
+ --> /rustc/library/core/src/iter/adapters/zip.rs:74:1
+
+warning: The extraction generated 3 warnings
+warning: `pv-b3p6-reference227` (lib) generated 80 warnings (3 duplicates) (run `cargo fix --lib -p pv-b3p6-reference227` to apply 29 suggestions)
+    Finished `release` profile [optimized] target(s) in 36.50s
+
