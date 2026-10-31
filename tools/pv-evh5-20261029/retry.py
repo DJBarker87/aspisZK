@@ -55,7 +55,10 @@ def proof(x,n=2):
  if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n)
  if x.kind=='bind':
   var=x.var;intro='rintro ⟨'+var[1:-1]+'⟩' if var.startswith('(') else 'intro '+var
-  return pad+'try dsimp only\n'+pad+'apply fixed_bind\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
+  step='apply fixed_bind'
+  if x.expr.kind=='call' and x.expr.expr.split()[0]=='Aeneas.Std.lift':
+   step+=' (r := (do\n'+emit(x.expr,n+2)+')) (f := fun '+var+' => (show Result (ControlFlow (State T0) Outcome) from do\n'+emit(x.next,n+2)+'))'
+  return pad+'try dsimp only\n'+pad+step+'\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
  if x.kind=='if':return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
  if x.kind=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+x.discr+' with\n'

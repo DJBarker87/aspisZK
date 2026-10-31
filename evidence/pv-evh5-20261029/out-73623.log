@@ -1,0 +1,241 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:79:3: warning: Variable name `coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:82:3: warning: Variable name `public1` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:83:3: warning: Variable name `compiled` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:85:3: warning: Variable name `variant` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:86:3: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:188:14: error: Tactic `apply` failed: could not unify the conclusion of `@fixed_bind`
+  FixedView (PV_EVH_World.bind ?m ?k) (Std.bind ?r ?f)
+with the goal
+  FixedView
+    (do
+      let i ← PV_EVH_World.lift (Std.lift (k.wrapping_add 1#usize))
+      pure (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)))
+    (let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), nonce_store1)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      do
+      let i ← Std.lift (k.wrapping_add 1#usize)
+      Result.ok
+          (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+      | verifier.Error.Semantic =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+      | verifier.Error.Transcript =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+      | verifier.Error.Relation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+      | verifier.Error.Merkle =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+      | verifier.Error.Query => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+      | verifier.Error.Checkpoint =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+      | verifier.Error.Allocation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+      | verifier.Error.Rejected => do
+        let i ← Std.lift (k.wrapping_add 1#usize)
+        Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+      | verifier.Error.Entropy =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)))
+
+Note: The full type of `@fixed_bind` is
+  ∀ {A B : Type} (m : M A) (k : A → M B) (r : Result A) (f : A → Result B),
+    FixedView m r → (∀ (a : A), FixedView (k a) (f a)) → FixedView (PV_EVH_World.bind m k) (Std.bind r f)
+
+case neg.hk.hk.Continue.hk.Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+next_OPEN : Next T0
+prove_OPEN : Prove
+next_fixed :
+  ∀ (c : T0) (k : Usize),
+    FixedView (next_OPEN c k) (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut c k)
+prove_fixed :
+  ∀ (a : Secrets) (st : Store),
+    FixedView (prove_OPEN a st) (prover.prove_masked_attempt public1 compiled variant hash a st)
+condition : ¬k ≥ prover.ATTEMPT_CAP
+r : core.result.Result Secrets verifier.Error
+next_attempt1 : T0
+val : Secrets
+nonce_store1 : Store
+p : alloc.vec.Vec U8 × prover.MaskedFixtureAudit
+proof : alloc.vec.Vec U8
+audit : prover.MaskedFixtureAudit
+⊢ FixedView
+    (do
+      let i ← PV_EVH_World.lift (Std.lift (k.wrapping_add 1#usize))
+      pure (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1)))
+    (let (r1, nonce_store1) := (core.result.Result.Ok (proof, audit), nonce_store1)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      do
+      let i ← Std.lift (k.wrapping_add 1#usize)
+      Result.ok
+          (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+      | verifier.Error.Semantic =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+      | verifier.Error.Transcript =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+      | verifier.Error.Relation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+      | verifier.Error.Merkle =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+      | verifier.Error.Query => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+      | verifier.Error.Checkpoint =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+      | verifier.Error.Allocation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+      | verifier.Error.Rejected => do
+        let i ← Std.lift (k.wrapping_add 1#usize)
+        Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+      | verifier.Error.Entropy =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)))
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_RetryBody.lean:214:16: error: Tactic `apply` failed: could not unify the conclusion of `@fixed_bind`
+  FixedView (PV_EVH_World.bind ?m ?k) (Std.bind ?r ?f)
+with the goal
+  FixedView
+    (do
+      let i ← PV_EVH_World.lift (Std.lift (k.wrapping_add 1#usize))
+      retry
+      pure (ControlFlow.cont (nonce_store1, next_attempt1, i)))
+    (let (r1, nonce_store1) := (core.result.Result.Err verifier.Error.Rejected, nonce_store1)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      do
+      let i ← Std.lift (k.wrapping_add 1#usize)
+      Result.ok
+          (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+      | verifier.Error.Semantic =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+      | verifier.Error.Transcript =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+      | verifier.Error.Relation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+      | verifier.Error.Merkle =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+      | verifier.Error.Query => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+      | verifier.Error.Checkpoint =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+      | verifier.Error.Allocation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+      | verifier.Error.Rejected => do
+        let i ← Std.lift (k.wrapping_add 1#usize)
+        Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+      | verifier.Error.Entropy =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)))
+
+Note: The full type of `@fixed_bind` is
+  ∀ {A B : Type} (m : M A) (k : A → M B) (r : Result A) (f : A → Result B),
+    FixedView m r → (∀ (a : A), FixedView (k a) (f a)) → FixedView (PV_EVH_World.bind m k) (Std.bind r f)
+
+case neg.hk.hk.Continue.hk.Err.Rejected
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+T0 : Type
+coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :
+  core.ops.function.FnMut T0 Usize
+    (core.result.Result aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error)
+public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public
+compiled : aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1
+variant : transport.Variant
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+nonce_store : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore
+next_attempt : T0
+k : Usize
+next_OPEN : Next T0
+prove_OPEN : Prove
+next_fixed :
+  ∀ (c : T0) (k : Usize),
+    FixedView (next_OPEN c k) (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut c k)
+prove_fixed :
+  ∀ (a : Secrets) (st : Store),
+    FixedView (prove_OPEN a st) (prover.prove_masked_attempt public1 compiled variant hash a st)
+condition : ¬k ≥ prover.ATTEMPT_CAP
+r : core.result.Result Secrets verifier.Error
+next_attempt1 : T0
+val : Secrets
+nonce_store1 : Store
+⊢ FixedView
+    (do
+      let i ← PV_EVH_World.lift (Std.lift (k.wrapping_add 1#usize))
+      retry
+      pure (ControlFlow.cont (nonce_store1, next_attempt1, i)))
+    (let (r1, nonce_store1) := (core.result.Result.Err verifier.Error.Rejected, nonce_store1)
+    match r1 with
+    | core.result.Result.Ok p =>
+      let (proof, audit) := p
+      do
+      let i ← Std.lift (k.wrapping_add 1#usize)
+      Result.ok
+          (ControlFlow.done (core.result.Result.Ok { proof := proof, audit := audit, attempts := i }, nonce_store1))
+    | core.result.Result.Err e =>
+      match e with
+      | verifier.Error.Parse => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Parse, nonce_store1))
+      | verifier.Error.Semantic =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Semantic, nonce_store1))
+      | verifier.Error.Transcript =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Transcript, nonce_store1))
+      | verifier.Error.Relation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Relation, nonce_store1))
+      | verifier.Error.Merkle =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Merkle, nonce_store1))
+      | verifier.Error.Query => Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Query, nonce_store1))
+      | verifier.Error.Checkpoint =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1))
+      | verifier.Error.Allocation =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Allocation, nonce_store1))
+      | verifier.Error.Rejected => do
+        let i ← Std.lift (k.wrapping_add 1#usize)
+        Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))
+      | verifier.Error.AttemptsExhausted =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store1))
+      | verifier.Error.Entropy =>
+        Result.ok (ControlFlow.done (core.result.Result.Err verifier.Error.Entropy, nonce_store1)))
+'PV_EVH_RetryBody.body_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

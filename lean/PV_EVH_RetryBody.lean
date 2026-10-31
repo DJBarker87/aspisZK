@@ -185,7 +185,10 @@ theorem body_fixed
               let (proof, audit) := p
               try dsimp only
               try dsimp only
-              apply fixed_bind
+              apply fixed_bind (r := (do
+                Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))) (f := fun i => (show Result (ControlFlow (State T0) Outcome) from do
+                Result.ok (ControlFlow.done ((core.result.Result.Ok { proof, audit, attempts := i },
+nonce_store1)))))
               ·
                 exact fixed_lift _
               · intro i
@@ -211,7 +214,9 @@ theorem body_fixed
                 exact fixed_lift _
               | Rejected =>
                 try dsimp only
-                apply fixed_bind
+                apply fixed_bind (r := (do
+                  Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize))) (f := fun i => (show Result (ControlFlow (State T0) Outcome) from do
+                  Result.ok (ControlFlow.cont (nonce_store1, next_attempt1, i))))
                 ·
                   exact fixed_lift _
                 · intro i
