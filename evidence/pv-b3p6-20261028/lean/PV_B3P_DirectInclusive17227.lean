@@ -89,7 +89,10 @@ theorem inclusive_std_fold17 {α : Type} (step : α → Usize → Result α)
       rw [loop.eq_1]
       simp only [inclusive_std_body17,inclusive_final17,bind_tc_ok,inclusive_exhausted17,
         usize_indices11,PV_B3P_Ordered227.fold]
-      cases operation : step state last <;> simp only [bind_tc_ok,inclusive_exhausted17]
+      cases operation : step state last with
+      | fail e => rfl
+      | div => rfl
+      | ok next => simp only [bind_tc_ok,inclusive_exhausted17]
     · have inside : first.val < last.val := by scalar_tac
       have inc := PV_B3P_Offset226V3.add_value first 1#usize
         (range_increment_safe13 first last (by scalar_tac))
