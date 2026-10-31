@@ -1,4 +1,4 @@
-# Measured event headline — checked strengthening, final audits pending
+# Measured event headline — conditional strengthening complete
 
 Branch `codex/pv-meas-20261029`, base `946718387d`.
 Receipts stay in this directory. The source implementation is frozen; no
@@ -42,9 +42,54 @@ runs (74105–74107) were void for cooldown violation and replaced compliantly
 at 74108–74110 before any consumer. Both violation and replacement evidence
 remain. No invalid object earns proof credit.
 
-Charged proof attempts before reserved audits: 31/100; native 0/0; Kani 0/0.
-All host scopes use MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64,
-Lean -M7000. Receipts name targets, source revisions/hashes, commands, admission,
-exit, wall, peak RSS, swaps, dependencies and complete axioms output.
-Next: reserved statements 73197, axioms 73198 and one frozen-manifest consumer
-73199; then final evidence freeze and report.
+Final charged Lean attempts: 34/100 (14 accepted, 20 rejected), with 66
+remaining. Spent proof IDs: 73100–73130 and reserved audits 73197–73199.
+Uncharged mechanical IDs: 74000–74110. No IDs were reused. Native 0/0;
+Kani 0/0. There are no Kani results, suspended harnesses or native measurements
+from this task. All host scopes use MemoryHigh=6G, MemoryMax=8G,
+MemorySwapMax=0, TasksMax=64, Lean -M7000.
+
+## Final validation
+
+| ID | Target | Exit | Wall | Peak RSS KiB | Swaps |
+|---|---|---|---|---|---|
+| 73120 | PV_MEAS_Deployed | 0 | 18.26 s | 4,308,028 | 0 |
+| 73123 | PV_MEAS_Satisfiability | 0 | 10.11 s | 4,277,880 | 0 |
+| 73130 | PV_MEAS_Legacy | 0 | 12.74 s | 4,268,228 | 0 |
+| 73197 | PV_MEAS_Statements | 0 | 2.83 s | 4,194,028 | 0 |
+| 73198 | PV_MEAS_Axioms | 0 | 2.46 s | 4,182,412 | 0 |
+| 73199 | PV_MEAS_Replay | 0 | 2.40 s | 4,186,632 | 0 |
+
+Each original receipt records its exact source revision/hash, dependencies,
+admission, command, timing and axioms output. The 31-declaration axioms audit
+has only subsets of propext, Classical.choice and Quot.sound. The final frozen
+import-manifest consumer ran ONCE, after the focused proofs and both audits.
+Preparation verified 836 project closure modules and 5,734 external objects
+(the original 5,673 plus the independent 61-module addendum), including effective
+first-namespace resolution and dependency hashes. Verified predecessor objects
+were reused; this was not a cold rebuild of all 836 modules.
+
+final-source-freeze.json pins all 12 new module sources; final-validation.json
+matches their current source and accepted object hashes against the host,
+checks the final dependency fingerprint, and matches all 34 original admission,
+output and timing records. No measured scopes or Lean processes remain live.
+The final audit's first process regex matched its own read-only command; the
+corrected executable/argument filter and an independent systemd/ps check show
+no job remained. No proof compile was repeated for that audit correction.
+
+The forbidden-source scan found no sorry, admit, axiom, native_decide, raised
+limits or unsafe reducibility override. The failed-source guard is unchanged;
+its SHA is recorded in final-validation.json. No file here exceeds 20 MB.
+
+Stopped because the requested conditional representability strengthening and
+exact full finite corollary are complete, with the named restriction removed;
+unused budget is not a reason to repeat unchanged formal checks. The overall
+shipped privacy target is NOT established. Next concrete deliverable: supply
+the installed runtime's exact native joint/conditional acquisition laws and
+prove its retained source-event, D163/D166, V400, causal, observer-program and
+selected-callback links. A synthetic consistency witness supplies none of
+those native associations. No new trust field or error term was introduced.
+
+Full branch history from base 946718387d is in git-log.txt, generated through
+the final replay-receipt commit; the final documentation commit adds only this
+report and the log snapshot.

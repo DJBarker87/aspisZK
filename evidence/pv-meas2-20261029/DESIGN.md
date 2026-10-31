@@ -94,3 +94,12 @@ averaging lemma now states [0,1] boundedness explicitly, as appropriate for the
 pre-registered decision PROBABILITIES. No bound on timing or trace length is
 introduced. The exact joint-law and finite-uniform event corollary targets are
 unchanged. No Bochner-equivalence theorem is claimed without elaboration.
+
+## Completed validation (2026-10-31 resume)
+
+The final representation and prerequisites are as documented in BEFORE-AFTER.md.
+The complete addendum has 61 modules. The conditional measured headline, closed
+synthetic witness, and full finite-uniform corollary are checked at 73120, 73123,
+and 73130. Reserved audits 73197–73199 passed in order; the final consumer ran
+once. See final-source-freeze.json, final-validation.json and REPORT.md.
+Native links remain obligations; the deployed privacy target is not established.

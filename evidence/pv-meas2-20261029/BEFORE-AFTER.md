@@ -2,8 +2,8 @@
 
 Status: generic layers, measured composition (73120), simultaneous closed
 synthetic witness (73123), and full finite adapter/corollary (73130) are checked.
-Statement audit 73197 confirms the quantifiers printed below. Final axioms and
-frozen import-manifest audits follow separately.
+Statement audit 73197 confirms the quantifiers printed below. Axioms audit
+73198 and the single frozen import-manifest consumer 73199 both passed.
 
 ## Before — full existing event endpoint
 
