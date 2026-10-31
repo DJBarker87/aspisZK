@@ -34,5 +34,5 @@ attribute [local irreducible] Array.index_usize aspis_core.field.QM31.add
  for i in sorted({i for _,i,_ in cells}):
   s+=f'  have cast_{i} : UScalar.cast .Usize {i}#u32 = {i}#usize := by scalar_tac\n'
  s+='  simp only [mask_add17,mask_step10,mask_read10,'+','.join(f'cast_{i}'for i in sorted({i for _,i,_ in cells}))+']\n'
- s+='  rfl\n'+f'#print axioms mask_direct17_{mask}\nend PV_B3P_Direct17227\n'
+ s+=f'#print axioms mask_direct17_{mask}\nend PV_B3P_Direct17227\n'
  (D/f'PV_B3P_DirectMask17_{mask}227.lean').write_text(s)

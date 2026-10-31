@@ -49,6 +49,5 @@ theorem mask_direct17_1749 (ones zeros : U16 → Result U32)
   have cast_9 : UScalar.cast .Usize 9#u32 = 9#usize := by scalar_tac
   have cast_10 : UScalar.cast .Usize 10#u32 = 10#usize := by scalar_tac
   simp only [mask_add17,mask_step10,mask_read10,cast_0,cast_2,cast_4,cast_6,cast_7,cast_9,cast_10]
-  rfl
 #print axioms mask_direct17_1749
 end PV_B3P_Direct17227
