@@ -1,5 +1,5 @@
 //! Offline user prover. Wallet witness bytes arrive only on an inherited FD.
-#[path="devnet_spend/diagnostics.rs"]
+#[path="user_client/diagnostics.rs"]
 mod diagnostics;
 use diagnostics::{Result,err};
 #[cfg(all(not(test), not(all(target_os = "linux", panic = "abort", getrandom_backend = "linux_raw"))))]

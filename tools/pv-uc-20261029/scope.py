@@ -87,5 +87,5 @@ receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(
 for f in ['admission-before.json','admission-launch.json','admission-barrier.json']:
  raw=(out/f).read_bytes();a=json.loads(raw)
  (out/f).write_text(json.dumps(dict(sha256=hashlib.sha256(raw).hexdigest(),host_path=D+'/'+name+'/'+f,**{k:a.get(k) for k in ['allowed','utc','error','bounded_reserved_bytes','safe_limit_bytes']}),indent=2)+'\n')
-print((out/'output.log').read_text()[-14000:]);print(json.dumps(receipt))
+print((out/'output.log').read_text()[-5000:]);print(json.dumps(receipt))
 sys.exit(actual_exit)
