@@ -34,18 +34,11 @@ theorem source_unfold
     | ok pair =>
       rcases pair with ⟨r,c⟩
       simp only [hn,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-      cases hb : core.result.Result.Insts.CoreOpsTry.branch r with
-      | fail e => simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-      | div => simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-      | ok cf =>
-        cases cf with
-        | Break e =>
-          simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-          cases hr : core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
-            prover.RetriedProof (core.convert.FromSame verifier.Error) e <;>
-            simp only [hr,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
-        | Continue val =>
-          simp only [hb,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
+      cases r with
+      | Err e => rfl
+      | Ok val =>
+          dsimp only [core.result.Result.Insts.CoreOpsTry.branch]
+          simp only [Aeneas.Std.bind_tc_ok]
           cases hp : prover.prove_masked_attempt public1 compiled variant hash val nonce_store with
           | fail e => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
           | div => simp only [hp,Aeneas.Std.bind, Aeneas.Std.bind_tc_ok, Aeneas.Std.bind_tc_fail, Aeneas.Std.bind_tc_div]
