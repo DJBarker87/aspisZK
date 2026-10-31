@@ -25,6 +25,7 @@ theorem source {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   unfold prover.derive_private_salts
   rw [count]
   simp only [bind_tc_ok]
+  simp only [alloc.vec.Vec.try_reserve_exact]
   rw [PV_RunJoin_Packets63.reserve base heap box ops runtime world]
   simp only [bind_tc_ok,Aeneas.Std.uncurry]
   apply PV_RunJoin_ResultPost41.bind
