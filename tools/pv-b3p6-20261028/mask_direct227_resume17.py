@@ -67,6 +67,7 @@ theorem mask_entry17 (ones zeros : U16 → Result U32)
       host_copy_terminal.selector_mask_sum_16_loop zeros values mask false aspis_core.field.QM31.ZERO := by
   simp only [host_copy_terminal.selector_mask_sum_16,law,bind_tc_ok,small,if_false,
     Bool.false_eq_true]
+  rfl
 
 #print axioms mask_entry17
 #print axioms mask_loop_stop17
