@@ -9,10 +9,10 @@ impl fmt::Display for Error {
 impl std::error::Error for Error {}
 pub type Result<T> = std::result::Result<T, Error>;
 pub fn err<T>(_: T) -> Error { Error }
-macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
+macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::new() }; }
 macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
 pub(super) use {anyhow, ensure};
-impl Error { pub fn literal(_: &'static str) -> Self { Self } }
+impl Error { pub fn new() -> Self { Self } }
 
 // Public startup boundary: isolate the boxed dynamic std panic-hook API.
 fn install_literal_panic_hook() {
