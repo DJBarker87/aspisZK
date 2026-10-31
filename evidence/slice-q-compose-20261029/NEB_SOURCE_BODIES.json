@@ -1,0 +1,955 @@
+{
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "functions": {
+  "crates/aspis-core/src/field.rs::CM31::add": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    9539,
+    9639
+   ],
+   "sha256": "feead0d400d9868283096c65b03d3e31d7c6b996bc9877eb6bd1ed239745a953",
+   "body": "{\n        CM31 {\n            a: self.a.add(rhs.a),\n            b: self.b.add(rhs.b),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::double": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    11444,
+    11474
+   ],
+   "sha256": "3a024536ab8e6cf0a01211d509e16b0927e3c397267ca8046a05c9c2a13f54c7",
+   "body": "{\n        self.add(self)\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::from_le_bytes": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    13033,
+    13422
+   ],
+   "sha256": "d87b6a001eb6ba955869857f651ee6d3191328b8141b75dd9d71f3dc2023b42a",
+   "body": "{\n        let a_bytes = match bytes[0..4].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let a = M31::from_le_bytes(a_bytes)?;\n        let b_bytes = match bytes[4..8].try_into() {\n            Ok(value) => value,\n            Err(_) => return None,\n        };\n        let b = M31::from_le_bytes(b_bytes)?;\n        Some(CM31 { a, b })\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::from_le_bytes"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::inv": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    12416,
+    12455
+   ],
+   "sha256": "2030a2aafd1b2499ad9a0340979bcf954a77216629fa2fbd90ee615c4634448d",
+   "body": "{\n        self.inv_with(M31::inv)\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::inv_with",
+    "crates/aspis-core/src/field.rs::M31::inv"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::inv_with": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    12654,
+    12867
+   ],
+   "sha256": "6bdba26e9d83c5f0214835961eadc9974a6033574502b7d24ef8e3954792790b",
+   "body": "{\n        let norm = self.a.mul(self.a).add(self.b.mul(self.b));\n        let inv_norm = inverse(norm);\n        CM31 {\n            a: self.a.mul(inv_norm),\n            b: self.b.neg().mul(inv_norm),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::mul",
+    "crates/aspis-core/src/field.rs::M31::add",
+    "crates/aspis-core/src/field.rs::M31::neg",
+    "<inverse argument>"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::mul": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    10064,
+    10641
+   ],
+   "sha256": "a9676bf974a9b2cda0d0bf13d9f0b4f56a4f849ba430835eb71e151055ed9e0d",
+   "body": "{\n        let m0 = self.a.mul(rhs.a);\n        let m1 = self.b.mul(rhs.b);\n        // Both unreduced sums are below `2P < 2^32`, so their product fits\n        // in u64. Reducing after the product is identical to first reducing\n        // each sum modulo P, and removes two canonical-add branches from\n        // every CM31 multiplication.\n        let m2 = M31::reduce_u64(\n            (u64::from(self.a.0) + u64::from(self.b.0)) * (u64::from(rhs.a.0) + u64::from(rhs.b.0)),\n        );\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::mul",
+    "crates/aspis-core/src/field.rs::M31::reduce_u64",
+    "crates/aspis-core/src/field.rs::M31::sub"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::mul_m31": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    11292,
+    11388
+   ],
+   "sha256": "4a87bf432c390be73d40c66b14f51f02298bf73b2187bd8216d0e8c53d54d79a",
+   "body": "{\n        CM31 {\n            a: self.a.mul(rhs),\n            b: self.b.mul(rhs),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::mul"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::neg": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    9856,
+    9946
+   ],
+   "sha256": "34b33b1ed28378cd76546671307a667c7c6498212f63d4766067d96492d436e0",
+   "body": "{\n        CM31 {\n            a: self.a.neg(),\n            b: self.b.neg(),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::neg"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::new": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    9346,
+    9375
+   ],
+   "sha256": "b82314af9377ead49dc46747df4755c001e0ab79446d7a23becc94f74cc056d8",
+   "body": "{\n        CM31 { a, b }\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::CM31::sub": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    9703,
+    9803
+   ],
+   "sha256": "efdf12c5739fe6362e1a3cb7267b05178ecf03ecffce6ae841a45907328d2734",
+   "body": "{\n        CM31 {\n            a: self.a.sub(rhs.a),\n            b: self.b.sub(rhs.b),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::sub"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::add": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    2201,
+    3201
+   ],
+   "sha256": "c7afbab359feb4c3a6b41a005a77541b454825cae6258f0f7c752e5840f1bca6",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FAdd);\n        #[cfg(feature = \"r0-r91-audit\")]\n        {\n            #[cfg(all(feature = \"r0-e4-reference\", not(target_os = \"solana\")))]\n            if crate::r0::equality_trace::is_reference() {\n                return r0_add_fallback(self.0, rhs.0);\n            }\n            // R91: widen the bounded fast path; preserve the original raw\n            // operation in the cold branch, including its overflow behavior.\n            let s = u64::from(self.0) + u64::from(rhs.0);\n            if s > u64::from(u32::MAX) {\n                return r0_add_fallback(self.0, rhs.0);\n            }\n            M31((if s >= u64::from(P) {\n                s - u64::from(P)\n            } else {\n                s\n            }) as u32)\n        }\n        #[cfg(not(feature = \"r0-r91-audit\"))]\n        {\n            let s = self.0 + rhs.0;\n            M31(if s >= P { s - P } else { s })\n        }\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::double": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    6765,
+    6795
+   ],
+   "sha256": "3a024536ab8e6cf0a01211d509e16b0927e3c397267ca8046a05c9c2a13f54c7",
+   "body": "{\n        self.add(self)\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::from_le_bytes": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    8739,
+    8878
+   ],
+   "sha256": "11700e1c990379b281c28c30bd0bd3afaf5bb4d74a265f683cff745327ef2f68",
+   "body": "{\n        let v = u32::from_le_bytes(bytes);\n        if v >= P {\n            None\n        } else {\n            Some(M31(v))\n        }\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::inv": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    7726,
+    8526
+   ],
+   "sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FInv);\n        assert!(self.0 != 0, \"inverse of zero\");\n\n        // Build x^(2^k - 1) at k = 2, 4, 8, 16, 24, 28, 29.\n        // The final exponent is 4*(2^29 - 1) + 1 = 2^31 - 3 = P - 2.\n        // This takes 38 M31 multiplications instead of the generic binary\n        // exponentiation's 61 for this fixed exponent.\n        let t2 = self.mul(self).mul(self);\n        let t4 = square_n(t2, 2).mul(t2);\n        let t8 = square_n(t4, 4).mul(t4);\n        let t16 = square_n(t8, 8).mul(t8);\n        let t24 = square_n(t16, 8).mul(t8);\n        let t28 = square_n(t24, 4).mul(t4);\n        let t29 = t28.mul(t28).mul(self);\n        let t30 = t29.mul(t29);\n        t30.mul(t30).mul(self)\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::mul",
+    "crates/aspis-core/src/field.rs::square_n"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::mul": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    4754,
+    4933
+   ],
+   "sha256": "0f4152a87fd44407044fd55aba805a7c2c70e942fae8af5d69c413847849589a",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FMul);\n        M31(reduce_u64(self.0 as u64 * rhs.0 as u64))\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::reduce_u64"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::reduce_u64": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    5608,
+    5646
+   ],
+   "sha256": "065261fab4e25c2593df2610ba9f3d47ff605780f8c233af825c7bced4ef9ed4",
+   "body": "{\n        M31(reduce_u64(value))\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::reduce_u64"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::M31::sub": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    3491,
+    4416
+   ],
+   "sha256": "74df6dc4e93dba44f9318efe8774eae7571766ada6198334c2bc6d1c224be3d2",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FSub);\n        #[cfg(feature = \"r0-r91-audit\")]\n        {\n            #[cfg(all(feature = \"r0-e4-reference\", not(target_os = \"solana\")))]\n            if crate::r0::equality_trace::is_reference() {\n                return r0_sub_fallback(self.0, rhs.0);\n            }\n            let left = u64::from(self.0) + u64::from(P);\n            if left > u64::from(u32::MAX) || left < u64::from(rhs.0) {\n                return r0_sub_fallback(self.0, rhs.0);\n            }\n            let s = left - u64::from(rhs.0);\n            M31((if s >= u64::from(P) {\n                s - u64::from(P)\n            } else {\n                s\n            }) as u32)\n        }\n        #[cfg(not(feature = \"r0-r91-audit\"))]\n        {\n            let s = self.0 + P - rhs.0;\n            M31(if s >= P { s - P } else { s })\n        }\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::add": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    29787,
+    30011
+   ],
+   "sha256": "59bab041e064fcd9a5ecb72a0aec1367770934b2eebf449fa47d0718266e366d",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KAdd);\n        QM31 {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::from_le_bytes": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    33664,
+    33808
+   ],
+   "sha256": "a7672983e191fffb317d3b19a1212b34177048bd151d9ed41321db67038dc0e6",
+   "body": "{\n        let c0 = CM31::from_le_bytes(&bytes[0..8])?;\n        let c1 = CM31::from_le_bytes(&bytes[8..16])?;\n        Some(QM31 { c0, c1 })\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::from_le_bytes"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::inv": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    33540,
+    33607
+   ],
+   "sha256": "14a1ec0274f93cd698a9c9b7eb7315dbf9e8fd96abb38253d1e55ab8a123f934",
+   "body": "{\n        self.try_inv().expect(\"cannot invert zero in QM31\")\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::try_inv"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::is_zero": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    32588,
+    32642
+   ],
+   "sha256": "a935b50299828040dbc802047ae32d1880c11150e70f3486dbca790d9f87ac1e",
+   "body": "{\n        self.c0.is_zero() && self.c1.is_zero()\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::is_zero"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::mul": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    30850,
+    31213
+   ],
+   "sha256": "13e3e9d9c7b115eeae7fe9d8672f42a7cfb3e027d872a7b34d0d0d2f77926568",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMul);\n        let m0 = self.c0.mul(rhs.c0);\n        let m1 = self.c1.mul(rhs.c1);\n        let m2 = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        QM31 {\n            c0: m0.add(mul_by_r(m1)),\n            c1: m2.sub(m0).sub(m1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::mul",
+    "crates/aspis-core/src/field.rs::CM31::add",
+    "crates/aspis-core/src/field.rs::CM31::sub",
+    "crates/aspis-core/src/field.rs::mul_by_r"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::mul_m31": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    32304,
+    32531
+   ],
+   "sha256": "a3bc3300486bbfb743e7b831a688fe20ccb8d6885172f9fd9df4a2cf0e396d1f",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KMulF);\n        QM31 {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::mul_m31"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::neg": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    30352,
+    30564
+   ],
+   "sha256": "6193946746119c5a83f1135945f395ee7ed456d697c17ffe7fa38d0107d8ba29",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KNeg);\n        QM31 {\n            c0: self.c0.neg(),\n            c1: self.c1.neg(),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::neg"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::square": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    31476,
+    31812
+   ],
+   "sha256": "d753e1472146cfa17f501d737426b4dd5342436ad7af400e8da2a853037f1cac",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSquare);\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::square",
+    "crates/aspis-core/src/field.rs::CM31::mul",
+    "crates/aspis-core/src/field.rs::CM31::double",
+    "crates/aspis-core/src/field.rs::CM31::add",
+    "crates/aspis-core/src/field.rs::mul_by_r"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::sub": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    30075,
+    30299
+   ],
+   "sha256": "2f99fb3843d2f2f61391181cfb05232735408c0e603cdf612e1064c2cda6e44a",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KSub);\n        QM31 {\n            c0: self.c0.sub(rhs.c0),\n            c1: self.c1.sub(rhs.c1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::CM31::sub"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::QM31::try_inv": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    33090,
+    33509
+   ],
+   "sha256": "1d4a03f4fd8ab36049bbbcdf033c09ff9c7303842bfa6cd91763c9732adb3c1e",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KInv);\n        if self.is_zero() {\n            return None;\n        }\n        let norm = self.c0.square().sub(mul_by_r(self.c1.square()));\n        let inverse_norm = norm.inv();\n        Some(QM31 {\n            c0: self.c0.mul(inverse_norm),\n            c1: self.c1.neg().mul(inverse_norm),\n        })\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::is_zero",
+    "crates/aspis-core/src/field.rs::CM31::square",
+    "crates/aspis-core/src/field.rs::mul_by_r",
+    "crates/aspis-core/src/field.rs::CM31::sub",
+    "crates/aspis-core/src/field.rs::CM31::inv",
+    "crates/aspis-core/src/field.rs::CM31::mul",
+    "crates/aspis-core/src/field.rs::CM31::neg"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::mul_by_r": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    29084,
+    29219
+   ],
+   "sha256": "c8a29d8546ae41b4a149920d16db90e9aafc0dba7a55a5e997f9ec5e9646d0ff",
+   "body": "{\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::double",
+    "crates/aspis-core/src/field.rs::M31::sub",
+    "crates/aspis-core/src/field.rs::M31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::reduce_u64": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    1255,
+    1686
+   ],
+   "sha256": "ea04e7311160208e97026b9dc343b3b3bffae79735722e5bccd90d661ab0ef45",
+   "body": "{\n    // reference_canonical: two mask/shift folds bring any u64 to at most\n    // P+3, then one conditional subtract canonicalizes. Supporting the full\n    // u64 range lets four maximal M31 products be accumulated before one\n    // reduction: 4*(P-1)^2 < 2^64.\n    let x = (x & P as u64) + (x >> 31u32);\n    let x = (x & P as u64) + (x >> 31u32);\n    let x = x as u32;\n    if x >= P {\n        x - P\n    } else {\n        x\n    }\n}",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field.rs::square_n": {
+   "path": "crates/aspis-core/src/field.rs",
+   "range": [
+    1755,
+    1832
+   ],
+   "sha256": "703cca2650daf476a656ca807834a2f14aec3cef27696c32e29bbf62c570a8e3",
+   "body": "{\n    for _ in 0..count {\n        value = value.mul(value);\n    }\n    value\n}",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::M31::mul"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::add": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    2519,
+    2743
+   ],
+   "sha256": "e4080f883505347da01570c80f3279502cfbbc7062760f985a34437bef1bd6bb",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EAdd);\n        Self {\n            c0: self.c0.add(rhs.c0),\n            c1: self.c1.add(rhs.c1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::add"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_le_bytes": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    8221,
+    8985
+   ],
+   "sha256": "be85509c9fdb54b33ef38278ec392165a9367cc5392aaad84f7cdacb451f2058",
+   "body": "{\n        if bytes.len() != Self::BYTE_LEN {\n            return None;\n        }\n        let limbs = [\n            u32::from_le_bytes([bytes[0], bytes[1], bytes[2], bytes[3]]),\n            u32::from_le_bytes([bytes[4], bytes[5], bytes[6], bytes[7]]),\n            u32::from_le_bytes([bytes[8], bytes[9], bytes[10], bytes[11]]),\n            u32::from_le_bytes([bytes[12], bytes[13], bytes[14], bytes[15]]),\n            u32::from_le_bytes([bytes[16], bytes[17], bytes[18], bytes[19]]),\n            u32::from_le_bytes([bytes[20], bytes[21], bytes[22], bytes[23]]),\n            u32::from_le_bytes([bytes[24], bytes[25], bytes[26], bytes[27]]),\n            u32::from_le_bytes([bytes[28], bytes[29], bytes[30], bytes[31]]),\n        ];\n        Self::from_limbs(limbs)\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    6785,
+    7570
+   ],
+   "sha256": "06e57d0dfbbd626fa98d79d2d0948690302173d64a9f88f830873b398e0f2dd2",
+   "body": "{\n        if limbs[0] >= P || limbs[1] >= P || limbs[2] >= P || limbs[3] >= P\n            || limbs[4] >= P || limbs[5] >= P || limbs[6] >= P || limbs[7] >= P {\n            return None;\n        }\n        let [a, b, c, d, e, f, g, h] = limbs;\n        Some(Self {\n            c0: QM31 {\n                c0: CM31 {\n                    a: M31(a),\n                    b: M31(b),\n                },\n                c1: CM31 {\n                    a: M31(c),\n                    b: M31(d),\n                },\n            },\n            c1: QM31 {\n                c0: CM31 {\n                    a: M31(e),\n                    b: M31(f),\n                },\n                c1: CM31 {\n                    a: M31(g),\n                    b: M31(h),\n                },\n            },\n        })\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_qm31": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    2356,
+    2455
+   ],
+   "sha256": "d47e1e6cf34bb75cfe4bbcde90935288ae78577e8568ed985fb38b5fdc875a6b",
+   "body": "{\n        Self {\n            c0: canonical_qm31(value),\n            c1: QM31::ZERO,\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field/wide_exact.rs::canonical_qm31"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    3410,
+    3955
+   ],
+   "sha256": "6a8baeea9d7670a6a31622e6b977fe2eecb4450cb918d2ddfa1ec87f6a23a523",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMul);\n        #[cfg(all(feature = \"r0-e4-reference\", not(target_os = \"solana\")))]\n        if crate::r0::equality_trace::is_reference() {\n            return self.mul_re3(rhs);\n        }\n        let ac = self.c0.mul(rhs.c0);\n        let bd = self.c1.mul(rhs.c1);\n        let cross = self.c0.add(self.c1).mul(rhs.c0.add(rhs.c1));\n        Self {\n            c0: ac.add(mul_u(bd)),\n            c1: cross.sub(ac).sub(bd),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::mul",
+    "crates/aspis-core/src/field.rs::QM31::add",
+    "crates/aspis-core/src/field.rs::QM31::sub",
+    "crates/aspis-core/src/field/wide_exact.rs::mul_u"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul_m31": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    6186,
+    6447
+   ],
+   "sha256": "7ec95ba5b6a4408e97ae6b6b4ece79615df32dddc52903f8fcd225b0eef84264",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulF);\n        let rhs = M31(rhs.0 % P);\n        Self {\n            c0: self.c0.mul_m31(rhs),\n            c1: self.c1.mul_m31(rhs),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::mul_m31"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul_qm31": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    5794,
+    6052
+   ],
+   "sha256": "adcd6948269372db264b769b7c8078b0aa5d58aa79cc56477382cb55cb3c7679",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::EMulK);\n        let rhs = canonical_qm31(rhs);\n        Self {\n            c0: self.c0.mul(rhs),\n            c1: self.c1.mul(rhs),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field/wide_exact.rs::canonical_qm31",
+    "crates/aspis-core/src/field.rs::QM31::mul"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::sub": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    2807,
+    3031
+   ],
+   "sha256": "7de92babd43589c41f91412828da6305d0e610f6142c91e6e4beb333767fbadc",
+   "body": "{\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESub);\n        Self {\n            c0: self.c0.sub(rhs.c0),\n            c1: self.c1.sub(rhs.c1),\n        }\n    }",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::QM31::sub"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    7653,
+    7904
+   ],
+   "sha256": "3e648b095b6939fdb3b504c416d3e33617ee4d49c5fd3de545d22e1d531a488a",
+   "body": "{\n        [\n            self.c0.c0.a.0,\n            self.c0.c0.b.0,\n            self.c0.c1.a.0,\n            self.c0.c1.b.0,\n            self.c1.c0.a.0,\n            self.c1.c0.b.0,\n            self.c1.c1.a.0,\n            self.c1.c1.b.0,\n        ]\n    }",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::canonical_qm31": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    9333,
+    9593
+   ],
+   "sha256": "7e334133a1dc749f6fee9738bb8147fb26dcba024df66e8b2d334906c2dcce82",
+   "body": "{\n    let reduce = |x: M31| M31(x.0 % P);\n    QM31 {\n        c0: CM31 {\n            a: reduce(value.c0.a),\n            b: reduce(value.c0.b),\n        },\n        c1: CM31 {\n            a: reduce(value.c1.a),\n            b: reduce(value.c1.b),\n        },\n    }\n}",
+   "actual_nonlibrary_targets": [],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/field/wide_exact.rs::mul_u": {
+   "path": "crates/aspis-core/src/field/wide_exact.rs",
+   "range": [
+    9676,
+    9757
+   ],
+   "sha256": "18f006ff837fa0d0023421523862b6a343484b12a0304ed3552d220b173e4461",
+   "body": "{\n    QM31 {\n        c0: super::mul_by_r(value.c1),\n        c1: value.c0,\n    }\n}",
+   "actual_nonlibrary_targets": [
+    "crates/aspis-core/src/field.rs::mul_by_r"
+   ],
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/r0/domain.rs::FibreIndex::get": {
+   "path": "crates/aspis-core/src/r0/domain.rs",
+   "range": [
+    616,
+    654
+   ],
+   "sha256": "a47676cbcdb365c2cd082e22ec6a5aea529168964134535a6e44910b772629f6",
+   "body": "{\n                self.0\n            }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-core/src/r0/domain.rs::FibreIndex::new": {
+   "path": "crates/aspis-core/src/r0/domain.rs",
+   "range": [
+    393,
+    571
+   ],
+   "sha256": "0e79aae457fa92e9cc89046d3d495608c1152f524d3fa895bcebf72ecfc45c4f",
+   "body": "{\n                if index < $bound {\n                    Ok(Self(index))\n                } else {\n                    Err(Error::IndexOutOfRange)\n                }\n            }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/candidate.rs::opening": {
+   "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+   "range": [
+    1436,
+    1518
+   ],
+   "sha256": "028b69f947f492303bf8a3c39d6173b877833d4f19f7e3fcd7cade0a287a364a",
+   "body": "{\n    let at = compact::OFF_OPENINGS + i * OPENING;\n    &proof[at..at + OPENING]\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop": {
+   "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+   "range": [
+    9654,
+    10013
+   ],
+   "sha256": "db07a00554acb64ff91b1e5ccf587feba5db14deb337efc4a5fb47ef11d991fe",
+   "body": "{\n    let mut state = Ok((a, pending));\n    loop {\n        match state {\n            Err(error) => return Err(error),\n            Ok((a, pending)) => {\n                if a.next >= end {\n                    return Ok((a, pending));\n                }\n                state = query_values(proof, p, a, g, obs, geometry, pending);\n            }\n        }\n    }\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/candidate.rs::query_values": {
+   "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+   "range": [
+    8464,
+    9432
+   ],
+   "sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
+   "body": "{\n    let i = a.next;\n    let u = p.queries[i] as usize;\n    let q = opening(proof, i);\n    let dots = crate::fast_dots::four_dots(q, g);\n    crate::trace::value(9, 4 * i, dots[0]);\n    crate::trace::value(9, 4 * i + 1, dots[1]);\n    crate::trace::value(9, 4 * i + 2, dots[2]);\n    crate::trace::value(9, 4 * i + 3, dots[3]);\n    let inverse = *geometry.for_query(i);\n    let folded = circle_fold_with_inverses(p.alpha[0], dots, &inverse);\n    crate::trace::value(10, 2 * i, folded);\n    let values = core::array::from_fn(|s| field(&q[672..800], s));\n    if folded != values[u % 4] {\n        return Err(Error::Query);\n    }\n    let folded = line_fold_with_inverses(p.alpha[1], values, &inverse);\n    crate::trace::value(10, 2 * i + 1, folded);\n    let z = geometry.line_z[i - geometry.start];\n    let node = z.mul(z).double().sub(M31::ONE);\n    accumulate_batched_with_node(p, &mut a, node, folded, &mut pending);\n    mark(obs, Phase::Query(i));\n    Ok((a, pending))\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_domain.rs::fibre_point": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+   "range": [
+    27437,
+    27656
+   ],
+   "sha256": "c44323f146aac19db295b187edce0a5bc09ee6cdd49e7aae04f274e77b3b1b79",
+   "body": "{\n    let index = u.get();\n    let left = table_value(TABLE_A[index & 511]);\n    let right = table_value(TABLE_B[index >> 9]);\n    let point = left.mul(right);\n    Point {\n        x: point.a,\n        y: point.b,\n    }\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_domain.rs::line_node": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+   "range": [
+    27777,
+    27871
+   ],
+   "sha256": "0c00e1cf5b320426d49b2996e6e42ada97423e4e5b34abc82737acabe8893a54",
+   "body": "{\n    let x = fibre_point(u).x;\n    let square = x.mul(x);\n    square.double().sub(M31::ONE)\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_domain.rs::table_value": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_domain.rs",
+   "range": [
+    27265,
+    27310
+   ],
+   "sha256": "fb2fb3b9ea1058d87f135f456df562d8c65538fd929da6378b14ac2cad4c25f3",
+   "body": "{\n    CM31::new(M31(value.0), M31(value.1))\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+   "range": [
+    3580,
+    3777
+   ],
+   "sha256": "c3841f0a0f2ea0242f9f5a507c0e2a5cdd925bc30df8d8c2f920e2d4286bebce",
+   "body": "{\n    let q: &[u8; 608] = q[..608].try_into().unwrap();\n    [\n        four_dots_one(q, g, 0),\n        four_dots_one(q, g, 1),\n        four_dots_one(q, g, 2),\n        four_dots_one(q, g, 3),\n    ]\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_dots.rs",
+   "range": [
+    875,
+    3435
+   ],
+   "sha256": "6061bc500d2f2d1600817960f709af5c5d0a1dc3585fa9d62fa9066ff84c8d11",
+   "body": "{\n        let mut limbs = [0u64; WideExact::LIMB_COUNT];\n        for start in (0..26).step_by(4) {\n            let mut sums = [0u64; WideExact::LIMB_COUNT];\n            for term in start..core::cmp::min(start + 4, 26) {\n                let scalar = M31::from_le_bytes(\n                    q[slot * 120 + term * 4..slot * 120 + term * 4 + 4]\n                        .try_into()\n                        .unwrap(),\n                )\n                .unwrap();\n                let coefficient = g[term].to_limbs();\n                sums[0] += u64::from(coefficient[0]) * u64::from(scalar.0);\n                sums[1] += u64::from(coefficient[1]) * u64::from(scalar.0);\n                sums[2] += u64::from(coefficient[2]) * u64::from(scalar.0);\n                sums[3] += u64::from(coefficient[3]) * u64::from(scalar.0);\n                sums[4] += u64::from(coefficient[4]) * u64::from(scalar.0);\n                sums[5] += u64::from(coefficient[5]) * u64::from(scalar.0);\n                sums[6] += u64::from(coefficient[6]) * u64::from(scalar.0);\n                sums[7] += u64::from(coefficient[7]) * u64::from(scalar.0);\n            }\n            limbs[0] += (sums[0] & 0x7fff_ffff) + (sums[0] >> 31);\n            limbs[1] += (sums[1] & 0x7fff_ffff) + (sums[1] >> 31);\n            limbs[2] += (sums[2] & 0x7fff_ffff) + (sums[2] >> 31);\n            limbs[3] += (sums[3] & 0x7fff_ffff) + (sums[3] >> 31);\n            limbs[4] += (sums[4] & 0x7fff_ffff) + (sums[4] >> 31);\n            limbs[5] += (sums[5] & 0x7fff_ffff) + (sums[5] >> 31);\n            limbs[6] += (sums[6] & 0x7fff_ffff) + (sums[6] >> 31);\n            limbs[7] += (sums[7] & 0x7fff_ffff) + (sums[7] >> 31);\n        }\n\n        let mut value = WideExact::from_limbs([\n            M31::reduce_u64(limbs[0]).0,\n            M31::reduce_u64(limbs[1]).0,\n            M31::reduce_u64(limbs[2]).0,\n            M31::reduce_u64(limbs[3]).0,\n            M31::reduce_u64(limbs[4]).0,\n            M31::reduce_u64(limbs[5]).0,\n            M31::reduce_u64(limbs[6]).0,\n            M31::reduce_u64(limbs[7]).0\n        ]).unwrap();\n        let mut tail=EbyKDot::new();\n        tail.push(g[28],QM31::from_le_bytes(&q[slot*120+104..slot*120+120]).unwrap()).unwrap();\n        let offset0 = 480 + slot * 32 + 0 * 16;\n                tail.push(g[0 + 26], QM31::from_le_bytes(&q[offset0..offset0 + 16]).unwrap()).unwrap();\n                let offset1 = 480 + slot * 32 + 1 * 16;\n                tail.push(g[1 + 26], QM31::from_le_bytes(&q[offset1..offset1 + 16]).unwrap()).unwrap();\n        value.add(tail.finish())\n    \n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    8187,
+    8415
+   ],
+   "sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "body": "{\n        let [a,b,c,d]=self.c0.finish().limbs();\n        let [e,f,g,h]=self.c1.finish().limbs();\n        // The private accumulator produces canonical coordinates already.\n        E::from_limbs([a,b,c,d,e,f,g,h]).unwrap()\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    7665,
+    7752
+   ],
+   "sha256": "a0fbee47b56e74fd7190d88d11dc38cd38bfa356c48f7361e42de14d1bd9f7b2",
+   "body": "{\n        Self { c0: canonical::Dot::new(), c1: canonical::Dot::new(), count: 0 }\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::push": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    7845,
+    8134
+   ],
+   "sha256": "0a69f40fecb6fa1a3e661c695929992da16636379f1534e0ccb14bafe8f10395",
+   "body": "{\n        if self.count >= MAX_TERMS { return Err(()); }\n        let [value_c0,value_c1] = canonical::Q::from_wide(value);\n        let scalar = checked_q(scalar)?;\n        self.c0.push(value_c0, scalar);\n        self.c1.push(value_c1, scalar);\n        self.count += 1;\n        Ok(())\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    6676,
+    6766
+   ],
+   "sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "body": "{Q([reduce(self.sums[0]),reduce(self.sums[1]),reduce(self.sums[2]),reduce(self.sums[3])])}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    6198,
+    6216
+   ],
+   "sha256": "8d4cbc69049afad585a5c43f20231fbd0e8e4bce2528e53bf0961359ce8bb7e5",
+   "body": "{Self{sums:[0;4]}}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::push": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    6282,
+    6644
+   ],
+   "sha256": "0690762c9d2c31673fed24b3cd4a34a41cd6383c4f53ff64079550dd817e420c",
+   "body": "{\n            // Both enclosing public accumulators check the 4096-term bound.\n            // This private accumulator cannot be reached by raw callers.\n            let raw=a.raw(b);\n            for j in 0..4 {\n                self.sums[j]=self.sums[j].wrapping_add(\n                    (raw[j]&u64::from(P)).wrapping_add(raw[j]>>31u32));\n            }\n        }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::from_limbs": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    1139,
+    1253
+   ],
+   "sha256": "5f66448bfb31976fa7c30fa23e04a61e13865bb1628fe4d6fedb56ca7bdebc23",
+   "body": "{\n            let [a,b,c,d]=x;\n            if a<P && b<P && c<P && d<P {Some(Self([a,b,c,d]))}else{None}\n        }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::from_wide": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    1627,
+    1736
+   ],
+   "sha256": "54c2900b8009e0413c553c3412a5b2386981493156b496717fd6e42579b14cbb",
+   "body": "{\n            let [a,b,c,d,e,f,g,h]=value.to_limbs();\n            [Self([a,b,c,d]),Self([e,f,g,h])]\n        }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    1381,
+    1389
+   ],
+   "sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "body": "{self.0}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    518,
+    674
+   ],
+   "sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "body": "{\n        x=(x & u64::from(P))+(x>>31u32);\n        x=(x & u64::from(P))+(x>>31u32);\n        if x>=u64::from(P) {(x-u64::from(P)) as u32}else{x as u32}\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::checked_q": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    7032,
+    7121
+   ],
+   "sha256": "fd14f9f66985884db8e11b71ba8f36db0a14f6847e5e8a68fce19351098e45db",
+   "body": "{\n    match canonical::Q::from_limbs(limbs_of(k)) { Some(q) => Ok(q), None => Err(()) }\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/fast_pairing.rs::limbs_of": {
+   "path": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "range": [
+    6914,
+    6962
+   ],
+   "sha256": "1b17bd83e597c464125ba785a67ddecd5499113369a300be51ab184889289dd1",
+   "body": "{\n    [k.c0.a.0, k.c0.b.0, k.c1.a.0, k.c1.b.0]\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/trace.rs::value": {
+   "path": "crates/aspis-r1-cost-probe/src/trace.rs",
+   "range": [
+    347,
+    511
+   ],
+   "sha256": "10e7cd0bed4a9659dc28bddff579217578b016047b2e8190457b6db53babedea",
+   "body": "{\n    #[cfg(feature=\"prover\")]\n    VALUES.with(|v| v.borrow_mut().push((tag,index,x.to_le_bytes())));\n    #[cfg(not(feature=\"prover\"))]\n    let _ = (tag,index,x);\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    11053,
+    11163
+   ],
+   "sha256": "6f0e38c5b3d0592b335cb62dc540a2748501bd47f2b8bda3e856985d13ed97f7",
+   "body": "{\n        let flush=self.terms&3==3;\n        update_residue_row(&mut self.raw[index],power,basis,flush);\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    9285,
+    9319
+   ],
+   "sha256": "585cf3766ded55b1585fd713f8b7501bb9d2fc43728b0336f5101d5c01309765",
+   "body": "{&self.inverses[index-self.start]}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    7450,
+    9216
+   ],
+   "sha256": "cecda71c277c78a80c9dedd96c0148a2907410736135eeef24f3c1c0ffeaf154",
+   "body": "{\n        if start>end||end>queries.len(){return Err(Error::Query);}\n        let mut line_z_values=Vec::with_capacity(end-start);\n        let mut flat=Vec::with_capacity((end-start)*5);\n        for &query in &queries[start..end] {\n            let u=query as usize;\n            let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;\n            let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);\n            let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4).map_err(|_|Error::Query)?);\n            let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(u/4*4+3).map_err(|_|Error::Query)?);\n            let line_z=line_x.mul(line_x).double().sub(M31::ONE);\n            let values=[circle_x,circle_y,line_x,line_y,line_z];\n            if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}\n            flat.extend_from_slice(&values);\n            line_z_values.push(line_z);\n        }\n        if flat.is_empty(){return Ok(Self{start,inverses:Vec::new(),line_z:line_z_values});}\n        // Standard prefix-product/backward batch inversion. The only `inv`\n        // in this routine is applied to the product of all nonzero entries.\n        let (prefixes,product)=batch_prefix_products(&flat);\n        let mut suffix_inverse=product.inv();\n        let mut flat_inverse=Vec::with_capacity(flat.len());\n        flat_inverse.resize(flat.len(),M31::ZERO);\n        for i in (0..flat.len()).rev() {\n            flat_inverse[i]=suffix_inverse.mul(prefixes[i]);\n            suffix_inverse=suffix_inverse.mul(flat[i]);\n        }\n        let inverses=(0..line_z_values.len()).map(|i|core::array::from_fn(|j|flat_inverse[5*i+j])).collect();\n        Ok(Self{start,inverses,line_z:line_z_values})\n    }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    13643,
+    14331
+   ],
+   "sha256": "4bb575a783c944b146f564b076a7cd1d3df4db7cce59a10f225e8eae12994afa",
+   "body": "{\n    let width=a.weights.len();\n    let mut basis=[M31::ZERO;256];basis[0]=M31::ONE;let mut n=1;\n    while n<width {for j in 0..n {basis[n+j]=basis[j].mul(node);} node=node.mul(node).double().sub(M31::ONE);n*=2;}\n    for j in 0..width {\n        weights.push(j,a.power,basis_at(&basis,j));\n        #[cfg(feature=\"prover\")] {a.weights[j]=weights.value(j);}\n        crate::trace::value(12,a.next*width+j,E::from_qm31(accumulated_weight_at(&a.weights,j)));\n        crate::trace::value(13,a.next*width+j,E::from_m31(basis_at(&basis,j)));\n    }\n    weights.terms+=1;\n    a.rhs=a.rhs.add(value.mul_qm31(a.power));crate::trace::value(11,a.next,a.rhs);\n    a.power=a.power.mul(p.rho);a.next+=1;\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    13495,
+    13511
+   ],
+   "sha256": "9bae9bc0891859f088e0e1dca4c9e8db7e8b4a14d0c2fecb21a74a8e6ab459fd",
+   "body": "{weights[index]}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::basis_at": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    13408,
+    13422
+   ],
+   "sha256": "486bc40aa1bda4eb6488bea22dff0d7d5b3d474eeab3c8c9054af3d1d47bd998",
+   "body": "{basis[index]}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    7067,
+    7349
+   ],
+   "sha256": "819dce1c5d717078e0b354f05139e44e402c5234dd5f3a8bd77df46996b6ec87",
+   "body": "{\n    let mut prefixes=Vec::with_capacity(flat.len());\n    let mut product=M31::ONE;\n    let mut index=0;\n    while index<flat.len() {\n        let value=flat[index];\n        prefixes.push(product);\n        product=product.mul(value);\n        index+=1;\n    }\n    (prefixes,product)\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::circle_fold_with_inverses": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    9406,
+    9761
+   ],
+   "sha256": "f91cd9637267d713b0fe130c79ecab6c98400adfa2f388c18ce5f6f8c36caad4",
+   "body": "{\n    let [ix,iy,_,_,_]=*inverse;let [a,b,c,d]=a;\n    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);\n    let h1=a.sub(b).sub(c).add(d).mul_m31(QUARTER.mul(iy));\n    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(ix));\n    let h3=a.sub(b).add(c).sub(d).mul_m31(QUARTER.mul(ix).mul(iy));\n    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    9844,
+    10265
+   ],
+   "sha256": "61cb34a1e43fb6611f6e550bf27d397e0f874b13d7beec3f728a4679543ea34d",
+   "body": "{\n    let [_,_,ix,iy,iz]=*inverse;let half=M31(1073741824);let [a,b,c,d]=a;\n    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);\n    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(iz));\n    let c0=a.sub(b).mul_m31(half.mul(ix));\n    let c1=d.sub(c).mul_m31(half.mul(iy));\n    let h1=c0.add(c1).mul_m31(half);\n    let h3=c0.sub(c1).mul_m31(half.mul(iz));\n    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::mark": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    1761,
+    1791
+   ],
+   "sha256": "8d11b2880963463305373885b0ac2b54c695091dad56461a54b77bffd87775d3",
+   "body": "{ if let Some(f)=obs {f(p);} }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::power_limb_at": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    11602,
+    11616
+   ],
+   "sha256": "d8534398dbd555cc81e530de0c7e3b454c79377cac62684f329b2bddb82bb1e9",
+   "body": "{limbs[index]}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    11521,
+    11533
+   ],
+   "sha256": "8127793a5379aaddb568da63252c5b92c7465d40b8cf8d8352a12672f87d54e3",
+   "body": "{row[index]}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row": {
+   "path": "crates/aspis-r1-cost-probe/src/verifier.rs",
+   "range": [
+    11704,
+    12025
+   ],
+   "sha256": "61f3b29780d6123b0664dfa77c78d164e6821e0adbe958a196c50e2ea64d5595",
+   "body": "{\n    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];\n    for j in 0..4 {\n        let old=residue_limb_at(row,j);\n        let limb=power_limb_at(&limbs,j);\n        row[j]=old+u64::from(limb)*u64::from(basis.0);\n    }\n    if flush {\n        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}\n    }\n}",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  },
+  "crates/aspis-r1-cost-probe/src/weights.rs::field": {
+   "path": "crates/aspis-r1-cost-probe/src/weights.rs",
+   "range": [
+    745,
+    798
+   ],
+   "sha256": "f144b4cb140af533df5bc6945181fa5e4bfd3bcd3e35ecf0ebf73b005d257263",
+   "body": "{ E::from_le_bytes(&bytes[i*32..(i+1)*32]).unwrap() }",
+   "actual_nonlibrary_targets": null,
+   "resolution_scope": "deployed-feature branch only; optional op-count/reference branches excluded by inherited feature pins"
+  }
+ }
+}

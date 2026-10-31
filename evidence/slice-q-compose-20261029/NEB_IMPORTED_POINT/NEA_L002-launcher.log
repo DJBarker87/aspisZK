@@ -1,0 +1,48 @@
+{"attempt": "NEA_L002", "exit_status": 1, "wall_seconds": 2.473374475957826, "peak_rss_kib": "2574388", "swaps": "0", "print_axioms": []}
+@[reducible] def AspisR1QueryGeometryActual.domain.FibreIndex : Type :=
+Usize
+def AspisR1QueryGeometryActual.fast_domain.fibre_point : AspisR1QueryGeometryActual.CM31Ops →
+  AspisR1QueryGeometryActual.domain.FibreIndex →
+    Result (AspisR1QueryGeometryActual.domain.Point AspisR1QueryGeometryActual.field.M31) :=
+fun ops u => do
+  let index ← u.get
+  let i ← lift (index &&& 511#usize)
+  let p ← AspisR1QueryGeometryActual.fast_domain.TABLE_A.index_usize i
+  let left ← AspisR1QueryGeometryActual.fast_domain.table_value ops p
+  let i1 ← index >>> 9#i32
+  let p1 ← AspisR1QueryGeometryActual.fast_domain.TABLE_B.index_usize i1
+  let right ← AspisR1QueryGeometryActual.fast_domain.table_value ops p1
+
+...
+    Result (AspisR1QueryGeometryActual.domain.Point AspisR1QueryGeometryActual.field.M31) :=
+fun ops u => do
+  let index ← u.get
+  let i ← lift (index &&& 511#usize)
+  let p ← AspisR1QueryGeometryActual.fast_domain.TABLE_A.index_usize i
+  let left ← AspisR1QueryGeometryActual.fast_domain.table_value ops p
+  let i1 ← index >>> 9#i32
+  let p1 ← AspisR1QueryGeometryActual.fast_domain.TABLE_B.index_usize i1
+  let right ← AspisR1QueryGeometryActual.fast_domain.table_value ops p1
+  let point ← ops.mul left right
+  ok { x := point.a, y := point.b }
+NEA_generated/NEA_GeometryInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `AspisR1QueryGeometryActual.fast_domain.line_node`
+structure AspisR1QueryGeometryActual.CM31Ops : Type
+number of parameters: 0
+fields:
+  AspisR1QueryGeometryActual.CM31Ops.new : AspisR1QueryGeometryActual.field.M31 →
+      AspisR1QueryGeometryActual.field.M31 → Result AspisR1QueryGeometryActual.field.CM31
+  AspisR1QueryGeometryActual.CM31Ops.mul : AspisR1QueryGeometryActual.field.CM31 →
+      AspisR1QueryGeometryActual.field.CM31 → Result AspisR1QueryGeometryActual.field.CM31
+constructor:
+  AspisR1QueryGeometryActual.CM31Ops.mk
+    (new :
+      AspisR1QueryGeometryActual.field.M31 →
+        AspisR1QueryGeometryActual.field.M31 → Result AspisR1QueryGeometryActual.field.CM31)
+    (mul :
+      AspisR1QueryGeometryActual.field.CM31 →
+        AspisR1QueryGeometryActual.field.CM31 → Result AspisR1QueryGeometryActual.field.CM31) :
+    AspisR1QueryGeometryActual.CM31Ops
+NEA_generated/NEA_GeometryInspect.lean:8:7: error(lean.unknownIdentifier): Unknown constant `AspisR1QueryGeometryActual.M31Ops`
+NEA_generated/NEA_GeometryInspect.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `AspisR1BatchedWeightsExtraction.verifier.BatchedWeights.push`
+
+Running as unit: run-r538ad7d9022a4565beb19328fe190b37.scope; invocation ID: 49c9e2f368ab472fb1130a16f1861e96

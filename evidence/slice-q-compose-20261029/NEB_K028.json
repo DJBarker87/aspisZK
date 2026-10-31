@@ -1,0 +1,72 @@
+{
+ "attempt": "NEB_K028",
+ "kind": "kani",
+ "target": "field::wide_exact::NEB_wide::e_add",
+ "source_revision": "ac2ceec3bc004306d7b4d93180d500a5ca6fbe42",
+ "source_tree_dirty": true,
+ "sources": [
+  "NEB_TOOL_PINS.json",
+  "NEB_gate.py",
+  "NEB_graph.py",
+  "NEB_SOURCE_PINS.json",
+  "NEB_src/Cargo.lock",
+  "NEB_src/Cargo.toml",
+  "NEB_src/crates/aspis-core/src/field.rs",
+  "NEB_src/crates/aspis-core/src/field/NEB_reducer.rs",
+  "NEB_src/crates/aspis-core/src/lib.rs",
+  "NEB_src/crates/aspis-core/src/field/wide_exact.rs",
+  "NEB_src/crates/aspis-core/src/field/NEB_additive.rs",
+  "NEB_src/crates/aspis-core/src/field/NEB_additive_reference.rs",
+  "NEB_src/crates/aspis-core/src/field/wide_exact/NEB_wide.rs"
+ ],
+ "command": [
+  "python3",
+  "NEB_gate.py",
+  "NEB_K028.json"
+ ],
+ "native_command": [
+  "/home/dombarker/.cargo/bin/cargo-kani",
+  "kani",
+  "--manifest-path",
+  "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_src/crates/aspis-core/Cargo.toml",
+  "--target-dir",
+  "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_target",
+  "--features",
+  "r0",
+  "--lib",
+  "-j",
+  "1",
+  "-Z",
+  "unstable-options",
+  "-Z",
+  "function-contracts",
+  "-Z",
+  "stubbing",
+  "--harness-timeout",
+  "90s",
+  "--exact",
+  "--harness",
+  "field::wide_exact::NEB_wide::e_add",
+  "--output-format",
+  "terse"
+ ],
+ "timeout": 180,
+ "env": {
+  "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+  "CARGO_BUILD_JOBS": "1",
+  "CARGO_NET_OFFLINE": "true",
+  "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+  "CARGO_PROFILE_DEV_DEBUG": "0",
+  "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+  "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+  "TMPDIR": "/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_tmp"
+ },
+ "deps_fingerprint": {
+  "source_pinset": "NEB_SOURCE_PINS.json",
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387"
+ },
+ "expected_time": "Optimized compilation then one named scalar or fixed-record/array contract; no field multiplication, generation or elimination",
+ "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+ "feature_scope": "core r0 helper, feature-independent frozen method bodies; cfg(kani) instrumentation only",
+ "copy_dependency": "KMX-approved copy implementation applied; scalar-only reducer has no copy dependence, record/array lanes require matched KMX positive/negative controls"
+}

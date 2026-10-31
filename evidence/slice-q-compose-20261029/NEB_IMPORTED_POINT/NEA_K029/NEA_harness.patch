@@ -1,0 +1,192 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -913,6 +913,8 @@
+     }
+ 
+     #[inline(always)]
++    #[cfg_attr(kani,kani::requires(NEA_field::canonical(self)))]
++    #[cfg_attr(kani,kani::ensures(|r| NEA_field::neg_post(self,*r)))]
+     pub fn neg(self) -> QM31 {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::KNeg);
+@@ -3266,3 +3268,5 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)] #[path="field/NEA_field.rs"] mod NEA_field;
+--- /dev/null
++++ b/crates/aspis-core/src/field/NEA_field.rs
+@@ -0,0 +1,12 @@
++use super::*;
++pub fn canonical(x:QM31)->bool {x.c0.a.0<P && x.c0.b.0<P && x.c1.a.0<P && x.c1.b.0<P}
++fn words(x:QM31)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
++fn neg(x:u32)->u32 {if x==0 {0}else{P-x}}
++pub fn neg_post(x:QM31,r:QM31)->bool {
++ let a=words(x);let want=[neg(a[0]),neg(a[1]),neg(a[2]),neg(a[3])];
++ if cfg!(NEA_wrong_neg) {words(r)!=want} else {words(r)==want}
++}
++#[kani::proof_for_contract(QM31::neg)]
++fn qm_neg() {let x=QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}};kani::assume(canonical(x));let _=x.neg();}
++
++impl kani::Arbitrary for M31 {fn any()->Self{M31(kani::any())}}
+--- a/crates/aspis-core/src/r0/domain.rs
++++ b/crates/aspis-core/src/r0/domain.rs
+@@ -8,6 +8,7 @@
+         #[derive(Clone, Copy, Debug, PartialEq, Eq)]
+         pub struct $name(usize);
+         impl $name {
++            #[cfg_attr(kani,kani::ensures(|r| match r {Ok(v)=>index < $bound && v.0==index,Err(e)=>index >= $bound && *e==Error::IndexOutOfRange}))]
+             pub fn new(index: usize) -> Result<Self, Error> {
+                 if index < $bound {
+                     Ok(Self(index))
+@@ -97,3 +98,10 @@
+ pub fn line_node<E: CodeField>(u: FibreIndex) -> E {
+     basis::double(exact_circle_x::<E>(u))
+ }
++
++#[cfg(kani)] mod NEA_domain { use super::*;
++#[kani::proof_for_contract(FibreIndex::new)] fn constructor(){let i:usize=kani::any();let _=FibreIndex::new(i);}
++#[kani::proof] fn reject_control(){let i:usize=kani::any();let x=FibreIndex::new(i);assert!(x.is_ok());}
++}
++
++#[cfg(kani)] impl<E:kani::Arbitrary> kani::Arbitrary for Point<E> {fn any()->Self{Self{x:kani::any(),y:kani::any()}}}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,5 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NEA_verifier.rs"] mod NEA_verifier;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_verifier.rs
+@@ -0,0 +1,3 @@
++use super::*;
++#[kani::proof] fn index_alignment() {let u:usize=kani::any();kani::assume(u<262144);let a=domain::FibreIndex::new(u/4*4).unwrap();let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(a.get()==u/4*4 && b.get()==u/4*4+3);}
++#[kani::proof] fn index_alignment_wrong() {let u:usize=kani::any();kani::assume(u<262144);let b=domain::FibreIndex::new(u/4*4+3).unwrap();assert!(b.get()==u/4*4);}
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! aspis-core: shared no_std verifier core for the Aspis native WHIR-style
+ //! M31 PCS substrate (Stage 0).
+ //!
+@@ -97,3 +98,5 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)] pub(crate) mod NEA_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] pub(crate) mod NEA_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- a/crates/aspis-r1-cost-probe/src/fast_domain.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_domain.rs
+@@ -279,6 +279,10 @@
+ 
+ /// Return exactly the core R0 fibre point for this checked index.
+ #[inline]
++#[cfg_attr(all(kani,not(NEA_line_opaque)),kani::requires(u.get()<262144))]
++#[cfg_attr(all(kani,not(NEA_line_opaque)),kani::modifies(&raw mut NEA_point::LOG))]
++#[cfg_attr(all(kani,not(NEA_point_tail),not(NEA_line_opaque)),kani::ensures(|r| NEA_point::point_post(u,*r)))]
++#[cfg_attr(all(kani,NEA_point_tail,not(NEA_line_opaque)),kani::ensures(|r| NEA_point::tail_post(u,*r)))]
+ pub fn fibre_point(u: FibreIndex) -> Point<M31> {
+     let index = u.get();
+     let left = table_value(TABLE_A[index & 511]);
+@@ -292,8 +296,16 @@
+ 
+ /// Return the R0 line node `2*x^2 - 1` for this checked fibre index.
+ #[inline]
++#[cfg_attr(kani,kani::requires(u.get()<262144))]
++#[cfg_attr(kani,kani::modifies(&raw mut NEA_point::LOG,&raw mut NEA_line::LOG))]
++#[cfg_attr(kani,kani::ensures(|r| NEA_line::line_post(u,*r)))]
+ pub fn line_node(u: FibreIndex) -> M31 {
++    #[cfg(all(kani,NEA_line_opaque))] unsafe {NEA_line::LOG.count=0;}
+     let x = fibre_point(u).x;
+     let square = x.mul(x);
+     square.double().sub(M31::ONE)
+ }
++
++#[cfg(kani)] #[path="NEA_point.rs"] mod NEA_point;
++
++#[cfg(kani)] #[path="NEA_line.rs"] mod NEA_line;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_point.rs
+@@ -0,0 +1,29 @@
++use super::*;
++#[path="NEA_point_reference.rs"] mod NEA_point_reference;
++#[derive(Clone,Copy,kani::Arbitrary)]
++pub(super) struct PointLog {pub count:usize,pub left:[u32;2],pub right:[u32;2],pub reply:[u32;2]}
++pub(super) static mut LOG:PointLog=PointLog{count:0,left:[0;2],right:[0;2],reply:[0;2]};
++fn words(x:CM31)->[u32;2] {[x.a.0,x.b.0]}
++fn canonical(x:CM31)->bool {x.a.0<2147483647 && x.b.0<2147483647}
++// Opaque product log: UNIVERSAL over canonical replies, not an asserted product.
++// Lean selects the one exact canonical natural-number product after this check.
++pub(super) fn cm_mul(x:CM31,y:CM31)->CM31 {
++ assert!(canonical(x) && canonical(y));
++ let z=CM31{a:M31(kani::any()),b:M31(kani::any())};kani::assume(canonical(z));
++ unsafe {LOG.count+=1;LOG.left=words(x);LOG.right=words(y);LOG.reply=words(z);}
++ z
++}
++pub fn point_post(u:FibreIndex,r:Point<M31>)->bool {unsafe {
++ let i=u.get();let a=TABLE_A[i&511];let b=TABLE_B[i>>9];
++ let association=LOG.count==1 && LOG.left==[a.0,a.1] && LOG.right==[b.0,b.1];
++ let reference=NEA_point_reference::point_ref(i,&TABLE_A,&TABLE_B,LOG.reply);
++ let returned=r.x.0==reference[4] && r.y.0==reference[5] && LOG.left==[reference[0],reference[1]] && LOG.right==[reference[2],reference[3]];
++ association && LOG.reply[0]<2147483647 && LOG.reply[1]<2147483647 && if cfg!(NEA_wrong_point){!returned}else{returned}
++}}
++#[cfg_attr(not(NEA_line_opaque),kani::proof_for_contract(fibre_point))]
++#[cfg_attr(NEA_line_opaque,kani::proof)]
++#[kani::stub(CM31::mul,cm_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn point() {unsafe{LOG.count=0;} let i:usize=kani::any();kani::assume(i<262144);let u=FibreIndex::new(i).unwrap();let _=fibre_point(u);}
++
++pub fn tail_post(_u:FibreIndex,r:Point<M31>)->bool {unsafe {let valid=LOG.count==1 && LOG.reply[0]<2147483647 && LOG.reply[1]<2147483647 && r.x.0==LOG.reply[0] && r.y.0==LOG.reply[1];if cfg!(NEA_wrong_point){!valid}else{valid}}}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_point_reference.rs
+@@ -0,0 +1 @@
++pub fn point_ref(index:usize,a:&[(u32,u32);512],b:&[(u32,u32);512],product:[u32;2])->[u32;6] {let left=a[index&511];let right=b[index>>9];[left.0,left.1,right.0,right.1,product[0],product[1]]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEA_line.rs
+@@ -0,0 +1,30 @@
++use super::*;
++#[derive(Clone,Copy,kani::Arbitrary)]
++pub(super) struct ScalarLog {pub count:usize,pub x:u32,pub y:u32,pub reply:u32}
++pub(super) static mut LOG:ScalarLog=ScalarLog{count:0,x:0,y:0,reply:0};
++fn m_mul(x:M31,y:M31)->M31 {assert!(x.0<2147483647 && y.0<2147483647);let z:u32=kani::any();kani::assume(z<2147483647);unsafe{LOG.count+=1;LOG.x=x.0;LOG.y=y.0;LOG.reply=z;}M31(z)}
++fn reference(square:u32)->u32 {let t=square+square;let d=if t>=2147483647 {t-2147483647}else{t};if d>=1 {d-1}else{2147483647-1}}
++pub fn line_post(u:FibreIndex,r:M31)->bool {unsafe {
++ let p=Point{x:M31(NEA_point::LOG.reply[0]),y:M31(NEA_point::LOG.reply[1])};
++ let point_ok=if cfg!(NEA_line_opaque){NEA_point::LOG.count==1 && NEA_point::LOG.left[0] as usize==u.get() && NEA_point::LOG.reply[0]<2147483647 && NEA_point::LOG.reply[1]<2147483647}else if cfg!(NEA_point_tail){NEA_point::tail_post(u,p)}else{NEA_point::point_post(u,p)};
++ let association=point_ok && LOG.count==1 && LOG.x==p.x.0 && LOG.y==p.x.0;
++ association && if cfg!(NEA_wrong_line){r.0!=reference(LOG.reply)}else{r.0==reference(LOG.reply)}
++}}
++#[kani::proof_for_contract(line_node)]
++#[cfg_attr(not(NEA_line_opaque),kani::stub_verified(fibre_point))]
++#[cfg_attr(NEA_line_opaque,kani::stub(fibre_point,point_cut))]
++#[cfg_attr(NEA_line_opaque,kani::stub(M31::double,m_double))]
++#[cfg_attr(NEA_line_opaque,kani::stub(M31::sub,m_sub_one))]
++#[kani::stub(CM31::mul,NEA_point::cm_mul)]
++#[kani::stub(M31::mul,m_mul)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEA_copy::KMX_copy_nonoverlapping)]
++fn line(){unsafe{LOG=kani::any();NEA_point::LOG=kani::any();}let i:usize=kani::any();kani::assume(i<262144);let u=FibreIndex::new(i).unwrap();let _=line_node(u);}
++
++fn point_cut(u:FibreIndex)->Point<M31> {
++ assert!(u.get()<262144);
++ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647 && b<2147483647);
++ unsafe{NEA_point::LOG=NEA_point::PointLog{count:1,left:[u.get() as u32,0],right:[0;2],reply:[a,b]};}
++ Point{x:M31(a),y:M31(b)}
++}
++fn m_double(x:M31)->M31 {assert!(x.0<2147483647);let t=x.0+x.0;let spec=if t>=2147483647{t-2147483647}else{t};let out:u32=kani::any();kani::assume(out==spec);M31(out)}
++fn m_sub_one(x:M31,y:M31)->M31 {assert!(x.0<2147483647 && y.0==1);let spec=if x.0>=1{x.0-1}else{2147483646};let out:u32=kani::any();kani::assume(out==spec);M31(out)}

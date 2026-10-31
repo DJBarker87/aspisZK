@@ -1,0 +1,54 @@
+{"attempt": "NEB_K008", "exit_status": 1, "wall_seconds": 6.323098570923321, "peak_rss_kib": "495352", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-compose-20261029/NEB_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`,
+...
+:419:15
+    |
+419 | pub(crate) fn verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes<
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `NEB_reducer` should have a snake case name
+    --> crates/aspis-core/src/field.rs:3272:49
+     |
+3272 | #[cfg(kani)] #[path="field/NEB_reducer.rs"] mod NEB_reducer;
+     |                                                 ^^^^^^^^^^^ help: convert the identifier to snake case: `neb_reducer`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 3.11s
+Checking harness field::NEB_reducer::wrapper_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 79 failed (3 unreachable)
+Failed Checks: |r| NEB_reducer::wrapper_post(value,*r)
+ File: "crates/aspis-core/src/field.rs", line 154, in field::M31::reduce_u64::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.18357821s
+
+Manual Harness Summary:
+Verification failed for - field::NEB_reducer::wrapper_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf5f0623b3b13433d8cbf35edceb6d2c0.scope; invocation ID: ad33091acfda478d9a7384d599f09a43

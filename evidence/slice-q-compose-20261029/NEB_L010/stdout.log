@@ -1,0 +1,62 @@
+NEB_QueryCallRanges.lean:14:2: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `AspisR1.Port2_QueryLoop.Calls.casesOn` can only eliminate into `Prop`
+
+call : Port2_QueryLoop.LocalCall
+finish : ℕ
+a : Acc
+b : BW
+n✝ : ℕ
+bout✝ : BW
+out✝ : Acc
+x✝¹ : Port2_QueryLoop.Calls call finish a b out✝ bout✝ n✝
+motive : (n : ℕ) → (bout : BW) → (out : Acc) → Port2_QueryLoop.Calls call finish a b out bout n → Sort ?u.18
+h_1 : (atEnd : ↑a.next = finish) → motive 0 b a ⋯
+h_2 :
+  (bout : Port2_QueryLoop.BW) →
+    (out a1 : Port2_QueryLoop.Acc) →
+      (b1 : Port2_QueryLoop.BW) →
+        (n : ℕ) →
+          (active : ↑a.next < finish) →
+            (returned : call a b = ok (core.result.Result.Ok (a1, b1))) →
+              (tail : Port2_QueryLoop.Calls call finish a1 b1 out bout n) → motive (n + 1) bout out ⋯
+a✝⁴ : Port2_QueryLoop.Acc
+a✝³ : Port2_QueryLoop.BW
+a✝² : Port2_QueryLoop.Acc
+a✝¹ : Port2_QueryLoop.BW
+a✝ : ℕ
+x✝ : Port2_QueryLoop.Calls call finish a✝⁴ a✝³ a✝² a✝¹ a✝
+⊢ a = a✝⁴ → b = a✝³ → out✝ = a✝² → bout✝ = a✝¹ → n✝ = a✝ → x✝¹ ≍ x✝ → motive n✝ bout✝ out✝ x✝¹ after processing
+  _, _, _, _
+the dependent pattern matcher can solve the following kinds of equations
+- <var> = <term> and <term> = <var>
+- <term> = <term> where the terms are definitionally equal
+- <constructor> = <constructor>, examples: List.cons x xs = List.cons y ys, and List.cons x xs = List.nil
+NEB_QueryCallRanges.lean:33:22: error: Tactic `assumption` failed
+
+case done
+call : Port2_QueryLoop.LocalCall
+finish : ℕ
+advance :
+  ∀ (a a1 : Port2_QueryLoop.Acc) (b b1 : Port2_QueryLoop.BW),
+    call a b = ok (core.result.Result.Ok (a1, b1)) → ↑a1.next = ↑a.next + 1
+geometry : verifier.QueryGeometry
+length : (↑geometry.inverses).length = finish - ↑geometry.start
+zlength : (↑geometry.line_z).length = finish - ↑geometry.start
+cap : finish ≤ 22
+a✝ out : Acc
+b✝ bout : BW
+n : ℕ
+a : Port2_QueryLoop.Acc
+b : Port2_QueryLoop.BW
+atEnd : ↑a.next = finish
+lower : ↑geometry.start ≤ ↑a.next
+⊢ Every
+    (fun current x =>
+      ↑geometry.start ≤ ↑current.next ∧
+        ↑current.next < finish ∧
+          ↑current.next < 22 ∧
+            ↑current.next - ↑geometry.start < (↑geometry.inverses).length ∧
+              ↑current.next - ↑geometry.start < (↑geometry.line_z).length)
+    ⋯
+'NEB_QueryCallRanges.calls' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEB_QueryCallRanges.root' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

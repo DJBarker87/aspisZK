@@ -1,0 +1,7 @@
+# Next native composition unit: full-u64 reducer wrapper
+
+The actual frozen `M31::reduce_u64(value)` passes exactly `value` to `field::reduce_u64` and wraps its scalar reply unchanged. Both existing selected packets cover every u64. There is no multiplication, copy, function pointer, allocator or loop in either body. This is an independent real call dependency, unlike an arbitrary-index geometry diagnostic.
+
+Plan: prove the actual private scalar reducer contract against a safe reference transliteration; pair a failing ensures control. Establish scalar contract fidelity controls (inverted ensures, unimplied caller assertion under substitution versus real body, modifies violation). Prove the actual M31 wrapper contract using stub_verified on that private reducer and pair a failing wrapper control. Reuse the emitted reducer definition and standard-axiom natural-value theorem; compile the exact same-input wrapper association and canonical-result law. Retain P6/D188 semantic transport as trust reclassification. No field multiplication is sent to Kani.
+
+The native proof must record frozen graph validation before every run, offline resolution, exact KMX patch hash, unchanged lock afterwards, deployed core-helper body parity and all-crate feature lists. No partial pass or timeout can close the edge. A bare source-shaped scalar harness is insufficient; the contract must execute the actual frozen caller body under the verified scalar callee contract.

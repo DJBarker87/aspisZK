@@ -1,0 +1,11 @@
+# Peer final findings (read-only import, no credit)
+
+Immutable final NEA handoff and stop audit from f9a70eb61e4d87faec34eba94cf543daeaef8d29 are copied under NEB_IMPORTED_INDEX_FINAL and hashed in NEB_INDEX_FINAL_IMPORTS.json. The peer branch ref is absent in this checkout; this commit is reachable in research history. No peer live worktree was read or modified. Constructor shape controls were revalidated separately. Failed native folds/prefixes, state-erasure resource failures and unvalidated extracts receive no credit.
+
+The copied final findings explicitly correct accumulate_batched_with_node: deployed prover is absent, trace::value is a no-op, and the function is NOT an Observer quarantine. Query_values/query_loop/mark still carry Option<fn> and remain quarantined. CMinv/inv_with and the QM inverse path remain function-pointer-dependent; try_inv also reaches out-of-slice CM31::square. QM neg array formula/negative fragments lack the exact adopted enclosing carrier association. No quarantine is lifted by a renamed/literal callback.
+
+NDI QueryGeometry::for_query is a borrowed-row interface; its model/reference and local pointer equality do not supply a borrowed-return substitution triad. NEB_GeometryAccessor proves complete same selected row and pure frame, but no composed native borrowed-shape promotion.
+
+NCI getter packets K032-K039 were inspected through immutable Git source. KMX_stubs.rs hashes match the approved patch and each getter positive has an inverted-result failure with that stub. NCI_ATTEMPTS.jsonl contains no dedicated KMX copy positive/negative invocation in that verifier configuration. This lane's K009/K010 controls have a core-r0 helper configuration, not the NCI verifier configuration. Conservatively no getter copy credit is imported across configurations. Generic emitted Array/Slice index and bounds proofs already exist as NCI_GetterModel/NCI_BasisBounds; repeating them would not establish the missing native copy/configuration or parent installed-port association.
+
+Own script repairs are recorded in NEB_PREFLIGHT_REPAIRS.json. Later scalar review checks the exact historical modulo assertion text (u64 remainder, not an assumed u128 spelling). Both inventory versions are parsed explicitly as expression-or-syntax; no semantic check was removed.
