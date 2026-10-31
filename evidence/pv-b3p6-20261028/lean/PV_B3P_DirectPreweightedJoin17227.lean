@@ -30,7 +30,8 @@ theorem preweighted_outer_loop17 {N : Usize} (start : Usize)
     host_terminal.add_preweighted_loop0 ⟨first,last,false⟩ packed start values =
       inclusive_std_loop17 (source_preweighted_macro_step12 start values) first last packed := by
   unfold host_terminal.add_preweighted_loop0 inclusive_std_loop17
-  apply congrArg (fun body => loop body (⟨first,last,false⟩,packed))
+  apply congrArg (fun body => loop body
+    ((⟨first,last,false⟩ : core.ops.range.RangeInclusive Usize),packed))
   funext state
   exact preweighted_outer_body17 start values state.1 state.2
 
