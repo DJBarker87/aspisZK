@@ -41,6 +41,14 @@ theorem mask_direct17_1749 (ones zeros : U16 → Result U32)
   have step_1024 (sum : aspis_core.field.QM31) :=
     mask_loop_step17 zeros values 1024#u16 sum 10#u32 (by decide) trail_1024
   simp only [step_1749,clear_1749,step_1748,clear_1748,step_1744,clear_1744,step_1728,clear_1728,step_1664,clear_1664,step_1536,clear_1536,step_1024,clear_1024,mask_loop_stop17]
+  have cast_0 : UScalar.cast .Usize 0#u32 = 0#usize := by scalar_tac
+  have cast_2 : UScalar.cast .Usize 2#u32 = 2#usize := by scalar_tac
+  have cast_4 : UScalar.cast .Usize 4#u32 = 4#usize := by scalar_tac
+  have cast_6 : UScalar.cast .Usize 6#u32 = 6#usize := by scalar_tac
+  have cast_7 : UScalar.cast .Usize 7#u32 = 7#usize := by scalar_tac
+  have cast_9 : UScalar.cast .Usize 9#u32 = 9#usize := by scalar_tac
+  have cast_10 : UScalar.cast .Usize 10#u32 = 10#usize := by scalar_tac
+  simp only [mask_add17,mask_step10,mask_read10,cast_0,cast_2,cast_4,cast_6,cast_7,cast_9,cast_10]
   rfl
 #print axioms mask_direct17_1749
 end PV_B3P_Direct17227

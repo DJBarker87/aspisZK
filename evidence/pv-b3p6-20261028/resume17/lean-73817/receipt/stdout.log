@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17_2048227.lean:20:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let next ← mask_add17 values aspis_core.field.QM31.ZERO 11#u32
+    ok next
+is not definitionally equal to the right-hand side
+  do
+    let next ← mask_step10 values aspis_core.field.QM31.ZERO 11
+    ok next
+
+ones zeros : U16 → Result U32
+values : Std.Array aspis_core.field.QM31 16#usize
+count_law : ones 2048#u16 = ok 1#u32
+trail_2048 : zeros 2048#u16 = ok 11#u32
+clear_2048 : 2048#u16 &&& U16.wrapping_sub 2048#u16 1#u16 = 0#u16
+step_2048 :
+  ∀ (sum : aspis_core.field.QM31),
+    host_copy_terminal.selector_mask_sum_16_loop zeros values 2048#u16 false sum = do
+      let next ← mask_add17 values sum 11#u32
+      host_copy_terminal.selector_mask_sum_16_loop zeros values (2048#u16 &&& U16.wrapping_sub 2048#u16 1#u16) false
+          next
+⊢ (do
+      let next ← mask_add17 values aspis_core.field.QM31.ZERO 11#u32
+      ok next) =
+    do
+    let next ← mask_step10 values aspis_core.field.QM31.ZERO 11
+    ok next
+'PV_B3P_Direct17227.mask_direct17_2048' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
