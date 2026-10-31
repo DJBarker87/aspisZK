@@ -37,19 +37,21 @@ theorem mask_loop_stop17 (zeros : U16 → Result U32)
     host_copy_terminal.selector_mask_sum_16_loop zeros values 0#u16 false sum = .ok sum := by
   unfold host_copy_terminal.selector_mask_sum_16_loop
   rw [loop.eq_1]
-  simp only [host_copy_terminal.selector_mask_sum_16_loop.body,ne_eq,not_true_eq_false,if_false]
+  have zero : (0#u16 != 0#u16) = false := by rfl
+  simp only [host_copy_terminal.selector_mask_sum_16_loop.body,zero,Bool.false_eq_true,if_false]
 
 theorem mask_loop_step17 (zeros : U16 → Result U32)
     (values : Array aspis_core.field.QM31 16#usize) (mask : U16)
     (sum : aspis_core.field.QM31) (index : U32)
     (nonzero : mask ≠ 0#u16) (law : zeros mask = .ok index) :
-    host_copy_terminal.selector_mask_sum_16_loop zeros values mask false sum = do
+    host_copy_terminal.selector_mask_sum_16_loop zeros values mask false sum = (do
       let next ← mask_add17 values sum index
       host_copy_terminal.selector_mask_sum_16_loop zeros values
-        (mask &&& U16.wrapping_sub mask 1#u16) false next := by
+        (mask &&& (U16.wrapping_sub mask 1#u16)) false next) := by
   unfold host_copy_terminal.selector_mask_sum_16_loop
   rw [loop.eq_1]
-  simp only [host_copy_terminal.selector_mask_sum_16_loop.body,nonzero,if_true,
+  have nonzero_bool : (mask != 0#u16) = true := by simp [nonzero]
+  simp only [host_copy_terminal.selector_mask_sum_16_loop.body,nonzero_bool,if_true,
     law,lift,bind_tc_ok,Bool.false_eq_true,if_false,mask_add17,PV_B3P_Ordered227.bind_assoc]
   cases read : Array.index_usize values (UScalar.cast .Usize index) with
   | fail e => rfl

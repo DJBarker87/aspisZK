@@ -1,0 +1,69 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:71:91: error: unsolved goals
+zeros : U16 → Result U32
+values : Std.Array aspis_core.field.QM31 16#usize
+sum : aspis_core.field.QM31
+⊢ (match
+      if (0#u16 != 0#u16) = true then do
+        let i ← zeros 0#u16
+        let index ← lift (UScalar.cast UScalarTy.Usize i)
+        let sum1 ←
+          if false = true then do
+              let q ← values.index_usize index
+              sum.sub q
+            else do
+              let q ← values.index_usize index
+              sum.add q
+        let i1 ← lift (U16.wrapping_sub 0#u16 1#u16)
+        let mask1 ← lift (0#u16 &&& i1)
+        ok (cont (mask1, sum1))
+      else ok (done sum) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            if (x.1 != 0#u16) = true then do
+              let i ← zeros x.1
+              let index ← lift (UScalar.cast UScalarTy.Usize i)
+              let sum1 ←
+                if false = true then do
+                    let q ← values.index_usize index
+                    x.2.sub q
+                  else do
+                    let q ← values.index_usize index
+                    x.2.add q
+              let i1 ← lift (x.1.wrapping_sub 1#u16)
+              let mask1 ← lift (x.1 &&& i1)
+              ok (cont (mask1, sum1))
+            else ok (done x.2))
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div) =
+    ok sum
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:74:63: warning: This simp argument is unused:
+  ne_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [host_copy_terminal.selector_mask_sum_16_loop.body, ̲ne̵_̵e̵q̵,̵n̵ot_true_eq_false, ̲if_false]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:74:69: warning: This simp argument is unused:
+  not_true_eq_false
+
+Hint: Omit it from the simp argument list.
+  simp only [̵h̵o̵s̵t̵_̵c̵o̵p̵y̵_̵t̵e̵r̵m̵i̵n̵a̵l̵.̵s̵e̵l̵e̵c̵t̵o̵r̵_̵m̵a̵s̵k̵_̵s̵u̵m̵_̵1̵6̵_̵l̵o̵o̵p̵.̵b̵o̵d̵y̵,̵n̵e̵_̵e̵q̵,̵n̵o̵t̵_̵t̵r̵u̵e̵_̵e̵q̵_̵f̵a̵l̵s̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵]̵[̲h̲o̲s̲t̲_̲c̲o̲p̲y̲_̲t̲e̲r̲m̲i̲n̲a̲l̲.̲s̲e̲l̲e̲c̲t̲o̲r̲_̲m̲a̲s̲k̲_̲s̲u̲m̲_̲1̲6̲_̲l̲o̲o̲p̲.̲b̲o̲d̲y̲,̲ ̲n̲e̲_̲e̲q̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:74:87: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [host_copy_terminal.selector_mask_sum_16_loop.body, ̲ne_eq, ̲not_true_eq_false,̵i̵f̵_̵f̵a̵l̵s̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:83:63: error: unexpected identifier; expected ':=', 'where' or '|'
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_DirectMask17227.lean:80:79: error: unsupported `do` element (kind: Lean.Parser.Term.doReassign)
+   host_copy_terminal.selector_mask_sum_16_loop zeros values (mask &&& U16.wrapping_sub mask 1#u16) false next := by
+'PV_B3P_Direct17227.mask_loop_stop17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_Direct17227.mask_loop_step17' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
