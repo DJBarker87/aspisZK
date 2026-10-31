@@ -23,7 +23,7 @@ theorem frame {S F T : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
         @ProverRwSuccessHeapSource.aspis_core.r0.heap.filled (types base) inner T := by
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_81]
-  exact candidate (residual base ops runtime world)
+  exact @candidate (types base) T (residual base ops runtime world)
 
 theorem complete {S F T : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
