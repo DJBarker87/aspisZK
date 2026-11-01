@@ -70,9 +70,10 @@ elif kind=='kani':
     if os.environ.get('NEI_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEI_gate.py',a+'.json']
 elif kind=='native':
-    for name in ['NEI_line_native.py','NEI_line_native.rs','NEI_FROZEN.json']:files[name]=(E/name).read_text()
+    family=os.environ.get('NEI_NATIVE_FAMILY','line');assert family in ['line','circle','prefix','push','row','accumulate','dots']
+    for name in [f'NEI_{family}_native.py',f'NEI_{family}_native.rs','NEI_FROZEN.json']:files[name]=(E/name).read_text()
     if os.environ.get('NEI_WRONG'):env['NEI_WRONG']=os.environ['NEI_WRONG']
-    sources=list(files);command=['python3','NEI_line_native.py']
+    sources=list(files);command=['python3',f'NEI_{family}_native.py']
 elif kind=='inspect':
     files['NEI_goto_inspect.py']=(E/'NEI_goto_inspect.py').read_text()
     sources=list(files);command=['python3','NEI_goto_inspect.py']
@@ -129,8 +130,11 @@ print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).is_file()}}))
 r=ssh('python3',code);assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,t in out.items():
-    p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+    p=E/(n+'.txt' if n.endswith('_Template.lean') else n);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 assert a+'/receipt.json' in out,'No receipt: stop, do not resubmit'
+if kind=='native':
+    for name in ['NEI_NATIVE_PINS.json','NEI_NATIVE_METADATA.json']:
+        if name in out:(E/a/name).write_text(out[name])
 if kind=='extract' and 'NEI_EXTRACTION_PINS.json' in out:(E/a/'NEI_EXTRACTION_PINS.json').write_text(out['NEI_EXTRACTION_PINS.json'])
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NEI_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')

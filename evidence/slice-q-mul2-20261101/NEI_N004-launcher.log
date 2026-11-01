@@ -1,0 +1,53 @@
+{"attempt": "NEI_N004", "exit_status": 101, "wall_seconds": 1.18430432502646, "peak_rss_kib": "139180", "swaps": "0", "print_axioms": "N/A: native"}
+{"command": ["/home/dombarker/.cargo/bin/cargo", "test", "--release", "--offline", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_native_line/Cargo.toml", "-j", "1", "NEI_circle_differential", "--", "--exact", "--nocapture"], "expected_time": "Optimized compilation, then six tiny frozen-circle/native-emitted fidelity cases; not a proof or arithmetic release gate"}
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_src/crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected value
+...
+openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> /home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_src/crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+   Compiling nei_native_circle v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_native_line)
+warning: function `NEI_circle_differential` should have a snake case name
+  --> src/lib.rs:11:12
+   |
+11 | #[test] fn NEI_circle_differential(){
+   |            ^^^^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nei_circle_differential`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `nei_native_circle` (lib test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 1.01s
+     Running unittests src/lib.rs (NEI_extract_target/release/build/nei_native_circle/3dbfc488ad90bea5/out/nei_native_circle-3dbfc488ad90bea5)
+
+running 1 test
+
+thread 'NEI_circle_differential' (2726352) panicked at src/lib.rs:12:358:
+assertion `left == right` failed
+  left: [0, 0, 0, 0, 0, 0, 0, 0]
+ right: [1, 0, 0, 0, 0, 0, 0, 0]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test NEI_circle_differential ... FAILED
+
+failures:
+
+failures:
+    NEI_circle_differential
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+
+
+Running as unit: run-r58f3839941cf4064a710160e97070f3d.scope; invocation ID: 621b6608a55043bb90abef7db630df8c

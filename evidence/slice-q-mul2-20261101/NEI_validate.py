@@ -54,20 +54,57 @@ def audit_line(packet):
  env=copy.deepcopy(negative['env']);require(env.pop('NEI_WRONG',None)=='1' and env==positive['env'],'control configuration mismatch')
  require('1 passed; 0 failed' in (E/'NEI_N001/stdout.log').read_text(),'positive test not reached')
  require("thread 'NEI_line_differential'" in (E/'NEI_N002/stdout.log').read_text() and 'assertion `left == right` failed' in (E/'NEI_N002/stdout.log').read_text(),'negative did not fail line assertion')
- np=obj(E/'NEI_NATIVE_PINS.json');require(np['lock_before']==np['lock_after']==pins['lock_after'],'frozen native lock changed')
+ np=obj(E/'NEI_LINE_NATIVE_PINS.json');require(np['lock_before']==np['lock_after']==pins['lock_after'],'frozen native lock changed')
  require(sorted(np['features'].values(),key=len)==[[],['r0']],'wrong native core feature projection')
  for path,h in np['source_pins'].items():
   require(hashlib.sha256(subprocess.check_output(['git','show',F+':'+path],cwd=R)).hexdigest()==h,'native core source drift')
  review=R/packet['review']['path'];require(sha(review)==packet['review']['sha256'],'association review hash')
  require(packet['remaining_inner_hypotheses']==[],'inner native/model hypothesis hidden')
  return dict(function=packet['function'],status='CLOSED-CONDITIONAL',route=packet['route'],composed_rows_closed=[],kani_credit=0)
+def audit_circle(packet):
+ require(packet['status']=='CLOSED-CONDITIONAL' and packet['route']=='D188_ACTUAL_BODY_SHARED_CALLEES','wrong shared-callee bridge method')
+ require(packet['frozen_revision']==F and packet['new_kani_credits']==[] and packet['suspended_neb_credits_restored']==[],'wrong frozen/credit classification')
+ require(packet['shared_actual_callee_packet']=='NEI_LINE_PACKET.json','unreviewed actual callee packet')
+ for item in packet['lean_evidence']:
+  for theorem in item['theorems']:neb.check_receipt(item,theorem)
+  d=obj(R/item['receipt'])
+  for path,h in d['source_hashes'].items():require(sha(E/path.removeprefix('NEI_generated/'))==h,'current successful circle source')
+ d=obj(E/'NEI_E002/receipt.json');require(d['exit_status']==0 and d['kind']=='extract','circle extraction failed')
+ pins=obj(E/'NEI_E002/NEI_EXTRACTION_PINS.json');require(pins['exit']==0 and pins['charon_exit']==0 and pins['lock_before']==pins['lock_after'],'circle extraction/lock failure')
+ for path,h in pins['outputs'].items():
+  raw=E/(path+'.txt' if path.endswith('_Template.lean') else path)
+  require(sha(raw)==h,'edited circle raw output')
+  if path.endswith('_Template.lean'):continue
+  direct=E/'NEI_CircleShared'/Path(path).name;require(sha(direct)==h,'edited circle working output')
+  require(not re.search(r'\b(axiom|sorry|admit|native_decide)\b',direct.read_text()),'admitted circle body')
+ expected_type='import NEI_LineFull.Types\nnamespace NEI_CircleShared\nabbrev aspis_core.field.wide_exact.WideExact := NEI_LineFull.aspis_core.field.wide_exact.WideExact\nend NEI_CircleShared\n'
+ require((E/'NEI_CircleShared/TypesExternal.lean').read_text()==expected_type,'wrong shared actual type')
+ ext='import NEI_CircleShared.Types\nimport NEI_LineFull.Funs\nnamespace NEI_CircleShared\n'
+ for m in ['add','sub','mul','mul_m31']:ext+=f'abbrev aspis_core.field.wide_exact.WideExact.{m} := NEI_LineFull.aspis_core.field.wide_exact.WideExact.{m}\n'
+ ext+='abbrev aspis_core.field.M31.mul := NEI_LineFull.aspis_core.field.M31.mul\nend NEI_CircleShared\n'
+ require((E/'NEI_CircleShared/FunsExternal.lean').read_text()==ext,'wrong shared actual field methods')
+ source=subprocess.check_output(['git','show',F+':crates/aspis-r1-cost-probe/src/verifier.rs'],cwd=R).decode()
+ body=function(source,'circle_fold_with_inverses');require(hashlib.sha256(body[body.index('{'):].encode()).hexdigest()==packet['source_body_sha256'],'wrong frozen circle body')
+ require(function((E/'NEI_ISOLATED.rs.txt').read_text(),'circle_fold_with_inverses')==body and function((E/'NEI_circle_native.rs').read_text(),'circle_fold_with_inverses')==body,'changed isolated/native circle body')
+ positive=obj(E/'NEI_N003/receipt.json');negative=obj(E/'NEI_N004/receipt.json')
+ require(positive['exit_status']==0 and negative['exit_status']==101 and positive['source_hashes']==negative['source_hashes'],'circle fidelity/control verdict or source')
+ env=copy.deepcopy(negative['env']);require(env.pop('NEI_WRONG',None)=='1' and env==positive['env'],'circle control configuration')
+ require('1 passed; 0 failed' in (E/'NEI_N003/stdout.log').read_text(),'circle positive test not reached')
+ log=(E/'NEI_N004/stdout.log').read_text();require("thread 'NEI_circle_differential'" in log and 'assertion `left == right` failed' in log,'circle negative assertion not reached')
+ np=obj(E/'NEI_N004/NEI_NATIVE_PINS.json');require(np['lock_before']==np['lock_after']==pins['lock_after'],'circle frozen lock changed')
+ require(sorted(np['features'].values(),key=len)==[[],['r0']],'circle native core features')
+ for path,h in np['source_pins'].items():require(hashlib.sha256(subprocess.check_output(['git','show',F+':'+path],cwd=R)).hexdigest()==h,'circle native core drift')
+ require(sha(R/packet['review']['path'])==packet['review']['sha256'] and packet['remaining_inner_hypotheses']==[],'circle review/inner hypothesis')
+ return dict(function=packet['function'],status='CLOSED-CONDITIONAL',route=packet['route'],composed_rows_closed=[],kani_credit=0)
+
 def main():
- packet=obj(E/'NEI_LINE_PACKET.json');result=audit_line(packet)
+ packet=obj(E/'NEI_LINE_PACKET.json');results=[audit_line(packet)]
+ if (E/'NEI_CIRCLE_PACKET.json').is_file():results.append(audit_circle(obj(E/'NEI_CIRCLE_PACKET.json')))
  delta=obj(E/'NEI_LEDGER_DELTA.json')
  require(delta['composed_rows_closed']==[],'uncertified composed promotion')
- require(delta['added_local_bridges']==[packet['function']],'wrong local delta')
+ require(delta['added_local_bridges']==[r['function'] for r in results],'wrong local delta')
  edges=obj(E/'NEI_EDGES.json')['edges']
  require(all(e['status']=='OPEN' and e['certificate'] is None for e in edges),'edge credit without NEB certificate')
  require(sha(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')==delta['authoritative_ledger_sha256'],'authoritative ledger changed')
- print(json.dumps(dict(original_neb_receipt_gates='PASS',additive_d188_packet=result,unmodified_original_edge_gates=True,composed_rows_closed=[]),indent=2))
+ print(json.dumps(dict(original_neb_receipt_gates='PASS',additive_d188_packets=results,unmodified_original_edge_gates=True,composed_rows_closed=[]),indent=2))
 if __name__=='__main__':main()

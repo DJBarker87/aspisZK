@@ -23,7 +23,7 @@ for n,t in frozen.items():
  if n.startswith(('crates/','programs/')) and not (scratch/Path(n).parts[0]/Path(n).parts[1]).exists():continue
  q=scratch/n;q.parent.mkdir(parents=True,exist_ok=True)
  if q.is_symlink():q.unlink()
- q.write_text(t)
+ if not q.exists() or q.read_text()!=t:q.write_text(t)
 cfg=json.loads(os.environ['NEI_EXTRACT_CONFIG']); ns=cfg['namespace'];out=B/'NEI_extracted'/ns;out.mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 manifest=B/'NEI_src/crates/aspis-r1-cost-probe/Cargo.toml'

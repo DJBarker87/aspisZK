@@ -6,3 +6,5 @@
 - L011 had redundant rfl after simp already closed the goals. L012 removes that sequencing error. L015's case split rewrote a goal to reflexivity; L016 supplies rfl at that site. Every replacement has different source bytes and an exit-0 receipt.
 - Own validator initially hashed the whole fn text against NDT's brace-only body hash. Corrected the range to match frozen_body_byte_range; separate exact full-fn comparisons with native/isolation sources remain mandatory. The original NEB validator and all its checks are unchanged.
 - No host infrastructure, launcher, admission barrier, shared cache, proved existing module, shipped source, wallet or key was edited.
+
+- Own extraction restoration now leaves byte-identical files untouched, avoiding unnecessary unchanged core recompilation; content equality remains checked. Raw generated external templates are archived as .lean.txt diagnostics and never compiled. Filled external modules contain exact aliases to the already checked actual E001 field definitions. The source/raw-output hashes stay mandatory. Own native runner now retains per-attempt metadata/pins in addition to the shared latest files.
