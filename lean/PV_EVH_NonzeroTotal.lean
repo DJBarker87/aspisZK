@@ -33,7 +33,7 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
       have inc := PV_EVH_NonzeroSafety.increment i active
       have nextBound : (Usize.wrapping_add i 1#usize).val + remaining = 32 := by omega
       have nextEnough : remaining + 1 ≤ fuel := by omega
-      obtain ⟨out,done⟩ := ih (fuel := fuel) (combined := combined ||| value)
+      obtain ⟨out,completed⟩ := ih (fuel := fuel) (combined := combined ||| value)
         (i := Usize.wrapping_add i 1#usize) (w := w) nextBound nextEnough
       refine ⟨out,?_⟩
       have step : PV_EVH_NonzeroStep.run bytes combined i {} =
@@ -46,20 +46,20 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
         simp only [PV_EVH_NonzeroFlow.loop,PV_EVH_PrefixLoop.loop,step,
           PV_EVH_Prefix.bind,PV_EVH_Prefix.lift,PV_EVH_Prefix.ofM,
           PV_EVH_World.lift,List.nil_append]
-      exact same.trans done
+      exact same.trans completed
 
 theorem run_terminal (bytes : Array U8 32#usize) (w : World) :
     ∃ out, PV_EVH_NonzeroFlow.run 33 bytes w = ⟨.finished (.ok out),w,[]⟩ := by
-  obtain ⟨combined,done⟩ := loop_terminal bytes 32 33 0#u8 0#usize w rfl (by omega)
+  obtain ⟨combined,completed⟩ := loop_terminal bytes 32 33 0#u8 0#usize w rfl (by omega)
   refine ⟨combined != 0#u8,?_⟩
-  simp only [PV_EVH_NonzeroFlow.run,PV_EVH_Prefix.bind,done,
+  simp only [PV_EVH_NonzeroFlow.run,PV_EVH_Prefix.bind,completed,
     PV_EVH_Prefix.lift,PV_EVH_Prefix.ofM,PV_EVH_World.lift,List.nil_append]
 
 theorem source_total (bytes : Array U8 32#usize) :
     ∃ out, aspis_prover.state_only_entropy.entropy_nonzero32 bytes = .ok out := by
-  obtain ⟨out,done⟩ := run_terminal bytes {}
+  obtain ⟨out,completed⟩ := run_terminal bytes {}
   exact ⟨out,PV_EVH_NonzeroFlow.run_fixed 33 bytes {} (.ok out)
-    (congrArg PV_EVH_WorldLoop.Prefix.status done)⟩
+    (congrArg PV_EVH_WorldLoop.Prefix.status completed)⟩
 #print axioms loop_terminal
 #print axioms run_terminal
 #print axioms source_total
