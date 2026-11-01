@@ -1,0 +1,135 @@
+import Port26ROW_Steps
+set_option autoImplicit false
+noncomputable section
+namespace Port26ROW
+open Aeneas Aeneas.Std Result ControlFlow
+open Port23PUSH Port25ARRAY
+
+theorem range_end :
+    core.iter.range.IteratorRange.next core.iter.range.StepUsize ⟨4#usize,4#usize⟩ =
+      ok (none,⟨4#usize,4#usize⟩) := by
+  obtain ⟨⟨o,it⟩,run,ho,hi⟩ := WP.spec_imp_exists
+    (core.iter.range.IteratorRange.next_UScalar_none_spec
+      (ty:=.Usize) (cloneInst:=core.clone.CloneUsize)
+      (partialOrdInst:=core.cmp.PartialOrdUsize) (by intro a b; rfl)
+      ⟨4#usize,4#usize⟩ (by decide))
+  subst o
+  subst it
+  exact run
+
+theorem add_body0 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0.body (Array.make 4#usize [p,q,r,s]) ⟨0#usize,4#usize⟩
+      (Array.make 4#usize [a,b,c,d]) basis =
+      (do let y ← addWord a p basis
+          ok (cont (⟨1#usize,4#usize⟩,Array.make 4#usize [y,b,c,d],basis))) := by
+  rw [verifier.update_residue_row_loop0.body,
+    range_next 0#usize 1#usize (by decide) (by decide)]
+  simp only [bind_tc_ok]
+  simp only [addWord,bind_assoc_eq]
+  rfl
+
+theorem add_body1 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0.body (Array.make 4#usize [p,q,r,s]) ⟨1#usize,4#usize⟩
+      (Array.make 4#usize [a,b,c,d]) basis =
+      (do let y ← addWord b q basis
+          ok (cont (⟨2#usize,4#usize⟩,Array.make 4#usize [a,y,c,d],basis))) := by
+  rw [verifier.update_residue_row_loop0.body,
+    range_next 1#usize 2#usize (by decide) (by decide)]
+  simp only [bind_tc_ok]
+  simp only [addWord,bind_assoc_eq]
+  rfl
+
+theorem add_body2 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0.body (Array.make 4#usize [p,q,r,s]) ⟨2#usize,4#usize⟩
+      (Array.make 4#usize [a,b,c,d]) basis =
+      (do let y ← addWord c r basis
+          ok (cont (⟨3#usize,4#usize⟩,Array.make 4#usize [a,b,y,d],basis))) := by
+  rw [verifier.update_residue_row_loop0.body,
+    range_next 2#usize 3#usize (by decide) (by decide)]
+  simp only [bind_tc_ok]
+  simp only [addWord,bind_assoc_eq]
+  rfl
+
+theorem add_body3 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0.body (Array.make 4#usize [p,q,r,s]) ⟨3#usize,4#usize⟩
+      (Array.make 4#usize [a,b,c,d]) basis =
+      (do let y ← addWord d s basis
+          ok (cont (⟨4#usize,4#usize⟩,Array.make 4#usize [a,b,c,y],basis))) := by
+  rw [verifier.update_residue_row_loop0.body,
+    range_next 3#usize 4#usize (by decide) (by decide)]
+  simp only [bind_tc_ok]
+  simp only [addWord,bind_assoc_eq]
+  rfl
+
+theorem add_tail4 (row : Row) (basis : U32) (limbs : Array U32 4#usize) :
+    verifier.update_residue_row_loop0 ⟨4#usize,4#usize⟩ row basis limbs = ok row := by
+  rw [add_unroll]
+  simp only [verifier.update_residue_row_loop0.body,range_end,bind_tc_ok]
+  rfl
+
+theorem add_tail3 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0 ⟨3#usize,4#usize⟩ (Array.make 4#usize [a,b,c,d]) basis
+      (Array.make 4#usize [p,q,r,s]) =
+      (do
+        let x3 ← addWord d s basis
+        ok (Array.make 4#usize [a,b,c,x3])) := by
+  rw [add_unroll,add_body3]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  congr 1
+  funext x
+  exact add_tail4 _ _ _
+
+theorem add_tail2 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0 ⟨2#usize,4#usize⟩ (Array.make 4#usize [a,b,c,d]) basis
+      (Array.make 4#usize [p,q,r,s]) =
+      (do
+        let x2 ← addWord c r basis
+        let x3 ← addWord d s basis
+        ok (Array.make 4#usize [a,b,x2,x3])) := by
+  rw [add_unroll,add_body2]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  congr 1
+  funext x
+  exact add_tail3 a b x d p q r s basis
+
+theorem add_tail1 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0 ⟨1#usize,4#usize⟩ (Array.make 4#usize [a,b,c,d]) basis
+      (Array.make 4#usize [p,q,r,s]) =
+      (do
+        let x1 ← addWord b q basis
+        let x2 ← addWord c r basis
+        let x3 ← addWord d s basis
+        ok (Array.make 4#usize [a,x1,x2,x3])) := by
+  rw [add_unroll,add_body1]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  congr 1
+  funext x
+  exact add_tail2 a x c d p q r s basis
+
+theorem add_tail0 (a b c d : U64) (p q r s basis : U32) :
+    verifier.update_residue_row_loop0 ⟨0#usize,4#usize⟩ (Array.make 4#usize [a,b,c,d]) basis
+      (Array.make 4#usize [p,q,r,s]) =
+      (do
+        let x0 ← addWord a p basis
+        let x1 ← addWord b q basis
+        let x2 ← addWord c r basis
+        let x3 ← addWord d s basis
+        ok (Array.make 4#usize [x0,x1,x2,x3])) := by
+  rw [add_unroll,add_body0]
+  simp only [bind_assoc_eq,bind_tc_ok]
+  congr 1
+  funext x
+  exact add_tail1 x b c d p q r s basis
+
+#print axioms range_end
+#print axioms add_body0
+#print axioms add_body1
+#print axioms add_body2
+#print axioms add_body3
+#print axioms add_tail0
+#print axioms add_tail1
+#print axioms add_tail2
+#print axioms add_tail3
+#print axioms add_tail4
+end Port26ROW
+end

@@ -1,0 +1,120 @@
+import Port26ROW_Steps
+set_option autoImplicit false
+noncomputable section
+namespace Port26ROW
+open Aeneas Aeneas.Std Result ControlFlow
+open Port23PUSH Port25ARRAY
+
+def atRow (a b c d : U64) (n : Nat) : Iter U64 :=
+  ⟨(Array.make 4#usize [a,b,c,d]).to_slice,n⟩
+def put (n : Nat) (y : U64) (im : Iter U64) : Iter U64 :=
+  {im with slice := im.slice.setAtNat n y}
+
+theorem fold_unroll (it : Iter U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 it back =
+      (do let step ← verifier.update_residue_row_loop1.body it back
+          match step with
+          | done out => ok out
+          | cont (it,b) => verifier.update_residue_row_loop1 it b) := by
+  unfold verifier.update_residue_row_loop1
+  rw [loop.eq_def]
+  cases h : verifier.update_residue_row_loop1.body it back with
+  | ok step => cases step with
+    | done out => simp only [h,bind_tc_ok]
+    | cont state => rcases state with ⟨it,b⟩; simp only [h,bind_tc_ok]
+  | fail e => simp only [h,bind_tc_fail]
+  | div => simp only [h,bind_tc_div]
+
+theorem fold_body0 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1.body (atRow a b c d 0) back =
+      ok (cont (atRow a b c d 1, fun im => back (put 0 (folded a) im))) := by
+  rw [fold_body_complete]
+  rfl
+
+theorem fold_body1 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1.body (atRow a b c d 1) back =
+      ok (cont (atRow a b c d 2, fun im => back (put 1 (folded b) im))) := by
+  rw [fold_body_complete]
+  rfl
+
+theorem fold_body2 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1.body (atRow a b c d 2) back =
+      ok (cont (atRow a b c d 3, fun im => back (put 2 (folded c) im))) := by
+  rw [fold_body_complete]
+  rfl
+
+theorem fold_body3 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1.body (atRow a b c d 3) back =
+      ok (cont (atRow a b c d 4, fun im => back (put 3 (folded d) im))) := by
+  rw [fold_body_complete]
+  rfl
+
+theorem fold_body4 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1.body (atRow a b c d 4) back =
+      ok (done back) := by
+  rw [fold_body_complete]
+  rfl
+
+theorem fold_tail4 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 (atRow a b c d 4) back =
+      ok (fun im => back (im)) := by
+  rw [fold_unroll,fold_body4]
+  simp only [bind_tc_ok]
+
+theorem fold_tail3 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 (atRow a b c d 3) back =
+      ok (fun im => back (put 3 (folded d) (im))) := by
+  rw [fold_unroll,fold_body3]
+  simp only [bind_tc_ok]
+  exact fold_tail4 a b c d _
+
+theorem fold_tail2 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 (atRow a b c d 2) back =
+      ok (fun im => back (put 2 (folded c) (put 3 (folded d) (im)))) := by
+  rw [fold_unroll,fold_body2]
+  simp only [bind_tc_ok]
+  exact fold_tail3 a b c d _
+
+theorem fold_tail1 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 (atRow a b c d 1) back =
+      ok (fun im => back (put 1 (folded b) (put 2 (folded c) (put 3 (folded d) (im))))) := by
+  rw [fold_unroll,fold_body1]
+  simp only [bind_tc_ok]
+  exact fold_tail2 a b c d _
+
+theorem fold_tail0 (a b c d : U64) (back : Iter U64 → Iter U64) :
+    verifier.update_residue_row_loop1 (atRow a b c d 0) back =
+      ok (fun im => back (put 0 (folded a) (put 1 (folded b) (put 2 (folded c) (put 3 (folded d) (im)))))) := by
+  rw [fold_unroll,fold_body0]
+  simp only [bind_tc_ok]
+  exact fold_tail1 a b c d _
+
+/-- Actual iterator continuation is applied to its original input, then the
+existing from_slice readback. All four writes and the entire carrier retained. -/
+theorem fold_readback (a b c d : U64) :
+    (do let (it,back) ← concrete (Array.make 4#usize [a,b,c,d])
+        let f ← verifier.update_residue_row_loop1 it id
+        ok (back f)) =
+      ok (Array.make 4#usize [folded a,folded b,folded c,folded d]) := by
+  change (do let f ← verifier.update_residue_row_loop1 (atRow a b c d 0) id
+             ok (Array.from_slice (Array.make 4#usize [a,b,c,d])
+               (f (atRow a b c d 0)).slice)) = _
+  rw [fold_tail0]
+  rfl
+
+#print axioms atRow
+#print axioms put
+#print axioms fold_unroll
+#print axioms fold_body0
+#print axioms fold_body1
+#print axioms fold_body2
+#print axioms fold_body3
+#print axioms fold_body4
+#print axioms fold_tail0
+#print axioms fold_tail1
+#print axioms fold_tail2
+#print axioms fold_tail3
+#print axioms fold_tail4
+#print axioms fold_readback
+end Port26ROW
+end

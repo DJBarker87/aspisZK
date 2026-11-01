@@ -1,0 +1,75 @@
+import Port25ARRAY_Std
+import S7Kani2OwnedPush
+set_option autoImplicit false
+noncomputable section
+namespace Port25ARRAY
+open Aeneas Aeneas.Std Result
+open AspisR1.ExtractedCurrentReducer
+
+def addWord (raw : U64) (limb basis : U32) : Result U64 := do
+  let a ← lift (core.convert.num.FromU64U32.from limb)
+  let b ← lift (core.convert.num.FromU64U32.from basis)
+  let p ← a * b
+  raw + p
+
+def foldWord (x : U64) : Result U64 := do
+  let low ← lift (x &&& 2147483647#u64)
+  let high ← x >>> 31#i32
+  low + high
+
+theorem fold_total (x : U64) : ∃ y, foldWord x = ok y := by
+  obtain ⟨y,hy,_⟩ := foldExecution_success x
+  refine ⟨y,?_⟩
+  change foldExecution x = ok y
+  exact hy
+
+def folded (x : U64) : U64 := Classical.choose (fold_total x)
+theorem fold_eq (x : U64) : foldWord x = ok (folded x) :=
+  Classical.choose_spec (fold_total x)
+def finish (flush : Bool) (x : U64) : U64 := if flush then folded x else x
+
+theorem scalar_all_results (raw : U64) (limb basis : U32) (flush : Bool) :
+    S7OwnedP6Scalar.residue_scalar_owned raw limb basis flush =
+      (do let x ← addWord raw limb basis; ok (finish flush x)) := by
+  simp only [S7OwnedP6Scalar.residue_scalar_owned, addWord, bind_assoc_eq,
+    lift, bind_tc_ok]
+  congr 1
+  funext p
+  congr 1
+  funext x
+  cases flush <;> simp only [finish, Bool.false_eq_true, if_false, if_true]
+  exact fold_eq x
+
+/-- Multiplication is total on all full U32 words. Raw addition remains checked. -/
+theorem product_total (limb basis : U32) :
+    ∃ p, ((core.convert.num.FromU64U32.from limb) *
+      (core.convert.num.FromU64U32.from basis) : Result U64) = ok p := by
+  have ha := AspisR1.ExtractedCurrentCM31Mul.widen_value limb
+  have hb := AspisR1.ExtractedCurrentCM31Mul.widen_value basis
+  have hp : (core.convert.num.FromU64U32.from limb).val *
+      (core.convert.num.FromU64U32.from basis).val < 2^64 := by
+    rw [ha,hb]
+    have h := Nat.mul_lt_mul_of_lt_of_lt limb.bv.isLt basis.bv.isLt
+    exact h
+  obtain ⟨p,hp,_⟩ := AspisR1.ExtractedCurrentReducerOps.mul_success _ _ hp
+  exact ⟨p,hp⟩
+
+/-- A total pure fold can pass a checked computation without losing its fail
+or div outcome. The computation's original order is preserved. -/
+theorem total_fold_order {A B C : Type} (m : Result A) (n : Result B)
+    (f : A → C) :
+    (do let a ← m; let b ← n; ok (f a,b)) =
+      (do let a ← m; let c ← ok (f a); let b ← n; ok (c,b)) := by
+  cases m <;> rfl
+
+#print axioms addWord
+#print axioms foldWord
+#print axioms fold_total
+#print axioms folded
+#print axioms fold_eq
+#print axioms finish
+#print axioms scalar_all_results
+#print axioms product_total
+#print axioms total_fold_order
+end Port25ARRAY
+end

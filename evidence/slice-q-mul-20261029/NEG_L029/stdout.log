@@ -1,0 +1,14 @@
+@[irreducible] def Aeneas.Std.loop.{u, v} : {α : Type u} →
+  {β : Type v} → (α → Result (ControlFlow α β)) → α → Result β :=
+fun {α} {β} body =>
+  Lean.Order.fix
+    (fun f x =>
+      match body x with
+      | ok r =>
+        match r with
+        | ControlFlow.cont x => f x
+        | ControlFlow.done x => ok x
+      | fail e => fail e
+      | div => div)
+    ⋯
+Aeneas.Std.Result.ok [1, 2, 3, 4]
