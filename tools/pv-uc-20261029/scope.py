@@ -21,8 +21,10 @@ for f in E.glob('**/admission-*.json'):
  except (KeyError,ValueError): pass
 
 assert re.fullmatch(r'native751[0-9]{2}',name) and cmd
-out=E/name;out.mkdir(exist_ok=True)
-assert not (out/'receipt.json').exists()
+assert len(list(E.glob('native*/receipt.json')))<50
+out=E/name
+assert not out.exists(), 'ID directory already exists: never reuse an ID; reconcile it first'
+out.mkdir()
 inputs={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'tools/r1-cost-probe/src/bin').rglob('*.rs')}
 (out/'source-inputs.json').write_text(json.dumps(dict(revision=source_revision_at_launch,files=inputs,dirty=subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),indent=2)+'\n')
 def ssh(c,retry=True):
