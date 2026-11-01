@@ -1,0 +1,22 @@
+"""Whole-source maps for leading pair and schedule callers."""
+from pathlib import Path
+import json,hashlib
+D=Path('evidence/pv-b3p6-20261028');R=D/'resume18';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+ns={};exec(compile(Path('tools/pv-b3p6-20261028/std_resolve_d540.py').read_text().split('indices={}')[0],'<parser>','exec'),ns)
+tokens,index=ns['tokens'],ns['index'];pins=json.loads((D/'resume17/deployed-source-pins.json').read_text());rows=[]
+for path,name,body,interpreter,theorem,steps in [
+ ('crates/aspis-statement/src/state_only_poseidon.rs','leading_pair_packed','''{let mut state=openings.z;for lane in 0..RATE {state[lane]=state[lane].add(openings.xor12_z[lane]);}external_linear_lazy(&mut state);full_round_m31_constants_packed(full_round_m31_constants(state,EXTERNAL_INITIAL[0]),EXTERNAL_INITIAL[1],)}''','source_leading546','leading_source_link546',[
+ ('copy openings.z','source_leading546 prefix','Whole immutable sixteen-element snapshot, no alias writes. Exact QM31 carrier, no custom Drop. Copy lowering V370.'),
+ ('for lane0..RATE=8 add xor12_z and store','range_loop13 leading_step12','Read current state then xor lane, QM31.add, restore state[lane] before next lane. All eight bounds fit. range_as_fold13/leading_indices15 preserve every Result path and ascending order.'),
+ ('external_linear_lazy(&mut state)','source_leading_finish546','Call identical frozen external body once; apply full-array loan restoration before constant reads or subsequent calls. External row remains named.'),
+ ('full_round_m31_constants(state,EXTERNAL_INITIAL[0]) then packed round with EXTERNAL_INITIAL[1]','native_round_MPlain15 then native_round_MPacked15','Read fixed first constants and execute first entire round before second constants read. All32 lane writes and inner external restores retained by ROUND-SOURCE-D546. leading_finish_reference546 composes named laws; no field-chain reassociation.')]),
+ ('crates/aspis-r1-cost-probe/src/host_terminal.rs','add_schedule_lanes','''{let (initial,absorption)=semantic_initial_and_absorption(public,openings,selectors);add_preweighted(packed,0,&initial);add_preweighted(packed,16,&absorption);}''','native_schedule15','schedule_source_link546',[
+ ('semantic_initial_and_absorption(public,openings,selectors)','native_schedule15 first bind','Public carrier preserves all fields by PublicInput543227 round trips. Read-only openings and selectors; exact same named source callee and pair return. Its complete source binding remains separate.'),
+ ('add_preweighted(packed,0,&initial)','native_preweighted15 first bind','Use D540 direct extraction/complete-Result total source law, not a narrowed source3 helper. Actual initial array length16, start0; it updates lanes0..15 in order, restoring packed before continuation.'),
+ ('add_preweighted(packed,16,&absorption), return ()','native_preweighted15 second bind','Same source row with length8/start16. Reads the UPDATED packed array from first call; writes16..23. No old snapshot substitution, mutable loan is restored after both calls. Return full restored state as Aeneas backward value. schedule_binding15 composes exact named helper law.')])]:
+ p=Path(path);assert sha(p)==pins[path];a=next(x for x in index(p.read_text())if x['name']==name)
+ def syntax(s):
+  t=tokens(s);return [x for i,x in enumerate(t)if not(x==','and i+1<len(t)and t[i+1]in [')','}',']'])]
+ assert syntax(a['body'])==syntax(body),name
+ rows.append(dict(function=name,source=dict(path=path,sha256=sha(p),item=a,whole_body_tokens_checked=True),interpreter=interpreter,theorem=theorem,source_steps=[dict(source=a,model=b,argument=c)for a,b,c in steps],domain='every raw field/input representation of these fixed array carriers; no canonicality narrowing',route='own-1 structural argument + Lean complete-Result equality',D188='Each indexed write and entire mutable-callee return restored before continuation; no discarded back function accepted',retained='Named callees/source rows, full std/D188/matrix/actual callback closure and V370 / D381,D386 remain separate; no endpoint/T change',feature_profile='deployed ct-host-prover; body span has no cfg/cfg!; release debug and overflow checks off; pinned graph inherited from exact reference extraction inputs'))
+(R/'CALLER-SOURCE-D546.json').write_text(json.dumps(dict(functions=rows,status='pending respective Lean receipts and reference-model provenance comparisons'),indent=2)+'\n');print(json.dumps(dict(bodies=len(rows))))

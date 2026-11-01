@@ -1,0 +1,95 @@
+{
+  "functions": [
+    {
+      "function": "active_literal",
+      "source_path": "crates/aspis-r1-cost-probe/src/host_copy_terminal.rs",
+      "source_sha256": "98e1bdacb3afee24572eccb71a1ecefe857cedf7a74d990e0046bec4c433fcce",
+      "item": {
+        "name": "active_literal",
+        "start": 192,
+        "end": 203,
+        "signature": "fn active_literal(&self) -> QM31 ",
+        "body": "{\n        let mut sum = QM31::ZERO;\n        let mut block = 0usize;\n        while block < 64 {\n            let mask = constants::ACTIVE_ROW_MASKS[block];\n            if mask != 0 {\n                sum = sum.add(self.high[block].mul(selector_mask_sum_16(&self.low, mask)));\n            }\n            block += 1;\n        }\n        sum\n    }",
+        "context": [
+          "impl Selectors "
+        ],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "interpreter": "native_active15",
+      "theorem": "active_literal_source_link546",
+      "domain": "every raw selector high[64]/low[16]",
+      "cfg": "any(test, not(feature=\"optimized-terminal\")); inactive on the optimized non-test build. This row binds the named literal function when present. The optimized active_mask_basis/pattern_values_windowed path remains a separate named endpoint/source-cone obligation; no substitution of this literal for that path.",
+      "source_steps": [
+        {
+          "source": "sum=ZERO, block=0, while block<64",
+          "model": "native_active15 / usize_body active_step12",
+          "argument": "Same ascending loop and sum state; complete-Result active_loop_binding12. Each increment0..64 fits usize; no field arithmetic changes."
+        },
+        {
+          "source": "ACTIVE_ROW_MASKS[block], branch mask!=0",
+          "model": "active_block_source11 / active_block_source_binding11",
+          "argument": "Exact pinned frozen64 masks; active_masks_allowed supplies the seven-mask domain at every index. A zero mask skips all high/low/mul/add calls, preserving errors. Nonzero branch reads high then low sum, multiplies high on left, adds old sum on left; frozen_mask_source11 composes with the direct mask source bridge from D542. No static oracle or Kani credit."
+        },
+        {
+          "source": "return final sum",
+          "model": "native_active_binding15",
+          "argument": "No mutable reference output or custom Drop. Shared input loans unchanged; aliases harmless since immutable."
+        }
+      ],
+      "route": "own-1 structural argument + compiled complete-Result Lean equality",
+      "retained": "V370 / D381,D386; whole std/D188/matrix/callback and optimized dispatch closure remain open. No endpoint/T change."
+    },
+    {
+      "function": "pattern_values_literal",
+      "source_path": "crates/aspis-r1-cost-probe/src/host_copy_terminal.rs",
+      "source_sha256": "98e1bdacb3afee24572eccb71a1ecefe857cedf7a74d990e0046bec4c433fcce",
+      "item": {
+        "name": "pattern_values_literal",
+        "start": 259,
+        "end": 289,
+        "signature": "fn pattern_values_literal(\n    openings: &[QM31; POSEIDON2_WIDTH],\n    lambda: QM31,\n) -> [QM31; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1] ",
+        "body": "{\n    let mut powers = [QM31::ZERO; POSEIDON2_WIDTH];\n    let mut power = lambda;\n    let mut limb = 0usize;\n    while limb < POSEIDON2_WIDTH {\n        powers[limb] = power;\n        power = power.mul(lambda);\n        limb += 1;\n    }\n    let mut result = [QM31::ZERO; POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1];\n    let mut pattern_index = 0usize;\n    while pattern_index < POOL_V1_PAIR_FOREST_COPY_TERMINAL_PATTERNS_V1 {\n        let pattern = constants::COPY_PATTERNS[pattern_index];\n        let mut value = QM31::ZERO;\n        limb = 0;\n        while limb < POSEIDON2_WIDTH {\n            if pattern.kinds[limb] == 1 {\n                let source = openings[usize::from(pattern.columns[limb])]\n                    .add(lift_m31(M31(pattern.offsets[limb])));\n                value = value.add(powers[limb].mul(source));\n            }\n            limb += 1;\n        }\n        result[pattern_index] = value;\n        pattern_index += 1;\n    }\n    result\n}",
+        "context": [],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "interpreter": "native_pattern15",
+      "theorem": "pattern_literal_source_link546",
+      "domain": "every shared openings[16] and raw lambda; no canonicality narrowing",
+      "cfg": "any(test, not(feature=\"optimized-terminal\")); inactive on the optimized non-test build. This row binds the named literal function when present. The optimized active_mask_basis/pattern_values_windowed path remains a separate named endpoint/source-cone obligation; no substitution of this literal for that path.",
+      "source_steps": [
+        {
+          "source": "powers[16]=ZERO, power=lambda, while limb<16",
+          "model": "native_power_body15",
+          "argument": "Store power to powers[limb], then multiply old power by lambda, then increment. The final multiplication is retained even though its value is not returned. Each write threads the whole powers array. native_power_body_binding15 is a complete-Result body law."
+        },
+        {
+          "source": "result[14]=ZERO; while pattern_index<14",
+          "model": "source_pattern_outer12",
+          "argument": "Read COPY_PATTERNS entry at current index, set value=ZERO and limb=0. Finish all sixteen limb visits before storing result[pattern_index] and incrementing. pattern_outer_binding12 preserves result and loop state."
+        },
+        {
+          "source": "kinds[limb]==1 branch",
+          "model": "source_pattern_step12 / pattern_step_binding12",
+          "argument": "Same condition and false branch. True branch reads column and widens u8 to usize, reads opening, offset and lift, adds, reads saved power, multiplies power on left and adds to accumulator. Bounds/errors follow the same Array.index_usize Result; neither unvalidated column nor error is silently omitted. Fixed tables are checked separately, with source hash."
+        },
+        {
+          "source": "all powers/result stores and return",
+          "model": "Array.update in native_power_body15/source_pattern_outer_body12",
+          "argument": "source_store_update543 and source_store_continuation543 apply every back function before following calls. Sixteen power stores and fourteen result stores retained. No heap allocation, address observation or custom Drop; compiler Copy/drop V370."
+        }
+      ],
+      "route": "own-1 structural argument + compiled complete-Result Lean equality",
+      "retained": "V370 / D381,D386; whole std/D188/matrix/callback and optimized dispatch closure remain open. No endpoint/T change."
+    }
+  ],
+  "tables": {
+    "source": "crates/aspis-r1-cost-probe/src/host_copy_terminal_constants.rs",
+    "source_sha256": "cfce7ec499d3cfd54cf91eb88675e45d89ada5ce073fe00c78be5211204fbc50",
+    "reference": "tools/pv-b3p6-20261028/v244/host_copy_terminal_constants.rs",
+    "reference_sha256": "cfce7ec499d3cfd54cf91eb88675e45d89ada5ce073fe00c78be5211204fbc50",
+    "full_token_identity": true
+  },
+  "status": "pending CopySource546227 receipt and fresh reference-model provenance comparison; no endpoint claim"
+}

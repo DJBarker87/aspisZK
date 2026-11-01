@@ -9,7 +9,7 @@ def defs(s):
   if m:out[m[1]]=b[m.start():].split('\nend ')[0].split('\n#print')[0].strip()
  return out
 old={};origin={}
-for p in sorted((D/'lean').glob('PV_B3P_P227_*.lean'))+sorted((D/'lean').glob('PV_B3P_E227_*.lean')):
+for p in sorted((D/'lean').glob('PV_B3P_P227_*.lean'))+sorted((D/'lean').glob('PV_B3P_E227_*.lean'))+[D/'lean/PV_B3P_SelectEmission227.lean']:
  for n,b in defs(p.read_text()).items():
   if n not in old:old[n]=b;origin[n]=p
 

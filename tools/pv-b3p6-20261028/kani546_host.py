@@ -6,10 +6,14 @@ os.environ["PATH"]="/home/dombarker/.cargo/bin:/usr/bin:/bin"
 ident=int(sys.argv[1]);assert 79104<=ident<=79105
 names=['raw_all_words_wrong','raw_all_words','internal_all_words_wrong','internal_all_words']
 name=names[ident-79104];control=ident%2==0;seconds=180
-R=H/'resume18';label=f'K{ident}';assert not any(R.glob(label+'*')),'never reuse any existing ID'
+R=H/'resume18';label=f'K{ident}';retry=0
+assert not any(R.glob(label+'*/receipt/receipt.json')), 'charged ID cannot be retried'
+while (R/label).exists():
+ assert (R/label/'refusal.json').exists() or (R/label/'cooldown-refusal.json').exists(), 'unresolved submission: recover first'
+ retry+=1;label=f'K{ident}-r{retry}'
 assert len(list(R.glob('K*/receipt/receipt.json')))<30
 if not control:
- p=R/f'K{ident-1}/receipt';assert json.loads((p/'receipt.json').read_text())['exit_status']!=0
+ controls=list(R.glob(f'K{ident-1}*/receipt/receipt.json'));assert len(controls)==1; p=controls[0].parent;assert json.loads((p/'receipt.json').read_text())['exit_status']!=0
  log=(p/'stdout.log').read_text();assert 'VERIFICATION:- FAILED' in log and 'assertion' in log.lower(),log[-2500:]
 P=H/'source/tools/pv-b3p6-20261028';manifest=P/'v244-k3-17/Cargo.toml';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 for n in ['equivalence_k3_17.rs','equivalence_helpers_k3_17.rs','lib_k3_17.rs','equivalence18.rs']:

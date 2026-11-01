@@ -1,0 +1,92 @@
+{
+  "functions": [
+    {
+      "function": "leading_pair_packed",
+      "source": {
+        "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+        "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+        "item": {
+          "name": "leading_pair_packed",
+          "start": 401,
+          "end": 413,
+          "signature": "fn leading_pair_packed(\n    openings: &StateOnlyPoseidonOpenings,\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] ",
+          "body": "{\n    let mut state = openings.z;\n    for lane in 0..RATE {\n        state[lane] = state[lane].add(openings.xor12_z[lane]);\n    }\n    external_linear_lazy(&mut state);\n    full_round_m31_constants_packed(\n        full_round_m31_constants(state, EXTERNAL_INITIAL[0]),\n        EXTERNAL_INITIAL[1],\n    )\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_tokens_checked": true
+      },
+      "interpreter": "source_leading546",
+      "theorem": "leading_source_link546",
+      "source_steps": [
+        {
+          "source": "copy openings.z",
+          "model": "source_leading546 prefix",
+          "argument": "Whole immutable sixteen-element snapshot, no alias writes. Exact QM31 carrier, no custom Drop. Copy lowering V370."
+        },
+        {
+          "source": "for lane0..RATE=8 add xor12_z and store",
+          "model": "range_loop13 leading_step12",
+          "argument": "Read current state then xor lane, QM31.add, restore state[lane] before next lane. All eight bounds fit. range_as_fold13/leading_indices15 preserve every Result path and ascending order."
+        },
+        {
+          "source": "external_linear_lazy(&mut state)",
+          "model": "source_leading_finish546",
+          "argument": "Call identical frozen external body once; apply full-array loan restoration before constant reads or subsequent calls. External row remains named."
+        },
+        {
+          "source": "full_round_m31_constants(state,EXTERNAL_INITIAL[0]) then packed round with EXTERNAL_INITIAL[1]",
+          "model": "native_round_MPlain15 then native_round_MPacked15",
+          "argument": "Read fixed first constants and execute first entire round before second constants read. All32 lane writes and inner external restores retained by ROUND-SOURCE-D546. leading_finish_reference546 composes named laws; no field-chain reassociation."
+        }
+      ],
+      "domain": "every raw field/input representation of these fixed array carriers; no canonicality narrowing",
+      "route": "own-1 structural argument + Lean complete-Result equality",
+      "D188": "Each indexed write and entire mutable-callee return restored before continuation; no discarded back function accepted",
+      "retained": "Named callees/source rows, full std/D188/matrix/actual callback closure and V370 / D381,D386 remain separate; no endpoint/T change",
+      "feature_profile": "deployed ct-host-prover; body span has no cfg/cfg!; release debug and overflow checks off; pinned graph inherited from exact reference extraction inputs"
+    },
+    {
+      "function": "add_schedule_lanes",
+      "source": {
+        "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+        "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+        "item": {
+          "name": "add_schedule_lanes",
+          "start": 419,
+          "end": 428,
+          "signature": "fn add_schedule_lanes(\n    packed: &mut [QM31; POOL_V1_PAIR_FOREST_PACKED_SEMANTIC_LANES_V1],\n    public: SemanticPublic,\n    openings: &StateOnlyPoseidonOpenings,\n    selectors: &Selectors,\n) ",
+          "body": "{\n    let (initial, absorption) = semantic_initial_and_absorption(public, openings, selectors);\n    add_preweighted(packed, 0, &initial);\n    add_preweighted(packed, 16, &absorption);\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_tokens_checked": true
+      },
+      "interpreter": "native_schedule15",
+      "theorem": "schedule_source_link546",
+      "source_steps": [
+        {
+          "source": "semantic_initial_and_absorption(public,openings,selectors)",
+          "model": "native_schedule15 first bind",
+          "argument": "Public carrier preserves all fields by PublicInput543227 round trips. Read-only openings and selectors; exact same named source callee and pair return. Its complete source binding remains separate."
+        },
+        {
+          "source": "add_preweighted(packed,0,&initial)",
+          "model": "native_preweighted15 first bind",
+          "argument": "Use D540 direct extraction/complete-Result total source law, not a narrowed source3 helper. Actual initial array length16, start0; it updates lanes0..15 in order, restoring packed before continuation."
+        },
+        {
+          "source": "add_preweighted(packed,16,&absorption), return ()",
+          "model": "native_preweighted15 second bind",
+          "argument": "Same source row with length8/start16. Reads the UPDATED packed array from first call; writes16..23. No old snapshot substitution, mutable loan is restored after both calls. Return full restored state as Aeneas backward value. schedule_binding15 composes exact named helper law."
+        }
+      ],
+      "domain": "every raw field/input representation of these fixed array carriers; no canonicality narrowing",
+      "route": "own-1 structural argument + Lean complete-Result equality",
+      "D188": "Each indexed write and entire mutable-callee return restored before continuation; no discarded back function accepted",
+      "retained": "Named callees/source rows, full std/D188/matrix/actual callback closure and V370 / D381,D386 remain separate; no endpoint/T change",
+      "feature_profile": "deployed ct-host-prover; body span has no cfg/cfg!; release debug and overflow checks off; pinned graph inherited from exact reference extraction inputs"
+    }
+  ],
+  "status": "pending respective Lean receipts and reference-model provenance comparisons"
+}
