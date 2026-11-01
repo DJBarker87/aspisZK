@@ -34,15 +34,16 @@ theorem finite (point : Array Q 10#usize) (suffix weighted : Q)
 
 theorem complete (point : Array Q 10#usize) :
     ∃ out,host_arithmetic.selected_mask_linears point=ok out := by
-  unfold host_arithmetic.selected_mask_linears
-  have first := finite point aspis_core.field.QM31.ZERO aspis_core.field.QM31.ZERO
+  obtain ⟨⟨suffix,weighted⟩,hfirst⟩ := finite point aspis_core.field.QM31.ZERO aspis_core.field.QM31.ZERO
     10 aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS rfl (by omega)
-  apply ProverRwP6BindTotal.bind_total _ _ first
-  rintro ⟨suffix,weighted⟩
-  repeat' first
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
-  exact ⟨_,rfl⟩
+  obtain ⟨q,hq⟩ := qscale suffix 3#u32
+  obtain ⟨q1,hq1⟩ := qscale weighted 22#u32
+  obtain ⟨q2,hq2⟩ := qadd q q1
+  obtain ⟨q3,hq3⟩ := qscale suffix 275#u32
+  obtain ⟨q4,hq4⟩ := qscale weighted 150#u32
+  obtain ⟨q5,hq5⟩ := qadd q3 q4
+  exact ⟨(q2,q5),by simp only [host_arithmetic.selected_mask_linears,
+    hfirst,hq,hq1,hq2,hq3,hq4,hq5,bind_tc_ok]⟩
 
 #print axioms finite
 #print axioms complete
