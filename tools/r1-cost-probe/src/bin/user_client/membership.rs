@@ -54,18 +54,43 @@ fn prepare(v:&Value,cm:Digest)->Result<Lane>{
  Ok(Lane{root,selected:match selected{Some((i,second))=>Some((leaves[i],i,second,siblings)),None=>None}})
 }
 fn push_lane(out:Result<Vec<Lane>>,v:&Value,cm:Digest)->Result<Vec<Lane>>{let mut out=out?;out.push(prepare(v,cm)?);Ok(out)}
-pub fn input(q:&Value,cm:Digest,k:Digest,salt:Digest,value:u32,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
+fn prepare_all(q:&Value,cm:Digest)->Result<Vec<Lane>>{
  let public_leaves=crate::public_field(q,"lane_leaf_sets");
  let all=crate::public_array(&public_leaves)?;
  ensure!(all.len()==8,"all eight public lane leaf sets required");
- let mut prepared=Ok(Vec::with_capacity(8));let mut l=0;while l<all.len(){prepared=push_lane(prepared,&all[l],cm);l+=1;}let prepared=prepared?;
- let mut roots:Vec<Digest>=Vec::with_capacity(8);let mut l=0;while l<prepared.len(){roots.push(prepared[l].root);l+=1;}
- let mut selected=None;let mut matches=0;
- let mut l=0;while l<prepared.len(){if let Some((pair,i,second,siblings))=prepared[l].selected{matches+=1;selected=Some((l,pair,i,second,siblings));}l+=1;}
+ let mut prepared=Ok(Vec::with_capacity(8));let mut l=0;
+ while l<all.len(){prepared=push_lane(prepared,&all[l],cm);l+=1;}prepared
+}
+fn collect_roots(prepared:&[Lane])->Vec<Digest>{
+ let mut roots=Vec::with_capacity(8);let mut l=0;
+ while l<prepared.len(){roots.push(prepared[l].root);l+=1;}roots
+}
+struct Selection {lane:usize,pair:PoolV1PairLeafWitnessV1,index:usize,second:bool,siblings:[Digest;20]}
+fn lane_selection(lane:usize,p:&Lane)->Option<Selection>{
+ match p.selected{Some((pair,index,second,siblings))=>Some(Selection{lane,pair,index,second,siblings}),None=>None}
+}
+fn collect_selection(prepared:&[Lane])->Result<Selection>{
+ let mut selected=None;let mut matches=0;let mut l=0;
+ while l<prepared.len(){
+  match lane_selection(l,&prepared[l]){Some(s)=>{matches+=1;selected=Some(s);},None=>{}}
+  l+=1;
+ }
  ensure!(matches==1,"input commitment must occur in one lane");
- let (l,pair,i,second,siblings)=selected.ok_or_else(||anyhow!("input absent"))?;
- let mut supers=[roots[0];3];let mut directions=[false;3];let mut index=l;
+ selected.ok_or_else(||anyhow!("input absent"))
+}
+fn super_path(mut roots:Vec<Digest>,lane:usize,anchor:Digest)->Result<([Digest;3],[bool;3])>{
+ let mut supers=[roots[0];3];let mut directions=[false;3];let mut index=lane;
  for level in 0..3{supers[level]=roots[index^1];directions[level]=index%2==1;index>>=1;roots=parent_level(&roots,POOL_V1_PAIR_EMPTY_ROOTS[0]);}
  ensure!(roots[0]==anchor,"complete public leaves do not reconstruct checkpoint");
- Ok(PoolV1PairForestInputNoteWitnessV1{pair:PoolV1PairInputNoteWitnessV1{nullifier_key:k,salt,value,pair_leaf:pair,selected_second:second,membership:PoolV1MembershipWitnessV1{siblings,index:i as u32}},super_root_siblings:supers,super_root_directions:directions})
+ Ok((supers,directions))
+}
+fn witness(s:Selection,roots:Vec<Digest>,k:Digest,salt:Digest,value:u32,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
+ let (supers,directions)=super_path(roots,s.lane,anchor)?;
+ Ok(PoolV1PairForestInputNoteWitnessV1{pair:PoolV1PairInputNoteWitnessV1{nullifier_key:k,salt,value,pair_leaf:s.pair,selected_second:s.second,membership:PoolV1MembershipWitnessV1{siblings:s.siblings,index:s.index as u32}},super_root_siblings:supers,super_root_directions:directions})
+}
+pub fn input(q:&Value,cm:Digest,k:Digest,salt:Digest,value:u32,anchor:Digest)->Result<PoolV1PairForestInputNoteWitnessV1>{
+ let prepared=prepare_all(q,cm)?;
+ let roots=collect_roots(&prepared);
+ let selected=collect_selection(&prepared)?;
+ witness(selected,roots,k,salt,value,anchor)
 }
