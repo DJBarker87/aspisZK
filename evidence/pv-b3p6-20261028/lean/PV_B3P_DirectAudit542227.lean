@@ -16,7 +16,7 @@ theorem changed_local_links542 :
     PV_B3P_Link_terminal_add_digest_binding host_terminal.add_digest_binding ∧
     PV_B3P_Link_terminal_add_preweighted (@host_terminal.add_preweighted) ∧
     (∀ (values : Array aspis_core.field.QM31 16#usize) (mask : U16),
-      MaskAllowed mask → mask_source542 values mask =
+      PV_B3P_Success227.MaskAllowed mask → mask_source542 values mask =
         reference_copy_terminal.selector_mask_sum_16 values mask) ∧
     PV_B3P_Link_terminal_sum_high PV_B3P_Binding13227.source_sum_high13 :=
   ⟨extracted_absorption_link540,extracted_digest_link540,

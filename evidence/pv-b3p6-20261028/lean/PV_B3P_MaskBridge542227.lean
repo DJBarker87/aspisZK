@@ -11,7 +11,7 @@ def mask_source542 (values : Array PV_B3P_227.aspis_core.field.QM31 16#usize)
 
 theorem mask_source_reference542
     (values : Array PV_B3P_227.aspis_core.field.QM31 16#usize) (mask : U16)
-    (allowed : MaskAllowed mask) :
+    (allowed : PV_B3P_Success227.MaskAllowed mask) :
     mask_source542 values mask =
       PV_B3P_227.reference_copy_terminal.selector_mask_sum_16 values mask :=
   mask_extraction_reference_on_domain17 count_ones_source542 trailing_zeros_source542
@@ -19,7 +19,7 @@ theorem mask_source_reference542
 
 theorem mask_source_continuation542 {β : Type}
     (values : Array PV_B3P_227.aspis_core.field.QM31 16#usize) (mask : U16)
-    (allowed : MaskAllowed mask)
+    (allowed : PV_B3P_Success227.MaskAllowed mask)
     (next : PV_B3P_227.aspis_core.field.QM31 → Result β) :
     (do let sum ← mask_source542 values mask; next sum) =
     (do let sum ← PV_B3P_227.reference_copy_terminal.selector_mask_sum_16 values mask;
@@ -33,7 +33,7 @@ theorem mask_external_boundary542 (ones zeros : U16 → Result U32)
     (count_boundary : ones = count_ones_source542)
     (trail_boundary : zeros = trailing_zeros_source542)
     (values : Array PV_B3P_227.aspis_core.field.QM31 16#usize) (mask : U16)
-    (allowed : MaskAllowed mask) :
+    (allowed : PV_B3P_Success227.MaskAllowed mask) :
     host_copy_terminal.selector_mask_sum_16 ones zeros values mask =
       PV_B3P_227.reference_copy_terminal.selector_mask_sum_16 values mask := by
   subst ones
