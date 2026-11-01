@@ -1,0 +1,62 @@
+START 78074 R1Z.PV_RunJoin_NativePowerScalar66
+DONE 78074 R1Z.PV_RunJoin_NativePowerScalar66 exit 1 wall 4.28 RSS 4432744448
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativePowerScalar66.lean:11:2: error: Type mismatch: After simplification, term
+  PV_RunJoin_CircleNeutralScalar52.subtract_shape x
+ has type
+  @Eq (Result U32)
+    (do
+      let i ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (x ≥ 2147483647#u32)))
+      let mask ← lift (core.num.U32.wrapping_sub 0#u32 i)
+      let i1 ← lift (2147483647#u32 &&& mask)
+      ok (core.num.U32.wrapping_sub x i1))
+    (ok (if x ≥ 2147483647#u32 then x.wrapping_sub 2147483647#u32 else x))
+but is expected to have type
+  @Eq (Result U32)
+    (do
+      let i ← lift (UScalar.cast_fromBool UScalarTy.U32 (decide (x ≥ 2147483647#u32)))
+      let mask ← lift (core.num.U32.wrapping_sub 0#u32 i)
+      let i1 ← lift (2147483647#u32 &&& mask)
+      ok (core.num.U32.wrapping_sub x i1))
+    (ok (if x ≥ 2147483647#u32 then x.wrapping_sub 2147483647#u32 else x))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativePowerScalar66.lean:25:12: error: Tactic `rfl` failed: The left-hand side
+  ok ((core.num.U32.wrapping_add x y).wrapping_sub 2147483647#u32)
+is not definitionally equal to the right-hand side
+  if x.wrapping_add y ≥ 2147483647#u32 then ok ((x.wrapping_add y).wrapping_sub 2147483647#u32)
+  else ok (x.wrapping_add y)
+
+case isTrue
+x y : U32
+h✝ : core.num.U32.wrapping_add x y ≥ 2147483647#u32
+⊢ ok ((core.num.U32.wrapping_add x y).wrapping_sub 2147483647#u32) =
+    if x.wrapping_add y ≥ 2147483647#u32 then ok ((x.wrapping_add y).wrapping_sub 2147483647#u32)
+    else ok (x.wrapping_add y)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativePowerScalar66.lean:25:12: error: Tactic `rfl` failed: The left-hand side
+  ok (core.num.U32.wrapping_add x y)
+is not definitionally equal to the right-hand side
+  if x.wrapping_add y ≥ 2147483647#u32 then ok ((x.wrapping_add y).wrapping_sub 2147483647#u32)
+  else ok (x.wrapping_add y)
+
+case isFalse
+x y : U32
+h✝ : ¬core.num.U32.wrapping_add x y ≥ 2147483647#u32
+⊢ ok (core.num.U32.wrapping_add x y) =
+    if x.wrapping_add y ≥ 2147483647#u32 then ok ((x.wrapping_add y).wrapping_sub 2147483647#u32)
+    else ok (x.wrapping_add y)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativePowerScalar66.lean:24:13: warning: This simp argument is unused:
+  aspis_core.field.P
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵P̵,̵A̵s̵p̵i̵s̵R̵1̵P̵r̵o̵d̵u̵c̵e̵r̵R̵e̵l̵e̵a̵s̵e̵4̵7̵.̵f̵i̵e̵l̵d̵.̵P̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵s̵u̵b̵t̵r̵a̵c̵t̵]̵[̲A̲s̲p̲i̲s̲R̲1̲P̲r̲o̲d̲u̲c̲e̲r̲R̲e̲l̲e̲a̲s̲e̲4̲7̲.̲f̲i̲e̲l̲d̲.̲P̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲s̲u̲b̲t̲r̲a̲c̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativePowerScalar66.lean:31:12: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+'R1Z.PV_RunJoin_NativePowerScalar66.mreduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.double' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.subtract' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.reduce' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.add' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_NativePowerScalar66.mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

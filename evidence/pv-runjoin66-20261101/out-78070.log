@@ -1,0 +1,27 @@
+START 78070 R1Z.PV_RunJoin_SemanticAppend66
+DONE 78070 R1Z.PV_RunJoin_SemanticAppend66 exit 1 wall 5.0 RSS 4395712512
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticAppend66.lean:17:42: error: unexpected token ';'; expected '-'
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticAppend66.lean:17:32: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+⊢ 13831 ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticAppend66.lean:15:61: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+fixed : ProverRwP6BodyCandidate.selected ops = ops
+logical : Slice U8
+records : List (List U8)
+length : logical.length = 13831
+domain : PV_RunJoin_SemanticDomain40.Domain ops logical 27#u8 32#usize 0#u8 records
+bound : ↑32#usize + records.flatten.length ≤ logical.length
+cap : 13831 ≤ Usize.max
+⊢ ∃ encoded,
+    host_compact.compact_semantic logical PV_RunJoin_ActualPlanSources59.empty =
+        ok (core.result.Result.Ok (), encoded) ∧
+      ∀ (out : alloc.vec.Vec U8),
+        out.length + List.length (bytes ↑encoded) ≤ Usize.max →
+          ∃ next,
+            host_compact.compact_semantic logical out = ok (core.result.Result.Ok (), next) ∧
+              bytes ↑next = bytes ↑out ++ bytes ↑encoded
+'R1Z.PV_RunJoin_SemanticAppend66.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

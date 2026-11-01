@@ -1,0 +1,29 @@
+START 78071 R1Z.PV_RunJoin_SemanticAppend66
+DONE 78071 R1Z.PV_RunJoin_SemanticAppend66 exit 1 wall 3.59 RSS 4409413632
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticAppend66.lean:15:61: error: unsolved goals
+inst✝ : ExternalTypes
+ops : ExternalFuns
+fixed : ProverRwP6BodyCandidate.selected ops = ops
+logical : Slice U8
+records : List (List U8)
+length : logical.length = 13831
+domain : PV_RunJoin_SemanticDomain40.Domain ops logical 27#u8 32#usize 0#u8 records
+bound : ↑32#usize + records.flatten.length ≤ logical.length
+cap : 13831 ≤ Usize.max
+emptylen : PV_RunJoin_ActualPlanSources59.empty.length = 0
+encoded : alloc.vec.Vec U8
+he : host_compact.compact_semantic logical PV_RunJoin_ActualPlanSources59.empty = ok (core.result.Result.Ok (), encoded)
+hv : ↑encoded = ↑PV_RunJoin_ActualPlanSources59.empty ++ List.take 32 ↑logical ++ records.flatten
+out : alloc.vec.Vec U8
+room : out.length + List.length (bytes ↑encoded) ≤ Usize.max
+le : List.length (bytes ↑encoded) = 32 + records.flatten.length
+available : out.length + 32 + records.flatten.length ≤ Usize.max
+next : alloc.vec.Vec U8
+hn : host_compact.compact_semantic logical out = ok (core.result.Result.Ok (), next)
+hnv : ↑next = ↑out ++ List.take 32 ↑logical ++ records.flatten
+⊢ List.map (fun x => UInt8.ofNat ↑x) ↑out ++ List.map (fun x => UInt8.ofNat ↑x) (List.take 32 ↑logical) ++
+      List.map (fun x => UInt8.ofNat ↑x) records.flatten =
+    List.map (fun x => UInt8.ofNat ↑x) ↑out ++
+      (List.map (fun x => UInt8.ofNat ↑x) (List.take 32 ↑logical) ++ List.map (fun x => UInt8.ofNat ↑x) records.flatten)
+'R1Z.PV_RunJoin_SemanticAppend66.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
