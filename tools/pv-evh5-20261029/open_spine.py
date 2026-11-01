@@ -229,7 +229,7 @@ out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.Entrop
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
 
 if entropy or short in ['BuildSemantics','PrepareOpening']:out=out.replace('simp only [condition,if_false]', 'simp only [condition,Bool.false_eq_true,if_false]')
-if short=='ProveSemantics':out=out.replace(':= by\n  unfold run', ':= by\n  rcases salts with ⟨reserved,context⟩\n  unfold run')
+if short=='ProveSemantics':out=out.replace(':= by\n  unfold run', ':= by\n  rcases salts with ⟨reserved,context⟩\n  let salts := (reserved,context)\n  unfold run')
 if short=='NoncePath' or filemode:out=out.replace('P (','PV_EVH_Prefix.P (')
 record=json.dumps(dict(source=p,revision=rev,source_sha256=hashlib.sha256(s.encode()).hexdigest(),external_sha256=hashlib.sha256(ext.encode()).hexdigest(),function=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),open_callees={k:dict(header=v[0],result=v[1],args=v[2],field=v[3]) for k,v in spec.items()},lifted_calls=[c for c in calls if pure(c)],scope='source spine only; all named callees and runtime adequacy OPEN'),indent=2)+'\n'
 target=Path('lean/'+namespace+'.lean');receipt=E/(short+'-generation.json')
