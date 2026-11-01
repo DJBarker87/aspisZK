@@ -69,6 +69,60 @@ def borrowed_projection(c,expected,ledger):
   return True
  except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
 
+COMMON='crates/aspis-statement/src/pool_v1/payment_relation.rs::validate_common'
+CANONICAL='crates/aspis-statement/src/pool_v1/payment_relation.rs::digest_is_canonical'
+
+def scalar_caller(c,expected,ledger):
+ try:
+  q=c['framed_scalar_caller']
+  assert q['method']=='ruling y: total scalar caller with local ordered child log'
+  assert q['function']==COMMON and q['selected_child']==CANONICAL
+  obs=[o for r in ledger['rows'] if r['function']==COMMON for o in r['caller_domain_obligations']]
+  allowed={COMMON,COMMON+' -> '+CANONICAL}|{COMMON+'::'+h['name'] for r in ledger['rows'] if r['function']==COMMON for h in r['named_hypotheses']}|{o['id'] for o in obs if 'callee' not in o}
+  assert expected in allowed
+  assert q['all_typed_inputs'] and q['local_frame_constructed'] and q['full_Result']
+  assert q['empty_external_modifies'] and q['exact_body_projection']
+  assert q['trust_classification']=='P6/D188 option A reclassification'
+  assert q['shape']=='Result<(),PoolV1PaymentStatementFormatError>; mutable local record'
+  assert q['controls']=={'native':'NEL_K034','contract':'NEL_K035','unimplied':'NEL_K039','inverted':'NEL_K040','frame':'NEL_K041'}
+  from NEL_artifacts import native_support
+  expected_support=native_support(['NEL_K032','NEL_K033','NEL_K034','NEL_K035','NEL_K039','NEL_K040','NEL_K041'])
+  assert q['native_support']==expected_support
+  for ref in q['native_support']:predecessor.inherited.artifact(ref)
+  assert native_pair('NEL_K032','NEL_K033') and native_pair('NEL_K034','NEL_K040') and native_pair('NEL_K035','NEL_K041')
+  # The unimplied check genuinely uses the same assertion as its real-body
+  # control and the SAME weak body; only the supported substitution differs.
+  u=read(E/'NEL_K039/receipt.json');text=(E/'NEL_K039/stdout.log').read_text()
+  assert u['exit_status']!=0 and 'VERIFICATION:- FAILED' in text and 'Failed Checks:' in text and 'timed out' not in text.lower()
+  assert u['limits']==read(E/'NEL_K034/receipt.json')['limits'] and int(u['swaps'])==0
+  assert read(E/'NEL_K039-admission.json')['exit']==0 and read(E/'NEL_K039-admission.json')['reservation']['allowed'] is True
+  assert read(E/'NEL_K039-graph-check.json')['graph_matches_frozen'] and read(E/'NEL_K039-graph-check.json')['exact_LPm_graph']
+  assert read(E/'NEL_K039-lock-check.json')['unchanged'] and read(E/'NEL_K039-rule16-check.json')['no_writable_static']
+  assert read(E/'NEL_K039.json')['env']['CARGO_NET_OFFLINE']=='true'
+  import re,subprocess
+  def added(a):return '\n'.join(l[1:] for l in (E/(a+'-NEL_native_contracts.patch')).read_text().splitlines() if l.startswith('+') and not l.startswith('+++'))
+  native=added('NEL_K034');havoc=added('NEL_K039')
+  weak=lambda t:next(l for l in t.splitlines() if l.startswith('fn weak('))
+  assert weak(native)==weak(havoc)
+  assert '#[kani::stub_verified(weak)]' not in native and '#[kani::stub_verified(weak)]' in havoc
+  assert 'assert!(f.y==old,"unimplied external frame")' in native and 'assert!(f.y==old,"unimplied external frame")' in havoc
+  assert 'Check that' in (E/'NEL_K041/stdout.log').read_text() and 'assignable' in (E/'NEL_K041/stdout.log').read_text()
+  frozen=subprocess.check_output(['git','show',ledger['frozen_revision']+':'+COMMON.split('::')[0]],cwd=R,text=True)
+  a=frozen.index('fn validate_common(');z=frozen.index('\n}',a)+2;body=frozen[a:z]
+  projected=body.replace('fn validate_common(common: CommonPublicV1)','fn NEL_common_validator(common: CommonPublicV1, frame:&mut NEL_common_validator::Frame)').replace('digest_is_canonical(&common.anchor_root)','NEL_common_validator::canonical(&common.anchor_root,frame)').replace('digest_is_canonical(&common.nullifier)','NEL_common_validator::canonical(&common.nullifier,frame)')
+  source=added('NEL_K032');assert projected in source
+  assert '#[kani::modifies(&mut frame.log)]' in source
+  assert '#[kani::requires(frame.log==0 && common.pool==frame.expected.pool' in source
+  assert q['positive']=='NEL_K032' and q['negative']=='NEL_K033'
+  assert [t['name'] for t in q['model_theorems']]==['NEL_CommonOracle.substitution','NEL_CommonOracle.reached_argument','NEL_CommonOracle.call_count']
+  assert [t['name'] for t in q['emitted_association']]==['NED_CommonValidation.common_result','NED_PaymentCohorts.canonical_result']
+  assert all(predecessor.inherited.theorem(t) for t in q['model_theorems']+q['emitted_association'])
+  if c['kind']=='external-domain':
+   row_ob=next(o for o in obs if o['id']==expected)
+   assert row_ob['call'].get('expression',row_ob['call'].get('syntax')) in {'Err','Ok'}
+  return True
+ except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
 def certificate(c,expected,ledger,reviewed):
  if not c or not c.get('id','').startswith('NEL_'):return BASE_CERTIFICATE(c,expected,ledger,reviewed)
  if predecessor.predecessor.suspended_reference(c):return False
@@ -76,7 +130,7 @@ def certificate(c,expected,ledger,reviewed):
  if not predecessor.predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
  # Original NEJ exact domain/physical/site gates are still mandatory.
  if not predecessor.call_domain(c,expected,ledger):return False
- return borrowed_projection(c,expected,ledger)
+ return scalar_caller(c,expected,ledger) if 'framed_scalar_caller' in c else borrowed_projection(c,expected,ledger)
 
 def compose(base,packet,reviewed):
  previous=predecessor.certificate

@@ -1,0 +1,51 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,23 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[kani::requires(frame.log==0)]
++#[kani::modifies(&mut frame.log)]
++#[kani::ensures(|r| *r==NEL_payment_validator::reference(public,frame) && frame.log==NEL_payment_validator::calls(public,frame))]
++fn NEL_payment_validator(
++    public: &PoolV1PrivateTransferPublicV1,
++    frame:&mut NEL_payment_validator::Frame,
++) -> Result<(), PoolV1PaymentStatementFormatError> {
++    NEL_payment_validator::common(transfer_common(public),frame)?;
++    if !NEL_payment_validator::canonical(&public.recipient_commitment,frame)
++        || !NEL_payment_validator::canonical(&public.change_commitment,frame)
++    {
++        return Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest);
++    }
++    Ok(())
++}
++#[cfg(kani)]
++#[path="NEL_payment_validator.rs"]
++mod NEL_payment_validator;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_payment_validator.rs
+@@ -0,0 +1,22 @@
++use super::*;
++pub(super) struct Frame{pub reply:Result<(),PoolV1PaymentStatementFormatError>,pub a:bool,pub b:bool,pub log:usize}
++pub(super) fn common(_c:CommonPublicV1,f:&mut Frame)->Result<(),PoolV1PaymentStatementFormatError>{assert!(f.log==0);f.log=1;f.reply}
++pub(super) fn canonical(_d:&Digest,f:&mut Frame)->bool{assert!(f.log>=1&&f.log<3);let r=if f.log==1{f.a}else{f.b};f.log+=1;r}
++pub(super) fn reference(
++    public: &PoolV1PrivateTransferPublicV1,
++    frame:&Frame,
++) -> Result<(), PoolV1PaymentStatementFormatError> {
++    frame.reply?;
++    if !frame.a
++        || !frame.b
++    {
++        return Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest);
++    }
++    Ok(())
++}
++pub(super) fn calls(p:&PoolV1PrivateTransferPublicV1,f:&Frame)->usize{if f.reply.is_err(){1}else if !f.a{2}else{3}}
++fn any_error()->crate::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>crate::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>crate::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(NEL_payment_validator)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn payment_validator(){let p=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()};let mut f=Frame{reply:if kani::any(){Ok(())}else{Err(any_error())},a:kani::any(),b:kani::any(),log:0};let _=NEL_payment_validator(&p,&mut f);}

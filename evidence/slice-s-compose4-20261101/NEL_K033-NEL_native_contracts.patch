@@ -1,0 +1,45 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,26 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[kani::requires(frame.log==0 && common.pool==frame.expected.pool && common.deployment_domain==frame.expected.deployment_domain && common.anchor_sequence==frame.expected.anchor_sequence && common.anchor_root==frame.expected.anchor_root && common.nullifier==frame.expected.nullifier && common.asset_id==frame.expected.asset_id)]
++#[kani::modifies(&mut frame.log)]
++#[kani::ensures(|r| !(*r==NEL_common_validator::reference(common,frame) && frame.log==NEL_common_validator::calls(common,frame)))]
++fn NEL_common_validator(common: CommonPublicV1, frame:&mut NEL_common_validator::Frame) -> Result<(), PoolV1PaymentStatementFormatError> {
++    if common.pool == [0u8; 32] || common.deployment_domain == [0u8; 32] {
++        return Err(PoolV1PaymentStatementFormatError::ZeroRequiredBinding);
++    }
++    if common.anchor_sequence > POOL_V1_LEAF_CAPACITY {
++        return Err(PoolV1PaymentStatementFormatError::InvalidAnchorSequence);
++    }
++    if !NEL_common_validator::canonical(&common.anchor_root,frame) || !NEL_common_validator::canonical(&common.nullifier,frame) {
++        return Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest);
++    }
++    if common.asset_id.0 >= P {
++        return Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId);
++    }
++    Ok(())
++}
++#[cfg(kani)]
++#[path="NEL_common_validator.rs"]
++mod NEL_common_validator;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_common_validator.rs
+@@ -0,0 +1,13 @@
++use super::*;
++pub(super) struct Frame{pub expected:CommonPublicV1,pub a:bool,pub b:bool,pub log:usize}
++pub(super) fn canonical(d:&Digest,f:&mut Frame)->bool{assert!(f.log<2);let want=if f.log==0{&f.expected.anchor_root}else{&f.expected.nullifier};let k:usize=kani::any();kani::assume(k<8);assert!(d[k].0==want[k].0,"same common canonical argument and order");let r=if f.log==0{f.a}else{f.b};f.log+=1;r}
++pub(super) fn reference(common:CommonPublicV1,f:&Frame)->Result<(),PoolV1PaymentStatementFormatError>{
++ if common.pool==[0;32]||common.deployment_domain==[0;32]{Err(PoolV1PaymentStatementFormatError::ZeroRequiredBinding)}
++ else if common.anchor_sequence>POOL_V1_LEAF_CAPACITY{Err(PoolV1PaymentStatementFormatError::InvalidAnchorSequence)}
++ else if !f.a||!f.b{Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)}
++ else if common.asset_id.0>=P{Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId)}else{Ok(())}}
++pub(super) fn calls(c:CommonPublicV1,f:&Frame)->usize{if c.pool==[0;32]||c.deployment_domain==[0;32]||c.anchor_sequence>POOL_V1_LEAF_CAPACITY{0}else if !f.a{1}else{2}}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(NEL_common_validator)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn common_validator(){let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any())};let mut f=Frame{expected:c,a:kani::any(),b:kani::any(),log:0};let _=NEL_common_validator(c,&mut f);}

@@ -1,0 +1,24 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_first.rs"]
++mod NEL_first;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_first.rs
+@@ -0,0 +1,11 @@
++#![allow(non_snake_case)]
++use super::*;
++use aspis_core::field::M31;
++struct Frame{expected:Digest,reply:[u8;32],called:bool}
++fn encode(d:&Digest,f:&mut Frame)->[u8;32]{let k:usize=kani::any();kani::assume(k<8);assert!(d[k].0==f.expected[k].0&&!f.called,"same first-byte digest argument");f.called=true;f.reply}
++#[kani::requires(!f.called && *d==f.expected)]
++#[kani::modifies(&mut f.called)]
++#[kani::ensures(|r| *r==f.reply[0] && f.called)]
++fn threaded_first(d:&Digest,f:&mut Frame)->u8{encode(d,f)[0]}
++#[kani::proof_for_contract(threaded_first)]
++fn first(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut f=Frame{expected:d,reply:kani::any(),called:false};let _=threaded_first(&d,&mut f);}

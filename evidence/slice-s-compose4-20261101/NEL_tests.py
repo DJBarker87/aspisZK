@@ -9,7 +9,7 @@ class Mutations(unittest.TestCase):
   o=v.compose(self.base,p,self.review if review is None else review)
   return {r['composed_status'] for r in o['rows'] if r['function']==self.f}
  def test_inherited_fourteen_and_getter(self):
-  out=v.compose(self.base,self.packet,self.review);self.assertEqual(len(v.predecessor.summary(out)['slice_closed']),16)
+  out=v.compose(self.base,self.packet,self.review);self.assertEqual(len(v.predecessor.summary(out)['slice_closed']),18)
  def test_missing_member(self):
   p=copy.deepcopy(self.packet);p['members'].pop(self.f);self.assertEqual(self.status(p),{'OPEN'})
  def test_wrong_subject(self):
@@ -28,4 +28,20 @@ class Mutations(unittest.TestCase):
   p=copy.deepcopy(self.packet);c=p['members'][self.f];c['borrowed_projection']['extracted_identity']='wrong';c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{self.f:h});self.assertEqual(self.status(p,review),{'OPEN'})
  def test_wrong_certificate_after_review(self):
   p=copy.deepcopy(self.packet);c=p['members'][self.f];c['call_domain_certificate']['native_frame_complete']=False;c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{self.f:h});self.assertEqual(self.status(p,review),{'OPEN'})
+
+class CommonMutations(Mutations):
+ def common_status(self,p,review=None):
+  o=v.compose(self.base,p,self.review if review is None else review)
+  return {r['composed_status'] for r in o['rows'] if r['function']==v.COMMON}
+ def test_missing_common_edge(self):
+  p=copy.deepcopy(self.packet);p['edges'].pop(v.COMMON+' -> '+v.CANONICAL);self.assertEqual(self.common_status(p),{'OPEN'})
+ def test_missing_common_constructor(self):
+  p=copy.deepcopy(self.packet);p['externals'].pop('external:TX1:298:1');self.assertIn('OPEN',self.common_status(p))
+ def test_scalar_control_missing_after_review(self):
+  p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller']['controls'].pop('frame');c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});self.assertEqual(self.common_status(p,review),{'OPEN'})
+ def test_scalar_guard_stronger_domain_rejected(self):
+  p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller']['all_typed_inputs']=False;c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});self.assertEqual(self.common_status(p,review),{'OPEN'})
+ def test_scalar_wrong_substitution_after_review(self):
+  p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller']['model_theorems'][0]['name']='wrong';c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});self.assertEqual(self.common_status(p,review),{'OPEN'})
+
 if __name__=='__main__':unittest.main()
