@@ -7,7 +7,8 @@ receipts=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-*.json'))]
 focused=[v['attempt'] for v in receipts if v['attempt']<73697]
 assert focused==list(range(73623,max(focused)+1))
 assert all(v['attempt']<73697 or v['attempt']==73699 for v in receipts)
-next_fresh=max(focused)+1
+fresh_focused=sorted(set(range(73623,73697))-set(focused))
+next_fresh=fresh_focused[0] if fresh_focused else None
 prep={sha(p.read_bytes()):str(p) for p in list(E.glob('prepare-*.json'))+list((E/'prepare-history').glob('*.json'))}
 # The first historical staging snapshot predates prepare-history support.
 for commit in subprocess.check_output(['git','log','--format=%H','841ae0f9a9..HEAD'],text=True).splitlines():
@@ -41,11 +42,11 @@ subprocess.run(['python3','tools/pv-evh5-20261029/retry.py','--check'],check=Tru
 subprocess.run(['python3','tools/pv-evh5-20261029/prefix_retry.py','--check'],check=True)
 for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['open_spine.py','DurableReserveBuild','--check'],['reserve_join.py','--check'],['account_guard.py','--check']]:
  subprocess.run(['python3','tools/pv-evh5-20261029/'+cmd[0]]+cmd[1:],check=True)
-for short in ['DurableWithAttempt','EntropyStep','NoncePath','MaterialFromEntropy','ApplyMaterial','BuildSemantics','ProveSemantics','PrivateSalts','SyncDirectory','NonceReserveFallible','NonceReserve']:
+for short in ['DurableWithAttempt','EntropyStep','NoncePath','MaterialFromEntropy','ApplyMaterial','BuildSemantics','ProveSemantics','PrivateSalts','SyncDirectory','NonceReserveFallible','NonceReserve','PrepareOpening']:
  subprocess.run(['python3','tools/pv-evh5-20261029/open_spine.py',short,'--check'],check=True)
 for mode in ['AccountFlow','AccountFlowEntry']:
  subprocess.run(['python3','tools/pv-evh5-20261029/entropy_entry.py',mode,'--check'],check=True)
-for script in ['durable_flow.py','nonce_build.py']:
+for script in ['durable_flow.py','nonce_build.py','leaf_install.py']:
  subprocess.run(['python3','tools/pv-evh5-20261029/'+script,'--check'],check=True)
 for mode in ['NonceWithAttempt','NonceProver']:
  subprocess.run(['python3','tools/pv-evh5-20261029/nonce_entry.py',mode,'--check'],check=True)
@@ -61,5 +62,5 @@ for v in receipts:
   f=f'{name}-{a}.'+('json' if name=='admission' else 'log')
   assert host['files'][f]==sha((E/f).read_bytes())
  if v['accepted']:assert host['objects'][v['target']]==v['object_sha256']
-summary=dict(status='PASS receipt and source audit; incomplete proof frontier',baseline='841ae0f9a98c89a780803664aaf8755f48343b53',new_attempts=len(receipts),new_passed=len(accepted),new_failed=len(receipts)-len(accepted),cumulative_spent=17+len(receipts),remaining=83-len(receipts),next_fresh_id=next_fresh,audit_remaining=[73699],accepted=accepted,guard_sha256=sha(Path('tools/pv-evh5-20261029/compile.py').read_bytes()),native=0,kani=0,rows_removed=[],release_replay=False,live_scopes=False)
+summary=dict(status='PASS receipt and source audit; incomplete proof frontier',baseline='841ae0f9a98c89a780803664aaf8755f48343b53',new_attempts=len(receipts),new_passed=len(accepted),new_failed=len(receipts)-len(accepted),cumulative_spent=17+len(receipts),remaining=83-len(receipts),next_fresh_id=next_fresh,fresh_focused_ids=fresh_focused,audit_remaining=[73699],retired_unlaunched_ids=[73600,73601,73602,73603,73605,73606,73613,73615],accepted=accepted,guard_sha256=sha(Path('tools/pv-evh5-20261029/compile.py').read_bytes()),native=0,kani=0,rows_removed=[],release_replay=False,live_scopes=False)
 (E/'validation.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))

@@ -90,3 +90,20 @@ monad alias. The changed generator qualifies that carrier on nonce modules;
 The fallible-reserve generator also handles its source pure conditional bind
 symbolically before any launch, following the already accepted old nonce proof
 shape. No source recurrence or concrete SHA computation is normalized.
+
+NoncePath 73681, SyncDirectory 73682, NonceReserveFallible 73683 and
+NonceReserve 73684 PASS. NonceReserveBuild 73685 first over-generalized its
+Compatible structure's parameters; 73686 restores that leaf-only structure and
+PASSES. NonceWithAttempt 73687 and NonceProver 73688 PASS, installing the expanded
+nonce path through the same entropy-expanded entry. The inherited Result-only
+nonce helper spine is no longer used by this new entry interpreter.
+
+MaterialFromEntropy 73689, ApplyMaterial 73690 and BuildSemantics 73691 PASS.
+ProveSemantics 73692 lost the source variable salts when destructuring its tuple
+input; 73693 retains a local alias and PASSES. PrivateSalts 73694 and LeafInstall
+73695 PASS. LeafInstall proves source callee installation for semantic proving,
+with-attempt and reserve-build, with no whole law for the replaced helpers.
+Their own native leaves and all adequacy obligations remain OPEN. PrepareOpening
+is generated and checked but not compiled; it has sixteen explicit callees.
+ExpandedProver is the final staged dependent bridge at ID 73696; admission
+initially refused it before launch, so that ID is not yet consumed.
