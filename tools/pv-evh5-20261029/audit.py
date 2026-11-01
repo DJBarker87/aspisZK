@@ -39,6 +39,8 @@ for p in E.rglob('*'):
 for p in Path('tools/pv-evh5-20261029').glob('*.py'):ast.parse(p.read_text())
 subprocess.run(['python3','tools/pv-evh5-20261029/retry.py','--check'],check=True)
 subprocess.run(['python3','tools/pv-evh5-20261029/prefix_retry.py','--check'],check=True)
+for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['reserve_join.py','--check']]:
+ subprocess.run(['python3','tools/pv-evh5-20261029/'+cmd[0]]+cmd[1:],check=True)
 code='''import pathlib,hashlib,json,subprocess,time
 p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-evh-20261029')
 print(json.dumps(dict(epoch=time.time(),units=subprocess.check_output(['systemctl','--user','list-units','pv-evh-*','--all','--no-pager'],text=True),files={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'evidence').iterdir() if q.is_file()},objects={q.stem:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'objects').glob('PV_EVH_*.olean')},quiet=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').read_text() if pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').exists() else None)))'''
