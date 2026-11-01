@@ -1,0 +1,2103 @@
+{
+  "target": "V244 / runjoin op227 OPEN",
+  "source_identity_rule": "k-double-prime; no relaxation",
+  "ordinary_or_generated_nonidentical_items": [
+    {
+      "name": "core::panicking::panic_nounwind_fmt::runtime::panic_impl",
+      "source": "core/src/panicking.rs",
+      "kani_line": "110",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "symbols": [
+        "_RNvCs1hStedNDpZ2_7___rustc17rust_begin_unwind_ffi_shim"
+      ],
+      "kani_item": {
+        "name": "panic_nounwind_fmt",
+        "start": 95,
+        "end": 125,
+        "signature": "fn panic_nounwind_fmt(fmt: fmt::Arguments<'_>, force_no_backtrace: bool) -> ! ",
+        "body": "{\n    const_eval_select!(\n        @capture { fmt: fmt::Arguments<'_>, force_no_backtrace: bool } -> !:\n        if const #[track_caller] {\n            // We don't unwind anyway at compile-time so we can call the regular `panic_fmt`.\n            panic_fmt(fmt)\n        } else #[track_caller] {\n            if cfg!(panic = \"immediate-abort\") {\n                super::intrinsics::abort()\n            }\n\n            // NOTE This function never crosses the FFI boundary; it's a Rust-to-Rust call\n            // that gets resolved to the `#[panic_handler]` function.\n            unsafe extern \"Rust\" {\n                #[lang = \"panic_impl\"]\n                fn panic_impl(pi: &PanicInfo<'_>) -> !;\n            }\n\n            // PanicInfo with the `can_unwind` flag set to false forces an abort.\n            let pi = PanicInfo::new(\n                &fmt,\n                Location::caller(),\n                /* can_unwind */ false,\n                force_no_backtrace,\n            );\n\n            // SAFETY: `panic_impl` is defined in safe Rust code and thus is safe to call.\n            unsafe { panic_impl(&pi) }\n        }\n    )\n}",
+        "context": []
+      },
+      "deployed_item": {
+        "name": "panic_nounwind_fmt",
+        "start": 95,
+        "end": 125,
+        "signature": "fn panic_nounwind_fmt(fmt: fmt::Arguments<'_>, force_no_backtrace: bool) -> ! ",
+        "body": "{\n    const_eval_select!(\n        @capture { fmt: fmt::Arguments<'_>, force_no_backtrace: bool } -> !:\n        if const #[track_caller] {\n            // We don't unwind anyway at compile-time so we can call the regular `panic_fmt`.\n            panic_fmt(fmt)\n        } else #[track_caller] {\n            if cfg!(panic = \"immediate-abort\") {\n                super::intrinsics::abort()\n            }\n\n            // NOTE This function never crosses the FFI boundary; it's a Rust-to-Rust call\n            // that gets resolved to the `#[panic_handler]` function.\n            unsafe extern \"Rust\" {\n                #[lang = \"panic_impl\"]\n                fn panic_impl(pi: &PanicInfo<'_>) -> !;\n            }\n\n            // PanicInfo with the `can_unwind` flag set to false forces an abort.\n            let pi = PanicInfo::new(\n                &fmt,\n                Location::caller(),\n                /* can_unwind */ false,\n                force_no_backtrace,\n            );\n\n            // SAFETY: `panic_impl` is defined in safe Rust code and thus is safe to call.\n            unsafe { panic_impl(&pi) }\n        }\n    )\n}",
+        "context": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "core::slice::cmp::<impl std::cmp::PartialEq for [aspis_core::field::M31]>::ne",
+      "source": "core/src/slice/cmp.rs",
+      "kani_line": "20",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "transition"
+      ],
+      "symbols": [
+        "_RNvXNtNtCsci0VKyKEi6N_4core5slice3cmpSNtNtCsf6pq3Kfi9zU_10aspis_core5field3M31NtNtB6_3cmp9PartialEq2neCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "ne",
+        "start": 20,
+        "end": 22,
+        "signature": "fn ne(&self, other: &[U]) -> bool ",
+        "body": "{\n        SlicePartialEq::not_equal(self, other)\n    }",
+        "context": [
+          "impl<T, U> const PartialEq<[U]> for [T]\nwhere\n    T: [const] PartialEq<U>,\n"
+        ],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "<std::result::Result<(), u8> as std::cmp::PartialEq>::eq",
+      "source": "core/src/result.rs",
+      "kani_line": "553",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); source body not established",
+      "groups": [
+        "transition"
+      ],
+      "symbols": [
+        "_RNvXsw_NtCsci0VKyKEi6N_4core6resultINtB5_6ResultuhENtNtB7_3cmp9PartialEq2eqCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "core::panicking::panic_nounwind_fmt::runtime",
+      "source": "core/src/intrinsics/mod.rs",
+      "kani_line": "2437",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "symbols": [
+        "_RNvNvNtCsci0VKyKEi6N_4core9panicking18panic_nounwind_fmt7runtime"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "<[aspis_core::field::M31] as core::slice::cmp::SlicePartialEq<aspis_core::field::M31>>::not_equal",
+      "source": "core/src/slice/cmp.rs",
+      "kani_line": "103",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "transition"
+      ],
+      "symbols": [
+        "_RNvYSNtNtCsf6pq3Kfi9zU_10aspis_core5field3M31INtNtNtCsci0VKyKEi6N_4core5slice3cmp14SlicePartialEqB3_E9not_equalCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "not_equal",
+        "start": 103,
+        "end": 105,
+        "signature": "fn not_equal(&self, other: &[B]) -> bool ",
+        "body": "{\n        !self.equal(other)\n    }",
+        "context": [
+          "trait SlicePartialEq<B> "
+        ],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "core::ub_checks::check_language_ub::runtime",
+      "source": "core/src/intrinsics/mod.rs",
+      "kani_line": "2437",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "symbols": [
+        "_RNvNvNtCsci0VKyKEi6N_4core9ub_checks17check_language_ub7runtime"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "core::ub_checks::check_language_ub",
+      "source": "core/src/ub_checks.rs",
+      "kani_line": "96",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "symbols": [
+        "_RNvNtCsci0VKyKEi6N_4core9ub_checks17check_language_ub"
+      ],
+      "kani_item": {
+        "name": "check_language_ub",
+        "start": 96,
+        "end": 109,
+        "signature": "fn check_language_ub() -> bool ",
+        "body": "{\n    // Only used for UB checks so we may const_eval_select.\n    intrinsics::ub_checks()\n        && const_eval_select!(\n            @capture { } -> bool:\n            if const {\n                // Always disable UB checks.\n                false\n            } else {\n                // Disable UB checks in Miri.\n                !cfg!(miri)\n            }\n        )\n}",
+        "context": [],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "check_language_ub",
+        "start": 96,
+        "end": 108,
+        "signature": "fn check_language_ub() -> bool ",
+        "body": "{\n    // Only used for UB checks so we may const_eval_select.\n    const_eval_select!(\n        @capture { } -> bool:\n        if const {\n            // Always disable UB checks.\n            false\n        } else {\n            // Disable UB checks in Miri.\n            !cfg!(miri)\n        }\n    ) && intrinsics::ub_checks()\n}",
+        "context": [],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<[u64; 4]>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:219:53: 219:61}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuitAyj4_E10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1625external_local_packed_raw0EB1s_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "core::ub_checks::maybe_is_aligned::runtime",
+      "source": "core/src/intrinsics/mod.rs",
+      "kani_line": "2437",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvNvNtCsci0VKyKEi6N_4core9ub_checks16maybe_is_aligned7runtime"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<[u64; 4]>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:219:53: 219:61}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuitAyj4_E10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1625external_local_packed_raw0E0B1u_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ptr::const_ptr::<impl *const T>::is_null::runtime",
+      "source": "core/src/intrinsics/mod.rs",
+      "kani_line": "2437",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvNvMNtNtCsci0VKyKEi6N_4core3ptr9const_ptrPp7is_null7runtime"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<std::array::Guard<'_, u64>>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external",
+        "internal"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropINtNtB6_5array5GuardyEE3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "<std::mem::ManuallyDrop<[aspis_core::field::QM31; 4]> as std::ops::DerefMut>::deref_mut",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "280",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvXs1_NtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB5_12ManuallyDropANtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31j4_ENtNtNtB9_3ops5deref8DerefMut9deref_mutCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "deref_mut",
+        "start": 280,
+        "end": 282,
+        "signature": "fn deref_mut(&mut self) -> &mut T ",
+        "body": "{\n        &mut self.value\n    }",
+        "context": [
+          "impl<T: ?Sized> const DerefMut for ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "deref_mut",
+        "start": 285,
+        "end": 287,
+        "signature": "fn deref_mut(&mut self) -> &mut T ",
+        "body": "{\n        self.value.as_mut()\n    }",
+        "context": [
+          "impl<T: ?Sized> const DerefMut for ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "<std::array::drain::Drain<'_, aspis_core::field::QM31> as std::iter::traits::unchecked_iterator::UncheckedIterator>::next_unchecked",
+      "source": "core/src/array/drain.rs",
+      "kani_line": "69",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvXs2_NtNtCsci0VKyKEi6N_4core5array5drainINtB5_5DrainNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31ENtNtNtNtB9_4iter6traits18unchecked_iterator17UncheckedIterator14next_uncheckedCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "next_unchecked",
+        "start": 69,
+        "end": 75,
+        "signature": "fn next_unchecked(&mut self) -> T ",
+        "body": "{\n        // SAFETY: `Drain` is 1:1 with the inner iterator, so if the caller promised\n        // that there's an element left, the inner iterator has one too.\n        let p: *const T = unsafe { self.0.next_unchecked() };\n        // SAFETY: The iterator was already advanced, so we won't drop this later.\n        unsafe { p.read() }\n    }",
+        "context": [
+          "impl<T> UncheckedIterator for Drain<'_, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::array::drain::drain_array_with::<aspis_core::field::QM31, std::ops::try_trait::NeverShortCircuit<[[u32; 4]; 4]>, 4, {closure@std::array::<impl [aspis_core::field::QM31; 4]>::try_map<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}}>::{closure#0}}>",
+      "source": "core/src/array/drain.rs",
+      "kani_line": "19",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RINvNtNtCsci0VKyKEi6N_4core5array5drain16drain_array_withNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31INtNtNtB6_3ops9try_trait17NeverShortCircuitAAmj4_B2i_EKB2i_NCINvMsm_B4_ABT_B2i_7try_mapIB1z_B2g_ENCINvMB1B_B2X_10wrap_mut_1BT_NvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsE0E0EB3E_"
+      ],
+      "kani_item": {
+        "name": "drain_array_with",
+        "start": 19,
+        "end": 27,
+        "signature": "fn drain_array_with<T, R, const N: usize>(\n    array: [T; N],\n    func: impl for<'a> FnOnce(Drain<'a, T>) -> R,\n) -> R ",
+        "body": "{\n    let mut array = ManuallyDrop::new(array);\n    // SAFETY: Now that the local won't drop it, it's ok to construct the `Drain` which will.\n    let drain = Drain(array.iter_mut());\n    func(drain)\n}",
+        "context": [],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<[u32; 4]>::wrap_mut_1::<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuitAmj4_E10wrap_mut_1NtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31NvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsEB24_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<u64>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external",
+        "internal"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropyE3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "<fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs} as std::ops::FnMut<(aspis_core::field::QM31,)>>::call_mut",
+      "source": "core/src/ops/function.rs",
+      "kani_line": "166",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); source body not established",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvYNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsINtNtNtCsci0VKyKEi6N_4core3ops8function5FnMutTNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31EE8call_mutB6_"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:220:30: 220:36}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuityE10wrap_mut_1jNCNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1625external_local_packed_raw00E0B1s_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "<std::array::drain::Drain<'_, aspis_core::field::QM31> as std::iter::ExactSizeIterator>::len",
+      "source": "core/src/array/drain.rs",
+      "kani_line": "60",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvXs0_NtNtCsci0VKyKEi6N_4core5array5drainINtB5_5DrainNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31ENtNtNtNtB9_4iter6traits10exact_size17ExactSizeIterator3lenCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "len",
+        "start": 60,
+        "end": 62,
+        "signature": "fn len(&self) -> usize ",
+        "body": "{\n        self.0.len()\n    }",
+        "context": [
+          "impl<T> ExactSizeIterator for Drain<'_, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::array::<impl [aspis_core::field::QM31; 4]>::try_map::<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}}>",
+      "source": "core/src/array/mod.rs",
+      "kani_line": "590",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RINvMsm_NtCsci0VKyKEi6N_4core5arrayANtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31j4_7try_mapINtNtNtB8_3ops9try_trait17NeverShortCircuitAmB1d_ENCINvMB1r_B1o_10wrap_mut_1By_NvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsE0EB2J_"
+      ],
+      "kani_item": {
+        "name": "try_map",
+        "start": 590,
+        "end": 595,
+        "signature": "fn try_map<R>(self, f: impl FnMut(T) -> R) -> ChangeOutputType<R, [R::Output; N]>\n    where\n        R: Try<Residual: Residual<[R::Output; N]>>,\n    ",
+        "body": "{\n        drain_array_with(self, |iter| try_from_trusted_iterator(iter.map(f)))\n    }",
+        "context": [
+          "impl<T, const N: usize> [T; N] "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "try_map",
+        "start": 595,
+        "end": 607,
+        "signature": "fn try_map<R>(\n        self,\n        mut f: impl [const] FnMut(T) -> R + [const] Destruct,\n    ) -> ChangeOutputType<R, [R::Output; N]>\n    where\n        R: [const] Try<Residual: [const] Residual<[R::Output; N]>, Output: [const] Destruct>,\n        T: [const] Destruct,\n    ",
+        "body": "{\n        let mut me = ManuallyDrop::new(self);\n        // SAFETY: try_from_fn calls `f` N times.\n        let mut f = unsafe { drain::Drain::new(&mut me, &mut f) };\n        try_from_fn(&mut f)\n    }",
+        "context": [
+          "impl<T, const N: usize> [T; N] "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:220:30: 220:36}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuityE10wrap_mut_1jNCNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1625external_local_packed_raw00EB1q_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<[u64; 4]>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropAyj4_E3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "<std::array::drain::Drain<'_, aspis_core::field::QM31> as std::iter::Iterator>::size_hint",
+      "source": "core/src/array/drain.rs",
+      "kani_line": "52",
+      "status": "ABSENT DEPLOYED DECLARATION",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvXs_NtNtCsci0VKyKEi6N_4core5array5drainINtB4_5DrainNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31ENtNtNtNtB8_4iter6traits8iterator8Iterator9size_hintCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "size_hint",
+        "start": 52,
+        "end": 55,
+        "signature": "fn size_hint(&self) -> (usize, Option<usize>) ",
+        "body": "{\n        let n = self.len();\n        (n, Some(n))\n    }",
+        "context": [
+          "impl<T> Iterator for Drain<'_, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": null,
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<std::array::Guard<'_, [u32; 4]>>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropINtNtB6_5array5GuardAmj4_EE3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<[aspis_core::field::QM31; 4]>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropANtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31j4_E3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::array::<impl [aspis_core::field::QM31; 4]>::try_map::<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}}>::{closure#0}",
+      "source": "core/src/array/mod.rs",
+      "kani_line": "594",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNCINvMsm_NtCsci0VKyKEi6N_4core5arrayANtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31j4_7try_mapINtNtNtBa_3ops9try_trait17NeverShortCircuitAmB1f_ENCINvMB1t_B1q_10wrap_mut_1BA_NvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsE0E0B2L_"
+      ],
+      "kani_item": {
+        "name": "try_map",
+        "start": 590,
+        "end": 595,
+        "signature": "fn try_map<R>(self, f: impl FnMut(T) -> R) -> ChangeOutputType<R, [R::Output; N]>\n    where\n        R: Try<Residual: Residual<[R::Output; N]>>,\n    ",
+        "body": "{\n        drain_array_with(self, |iter| try_from_trusted_iterator(iter.map(f)))\n    }",
+        "context": [
+          "impl<T, const N: usize> [T; N] "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "try_map",
+        "start": 595,
+        "end": 607,
+        "signature": "fn try_map<R>(\n        self,\n        mut f: impl [const] FnMut(T) -> R + [const] Destruct,\n    ) -> ChangeOutputType<R, [R::Output; N]>\n    where\n        R: [const] Try<Residual: [const] Residual<[R::Output; N]>, Output: [const] Destruct>,\n        T: [const] Destruct,\n    ",
+        "body": "{\n        let mut me = ManuallyDrop::new(self);\n        // SAFETY: try_from_fn calls `f` N times.\n        let mut f = unsafe { drain::Drain::new(&mut me, &mut f) };\n        try_from_fn(&mut f)\n    }",
+        "context": [
+          "impl<T, const N: usize> [T; N] "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<[u32; 4]>::wrap_mut_1::<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuitAmj4_E10wrap_mut_1NtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31NvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1615extension_limbsE0B26_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<std::array::Guard<'_, [u64; 4]>>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropINtNtB6_5array5GuardAyj4_EE3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::mem::ManuallyDrop::<[u32; 4]>::new",
+      "source": "core/src/mem/manually_drop.rs",
+      "kani_line": "181",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvMNtNtCsci0VKyKEi6N_4core3mem13manually_dropINtB2_12ManuallyDropAmj4_E3newCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "new",
+        "start": 181,
+        "end": 183,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 184,
+        "end": 186,
+        "signature": "fn new(value: T) -> ManuallyDrop<T> ",
+        "body": "{\n        ManuallyDrop { value: MaybeDangling::new(value) }\n    }",
+        "context": [
+          "impl<T> ManuallyDrop<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ptr::const_ptr::<impl *const T>::offset_from_unsigned::runtime_ptr_ge::runtime",
+      "source": "core/src/intrinsics/mod.rs",
+      "kani_line": "2437",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); const_eval_select macro runtime lowering; template body does not establish instantiated body parity",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvNvNvMNtNtCsci0VKyKEi6N_4core3ptr9const_ptrPp20offset_from_unsigned14runtime_ptr_ge7runtime"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "<std::array::drain::Drain<'_, aspis_core::field::QM31> as std::ops::Drop>::drop",
+      "source": "core/src/array/drain.rs",
+      "kani_line": "35",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "external"
+      ],
+      "symbols": [
+        "_RNvXNtNtCsci0VKyKEi6N_4core5array5drainINtB2_5DrainNtNtCsf6pq3Kfi9zU_10aspis_core5field4QM31ENtNtNtB6_3ops4drop4Drop4dropCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": {
+        "name": "drop",
+        "start": 35,
+        "end": 38,
+        "signature": "fn drop(&mut self) ",
+        "body": "{\n        // SAFETY: By the type invariant, we're allowed to drop all these.\n        unsafe { drop_in_place(self.0.as_mut_slice()) }\n    }",
+        "context": [
+          "impl<T> Drop for Drain<'_, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "drop",
+        "start": 93,
+        "end": 107,
+        "signature": "fn drop(&mut self) ",
+        "body": "{\n        if !T::IS_ZST {\n            // SAFETY: we cant read more than N elements\n            let slice = unsafe {\n                from_raw_parts_mut::<[T]>(\n                    self.ptr.as_ptr(),\n                    // SAFETY: `start <= end`\n                    self.end.offset_from_unsigned(self.ptr.as_ptr()),\n                )\n            };\n\n            // SAFETY: By the type invariant, we're allowed to drop all these. (we own it, after all)\n            unsafe { drop_in_place(slice) }\n        }\n    }",
+        "context": [
+          "impl<T: [const] Destruct, const N: usize, F> const Drop for Drain<'_, '_, T, N, F> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:325:69: 325:75}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazys0_0EB1o_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:320:62: 320:68}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazys_0EB1o_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:319:30: 319:36}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazy0E0B1q_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:320:62: 320:68}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazys_0E0B1q_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:319:30: 319:36}>",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "403",
+      "status": "DIFFERENT",
+      "classification": "ordinary standard-library source item",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB3_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazy0EB1o_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Strict source token identity not established; deployed credit withheld."
+    },
+    {
+      "name": "std::ops::try_trait::NeverShortCircuit::<u64>::wrap_mut_1::<usize, {closure@../v244/deployed_poseidon_kani16.rs:325:69: 325:75}>::{closure#0}",
+      "source": "core/src/ops/try_trait.rs",
+      "kani_line": "406",
+      "status": "DIFFERENT",
+      "classification": "V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed",
+      "groups": [
+        "internal"
+      ],
+      "symbols": [
+        "_RNCINvMNtNtCsci0VKyKEi6N_4core3ops9try_traitINtB5_17NeverShortCircuityE10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazys0_0E0B1q_"
+      ],
+      "kani_item": {
+        "name": "wrap_mut_1",
+        "start": 403,
+        "end": 407,
+        "signature": "fn wrap_mut_1<A>(\n        mut f: impl FnMut(A) -> T,\n    ) -> impl FnMut(A) -> NeverShortCircuit<T> ",
+        "body": "{\n        move |a| NeverShortCircuit(f(a))\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "wrap_mut_1",
+        "start": 427,
+        "end": 432,
+        "signature": "fn wrap_mut_1<A, F>(f: F) -> Wrapped<T, A, F>\n    where\n        F: [const] FnMut(A) -> T,\n    ",
+        "body": "{\n        Wrapped { f, p: PhantomData }\n    }",
+        "context": [
+          "impl<T> NeverShortCircuit<T> "
+        ],
+        "macros": []
+      },
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    },
+    {
+      "name": "<std::ops::Range<usize> as std::clone::Clone>::clone",
+      "source": "core/src/ops/range.rs",
+      "kani_line": "80",
+      "status": "COMPILER-GENERATED / UNRESOLVED",
+      "classification": "V370 compiler-cohort item (owner D381/D386); source body not established",
+      "groups": [
+        "K73946",
+        "K73948"
+      ],
+      "symbols": [
+        "_RNvXsL_NtNtCsci0VKyKEi6N_4core3ops5rangeINtB5_5RangejENtNtB9_5clone5Clone5cloneCs602rsP8SHUw_20pv_b3p6_reference227"
+      ],
+      "kani_item": null,
+      "deployed_item": null,
+      "note": "Generated source template is not its instantiated MIR; compiler-cohort item under V370, owner D381/D386."
+    }
+  ],
+  "intrinsic_items": [
+    {
+      "name": "core::intrinsics::abort",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 368,
+        "declaration": "fn abort() -> !;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 369,
+        "declaration": "fn abort() -> !;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::add_with_overflow",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1862,
+        "declaration": "fn add_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1867,
+        "declaration": "fn add_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::aggregate_raw_ptr",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2904,
+        "declaration": "fn aggregate_raw_ptr<P: bounds::BuiltinDeref, D, M>(data: D, meta: M) -> P\nwhere\n    <P as bounds::BuiltinDeref>::Pointee: ptr::Pointee<Metadata = M>;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2908,
+        "declaration": "fn aggregate_raw_ptr<P: bounds::BuiltinDeref, D, M>(data: D, meta: M) -> P\nwhere\n    <P as bounds::BuiltinDeref>::Pointee: ptr::Pointee<Metadata = M>;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::arith_offset",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 911,
+        "declaration": "fn arith_offset<T>(dst: *const T, offset: isize) -> *const T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 912,
+        "declaration": "fn arith_offset<T>(dst: *const T, offset: isize) -> *const T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::assert_inhabited",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 500,
+        "declaration": "fn assert_inhabited<T>();",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 501,
+        "declaration": "fn assert_inhabited<T>();",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::caller_location",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 534,
+        "declaration": "fn caller_location() -> &'static crate::panic::Location<'static>;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 535,
+        "declaration": "fn caller_location() -> &'static crate::panic::Location<'static>;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::const_eval_select",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2378,
+        "declaration": "fn const_eval_select<ARG: Tuple, F, G, RET>(\n    _arg: ARG,\n    _called_in_const: F,\n    _called_at_rt: G,\n) -> RET\nwhere\n    G: FnOnce<ARG, Output = RET>,\n    F: const FnOnce<ARG, Output = RET>;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2383,
+        "declaration": "fn const_eval_select<ARG: Tuple, F, G, RET>(\n    _arg: ARG,\n    _called_in_const: F,\n    _called_at_rt: G,\n) -> RET\nwhere\n    G: FnOnce<ARG, Output = RET>,\n    F: const FnOnce<ARG, Output = RET>;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::ctpop",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external",
+        "host-mask",
+        "statement-mask"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1659,
+        "declaration": "fn ctpop<T: Copy>(x: T) -> u32;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1664,
+        "declaration": "fn ctpop<T: Copy>(x: T) -> u32;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::cttz",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "host-mask",
+        "statement-mask"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1763,
+        "declaration": "fn cttz<T: Copy>(x: T) -> u32;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1768,
+        "declaration": "fn cttz<T: Copy>(x: T) -> u32;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::mul_with_overflow",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1892,
+        "declaration": "fn mul_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1897,
+        "declaration": "fn mul_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::offset",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 892,
+        "declaration": "fn offset<Ptr: bounds::BuiltinDeref, Delta>(dst: Ptr, offset: Delta) -> Ptr;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 893,
+        "declaration": "fn offset<Ptr: bounds::BuiltinDeref, Delta>(dst: Ptr, offset: Delta) -> Ptr;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::ptr_offset_from_unsigned",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2255,
+        "declaration": "fn ptr_offset_from_unsigned<T>(ptr: *const T, base: *const T) -> usize;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2260,
+        "declaration": "fn ptr_offset_from_unsigned<T>(ptr: *const T, base: *const T) -> usize;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::raw_eq",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2295,
+        "declaration": "fn raw_eq<T>(a: &T, b: &T) -> bool;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2300,
+        "declaration": "fn raw_eq<T>(a: &T, b: &T) -> bool;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::read_via_copy",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2183,
+        "declaration": "fn read_via_copy<T>(ptr: *const T) -> T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2188,
+        "declaration": "fn read_via_copy<T>(ptr: *const T) -> T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::sub_with_overflow",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1877,
+        "declaration": "fn sub_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1882,
+        "declaration": "fn sub_with_overflow<T: Copy>(x: T, y: T) -> (T, bool);",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::transmute",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 838,
+        "declaration": "fn transmute<Src, Dst>(src: Src) -> Dst;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 839,
+        "declaration": "fn transmute<Src, Dst>(src: Src) -> Dst;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::transmute_unchecked",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 852,
+        "declaration": "fn transmute_unchecked<Src, Dst>(src: Src) -> Dst;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 853,
+        "declaration": "fn transmute_unchecked<Src, Dst>(src: Src) -> Dst;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::ub_checks",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2598,
+        "declaration": "fn ub_checks() -> bool {\n    cfg!(ub_checks)\n}",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2581,
+        "declaration": "fn ub_checks() -> bool {\n    cfg!(ub_checks)\n}",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::unchecked_add",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal",
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1981,
+        "declaration": "fn unchecked_add<T: Copy>(x: T, y: T) -> T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1986,
+        "declaration": "fn unchecked_add<T: Copy>(x: T, y: T) -> T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::unchecked_sub",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "internal"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 1991,
+        "declaration": "fn unchecked_sub<T: Copy>(x: T, y: T) -> T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 1996,
+        "declaration": "fn unchecked_sub<T: Copy>(x: T, y: T) -> T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::unlikely",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "transition"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 456,
+        "declaration": "fn unlikely(b: bool) -> bool {\n    if b {\n        cold_path();\n        true\n    } else {\n        false\n    }\n}",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 457,
+        "declaration": "fn unlikely(b: bool) -> bool {\n    if b {\n        cold_path();\n        true\n    } else {\n        false\n    }\n}",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::wrapping_add",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "host-mask",
+        "reconstruct",
+        "statement-mask"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2060,
+        "declaration": "fn wrapping_add<T: Copy>(a: T, b: T) -> T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2065,
+        "declaration": "fn wrapping_add<T: Copy>(a: T, b: T) -> T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    },
+    {
+      "name": "core::intrinsics::wrapping_sub",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+      "groups": [
+        "K73946",
+        "K73948",
+        "external",
+        "host-mask",
+        "internal",
+        "reconstruct",
+        "statement-mask"
+      ],
+      "kani": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+        "line": 2074,
+        "declaration": "fn wrapping_sub<T: Copy>(a: T, b: T) -> T;",
+        "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+      },
+      "deployed": {
+        "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+        "line": 2079,
+        "declaration": "fn wrapping_sub<T: Copy>(a: T, b: T) -> T;",
+        "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+      },
+      "declaration_tokens_identical": true
+    }
+  ],
+  "compiler_drop_glue": [
+    {
+      "name": "std::ptr::drop_in_place::<{closure@../v244/host_terminal_kani16.rs:1675:101: 1675:104}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "transition"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@../v244/reference_terminal_kani16.rs:2612:101: 2612:104}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "transition"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:220:30: 220:36}>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<usize>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::array::try_from_trusted_iterator::next<std::ops::try_trait::NeverShortCircuit<[u32; 4]>, std::iter::Map<std::array::drain::Drain<'_, aspis_core::field::QM31>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}}>>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::array::Guard<'_, [u64; 4]>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<[[u32; 4]]>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::iter::Map<std::array::drain::Drain<'_, aspis_core::field::QM31>, {closure@std::ops::try_trait::NeverShortCircuit<[u32; 4]>::wrap_mut_1<aspis_core::field::QM31, fn(aspis_core::field::QM31) -> [u32; 4] {deployed_poseidon16::extension_limbs}>::{closure#0}}>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::array::drain::Drain<'_, aspis_core::field::QM31>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<[aspis_core::field::QM31]>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<[u64]>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::ops::try_trait::NeverShortCircuit<[u64; 4]>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:219:53: 219:61}>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<[[u64; 4]]>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::array::Guard<'_, [u32; 4]>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::array::Guard<'_, u64>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "external"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<[u64]>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<usize>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:320:62: 320:68}>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:319:30: 319:36}>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<std::array::Guard<'_, u64>>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<{closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:325:69: 325:75}>::{closure#0}}>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "internal"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<usize>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "K73946"
+    },
+    {
+      "name": "std::ptr::drop_in_place::<usize>",
+      "source": "core/src/ptr/mod.rs",
+      "classification": "V370 compiler-cohort item",
+      "owner": [
+        "D381",
+        "D386"
+      ],
+      "reason": "rustc replaces recursive placeholder with actual drop glue",
+      "group": "K73948"
+    }
+  ],
+  "differing_source_declaration_names": [
+    "check_language_ub",
+    "deref_mut",
+    "drop",
+    "new",
+    "try_map",
+    "wrap_mut_1"
+  ],
+  "budget_spent_in_this_audit": {
+    "lean": 0,
+    "extraction": 0,
+    "kani": 0,
+    "std_scopes": 0
+  },
+  "endpoint_premise_changes": {
+    "removed": [],
+    "added": [],
+    "weakened": []
+  }
+}
