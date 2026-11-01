@@ -1,0 +1,53 @@
+{
+  "function": "external_local_packed_raw",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "whole_module_verbatim_prefix": true,
+    "item": {
+      "name": "external_local_packed_raw",
+      "start": 217,
+      "end": 262,
+      "signature": "fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] ",
+      "body": "{\n    let input = input.map(extension_limbs);\n    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {\n        core::array::from_fn(|limb| {\n            let a = u64::from(input[0][limb]);\n            let b = u64::from(input[1][limb]);\n            let c = u64::from(input[2][limb]);\n            let d = u64::from(input[3][limb]);\n            match output {\n                0 => 2 * a + 3 * b + c + d,\n                1 => a + 2 * b + 3 * c + d,\n                2 => a + b + 2 * c + 3 * d,\n                3 => 3 * a + b + c + 2 * d,\n                _ => unreachable!(),\n            }\n        })\n    });\n    let mut all_local_limbs_bounded = true;\n    let mut output = 0usize;\n    while output < 4 {\n        let mut limb = 0usize;\n        while limb < 4 {\n            all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;\n            limb += 1;\n        }\n        output += 1;\n    }\n    debug_assert!(all_local_limbs_bounded);\n\n    let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;\n    let packed = [\n        local[0][0] + 5 * bound - local[1][1] + 2 * local[2][2]\n            - local[2][3]\n            - local[3][2]\n            - 2 * local[3][3],\n        local[0][1] + local[1][0] + local[2][2] + 2 * local[2][3] + 2 * local[3][2] + bound\n            - local[3][3],\n        local[0][2] + 2 * bound - local[1][3] + local[2][0] - local[3][1],\n        local[0][3] + local[1][2] + local[2][1] + local[3][0],\n    ];\n    debug_assert!(packed[0] < 8 * bound);\n    debug_assert!(packed[1] < 8 * bound);\n    debug_assert!(packed[2] < 4 * bound);\n    debug_assert!(packed[3] < 4 * bound);\n    packed\n}",
+      "context": [],
+      "macros": []
+    }
+  },
+  "reference": {
+    "path": "tools/pv-b3p6-20261028/v244/reference_poseidon.rs",
+    "sha256": "b1c375ce58fb025e26b3c3427e150ebd27020466394168e17addf5075b136638",
+    "whole_module_verbatim_prefix": true,
+    "exact_model_receipt": "POSEIDON-REFERENCE-D543.json / N79161",
+    "model": "PV_B3P_227.reference_poseidon.external_local_packed_raw"
+  },
+  "wrappers": {
+    "deployed": "access16::raw(s) returns external_local_packed_raw(s) directly",
+    "reference": "access16::raw(s) returns external_local_packed_raw(s) directly",
+    "token_bodies_checked": true
+  },
+  "input_domain": {
+    "symbolic": "q() draws exactly four independent u32 values, nests them as M31/CM31/QM31; qs<4> writes exactly four such elements in ascending order",
+    "coverage": "every raw QM31[4] representation, including noncanonical limbs; no assume, no stubbed input",
+    "carrier": "same Rust field and array types on both sides. Extraction carrier has the same four U32 limbs. No nominal public-input adapter on this gate."
+  },
+  "observation": "all four u64 lanes in order; equality of every lane is equality of the fixed array, no hash/truncation/field reduction",
+  "controls": {
+    "positive": "K79107",
+    "mutation": "K79106",
+    "difference": "XOR one bit of right[0], same original harness names raw_all_words and raw_all_words_wrong, same domain, compiler flags, bounds and KMX patch"
+  },
+  "K3": "no writable statics in the harness, stubs or oracle; no Option<fn> or function-pointer observations",
+  "profile": "explicit RUSTFLAGS opt-level3/debug-assertions=no/overflow-checks=off. Release wrapping semantics on the same verbatim source, not an input restriction. See KANI-DRIVER-OVERFLOW-D547.json.",
+  "source_hashes": {
+    "crates/aspis-statement/src/state_only_poseidon.rs": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "tools/pv-b3p6-20261028/v244/reference_poseidon.rs": "b1c375ce58fb025e26b3c3427e150ebd27020466394168e17addf5075b136638",
+    "tools/pv-b3p6-20261028/v244/equivalence16.rs": "c1b4ef82907f4651becd8fc5bf0f09db2d022be7d84206caae835ce11b8bacdb",
+    "tools/pv-b3p6-20261028/v244/equivalence18.rs": "01887a3287a5f4b7d926634f50fa5c7cc69ca80b4d43300826ced1d13f0e5c4a",
+    "tools/pv-b3p6-20261028/v244/deployed_poseidon_kani16.rs": "c6e930f85a77ef9e0ecd1a4586ae026c7b5db683ef8820f26a133c9e0539f4a5",
+    "tools/pv-b3p6-20261028/v244/reference_poseidon_kani16.rs": "76c5241174e376d660a846476c5de2a3e95ca831b903abc5ef00ff342c63f07d"
+  },
+  "route": "Kani equivalence (P6) with std parity by token identity plus structural per-item arguments (k''')",
+  "retained": "Full source-cone std/D188/matrix/callback closure and V370/D381,D386 compiler preservation. Canonicality for a mathematical nonwrapping field interpretation remains separate; this local comparison is total raw release wrapping.",
+  "status": "pending intended failed control, positive PASS, complete reached std mapping and receipt verification; no credit yet"
+}
