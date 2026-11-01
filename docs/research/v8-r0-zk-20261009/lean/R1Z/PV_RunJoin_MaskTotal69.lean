@@ -4,6 +4,8 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_MaskTotal69
 open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_Range117 PV_RunJoin_MaskFieldTotal69
 
+abbrev Q := aspis_core.field.QM31
+
 theorem selected_values (i : Usize) (hi : i∈selectedIndices) :
     ∃ e,Array.index_usize host_arithmetic.FACTOR_EXPONENTS i=ok e ∧ e.val<27 := by
   simp only [selectedIndices,List.mem_cons,List.not_mem_nil,or_false] at hi
@@ -44,7 +46,7 @@ theorem complete (c1 : Array Q 16#usize) (mask : Array Q 10#usize) (g : Q)
     maskIndices coefficients mask_bound mask_values
   obtain ⟨prepared,hp⟩ := PV_RunJoin_MaskPreparedTotal69.prepare linear
   obtain ⟨shared,hs⟩ := ProverRwP6ArrayRead.read coefficients1
-    aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE (by decide)
+    aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE (by unfold aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE;decide)
   obtain ⟨shared1,hs1⟩ := PV_RunJoin_MaskRangeTotal69.horner coefficients1 prepared hornerIndices shared horner_bound
   obtain ⟨power,hpow⟩ := PV_RunJoin_MaskPreparedTotal69.power explicit_linear
   obtain ⟨factor,hf⟩ := qadd aspis_core.field.QM31.ONE power

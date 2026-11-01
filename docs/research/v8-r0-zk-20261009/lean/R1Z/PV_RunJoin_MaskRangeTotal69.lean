@@ -4,6 +4,8 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_MaskRangeTotal69
 open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_B3_Range117 PV_RunJoin_MaskFieldTotal69
 
+abbrev Q := aspis_core.field.QM31
+
 theorem scatter {n : Usize} (input : Array Q n) (exponents : Array U8 n)
     (indices : List Usize) (coefficients : Coefficients)
     (bound : ∀ i∈indices,i.val<n.val)
@@ -22,7 +24,7 @@ theorem scatter {n : Usize} (input : Array Q n) (exponents : Array U8 n)
     have cast : (UScalar.cast .Usize exponent).val<27 := by scalar_tac
     obtain ⟨next,update,hvalue⟩ := WP.spec_imp_exists
       (Array.update_spec coefficients (UScalar.cast .Usize exponent) value
-        (by simpa only [Array.length,coefficients.property] using cast))
+        (by simpa only [Array.length,coefficients.property,show (27#usize).val=27 from rfl] using cast))
     obtain ⟨out,ho⟩ := ih next
       (fun j hj => bound j (by simp only [List.mem_cons];exact Or.inr hj))
       (fun j hj => values j (by simp only [List.mem_cons];exact Or.inr hj))
@@ -35,7 +37,7 @@ theorem horner (coefficients : Coefficients) (prepared : host_arithmetic.Prepare
   | nil => exact ⟨shared,rfl⟩
   | cons i rest ih =>
     obtain ⟨product,hp⟩ := PV_RunJoin_MaskPreparedTotal69.mul prepared shared
-    obtain ⟨q,hq⟩ := ProverRwP6ArrayRead.read coefficients i (bound i (by simp))
+    obtain ⟨q,hq⟩ := ProverRwP6ArrayRead.read coefficients i (by change i.val<27;exact bound i (by simp))
     obtain ⟨next,hn⟩ := qadd product q
     obtain ⟨out,ho⟩ := ih next (fun j hj => bound j (by simp only [List.mem_cons];exact Or.inr hj))
     exact ⟨out,by simp only [PV_B3_Range117.horner,hp,hq,hn,ho,bind_tc_ok]⟩
