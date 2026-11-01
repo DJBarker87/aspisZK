@@ -21,7 +21,9 @@ theorem tail {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   have hmap : core.result.Result.map_err
       host_semantic.OracleSemanticOracle.evaluate.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
       (.Ok terminal) ()=ok (.Ok terminal) := by
-    change @ExternalFuns.op12 (types base) (opsNative base heap box ops runtime world) _ _ _ _ _ _ _=_
+    change @ExternalFuns.op12 (types base)
+      (PV_RunJoin_WeightInstalled46.selected (PV_RunJoin_NativeResidual62.baseTypes base) heap box
+        (residual base ops runtime world)) _ _ _ _ _ _ _=_
     rw [PV_RunJoin_PreparedMapErr48.field (PV_RunJoin_NativeResidual62.baseTypes base) heap box
       (residual base ops runtime world)]
     rfl
@@ -48,11 +50,14 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F)
     (self : @host_semantic.SemanticOracle (types base)) (point : Array Q 10#usize)
     (claims : Array (Array Q 29#usize) 3#usize)
-    (hc : @host_semantic.point_claims (types base) (opsNative base heap box ops runtime world)
+    (hc : letI : ExternalTypes := types base
+      @host_semantic.point_claims (types base) (opsNative base heap box ops runtime world)
       self.columns point=ok (.Ok claims))
     (terminal : Q)
-    (ht : @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
+    (ht : letI : ExternalTypes := types base
+      @aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public.terminal_qm31
       (types base) ops self.«public» claims point self.challenges=ok (.Ok terminal)) :
+    letI : ExternalTypes := types base
     ∃ out,@host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate
       (types base) (opsNative base heap box ops runtime world) self point=ok (.Ok out) := by
   letI : ExternalTypes := types base
