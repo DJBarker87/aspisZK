@@ -23,11 +23,19 @@ pub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{
  change_key:digest(r,76),change_salt:digest(r,108),recipient_owner:digest(r,140),recipient_salt:digest(r,172),
  recipient_value:long(r,204),record:*r}
 }
+fn canonical_digest(d:Digest)->bool{
+ let mut valid=true;let mut i=0;
+ while i<8{valid &= d[i].0<P;i+=1;}valid
+}
 fn canonical(w:&Wallet)->bool{
  let mut valid=w.asset.0<P;
- for d in [&w.input_key,&w.input_salt,&w.change_key,&w.change_salt,&w.recipient_owner,&w.recipient_salt]{
-  for x in d{valid &= x.0<P;}
- }valid
+ valid &= canonical_digest(w.input_key);
+ valid &= canonical_digest(w.input_salt);
+ valid &= canonical_digest(w.change_key);
+ valid &= canonical_digest(w.change_salt);
+ valid &= canonical_digest(w.recipient_owner);
+ valid &= canonical_digest(w.recipient_salt);
+ valid
 }
 pub fn read(q:&Value)->Result<Wallet>{
  let fd=i32::try_from(crate::public_field(q,"wallet_bytes_fd").as_u64().ok_or_else(||anyhow!("missing wallet FD"))?).map_err(err)?;
