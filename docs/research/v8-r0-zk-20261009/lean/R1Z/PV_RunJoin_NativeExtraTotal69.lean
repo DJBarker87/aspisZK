@@ -9,6 +9,8 @@ theorem arithmetic {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) :
     @PV_RunJoin_ExtraTotal69.Arithmetic (types base) (opsNative base heap box ops runtime world) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops runtime world
   refine ⟨PV_RunJoin_NativeQuarticTotal69.add base heap box ops runtime world,
     PV_RunJoin_NativeQuarticTotal69.mul base heap box ops runtime world,?_⟩
   exact ⟨_,PV_RunJoin_NativeQuarticTotal69.zero_source base heap box ops runtime world⟩
