@@ -37,7 +37,6 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       @PV_RunJoin_PrepareTail48.run (types base) (selected base heap box ops) .S2 hash backend sem
         tr claim gamma inactive kappa (Array.to_slice (amap fromW qSource))
           (Array.to_slice (amap fromW wSource))=ok (.Ok out) := by
-  dsimp only
   obtain ⟨coeff,scp,x,y,weight,tr0,tr1,tr2,claim,gamma,inactive,kappa,ib,q,w,
     hcoeff,hpoint,hx,hy,hclaim,hq,hctor,hi,hib,hmat,hg,hk,htail⟩ :=
     PV_RunJoin_PrepareReach50.complete base heap box ops .S2 hash backend sem out h
