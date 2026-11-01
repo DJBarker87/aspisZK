@@ -1,7 +1,7 @@
 """Actual baseline/draft clients, alternating paired fixture calls in own quiet window."""
 from pathlib import Path
 import hashlib,json,os,statistics,subprocess,time
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029';O=H/'final-gates/timing';O.mkdir(exist_ok=False)
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029';O=H/'final-gates/timing-d543';O.mkdir(exist_ok=False)
 M=H.parent/'QUIET_WINDOW.json';owner='pv-c474-20261029'
 B={'baseline':CONTROL/'artifacts/baseline-devnet_spend','draft':H/'native-target/client/user_client'}
 rows=[]
@@ -47,6 +47,9 @@ for i in range(10):
    assert r.returncode==0 and not r.stderr,(r.returncode,r.stderr)
    v=json.loads(r.stdout);assert v['attempts']==1,(f,side,v['attempts'])
    pair.append(dict(pair=i,fixture=f,side=side,order=order,seconds=v['prove_wall_seconds'],process_wall_seconds=wall,attempts=v['attempts']))
+   # Keep actual completed calls even when the following quiet check rejects
+   # the pair. This never admits a sample rejected by that check.
+   write(O/'calls-before-postcheck.json',dict(accepted_rows=rows,current_pair=pair))
    guard(f'{i}-{f}-{side}-after')
  after=thermal();deltas={k:after[k]-v for k,v in before.items()};assert all(x>=0 for x in deltas.values())
  throttled=any(x>0 for x in deltas.values())
