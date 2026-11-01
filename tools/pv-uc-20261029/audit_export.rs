@@ -1,5 +1,6 @@
 //! Audit-only serialization of every field of the exact RealR1 compiled input.
 use aspis_core::field::M31;
+use aspis_statement::pool_v1::pair_trace::{PoolV1PairTraceVariantV1,PoolV1PairTracePublicOutputsV1};
 use aspis_statement::{pool_v1::*,poseidon2::Digest};
 fn words(out:&mut Vec<u8>,v:&[M31]){out.extend_from_slice(&(v.len() as u64).to_le_bytes());for x in v{out.extend_from_slice(&x.0.to_le_bytes());}}
 fn matrix<const N:usize>(out:&mut Vec<u8>,v:&[Vec<M31>;N]){out.extend_from_slice(&(N as u64).to_le_bytes());for col in v{words(out,col);}}

@@ -6,7 +6,7 @@ F=json.loads((H/'fixture-inputs.json').read_text());control=H.parent/'codex-pv-c
 requests={f:json.loads((control/f/'request.json').read_text()) for f in ['transfer','withdrawal']}
 B={side:H/'native-target/client'/('pv-uc-'+side+'-audit') for side in ['user','fixture']}
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-pins=json.loads((H/'final-gates/audit-build.json').read_text());assert pins['exit']==0 and pins['lock_byte_equal']
+pins=json.loads((H/'final-gates/audit-build-fixed.json').read_text());assert pins['exit']==0 and pins['lock_byte_equal']
 assert all(sha(p)==pins['binaries'][p.name] for p in B.values())
 slots=asyncio.Semaphore(3);active=set();rows={};start=time.monotonic()
 def key(label):
