@@ -21,6 +21,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     @ProverRwP6BodyCandidate.selected (types base) (selected base heap box ops)=
       selected base heap box ops := by
   rw [frame,coefficients]
+  rfl
 #print axioms coefficients
 #print axioms frame
 #print axioms complete

@@ -5,7 +5,6 @@ noncomputable section
 namespace R1Z.PV_RunJoin_SemanticMaterialDomain66
 open Aeneas Aeneas.Std Result ProverRwFull
 open PV_RunJoin_WeightInstalled46 PV_RunJoin_ResultPost41
-open PV_RunJoin_PointPrefix51 (Prefix)
 abbrev Q := ProverRwFull.aspis_core.field.QM31
 
 theorem helper (base : ExternalTypes) (heap : Heap) (box : Box)
