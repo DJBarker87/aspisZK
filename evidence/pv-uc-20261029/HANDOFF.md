@@ -1,10 +1,10 @@
-# D540 continuation checkpoint — live differential, task incomplete
+# D543 continuation — live differential, task incomplete
 
 Only writer. Exact worktree `/Users/dominic/ZK/.worktrees/pv-uc`, branch `codex/pv-uc-20261029`, base `683e01efee`. Read original prompt-pv-uc.txt, pv-common.txt through k3/dup-1'/fmt-1/ae1, root AGENTS, DESIGN.md and current REPORT.md. Never merge, push, repin, edit other checkouts, or access deployment authority keys. Gates are offline except SSH transport. No rows removed, no T field added; privacy target not established.
 
 ## First action: recover N75145, NEVER resubmit it
 
-**N75145 is already running**, detached once on the build host. It executes the full 1,000-pair differential with real optimized prover calls, no stubs. Latest committed snapshot is in `host-checkpoint.json`, `native75145/pending-status.json`, `native75145/output.partial.log`, and `final-gates/differential-snapshot/`. Snapshot at this handoff: **148/1,000 pairs passed**, elapsed ~2,639 s, peak cgroup memory ~1.875 GB, swap 0, no OOM/task-limit events. This is NOT a complete gate pass or final receipt. It can take several more hours. Source proof generation, not compilation, is the expected heavy step. Per-minute progress/resource output is preserved; resource review records continuing legitimate proof generation with unchanged caps.
+**N75145 is already running**, detached once on the build host. It executes the full 1,000-pair differential with real optimized prover calls, no stubs. Latest committed snapshot is in `host-checkpoint.json`, `native75145/pending-status.json`, `native75145/output.partial.log`, and `final-gates/differential-snapshot/`. Snapshot at this handoff: **220/1,000 pairs passed**, elapsed ~4,004 s, peak cgroup memory ~1.875 GB, swap 0, no OOM/task-limit events. This is NOT a complete gate pass or final receipt. It can take several more hours. Source proof generation, not compilation, is the expected heavy step. Per-minute progress/resource output is preserved; resource review records continuing legitimate proof generation with unchanged caps.
 
 Host `dombarker@100.108.41.90`, workspace `/home/dombarker/project-offloads/codex-pv-uc-20261029`. Active process at checkpoint PID 2154731; scope `run-rf852348fd8f142578b00fb9201911ccf.scope`. Query current status; do not rely on PID remaining unchanged. No other own scope may launch until this one is complete and its output/status/resources are reconciled.
 
@@ -47,3 +47,14 @@ Final production Rust source last changed in `11b19c589e` (wallet canonicality);
 5. Final source/artifact audit and SHA binding after final gates; no final closure replay until focused compile/bridge/axiom gates are green. No full regression has run.
 
 Source/endpoint obligations are unchanged: E1/E2, V370/V371, RunJoin, native-I/O/public JSON/hash/format associations, and whole-client L1/L2/L3. All wallet keys, recovery data, nonce ledgers, SBF-generated fixture keypairs and caches needed for continuation retained. No deployment authority access, network/RPC/deployment, cleanup, merge, push or repin. **Rows removed: NONE.**
+
+
+## D543 work in progress (this continuation, no new scope yet)
+
+- Re-read the governing prompts, local-lean rules and root security/proof discipline. Found the historical r1p-common in HEAD at docs/research/100bit-spend-path-20261013/evidence/lead-tools-20261027/r1p-common.txt and read it; /tmp original is absent.
+- N75145 remains the ONLY own live scope. No native/Lean launch, no resubmission. Latest read-only checkpoint: 220 pairs, swap 0, no OOM; preserve the same corpus and collector recovery instructions above.
+- Staged full-entry Types/Funs verbatim in tools/pv-uc-20261029/lean/PVUCEntry. External templates are STILL NOT installed. No claim of full-entry compilation.
+- Prepared PV_UC_RawAudit.lean by namespace-only rename of Stream A's adopted NDP_Audit source, using git show from research; provenance in raw-audit-provenance.json. It is NOT compiled; use only its SOURCE, never another stream's objects. Raw walk must equal collectAxioms, and all top theorem #print axioms lines remain required.
+- Found a concrete fmt-1 obstruction beyond missing extern definitions: wallet.rs line 42 formats /proc/self/fd/{fd}; emission Funs lines 1827–1839 constructs builtin core.fmt arguments, which erase fd to Unit before alloc.fmt.format receives them. The same erasure affects observable JSON printing at Funs 3886–3892. No faithful pure external definition can recover an erased operand. Source/library/emission pins and exact library source retained in formatting-obstruction/. PV_UC_FormattingObstruction.lean is an UNCOMPILED diagnostic no-go proof, not a credited formatting/source law. Do not edit generated bodies, substitute the library, or install arbitrary extern definitions to bypass it.
+- Timing script now targets fresh final-gates/timing-d543 and persists completed calls before the post-call quiet check, so interference cannot erase the observed sample. Still needs quiet host-load inspection BEFORE ADMISSION and continuous before/after guards; never repeat combined-client timing. No timing launch yet.
+- No production Rust/source/artifact change, key access, network/RPC/deployment, merge/push/repin. Native remaining 4, Lean remaining 40. Next scope still N75146; next Lean 75000.
