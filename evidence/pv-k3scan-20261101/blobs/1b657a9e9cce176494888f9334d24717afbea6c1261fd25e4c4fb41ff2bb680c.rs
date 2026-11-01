@@ -1,0 +1,27 @@
+#[path="owned-encoder.rs"] mod owned;
+use aspis_core::{field::{M31,CM31,QM31,P},r0::{CodeField,domain::Point}};
+fn base(seed:u64)->M31 {M31((seed%u64::from(P)) as u32)}
+fn extension(seed:u64)->QM31 {QM31{
+    c0:CM31::new(base(seed),base(seed.wrapping_mul(17).wrapping_add(7))),
+    c1:CM31::new(base(seed.wrapping_mul(31).wrapping_add(11)),base(seed.wrapping_mul(43).wrapping_add(13)))}}
+fn compare<E:CodeField+core::fmt::Debug>(make:fn(u64)->E) {
+    for seed in 0..64u64 {
+        let q:[E;1024]=core::array::from_fn(|i|make(seed.wrapping_mul(101).wrapping_add((i as u64).wrapping_mul(37))));
+        let p=Point{x:make(seed+17),y:make(seed+29)};
+        assert_eq!(aspis_core::r0::encoder::eval_message(&q,p),owned::encoder(&q,p));
+    }
+}
+#[test]
+fn encoder_native_differential() {
+    std::thread::Builder::new().stack_size(32*1024*1024).spawn(||{
+        compare(base);compare(extension);
+        // The first basis write changes ONE to TWO, and influences q[2].
+        let changed=owned::basis_cell([M31::ONE;512],1,0,M31(2));
+        assert_eq!(changed[1],M31(2));
+        let mut q=[M31::ZERO;1024];q[2]=M31::ONE;
+        let p=Point{x:M31(2),y:M31(3)};
+        assert_eq!(aspis_core::r0::encoder::eval_message(&q,p),M31(2));
+        assert_eq!(owned::encoder(&q,p),M31(2));
+        println!("128 dense native/reference comparisons; changed-write and sparse q[2] witnesses passed");
+    }).unwrap().join().unwrap();
+}

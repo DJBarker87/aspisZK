@@ -1,0 +1,141 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "RUSTFLAGS=--cfg kani",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "path_checks::path_borrows",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "1b71b2650f5a71857f45851189b73f1b10dd634c",
+  "source_identity": "post-run read-only input hashes; candidate-snapshot.json identifies the frozen Rust snapshot; source-provenance.json identifies pinned third-party library files. No attribution to a different candidate or deployed ELF.",
+  "exit": "124",
+  "wall": "3:00.34",
+  "peak_rss_kib": "15468",
+  "swap": "0",
+  "print_axioms": "N/A Kani",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source/crates/aspis-r1-cost-probe/src/host_commitment.rs": {
+      "sha256": "6b20632e53254da24e5c542acb93b2f31d959b312ac735807a12beaf2d69ab72",
+      "size": 17748
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/lib.rs": {
+      "sha256": "be5215a78214a837c8337faa875795a628068d0ef9776413026f62621220fa13",
+      "size": 2956
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml": {
+      "sha256": "942ca89257a9ef58c3999ab94edce0134ca3a4f1365de752565fba9c24e4a8c2",
+      "size": 172
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.lock": {
+      "sha256": "f14efac50ec0c39b26c775b18c64847ea9195bc17993ea90aeaecf15f40d3d62",
+      "size": 157
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source/Cargo.lock": {
+      "sha256": "c6e47137f230dcd78e2295c85c81007cc17d58ff25b34729094bac0f733dc73d",
+      "size": 117392
+    }
+  },
+  "dependency_fingerprint": "349745a6f6ef77eee8fcc04532e2a6edffd308c5286893538117416d36bb1e5c",
+  "admissions": {
+    "admission-barrier.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T03:34:17.517125+00:00",
+      "requested_bytes": 0,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 51942260736,
+      "projected_reserved_bytes": 51942260736,
+      "own_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r091a96d614264811bf26ed6689e28702.scope",
+      "own_limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-path-borrows-001/time.log",
+        "timeout",
+        "180",
+        "taskset",
+        "--cpu-list",
+        "0-3",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "CARGO_BUILD_JOBS=4",
+        "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+        "RUSTFLAGS=--cfg kani",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-target",
+        "cargo",
+        "kani",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml",
+        "--lib",
+        "--exact",
+        "--harness",
+        "path_checks::path_borrows",
+        "--solver",
+        "kissat",
+        "--no-assertion-reach-checks",
+        "--output-format",
+        "terse",
+        "-j",
+        "4",
+        "-Z",
+        "unstable-options",
+        "--cbmc-args",
+        "--unwinding-assertions"
+      ]
+    },
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T03:34:17.036181+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 43352326144,
+      "projected_reserved_bytes": 51942260736
+    }
+  },
+  "harness": "path_checks::path_borrows",
+  "expected_phase": "optimized compilation then bounded native library/reference equivalence; no stubs; CPU0-3 mitigates compiler fanout per KANI-CONFIG.md",
+  "peak_rss_caveat": "GNU time raw maximum is retained, but timeout killed descendants before their complete usage was reaped; 15468 KiB is not claimed as exact aggregate CBMC/solver peak RSS. The cgroup was gone when checked, so its historical peak is unavailable."
+}

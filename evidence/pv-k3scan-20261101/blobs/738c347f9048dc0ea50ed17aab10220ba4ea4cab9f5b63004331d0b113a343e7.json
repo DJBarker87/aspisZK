@@ -1,0 +1,19 @@
+{
+  "target": "mask_sort_swap",
+  "command": "cd /home/dombarker/project-offloads/codex-pv-inv-20261027/inv3-kani && systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/time -v -o K03-time.log timeout 180 taskset --cpu-list 0-3 /home/dombarker/.cargo/bin/kani PV_Inv_control.rs --harness mask_sort_swap -j 4 --output-format terse > K03-out.log 2>&1; code=$?; echo $code > K03-exit.txt",
+  "exit": 0,
+  "source_revision": "3247030b013c87e60a81e4e1cbaeed2ba17dcd61",
+  "source_sha256": "79c9fb05888c44d2d0dbea96a59cc492f8a9b06d850c0711f4a6effe1cd4c72a",
+  "wall": "0:00.50",
+  "peak_rss_kib": "125360",
+  "swaps": "0",
+  "axioms": "N/A: Kani",
+  "scope": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "expected_work": "Kani translation and named bounded structural control assertion; no chained field arithmetic",
+  "claim": "control slice only; no whole-function or source arithmetic equivalence"
+}

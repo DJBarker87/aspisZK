@@ -1,0 +1,74 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::gamma_pass_split",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "0719461a638258d93be4192f35e9eaab32fa8d09",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "124",
+  "wall": "3:00.00",
+  "peak_rss_kib": "15452",
+  "swap": "0",
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml": {
+      "sha256": "a7cdaf95ee79e877ce237e502607877aec1e3787d3a8113e189262f4f2b18f54",
+      "size": 325
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/lib.rs": {
+      "sha256": "f8ba238703104950fb596448db1dfcb89e1b2ad9f7ce5c8d38e34642cced9279",
+      "size": 2661
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference.rs": {
+      "sha256": "06c226754006e3d4b30a3d7598242206876ab238f85b6e0e6fafa2e9592dc5ef",
+      "size": 1842
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference_split.rs": {
+      "sha256": "4ff3d0df3d40206f48e5e7cdc65bfe095068d478c605399566066b838757d928",
+      "size": 2576
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/source_fragments.rs": {
+      "sha256": "a5d13fcaf330863eda5a4522ae2c7408396c62e95f03888c9c7edff088071af1",
+      "size": 1052
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.lock": {
+      "sha256": "22672bcb4edb78ba3b293ff6222cea8e69946341ffde19b400bc94dbe989444b",
+      "size": 240
+    }
+  },
+  "dependency_fingerprint": "94ee5174e864556a392d39a289d1f664acbb8c277bcaf5b2be1f12aede131240",
+  "admissions": {},
+  "expected_phase": "Optimized cached build, then complete eight-word division pass versus unrolled owned stage; arbitrary u32[8], no stubs, unwind65 with unwinding assertions enabled."
+}

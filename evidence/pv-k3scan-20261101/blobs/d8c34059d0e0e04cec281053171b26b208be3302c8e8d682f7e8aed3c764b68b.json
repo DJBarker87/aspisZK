@@ -1,0 +1,20 @@
+{
+  "harness": "cursor_slice",
+  "target": "systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/time -v -o /home/dombarker/project-offloads/codex-pv-l2b-20261027/kani-cursor_slice.time timeout 180 taskset --cpu-list 0-3 env PATH=/home/dombarker/.cargo/bin:/usr/bin:/bin 'RUSTFLAGS=-C opt-level=3 -Z mir-opt-level=4 -Z inline-mir=yes' /home/dombarker/.cargo/bin/kani --verbose -Z unstable-options -j 4 --exact --harness cursor_slice --output-format terse /home/dombarker/project-offloads/codex-pv-l2b-20261027/control.rs",
+  "revision": "143889c4e86eac46e5cd025f7040612200fa29f4",
+  "sha256": "24d4c92cc82779c481642edab7a0cb63940b76b2078d431121b1ba0bb74b6475",
+  "print_axioms": "N/A (Kani control projection)",
+  "scope": "standalone no-stub control/indexing; not shipped-function equivalence",
+  "expected": "optimized compilation then named bounded control gate",
+  "wall_client_seconds": 6.928849416784942,
+  "exit": 0,
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "wall": "0:05.76",
+  "peak_RSS_KiB": "247876",
+  "swap": "0"
+}

@@ -1,0 +1,44 @@
+//! Indexed P6 reference matching the retained Post25 sampler traversal.
+use aspis_core::field::{M31,CM31,QM31,WideExact,P};
+pub fn qm31_div_pass(mut rank:[u32;8])->([u32;8],u32) {
+ let mut remainder=0u64;let mut j=8usize;
+ while j>0 {
+  j-=1;
+  let dividend=(remainder<<32u32)|u64::from(rank[j]);
+  rank[j]=(dividend/u64::from(P)) as u32;
+  remainder=dividend%u64::from(P);
+ }
+ (rank,remainder as u32)
+}
+pub fn low_base_p_digits(block:&[u8;32])->([u32;8],u32) {
+ let mut rank=[0u32;8];let mut i=0usize;
+ while i<8 {
+  let start=4*i;
+  rank[i]=u32::from_le_bytes([block[start],block[start+1],block[start+2],block[start+3]]);
+  i+=1;
+ }
+ let mut digits=[0u32;8];let mut i=0usize;
+ while i<8 {
+  let (quotient,digit)=qm31_div_pass(rank);
+  rank=quotient;digits[i]=digit;i+=1;
+ }
+ (digits,rank[0])
+}
+pub fn decode8(digits:[u32;8])->WideExact {
+ WideExact::new(
+  QM31{c0:CM31{a:M31(digits[0]),b:M31(digits[1])},c1:CM31{a:M31(digits[2]),b:M31(digits[3])}},
+  QM31{c0:CM31{a:M31(digits[4]),b:M31(digits[5])},c1:CM31{a:M31(digits[6]),b:M31(digits[7])}})
+}
+pub fn ordinary_sample(block:&[u8;32])->WideExact {decode8(low_base_p_digits(block).0)}
+
+// Exact reverse-iterator arithmetic body from the shipped from_fn closure;
+// make the local quotient's post-state explicit for the focused kernel check.
+pub fn iterator_div_pass(mut quotient: [u32; 8]) -> ([u32; 8], u32) {
+    let mut remainder = 0u64;
+    for limb in quotient.iter_mut().rev() {
+        let dividend = (remainder << 32) | u64::from(*limb);
+        *limb = (dividend / u64::from(P)) as u32;
+        remainder = dividend % u64::from(P);
+    }
+    (quotient, remainder as u32)
+}

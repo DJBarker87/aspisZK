@@ -1,0 +1,86 @@
+{
+  "target": [
+    "timeout",
+    "180",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS=4",
+    "CARGO_NET_OFFLINE=true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL=3",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-target",
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "checks::iterator_back_frame8",
+    "--solver",
+    "kissat",
+    "--no-assertion-reach-checks",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "source_revision": "76497772a84dab8b6af0b6b9f4433fa3c858ff69",
+  "source_identity": "post-run read-only input snapshot; mutable proof inputs need retained per-run snapshots, not attribution to current files. Shipped snapshot is verified against base 09df2340e24cdcc86fe4ef272eed9994562fcda9; see source-identity.json (782 matching tracked files)",
+  "exit": "1",
+  "wall": "0:03.05",
+  "peak_rss_kib": "277872",
+  "swap": "0",
+  "print_axioms": "N/A native P6 equivalence gate; extracted reference Lean law still required",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.toml": {
+      "sha256": "a7cdaf95ee79e877ce237e502607877aec1e3787d3a8113e189262f4f2b18f54",
+      "size": 325
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/lib.rs": {
+      "sha256": "7d06433f6ae9c011df06cb5d19a6bb6087e384cd33fd3d8e5354e5d744fb654e",
+      "size": 3714
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference.rs": {
+      "sha256": "06c226754006e3d4b30a3d7598242206876ab238f85b6e0e6fafa2e9592dc5ef",
+      "size": 1842
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/reference_split.rs": {
+      "sha256": "84a4e69a50659699c9b9f80f16da9d48eb37eebe09298984e52aa9463c35015b",
+      "size": 3501
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/source_fragments.rs": {
+      "sha256": "fcf6f496a99f5e3ad89ce5b0a2ca0ff86d14371507a5951a36838091b0646afd",
+      "size": 1330
+    },
+    "/home/dombarker/project-offloads/codex-pv-cb3-20261026/kani-proof/Cargo.lock": {
+      "sha256": "22672bcb4edb78ba3b293ff6222cea8e69946341ffde19b400bc94dbe989444b",
+      "size": 240
+    }
+  },
+  "dependency_fingerprint": "a8762c4534882a1ce41e75b3eef9e890a89e6c5b4f355a83e39af7193b341f09",
+  "admissions": {
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-26T19:52:24.553881+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 43352326144,
+      "projected_reserved_bytes": 51942260736
+    }
+  },
+  "expected_phase": "Optimized cached build then actual slice IterMut.next_back frame for arbitrary eight-word buffers and arbitrary prefix/last updates; remaining<=8 is the valid-state invariant, not an output premise; unwind65."
+}

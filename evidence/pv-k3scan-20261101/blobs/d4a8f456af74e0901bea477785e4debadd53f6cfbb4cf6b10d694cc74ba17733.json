@@ -1,0 +1,64 @@
+{
+  "source_revision": "9798b4e48ebee06b17d043440b1fa6d5921d76b3",
+  "harness_uncommitted": true,
+  "runs": [
+    {
+      "run": 1,
+      "harness": "zero_nonce_stops_before_os",
+      "unwind": 34,
+      "exit": 0,
+      "wall": "0:05.38",
+      "peak_rss_kib": 298252,
+      "swaps": 0,
+      "result": "pass: 0/470 failed, 20 unreachable",
+      "libc": "0.2.191"
+    },
+    {
+      "run": 2,
+      "harness": "native_success_postconditions",
+      "unwind": 67,
+      "exit": 1,
+      "wall": "0:02.01",
+      "peak_rss_kib": 296408,
+      "swaps": 0,
+      "result": "unsupported dlsym: 1/478 failed, 477 undetermined",
+      "libc": "0.2.191"
+    },
+    {
+      "run": 3,
+      "harness": "native_success_postconditions",
+      "unwind": 67,
+      "exit": 1,
+      "wall": "0:02.70",
+      "peak_rss_kib": 296104,
+      "swaps": 0,
+      "result": "unsupported dlsym: 1/478 failed, 477 undetermined",
+      "libc": "0.2.186"
+    }
+  ],
+  "getrandom": "0.3.4",
+  "zeroize": "1.9.1",
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "optimization": "CARGO_PROFILE_DEV_OPT_LEVEL=3, jobs=4",
+  "print_axioms": "N/A Rust Kani",
+  "stubs": false,
+  "premises_removed": [],
+  "budget": {
+    "allocated": 15,
+    "used": 3,
+    "unused": 12,
+    "reason": "Reachable actual getrandom dlsym unsupported. No unchanged rerun or replacement syscall stub."
+  },
+  "scope": "Literal selected frozen factory only. Guard pass does not establish full native client or E1.",
+  "source_hashes": {
+    "lib.rs": "d1e45574d4b0ecd3decb4fac65514201054d77544a790913c371f34ced734c64",
+    "selected.rs": "003c228e933c6ac4a2fa4658276a4ffc11eb3e5a4c2f323c5c103282d7acc4fc",
+    "Cargo.toml": "7e1c9426f1c6df302cee60c2940319e91819d7928ff17856b30fc198478010a7",
+    "run.sh": "32663b74a944e0a4714e3618b446ab1efd63d7de6334f9907bedd8990bb92a80"
+  }
+}

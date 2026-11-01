@@ -1,0 +1,943 @@
+//! Correlation of relayer finality with the authenticated finalized indexer.
+//!
+//! Signature status is only a liveness hint. A successful journal outcome is
+//! derived from the exact finalized transaction and authenticated Pool
+//! lifecycle effect; a landed execution failure is derived separately from
+//! the exact failed transaction plus the indexer's failed-Pool fact.
+
+use aspis_pool::instruction::{encode_initialization_receipt_v1, encode_transition_receipt_v1};
+use aspis_statement::pool_v1::PoolV1TransitionKind;
+use sha2::{Digest as _, Sha256};
+
+use crate::{
+    finalized_indexer::{
+        FinalizedBlockIngestResultV1, FinalizedPreparedSettlementLifecycleV1,
+        FinalizedTransitionEvidenceV1,
+    },
+    pool_transport::{
+        AuthenticatedCancelledSettlementV1, AuthenticatedInitializationV1,
+        AuthenticatedPreparedSettlementPlanIdentityV1, AuthenticatedPreparedSettlementV1,
+    },
+    relayer::{RelayerPlanV1, RelayerRequestKindV1},
+    relayer_execution_journal::{RelayerFinalizedEvidenceV1, RelayerFinalizedFailureEvidenceV1},
+    rpc_json::{FinalizedTransactionExecutionV1, FinalizedTransactionObservationV1},
+    scan_state::DepositEventIdV1,
+};
+
+pub const RELAYER_EXECUTION_RESULT_DOMAIN_V1: &[u8] =
+    b"aspis:pool-v1:relayer-finalized-execution-quorum-bound:sha256:v1";
+pub const RELAYER_POSTSTATE_DOMAIN_V1: &[u8] =
+    b"aspis:pool-v1:relayer-authenticated-poststate:sha256:v1";
+pub const RELAYER_FAILURE_RESULT_DOMAIN_V1: &[u8] =
+    b"aspis:pool-v1:relayer-finalized-failure-quorum-bound:sha256:v1";
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum RelayerFinalizedEvidenceErrorV1 {
+    ZeroProviderSetDigest,
+    ZeroStatusEvidenceDigest,
+    ZeroBlockRequestBinding,
+    ZeroRootRequestBinding,
+    ExpectedFailedTransaction,
+    MissingFailedIngestEvidence,
+    UnexpectedFailedLifecycleEvidence,
+    MissingLifecycleEvidence,
+    MultipleLifecycleEvidence,
+    WrongLifecycleEvidence,
+    WrongTransitionKind,
+    WrongPreparedPlan,
+    WrongAuthenticatedTransport,
+    CountOverflow,
+}
+
+/// Derive the durable evidence for a transaction that landed in the agreed
+/// finalized block but whose Solana execution failed. This path deliberately
+/// carries no successful Pool poststate: the authenticated indexer must have
+/// ignored at least one failed Pool transaction and must not have emitted any
+/// lifecycle evidence for this exact signature and point.
+pub fn derive_relayer_finalized_failure_evidence_v1(
+    plan: &RelayerPlanV1,
+    observation: FinalizedTransactionObservationV1,
+    result: &FinalizedBlockIngestResultV1,
+    provider_set_digest: [u8; 32],
+    status_evidence_sha256: [u8; 32],
+    block_request_binding_sha256: [u8; 32],
+    root_request_binding_sha256: Option<[u8; 32]>,
+) -> Result<RelayerFinalizedFailureEvidenceV1, RelayerFinalizedEvidenceErrorV1> {
+    validate_quorum_evidence_v1(
+        provider_set_digest,
+        status_evidence_sha256,
+        block_request_binding_sha256,
+        root_request_binding_sha256,
+    )?;
+    if observation.succeeded() {
+        return Err(RelayerFinalizedEvidenceErrorV1::ExpectedFailedTransaction);
+    }
+    if result.ignored_failed_pool_transactions() == 0 {
+        return Err(RelayerFinalizedEvidenceErrorV1::MissingFailedIngestEvidence);
+    }
+    if result_contains_lifecycle_for_observation_v1(result, observation) {
+        return Err(RelayerFinalizedEvidenceErrorV1::UnexpectedFailedLifecycleEvidence);
+    }
+    let ignored_failed_pool_transactions = u64::try_from(result.ignored_failed_pool_transactions())
+        .map_err(|_| RelayerFinalizedEvidenceErrorV1::CountOverflow)?;
+
+    let mut failure = Sha256::new();
+    failure.update(RELAYER_FAILURE_RESULT_DOMAIN_V1);
+    failure.update(plan.request_id);
+    failure.update([request_kind_byte_v1(plan.kind)]);
+    hash_exact_plan_v1(&mut failure, plan)?;
+    failure.update(observation.point().slot().to_le_bytes());
+    failure.update(observation.point().block_hash());
+    failure.update(observation.transaction_signature());
+    failure.update(observation.fee_lamports().to_le_bytes());
+    failure.update(observation.compute_units_consumed().to_le_bytes());
+    failure.update(provider_set_digest);
+    failure.update(status_evidence_sha256);
+    failure.update(block_request_binding_sha256);
+    hash_optional_request_binding_v1(&mut failure, root_request_binding_sha256);
+    failure.update(ignored_failed_pool_transactions.to_le_bytes());
+
+    Ok(RelayerFinalizedFailureEvidenceV1 {
+        point: observation.point(),
+        fee_lamports: observation.fee_lamports(),
+        compute_units_consumed: observation.compute_units_consumed(),
+        failure_evidence_sha256: failure.finalize().into(),
+        provider_set_digest,
+    })
+}
+
+pub fn derive_relayer_finalized_evidence_v1(
+    plan: &RelayerPlanV1,
+    execution: FinalizedTransactionExecutionV1,
+    result: &FinalizedBlockIngestResultV1,
+    expected_instruction_index: u16,
+    provider_set_digest: [u8; 32],
+    status_evidence_sha256: [u8; 32],
+    block_request_binding_sha256: [u8; 32],
+    root_request_binding_sha256: Option<[u8; 32]>,
+) -> Result<RelayerFinalizedEvidenceV1, RelayerFinalizedEvidenceErrorV1> {
+    validate_quorum_evidence_v1(
+        provider_set_digest,
+        status_evidence_sha256,
+        block_request_binding_sha256,
+        root_request_binding_sha256,
+    )?;
+    let mut poststate = Sha256::new();
+    poststate.update(RELAYER_POSTSTATE_DOMAIN_V1);
+    poststate.update(plan.request_id);
+    poststate.update([request_kind_byte_v1(plan.kind)]);
+    poststate.update(execution.point().slot().to_le_bytes());
+    poststate.update(execution.point().block_hash());
+    poststate.update(execution.transaction_signature());
+    hash_exact_plan_v1(&mut poststate, plan)?;
+
+    match plan.kind {
+        RelayerRequestKindV1::Initialize => {
+            let initialization = exactly_one_v1(
+                result
+                    .initializations
+                    .iter()
+                    .filter(|item| event_matches_execution_v1(&item.id, execution)),
+            )?;
+            validate_single_event_id_v1(&initialization.id, execution, expected_instruction_index)?;
+            if plan
+                .instruction
+                .accounts
+                .get(1)
+                .map(|meta| meta.pubkey.to_bytes())
+                != Some(initialization.receipt.pool)
+                || plan
+                    .instruction
+                    .accounts
+                    .get(2)
+                    .map(|meta| meta.pubkey.to_bytes())
+                    != Some(initialization.receipt.root_page_zero)
+                || plan
+                    .instruction
+                    .accounts
+                    .get(4)
+                    .map(|meta| meta.pubkey.to_bytes())
+                    != Some(initialization.receipt.vault_token_account)
+            {
+                return Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence);
+            }
+            hash_initialization_v1(&mut poststate, initialization);
+        }
+        RelayerRequestKindV1::Deposit => {
+            let id = exactly_one_v1(
+                result
+                    .deposit_event_ids
+                    .iter()
+                    .filter(|id| event_matches_execution_v1(id, execution)),
+            )?;
+            validate_single_event_id_v1(id, execution, expected_instruction_index)?;
+            let append = exactly_one_v1(
+                result
+                    .append_evidence
+                    .iter()
+                    .filter(|append| append.event_id == *id),
+            )?;
+            let root = exactly_one_v1(
+                result
+                    .root_evidence
+                    .iter()
+                    .filter(|root| root.event_id == *id),
+            )?;
+            if append.root_sequence != root.root_sequence || append.root != root.root {
+                return Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence);
+            }
+            hash_event_id_v1(&mut poststate, id);
+            poststate.update(append.leaf_index.to_le_bytes());
+            poststate.update(append.root_sequence.to_le_bytes());
+            poststate.update(append.note_commitment);
+            poststate.update(append.root);
+            poststate.update(root.page_number.to_le_bytes());
+            poststate.update(root.page_address);
+            poststate.update(root.snapshot_context_slot.to_le_bytes());
+        }
+        RelayerRequestKindV1::PrepareSettlement => {
+            let prepared = exactly_one_v1(
+                result
+                    .prepared_settlements
+                    .iter()
+                    .filter(|item| event_matches_execution_v1(&item.id, execution)),
+            )?;
+            validate_single_event_id_v1(&prepared.id, execution, expected_instruction_index)?;
+            hash_prepared_v1(&mut poststate, prepared);
+        }
+        RelayerRequestKindV1::CancelPrepared => {
+            let cancelled = exactly_one_v1(
+                result
+                    .cancelled_settlements
+                    .iter()
+                    .filter(|item| event_matches_execution_v1(&item.id, execution)),
+            )?;
+            validate_single_event_id_v1(&cancelled.id, execution, expected_instruction_index)?;
+            require_prepared_identity_v1(
+                plan,
+                cancelled.plan_authority,
+                cancelled.core_plan,
+                cancelled.rollover_shard,
+            )?;
+            hash_cancelled_v1(&mut poststate, cancelled);
+        }
+        RelayerRequestKindV1::PrivateTransfer
+        | RelayerRequestKindV1::Withdrawal
+        | RelayerRequestKindV1::SettlePrepared => {
+            let transition = exactly_one_v1(result.transition_evidence.iter().filter(|item| {
+                item.output_ids
+                    .first()
+                    .is_some_and(|id| event_matches_execution_v1(id, execution))
+            }))?;
+            validate_transition_v1(plan, execution, expected_instruction_index, transition)?;
+            hash_transition_v1(&mut poststate, transition)?;
+        }
+    }
+    let poststate_sha256: [u8; 32] = poststate.finalize().into();
+
+    let mut execution_result = Sha256::new();
+    execution_result.update(RELAYER_EXECUTION_RESULT_DOMAIN_V1);
+    execution_result.update(plan.request_id);
+    execution_result.update(execution.point().slot().to_le_bytes());
+    execution_result.update(execution.point().block_hash());
+    execution_result.update(execution.transaction_signature());
+    execution_result.update(execution.fee_lamports().to_le_bytes());
+    execution_result.update(execution.compute_units_consumed().to_le_bytes());
+    execution_result.update(provider_set_digest);
+    execution_result.update(status_evidence_sha256);
+    execution_result.update(block_request_binding_sha256);
+    hash_optional_request_binding_v1(&mut execution_result, root_request_binding_sha256);
+    execution_result.update(poststate_sha256);
+
+    Ok(RelayerFinalizedEvidenceV1 {
+        point: execution.point(),
+        fee_lamports: execution.fee_lamports(),
+        compute_units_consumed: execution.compute_units_consumed(),
+        execution_result_sha256: execution_result.finalize().into(),
+        poststate_sha256,
+        provider_set_digest,
+    })
+}
+
+fn validate_quorum_evidence_v1(
+    provider_set_digest: [u8; 32],
+    status_evidence_sha256: [u8; 32],
+    block_request_binding_sha256: [u8; 32],
+    root_request_binding_sha256: Option<[u8; 32]>,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    if provider_set_digest == [0u8; 32] {
+        return Err(RelayerFinalizedEvidenceErrorV1::ZeroProviderSetDigest);
+    }
+    if status_evidence_sha256 == [0u8; 32] {
+        return Err(RelayerFinalizedEvidenceErrorV1::ZeroStatusEvidenceDigest);
+    }
+    if block_request_binding_sha256 == [0u8; 32] {
+        return Err(RelayerFinalizedEvidenceErrorV1::ZeroBlockRequestBinding);
+    }
+    if root_request_binding_sha256 == Some([0u8; 32]) {
+        return Err(RelayerFinalizedEvidenceErrorV1::ZeroRootRequestBinding);
+    }
+    Ok(())
+}
+
+fn hash_optional_request_binding_v1(
+    hasher: &mut Sha256,
+    root_request_binding_sha256: Option<[u8; 32]>,
+) {
+    match root_request_binding_sha256 {
+        None => hasher.update([0u8]),
+        Some(root_request_binding_sha256) => {
+            hasher.update([1u8]);
+            hasher.update(root_request_binding_sha256);
+        }
+    }
+}
+
+fn result_contains_lifecycle_for_observation_v1(
+    result: &FinalizedBlockIngestResultV1,
+    observation: FinalizedTransactionObservationV1,
+) -> bool {
+    let matches = |id: &DepositEventIdV1| {
+        id.point() == observation.point()
+            && id.transaction_signature() == observation.transaction_signature()
+    };
+    result.deposit_event_ids().iter().any(matches)
+        || result
+            .transition_evidence()
+            .iter()
+            .flat_map(|transition| &transition.output_ids)
+            .any(matches)
+        || result
+            .initializations()
+            .iter()
+            .any(|value| matches(&value.id))
+        || result
+            .append_evidence()
+            .iter()
+            .any(|value| matches(&value.event_id))
+        || result
+            .prepared_settlements()
+            .iter()
+            .any(|value| matches(&value.id))
+        || result
+            .cancelled_settlements()
+            .iter()
+            .any(|value| matches(&value.id))
+        || result.plan_lifecycle().iter().any(|value| match value {
+            FinalizedPreparedSettlementLifecycleV1::Prepared(value) => matches(&value.id),
+            FinalizedPreparedSettlementLifecycleV1::Settled { id, .. } => matches(id),
+            FinalizedPreparedSettlementLifecycleV1::Cancelled(value) => matches(&value.id),
+        })
+        || result
+            .root_evidence()
+            .iter()
+            .any(|value| matches(&value.event_id))
+}
+
+fn exactly_one_v1<'a, T>(
+    mut values: impl Iterator<Item = &'a T>,
+) -> Result<&'a T, RelayerFinalizedEvidenceErrorV1> {
+    let first = values
+        .next()
+        .ok_or(RelayerFinalizedEvidenceErrorV1::MissingLifecycleEvidence)?;
+    if values.next().is_some() {
+        return Err(RelayerFinalizedEvidenceErrorV1::MultipleLifecycleEvidence);
+    }
+    Ok(first)
+}
+
+fn event_matches_execution_v1(
+    id: &DepositEventIdV1,
+    execution: FinalizedTransactionExecutionV1,
+) -> bool {
+    id.point() == execution.point()
+        && id.transaction_signature() == execution.transaction_signature()
+}
+
+fn request_kind_byte_v1(kind: RelayerRequestKindV1) -> u8 {
+    match kind {
+        RelayerRequestKindV1::Initialize => 0,
+        RelayerRequestKindV1::Deposit => 1,
+        RelayerRequestKindV1::PrepareSettlement => 2,
+        RelayerRequestKindV1::SettlePrepared => 3,
+        RelayerRequestKindV1::CancelPrepared => 4,
+        RelayerRequestKindV1::PrivateTransfer => 5,
+        RelayerRequestKindV1::Withdrawal => 6,
+    }
+}
+
+fn hash_exact_plan_v1(
+    hasher: &mut Sha256,
+    plan: &RelayerPlanV1,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    hasher.update(plan.snapshot.pinned_program_id.as_ref());
+    hasher.update(plan.snapshot.registry_program.as_ref());
+    hasher.update(plan.snapshot.current_root_sequence.to_le_bytes());
+    hasher.update(plan.snapshot.observed_slot.to_le_bytes());
+    hasher.update(plan.snapshot.pool_state_sha256);
+    hasher.update(plan.fee_payer.as_ref());
+    hasher.update(
+        u16::try_from(plan.instruction.accounts.len())
+            .map_err(|_| RelayerFinalizedEvidenceErrorV1::CountOverflow)?
+            .to_le_bytes(),
+    );
+    for account in &plan.instruction.accounts {
+        hasher.update(account.pubkey.as_ref());
+        hasher.update([u8::from(account.is_signer), u8::from(account.is_writable)]);
+    }
+    hasher.update(
+        u32::try_from(plan.instruction.data.len())
+            .map_err(|_| RelayerFinalizedEvidenceErrorV1::CountOverflow)?
+            .to_le_bytes(),
+    );
+    hasher.update(&plan.instruction.data);
+    Ok(())
+}
+
+fn hash_event_id_v1(hasher: &mut Sha256, id: &DepositEventIdV1) {
+    hasher.update(id.point().slot().to_le_bytes());
+    hasher.update(id.point().block_hash());
+    hasher.update(id.transaction_signature());
+    hasher.update(id.instruction_index().to_le_bytes());
+    hasher.update(id.event_index().to_le_bytes());
+}
+
+fn hash_initialization_v1(hasher: &mut Sha256, value: &AuthenticatedInitializationV1) {
+    hash_event_id_v1(hasher, &value.id);
+    let bytes = encode_initialization_receipt_v1(
+        &value.receipt.pool.into(),
+        &value.receipt.root_page_zero.into(),
+        &value.receipt.vault_token_account.into(),
+    );
+    hasher.update(bytes);
+}
+
+fn hash_prepared_v1(hasher: &mut Sha256, value: &AuthenticatedPreparedSettlementV1) {
+    hash_event_id_v1(hasher, &value.id);
+    hasher.update([value.transition_kind as u8]);
+    hasher.update(value.source_root_sequence.to_le_bytes());
+    hasher.update(value.not_before_slot.to_le_bytes());
+    hasher.update(value.expires_at_slot.to_le_bytes());
+    hasher.update(value.plan_authority);
+    hasher.update(value.authorization_receipt);
+    hasher.update(value.verifier_registry);
+    hasher.update(value.verifier_entry);
+    hasher.update(value.verifier_profile);
+    hasher.update(value.verifier_release);
+    hasher.update(value.core_plan);
+    hash_optional_pubkey_v1(hasher, value.rollover_page);
+    hash_optional_pubkey_v1(hasher, value.rollover_shard);
+}
+
+fn hash_cancelled_v1(hasher: &mut Sha256, value: &AuthenticatedCancelledSettlementV1) {
+    hash_event_id_v1(hasher, &value.id);
+    hasher.update(value.plan_authority);
+    hasher.update(value.core_plan);
+    hash_optional_pubkey_v1(hasher, value.rollover_shard);
+}
+
+fn hash_optional_pubkey_v1(hasher: &mut Sha256, value: Option<[u8; 32]>) {
+    match value {
+        Some(value) => {
+            hasher.update([1]);
+            hasher.update(value);
+        }
+        None => hasher.update([0]),
+    }
+}
+
+fn validate_transition_v1(
+    plan: &RelayerPlanV1,
+    execution: FinalizedTransactionExecutionV1,
+    expected_instruction_index: u16,
+    transition: &FinalizedTransitionEvidenceV1,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    let expected_kind = match plan.kind {
+        RelayerRequestKindV1::PrivateTransfer => PoolV1TransitionKind::PrivateTransfer,
+        RelayerRequestKindV1::Withdrawal => PoolV1TransitionKind::Withdrawal,
+        RelayerRequestKindV1::SettlePrepared => {
+            plan.prepared_plan
+                .ok_or(RelayerFinalizedEvidenceErrorV1::WrongPreparedPlan)?
+                .transition_kind
+        }
+        _ => return Err(RelayerFinalizedEvidenceErrorV1::WrongTransitionKind),
+    };
+    if transition.receipt.transition_kind != expected_kind {
+        return Err(RelayerFinalizedEvidenceErrorV1::WrongTransitionKind);
+    }
+    validate_transition_output_ids_v1(
+        execution,
+        expected_instruction_index,
+        expected_kind,
+        &transition.output_ids,
+    )?;
+    let receipt = encode_transition_receipt_v1(&transition.receipt)
+        .map_err(|_| RelayerFinalizedEvidenceErrorV1::WrongAuthenticatedTransport)?;
+    let expected_length = plan
+        .instruction
+        .data
+        .len()
+        .checked_add(receipt.len())
+        .ok_or(RelayerFinalizedEvidenceErrorV1::CountOverflow)?;
+    if transition.authenticated_transport.len() != expected_length
+        || !transition
+            .authenticated_transport
+            .starts_with(&plan.instruction.data)
+        || !transition.authenticated_transport.ends_with(&receipt)
+    {
+        return Err(RelayerFinalizedEvidenceErrorV1::WrongAuthenticatedTransport);
+    }
+    match plan.kind {
+        RelayerRequestKindV1::SettlePrepared => {
+            let settled = transition
+                .settled_plan
+                .ok_or(RelayerFinalizedEvidenceErrorV1::WrongPreparedPlan)?;
+            require_prepared_identity_v1(
+                plan,
+                settled.plan_authority,
+                settled.core_plan,
+                settled.rollover_shard,
+            )?;
+        }
+        _ if transition.settled_plan.is_some() => {
+            return Err(RelayerFinalizedEvidenceErrorV1::WrongPreparedPlan)
+        }
+        _ => {}
+    }
+    Ok(())
+}
+
+fn validate_transition_output_ids_v1(
+    execution: FinalizedTransactionExecutionV1,
+    expected_instruction_index: u16,
+    transition_kind: PoolV1TransitionKind,
+    output_ids: &[DepositEventIdV1],
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    let expected_count = match transition_kind {
+        PoolV1TransitionKind::PrivateTransfer => 2,
+        PoolV1TransitionKind::Withdrawal => 1,
+    };
+    if output_ids.len() != expected_count {
+        return Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence);
+    }
+    for (event_index, id) in output_ids.iter().enumerate() {
+        if !event_matches_execution_v1(id, execution)
+            || id.instruction_index() != expected_instruction_index
+            || usize::from(id.event_index()) != event_index
+        {
+            return Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence);
+        }
+    }
+    Ok(())
+}
+
+fn validate_single_event_id_v1(
+    id: &DepositEventIdV1,
+    execution: FinalizedTransactionExecutionV1,
+    expected_instruction_index: u16,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    if !event_matches_execution_v1(id, execution)
+        || id.instruction_index() != expected_instruction_index
+        || id.event_index() != 0
+    {
+        return Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence);
+    }
+    Ok(())
+}
+
+fn require_prepared_identity_v1(
+    plan: &RelayerPlanV1,
+    plan_authority: [u8; 32],
+    core_plan: [u8; 32],
+    rollover_shard: Option<[u8; 32]>,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    let expected = plan
+        .prepared_plan
+        .ok_or(RelayerFinalizedEvidenceErrorV1::WrongPreparedPlan)?;
+    if expected.plan_authority.to_bytes() != plan_authority
+        || expected.core_plan.to_bytes() != core_plan
+        || expected.rollover_shard.map(|value| value.to_bytes()) != rollover_shard
+    {
+        return Err(RelayerFinalizedEvidenceErrorV1::WrongPreparedPlan);
+    }
+    Ok(())
+}
+
+fn hash_transition_v1(
+    hasher: &mut Sha256,
+    value: &FinalizedTransitionEvidenceV1,
+) -> Result<(), RelayerFinalizedEvidenceErrorV1> {
+    hasher.update(
+        u32::try_from(value.output_ids.len())
+            .map_err(|_| RelayerFinalizedEvidenceErrorV1::CountOverflow)?
+            .to_le_bytes(),
+    );
+    for id in &value.output_ids {
+        hash_event_id_v1(hasher, id);
+    }
+    hasher.update(
+        u32::try_from(value.authenticated_transport.len())
+            .map_err(|_| RelayerFinalizedEvidenceErrorV1::CountOverflow)?
+            .to_le_bytes(),
+    );
+    hasher.update(&value.authenticated_transport);
+    match value.settled_plan {
+        Some(identity) => {
+            hasher.update([1]);
+            hash_prepared_identity_v1(hasher, identity);
+        }
+        None => hasher.update([0]),
+    }
+    Ok(())
+}
+
+fn hash_prepared_identity_v1(
+    hasher: &mut Sha256,
+    identity: AuthenticatedPreparedSettlementPlanIdentityV1,
+) {
+    hasher.update(identity.plan_authority);
+    hasher.update(identity.core_plan);
+    hash_optional_pubkey_v1(hasher, identity.rollover_shard);
+}
+
+#[cfg(test)]
+mod tests {
+    use aspis_core::field::M31;
+    use aspis_pool::{PoolInitializationV1, LEGACY_SPL_TOKEN_PROGRAM_ID};
+    use aspis_statement::pool_v1::{
+        VerifierPolicyV1, POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
+    };
+    use solana_program::pubkey::Pubkey;
+
+    use super::*;
+    use crate::{
+        finalized_indexer::FinalizedBlockIngestResultV1,
+        pool_transport::InitializationReceiptV1,
+        relayer::{prepare_permissionless_relayer_plan_v1, RelayerSnapshotV1},
+        scan_state::{DepositEventIdV1, FinalizedBlockAdvanceV1, FinalizedChainPointV1},
+        transaction_builder::build_initialize_instruction_v1,
+    };
+
+    fn key(seed: u8) -> Pubkey {
+        Pubkey::new_from_array([seed; 32])
+    }
+
+    fn fixture() -> (
+        RelayerPlanV1,
+        FinalizedTransactionExecutionV1,
+        FinalizedBlockIngestResultV1,
+    ) {
+        let program_id = key(1);
+        let payer = key(2);
+        let mint = key(3);
+        let registry_program = key(4);
+        let initialization = PoolInitializationV1 {
+            asset_mint: mint.to_bytes(),
+            token_program: LEGACY_SPL_TOKEN_PROGRAM_ID.to_bytes(),
+            asset_id: M31(9),
+            deployment_domain: [0x31; 32],
+            verifier_policy: VerifierPolicyV1 {
+                flags: POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY,
+                registry_program: registry_program.to_bytes(),
+                registry_authority: [0; 32],
+                policy_binding: [0x33; 32],
+            },
+        };
+        let instruction =
+            build_initialize_instruction_v1(program_id, payer, &initialization).unwrap();
+        let plan = prepare_permissionless_relayer_plan_v1(
+            RelayerSnapshotV1 {
+                pinned_program_id: program_id,
+                registry_program,
+                current_root_sequence: 0,
+                observed_slot: 90,
+                pool_state_sha256: [0x41; 32],
+            },
+            payer,
+            &instruction,
+        )
+        .unwrap();
+        let point = FinalizedChainPointV1::new(100, [0x51; 32]).unwrap();
+        let signature = [0x61; 64];
+        let execution =
+            FinalizedTransactionExecutionV1::test_only_v1(point, signature, 5_000, 88_000);
+        let id = DepositEventIdV1::new(point, signature, 1, 0).unwrap();
+        let result = FinalizedBlockIngestResultV1 {
+            advance: FinalizedBlockAdvanceV1::Advanced,
+            rollback: None,
+            deposit_event_ids: Vec::new(),
+            deposit_outcomes: Vec::new(),
+            transition_outcomes: Vec::new(),
+            transition_evidence: Vec::new(),
+            initializations: vec![AuthenticatedInitializationV1 {
+                id,
+                receipt: InitializationReceiptV1 {
+                    pool: instruction.accounts[1].pubkey.to_bytes(),
+                    root_page_zero: instruction.accounts[2].pubkey.to_bytes(),
+                    vault_token_account: instruction.accounts[4].pubkey.to_bytes(),
+                },
+            }],
+            append_evidence: Vec::new(),
+            prepared_settlements: Vec::new(),
+            cancelled_settlements: Vec::new(),
+            plan_lifecycle: Vec::new(),
+            root_evidence: Vec::new(),
+            ignored_failed_pool_transactions: 0,
+        };
+        (plan, execution, result)
+    }
+
+    #[test]
+    fn finalized_initialization_binds_exact_signature_metadata_and_pool_poststate() {
+        let (plan, execution, result) = fixture();
+        let evidence = derive_relayer_finalized_evidence_v1(
+            &plan, execution, &result, 1, [0x71; 32], [0x72; 32], [0x73; 32], None,
+        )
+        .unwrap();
+        assert_eq!(evidence.point, execution.point());
+        assert_eq!(evidence.fee_lamports, 5_000);
+        assert_eq!(evidence.compute_units_consumed, 88_000);
+        assert_ne!(evidence.execution_result_sha256, [0u8; 32]);
+        assert_ne!(evidence.poststate_sha256, [0u8; 32]);
+
+        let mut wrong = result;
+        wrong.initializations[0].receipt.pool = [0x72; 32];
+        assert_eq!(
+            derive_relayer_finalized_evidence_v1(
+                &plan, execution, &wrong, 1, [0x71; 32], [0x72; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence)
+        );
+
+        let (plan, execution, mut wrong) = fixture();
+        wrong.initializations[0].id =
+            DepositEventIdV1::new(execution.point(), *execution.transaction_signature(), 2, 0)
+                .unwrap();
+        assert_eq!(
+            derive_relayer_finalized_evidence_v1(
+                &plan, execution, &wrong, 1, [0x71; 32], [0x72; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence)
+        );
+    }
+
+    #[test]
+    fn finalized_execution_digest_binds_status_and_canonical_request_presence() {
+        let derive = |provider, status, block, root| {
+            let (plan, execution, result) = fixture();
+            derive_relayer_finalized_evidence_v1(
+                &plan, execution, &result, 1, provider, status, block, root,
+            )
+            .unwrap()
+            .execution_result_sha256
+        };
+        let baseline = derive([0x71; 32], [0x72; 32], [0x73; 32], None);
+        let (plan, execution, result) = fixture();
+        let evidence = derive_relayer_finalized_evidence_v1(
+            &plan, execution, &result, 1, [0x71; 32], [0x72; 32], [0x73; 32], None,
+        )
+        .unwrap();
+        let mut exact_none = Sha256::new();
+        exact_none.update(RELAYER_EXECUTION_RESULT_DOMAIN_V1);
+        exact_none.update(plan.request_id);
+        exact_none.update(execution.point().slot().to_le_bytes());
+        exact_none.update(execution.point().block_hash());
+        exact_none.update(execution.transaction_signature());
+        exact_none.update(execution.fee_lamports().to_le_bytes());
+        exact_none.update(execution.compute_units_consumed().to_le_bytes());
+        exact_none.update([0x71; 32]);
+        exact_none.update([0x72; 32]);
+        exact_none.update([0x73; 32]);
+        exact_none.update([0u8]);
+        exact_none.update(evidence.poststate_sha256);
+        assert_eq!(baseline, <[u8; 32]>::from(exact_none.finalize()));
+
+        assert_ne!(baseline, derive([0x74; 32], [0x72; 32], [0x73; 32], None));
+        assert_ne!(baseline, derive([0x71; 32], [0x75; 32], [0x73; 32], None));
+        assert_ne!(baseline, derive([0x71; 32], [0x72; 32], [0x76; 32], None));
+        assert_ne!(
+            baseline,
+            derive([0x71; 32], [0x72; 32], [0x73; 32], Some([0x77; 32]),)
+        );
+
+        let (plan, execution, result) = fixture();
+        assert_eq!(
+            derive_relayer_finalized_evidence_v1(
+                &plan, execution, &result, 1, [0x71; 32], [0u8; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::ZeroStatusEvidenceDigest)
+        );
+        assert_eq!(
+            derive_relayer_finalized_evidence_v1(
+                &plan, execution, &result, 1, [0x71; 32], [0x72; 32], [0u8; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::ZeroBlockRequestBinding)
+        );
+        assert_eq!(
+            derive_relayer_finalized_evidence_v1(
+                &plan,
+                execution,
+                &result,
+                1,
+                [0x71; 32],
+                [0x72; 32],
+                [0x73; 32],
+                Some([0u8; 32]),
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::ZeroRootRequestBinding)
+        );
+    }
+
+    #[test]
+    fn finalized_failure_digest_binds_plan_execution_quorum_and_failed_ingest() {
+        let failed_fixture = |succeeded, fee_lamports, compute_units_consumed, failed_count| {
+            let (plan, execution, mut result) = fixture();
+            result.initializations.clear();
+            result.ignored_failed_pool_transactions = failed_count;
+            let observation = FinalizedTransactionObservationV1::test_only_v1(
+                execution.point(),
+                *execution.transaction_signature(),
+                succeeded,
+                fee_lamports,
+                compute_units_consumed,
+            );
+            (plan, observation, result)
+        };
+        let (plan, observation, result) = failed_fixture(false, 5_000, 88_000, 1);
+        let evidence = derive_relayer_finalized_failure_evidence_v1(
+            &plan,
+            observation,
+            &result,
+            [0x71; 32],
+            [0x72; 32],
+            [0x73; 32],
+            None,
+        )
+        .unwrap();
+
+        let mut exact = Sha256::new();
+        exact.update(RELAYER_FAILURE_RESULT_DOMAIN_V1);
+        exact.update(plan.request_id);
+        exact.update([request_kind_byte_v1(plan.kind)]);
+        hash_exact_plan_v1(&mut exact, &plan).unwrap();
+        exact.update(observation.point().slot().to_le_bytes());
+        exact.update(observation.point().block_hash());
+        exact.update(observation.transaction_signature());
+        exact.update(observation.fee_lamports().to_le_bytes());
+        exact.update(observation.compute_units_consumed().to_le_bytes());
+        exact.update([0x71; 32]);
+        exact.update([0x72; 32]);
+        exact.update([0x73; 32]);
+        exact.update([0u8]);
+        exact.update(1u64.to_le_bytes());
+        let exact: [u8; 32] = exact.finalize().into();
+        assert_eq!(evidence.failure_evidence_sha256(), &exact);
+        assert_eq!(evidence.point(), observation.point());
+        assert_eq!(evidence.fee_lamports(), 5_000);
+        assert_eq!(evidence.compute_units_consumed(), 88_000);
+
+        let derive = |fee_lamports, compute_units_consumed, failed_count, root| {
+            let (plan, observation, result) =
+                failed_fixture(false, fee_lamports, compute_units_consumed, failed_count);
+            *derive_relayer_finalized_failure_evidence_v1(
+                &plan,
+                observation,
+                &result,
+                [0x71; 32],
+                [0x72; 32],
+                [0x73; 32],
+                root,
+            )
+            .unwrap()
+            .failure_evidence_sha256()
+        };
+        let baseline = *evidence.failure_evidence_sha256();
+        assert_ne!(baseline, derive(5_001, 88_000, 1, None));
+        assert_ne!(baseline, derive(5_000, 88_001, 1, None));
+        assert_ne!(baseline, derive(5_000, 88_000, 2, None));
+        assert_ne!(baseline, derive(5_000, 88_000, 1, Some([0x74; 32])));
+
+        let (plan, succeeded, result) = failed_fixture(true, 5_000, 88_000, 1);
+        assert_eq!(
+            derive_relayer_finalized_failure_evidence_v1(
+                &plan, succeeded, &result, [0x71; 32], [0x72; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::ExpectedFailedTransaction)
+        );
+
+        let (plan, failed, result) = failed_fixture(false, 5_000, 88_000, 0);
+        assert_eq!(
+            derive_relayer_finalized_failure_evidence_v1(
+                &plan, failed, &result, [0x71; 32], [0x72; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::MissingFailedIngestEvidence)
+        );
+
+        let (plan, execution, mut result) = fixture();
+        result.ignored_failed_pool_transactions = 1;
+        let failed = FinalizedTransactionObservationV1::test_only_v1(
+            execution.point(),
+            *execution.transaction_signature(),
+            false,
+            execution.fee_lamports(),
+            execution.compute_units_consumed(),
+        );
+        assert_eq!(
+            derive_relayer_finalized_failure_evidence_v1(
+                &plan, failed, &result, [0x71; 32], [0x72; 32], [0x73; 32], None,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::UnexpectedFailedLifecycleEvidence)
+        );
+    }
+
+    #[test]
+    fn transition_output_ids_bind_every_output_to_one_finalized_instruction() {
+        let (_, execution, _) = fixture();
+        let point = execution.point();
+        let signature = *execution.transaction_signature();
+        let output = |point, signature, instruction_index, event_index| {
+            DepositEventIdV1::new(point, signature, instruction_index, event_index).unwrap()
+        };
+        let canonical = [
+            output(point, signature, 3, 0),
+            output(point, signature, 3, 1),
+        ];
+        assert_eq!(
+            validate_transition_output_ids_v1(
+                execution,
+                3,
+                PoolV1TransitionKind::PrivateTransfer,
+                &canonical,
+            ),
+            Ok(())
+        );
+
+        let wrong_point = FinalizedChainPointV1::new(point.slot() + 1, [0x81; 32]).unwrap();
+        let mutations = [
+            [canonical[0], output(wrong_point, signature, 3, 1)],
+            [canonical[0], output(point, [0x82; 64], 3, 1)],
+            [canonical[0], output(point, signature, 4, 1)],
+            [canonical[0], output(point, signature, 3, 0)],
+        ];
+        for mutated in mutations {
+            assert_eq!(
+                validate_transition_output_ids_v1(
+                    execution,
+                    3,
+                    PoolV1TransitionKind::PrivateTransfer,
+                    &mutated,
+                ),
+                Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence)
+            );
+        }
+        assert_eq!(
+            validate_transition_output_ids_v1(
+                execution,
+                3,
+                PoolV1TransitionKind::Withdrawal,
+                &canonical,
+            ),
+            Err(RelayerFinalizedEvidenceErrorV1::WrongLifecycleEvidence)
+        );
+    }
+}

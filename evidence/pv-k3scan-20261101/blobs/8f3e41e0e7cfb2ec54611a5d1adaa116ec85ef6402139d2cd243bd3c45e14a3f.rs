@@ -1,0 +1,46 @@
+#![cfg_attr(kani, feature(allocator_api))]
+#[cfg(kani)]
+extern crate alloc;
+#[cfg(kani)]
+#[path="kmx/KMX_stubs.rs"]
+mod KMX_stubs;
+pub mod reference133;
+#[cfg(kani)]
+mod proofs {
+    #[kani::proof]
+    #[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
+    #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
+    #[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
+    #[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
+    #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
+    #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
+    #[kani::unwind(1026)]
+    fn shipped_equals_reference133_pointwise() {
+        let shipped = aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1();
+        let expected = super::reference133::active_rows();
+        match shipped {
+            Ok(rows) => { assert_eq!(rows.len(), 214); let index: u8 = kani::any(); kani::assume(index < 214); let i = usize::from(index); assert_eq!(rows[i], expected[i]); }
+            Err(_) => assert!(false, "reference success disagrees with shipped error"),
+        }
+    }
+}
+#[test]
+fn finite_native133() {
+ let actual=aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_rows_v1().unwrap();
+ assert_eq!(actual.as_slice(), reference133::active_rows().as_slice());
+}
+
+pub mod reference226;
+#[cfg(any(kani, test))]
+mod native226;
+pub mod owned133;
+#[test]
+fn finite_native133_structural() {
+ use aspis_statement::pool_v1::{pair_tree_hiding as t,pair_forest_hiding as f};
+ assert_eq!(owned133::tree::build_pool_v1_pair_copy_row_schedule_v1(),t::build_pool_v1_pair_copy_row_schedule_v1());
+ assert_eq!(owned133::forest::build_pool_v1_pair_forest_copy_row_schedule_v1(),f::build_pool_v1_pair_forest_copy_row_schedule_v1());
+ let original=f::pool_v1_pair_forest_copy_active_rows_v1();
+ let copied=owned133::forest::pool_v1_pair_forest_copy_active_rows_v1();
+ assert_eq!(original,copied);
+ assert_eq!(copied.unwrap().as_slice(),reference133::active_rows().as_slice());
+}

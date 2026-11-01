@@ -1,0 +1,262 @@
+//! No stubs. The source modules are imported verbatim from the pinned snapshot.
+#[cfg(kani)]
+#[path = "../source/crates/aspis-r1-cost-probe/src/ct_pole.rs"]
+mod ct_pole;
+#[cfg(kani)]
+#[path = "../source/crates/aspis-r1-cost-probe/src/sampler.rs"]
+mod sampler;
+#[cfg(kani)]
+mod reference;
+#[cfg(kani)]
+mod reference_split;
+#[cfg(kani)]
+mod source_fragments;
+#[cfg(kani)]
+mod reference_p6;
+#[cfg(kani)]
+mod reference_polynomial;
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod checks {
+    use aspis_core::field::{QM31, CM31, M31};
+    fn q(w:[u32;4])->QM31 {
+        QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn wide_flat() {
+        let raw:[u32;8]=kani::any();
+        let x=aspis_core::field::WideExact::new(q([raw[0],raw[1],raw[2],raw[3]]),q([raw[4],raw[5],raw[6],raw[7]]));
+        assert_eq!(x.to_le_bytes(),super::reference_p6::wide_bytes_flat(x));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn boundary_flat28() {
+        let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];
+        for i in 0..28 {p[i]=q(raw[i]);}
+        let a=aspis_core::state_only_sumcheck::state_only_boundary_sum(&p);
+        let b=super::reference_p6::boundary_flat(&p);
+        assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn polynomial_flat28() {
+        let raw:[[u32;4];28]=kani::any();let mut p=[QM31::ZERO;28];
+        for i in 0..28 {p[i]=q(raw[i]);}
+        let challenge=q(kani::any());
+        let a=aspis_core::state_only_sumcheck::evaluate_state_only_polynomial(&p,challenge);
+        let b=super::reference_polynomial::evaluate(&p,challenge);
+        assert_eq!(a.c0.a.0,b.c0.a.0);assert_eq!(a.c0.b.0,b.c0.b.0);
+        assert_eq!(a.c1.a.0,b.c1.a.0);assert_eq!(a.c1.b.0,b.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn sum_products3_flat() {
+        let a:[[u32;4];3]=kani::any();let b:[[u32;4];3]=kani::any();
+        let left=[q(a[0]),q(a[1]),q(a[2])];let right=[q(b[0]),q(b[1]),q(b[2])];
+        let x=aspis_core::field::qm31_sum_products3(left,right);
+        let y=super::reference_polynomial::sum_products3(left,right);
+        assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+        assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
+    }
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn helper_sum1024() {
+        let raw:[[u32;4];1024]=kani::any();let mut h1=[QM31::ZERO;1024];
+        for i in 0..1024 {h1[i]=q(raw[i]);}
+        let n:usize=kani::any();kani::assume(n<=1024);
+        let a=aspis_statement::state_only_semantic::state_only_copy_helper_sum(&h1[..n]);
+        let b=super::reference_p6::helper_sum(&h1[..n]);
+        match (a,b) {
+            (None,None)=>{},
+            (Some(x),Some(y))=>{
+                assert_eq!(x.c0.a.0,y.c0.a.0);assert_eq!(x.c0.b.0,y.c0.b.0);
+                assert_eq!(x.c1.a.0,y.c1.a.0);assert_eq!(x.c1.b.0,y.c1.b.0);
+            },
+            _=>assert!(false),
+        }
+    }
+    #[kani::proof]
+    fn pole_equal() {
+        let a=q(kani::any());let b=q(kani::any());
+        assert_eq!(super::ct_pole::equal(a,b),super::reference::equal(a,b));
+    }
+    #[kani::proof]
+    fn pole_step() {
+        let clear:bool=kani::any();let active:bool=kani::any();
+        let chi=q(kani::any());let value=q(kani::any());
+        assert_eq!(super::ct_pole::keep_clear(clear,active,chi,value),
+            clear & !(active & super::reference::equal(chi,value)));
+    }
+    #[kani::proof]
+    #[kani::unwind(4)]
+    fn pole_rows2() {
+        let words:[[[[u32;4];2];2];2]=kani::any();
+        let mut values=[[[QM31::ZERO;2];2];2];
+        for row in 0..2 {for side in 0..2 {for v in 0..2 {values[row][side][v]=q(words[row][side][v]);}}}
+        let masks:[u16;64]=kani::any();let chi=q(kani::any());
+        let n:usize=kani::any();kani::assume(n<=2);
+        assert_eq!(super::ct_pole::all_slots_clear(&values[..n],&masks,chi),
+            super::reference::all_slots_clear(&values[..n],&masks,chi));
+    }
+    #[kani::proof]
+    #[kani::unwind(10)]
+    fn gamma() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::sampler::gamma_sample(&block),super::reference::gamma(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_complete_split() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_words_split() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::source_fragments::words(&block),super::reference_split::words(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_pass_split() {
+        let rank:[u32;8]=kani::any();
+        assert_eq!(super::source_fragments::pass(rank),super::reference_split::pass(rank));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_carry_split() {
+        let digits:[u32;8]=kani::any();let add:u32=kani::any();
+        assert_eq!(super::source_fragments::carry(digits,add),super::reference_split::carry(digits,add));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_split() {
+        let block:[u8;32]=kani::any();
+        assert_eq!(super::sampler::gamma_sample(&block),super::reference_split::gamma(block));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_word_split() {
+        let word:u32=kani::any();let prior:u64=kani::any();
+        assert_eq!(super::source_fragments::word_step(word,prior),super::reference_split::word_step(word,prior));
+    }
+
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn iterator_back_frame8() {
+        let data:[u32;8]=kani::any();let updates:[u32;8]=kani::any();
+        let remaining:usize=kani::any();kani::assume(remaining<=8);
+        let last:u32=kani::any();let mut actual=data;
+        let read;
+        {
+            let mut iter=actual[..remaining].iter_mut();
+            read=iter.next_back().map(|word|{let old=*word;*word=last;old});
+            let rest=iter.into_slice();
+            let n=if remaining==0 {0}else{remaining-1};
+            assert_eq!(rest.len(),n);
+            if remaining>0 {rest.copy_from_slice(&updates[..n]);}
+        }
+        let expected=super::reference_split::back_frame(&data,remaining,&updates,last);
+        assert_eq!(read,expected.0);assert_eq!(actual,expected.1);
+    }
+
+    // The earlier frame gate used copy_from_slice and produced a Kani/native
+    // discrepancy. This checks the same iterator frame with indexed writes,
+    // matching the sampler's scalar mutation instead of introducing memcpy.
+    #[kani::proof]
+    #[kani::unwind(17)]
+    fn iterator_back_frame_indexed() {
+        let data:[u32;8]=kani::any(); let updates:[u32;8]=kani::any();
+        let remaining:usize=kani::any(); kani::assume(remaining<=8);
+        let last:u32=kani::any(); let mut actual=data; let read;
+        {
+            let mut iter=actual[..remaining].iter_mut();
+            read=iter.next_back().map(|word| {let old=*word; *word=last; old});
+            let rest=iter.into_slice();
+            let n=if remaining==0 {0}else{remaining-1};
+            assert_eq!(rest.len(),n);
+            let mut i=0;
+            while i<n { rest[i]=updates[i]; i+=1; }
+        }
+        let expected=super::reference_split::back_frame(&data,remaining,&updates,last);
+        assert_eq!(read,expected.0); assert_eq!(actual,expected.1);
+    }
+
+}
+
+// Resume 6: scalar observations avoid builtin memcmp and expose all state.
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resumed_checks {
+    macro_rules! words_equal { ($a:expr,$b:expr) => {{
+        let a=$a; let b=$b;
+        assert_eq!(a[0],b[0]); assert_eq!(a[1],b[1]);
+        assert_eq!(a[2],b[2]); assert_eq!(a[3],b[3]);
+        assert_eq!(a[4],b[4]); assert_eq!(a[5],b[5]);
+        assert_eq!(a[6],b[6]); assert_eq!(a[7],b[7]);
+    }} }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn words_scalar() {
+        let block:[u8;32]=kani::any();
+        words_equal!(super::source_fragments::words(&block),super::reference_split::words(block));
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn pass_scalar() {
+        let rank:[u32;8]=kani::any();
+        let a=super::source_fragments::pass(rank); let b=super::reference_split::pass(rank);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn carry_scalar() {
+        let digits:[u32;8]=kani::any(); let add:u32=kani::any();
+        let a=super::source_fragments::carry(digits,add); let b=super::reference_split::carry(digits,add);
+        words_equal!(a.0,b.0); assert_eq!(a.1,b.1);
+    }
+    #[kani::proof]
+    #[kani::unwind(65)]
+    fn gamma_scalar() {
+        let block:[u8;32]=kani::any();
+        let a=super::sampler::gamma_sample(&block);let b=super::reference_split::gamma(block);
+        assert_eq!(a.c0().c0.a.0,b.c0().c0.a.0);assert_eq!(a.c0().c0.b.0,b.c0().c0.b.0);
+        assert_eq!(a.c0().c1.a.0,b.c0().c1.a.0);assert_eq!(a.c0().c1.b.0,b.c0().c1.b.0);
+        assert_eq!(a.c1().c0.a.0,b.c1().c0.a.0);assert_eq!(a.c1().c0.b.0,b.c1().c0.b.0);
+        assert_eq!(a.c1().c1.a.0,b.c1().c1.a.0);assert_eq!(a.c1().c1.b.0,b.c1().c1.b.0);
+    }
+}
+
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_pole {
+    use aspis_core::field::{QM31,CM31,M31};
+    fn q(w:[u32;4])->QM31 {QM31{c0:CM31{a:M31(w[0]),b:M31(w[1])},c1:CM31{a:M31(w[2]),b:M31(w[3])}}}
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn canonical1024() {
+        let mut values=[[[QM31::ZERO;2];2];1024];
+        for row in 0..1024 { for side in 0..2 { for slot in 0..2 {values[row][side][slot]=q(kani::any());}}}
+        let masks:[u16;64]=kani::any();let chi=q(kani::any());
+        let n:usize=kani::any();kani::assume(n<=1024);
+        assert_eq!(super::ct_pole::all_slots_clear(&values[..n],&masks,chi),
+          super::reference::all_slots_clear(&values[..n],&masks,chi));
+    }
+}
+
+#[cfg(kani)]
+mod resume6_mask_reference;
+#[cfg(all(kani,not(pv_cb_extract)))]
+mod resume6_mask_gate {
+    #[kani::proof]
+    #[kani::unwind(1026)]
+    fn mask_source() {
+        let a=aspis_statement::pool_v1::pair_forest_hiding::pool_v1_pair_forest_copy_active_row_masks_v1();
+        let b=super::resume6_mask_reference::masks();
+        match (a,b) {
+            (Ok(a),Ok(b))=>{let mut i=0;while i<64 {assert_eq!(a[i],b[i]);i+=1;}},
+            (Err(a),Err(b))=>assert_eq!(a,b),
+            _=>assert!(false),
+        }
+    }
+}

@@ -1,0 +1,12 @@
+//! Extraction entrypoints only. These call unchanged native trait methods.
+use aspis_core::{field::WideExact, r0::scalar::CodeField};
+pub fn wide_neg(x: WideExact) -> WideExact { <WideExact as CodeField>::neg(x) }
+pub fn wide_inv(x: WideExact) -> Option<WideExact> { <WideExact as CodeField>::try_inv(x) }
+pub fn vec_default<T>() -> Vec<T> { Vec::default() }
+pub fn vec_is_empty<T>(v: &Vec<T>) -> bool { v.is_empty() }
+pub fn vec_pop<T>(mut v: Vec<T>) -> (Option<T>, Vec<T>) { let x=v.pop(); (x,v) }
+pub fn vec_array<T,const N:usize>(v: Vec<T>) -> Result<[T;N],Vec<T>> { v.try_into() }
+
+pub fn compress(tag: aspis_core::field::M31, values: &[aspis_core::field::M31], lambda: aspis_core::field::QM31) -> aspis_core::field::QM31 {
+    aspis_statement::logup::compress_tagged_tuple(tag, values, lambda)
+}

@@ -1,0 +1,159 @@
+{
+  "target": [
+    "timeout",
+    "120",
+    "env",
+    "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+    "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+    "RUSTFLAGS=--cfg pv_cb_extract",
+    "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/charon-target",
+    "/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/charon",
+    "cargo",
+    "--preset",
+    "aeneas",
+    "--hide-allocator",
+    "--mir",
+    "optimized",
+    "--rustc-arg=--cfg=kani",
+    "--rustc-arg=--cfg=pv_cb_extract",
+    "--sysroot",
+    "default",
+    "--start-from",
+    "pv_cblib_source::sha_core_new_owned",
+    "--include",
+    "pv_cblib_source::sha_core_new_owned",
+    "--dest-file",
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/PV_CBL_CoreNewOwned.llbc",
+    "--",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source-proof/Cargo.toml",
+    "--release",
+    "--offline",
+    "--lib",
+    "--jobs",
+    "4"
+  ],
+  "source_revision": "e2e89dd49cddc49f707aa607859ef325f5b38a2e",
+  "source_identity": "post-run read-only input hashes; candidate-snapshot.json identifies the frozen Rust snapshot; source-provenance.json identifies pinned third-party library files. No attribution to a different candidate or deployed ELF.",
+  "exit": "0",
+  "wall": "0:00.57",
+  "peak_rss_kib": "199760",
+  "swap": "0",
+  "print_axioms": "N/A extraction",
+  "attempt_charged": true,
+  "limits": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "inputs": {
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source-proof/lib.rs": {
+      "sha256": "579f687984a30e96ce1cbfe8c2d0009f5a3aae074f5343c3b1ec049faea9e590",
+      "size": 16354
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source-proof/Cargo.toml": {
+      "sha256": "61ed8ff03f5a6af74d430ebc2b4b9f225158b0db54091f86dcc79c2c2761c4de",
+      "size": 288
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source/crates/aspis-r1-cost-probe/src/host_commitment.rs": {
+      "sha256": "dec7a9f189415faa22a251fc17ee05901bfb51f4991c253a1725363f8538cf53",
+      "size": 24101
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source/crates/aspis-core/src/field.rs": {
+      "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+      "size": 123034
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source/crates/aspis-core/src/r0/mod.rs": {
+      "sha256": "709f1d0d9be9d3ee74e2b63e13065f5a91c878ba77ed2d2e97a414fbbc646aca",
+      "size": 1830
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/lib.rs": {
+      "sha256": "f849b74d7de16ee607ee15e08cd642333ab067e8f8f9b5309112d60caa908e6b",
+      "size": 8544
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/kani-proof/Cargo.toml": {
+      "sha256": "942ca89257a9ef58c3999ab94edce0134ca3a4f1365de752565fba9c24e4a8c2",
+      "size": 172
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source-proof/Cargo.lock": {
+      "sha256": "53b7a7a6d60d94b681933de795d7a9533b3a95d9a894a582e56cdb64fe46dc64",
+      "size": 2492
+    },
+    "/home/dombarker/project-offloads/codex-pv-cblib-20261027/PV_CBL_CoreNewOwned.llbc": {
+      "sha256": "8433e6ae0aeca85fcd61d51ab927a6e25539702e6a1210d26523feea1767ce09",
+      "size": 35644
+    }
+  },
+  "dependency_fingerprint": "da527ef5209cb5b1aba39055ce89a00d620a6d3530c1f78c61409898fed01b05",
+  "admissions": {
+    "admission-barrier.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T10:06:42.183052+00:00",
+      "requested_bytes": 0,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 51405389824,
+      "projected_reserved_bytes": 51405389824,
+      "own_cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r3fbbe9ccceff42a0a1b2d47ce9443642.scope",
+      "own_limits": {
+        "memory.high": "6442450944",
+        "memory.max": "8589934592",
+        "memory.swap.max": "0",
+        "pids.max": "64"
+      },
+      "command": [
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/charon-source-core-new-owned-opt-resume8-01/time.log",
+        "timeout",
+        "120",
+        "env",
+        "PATH=/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin",
+        "RUSTUP_TOOLCHAIN=nightly-2026-06-01",
+        "RUSTFLAGS=--cfg pv_cb_extract",
+        "CARGO_TARGET_DIR=/home/dombarker/project-offloads/codex-pv-cblib-20261027/charon-target",
+        "/home/dombarker/project-offloads/codex-pv-cb-20261026/pinned-tools/charon",
+        "cargo",
+        "--preset",
+        "aeneas",
+        "--hide-allocator",
+        "--mir",
+        "optimized",
+        "--rustc-arg=--cfg=kani",
+        "--rustc-arg=--cfg=pv_cb_extract",
+        "--sysroot",
+        "default",
+        "--start-from",
+        "pv_cblib_source::sha_core_new_owned",
+        "--include",
+        "pv_cblib_source::sha_core_new_owned",
+        "--dest-file",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/PV_CBL_CoreNewOwned.llbc",
+        "--",
+        "--manifest-path",
+        "/home/dombarker/project-offloads/codex-pv-cblib-20261027/source-proof/Cargo.toml",
+        "--release",
+        "--offline",
+        "--lib",
+        "--jobs",
+        "4"
+      ]
+    },
+    "admission-before.json": {
+      "schema": "ProverRwNativeEntropy-reservation-v1",
+      "utc": "2026-10-27T10:06:41.564865+00:00",
+      "requested_bytes": 8589934592,
+      "safe_limit_bytes": 59055800320,
+      "scanner_sha256": "a5943cb407b28f4807cd20986d37b31ecd5eae103781a07dc7e9affbb144afd2",
+      "print_axioms": "N/A: read-only resource gate",
+      "allowed": true,
+      "bounded_reserved_bytes": 42815455232,
+      "projected_reserved_bytes": 51405389824
+    }
+  },
+  "expected_phase": "optimized compilation / selected MIR extraction"
+}

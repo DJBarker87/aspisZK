@@ -1,0 +1,19 @@
+{
+  "target": "guarded_pivot",
+  "command": "cd /home/dombarker/project-offloads/codex-pv-inv-20261027 && systemd-run --user --scope --quiet -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 /usr/bin/time -v -o K03-time.log timeout 180 taskset --cpu-list 0-3 /home/dombarker/.cargo/bin/kani PV_Inv_control.rs --harness guarded_pivot -j 4 --output-format terse > K03-out.log 2>&1; code=$?; echo $code > K03-exit.txt",
+  "exit": 0,
+  "source_revision": "6f7c3c404455ecd44479e5ba4a64dc138650067c",
+  "source_sha256": "27dff9a04067ad66eb5a59f32b2d7f5a74e23798f9d694819cd2c5aeb78a6a22",
+  "wall": "0:00.12",
+  "peak_rss_kib": "125156",
+  "swaps": "0",
+  "axioms": "N/A: Kani",
+  "scope": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "expected_work": "Kani translation and named bounded structural control assertion; no chained field arithmetic",
+  "claim": "control slice only; no whole-function or source arithmetic equivalence"
+}
