@@ -16,8 +16,8 @@ theorem complete (n : Usize) (x y : Nat → Raw)
 theorem byte : PV_RunJoin_WideImage43.byte=(fun x : U8 => UInt8.ofNat x.val) := by
   funext x
   apply UInt8.toNat_inj.mp
-  simp [PV_RunJoin_WideImage43.byte,PV_RunJoin_WidePoint43.byte,
-    ProverCommitWordBytes47.rawByte,UScalar.val]
+  change x.val=x.val%256
+  exact (Nat.mod_eq_of_lt x.bv.isLt).symm
 
 #print axioms complete
 #print axioms byte
