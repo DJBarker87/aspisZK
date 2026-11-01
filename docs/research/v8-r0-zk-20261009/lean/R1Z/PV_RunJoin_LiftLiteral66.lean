@@ -12,7 +12,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (m : U32) :
     @host_semantic.lift (types base) (selected base heap box ops) m=
       ok (PV_RunJoin_LiftCell63.lifted m) := by
-  rw [PV_RunJoin_LiftCell63.complete]
+  rw [@PV_RunJoin_LiftCell63.complete (types base) (selected base heap box ops) m]
   unfold selected
   rw [PV_B2_F_RawNative.preserved_61,PV_B2_F_RawNative.preserved_66]
   change (do
