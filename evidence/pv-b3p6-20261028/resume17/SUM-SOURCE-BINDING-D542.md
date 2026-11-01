@@ -1,0 +1,11 @@
+# D542 sum_high source association
+
+Evidence class: script-checked structural argument (k' route 3 / own-1), not a machine proof. Exact source, full bodies and hashes are in SUM-SOURCE-BINDING-D542.json; checker is tools/pv-b3p6-20261028/sum_source_d542.py.
+
+The deployed function's entire body matches the checked grammar. The dossier binds every source statement to source_sum_ranges13 and the already compiled total laws range_increment_safe13, range_body_binding13, range_loop_binding13, range_drop_binding13, sum_ranges_binding13, sum_high_link13 and native_sum_high_binding15. The source interpretation is source_sum_high13, so its original total PV_B3P_Link_terminal_sum_high is supplied by sum_high_link13. No Link definition, quantifier, failure result or endpoint premise was changed.
+
+The additional step missing in D540 is explicit: actual slice IntoIterator -> iter -> Iter::new -> next maps the immutable ordered range slice to the same pair list; Range<usize> Clone copies its two usize endpoints; IntoIterator on Range is identity; next -> spec_next returns old start and advances only when start<end; Step::forward_unchecked is safe by range_increment_safe13, including maximum/reversed endpoints. Range/iterator cleanup has no side effects for these exact types. Derived Clone and drop/pointer/compiler lowering are named V370 / D381,D386 obligations. All eight reached ordinary iterator bodies and their deployed captures are checked.
+
+Every ordered valid range slice is covered, including empty/reversed ranges and an out-of-bounds high access that fails at the same local step. All three actual call sites are recorded. The script preserves immutable loan identity, input order, duplicate ranges, the high array read, the exact QM31::add callee and the accumulator store. It introduces no canonicality assumption and no mutable-borrow restoration.
+
+This earns one additional LOCAL body association (sum_high), bringing the previous 5/36 to 6/36. The source-to-machine boundary, full std panic/format observer cone, matrix and callback composition remain open. This does not establish V244 or the runjoin op227 hypothesis. The separate Kani interval results are supporting P6 evidence; their status does not replace this total structural route.
