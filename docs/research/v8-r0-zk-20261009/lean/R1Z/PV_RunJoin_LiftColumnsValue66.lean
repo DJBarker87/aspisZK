@@ -23,6 +23,11 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
     (h : Row) (g d : Array Q 1024#usize) (out : Matrix)
     (success : @host_semantic.lift_columns (types base) (selected base heap box ops) columns h g d=ok out) :
     ∃ p : Nat → Row, out=matrix (tails (filled p (row columns hlen) 26) h g d) := by
+  have clone (a : Array Q 1024#usize) :
+      @alloc.slice.Slice.to_vec Q
+        (@aspis_core.field.QM31.Insts.CoreCloneClone (types base) (selected base heap box ops))
+        (Array.to_slice a)=ok (vec a) := by
+    exact PV_RunJoin_CloneQ66.complete base heap box ops (Array.to_slice a)
   unfold host_semantic.lift_columns at success
   obtain ⟨initial,hinitial,success⟩ := PV_RunJoin_ResultPost.bind_eq_ok success
   let p := PV_RunJoin_LiftArrayTotal66.cells initial
@@ -43,16 +48,16 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_WeightArrayUpdate47.complete _ 26#usize (by decide),
     PV_RunJoin_LiftArray66.set _ 26#usize (by decide)] at success
   simp only [bind_tc_ok,lift] at success
-  rw [PV_RunJoin_CloneQ66.complete base heap box ops] at success
-  simp only [Array.to_slice,bind_tc_ok,massert,show 27#usize<29#usize from by decide,if_true] at success
+  rw [clone g] at success
+  simp only [bind_tc_ok,massert,show 27#usize<29#usize from by decide,if_true] at success
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ 27#usize (by decide)] at success
   simp only [bind_tc_ok,Aeneas.Std.uncurry] at success
   rw [PV_RunJoin_LiftArray66.restore _ 27#usize (by decide),
     PV_RunJoin_WeightArrayUpdate47.complete _ 27#usize (by decide),
     PV_RunJoin_LiftArray66.set _ 27#usize (by decide)] at success
   simp only [bind_tc_ok,lift] at success
-  rw [PV_RunJoin_CloneQ66.complete base heap box ops] at success
-  simp only [Array.to_slice,bind_tc_ok,massert,show 28#usize<29#usize from by decide,if_true] at success
+  rw [clone d] at success
+  simp only [bind_tc_ok,massert,show 28#usize<29#usize from by decide,if_true] at success
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ 28#usize (by decide)] at success
   simp only [bind_tc_ok,Aeneas.Std.uncurry] at success
   rw [PV_RunJoin_LiftArray66.restore _ 28#usize (by decide),
