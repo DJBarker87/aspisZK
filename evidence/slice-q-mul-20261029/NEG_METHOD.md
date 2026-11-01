@@ -35,3 +35,45 @@ L045 proves row totality from the exact batching phase invariant. L052 proves th
 L054 executes the emitted prefix/push/circle/line functions. N004 matches seven prefix cases (lengths 0,1,4,5,22,109,110), six push cases and twelve folds against optimized unchanged native functions, with all-zero/all-one/all-max and mixed fixtures. N005 flips expected bit zero; all three family controls fail. The expanded restoration scan checks exact raw Funs identity for push/prefix/folds, selected mutable-Vec writeback and threaded append output. These are finite translator-fidelity tests, not universal native refinement proofs.
 
 L049/L051/L053/L055/L056/L057 are rejected push adapter proof drafts. L059 replaces their redundant Result-return mapping with direct same-carrier equality and passes. L050 is rejected until L052 unfolds its numerical abbreviation. L061/L062/L064 are failed prefix-step drafts; only L060 supplies the accepted multiplication theorem (all U32 inputs, no canonical assumption). Current NEG_PrefixStep.lean is restored byte-for-byte to L060. The corrected but uncompiled follow-on is in NEG_PrefixStep_pending.lean.txt and earns no credit.
+
+## Candidate evaluation and soundness boundary
+
+1. **Actual-body extraction:** `NEG_EXTRACTION_EVALUATION.json` records all 20
+   exact commands, statuses and unsupported-construct diagnostics. E003/E005/
+   E006/E008/E009 fail because making field ADTs opaque hides variants needed
+   for projection; including the four field type declarations while retaining
+   method opacity fixes that in E012/E013 without altering source bodies.
+   Promoted and elaborated MIR do not fix the failure by themselves.
+   E004/E007/E010/E014/E015 fail copying the mutable iterator borrow while
+   translating the std IntoIterator implementation. E002/E017 externalize
+   that standard-library boundary, but the generated external template's
+   continuation type requires the explicit model repair retained in
+   FunsExternal. No tested flag establishes that repair's native fidelity.
+   E011 encounters an opaque ADT field-list request; E016 encounters an
+   internal translator invariant failure in the full dot/callee graph.
+   E018 and E020 succeed on actual prefix/fold bodies; E019 is an explicitly
+   changed safe reference and is not actual-source evidence.
+   The restoration scan and direct native/emitted differentials both pass;
+   these are necessary fidelity gates, not a proof of the remaining external
+   dictionary/library/native composition.
+2. **Exact product abstraction:** L001 and L024 prove that each actual
+   wrapping U64/U128 primitive value is admitted by the exact modular relation.
+   That relation is a singleton: `assume(reply == a*b)` still gives the solver
+   multiplication. It is sound but not a solver remedy. The broader bounded
+   product oracle is a sound over-approximation on canonical operands, proved
+   by L017/L043/L052; every exact native product is one permitted reply. The
+   Kani property is universal over those replies and has a matched failing
+   control. A source-site/whole-function association remains mandatory.
+3. **One-step decomposition:** K013/K014 and K015/K016 are restored local-log
+   step pairs. K017/K018 and K023/K024 add outer-fold and actual iterator steps.
+   L058 gives product/batch/fold induction, and L063 gives the exact same-run
+   model result/continuation bridge. The missing native-to-emitted source-step
+   and repaired-library association prevents an end-to-end claim. None of
+   these facts licenses replacing the actual program by an unrelated
+   surrogate or using an exact-product assumption in Kani to prove a field
+   multiplication.
+
+All three candidates were evaluated with executable or kernel evidence.
+The actual-body route is the best recovered route, with local-log step
+abstraction supplying supplemental native evidence. **No route is reported as
+completed end to end on either required member.**
