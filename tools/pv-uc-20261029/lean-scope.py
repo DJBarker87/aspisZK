@@ -30,7 +30,8 @@ assert re.fullmatch(r'lean750[0-9]{2}',name) and cmd
 out=E/name
 assert not out.exists(), 'ID directory already exists: never reuse an ID; reconcile it first'
 out.mkdir()
-inputs={source:source_sha}
+runner_sources=['tools/pv-uc-20261029/lean-one.py','tools/pv-uc-20261029/authority-preflight.py']
+inputs={source:source_sha,**{f:hashlib.sha256((R/f).read_bytes()).hexdigest() for f in runner_sources}}
 (out/'source-inputs.json').write_text(json.dumps(dict(revision=source_revision_at_launch,files=inputs,dirty=subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),indent=2)+'\n')
 def ssh(c,retry=True):
  if os.environ.get('PV_C474_QUIET_OWNER')=='1':
@@ -51,6 +52,21 @@ for f in ['admission-before.json','reservation.log']:
 ad=json.loads((out/'admission-before.json').read_text())
 if r.returncode!=0 or ad.get('allowed') is not True:
  print('UNCHARGED REFUSAL',r.returncode,{k:ad.get(k) for k in ['utc','allowed','error','bounded_reserved_bytes','safe_limit_bytes']});sys.exit(78)
+# Correctly stage this job's committed inputs only AFTER recorded admission.
+# Shared runners, sources and authoritative objects are never written here.
+staging=[]
+for local,remote in [(source,D+'/lean/'+module.replace('.','/')+'.lean'),*[(f,D+'/'+Path(f).name) for f in runner_sources]]:
+ assert subprocess.check_output(['git','show','HEAD:'+local],cwd=R)==(R/local).read_bytes()
+ q=ssh('mkdir -p '+shlex.quote(str(Path(remote).parent)));assert q.returncode==0,q.stderr
+ for attempt in range(10):
+  q=subprocess.run(['scp',str(R/local),H+':'+remote],capture_output=True,text=True)
+  if q.returncode!=255:break
+  with (out/'transport.jsonl').open('a') as f:f.write(json.dumps(dict(stage='own committed input staging before Lean launch',exit=255,try_number=attempt+1))+'\n')
+  if attempt<9:time.sleep(60)
+ assert q.returncode==0,q.stderr
+ q=ssh('sha256sum '+shlex.quote(remote));assert q.returncode==0 and q.stdout.split()[0]==inputs[local],q.stdout+q.stderr
+ staging.append(dict(source=local,host_path=remote,sha256=inputs[local]))
+(out/'staged-inputs.json').write_text(json.dumps(staging,indent=2)+'\n')
 run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
 admit=f'python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/reservation-launch.log 2>&1'
 check='python3 -c '+shlex.quote("import json; assert json.load(open("+repr(D+'/'+name+'/admission-launch.json')+"))['allowed'] is True")
