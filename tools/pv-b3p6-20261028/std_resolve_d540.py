@@ -88,7 +88,10 @@ for name in ['STD-PARITY.json','K3-STD-PARITY.json']:
    if rel=='core/src/slice/cmp.rs' and a['name'] in ('ne','not_equal'):r['status']='ABSENT DEPLOYED DECLARATION' # exact SlicePartialEq / PartialEq<[U]> contexts removed; retained default PartialEq::ne requires a distinct binding
    r['same_name_deployed_contexts']=[dict(name=f['name'],start=f['start'],context=f['context']) for f in bb if f['name']==a['name']]
   r['intrinsics']=sorted(set(re.findall(r'\bintrinsics::(\w+)',a['body'])))
-  r['classification']=('V370 compiler-cohort item (owner D381/D386); closure lowering whose enclosing source expression changed' if '::{closure#' in r['name'] and r['status']=='DIFFERENT' else 'ordinary standard-library source item')
+  if re.search(r'::\{closure#\d+\}$',r['name']):
+   r['comparison_unit']='enclosing source function; generated closure requires compiler lowering evidence, not just identical enclosing tokens'
+   r['status']='COMPILER-GENERATED / SOURCE CHANGED' if r['status']=='DIFFERENT' else 'COMPILER-GENERATED / UNRESOLVED'
+  r['classification']=('V370 compiler-cohort item (owner D381/D386); closure lowering; enclosing-source comparison does not establish generated-item parity' if re.search(r'::\{closure#\d+\}$',r['name']) else 'ordinary standard-library source item')
   rows.append(r)
  groups={}
  for g in sorted({r['group'] for r in rows}):
