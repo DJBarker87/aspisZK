@@ -23,7 +23,7 @@ theorem step (base : ExternalTypes) (heap : Heap) (box : Box)
   simp only [bind_tc_ok,massert,h29,if_true]
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ lane h29]
   simp only [bind_tc_ok]
-  dsimp only
+  dsimp only [Aeneas.Std.uncurry]
   rw [PV_RunJoin_LiftArray66.restore _ lane h29,
     PV_RunJoin_WeightArrayUpdate47.complete _ lane h29,
     PV_RunJoin_LiftArray66.step _ _ lane h29]
