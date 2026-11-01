@@ -64,16 +64,23 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
       heap box (residual base ops runtime world) .S2 phase.val.hash phase.val.backend phase.val.sem
       tr claim g inactive k _ _ prepared ht
   obtain ⟨hg',hk',ha'⟩ := PV_RunJoin_ActualScalar60.prepared phase.val prepared hp
+  change fromW (source d.g)=prepared.gamma at hg'
+  change fromW (source d.k)=prepared.kappa at hk'
   have gs : source d.g=toW g := by
     simpa only [ProverRwDictionaryTower.native_w_roundtrip] using congrArg toW (hg'.trans hg)
   have ks : source d.k=toW k := by
     simpa only [ProverRwDictionaryTower.native_w_roundtrip] using congrArg toW (hk'.trans hk)
   have native := PV_RunJoin_NativeBinding63.native base heap box ops runtime world
   let p : PV_RunJoin_NativeActual62.P base heap box (PV_RunJoin_NativeBinding63.remaining base ops runtime world) :=
-    ⟨phase.val,by simpa only [←native] using phase.property⟩
+    ⟨phase.val,by
+      have produced := phase.property
+      rw [native] at produced
+      exact produced⟩
   have domain := PV_RunJoin_CircleCanonical69.data base heap box
     (PV_RunJoin_NativeBinding63.remaining base ops runtime world) p
-  rw [←native] at domain
+  change (∀ i,i<10 → ProverCommitSubfieldOps47.Canonical (d.p i)) ∧
+    ProverCommitSubfieldOps47.Canonical d.x0 ∧ ProverCommitSubfieldOps47.Canonical d.y0 ∧
+    ProverCommitSubfieldOps47.Canonical d.x1 ∧ ProverCommitSubfieldOps47.Canonical d.y1 at domain
   obtain ⟨hpoint,hx0,hy0,hx1,hy1⟩ := domain
   obtain ⟨hgcan,hkcan,hacan,hbcan⟩ :=
     PV_RunJoin_NativeFinishCanonical63.complete base heap box ops runtime world phase.val prepared hp
