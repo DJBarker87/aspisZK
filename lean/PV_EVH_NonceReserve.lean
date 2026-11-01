@@ -11,7 +11,7 @@ variable [ExternalTypes] [ExternalFuns]
 /-- Every non-language callee is explicitly OPEN. This structure supplies
 neither a complete native event trace nor any successful run witness. -/
 structure Callees where
-  op23_OPEN : ∀ (arg0 : std.io.error.Error), P (core.io.error.ErrorKind)
+  op23_OPEN : ∀ (arg0 : std.io.error.Error), PV_EVH_Prefix.P (core.io.error.ErrorKind)
 
 structure Compatible (c : Callees) : Prop where
   op23_fixed : ∀ (arg0 : std.io.error.Error), FinishedView (c.op23_OPEN arg0) (std.io.error.Error.kind arg0)
@@ -19,7 +19,7 @@ structure Compatible (c : Callees) : Prop where
 def run
   (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   (statement_digest : Array Std.U8 32#usize)
-  (mask_nonce : Array Std.U8 32#usize) (fileAnswers : PV_EVH_NonceWorld.Answers) (fallibleCallees : PV_EVH_NonceReserveFallible.Callees) (pathCallees : PV_EVH_NoncePath.Callees) (c : Callees) : P (Bool ×
+  (mask_nonce : Array Std.U8 32#usize) (fileAnswers : PV_EVH_NonceWorld.Answers) (fallibleCallees : PV_EVH_NonceReserveFallible.Callees) (pathCallees : PV_EVH_NoncePath.Callees) (c : Callees) : PV_EVH_Prefix.P (Bool ×
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) := do
   let (r, self1) ← PV_EVH_NonceReserveFallible.run self statement_digest mask_nonce fileAnswers pathCallees fallibleCallees
   match r with

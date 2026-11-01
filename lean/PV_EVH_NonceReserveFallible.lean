@@ -12,13 +12,13 @@ variable [ExternalTypes] [ExternalFuns]
 /-- Every non-language callee is explicitly OPEN. This structure supplies
 neither a complete native event trace nor any successful run witness. -/
 structure Callees where
-  op19_OPEN : P (std.fs.OpenOptions)
-  op20_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Bool), P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
-  op21_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Bool), P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
-  op24_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Std.U32), P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
-  op25_OPEN : ∀ (arg0 : std.path.PathBuf), P (std.path.Path)
-  op23_OPEN : ∀ (arg0 : std.io.error.Error), P (core.io.error.ErrorKind)
-  op2_OPEN : ∀ (arg0 : core.io.error.ErrorKind) (arg1 : core.io.error.ErrorKind), P (Bool)
+  op19_OPEN : PV_EVH_Prefix.P (std.fs.OpenOptions)
+  op20_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Bool), PV_EVH_Prefix.P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
+  op21_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Bool), PV_EVH_Prefix.P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
+  op24_OPEN : ∀ (arg0 : std.fs.OpenOptions) (arg1 : Std.U32), PV_EVH_Prefix.P ((std.fs.OpenOptions × (std.fs.OpenOptions → std.fs.OpenOptions)))
+  op25_OPEN : ∀ (arg0 : std.path.PathBuf), PV_EVH_Prefix.P (std.path.Path)
+  op23_OPEN : ∀ (arg0 : std.io.error.Error), PV_EVH_Prefix.P (core.io.error.ErrorKind)
+  op2_OPEN : ∀ (arg0 : core.io.error.ErrorKind) (arg1 : core.io.error.ErrorKind), PV_EVH_Prefix.P (Bool)
 
 structure Compatible (c : Callees) : Prop where
   op19_fixed : FinishedView (c.op19_OPEN) (std.fs.OpenOptions.new)
@@ -32,7 +32,7 @@ structure Compatible (c : Callees) : Prop where
 def run
   (self : aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)
   (statement_digest : Array Std.U8 32#usize)
-  (mask_nonce : Array Std.U8 32#usize) (fileAnswers : PV_EVH_NonceWorld.Answers) (pathCallees : PV_EVH_NoncePath.Callees) (c : Callees) : P ((core.result.Result Bool std.io.error.Error) ×
+  (mask_nonce : Array Std.U8 32#usize) (fileAnswers : PV_EVH_NonceWorld.Answers) (pathCallees : PV_EVH_NoncePath.Callees) (c : Callees) : PV_EVH_Prefix.P ((core.result.Result Bool std.io.error.Error) ×
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) := do
   let path ← PV_EVH_NoncePath.run { self with last_error := none } mask_nonce pathCallees
   let options ← c.op19_OPEN
