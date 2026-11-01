@@ -24,8 +24,7 @@ pub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{
  recipient_value:long(r,204),record:*r}
 }
 fn canonical_digest(d:Digest)->bool{
- let mut valid=true;let mut i=0;
- while i<8{valid &= d[i].0<P;i+=1;}valid
+ (d[0].0<P) & (d[1].0<P) & (d[2].0<P) & (d[3].0<P) & (d[4].0<P) & (d[5].0<P) & (d[6].0<P) & (d[7].0<P)
 }
 fn canonical(w:&Wallet)->bool{
  let mut valid=w.asset.0<P;
