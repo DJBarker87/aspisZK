@@ -161,8 +161,49 @@ theorem run_fixed
                   ·
                     exact compatible.op126_fixed _ _
                   · rintro ⟨a3, deref_mut_back⟩
-                    try dsimp only
                     apply PV_EVH_Prefix.bind_fixed (r := Aeneas.Std.lift (Array.to_slice_mut a3))
+                      (f := fun (s2, to_slice_mut_back) => do
+                        let a4 ← zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket
+                            U8.Insts.ZeroizeDefaultIsZeroes)) bytes1
+                        let s3 ← core.array.Array.index (core.ops.index.IndexSlice
+                            (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) a4
+                            { «end» := 32#usize }
+                        let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+                        let a5 := to_slice_mut_back s4
+                        let field_mask_entropy1 := deref_mut_back a5
+                        let (a6, deref_mut_back1) ← zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
+                            U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed
+                        let (s5, to_slice_mut_back1) ← Aeneas.Std.lift (Array.to_slice_mut a6)
+                        let s6 ← core.array.Array.index (core.ops.index.IndexSlice
+                            (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) a4
+                            { start := 32#usize }
+                        let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+                        let a7 := to_slice_mut_back1 s7
+                        let leaf_salt_seed1 := deref_mut_back1 a7
+                        let a8 ← zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
+                            U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy1
+                        let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+                        if b then
+                          let a9 ← zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                              (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
+                              U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
+                          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+                          if b1 then
+                            Result.ok (done (core.result.Result.Ok
+                              {
+                              mask_nonce,
+                              field_mask_entropy := field_mask_entropy1,
+                              leaf_salt_seed := leaf_salt_seed1
+                              }))
+                          else
+                            let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
+                            Result.ok (cont retry1)
+                        else
+                          let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
+                          Result.ok (cont retry1))
                     ·
                       exact PV_EVH_Prefix.lift_fixed _
                     · rintro ⟨s2, to_slice_mut_back⟩
@@ -190,8 +231,36 @@ theorem run_fixed
                             ·
                               exact compatible.op126_fixed _ _
                             · rintro ⟨a6, deref_mut_back1⟩
-                              try dsimp only
                               apply PV_EVH_Prefix.bind_fixed (r := Aeneas.Std.lift (Array.to_slice_mut a6))
+                                (f := fun (s5, to_slice_mut_back1) => do
+                                  let s6 ← core.array.Array.index (core.ops.index.IndexSlice
+                                      (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) a4
+                                      { start := 32#usize }
+                                  let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+                                  let a7 := to_slice_mut_back1 s7
+                                  let leaf_salt_seed1 := deref_mut_back1 a7
+                                  let a8 ← zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                                      (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
+                                      U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy1
+                                  let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+                                  if b then
+                                    let a9 ← zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                                        (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
+                                        U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1
+                                    let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+                                    if b1 then
+                                      Result.ok (done (core.result.Result.Ok
+                                        {
+                                        mask_nonce,
+                                        field_mask_entropy := field_mask_entropy1,
+                                        leaf_salt_seed := leaf_salt_seed1
+                                        }))
+                                    else
+                                      let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
+                                      Result.ok (cont retry1)
+                                  else
+                                    let retry1 ← Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)
+                                    Result.ok (cont retry1))
                               ·
                                 exact PV_EVH_Prefix.lift_fixed _
                               · rintro ⟨s5, to_slice_mut_back1⟩

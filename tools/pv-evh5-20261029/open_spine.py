@@ -160,6 +160,8 @@ def proof(x,n=2,lets=()):
   return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
+  if entropy and x.expr.kind=='call' and 'Array.to_slice_mut' in x.expr.expr:
+   return pad+'apply PV_EVH_Prefix.bind_fixed (r := '+emit(x.expr,world=False).strip()+')\n'+pad+'  (f := fun '+v+' => do\n'+emit(x.next,n+4,world=False)+')\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
   return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed'+((' (r := '+emit(x.expr,world=False).strip().replace('\n',' ')+')') if entropy and x.expr.kind=='call' and x.expr.expr.startswith('Aeneas.Std.lift') else '')+'\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
  if x.kind=='if':
   normalize=('try dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
