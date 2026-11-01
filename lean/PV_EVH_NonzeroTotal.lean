@@ -28,7 +28,9 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
       change PV_EVH_Prefix.bind (PV_EVH_NonzeroStep.run bytes combined i {})
         (fun cf => match cf with
           | .done a => PV_EVH_Prefix.lift (.ok a)
-          | .cont state => PV_EVH_NonzeroFlow.loop fuel bytes state.1 state.2) w = _
+          | .cont next => PV_EVH_PrefixLoop.loop
+              (fun (state : U8 × Usize) => PV_EVH_NonzeroStep.run bytes state.1 state.2 {})
+              fuel next) w = _
       rw [stopStep]
       rfl
   | succ remaining ih =>
