@@ -55,6 +55,7 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
       heap box (residual base ops runtime world) .S2 phase.val.hash phase.val.backend phase.val.sem
       tr claim g inactive k _ _ prepared ht
   obtain ⟨hg',hk',ha⟩ := PV_RunJoin_ActualScalar60.prepared phase.val prepared hp
+  change ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data phase.val).a)=prepared.alpha0 at ha
   rw [←hqq,←haa,←ha] at hq1
   rw [←hww,←haa,←ha] at hw1
   rw [PV_RunJoin_RoundInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
