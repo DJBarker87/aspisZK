@@ -1,0 +1,225 @@
+{
+  "function": "internal_linear_lazy",
+  "route": "own-1 structural source interpretation plus total Lean equality; no Kani credit used",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "internal_linear_lazy",
+      "start": 304,
+      "end": 329,
+      "signature": "fn internal_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) ",
+      "body": "{\n    const SHIFTS: [u8; 15] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15, 16];\n    let old_zero = extension_limbs(state[0]);\n    let mut part_sum = [0u64; 4];\n    let mut lane = 1usize;\n    while lane < POSEIDON2_WIDTH {\n        let limbs = extension_limbs(state[lane]);\n        let mut limb = 0usize;\n        while limb < 4 {\n            part_sum[limb] += u64::from(limbs[limb]);\n            limb += 1;\n        }\n        lane += 1;\n    }\n    let full_sum: [u64; 4] =\n        core::array::from_fn(|limb| part_sum[limb] + u64::from(old_zero[limb]));\n    state[0] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n        part_sum[limb] + u64::from(P) - u64::from(old_zero[limb])\n    }));\n    for lane in 1..POSEIDON2_WIDTH {\n        let limbs = extension_limbs(state[lane]);\n        state[lane] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n            full_sum[limb] + (u64::from(limbs[limb]) << SHIFTS[lane - 1])\n        }));\n    }\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_token_check": true,
+    "syntax_normalization": "optional trailing commas only"
+  },
+  "fresh_reference": "POSEIDON-REFERENCE-D543.json / N79161, seventeen declarations and three same-origin carriers, no holes",
+  "source_steps": [
+    {
+      "source": "SHIFTS constant; state[0] read and extension_limbs; part_sum[4]=0",
+      "model": "source_internal543 prefix / source_internal_sum543",
+      "argument": "Exact fifteen U8 values and their order; same sixteen-state/four-limb carriers. No canonicality type invariant is presumed. Shared reads preserve values; state is one caller-owned mutable array and its updated value is returned on borrow restoration."
+    },
+    {
+      "source": "lane1..15, for each limb0..3: part_sum[limb] += u64::from(limbs[limb])",
+      "model": "source_internal_sum_step543 -> source_internal_sum12 -> internal_limb12",
+      "argument": "The new source interpreter executes the actual inner loop. internal_sum_step_binding543 applies the compiled helper law, not a selected model definition. Each read and u32-to-u64 conversion precedes the same wrapping_add/store. Every sum-array write applies its back function before the next limb. Lane/limb bounds16/4 and increments are structural; no scalar overflow or failure. No state element is changed during accumulation."
+    },
+    {
+      "source": "full_sum=from_fn(part_sum[limb]+old_zero[limb])",
+      "model": "internal_full_read12 / four_build12 / internal_full_helper_binding12",
+      "argument": "Bind from_fn at N4 to ordered callbacks0,1,2,3. The exact deployed from_fn delegates through NeverShortCircuit to try_from_fn. try_from_fn_erased initializes Guard.initialized=0; while initialized<4 it invokes the callback at that index, branches Continue, writes exactly that uninitialized slot, then increments. Each slot is initialized once; after four successful callbacks mem::forget suppresses Guard cleanup and array_assume_init returns all four items. Callback capture is immutable; no allocation, outside read, pointer comparison or fallible callback. Index/UB checks are satisfied by0<=limb<4. NeverShortCircuit Wrapped::call_mut, try_from_fn, ManuallyDrop and cleanup source bodies are the exact internal instantiations already structurally argued in STD-STRUCTURAL-D542. Closure/FnMut/intrinsic and array layout lowering remains V370. This is an ordinary-source structural argument, not a claimed intrinsic law."
+    },
+    {
+      "source": "state[0]=extension_from_raw_limbs(from_fn(part_sum+P-old_zero))",
+      "model": "internal_zero_read12 / internal_zero_helper_binding12; native_internal_finish15 first update",
+      "argument": "Same ordered four callbacks and conversions; specifically retain wrapping_sub for part_sum+P-old_zero even when noncanonical words cause mathematical underflow. No canonicality, nonnegative subtraction or field equality is inferred. extension_from_raw_limbs invokes the same reduce_u62/reduce64 field rows for each component, with release debug assertions disabled. source_store_continuation543 keeps the updated state0 for all subsequent outputs. This explicitly covers the boundary that the new checked-MIR Kani raw gate could not verify."
+    },
+    {
+      "source": "for lane1..15: read current state[lane], shift by SHIFTS[lane-1], build four limbs, reduce, store state[lane]",
+      "model": "range_loop13 internal_output_step12; internal_shift_read12 / internal_shift_helper_binding12",
+      "argument": "Range semantics are source-bound in D542 and direct range_next_extraction17. Each yielded lane satisfies1<=lane<16, lane-1<15. All shifts are<=16 and U8-to-U32 widening preserves their value (u8_u32_value). Each full_sum access then limb conversion, shift and wrapping_add matches the source order. The full_sum and old_zero snapshots are fixed before writes. Earlier output writes cannot change later state[lane] reads: the array frame law restored_frame records all distinct-index cells. Every output store restores its mutable back function; all sixteen state writes are retained. Function exit returns the updated caller state, not its old snapshot."
+    }
+  ],
+  "std_source_chain": [
+    {
+      "group": "internal",
+      "harness": "equivalence16::internal_linear_lazy",
+      "symbol": "_RINvNtCsci0VKyKEi6N_4core5array7from_fnyKj4_NCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazys_0EBM_",
+      "name": "std::array::from_fn::<u64, 4, {closure@../v244/deployed_poseidon_kani16.rs:320:62: 320:68}>",
+      "location": {
+        "column": "1",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+        "function": "std::array::from_fn::<u64, 4, {closure@../v244/deployed_poseidon_kani16.rs:320:62: 320:68}>",
+        "line": "108"
+      },
+      "source": "core/src/array/mod.rs",
+      "has_body": true,
+      "symbol_dump": "/home/dombarker/project-offloads/codex-pv-b3p6-20261028/resume17/std-internal/symbols-0.json.xz",
+      "symbol_dump_sha256": "1b47a86615057f8c16a37f10abdbd4fce9d871d0e7896a95f9af5107bfefc263",
+      "status": "IDENTICAL",
+      "kani_item": {
+        "name": "from_fn",
+        "start": 108,
+        "end": 113,
+        "signature": "fn from_fn<T, const N: usize, F>(f: F) -> [T; N]\nwhere\n    F: FnMut(usize) -> T,\n",
+        "body": "{\n    try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0\n}",
+        "context": [],
+        "macros": []
+      },
+      "deployed_candidates": [
+        {
+          "name": "from_fn",
+          "start": 109,
+          "end": 114,
+          "signature": "fn from_fn<T: [const] Destruct, const N: usize, F>(f: F) -> [T; N]\nwhere\n    F: [const] FnMut(usize) -> T + [const] Destruct,\n",
+          "body": "{\n    try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0\n}",
+          "context": [],
+          "macros": []
+        }
+      ],
+      "deployed_item": {
+        "name": "from_fn",
+        "start": 109,
+        "end": 114,
+        "signature": "fn from_fn<T: [const] Destruct, const N: usize, F>(f: F) -> [T; N]\nwhere\n    F: [const] FnMut(usize) -> T + [const] Destruct,\n",
+        "body": "{\n    try_from_fn(NeverShortCircuit::wrap_mut_1(f)).0\n}",
+        "context": [],
+        "macros": []
+      },
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": false,
+      "intrinsics": [],
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "internal",
+      "harness": "equivalence16::internal_linear_lazy",
+      "symbol": "_RINvNtCsci0VKyKEi6N_4core5array18try_from_fn_erasedyINtNtNtB4_3ops9try_trait17NeverShortCircuityENCINvMBR_BO_10wrap_mut_1jNCNvNtCs602rsP8SHUw_20pv_b3p6_reference22719deployed_poseidon1620internal_linear_lazy0E0EB22_",
+      "name": "std::array::try_from_fn_erased::<u64, std::ops::try_trait::NeverShortCircuit<u64>, {closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:319:30: 319:36}>::{closure#0}}>",
+      "location": {
+        "column": "1",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+        "function": "std::array::try_from_fn_erased::<u64, std::ops::try_trait::NeverShortCircuit<u64>, {closure@std::ops::try_trait::NeverShortCircuit<u64>::wrap_mut_1<usize, {closure@../v244/deployed_poseidon_kani16.rs:319:30: 319:36}>::{closure#0}}>",
+        "line": "888"
+      },
+      "source": "core/src/array/mod.rs",
+      "has_body": true,
+      "symbol_dump": "/home/dombarker/project-offloads/codex-pv-b3p6-20261028/resume17/std-internal/symbols-0.json.xz",
+      "symbol_dump_sha256": "1b47a86615057f8c16a37f10abdbd4fce9d871d0e7896a95f9af5107bfefc263",
+      "kani_item": {
+        "name": "try_from_fn_erased",
+        "start": 888,
+        "end": 906,
+        "signature": "fn try_from_fn_erased<T, R>(\n    buffer: &mut [MaybeUninit<T>],\n    mut generator: impl FnMut(usize) -> R,\n) -> ControlFlow<R::Residual>\nwhere\n    R: Try<Output = T>,\n",
+        "body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+        "context": [],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "deployed_candidates": [
+        {
+          "name": "try_from_fn_erased",
+          "start": 901,
+          "end": 916,
+          "signature": "fn try_from_fn_erased<R: [const] Try<Output: [const] Destruct>>(\n    buffer: &mut [MaybeUninit<R::Output>],\n    mut generator: impl [const] FnMut(usize) -> R + [const] Destruct,\n) -> ControlFlow<R::Residual> ",
+          "body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+          "context": [],
+          "macros": []
+        }
+      ],
+      "intrinsics": [],
+      "deployed_item": {
+        "name": "try_from_fn_erased",
+        "start": 901,
+        "end": 916,
+        "signature": "fn try_from_fn_erased<R: [const] Try<Output: [const] Destruct>>(\n    buffer: &mut [MaybeUninit<R::Output>],\n    mut generator: impl [const] FnMut(usize) -> R + [const] Destruct,\n) -> ControlFlow<R::Residual> ",
+        "body": "{\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+        "context": [],
+        "macros": []
+      },
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": false,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "internal",
+      "harness": "equivalence16::internal_linear_lazy",
+      "symbol": "_RNvMsn_NtCsci0VKyKEi6N_4core5arrayINtB5_5GuardyE14push_uncheckedCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "std::array::Guard::<'_, u64>::push_unchecked",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/mod.rs",
+        "function": "std::array::Guard::<'_, u64>::push_unchecked",
+        "line": "933"
+      },
+      "source": "core/src/array/mod.rs",
+      "has_body": true,
+      "symbol_dump": "/home/dombarker/project-offloads/codex-pv-b3p6-20261028/resume17/std-internal/symbols-0.json.xz",
+      "symbol_dump_sha256": "1b47a86615057f8c16a37f10abdbd4fce9d871d0e7896a95f9af5107bfefc263",
+      "kani_item": {
+        "name": "push_unchecked",
+        "start": 933,
+        "end": 941,
+        "signature": "fn push_unchecked(&mut self, item: T) ",
+        "body": "{\n        // SAFETY: If `initialized` was correct before and the caller does not\n        // invoke this method more than N times then writes will be in-bounds\n        // and slots will not be initialized more than once.\n        unsafe {\n            self.array_mut.get_unchecked_mut(self.initialized).write(item);\n            self.initialized = self.initialized.unchecked_add(1);\n        }\n    }",
+        "context": [
+          "impl<T> Guard<'_, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "push_unchecked",
+        "start": 944,
+        "end": 952,
+        "signature": "fn push_unchecked(&mut self, item: T) ",
+        "body": "{\n        // SAFETY: If `initialized` was correct before and the caller does not\n        // invoke this method more than N times, then writes will be in-bounds\n        // and slots will not be initialized more than once.\n        unsafe {\n            self.array_mut.get_unchecked_mut(self.initialized).write(item);\n            self.initialized = self.initialized.unchecked_add(1);\n        }\n    }",
+        "context": [
+          "impl<T> Guard<'_, T> "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "push_unchecked",
+          "start": 944,
+          "end": 952,
+          "signature": "fn push_unchecked(&mut self, item: T) ",
+          "body": "{\n        // SAFETY: If `initialized` was correct before and the caller does not\n        // invoke this method more than N times, then writes will be in-bounds\n        // and slots will not be initialized more than once.\n        unsafe {\n            self.array_mut.get_unchecked_mut(self.initialized).write(item);\n            self.initialized = self.initialized.unchecked_add(1);\n        }\n    }",
+          "context": [
+            "impl<T> Guard<'_, T> "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    }
+  ],
+  "compiled_laws": [
+    "internal_sum_helper_binding12",
+    "internal_full_helper_binding12",
+    "internal_zero_helper_binding12",
+    "internal_shift_helper_binding12",
+    "native_internal_sum_binding15",
+    "native_internal_finish_binding15",
+    "native_internal_binding15",
+    "source_store_continuation543",
+    "internal_sum_step_binding543",
+    "internal_sum_binding543",
+    "internal_source_reference543",
+    "internal_source_link543"
+  ],
+  "domain": "all valid mutable [QM31;16] arrays and all u32 limb representations; no canonicality hypothesis",
+  "canonicality": "Historical K72138 canonical-only P6 route stays domain-conditional. The new source-to-reference wrapping equality is total, so it does not consume that route or assume PV_B3P_Link_callers_canonical16. Mathematical canonical-field interpretation elsewhere still requires its own actual caller proof.",
+  "D188": "Actual inner accumulator stores and all16 output stores explicitly restored; model equals full functional array updates with arbitrary continuation. No discarded mutable backward function accepted.",
+  "evidence_class": "Structural argument + Lean equality, not machine proof of native Rust or compiler semantics",
+  "status": "pending InternalSource543227 compile/final audit; do not credit pending proof",
+  "retained": "V370 / D381,D386; raw/external canonicality and source binding, complete std/D188/matrix and callback remain open. No endpoint/T change."
+}
