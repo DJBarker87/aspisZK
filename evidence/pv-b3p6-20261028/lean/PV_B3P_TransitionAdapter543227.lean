@@ -45,8 +45,8 @@ theorem transition_adapter_transfer543
       observe_transition543 (deployed (public_from_input543 input)) =
       observe_transition543 (reference (public_from_input543 input))) :
     deployed = reference := by
-  funext public
-  have observed := gate (input_from_public543 public)
+  funext pub
+  have observed := gate (input_from_public543 pub)
   rw [public_input_roundtrip543] at observed
   exact observation_injective543 observed
 
