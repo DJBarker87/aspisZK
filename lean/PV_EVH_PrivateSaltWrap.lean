@@ -17,7 +17,7 @@ def sourceMap {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
     pure (.Ok out)
   | .Err e => pure (.Err e)
 
-def install (ops : ExternalFuns) : ExternalFuns := {ops with op11 := sourceMap}
+@[reducible] def install (ops : ExternalFuns) : ExternalFuns := {ops with op11 := sourceMap}
 
 def wrap (values : Values) : P host_commitment.PrivateSalts := pure values
 
@@ -40,8 +40,8 @@ theorem map_fixed (ops : ExternalFuns) (r : core.result.Result Values verifier.E
         host_commitment.PrivateSalts.new) := by
   letI : ExternalFuns := install ops
   cases r with
-  | Ok values => exact PV_EVH_Prefix.lift_fixed (.ok (.Ok values))
-  | Err e => exact PV_EVH_Prefix.lift_fixed (.ok (.Err e))
+  | Ok values => exact PV_EVH_Prefix.lift_fixed (.ok (core.result.Result.Ok (E := verifier.Error) values))
+  | Err e => exact PV_EVH_Prefix.lift_fixed (.ok (core.result.Result.Err (T := host_commitment.PrivateSalts) e))
 
 /-- This identifies the inherited source-map lift with the independently
 interpreted constructor callback, including its state and event trace. -/

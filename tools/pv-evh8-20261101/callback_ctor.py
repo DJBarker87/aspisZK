@@ -21,8 +21,8 @@ for i,v in enumerate(json.load(open(E/'callback-frontier.json'))['callbacks']):
  if 'body' not in v:continue
  name='callback_'+str(i);fn=v['callback'];h,r,b,_,ex=g['get'](fn);m=re.fullmatch(r'\s*ok (\w+(?:\.\w+)*)\s*',b);assert m,b
  value=m[1];args=' '.join(ex)
- cap=re.search(r'\(c : ([\s\S]*?)\)\s*\(tupled_args :',h)[1]
- arg=re.search(r'\(tupled_args : ([\s\S]*?)\)\s*$',h)[1]
+ cap=re.search(r'\(c :\s*([\s\S]*?)\)\s*\(tupled_args :',h)[1]
+ arg=re.search(r'\(tupled_args :\s*([\s\S]*?)\)\s*$',h)[1]
  drops=' (dropArgument : '+arg+' → P Unit) (dropCapture : '+cap+' → P Unit)'
  out+='\ndef '+name+' '+h+drops+' : P '+r+' := do\n  let _ ← dropArgument tupled_args\n  let _ ← dropCapture c\n  pure '+value+'\n'
  out+='\ntheorem '+name+'_fixed '+h+drops+'\n    (ha : FinishedView (dropArgument tupled_args) (.ok ()))\n    (hc : FinishedView (dropCapture c) (.ok ())) :\n    FinishedView ('+name+' '+args+' dropArgument dropCapture) ('+fn+' '+args+') := by\n'
