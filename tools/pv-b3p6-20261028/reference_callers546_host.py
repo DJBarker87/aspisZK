@@ -21,7 +21,7 @@ pkgs={p['id']:p for p in meta['packages']};nodes=[dict(name=pkgs[n['id']]['name'
 authority=json.loads((H/'features227-resume4.json').read_text())['validation']['nodes']
 strip=lambda ns:sorted([n for n in ns if n['name']!='pv-b3p6-reference227'],key=lambda n:(n['name'],n['version']))
 assert strip(nodes)==strip(authority)
-roots={'leading':['leading_pair_packed'],'copy':['Selectors::active_literal','pattern_values_literal'],'schedule':['add_schedule_lanes']}[group]
+roots={'leading':['leading_pair_packed'],'copy':['Selectors::active_literal','pattern_values_literal'],'schedule':['add_schedule_lanes','path_lanes_literal','public_digest_lanes','add_value_lanes']}[group]
 module={'leading':'reference_poseidon','copy':'reference_copy_terminal','schedule':'reference_terminal'}[group]
 llbc=O/'Reference546.llbc';gen=O/'generated';gen.mkdir()
 cmd=['timeout','300','taskset','--cpu-list','0-3',str(c),'cargo','--preset','aeneas','--mir','optimized','--sysroot','default']

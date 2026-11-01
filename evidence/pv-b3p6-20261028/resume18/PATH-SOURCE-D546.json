@@ -1,0 +1,47 @@
+{
+  "function": "path_lanes_literal",
+  "source": {
+    "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+    "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+    "item": {
+      "name": "path_lanes_literal",
+      "start": 450,
+      "end": 464,
+      "signature": "fn path_lanes_literal(path_selector: QM31, openings: &StateOnlyPoseidonOpenings) -> [QM31; 17] ",
+      "body": "{\n    let bit = openings.z[0];\n    let mut path = [QM31::ZERO; 17];\n    path[0] = path_selector.mul(bit.mul(bit.sub(QM31::ONE)));\n    for lane in 0..DIGEST_ELEMS {\n        let current = openings.z[1 + lane];\n        path[1 + lane] = path_selector\n            .mul(QM31::ONE.sub(bit))\n            .mul(openings.succ_z[lane].sub(current));\n        path[1 + DIGEST_ELEMS + lane] = path_selector\n            .mul(bit)\n            .mul(openings.succ_z[RATE + lane].sub(current));\n    }\n    path\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "interpreter": "native_path15",
+  "theorem": "PV_B3P_Native15227.native_path_binding15",
+  "domain": "all raw path_selector and openings values; no Boolean-bit or field-canonicality restriction",
+  "source_steps": [
+    {
+      "source": "bit=openings.z[0]; path[17]=ZERO; path[0]=selector*(bit*(bit-ONE))",
+      "model": "native_path15 prefix",
+      "argument": "Identical read and nested call order; bound0<16/17. No algebraic or Boolean simplification."
+    },
+    {
+      "source": "for lane0..8 read current z[1+lane]",
+      "model": "range_loop13 path_step15",
+      "argument": "Same eight ascending lanes; current index1..8<16. range_as_fold13/leading_indices15 gives exact eight-step plan."
+    },
+    {
+      "source": "left path store1+lane then right store9+lane",
+      "model": "path_step15 / path_tail15_0..7",
+      "argument": "Left reads succ_z[lane], right reads succ_z[8+lane]. Destination1..8 and9..16 are disjoint within17. Whole updated array from each write is passed to the next. Source_store_continuation543 applies the mutable back function. Each isolated cell theorem ties source operations to that step without evaluating the arithmetic chain."
+    },
+    {
+      "source": "repeated ONE.sub(bit) and selector.mul(bit)",
+      "model": "cached minus/right in path_tail15 cells",
+      "argument": "The exact frozen QM31 sub/mul functions are pure, deterministic and total by qsub/qmul; native_path_binding15 obtains their success witnesses and applies each cell law. Reusing those successful immutable values adds no field identity or input restriction. No mutation, allocation, address reads or errors are suppressed."
+    }
+  ],
+  "cfg": "any(test, not(feature=optimized-terminal)); literal body local association only; optimized add_path_lanes uses its own inline path and remains separately open",
+  "D188": "17 local path stores, every back restoration retained before subsequent calls; no mutable reference escapes",
+  "retained": "Complete source cone, std/D188/matrix/callback and V370 compiler lowering remain open",
+  "route": "own-1 structural argument + complete-Result Lean equality",
+  "status": "pending isolated PathCell15_7..0 and NativePath15227 focused receipts; no inherited objects or credit claimed"
+}
