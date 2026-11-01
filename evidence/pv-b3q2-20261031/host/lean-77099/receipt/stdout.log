@@ -1,0 +1,276 @@
+PV_B3Q_CallerLayouts.layouts_safe : (PV_B3Q_CallerLayouts.layouts.all fun p => decide (0 < p.2 ∧ p.1 + p.2 ≤ 96)) = true
+PV_B3Q_CallerLayouts.layout_member (start count : ℕ) (member : (start, count) ∈ PV_B3Q_CallerLayouts.layouts) :
+  0 < count ∧ start + count ≤ 96
+PV_B3Q_CallerLayouts.preweighted_caller (start count group slot : ℕ)
+  (member : (start, count) ∈ PV_B3Q_CallerLayouts.layouts) (range : group ≤ (start + count - 1) / 4) (lane : slot < 4)
+  (inside : start ≤ 4 * group + slot ∧ 4 * group + slot < start + count) :
+  group < 24 ∧ slot < 4 ∧ 4 * group + slot - start < count
+PV_B3Q_CallerLayouts.high_ranges_safe :
+  (PV_B3Q_CallerLayouts.highRanges.all fun p => decide (p.1 ≤ p.2 ∧ p.2 ≤ 64)) = true
+PV_B3Q_CallerLayouts.high_range_read (start finish block : ℕ)
+  (member : (start, finish) ∈ PV_B3Q_CallerLayouts.highRanges) (sourceGuard : start ≤ block ∧ block < finish) :
+  block < 64
+PV_B3Q_CallerLayouts.internal_rows_safe :
+  (PV_B3Q_CallerLayouts.internalRows.all fun row => decide (2 ≤ row ∧ row < 16 ∧ 2 * (row - 2) + 1 < 14)) = true
+PV_B3Q_CallerLayouts.internal_row_reads (row : ℕ) (member : row ∈ PV_B3Q_CallerLayouts.internalRows) :
+  row < 16 ∧ 2 * (row - 2) < 14 ∧ 2 * (row - 2) + 1 < 14
+PV_B3Q_CallerLayouts.append_selector_rows (level carry : ℕ) (loop : level < 20) (branch : carry < 20) :
+  (34 + level) * 16 < 1024 ∧ (34 + level) * 16 + 12 < 1024 ∧ (33 + carry) * 16 + 11 < 1024
+PV_B3Q_CallerLayouts.digest_source_window (start lane : ℕ) (caller : start = 0 ∨ start = 8) (loop : lane < 8) :
+  start + lane < 16
+PV_B3Q_ExpandGuards.initial (start : ℕ) : PV_B3Q_ExpandGuards.Stage start start 1
+PV_B3Q_ExpandGuards.advance (start coordinate len : ℕ) (invariant : PV_B3Q_ExpandGuards.Stage start coordinate len) :
+  PV_B3Q_ExpandGuards.Stage start (coordinate + 1) (len * 2)
+PV_B3Q_ExpandGuards.high_stage_capacity (k : ℕ) (guard : k < 6) : 2 * 2 ^ k ≤ 64
+PV_B3Q_ExpandGuards.low_stage_capacity (k : ℕ) (guard : k < 4) : 2 * 2 ^ k ≤ 16
+PV_B3Q_ExpandGuards.high_inner (coordinate len index : ℕ) (invariant : PV_B3Q_ExpandGuards.Stage 0 coordinate len)
+  (outer : coordinate < 6) (inner : index < len) : coordinate < 10 ∧ index < 64 ∧ 2 * index < 64 ∧ 2 * index + 1 < 64
+PV_B3Q_ExpandGuards.low_inner (coordinate len index : ℕ) (invariant : PV_B3Q_ExpandGuards.Stage 6 coordinate len)
+  (outer : coordinate < 10) (inner : index < len) : coordinate < 10 ∧ index < 16 ∧ 2 * index < 16 ∧ 2 * index + 1 < 16
+PV_B3Q_FormattingBranches.checked_unreachable {α : Type} (value : α) (panicFormat : Unit → α) :
+  PV_B3Q_FormattingBranches.checked true value panicFormat = value
+PV_B3Q_FormattingBranches.weight_format_unreachable {α : Type} (kind : ℕ) (guard : kind < 5)
+  (one transfer withdrawal left right : α) (first second : Unit → α) :
+  PV_B3Q_FormattingBranches.weight_dispatch kind one transfer withdrawal left right first =
+    PV_B3Q_FormattingBranches.weight_dispatch kind one transfer withdrawal left right second
+PV_B3Q_FormattingBranches.frozen_weight_format_unreachable {α : Type} (link : PV_B3Q_FrozenTables.Link)
+  (member : link ∈ PV_B3Q_FrozenTables.links) (one transfer withdrawal left right : α) (first second : Unit → α) :
+  PV_B3Q_FormattingBranches.weight_dispatch link.1 one transfer withdrawal left right first =
+    PV_B3Q_FormattingBranches.weight_dispatch link.1 one transfer withdrawal left right second
+PV_B3Q_FormattingBranches.dot_assert_format_unreachable {α β γ δ ε : Type} (rows : List α) (f : α → β) (g : α → γ)
+  (h : α → δ) (value : ε) (panicFormat : Unit → ε) :
+  PV_B3Q_FormattingBranches.checked
+      (decide
+        ((List.map f rows).length = (List.map g rows).length ∧ (List.map f rows).length = (List.map h rows).length))
+      value panicFormat =
+    value
+PV_B3Q_FormattingBranches.pattern_column_format_unreachable {α : Type} (column : ℕ)
+  (member : column ∈ PV_B3Q_FrozenTables.columns) (value : α) (panicFormat : Unit → α) :
+  PV_B3Q_FormattingBranches.checked (decide (column < 16)) value panicFormat = value
+PV_B3Q_FormattingBranches.endpoint_format_unreachable {α : Type} (link : PV_B3Q_FrozenTables.Link)
+  (member : link ∈ PV_B3Q_FrozenTables.links) (value : α) (panicFormat : Unit → α) :
+  PV_B3Q_FormattingBranches.checked
+      (decide
+        (link.2.2.1.1 / 16 < 64 ∧
+          link.2.2.1.1 % 16 < 16 ∧
+            link.2.2.1.2.1 < 2 ∧
+              link.2.2.1.2.2 < 14 ∧
+                link.2.2.2.1 / 16 < 64 ∧ link.2.2.2.1 % 16 < 16 ∧ link.2.2.2.2.1 < 2 ∧ link.2.2.2.2.2 < 14))
+      value panicFormat =
+    value
+PV_B3Q_ForwardPointer.constructor_binding {α : Type} (cells : Aeneas.Std.Slice α) :
+  Aeneas.Std.Result.ok (PV_B3Q_ForwardPointer.view (PV_B3Q_ForwardPointer.native_new cells)) =
+    Aeneas.Std.core.slice.Slice.iter cells
+PV_B3Q_ForwardPointer.next_binding {α : Type} (c : PV_B3Q_ForwardPointer.Cursor α) :
+  (do
+      let __x ← PV_B3Q_ForwardPointer.native_next c
+      match __x with
+        | (item, next) => Aeneas.Std.Result.ok (item, PV_B3Q_ForwardPointer.view next)) =
+    Aeneas.Std.core.slice.iter.IteratorSliceIter.next (PV_B3Q_ForwardPointer.view c)
+PV_B3Q_ForwardPointer.next_preserves_region {α : Type} (c : PV_B3Q_ForwardPointer.Cursor α) :
+  ∃ item next,
+    PV_B3Q_ForwardPointer.native_next c = Aeneas.Std.Result.ok (item, next) ∧
+      next.cells = c.cells ∧ (item = none → next.position = c.position) ∧ (item ≠ none → next.position = c.position + 1)
+PV_B3Q_ForwardPointer.iterator_link (α : Type) :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14
+    (fun x => PV_B3Q_ForwardPointer.Cursor α → Aeneas.Std.Result (Option α × Aeneas.Std.core.slice.iter.Iter α))
+    (fun x c => do
+      let __x ← PV_B3Q_ForwardPointer.native_next c
+      match __x with
+        | (item, next) => Aeneas.Std.Result.ok (item, PV_B3Q_ForwardPointer.view next))
+    fun x c => Aeneas.Std.core.slice.iter.IteratorSliceIter.next (PV_B3Q_ForwardPointer.view c)
+PV_B3Q_InclusiveActual.binding (r : Aeneas.Std.core.ops.range.RangeInclusive Aeneas.Std.Usize) :
+  PV_B3Q_InclusiveActual.source r = PV_B3Q_InclusiveActual.model r
+PV_B3Q_InclusiveActual.actual_inclusive_link :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14
+    (fun x =>
+      Aeneas.Std.core.ops.range.RangeInclusive Aeneas.Std.Usize →
+        Aeneas.Std.Result (Option Aeneas.Std.Usize × Aeneas.Std.core.ops.range.RangeInclusive Aeneas.Std.Usize))
+    (fun x => PV_B3Q_InclusiveActual.source) fun x => PV_B3Q_InclusiveActual.model
+PV_B3Q_IndexGuard0.dynamic_bounds (i : ℕ) (h : PV_B3Q_LoopGuards.Emitted 84 i) : i / 28 < 3 ∧ i % 28 < 29 ∧ i < 84
+PV_B3Q_IndexGuard13.dynamic_bounds (level : ℕ) (h : PV_B3Q_LoopGuards.Emitted 20 level) : level < 20 ∧ level < 64
+PV_B3Q_IndexGuard14.dynamic_bounds (point column : ℕ) (hp : point < 3) (hc : column < 28) : point * 28 + column < 84
+PV_B3Q_IndexGuard17.constant_bounds : (PV_B3Q_IndexGuard17.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard18.constant_bounds : (PV_B3Q_IndexGuard18.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard185.dynamic_bounds (coordinate len index : ℕ) (h : PV_B3Q_ExpandGuards.Stage 0 coordinate len)
+  (outer : coordinate < 6) (inner : index < len) : coordinate < 10 ∧ index < 64 ∧ 2 * index < 64 ∧ 2 * index + 1 < 64
+PV_B3Q_IndexGuard20.dynamic_bounds (linkIndex : ℕ) (h : PV_B3Q_LoopGuards.Emitted 136 linkIndex) : linkIndex < 136
+PV_B3Q_IndexGuard212.dynamic_bounds (group output index : ℕ) (hg : PV_B3Q_LoopGuards.Emitted 4 group)
+  (ho : PV_B3Q_LoopGuards.Emitted 4 output) (hi : PV_B3Q_LoopGuards.Emitted 16 index) :
+  4 * group < 16 ∧ 4 * group + 1 < 16 ∧ 4 * group + 2 < 16 ∧ 4 * group + 3 < 16 ∧ 4 * group + output < 16 ∧ index < 16
+PV_B3Q_IndexGuard213.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard214.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard215.constant_bounds : (PV_B3Q_IndexGuard215.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard215.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard216.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard217.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard218.constant_bounds : (PV_B3Q_IndexGuard218.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard218.dynamic_bounds (start index finish limb : ℕ) (outer : start < finish) (inner : start ≤ index)
+  (guard : index < min (start + 4) finish) (limbGuard : PV_B3Q_LoopGuards.Emitted 4 limb) :
+  index < finish ∧ index - start < 4 ∧ limb < 4
+PV_B3Q_IndexGuard219.constant_bounds : (PV_B3Q_IndexGuard219.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard223.constant_bounds : (PV_B3Q_IndexGuard223.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard223.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16 ∧ 8 < 16 ∧ 8 + 1 < 16
+PV_B3Q_IndexGuard224.constant_bounds : (PV_B3Q_IndexGuard224.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard224.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 8 lane) :
+  1 + lane < 16 ∧ lane < 16 ∧ 1 + lane < 17 ∧ 8 + lane < 16 ∧ 1 + 8 + lane < 17
+PV_B3Q_IndexGuard226.constant_bounds : (PV_B3Q_IndexGuard226.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard226.dynamic_bounds (before : ℕ) (h : before ≤ 9) (positive : 0 < before) : before - 1 < 16
+PV_B3Q_IndexGuard23.constant_bounds : (PV_B3Q_IndexGuard23.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard231.constant_bounds : (PV_B3Q_IndexGuard231.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard231.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 8 lane) : 2 + lane < 16 ∧ 3 + lane < 12
+PV_B3Q_IndexGuard232.dynamic_bounds (lane start : ℕ) (h : PV_B3Q_LoopGuards.Emitted 8 lane)
+  (caller : start = 0 ∨ start = 8) : lane < 8 ∧ start + lane < 16
+PV_B3Q_IndexGuard233.constant_bounds : (PV_B3Q_IndexGuard233.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard233.dynamic_bounds (length index : ℕ) (shape : length ≤ 4)
+  (h : PV_B3Q_LoopGuards.Emitted length index) : index < length ∧ index < 4
+PV_B3Q_IndexGuard237.dynamic_bounds (limb pattern column : ℕ) (hl : PV_B3Q_LoopGuards.Emitted 16 limb)
+  (hp : PV_B3Q_LoopGuards.Emitted 14 pattern) (hc : column ∈ PV_B3Q_FrozenTables.columns) :
+  limb < 16 ∧ pattern < 14 ∧ column < 16
+PV_B3Q_IndexGuard240.dynamic_bounds (block : ℕ) (h : PV_B3Q_LoopGuards.Emitted 64 block) : block < 64
+PV_B3Q_IndexGuard307.constant_bounds : (PV_B3Q_IndexGuard307.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard310.constant_bounds : (PV_B3Q_IndexGuard310.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard310.dynamic_bounds (group : ℕ) (h : PV_B3Q_LoopGuards.Emitted 4 group) :
+  4 * group < 16 ∧ 4 * group + 1 < 16 ∧ 4 * group + 2 < 16 ∧ 4 * group + 3 < 16 ∧ group < 4
+PV_B3Q_IndexGuard326.constant_bounds : (PV_B3Q_IndexGuard326.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard326.dynamic_bounds (lane limb : ℕ) (hl : PV_B3Q_LoopGuards.Emitted 16 lane)
+  (hb : PV_B3Q_LoopGuards.Emitted 4 limb) : lane < 16 ∧ limb < 4
+PV_B3Q_IndexGuard331.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard355.dynamic_bounds (mask : Aeneas.Std.U16) (h : mask ≠ 0#u16) :
+  ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize (PV_B3Q_BitCounts.word (PV_B3Q_BitCounts.bits mask).ctz)) < 16
+PV_B3Q_IndexGuard38.constant_bounds : (PV_B3Q_IndexGuard38.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard38.dynamic_bounds (level : ℕ) (h : PV_B3Q_LoopGuards.Reach 0 20 level) : level < 21
+PV_B3Q_IndexGuard42.dynamic_bounds (lower upper index : ℕ) (h : PV_B3Q_LoopGuards.Reach lower upper index)
+  (active : index < upper) (caller : upper ≤ 64) : index < 64
+PV_B3Q_IndexGuard430.constant_bounds : (PV_B3Q_IndexGuard430.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard430.dynamic_bounds (output limb : ℕ) (ho : PV_B3Q_LoopGuards.Emitted 4 output)
+  (hl : PV_B3Q_LoopGuards.Emitted 4 limb) : output < 4 ∧ limb < 4 ∧ (output = 0 ∨ output = 1 ∨ output = 2 ∨ output = 3)
+PV_B3Q_IndexGuard47.constant_bounds : (PV_B3Q_IndexGuard47.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard47.dynamic_bounds (lane : ℕ) (h : PV_B3Q_LoopGuards.Emitted 16 lane) : lane < 16
+PV_B3Q_IndexGuard48.constant_bounds : (PV_B3Q_IndexGuard48.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard54.constant_bounds : (PV_B3Q_IndexGuard54.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard55.constant_bounds : (PV_B3Q_IndexGuard55.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard55.dynamic_bounds (rangeIndex conserveIndex : ℕ) (hr : PV_B3Q_LoopGuards.Emitted 10 rangeIndex)
+  (hc : PV_B3Q_LoopGuards.Emitted 10 conserveIndex) :
+  rangeIndex < 16 ∧ 10 + rangeIndex < 33 ∧ conserveIndex < 16 ∧ 20 + conserveIndex < 33
+PV_B3Q_IndexGuard57.dynamic_bounds (level carry : ℕ) (h : PV_B3Q_LoopGuards.Emitted 20 level) (branch : carry < 20) :
+  level < 20 ∧ carry < 20 ∧ 34 + level < 64
+PV_B3Q_IndexGuard58.dynamic_bounds (start count group slot : ℕ) (shape : 0 < count ∧ start + count ≤ 96)
+  (groupBound : group ≤ (start + count - 1) / 4) (slotBound : slot < 4)
+  (inside : start ≤ 4 * group + slot ∧ 4 * group + slot < start + count) :
+  group < 24 ∧ slot < 4 ∧ 4 * group + slot - start < count
+PV_B3Q_IndexGuard6.dynamic_bounds (column maskColumn before24 before4 : ℕ) (h16 : PV_B3Q_LoopGuards.Emitted 16 column)
+  (h10 : PV_B3Q_LoopGuards.Emitted 10 maskColumn) (h24 : before24 ≤ 24) (p24 : 0 < before24) (h4 : before4 ≤ 4)
+  (p4 : 0 < before4) : column < 16 ∧ maskColumn < 10 ∧ 16 + maskColumn < 28 ∧ before24 - 1 < 24 ∧ before4 - 1 < 4
+PV_B3Q_IndexGuard60.dynamic_bounds (row : ℕ) (h : row < 1024) : row / 16 < 64 ∧ row % 16 < 16
+PV_B3Q_IndexGuard68.constant_bounds : (PV_B3Q_IndexGuard68.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard69.dynamic_bounds (link : PV_B3Q_FrozenTables.Link) (h : link ∈ PV_B3Q_FrozenTables.links) :
+  link.2.2.1.2.1 < 2 ∧ link.2.2.1.2.2 < 14 ∧ link.2.2.2.2.1 < 2 ∧ link.2.2.2.2.2 < 14
+PV_B3Q_IndexGuard71.constant_bounds : (PV_B3Q_IndexGuard71.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard8.constant_bounds : (PV_B3Q_IndexGuard8.constantReads.all fun p => decide (p.1 < p.2)) = true
+PV_B3Q_IndexGuard8.dynamic_bounds (i : ℕ) (h : PV_B3Q_LoopGuards.Emitted 10 i) : i < 10
+PV_B3Q_FrozenTables.links0_safe : PV_B3Q_FrozenTables.links0.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links1_safe : PV_B3Q_FrozenTables.links1.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links2_safe : PV_B3Q_FrozenTables.links2.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links3_safe : PV_B3Q_FrozenTables.links3.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links4_safe : PV_B3Q_FrozenTables.links4.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links5_safe : PV_B3Q_FrozenTables.links5.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links6_safe : PV_B3Q_FrozenTables.links6.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links7_safe : PV_B3Q_FrozenTables.links7.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.links8_safe : PV_B3Q_FrozenTables.links8.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_LoopGuards.reach_invariant {lower upper index : ℕ} (reached : PV_B3Q_LoopGuards.Reach lower upper index) :
+  lower ≤ index ∧ index ≤ upper
+PV_B3Q_LoopGuards.emitted_bound {upper index : ℕ} (emitted : PV_B3Q_LoopGuards.Emitted upper index) : index < upper
+PV_B3Q_LoopGuards.emitted_initial (upper : ℕ) (nonempty : 0 < upper) : PV_B3Q_LoopGuards.Emitted upper 0
+PV_B3Q_LoopGuards.emitted_successor {upper index : ℕ} (emitted : PV_B3Q_LoopGuards.Emitted upper index)
+  (next : index + 1 < upper) : PV_B3Q_LoopGuards.Emitted upper (index + 1)
+PV_B3Q_LoopGuards.machine_increment (index : Aeneas.Std.Usize) (upper : ℕ) (guard : ↑index < upper)
+  (small : upper ≤ 1024) : ↑(index.wrapping_add 1#usize) = ↑index + 1
+PV_B3Q_LoopGuards.chunk_bounds (start index finish : ℕ) (outer : start < finish) (inner : start ≤ index)
+  (guard : index < min (start + 4) finish) : index < finish ∧ index - start < 4
+PV_B3Q_LoopGuards.preweighted_source (start count group slot : ℕ) (shape : 0 < count ∧ start + count ≤ 96)
+  (group_bound : group ≤ (start + count - 1) / 4) (slot_bound : slot < 4)
+  (inside : start ≤ 4 * group + slot ∧ 4 * group + slot < start + count) :
+  group < 24 ∧ slot < 4 ∧ 4 * group + slot - start < count
+PV_B3Q_LoopGuards.positive_range_length (start finish : ℕ) (ordered : start ≤ finish) :
+  start + (finish - start) = finish
+PV_B3Q_MetadataActual.length_value {α : Type} (slice : Aeneas.Std.Slice α) :
+  ↑(PV_B3Q_MetadataActual.source_len slice) = (↑slice).length
+PV_B3Q_MetadataActual.binding {α : Type} (slice : Aeneas.Std.Slice α) :
+  PV_B3Q_MetadataActual.source_len slice = slice.len
+PV_B3Q_MetadataActual.actual_metadata_link (α : Type) :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14 (fun x => Aeneas.Std.Slice α → Aeneas.Std.Usize)
+    (fun x => PV_B3Q_MetadataActual.source_len) fun x => Aeneas.Std.Slice.len
+PV_B3Q_PanicGuards.selected_claim_bounds (i : ℕ) (guard : i < 84) : i / 28 < 3 ∧ i % 28 < 29
+PV_B3Q_PanicGuards.dot_map_lengths {α β γ δ : Type} (rows : List α) (f : α → β) (g : α → γ) (h : α → δ) :
+  (List.map f rows).length = (List.map g rows).length ∧ (List.map f rows).length = (List.map h rows).length
+PV_B3Q_PanicGuards.pack4_guard (length i : ℕ) (shape : length ≤ 4) (loop : i < length) : length ≤ 4 ∧ i < 4 ∧ i < length
+PV_B3Q_PanicGuards.reverse_read (i n : ℕ) (invariant : i ≤ n) (loop : 0 < i) : i - 1 < n
+PV_B3Q_PanicGuards.endpoint_selector_bounds (row : ℕ) (bound : row < 1024) : row / 16 < 64 ∧ row % 16 < 16
+PV_B3Q_PanicGuards.weight_bit (bit : ℕ) (bound : bit < 2) : bit = 0 ∨ bit = 1
+PV_B3Q_PanicGuards.batch_count_guard (coordinate finish : ℕ) (loop : coordinate < finish) :
+  1 ≤ min 4 (finish - coordinate) ∧ min 4 (finish - coordinate) ≤ 4
+PV_B3Q_PanicGuards.high_coordinate (coordinate : ℕ) (guard : coordinate < 0 + 6) : coordinate < 10
+PV_B3Q_PanicGuards.low_coordinate (coordinate : ℕ) (guard : coordinate < 6 + 4) : coordinate < 10
+PV_B3Q_PanicGuards.expand_write_bounds (index len capacity : ℕ) (guard : index < len) (stage : 2 * len ≤ capacity) :
+  index < capacity ∧ 2 * index < capacity ∧ 2 * index + 1 < capacity
+PV_B3Q_PanicGuards.mask_read_bound (mask : Aeneas.Std.U16) (guard : mask ≠ 0#u16) :
+  ↑(Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.Usize (PV_B3Q_BitCounts.word (PV_B3Q_BitCounts.bits mask).ctz)) < 16
+PV_B3Q_PartialCatalogue2.partial_dependency_link (α : Type) :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14 (PV_B3Q_PartialCatalogue2.Signature α)
+    (PV_B3Q_PartialCatalogue2.source α) (PV_B3Q_PartialCatalogue2.model α)
+PV_B3Q_PartialCatalogue2.joint_instance (α : Type) :
+  ∃ native,
+    native = PV_B3Q_PartialCatalogue2.source α ∧
+      PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14 (PV_B3Q_PartialCatalogue2.Signature α) native
+        (PV_B3Q_PartialCatalogue2.model α)
+PV_B3Q_FrozenTables.columns0_safe : (PV_B3Q_FrozenTables.columns0.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns1_safe : (PV_B3Q_FrozenTables.columns1.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns2_safe : (PV_B3Q_FrozenTables.columns2.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns3_safe : (PV_B3Q_FrozenTables.columns3.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns4_safe : (PV_B3Q_FrozenTables.columns4.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns5_safe : (PV_B3Q_FrozenTables.columns5.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns6_safe : (PV_B3Q_FrozenTables.columns6.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns7_safe : (PV_B3Q_FrozenTables.columns7.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns8_safe : (PV_B3Q_FrozenTables.columns8.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns9_safe : (PV_B3Q_FrozenTables.columns9.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns10_safe : (PV_B3Q_FrozenTables.columns10.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns11_safe : (PV_B3Q_FrozenTables.columns11.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns12_safe : (PV_B3Q_FrozenTables.columns12.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.columns13_safe : (PV_B3Q_FrozenTables.columns13.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.masks0_safe : PV_B3Q_FrozenTables.masks0.all PV_B3Q_FrozenTables.maskSafe = true
+PV_B3Q_FrozenTables.masks1_safe : PV_B3Q_FrozenTables.masks1.all PV_B3Q_FrozenTables.maskSafe = true
+PV_B3Q_FrozenTables.masks2_safe : PV_B3Q_FrozenTables.masks2.all PV_B3Q_FrozenTables.maskSafe = true
+PV_B3Q_FrozenTables.masks3_safe : PV_B3Q_FrozenTables.masks3.all PV_B3Q_FrozenTables.maskSafe = true
+PV_B3Q_RangeActual.increment_safe (range : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize)
+  (guard : range.start < range.end) : ↑range.start + 1 < Aeneas.Std.UScalar.size Aeneas.Std.UScalarTy.Usize
+PV_B3Q_RangeActual.binding (range : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) :
+  PV_B3Q_RangeActual.source range = PV_B3Q_RangeActual.model range
+PV_B3Q_RangeActual.actual_range_link :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14
+    (fun x =>
+      Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+        Aeneas.Std.Result (Option Aeneas.Std.Usize × Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize))
+    (fun x => PV_B3Q_RangeActual.source) fun x => PV_B3Q_RangeActual.model
+PV_B3Q_RangeIndexSource.binding {α : Type} (s : Aeneas.Std.Slice α)
+  (r : Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize) :
+  PV_B3Q_RangeIndexSource.source s r = Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index r s
+PV_B3Q_RangeIndexSource.projected_group_range (group : ℕ) (guard : group < 4) :
+  4 * group < 4 * group + 4 ∧ 4 * group + 4 ≤ 16
+PV_B3Q_RangeIndexSource.all_range_link (α : Type) :
+  PV_B3P_Groups14227.PV_B3P_Link_std_dependency_closure14
+    (fun x =>
+      Aeneas.Std.Slice α → Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.Slice α))
+    (fun x => PV_B3Q_RangeIndexSource.source) fun x s r =>
+    Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index r s
+PV_B3Q_FrozenTables.links_safe : PV_B3Q_FrozenTables.links.all PV_B3Q_FrozenTables.linkSafe = true
+PV_B3Q_FrozenTables.link_member_safe (l : PV_B3Q_FrozenTables.Link) (member : l ∈ PV_B3Q_FrozenTables.links) :
+  l.1 < 5 ∧
+    l.2.1 < 64 ∧
+      l.2.2.1.1 < 1024 ∧ l.2.2.1.2.1 < 2 ∧ l.2.2.1.2.2 < 14 ∧ l.2.2.2.1 < 1024 ∧ l.2.2.2.2.1 < 2 ∧ l.2.2.2.2.2 < 14
+PV_B3Q_FrozenTables.columns_safe : (PV_B3Q_FrozenTables.columns.all fun n => decide (n < 16)) = true
+PV_B3Q_FrozenTables.column_member_bound (column : ℕ) (member : column ∈ PV_B3Q_FrozenTables.columns) : column < 16
+PV_B3Q_FrozenTables.masks_safe : PV_B3Q_FrozenTables.masks.all PV_B3Q_FrozenTables.maskSafe = true
+PV_B3Q_FrozenTables.mask_member_cases (mask : ℕ) (member : mask ∈ PV_B3Q_FrozenTables.masks) :
+  mask = 6144 ∨ mask = 6145 ∨ mask = 4097 ∨ mask = 2048 ∨ mask = 2049 ∨ mask = 26214 ∨ mask = 1749
+'PV_B3Q_PartialCatalogue2.joint_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
