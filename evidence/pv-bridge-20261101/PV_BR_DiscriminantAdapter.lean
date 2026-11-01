@@ -27,7 +27,7 @@ initialize pvBridgeDiscriminantAttribute : AttributeImpl ← do
         let cmds ← Lean.Elab.Command.liftTermElabM
           (Aeneas.Discriminant.generateReadDiscriminantCmds declName ty values)
         Lean.Elab.Command.elabCommand cmds[0]!
-        let instName := mkIdent (declName ++ `instDiscriminant)
+        let instName := mkIdent (`_root_ ++ `PV_BR_Instances ++ declName ++ `instDiscriminant)
         let id ← `(Parser.Command.declId| $instName:ident)
         let inst := cmds[1]!.rewriteBottomUp fun node => Id.run do
           if node.isOfKind ``Lean.Parser.Command.instance then

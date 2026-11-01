@@ -8,6 +8,7 @@ def sha(b):return hashlib.sha256(b).hexdigest()
 # The adapter changes ONLY the generated instance identifier, not its reader.
 original='docs/research/100bit-spend-path-20261013/lean/ImportUnionNamedDiscriminant.lean'
 s=git(original).decode().replace('ImportUnionNamedDiscriminant','PV_BR_DiscriminantAdapter').replace('import_union_discriminant','pv_bridge_discriminant').replace('namedDiscriminant','pvBridgeDiscriminant')
+s=s.replace('mkIdent (declName ++ `instDiscriminant)', 'mkIdent (`_root_ ++ `PV_BR_Instances ++ declName ++ `instDiscriminant)')
 (B/'PV_BR_DiscriminantAdapter.lean').write_text(s)
 for mod,out in [('R1Z.BuilderAdmissionExtracted','PV_BR_BuilderAdmission'),('AspisR1ProverCommit.Types','PV_BR_ProverTypes')]:
  row=sources[mod]; raw=git(row['source']); assert sha(raw)==row['sha256'],mod
