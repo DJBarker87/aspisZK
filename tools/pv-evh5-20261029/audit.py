@@ -39,8 +39,14 @@ for p in E.rglob('*'):
 for p in Path('tools/pv-evh5-20261029').glob('*.py'):ast.parse(p.read_text())
 subprocess.run(['python3','tools/pv-evh5-20261029/retry.py','--check'],check=True)
 subprocess.run(['python3','tools/pv-evh5-20261029/prefix_retry.py','--check'],check=True)
-for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['open_spine.py','DurableReserveBuild','--check'],['reserve_join.py','--check']]:
+for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['open_spine.py','DurableReserveBuild','--check'],['reserve_join.py','--check'],['account_guard.py','--check']]:
  subprocess.run(['python3','tools/pv-evh5-20261029/'+cmd[0]]+cmd[1:],check=True)
+for short in ['DurableWithAttempt','EntropyStep','NoncePath','MaterialFromEntropy','ApplyMaterial','BuildSemantics','ProveSemantics','PrivateSalts','SyncDirectory','NonceReserveFallible','NonceReserve']:
+ subprocess.run(['python3','tools/pv-evh5-20261029/open_spine.py',short,'--check'],check=True)
+for mode in ['AccountFlow','AccountFlowEntry']:
+ subprocess.run(['python3','tools/pv-evh5-20261029/entropy_entry.py',mode,'--check'],check=True)
+for script in ['durable_flow.py','nonce_build.py']:
+ subprocess.run(['python3','tools/pv-evh5-20261029/'+script,'--check'],check=True)
 code='''import pathlib,hashlib,json,subprocess,time
 p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-evh-20261029')
 print(json.dumps(dict(epoch=time.time(),units=subprocess.check_output(['systemctl','--user','list-units','pv-evh-*','--all','--no-pager'],text=True),files={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'evidence').iterdir() if q.is_file()},objects={q.stem:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'objects').glob('PV_EVH_*.olean')},quiet=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').read_text() if pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').exists() else None)))'''

@@ -21,7 +21,7 @@ def run
   (statement_digest : Array Std.U8 32#usize)
   (mask_nonce : Array Std.U8 32#usize) (fileAnswers : PV_EVH_NonceWorld.Answers) (fallibleCallees : PV_EVH_NonceReserveFallible.Callees) (pathCallees : PV_EVH_NoncePath.Callees) (c : Callees) : P (Bool ×
     aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore) := do
-  let (r, self1) ← PV_EVH_NonceReserveFallible.run self statement_digest mask_nonce fileAnswers fallibleCallees pathCallees c
+  let (r, self1) ← PV_EVH_NonceReserveFallible.run self statement_digest mask_nonce fileAnswers pathCallees fallibleCallees
   match r with
   | core.result.Result.Ok reserved =>
     pure (reserved, self1)

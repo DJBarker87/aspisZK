@@ -165,6 +165,7 @@ def emit(x,n=2,world=False):
   args=exp[len(label):].strip().replace('\n',' ')
   tail=(' fileAnswers'+(' '+params if params else '')+' c' if m!='PV_EVH_NoncePath' else ' '+params)
   if m=='PV_EVH_SyncDirectory':tail=' fileAnswers {}'
+  if m=='PV_EVH_NonceReserveFallible':tail=' fileAnswers pathCallees fallibleCallees'
   return pad+m+'.run '+args+tail
  if entropy and label=='getrandom.fill':
   return pad+'PV_EVH_Prefix.ofM (PV_EVH_Entropy.draw entropyAnswers '+exp[len(label):].strip()+')'
