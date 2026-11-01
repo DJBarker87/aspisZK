@@ -12,6 +12,7 @@ ext=subprocess.check_output(['git','show',rev+':'+p.replace('Funs.lean','Externa
 a=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text());g=dict(s=s.replace('\npartial_fixpoint',''),re=re)
 exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),g)
 config={
+ 'PrepareOpening':'prover.prepare_opening',
  'SyncDirectory':'aspis_prover.state_only_entropy.sync_directory',
  'NonceReserveFallible':'aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reserve_fallible',
  'NonceReserve':'aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore.reserve',
@@ -107,6 +108,8 @@ def signature(label):
   return '{T : Type} (inst : core.marker.Copy T) (dst src : Slice T)','Slice T',['inst','dst','src'],'sliceCopy_OPEN'
  if label=='core.convert.IntoFrom.into':
   return '{T U : Type} (inst : core.convert.From U T) (value : T)','U',['inst','value'],'into_OPEN'
+ if label=='core.cmp.PartialEq.ne.trait_default':
+  return '{T U : Type} (inst : core.cmp.PartialEq T U) (a : T) (b : U)','Bool',['inst','a','b'],'traitNe_OPEN'
  if label=='core.cmp.impls.PartialEqShared.ne':
   return '{T U : Type} (inst : core.cmp.PartialEq T U) (a : T) (b : U)','Bool',['inst','a','b'],'sharedNe_OPEN'
  if label=='core.array.equality.PartialEqArray.ne':
@@ -225,7 +228,7 @@ out+='\ndef run\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)'
 out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable or filemode else '')+extra_params+' (c : Callees) (compatible : Compatible c)'+(' (entropy_same : ∀ n s, entropyAnswers n s = getrandom.fill s)' if entropy else '')+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable or filemode else '')+extra_views+' :\n    FinishedView (run '+' '.join(explicit)+(' entropyAnswers' if entropy else '')+(' fileAnswers'+(' reserveCallees' if joined else '') if durable or filemode else '')+(' pathCallees' if short=='NonceReserveFallible' else ' fallibleCallees pathCallees' if short=='NonceReserve' else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
 
-if entropy or short=='BuildSemantics':out=out.replace('simp only [condition,if_false]', 'simp only [condition,Bool.false_eq_true,if_false]')
+if entropy or short in ['BuildSemantics','PrepareOpening']:out=out.replace('simp only [condition,if_false]', 'simp only [condition,Bool.false_eq_true,if_false]')
 if short=='ProveSemantics':out=out.replace(':= by\n  unfold run', ':= by\n  rcases salts with ⟨reserved,context⟩\n  unfold run')
 if short=='NoncePath' or filemode:out=out.replace('P (','PV_EVH_Prefix.P (')
 record=json.dumps(dict(source=p,revision=rev,source_sha256=hashlib.sha256(s.encode()).hexdigest(),external_sha256=hashlib.sha256(ext.encode()).hexdigest(),function=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),open_callees={k:dict(header=v[0],result=v[1],args=v[2],field=v[3]) for k,v in spec.items()},lifted_calls=[c for c in calls if pure(c)],scope='source spine only; all named callees and runtime adequacy OPEN'),indent=2)+'\n'
