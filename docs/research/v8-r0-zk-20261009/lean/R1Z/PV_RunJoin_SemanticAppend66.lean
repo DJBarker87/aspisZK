@@ -14,7 +14,7 @@ theorem complete (ops : ExternalFuns) (fixed : ProverRwP6BodyCandidate.selected 
         ∃ next, @host_compact.compact_semantic _ ops logical out=ok (.Ok (),next) ∧
           bytes next.val=bytes out.val++bytes encoded.val := by
   have bound := PV_RunJoin_SemanticDomainBound66.complete ops logical 27#u8 32#usize 0#u8 records domain
-  have cap : 13831≤Usize.max := by scalar_tac
+  have cap : 13831≤Usize.max := by clear *;scalar_tac
   have emptylen : PV_RunJoin_ActualPlanSources59.empty.length=0 := rfl
   obtain ⟨encoded,he,hv⟩ := PV_RunJoin_SemanticComplete40.encode ops logical
     PV_RunJoin_ActualPlanSources59.empty records length domain (by change 0+32+records.flatten.length≤Usize.max;change 32+records.flatten.length≤logical.length at bound;omega)
