@@ -42,16 +42,21 @@ pins={{str(q.relative_to(s)):hashlib.sha256(q.read_bytes()).hexdigest() for q in
 (b/'NEH_SOURCE_PINS.json').write_text(json.dumps(pins));print(len(pins))
 ''');assert r.returncode==0,r.stderr
  ni=(original.get('native_command') or original['command'])[:]
- assert 'cargo-kani' in ni[0],('unresolved native argv',rp)
- if '--features' not in ni:
-  ni+=['--features',('r0' if '/aspis-core/' in ' '.join(ni) else 'r0,pool-v1-kernel' if '/aspis-statement/' in ' '.join(ni) else 'private-leaf-salts,optimized-terminal,program-build')]
+ if os.environ.get('NEH_NATIVE_TEMPLATE'):ni=json.loads(Path(os.environ['NEH_NATIVE_TEMPLATE']).read_text())
+ standalone=bool(os.environ.get('NEH_STANDALONE'))
+ assert 'cargo-kani' in ni[0] or standalone and 'kani-driver' in ni[0],('unresolved native argv',rp)
+ if not standalone:
+  if '--features' not in ni:
+   ni+=['--features',('r0' if '/aspis-core/' in ' '.join(ni) else 'r0,pool-v1-kernel' if '/aspis-statement/' in ' '.join(ni) else 'private-leaf-salts,optimized-terminal,program-build')]
+  manifest=ni[ni.index('--manifest-path')+1]
+  oldsrc=manifest.split('/crates/')[0] if '/crates/' in manifest else manifest.split('/programs/')[0]
+  ni=[v.replace(oldsrc,B+'/NEH_src') for v in ni]
+  ni=[B+'/NEH_target' if i>0 and ni[i-1]=='--target-dir' else v for i,v in enumerate(ni)]
  if os.environ.get('NEH_KMX_REQUIRED'):original['copy_patch_sha256']='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
- manifest=ni[ni.index('--manifest-path')+1]
- oldsrc=manifest.split('/crates/')[0] if '/crates/' in manifest else manifest.split('/programs/')[0]
- ni=[v.replace(oldsrc,B+'/NEH_src') for v in ni]
- ni=[B+'/NEH_target' if i>0 and ni[i-1]=='--target-dir' else v for i,v in enumerate(ni)]
  env={k:v for k,v in original['env'].items() if k!='LEAN_PATH'};env['TMPDIR']=B+'/NEH_tmp';env['CARGO_NET_OFFLINE']='true'
+ env['CARGO_PROFILE_DEV_OPT_LEVEL']='3';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS']='true'
  cfg=dict(attempt=a,kind='kani',module=original.get('module') or ni[ni.index('--harness')+1],sources=['NEH_src/'+n for n in overlay]+['NEH_gate.py','NEH_graph.py','NEH_src/Cargo.lock'],command=['python3','NEH_gate.py',a+'.json'],native_command=ni,env=env,timeout=original.get('timeout',240),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(original_receipt=rp,original_sha256=sha((ROOT/rp).read_bytes()),patch=patch,patch_sha256=sha((ROOT/patch).read_bytes())),copy_patch_sha256=original.get('copy_patch_sha256'),expected_time='Optimized cached compilation then original native harness, static-free local/owned records; no multiplication',print_axioms='N/A: kani')
+ if standalone:cfg.update(metadata_manifest=B+'/NEH_src/crates/aspis-r1-cost-probe/Cargo.toml',metadata_features='private-leaf-salts,optimized-terminal,program-build')
  rc=launch(cfg)
  r=py(f'''from pathlib import Path
 import json

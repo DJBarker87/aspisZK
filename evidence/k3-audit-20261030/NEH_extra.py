@@ -1,3 +1,4 @@
+from NEH_verdict import verdict as parse_verdict
 from NEH_replay import *
 from NEH_scan import frozen, read_json
 import difflib
@@ -12,7 +13,7 @@ def publish(a,rp,o,negative=False):
  with (E/(a+'-driver.log')).open('w') as f:r=subprocess.run([sys.executable,str(E/'NEH_replay.py'),a,rp,str(patch.relative_to(ROOT))],env={**os.environ,'NEH_OVERLAY_FILE':str(fn),'NEH_KMX_REQUIRED':'1'},stdout=f,stderr=subprocess.STDOUT)
  print(a,rp,r.returncode,flush=True)
  if r.returncode:raise SystemExit('own input fault; inspect')
- q=read_json(E/a/'receipt.json');t=(E/a/'stdout.log').read_text();v='OPEN' if ('timed out' in t.lower() or 'timeout' in t.lower() and 'VERIFICATION:- SUCCESSFUL' not in t) else 'PASS' if 'VERIFICATION:- SUCCESSFUL' in t else 'FAIL' if 'VERIFICATION:- FAILED' in t else 'OPEN'
+ q=read_json(E/a/'receipt.json');t=(E/a/'stdout.log').read_text();v=parse_verdict(t)
  with (E/'NEH_REPLAY_RESULTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,original_receipt=rp,verdict=v,expected='FAIL' if negative else 'PASS',new_control=negative))+'\n')
  if (negative and v=='PASS') or (not negative and v=='FAIL'):
   with (E/'NEH_FINDINGS.md').open('a') as f:f.write(f'\nImmediate replay finding {a}: {rp}, got {v}. Original harness name and native function preserved.\n')

@@ -1,10 +1,11 @@
+from NEH_verdict import verdict as parse_verdict
 """Derive review-only statuses; never mutate the authoritative ledgers."""
 from NEH_scan import *
 A=read_json(E/'NEH_APPLICABILITY.json');by={r['receipt']:r for r in A['receipts']};runs={}
 for q in sorted(E.glob('NEH_K*/receipt.json')):
  r=read_json(q);rp=r.get('deps_fingerprint',{}).get('original_receipt')
  if not rp:continue
- t=(q.parent/'stdout.log').read_text();v='OPEN' if ('timed out' in t.lower() or 'timeout' in t.lower() and 'VERIFICATION:- SUCCESSFUL' not in t) else 'PASS' if 'VERIFICATION:- SUCCESSFUL' in t else 'FAIL' if 'VERIFICATION:- FAILED' in t else 'OPEN'
+ t=(q.parent/'stdout.log').read_text();v=parse_verdict(t)
  runs.setdefault(rp,[]).append(dict(attempt=r['attempt'],verdict=v,exit=r['exit_status'],wall=r['wall_seconds'],peak_rss_kib=r['peak_rss_kib'],swaps=r['swaps'],receipt=str(q.relative_to(ROOT))))
 # Exact known pairs, including negative controls with the same harness name.
 pairs=[]

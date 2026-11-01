@@ -1,0 +1,83 @@
+{
+  "attempt": "NEH_K087",
+  "kind": "kani",
+  "module": "fast_pairing::canonical::NBQ_private::new",
+  "sources": [
+    "NEH_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NEH_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+    "NEH_gate.py",
+    "NEH_graph.py",
+    "NEH_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEH_gate.py",
+    "NEH_K087.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "fast_pairing::canonical::NBQ_private::new",
+    "--output-format",
+    "terse",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "1640f4475be44469cf83a5835191d4c670248b55",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "original_sha256": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "patch": "evidence/k3-audit-20261030/NEH_K087_harness.patch",
+    "patch_sha256": "ea5c086abf62ae75e3f1f5c894103659a2497851b794e9f104c7f694ccf0e732"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 2.7974350500153378,
+  "peak_rss_kib": "170176",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r2ec7f6655aa649d9b50487eb8b192397.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "163966976",
+  "source_hashes": {
+    "NEH_src/crates/aspis-r1-cost-probe/src/lib.rs": "29994baaf506cc323e6cd118207c6aabfb134a80c5fc6250b48fb0b41c0dcfd2",
+    "NEH_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs": "826ca25fdb31372f9fd92d85d69cf83c425a28f2922b8a91f882138e073a8ed5",
+    "NEH_gate.py": "988a3cdfd27ea243ab2dbb463def81febb0712fc2d5e892ee9eafff71f3c4b76",
+    "NEH_graph.py": "3b2b7d19b2961dd7fc2e06cf1bce3b107603502d80968432551810f68015475e",
+    "NEH_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  }
+}

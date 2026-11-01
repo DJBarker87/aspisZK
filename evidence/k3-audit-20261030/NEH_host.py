@@ -33,6 +33,9 @@ print(p.read_text(),end='');sys.exit(r.returncode)
   raise SystemExit('STOP admission error')
  raise SystemExit('STOP reservation exhausted')
 def launch(cfg):
+ existing=[json.loads(l) for l in (E/'NEH_ATTEMPTS.jsonl').read_text().splitlines()]
+ assert len(existing)<120, 'Kani budget exhausted'
+ assert cfg['attempt'] not in {r['attempt'] for r in existing}
  assert not (E/cfg['attempt']/'receipt.json').exists()
  cfg['reservation_retries']=admit(cfg['attempt'])
  (E/(cfg['attempt']+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')

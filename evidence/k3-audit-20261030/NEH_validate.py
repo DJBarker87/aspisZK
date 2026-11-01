@@ -1,7 +1,8 @@
+from NEH_verdict import verdict as parse_verdict
 from NEH_scan import *
 errors=[];done=[]
 for q in sorted(E.glob('NEH_K*/receipt.json')):
- r=read_json(q);a=r['attempt'];num=int(a.removeprefix('NEH_K'));log=(q.parent/'stdout.log').read_text();v='OPEN' if 'timed out' in log.lower() else 'PASS' if 'VERIFICATION:- SUCCESSFUL' in log else 'FAIL' if 'VERIFICATION:- FAILED' in log else 'OPEN'
+ r=read_json(q);a=r['attempt'];num=int(a.removeprefix('NEH_K'));log=(q.parent/'stdout.log').read_text();v=parse_verdict(log)
  if r.get('limits')!={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}:errors.append(a+':limits')
  if str(r['swaps'])!='0':errors.append(a+':swaps')
  g=E/(a+'-graph-check.json');l=E/(a+'-lock-check.json')
