@@ -4,7 +4,10 @@ import ast,hashlib,json,re,subprocess,shlex,time
 E=Path('evidence/pv-evh5-20261029');old=Path('evidence/pv-evh4-20261029')
 sha=lambda b:hashlib.sha256(b).hexdigest()
 receipts=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-*.json'))]
-assert [v['attempt'] for v in receipts]==list(range(73623,73642))
+focused=[v['attempt'] for v in receipts if v['attempt']<73697]
+assert focused==list(range(73623,max(focused)+1))
+assert all(v['attempt']<73697 or v['attempt']==73699 for v in receipts)
+next_fresh=max(focused)+1
 prep={sha(p.read_bytes()):str(p) for p in list(E.glob('prepare-*.json'))+list((E/'prepare-history').glob('*.json'))}
 # The first historical staging snapshot predates prepare-history support.
 for commit in subprocess.check_output(['git','log','--format=%H','841ae0f9a9..HEAD'],text=True).splitlines():
@@ -35,6 +38,7 @@ for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 for p in Path('tools/pv-evh5-20261029').glob('*.py'):ast.parse(p.read_text())
 subprocess.run(['python3','tools/pv-evh5-20261029/retry.py','--check'],check=True)
+subprocess.run(['python3','tools/pv-evh5-20261029/prefix_retry.py','--check'],check=True)
 code='''import pathlib,hashlib,json,subprocess,time
 p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-evh-20261029')
 print(json.dumps(dict(epoch=time.time(),units=subprocess.check_output(['systemctl','--user','list-units','pv-evh-*','--all','--no-pager'],text=True),files={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'evidence').iterdir() if q.is_file()},objects={q.stem:hashlib.sha256(q.read_bytes()).hexdigest() for q in (p/'objects').glob('PV_EVH_*.olean')},quiet=pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').read_text() if pathlib.Path('/home/dombarker/project-offloads/QUIET_WINDOW.json').exists() else None)))'''
@@ -47,5 +51,5 @@ for v in receipts:
   f=f'{name}-{a}.'+('json' if name=='admission' else 'log')
   assert host['files'][f]==sha((E/f).read_bytes())
  if v['accepted']:assert host['objects'][v['target']]==v['object_sha256']
-summary=dict(status='PASS receipt and source audit; incomplete proof frontier',baseline='841ae0f9a98c89a780803664aaf8755f48343b53',new_attempts=len(receipts),new_passed=len(accepted),new_failed=len(receipts)-len(accepted),cumulative_spent=17+len(receipts),remaining=83-len(receipts),next_fresh_id=73642,audit_remaining=[73699],accepted=accepted,guard_sha256=sha(Path('tools/pv-evh5-20261029/compile.py').read_bytes()),native=0,kani=0,rows_removed=[],release_replay=False,live_scopes=False)
+summary=dict(status='PASS receipt and source audit; incomplete proof frontier',baseline='841ae0f9a98c89a780803664aaf8755f48343b53',new_attempts=len(receipts),new_passed=len(accepted),new_failed=len(receipts)-len(accepted),cumulative_spent=17+len(receipts),remaining=83-len(receipts),next_fresh_id=next_fresh,audit_remaining=[73699],accepted=accepted,guard_sha256=sha(Path('tools/pv-evh5-20261029/compile.py').read_bytes()),native=0,kani=0,rows_removed=[],release_replay=False,live_scopes=False)
 (E/'validation.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary,indent=2))
