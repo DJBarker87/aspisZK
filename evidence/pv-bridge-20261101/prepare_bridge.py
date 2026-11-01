@@ -13,8 +13,9 @@ s=s.replace('mkIdent (declName ++ `instDiscriminant)', 'mkIdent (`_root_ ++ `PV_
 for mod,out in [('R1Z.BuilderAdmissionExtracted','PV_BR_BuilderAdmission'),('AspisR1ProverCommit.Types','PV_BR_ProverTypes')]:
  row=sources[mod]; raw=git(row['source']); assert sha(raw)==row['sha256'],mod
  s=raw.decode().replace('import ImportUnionNamedDiscriminant','import PV_BR_DiscriminantAdapter').replace('import_union_discriminant','pv_bridge_discriminant')
+ s=f'-- D540 adapted historical source: {mod}, sha256 {row["sha256"]}.\n-- Import/attribute adaptation only; not a fresh extraction. UNCOMPILED.\n'+s
  (B/f'{out}.lean').write_text(s)
- changes.append({'module':out,'source_module':mod,'source':row,'new_sha256':sha(s.encode()),'changes':['import replacement','attribute spelling; generated reader unchanged; enum-qualified instance identifier'], 'status':'UNCOMPILED'})
+ changes.append({'module':out,'source_module':mod,'source':row,'new_sha256':sha(s.encode()),'changes':['provenance comment','import replacement','attribute spelling; generated reader unchanged; enum-qualified instance identifier'], 'status':'UNCOMPILED'})
 constructors=[json.loads(l) for l in (D/'lean-70765/stdout.log').read_text().splitlines() if l.startswith('{')]
 lines=['import PV_BR_BuilderAdmission','import PV_BR_ProverTypes','import AspisR1WithdrawalValidation.Types','import AspisR1TerminalDecoder.Types','import AspisR1FinishRelationCurrent.Types','', '/-! D540 privacy-only transport. No omission of retry or entropy outcomes. -/','set_option autoImplicit false','namespace PV_BR_Transport']
 queries=[]
