@@ -22,3 +22,13 @@ that allocation-bearing source let. Its compatibility remains conditional.
 
 Rows removed NONE; target not established. No trace-projection or (v')
 reduction credit is claimed.
+
+The nonzero entropy guard is also prepared as its actual source loop, using
+PrefixLoop and checked value primitives, with no whole-helper answer.
+NonzeroStep, NonzeroFlow, NonzeroInstall and NonzeroProver are UNCOMPILED.
+Both the outer nonce guard and inner entropy-block checks use the same
+interpreter; the six remaining entropy callees stay explicit. Runtime primitive
+fidelity, panic-free termination and sufficient fuel are not yet proved.
+ValueBind and inherited PrepareOpening staging pass against hash-checked
+same-cohort dependencies. Staging is not a Lean run. The complete new ID block
+has no host receipt or sent.txt collisions.
