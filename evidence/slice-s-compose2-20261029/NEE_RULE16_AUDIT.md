@@ -72,3 +72,26 @@ part (1); it still does not supply part (2)'s missing child contracts or the
 borrowed shape admission. Every new Kani receipt has frozen offline graph,
 features, KMX and unchanged lock records; K044 onward also have the strict
 whole-lane writable-static scan. K041..043 patches are static-free by inspection.
+
+## Conservative source-file quarantine at final validation
+
+The reachable-cone audit above finds no static writes in the pure direct calls,
+but their historical oracle MODULE also contains obsolete static-writing
+functions. To avoid relying on that reachability interpretation of rule 16,
+NEE_validate additionally rejects any direct harness SOURCE containing writable
+statics. Thus NEE_K005 frame_m31, K007 frame_common and K009 frame_parts are
+conservatively SUSPENDED together with their paired controls K006/K008/K010.
+They were not re-run within this grant. Common also lacks borrowed admission.
+Their earlier local proof properties are not cited as current native credit.
+
+The retained direct sources for K011/013/015 (transfer_common,
+withdrawal_common, canonicality) are separate static-free payment_frames
+modules. Their model/empty-frame certificates retain 6/97 composed rows.
+The provisional 10/97 figure above is superseded by this stricter final gate.
+No root closes. This strengthens checks; it relaxes none.
+
+K054 and split-prefix K055 both timed out; no common-encoder native frame
+credit is claimed. All 55 Kani units are consumed. L024/L028/L029 and focused
+axioms audit L030 are accepted; failed L025..027 remain excluded. Final Lean
+usage 30/150. The under-80% stop is justified per member in NEE_STOP_AUDIT.json,
+not by Kani exhaustion alone. All new accepted top theorems use standard axioms.

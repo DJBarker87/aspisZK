@@ -141,13 +141,26 @@ def direct_contract(c,expected,ledger):
             inherited.artifact(p['contract_source'])
             source_check=json.loads(inherited.artifact(p['source_check']));assert source_check['errors']==[]
             source=inherited.artifact(p['harness']).decode()
+            assert 'static mut' not in source and 'UnsafeCell' not in source
+            assert 'Cell<' not in source and 'Atomic' not in source
             assert d['proof_target'] in source and '#[kani::proof_for_contract(' in source
         assert all(inherited.theorem(t) for t in d['domain_and_model_theorems'])
         assert d['domain_and_model_theorems']
         return True
     except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
 
+SUSPENDED_RECEIPT_FRAGMENTS={
+    'slice-s-compose2-20261029/NEE_K'+n+'/receipt.json'
+    for n in ['005','006','007','008','009','010','024','025','026','027']
+} | {'slice-s-compose-20261029/NED_K034/receipt.json','slice-s-compose-20261029/NED_K035/receipt.json'}
+
+def suspended_reference(value):
+    if isinstance(value,dict):return any(suspended_reference(v) for v in value.values())
+    if isinstance(value,list):return any(suspended_reference(v) for v in value)
+    return isinstance(value,str) and any(p in value for p in SUSPENDED_RECEIPT_FRAGMENTS)
+
 def certificate(c,expected,ledger,reviewed):
+    if suspended_reference(c):return False
     if not BASE_CERTIFICATE(c,expected,ledger,reviewed): return False
     # Alternative resolution does not invoke a child. Every execution-bearing
     # certificate additionally needs the three assume-guarantee parts.

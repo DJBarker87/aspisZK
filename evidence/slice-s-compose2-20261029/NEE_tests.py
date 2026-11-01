@@ -46,19 +46,23 @@ class RealCertificateMutations(unittest.TestCase):
         cls.base=v.read(v.R/'evidence/native-ledger3-20261029/NDT_LEDGER.json')
         cls.packet=v.read(E/'NEE_LEDGER_DELTA.json')
         cls.review=v.read(E/'NEE_REVIEWED_CERTIFICATES.json')
-        cls.f=next(f for f in cls.packet['members'] if f.endswith('::M31::to_le_bytes'))
+        cls.f=next(f for f in cls.packet['members'] if f.endswith('::transfer_common'))
     def rows(self,p,review=None):
         return [r['composed_status'] for r in v.compose(self.base,p,self.review if review is None else review)['rows'] if r['function']==self.f]
     def test_checked_leaf_closes(self):self.assertTrue(all(s=='CLOSED' for s in self.rows(self.packet)))
     def test_missing_leaf_certificate_keeps_row_open(self):
         p=copy.deepcopy(self.packet);p['members'].pop(self.f)
         self.assertTrue(all(s=='OPEN' for s in self.rows(p)))
-    def test_missing_self_edge_certificate_keeps_row_open(self):
-        p=copy.deepcopy(self.packet);p['inventory_edges']={}
-        self.assertTrue(all(s=='OPEN' for s in self.rows(p)))
-    def test_wrong_resolution_subject_keeps_row_open(self):
-        p=copy.deepcopy(self.packet);c=next(iter(p['inventory_edges'].values()));c['subject']+='wrong'
-        self.assertTrue(all(s=='OPEN' for s in self.rows(p)))
+    def test_suspended_static_module_keeps_m31_open(self):
+        m=next(f for f in self.packet['members'] if f.endswith('::M31::to_le_bytes'))
+        out=v.compose(self.base,self.packet,self.review)
+        self.assertTrue(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function']==m))
+    def test_suspended_receipt_cannot_support_alternative_resolution(self):
+        edge=next(e for e in self.packet['edges'] if 'M31::to_le_bytes ->' in e)
+        self.assertFalse(v.certificate(self.packet['edges'][edge],edge,self.base,self.review))
+    def test_missing_owned_shape_controls_keeps_row_open(self):
+        with patch.object(v,'shape_admitted',return_value=False):
+            self.assertTrue(all(s=='OPEN' for s in self.rows(self.packet)))
     def test_missing_frame_keeps_row_open(self):
         p=copy.deepcopy(self.packet);c=p['members'][self.f];c['direct_contract']['empty_modifies']=False
         self.assertTrue(all(s=='OPEN' for s in self.rows(p)))

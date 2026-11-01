@@ -1,0 +1,115 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -252,6 +252,7 @@
+     Ok(())
+ }
+ 
++#[cfg(not(kani))]
+ fn encode_common(
+     output: &mut [u8; POOL_V1_PAYMENT_STATEMENT_BYTES],
+     magic: [u8; 4],
+@@ -274,17 +275,44 @@
+     output[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]
+         .copy_from_slice(&common.asset_id.to_le_bytes());
+ }
++#[cfg(kani)]
++#[kani::requires(frame.j<216 && frame.log==0 && frame.old==output[frame.j] && frame.e0==common.anchor_root && frame.e1==common.nullifier)]
++#[kani::modifies(output, &mut frame.log)]
++#[kani::ensures(|_| frame.log==0 && output[frame.j]==if frame.j<40 {NEE_common_oracle::byte(magic,kind,common,frame)}else{frame.old})]
++fn encode_common(
++    output: &mut [u8; POOL_V1_PAYMENT_STATEMENT_BYTES],
++    magic: [u8; 4],
++    kind: PoolV1TransitionKind,
++    common: CommonPublicV1,
++    frame: &mut NEE_common_oracle::Frame,
++) {
++    output[..4].copy_from_slice(&magic);
++    output[4] = POOL_V1_PAYMENT_STATEMENT_VERSION;
++    output[5] = kind as u8;
++    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;
++    output[POOL_OFFSET..DEPLOYMENT_DOMAIN_OFFSET].copy_from_slice(&common.pool);
++}
+ 
+ pub fn encode_pool_v1_private_transfer_public_v1(
+     public: &PoolV1PrivateTransferPublicV1,
+ ) -> Result<[u8; POOL_V1_PAYMENT_STATEMENT_BYTES], PoolV1PaymentStatementFormatError> {
+     validate_pool_v1_private_transfer_public_v1(public)?;
+     let mut output = [0u8; POOL_V1_PAYMENT_STATEMENT_BYTES];
++    #[cfg(not(kani))]
+     encode_common(
+         &mut output,
+         POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC,
+         PoolV1TransitionKind::PrivateTransfer,
+         transfer_common(public),
++    );
++
++    #[cfg(kani)]
++    encode_common(
++        &mut output,
++        POOL_V1_PRIVATE_TRANSFER_STATEMENT_MAGIC,
++        PoolV1TransitionKind::PrivateTransfer,
++        transfer_common(public),
++        &mut NEE_common_oracle::Frame::new(transfer_common(public),0,0),
+     );
+     // Bytes 148..152 remain the canonical zero fee/reserved word.
+     debug_assert_eq!(
+@@ -303,11 +331,21 @@
+ ) -> Result<[u8; POOL_V1_PAYMENT_STATEMENT_BYTES], PoolV1PaymentStatementFormatError> {
+     validate_pool_v1_withdrawal_public_v1(public)?;
+     let mut output = [0u8; POOL_V1_PAYMENT_STATEMENT_BYTES];
++    #[cfg(not(kani))]
+     encode_common(
+         &mut output,
+         POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,
+         PoolV1TransitionKind::Withdrawal,
+         withdrawal_common(public),
++    );
++
++    #[cfg(kani)]
++    encode_common(
++        &mut output,
++        POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,
++        PoolV1TransitionKind::Withdrawal,
++        withdrawal_common(public),
++        &mut NEE_common_oracle::Frame::new(withdrawal_common(public),0,0),
+     );
+     output[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]
+         .copy_from_slice(&public.amount.to_le_bytes());
+@@ -1158,3 +1196,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEE_common_oracle.rs"]
++mod NEE_common_oracle;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEE_common_oracle.rs
+@@ -0,0 +1,27 @@
++#![allow(non_snake_case)]
++use super::*;
++fn NEE_digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn NEE_frontier()->[Digest;20] {[NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest()]}
++
++pub(super) struct Frame {pub j:usize,pub old:u8,pub log:usize,pub e0:Digest,pub e1:Digest,d0:[u8;32],d1:[u8;32]}
++impl Frame{pub(super) fn new(c:CommonPublicV1,j:usize,old:u8)->Self {Self{j,old,log:0,e0:c.anchor_root,e1:c.nullifier,d0:kani::any(),d1:kani::any()}}}
++pub(super) fn digest_reply(d:&Digest,f:&mut Frame)->[u8;32]{
++ let k:usize=kani::any();kani::assume(k<8);assert!(f.log<2);
++ assert!(d[k].0==if f.log==0{f.e0[k].0}else{f.e1[k].0},"NEE same digest call argument");
++ let r=if f.log==0{f.d0}else{f.d1};f.log+=1;r
++}
++pub(super) fn byte(magic:[u8;4],kind:PoolV1TransitionKind,c:CommonPublicV1,f:&Frame)->u8{
++ match f.j {0..=3=>magic[f.j],4=>1,5=>kind as u8,6=>1,7=>f.old,
++ 8..=39=>c.pool[f.j-8],40..=71=>c.deployment_domain[f.j-40],72..=79=>c.anchor_sequence.to_le_bytes()[f.j-72],
++ 80..=111=>f.d0[f.j-80],112..=143=>f.d1[f.j-112],144..=147=>c.asset_id.0.to_le_bytes()[f.j-144],_=>f.old}
++}
++#[kani::proof_for_contract(encode_common)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn common_oracle(){
++ let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NEE_digest(),nullifier:NEE_digest(),asset_id:M31(kani::any())};
++ let mut output:[u8;216]=kani::any();let magic:[u8;4]=kani::any();
++ let kind=if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal};
++ let j:usize=kani::any();kani::assume(j<216);let mut frame=Frame::new(c,j,output[j]);
++ encode_common(&mut output,magic,kind,c,&mut frame);
++}
