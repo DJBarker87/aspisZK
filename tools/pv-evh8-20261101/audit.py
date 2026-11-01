@@ -34,6 +34,8 @@ for short in ['FinishOpening','PublishCompact','NonzeroStep','PrivateSaltStep','
  subprocess.run(['python3','tools/pv-evh8-20261101/open_spine.py',short,'--check'],check=True,capture_output=True)
 subprocess.run(['python3','tools/pv-evh8-20261101/nonzero_install.py','--check'],check=True,capture_output=True)
 subprocess.run(['python3','tools/pv-evh5-20261029/open_spine.py','PrepareOpening','--check'],check=True,capture_output=True)
+for script in ['native_preflight.py','callback_frontier.py','callback_ctor.py']:
+ subprocess.run(['python3','tools/pv-evh8-20261101/'+script,'--check'],check=True,capture_output=True)
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 code='''import pathlib,hashlib,json,subprocess,time

@@ -74,3 +74,33 @@ failed, 57 attempts remaining. Next fresh ID 79323 is refused and UNCHARGED;
 a full 180-second cooldown precedes same-ID retry. Audits 79397–79399 untouched.
 Every accepted source and object/receipt hash reconciles with the retained host;
 there is no live owned scope. No full release replay was run.
+
+## Context checkpoint (final EVH8 snapshot)
+
+32 charged attempts, 22 accepted / 10 failed; **48 attempts remain**, next fresh
+79332. Audits 79397–79399 untouched. This is a context checkpoint, not budget
+exhaustion or a checked counterexample to shipped Rust. Strongest accepted
+entry: SaltsProver.entry_fixed (79328), still conditional source transport.
+
+NonzeroTotal (79323) proves symbolic completion in 33 steps for every typed
+32-byte input, unchanged world/events. PrivateSaltsFlow (79324), the explicit
+op11 salt wrapper (79326), ResultOps callback/drop frames (79327), VariantGuard
+at an explicit op233 selection (79329), and seven CallbackCtor frames with
+typed native argument/capture drops (79330) pass. Their actual source/native
+operator and drop associations remain open; the operator frames are not yet
+installed through the entire entry.
+
+ViewBoundary (79331) proves that runtime failure of a pure-source capacity
+call is incompatible with the old global FinishedView. Full native outcomes
+must retain runtime-fault prefixes and delimit the source-view domain; silently
+excluding aborts would not establish native coverage. This is a view limitation,
+not a refutation of the native task. Heap/capacity/handle/address/errno state,
+partial entropy-fill cleanup and native runtime fidelity still require work.
+
+Seven unique spine/operator groups contain eight actual op11/op12 calls. The
+preflight and callback inventory now record both counts. No full prover trace
+projection or (v') reduction is established, and no endpoint row/premise or trust
+field was removed, added or weakened. All accepted axioms are standard or empty;
+all receipt/source/object hashes reconcile read-only, no owned scope is live,
+no swaps/memory kills/limit increases occurred, and no full manifest/native/Kani
+regression ran. HANDOFF.md gives the next concrete native work and live budget.
