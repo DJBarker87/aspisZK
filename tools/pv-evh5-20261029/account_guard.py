@@ -8,7 +8,7 @@ s=s.replace('let b ← PV_EVH_Prefix.lift (core.cmp.PartialEq.ne.trait_default\n
 s=s.replace('account account_OPEN prove_OPEN','account account_OPEN prove_OPEN guard_OPEN')
 s=s.replace('    (same :', '    (guard_fixed : ∀ v, FinishedView (guard_OPEN v)\n      (core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant v transport.Variant.S2))\n    (same :')
 s=s.replace('· exact PV_EVH_Prefix.lift_fixed _','· exact guard_fixed variant',1)
-s=s.replace('prove_OPEN same account_fixed prove_fixed','prove_OPEN guard_OPEN guard_fixed same account_fixed prove_fixed')
+s=s.replace('prove_OPEN guard_OPEN same account_fixed prove_fixed','prove_OPEN guard_OPEN guard_fixed same account_fixed prove_fixed')
 s=s.replace('/-- Exact retry-entry guard and actual callback. Masked proving remains OPEN. -/', '/-- Comparison op233/trait-default is explicitly unfinished. It can emit events\nor exhaust before the actual callback; no Result-only effect credit is taken. -/')
 p=Path('lean/PV_EVH_AccountGuard.lean');r=Path('evidence/pv-evh5-20261029/account-guard-generation.json')
 record=json.dumps(dict(input=str(src),input_sha256=hashlib.sha256(src.read_bytes()).hexdigest(),output_sha256=hashlib.sha256(s.encode()).hexdigest(),unfinished='core.cmp.PartialEq.ne.trait_default transport.Variant.Insts.CoreCmpPartialEqVariant (op233)',scope='source entry erasure only; guard native interpretation remains OPEN'),indent=2)+'\n'

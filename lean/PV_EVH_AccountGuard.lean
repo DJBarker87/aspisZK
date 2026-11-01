@@ -89,7 +89,7 @@ theorem entry_fixed {T : Type} (inst : AccountInst T)
   unfold entry RealR1_client.prove_for_proof_accounts
   apply PV_EVH_Prefix.bind_fixed
   · exact retrying_fixed inst retryFuel entropyFuel answers public1 compiled
-      transport.Variant.S2 hash store account account_OPEN prove_OPEN guard_OPEN same account_fixed prove_fixed
+      transport.Variant.S2 hash store account account_OPEN prove_OPEN guard_OPEN guard_fixed same account_fixed prove_fixed
   · rintro ⟨r,store1⟩
     exact PV_EVH_Prefix.lift_fixed _
 
