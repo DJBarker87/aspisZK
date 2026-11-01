@@ -1,0 +1,70 @@
+{
+  "attempt": "NEK_K001",
+  "kind": "kani",
+  "module": "state_only_poseidon::NDE_native::NDE_matrix_cell",
+  "sources": [
+    "NEK_src/crates/aspis-statement/src/lib.rs",
+    "NEK_src/crates/aspis-statement/src/state_only_poseidon.rs",
+    "NEK_src/crates/aspis-statement/src/NDE_poseidon.rs",
+    "NEK_src/crates/aspis-statement/src/NDE_reference.rs",
+    "NEK_src/crates/aspis-core/src/lib.rs",
+    "NEK_src/crates/aspis-core/src/NEK_arbitrary.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K001.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--features",
+    "r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "state_only_poseidon::NDE_native::NDE_matrix_cell",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDE_matrix_step",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "1ef6ddef3deee731b13c2045095fa21f13a51f73",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front2-20261028/NDE_K050/receipt.json",
+    "original_sha256": "9a29191242436134cd85320b1d14f6891034f2f8f2be829f7203ea19826af86e",
+    "patch": "evidence/k3-review2-20261101/NEK_K001_harness.patch",
+    "patch_sha256": "2f3eb0c5bdf81b09f7e4a2bd8194f36ff19fd32cb8893b74eae4cf85470c8293"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0
+}

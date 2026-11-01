@@ -1,0 +1,70 @@
+{
+  "attempt": "NEK_K008",
+  "kind": "kani",
+  "module": "pool_v1::pair_forest_copy_terminal::NDE_native::NDE_binary",
+  "sources": [
+    "NEK_src/crates/aspis-statement/src/lib.rs",
+    "NEK_src/crates/aspis-statement/src/pool_v1/pair_forest_copy_terminal.rs",
+    "NEK_src/crates/aspis-statement/src/pool_v1/NDE_copy.rs",
+    "NEK_src/crates/aspis-statement/src/pool_v1/NDE_reference.rs",
+    "NEK_src/crates/aspis-core/src/lib.rs",
+    "NEK_src/crates/aspis-core/src/NEK_arbitrary.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K008.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--features",
+    "r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pool_v1::pair_forest_copy_terminal::NDE_native::NDE_binary",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1 --cfg NDE_simple",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "1ef6ddef3deee731b13c2045095fa21f13a51f73",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front2-20261028/NDE_K071/receipt.json",
+    "original_sha256": "bbc3a963e21a9cd10a214d95a27656b9286e5bfeec9be12bb23b9f6be551b519",
+    "patch": "evidence/k3-review2-20261101/NEK_K008_harness.patch",
+    "patch_sha256": "f138f09569039426cb3793ed8f67e39b7aac7eeede1f1a37d122639117ea4739"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0
+}
