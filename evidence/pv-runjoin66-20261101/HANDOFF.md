@@ -46,9 +46,10 @@ use source producer proofs, never weaken Link definitions.
 
 After full FinishContext: sequential op227/op257 success on actually reached
 inputs, with allocator-world binding, yielding Nonempty P; then NodeAppend,
-CommonSample and BackendInput. NativeSample62.common is already checked at the
-older dictionary; NativeBinding63.native supplies the world-indexed dictionary
-identity. No separate existential model witness is needed under(v').
+CommonSample and BackendInput. NativeSample62 is tracked but NOT in the accepted cache; do not claim
+its sourceFacts/common as checked. The NativeSampleSource66 transport draft
+cannot be staged until that dependency is reconciled and checked.
+NativeBinding63.native does supply the checked world-indexed dictionary identity. No separate existential model witness is needed under(v').
 
 No additional link or ledger row removed yet. QueryAppend remains the only
 removed native publication premise. Original privacy endpoint unchanged;
