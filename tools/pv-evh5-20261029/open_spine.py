@@ -111,7 +111,7 @@ def signature(label):
  return h,r,ex,field
 spec={label:signature(label) for label in calls if not pure(label) and not (durable and label==reserveLabel) and not (entropy and label=='getrandom.fill')}
 fields=[x[3] for x in spec.values()];assert len(set(fields))==len(fields),fields
-out=('import PV_EVH_Entropy\n' if entropy else '')+('import PV_EVH_DurableReserveBuild\n' if joined else 'import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
+out=('import PV_EVH_Entropy\nimport PV_EVH_SliceBind\n' if entropy else '')+('import PV_EVH_DurableReserveBuild\n' if joined else 'import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
 set_option autoImplicit false
 noncomputable section
 namespace '''+namespace+'''
@@ -161,8 +161,10 @@ def proof(x,n=2,lets=()):
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
   if entropy and x.expr.kind=='call' and 'Array.to_slice_mut' in x.expr.expr:
-   return pad+'apply PV_EVH_Prefix.bind_fixed (r := '+emit(x.expr,world=False).strip()+')\n'+pad+'  (f := fun '+v+' => do\n'+emit(x.next,n+4,world=False)+')\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
-  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed'+((' (r := '+emit(x.expr,world=False).strip().replace('\n',' ')+')') if entropy and x.expr.kind=='call' and x.expr.expr.startswith('Aeneas.Std.lift') else '')+'\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
+   pureexpr=x.expr.expr.removeprefix('Aeneas.Std.lift (')[:-1]
+   names=v[1:-1].split(', ');assert len(names)==2
+   return pad+'apply PV_EVH_SliceBind.pure_bind_fixed\n'+pad+'let '+names[0]+' := ('+pureexpr+').1\n'+pad+'let '+names[1]+' := ('+pureexpr+').2\n'+proof(x.next,n,lets+tuple(names))
+  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
  if x.kind=='if':
   normalize=('try dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
   return pad+'by_cases condition : '+x.cond+'\n'+pad+'· '+normalize+'simp only [condition,if_true]\n'+proof(x.yes,n+2,lets)+'\n'+pad+'· '+normalize+'simp only [condition,if_false]\n'+proof(x.no,n+2,lets)
