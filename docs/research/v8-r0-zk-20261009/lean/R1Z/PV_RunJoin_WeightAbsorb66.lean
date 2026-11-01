@@ -8,6 +8,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @ProverRwP6BodyCandidate.selected (types base) (selected base heap box ops)=
       selected base heap box ops := by
-  apply ExternalFuns.ext <;> rfl
+  cases ops
+  rfl
 #print axioms complete
 end R1Z.PV_RunJoin_WeightAbsorb66
