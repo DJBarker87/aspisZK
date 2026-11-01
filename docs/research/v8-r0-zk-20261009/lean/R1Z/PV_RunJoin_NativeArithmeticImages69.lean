@@ -1,5 +1,5 @@
 import R1Z.PV_RunJoin_NativeArithmeticTrace69
-import R1Z.PV_RunJoin_OpeningStreamUnique69
+import R1Z.PV_RunJoin_OpeningArrayStream69
 import R1Z.PV_RunJoin_OpeningEncoded44
 set_option autoImplicit false
 noncomputable section
@@ -74,17 +74,12 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
   have emfin := congrArg (fun t => t.2.2.2) eqModel
   have stream0 := PV_RunJoin_OpeningStreamUnique69.stream 7 c0 m0 hcc0 hcm0 em0
   have stream1 := PV_RunJoin_OpeningStreamUnique69.stream 7 c1 m1 hcc1 hcm1 em1
-  have streamf := PV_RunJoin_OpeningStreamUnique69.stream 64 finRaw mfin hcfin hcmfin
-    (by simpa only [ProverCommitMix48.sourceArray] using congrArg Subtype.val emfin)
+  dsimp only [Prod.fst,Prod.snd] at emfin
+  have streamf := PV_RunJoin_OpeningArrayStream69.complete 64#usize finRaw mfin hcfin hcmfin emfin
   rw [bytes0] at hi0
   rw [bytes1] at hi1
   rw [bytesf] at hif
-  have byte_eq : PV_RunJoin_WideImage43.byte=(fun x : U8 => UInt8.ofNat x.val) := by
-    funext x
-    apply UInt8.eq_of_toNat_eq
-    simp [PV_RunJoin_WideImage43.byte,PV_RunJoin_WidePoint43.byte,
-      ProverCommitWordBytes47.rawByte,UScalar.val]
-  rw [byte_eq] at hi0 hi1 hif
+  rw [PV_RunJoin_OpeningArrayStream69.byte] at hi0 hi1 hif
   exact ⟨hi0.trans (stream0.trans hm0),hi1.trans (stream1.trans hm1),hif.trans (streamf.trans hmfin)⟩
 
 #print axioms complete
