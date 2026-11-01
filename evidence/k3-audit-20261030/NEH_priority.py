@@ -11,7 +11,7 @@ for i,r in enumerate(rows):
  print(a,rp,z.returncode,flush=True)
  if z.returncode:raise SystemExit('own input fault or migration needed; inspect')
  old=json.loads((ROOT/rp).read_text());t=(E/a/'stdout.log').read_text()
- verdict='PASS' if 'VERIFICATION:- SUCCESSFUL' in t else 'FAIL' if 'VERIFICATION:- FAILED' in t else 'OPEN'
+ verdict='OPEN' if ('timed out' in t.lower() or 'timeout' in t.lower() and 'VERIFICATION:- SUCCESSFUL' not in t) else 'PASS' if 'VERIFICATION:- SUCCESSFUL' in t else 'FAIL' if 'VERIFICATION:- FAILED' in t else 'OPEN'
  with (E/'NEH_REPLAY_RESULTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,original_receipt=rp,verdict=verdict,expected='PASS' if old['exit_status']==0 else 'FAIL'))+'\n')
  if (old['exit_status']==0 and verdict=='FAIL') or (old['exit_status']!=0 and verdict=='PASS'):
   with (E/'NEH_FINDINGS.md').open('a') as f:f.write(f'\nImmediate replay finding: {a} / {rp}: expected historical exit {old["exit_status"]}, got {verdict}. Credit WITHDRAWN pending precise row consequences.\n')

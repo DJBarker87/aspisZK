@@ -18,6 +18,7 @@ print(len(f))
 ''');assert r.returncode==0,r.stderr
  (E/'NEH_REPLAY_FROZEN.json').write_text(json.dumps({n:sha(t.encode()) for n,t in files.items()},indent=2)+'\n')
 def replay(a,rp,patch):
+ if (E/'NEH_COMMON_RESTART').exists() and 74 <= int(a.removeprefix('NEH_K')) <= 99:raise SystemExit('planned local driver reload after K072 timeout; no submission')
  original=json.loads((ROOT/rp).read_text()); overlay=dict(patched_files((ROOT/patch).read_text()))
  if os.environ.get('NEH_OVERLAY_FILE'):overlay=json.loads(Path(os.environ['NEH_OVERLAY_FILE']).read_text())
  assert overlay,patch
