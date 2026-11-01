@@ -116,105 +116,105 @@ theorem run_fixed
   by_cases condition : retry < limit
   · simp only [condition,if_true]
     let a := Array.repeat 64#usize 0#u8
-    try dsimp only
-    try dsimp only
+    try dsimp only [Prod.casesOn]
+    try dsimp only [Prod.casesOn]
     apply PV_EVH_Prefix.bind_fixed
     ·
       exact compatible.op128_fixed _ _
     · intro bytes
-      try dsimp only
+      try dsimp only [Prod.casesOn]
       apply PV_EVH_Prefix.bind_fixed
       ·
         exact compatible.op125_fixed _ _ _
       · rintro ⟨s, as_mut_back⟩
-        try dsimp only
+        try dsimp only [Prod.casesOn]
         apply PV_EVH_Prefix.bind_fixed
         ·
           exact PV_EVH_Prefix.ofM_fixed _ _ (PV_EVH_Entropy.draw_fixed entropyAnswers entropy_same _) 
         · rintro ⟨r, s1⟩
-          try dsimp only
+          try dsimp only [Prod.casesOn]
           apply PV_EVH_Prefix.bind_fixed
           ·
             exact PV_EVH_Prefix.lift_fixed _
           · intro cf
-            try dsimp only
+            try dsimp only [Prod.casesOn]
             cases cf with
             | Continue unused0 =>
               let bytes1 := as_mut_back s1
-              try dsimp only
+              try dsimp only [Prod.casesOn]
               let a1 := Array.repeat 32#usize 0#u8
-              try dsimp only
-              try dsimp only
+              try dsimp only [Prod.casesOn]
+              try dsimp only [Prod.casesOn]
               apply PV_EVH_Prefix.bind_fixed
               ·
                 exact compatible.op128_fixed _ _
               · intro field_mask_entropy
                 let a2 := Array.repeat 32#usize 0#u8
-                try dsimp only
-                try dsimp only
+                try dsimp only [Prod.casesOn]
+                try dsimp only [Prod.casesOn]
                 apply PV_EVH_Prefix.bind_fixed
                 ·
                   exact compatible.op128_fixed _ _
                 · intro leaf_salt_seed
-                  try dsimp only
+                  try dsimp only [Prod.casesOn]
                   apply PV_EVH_Prefix.bind_fixed
                   ·
                     exact compatible.op126_fixed _ _
                   · rintro ⟨a3, deref_mut_back⟩
-                    try dsimp only
+                    try dsimp only [Prod.casesOn]
                     apply PV_EVH_Prefix.bind_fixed
                     ·
                       exact PV_EVH_Prefix.lift_fixed _
                     · rintro ⟨s2, to_slice_mut_back⟩
-                      try dsimp only
+                      try dsimp only [Prod.casesOn]
                       apply PV_EVH_Prefix.bind_fixed
                       ·
                         exact compatible.op127_fixed _ _
                       · intro a4
-                        try dsimp only
+                        try dsimp only [Prod.casesOn]
                         apply PV_EVH_Prefix.bind_fixed
                         ·
                           exact compatible.arrayIndex_fixed _ _ _
                         · intro s3
-                          try dsimp only
+                          try dsimp only [Prod.casesOn]
                           apply PV_EVH_Prefix.bind_fixed
                           ·
                             exact compatible.sliceCopy_fixed _ _ _
                           · intro s4
                             let a5 := to_slice_mut_back s4
-                            try dsimp only
+                            try dsimp only [Prod.casesOn]
                             let field_mask_entropy1 := deref_mut_back a5
-                            try dsimp only
-                            try dsimp only
+                            try dsimp only [Prod.casesOn]
+                            try dsimp only [Prod.casesOn]
                             apply PV_EVH_Prefix.bind_fixed
                             ·
                               exact compatible.op126_fixed _ _
                             · rintro ⟨a6, deref_mut_back1⟩
-                              try dsimp only
+                              try dsimp only [Prod.casesOn]
                               apply PV_EVH_Prefix.bind_fixed
                               ·
                                 exact PV_EVH_Prefix.lift_fixed _
                               · rintro ⟨s5, to_slice_mut_back1⟩
-                                try dsimp only
+                                try dsimp only [Prod.casesOn]
                                 apply PV_EVH_Prefix.bind_fixed
                                 ·
                                   exact compatible.arrayIndex_fixed _ _ _
                                 · intro s6
-                                  try dsimp only
+                                  try dsimp only [Prod.casesOn]
                                   apply PV_EVH_Prefix.bind_fixed
                                   ·
                                     exact compatible.sliceCopy_fixed _ _ _
                                   · intro s7
                                     let a7 := to_slice_mut_back1 s7
-                                    try dsimp only
+                                    try dsimp only [Prod.casesOn]
                                     let leaf_salt_seed1 := deref_mut_back1 a7
-                                    try dsimp only
-                                    try dsimp only
+                                    try dsimp only [Prod.casesOn]
+                                    try dsimp only [Prod.casesOn]
                                     apply PV_EVH_Prefix.bind_fixed
                                     ·
                                       exact compatible.op127_fixed _ _
                                     · intro a8
-                                      try dsimp only
+                                      try dsimp only [Prod.casesOn]
                                       apply PV_EVH_Prefix.bind_fixed
                                       ·
                                         exact compatible.entropy_nonzero32_fixed _
@@ -222,12 +222,12 @@ theorem run_fixed
                                         by_cases condition : b
                                         · try dsimp only [a,bytes1,a1,a2,a5,field_mask_entropy1,a7,leaf_salt_seed1] at condition
                                           simp only [condition,if_true]
-                                          try dsimp only
+                                          try dsimp only [Prod.casesOn]
                                           apply PV_EVH_Prefix.bind_fixed
                                           ·
                                             exact compatible.op127_fixed _ _
                                           · intro a9
-                                            try dsimp only
+                                            try dsimp only [Prod.casesOn]
                                             apply PV_EVH_Prefix.bind_fixed
                                             ·
                                               exact compatible.entropy_nonzero32_fixed _
@@ -238,7 +238,7 @@ theorem run_fixed
                                                 exact PV_EVH_Prefix.lift_fixed _
                                               · try dsimp only [a,bytes1,a1,a2,a5,field_mask_entropy1,a7,leaf_salt_seed1] at condition
                                                 simp only [condition,if_false]
-                                                try dsimp only
+                                                try dsimp only [Prod.casesOn]
                                                 apply PV_EVH_Prefix.bind_fixed
                                                 ·
                                                   exact PV_EVH_Prefix.lift_fixed _
@@ -246,14 +246,14 @@ theorem run_fixed
                                                   exact PV_EVH_Prefix.lift_fixed _
                                         · try dsimp only [a,bytes1,a1,a2,a5,field_mask_entropy1,a7,leaf_salt_seed1] at condition
                                           simp only [condition,if_false]
-                                          try dsimp only
+                                          try dsimp only [Prod.casesOn]
                                           apply PV_EVH_Prefix.bind_fixed
                                           ·
                                             exact PV_EVH_Prefix.lift_fixed _
                                           · intro retry1
                                             exact PV_EVH_Prefix.lift_fixed _
             | Break residual =>
-              try dsimp only
+              try dsimp only [Prod.casesOn]
               apply PV_EVH_Prefix.bind_fixed
               ·
                 exact PV_EVH_Prefix.lift_fixed _
