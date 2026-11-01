@@ -15,6 +15,7 @@ theorem backend {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F)
     (phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world) :
+    letI : ExternalTypes := types base
     phase.val.backend.messages.length=29 := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops runtime world
@@ -33,7 +34,8 @@ theorem prepared {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F)
     (phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world)
     (p : prover.PreparedOpening)
-    (success : @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
+    (success : letI : ExternalTypes := types base
+      @prover.prepare_opening (types base) (opsNative base heap box ops runtime world)
       .S2 phase.val.hash phase.val.backend phase.val.sem=ok (.Ok p)) :
     p.y1.length=32*29 := by
   letI : ExternalTypes := types base
