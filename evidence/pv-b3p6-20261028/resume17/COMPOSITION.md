@@ -1,3 +1,9 @@
+# D542 std transfer update
+
+All 23 ordinary instantiated std differences/absences have script-checked structural arguments in STD-STRUCTURAL-D542.md/.json. Transition, external, internal and sum_high gates K73946/K73948 have their withheld LOCAL equivalence credit RELEASED. Label: "Kani equivalence (P6) with std parity by token identity plus structural per-item arguments (k''')". No ordinary item is unargued. Intrinsics, generated glue and compiler preservation remain V370 / D381,D386. Historical K3 suspensions remain; no suspended pass is credited.
+
+This supersedes the D540 withholding paragraphs below. It does not discharge linear caller-canonicality, the missing third sum interval, full reference-model binding, std/D188/matrix/callback closure or the endpoint. Local equivalences and complete model associations are counted separately pending composition.
+
 # D540 composition update
 
 V244 / runjoin op227 OPEN. No endpoint premise removed, added or weakened.
