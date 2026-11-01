@@ -82,10 +82,14 @@ theorem inclusive_std_while540 {α : Type} (step : α → Usize → Result α)
     exact (inclusive_std_fold540 step last first _ state count).trans
       (inclusive_while_fold540 step last first safe _ state count).symm
   · have empty : last.val < first.val := by scalar_tac
-    unfold inclusive_std_loop17
-    rw [loop.eq_1,loop.eq_1]
-    simp only [inclusive_std_body17,inclusive_next_extraction17,empty,or_true,if_true,
-      bind_tc_ok,inclusive_body12,order,if_false]
+    have left : inclusive_std_loop17 step first last state = .ok state := by
+      unfold inclusive_std_loop17
+      rw [loop.eq_1]
+      simp only [inclusive_std_body17,inclusive_next_extraction17,empty,or_true,if_true,bind_tc_ok]
+    have right : loop (inclusive_body12 step last) (state,first) = .ok state := by
+      rw [loop.eq_1]
+      simp only [inclusive_body12,order,if_false]
+    exact left.trans right.symm
 
 #print axioms inclusive_std_fold540
 #print axioms inclusive_body_general540
