@@ -15,6 +15,7 @@ theorem add_source {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F) :
     @aspis_core.field.QM31.add (types base) (opsNative base heap box ops runtime world)=
       ProverRwDictionaryTower.qAdd := by
+  change @ExternalFuns.op67 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_67]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -26,6 +27,7 @@ theorem mul_source {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F) :
     @aspis_core.field.QM31.mul (types base) (opsNative base heap box ops runtime world)=
       ProverRwDictionaryTower.qMul := by
+  change @ExternalFuns.op69 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_69]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
@@ -37,6 +39,7 @@ theorem zero_source {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box
     (world : PV_FXM_ReserveWorld.World S F) :
     @aspis_core.field.QM31.ZERO (types base) (opsNative base heap box ops runtime world)=
       ok (ProverRwDictionaryTower.fromQ AspisR1ProducerRelease47.field.QM31.ZERO) := by
+  change @ExternalFuns.op64 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_64]
   unfold ProverRwP6BodyCandidate.selected ProverRwP6BoundaryInstall.selected
