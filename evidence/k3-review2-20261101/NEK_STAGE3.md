@@ -1,0 +1,11 @@
+# Box windows and focused assembly
+
+All sixty original boxed-common conjunct windows have completed:30 positive PASS,29 matched control FAIL,1 control OPEN (K052 outer timeout after cold-compilation/lock waiting). K052 is not rerun unchanged. All original predicates, input records and names are retained; field and input-frame conjuncts are split explicitly, never dropped. This is provisional window evidence, pending per-configuration exact KMX controls, same-shape function-contract fidelity admission, full conjunction assembly, and native/context transport audit. No NEC leaf is newly CLOSED.
+
+The immutable source bundle enables up to three independently admitted capped Kani scopes. Global cfg RUSTFLAGS caused dependency rebuilds and Cargo waits in v1; v2 uses EMPTY target-only harness features for postcondition selection. Deployed features remain selected, all package/version/edge checks remain exact, and no frozen native body uses these harness feature names. Original source bundles and all interrupted-dispatcher receipts are retained, recovered read-only; submitted scopes were never resubmitted.
+
+NBQ error signature migration is repaired at its owned adapter map_err use: K195 PASS/K196 control FAIL. This corrects K011/K012's recorded compile-error obstruction. The exact formatting abstraction/result/one-log property and original rejects name are retained. The Solana msg macro source is pinned by hash; formatted bytes remain outside the approved observation, as originally scoped.
+
+Focused Lean NEK_L001: target NEK_ByteWindows.lean, exit0,wall0.7263231170363724s,peakRSS460936KiB,swap0. Source revision6779677f18 with dirty-source SHA and full command in receipt. New top axioms: quotient_remainder_ext [propext]; indexed_nibbles_ext [propext,Quot.sound]. Both are generic division/remainder assembly facts; neither replaces native evidence.219 Aeneas objects reachable through the selected coherent/cache LEAN_PATH are pinned; no dependency build ran.
+
+Own reset inventory is extended to frozen TOML manifests before resetting harness-only feature overlays; validation is unchanged or stricter. No shared runner changed. No shipped source, ELF, security assumption or authoritative ledger changed. Target not yet established.

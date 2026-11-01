@@ -34,7 +34,8 @@ print(p.read_text(),end='');sys.exit(r.returncode)
  raise SystemExit('STOP reservation exhausted')
 def launch(cfg):
  existing=[json.loads(l) for l in (E/'NEK_ATTEMPTS.jsonl').read_text().splitlines()]
- assert len(existing)<240, 'Kani budget exhausted'
+ limit=240 if cfg['kind']=='kani' else 10
+ assert sum(r.get('kind')==cfg['kind'] for r in existing)<limit, cfg['kind']+' budget exhausted'
  assert cfg['attempt'] not in {r['attempt'] for r in existing}
  assert not (E/cfg['attempt']/'receipt.json').exists()
  cfg['reservation_retries']=admit(cfg['attempt'])

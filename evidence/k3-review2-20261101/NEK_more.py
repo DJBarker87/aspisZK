@@ -70,6 +70,7 @@ def nbq_error(start=11):
  native=original.replace(old,new).replace('.map_err(error)','.map_err(|e|error(e,&mut NBQ_error_control::NEK_Context{CALLS:0}))')
  o=kmx('programs/r1-cost-probe');o[p]+='\n'+h # replace native only, preserving own KMX module
  o[p]=o[p].replace(original,native,1)
+ owned='programs/r1-cost-probe/src/r1_pool_adapter_owned.rs';own=frozen(owned).decode();own=own.replace('.map_err(super::super::error)', '.map_err(|e|super::super::error(e,&mut super::super::NBQ_error_control::NEK_Context{CALLS:0}))');o[owned]=own
  for neg in [False,True]:
   a=f'NEK_K{start+int(neg):03}'
   if (E/a/'receipt.json').exists():continue

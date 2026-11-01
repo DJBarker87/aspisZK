@@ -1,6 +1,6 @@
 # Closure and decoder-contract stage
 
-NEK_K011/012 restore the selected NBQ error result/one-log observation with a local receiver and the same formatting abstraction. The native helper has an explicit context argument; the exact msg-format expansion/native association remains recorded trust, not discharged by the log count. NEK_K013/014 restore the exact recovered NBP Debug Parse writer byte/length property; unused static error-log functions are omitted. NEK_K015/016 validate the original NDE KMX pointer control configuration with no unrelated static modules.
+NEK_K011/012 are charged compile errors from a missed adapter map_err(super::error) call after the local-context signature change; no NBQ error credit is restored. The earlier stage wording was corrected as soon as the raw verdict audit exposed it. NEK_K013/014 restore the exact recovered NBP Debug Parse writer byte/length property; unused static error-log functions are omitted. NEK_K015/016 validate the original NDE KMX pointer control configuration with no unrelated static modules.
 
 NEK_K023–030 are eight charged own migration compile errors (missing crate:: qualifier for KMX paths); no semantic credit. After repair, K031 row-contract TIMED OUT at90s and is OPEN. Already submitted K032 inverted contract failed; its receipt was recovered after stopping only the local dispatcher. No unchanged retry or timeout/cap increase. Other Vec admission/caller checks need a one-window/frame split first.
 

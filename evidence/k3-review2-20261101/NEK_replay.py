@@ -64,4 +64,7 @@ b=Path({B!r});print(json.dumps({{p.name:p.read_text() for p in b.glob({(a+'-*che
  return rc
 if __name__=='__main__':
  if sys.argv[1]=='seed':seed()
- else:replay(*sys.argv[1:])
+ else:
+  replay(*sys.argv[1:])
+  log=(E/sys.argv[1]/'stdout.log').read_text()
+  if re.search(r'could not compile|Found [0-9]+ compilation errors|no matching harness|Failed to execute cargo',log):raise SystemExit('own compile/selection failure; repair before dependent launch')

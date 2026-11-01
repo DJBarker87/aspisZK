@@ -12,22 +12,28 @@ def prepare():
   else:
    assert o[p]==base[p] and o[m]==base[m],('not identical body/input fixture',rp)
   for j,clause in enumerate(clauses):
-   attrs.append('#[cfg_attr(all(kani,NEK_clause_'+str(clause_index)+'),kani::ensures(|r| ('+clause+') != cfg!(NEK_invert)))]\n')
+   attrs.append('#[cfg_attr(all(kani,feature="NEK_clause_'+str(clause_index)+'"),kani::ensures(|r| ('+clause+') != cfg!(feature="NEK_invert")))]\n')
    for neg in [False,True]:
     a=f'NEK_K{index:03}';index+=1
     items.append(dict(attempt=a,original_receipt=rp,clause=j,cfg='NEK_clause_'+str(clause_index),predicate=clause,negative=neg))
    clause_index+=1
  base[base_parent]=base[base_parent].replace('fn asq8_common(',requirements+''.join(attrs)+'fn asq8_common(',1)
+ # Empty target-only harness features do not change any deployed body/dependency.
+ manifest='programs/r1-cost-probe/Cargo.toml';toml=frozen(manifest).decode()
+ feature_names=['NEK_clause_'+str(i) for i in range(clause_index)]+['NEK_invert']
+ assert all(n not in toml for n in feature_names)
+ assert toml.count('[features]')==1
+ base[manifest]=toml.replace('[features]','[features]\n'+''.join(n+' = []\n' for n in feature_names),1)
  assert all('static mut' not in t for t in base.values())
- (E/'NEK_COMMON_IMMUTABLE.json.xz').write_bytes(lzma.compress(json.dumps(base,sort_keys=True).encode()))
- (E/'NEK_COMMON_BATCH_PLAN.json').write_text(json.dumps(items,indent=2)+'\n')
+ (E/'NEK_COMMON_IMMUTABLE_v2.json.xz').write_bytes(lzma.compress(json.dumps(base,sort_keys=True).encode()))
+ (E/'NEK_COMMON_BATCH_PLAN_v2.json').write_text(json.dumps(items,indent=2)+'\n')
  diff=[]
  for n,t in base.items():
   old=frozen(n);diff.extend(__import__('difflib').unified_diff((old or b'').decode().splitlines(True),t.splitlines(True),fromfile='a/'+n if old else '/dev/null',tofile='b/'+n))
- (E/'NEK_COMMON_IMMUTABLE.patch').write_text(''.join(diff));return base,items
+ (E/'NEK_COMMON_IMMUTABLE_v2.patch').write_text(''.join(diff));return base,items
 
 def upload(base):
- admit('NEK_COMMON_IMMUTABLE_INPUT')
+ admit('NEK_COMMON_IMMUTABLE_v2_INPUT')
  code=f'''from pathlib import Path
 import json,zlib,base64,hashlib
 b=Path({B!r});s=b/'NEK_src';f=json.loads((b/'NEK_FROZEN_RS.json').read_text())
@@ -49,8 +55,8 @@ def cfg(item,base):
  ni=[v.replace(oldsrc,B+'/NEK_src') for v in ni];ni=[B+'/NEK_target' if i>0 and ni[i-1]=='--target-dir' else v for i,v in enumerate(ni)]
  if '--features' not in ni:ni+=['--features','pool-adapter,private-leaf-salts']
  env={k:v for k,v in original['env'].items() if k!='LEAN_PATH'};env.update(TMPDIR=B+'/NEK_tmp',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0')
- env['RUSTFLAGS']=env.get('RUSTFLAGS','')+' --cfg '+item['cfg']+(' --cfg NEK_invert' if item['negative'] else '')
- return dict(attempt=a,kind='kani',module='r1_pool_adapter::NDM_native::common_contract',sources=['NEK_src/'+n for n in base]+['NEK_gate.py','NEK_graph.py','NEK_src/Cargo.lock'],command=['python3','NEK_gate.py',a+'.json'],native_command=ni,env=env,timeout=original.get('timeout',180),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(original_receipt=rp,original_sha256=sha((ROOT/rp).read_bytes()),immutable_bundle_sha256=sha((E/'NEK_COMMON_IMMUTABLE.json.xz').read_bytes()),split_conjunct=item['clause'],selected_cfg=item['cfg']),copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',expected_time='optimized cached compile, one independent original postcondition conjunct, no native field multiplication',print_axioms='N/A: kani',concurrency_policy='at most three 8GiB scopes, immutable source/manifest/pins; independent cfg targets and disjoint evidence paths')
+ ni[ni.index('--features')+1]+=','+item['cfg']+(',NEK_invert' if item['negative'] else '')
+ return dict(attempt=a,kind='kani',module='r1_pool_adapter::NDM_native::common_contract',sources=['NEK_src/'+n for n in base]+['NEK_gate.py','NEK_graph.py','NEK_src/Cargo.lock'],command=['python3','NEK_gate.py',a+'.json'],native_command=ni,env=env,timeout=original.get('timeout',180),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(original_receipt=rp,original_sha256=sha((ROOT/rp).read_bytes()),immutable_bundle_sha256=sha((E/'NEK_COMMON_IMMUTABLE_v2.json.xz').read_bytes()),split_conjunct=item['clause'],selected_cfg=item['cfg']),copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67',expected_time='optimized cached compile, one independent original postcondition conjunct, no native field multiplication',print_axioms='N/A: kani',concurrency_policy='at most three 8GiB scopes, immutable source/manifest/pins; independent cfg targets and disjoint evidence paths')
 
 write_lock=threading.Lock()
 def worker(item,base):
@@ -72,6 +78,7 @@ def run():
  # No previous native scope may still read this source tree during setup.
  upload(base)
  pending=[x for x in items if not (E/x['attempt']/'receipt.json').exists()]
+ assert not any((E/x['attempt']/"receipt.json").exists() for x in pending)
  with ThreadPoolExecutor(max_workers=3) as pool:
   futures=[]
   for i,item in enumerate(pending):
