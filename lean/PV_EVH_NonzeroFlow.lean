@@ -10,15 +10,15 @@ variable [ExternalTypes] [ExternalFuns]
 The checked primitive/runtime fidelity and panic-free domain still need audit. -/
 def loop (fuel : Nat) (bytes : Array U8 32#usize) (combined : U8) (i : Usize) : P U8 :=
   PV_EVH_PrefixLoop.loop
-    (fun (combined, i) => PV_EVH_NonzeroStep.run bytes combined i {}) fuel (combined, i)
+    (fun (state : U8 × Usize) => PV_EVH_NonzeroStep.run bytes state.1 state.2 {}) fuel (combined, i)
 
 theorem loop_fixed (fuel : Nat) (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     FinishedView (loop fuel bytes combined i)
       (aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i) := by
   apply PV_EVH_PrefixLoop.fixed_recursive
-    (fun (combined, i) => PV_EVH_NonzeroStep.run bytes combined i {})
-    (fun (combined, i) => aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes combined i)
-    (fun (combined, i) => aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i)
+    (fun (state : U8 × Usize) => PV_EVH_NonzeroStep.run bytes state.1 state.2 {})
+    (fun (state : U8 × Usize) => aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes state.1 state.2)
+    (fun (state : U8 × Usize) => aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes state.1 state.2)
   · rintro ⟨combined, i⟩
     unfold aspis_prover.state_only_entropy.entropy_nonzero32_loop
     rw [Aeneas.Std.loop.eq_def]

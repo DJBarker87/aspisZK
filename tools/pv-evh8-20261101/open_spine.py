@@ -12,6 +12,8 @@ ext=subprocess.check_output(['git','show',rev+':'+p.replace('Funs.lean','Externa
 a=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text());g=dict(s=s.replace('\npartial_fixpoint',''),re=re)
 exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),g)
 config={
+ 'PrivateSaltStep':'prover.derive_private_salt_step',
+ 'PrivateSaltsStep':'prover.derive_private_salts_loop.body',
  'NonzeroStep':'aspis_prover.state_only_entropy.entropy_nonzero32_loop.body',
  'FinishOpening':'prover.finish_opening',
  'PublishCompact':'prover.publish_compact',
@@ -107,6 +109,8 @@ def signature(label):
   parts.append(typ[last:].strip());ret=parts.pop();assert ret.startswith('Result '),ret
   h+=''.join(' (arg'+str(i)+' : '+v+')' for i,v in enumerate(parts))
   return h.strip(),ret[7:].strip(),binder_names(h),op+'_OPEN'
+ if label=='alloc.vec.Vec.push':
+  return '{T : Type} (v : alloc.vec.Vec T) (value : T)','alloc.vec.Vec T',['v','value'],'push_OPEN'
  if label=='alloc.slice.Slice.to_vec':
   return '{T : Type} (inst : core.clone.Clone T) (s : Slice T)','alloc.vec.Vec T',['inst','s'],'toVec_OPEN'
  if label=='alloc.vec.Vec.extend_from_slice':
@@ -252,7 +256,7 @@ def proof(x,n=2,lets=()):
   return pad+'exact compatible.'+field.replace('_OPEN','_fixed')+(' '+' '.join(['_']*len(ex)) if ex else '')
  return pad+'exact PV_EVH_Prefix.lift_fixed _'
 
-if entropy or short=='NonzeroStep':out+='\nopen ControlFlow\n'
+if entropy or short in ['NonzeroStep','PrivateSaltsStep']:out+='\nopen ControlFlow\n'
 out+='\ndef run\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable or filemode else '')+extra_params+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
 out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable or filemode else '')+extra_params+' (c : Callees) (compatible : Compatible c)'+(' (entropy_same : ∀ n s, entropyAnswers n s = getrandom.fill s)' if entropy else '')+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable or filemode else '')+extra_views+' :\n    FinishedView (run '+' '.join(explicit)+(' entropyAnswers' if entropy else '')+(' fileAnswers'+(' reserveCallees' if joined else '') if durable or filemode else '')+(' pathCallees' if short=='NonceReserveFallible' else ' fallibleCallees pathCallees' if short=='NonceReserve' else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
