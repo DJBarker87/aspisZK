@@ -1,0 +1,84 @@
+START 78046 R1Z.PV_RunJoin_LiftColumnsValue66
+DONE 78046 R1Z.PV_RunJoin_LiftColumnsValue66 exit 1 wall 2.4 RSS 4372717568
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsValue66.lean:51:4: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Array.update ?m.198 27#usize ?x
+in the target expression
+  (do
+      let v1 ← ok ⟨↑g.to_slice, ⋯⟩
+      let columns5 ← Array.update (matrix (Function.update (filled p (row columns hlen) 26) (↑26#usize) h)) 27#usize v1
+      let v3 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone d.to_slice
+      if 28#usize < 29#usize then ok () else fail Error.assertionFailure
+      let (v4, index_mut_back2) ← columns5.index_mut_usize 28#usize
+      (index_mut_back2 v4).update 28#usize v3) =
+    ok out
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+columns : Columns
+hlen : ∀ l < 26, (column columns l).length = 1024
+h : Row
+g d : Std.Array Q 1024#usize
+out : PV_RunJoin_LiftArray66.Matrix
+success✝ :
+  (do
+      let columns_1 ←
+        core.default.DefaultArray.default 29#usize (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.QM31)
+      let columns1 ← host_semantic.lift_columns_loop0 columns columns_1 0#usize
+      massert (26#usize < 29#usize)
+      let (v, index_mut_back) ← columns1.index_mut_usize 26#usize
+      have columns2 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back v
+      let columns3 ← columns2.update 26#usize h
+      let s ← lift g.to_slice
+      let v1 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s
+      massert (27#usize < 29#usize)
+      let (v2, index_mut_back1) ← columns3.index_mut_usize 27#usize
+      have columns4 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back1 v2
+      let columns5 ← columns4.update 27#usize v1
+      let s1 ← lift d.to_slice
+      let v3 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s1
+      massert (28#usize < 29#usize)
+      let (v4, index_mut_back2) ← columns5.index_mut_usize 28#usize
+      have columns6 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back2 v4
+      columns6.update 28#usize v3) =
+    ok out
+initial : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize
+hinitial :
+  core.default.DefaultArray.default 29#usize (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.QM31) = ok initial
+p : ℕ → Row := PV_RunJoin_LiftArrayTotal66.cells initial
+zero : filled p (row columns hlen) 0 = p
+hi : matrix (filled p (row columns hlen) 0) = initial
+hl : host_semantic.lift_columns_loop0 columns initial 0#usize = ok (matrix (filled p (row columns hlen) 26))
+success :
+  (do
+      let v1 ← ok ⟨↑g.to_slice, ⋯⟩
+      let columns5 ← Array.update (matrix (Function.update (filled p (row columns hlen) 26) (↑26#usize) h)) 27#usize v1
+      let v3 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone d.to_slice
+      if 28#usize < 29#usize then ok () else fail Error.assertionFailure
+      let (v4, index_mut_back2) ← columns5.index_mut_usize 28#usize
+      (index_mut_back2 v4).update 28#usize v3) =
+    ok out
+⊢ ∃ p, out = matrix (tails (filled p (row columns hlen) 26) h g d)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    g.to_slice
+  has type
+    Slice aspis_core.field.QM31
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑g.to_slice
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsValue66.lean:47:24: warning: This simp argument is unused:
+  massert
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵m̵a̵s̵s̵e̵r̵t̵,̵s̵h̵o̵w̵ ̵2̵7̵#̵u̵s̵i̵z̵e̵<̵2̵9̵#̵u̵s̵i̵z̵e̵[̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲s̲h̲o̲w̲ ̲2̲7̲#̲u̲s̲i̲z̲e̲ ̲<̲ ̲2̲9̲#̲u̲s̲i̲z̲e̲ from by d̵e̵c̵i̵d̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵d̲e̲c̲i̲d̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲ at success
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_LiftColumnsValue66.vec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftColumnsValue66.tails' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftColumnsValue66.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,73 @@
+START 78045 R1Z.PV_RunJoin_LiftColumnsValue66
+DONE 78045 R1Z.PV_RunJoin_LiftColumnsValue66 exit 1 wall 4.16 RSS 4369362944
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsValue66.lean:30:4: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsValue66.lean:33:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  matrix (filled p (row columns hlen) 0)
+in the target expression
+  host_semantic.lift_columns_loop0 columns (matrix (filled p (row columns hlen) ↑0#usize)) 0#usize =
+    ok (matrix (filled p (row columns hlen) 26))
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+columns : Columns
+hlen : ∀ l < 26, (column columns l).length = 1024
+h : Row
+g d : Std.Array Q 1024#usize
+out : PV_RunJoin_LiftArray66.Matrix
+success✝ :
+  (do
+      let columns_1 ←
+        core.default.DefaultArray.default 29#usize (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.QM31)
+      let columns1 ← host_semantic.lift_columns_loop0 columns columns_1 0#usize
+      massert (26#usize < 29#usize)
+      let (v, index_mut_back) ← columns1.index_mut_usize 26#usize
+      have columns2 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back v
+      let columns3 ← columns2.update 26#usize h
+      let s ← lift g.to_slice
+      let v1 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s
+      massert (27#usize < 29#usize)
+      let (v2, index_mut_back1) ← columns3.index_mut_usize 27#usize
+      have columns4 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back1 v2
+      let columns5 ← columns4.update 27#usize v1
+      let s1 ← lift d.to_slice
+      let v3 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s1
+      massert (28#usize < 29#usize)
+      let (v4, index_mut_back2) ← columns5.index_mut_usize 28#usize
+      have columns6 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back2 v4
+      columns6.update 28#usize v3) =
+    ok out
+initial : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize
+hinitial :
+  core.default.DefaultArray.default 29#usize (alloc.vec.Vec.Insts.CoreDefaultDefault aspis_core.field.QM31) = ok initial
+success :
+  (do
+      let columns1 ← host_semantic.lift_columns_loop0 columns initial 0#usize
+      massert (26#usize < 29#usize)
+      let (v, index_mut_back) ← columns1.index_mut_usize 26#usize
+      have columns2 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back v
+      let columns3 ← columns2.update 26#usize h
+      let s ← lift g.to_slice
+      let v1 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s
+      massert (27#usize < 29#usize)
+      let (v2, index_mut_back1) ← columns3.index_mut_usize 27#usize
+      have columns4 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back1 v2
+      let columns5 ← columns4.update 27#usize v1
+      let s1 ← lift d.to_slice
+      let v3 ← alloc.slice.Slice.to_vec aspis_core.field.QM31.Insts.CoreCloneClone s1
+      massert (28#usize < 29#usize)
+      let (v4, index_mut_back2) ← columns5.index_mut_usize 28#usize
+      have columns6 : Std.Array (alloc.vec.Vec aspis_core.field.QM31) 29#usize := index_mut_back2 v4
+      columns6.update 28#usize v3) =
+    ok out
+p : ℕ → Row := PV_RunJoin_LiftArrayTotal66.cells initial
+hi : matrix (filled p (row columns hlen) 0) = initial
+hl :
+  host_semantic.lift_columns_loop0 columns (matrix (filled p (row columns hlen) ↑0#usize)) 0#usize =
+    ok (matrix (filled p (row columns hlen) 26))
+⊢ ∃ p, out = matrix (tails (filled p (row columns hlen) 26) h g d)
+'R1Z.PV_RunJoin_LiftColumnsValue66.vec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftColumnsValue66.tails' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftColumnsValue66.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
