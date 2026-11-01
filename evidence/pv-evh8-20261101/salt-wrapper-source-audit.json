@@ -1,0 +1,19 @@
+{
+  "evidence_class": "structural source inspection; Lean callback laws pending",
+  "source_path": "crates/aspis-r1-cost-probe/src/host_commitment.rs",
+  "source_revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+  "current_revision": "9e48e67470843365430805657255665f44e1b8d0",
+  "body": "pub fn new(values: Vec<[u8; 32]>) -> Self { Self(values) }",
+  "body_sha256": "cd4a5690f94616247449aaaeedfb33be6e81f196c770e79d3e8653d59d2d8aeb",
+  "current_body_byte_identical": true,
+  "source_behavior": "move the owned vector into a newtype; no allocation or external call in constructor body",
+  "extracted_body": "host_commitment.PrivateSalts.new values = Result.ok values",
+  "laws": [
+    "PV_EVH_PrivateSaltWrap.wrap_fixed",
+    "PV_EVH_PrivateSaltWrap.map_fixed",
+    "PV_EVH_PrivateSaltWrap.map_agrees",
+    "PV_EVH_PrivateSaltWrap.map_execution"
+  ],
+  "scope": "only the reached Result.map constructor callback; surrounding allocation, later drop and native fidelity retained; no privacy row credit",
+  "operator_binding": "Result.map aliases ExternalFuns.op11; wrapper/map laws require explicit sourceMap installation, whose actual opsNative binding remains open"
+}

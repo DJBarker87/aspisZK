@@ -7,6 +7,18 @@ open PV_EVH_Prefix (P FinishedView)
 variable [ExternalTypes] [ExternalFuns]
 abbrev Values := alloc.vec.Vec (Array U8 32#usize)
 
+/-- Source model of the standard map control flow. Native callback/drop
+adequacy and its binding to actual opsNative remain separate obligations. -/
+def sourceMap {T E U F : Type} (inst : core.ops.function.FnOnce F T U)
+    (r : core.result.Result T E) (f : F) : Result (core.result.Result U E) := do
+  match r with
+  | .Ok value =>
+    let out ← inst.call_once f value
+    pure (.Ok out)
+  | .Err e => pure (.Err e)
+
+def install (ops : ExternalFuns) : ExternalFuns := {ops with op11 := sourceMap}
+
 def wrap (values : Values) : P host_commitment.PrivateSalts := pure values
 
 theorem wrap_fixed (values : Values) :
@@ -21,20 +33,24 @@ def map (r : core.result.Result Values verifier.Error) :
     pure (.Ok wrapped)
   | .Err e => pure (.Err e)
 
-theorem map_fixed (r : core.result.Result Values verifier.Error) :
+theorem map_fixed (ops : ExternalFuns) (r : core.result.Result Values verifier.Error) :
+    letI : ExternalFuns := install ops
     FinishedView (map r)
       (core.result.Result.map (BuiltinFnOnce Values host_commitment.PrivateSalts) r
         host_commitment.PrivateSalts.new) := by
+  letI : ExternalFuns := install ops
   cases r with
   | Ok values => exact PV_EVH_Prefix.lift_fixed (.ok (.Ok values))
   | Err e => exact PV_EVH_Prefix.lift_fixed (.ok (.Err e))
 
 /-- This identifies the inherited source-map lift with the independently
 interpreted constructor callback, including its state and event trace. -/
-theorem map_agrees (r : core.result.Result Values verifier.Error) :
+theorem map_agrees (ops : ExternalFuns) (r : core.result.Result Values verifier.Error) :
+    letI : ExternalFuns := install ops
     map r = PV_EVH_Prefix.lift
       (core.result.Result.map (BuiltinFnOnce Values host_commitment.PrivateSalts) r
         host_commitment.PrivateSalts.new) := by
+  letI : ExternalFuns := install ops
   funext w
   cases r <;> rfl
 
