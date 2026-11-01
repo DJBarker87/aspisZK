@@ -46,6 +46,7 @@ theorem loop_fixed (fuel : Nat) (reserved : Reserved) (context : Context) (hash 
   · rintro ⟨result, index⟩
     unfold prover.derive_private_salts_loop
     rw [Aeneas.Std.loop.eq_def]
+    dsimp only
     cases h : prover.derive_private_salts_loop.body reserved context hash tag count result index with
     | ok cf => cases cf <;> rfl
     | fail e => rfl

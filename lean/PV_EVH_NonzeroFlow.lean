@@ -22,6 +22,7 @@ theorem loop_fixed (fuel : Nat) (bytes : Array U8 32#usize) (combined : U8) (i :
   · rintro ⟨combined, i⟩
     unfold aspis_prover.state_only_entropy.entropy_nonzero32_loop
     rw [Aeneas.Std.loop.eq_def]
+    dsimp only
     cases h : aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes combined i with
     | ok cf => cases cf <;> rfl
     | fail e => rfl
