@@ -42,7 +42,7 @@ for i,x in enumerate(credits):
  stub_note='; '.join(stubs) if stubs else 'none in recovered selected harness' if selected else 'unrecorded (OPEN)'
  static=x.get('writable_static_candidates',[])
  oracle='local / no selected global log recovered' if not static and selected else 'recorded-input static candidates; selected association unresolved' if static else 'unrecorded (OPEN)'
- if 'shared_repeat16' in h or ('K73931/' in p or 'K73932/' in p):oracle='shared_callee16::{USED,TAG,LEFT,RIGHT,OUT}; mutable global memo oracle'
+ if 'shared_repeat16' in h or ('K73931/' in p or 'K73932/' in p):oracle='shared_callee16::{USED,TAG,LEFT,RIGHT,OUTPUT}; mutable global memo oracle'
  classification=scoped[x['path']]['classification'] if x['path'] in scoped else x['classification']
  status='UNAFFECTED' if classification in ('UNAFFECTED','NOT-EXPOSED') else 'SUSPENDED'
  why='K-3 clearance limited to recovered recorded inputs' if status=='UNAFFECTED' else 'Missing input / macro / selected source association; no admissible K-3 restoration'
