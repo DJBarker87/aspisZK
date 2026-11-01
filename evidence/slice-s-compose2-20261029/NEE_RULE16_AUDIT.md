@@ -15,7 +15,7 @@ written statics. Their controls K025/K027 do not rehabilitate them. K023 failed
 before proof. K028 common_oracle timed out and has no credit; it also wrote
 statics. K001..004 oracle_domain_positive never passed; still excluded.
 
-Inherited NED_K034/K035 window_6 caller logs use written statics; their earlier
+Inherited NED_K034/K035 validator_control_positive/validator_control_negative caller logs use written statics; their earlier
 part-(1) credit is SUSPENDED regardless of the historical ruling-(y) statement.
 All inherited NED call-window/binding log certificates with written statics are
 suspended until audited/re-run. None is used to close a root in this packet.
@@ -34,3 +34,41 @@ Runner change: own Kani budget guard increased from 40 to exactly 55 to account
 for the explicit 15-run grant; source/graph/features/KMX/lock/caps checks remain.
 Pure constructor imports now omit the entire obsolete writable-static oracle.
 No shared infrastructure, shipped source, key or artifact changed.
+
+## New local-record evidence
+
+K041/K042 (forest) and K043/K044 (tree) reproduce step_frame's Bool and end-index
+property, under the original harness names, using a harness-local Frame.
+The one-step body is a cfg(kani) source copy: removing the local initialization,
+one-step cut and ghost parameter yields exactly the frozen function body.
+This is a native one-step association plus reused Lean induction, not a whole
+native-loop contract or a new composed-row certificate.
+
+K045..048 detect inverted postconditions for fixed4/common/tuple/borrowed.
+Combined with static-free K029..040 controls, only the three OWNED shapes are
+admitted. Borrowed K039 was CODEGEN ERROR (missing Arbitrary for &Common),
+not a semantic negative; borrowed admission stays OPEN. The validator now
+checks four actual hashed controls, exact carrier, graph/lock/features/caps,
+failed property identity and absence of writable statics in those controls.
+Current checked count: 10/97; no root closed.
+
+K049 is excluded: my generator referred to a nonexistent K004 snapshot and the
+following shell command still launched against stale input. No harness matched.
+It consumed one budget unit. Fixed the generator's snapshot reference to K005
+and added a prelaunch harness-presence assertion to my runner.
+
+K050/K051 pass/fail the original oracle_domain_positive/negative properties
+with local records, for the fixed-byte mutation predecessor. Both branch covers
+are reached in the positive. The frozen root has an explicit cfg(kani)-only
+context parameter and direct local oracle substitution; its exact body projection
+is checked in NEE_LOCAL_VALIDATOR_PROJECTION.json. This is caller-control
+support, not a composed root theorem. The full mutable-buffer check is separate.
+
+K052/K053 now pass/fail with an unconstrained FULL 1520-byte late mutation and
+an arbitrary-index initial-zero check. Same original harness names, same Result/
+ordered-call property, all error variants and both success/all-call covers.
+No timeout/cap increase. This repairs the mutable-buffer overapproximation in
+part (1); it still does not supply part (2)'s missing child contracts or the
+borrowed shape admission. Every new Kani receipt has frozen offline graph,
+features, KMX and unchanged lock records; K044 onward also have the strict
+whole-lane writable-static scan. K041..043 patches are static-free by inspection.

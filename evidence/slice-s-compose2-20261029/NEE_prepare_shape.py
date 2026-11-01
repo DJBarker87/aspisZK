@@ -5,7 +5,7 @@ from NEE_patch_inputs import oracle_parts
 E=Path(__file__).resolve().parent
 shape=sys.argv[1];assert shape in {'fixed4','common','tuple','borrowed'}
 base,hook=oracle_parts()
-utilities=base[base.index('fn NEE_digest()'):base.index('fn covers(')] if 'fn covers(' in base else base[base.index('fn NEE_digest()'):base.index('#[derive(Clone,Copy,Debug,PartialEq,Eq)]')]
+utilities=base[base.index('fn NEE_digest()'):]
 # Only the typed record constructors are needed by the borrowed-carrier control.
 utilities=utilities[:utilities.index('fn NEE_statement()')] if 'fn NEE_statement()' in utilities else utilities
 imports='''#![allow(non_snake_case,unused_variables)]
@@ -48,6 +48,12 @@ fn bad_frame<'a>(buf:&mut[u8;2],x:&'a A)->&'a A {buf[1]=buf[1].wrapping_add(1);x
  native='let x=FACTORY;let r=weak(&x);assert!(same(r,&x),"NEE weak real-body reference identity");'
  unimplied='let x=FACTORY;let r=weak(&x);assert!(same(r,&x),"NEE weak reference replacement cannot imply identity");'
  frame='let mut b:[u8;2]=kani::any();let x=FACTORY;let _=bad_frame(&mut b,&x);'
+if owned:
+ module+='#[kani::modifies()]\n#[kani::ensures(|r| !same(r,&x))]\nfn inverted(x:A)->A {x}\n'
+ inverse='let x=FACTORY;let _=inverted(x);'
+else:
+ module+='#[kani::modifies()]\n#[kani::ensures(|r| !same(*r,x))]\nfn inverted(x:&A)->&A {x}\n'
+ inverse='let x=FACTORY;let _=inverted(&x);'
 kmx='''#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
@@ -55,6 +61,7 @@ kmx='''#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slic
 #[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
 #[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
 '''
+module+='#[kani::proof_for_contract(inverted)]\n'+kmx+'fn inverted_contract(){'+inverse.replace('FACTORY',factory)+'}\n'
 module+='#[kani::proof_for_contract(weak)]\n'+kmx+'fn native_weak(){'+native.replace('FACTORY',factory)+'}\n'
 module+='#[kani::proof]\n#[kani::stub_verified(weak)]\n'+kmx+'fn unimplied(){'+unimplied.replace('FACTORY',factory)+'}\n'
 module+='#[kani::proof_for_contract(bad_frame)]\n'+kmx+'fn frame_violation(){'+frame.replace('FACTORY',factory)+'}\n'

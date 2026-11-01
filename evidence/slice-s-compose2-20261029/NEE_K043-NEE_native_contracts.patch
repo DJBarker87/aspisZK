@@ -1,0 +1,41 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,25 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[cfg_attr(kani,kani::requires(frame.start<=8 && frame.end==frame.start))]
++#[cfg_attr(kani,kani::modifies(&mut frame.end))]
++#[cfg_attr(kani,kani::ensures(|r| { let i=frame.start; let good=i>=8||value[i].0<P;
++ *r==good && frame.end==if i<8&&good {i+1} else {i} }))]
++pub(crate) fn NEE_step(value: &Digest, frame: &mut NEE_loop_frame::Frame) -> bool {
++    let mut i = 0;
++    i = frame.start;
++    while i < value.len() {
++        if value[i].0 >= P {
++            return false;
++        }
++        i += 1;
++        frame.end = i; return true;
++    }
++    true
++}
++
++#[cfg(kani)]
++#[path="NEE_tree_loop_frame.rs"]
++mod NEE_loop_frame;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEE_tree_loop_frame.rs
+@@ -0,0 +1,10 @@
++#![allow(non_snake_case)]
++use super::*;
++use aspis_core::field::M31;
++pub(super) struct Frame {pub start:usize,pub end:usize}
++fn d()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(NEE_step)]
++#[kani::unwind(2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn step_frame(){let input=d();let i:usize=kani::any();kani::assume(i<=8);let mut frame=Frame{start:i,end:i};let _=NEE_step(&input,&mut frame);}

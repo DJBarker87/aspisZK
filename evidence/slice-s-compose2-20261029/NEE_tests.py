@@ -72,4 +72,23 @@ class RealCertificateMutations(unittest.TestCase):
         p=copy.deepcopy(self.packet);p['inventory_edges']['foreign -> foreign']={}
         with self.assertRaises(AssertionError):self.rows(p)
 
+class ShapeAdmissionControls(unittest.TestCase):
+    def test_complete_controls_admit_only_owned_supported_shapes(self):
+        a=v.read(E/'NEE_SHAPE_ADMISSIONS.json')
+        for shape in ['fixed4','common','tuple']:self.assertTrue(v.shape_admitted(shape,a[shape]))
+        self.assertFalse(v.shape_admitted('borrowed',a['borrowed']))
+    def test_missing_inverted_control_rejects_admission(self):
+        a=copy.deepcopy(v.read(E/'NEE_SHAPE_ADMISSIONS.json')['fixed4'])
+        del a['controls']['inverted']
+        self.assertFalse(v.shape_admitted('fixed4',a))
+    def test_codegen_failure_is_not_a_negative_control(self):
+        a=copy.deepcopy(v.read(E/'NEE_SHAPE_ADMISSIONS.json')['fixed4'])
+        a['controls']['unimplied']['stdout']={'path':str(E/'NEE_K039/stdout.log'),'sha256':v.hashlib.sha256((E/'NEE_K039/stdout.log').read_bytes()).hexdigest()}
+        self.assertFalse(v.shape_admitted('fixed4',a))
+    def test_wrong_carrier_rejects_admission(self):
+        a=copy.deepcopy(v.read(E/'NEE_SHAPE_ADMISSIONS.json')['fixed4']);a['return_type']='[u8;8]'
+        self.assertFalse(v.shape_admitted('fixed4',a))
+    def test_boolean_alone_cannot_admit_new_shape(self):
+        self.assertFalse(v.shape_admitted('fixed4',{'admitted':True}))
+
 if __name__=='__main__':unittest.main()

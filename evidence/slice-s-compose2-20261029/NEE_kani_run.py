@@ -3,6 +3,8 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,tomllib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose2-20261029';H='dombarker@100.108.41.90'
 a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NEE_M' if kind=='metadata' else 'NEE_K')
+if kind=='kani':
+ assert 'fn '+harness.rsplit('::',1)[-1]+'(' in ((E/'NEE_oracle.patch').read_text()+(E/'NEE_native_contracts.patch').read_text()),'missing requested harness; no launch'
 assert not (E/a).exists();assert len(list(E.glob('NEE_K*/receipt.json')))<55
 assert 1<=int(a[5:])<=55 if kind=='kani' else True
 active=E/'NEE_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
@@ -89,7 +91,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 (E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
 code=f'''from pathlib import Path
 import json
-b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json']!r}
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json',a+'-rule16-check.json']!r}
 print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)

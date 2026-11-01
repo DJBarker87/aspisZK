@@ -40,7 +40,9 @@ def ruling_y(c):
             assert lock['unchanged'] and lock['before']==lock['after']
             features=json.loads(inherited.artifact(caller[kind]['features']))
             assert features['features_all_crates']
-            inherited.artifact(caller[kind]['source'])
+            source=inherited.artifact(caller[kind]['source']).decode()
+            assert 'static mut' not in source and 'UnsafeCell' not in source
+            assert 'Cell<' not in source and 'Atomic' not in source
         assert y['children']
         for child in y['children']:
             assert child['bridge_status']=='CLOSED-CONDITIONAL'
@@ -62,6 +64,39 @@ def ruling_y(c):
     except (AssertionError,KeyError,ValueError,TypeError,OSError):
         return False
 
+def shape_admitted(shape,admission):
+    try:
+        assert admission.get('admitted') is True
+        if shape=='Bool':
+            assert admission['basis']=='C3-BIN ruling (t): inherited NCC pure Bool/record interface; no new interface shape used by the payment canonicality predicate'
+            return True
+        assert shape in {'fixed4','common','tuple'}
+        assert set(admission['controls'])=={'native','unimplied','frame','inverted'}
+        for name,p in admission['controls'].items():
+            rc=json.loads(inherited.artifact(p['receipt']))
+            assert rc['kind']=='kani' and int(rc['swaps'])==0 and rc['source_revision']
+            assert rc['module']=='pool_v1::payment_relation::NEE_shape::'+{'native':'native_weak','unimplied':'unimplied','frame':'frame_violation','inverted':'inverted_contract'}[name]
+            assert (rc['exit_status']==0)==(name=='native')
+            assert rc['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+            log=inherited.artifact(p['stdout']).decode()
+            assert ('VERIFICATION:- SUCCESSFUL' if name=='native' else 'VERIFICATION:- FAILED') in log
+            assert 'timed out' not in log.lower()
+            if name=='inverted': assert 'Failed Checks: |r| !same(' in log
+            if name=='frame': assert 'is assignable' in log
+            if name=='unimplied': assert 'in pool_v1::payment_relation::NEE_shape::unimplied' in log
+            source=inherited.artifact(p['source']).decode()
+            assert rc['source_hashes']['NEE_native_contracts.patch']==p['source']['sha256']
+            assert '+type A='+admission['return_type']+';' in source
+            assert 'static mut' not in source and 'UnsafeCell' not in source
+            assert 'Cell<' not in source and 'Atomic' not in source
+            graph=json.loads(inherited.artifact(p['graph']))
+            assert graph['graph_matches_frozen'] and graph['exact_LPm_graph']
+            lock=json.loads(inherited.artifact(p['lock']))
+            assert lock['unchanged'] and lock['before']==lock['after']
+            assert json.loads(inherited.artifact(p['features']))['features_all_crates']
+        return True
+    except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
 def direct_contract(c,expected,ledger):
     try:
         d=c['direct_contract']
@@ -74,7 +109,7 @@ def direct_contract(c,expected,ledger):
         f=d['function'];binding=read(E/'NEE_MODEL_BINDINGS.json')[f]
         assert d['proof_target']==binding['proof_target']
         admission=read(E/'NEE_SHAPE_ADMISSIONS.json').get(binding['shape'],{})
-        assert admission.get('admitted') is True,('unadmitted contract shape',binding['shape'])
+        assert shape_admitted(binding['shape'],admission),('unadmitted contract shape',binding['shape'])
         assert [t['name'] for t in d['domain_and_model_theorems']]==binding['model_theorems']
         assert d['positive']['receipt']['sha256']==binding['positive_receipt_sha256']
         assert d['negative']['receipt']['sha256']==binding['negative_receipt_sha256']

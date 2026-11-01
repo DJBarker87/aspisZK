@@ -9,6 +9,16 @@ patch=B/'NEE_KMX_copy_stubs.patch';assert sha(patch)=='bcdf749b78eb6143789500d98
 for n,h in {'KMX_stubs.rs':'ad8efb63d8ff791274c91eff9ccc5b9fb126f5a3ac7f27aa811ca11b8e25c138','KMX_native.rs':'cf719c47b5c8c91dcc369984c01bd0b8531b25210e344c9fd06db21b30171880','KMX_CopyMeaning.lean':'2baec49a3446a3bbb2be6f992c97d0a6897534a1cd308db8746194dedf665f2b'}.items():assert sha(S/n)==h,('KMX file mismatch',n)
 pins=json.loads((B/'NEE_RUST_SHA256.json').read_text());errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=1)+'\n');assert not errors,errors
+# Rule 16, stricter than reachability: reject writable static declarations in
+# every lane harness module and pinned copy-stub source before compiling.
+import re
+owned=[*S.rglob('NEE_*.rs'),S/'crates/aspis-statement/src/NED_controls.rs',S/'KMX_stubs.rs']
+violations=[]
+for p in owned:
+ text=p.read_text()
+ if re.search(r'\bstatic\s+mut\b|\bstatic\s+[^;=]+:\s*[^;=]*(?:Cell|RefCell|UnsafeCell|Atomic)',text):violations.append(str(p.relative_to(S)))
+(B/(a+'-rule16-check.json')).write_text(json.dumps(dict(no_writable_static=not violations,files=[str(p.relative_to(S)) for p in owned],violations=violations),indent=1)+'\n')
+assert not violations,('STOP rule16',violations)
 cmd=['/home/dombarker/.cargo/bin/cargo','metadata','--manifest-path',str(S/'crates/aspis-statement/Cargo.toml'),'--locked','--offline','--format-version','1','--features',cfg['statement_features']]
 r=subprocess.run(cmd,cwd=S,capture_output=True,text=True);(B/(a+'-metadata.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr
