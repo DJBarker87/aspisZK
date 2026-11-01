@@ -81,7 +81,8 @@ for r in x['ordinary_or_generated_nonidentical_items']:
  rows.append(dict(**r,argument_key=key,structural_argument=argument,verdict='ARGUED under k-triple-prime'))
 assert len(rows)==23,len(rows)
 # Concrete source facts used by the reached drain argument.
-field=Path('crates/aspis-core/src/field.rs').read_text();assert 'pub struct QM31' in field and 'impl Drop for QM31'not in field
+field=Path('crates/aspis-core/src/field.rs').read_text();assert all('impl Drop for '+n not in field for n in ['QM31','CM31','M31'])
+assert 'pub struct M31(pub u32);'in field and 'pub struct CM31 {\n    pub a: M31,\n    pub b: M31,\n}'in field and 'pub struct QM31 {\n    pub c0: CM31,\n    pub c1: CM31,\n}'in field
 poseidon=Path('tools/pv-b3p6-20261028/v244/deployed_poseidon_kani16.rs').read_text()
 assert 'fn extension_limbs(value: QM31) -> [u32; 4] {\n    [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]\n}' in poseidon
 for a in (False,True):

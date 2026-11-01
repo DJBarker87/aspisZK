@@ -1,0 +1,549 @@
+{
+  "body": "host_terminal::sum_high",
+  "route": "k-prime route3 / own-1 script-checked structural source argument; not machine proof",
+  "source": {
+    "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+    "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+    "item": {
+      "name": "sum_high",
+      "start": 189,
+      "end": 197,
+      "signature": "fn sum_high(selectors: &Selectors, ranges: &[core::ops::Range<usize>]) -> QM31 ",
+      "body": "{\n    let mut sum = QM31::ZERO;\n    for range in ranges {\n        for block in range.clone() {\n            sum = sum.add(selectors.high[block]);\n        }\n    }\n    sum\n}",
+      "context": [],
+      "macros": []
+    }
+  },
+  "steps": [
+    {
+      "source": "let mut sum = QM31::ZERO",
+      "model": "source_sum_ranges13 selectors.high ranges ZERO",
+      "argument": "Same exact field constant; local accumulator only, no write through shared inputs."
+    },
+    {
+      "source": "for range in ranges: &[Range<usize>]",
+      "model": "List recursion of source_sum_ranges13",
+      "argument": "Bind concrete slice to its ordered list of (start,end) values and retain the shared loan identity. IntoIterator calls slice.iter -> Iter::new. Range<usize> is non-ZST (two usize fields). Relate ptr=base+j, end=base+len to list suffix drop j. next compares ptr==end: equality returns None, otherwise increments ptr once and returns &ranges[j]. On every j<len, pointer arithmetic and reference are inside a live immutable allocation; next never mutates any range. At j=len (including len=0) no element is read. Each source next corresponds exactly to one cons or nil case; duplicates and order are preserved. ZST branch in the generic body is unreachable for this instantiation. Pointer/layout/lowering is retained V370."
+    },
+    {
+      "source": "range.clone()",
+      "model": "pair (start,finish) passed by value to range_loop13",
+      "argument": "Range<usize> has exactly start/end fields; its derived Clone copies both usize values, with usize Clone the value identity. This generated expansion is explicitly V370 D381/D386, not proved by source-template identity. The borrowed original range remains unchanged; clone has no custom destructor and its two usize fields have effect-free drops. Shared slice iterator is also a pointer/marker record with no custom destructor. Drop glue remains V370; no runtime effect is elided."
+    },
+    {
+      "source": "for block in cloned Range<usize>",
+      "model": "range_next13 / range_body13 / range_loop13",
+      "argument": "IntoIterator is identity, next delegates to checked TrustedStep spec_next. If start>=finish both return none without increment or body (including reversed or MAX endpoints). Otherwise both yield old start and store successor before the body. range_increment_safe13 proves start.val+1<size Usize from start<finish, so unchecked_add and wrapping_add are equal, never UB. range_body_binding13 and range_loop_binding13 then preserve complete Result iteration, with the same cursor at each step; no concrete range is normalized."
+    },
+    {
+      "source": "selectors.high[block]",
+      "model": "sum_step high uses Array.index_usize",
+      "argument": "Exactly high[block], before the add and store. Bound block<64 gives the same immutable field element. If block>=64 source panics and the local Result model fails at that same access, before add/store and before any later range. Panic formatting/abort observations belong to the separately open std/D159 source cone; this local Result association does not claim to erase their observer effects."
+    },
+    {
+      "source": "sum = sum.add(element)",
+      "model": "same extracted aspis_core.field.QM31.add, then local state replacement",
+      "argument": "Identical field callee on both sides, no multiplication or arithmetic abstraction. Keep its full Result, propagate failure/divergence and replace sum only on success. Every field-limb operation remains in the pinned extraction/tool trust; no reassociation, commutation, narrowing, or canonical input assumption."
+    },
+    {
+      "source": "loop cleanup and final sum",
+      "model": "range_drop13, list nil -> Result.ok sum",
+      "argument": "No side-effecting destructor: Range<usize> owns two integers; Iter owns pointers and PhantomData. The shared slice and selectors remain live and unchanged, including error/unwind. range_drop_binding13 is the exact effect-free cleanup; iterator/drop compiler glue is retained V370. At list end return the accumulator once. sum_ranges_binding13 gives reference equality on every ordered range list, and native_sum_high_binding15 retains both shared loan identities."
+    }
+  ],
+  "std_support": [
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXs_NtNtCsci0VKyKEi6N_4core5slice4iterRSINtNtNtB8_3ops5range5RangejENtNtNtNtB8_4iter6traits7collect12IntoIterator9into_iterCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "core::slice::iter::<impl std::iter::IntoIterator for &[std::ops::Range<usize>]>::into_iter",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+        "function": "core::slice::iter::<impl std::iter::IntoIterator for &[std::ops::Range<usize>]>::into_iter",
+        "line": "25"
+      },
+      "source": "core/src/slice/iter.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "into_iter",
+        "start": 25,
+        "end": 27,
+        "signature": "fn into_iter(self) -> Iter<'a, T> ",
+        "body": "{\n        self.iter()\n    }",
+        "context": [
+          "impl<'a, T> IntoIterator for &'a [T] "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "into_iter",
+        "start": 25,
+        "end": 27,
+        "signature": "fn into_iter(self) -> Iter<'a, T> ",
+        "body": "{\n        self.iter()\n    }",
+        "context": [
+          "impl<'a, T> IntoIterator for &'a [T] "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "into_iter",
+          "start": 25,
+          "end": 27,
+          "signature": "fn into_iter(self) -> Iter<'a, T> ",
+          "body": "{\n        self.iter()\n    }",
+          "context": [
+            "impl<'a, T> IntoIterator for &'a [T] "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvMNtCsci0VKyKEi6N_4core5sliceSINtNtNtB4_3ops5range5RangejE4iterCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "core::slice::<impl [std::ops::Range<usize>]>::iter",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/mod.rs",
+        "function": "core::slice::<impl [std::ops::Range<usize>]>::iter",
+        "line": "1039"
+      },
+      "source": "core/src/slice/mod.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "iter",
+        "start": 1039,
+        "end": 1041,
+        "signature": "fn iter(&self) -> Iter<'_, T> ",
+        "body": "{\n        Iter::new(self)\n    }",
+        "context": [
+          "impl<T> [T] "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "iter",
+        "start": 1040,
+        "end": 1042,
+        "signature": "fn iter(&self) -> Iter<'_, T> ",
+        "body": "{\n        Iter::new(self)\n    }",
+        "context": [
+          "impl<T> [T] "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "iter",
+          "start": 1040,
+          "end": 1042,
+          "signature": "fn iter(&self) -> Iter<'_, T> ",
+          "body": "{\n        Iter::new(self)\n    }",
+          "context": [
+            "impl<T> [T] "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvMs4_NtNtCsci0VKyKEi6N_4core5slice4iterINtB5_4IterINtNtNtB9_3ops5range5RangejEE3newCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "std::slice::Iter::<'_, std::ops::Range<usize>>::new",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter.rs",
+        "function": "std::slice::Iter::<'_, std::ops::Range<usize>>::new",
+        "line": "96"
+      },
+      "source": "core/src/slice/iter.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "new",
+        "start": 96,
+        "end": 106,
+        "signature": "fn new(slice: &'a [T]) -> Self ",
+        "body": "{\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        // SAFETY: Similar to `IterMut::new`.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+        "context": [
+          "impl<'a, T> Iter<'a, T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "new",
+        "start": 96,
+        "end": 106,
+        "signature": "fn new(slice: &'a [T]) -> Self ",
+        "body": "{\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        // SAFETY: Similar to `IterMut::new`.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+        "context": [
+          "impl<'a, T> Iter<'a, T> "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "new",
+          "start": 96,
+          "end": 106,
+          "signature": "fn new(slice: &'a [T]) -> Self ",
+          "body": "{\n        let len = slice.len();\n        let ptr: NonNull<T> = NonNull::from_ref(slice).cast();\n        // SAFETY: Similar to `IterMut::new`.\n        unsafe {\n            let end_or_len =\n                if T::IS_ZST { without_provenance(len) } else { ptr.as_ptr().add(len) };\n\n            Self { ptr, end_or_len, _marker: PhantomData }\n        }\n    }",
+          "context": [
+            "impl<'a, T> Iter<'a, T> "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXNtNtNtCsci0VKyKEi6N_4core4iter6traits7collectINtNtNtB8_3ops5range5RangejENtB2_12IntoIterator9into_iterCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "<std::ops::Range<usize> as std::iter::IntoIterator>::into_iter",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/traits/collect.rs",
+        "function": "<std::ops::Range<usize> as std::iter::IntoIterator>::into_iter",
+        "line": "319"
+      },
+      "source": "core/src/iter/traits/collect.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "into_iter",
+        "start": 319,
+        "end": 321,
+        "signature": "fn into_iter(self) -> I ",
+        "body": "{\n        self\n    }",
+        "context": [
+          "impl<I: Iterator> IntoIterator for I "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "into_iter",
+        "start": 319,
+        "end": 321,
+        "signature": "fn into_iter(self) -> I ",
+        "body": "{\n        self\n    }",
+        "context": [
+          "impl<I: Iterator> IntoIterator for I "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "into_iter",
+          "start": 319,
+          "end": 321,
+          "signature": "fn into_iter(self) -> I ",
+          "body": "{\n        self\n    }",
+          "context": [
+            "impl<I: Iterator> IntoIterator for I "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXs4_NtNtCsci0VKyKEi6N_4core4iter5rangeINtNtNtB9_3ops5range5RangejENtNtNtB7_6traits8iterator8Iterator4nextCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "std::iter::range::<impl std::iter::Iterator for std::ops::Range<usize>>::next",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+        "function": "std::iter::range::<impl std::iter::Iterator for std::ops::Range<usize>>::next",
+        "line": "849"
+      },
+      "source": "core/src/iter/range.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "next",
+        "start": 849,
+        "end": 851,
+        "signature": "fn next(&mut self) -> Option<A> ",
+        "body": "{\n        self.spec_next()\n    }",
+        "context": [
+          "impl<A: Step> Iterator for ops::Range<A> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "next",
+        "start": 856,
+        "end": 858,
+        "signature": "fn next(&mut self) -> Option<A> ",
+        "body": "{\n        self.spec_next()\n    }",
+        "context": [
+          "impl<A: Step> Iterator for ops::Range<A> "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "next",
+          "start": 856,
+          "end": 858,
+          "signature": "fn next(&mut self) -> Option<A> ",
+          "body": "{\n        self.spec_next()\n    }",
+          "context": [
+            "impl<A: Step> Iterator for ops::Range<A> "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXs3_NtNtCsci0VKyKEi6N_4core4iter5rangeINtNtNtB9_3ops5range5RangejENtB5_17RangeIteratorImpl9spec_nextCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next",
+      "location": {
+        "column": "5",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+        "function": "<std::ops::Range<usize> as std::iter::range::RangeIteratorImpl>::spec_next",
+        "line": "764"
+      },
+      "source": "core/src/iter/range.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "spec_next",
+        "start": 764,
+        "end": 773,
+        "signature": "fn spec_next(&mut self) -> Option<T> ",
+        "body": "{\n        if self.start < self.end {\n            let old = self.start;\n            // SAFETY: just checked precondition\n            self.start = unsafe { Step::forward_unchecked(old, 1) };\n            Some(old)\n        } else {\n            None\n        }\n    }",
+        "context": [
+          "impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T> "
+        ],
+        "macros": []
+      },
+      "deployed_item": {
+        "name": "spec_next",
+        "start": 771,
+        "end": 780,
+        "signature": "fn spec_next(&mut self) -> Option<T> ",
+        "body": "{\n        if self.start < self.end {\n            let old = self.start;\n            // SAFETY: just checked precondition\n            self.start = unsafe { Step::forward_unchecked(old, 1) };\n            Some(old)\n        } else {\n            None\n        }\n    }",
+        "context": [
+          "impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T> "
+        ],
+        "macros": []
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [],
+      "deployed_candidates": [
+        {
+          "name": "spec_next",
+          "start": 771,
+          "end": 780,
+          "signature": "fn spec_next(&mut self) -> Option<T> ",
+          "body": "{\n        if self.start < self.end {\n            let old = self.start;\n            // SAFETY: just checked precondition\n            self.start = unsafe { Step::forward_unchecked(old, 1) };\n            Some(old)\n        } else {\n            None\n        }\n    }",
+          "context": [
+            "impl<T: TrustedStep> RangeIteratorImpl for ops::Range<T> "
+          ],
+          "macros": []
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXsF_NtNtCsci0VKyKEi6N_4core4iter5rangejNtB5_4Step17forward_unchecked",
+      "name": "<usize as std::iter::Step>::forward_unchecked",
+      "location": {
+        "column": "9",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/iter/range.rs",
+        "function": "<usize as std::iter::Step>::forward_unchecked",
+        "line": "204"
+      },
+      "source": "core/src/iter/range.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "forward_unchecked",
+        "start": 204,
+        "end": 207,
+        "signature": "fn forward_unchecked(start: Self, n: usize) -> Self ",
+        "body": "{\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+        "context": [],
+        "macros": [
+          "step_unsigned_methods"
+        ]
+      },
+      "status": "IDENTICAL",
+      "deployed_candidates": [
+        {
+          "name": "forward_unchecked",
+          "start": 211,
+          "end": 214,
+          "signature": "fn forward_unchecked(start: Self, n: usize) -> Self ",
+          "body": "{\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+          "context": [],
+          "macros": [
+            "step_unsigned_methods"
+          ]
+        }
+      ],
+      "intrinsics": [],
+      "deployed_item": {
+        "name": "forward_unchecked",
+        "start": 211,
+        "end": 214,
+        "signature": "fn forward_unchecked(start: Self, n: usize) -> Self ",
+        "body": "{\n            // SAFETY: the caller has to guarantee that `start + n` doesn't overflow.\n            unsafe { start.unchecked_add(n as Self) }\n        }",
+        "context": [],
+        "macros": [
+          "step_unsigned_methods"
+        ]
+      },
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    },
+    {
+      "group": "K73946",
+      "harness": "equivalence17::sum_high_nodes",
+      "symbol": "_RNvXs2E_NtNtCsci0VKyKEi6N_4core5slice4iterINtB6_4IterINtNtNtBa_3ops5range5RangejEENtNtNtNtBa_4iter6traits8iterator8Iterator4nextCs602rsP8SHUw_20pv_b3p6_reference227",
+      "name": "<std::slice::Iter<'_, std::ops::Range<usize>> as std::iter::Iterator>::next",
+      "location": {
+        "column": "13",
+        "file": "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+        "function": "<std::slice::Iter<'_, std::ops::Range<usize>> as std::iter::Iterator>::next",
+        "line": "156"
+      },
+      "source": "core/src/slice/iter/macros.rs",
+      "has_body": true,
+      "symbol_dump": "evidence/pv-b3p6-20261028/resume17/K73946-symbols/symbols-0.json.xz",
+      "symbol_dump_sha256": "d9f17fe069088713bdb34609729ea71905b96cba23902cef2c2fab7e0a0cb084",
+      "kani_item": {
+        "name": "next",
+        "start": 156,
+        "end": 191,
+        "signature": "fn next(&mut self) -> Option<$elem> ",
+        "body": "{\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+        "context": [
+          "impl<'a, T> Iterator for $name<'a, T> "
+        ],
+        "macros": [
+          "iterator"
+        ]
+      },
+      "deployed_item": {
+        "name": "next",
+        "start": 157,
+        "end": 192,
+        "signature": "fn next(&mut self) -> Option<$elem> ",
+        "body": "{\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+        "context": [
+          "impl<'a, T> Iterator for $name<'a, T> "
+        ],
+        "macros": [
+          "iterator"
+        ]
+      },
+      "status": "IDENTICAL",
+      "intrinsics": [
+        "transmute"
+      ],
+      "deployed_candidates": [
+        {
+          "name": "next",
+          "start": 157,
+          "end": 192,
+          "signature": "fn next(&mut self) -> Option<$elem> ",
+          "body": "{\n                // intentionally not using the helpers because this is\n                // one of the most mono'd things in the library.\n\n                let ptr = self.ptr;\n                let end_or_len = self.end_or_len;\n                // SAFETY: See inner comments. (For some reason having multiple\n                // block breaks inlining this -- if you can fix that please do!)\n                unsafe {\n                    if T::IS_ZST {\n                        let len = end_or_len.addr();\n                        if len == 0 {\n                            return None;\n                        }\n                        // SAFETY: just checked that it's not zero, so subtracting one\n                        // cannot wrap.  (Ideally this would be `checked_sub`, which\n                        // does the same thing internally, but as of 2025-02 that\n                        // doesn't optimize quite as small in MIR.)\n                        self.end_or_len = without_provenance_mut(len.unchecked_sub(1));\n                    } else {\n                        // SAFETY: by type invariant, the `end_or_len` field is always\n                        // non-null for a non-ZST pointee.  (This transmute ensures we\n                        // get `!nonnull` metadata on the load of the field.)\n                        if ptr == crate::intrinsics::transmute::<$ptr, NonNull<T>>(end_or_len) {\n                            return None;\n                        }\n                        // SAFETY: since it's not empty, per the check above, moving\n                        // forward one keeps us inside the slice, and this is valid.\n                        self.ptr = ptr.add(1);\n                    }\n                    // SAFETY: Now that we know it wasn't empty and we've moved past\n                    // the first one (to avoid giving a duplicate `&mut` next time),\n                    // we can give out a reference to it.\n                    Some({ptr}.$into_ref())\n                }\n            }",
+          "context": [
+            "impl<'a, T> Iterator for $name<'a, T> "
+          ],
+          "macros": [
+            "iterator"
+          ]
+        }
+      ],
+      "mapping": "same declaration name, enclosing impl/trait and macro; const eligibility ignored only in context; body tokens unchanged",
+      "signature_identical": true,
+      "classification": "ordinary standard-library source item"
+    }
+  ],
+  "range_declaration": {
+    "path": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/ops/range.rs.deployed",
+    "sha256": "e6d3e2a7ca9bef4409c2b9e043b202df2e1a76cb78cc11ae4e48559f3a3972c2"
+  },
+  "compiled_symbolic_laws": [
+    "PV_B3P_Binding13227.range_increment_safe13",
+    "PV_B3P_Binding13227.range_body_binding13",
+    "PV_B3P_Binding13227.range_loop_binding13",
+    "PV_B3P_Binding13227.range_drop_binding13",
+    "PV_B3P_Binding13227.sum_ranges_binding13",
+    "PV_B3P_Binding13227.sum_high_link13",
+    "PV_B3P_Native15227.native_sum_high_binding15"
+  ],
+  "call_sites": [
+    {
+      "line": 250,
+      "text": "block: sum_high(selectors, &[0..57]),"
+    },
+    {
+      "line": 283,
+      "text": "let nodes = sum_high(selectors, &[4..25, 33..57]);"
+    },
+    {
+      "line": 436,
+      "text": "let path_selector = sum_high(selectors, &[57..63]).mul("
+    }
+  ],
+  "domain": "Every high array and every valid immutable slice of Range<usize>, including reversed/empty/out-of-bounds ranges; typed source-to-Result association with failures retained. All three actual interval lists covered, no canonicality restriction.",
+  "V370": "Exact derived Range<usize>::clone, usize Clone identity, Range/Iter drop glue, pointer intrinsics and source-to-machine preservation retained at owner D381/D386.",
+  "D188": "No writes through mutable borrows in this source body. Iterator cursor and accumulator stores are local. No discarded restoration continuation introduced.",
+  "scope": "Local source body association; full std panic/format observer cone, matrix/callback closure and V244 endpoint remain OPEN.",
+  "budget_spent": {
+    "lean": 0,
+    "extraction": 0,
+    "kani": 0,
+    "native": 0
+  }
+}
