@@ -25,12 +25,9 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
           PV_EVH_Prefix.lift (.ok (.done combined)) := by
         rw [PV_EVH_NonzeroSafety.step_plain]
         simp only [aspis_prover.state_only_entropy.entropy_nonzero32_loop.body,stop,if_false]
-      change PV_EVH_Prefix.bind (PV_EVH_NonzeroStep.run bytes combined i {})
-        (fun cf => match cf with
-          | .done a => PV_EVH_Prefix.lift (.ok a)
-          | .cont next => PV_EVH_PrefixLoop.loop
-              (fun (state : U8 × Usize) => PV_EVH_NonzeroStep.run bytes state.1 state.2 {})
-              fuel next) w = _
+      unfold PV_EVH_NonzeroFlow.loop
+      rw [PV_EVH_PrefixLoop.loop]
+      dsimp only
       rw [stopStep]
       rfl
   | succ remaining ih =>
