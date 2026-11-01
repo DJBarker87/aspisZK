@@ -8,9 +8,19 @@ open PV_RunJoin_WeightMap46 (mapResult)
 open PV_B2_F_ConstructorCarrier (amap)
 
 theorem zero : toS PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO=
-    AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO := rfl
+    AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO := by
+  simp only [toS,PV_RunJoin_NativePowerQM66.toQ,PV_RunJoin_NativePowerCM66.toC,
+      PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO,PV_B1_254.aspis_core.field.wide_exact.WideExact.ONE,
+      PV_B1_254.aspis_core.field.QM31.ZERO,PV_B1_254.aspis_core.field.QM31.ONE,
+      AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO,AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE,
+      AspisR1ProducerRelease47.field.QM31.ZERO,AspisR1ProducerRelease47.field.QM31.ONE]
 theorem one : toS PV_B1_254.aspis_core.field.wide_exact.WideExact.ONE=
-    AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE := rfl
+    AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE := by
+  simp only [toS,PV_RunJoin_NativePowerQM66.toQ,PV_RunJoin_NativePowerCM66.toC,
+      PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO,PV_B1_254.aspis_core.field.wide_exact.WideExact.ONE,
+      PV_B1_254.aspis_core.field.QM31.ZERO,PV_B1_254.aspis_core.field.QM31.ONE,
+      AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO,AspisR1ProducerRelease47.field.wide_exact.WideExact.ONE,
+      AspisR1ProducerRelease47.field.QM31.ZERO,AspisR1ProducerRelease47.field.QM31.ONE]
 
 theorem mapped (N : Usize) (x : W) (left : U8) (hl : left.val=N.val) :
     mapResult image (PV_B1_254.powers N x)=
@@ -21,11 +31,11 @@ theorem mapped (N : Usize) (x : W) (left : U8) (hl : left.val=N.val) :
   have h := PV_RunJoin_NativePowerLoop66.complete x N.val
     (Array.repeat N PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO)
     PV_B1_254.aspis_core.field.wide_exact.WideExact.ONE 0#usize left (by change 0+_= _;omega) hl
-  have repeat : image (Array.repeat N PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO)=
+  have repeated : image (Array.repeat N PV_B1_254.aspis_core.field.wide_exact.WideExact.ZERO)=
       Array.repeat N AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO := by
     change ProverRwP6ArrayMap.map toS (Array.repeat N _)=_
     rw [ProverRwP6ArrayMap.repeat_map,zero]
-  rw [repeat,one] at h
+  rw [repeated,one] at h
   exact h
 
 theorem undo (x : W) : ProverRwDictionaryTower.fromW (toS x)=PV_B1_ActualCarrierWide.fromW x := by
