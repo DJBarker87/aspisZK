@@ -69,6 +69,20 @@ theorem mapRunError_success {{T E F : Type}} (f : E → F)
   | fail e => simp only [mapRunError, reduceCtorEq]
   | div => simp only [mapRunError, reduceCtorEq]
 
+/-- Split every privacy result into the eight verifier errors plus all three
+prover-only outcomes. No conditional domain or erased error is introduced. -/
+def splitProverRun {{T : Type}}
+    (r : Result (core.result.Result T AspisR1ProverCommit.verifier.Error)) :
+    Result (core.result.Result T (Sum VerifierShared ProverOnly)) :=
+  mapRunError verifierSplit r
+
+theorem prover_run_roundtrip {{T : Type}}
+    (r : Result (core.result.Result T AspisR1ProverCommit.verifier.Error)) :
+    mapRunError verifierJoin (splitProverRun r) = r :=
+  mapRunError_inverse verifierSplit verifierJoin verifier_join_split r
+
+#print axioms prover_run_roundtrip
+
 open AspisBuilderAdmissionSource
 variable (pool domain : Array U8 32#usize) (seq : U64)
   (anchor nullifier : Array aspis_core.field.M31 8#usize)

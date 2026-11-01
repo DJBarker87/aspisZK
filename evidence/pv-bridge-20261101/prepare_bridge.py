@@ -24,6 +24,7 @@ for label,left,right in [('payment',0,2),('tree',1,3)]:
  lines += [f'def {label}FromShared : {new} → {old}']+[f'  | {y} => {x}' for x,y in zip(ac,bc)]
  for name,ty,expr in [(f'{label}_left_inverse',old,f'{label}FromShared ({label}ToShared e) = e'),(f'{label}_right_inverse',new,f'{label}ToShared ({label}FromShared e) = e')]:
   lines += [f'theorem {name} (e : {ty}) : {expr} := by', '  cases e <;> rfl']; queries.append(name)
+ lines += [f'theorem {label}_discriminant (e : {old}) :',f'    {new}.read_discriminant ({label}ToShared e) = {old}.read_discriminant e := by','  cases e <;> rfl']; queries.append(f'{label}_discriminant')
  lines += [f'theorem {label}_injective : Function.Injective {label}ToShared := by',f'  intro a b h',f'  have h\' := congrArg {label}FromShared h',f'  exact ({label}_left_inverse a).symm.trans (h\'.trans ({label}_left_inverse b))']; queries.append(f'{label}_injective')
 a,b=constructors[4],constructors[5]; small=a['type']; big=b['type']; ac=a['constructors']; bc=b['constructors']; extra=bc[8:]
 lines+=['\ninductive ProverOnly where','  | rejected | attemptsExhausted | entropy',f'abbrev VerifierShared := {small}',f'def verifierEmbed : {small} → {big}']+[f'  | {x} => {y}' for x,y in zip(ac,bc)]
@@ -31,6 +32,7 @@ lines += [f'def verifierSplit : {big} → Sum {small} ProverOnly']+[f'  | {y} =>
 lines += [f'def verifierJoin : Sum {small} ProverOnly → {big}']+[f'  | .inl {x} => {y}' for x,y in zip(ac,bc)]+[f'  | .inr .{y} => {x}' for x,y in zip(extra,['rejected','attemptsExhausted','entropy'])]
 lines += [f'theorem verifier_retraction (e : {small}) : verifierSplit (verifierEmbed e) = .inl e := by','  cases e <;> rfl',f'theorem verifier_join_split (e : {big}) : verifierJoin (verifierSplit e) = e := by','  cases e <;> rfl',f'theorem verifier_split_join (e : Sum {small} ProverOnly) : verifierSplit (verifierJoin e) = e := by','  cases e with','  | inl e => cases e <;> rfl','  | inr e => cases e <;> rfl','theorem verifier_embedding_injective : Function.Injective verifierEmbed := by','  intro a b h','  have h\' := congrArg verifierSplit h','  rw [verifier_retraction, verifier_retraction] at h\'','  exact Sum.inl.inj h\'']
 queries += ['verifier_retraction','verifier_join_split','verifier_split_join','verifier_embedding_injective']
+lines += [f'theorem verifier_discriminant (e : {small}) :',f'    {big}.read_discriminant (verifierEmbed e) = {small}.read_discriminant e := by','  cases e <;> rfl']; queries.append('verifier_discriminant')
 lines += ['\n/-- Complete Rust Result error transport, including every error constructor. -/','def mapCoreError {T E F : Type} (f : E → F) :','    Aeneas.Std.core.result.Result T E → Aeneas.Std.core.result.Result T F','  | .Ok x => .Ok x','  | .Err e => .Err (f e)','theorem mapCoreError_inverse {T E F : Type} (f : E → F) (g : F → E)','    (inverse : ∀ e, g (f e) = e) (r : Aeneas.Std.core.result.Result T E) :','    mapCoreError g (mapCoreError f r) = r := by','  cases r with','  | Ok x => rfl','  | Err e => exact congrArg Aeneas.Std.core.result.Result.Err (inverse e)']
 queries+=['mapCoreError_inverse']
 for label,left in [('payment',0),('tree',1)]:

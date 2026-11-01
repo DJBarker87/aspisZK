@@ -29,3 +29,7 @@ Premises before/after: unchanged PrivacyR1HeadlineDeployedReal.privacy_headline_
 ## Compile-free preflight
 
 PREFLIGHT.json passes deterministic regeneration, all 95 selected-text hashes, prefix checks, complete membership of the migration plan, and the 20 MiB limit. No Lean parser, elaborator, kernel, axioms audit or import merge has run. SELECTED-SOURCES.json was recovered read-only from the retained privacy reconciliation plan; its per-source hashes are checked. No host directory has been written.
+
+## Further draft audit
+
+Added discriminant-commutation statements for payment, tree and verifier embedding (finite constructor cases only), and a complete prover-run split/join statement retaining the three prover-only outcomes. preflight.py caught a Python f-string brace error while adding the latter; it was corrected before any Lean attempt, then deterministic regeneration passed. These remain UNCOMPILED; no source failure hash is a Lean failure. The first required ten-minute gate poll at 20:50:34 UTC still found no restoration flag.

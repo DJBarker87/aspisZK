@@ -43,6 +43,9 @@ theorem payment_left_inverse (e : AspisBuilderAdmissionSource.pool_v1.payment_re
   cases e <;> rfl
 theorem payment_right_inverse (e : AspisR1WithdrawalValidation.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) : paymentToShared (paymentFromShared e) = e := by
   cases e <;> rfl
+theorem payment_discriminant (e : AspisBuilderAdmissionSource.pool_v1.payment_relation.PoolV1PaymentStatementFormatError) :
+    AspisR1WithdrawalValidation.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.read_discriminant (paymentToShared e) = AspisBuilderAdmissionSource.pool_v1.payment_relation.PoolV1PaymentStatementFormatError.read_discriminant e := by
+  cases e <;> rfl
 theorem payment_injective : Function.Injective paymentToShared := by
   intro a b h
   have h' := congrArg paymentFromShared h
@@ -80,6 +83,9 @@ def treeFromShared : AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1Tre
 theorem tree_left_inverse (e : AspisBuilderAdmissionSource.pool_v1.incremental_merkle.PoolV1TreeError) : treeFromShared (treeToShared e) = e := by
   cases e <;> rfl
 theorem tree_right_inverse (e : AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1TreeError) : treeToShared (treeFromShared e) = e := by
+  cases e <;> rfl
+theorem tree_discriminant (e : AspisBuilderAdmissionSource.pool_v1.incremental_merkle.PoolV1TreeError) :
+    AspisR1TerminalDecoder.pool_v1.incremental_merkle.PoolV1TreeError.read_discriminant (treeToShared e) = AspisBuilderAdmissionSource.pool_v1.incremental_merkle.PoolV1TreeError.read_discriminant e := by
   cases e <;> rfl
 theorem tree_injective : Function.Injective treeToShared := by
   intro a b h
@@ -135,6 +141,9 @@ theorem verifier_embedding_injective : Function.Injective verifierEmbed := by
   have h' := congrArg verifierSplit h
   rw [verifier_retraction, verifier_retraction] at h'
   exact Sum.inl.inj h'
+theorem verifier_discriminant (e : AspisR1FinishRelationCurrent.verifier.Error) :
+    AspisR1ProverCommit.verifier.Error.read_discriminant (verifierEmbed e) = AspisR1FinishRelationCurrent.verifier.Error.read_discriminant e := by
+  cases e <;> rfl
 
 /-- Complete Rust Result error transport, including every error constructor. -/
 def mapCoreError {T E F : Type} (f : E → F) :
@@ -156,14 +165,17 @@ theorem tree_result_transport {T : Type} (r : Aeneas.Std.core.result.Result T As
 
 #print axioms payment_left_inverse
 #print axioms payment_right_inverse
+#print axioms payment_discriminant
 #print axioms payment_injective
 #print axioms tree_left_inverse
 #print axioms tree_right_inverse
+#print axioms tree_discriminant
 #print axioms tree_injective
 #print axioms verifier_retraction
 #print axioms verifier_join_split
 #print axioms verifier_split_join
 #print axioms verifier_embedding_injective
+#print axioms verifier_discriminant
 #print axioms mapCoreError_inverse
 #print axioms payment_result_transport
 #print axioms tree_result_transport
