@@ -32,7 +32,9 @@ theorem stream (n : Nat) (x y : Nat → Raw)
   apply congrArg List.flatten
   apply congrArg List.ofFn
   funext i
-  rw [point i]
+  exact congrArg (fun z : {r : Raw // canonical r} =>
+    List.ofFn (ProverCommitWideBytes48.sourceCell z.val z.property))
+    (Subtype.ext (point i))
 
 #print axioms unpack
 #print axioms unpack_source
