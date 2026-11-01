@@ -1,0 +1,104 @@
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -6,6 +6,7 @@
+ //! statement proof is wired into the PCS.
+ 
+ #![no_std]
++#![cfg_attr(kani, feature(allocator_api))]
+ 
+ extern crate alloc;
+ #[cfg(test)]
+@@ -207,3 +208,9 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++mod KMX_stubs;
++#[cfg(kani)]
++mod NED_controls;
+--- /dev/null
++++ b/crates/aspis-statement/src/NED_controls.rs
+@@ -0,0 +1,81 @@
++// Scratch fidelity probes only. No native implementation credit.
++use crate::pool_v1::PoolV1PaymentStatementFormatError as E;
++type Reply = Result<[u8;216],E>;
++impl kani::Arbitrary for E {
++ fn any()->Self {match kani::any::<u8>() {
++  0=>E::WrongLength,1=>E::WrongMagic,2=>E::WrongVersion,
++  3=>E::WrongTransitionKind,4=>E::WrongDigestEncoding,5=>E::NonZeroReserved,
++  6=>E::ZeroRequiredBinding,7=>E::InvalidAnchorSequence,
++  8=>E::NonCanonicalDigest,9=>E::NonCanonicalAssetId,
++  10=>E::InvalidWithdrawalAmount,11=>E::InvalidDestination,
++  12=>E::InvalidEnvelope,_=>E::EnvelopeMismatch}}
++}
++#[kani::ensures(|r| matches!(r,Ok(a) if a[0]==x))]
++fn exact(x:u8)->Reply {Ok([x;216])}
++#[kani::ensures(|r| matches!(r,Ok(a) if a[0]!=x))]
++fn inverted(x:u8)->Reply {Ok([x;216])}
++#[kani::ensures(|r| r.is_ok())]
++fn weak(x:u8)->Reply {Ok([x;216])}
++#[kani::modifies(&mut x[0])]
++#[kani::ensures(|r| r.is_ok())]
++fn frame_good(x:&mut[u8;2])->Reply {x[0]=x[0].wrapping_add(1);Ok([x[0];216])}
++#[kani::modifies(&mut x[0])]
++#[kani::ensures(|r| r.is_ok())]
++fn frame_bad(x:&mut[u8;2])->Reply {x[1]=x[1].wrapping_add(1);Ok([x[0];216])}
++#[kani::proof_for_contract(exact)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn exact_contract(){let _=exact(kani::any());}
++#[kani::proof_for_contract(inverted)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn inverted_contract(){let _=inverted(kani::any());}
++#[kani::proof_for_contract(weak)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn weak_contract(){let _=weak(kani::any());}
++#[kani::proof]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn weak_real(){let x:u8=kani::any();assert!(matches!(weak(x),Ok(a) if a[0]==x));}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn weak_unimplied(){let x:u8=kani::any();assert!(matches!(weak(x),Ok(a) if a[0]==x));}
++#[kani::proof_for_contract(frame_good)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn frame_positive(){let mut x:[u8;2]=kani::any();let _=frame_good(&mut x);}
++#[kani::proof_for_contract(frame_bad)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn frame_violation(){let mut x:[u8;2]=kani::any();let _=frame_bad(&mut x);}

@@ -1,0 +1,35 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,21 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[kani::requires(frame.log==0 && *nullifier==frame.expected)]
++#[kani::modifies(&mut frame.log)]
++#[kani::ensures(|r| *r==if frame.canon {Ok((frame.byte&7)^1)}else{Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)} && frame.log==if frame.canon{2}else{1})]
++fn NEL_threaded_lane(
++    nullifier: &Digest,
++    frame: &mut NEL_lane_oracle::Frame,
++) -> Result<u8, PoolV1PairForestAccountErrorV1> {
++    if !NEL_lane_oracle::canonical(nullifier,frame) {
++        return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
++    }
++    Ok(NEL_lane_oracle::first(nullifier,frame) & 7)
++}
++
++#[cfg(kani)]
++#[path="NEL_lane_oracle.rs"]
++mod NEL_lane_oracle;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_lane_oracle.rs
+@@ -0,0 +1,8 @@
++#![allow(non_snake_case)]
++use super::*;
++use aspis_core::field::M31;
++pub(super) struct Frame{pub expected:Digest,pub canon:bool,pub byte:u8,pub log:usize}
++pub(super) fn canonical(d:&Digest,f:&mut Frame)->bool{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==0 && d[k].0==f.expected[k].0);f.log=1;f.canon}
++pub(super) fn first(d:&Digest,f:&mut Frame)->u8{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==1 && f.canon && d[k].0==f.expected[k].0);f.log=2;f.byte}
++#[kani::proof_for_contract(NEL_threaded_lane)]
++fn lane_oracle(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut f=Frame{expected:d,canon:kani::any(),byte:kani::any(),log:0};let _=NEL_threaded_lane(&d,&mut f);}
