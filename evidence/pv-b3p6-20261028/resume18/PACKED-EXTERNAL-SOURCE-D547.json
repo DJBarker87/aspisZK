@@ -1,0 +1,52 @@
+{
+  "function": "external_linear_packed",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "external_linear_packed",
+      "start": 281,
+      "end": 301,
+      "signature": "fn external_linear_packed(state: [QM31; POSEIDON2_WIDTH]) -> [QM31; 4] ",
+      "body": "{\n    let mut local_packed = [QM31::ZERO; 4];\n    let mut group = 0usize;\n    while group < 4 {\n        let start = 4 * group;\n        let input = [\n            state[start],\n            state[start + 1],\n            state[start + 2],\n            state[start + 3],\n        ];\n        local_packed[group] = external_local_packed(input);\n        group += 1;\n    }\n    let sum = QM31::ZERO\n        .add(local_packed[0])\n        .add(local_packed[1])\n        .add(local_packed[2])\n        .add(local_packed[3]);\n    local_packed.map(|value| value.add(sum))\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "interpreter": "source_external_packed547",
+  "theorem": "external_packed_source_link547",
+  "source_steps": [
+    {
+      "source": "ZERO[4]; while group0..4",
+      "model": "source_external_packed547 / range_loop13",
+      "argument": "The source while state is a four-element owned array and ascending group. range_as_fold13 and four_group_indices547 give exactly0,1,2,3; increment cannot overflow."
+    },
+    {
+      "source": "start4*group, input four source reads",
+      "model": "packed_group_step547 prefix",
+      "argument": "Same multiplication and additions in the same order, each exact u64 usize value. All indices0..15 are in16. Immutable state reads and a fresh four-element input array; no aliased mutable state or allocation."
+    },
+    {
+      "source": "external_local_packed(input), store local_packed[group]",
+      "model": "packed_group_step547 suffix",
+      "argument": "Identical frozen function/call order; return complete four-element array from Array.update before increment/continuation. Raw helper and its canonicality/total release interpretation remain a named dependency; no Kani79105 credit used."
+    },
+    {
+      "source": "left-associated ZERO+local0+local1+local2+local3",
+      "model": "packed_finish547 prefix",
+      "argument": "Exactly four reads in order and four unchanged QM31.add calls. No associativity or field property assumed. Index bounds0..3<4 hold for every carrier."
+    },
+    {
+      "source": "local_packed.map(value.add(sum))",
+      "model": "packed_finish547 output four adds",
+      "argument": "Array.map consumes this QM31[4]; captured sum is immutable, callback exact QM31.add. In ascending index order it reads0,1,2,3 and adds the same sum. Reuse the four already-read immutable values; source has no intervening write to local_packed or field ownership effect. core array map/try_map/Guard mapping in ArrayInterface543 and STD-STRUCTURAL-D542 retains initialization cursor-before-callback and initialized prefix/suffix cleanup. QM31.add is total, so no panic/error prefix is removed. Derived Copy, FnMut/drop lowering remain V370."
+    }
+  ],
+  "domain": "every raw QM31[16] carrier, no canonicality narrowing in the local equation",
+  "route": "own-1 structural argument plus Lean complete-Result equality",
+  "D188": "All four indexed stores return the whole updated localPacked array; no iterator mutation or discarded backward continuation",
+  "feature_profile": "ct-host-prover, body has no cfg/cfg!; exact fresh packed extraction graph; release wrap/debug off",
+  "retained": "raw local helper source association, full std/D188/matrix/callback source-cone and V370/D381/D386 remain separately named; no endpoint or T change",
+  "status": "pending focused Lean and new reference-packed extraction comparison"
+}

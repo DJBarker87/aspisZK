@@ -23,7 +23,7 @@ def normalized(s):
   s=s[:a]+s[i:]
  return ' '.join(re.findall(r'"(?:\\.|[^"])*"|[A-Za-z_][\w.]*|[0-9]+|[^\s]',s))
 import sys
-group=sys.argv[1]; assert group in ['leading','copy','schedule']
+group=sys.argv[1]; assert group in ['leading','copy','schedule','packed']
 O=R/('reference-'+group)
 rows=[]
 for n,b in defs((O/'generated/Funs.lean').read_text()).items():

@@ -3,10 +3,10 @@ from pathlib import Path
 import subprocess,json,hashlib,re
 H='/home/dombarker/project-offloads/codex-pv-b3p6-20261028';D=Path('evidence/pv-b3p6-20261028')
 revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();sources={};authority={}
-for name in ['PV_B3P_DigestSource547227','PV_B3P_PathSource547227']:
+for name in ['PV_B3P_DigestSource547227','PV_B3P_PathSource547227','PV_B3P_PackedExternal547227']:
  p=D/'lean'/(name+'.lean');raw=subprocess.check_output(['git','show',revision+':'+str(p)]);assert raw==p.read_bytes()
  sources[name]=raw.decode();authority[name]=dict(module=name,path=str(p),blob=subprocess.check_output(['git','rev-parse',revision+':'+str(p)],text=True).strip(),sha256=hashlib.sha256(raw).hexdigest(),authority='h5 HEAD',imports=re.findall(r'^import (\S+)',raw.decode(),re.M),tracked_conflicts=[])
-scripts={n:Path('tools/pv-b3p6-20261028/'+n).read_text()for n in ['queue_lean547_host.py','collect_d547_host.py']}
+scripts={n:Path('tools/pv-b3p6-20261028/'+n).read_text()for n in ['queue_lean547_host.py','collect_d547_host.py','reference_packed547_host.py']}
 code='''from pathlib import Path
 import json,hashlib
 H=Path(HOST); sources=SOURCES;authority=AUTHORITY;scripts=SCRIPTS
