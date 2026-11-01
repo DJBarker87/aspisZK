@@ -1,0 +1,21 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -245,6 +245,8 @@
+         }
+     }
+ 
++    #[cfg_attr(kani,kani::modifies())]
++    #[cfg_attr(kani,kani::ensures(|r| *r == self.0.to_le_bytes()))]
+     pub fn to_le_bytes(self) -> [u8; 4] {
+         self.0.to_le_bytes()
+     }
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEJ_oracle.rs"]
++mod NEJ_oracle;

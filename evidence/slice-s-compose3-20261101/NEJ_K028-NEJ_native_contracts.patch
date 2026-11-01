@@ -1,0 +1,20 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEJ_common_window.rs"]
++mod NEJ_common_window;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEJ_common_window.rs
+@@ -0,0 +1,7 @@
++#![allow(non_snake_case)]
++#[kani::requires(offset<4)]
++#[kani::modifies(out)]
++#[kani::ensures(|r| *r == offset+1)]
++fn weak(out:&mut [u8;216],offset:usize)->usize{out[offset]=42;offset+1}
++#[kani::proof]
++fn common_window(){let mut out:[u8;216]=kani::any();let old=out[4];let offset:usize=kani::any();kani::assume(offset<4);let r=weak(&mut out,offset);assert!(r==offset+1);assert!(out[4]==old,"NEJ unimplied output frame");}

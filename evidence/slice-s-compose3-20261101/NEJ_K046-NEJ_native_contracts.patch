@@ -1,0 +1,24 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEJ_late_step.rs"]
++mod NEJ_late_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEJ_late_step.rs
+@@ -0,0 +1,11 @@
++#![allow(non_snake_case)]
++use super::*;
++#[kani::requires(offset<2 && j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES && old==output[j])]
++#[kani::modifies(output)]
++#[kani::ensures(|r| *r==offset+1 && output[j]==if j==10+offset{((POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES as u16).to_le_bytes())[offset]}else{old})]
++fn step(output:&mut [u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES],offset:usize,j:usize,old:u8)->usize{
++ let dst=&mut output[10..12];let src=&((POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES as u16).to_le_bytes());let mut i=offset;
++ dst[i]=src[i];i+=1;i
++}
++#[kani::proof_for_contract(step)]
++fn header_window(){let mut output:[u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES]=kani::any();let j:usize=kani::any();kani::assume(j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES);let old=output[j];let offset:usize=kani::any();kani::assume(offset<2);step(&mut output,offset,j,old);}

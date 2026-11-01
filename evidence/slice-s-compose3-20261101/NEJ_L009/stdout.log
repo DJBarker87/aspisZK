@@ -1,0 +1,16 @@
+NEJ_generated/NEJ_ScannerFramed.lean:25:6: error: Tactic `subst` failed: did not find equation for eliminating 'σ'
+
+case refine_1
+State : Type
+d : Std.Array U32 8#usize
+state : State
+i : Usize
+σ : State
+bound : ↑(i, σ).1 ≤ 8
+eqv : Canonical d ↔ Suffix d ↑(i, σ).1
+same : (i, σ).2 = state
+⊢ NEE_CanonicalFrame.body d (i, σ) ⦃ r =>
+    match r with
+    | ControlFlow.done y => y = (decide (Canonical d), state)
+    | ControlFlow.cont x' => (↑x'.1 ≤ 8 ∧ (Canonical d ↔ Suffix d ↑x'.1) ∧ x'.2 = state) ∧ 8 - ↑x'.1 < 8 - ↑(i, σ).1 ⦄
+'NEJ_ScannerFramed.value_and_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,31 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEJ_common_window.rs"]
++mod NEJ_common_window;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEJ_common_window.rs
+@@ -0,0 +1,18 @@
++#![allow(non_snake_case,unused_variables)]
++use super::*;
++#[kani::requires(offset<4 && j<216 && old==output[j])]
++#[kani::modifies(output)]
++#[kani::ensures(|r| *r==offset+1 && output[j]==if j==0+offset{(magic)[offset]}else{old})]
++fn step(output:&mut [u8;216],magic:[u8;4],common:CommonPublicV1,reply0:[u8;32],reply1:[u8;32],offset:usize,j:usize,old:u8)->usize{
++ let dst=&mut output[0..4];let src=&(magic);let mut i=offset;
++ dst[i]=src[i];i+=1;
++ i
++}
++fn digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(step)]
++fn common_window(){
++ let mut output:[u8;216]=kani::any();let j:usize=kani::any();kani::assume(j<216);let old=output[j];
++ let offset:usize=kani::any();kani::assume(offset<4);
++ let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any())};
++ step(&mut output,kani::any(),c,kani::any(),kani::any(),offset,j,old);
++}

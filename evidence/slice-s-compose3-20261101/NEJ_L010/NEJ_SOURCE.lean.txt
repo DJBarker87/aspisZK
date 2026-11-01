@@ -1,0 +1,52 @@
+import NEE_CanonicalFrame
+set_option autoImplicit false
+noncomputable section
+namespace NEJ_ScannerFramed
+open Aeneas Aeneas.Std Result WP AspisR1AdapterReconstruct
+open NBD_DigestInduction
+attribute [local instance] Classical.propDecidable
+
+/-- A single loop execution has BOTH the canonicality result and the external
+frame. This strengthens the predecessor's existential frame, without assuming
+its existential Boolean equals the value of an unrelated execution. -/
+theorem value_and_frame {State : Type} (d : Array U32 8#usize) (state : State) :
+    NEE_CanonicalFrame.run d state = ok (decide (Canonical d),state) := by
+  have spec : NEE_CanonicalFrame.run d state
+      ⦃ r => r = (decide (Canonical d),state) ⦄ := by
+    unfold NEE_CanonicalFrame.run
+    refine loop.spec_decr_nat (fun p : Usize × State => 8-p.1.val)
+      (fun p : Usize × State => p.1.val ≤ 8 ∧
+        (Canonical d ↔ Suffix d p.1.val) ∧ p.2=state)
+      (fun r : Bool × State => r=(decide (Canonical d),state))
+      (NEE_CanonicalFrame.body d) (0#usize,state) ?_ ?_
+    · intro p hp
+      rcases p with ⟨i,σ⟩
+      rcases hp with ⟨bound,eqv,same⟩
+      dsimp only at bound eqv same
+      subst σ
+      unfold NEE_CanonicalFrame.body
+        aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body
+      step*
+      all_goals try unfold aspis_core.field.P at *
+      all_goals simp_all [Canonical, Suffix]
+      all_goals first | scalar_tac | skip
+      · refine ⟨⟨i.val, by scalar_tac⟩, Nat.le_refl _, ?_⟩
+        assumption
+      · refine ⟨⟨by scalar_tac, ?_, rfl⟩, by scalar_tac⟩
+        constructor
+        · intro h j hj
+          exact h j (by omega)
+        · intro h j hj
+          by_cases same : j.val=i.val
+          · simpa only [same] using
+              (show (d.val[i.val]'(by have := d.property; scalar_tac)).val < 2147483647 from by assumption)
+          · exact h j (by omega)
+    · constructor
+      · scalar_tac
+      · exact ⟨by simp [Canonical,Suffix],rfl⟩
+  obtain ⟨r,call,same⟩ := WP.spec_imp_exists spec
+  rw [same] at call
+  exact call
+
+#print axioms value_and_frame
+end NEJ_ScannerFramed
