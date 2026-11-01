@@ -61,6 +61,12 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
     (ProverCommitQArray48.array 10#usize d.p) (ProverCommitNativeQ48.source d.x0)
     (ProverCommitNativeQ48.source d.y0) (ProverCommitNativeQ48.source d.x1)
     (ProverCommitNativeQ48.source d.y1) (source d.g) (source d.k) (source d.a) (source d.b)=_ at hm
+  change ProverCommitGammaOutput53.run (ProverCommitGammaCell53.table
+    (ProverCommitGammaCoefficients53.wide d.c hc)) (source d.g)=ok (sourceArray 1024#usize q) at hqmodel
+  change ProverCommitWeightsMaterial53.run (ProverCommitQArray48.array 10#usize d.p)
+    (ProverCommitNativeQ48.source d.x0) (ProverCommitNativeQ48.source d.y0)
+    (ProverCommitNativeQ48.source d.x1) (ProverCommitNativeQ48.source d.y1)
+    (source d.k)=ok (sourceArray 1024#usize w) at hwmodel
   simp only [ProverCommitOpeningModel53.run,hqmodel,hwmodel,bind_tc_ok] at hm
   have eqModel := Result.ok.inj (hmodel.symm.trans hm)
   have em0 := congrArg (fun t => t.1) eqModel
