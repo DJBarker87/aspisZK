@@ -30,6 +30,6 @@ theorem complete (ops : ExternalFuns) (fixed : ProverRwP6BodyCandidate.selected 
   obtain ⟨next,hn,hnv⟩ := PV_RunJoin_SemanticComplete40.encode ops logical out records length domain available
   rw [fixed] at hn
   refine ⟨next,hn,?_⟩
-  simp only [bytes,hnv,hv,PV_RunJoin_ActualPlanSources59.empty,List.nil_append,List.map_append]
+  simp only [bytes,hnv,hv,PV_RunJoin_ActualPlanSources59.empty,List.nil_append,List.map_append,List.append_assoc]
 #print axioms complete
 end R1Z.PV_RunJoin_SemanticAppend66

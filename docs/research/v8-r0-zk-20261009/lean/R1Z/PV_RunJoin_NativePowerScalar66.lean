@@ -34,6 +34,16 @@ theorem mul (x y : U32) : aspis_core.field.M31.mul x y=
     AspisR1ProducerRelease47.field.M31.mul x y := by
   unfold aspis_core.field.M31.mul AspisR1ProducerRelease47.field.M31.mul
   simp only [lift,bind_tc_ok,reduce]
+theorem mreduce (x : U64) : aspis_core.field.M31.reduce_u64 x=
+    AspisR1ProducerRelease47.field.M31.reduce_u64 x := by
+  unfold aspis_core.field.M31.reduce_u64 AspisR1ProducerRelease47.field.M31.reduce_u64
+  rw [reduce]
+theorem double (x : U32) : aspis_core.field.M31.double x=
+    AspisR1ProducerRelease47.field.M31.double x := by
+  unfold aspis_core.field.M31.double AspisR1ProducerRelease47.field.M31.double
+  exact add x x
+#print axioms mreduce
+#print axioms double
 #print axioms subtract
 #print axioms reduce
 #print axioms add
