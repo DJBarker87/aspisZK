@@ -1,0 +1,257 @@
+{
+  "rule": "own-1 / k-prime route3",
+  "functions": [
+    {
+      "function": "equality_value",
+      "source": {
+        "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+        "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+        "item": {
+          "name": "equality_value",
+          "start": 1240,
+          "end": 1248,
+          "signature": "fn equality_value(left: &[QM31; 10], right: &[QM31; 10]) -> QM31 ",
+          "body": "{\n    let mut product = equality_factor(left[0], right[0]);\n    let mut index = 1usize;\n    while index < left.len() {\n        product = product.mul(equality_factor(left[index], right[index]));\n        index += 1;\n    }\n    product\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_token_check": true,
+        "syntax_normalization": "optional trailing commas only"
+      },
+      "source_steps": [
+        {
+          "source": "two immutable &[QM31;10] loans",
+          "model": "Shared14 EqualityInput14 / equality_native14",
+          "argument": "Retain both identities; allow identical/overlapping loans. Neither source nor model writes inputs, dereferences arbitrary addresses, compares addresses, or inspects outside state."
+        },
+        {
+          "source": "equality_factor(left[0],right[0])",
+          "model": "two Array.index_usize then exact reference_terminal.equality_factor",
+          "argument": "Source left read precedes right read and opaque field call. Both indices 0<10; index_value records same contents. equality_factor is the token-identical helper from the pinned source/copy; no arithmetic reassociation."
+        },
+        {
+          "source": "index=1; while index<left.len()",
+          "model": "source_equality_loop, usize_body equality_step 10",
+          "argument": "Fixed array len is10 independent of values. For each index1..9 read left then right, evaluate same factor and multiply old product on the left. Increment only after storing product. No integer overflow because index<=10. equality_loop_binding/usize_loop_plan covers precisely nine steps, preserving Result failures/divergence."
+        },
+        {
+          "source": "return product; cleanup shared inputs",
+          "model": "equality_native_continuation14",
+          "argument": "No custom Drop, allocation or mutable restoration. Immutable Copy field/array values retain identical order; compiler copy/drop lowering V370. Arbitrary continuation equality retains the resulting value."
+        }
+      ],
+      "compiled_named_laws": [
+        "PV_B3P_Loans14227.equality_native_binding14",
+        "PV_B3P_Loans14227.equality_native_continuation14",
+        "PV_B3P_Binding9227.equality_body_binding"
+      ],
+      "domain": "every pair of valid shared arrays, including aliases and every raw field representation",
+      "stores": 0,
+      "route": "own-1 script-checked structural source binding + named complete-Result Lean equality",
+      "evidence_class": "structural argument; Lean equality concerns the exact stated source interpreter, not machine-code preservation",
+      "D188": "Every local indexed assignment retains its mutable loan restoration via source_store_update543/source_store_continuation543; this is an own-1 interpreter, not an unsupported extraction. No discarded mutable backward function is accepted.",
+      "retained": "Field source rows and standard/dependency closure remain named separately. Compiler lowering, intrinsics, copy/drop and source-to-machine V370 / D381,D386 retained. No endpoint or T change."
+    },
+    {
+      "function": "occupancy_lanes_literal",
+      "source": {
+        "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+        "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+        "item": {
+          "name": "occupancy_lanes_literal",
+          "start": 596,
+          "end": 617,
+          "signature": "fn occupancy_lanes_literal(\n    input_occupancy: QM31,\n    output_occupancy: QM31,\n    expected_output: M31,\n    opened: &[QM31; 16],\n) -> [QM31; 12] ",
+          "body": "{\n    let occupied = opened[0];\n    let inverse = opened[1];\n    let one_minus = QM31::ONE.sub(occupied);\n    let mut occupancy = [QM31::ZERO; 12];\n    let both = input_occupancy.add(output_occupancy);\n    occupancy[0] = both.mul(occupied.mul(occupied.sub(QM31::ONE)));\n    occupancy[1] = both.mul(opened[9].mul(inverse).sub(occupied));\n    occupancy[2] = both.mul(one_minus.mul(inverse));\n    for lane in 0..DIGEST_ELEMS {\n        occupancy[3 + lane] = both.mul(one_minus.mul(opened[2 + lane]));\n    }\n    occupancy[11] = input_occupancy\n        .mul(opened[10].mul(one_minus))\n        .add(output_occupancy.mul(occupied.sub(lift_m31(expected_output))));\n    occupancy\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_token_check": true,
+        "syntax_normalization": "optional trailing commas only"
+      },
+      "source_steps": [
+        {
+          "source": "read opened[0], opened[1]; ONE.sub(occupied)",
+          "model": "native_occupancy15 prefix",
+          "argument": "Same read and field-call order. Bounds0,1<16 are value-independent. Shared opened is never mutated; possible external aliases are immutable."
+        },
+        {
+          "source": "[ZERO;12], both=input.add(output)",
+          "model": "Array.repeat12 ZERO, exact QM31.add",
+          "argument": "QM31 and all fields are Copy and have no custom destructor; source array-repeat lowering V370, not an ordinary std function silently omitted. No allocation or address-dependent control."
+        },
+        {
+          "source": "stores occupancy[0], [1], [2] in source order",
+          "model": "native_occupancy15 three Array.update binds",
+          "argument": "Every operand and evaluation order is the exact source expression; each nested field call remains opaque. source_store_update543 binds direct local element assignment; continuation lemma applies the back function before later stores. All fixed indices<12 and opened[9]<16."
+        },
+        {
+          "source": "for lane in 0..8; occupancy[3+lane]=both.mul(one_minus.mul(opened[2+lane]))",
+          "model": "occupancy_step15 / range_loop13",
+          "argument": "Range source has same IntoIterator/next/spec_next/Step bodies captured in SUM-SOURCE-BINDING-D542 and direct range_next_extraction17; cursor increments before body. occupancy_indices543 proves read2+lane<16 and target3+lane<12. Both scalar additions and range successor fit usize. The full Array.update state is threaded into each next step, never discarded."
+        },
+        {
+          "source": "final occupancy[11] expression then return",
+          "model": "occupancy_finish15",
+          "argument": "Read opened[10], multiply opened10*one_minus, multiply input; then lift expected_output, subtract from occupied, multiply output; finally add and store11. Exact lift_m31 helper source, same CM31/QM31 constructors; no arithmetic regrouping. Every cell0..11 written once, local array ownership returned; source_store_continuation543 retains final write."
+        }
+      ],
+      "compiled_named_laws": [
+        "PV_B3P_Native15227.native_occupancy_binding15",
+        "PV_B3P_Association543227.occupancy_indices543",
+        "PV_B3P_Association543227.source_store_continuation543"
+      ],
+      "domain": "all raw field values, expected_output words and valid opened[16]; no canonicality premise",
+      "stores": 12,
+      "route": "own-1 script-checked structural source binding + named complete-Result Lean equality",
+      "evidence_class": "structural argument; Lean equality concerns the exact stated source interpreter, not machine-code preservation",
+      "D188": "Every local indexed assignment retains its mutable loan restoration via source_store_update543/source_store_continuation543; this is an own-1 interpreter, not an unsupported extraction. No discarded mutable backward function is accepted.",
+      "retained": "Field source rows and standard/dependency closure remain named separately. Compiler lowering, intrinsics, copy/drop and source-to-machine V370 / D381,D386 retained. No endpoint or T change."
+    },
+    {
+      "function": "poseidon_selectors",
+      "source": {
+        "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+        "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+        "item": {
+          "name": "poseidon_selectors",
+          "start": 248,
+          "end": 253,
+          "signature": "fn poseidon_selectors(selectors: &Selectors) -> StateOnlyPoseidonSelectors ",
+          "body": "{\n    StateOnlyPoseidonSelectors {\n        block: sum_high(selectors, &[0..57]),\n        local: selectors.low,\n    }\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_token_check": true,
+        "syntax_normalization": "optional trailing commas only"
+      },
+      "source_steps": [
+        {
+          "source": "immutable &Selectors and singleton Range slice",
+          "model": "native_poseidon_selectors15 / source_sum_ranges13 [(0,57)]",
+          "argument": "Selectors has exactly high[64],low[16]. The source/copy carrier map preserves both whole arrays; no assumed invariant. Slice preserves singleton range0..57, shared loan identity and order. No heap allocation."
+        },
+        {
+          "source": "block: sum_high(selectors,&[0..57])",
+          "model": "previously source-bound source_sum_ranges13",
+          "argument": "D542 own-1 total sum dossier binds the actual callee, not only a model alias. Same57 left-fold additions. sum_ranges_binding13/native_sum_high_binding15 include range/drop and arbitrary raw fields. This body introduces no independent arithmetic."
+        },
+        {
+          "source": "local: selectors.low and constructor",
+          "model": "ok {block, local:=selectors.low}",
+          "argument": "Exact immutable Copy of16 field elements, no writes, custom destructor or effects. Carrier fields/order agree with the same-origin PoseidonSelectors extraction. The field constructor is evaluated after block and returns both values intact."
+        }
+      ],
+      "compiled_named_laws": [
+        "PV_B3P_Native15227.native_poseidon_selectors_binding15",
+        "PV_B3P_Binding13227.sum_ranges_binding13",
+        "PV_B3P_Native15227.native_sum_high_binding15"
+      ],
+      "domain": "all high[64],low[16] selector arrays; no canonicality premise",
+      "stores": 0,
+      "route": "own-1 script-checked structural source binding + named complete-Result Lean equality",
+      "evidence_class": "structural argument; Lean equality concerns the exact stated source interpreter, not machine-code preservation",
+      "D188": "Every local indexed assignment retains its mutable loan restoration via source_store_update543/source_store_continuation543; this is an own-1 interpreter, not an unsupported extraction. No discarded mutable backward function is accepted.",
+      "retained": "Field source rows and standard/dependency closure remain named separately. Compiler lowering, intrinsics, copy/drop and source-to-machine V370 / D381,D386 retained. No endpoint or T change."
+    },
+    {
+      "function": "interpolate_three_constant_columns",
+      "source": {
+        "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+        "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+        "item": {
+          "name": "interpolate_three_constant_columns",
+          "start": 432,
+          "end": 482,
+          "signature": "fn interpolate_three_constant_columns(\n    weights: [QM31; 3],\n    column0: [u32; POSEIDON2_WIDTH],\n    column1: [u32; POSEIDON2_WIDTH],\n    column2: [u32; POSEIDON2_WIDTH],\n) -> [QM31; POSEIDON2_WIDTH] ",
+          "body": "{\n    let mut output = [QM31::ZERO; POSEIDON2_WIDTH];\n    let mut lane = 0usize;\n    while lane < POSEIDON2_WIDTH {\n        output[lane] = QM31 {\n            c0: CM31::new(\n                interpolate_three_constant_limb(\n                    weights[0].c0.a.0,\n                    weights[1].c0.a.0,\n                    weights[2].c0.a.0,\n                    column0[lane],\n                    column1[lane],\n                    column2[lane],\n                ),\n                interpolate_three_constant_limb(\n                    weights[0].c0.b.0,\n                    weights[1].c0.b.0,\n                    weights[2].c0.b.0,\n                    column0[lane],\n                    column1[lane],\n                    column2[lane],\n                ),\n            ),\n            c1: CM31::new(\n                interpolate_three_constant_limb(\n                    weights[0].c1.a.0,\n                    weights[1].c1.a.0,\n                    weights[2].c1.a.0,\n                    column0[lane],\n                    column1[lane],\n                    column2[lane],\n                ),\n                interpolate_three_constant_limb(\n                    weights[0].c1.b.0,\n                    weights[1].c1.b.0,\n                    weights[2].c1.b.0,\n                    column0[lane],\n                    column1[lane],\n                    column2[lane],\n                ),\n            ),\n        };\n        lane += 1;\n    }\n    output\n}",
+          "context": [],
+          "macros": []
+        },
+        "whole_body_token_check": true,
+        "syntax_normalization": "optional trailing commas only"
+      },
+      "source_steps": [
+        {
+          "source": "owned weights[3], column0/1/2[16]; output[16]=ZERO; lane=0",
+          "model": "interpolation_source15",
+          "argument": "Same fixed-size value carrier. No mutable input reference, external read, allocation or custom Drop. Repeat semantics is compiler Copy lowering under V370."
+        },
+        {
+          "source": "while lane<16; four component expressions in c0.a,c0.b,c1.a,c1.b order",
+          "model": "interpolation_native_value15 / interpolation_native_limb15",
+          "argument": "For each component independently read weights0,1,2 then column0/1/2 at lane, exactly as source. Do not cache or reorder reads. index_value proves weights and lane accesses succeed; native_value_binding15 only factors successful immutable reads. CM31::new and QM31 field constructors remain in exact source order."
+        },
+        {
+          "source": "each interpolate_three_constant_limb call",
+          "model": "same extracted reference_poseidon.interpolate_three_constant_limb",
+          "argument": "The source/copy helper is token-identical under deployed ct-host-prover features, pinned in source grammar/dossiers. All u64 multiplications/additions retain release wrapping operation order; no canonical-field or non-overflow claim is substituted. M31::reduce_u64 is the same frozen field item, separately bound in field cone."
+        },
+        {
+          "source": "output[lane]=value; lane+=1",
+          "model": "interpolation_source_step15 Array.update; usize_body; interpolation_source_binding15",
+          "argument": "source_store_update543/source_store_continuation543 preserve every one of16 full-QM31 writes, including all four component limbs. On lane0..15 the destination is valid. Increment16 does not overflow. Terminal branch returns complete output. No mutable backward result is dropped."
+        }
+      ],
+      "compiled_named_laws": [
+        "PV_B3P_Native15227.interpolation_native_value_binding15",
+        "PV_B3P_Native15227.interpolation_source_step_binding15",
+        "PV_B3P_Native15227.interpolation_source_binding15",
+        "PV_B3P_Association543227.source_store_continuation543"
+      ],
+      "domain": "every weights[3], columns[16] raw u32 representation, including wrap boundaries; no canonicality premise",
+      "stores": 16,
+      "route": "own-1 script-checked structural source binding + named complete-Result Lean equality",
+      "evidence_class": "structural argument; Lean equality concerns the exact stated source interpreter, not machine-code preservation",
+      "D188": "Every local indexed assignment retains its mutable loan restoration via source_store_update543/source_store_continuation543; this is an own-1 interpreter, not an unsupported extraction. No discarded mutable backward function is accepted.",
+      "retained": "Field source rows and standard/dependency closure remain named separately. Compiler lowering, intrinsics, copy/drop and source-to-machine V370 / D381,D386 retained. No endpoint or T change."
+    }
+  ],
+  "exact_helpers": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+      "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+      "item": {
+        "name": "lift_m31",
+        "start": 119,
+        "end": 121,
+        "signature": "fn lift_m31(value: M31) -> QM31 ",
+        "body": "{\n    QM31::from_cm31(CM31::from_m31(value))\n}",
+        "context": [],
+        "macros": []
+      }
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+      "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+      "item": {
+        "name": "equality_factor",
+        "start": 1650,
+        "end": 1653,
+        "signature": "fn equality_factor(a: QM31, b: QM31) -> QM31 ",
+        "body": "{\n    let ab = a.mul(b);\n    QM31::ONE.sub(a).sub(b).add(ab).add(ab)\n}",
+        "context": [],
+        "macros": []
+      }
+    },
+    {
+      "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "item": {
+        "name": "interpolate_three_constant_limb",
+        "start": 416,
+        "end": 429,
+        "signature": "fn interpolate_three_constant_limb(\n    weight0: u32,\n    weight1: u32,\n    weight2: u32,\n    constant0: u32,\n    constant1: u32,\n    constant2: u32,\n) -> M31 ",
+        "body": "{\n    M31::reduce_u64(\n        u64::from(weight0) * u64::from(constant0)\n            + u64::from(weight1) * u64::from(constant1)\n            + u64::from(weight2) * u64::from(constant2),\n    )\n}",
+        "context": [],
+        "macros": []
+      }
+    }
+  ],
+  "std_range_binding": "resume17/SUM-SOURCE-BINDING-D542.json; eight exact deployed ordinary std bodies; derived Clone/drop/intrinsics V370",
+  "primitive_binding": "Fixed-array read/write and len are MIR primitive operations, not an omitted ordinary std Index implementation. Source bounds map to index_value; mutable back restoration maps to source_store_update543 and arbitrary continuation theorem. Their compiler/runtime implementation remains V370.",
+  "callee_binding": "Same frozen project items on source and interpreter side, not axioms or arbitrary opaque functions. Local body equality is modulo the separately named dependency rows, as for the retained direct source associations. This does not assert whole source-cone closure.",
+  "coverage_status": "pending ArrayInterface543227 and BodyLinks543227 compile/audit; only count after receipts",
+  "ordinary_std_unargued": [],
+  "native_tests": "No changed release source/artifact; reuse existing finite validation only, never promote it to universal source proof"
+}
