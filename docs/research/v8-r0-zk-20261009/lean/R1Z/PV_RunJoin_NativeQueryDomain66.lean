@@ -20,6 +20,7 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_QueryLoopTotal64.Domain cc1 cc2 (alloc.vec.Vec.deref p.folded_word) p.folded_salts := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops runtime world
+  have retainedContext := context
   obtain ⟨prepared,salts,hp,hs,hf⟩ := context
   have prepareFrame := PV_RunJoin_PrepareFrame66.complete .S2 phase.val.hash phase.val.backend phase.val.sem prepared hp
   have finishFrame := (PV_RunJoin_FinishFrame63.complete .S2 phase.val.hash prepared salts p hf).1
@@ -30,8 +31,8 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   have same2 : c2=cc2 := Option.some.inj (h2.symm.trans (frame ▸ hc2))
   subst c1
   subst c2
-  have wordSize := PV_RunJoin_NativeWordContext66.complete base heap box ops runtime world phase p context
-  have saltSize := PV_RunJoin_NativeSaltContext64.complete base heap box ops runtime world phase p context
+  have wordSize := PV_RunJoin_NativeWordContext66.complete base heap box ops runtime world phase p retainedContext
+  have saltSize := PV_RunJoin_NativeSaltContext64.complete base heap box ops runtime world phase p retainedContext
   exact ⟨words1,words2,salts1,salts2,wordSize,by omega⟩
 
 #print axioms complete
