@@ -27,7 +27,8 @@ def install (ops : ExternalFuns) : ExternalFuns :=
   {ops with op11 := sourceMap, op12 := sourceMapErr}
 
 /-- The unused closure is explicitly dropped. A callback invocation owns
-its consumed closure's native effects, including captures and unwinding. -/
+its consumed closure and argument's native effects, including capture/argument
+drops and unwinding. -/
 def map {T E U : Type} (callback : T → P U) (dropClosure : P Unit)
     (r : core.result.Result T E) : P (core.result.Result U E) :=
   match r with
