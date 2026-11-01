@@ -12,15 +12,15 @@ theorem coefficients (base : ExternalTypes) (heap : Heap) (box : Box)
 theorem frame (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @ProverRwP6BodyCandidate.selected (types base) (selected base heap box ops)=
-      {selected base heap box ops with op255 :=
-        @ProverRwSuccessBodyInterpretation.coefficients (types base) (selected base heap box ops)} := by
+      (letI : ExternalTypes := types base
+       {selected base heap box ops with op255 :=
+        @ProverRwSuccessBodyInterpretation.coefficients (types base) (selected base heap box ops)}) := by
   rfl
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) :
     @ProverRwP6BodyCandidate.selected (types base) (selected base heap box ops)=
       selected base heap box ops := by
   rw [frame,coefficients]
-  rfl
 #print axioms coefficients
 #print axioms frame
 #print axioms complete
