@@ -160,7 +160,7 @@ def proof(x,n=2,lets=()):
   return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
-  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
+  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed'+((' (r := '+emit(x.expr,world=False).strip().replace('\n',' ')+')') if entropy else '')+'\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
  if x.kind=='if':
   normalize=('try dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
   return pad+'by_cases condition : '+x.cond+'\n'+pad+'· '+normalize+'simp only [condition,if_true]\n'+proof(x.yes,n+2,lets)+'\n'+pad+'· '+normalize+'simp only [condition,if_false]\n'+proof(x.no,n+2,lets)
@@ -185,7 +185,7 @@ if entropy:out+='\nopen ControlFlow\n'
 out+='\ndef run\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
 out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (entropy_same : ∀ n s, entropyAnswers n s = getrandom.fill s)' if entropy else '')+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' entropyAnswers' if entropy else '')+(' fileAnswers'+(' reserveCallees' if joined else '') if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
-if entropy:out=out.replace('try dsimp only\n', 'try simp only []\n')
+
 record=json.dumps(dict(source=p,revision=rev,source_sha256=hashlib.sha256(s.encode()).hexdigest(),external_sha256=hashlib.sha256(ext.encode()).hexdigest(),function=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),open_callees={k:dict(header=v[0],result=v[1],args=v[2],field=v[3]) for k,v in spec.items()},lifted_calls=[c for c in calls if pure(c)],scope='source spine only; all named callees and runtime adequacy OPEN'),indent=2)+'\n'
 target=Path('lean/'+namespace+'.lean');receipt=E/(short+'-generation.json')
 if '--check' in sys.argv:
