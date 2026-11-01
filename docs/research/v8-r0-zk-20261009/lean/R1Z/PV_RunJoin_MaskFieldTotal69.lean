@@ -7,14 +7,14 @@ abbrev Q := aspis_core.field.QM31
 
 theorem cadd (a b : C) : ∃ c,aspis_core.field.CM31.add a b=ok c := by
   unfold aspis_core.field.CM31.add
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -26,15 +26,15 @@ theorem cadd (a b : C) : ∃ c,aspis_core.field.CM31.add a b=ok c := by
 
 theorem csub (a b : C) : ∃ c,aspis_core.field.CM31.sub a b=ok c := by
   unfold aspis_core.field.CM31.sub
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -47,16 +47,16 @@ theorem csub (a b : C) : ∃ c,aspis_core.field.CM31.sub a b=ok c := by
 
 theorem cmul (a b : C) : ∃ c,aspis_core.field.CM31.mul a b=ok c := by
   unfold aspis_core.field.CM31.mul
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -70,17 +70,17 @@ theorem cmul (a b : C) : ∃ c,aspis_core.field.CM31.mul a b=ok c := by
 
 theorem csquare (a : C) : ∃ c,aspis_core.field.CM31.square a=ok c := by
   unfold aspis_core.field.CM31.square
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -95,18 +95,18 @@ theorem csquare (a : C) : ∃ c,aspis_core.field.CM31.square a=ok c := by
 
 theorem cscale (a : C) (b : U32) : ∃ c,aspis_core.field.CM31.mul_m31 a b=ok c := by
   unfold aspis_core.field.CM31.mul_m31
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -122,19 +122,19 @@ theorem cscale (a : C) (b : U32) : ∃ c,aspis_core.field.CM31.mul_m31 a b=ok c 
 
 theorem cdouble (a : C) : ∃ c,aspis_core.field.CM31.double a=ok c := by
   unfold aspis_core.field.CM31.double
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -151,20 +151,20 @@ theorem cdouble (a : C) : ∃ c,aspis_core.field.CM31.double a=ok c := by
 
 theorem mulR (a : C) : ∃ c,aspis_core.field.mul_by_r a=ok c := by
   unfold aspis_core.field.mul_by_r
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -182,21 +182,21 @@ theorem mulR (a : C) : ∃ c,aspis_core.field.mul_by_r a=ok c := by
 
 theorem qadd (a b : Q) : ∃ c,aspis_core.field.QM31.add a b=ok c := by
   unfold aspis_core.field.QM31.add
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -215,22 +215,22 @@ theorem qadd (a b : Q) : ∃ c,aspis_core.field.QM31.add a b=ok c := by
 
 theorem qmul (a b : Q) : ∃ c,aspis_core.field.QM31.mul a b=ok c := by
   unfold aspis_core.field.QM31.mul
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -250,23 +250,23 @@ theorem qmul (a b : Q) : ∃ c,aspis_core.field.QM31.mul a b=ok c := by
 
 theorem qsquare (a : Q) : ∃ c,aspis_core.field.QM31.square a=ok c := by
   unfold aspis_core.field.QM31.square
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -287,24 +287,24 @@ theorem qsquare (a : Q) : ∃ c,aspis_core.field.QM31.square a=ok c := by
 
 theorem qscale (a : Q) (b : U32) : ∃ c,aspis_core.field.QM31.mul_m31 a b=ok c := by
   unfold aspis_core.field.QM31.mul_m31
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -326,25 +326,25 @@ theorem qscale (a : Q) (b : U32) : ∃ c,aspis_core.field.QM31.mul_m31 a b=ok c 
 
 theorem hostR (a : C) : ∃ c,host_arithmetic.cm31_mul_r a=ok c := by
   unfold host_arithmetic.cm31_mul_r
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qscale _ _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qscale _ _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
@@ -367,26 +367,26 @@ theorem hostR (a : C) : ∃ c,host_arithmetic.cm31_mul_r a=ok c := by
 
 theorem hostI (a : C) : ∃ c,host_arithmetic.cm31_mul_i a=ok c := by
   unfold host_arithmetic.cm31_mul_i
+  simp only [lift,bind_tc_ok]
   repeat' first
-    | progress simp only [lift,bind_tc_ok]
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (qscale _ _); intro _)
-    | (apply ProverRwP6BindTotal.bind_total _ _ (hostR _); intro _)
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.mul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.neg _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.double _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cdouble _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (mulR _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qadd _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qmul _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qsquare _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (qscale _ _); intro _; simp only [lift,bind_tc_ok])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (hostR _); intro _; simp only [lift,bind_tc_ok])
   first
     | exact PV_RunJoin_MaskScalarTotal69.add _ _
     | exact PV_RunJoin_MaskScalarTotal69.sub _ _
