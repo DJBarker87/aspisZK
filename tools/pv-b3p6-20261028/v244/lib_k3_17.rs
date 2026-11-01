@@ -31,3 +31,5 @@ mod inputs16;
 
 
 #[cfg(kani)] #[path="equivalence_k3_17.rs"] mod equivalence17;
+
+#[cfg(kani)] mod equivalence18;
