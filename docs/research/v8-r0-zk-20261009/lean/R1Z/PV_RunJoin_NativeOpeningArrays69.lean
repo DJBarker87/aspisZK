@@ -4,6 +4,7 @@ import R1Z.PV_RunJoin_NativeBinding63
 import R1Z.PV_RunJoin_NativeFinishCanonical63
 import R1Z.PV_RunJoin_PrepareTailSuccess48
 import R1Z.PV_RunJoin_FoldCell44
+import R1Z.PV_RunJoin_ActualScalar60
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_NativeOpeningArrays69
@@ -17,9 +18,8 @@ attribute [local irreducible] source sourceArray PV_RunJoin_FoldCell44.array
 theorem image (n : Usize) (q : Nat → Raw) :
     amap fromW (sourceArray n q)=PV_RunJoin_FoldCell44.array n q := by
   apply Subtype.ext
-  change (List.ofFn (fun i : Fin n.val => source (q i.val))).map fromW=
-    List.ofFn (fun i : Fin n.val => fromW (source (q i.val)))
-  rw [List.map_ofFn]
+  simp only [amap,sourceArray,PV_RunJoin_FoldCell44.array,ProverCommitArray49.array,List.map_ofFn]
+  rfl
 
 theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
