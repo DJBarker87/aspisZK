@@ -17,8 +17,9 @@ theorem c1 (mapErr : @ExternalFuns.op12 _ ext = @ProverRwOuterMapErr.map_err)
     (self : prover.Backend)
     (columns : Array (alloc.vec.Vec aspis_core.field.M31) 26#usize)
     (d : Array aspis_core.field.QM31 1024#usize) :
-    Post (fun pair => match pair.1 with | .Err _ => True | .Ok _ =>
-      ∃ c, pair.2.c1=some c ∧ Built c)
+    Post (fun pair => match pair.1 with
+      | .Err _ => True
+      | .Ok _ => ∃ c, pair.2.c1=some c ∧ Built c)
       (prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1 self columns d) := by
   unfold prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c1
   apply PV_RunJoin_ResultPost41.bind
@@ -52,8 +53,9 @@ theorem c2 (mapErr : @ExternalFuns.op12 _ ext = @ProverRwOuterMapErr.map_err)
     (self : prover.Backend)
     (h1 : Slice aspis_core.field.QM31)
     (g : Array aspis_core.field.QM31 1024#usize) :
-    Post (fun pair => match pair.1 with | .Err _ => True | .Ok _ =>
-      ∃ c, pair.2.c2=some c ∧ Built c)
+    Post (fun pair => match pair.1 with
+      | .Err _ => True
+      | .Ok _ => ∃ c, pair.2.c2=some c ∧ Built c)
       (prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2 self h1 g) := by
   unfold prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments.c2
   apply PV_RunJoin_ResultPost41.bind
