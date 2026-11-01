@@ -1,0 +1,58 @@
+"""Reconcile accepted evidence; every route fails closed without its receipts."""
+from pathlib import Path
+import json,re,hashlib,subprocess,lzma
+D=Path('evidence/pv-b3p6-20261028');R=D/'resume18';sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+inv=json.loads((R/'D547-final-host-inventory.json').read_text())
+for n,h in inv['hashes'].items():
+ p=R/n.removeprefix('resume18/');b=p.read_bytes()if p.exists()else lzma.decompress(p.with_name(p.name+'.xz').read_bytes());assert hashlib.sha256(b).hexdigest()==h,n
+assert '0 loaded units listed'in inv['scopes']
+receipts={};new=[]
+for p in sorted(R.glob('lean-790*/receipt/receipt.json')):
+ r=json.loads(p.read_text());receipts[r['module']]=r
+ if r['attempt']<79012 or r['attempt']==79097:continue
+ assert r['source_sha256']==sha(p.parent.parent/'source.lean')
+ assert r['source_sha256']==hashlib.sha256(subprocess.check_output(['git','cat-file','blob',r['project_source_authority']['blob']])).hexdigest()
+ assert r['swaps']==0 and r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ if r['exit_status']==0:
+  log=(p.parent/'stdout.log').read_text();assert 'sorryAx'not in log and 'error:'not in log
+  ax=re.findall(r'depends on axioms: \[([^\]]*)\]',log);assert ax or 'does not depend on any axioms'in log
+  assert all(set(a.replace('\n','').replace(' ','').split(','))<={'propext','Classical.choice','Quot.sound'}for a in ax)
+ new.append({k:r[k]for k in ['attempt','module','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','lean_source_revision','source_sha256','print_axioms']})
+def passed(m):assert m in receipts and receipts[m]['exit_status']==0,m
+for group,ident in [('leading',79163),('copy',79164),('schedule',79165),('packed',79166)]:
+ x=json.loads((R/('REFERENCE-'+group.upper()+'-D547.json')).read_text());assert not x['holes'] and x['declarations']
+ r=json.loads((R/f'N{ident}/receipt/receipt.json').read_text());assert r['exit_status']==0 and r['swaps']==0
+updates={
+ 'leading_pair_packed':('PV_B3P_LeadingSource546227','leading_source_link546','CALLER-SOURCE-D546.json / REFERENCE-LEADING-D547.json'),
+ 'active_literal':('PV_B3P_CopySource546227','active_literal_source_link546','COPY-SOURCE-D546.json / REFERENCE-COPY-D547.json'),
+ 'pattern_values_literal':('PV_B3P_CopySource546227','pattern_literal_source_link546','COPY-SOURCE-D546.json / REFERENCE-COPY-D547.json'),
+ 'add_schedule_lanes':('PV_B3P_ScheduleSource546227','schedule_source_link546','CALLER-SOURCE-D546.json / REFERENCE-SCHEDULE-D547.json'),
+ 'public_digest_lanes':('PV_B3P_DigestSource547227','public_digest_source_link547','DIGEST-SOURCE-D547.json / REFERENCE-SCHEDULE-D547.json'),
+ 'path_lanes_literal':('PV_B3P_PathSource547227','path_literal_source_link547','PATH-SOURCE-D546.json / REFERENCE-SCHEDULE-D547.json'),
+ 'external_linear_packed':('PV_B3P_PackedExternal547227','external_packed_source_link547','PACKED-EXTERNAL-SOURCE-D547.json / REFERENCE-PACKED-D547.json')}
+old=json.loads((R/'PER-FUNCTION-D546.json').read_text())
+for row in old['functions']:
+ if row['function']in updates:
+  m,t,e=updates[row['function']];passed(m)
+  row.update(local_body_association='BOUND',route='Lean equality + own-1 structural',theorem=t,evidence=e,remaining='Named callee source rows and full std/D188/matrix/callback, optimized dispatch where distinct, and V370 remain open; no endpoint closure')
+for i in range(8):passed(f'PV_B3P_PathCell15_{i}227')
+passed('PV_B3P_NativePath15227');passed('PV_B3P_SourceAudit547227')
+# No assertion-only, partial-lane or refused control is accepted.
+for ident in [79106,79107]:
+ r=json.loads((R/f'K{ident}/receipt/receipt.json').read_text());log=(R/f'K{ident}/receipt/stdout.log').read_text();assert r['swaps']==0
+ assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+ if ident==79106:assert r['exit_status']!=0 and 'VERIFICATION:- FAILED'in log and 'assertion failed: left[lane] == right[lane]'in log and 'attempt to subtract with overflow'not in log
+ else:assert r['exit_status']==0 and 'VERIFICATION:- SUCCESSFUL'in log
+ x=json.loads((R/f'K{ident}-inputs.json').read_text());assert x['profile']['overflow_checks']is False and x['domain'].startswith('all u32')
+ assert '-C overflow-checks=off' in str(r['env'])
+std=json.loads((R/'STD-RAW-D547.json').read_text());assert std['complete_std_item_mapping'] and not std['new_unargued_items']
+for row in old['functions']:
+ if row['function']=='external_local_packed_raw':
+  row.update(local_body_association='BOUND',route="Kani (k''')",theorem=None,evidence='RAW-SOURCE-D547.json / STD-RAW-D547.json / K79106 failed control + K79107 positive / POSEIDON-REFERENCE-D543.json',remaining='Total raw release wrapping association; mathematical canonicality, full std/D188/matrix/callback and V370 retained')
+assert sum(r['local_body_association']=='BOUND'for r in old['functions'])==24
+old['counts']=dict(total=36,bound=24,open=12,direct_extraction=4,Kani=3,Lean_equality_with_structural_source_binding=17)
+old['new_associations']=list(updates)+['external_local_packed_raw'];old['pending_uncredited']=[]
+(R/'PER-FUNCTION-D547.json').write_text(json.dumps(old,indent=2)+'\n')
+t=json.loads((R/'TALLY-resume18.json').read_text())
+out=dict(target=old['target'],entry_revision='b34b41b85b',coverage=old['counts'],new_lean=new,host_artifacts_verified=len(inv['hashes']),budget=dict(remaining=dict(lean=80-t['lean_attempts'],extraction=30-inv['extraction_receipts'],kani=30-inv['kani_receipts']),next_lean=t['next_unused_id'],audits_remaining=[79099],next_extraction='N79167',next_Kani='K79108'),failed_no_credit=['K79104-r2: intended assertion plus forced-MIR subtraction checks','K79105: only forced-MIR subtraction checks; environment correction K79106/07 is explicit RUSTFLAGS overflow-checks=off'],axioms='Only propext/Classical.choice/Quot.sound in all accepted new declarations and eleven-link audit',premise_changes=dict(removed=[],added=[],weakened=[]),scope='Local source-body associations. V244 and selected_callback op227 remain OPEN; no actual callback source-cone closure asserted.',full_endpoint_replay='not run; unchanged full regressions not repeated')
+(R/'verification-summary-D547.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(dict(coverage=old['counts'],budget=out['budget'],host_hashes=len(inv['hashes']))))
