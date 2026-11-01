@@ -3,7 +3,7 @@ from pathlib import Path
 import json,hashlib,subprocess
 from run import H
 R=H/'resume17';paths=[]
-for ident in [73832,73833,73899]:
+for ident in list(range(73832,73897))+[73899]:
  p=H/f'lean-{ident}'
  if p.exists():paths.extend(q for q in p.rglob('*')if q.is_file())
 for ident in [73949,73950]:
