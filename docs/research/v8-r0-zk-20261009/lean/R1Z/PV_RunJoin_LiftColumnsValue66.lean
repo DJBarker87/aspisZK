@@ -26,10 +26,14 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
   unfold host_semantic.lift_columns at success
   obtain ⟨initial,hinitial,success⟩ := PV_RunJoin_ResultPost.bind_eq_ok success
   let p := PV_RunJoin_LiftArrayTotal66.cells initial
-  have hi : matrix (filled p (row columns hlen) 0)=initial := by
+  have zero : filled p (row columns hlen) 0=p := by
+    funext l
     simp only [filled,Nat.not_lt_zero,if_false]
+  have hi : matrix (filled p (row columns hlen) 0)=initial := by
+    rw [zero]
     exact PV_RunJoin_LiftArrayTotal66.of_array initial
   have hl := PV_RunJoin_LiftColumnsLoop66.complete base heap box ops columns hlen p 26 0#usize rfl
+  simp only [show (0#usize).val=0 from rfl] at hl
   rw [hi] at hl
   rw [hl] at success
   simp only [bind_tc_ok,massert,show 26#usize<29#usize from by decide,if_true] at success
