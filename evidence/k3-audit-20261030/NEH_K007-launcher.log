@@ -1,0 +1,50 @@
+{"attempt": "NEH_K007", "exit_status": 1, "wall_seconds": 1.2506800929550081, "peak_rss_kib": "169240", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+    Blocking waiting for file lock on package cache
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = h
+...
+atus: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 6: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 7: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 8: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 9: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 1 of 9 failed
+Failed Checks: assertion failed: obs[0] == 1
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 4, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.02326267s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r58cd155d62c644569b75fc31599bba14.scope; invocation ID: 46c3f5514a2d44dca29f362ba1eb93eb

@@ -1,0 +1,120 @@
+{"attempt": "NEH_K006", "exit_status": 0, "wall_seconds": 1.2861613030545413, "peak_rss_kib": "168736", "swaps": "0"}
+Checking harness verifier::candidate::NBZ_native::NBZ_return_carriers...
+CBMC 6.8.0 (cbmc-6.8.0)
+CBMC version 6.8.0 (cbmc-6.8.0) 64-bit x86_64 linux
+Reading GOTO program from file /home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe-4841d7c1864d046c__RNvNtNtNtCsfWDlomp3Mzz_19aspis_r1_cost_probe8verifier9candidate10NBZ_native19NBZ_return_carriers.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+Runtime Symex: 0.00286872s
+size of program expression: 184 steps
+slicing removed 140 assignments
+Generated 16 VCC(s), 3 remaining after simplification
+Runtime Postprocess Equation: 1.5569e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 8.1189e-05s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.494e-06s
+Solving with CaDiCaL 2.0.0
+1 variables, 0 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 3.2544e-05s
+Runtime decision procedure: 0.000141764s
+Running propositional reduction
+Solving with CaDiCaL 2.0.0
+2 variables, 1 clauses
+SAT checker: instance is UNSATISFIABLE
+Runtime Solver: 9.616e-06s
+Runtime decision procedure: 1.7487e-05s
+
+RESULTS:
+Check 1: verifier::candidate::NBZ_native::NBZ_return_carriers.safety_check.1
+	 - Status: SUCCESS
+	 - Description: "misaligned pointer dereference: address must be a multiple of its type's alignment"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 2: verifier::candidate::NBZ_native::NBZ_return_carriers.safety_check.2
+	 - Status: SUCCESS
+	 - Description: "null pointer dereference occurred"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 3: verifier::candidate::NBZ_native::NBZ_mark_none.assertion.1
+	 - Status: SUCCESS
+	 - Description: "assertion failed: obs.is_some()"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:4:2 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+Check 4: core::option::Option::<&u8>::is_some.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 5: core::option::Option::<&u8>::is_some.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 6: core::option::Option::<&u8>::is_some.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 7: core::option::Option::<&u8>::is_some.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 8: core::option::Option::<&u8>::is_some.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 9: core::option::Option::<&u8>::is_some.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: ../../../runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/option.rs:636:18 in function core::option::Option::<&u8>::is_some
+
+Check 10: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.1
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer NULL"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 11: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.2
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer invalid"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 12: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.3
+	 - Status: SUCCESS
+	 - Description: "dereference failure: deallocated dynamic object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 13: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.4
+	 - Status: SUCCESS
+	 - Description: "dereference failure: dead object"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 14: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.5
+	 - Status: SUCCESS
+	 - Description: "dereference failure: pointer outside object bounds"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+Check 15: verifier::candidate::NBZ_native::NBZ_return_carriers.pointer_dereference.6
+	 - Status: SUCCESS
+	 - Description: "dereference failure: invalid integer address"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:10:9 in function verifier::candidate::NBZ_native::NBZ_return_carriers
+
+
+SUMMARY:
+ ** 0 of 15 failed
+
+VERIFICATION:- SUCCESSFUL
+Verification Time: 0.022198776s
+
+Manual Harness Summary:
+Complete - 1 successfully verified harnesses, 0 failures, 1 total.
+

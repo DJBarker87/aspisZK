@@ -1,0 +1,57 @@
+{"attempt": "NEH_K011", "exit_status": 1, "wall_seconds": 1.0888522149762139, "peak_rss_kib": "168708", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+-20261029/NEH_target/kani/x86_64-unknown-linux-gnu/debug/deps/aspis_r1_cost_probe-4841d7c1864d046c__RNvNtNtNtCsfWDlomp3Mzz_19aspis_r1_cost_probe8verifier9candidate10NBZ_native19NBZ_return_carriers.out
+Generating GOTO Program
+Adding CPROVER library (x86_64)
+Removal of function pointers and virtual functions
+Generic Property Instrumentation
+Running with 16 object bits, 48 offset bits (user-specified)
+Starting Bounded Model Checking
+aborting path on assume(false) at file crates/aspis-r1-cost-probe/src/NBZ_native.rs line 4 column 2 function verifier::candidate::NBZ_native::NBZ_mark_none thread 0
+Runtime Symex: 0.00208035s
+size of program expression: 138 steps
+slicing removed 100 assignments
+Generated 1 VCC(s), 1 remaining after simplification
+Runtime Postprocess Equation: 1.4357e-05s
+Passing problem to propositional reduction
+converting SSA
+Runtime Convert SSA: 0.000239122s
+Running propositional reduction
+Post-processing
+Runtime Post-process: 4.612e-06s
+Solving with CaDiCaL 2.0.0
+370 variables, 610 clauses
+SAT checker: instance is SATISFIABLE
+Runtime Solver: 4.4326e-05s
+Runtime decision procedure: 0.000303352s
+
+RESULTS:
+Check 1: verifier::candidate::NBZ_native::NBZ_mark_none.assertion.1
+	 - Status: FAILURE
+	 - Description: "assertion failed: obs == 1"
+	 - Location: crates/aspis-r1-cost-probe/src/NBZ_native.rs:4:2 in function verifier::candidate::NBZ_native::NBZ_mark_none
+
+
+SUMMARY:
+ ** 1 of 1 failed
+Failed Checks: assertion failed: obs == 1
+ File: "crates/aspis-r1-cost-probe/src/NBZ_native.rs", line 4, in verifier::candidate::NBZ_native::NBZ_mark_none
+
+VERIFICATION:- FAILED
+Verification Time: 0.020720389s
+
+Manual Harness Summary:
+Verification failed for - verifier::candidate::NBZ_native::NBZ_return_carriers
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-rf6ace891de1c48cda6e83351ada45e72.scope; invocation ID: 6391354129e549e6aab2e5fe8e182f46

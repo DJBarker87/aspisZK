@@ -1,0 +1,62 @@
+{"attempt": "NEH_K016", "exit_status": 1, "wall_seconds": 1.0324295449536294, "peak_rss_kib": "150712", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/candidate.rs:239:43
+    |
+239 | fn query_loop(proof: &[u8], p: &Prepared, mut a: Accumulator, g: &[E; 29], obs: Observer, geometry: &QueryGeometry, pending: Batche...
+    |                                           ----^
+    |                                           |
+    |                                           help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/NEF_native.rs:10:6
+   |
+10 |  let mut frame:[u8;4]=kani::any();let old=frame;
+   |      ----^^^^^
+   |      |
+   |      help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/NEF_native.rs:12:6
+   |
+12 |  let mut result:Result<u32,Error>=if ok {Ok(v)} else {Err(Error::Query)};
+   |      ----^^^^^^
+   |      |
+   |      help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/NEF_native.rs:25:7
+   |
+25 |  let (mut a,pending)=NEF_query_tail(a,pending,i,()).unwrap();
+   |       ----^
+   |       |
+   |       help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/NEF_native.rs:123:7
+    |
+123 |  let (mut a,pending)=NEF_query_tail(a,pending,i,()).unwrap();
+    |       ----^
+    |       |
+    |       help: remove this `mut`
+
+For more information about this error, try `rustc --explain E0433`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 3 previous errors; 36 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-ref67b2e6ae454d0fb6231a7abc6f9dee.scope; invocation ID: 17b2653e3e2a4a0a9ca73ae63afd45f7
