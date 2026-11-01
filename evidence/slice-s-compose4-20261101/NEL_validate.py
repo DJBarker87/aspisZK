@@ -1,6 +1,7 @@
 """Strict additive continuation of NDT/NED/NEE/NEJ; no inherited gate replaced."""
 from pathlib import Path
 import sys,json,copy,argparse,hashlib
+sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent
 sys.path.insert(0,str(R/'evidence/slice-s-compose3-20261101'))
 import NEJ_validate as predecessor
@@ -44,6 +45,10 @@ def borrowed_projection(c,expected,ledger):
   assert d['function']==GETTER and (expected==GETTER or expected.startswith(GETTER+'::'))
   assert d['all_typed_inputs'] and d['empty_modifies'] and d['no_stub_verified']
   assert d['trust_classification']=='P6/D188 option A reclassification'
+  assert d['native_support']
+  for ref in d['native_support']:predecessor.inherited.artifact(ref)
+  required={str((E/n).relative_to(R)) for a in ['NEL_K006','NEL_K007'] for n in [a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-metadata-pin.json',a+'-source-check.json',a+'-rule16-check.json',a+'-NEL_native_contracts.patch',a+'-NEL_oracle.patch']}
+  assert {r['path'] for r in d['native_support']}==required
   assert native_pair('NEL_K006','NEL_K007')
   record=json.loads(predecessor.inherited.artifact(d['source_identity']))
   assert record['frozen_revision']==ledger['frozen_revision']

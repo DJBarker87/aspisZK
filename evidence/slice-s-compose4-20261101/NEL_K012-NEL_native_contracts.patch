@@ -1,0 +1,27 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_digest_step.rs"]
++mod NEL_digest_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEL_digest_step.rs
+@@ -0,0 +1,14 @@
++#![allow(non_snake_case)]
++use super::*;
++struct Frame{expected:M31,reply:[u8;4],called:bool}
++fn serialize(value:&M31,frame:&mut Frame)->[u8;4]{assert!(value.0==frame.expected.0 && !frame.called,"same native limb at serialization call");frame.called=true;frame.reply}
++#[kani::requires(index<8 && offset<4 && j<32 && old==bytes[j] && !frame.called && frame.expected.0==digest[index].0)]
++#[kani::modifies(bytes,&mut frame.called)]
++#[kani::ensures(|r| *r==offset+1 && frame.called && bytes[j]==if j==index*4+offset{frame.reply[offset]}else{old})]
++fn step(bytes:&mut[u8;32],digest:&Digest,index:usize,offset:usize,j:usize,old:u8,frame:&mut Frame)->usize{
++ let value=&digest[index];let reply=serialize(value,frame);
++ let dst=&mut bytes[index*4..index*4+4];let src=&reply;let mut i=offset;
++ dst[i]=src[i];i+=1;i
++}
++#[kani::proof_for_contract(step)]
++fn digest_step(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut bytes:[u8;32]=kani::any();let index:usize=kani::any();kani::assume(index<8);let offset:usize=kani::any();kani::assume(offset<4);let j:usize=kani::any();kani::assume(j<32);let old=bytes[j];let mut frame=Frame{expected:d[index],reply:kani::any(),called:false};step(&mut bytes,&d,index,offset,j,old,&mut frame);}

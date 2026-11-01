@@ -1,0 +1,22 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_digest_iter.rs"]
++mod NEL_digest_iter;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEL_digest_iter.rs
+@@ -0,0 +1,9 @@
++use super::*;
++#[kani::proof]
++fn iterator_step(){
++ let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let index:usize=kani::any();kani::assume(index<=8);
++ let mut iter=d[index..].iter();let next=iter.next();
++ if index<8{assert!(core::ptr::eq(next.unwrap(),&d[index]),"same suffix iterator limb");assert!(iter.as_slice().len()==7-index);assert!(iter.as_slice().as_ptr()==d[index+1..].as_ptr());}
++ else{assert!(next.is_none() && iter.as_slice().is_empty());}
++}

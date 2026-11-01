@@ -1,24 +1,22 @@
---- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
-@@ -982,3 +982,7 @@
-         ));
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
      }
  }
 +
 +#[cfg(kani)]
-+#[path="NEL_late_step.rs"]
-+mod NEL_late_step;
++#[path="NEL_digest_iter.rs"]
++mod NEL_digest_iter;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEL_late_step.rs
-@@ -0,0 +1,11 @@
-+#![allow(non_snake_case)]
++++ b/crates/aspis-statement/src/NEL_digest_iter.rs
+@@ -0,0 +1,9 @@
 +use super::*;
-+#[kani::requires(offset<4 && j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES && old==output[j])]
-+#[kani::modifies(output)]
-+#[kani::ensures(|r| *r==offset+1 && output[j]==if j==16+offset{((POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES as u32).to_le_bytes())[offset]}else{old})]
-+fn step(output:&mut [u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES],offset:usize,j:usize,old:u8)->usize{
-+ let dst=&mut output[16..20];let src=&((POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES as u32).to_le_bytes());let mut i=offset;
-+ dst[i]=src[i];i+=1;i
++#[kani::proof]
++fn iterator_step(){
++ let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let index:usize=kani::any();kani::assume(index<=8);
++ let mut iter=d[index..].iter();let next=iter.next();
++ if index<8{assert!(core::ptr::eq(next.unwrap(),&d[index]),"same suffix iterator limb");assert!(iter.as_slice().len()==7-index);assert!(iter.as_slice().as_ptr()==d[index+1..].as_ptr());}
++ else{assert!(next.is_none() && iter.as_slice().is_empty());}
 +}
-+#[kani::proof_for_contract(step)]
-+fn header_window(){let mut output:[u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES]=kani::any();let j:usize=kani::any();kani::assume(j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES);let old=output[j];let offset:usize=kani::any();kani::assume(offset<4);step(&mut output,offset,j,old);}
