@@ -1,35 +1,24 @@
---- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
-+++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
-@@ -819,3 +819,21 @@
-         );
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
      }
  }
 +
 +#[cfg(kani)]
-+#[kani::requires(frame.log==0 && *nullifier==frame.expected)]
-+#[kani::modifies(&mut frame.log)]
-+#[kani::ensures(|r| *r==if frame.canon {Ok((frame.byte&7)^1)}else{Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)} && frame.log==if frame.canon{2}else{1})]
-+fn NEL_threaded_lane(
-+    nullifier: &Digest,
-+    frame: &mut NEL_lane_oracle::Frame,
-+) -> Result<u8, PoolV1PairForestAccountErrorV1> {
-+    if !NEL_lane_oracle::canonical(nullifier,frame) {
-+        return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
-+    }
-+    Ok(NEL_lane_oracle::first(nullifier,frame) & 7)
-+}
-+
-+#[cfg(kani)]
-+#[path="NEL_lane_oracle.rs"]
-+mod NEL_lane_oracle;
++#[path="NEL_late_step.rs"]
++mod NEL_late_step;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEL_lane_oracle.rs
-@@ -0,0 +1,8 @@
++++ b/crates/aspis-statement/src/pool_v1/NEL_late_step.rs
+@@ -0,0 +1,11 @@
 +#![allow(non_snake_case)]
 +use super::*;
-+use aspis_core::field::M31;
-+pub(super) struct Frame{pub expected:Digest,pub canon:bool,pub byte:u8,pub log:usize}
-+pub(super) fn canonical(d:&Digest,f:&mut Frame)->bool{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==0 && d[k].0==f.expected[k].0);f.log=1;f.canon}
-+pub(super) fn first(d:&Digest,f:&mut Frame)->u8{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==1 && f.canon && d[k].0==f.expected[k].0);f.log=2;f.byte}
-+#[kani::proof_for_contract(NEL_threaded_lane)]
-+fn lane_oracle(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut f=Frame{expected:d,canon:kani::any(),byte:kani::any(),log:0};let _=NEL_threaded_lane(&d,&mut f);}
++#[kani::requires(offset<4 && j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES && old==output[j])]
++#[kani::modifies(output)]
++#[kani::ensures(|r| *r==offset+1 && output[j]==if j==16+offset{((POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES as u32).to_le_bytes())[offset]}else{old})]
++fn step(output:&mut [u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES],offset:usize,j:usize,old:u8)->usize{
++ let dst=&mut output[16..20];let src=&((POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES as u32).to_le_bytes());let mut i=offset;
++ dst[i]=src[i];i+=1;i
++}
++#[kani::proof_for_contract(step)]
++fn header_window(){let mut output:[u8;POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES]=kani::any();let j:usize=kani::any();kani::assume(j<POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES);let old=output[j];let offset:usize=kani::any();kani::assume(offset<4);step(&mut output,offset,j,old);}
