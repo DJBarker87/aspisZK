@@ -40,7 +40,7 @@ ids=[r['attempt'] for r in receipts]
 assert ids==list(range(76000,76100)),ids
 assert len(host['results'])==len(receipts)
 assert not host['scopes']['stdout'].strip() and not host['cgroups'],'wait for existing scope'
-out=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),host=host,matching_files=checks,charged_attempts=len(receipts),accepted=sum(r['accepted'] for r in receipts),rejected=sum(not r['accepted'] for r in receipts),spent_ids=ids,remaining_budget=100-len(receipts),next_unused_id=78000,reserved_audit_ids=[76097,76098,76099],refusals_uncharged=len(list(E.glob('refusal-*.json'))),existing_scope_or_reservation=False)
+out=dict(utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),host=host,matching_files=checks,charged_attempts=len(receipts),accepted=sum(r['accepted'] for r in receipts),rejected=sum(not r['accepted'] for r in receipts),spent_ids=ids,prior_block_remaining=100-len(receipts),remaining_budget=100,next_unused_id=78000,reserved_audit_ids=[76097,76098,76099],refusals_uncharged=len(list(E.glob('refusal-*.json'))),existing_scope_or_reservation=False)
 (R/'evidence/pv-runjoin66-20261101/resume-reconciliation.json').write_text(json.dumps(out,indent=2)+'\n')
 print(json.dumps({k:out[k] for k in ['charged_attempts','accepted','rejected','remaining_budget','next_unused_id','existing_scope_or_reservation']}))
 print('Matched host files:',len(checks),'other job hits:',len(host['other_job_hits']))
