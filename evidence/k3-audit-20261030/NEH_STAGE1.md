@@ -1,0 +1,5 @@
+# Recovered stage 1
+
+Continuation recovered 19 terminal Kani attempts and the source scanner from the existing worktree. Five attempts were input/setup compilation or harness-selection failures (K001/K002/K004/K010/K016); K003 and K005–K019 otherwise contain actual verification results. K018 repairs K004's Observer argument type and K019 uses the retained original false-pass source. No timed-out or memory-killed diagnostic was rerun. Atomic diagnostics K010/K016 used an unavailable std path in a no_std crate; the recorded experiment generator now uses core and the repaired cases need new attempt numbers.
+
+Each receipt retains the exact target, revision/hash, argv, capped scope, exit, wall, peak RSS, zero swaps, frozen graph and lock checks; axioms N/A. Objects/cache imports retained and pinned. All output is evidence-only; frozen crate/program bytes and release pins unchanged, no ELF rebuild triggered. Remaining stages: close diagnostic gaps, conservative complete applicability output, prioritized local-record reruns and explicit row deltas. Budget recovered: 19/120 Kani, 0/10 Lean.

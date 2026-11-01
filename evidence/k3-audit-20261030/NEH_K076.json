@@ -1,0 +1,64 @@
+{
+  "attempt": "NEH_K076",
+  "kind": "kani",
+  "module": "field::NBG_runtime::NBG_cm_add_sub_double_r",
+  "sources": [
+    "NEH_src/crates/aspis-core/src/field.rs",
+    "NEH_src/crates/aspis-core/src/field/NBG_runtime.rs",
+    "NEH_gate.py",
+    "NEH_graph.py",
+    "NEH_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEH_gate.py",
+    "NEH_K076.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_src/crates/aspis-core/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "field::NBG_runtime::NBG_cm_add_sub_double_r",
+    "--output-format",
+    "terse",
+    "--features",
+    "r0"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "297edc6456412cffba658439585915079cdeada7",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-tx2c-20261027/NBG_K007/receipt.json",
+    "original_sha256": "c6a46076420a205b1242662e0efdb8090822a5309b8e3da30b15e7d17188bf0d",
+    "patch": "evidence/k3-audit-20261030/NEH_K076_harness.patch",
+    "patch_sha256": "acf53ff5db902ce2a1448e6f1c4b1e74dfe7791ce8fee72e4d31e0b3a1b447e0"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0
+}
