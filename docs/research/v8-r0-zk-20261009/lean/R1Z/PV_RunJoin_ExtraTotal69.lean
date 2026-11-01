@@ -18,7 +18,11 @@ structure Arithmetic : Prop where
 
 theorem offset (side j : Usize) (hs : side.val<2) (hj : j.val<28) :
     (Usize.wrapping_add (Usize.wrapping_mul 28#usize side) j).val<1024 := by
-  have size : 1024<UScalar.size .Usize := by scalar_tac
+  have size : 1024<UScalar.size .Usize := by
+    have lower : 2^32≤UScalar.size .Usize := by
+      rw [UScalar.size_def]
+      exact Nat.pow_le_pow_right (by decide) System.Platform.le_numBits
+    omega
   have hm : (Usize.wrapping_mul 28#usize side).val=28*side.val := by
     rw [Usize.wrapping_mul_val_eq]
     change (28*side.val)%UScalar.size .Usize=28*side.val
