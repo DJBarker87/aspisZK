@@ -70,11 +70,9 @@ elif kind=='kani':
     if os.environ.get('NEI_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEI_gate.py',a+'.json']
 elif kind=='native':
-    for name in ['NEI_native.py','NEI_native_tests.rs','NEI_fixture_tests.rs','NEI_family_native.rs']:files[name]=(E/name).read_text()
-    if os.environ.get('NEI_FAMILY_NEGATIVE'):env['NEI_FAMILY_NEGATIVE']=os.environ['NEI_FAMILY_NEGATIVE']
+    for name in ['NEI_line_native.py','NEI_line_native.rs','NEI_FROZEN.json']:files[name]=(E/name).read_text()
     if os.environ.get('NEI_WRONG'):env['NEI_WRONG']=os.environ['NEI_WRONG']
-    if os.environ.get('NEI_FIXTURE_NEGATIVE'):env['NEI_FIXTURE_NEGATIVE']=os.environ['NEI_FIXTURE_NEGATIVE']
-    sources=list(files);command=['python3','NEI_native.py']
+    sources=list(files);command=['python3','NEI_line_native.py']
 elif kind=='inspect':
     files['NEI_goto_inspect.py']=(E/'NEI_goto_inspect.py').read_text()
     sources=list(files);command=['python3','NEI_goto_inspect.py']
@@ -122,7 +120,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
-names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-rule16-check.json','NEI_EXTRACTION_PINS.json','NEI_NATIVE_METADATA.json',a+'.json']
+names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-rule16-check.json','NEI_EXTRACTION_PINS.json','NEI_NATIVE_METADATA.json','NEI_NATIVE_PINS.json',a+'.json']
 
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NEI_extracted').rglob('*.lean')]

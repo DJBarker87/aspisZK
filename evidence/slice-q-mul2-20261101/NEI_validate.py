@@ -1,0 +1,73 @@
+"""Additive D188 actual-body packet audit; original NEB receipt gates unchanged.
+
+Local packet acceptance never promotes a composed row without an independently
+accepted caller/child edge certificate. No historical Kani verdict is restored.
+"""
+from pathlib import Path
+import sys,json,hashlib,re,subprocess,copy
+sys.dont_write_bytecode=True
+E=Path(__file__).resolve().parent;R=E.parent.parent
+sys.path.insert(0,str(E.parent/'slice-q-compose-20261029'))
+import NEB_validate as neb
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+obj=lambda p:json.loads(p.read_text())
+F='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+def require(ok,message):
+ if not ok:raise ValueError(message)
+def function(text,name):
+ m=re.search(r'\bfn '+re.escape(name)+r'\b',text);require(m is not None,'missing function '+name)
+ j=text.index('{',m.start())+1;depth=1
+ while depth:
+  depth+=(text[j]=='{')-(text[j]=='}');j+=1
+ return text[m.start():j]
+def audit_line(packet):
+ require(packet['status']=='CLOSED-CONDITIONAL' and packet['route']=='D188_ACTUAL_BODY_FULL_CALLEES','wrong bridge method')
+ require(packet['frozen_revision']==F,'wrong frozen source')
+ require(packet['trust_reclassification']=='P6/D188; retained, never removal','wrong trust classification')
+ require(packet['new_kani_credits']==[] and packet['suspended_neb_credits_restored']==[],'Kani credit manufactured')
+ for item in packet['lean_evidence']:
+  for theorem in item['theorems']:neb.check_receipt(item,theorem)
+  receipt=obj(R/item['receipt'])
+  for path,h in receipt['source_hashes'].items():
+   source=R/item['receipt'];archived=source.parent/'sources'/path
+   require(sha(archived)==h,'archived proof source')
+   current=E/path.removeprefix('NEI_generated/')
+   require(current.is_file() and sha(current)==h,'current successful proof source')
+ d=obj(E/'NEI_E001/receipt.json');require(d['exit_status']==0 and d['kind']=='extract','actual extraction failed')
+ pins=obj(E/'NEI_E001/NEI_EXTRACTION_PINS.json');require(pins['exit']==0 and pins['charon_exit']==0,'translator failure')
+ require(pins['lock_before']==pins['lock_after'],'extraction lock drift')
+ require('--include' in pins['charon_command'] and 'aspis_core::field' in pins['charon_command'],'field methods left opaque')
+ for path,h in pins['outputs'].items():
+  require(sha(E/path)==h,'edited raw emitted source')
+  direct=E/'NEI_LineFull'/Path(path).name
+  require(sha(direct)==h,'working emitted source differs')
+  raw=direct.read_text();require(not re.search(r'\b(axiom|sorry|admit|native_decide)\b|FunsExternal|TypesExternal',raw),'opaque or admitted actual-body declaration')
+ frozen=subprocess.check_output(['git','show',F+':crates/aspis-r1-cost-probe/src/verifier.rs'],cwd=R).decode()
+ body=function(frozen,'line_fold_with_inverses');h=hashlib.sha256(body[body.index('{'):].encode()).hexdigest()
+ require(h==packet['source_body_sha256'],'frozen line body hash')
+ require(function((E/'NEI_ISOLATED.rs.txt').read_text(),'line_fold_with_inverses')==body,'isolation changed line body')
+ require(function((E/'NEI_line_native.rs').read_text(),'line_fold_with_inverses')==body,'native fixture changed line body')
+ require(not re.search(r'&mut|static\s+mut|unsafe|copy_from_slice|extend_from_slice|to_vec',body),'unreviewed native effects/copies')
+ positive=obj(E/'NEI_N001/receipt.json');negative=obj(E/'NEI_N002/receipt.json')
+ require(positive['exit_status']==0 and negative['exit_status']==101,'line fidelity/control verdict')
+ require(positive['source_hashes']==negative['source_hashes'],'control source mismatch')
+ env=copy.deepcopy(negative['env']);require(env.pop('NEI_WRONG',None)=='1' and env==positive['env'],'control configuration mismatch')
+ require('1 passed; 0 failed' in (E/'NEI_N001/stdout.log').read_text(),'positive test not reached')
+ require("thread 'NEI_line_differential'" in (E/'NEI_N002/stdout.log').read_text() and 'assertion `left == right` failed' in (E/'NEI_N002/stdout.log').read_text(),'negative did not fail line assertion')
+ np=obj(E/'NEI_NATIVE_PINS.json');require(np['lock_before']==np['lock_after']==pins['lock_after'],'frozen native lock changed')
+ require(sorted(np['features'].values(),key=len)==[[],['r0']],'wrong native core feature projection')
+ for path,h in np['source_pins'].items():
+  require(hashlib.sha256(subprocess.check_output(['git','show',F+':'+path],cwd=R)).hexdigest()==h,'native core source drift')
+ review=R/packet['review']['path'];require(sha(review)==packet['review']['sha256'],'association review hash')
+ require(packet['remaining_inner_hypotheses']==[],'inner native/model hypothesis hidden')
+ return dict(function=packet['function'],status='CLOSED-CONDITIONAL',route=packet['route'],composed_rows_closed=[],kani_credit=0)
+def main():
+ packet=obj(E/'NEI_LINE_PACKET.json');result=audit_line(packet)
+ delta=obj(E/'NEI_LEDGER_DELTA.json')
+ require(delta['composed_rows_closed']==[],'uncertified composed promotion')
+ require(delta['added_local_bridges']==[packet['function']],'wrong local delta')
+ edges=obj(E/'NEI_EDGES.json')['edges']
+ require(all(e['status']=='OPEN' and e['certificate'] is None for e in edges),'edge credit without NEB certificate')
+ require(sha(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')==delta['authoritative_ledger_sha256'],'authoritative ledger changed')
+ print(json.dumps(dict(original_neb_receipt_gates='PASS',additive_d188_packet=result,unmodified_original_edge_gates=True,composed_rows_closed=[]),indent=2))
+if __name__=='__main__':main()

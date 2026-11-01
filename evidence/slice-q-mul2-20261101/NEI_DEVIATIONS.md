@@ -1,0 +1,8 @@
+# Repairs and excluded attempts
+
+- Initial checkout branch was codex/cx-slice-q-mul2-20261101, with no requested 20261029 branch present. Renamed this own branch to the requested codex/cx-slice-q-mul2-20261029. No other worktree changed. Added only this evidence directory to sparse checkout.
+- L001 deliberately inspected existing theorem names; two guessed identifiers were absent. It is an exit-1 inspection, not proof credit. L002 used a nonexistent sub-success name; L003 replaces it using the existing totality theorem and same-result injectivity.
+- L007's scalar rfl draft failed, including a deterministic heartbeat timeout for symbolic multiplication. No cap or heartbeat setting was raised and no unchanged proof was rerun. Split carrier transport into L008 and scalar definitions into L009; explicitly unfold the irreducible modulus and use the symbolic reducer equality. Failed sorryAx outputs are excluded.
+- L011 had redundant rfl after simp already closed the goals. L012 removes that sequencing error. L015's case split rewrote a goal to reflexivity; L016 supplies rfl at that site. Every replacement has different source bytes and an exit-0 receipt.
+- Own validator initially hashed the whole fn text against NDT's brace-only body hash. Corrected the range to match frozen_body_byte_range; separate exact full-fn comparisons with native/isolation sources remain mandatory. The original NEB validator and all its checks are unchanged.
+- No host infrastructure, launcher, admission barrier, shared cache, proved existing module, shipped source, wallet or key was edited.
