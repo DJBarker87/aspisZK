@@ -58,20 +58,25 @@ theorem run_fixed
   by_cases condition : index < count
   · simp only [condition,if_true]
     try dsimp only
-    apply PV_EVH_Prefix.bind_fixed
-    ·
+    cases result with
+    | Ok salts =>
       try dsimp only
-      cases result with
-      | Ok salts =>
+      apply PV_EVH_Prefix.bind_fixed
+      ·
+        exact PV_EVH_Prefix.lift_fixed _
+      · intro i
         try dsimp only
         apply PV_EVH_Prefix.bind_fixed
         ·
-          exact PV_EVH_Prefix.lift_fixed _
-        · intro i
           exact compatible.derive_private_salt_step_fixed _ _ _ _ _ _
-      | Err unused1 =>
-        exact PV_EVH_Prefix.lift_fixed _
-    · intro result1
+        · intro result1
+          try dsimp only
+          apply PV_EVH_Prefix.bind_fixed
+          ·
+            exact PV_EVH_Prefix.lift_fixed _
+          · intro index1
+            exact PV_EVH_Prefix.lift_fixed _
+    | Err unused1 =>
       try dsimp only
       apply PV_EVH_Prefix.bind_fixed
       ·

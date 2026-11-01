@@ -211,6 +211,14 @@ def emit(x,n=2,world=False):
  if label in spec:return pad+('c.'+spec[label][3]+(' hash' if label=='hash' else ' state_only_hidingStateOnlyMaskNonceStoreInst' if label=='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»' else '')+exp[len(label):]).replace('\n','\n'+pad+'  ')
  return pad+'PV_EVH_Prefix.lift ('+exp.replace('\n','\n'+pad+'  ')+')'
 
+def then_node(branch,var,next_node):
+ N=g['Node']
+ if branch.kind in ['bind','let']:
+  fields={k:v for k,v in branch.__dict__.items() if k!='kind'}
+  fields['next']=then_node(branch.next,var,next_node)
+  return N(branch.kind,**fields)
+ return N('bind',var=var,expr=branch,next=next_node)
+
 def proof(x,n=2,lets=()):
  pad=' '*n
  if x.kind=='let' and valuelet(x):
@@ -222,6 +230,13 @@ def proof(x,n=2,lets=()):
   return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
  if filemode and x.kind=='bind' and x.expr.kind=='if' and x.expr.yes.kind==x.expr.no.kind==x.next.kind=='pure':
   return pad+'by_cases condition : '+x.expr.cond+'\n'+pad+'· simp only [condition,if_true]\n'+pad+'  exact PV_EVH_Prefix.lift_fixed _\n'+pad+'· simp only [condition,Bool.false_eq_true,if_false]\n'+pad+'  exact PV_EVH_Prefix.lift_fixed _'
+ if short=='PrivateSaltsStep' and x.kind=='bind' and x.expr.kind=='match':
+  out=pad+'try dsimp only\n'+pad+'cases '+x.expr.discr+' with\n'
+  for j,(pat,branch) in enumerate(x.expr.branches):
+   bits=pat.split();vs=[('unused'+str(j)) if z=='_' else z for z in bits[1:]]
+   out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'
+   out+=proof(x.next if branch.kind=='pure' else then_node(branch,x.var,x.next),n+2,lets)+'\n'
+  return out.rstrip()
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
   if entropy and x.expr.kind=='call' and 'Array.to_slice_mut' in x.expr.expr:
