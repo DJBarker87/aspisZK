@@ -12,6 +12,13 @@ ext=subprocess.check_output(['git','show',rev+':'+p.replace('Funs.lean','Externa
 a=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text());g=dict(s=s.replace('\npartial_fixpoint',''),re=re)
 exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),g)
 config={
+ 'EntropyStep':'aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body',
+ 'NoncePath':'aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.reservation_path',
+ 'MaterialFromEntropy':'aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref',
+ 'ApplyMaterial':'aspis_prover.state_only_hiding.apply_pool_v1_pair_forest_mask_material_v1',
+ 'BuildSemantics':'host_semantic.build_with_material',
+ 'ProveSemantics':'prover.prove_from_semantics',
+ 'PrivateSalts':'prover.derive_private_salts',
  'MaskedWithAttempt':'prover.prove_masked_with_attempt',
  'DurableWithAttempt':'prover.prove_masked_with_attempt',
  'DurableReserveBuild':'aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1',
@@ -20,6 +27,7 @@ short=sys.argv[1];name=config[short];namespace='PV_EVH_'+short
 header,result,body,args,explicit=g['get'](name);node=g['parse'](g['normalize'](body))
 durable=short in ['DurableReserveBuild','DurableWithAttempt']
 joined=short=='DurableWithAttempt'
+entropy=short=='EntropyStep'
 store='aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore'
 inst=store+'.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore'
 reserveLabel=('aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1' if joined else 'state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»')
@@ -76,6 +84,14 @@ def signature(label):
   parts.append(typ[last:].strip());ret=parts.pop();assert ret.startswith('Result '),ret
   h+=''.join(' (arg'+str(i)+' : '+v+')' for i,v in enumerate(parts))
   return h.strip(),ret[7:].strip(),binder_names(h),op+'_OPEN'
+ if label=='core.array.Array.index':
+  return '{T I Output : Type} {N : Usize} (inst : core.ops.index.Index (Slice T) I Output) (a : Array T N) (i : I)','Output',['inst','a','i'],'arrayIndex_OPEN'
+ if label=='core.slice.Slice.copy_from_slice':
+  return '{T : Type} (inst : core.marker.Copy T) (dst src : Slice T)','Slice T',['inst','dst','src'],'sliceCopy_OPEN'
+ if label=='core.convert.IntoFrom.into':
+  return '{T U : Type} (inst : core.convert.From U T) (value : T)','U',['inst','value'],'into_OPEN'
+ if label=='core.cmp.impls.PartialEqShared.ne':
+  return '{T U : Type} (inst : core.cmp.PartialEq T U) (a : T) (b : U)','Bool',['inst','a','b'],'sharedNe_OPEN'
  if label=='core.array.equality.PartialEqArray.ne':
   return '{T : Type} {N : Usize} (inst : core.cmp.PartialEq T T) (a b : Array T N)','Bool',['inst','a','b'],'arrayNe_OPEN'
  if label=='hash':
@@ -88,13 +104,14 @@ def signature(label):
   h,r,_,_,ex=g['get'](label)
  except AssertionError:
   # Source constants have no argument binder and therefore are not matched by get.
-  m=re.search(r'\ndef\s+'+re.escape(label)+r'\s*:\s*Result\s+([\s\S]*?)\n  := do',s);assert m,label
+  m=re.search(r'\ndef\s+'+re.escape(label)+r'\s*:\s*Result\s+([\s\S]*?)\s*:=',s);assert m,label
   h,r,ex='',m[1].strip(),[]
+  assert '\ndef ' not in r and ':=' not in r,label
  field=label.split('.')[-1]+'_OPEN'
  return h,r,ex,field
-spec={label:signature(label) for label in calls if not pure(label) and not (durable and label==reserveLabel)}
+spec={label:signature(label) for label in calls if not pure(label) and not (durable and label==reserveLabel) and not (entropy and label=='getrandom.fill')}
 fields=[x[3] for x in spec.values()];assert len(set(fields))==len(fields),fields
-out=('import PV_EVH_DurableReserveBuild\n' if joined else 'import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
+out=('import PV_EVH_Entropy\n' if entropy else '')+('import PV_EVH_DurableReserveBuild\n' if joined else 'import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
 set_option autoImplicit false
 noncomputable section
 namespace '''+namespace+'''
@@ -124,6 +141,8 @@ def emit(x,n=2,world=False):
  exp=x.expr;label=exp.split()[0]
  if joined:exp=exp.replace('aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst',inst)
  if not world:return pad+exp.replace('\n','\n'+pad+'  ')
+ if entropy and label=='getrandom.fill':
+  return pad+'PV_EVH_Prefix.ofM (PV_EVH_Entropy.draw entropyAnswers '+exp[len(label):].strip()+')'
  if joined and label==reserveLabel:
   args=exp[len(label):].strip().split(None,1)
   assert args[0]==inst
@@ -151,6 +170,8 @@ def proof(x,n=2,lets=()):
    bits=pat.split();vs=[('unused'+str(j)) if z=='_' else z for z in bits[1:]]
    out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'+proof(c,n+2,lets)+'\n'
   return out.rstrip()
+ if x.kind=='call' and entropy and x.expr.split()[0]=='getrandom.fill':
+  return pad+'exact PV_EVH_Prefix.ofM_fixed _ _ (PV_EVH_Entropy.draw_fixed entropyAnswers entropy_same _) '
  if x.kind=='call' and joined and x.expr.split()[0]==reserveLabel:
   return pad+'exact PV_EVH_DurableReserveBuild.run_fixed _ _ _ _ _ fileAnswers reserveCallees reserve_same files_same'
  if x.kind=='call' and durable and x.expr.split()[0]==reserveLabel:
@@ -160,8 +181,8 @@ def proof(x,n=2,lets=()):
   return pad+'exact compatible.'+field.replace('_OPEN','_fixed')+(' '+' '.join(['_']*len(ex)) if ex else '')
  return pad+'exact PV_EVH_Prefix.lift_fixed _'
 
-out+='\ndef run\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
-out+='\ntheorem run_fixed\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' fileAnswers'+(' reserveCallees' if joined else '') if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
+out+='\ndef run\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
+out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (entropy_same : ∀ n s, entropyAnswers n s = getrandom.fill s)' if entropy else '')+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' entropyAnswers' if entropy else '')+(' fileAnswers'+(' reserveCallees' if joined else '') if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
 record=json.dumps(dict(source=p,revision=rev,source_sha256=hashlib.sha256(s.encode()).hexdigest(),external_sha256=hashlib.sha256(ext.encode()).hexdigest(),function=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),open_callees={k:dict(header=v[0],result=v[1],args=v[2],field=v[3]) for k,v in spec.items()},lifted_calls=[c for c in calls if pure(c)],scope='source spine only; all named callees and runtime adequacy OPEN'),indent=2)+'\n'
 target=Path('lean/'+namespace+'.lean');receipt=E/(short+'-generation.json')
