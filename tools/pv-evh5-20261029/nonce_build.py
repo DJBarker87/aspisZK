@@ -5,6 +5,7 @@ src=Path('lean/PV_EVH_DurableReserveBuild.lean');s=src.read_text()
 s=s.replace('PV_EVH_NonceSource','PV_EVH_NonceReserve').replace('PV_EVH_DurableReserveBuild','PV_EVH_NonceReserveBuild')
 extra=' (fallibleCallees : PV_EVH_NonceReserveFallible.Callees) (pathCallees : PV_EVH_NoncePath.Callees) (nonceCallees : PV_EVH_NonceReserve.Callees)'
 s=s.replace(' (c : Callees)',extra+' (c : Callees)')
+s=s.replace('structure Compatible'+extra+' (c : Callees)','structure Compatible (c : Callees)')
 s=s.replace(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)', ' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers) (fallible_same : PV_EVH_NonceReserveFallible.Compatible fallibleCallees) (path_same : PV_EVH_NoncePath.Compatible pathCallees) (nonce_same : PV_EVH_NonceReserve.Compatible nonceCallees)')
 s=s.replace('PV_EVH_Prefix.ofM (PV_EVH_NonceReserve.reserve fileAnswers nonce_store context.statement_digest context.mask_nonce)', 'PV_EVH_NonceReserve.run nonce_store context.statement_digest context.mask_nonce fileAnswers fallibleCallees pathCallees nonceCallees')
 s=s.replace('nonce_store fileAnswers c)', 'nonce_store fileAnswers fallibleCallees pathCallees nonceCallees c)')

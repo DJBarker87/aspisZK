@@ -29,7 +29,7 @@ structure Callees where
   op128_OPEN : ∀ {Z : Type} (ZeroizeInst : zeroize.Zeroize Z) (arg0 : Z), P ((zeroize.Zeroizing Z))
   op130_OPEN : ∀ {Z : Type} (ZeroizeInst : zeroize.Zeroize Z) (arg0 : (zeroize.Zeroizing Z)), P ((zeroize.Zeroizing Z))
 
-structure Compatible (fallibleCallees : PV_EVH_NonceReserveFallible.Callees) (pathCallees : PV_EVH_NoncePath.Callees) (nonceCallees : PV_EVH_NonceReserve.Callees) (c : Callees) : Prop where
+structure Compatible (c : Callees) : Prop where
   arrayNe_fixed : ∀ {T : Type} {N : Usize} (inst : core.cmp.PartialEq T T) (a b : Array T N), FinishedView (c.arrayNe_OPEN inst a b) (core.array.equality.PartialEqArray.ne inst a b)
   op112_fixed : FinishedView (c.op112_OPEN) (aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_RELATION_FREE_MASK_FINGERPRINT_V1)
   op113_fixed : FinishedView (c.op113_OPEN) (aspis_core.state_only_hiding.PINNED_POOL_V1_PAIR_FOREST_HIDING_LAYOUT_FACTOR_FINGERPRINT_V1)
