@@ -65,7 +65,9 @@ theorem phase (base : ExternalTypes) (heap : Heap) (box : Box)
     · have step : PV_RunJoin_LiftRow63.step
           (@host_semantic.lift (types base) (selected base heap box ops)) columns lane out row=ok mid := by
         unfold PV_RunJoin_LiftRow63.step
-        rw [←bind_assoc_eq,←bind_assoc_eq,read base heap box ops columns hlen lane row hl hr]
+        have rd := read base heap box ops columns hlen lane row hl hr
+        rw [←bind_assoc_eq] at rd
+        rw [←bind_assoc_eq,←bind_assoc_eq,rd]
         simp only [bind_tc_ok,hm]
       simp only [PV_RunJoin_LiftRow63.phase,step,bind_tc_ok,hn]
     · rw [hnext,hv,ri,List.append_assoc]
