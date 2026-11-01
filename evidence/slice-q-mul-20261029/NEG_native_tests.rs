@@ -42,3 +42,5 @@ fn NEG_dots_native_differential(){
 }
 
 include!("NEG_fixture_tests.rs");
+
+#[path="NEG_family_native.rs"] mod NEG_family_native;

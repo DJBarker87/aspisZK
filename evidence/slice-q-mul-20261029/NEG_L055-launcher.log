@@ -1,0 +1,64 @@
+{"attempt": "NEG_L055", "exit_status": 1, "wall_seconds": 1.516133376979269, "peak_rss_kib": "2550064", "swaps": "0", "print_axioms": ["'NEG_PushAssociation.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEG_PushAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEG_generated/NEG_PushAssociation.lean:31:2: error: Tactic `rfl` failed: The left-hand side
+  let (a, index_mut_back) := (old, back)
+  do
+  let a1 ←
+    Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+        (decide (phase = 3#usize))
+  ok { raw := index_mut_back a1, terms := b.terms }
+is not definitionally equal to the right-hand side
+  do
+    let out ←
+      let (a, index_mut_back) := (old, back)
+        do
+        let a1 ←
+          Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+              (decide (phase = 3#usize))
+        ok { raw := index_mut_back a1, terms := b.terms }
+    ok { raw :
+...
+t25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+        (decide (phase = 3#usize))
+  ok { raw := index_mut_back a1, terms := b.terms }
+is not definitionally equal to the right-hand side
+  do
+    let out ←
+      let (a, index_mut_back) := (old, back)
+        do
+        let a1 ←
+          Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+              (decide (phase = 3#usize))
+        ok { raw := index_mut_back a1, terms := b.terms }
+    ok { raw := out.raw, terms := out.terms }
+
+case e_a
+b : NEG_PushActual.BatchedWeights
+index : Usize
+p : Power
+basis : U32
+row_eq :
+  ∀ (row : Std.Array U64 4#usize) (power : Power) (k : U32) (flush : Bool),
+    NEG_PushActual.update_residue_row row power k flush =
+      Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete row (NEG_RowAssociation.toOld power) k flush
+phase : UScalar UScalarTy.Usize
+old : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+⊢ (let (a, index_mut_back) := (old, back)
+    do
+    let a1 ←
+      Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+          (decide (phase = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms }) =
+    do
+    let out ←
+      let (a, index_mut_back) := (old, back)
+        do
+        let a1 ←
+          Port23PUSH.verifier.update_residue_row Port25ARRAY.concrete a (NEG_RowAssociation.toOld p) basis
+              (decide (phase = 3#usize))
+        ok { raw := index_mut_back a1, terms := b.terms }
+    ok { raw := out.raw, terms := out.terms }
+'NEG_PushAssociation.emitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEG_PushAssociation.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0465d0c7f98f46668c24d8f5db0127fe.scope; invocation ID: ca64200e6173438293e8d4cebb9d8794

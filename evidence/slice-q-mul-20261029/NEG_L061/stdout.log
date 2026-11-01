@@ -1,0 +1,16 @@
+'NEG_PrefixStep.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEG_generated/NEG_PrefixStep.lean:16:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+v : alloc.vec.Vec U32
+x : U32
+len : (↑v).length < 110
+⊢ ∃ w,
+    (let nlen := (↑v).length + 1;
+        if h : (decide (nlen ≤ U32.max) || decide (nlen ≤ Usize.max)) = true then ok ⟨(↑v).concat x, ⋯⟩
+        else fail Error.maximumSizeExceeded) =
+        ok w ∧
+      ↑w = ↑v ++ [x]
+'NEG_PrefixStep.append' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEG_PrefixStep.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

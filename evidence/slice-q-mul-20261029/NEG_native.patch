@@ -77,7 +77,7 @@
 +fn copy_check(){let x:[u64;4]=kani::any();let y=x;let j:usize=kani::any();kani::assume(j<4);let correct=x[j]==y[j];assert!(if cfg!(NEG_wrong_copy){!correct}else{correct});}
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/NEG_dot_step.rs
-@@ -0,0 +1,35 @@
+@@ -0,0 +1,64 @@
 +use super::*;
 +const MAX_PRODUCT:u64=4611686009837453316;
 +#[derive(Clone,Copy)] struct Log{left:[u32;8],right:[u32;8],value:[u64;8],count:usize}
@@ -112,4 +112,33 @@
 + let correct=sums[j]==old[j]+log.value[j];
 + assert!(if cfg!(NEG_wrong_term){!correct}else{correct});
 + }
++}
++// Arbitrary outer-loop prestate; literal eight frozen folding assignments.
++fn fold_step(limbs:&mut[u64;8],sums:[u64;8]){
++ limbs[0]+=(sums[0]&0x7fff_ffff)+(sums[0]>>31);
++ limbs[1]+=(sums[1]&0x7fff_ffff)+(sums[1]>>31);
++ limbs[2]+=(sums[2]&0x7fff_ffff)+(sums[2]>>31);
++ limbs[3]+=(sums[3]&0x7fff_ffff)+(sums[3]>>31);
++ limbs[4]+=(sums[4]&0x7fff_ffff)+(sums[4]>>31);
++ limbs[5]+=(sums[5]&0x7fff_ffff)+(sums[5]>>31);
++ limbs[6]+=(sums[6]&0x7fff_ffff)+(sums[6]>>31);
++ limbs[7]+=(sums[7]&0x7fff_ffff)+(sums[7]>>31);
++}
++#[kani::proof] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEG_copy::KMX_copy_nonoverlapping)]
++fn fold_check(){
++ let old:[u64;8]=kani::any();let sums:[u64;8]=kani::any();
++ for j in 0..8{kani::assume(old[j]<(1u64<<37));}
++ let mut limbs=old;fold_step(&mut limbs,sums);
++ let j:usize=kani::any();kani::assume(j<8);
++ let correct=limbs[j]==old[j]+(sums[j]&0x7fff_ffff)+(sums[j]>>31);
++ assert!(if cfg!(NEG_wrong_fold){!correct}else{correct});
++ assert!(limbs[j]<(1u64<<38));
++}
++#[kani::proof]
++fn windows_check(){
++ let slot:usize=kani::any();let term:usize=kani::any();kani::assume(slot<4 && term<26);
++ let lo=slot*120+term*4;let hi=slot*120+term*4+4;
++ let correct=hi<=608 && hi-lo==4 && slot*120+120<=608 && 480+slot*32+32<=608;
++ assert!(if cfg!(NEG_wrong_windows){!correct}else{correct});
 +}

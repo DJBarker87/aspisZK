@@ -70,7 +70,8 @@ elif kind=='kani':
     if os.environ.get('NEG_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEG_gate.py',a+'.json']
 elif kind=='native':
-    for name in ['NEG_native.py','NEG_native_tests.rs','NEG_fixture_tests.rs']:files[name]=(E/name).read_text()
+    for name in ['NEG_native.py','NEG_native_tests.rs','NEG_fixture_tests.rs','NEG_family_native.rs']:files[name]=(E/name).read_text()
+    if os.environ.get('NEG_FAMILY_NEGATIVE'):env['NEG_FAMILY_NEGATIVE']=os.environ['NEG_FAMILY_NEGATIVE']
     if os.environ.get('NEG_WRONG'):env['NEG_WRONG']=os.environ['NEG_WRONG']
     if os.environ.get('NEG_FIXTURE_NEGATIVE'):env['NEG_FIXTURE_NEGATIVE']=os.environ['NEG_FIXTURE_NEGATIVE']
     sources=list(files);command=['python3','NEG_native.py']

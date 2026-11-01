@@ -14,12 +14,8 @@ def fromOld (b : Port23PUSH.verifier.BatchedWeights) : NEG_PushActual.BatchedWei
 theorem emitted (b : NEG_PushActual.BatchedWeights) (index : Usize)
     (p : Power) (basis : U32) :
     NEG_PushActual.BatchedWeights.push b index p basis =
-      (do let out ← Port23PUSH.verifier.BatchedWeights.push Port25ARRAY.concrete
-            (toOld b) index (NEG_RowAssociation.toOld p) basis
-          ok (fromOld out)) := by
-  unfold NEG_PushActual.BatchedWeights.push Port23PUSH.verifier.BatchedWeights.push
-  simp only [bind_assoc_eq,bind_tc_ok]
-  rfl
+      Port23PUSH.verifier.BatchedWeights.push Port25ARRAY.concrete
+        b index (NEG_RowAssociation.toOld p) basis := by rfl
 
 theorem source (b : NEG_PushActual.BatchedWeights) (index : Usize)
     (p : Power) (basis : U32) :
@@ -28,7 +24,7 @@ theorem source (b : NEG_PushActual.BatchedWeights) (index : Usize)
             (Port26ROW.toK (NEG_RowAssociation.toOld p)) basis
           ok (⟨out.raw,out.terms⟩ : NEG_PushActual.BatchedWeights)) := by
   rw [emitted,Port26ROW.push_complete]
-  simp only [bind_assoc_eq,bind_tc_ok,toOld,fromOld,Port26ROW.toBW,Port26ROW.fromBW]
+  rfl
 
 #print axioms emitted
 #print axioms source
