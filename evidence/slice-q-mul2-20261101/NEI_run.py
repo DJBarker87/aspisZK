@@ -80,6 +80,7 @@ elif kind=='inspect':
     sources=list(files);command=['python3','NEI_goto_inspect.py']
 else:
     files['NEI_extract.py']=(E/'NEI_extract.py').read_text()
+    files['NEI_FROZEN.json']=(E/'NEI_FROZEN.json').read_text()
     reference_path=E/os.environ.get('NEI_REFERENCE','NEI_reference.rs.txt')
     if not reference_path.exists():
         from NEI_restore import references
