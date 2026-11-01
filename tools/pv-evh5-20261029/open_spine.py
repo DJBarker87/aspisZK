@@ -114,18 +114,23 @@ def emit(x,n=2,world=False):
  if label in spec:return pad+('c.'+spec[label][3]+(' hash' if label=='hash' else ' state_only_hidingStateOnlyMaskNonceStoreInst' if label=='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»' else '')+exp[len(label):]).replace('\n','\n'+pad+'  ')
  return pad+'PV_EVH_Prefix.lift ('+exp.replace('\n','\n'+pad+'  ')+')'
 
-def proof(x,n=2):
+def proof(x,n=2,lets=()):
  pad=' '*n
- if x.kind=='let':return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n)
+ if x.kind=='let':
+  m=re.match(r'let (\w+) :=',x.text)
+  nextlets=lets+((m[1],) if m else ())
+  return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
-  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed\n'+pad+'·\n'+proof(x.expr,n+2)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2)
- if x.kind=='if':return pad+'by_cases condition : '+x.cond+'\n'+pad+'· simp only [condition,if_true]\n'+proof(x.yes,n+2)+'\n'+pad+'· simp only [condition,if_false]\n'+proof(x.no,n+2)
+  return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
+ if x.kind=='if':
+  normalize=('dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
+  return pad+'by_cases condition : '+x.cond+'\n'+pad+'· '+normalize+'simp only [condition,if_true]\n'+proof(x.yes,n+2,lets)+'\n'+pad+'· '+normalize+'simp only [condition,if_false]\n'+proof(x.no,n+2,lets)
  if x.kind=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+x.discr+' with\n'
   for j,(pat,c) in enumerate(x.branches):
    bits=pat.split();vs=[('unused'+str(j)) if z=='_' else z for z in bits[1:]]
-   out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'+proof(c,n+2)+'\n'
+   out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'+proof(c,n+2,lets)+'\n'
   return out.rstrip()
  if x.kind=='call' and x.expr.split()[0] in spec:
   h,r,ex,field=spec[x.expr.split()[0]]
