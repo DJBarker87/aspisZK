@@ -1,24 +1,15 @@
-# D542 std transfer update
+# D542 per-function status
 
-All 23 ordinary instantiated std differences/absences have script-checked structural arguments in STD-STRUCTURAL-D542.md/.json. Transition, external, internal and sum_high gates K73946/K73948 have their withheld LOCAL equivalence credit RELEASED. Label: "Kani equivalence (P6) with std parity by token identity plus structural per-item arguments (k''')". No ordinary item is unargued. Intrinsics, generated glue and compiler preservation remain V370 / D381,D386. Historical K3 suspensions remain; no suspended pass is credited.
+V244 / runjoin op227 OPEN. Target not yet established. No endpoint premise removed, added or weakened.
 
-This supersedes the D540 withholding paragraphs below. It does not discharge linear caller-canonicality, the missing third sum interval, full reference-model binding, std/D188/matrix/callback closure or the endpoint. Local equivalences and complete model associations are counted separately pending composition.
+Direct trials remain4 EXTRACTED /32 REFUSED. Local body associations:6/36 (four direct-source associations including the actual-domain mask under retained V370; one historical P6 reconstruct association; one total structural sum association). Thirty remain. The three newly released transition/linear local Kani equalities remain separate until reference-model and actual-domain relations are supplied.
 
-# D540 per-function status
-
-V244 / runjoin op227 OPEN. Target not yet established. No endpoint premise removed.
-
-4 direct extractions / 32 verbatim refusals. Local body associations 5/36:
-3 direct equations + 2 historical P6/reference-link associations. The direct
-mask bridge is conditional on explicit external laws, so it adds no sixth
-association. Ancillary statement mask is outside the denominator.
-
-| Function | Direct trial | Status |
+| Function | Direct trial | Current status |
 |---|---|---|
 | absorption_lanes_literal | EXTRACTED | local body association; reclassification within existing Charon/Aeneas tool trust |
 | add_digest_binding | EXTRACTED | local body association; reclassification within existing Charon/Aeneas tool trust |
 | add_path_lanes | REFUSED | OPEN |
-| add_preweighted | EXTRACTED | local body association on recorded actual domain; reclassification within existing Charon/Aeneas tool trust |
+| add_preweighted | EXTRACTED | local total body association; reclassification within existing Charon/Aeneas tool trust |
 | add_schedule_lanes | REFUSED | OPEN |
 | add_value_lanes | REFUSED | OPEN |
 | composition_parts | REFUSED | OPEN |
@@ -30,11 +21,11 @@ association. Ancillary statement mask is outside the denominator.
 | reconstruct_10 | REFUSED | local P6 body association |
 | semantic_initial_and_absorption | REFUSED | OPEN |
 | semantic_packed | REFUSED | OPEN |
-| sum_high | REFUSED | OPEN |
-| validate_transition | REFUSED | WITHHELD |
+| sum_high | REFUSED | local source body association; structural argument (k-prime route3 / own-1) |
+| validate_transition | REFUSED | local P6 body equivalence RELEASED under k-triple-prime |
 | active_literal | REFUSED | OPEN |
 | pattern_values_literal | REFUSED | OPEN |
-| selector_mask_sum_16 | EXTRACTED | local P6 body association on actual domain; preferred direct route OPEN |
+| selector_mask_sum_16 | EXTRACTED | local direct source-wrapper association on actual MaskAllowed domain, relative to retained V370 |
 | qm31_m31_dot | REFUSED | OPEN |
 | qm31_sum_products3_prepared | REFUSED | OPEN |
 | at_point | REFUSED | OPEN |
@@ -42,16 +33,20 @@ association. Ancillary statement mask is outside the denominator.
 | expand | REFUSED | OPEN |
 | external_linear_lazy | REFUSED | OPEN |
 | external_linear_packed | REFUSED | OPEN |
-| external_local_packed_raw | REFUSED | WITHHELD |
+| external_local_packed_raw | REFUSED | local P6 body equivalence RELEASED under k-triple-prime |
 | full_round | REFUSED | OPEN |
 | full_round_m31_constants | REFUSED | OPEN |
 | full_round_m31_constants_packed | REFUSED | OPEN |
 | full_round_packed | REFUSED | OPEN |
-| internal_linear_lazy | REFUSED | WITHHELD |
+| internal_linear_lazy | REFUSED | local P6 body equivalence RELEASED under k-triple-prime |
 | interpolate_three_constant_columns | REFUSED | OPEN |
 | interpolated_internal_pair | REFUSED | OPEN |
 | leading_pair_packed | REFUSED | OPEN |
 
-See PER-FUNCTION-D537.json for exact theorem, source, refusal, domain and receipt details.
+The five requested gate groups have all ordinary std items argued (23 unique instantiated items). Exact label: "Kani equivalence (P6) with std parity by token identity plus structural per-item arguments (k''')". No unargued ordinary item remains. Intrinsics, derived Clone/PartialEq, FnMut/closure/runtime and drop lowering stay V370 / D381,D386.
 
-D540: absorption and digest now supply their named total Link0/Link1 directly. Preweighted PASS73831 supplies its original total Link3 without actual-domain restrictions; the actual-family continuation theorem remains available. Local body association count stays 5/36 (three direct, two P6), with 31 outstanding. MaskIntegerLaws17 stays OPEN. Strict std blockers and every differing item are named in STD-ITEMS-D540.md; no blocked P6 transfer is credited.
+K73949 intended FAIL42.713s; K73950 PASS854.404s; complete new std-set mapping108 entries, no new unargued item. Existing nodes/path pairs retained. No writable statics in the selected dedicated crate; K-3 suspensions shared_repeat/K73931/K73932 remain.
+
+Mask source laws PASS73832; universal bit semantics PASS73833; corrected direct bridge PASS73835. Failed73834 namespace elaboration is retained and earns no credit. No template axiom or native intrinsic authority is invented. The source wrappers delegate to explicit V370 specifications. No frozen-mask equality outside MaskAllowed or total Link weakening is claimed.
+
+Changed local closure audit73899 PASS, standard axioms only. Exact receipts are in verification-summary-D542.json. Historical79 reachable /41 bound inventory remains separate.
