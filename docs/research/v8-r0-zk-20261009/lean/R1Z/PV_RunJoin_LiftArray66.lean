@@ -9,7 +9,7 @@ abbrev Row := alloc.vec.Vec Q
 abbrev Matrix := Array Row 29#usize
 
 def matrix (p : Nat → Row) : Matrix := ProverCommitArray49.array 29#usize p
-def prefix (p input : Nat → Row) (stop : Nat) (lane : Nat) : Row :=
+def filled (p input : Nat → Row) (stop : Nat) (lane : Nat) : Row :=
   if lane<stop then input lane else p lane
 
 theorem read (p : Nat → Row) (i : Usize) (hi : i.val<29) :
@@ -21,7 +21,7 @@ theorem set (p : Nat → Row) (i : Usize) (hi : i.val<29) (value : Row) :
   apply Subtype.ext
   change (List.ofFn (fun j : Fin 29 => p j.val)).set i.val value=_
   apply List.ext_getElem
-  · simp only [matrix,ProverCommitArray49.array,List.length_set,List.length_ofFn]
+  · simp only [matrix,ProverCommitArray49.array,List.length_set,List.length_ofFn,UScalar.ofNatCore_val_eq]
   · intro j hj hj'
     simp only [matrix,ProverCommitArray49.array,List.getElem_set,List.getElem_ofFn]
     by_cases he : j=i.val
@@ -36,22 +36,22 @@ theorem restore (p : Nat → Row) (i : Usize) (hi : i.val<29) :
   exact PV_RunJoin_WeightFactorRestore47.read_value _ _ _ (read p i hi)
 
 theorem step (p input : Nat → Row) (lane : Usize) (hi : lane.val<29) :
-    Aeneas.Std.Array.set (matrix (prefix p input lane.val)) lane (input lane.val)=
-      matrix (prefix p input (lane.val+1)) := by
+    Aeneas.Std.Array.set (matrix (filled p input lane.val)) lane (input lane.val)=
+      matrix (filled p input (lane.val+1)) := by
   rw [set _ lane hi]
   apply congrArg matrix
   funext l
   by_cases eq : l=lane.val
   · subst l
-    simp only [Function.update_self,prefix,Nat.lt_succ_self,if_true]
+    simp only [Function.update_self,filled,Nat.lt_succ_self,if_true]
   · rw [Function.update_of_ne eq]
-    unfold prefix
+    unfold filled
     by_cases before : l<lane.val
     · simp only [if_pos before,if_pos (show l<lane.val+1 from by omega)]
     · simp only [if_neg before,if_neg (show ¬l<lane.val+1 from by omega)]
 
 #print axioms matrix
-#print axioms prefix
+#print axioms filled
 #print axioms read
 #print axioms set
 #print axioms restore
