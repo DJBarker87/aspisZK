@@ -37,6 +37,7 @@ theorem table (c : Nat → Nat → Old.Q)
   change (List.ofFn (fun l : Fin 29 => ProverCommitArray49.array 1024#usize
     (fun j => fromW (ProverCommitNativeOps47.embedded (c l.val j))))).map _=_
   rw [List.map_ofFn]
+  change List.ofFn _=List.ofFn _
   apply congrArg List.ofFn
   funext l
   apply Subtype.ext
@@ -45,6 +46,7 @@ theorem table (c : Nat → Nat → Old.Q)
       (ProverCommitNativeOps47.embedded (c l.val j))))).val.map toW=_
   simp only [PV_RunJoin_CoefficientActualCell50.permuted,ProverCommitArray49.array,
     List.map_ofFn]
+  change List.ofFn _=List.ofFn _
   apply congrArg List.ofFn
   funext j
   simp only [PV_RunJoin_ArrayEntries41.entries,ProverCommitArray49.array]
