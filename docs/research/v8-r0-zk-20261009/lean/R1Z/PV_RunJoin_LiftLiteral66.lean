@@ -13,6 +13,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     @host_semantic.lift (types base) (selected base heap box ops) m=
       ok (PV_RunJoin_LiftCell63.lifted m) := by
   rw [PV_RunJoin_LiftCell63.complete]
+  unfold selected
+  rw [PV_B2_F_RawNative.preserved_61,PV_B2_F_RawNative.preserved_66]
   change (do
     let c ← ProverRwDictionaryTower.mapResult ProverRwDictionaryTower.fromC
       (AspisR1ProducerRelease47.field.CM31.from_m31 m)

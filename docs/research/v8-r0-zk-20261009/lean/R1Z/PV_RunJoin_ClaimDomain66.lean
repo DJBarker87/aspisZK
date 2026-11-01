@@ -29,7 +29,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   · change claim.val.length=32*29
     rw [hbytes,PV_RunJoin_ClaimImage48.length,List.length_ofFn]
   · rw [hbytes]
-    simpa only [List.map_ofFn] using PV_RunJoin_ClaimHigh66.high (List.ofFn z)
+    simpa only [List.map_ofFn,Function.comp_def] using PV_RunJoin_ClaimHigh66.high (List.ofFn z)
 
 #print axioms complete
 end R1Z.PV_RunJoin_ClaimDomain66
