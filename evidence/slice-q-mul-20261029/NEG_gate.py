@@ -11,6 +11,13 @@ pins=json.loads((B/'NEG_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
+# Rule 16: reject every static declaration in own harnesses and exact KMX files.
+# This is stricter than checking writes/interior mutability only.
+import re
+harnesses=[S/'crates/aspis-r1-cost-probe/src/NEG_step.rs',S/'crates/aspis-r1-cost-probe/src/NEG_dot_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
+static_errors=[str(p) for p in harnesses if re.search(r'\bstatic\s+(?:mut\s+)?[A-Za-z_]',p.read_text())]
+(B/(a+'-rule16-check.json')).write_text(json.dumps(dict(static_declarations=static_errors,files={str(p):sha(p) for p in harnesses}),indent=2)+'\n')
+assert not static_errors,('STOP rule16',static_errors)
 ni=x['native_command'];manifest=ni[ni.index('--manifest-path')+1];selected=ni[ni.index('--features')+1]
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',manifest,'--features',selected],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)

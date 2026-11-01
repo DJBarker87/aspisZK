@@ -11,7 +11,7 @@ H='dombarker@100.108.41.90'
 C='/home/dombarker/project-offloads/codex-cx-slice-q-mul-cache-20261029'
 W='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,kind,target=sys.argv[1:]
-assert a.startswith('NEG_') and int(a[-3:]) <= (20 if kind=='extract' else 60)
+assert a.startswith('NEG_') and int(a[-3:]) <= (20 if kind=='extract' else 75 if kind=='kani' else 64)
 assert not (E/(a+'-launcher.log')).exists()
 def ssh(code, data=None, submitted=False):
     for retry in range(11):
@@ -120,7 +120,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});a={a!r}
-names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json','NEG_EXTRACTION_PINS.json','NEG_NATIVE_METADATA.json',a+'.json']
+names=[str(p.relative_to(b)) for p in (b/a/'sources').rglob('*') if p.is_file()]+[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-graph-check.json',a+'-source-check.json',a+'-graph.stderr',a+'-lock-check.json',a+'-rule16-check.json','NEG_EXTRACTION_PINS.json','NEG_NATIVE_METADATA.json',a+'.json']
 
 if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NEG_extracted').rglob('*.lean')]

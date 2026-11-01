@@ -1,0 +1,115 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,5 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] #[path="NEG_step.rs"] mod NEG_step;
+--- a/crates/aspis-r1-cost-probe/src/fast_dots.rs
++++ b/crates/aspis-r1-cost-probe/src/fast_dots.rs
+@@ -73,3 +73,5 @@
+         four_dots_one(q, g, 3),
+     ]
+ }
++
++#[cfg(kani)] #[path="NEG_dot_step.rs"] mod NEG_dot_step;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+@@ -44,3 +45,5 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] pub(crate) mod NEG_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEG_step.rs
+@@ -0,0 +1,43 @@
++use super::*;
++const MAX_PRODUCT:u64=4611686009837453316;
++const MAX_ROW:u64=13835058046692229131;
++#[derive(Clone,Copy)] struct Log{lhs:u32,rhs:u32,value:u64,count:usize}
++fn product(log:&mut Log,a:u32,b:u32)->u64{
++ assert!(a<2147483647 && b<2147483647);
++ let p:u64=kani::any();kani::assume(p<=MAX_PRODUCT);
++ *log=Log{lhs:a,rhs:b,value:p,count:log.count+1};p
++}
++// Frozen verifier.rs:237-240, one arbitrary iteration, replacing only the
++// product expression by its over-approximation. This is a method experiment,
++// NOT execution of the unchanged full native function.
++fn row_step(row:&mut[u64;4],limbs:&[u32;4],basis:M31,j:usize,log:&mut Log){
++ let old=residue_limb_at(row,j);let limb=power_limb_at(limbs,j);
++ row[j]=old+product(log,limb,basis.0);
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEG_copy::KMX_copy_nonoverlapping)]
++fn row_step_check(){
++ let old:[u64;4]=kani::any();let limbs:[u32;4]=kani::any();let basis:u32=kani::any();let j:usize=kani::any();
++ kani::assume(j<4 && old[j]<=MAX_ROW && limbs[j]<2147483647 && basis<2147483647);
++ let mut log=Log{lhs:0,rhs:0,value:0,count:0};let mut row=old;row_step(&mut row,&limbs,M31(basis),j,&mut log);
++ {
++ assert!(log.count==1 && log.lhs==limbs[j] && log.rhs==basis);
++ let correct=row[j]==old[j]+log.value;
++ assert!(if cfg!(NEG_wrong_step){!correct}else{correct});
++ let k:usize=kani::any();kani::assume(k<4 && k!=j);assert!(row[k]==old[k]);
++ }
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEG_copy::KMX_copy_nonoverlapping)]
++fn flush_step_check(){
++ let old:[u64;4]=kani::any();let j:usize=kani::any();kani::assume(j<4);
++ let mut row=old;
++ let mut iter=row[j..].iter_mut();let limb=iter.next().unwrap();
++ *limb=(*limb&0x7fff_ffff)+(*limb>>31);
++ let correct=row[j]==(old[j]&0x7fff_ffff)+(old[j]>>31);
++ assert!(if cfg!(NEG_wrong_step){!correct}else{correct});
++ let k:usize=kani::any();kani::assume(k<4 && k!=j);assert!(row[k]==old[k]);
++}
++#[kani::proof] #[kani::unwind(8)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEG_copy::KMX_copy_nonoverlapping)]
++fn copy_check(){let x:[u64;4]=kani::any();let y=x;let j:usize=kani::any();kani::assume(j<4);let correct=x[j]==y[j];assert!(if cfg!(NEG_wrong_copy){!correct}else{correct});}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEG_dot_step.rs
+@@ -0,0 +1,35 @@
++use super::*;
++const MAX_PRODUCT:u64=4611686009837453316;
++#[derive(Clone,Copy)] struct Log{left:[u32;8],right:[u32;8],value:[u64;8],count:usize}
++fn product(log:&mut Log,a:u32,b:u32)->u64{
++ assert!(a<2147483647 && b<2147483647);let value:u64=kani::any();kani::assume(value<=MAX_PRODUCT);
++ {let i=log.count;assert!(i<8);log.left[i]=a;log.right[i]=b;log.value[i]=value;log.count=i+1;}value
++}
++// Literal eight assignment statements from frozen fast_dots.rs:27-34, with
++// only each arithmetic product replaced by the bounded log oracle.
++fn term(sums:&mut[u64;8],coefficient:[u32;8],scalar:M31,log:&mut Log){
++ sums[0]+=product(log,coefficient[0],scalar.0);
++ sums[1]+=product(log,coefficient[1],scalar.0);
++ sums[2]+=product(log,coefficient[2],scalar.0);
++ sums[3]+=product(log,coefficient[3],scalar.0);
++ sums[4]+=product(log,coefficient[4],scalar.0);
++ sums[5]+=product(log,coefficient[5],scalar.0);
++ sums[6]+=product(log,coefficient[6],scalar.0);
++ sums[7]+=product(log,coefficient[7],scalar.0);
++}
++#[kani::proof] #[kani::unwind(12)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEG_copy::KMX_copy_nonoverlapping)]
++fn term_check(){
++ let coefficient:[u32;8]=kani::any();let scalar:u32=kani::any();let n:u8=kani::any();let old:[u64;8]=kani::any();
++ kani::assume(n<4 && scalar<2147483647);
++ let bound=match n{0=>0,1=>4611686009837453316,2=>9223372019674906632,_=>13835058029512359948};
++ for j in 0..8{kani::assume(coefficient[j]<2147483647 && old[j]<=bound);}
++ let mut log=Log{left:[0;8],right:[0;8],value:[0;8],count:0};let mut sums=old;term(&mut sums,coefficient,M31(scalar),&mut log);
++ {
++ assert!(log.count==8);
++ let j:usize=kani::any();kani::assume(j<8);
++ assert!(log.left[j]==coefficient[j] && log.right[j]==scalar);
++ let correct=sums[j]==old[j]+log.value[j];
++ assert!(if cfg!(NEG_wrong_term){!correct}else{correct});
++ }
++}
