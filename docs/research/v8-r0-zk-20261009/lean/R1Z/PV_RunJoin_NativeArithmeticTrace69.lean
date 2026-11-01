@@ -72,17 +72,21 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
     exact PV_RunJoin_SourceLength48.second r
   obtain ⟨second,fin,hr1,hbc1,hfin,hbf,hcb⟩ :=
     PV_RunJoin_NativeFinalFold63.complete base heap box ops runtime world phase prepared salts p hp hs hf
-  rw [PV_RunJoin_RoundInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
-    heap box (residual base ops runtime world) _ _ small] at hr1
-  rw [PV_RunJoin_FoldInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
-    heap box (residual base ops runtime world) _ _ false small] at hfin
-  rw [PV_RunJoin_EncodedInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
-    heap box (residual base ops runtime world)] at hbc0 hbc1 hbf
+  have hr1' := (PV_RunJoin_RoundInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
+    heap box (residual base ops runtime world) _ _ small).symm.trans hr1
+  have hfin' := (PV_RunJoin_FoldInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
+    heap box (residual base ops runtime world) _ _ false small).symm.trans hfin
+  have hbc0' := (PV_RunJoin_EncodedInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
+    heap box (residual base ops runtime world) _).symm.trans hbc0
+  have hbc1' := (PV_RunJoin_EncodedInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
+    heap box (residual base ops runtime world) _).symm.trans hbc1
+  have hbf' := (PV_RunJoin_EncodedInstalled48.complete (PV_RunJoin_NativeResidual62.baseTypes base)
+    heap box (residual base ops runtime world) _).symm.trans hbf
   have frame := (PV_RunJoin_FinishFrame63.complete .S2 phase.val.hash prepared salts p hf).2.2.2.2.1
-  refine ⟨first,second,fin,?_,?_,hbc1,hbf⟩
-  · simp only [PV_RunJoin_OpeningKernel44.run,hr0,hq1,hw1,hr1,hfin,bind_tc_ok]
+  refine ⟨first,second,fin,?_,?_,hbc1',hbf'⟩
+  · simp only [PV_RunJoin_OpeningKernel44.run,hr0,hq1,hw1,hr1',hfin',bind_tc_ok]
   · rw [frame,hbytes]
-    exact hbc0
+    exact hbc0'
 
 #print axioms complete
 end R1Z.PV_RunJoin_NativeArithmeticTrace69
