@@ -36,11 +36,13 @@ Preaudit checked 5,673 external, 137 inherited and 69 focused module fingerprint
 including first-namespace-root resolution: no mismatches. Isolated regeneration
 reproduces 56 sources exactly.
 
-Stopped on **80/80 Lean attempts** (72 zero, eight rejected); **21/30 native scopes**,
+Stopped on **80/80 Lean attempts** (72 zero, eight rejected); **22/30 native scopes**,
 **0 Kani**. All scopes retained 6G/8G/no-swap/TasksMax=64; Lean -M7000.
 RESIDUALS.md records source/staging failures and the early quiet-marker snapshot
-limitation. No shipped/PV_B3P source change, push, merge, key operation, T or
-observer/simulator weakening. Compiler V370/D381,D386 and all existing failure
+limitation. No original shipped/PV_B3P source edit, push, merge, key operation, T or
+observer/simulator weakening. Private staging inadvertently copied 42 PV_B3P
+sources; duplicate formal copies were removed without touching originals or
+proof objects. See STAGING-DEVIATION.md. Compiler V370/D381,D386 and all existing failure
 and side-channel obligations remain. Privacy target not established.
 
 Next: finish the opaque/pre-inline helper and source-event/caller associations,

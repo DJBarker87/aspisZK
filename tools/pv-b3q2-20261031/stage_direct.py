@@ -1,7 +1,7 @@
 from pathlib import Path
 import shutil,tarfile,json,hashlib,tomllib
 H=Path('/home/dombarker/project-offloads/codex-pv-b3q2-20261031');B=H.parent/'codex-pv-b3p6-20261028/source';O=H/'direct-source';assert not O.exists()
-shutil.copytree(B,O,ignore=shutil.ignore_patterns('target','charon-target','.git','.lake','node_modules','lean-objects'))
+shutil.copytree(B,O,ignore=shutil.ignore_patterns('target','charon-target','.git','.lake','node_modules','lean-objects','*.lean','*.olean*','*.ilean*'))
 a=H/'pv-b3q2-audit-member.tar'
 with tarfile.open(a)as t:
  for m in t.getmembers():

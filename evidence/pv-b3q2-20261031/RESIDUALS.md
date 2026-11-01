@@ -28,7 +28,7 @@ New helpers still require deployed 1.94.1 source laws where source parity is
 not already established; no Kani transfer or automatic reclassification is used.
 
 Stop: the assigned 80 Lean attempts are exhausted (72 zero, eight rejected).
-The three final audit IDs passed. Twenty-one of at most thirty native scopes
+The three final audit IDs passed. Twenty-two of at most thirty native scopes
 were used; zero Kani. No unchanged full replay, failed-proof resubmission,
 out-of-range charged ID, memory kill, swap, new trust field, release-source edit,
 foreign worktree edit, push, merge or key operation occurred.
@@ -42,3 +42,8 @@ rejected error-marked LLBC outputs remain in receipts. Cargo metadata's workspac
 feature union was rejected; subsequent actual rustc cfg checks match the deployed
 four-crate lists. These corrections are not source counterexamples or privacy
 closure claims.
+
+Private staging deviation: 42 PV_B3P source copies (43 total Lean files) were
+inadvertently created in the isolated Rust mirror. N77121 removed only the
+unused, byte-identical copies and verified originals/proof objects unchanged.
+No copied source was compiled or imported. See STAGING-DEVIATION.md.

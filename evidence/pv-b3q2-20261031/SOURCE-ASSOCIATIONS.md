@@ -47,3 +47,7 @@ No repeated-name comparison with another feature/cohort is promoted to an
 identity claim. Raw Rust qualified components, source spans, crate origin and
 project feature sets are retained per instance (dup-1'). No foreign worktree,
 PV_B3P source, release source, ledger row or T field was edited.
+
+The private Rust staging copy briefly included unused formal sources; this
+creation deviation was corrected and is fully recorded in STAGING-DEVIATION.md.
+Originals and compiled proof inputs were untouched.
