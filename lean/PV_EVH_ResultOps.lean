@@ -23,7 +23,7 @@ def sourceMapErr {T E F O : Type} (inst : core.ops.function.FnOnce O E F)
     let out ← inst.call_once f e
     pure (.Err out)
 
-def install (ops : ExternalFuns) : ExternalFuns :=
+@[reducible] def install (ops : ExternalFuns) : ExternalFuns :=
   {ops with op11 := sourceMap, op12 := sourceMapErr}
 
 /-- The unused closure is explicitly dropped. A callback invocation owns
@@ -59,12 +59,12 @@ theorem map_fixed {T E U F : Type} (ops : ExternalFuns)
   letI : ExternalFuns := install ops
   cases r with
   | Ok value =>
-    change FinishedView (PV_EVH_Prefix.bind (callback value) (fun out => PV_EVH_Prefix.lift (.ok (.Ok out))))
-      (Aeneas.Std.bind (inst.call_once f value) (fun out => .ok (.Ok out)))
+    change FinishedView (PV_EVH_Prefix.bind (callback value) (fun out => PV_EVH_Prefix.lift (.ok (core.result.Result.Ok (E := E) out))))
+      (Aeneas.Std.bind (inst.call_once f value) (fun out => .ok (core.result.Result.Ok (E := E) out)))
     exact PV_EVH_Prefix.bind_fixed _ _ _ _ (hc value) (fun out => PV_EVH_Prefix.lift_fixed _)
   | Err e =>
-    change FinishedView (PV_EVH_Prefix.bind dropClosure (fun _ => PV_EVH_Prefix.lift (.ok (.Err e)))) (.ok (.Err e))
-    exact PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok (.Err e)) hd
+    change FinishedView (PV_EVH_Prefix.bind dropClosure (fun _ => PV_EVH_Prefix.lift (.ok (core.result.Result.Err (T := U) e)))) (.ok (core.result.Result.Err (T := U) e))
+    exact PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok (core.result.Result.Err (T := U) e)) hd
       (fun _ => PV_EVH_Prefix.lift_fixed _)
 
 theorem mapErr_fixed {T E F O : Type} (ops : ExternalFuns)
@@ -77,12 +77,12 @@ theorem mapErr_fixed {T E F O : Type} (ops : ExternalFuns)
   letI : ExternalFuns := install ops
   cases r with
   | Ok value =>
-    change FinishedView (PV_EVH_Prefix.bind dropClosure (fun _ => PV_EVH_Prefix.lift (.ok (.Ok value)))) (.ok (.Ok value))
-    exact PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok (.Ok value)) hd
+    change FinishedView (PV_EVH_Prefix.bind dropClosure (fun _ => PV_EVH_Prefix.lift (.ok (core.result.Result.Ok (E := F) value)))) (.ok (core.result.Result.Ok (E := F) value))
+    exact PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok (core.result.Result.Ok (E := F) value)) hd
       (fun _ => PV_EVH_Prefix.lift_fixed _)
   | Err e =>
-    change FinishedView (PV_EVH_Prefix.bind (callback e) (fun out => PV_EVH_Prefix.lift (.ok (.Err out))))
-      (Aeneas.Std.bind (inst.call_once f e) (fun out => .ok (.Err out)))
+    change FinishedView (PV_EVH_Prefix.bind (callback e) (fun out => PV_EVH_Prefix.lift (.ok (core.result.Result.Err (T := T) out))))
+      (Aeneas.Std.bind (inst.call_once f e) (fun out => .ok (core.result.Result.Err (T := T) out)))
     exact PV_EVH_Prefix.bind_fixed _ _ _ _ (hc e) (fun out => PV_EVH_Prefix.lift_fixed _)
 #print axioms map_fixed
 #print axioms mapErr_fixed
