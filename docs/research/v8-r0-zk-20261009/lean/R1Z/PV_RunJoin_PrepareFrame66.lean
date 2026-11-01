@@ -57,7 +57,6 @@ theorem source (variant : transport.Variant) (hash : aspis_core.digest.LegacyHas
         simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
         apply PV_RunJoin_ResultPost41.bind
         intro c0
-        simp only [lift,bind_tc_ok]
         apply PV_RunJoin_ResultPost41.bind
         intro c0bytes
         apply PV_RunJoin_ResultPost41.bind
