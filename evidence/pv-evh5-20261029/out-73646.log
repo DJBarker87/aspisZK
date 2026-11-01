@@ -1,0 +1,49 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrefixLoop.lean:12:4: error: Inconsistent number of patterns in match alternatives: This alternative contains 2 patterns:
+  n + 1, s
+but a preceding alternative contains 3:
+  0, _, w
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrefixLoop.lean:24:25: error: Dependent elimination failed: Failed to solve equation
+  Status.finished r = (loop body 0 s w).1
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrefixLoop.lean:27:4: error: Tactic `apply` failed: could not unify the conclusion of `@PV_EVH_Prefix.bind_fixed`
+  FinishedView (PV_EVH_Prefix.bind ?m ?k) (Std.bind ?r ?f)
+with the goal
+  FinishedView (loop body (n + 1) s)
+    (Std.bind (source s) fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next => recur next)
+
+Note: The full type of `@PV_EVH_Prefix.bind_fixed` is
+  ∀ {A B : Type} (m : P A) (k : A → P B) (r : Result A) (f : A → Result B),
+    FinishedView m r → (∀ (a : A), FinishedView (k a) (f a)) → FinishedView (PV_EVH_Prefix.bind m k) (Std.bind r f)
+
+case succ
+S A : Type
+body : S → P (ControlFlow S A)
+source : S → Result (ControlFlow S A)
+recur : S → Result A
+equation :
+  ∀ (s : S),
+    recur s =
+      Std.bind (source s) fun cf =>
+        match cf with
+        | ControlFlow.done a => Result.ok a
+        | ControlFlow.cont next => recur next
+compatible : ∀ (s : S), FinishedView (body s) (source s)
+n : ℕ
+ih : ∀ (s : S), FinishedView (loop body n s) (recur s)
+s : S
+⊢ FinishedView (loop body (n + 1) s)
+    (Std.bind (source s) fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next => recur next)
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrefixLoop.lean:38:2: error: Type mismatch
+  PV_EVH_Prefix.bind_exhausted (body s) ?m.25 w h
+has type
+  PV_EVH_Prefix.bind (body s) ?m.25 w =
+    { status := Status.exhausted, world := (body s w).world, events := (body s w).events }
+but is expected to have type
+  loop body (n + 1) s w = { status := Status.exhausted, world := (body s w).world, events := (body s w).events }
+'PV_EVH_PrefixLoop.fixed_recursive' depends on axioms: [sorryAx]
+'PV_EVH_PrefixLoop.nested_exhaustion' depends on axioms: [sorryAx]

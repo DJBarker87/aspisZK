@@ -8,7 +8,7 @@ variable {S A : Type}
 /-- Both a nested callee's exhaustion and this loop's exhaustion retain their
 post-state and complete emitted prefix. Neither becomes source divergence. -/
 def loop (body : S → P (ControlFlow S A)) : Nat → S → P A
-  | 0,_,w => ⟨.exhausted,w,[]⟩
+  | 0,_ => fun w => ⟨.exhausted,w,[]⟩
   | n+1,s => PV_EVH_Prefix.bind (body s) (fun cf =>
       match cf with
       | .done a => PV_EVH_Prefix.lift (.ok a)
