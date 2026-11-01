@@ -60,3 +60,9 @@ The new `PV_RDCD5_BufferSource.source_instance` draft targets the EXISTING
 `finish_binding` isolates the bulk callback and suffix write. These remain
 uncompiled. The concrete typed `PV_DL_UpdateCarrier` and op216 association
 are still required; source-shape checks cannot supply those equalities.
+
+`PV_RDCD5_V236.carrier_instance/op216_instance` now drafts the typed
+composition against the existing `PV_DL_UpdateSelected.selected_native` link,
+without installing/changing a dictionary. The original safe cursor guard is
+explicit. It is uncompiled, and the source-to-typed compression-carrier binding
+remains required before any restoration.
