@@ -53,7 +53,11 @@ add('interpolate_three_constant_columns',src,[
 helpers=[]
 for path,names in [(terminal,['equality_factor','lift_m31']),(poseidon,['interpolate_three_constant_limb'])]:
  for a in index(Path(path).read_text()):
-  if a['name']in names:helpers.append(dict(path=path,sha256=sha(Path(path)),item=a))
+  if a['name']in names:
+   owned=Path('tools/pv-b3p6-20261028/v244')/('reference_terminal.rs'if path==terminal else'reference_poseidon.rs')
+   candidate=next(v for v in index(owned.read_text())if v['name']==a['name'])
+   assert syntax_tokens(a['body'])==syntax_tokens(candidate['body']),a['name']
+   helpers.append(dict(path=path,sha256=sha(Path(path)),item=a,owned=str(owned),owned_sha256=sha(owned),owned_item=candidate,exact_body_token_identity=True))
 assert len(helpers)==3
 out=dict(rule='own-1 / k-prime route3',functions=rows,exact_helpers=helpers,std_range_binding='resume17/SUM-SOURCE-BINDING-D542.json; eight exact deployed ordinary std bodies; derived Clone/drop/intrinsics V370',primitive_binding='Fixed-array read/write and len are MIR primitive operations, not an omitted ordinary std Index implementation. Source bounds map to index_value; mutable back restoration maps to source_store_update543 and arbitrary continuation theorem. Their compiler/runtime implementation remains V370.',callee_binding='Same frozen project items on source and interpreter side, not axioms or arbitrary opaque functions. Local body equality is modulo the separately named dependency rows, as for the retained direct source associations. This does not assert whole source-cone closure.',coverage_status='pending ArrayInterface543227 and BodyLinks543227 compile/audit; only count after receipts',ordinary_std_unargued=[],native_tests='No changed release source/artifact; reuse existing finite validation only, never promote it to universal source proof')
 (R/'LOCAL-SOURCE-BINDINGS-D543.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(dict(bodies=len(rows),explicit_helper_bodies=len(helpers),stores=sum(r['stores']for r in rows))))
