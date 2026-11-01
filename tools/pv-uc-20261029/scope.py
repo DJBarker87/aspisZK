@@ -40,6 +40,15 @@ def ssh(c,retry=True):
   if attempt<10:
    print('SSH 255 before launch/read-only recovery; waiting 60s',flush=True);time.sleep(60)
  return q
+if phase == 'd543-paired-timing':
+ q=ssh(f'mkdir -p {D}/{name} && python3 /home/dombarker/project-offloads/codex-pv-c474-20261029/quiet-preflight.py {D}/{name}/timing-before-admission.json')
+ (out/'timing-before-admission.json').write_text(q.stdout)
+ quiet=json.loads(q.stdout)
+ # The preceding invalid gate had a foreign Kani job. Require a changed,
+ # quiet environment and low recorded load BEFORE normal admission.
+ if q.returncode != 0 or not quiet['quiet'] or quiet['load'][0] >= 2.0:
+  print('TIMING NOT SUBMITTED: pre-admission quiet/load check failed',q.stdout)
+  sys.exit(78)
 r=ssh(f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
 for f in ['admission-before.json','reservation.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
