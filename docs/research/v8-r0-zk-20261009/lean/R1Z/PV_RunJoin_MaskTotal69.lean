@@ -26,17 +26,17 @@ theorem complete (c1 : Array Q 16#usize) (mask : Array Q 10#usize) (g : Q)
   obtain ⟨⟨linear,explicit_linear⟩,hl⟩ := PV_RunJoin_MaskLinearsTotal69.complete point
   have selected_bound : ∀ i∈selectedIndices,i.val<(16#usize).val := by
     intro i hi
-    have h := List.mem_map.mpr ⟨i,hi,rfl⟩
+    have h : i.val∈selectedIndices.map (fun j => j.val) := List.mem_map.mpr ⟨i,hi,rfl⟩
     rw [selected_order] at h
     exact List.mem_range.mp h
   have mask_bound : ∀ i∈maskIndices,i.val<(10#usize).val := by
     intro i hi
-    have h := List.mem_map.mpr ⟨i,hi,rfl⟩
+    have h : i.val∈maskIndices.map (fun j => j.val) := List.mem_map.mpr ⟨i,hi,rfl⟩
     rw [mask_order] at h
     exact List.mem_range.mp h
   have horner_bound : ∀ i∈hornerIndices,i.val<27 := by
     intro i hi
-    have h := List.mem_map.mpr ⟨i,hi,rfl⟩
+    have h : i.val∈hornerIndices.map (fun j => j.val) := List.mem_map.mpr ⟨i,hi,rfl⟩
     rw [horner_order,List.mem_reverse] at h
     have small := List.mem_range.mp h
     omega
