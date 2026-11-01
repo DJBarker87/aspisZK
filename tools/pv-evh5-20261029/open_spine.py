@@ -124,7 +124,7 @@ def proof(x,n=2,lets=()):
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
   return pad+'try dsimp only\n'+pad+'apply PV_EVH_Prefix.bind_fixed\n'+pad+'·\n'+proof(x.expr,n+2,lets)+'\n'+pad+'· '+intro+'\n'+proof(x.next,n+2,lets)
  if x.kind=='if':
-  normalize=('dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
+  normalize=('try dsimp only ['+','.join(lets)+'] at condition\n'+pad+'  ') if lets else ''
   return pad+'by_cases condition : '+x.cond+'\n'+pad+'· '+normalize+'simp only [condition,if_true]\n'+proof(x.yes,n+2,lets)+'\n'+pad+'· '+normalize+'simp only [condition,if_false]\n'+proof(x.no,n+2,lets)
  if x.kind=='match':
   out=pad+'try dsimp only\n'+pad+'cases '+x.discr+' with\n'

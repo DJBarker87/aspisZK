@@ -465,18 +465,18 @@ theorem run_fixed
                                             let i := alloc.vec.Vec.len val1.g
                                             try dsimp only
                                             by_cases condition : i != 1024#usize
-                                            · dsimp only [i] at condition
+                                            · try dsimp only [i] at condition
                                               simp only [condition,if_true]
                                               exact PV_EVH_Prefix.lift_fixed _
-                                            · dsimp only [i] at condition
+                                            · try dsimp only [i] at condition
                                               simp only [condition,if_false]
                                               let i1 := alloc.vec.Vec.len val1.h1_padding
                                               try dsimp only
                                               by_cases condition : i1 != 1024#usize
-                                              · dsimp only [i,i1] at condition
+                                              · try dsimp only [i,i1] at condition
                                                 simp only [condition,if_true]
                                                 exact PV_EVH_Prefix.lift_fixed _
-                                              · dsimp only [i,i1] at condition
+                                              · try dsimp only [i,i1] at condition
                                                 simp only [condition,if_false]
                                                 let s := alloc.vec.Vec.deref val1.g
                                                 try dsimp only
@@ -503,25 +503,25 @@ theorem run_fixed
                                                         exact compatible.audit_masks_fixed _ _ _ _ _ _
                                                       · intro audit
                                                         by_cases condition : audit.c1_columns_inactive_balanced != 16#usize
-                                                        · dsimp only [i,i1,s,s1] at condition
+                                                        · try dsimp only [i,i1,s,s1] at condition
                                                           simp only [condition,if_true]
                                                           exact PV_EVH_Prefix.lift_fixed _
-                                                        · dsimp only [i,i1,s,s1] at condition
+                                                        · try dsimp only [i,i1,s,s1] at condition
                                                           simp only [condition,if_false]
                                                           by_cases condition : audit.mask_only_columns_inactive_balanced != 10#usize
-                                                          · dsimp only [i,i1,s,s1] at condition
+                                                          · try dsimp only [i,i1,s,s1] at condition
                                                             simp only [condition,if_true]
                                                             exact PV_EVH_Prefix.lift_fixed _
-                                                          · dsimp only [i,i1,s,s1] at condition
+                                                          · try dsimp only [i,i1,s,s1] at condition
                                                             simp only [condition,if_false]
                                                             by_cases condition : audit.d_inactive_balanced
-                                                            · dsimp only [i,i1,s,s1] at condition
+                                                            · try dsimp only [i,i1,s,s1] at condition
                                                               simp only [condition,if_true]
                                                               by_cases condition : audit.g_inactive_balanced
-                                                              · dsimp only [i,i1,s,s1] at condition
+                                                              · try dsimp only [i,i1,s,s1] at condition
                                                                 simp only [condition,if_true]
                                                                 by_cases condition : audit.h1_padding_inactive_balanced
-                                                                · dsimp only [i,i1,s,s1] at condition
+                                                                · try dsimp only [i,i1,s,s1] at condition
                                                                   simp only [condition,if_true]
                                                                   try dsimp only
                                                                   apply PV_EVH_Prefix.bind_fixed
@@ -630,7 +630,7 @@ theorem run_fixed
                                                                                                               exact compatible.op8_fixed _ _ _
                                                                                                             · intro h1_total_balanced
                                                                                                               by_cases condition : h1_total_balanced
-                                                                                                              · dsimp only [i,i1,s,s1,a,s3] at condition
+                                                                                                              · try dsimp only [i,i1,s,s1,a,s3] at condition
                                                                                                                 simp only [condition,if_true]
                                                                                                                 try dsimp only
                                                                                                                 apply PV_EVH_Prefix.bind_fixed
@@ -653,7 +653,7 @@ theorem run_fixed
                                                                                                                         exact PV_EVH_Prefix.lift_fixed _
                                                                                                                       · intro r17
                                                                                                                         exact PV_EVH_Prefix.lift_fixed _
-                                                                                                              · dsimp only [i,i1,s,s1,a,s3] at condition
+                                                                                                              · try dsimp only [i,i1,s,s1,a,s3] at condition
                                                                                                                 simp only [condition,if_false]
                                                                                                                 exact PV_EVH_Prefix.lift_fixed _
                                                                                                     | Break residual =>
@@ -684,13 +684,13 @@ theorem run_fixed
                                                                             exact PV_EVH_Prefix.lift_fixed _
                                                                           · intro r11
                                                                             exact PV_EVH_Prefix.lift_fixed _
-                                                                · dsimp only [i,i1,s,s1] at condition
+                                                                · try dsimp only [i,i1,s,s1] at condition
                                                                   simp only [condition,if_false]
                                                                   exact PV_EVH_Prefix.lift_fixed _
-                                                              · dsimp only [i,i1,s,s1] at condition
+                                                              · try dsimp only [i,i1,s,s1] at condition
                                                                 simp only [condition,if_false]
                                                                 exact PV_EVH_Prefix.lift_fixed _
-                                                            · dsimp only [i,i1,s,s1] at condition
+                                                            · try dsimp only [i,i1,s,s1] at condition
                                                               simp only [condition,if_false]
                                                               exact PV_EVH_Prefix.lift_fixed _
                                           | Break residual =>
