@@ -33,7 +33,8 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
       have inc := PV_EVH_NonzeroSafety.increment i active
       have nextBound : (Usize.wrapping_add i 1#usize).val + remaining = 32 := by omega
       have nextEnough : remaining + 1 ≤ fuel := by omega
-      obtain ⟨out,done⟩ := ih fuel (combined ||| value) (Usize.wrapping_add i 1#usize) w nextBound nextEnough
+      obtain ⟨out,done⟩ := ih (fuel := fuel) (combined := combined ||| value)
+        (i := Usize.wrapping_add i 1#usize) (w := w) nextBound nextEnough
       refine ⟨out,?_⟩
       have step : PV_EVH_NonzeroStep.run bytes combined i {} =
           PV_EVH_Prefix.lift (.ok (.cont (combined ||| value,Usize.wrapping_add i 1#usize))) := by

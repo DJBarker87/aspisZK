@@ -1,0 +1,24 @@
+{
+  "status": "source inspection only; Lean safety and totality pending",
+  "source_path": "crates/aspis-prover/src/state_only_entropy.rs",
+  "source_revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+  "current_revision": "5665f89233a39fd317b1dfbc582f8d4a9b44e18e",
+  "function": "entropy_nonzero32",
+  "body": "fn entropy_nonzero32(bytes:&[u8;32])->bool {\n    let mut combined=0u8;let mut i=0;\n    while i<32 {combined|=bytes[i];i+=1;}\n    combined!=0\n}",
+  "source_body_sha256": "2acb078997fd88d55a9a95e298dbf3bc0c86c9b1c0b68236a64149c1785ad07b",
+  "current_body_byte_identical": true,
+  "extraction": "ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32",
+  "source_operations": [
+    "fixed 32-byte array read at i < 32",
+    "u8 bitwise OR",
+    "bounded usize increment",
+    "final u8 comparison"
+  ],
+  "external_channels": [],
+  "mutation": "local scalar accumulator and loop index only; input array read-only",
+  "remaining": [
+    "Compile NonzeroSafety/NonzeroTotal",
+    "Existing compiler/runtime preservation V370 and complete extraction provenance remain retained",
+    "No whole-entry/native privacy or trace-projection credit"
+  ]
+}
