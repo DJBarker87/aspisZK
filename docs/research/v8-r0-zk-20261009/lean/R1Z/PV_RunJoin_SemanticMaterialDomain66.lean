@@ -20,7 +20,7 @@ theorem helper (base : ExternalTypes) (heap : Heap) (box : Box)
     Post (fun next : (core.result.Result (host_semantic.BuiltSemantics H) r1_wire.Error) × T2 =>
       match next.1 with
       | .Err _ => True
-      | .Ok built => built.bytes.length=13831 ∧ ∃ records, PV_RunJoin_SemanticDomain40.Domain (selected base heap box ops)
+      | .Ok built => built.bytes.length=13831 ∧ ∃ records, @PV_RunJoin_SemanticDomain40.Domain (types base) (selected base heap box ops)
           (alloc.vec.Vec.deref built.bytes) 27#u8 32#usize 0#u8 records)
       (@host_semantic.build_with_helper_mode (types base) (selected base heap box ops)
         H T1 T2 hash helperInst commitInst public1 c1 d g padding helper commitments initialHash variant) := by
@@ -38,7 +38,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (maskOnly : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize)
     (d g padding : Array Q 1024#usize) (commitments : T) (hash : H) (variant : transport.Variant) :
     Post (fun pair => match pair.1 with | .Err _ => True | .Ok built =>
-      built.bytes.length=13831 ∧ ∃ records, PV_RunJoin_SemanticDomain40.Domain
+      built.bytes.length=13831 ∧ ∃ records, @PV_RunJoin_SemanticDomain40.Domain (types base)
         (selected base heap box ops) (alloc.vec.Vec.deref built.bytes) 27#u8 32#usize 0#u8 records)
       (@host_semantic.build_with_material (types base) (selected base heap box ops)
         H T D commitInst public1 compiled noised maskOnly d g padding commitments hash variant) := by

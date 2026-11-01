@@ -18,7 +18,7 @@ theorem complete (ops : ExternalFuns) (logical : Slice U8) (count : U8)
   induction domain with
   | nil at1 row stop last =>
     have h := congrArg UScalar.val last
-    simpa only [List.flatten_nil,List.length_nil,Nat.add_zero] using Nat.le_of_eq h
+    simpa only [List.flatten_nil,List.length_nil,Nat.add_zero,Slice.len_val] using Nat.le_of_eq h
   | copy at1 size row tag rest more shape small bound tail ih =>
     have cursor := after_value logical at1 size bound
     have len := PV_RunJoin_SemanticLengths40.raw logical at1 size bound
