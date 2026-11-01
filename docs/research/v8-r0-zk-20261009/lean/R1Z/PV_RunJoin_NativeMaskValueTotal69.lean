@@ -33,7 +33,7 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   rw [source]
   obtain ⟨out,ho⟩ := PV_RunJoin_MaskTotal69.complete (PV_B3_Carrier117.fromArray c1)
     (PV_B3_Carrier117.fromArray mask) (PV_B3_Carrier117.fromQ g) (PV_B3_Carrier117.fromArray point)
-  exact ⟨PV_B3_Carrier117.toQ out,by simp only [PV_B3_Install117.callback,ho,PV_B3_Carrier117.map]⟩
+  exact ⟨PV_B3_Carrier117.toQ out,by simp only [PV_B3_Install117.callback,ho,PV_B3_Carrier117.map,PV_B3_ArrayCarrier.resultMap]⟩
 
 #print axioms source
 #print axioms complete
