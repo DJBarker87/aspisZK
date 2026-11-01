@@ -22,6 +22,8 @@ theorem coefficient_row (c : Nat → Nat → Old.Q)
     ((ProverCommitGammaCoefficients53.column_spec c hc ⟨l,hl⟩).2.1 j hj)
     (hc l hl _ (AspisR1.rowNat_lt j))).mp h
 
+attribute [local irreducible] ProverCommitArray49.array ProverCommitMix48.sourceArray
+
 theorem table (c : Nat → Nat → Old.Q)
     (hc : ∀ l, l<29 → ∀ j, j<1024 → Canonical (c l j))
     (coeff : alloc.vec.Vec PV_RunJoin_CoefficientActualCell50.Column)
@@ -37,6 +39,7 @@ theorem table (c : Nat → Nat → Old.Q)
   change (List.ofFn (fun l : Fin 29 => ProverCommitArray49.array 1024#usize
     (fun j => fromW (ProverCommitNativeOps47.embedded (c l.val j))))).map _=_
   rw [List.map_ofFn]
+  simp only [ProverCommitGammaCell53.table]
   change List.ofFn _=List.ofFn _
   apply congrArg List.ofFn
   funext l
@@ -45,7 +48,7 @@ theorem table (c : Nat → Nat → Old.Q)
     (ProverCommitArray49.array 1024#usize (fun j => fromW
       (ProverCommitNativeOps47.embedded (c l.val j))))).val.map toW=_
   simp only [PV_RunJoin_CoefficientActualCell50.permuted,ProverCommitArray49.array,
-    List.map_ofFn]
+    List.map_ofFn,ProverCommitMix48.sourceArray]
   change List.ofFn _=List.ofFn _
   apply congrArg List.ofFn
   funext j
