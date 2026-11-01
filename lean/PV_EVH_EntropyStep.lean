@@ -118,22 +118,22 @@ theorem run_fixed
     let a := Array.repeat 64#usize 0#u8
     try dsimp only
     try dsimp only
-    apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 64#usize     (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a)
+    apply PV_EVH_Prefix.bind_fixed
     ·
       exact compatible.op128_fixed _ _
     · intro bytes
       try dsimp only
-      apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut     (Array.Insts.CoreConvertAsMutSlice Std.U8 64#usize)     (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) bytes)
+      apply PV_EVH_Prefix.bind_fixed
       ·
         exact compatible.op125_fixed _ _ _
       · rintro ⟨s, as_mut_back⟩
         try dsimp only
-        apply PV_EVH_Prefix.bind_fixed (r := getrandom.fill s)
+        apply PV_EVH_Prefix.bind_fixed
         ·
           exact PV_EVH_Prefix.ofM_fixed _ _ (PV_EVH_Entropy.draw_fixed entropyAnswers entropy_same _) 
         · rintro ⟨r, s1⟩
           try dsimp only
-          apply PV_EVH_Prefix.bind_fixed (r := core.result.Result.Insts.CoreOpsTry.branch r)
+          apply PV_EVH_Prefix.bind_fixed
           ·
             exact PV_EVH_Prefix.lift_fixed _
           · intro cf
@@ -145,19 +145,19 @@ theorem run_fixed
               let a1 := Array.repeat 32#usize 0#u8
               try dsimp only
               try dsimp only
-              apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 32#usize     (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a1)
+              apply PV_EVH_Prefix.bind_fixed
               ·
                 exact compatible.op128_fixed _ _
               · intro field_mask_entropy
                 let a2 := Array.repeat 32#usize 0#u8
                 try dsimp only
                 try dsimp only
-                apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 32#usize     (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2)
+                apply PV_EVH_Prefix.bind_fixed
                 ·
                   exact compatible.op128_fixed _ _
                 · intro leaf_salt_seed
                   try dsimp only
-                  apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut     (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy)
+                  apply PV_EVH_Prefix.bind_fixed
                   ·
                     exact compatible.op126_fixed _ _
                   · rintro ⟨a3, deref_mut_back⟩
@@ -167,17 +167,17 @@ theorem run_fixed
                       exact PV_EVH_Prefix.lift_fixed _
                     · rintro ⟨s2, to_slice_mut_back⟩
                       try dsimp only
-                      apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref     (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) bytes1)
+                      apply PV_EVH_Prefix.bind_fixed
                       ·
                         exact compatible.op127_fixed _ _
                       · intro a4
                         try dsimp only
-                        apply PV_EVH_Prefix.bind_fixed (r := core.array.Array.index (core.ops.index.IndexSlice     (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) a4     { «end» := 32#usize })
+                        apply PV_EVH_Prefix.bind_fixed
                         ·
                           exact compatible.arrayIndex_fixed _ _ _
                         · intro s3
                           try dsimp only
-                          apply PV_EVH_Prefix.bind_fixed (r := core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3)
+                          apply PV_EVH_Prefix.bind_fixed
                           ·
                             exact compatible.sliceCopy_fixed _ _ _
                           · intro s4
@@ -186,7 +186,7 @@ theorem run_fixed
                             let field_mask_entropy1 := deref_mut_back a5
                             try dsimp only
                             try dsimp only
-                            apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut     (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed)
+                            apply PV_EVH_Prefix.bind_fixed
                             ·
                               exact compatible.op126_fixed _ _
                             · rintro ⟨a6, deref_mut_back1⟩
@@ -196,12 +196,12 @@ theorem run_fixed
                                 exact PV_EVH_Prefix.lift_fixed _
                               · rintro ⟨s5, to_slice_mut_back1⟩
                                 try dsimp only
-                                apply PV_EVH_Prefix.bind_fixed (r := core.array.Array.index (core.ops.index.IndexSlice     (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) a4     { start := 32#usize })
+                                apply PV_EVH_Prefix.bind_fixed
                                 ·
                                   exact compatible.arrayIndex_fixed _ _ _
                                 · intro s6
                                   try dsimp only
-                                  apply PV_EVH_Prefix.bind_fixed (r := core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6)
+                                  apply PV_EVH_Prefix.bind_fixed
                                   ·
                                     exact compatible.sliceCopy_fixed _ _ _
                                   · intro s7
@@ -210,12 +210,12 @@ theorem run_fixed
                                     let leaf_salt_seed1 := deref_mut_back1 a7
                                     try dsimp only
                                     try dsimp only
-                                    apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref     (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy1)
+                                    apply PV_EVH_Prefix.bind_fixed
                                     ·
                                       exact compatible.op127_fixed _ _
                                     · intro a8
                                       try dsimp only
-                                      apply PV_EVH_Prefix.bind_fixed (r := aspis_prover.state_only_entropy.entropy_nonzero32 a8)
+                                      apply PV_EVH_Prefix.bind_fixed
                                       ·
                                         exact compatible.entropy_nonzero32_fixed _
                                       · intro b
@@ -223,12 +223,12 @@ theorem run_fixed
                                         · try dsimp only [a,bytes1,a1,a2,a5,field_mask_entropy1,a7,leaf_salt_seed1] at condition
                                           simp only [condition,if_true]
                                           try dsimp only
-                                          apply PV_EVH_Prefix.bind_fixed (r := zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref     (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket     U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1)
+                                          apply PV_EVH_Prefix.bind_fixed
                                           ·
                                             exact compatible.op127_fixed _ _
                                           · intro a9
                                             try dsimp only
-                                            apply PV_EVH_Prefix.bind_fixed (r := aspis_prover.state_only_entropy.entropy_nonzero32 a9)
+                                            apply PV_EVH_Prefix.bind_fixed
                                             ·
                                               exact compatible.entropy_nonzero32_fixed _
                                             · intro b1
@@ -254,7 +254,7 @@ theorem run_fixed
                                             exact PV_EVH_Prefix.lift_fixed _
             | Break residual =>
               try dsimp only
-              apply PV_EVH_Prefix.bind_fixed (r := core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual     aspis_prover.state_only_entropy.StateOnlyAttemptSecrets     aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError     residual)
+              apply PV_EVH_Prefix.bind_fixed
               ·
                 exact PV_EVH_Prefix.lift_fixed _
               · intro r1
