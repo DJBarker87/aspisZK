@@ -1,0 +1,19 @@
+{
+  "url": "https://raw.githubusercontent.com/model-checking/kani/kani-0.67.0/kani-driver/src/call_single_file.rs",
+  "source_sha256": "1c956f2c418c63d8c0cc6fda785a1aec803b6e08fd3f222d8ebccefecbe9df14",
+  "source_tag": "kani-0.67.0",
+  "snippet": "pub fn base_rustc_flags(lib_config: LibConfig) -> Vec<RustcArg> {\n    let mut flags = [\n        \"-C\",\n        \"overflow-checks=on\",\n        \"-Z\",\n        \"unstable-options\",\n        \"-Z\",\n        \"trim-diagnostic-paths=no\",\n        \"-Z\",\n        \"human_readable_cgu_names\",\n        \"-Z\",\n        \"always-encode-mir\",\n        \"--cfg=kani\",\n        \"-Z\",\n        \"crate-attr=feature(register_tool)\",\n        \"-Z\",\n        \"crate-attr=register_tool(kanitool)\",\n    ]\n    .map(RustcArg::from)\n    .to_vec();\n\n    flags.extend(lib_config.args);\n\n    // e.g. compiletest will set 'compile-flags' here and we should pass those down to rustc\n    // and we fail in `tests/kani/Match/match_bool.rs`\n    if let Ok(str) = std::env::var(\"RUSTFLAGS\") {\n        flags.extend(str.split(' ').map(RustcArg::from));\n    }\n\n    flags\n}\n\n",
+  "diagnosis": "Kani forces rustc overflow-checks=on; RUSTFLAGS is appended after it, so explicitly override there. Cargo profile alone did not fix checked MIR.",
+  "old_pair": [
+    "K79104-r2",
+    "K79105"
+  ],
+  "old_pair_credit": false,
+  "new_unlaunched_pair": [
+    "K79106",
+    "K79107"
+  ],
+  "harness_names_unchanged": true,
+  "input_domain_unchanged": true,
+  "writable_statics": false
+}
