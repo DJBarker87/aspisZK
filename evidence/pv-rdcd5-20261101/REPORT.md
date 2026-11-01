@@ -44,3 +44,19 @@ if such declarations enter the closure.
 Before/after: all original concrete source-to-reference links retain their
 input quantifiers, Result carriers, error order and qualifications. Endpoint
 premises removed/added/changed: zero. All draft axioms commands are unexecuted.
+
+Preparation checks: parser source-shape checker verifies the three original
+Rust parser bodies and records nine library spans against inherited snapshots.
+The buffer source-shape checker verifies six complete native bodies. Both are
+source checks, not complete native/Lean links. Read-only h4 inventory verifies
+all 5,673 authoritative external object hashes (manifest sha256 d9187c80…);
+this neither opens the gate nor establishes a compiled project closure.
+The tracked-HEAD closure plan has 66 project modules and zero EJR/freeze hits.
+`source-resolution.json` and `compile-order.txt` record exact source blobs and
+hashes; no project object is accepted by this source census.
+
+The new `PV_RDCD5_BufferSource.source_instance` draft targets the EXISTING
+`PV_DL_UpdatePlan.model`, with all branches and arbitrary Result callback.
+`finish_binding` isolates the bulk callback and suffix write. These remain
+uncompiled. The concrete typed `PV_DL_UpdateCarrier` and op216 association
+are still required; source-shape checks cannot supply those equalities.

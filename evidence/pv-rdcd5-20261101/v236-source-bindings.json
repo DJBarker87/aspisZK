@@ -1,0 +1,96 @@
+{
+  "row": "V236",
+  "status": "PREPARATION ONLY",
+  "evidence_class": "structural (K-1 substitute), within existing compiler/tool trust; not premise removal",
+  "bindings": [
+    {
+      "step": "wrapper",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/digest-0.10.7/src/core_api/wrapper.rs",
+      "file_sha256": "033777bed7d140b158e15d50fda8a6e06557ce89bd0738fcca692be2c39e8b8a",
+      "body": "{\n        let Self { core, buffer } = self;\n        buffer.digest_blocks(input, |blocks| core.update_blocks(blocks));\n    }",
+      "body_sha256": "684d44ee81d9dd21cdea475c26c0919b4d036434faee7e152ec09bb99d794dd5",
+      "tokens_sha256": "6952ed2623de3329ef25c121340f8e4d7b8d4f58ccd50d9dbe5af899cdb745c1",
+      "token_identity": true,
+      "expected": "{let Self{core,buffer}=self;buffer.digest_blocks(input,|blocks|core.update_blocks(blocks));}",
+      "law": "PV_DL_UpdateSelected.selected_native; only original UpdateCore.update_blocks parameter retained",
+      "status": "source shape checked; Lean proof uncompiled"
+    },
+    {
+      "step": "buffer",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "file_sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d",
+      "body": "{\n        let pos = self.get_pos();\n        // using `self.remaining()` for some reason\n        // prevents panic elimination\n        let rem = self.size() - pos;\n        let n = input.len();\n        // Note that checking condition `pos + n < BlockSize` is\n        // equivalent to checking `n < rem`, where `rem` is equal\n        // to `BlockSize - pos`. Using the latter allows us to work\n        // around compiler accounting for possible overflow of\n        // `pos + n` which results in it inserting unreachable\n        // panic branches. Using `unreachable_unchecked` in `get_pos`\n        // we convince compiler that `BlockSize - pos` never underflows.\n        if Kind::invariant(n, rem) {\n            // double slicing allows to remove panic branches\n            self.buffer[pos..][..n].copy_from_slice(input);\n            self.set_pos_unchecked(pos + n);\n            return;\n        }\n        if pos != 0 {\n            let (left, right) = input.split_at(rem);\n            input = right;\n            self.buffer[pos..].copy_from_slice(left);\n            compress(slice::from_ref(&self.buffer));\n        }\n\n        let (blocks, leftover) = Kind::split_blocks(input);\n        if !blocks.is_empty() {\n            compress(blocks);\n        }\n\n        let n = leftover.len();\n        self.buffer[..n].copy_from_slice(leftover);\n        self.set_pos_unchecked(n);\n    }",
+      "body_sha256": "0a2806d6c91c17ca79688184aab250a007b59ffd14254ad99b0ca0e0c8ab41bc",
+      "tokens_sha256": "ad317c233d6b87d4196e082007ff9c513d15febfa75d3a054dbab08e5b33b6f5",
+      "token_identity": true,
+      "expected": "{let pos=self.get_pos();let rem=self.size()-pos;let n=input.len();\n  if Kind::invariant(n,rem){self.buffer[pos..][..n].copy_from_slice(input);self.set_pos_unchecked(pos+n);return;}\n  if pos!=0{let(left,right)=input.split_at(rem);input=right;self.buffer[pos..].copy_from_slice(left);compress(slice::from_ref(&self.buffer));}\n  let(blocks,leftover)=Kind::split_blocks(input);if !blocks.is_empty(){compress(blocks);}\n  let n=leftover.len();self.buffer[..n].copy_from_slice(leftover);self.set_pos_unchecked(n);}",
+      "law": "PV_RDCD5_BufferSource.source_instance -> existing PV_DL_UpdatePlan.model; typed carrier association remains required",
+      "status": "source shape checked; Lean proof uncompiled"
+    },
+    {
+      "step": "get_pos",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "file_sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d",
+      "body": "{\n        let pos = self.pos as usize;\n        if !Kind::invariant(pos, BlockSize::USIZE) {\n            debug_assert!(false);\n            // SAFETY: `pos` never breaks the invariant\n            unsafe {\n                core::hint::unreachable_unchecked();\n            }\n        }\n        pos\n    }",
+      "body_sha256": "f9db1b42818f6262dc38dd07e761ede14780931a3f1c2de09b1b173869be5313",
+      "tokens_sha256": "797c547678236d9ab41a1685c61659a473b216dee9f610d8809167f404b96c29",
+      "token_identity": true,
+      "expected": "{let pos=self.pos as usize;if !Kind::invariant(pos,BlockSize::USIZE){debug_assert!(false);unsafe{core::hint::unreachable_unchecked();}}pos}",
+      "law": "Original Eager64 safe guard pos<64 excludes UB and formatting; U8 widening preserves val at V370",
+      "status": "source shape checked; Lean proof uncompiled"
+    },
+    {
+      "step": "size",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "file_sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d",
+      "body": "{\n        BlockSize::USIZE\n    }",
+      "body_sha256": "f3f6f0e4894994a0bd095bb7185cd93da82eaa9c3e22a59a5f4c94c99d070e44",
+      "tokens_sha256": "33c3ac60f7c43e43f45389a6bd673958edc3b59060f048277f1dafc0b6303310",
+      "token_identity": true,
+      "expected": "{BlockSize::USIZE}",
+      "law": "PV_AL_SplitNativeShape.native_size; concrete U64 only",
+      "status": "source shape checked; Lean proof uncompiled"
+    },
+    {
+      "step": "set_pos",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/lib.rs",
+      "file_sha256": "b437252d389042d894b1ef17859b043e827d2bd2a1bca4b5311c67dff565274d",
+      "body": "{\n        debug_assert!(Kind::invariant(pos, BlockSize::USIZE));\n        self.pos = pos as u8;\n    }",
+      "body_sha256": "a50d36fd8fea17990d78a16ea2068f6c69ec57fa71a2566fa320587384e2d616",
+      "tokens_sha256": "594eda6c889566c1612c8f8376e3cb0548fde8a91b4e98ad26a69f3986e71cd1",
+      "token_identity": true,
+      "expected": "{debug_assert!(Kind::invariant(pos,BlockSize::USIZE));self.pos=pos as u8;}",
+      "law": "PV_RDCD5_BufferSource.cursor_transport; all assigned values<64; debug assertions inactive in deployed release",
+      "status": "source shape checked; Lean proof uncompiled"
+    },
+    {
+      "step": "Eager.invariant",
+      "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/block-buffer-0.10.4/src/sealed.rs",
+      "file_sha256": "9327ee3e567ae779b83c2b7f4f3ff56fcb2117163e023e7b0e37759e7e8d1f5c",
+      "body": "{\n        pos < block_size\n    }",
+      "body_sha256": "4508948a558fa072fa4065e5838938be3165e9438aa298cbe666007b680738c8",
+      "tokens_sha256": "3a66b5588c25bb83b5c49bae957fc3cfc17087c936a1c12744296163d4a23cc3",
+      "token_identity": true,
+      "expected": "{pos<block_size}",
+      "law": "Original safe Eager domain; zero-sized/Unit Lazy marker is never used as evidence of Eager selection",
+      "status": "source shape checked; Lean proof uncompiled"
+    }
+  ],
+  "existing_link": "PV_DL_UpdatePlan.model; PV_DL_UpdateCarrier.value; PV_DL_UpdateSelected.selected_native",
+  "qualifiers": [
+    "original safe private Eager64 cursor<64",
+    "original native byte-slice word bound",
+    "same complete Result-valued batched compression callback; no callback totality or singleton-fold premise",
+    "V233 typed Eager split/carrier association still required",
+    "V370/D381/D386 source-to-codegen boundary retained",
+    "D159 physical/formatting observer link remains a separate original obligation"
+  ],
+  "fmt_1": "No Aeneas.Std core::fmt semantics is used. get_pos UB/debug diagnostic excluded by original safe guard; release debug_assert inactive. All checked buffer windows require symbolic bounds.",
+  "originals_reused": "99328 native/reference finite pairs and recovered original checker retained unchanged; no unchanged suite rerun",
+  "before": "Concrete source buffer branch/cursor/callback transport unbound at original link",
+  "after": "Unchanged target, uncompiled drafts; row remains SUSPENDED",
+  "endpoint_premises_removed": [],
+  "endpoint_premises_added": [],
+  "endpoint_premises_changed": [],
+  "kani_runs": 0
+}
