@@ -1,97 +1,131 @@
-# EVH5 context handoff — full prover task still unfinished
+# D540 continuation handoff — full prover event task still unfinished
 
-Continue in exactly /Users/dominic/ZK/.worktrees/pv-evh on
-codex/pv-evh-20261029. Read the prompt-pv-evh5.txt chain, pv-common rulings,
-AGENTS.md and this directory's REPORT.md. ONLY writer. No pushes or edits to
-crates/, programs/, soundness sources, other worktrees or extracted modules.
-New Lean modules use PV_EVH_. No delegation was used or authorized.
+Continue ONLY in `/Users/dominic/ZK/.worktrees/pv-evh`, branch
+`codex/pv-evh-20261029`. Read the prompt-pv-evh5.txt chain, pv-common.txt
+(all rulings through k3, dup-1', fmt-1 and ae1), root/worktree AGENTS.md and
+this directory's REPORT.md. ONLY writer; no delegation authorized. No pushes,
+crates/programs changes, soundness edits, extracted-source edits or other
+worktree writes. New modules use PV_EVH_. This is a CONTEXT handoff, not an
+owner blocker, exhausted budget, completed task or checked counterexample.
 
-## Receipt and host state
+## Receipts, IDs, host
 
-- Resume base: 841ae0f9a98c89a780803664aaf8755f48343b53.
-- EVH4 spent 17; EVH5 now spent 19 (73623–73641 inclusive). Cumulative 36/100,
-  leaving **64 attempts**, zero native and zero Kani. Fresh ID **73642**.
-- Never reuse any of 73623–73641 or old 73697/73698. Leave prior refused IDs
-  73600–73603, 73605/73606, 73613/73615 alone. Audit reserve **73699** unused.
-- `validation.json` and `host-final.json` verify accepted sources/objects and
-  all 19 host admission/output/time receipts. No live owned host scope remains.
-  On resuming, FIRST git status and recheck host scopes/receipts before launch.
-- Retain the existing host workspace/cache:
-  /home/dombarker/project-offloads/codex-pv-evh-20261029.
-- Four accepted new objects: RetryBody 73624, RetrySource 73636,
-  WorldRecursion 73638, RetryRun 73641. Do not rebuild them unchanged.
-- `python3 tools/pv-evh5-20261029/retry.py --check` reproduces RetryBody and
-  its source receipt exactly. `audit.py` performs read-only receipt/source
-  validation, including a host inventory; no compiler launch.
+- This resume began at `ddd4d92391`, proof work through `7cd97b6f6c` plus the
+  final evidence/handoff commit. EVH5 originally resumed at `841ae0f9a9`.
+- EVH4 spent 17; EVH5 now spent **37** (73623–73659 inclusive). Cumulative
+  **54/100**, nominal **46 attempts remaining**, 0 native and 0 Kani.
+- Next fresh ID **73660**. Audit **73699** UNUSED. Never reuse 73623–73659,
+  73697/73698 or earlier consumed IDs. Leave the old admission-only skipped
+  73600–73603, 73605/73606, 73613/73615 alone as already instructed. The
+  nominal budget does not authorize an ID outside 73600–73699 or skipped IDs;
+  only 73660–73696 and reserved 73699 remain fresh in this block.
+- Read-only audit passed after 73659. `validation.json`, `host-final.json`
+  and `resume-final-checks.json` reconcile all 37 EVH5 admission/out/time
+  receipts, current accepted sources/objects and no live owned scope.
+- FIRST git status and read-only host/receipt reconciliation before launching.
+  Keep `/home/dombarker/project-offloads/codex-pv-evh-20261029` and its cache.
+- New accepted modules in this resume: Prefix 73642, EntropyGenerate 73644,
+  AccountCallback 73645, PrefixRetryBody 73647, PrefixLoop 73648,
+  PrefixRetryRun 73649, AccountEntry 73650, MaskedAttempt 73651,
+  ReserveBuild 73654, MaskedWithAttempt 73656, ReserveJoin 73657,
+  ProverSpine 73658, DurableReserveBuild 73659. DO NOT rebuild or edit them
+  unchanged. Earlier accepted RetryBody/RetrySource/WorldRecursion/RetryRun
+  and the EVH4 substrate are retained and unchanged.
+- `guard-73655.json` is an UNCHARGED pre-ID-scan/pre-submission guard refusal.
+  The later actual 73655 used changed source and failed; it IS consumed.
 
-## What the new theorem really says
+## What is actually proved
 
-PV_EVH_RetryRun.run_fixed transports every FINISHED finite source retry run
-under `next_fixed` and `prove_fixed` to the actual extracted retry_attempt
-Result. The control spine is source-directed and contains attempt/count and
-rejection events. Both `next_OPEN : Next T0` and `prove_OPEN : Prove` are still
-OPEN, so this is not the full requested worldRun, and cannot remove any row.
-No complete source event trace, rtDeployed binding, opsNative/allocator success
-or actual-family nonemptiness was proved. D520 client inputs remain open for
-pv-uc under owner U/D524. Do not claim ruling (v') completion from these local
-conditional lemmas or from an unrelated model view.
+`PV_EVH_ProverSpine.entry_fixed` is now the most composed LOCAL source Result
+transport. It follows actual emitted prove_for_proof_accounts, its callback
+and FnMut wrapper, retry owner, prove_masked_attempt, prove_masked_with_attempt
+and reserve-and-build. No whole next/prove/with-attempt/reserve erasure law is
+assumed there. The source spines are composed from named OPEN leaf executions.
 
-## Exact next proof work, in task order
+It is NOT the requested complete event-producing worldRun. Account acquisition
+remains a D520 input. Five head, eighteen with-attempt and eleven generic
+reserve callees remain OPEN. Entropy afterDraw, nonce helper tails and
+AccountEntry's op233 comparison under trait_default still contain Result-only
+calls with incomplete event coverage. Allocation/drop/runtime/panic/abort,
+source hash/oracle byte fidelity and actual success remain open. No full
+NativeTrace projection or rtDeployed installation has been supplied.
 
-1. Instantiate next_OPEN from the actual emitted proof-account FnMut callback:
-   RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut,
-   its FnMut wrapper, StateOnlyAttemptSecrets.generate_for_mask_nonce, and
-   existing PV_EVH_EntropyLoop.entropyRun. The latter returns Prefix, not M.
-   Introduce compositional Prefix bind (finished Result, exhausted state/events)
-   or an equivalent honest finite-execution interface. NEVER turn exhaustion
-   into source .div. Preserve restoration tuple t/back exactly. No opaque
-   replacement of the client or whole callback trace.
-2. Instantiate prove_OPEN by expanding actual prover.prove_masked_attempt,
-   prover.prove_masked_with_attempt, reserve_and_build... and effectful helpers.
-   Existing NonceSource and Entropy afterDraw contain Result-only lifted helpers
-   that remain an event-coverage gap. The task needs all reached external ops,
-   allocation/drop/runtime/panic/abort paths, not just their final Results.
-   Reuse the source parser and per-bind fixed_view proofs, but keep every
-   unexpanded effectful callee explicitly OPEN; do not count it as delivered.
-3. Complete the extracted entry worldRun and its compatible-domain erasure;
-   then prove complete prover oraclePrefix, countTrace and nonce fileTrace
-   projections against UNCHANGED NativeTrace definitions. Clients before/after
-   are named inputs for pv-uc. Counter projections must account for events
-   emitted by all instantiated callees, not assume they cannot emit counts.
-4. Only once the links are over provenance-fixed actual families and proved,
-   reduce (v') consistency to successful actual worldRun existence at runjoin's
-   opsNative and allocator world. Keep actual-domain nonemptiness explicit;
-   NativeObstruction62/op132 prevents inferring uniform success. No extra T.
-5. Focused modules first, dependent entry bridge, final axioms audit and one
-   final closure replay when ready. Preserve 73699 for that audit. Existing
-   73697/73698 cannot be reused. No repeated unchanged release regression.
+Prefix.bind and PrefixLoop retain state/events at exhaustion separately from
+source .div. All erasure claims are restricted to completed finite executions
+on their named compatible dictionary domain. Preserve that distinction.
 
-## Commands and proof pitfalls
+`PV_EVH_DurableReserveBuild` additionally specializes reserve-and-build to the
+ACTUAL durable store instance and interprets its reservation through existing
+NonceSource.reserve, lifted by Prefix.ofM. It has ten other callees OPEN and
+inherits every documented nonce-helper coverage gap. It is compiled, but
+NOT YET installed into the generic ProverSpine source composition.
 
-Commit a new module first, then:
+## Exact next proof work
+
+1. Install DurableReserveBuild in an actual-store specialized with-attempt
+   source interpreter (new module, do not edit accepted generated modules).
+   The existing generic ReserveJoin requires universal store/trait fields;
+   avoid imposing those as actual-domain premises. Specialize the source
+   header to DurableStateOnlyMaskNonceStore and the exact emitted instance,
+   as open_spine.py's DurableReserveBuild does. Replace the whole reserve
+   callee by the accepted specialized interpreter, carrying its ten remaining
+   OPEN leaves and file Compatible domain. Then compose that actual-store
+   source spine through MaskedAttempt and the account entry.
+2. Replace the Result-only retry-entry op233/trait-default comparison by its
+   source interpretation or an explicit named unfinished callee. Do not count
+   the current Result lift as complete effect coverage. Continue expanding
+   the remaining named leaf inventories in *-generation.json: allocation,
+   zeroize/drop, context encode, hash/oracle, mask generation/application,
+   host_semantic.build_with_material and prove_from_semantics. They are
+   source-association/proof work, not a new T or an OS answer for a whole helper.
+3. Close inherited Entropy.afterDraw and NonceSource reservation_path/other
+   helper coverage gaps. Instantiate every reached external operation with
+   its actual world state update, ordered requests/deliveries and failure,
+   panic/abort/allocation paths. Preserve source restoration tuples/functions.
+   Ruling fmt-1 applies to ANY reached formatting, no Unit-carrier credit.
+4. Only after full coverage: complete prover worldRun and erasure on its honest
+   compatible domain; prove source oraclePrefix/countTrace/nonce-fileTrace
+   equal to UNCHANGED NativeTrace projections. Callees may themselves emit
+   count events: never silently assume otherwise. D520 before/after/account
+   inputs remain named for pv-uc, owner U/D524.
+5. Only after every link is on provenance-fixed actual families and proved,
+   reduce (v') consistency to successful actual worldRun nonemptiness at
+   runjoin's opsNative AND allocator world. NativeObstruction62/op132 still
+   blocks inferring uniform success. No unrelated MODEL VIEW earns this.
+6. Focused module, dependent entry bridge, final axioms audit 73699 and one
+   closure replay only when acceptance is actually ready. pv-meas's measured
+   arbitrary-law event headline at `8fa34d9fb4` is unchanged and consumes the
+   same links. Do not work on finite carriers or redefine native projections.
+
+## Tools and proof pitfalls
+
+Commit each new source first, then:
 
     python3 tools/pv-evh5-20261029/stage.py PV_EVH_NewModule
-    python3 tools/pv-evh5-20261029/compile.py 73642 PV_EVH_NewModule
+    python3 tools/pv-evh5-20261029/compile.py 73660 PV_EVH_NewModule
 
-`stage.py` verifies the SAME inherited cohort/external hashes and reuses all
-accepted own modules from EVH4 and EVH5. A new import outside that known set
-requires the inherited full prepare/cohort resolution, not a guessed object.
-The compile wrapper uses one 6G/8G/swap0/64-task scope and -M7000, exact source
-revision, admission in the same shell, cross-job ID scan and failed-hash guard.
-On admission refusal keep the SAME unlaunched ID and wait full 180 seconds.
-On SSH reset before launch wait 60 seconds; after submission recover receipts
-and never resubmit blindly. Each refusal/transport error needs retained evidence.
+stage.py verifies the inherited SAME project/external cohort and first-root
+resolution, reusing all accepted own objects. New imports outside its known
+set need the inherited full prepare/cohort resolution, never a guessed object.
+compile.py uses one 6G/8G/swap0/64-task scope, -M7000, same-shell admission,
+cross-job ID scan, exact committed source and failed-hash guard. Admission
+refusal: keep same unlaunched ID, wait FULL 180s. Pre-launch SSH reset: retain
+evidence and wait 60s. Post-submission reset: recover receipts, never resubmit.
+No host infrastructure changes are authorized.
 
-Do NOT edit the four accepted modules merely to simplify their proof text.
-The RetrySource failures are already solved. The pattern tuple let binders
-resisted eager simplification; the final proof uses an explicit `change` of
-its Continue branch before case analysis. RetryRun composes via direct state
-projections s.1/s.2.1/s.2.2, avoiding anonymous tuple matchers. Increment
-cases use precise bind constructor laws and final definitional equality;
-no prover recurrence or field arithmetic is normalized. Prior failed source
-hashes must not be recompiled unchanged.
+All generators have --check and are checked by audit.py (read-only, no compile):
+retry.py, prefix_retry.py, masked.py, open_spine.py with MaskedWithAttempt,
+ReserveBuild or DurableReserveBuild, and reserve_join.py. Their original
+extraction/body/source hashes and exact OPEN field signatures are retained.
 
-Receipts include failed elaboration sorryAx output for diagnosis only. All
-accepted theorem axioms are permitted; WorldRecursion is axiom-free. The final
-report must state rows removed NONE until a genuine endpoint premise is
-removed. Current stop is context handoff, not a blocker or exhausted budget.
+open_spine.py emits per-bind FinishedView proofs and preserves source calls;
+no recurrence/field arithmetic is normalized. When a source pure let introduces
+an alias i, dsimp at the goal can remove it before case splitting. The final
+proof tracks indented let aliases and uses `try dsimp only [aliases] at condition`
+then exact branch simp. Do not repeat failed 73652/73653/73655 text. Result
+carrier applications must be parenthesized (`P (alloc.vec.Vec T)`). Source
+constants without argument binders need the generator's special signature path.
+
+Do not promote the conditional local erasure structs to endpoint link proofs.
+No privacy skeleton consistency credit is claimed. All endpoint/deployment
+rows remain OPEN; **rows removed NONE; target not yet established**.

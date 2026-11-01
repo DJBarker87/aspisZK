@@ -39,7 +39,7 @@ for p in E.rglob('*'):
 for p in Path('tools/pv-evh5-20261029').glob('*.py'):ast.parse(p.read_text())
 subprocess.run(['python3','tools/pv-evh5-20261029/retry.py','--check'],check=True)
 subprocess.run(['python3','tools/pv-evh5-20261029/prefix_retry.py','--check'],check=True)
-for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['reserve_join.py','--check']]:
+for cmd in [['masked.py','--check'],['open_spine.py','MaskedWithAttempt','--check'],['open_spine.py','ReserveBuild','--check'],['open_spine.py','DurableReserveBuild','--check'],['reserve_join.py','--check']]:
  subprocess.run(['python3','tools/pv-evh5-20261029/'+cmd[0]]+cmd[1:],check=True)
 code='''import pathlib,hashlib,json,subprocess,time
 p=pathlib.Path('/home/dombarker/project-offloads/codex-pv-evh-20261029')
