@@ -1,5 +1,4 @@
 import R1Z.PV_RunJoin_NativePowerQM66
-import PV_B1_FieldWideTotal
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_NativePowerCarrier66
 open Aeneas Aeneas.Std Result PV_B1_254
