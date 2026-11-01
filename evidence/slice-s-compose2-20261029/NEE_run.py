@@ -37,7 +37,7 @@ source=local.read_text() if local.exists() else imported.read_text() if imported
 code=f'''from pathlib import Path
 import re,json,hashlib
 b=Path({B!r});coherent=b.parent/'codex-cx-sound-int2-20261025'
-roots=[b/'NEE_objects',b.parent/'codex-cx-slice-s-compose2-cache-20261029/NED_final_objects_20261029',b.parent/'codex-cx-slice-s-compose2-cache-20261029/NDM_front4b_objects_20261029',b.parent/'codex-cx-slice-s-compose2-cache-20261029',coherent,coherent/'objects']
+roots=[b/'NEE_objects',b.parent/'codex-cx-slice-s-compose2-cache-20261029/NEE_final_objects_20261101',b.parent/'codex-cx-slice-s-compose2-cache-20261029/NED_final_objects_20261029',b.parent/'codex-cx-slice-s-compose2-cache-20261029/NDM_front4b_objects_20261029',b.parent/'codex-cx-slice-s-compose2-cache-20261029',coherent,coherent/'objects']
 selected={{}};missing=[];seen=set()
 def visit(n):
  if n in seen:return
@@ -56,7 +56,7 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NEE_generated','-o','NEE_objects/'+moduleRel+'.olean','NEE_generated/'+moduleRel+'.lean']
-cfg=dict(attempt=a,kind='lean',module=target,sources=['NEE_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NEE_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NED_final_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NDM_front4b_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean',module=target,sources=['NEE_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NEE_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NEE_final_objects_20261101:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NED_final_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NDM_front4b_objects_20261029:/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NEE_SOURCE.lean.txt').write_text(source)
 files={'NEE_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 code=f'''from pathlib import Path

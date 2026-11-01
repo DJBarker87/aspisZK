@@ -97,3 +97,28 @@ status/source field is promoted or altered. Next concrete work is native
 child-frame repair (first encode_common ONE small store/copy window, not K054/
 K055 unchanged), re-run of suspended pure serializers/getters, and borrowed
 interface admission or a validated non-scalar assume-guarantee child interface.
+
+## Retained objects and final checks
+
+NEE_ARCHIVE ran in its own admitted capped scope: exit 0, wall 0.150958985 s,
+peak 16,720 KiB, swap 0. It copied 30 files (15 accepted module source/object
+pairs) to the permanent OWN cache, with hash equality checked for each:
+/home/dombarker/project-offloads/codex-cx-slice-s-compose2-cache-20261029/NEE_final_objects_20261101.
+NEE_CACHE_FINAL.json records hashes/sizes and confirms ONLY own NEE_target,
+NEE_objects and NEE_tmp were removed. The permanent cache was not deleted.
+
+For continuation use that new cache first, followed by the already pinned
+NED_final_objects_20261029 and NDM_front4b_objects_20261029 within the own cache,
+then its root, coherent SInt2 and its objects. NEE_run.py now adds the new own
+cache after future NEE_objects, before all predecessor caches; its dependency
+and Aeneas-object hashing is unchanged. No compile was needed for that path
+update. The Rust scratch source remains at the private host workspace, with
+KMX patch and frozen lock intact. Do not re-run either common-frame timeout
+unchanged. No new Kani budget remains.
+
+NEE_FINAL_CHECKS.json records the final budget, source/receipt correspondence,
+limits/graph/lock/admission inventory, directory confinement and file-size
+check. No full frozen manifest or release replay was launched because the
+native-root prerequisites are still OPEN. Logs/patches are exact historical
+artifacts; patch context blank lines are retained rather than edited merely
+for whitespace cosmetics. Non-patch git diff whitespace checks pass.
