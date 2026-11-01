@@ -33,3 +33,7 @@ PREFLIGHT.json passes deterministic regeneration, all 95 selected-text hashes, p
 ## Further draft audit
 
 Added discriminant-commutation statements for payment, tree and verifier embedding (finite constructor cases only), and a complete prover-run split/join statement retaining the three prover-only outcomes. preflight.py caught a Python f-string brace error while adding the latter; it was corrected before any Lean attempt, then deterministic regeneration passed. These remain UNCOMPILED; no source failure hash is a Lean failure. The first required ten-minute gate poll at 20:50:34 UTC still found no restoration flag.
+
+The literal extraction-crate keys are primary in REKEYED.json: A=1, A-prime=0, B=2, plus 109 generated Lean auxiliaries. The original-item interpretation (A=2, A-prime=1) is secondary and keeps every copy qualifier. In particular r0 is only a finish-wrapper feature; it is not attributed to the cost-probe crate. The later generator preflight correctly detected the changed registry output, then passed after regenerating that changed input.
+
+Poll 2 actually ran at 21:45:21 UTC and still found no flag. The local polling monitor was interrupted and resumed from its existing history using wall-clock deadlines, because cumulative sleeps had stopped tracking a large wall-clock advance; poll-monitor-adjustment.json records the own-process exit 130. No missed polls were fabricated. This is not a compiler/host-run failure.
