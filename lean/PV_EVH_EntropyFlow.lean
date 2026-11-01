@@ -21,13 +21,13 @@ theorem loop_fixed (fuel : Nat) (answers : EntropyAnswers) (c : PV_EVH_EntropySt
     (same : ∀ n s, answers n s = getrandom.fill s)
     (nonce : Array U8 32#usize) (limit retry : Usize) :
     FinishedView (loop fuel answers c nonce limit retry)
-      (Secrets.generate_for_mask_nonce_loop nonce limit retry) := by
+      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit retry) := by
   apply PV_EVH_PrefixLoop.fixed_recursive
     (fun i => PV_EVH_EntropyStep.run nonce limit i answers c)
-    (fun i => Secrets.generate_for_mask_nonce_loop.body nonce limit i)
-    (fun i => Secrets.generate_for_mask_nonce_loop nonce limit i)
+    (fun i => aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit i)
+    (fun i => aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop nonce limit i)
   · intro i
-    unfold Secrets.generate_for_mask_nonce_loop
+    unfold aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop
     rw [Aeneas.Std.loop.eq_def]
   · intro i
     exact PV_EVH_EntropyStep.run_fixed nonce limit i answers c hc same
@@ -46,8 +46,8 @@ theorem generate_fixed (fuel : Nat) (answers : EntropyAnswers) (c : PV_EVH_Entro
     (nonzero_OPEN : Array U8 32#usize → P Bool)
     (hn : ∀ n, FinishedView (nonzero_OPEN n) (aspis_prover.state_only_entropy.entropy_nonzero32 n))
     (nonce : Array U8 32#usize) :
-    FinishedView (generate fuel answers c nonzero_OPEN nonce) (Secrets.generate_for_mask_nonce nonce) := by
-  unfold generate Secrets.generate_for_mask_nonce
+    FinishedView (generate fuel answers c nonzero_OPEN nonce) (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce) := by
+  unfold generate aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce
   apply PV_EVH_Prefix.bind_fixed
   · exact hn nonce
   · intro b
