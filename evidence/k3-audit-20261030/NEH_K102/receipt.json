@@ -1,0 +1,89 @@
+{
+  "attempt": "NEH_K102",
+  "kind": "kani",
+  "module": "r1_pool_adapter::NDM_native::common_contract",
+  "sources": [
+    "NEH_src/programs/r1-cost-probe/src/lib.rs",
+    "NEH_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NEH_src/programs/r1-cost-probe/src/NDM_native.rs",
+    "NEH_src/programs/r1-cost-probe/src/NDM_reference.rs",
+    "NEH_gate.py",
+    "NEH_graph.py",
+    "NEH_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEH_gate.py",
+    "NEH_K102.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::NDM_native::common_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_tmp"
+  },
+  "timeout": 240,
+  "source_revision": "3a376082da908d89338165638fec6e8299adf484",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front4b-20261028/NDM_K023/receipt.json",
+    "original_sha256": "1338ee3707c68cb0cdf6d779bed552d6c6b277aded128d58c67d130225034fd3",
+    "patch": "evidence/native-front4b-20261028/NDM_K023/NDM_harness.patch",
+    "patch_sha256": "4cd9096affc3240f62362dcefee236a6636c788bdbffd62efafcdb273deea3ff"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 28.446403488051146,
+  "peak_rss_kib": "1041656",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r835597a54bf643a9a5332e21d57f0254.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1111158784",
+  "source_hashes": {
+    "NEH_src/programs/r1-cost-probe/src/lib.rs": "46c003773fb0a5bb78bb77dae557c0061b39808f9c812b04283d4088260c218c",
+    "NEH_src/programs/r1-cost-probe/src/r1_pool_adapter.rs": "8b534f456b9dc97b6009f6609a723e46a86342291616742dd9e6276797467795",
+    "NEH_src/programs/r1-cost-probe/src/NDM_native.rs": "78700edbc8e171169e29aa3651fbdb2a796748c096b805b2a0facc166f4f355d",
+    "NEH_src/programs/r1-cost-probe/src/NDM_reference.rs": "49bb4668e81a6ba7ac1bc3e3943767ae4f7fc05a7f3afa50eb7d1725b182091a",
+    "NEH_gate.py": "c03646064f4799ae7a07d4d0688250894a44f947e03a9a8e71afd61582f49281",
+    "NEH_graph.py": "3b2b7d19b2961dd7fc2e06cf1bce3b107603502d80968432551810f68015475e",
+    "NEH_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  }
+}

@@ -114,3 +114,23 @@ def knf(start=116):
   pair=[f'evidence/kani-k2leaf-20261028/KNF_K{n:03}/receipt.json' for n in [positive,control]]
   if pair not in pairs:pairs.append(pair)
  p.write_text(json.dumps(pairs,indent=2)+'\n');(E/'NEH_KNF_AUDIT.json').write_text(json.dumps(audit,indent=2)+'\n')
+
+def common_repairs(start=114):
+ from NEH_migrate_common import migrate
+ c=read_json(ROOT/'evidence/slice-s-leaves-20261029/NEC_CLOSED.json')[0]
+ pairs=list(zip(c['kani_receipt_paths'],c['control_receipts']))[-4:]
+ todo=[v for pair in pairs for v in pair][:7]
+ for i,rp in enumerate(todo):
+  a=f'NEH_K{start+i:03}'
+  if (E/a/'receipt.json').exists():continue
+  out=migrate(rp);patch=str(Path(rp).parent/'NDM_harness.patch')
+  with (E/(a+'-driver.log')).open('w') as f:r=subprocess.run([sys.executable,str(E/'NEH_replay.py'),a,rp,patch],env={**os.environ,'NEH_OVERLAY_FILE':str(out)},stdout=f,stderr=subprocess.STDOUT)
+  print(a,rp,r.returncode,flush=True)
+  if r.returncode:raise SystemExit('own input fault; inspect')
+  t=(E/a/'stdout.log').read_text()
+  if 'error[E' in t:raise SystemExit('compile error; inspect before dependent launch')
+  from NEH_verdict import verdict
+  v=verdict(t)
+  with (E/'NEH_REPLAY_RESULTS.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,original_receipt=rp,verdict=v,expected='PASS' if i%2==0 else 'FAIL',method='direct local native observation; original contract composition remains open'))+'\n')
+  if (i%2==0 and v=='FAIL') or (i%2==1 and v=='PASS'):
+   with (E/'NEH_FINDINGS.md').open('a') as f:f.write(f'\nLocal observation finding {a} / {rp}: {v}; original composition credit remains suspended.\n')

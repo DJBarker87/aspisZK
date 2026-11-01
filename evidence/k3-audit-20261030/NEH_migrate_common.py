@@ -25,7 +25,7 @@ def migrate(rp):
   t=t.replace('NDM_native::index8()','(record.index % 8)').replace('NDM_native::index()','record.index').replace('NDM_native::level()','record.level')
   t=re.sub(r'\bauthenticated\b','a',t)
   t=re.sub(r'(?<!\.)\bcandidate_afterstate\b','c',t)
-  return t
+  return t.replace('(*c)', 'c')
  pred=local(pred);olds=[]
  while 'old(' in pred:
   at=pred.index('old(');expr,end=paren(pred,at+4);olds.append(expr);pred=pred[:at]+f'old_values.{len(olds)-1}'+pred[end:]

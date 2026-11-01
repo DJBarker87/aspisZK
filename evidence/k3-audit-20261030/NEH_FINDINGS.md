@@ -13,3 +13,5 @@ Review boundary: NDE_K050/K052/K071 use cfg-only step interception and global in
 NEH_K072 / NDM_K035: CBMC timeout, OPEN, no counterexample and no withdrawal. The first draft status parser mistook the generic VERIFICATION:- FAILED timeout banner for a semantic failure; it was corrected to recognize timeouts before parsing verdicts. The original stdout and receipt are retained. No parent credit is restored.
 
 NEH_K086/K087 / NBQ_K002: memcmp unwinding assertion, OPEN. The provisional parser classified the generic FAILED banner as semantic failure; review of the named failed check corrected that classification. No historical credit withdrawn. Scalar expansion of the same array equality is the next isolated target, without changing the native function or harness name.
+
+NEH_K104–K111: own migration type errors in candidate-field snapshots, no semantic verdict. The repaired local expression removes dereference of an owned candidate; the selected native function and property are unchanged. All attempts are retained and charged.

@@ -1,0 +1,55 @@
+{"attempt": "NEH_K104", "exit_status": 1, "wall_seconds": 2.482758631929755, "peak_rss_kib": "158708", "swaps": "0"}
+ crate, try updating your dependency with `cargo update -p solana_program_entrypoint`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: this warning originates in the macro `$crate::custom_panic_default` which comes from the expansion of the macro `solana_program::entrypoint` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: unused import: `Phase`
+ --> programs/r1-cost-probe/src/lib.rs:3:42
+  |
+3 | use aspis_r1_cost_probe::verifier::{self,Phase};
+  |                                          ^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `log::sol_log_compute_units`
+ --> programs/r1-cost-probe/src/lib.rs:5:133
+  |
+5 | ...:Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+  |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `hash::hashv` and `msg`
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:46:5
+   |
+46 |     hash::hashv, msg, program, program_error::ProgramError, pubkey::Pubkey, sysvar::Sysvar,
+   |     ^^^^^^^^^^^  ^^^
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:27:54
+   |
+27 |  let old_values=(NDM_native::reference::identity_ref((*c).next_pair_index), (*c).next_pair_index,);
+   |                                                      ^^^^ can't be dereferenced
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:27:77
+   |
+27 |  let old_values=(NDM_native::reference::identity_ref((*c).next_pair_index), (*c).next_pair_index,);
+   |                                                                             ^^^^ can't be dereferenced
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:29:84
+   |
+29 |  assert!(r.lane_transition.candidate_afterstate.next_pair_index == old_values.0 && (*c).next_pair_index == old_values.1);
+   |                                                                                    ^^^^ can't be dereferenced
+
+For more information about this error, try `rustc --explain E0614`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 3 previous errors; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+

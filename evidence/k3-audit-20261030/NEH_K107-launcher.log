@@ -1,0 +1,43 @@
+{"attempt": "NEH_K107", "exit_status": 1, "wall_seconds": 2.875192019972019, "peak_rss_kib": "162364", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+le`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:27:54
+   |
+27 |  let old_values=(NDM_native::reference::identity_ref((*c).next_root[(record.index % 8)]), (*c).next_root[(record.index % 8)],);
+   |                                                      ^^^^ can't be dereferenced
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:27:91
+   |
+27 |  let old_values=(NDM_native::reference::identity_ref((*c).next_root[(record.index % 8)]), (*c).next_root[(record.index % 8)],);
+   |                                                                                           ^^^^ can't be dereferenced
+
+error[E0614]: type `aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1` cannot be dereferenced
+  --> programs/r1-cost-probe/src/NDM_native.rs:29:100
+   |
+29 |  assert!(!(r.lane_transition.candidate_afterstate.next_root[(record.index % 8)] == old_values.0 && (*c).next_root[(record.index % 8)...
+   |                                                                                                    ^^^^ can't be dereferenced
+
+For more information about this error, try `rustc --explain E0614`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 3 previous errors; 11 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-rcf830e7f70a34ef797995801b7171f47.scope; invocation ID: 493b5cffd34f4374868b6c3bac74d2fa
