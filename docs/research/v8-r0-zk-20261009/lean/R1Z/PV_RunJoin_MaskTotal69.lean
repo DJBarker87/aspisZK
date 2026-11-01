@@ -77,7 +77,6 @@ theorem complete (c1 : Array Q 16#usize) (mask : Array Q 10#usize) (g : Q)
   refine ⟨out,?_⟩
   rw [PV_B3_AuditSourceD324.Mask117.source]
   simp only [PV_B3_AuditSourceD324.Mask117.reference,hl,bind_tc_ok,Aeneas.Std.uncurry]
-  dsimp only
   simp only [hc,hc1,hp,hs,hs1,hpow,hf,he,ho,bind_tc_ok]
 
 #print axioms selected_values
