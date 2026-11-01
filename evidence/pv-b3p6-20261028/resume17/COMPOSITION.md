@@ -1,3 +1,50 @@
+# D540 composition update
+
+V244 / runjoin op227 OPEN. No endpoint premise removed, added or weakened.
+
+Direct extraction equations now compose as named original Links:
+`extracted_absorption_link540` (Link0) and `extracted_digest_link540` (Link1),
+PASS73828. The preweighted actual-family Link and arbitrary Result continuation
+replacement also pass73828, with a typed nonempty actual-call domain.
+
+The original total Link3 is now discharged for the direct preweighted
+extraction by `extracted_preweighted_total_link540`, PASS73831. No change to
+its statement or quantifiers was required. `inclusive_std_while540` PASS73829
+compares the standard inclusive loop to the reference while loop for every
+nonwrapping endpoint, including empty/reversed ranges and failing/diverging
+steps. For preweighted, the final endpoint is an unsigned value divided by4;
+its successor cannot wrap even if start+N-1 wraps. This is a symbolic proof;
+no huge generated range or field term is evaluated. The earlier bounded
+actual-call result remains valid but is no longer needed for this total Link.
+
+These are local body/extraction facts under existing Charon/Aeneas tool trust,
+not a whole-row source-cone or endpoint closure. Local body associations
+remain5/36, with31 outstanding. No change to T, observer, source pins or release
+artifacts. The mask direct bridge remains conditional on28 finite equations
+for two externals. Candidate hand-written models are not native authority;
+no template axiom is installed. See MASK-EXTERNAL-AUTHORITY-D540.json.
+
+The refined strict std audit resolves Step and conversion source mappings,
+and names every source difference, removed declaration and unestablished
+compiler-generated expansion. Forty instantiated items are listed in
+STD-ITEM-INVENTORY-D540.json, plus23 intrinsic declarations. Every intrinsic,
+derived method, runtime wrapper and closure-lowering item is explicitly
+V370 / owner D381,D386. Matching intrinsic declarations do not establish
+compiler semantics. Ordinary source differences are not relabelled away.
+Transition, both linear helpers and K73946/K73948 stay WITHHELD.
+
+Audit73898 PASS composes all three original total Links jointly and prints five
+top declarations with only standard axioms. The changed frozen direct import
+closure was checked once; no full release replay was claimed.
+
+No new Kani or extraction was launched merely to spend budget while strict
+parity fails. Inherited new-Kani scope is restricted to directly refused
+functions, so the proposed new ctpop/cttz gate for the EXTRACTED mask was not
+launched. Remaining work includes the31 refused/unassociated bodies, full
+source std/D188/matrix closure and the concrete callback relation.
+
+## Retained D537 report
+
 # D537 composition status
 
 Target not yet established. V244 / runjoin op227 OPEN. No endpoint premise

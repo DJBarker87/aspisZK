@@ -1,4 +1,4 @@
-# D537 per-function status
+# D540 per-function status
 
 V244 / runjoin op227 OPEN. Target not yet established. No endpoint premise removed.
 
@@ -47,3 +47,5 @@ association. Ancillary statement mask is outside the denominator.
 | leading_pair_packed | REFUSED | OPEN |
 
 See PER-FUNCTION-D537.json for exact theorem, source, refusal, domain and receipt details.
+
+D540: absorption and digest now supply their named total Link0/Link1 directly. Preweighted PASS73831 supplies its original total Link3 without actual-domain restrictions; the actual-family continuation theorem remains available. Local body association count stays 5/36 (three direct, two P6), with 31 outstanding. MaskIntegerLaws17 stays OPEN. Strict std blockers and every differing item are named in STD-ITEMS-D540.md; no blocked P6 transfer is credited.
