@@ -56,7 +56,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
       simp only [tails,Function.update_of_ne (show (26:Nat)≠28 from by decide),
         Function.update_of_ne (show (26:Nat)≠27 from by decide),Function.update_self,
         PV_RunJoin_BackendRawCoefficients58.coefficients,if_neg (by omega : ¬(26:Nat)<26),if_true,
-        PV_RunJoin_BackendQInput58.element,PV_RunJoin_BackendHRows58.array,Nat.mod_eq_of_lt hj,
+        PV_RunJoin_BackendQInput58.element,PV_RunJoin_BackendHRows58.array,alloc.vec.Vec.deref,Nat.mod_eq_of_lt hj,
         List.getElem?_eq_getElem jh,Option.getD_some]
     · by_cases lane27 : l=27
       · subst l
