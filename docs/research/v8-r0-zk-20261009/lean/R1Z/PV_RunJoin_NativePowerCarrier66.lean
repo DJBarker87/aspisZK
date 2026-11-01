@@ -7,11 +7,11 @@ def toS (x : W) : AspisR1ProducerRelease47.field.wide_exact.WideExact :=
   ⟨PV_RunJoin_NativePowerQM66.toQ x.c0,PV_RunJoin_NativePowerQM66.toQ x.c1⟩
 theorem mul_u (a : PV_B1_254.aspis_core.field.QM31) : ∃ z,
     aspis_core.field.wide_exact.mul_u a=ok z ∧
-    AspisR1ProducerRelease47.field.wide_exact.mul_u (PV_RunJoin_NativePowerQM66.toQ a)=ok (toS z) := by
-  obtain ⟨c,hc,ohc⟩ := PV_B1_FieldCM31Total.mul_by_r a.c1
+    AspisR1ProducerRelease47.field.wide_exact.mul_u (PV_RunJoin_NativePowerQM66.toQ a)=ok (PV_RunJoin_NativePowerQM66.toQ z) := by
+  obtain ⟨c,hc,ohc⟩ := PV_RunJoin_NativePowerCM66.mul_by_r a.c1
   refine ⟨⟨c,a.c0⟩,?_,?_⟩
   · simp only [aspis_core.field.wide_exact.mul_u,hc,bind_tc_ok]
-  · simp only [toS,AspisR1ProducerRelease47.field.wide_exact.mul_u,ohc,bind_tc_ok]
+  · simp only [PV_RunJoin_NativePowerQM66.toQ,AspisR1ProducerRelease47.field.wide_exact.mul_u,ohc,bind_tc_ok]
 #print axioms mul_u
 theorem mul (a b : W) : ∃ z,
     aspis_core.field.wide_exact.WideExact.mul a b=ok z ∧
@@ -30,4 +30,7 @@ theorem mul (a b : W) : ∃ z,
     hac,hbd,hq,hq1,hcross,hq2,hq3,hq4,hq5,bind_tc_ok]
   · simp only [toS,AspisR1ProducerRelease47.field.wide_exact.WideExact.mul,ohac,ohbd,ohq,ohq1,ohcross,ohq2,ohq3,ohq4,ohq5,bind_tc_ok]
 #print axioms mul
+theorem source (x : W) : toS x=
+    ProverRwDictionaryTower.toW (PV_B1_ActualCarrierWide.fromW x) := rfl
+#print axioms source
 end R1Z.PV_RunJoin_NativePowerCarrier66
