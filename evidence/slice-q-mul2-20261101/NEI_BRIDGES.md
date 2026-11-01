@@ -13,3 +13,7 @@ Domain: canonical alpha and four canonical row values; every inverse word and un
 ## Stage 2: circle fold
 
 CLOSED-CONDITIONAL local D188 packet, with the exact E002 root and E001's already checked actual field dictionary. NEI_CIRCLE_PACKET.json, NEI_CIRCLE_ASSOCIATION.md and NEI_CIRCLE_VALIDATE.json give the all-Result source/cohort association, same-result/frame theorem, same-site canonical domains, exact dictionary aliases and native circle PASS/changed-output FAIL. All accepted theorem audits use standard axioms only. No suspended NEB Kani credit supports this local packet. Incoming query_values edges remain OPEN under rule 14. Composed rows CLOSED: zero.
+
+## Stage 3: batch_prefix_products
+
+OPEN. NEI_PREFIX_OBLIGATIONS.md records exact kernel results, native controls and the unresolved actual Vec append/frame. K005/K006/K009 timeouts earn zero credit; no narrower capacity, shorter buffer or invalid-state substitute is admitted. K007/K008 restore only the native read/product-log/index component. No whole-prefix or composed-row credit is booked.
