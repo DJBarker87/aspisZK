@@ -18,7 +18,6 @@ print(len(f))
 ''');assert r.returncode==0,r.stderr
  (E/'NEH_REPLAY_FROZEN.json').write_text(json.dumps({n:sha(t.encode()) for n,t in files.items()},indent=2)+'\n')
 def replay(a,rp,patch):
- if (E/'NEH_COMMON_RESTART').exists() and 74 <= int(a.removeprefix('NEH_K')) <= 99:raise SystemExit('planned local driver reload after K072 timeout; no submission')
  original=json.loads((ROOT/rp).read_text()); overlay=dict(patched_files((ROOT/patch).read_text()))
  if os.environ.get('NEH_OVERLAY_FILE'):overlay=json.loads(Path(os.environ['NEH_OVERLAY_FILE']).read_text())
  assert overlay,patch
@@ -45,7 +44,7 @@ pins={{str(q.relative_to(s)):hashlib.sha256(q.read_bytes()).hexdigest() for q in
  ni=(original.get('native_command') or original['command'])[:]
  assert 'cargo-kani' in ni[0],('unresolved native argv',rp)
  if '--features' not in ni:
-  ni+=['--features',('r0,pool-v1-kernel' if '/aspis-statement/' in ' '.join(ni) else 'private-leaf-salts,optimized-terminal,program-build')]
+  ni+=['--features',('r0' if '/aspis-core/' in ' '.join(ni) else 'r0,pool-v1-kernel' if '/aspis-statement/' in ' '.join(ni) else 'private-leaf-salts,optimized-terminal,program-build')]
  if os.environ.get('NEH_KMX_REQUIRED'):original['copy_patch_sha256']='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
  manifest=ni[ni.index('--manifest-path')+1]
  oldsrc=manifest.split('/crates/')[0] if '/crates/' in manifest else manifest.split('/programs/')[0]

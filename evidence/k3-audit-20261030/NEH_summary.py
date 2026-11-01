@@ -26,6 +26,15 @@ for p,c in pairs:
    (partial if direct else cleared)[rp]=dict(positive=a['attempt'],control=b['attempt'])
  elif a['verdict']=='FAIL' or b['verdict']=='PASS':
   for rp in [p,c]:withdrawn[rp]=dict(positive=a['attempt'],control=b['attempt'])
+# New same-name controls share an original receipt, so select attempts explicitly.
+newpairs=E/'NEH_NEW_CONTROL_PAIRS.json'
+if newpairs.exists():
+ for pair in read_json(newpairs):
+  rp=pair['original_receipt'];rr={q['attempt']:q for q in runs.get(rp,[])}
+  if pair['positive'] not in rr or pair['control'] not in rr:continue
+  a=rr[pair['positive']];b=rr[pair['control']]
+  if a['verdict']=='PASS' and b['verdict']=='FAIL':cleared[rp]=dict(positive=a['attempt'],control=b['attempt'])
+  elif a['verdict']=='FAIL' or b['verdict']=='PASS':withdrawn[rp]=dict(positive=a['attempt'],control=b['attempt'])
 rows=[]
 for rp,r in by.items():
  if rp in withdrawn:state='WITHDRAWN';reason='native property failed or matched control passed'

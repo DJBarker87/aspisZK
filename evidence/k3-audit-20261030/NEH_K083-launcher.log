@@ -1,0 +1,62 @@
+{"attempt": "NEH_K083", "exit_status": 1, "wall_seconds": 4.0424642889993265, "peak_rss_kib": "483008", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-k3-audit-20261029/NEH_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`
+...
+r to snake case: `nbg_cm_add_sub_double_r`
+
+warning: function `NBG_qm_add_sub` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:28:4
+   |
+28 | fn NBG_qm_add_sub() {
+   |    ^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_qm_add_sub`
+
+warning: function `NBG_m31_bytes` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:37:4
+   |
+37 | fn NBG_m31_bytes() {
+   |    ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_m31_bytes`
+
+warning: function `NBG_cm_bytes` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:47:4
+   |
+47 | fn NBG_cm_bytes() {
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_cm_bytes`
+
+warning: function `NBG_qm_bytes` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:55:4
+   |
+55 | fn NBG_qm_bytes() {
+   |    ^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_qm_bytes`
+
+warning: function `NBG_constructors` should have a snake case name
+  --> crates/aspis-core/src/field/NBG_runtime.rs:63:4
+   |
+63 | fn NBG_constructors() {
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nbg_constructors`
+
+    Finished `dev` profile [optimized] target(s) in 2.53s
+Checking harness field::NBG_runtime::NBG_constructors...
+
+VERIFICATION RESULT:
+ ** 1 of 3 failed
+
+ ** 0 of 1 cover properties satisfied (1 unreachable)
+
+Failed Checks: assertion failed: !(c.a.0 == a.0 && c.b.0 == b.0)
+ File: "crates/aspis-core/src/field/NBG_runtime.rs", line 65, in field::NBG_runtime::NBG_constructors
+
+VERIFICATION:- FAILED
+Verification Time: 0.033915423s
+
+Manual Harness Summary:
+Verification failed for - field::NBG_runtime::NBG_constructors
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r4af26bf057f54cfeb7e218a8b6882b20.scope; invocation ID: c0e559885faf4930bb7106d56b3b429c
