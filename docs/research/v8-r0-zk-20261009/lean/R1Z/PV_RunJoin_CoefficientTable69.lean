@@ -52,6 +52,7 @@ theorem table (c : Nat → Nat → Old.Q)
   change List.ofFn _=List.ofFn _
   apply congrArg List.ofFn
   funext j
+  dsimp only [Function.comp]
   simp only [PV_RunJoin_ArrayEntries41.entries,ProverCommitArray49.array]
   rw [List.getElem?_eq_getElem (by rw [List.length_ofFn];exact AspisR1.rowNat_lt j.val)]
   simp only [Option.getD_some,List.getElem_ofFn,ProverRwDictionaryTower.native_w_roundtrip]
