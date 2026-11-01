@@ -1,0 +1,146 @@
+{
+  "source": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+  "revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+  "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+  "external_sha256": "ba71e3be7eab2c4c59fe09d6f859ab323e74ca207b66fdf44b770382bfb8faf1",
+  "function": "prover.finish_opening",
+  "body_sha256": "d1f6c498223ae878a0114445f0df5ba5351e14a00bcd9dabc95b0cc62e4fcf29",
+  "output_sha256": "1605bfb3950957876e6434560d8a3c8dd9bc2537410bb86266960bee6bbb6f00",
+  "open_callees": {
+    "prover.folded_leaves": {
+      "header": "(hash : Slice (Slice Std.U8) \u2192 Result (Array Std.U8 32#usize))\n  (word : Slice aspis_core.field.wide_exact.WideExact)\n  (salts : host_commitment.PrivateSalts)",
+      "result": "(alloc.vec.Vec (Array Std.U8 32#usize))",
+      "args": [
+        "hash",
+        "word",
+        "salts"
+      ],
+      "field": "folded_leaves_OPEN"
+    },
+    "host_tree.BinaryTree.new": {
+      "header": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n  (hash : H) (leaves : alloc.vec.Vec (Array Std.U8 32#usize))",
+      "result": "(Option host_tree.BinaryTree)",
+      "args": [
+        "aspis_coredigestDigest32Inst",
+        "hash",
+        "leaves"
+      ],
+      "field": "new_OPEN"
+    },
+    "core.option.Option.ok_or": {
+      "header": "{T : Type} {E : Type} (arg0 : (Option T)) (arg1 : E)",
+      "result": "(core.result.Result T E)",
+      "args": [
+        "arg0",
+        "arg1"
+      ],
+      "field": "op7_OPEN"
+    },
+    "host_tree.BinaryTree.root": {
+      "header": "(self : host_tree.BinaryTree)",
+      "result": "(Array Std.U8 32#usize)",
+      "args": [
+        "self"
+      ],
+      "field": "root_OPEN"
+    },
+    "prover.round": {
+      "header": "(q : Slice aspis_core.field.wide_exact.WideExact)\n  (w : Slice aspis_core.field.wide_exact.WideExact)",
+      "result": "(Array aspis_core.field.wide_exact.WideExact 7#usize)",
+      "args": [
+        "q",
+        "w"
+      ],
+      "field": "round_OPEN"
+    },
+    "prover.encoded_slice": {
+      "header": "(values : Slice aspis_core.field.wide_exact.WideExact)",
+      "result": "(alloc.vec.Vec Std.U8)",
+      "args": [
+        "values"
+      ],
+      "field": "encoded_slice_OPEN"
+    },
+    "alloc.slice.Slice.to_vec": {
+      "header": "{T : Type} (inst : core.clone.Clone T) (s : Slice T)",
+      "result": "alloc.vec.Vec T",
+      "args": [
+        "inst",
+        "s"
+      ],
+      "field": "toVec_OPEN"
+    },
+    "alloc.vec.Vec.extend_from_slice": {
+      "header": "{T : Type} (inst : core.clone.Clone T) (v : alloc.vec.Vec T) (s : Slice T)",
+      "result": "alloc.vec.Vec T",
+      "args": [
+        "inst",
+        "v",
+        "s"
+      ],
+      "field": "extendFromSlice_OPEN"
+    },
+    "host_transcript.Transcript.scalar": {
+      "header": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n  (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8)\n  (nonzero : Bool)",
+      "result": "(aspis_core.field.wide_exact.WideExact \u00d7 (host_transcript.Transcript\n    H))",
+      "args": [
+        "aspis_coredigestDigest32Inst",
+        "self",
+        "row",
+        "payload",
+        "nonzero"
+      ],
+      "field": "scalar_OPEN"
+    },
+    "prover.fold": {
+      "header": "(q : Slice aspis_core.field.wide_exact.WideExact)\n  (alpha : aspis_core.field.wide_exact.WideExact) (dual : Bool)",
+      "result": "(alloc.vec.Vec aspis_core.field.wide_exact.WideExact)",
+      "args": [
+        "q",
+        "alpha",
+        "dual"
+      ],
+      "field": "fold_OPEN"
+    },
+    "host_transcript.Transcript.queries": {
+      "header": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n  (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8)",
+      "result": "((core.result.Result (Array Std.U32 22#usize) verifier.Error) \u00d7\n    (host_transcript.Transcript H))",
+      "args": [
+        "aspis_coredigestDigest32Inst",
+        "self",
+        "row",
+        "payload"
+      ],
+      "field": "queries_OPEN"
+    },
+    "host_transcript.Transcript.scalar_k": {
+      "header": "{H : Type} (aspis_coredigestDigest32Inst : aspis_core.digest.Digest32 H)\n  (self : host_transcript.Transcript H) (row : Std.U8) (payload : Slice Std.U8)",
+      "result": "(aspis_core.field.QM31 \u00d7 (host_transcript.Transcript H))",
+      "args": [
+        "aspis_coredigestDigest32Inst",
+        "self",
+        "row",
+        "payload"
+      ],
+      "field": "scalar_k_OPEN"
+    },
+    "prover.public_check": {
+      "header": "(variant : transport.Variant)\n  (challenges : aspis_z4b_probe.probe.z9.z9b.z9c.z9d.z9e.R1PublicChallenges)\n  (c1_root : Array Std.U8 32#usize)",
+      "result": "(core.result.Result Unit verifier.Error)",
+      "args": [
+        "variant",
+        "challenges",
+        "c1_root"
+      ],
+      "field": "public_check_OPEN"
+    }
+  },
+  "lifted_calls": [
+    "core.result.Result.Insts.CoreOpsTry.branch",
+    "Aeneas.Std.lift",
+    "Array.index_usize",
+    "core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual"
+  ],
+  "value_callees": {},
+  "scope": "source spine only; all named callees and runtime adequacy OPEN"
+}

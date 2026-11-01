@@ -1,0 +1,28 @@
+--- inherited compile.py
++++ EVH8 compile.py
+@@ -1,13 +1,13 @@
+ """adopted by owner decision D502/D478. D502 adopted: Single-module capped invocation; admission and original receipt recovery."""
+ from pathlib import Path
+ import subprocess,json,shlex,sys,time,hashlib,re
+-E=Path('evidence/pv-evh5-20261029'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'
+-a=int(sys.argv[1]);assert 73623<=a<=73699
++E=Path('evidence/pv-evh8-20261101'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'
++a=int(sys.argv[1]);assert 79300<=a<=79399
+ assert not (E/f'submission-{a}.json').exists()
+ module=sys.argv[2] if len(sys.argv)>2 else 'PV_EVH_Interface'
+ assert module.startswith('PV_EVH_')
+ assert module != 'PV_EVH_FixtureConsumer', 'lead-only 16 GiB consumer; worker launch forbidden'
+-if a >= 73697:
++if a >= 79397:
+  assert module in ['PV_EVH_ProverAudit','PV_EVH_ProverReplay'], 'reserved audit ID'
+ source=Path('lean/'+module+'.lean').read_bytes()
+ assert hashlib.sha256(source).hexdigest()==json.load(open(E/('prepare-'+module+'.json')))['result']['source_sha256']
+@@ -15,7 +15,7 @@
+ source_sha=hashlib.sha256(source).hexdigest()
+ for prior in E.glob('refusal-*.json'):
+  assert time.time()-json.loads(prior.read_text())['epoch']>=180, 'admission cooldown active'
+-for prior in list(E.glob('receipt-*.json')) + list(Path('evidence/pv-evh4-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh2-20261029').glob('receipt-*.json')):
++for prior in list(E.glob('receipt-*.json')) + list(Path('evidence/pv-evh5-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh4-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh-20261029').glob('receipt-*.json')) + list(Path('evidence/pv-evh2-20261029').glob('receipt-*.json')):
+  old=json.loads(prior.read_text())
+  assert old.get('accepted') or old.get('source_sha256')!=source_sha or (old.get('failure_class')=='pre-elaboration environment' and old.get('environment_correction')),  ('unchanged failed source',str(prior))
+ assert subprocess.check_output(['git','show','HEAD:lean/'+module+'.lean'])==source
