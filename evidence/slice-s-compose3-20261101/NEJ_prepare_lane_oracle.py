@@ -18,6 +18,7 @@ attrs='''#[cfg(kani)]
 changed=frozen+'\n'+attrs+new+'\n#[cfg(kani)]\n#[path="NEJ_lane_oracle.rs"]\nmod NEJ_lane_oracle;\n'
 body='''#![allow(non_snake_case)]
 use super::*;
+use aspis_core::field::M31;
 pub(super) struct Frame{pub expected:Digest,pub canon:bool,pub byte:u8,pub log:usize}
 pub(super) fn canonical(d:&Digest,f:&mut Frame)->bool{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==0 && d[k].0==f.expected[k].0);f.log=1;f.canon}
 pub(super) fn first(d:&Digest,f:&mut Frame)->u8{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==1 && f.canon && d[k].0==f.expected[k].0);f.log=2;f.byte}

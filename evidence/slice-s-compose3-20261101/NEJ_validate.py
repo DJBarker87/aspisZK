@@ -9,6 +9,7 @@ import argparse,copy,hashlib,json,sys
 E=Path(__file__).resolve().parent;R=E.parent.parent
 sys.path.insert(0,str(R/'evidence/slice-s-compose2-20261029'))
 import NEE_validate as predecessor
+import NEJ_loop_checks
 BASE_CERTIFICATE=predecessor.certificate
 read=predecessor.read
 inherited=predecessor.inherited
@@ -74,7 +75,7 @@ def call_domain(c,expected,ledger):
         assert c['kind'] in {'call-domain','hypothesis-discharge','root-composition','external-domain','alternative-resolution'}
         assert d['subject']==expected
         assert d['frozen_revision']==ledger['frozen_revision']
-        assert d['native_association_kind'] in {'ruling-y','native-contract'}
+        assert d['native_association_kind'] in {'ruling-y','native-contract','native-loop'}
         assert d['domain_theorems'] and d['physical_theorems']
         assert all(predecessor.inherited.theorem(t) for t in d['domain_theorems']+d['physical_theorems'])
         assert d['selected_callee_claims']
@@ -103,7 +104,9 @@ def certificate(c,expected,ledger,reviewed):
     if predecessor.suspended_reference(c):return False
     if not predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
     if c['kind']!='alternative-resolution':
-        if not (direct_contract(c,expected,ledger) if 'direct_contract' in c else predecessor.ruling_y(c)):return False
+        if 'loop_composition' in c:
+            if not NEJ_loop_checks.validate(c,expected,ledger,sys.modules[__name__]):return False
+        elif not (direct_contract(c,expected,ledger) if 'direct_contract' in c else predecessor.ruling_y(c)):return False
     return call_domain(c,expected,ledger)
 
 def compose(base,packet,reviewed):

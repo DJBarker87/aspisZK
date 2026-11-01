@@ -58,4 +58,31 @@ class RevalidatedMutations(CertificateMutations):
   self.assertEqual(set(self.changed(lambda c:c['call_domain_certificate'].update(canonical_carrier=False))),{'OPEN'})
  def test_missing_direct_native_contract_even_if_reviewed_is_open(self):
   self.assertEqual(set(self.changed(lambda c:c.pop('direct_contract'))),{'OPEN'})
+class LoopCertificateMutations(unittest.TestCase):
+ @classmethod
+ def setUpClass(cls):
+  cls.base=v.read(v.R/'evidence/native-ledger3-20261029/NDT_LEDGER.json')
+  cls.packet=v.read(v.E/'NEJ_LEDGER_DELTA.json');cls.review=v.read(v.E/'NEJ_REVIEWED_CERTIFICATES.json')
+  cls.f=next(f for f in cls.packet['members'] if 'pair_forest_accounts' in f and f.endswith('::digest_is_canonical'))
+ def states(self,p,review=None):
+  return {r['composed_status'] for r in v.compose(self.base,p,self.review if review is None else review)['rows'] if r['function']==self.f}
+ def mutated(self,edit):
+  import hashlib
+  p=copy.deepcopy(self.packet);c=p['members'][self.f];edit(c['loop_composition'])
+  c.pop('semantic_review_sha256',None);digest=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=digest
+  review=dict(self.review);review[self.f]=digest
+  return self.states(p,review)
+ def test_complete_loop_closes(self):self.assertEqual(self.states(self.packet),{'CLOSED'})
+ def test_missing_induction_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.pop('value_frame_theorem')),{'OPEN'})
+ def test_old_existential_frame_does_not_replace_same_run_join(self):
+  self.assertEqual(self.mutated(lambda q:q['value_frame_theorem'].update(name='NEE_CanonicalFrame.frame')),{'OPEN'})
+ def test_missing_emitted_association_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.update(emitted_association_theorems=[])),{'OPEN'})
+ def test_missing_control_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.pop('negative')),{'OPEN'})
+ def test_wrong_native_frame_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.update(native_external_modifies=['input'])),{'OPEN'})
+ def test_wrong_native_source_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.update(frozen_body_sha256='0'*64)),{'OPEN'})
+ def test_missing_width_theorem_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.pop('external_length_theorem')),{'OPEN'})
+ def test_missing_external_domain_keeps_loop_open(self):
+  p=copy.deepcopy(self.packet);key=p['members'][self.f]['loop_composition']['external_ids'][0];p['externals'].pop(key)
+  self.assertIn('OPEN',self.states(p))
+ def test_wrong_loop_invariant_keeps_loop_open(self):self.assertEqual(self.mutated(lambda q:q.update(invariant='i<=9')),{'OPEN'})
 if __name__=='__main__':unittest.main()
