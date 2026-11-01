@@ -62,9 +62,12 @@ theorem phase (base : ExternalTypes) (heap : Heap) (box : Box)
     obtain ⟨next,hn,hnext⟩ := ih (Usize.wrapping_add row 1#usize)
       (by rw [ri];omega) mid (by rw [ml];omega)
     refine ⟨next,?_,?_⟩
-    · simp only [PV_RunJoin_LiftRow63.phase,PV_RunJoin_LiftRow63.step,bind_assoc_eq]
-      rw [read base heap box ops columns hlen lane row hl hr]
-      simp only [bind_tc_ok,hm,hn]
+    · have step : PV_RunJoin_LiftRow63.step
+          (@host_semantic.lift (types base) (selected base heap box ops)) columns lane out row=ok mid := by
+        unfold PV_RunJoin_LiftRow63.step
+        rw [←bind_assoc_eq,←bind_assoc_eq,read base heap box ops columns hlen lane row hl hr]
+        simp only [bind_tc_ok,hm]
+      simp only [PV_RunJoin_LiftRow63.phase,step,bind_tc_ok,hn]
     · rw [hnext,hv,ri,List.append_assoc]
       apply congrArg (fun xs => out.val++xs)
       simp only [payload,List.ofFn_succ,List.singleton_append,Fin.val_zero,Nat.add_zero]
