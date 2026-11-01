@@ -13,16 +13,18 @@ a=ast.parse(Path('tools/pv-world-20261028/reify-recursive.py').read_text());g=di
 exec(compile(ast.Module(body=[n for n in a.body if isinstance(n,(ast.FunctionDef,ast.ClassDef)) and n.name in ['indent','normalize','Node','parse','get']],type_ignores=[]),'<source-parser>','exec'),g)
 config={
  'MaskedWithAttempt':'prover.prove_masked_with_attempt',
+ 'DurableWithAttempt':'prover.prove_masked_with_attempt',
  'DurableReserveBuild':'aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1',
  'ReserveBuild':'aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1'}
 short=sys.argv[1];name=config[short];namespace='PV_EVH_'+short
 header,result,body,args,explicit=g['get'](name);node=g['parse'](g['normalize'](body))
-durable=short=='DurableReserveBuild'
+durable=short in ['DurableReserveBuild','DurableWithAttempt']
+joined=short=='DurableWithAttempt'
 store='aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore'
 inst=store+'.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore'
-reserveLabel='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»'
+reserveLabel=('aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.reserve_and_build_pool_v1_pair_forest_mask_material_v1' if joined else 'state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»')
 if durable:
- header=header[header.index('(self :'):].replace('(nonce_store : T0)','(nonce_store : '+store+')')
+ header=header[header.index('(public1 :' if joined else '(self :'):].replace('(nonce_store : T0)','(nonce_store : '+store+')')
  result=result.replace('× T0','× '+store)
  explicit=explicit[1:]
 
@@ -92,7 +94,7 @@ def signature(label):
  return h,r,ex,field
 spec={label:signature(label) for label in calls if not pure(label) and not (durable and label==reserveLabel)}
 fields=[x[3] for x in spec.values()];assert len(set(fields))==len(fields),fields
-out=('import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
+out=('import PV_EVH_DurableReserveBuild\n' if joined else 'import PV_EVH_NonceSource\n' if durable else '')+'''import PV_EVH_Prefix
 set_option autoImplicit false
 noncomputable section
 namespace '''+namespace+'''
@@ -121,6 +123,10 @@ def emit(x,n=2,world=False):
  if x.kind=='pure':return pad+('pure ' if world else 'Result.ok ')+x.expr.replace('\n','\n'+pad+'  ')
  exp=x.expr;label=exp.split()[0]
  if not world:return pad+exp.replace('\n','\n'+pad+'  ')
+ if joined and label==reserveLabel:
+  args=exp[len(label):].strip().split(None,1)
+  assert args[0]=='aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst'
+  return pad+'PV_EVH_DurableReserveBuild.run '+args[1].replace('\n',' ')+' fileAnswers reserveCallees'
  if durable and label==reserveLabel:
   return pad+'PV_EVH_Prefix.ofM (PV_EVH_NonceSource.reserve fileAnswers '+exp[len(label):].strip().replace('\n',' ') +')'
  if label in spec:return pad+('c.'+spec[label][3]+(' hash' if label=='hash' else ' state_only_hidingStateOnlyMaskNonceStoreInst' if label=='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»' else '')+exp[len(label):]).replace('\n','\n'+pad+'  ')
@@ -144,6 +150,8 @@ def proof(x,n=2,lets=()):
    bits=pat.split();vs=[('unused'+str(j)) if z=='_' else z for z in bits[1:]]
    out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'+proof(c,n+2,lets)+'\n'
   return out.rstrip()
+ if x.kind=='call' and joined and x.expr.split()[0]==reserveLabel:
+  return pad+'exact PV_EVH_DurableReserveBuild.run_fixed _ _ _ _ _ fileAnswers reserveCallees reserve_same files_same'
  if x.kind=='call' and durable and x.expr.split()[0]==reserveLabel:
   return pad+'exact PV_EVH_Prefix.ofM_fixed _ _ (PV_EVH_NonceSource.reserve_fixed fileAnswers files_same _ _ _)'
  if x.kind=='call' and x.expr.split()[0] in spec:
@@ -151,8 +159,8 @@ def proof(x,n=2,lets=()):
   return pad+'exact compatible.'+field.replace('_OPEN','_fixed')+(' '+' '.join(['_']*len(ex)) if ex else '')
  return pad+'exact PV_EVH_Prefix.lift_fixed _'
 
-out+='\ndef run\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)' if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
-out+='\ntheorem run_fixed\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)' if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)' if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' fileAnswers' if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
+out+='\ndef run\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
+out+='\ntheorem run_fixed\n  '+header+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' fileAnswers'+(' reserveCallees' if joined else '') if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'
 record=json.dumps(dict(source=p,revision=rev,source_sha256=hashlib.sha256(s.encode()).hexdigest(),external_sha256=hashlib.sha256(ext.encode()).hexdigest(),function=name,body_sha256=hashlib.sha256(body.encode()).hexdigest(),output_sha256=hashlib.sha256(out.encode()).hexdigest(),open_callees={k:dict(header=v[0],result=v[1],args=v[2],field=v[3]) for k,v in spec.items()},lifted_calls=[c for c in calls if pure(c)],scope='source spine only; all named callees and runtime adequacy OPEN'),indent=2)+'\n'
 target=Path('lean/'+namespace+'.lean');receipt=E/(short+'-generation.json')
