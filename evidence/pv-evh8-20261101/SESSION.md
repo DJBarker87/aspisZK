@@ -10,9 +10,13 @@ project/external cohort and checks effective first-root resolution. The private
 wrapper changes only receipt destination, authorized range/audit threshold, and
 inclusion of inherited receipts in the source guard/cache reuse.
 
-The historical pv-common (f) restoration flag is absent. No compiler scope has
-been launched; the owner was asked asynchronously whether this old gate is lifted.
-No inferred authorization or elapsed time is treated as a response.
+The historical pv-common (f) restoration flag is absent. The owner was initially asked asynchronously about this old gate. Historical
+committed evidence then resolved it without requiring a new answer: rules.json
+in pv-evhd records the previously read restoration flag (sha e186d6d6...,
+2012 bytes), and resume-D540.json records absent flag with continued explicit
+resume authorization against this same retained verified workspace. The gate
+was cleared historically; a missing temporary marker does not reimpose it.
+No elapsed time or missing answer is treated as authorization.
 
 PrepareOpening is inherited, generated and uncompiled. New FinishOpening,
 PublishCompact, ValueBind, OpeningInstall and OpeningProver are DRAFTS pending
