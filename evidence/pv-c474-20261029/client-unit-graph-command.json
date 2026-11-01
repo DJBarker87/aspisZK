@@ -1,0 +1,26 @@
+{
+  "command": [
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--profile",
+    "client",
+    "--bin",
+    "devnet_spend",
+    "-Z",
+    "unstable-options",
+    "--unit-graph"
+  ],
+  "environment": {
+    "RUSTC_BOOTSTRAP": "1",
+    "RUSTFLAGS": "--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4"
+  },
+  "scope": "Cargo unit graph only, no compilation/code generation; production builds unset RUSTC_BOOTSTRAP",
+  "stderr": ""
+}

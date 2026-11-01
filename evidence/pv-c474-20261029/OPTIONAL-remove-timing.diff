@@ -1,0 +1,27 @@
+--- a/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs
++++ b/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs
+@@ -3,7 +3,7 @@
+ use super::diagnostics::{anyhow,ensure,Result,err};
+ use serde_json::{Value,json};
+ use solana_program::pubkey::Pubkey;
+-use std::{str::FromStr,fs,path::Path,time::Instant};
++use std::{str::FromStr,fs,path::Path};
+ use aspis_core::field::{M31,P};
+ use aspis_pool::*;
+ use aspis_statement::pool_v1::pair_trace::PoolV1PairInputNoteWitnessV1;
+@@ -80,7 +80,7 @@
+  use aspis_r1_cost_probe::RealR1_client;
+  let mut accounts=client64_accounts::Accounts::parse(q)?;
+  use aspis_prover::{HOST_HASH,state_only_entropy::DurableStateOnlyMaskNonceStore};
+- let started=Instant::now();let n=q["note"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);
++ let n=q["note"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let nf=pool_v1_nullifier(&k,&salt);
+  let input_lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)? as usize;
+  let output_lane=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;
+  let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,"lane_bytes"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;
+@@ -125,5 +125,5 @@
+  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
+  if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}
+  a.push(ro(pk(q,"verifier_checkpoint")));
+- Ok(json!({"client_route":"selected64-proof-account-v1","proof_account":proof_account.to_string(),"attempt_index":attempt_index,"prove_wall_seconds":started.elapsed().as_secs_f64(),"attempts":result.attempts,"p_r1":true,"mask_audit":format!("{:?}",result.audit),"proof_bytes":proof.len(),"proof_upload_count":proof.len().div_ceil(3763),"statement_upload_count":1,"marker":marker.to_string(),"output_lane":lanes[output_lane as usize].to_string(),"page":page.to_string(),"needs_zero_page":lane.tree.next_leaf_index==0,"settle":ix(pool,a,data),"stage1":ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))
++ Ok(json!({"client_route":"selected64-proof-account-v1","proof_account":proof_account.to_string(),"attempt_index":attempt_index,"attempts":result.attempts,"p_r1":true,"mask_audit":format!("{:?}",result.audit),"proof_bytes":proof.len(),"proof_upload_count":proof.len().div_ceil(3763),"statement_upload_count":1,"marker":marker.to_string(),"output_lane":lanes[output_lane as usize].to_string(),"page":page.to_string(),"needs_zero_page":lane.tree.next_leaf_index==0,"settle":ix(pool,a,data),"stage1":ix(pk(q,"verifier"),stage1_accounts.as_array().unwrap().clone(),[3,10])}))
+ }

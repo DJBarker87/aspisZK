@@ -1,0 +1,221 @@
+diff --git a/tools/r1-cost-probe/Cargo.toml b/tools/r1-cost-probe/Cargo.toml
+index c6007f8887..8e62aa5239 100644
+--- a/tools/r1-cost-probe/Cargo.toml
++++ b/tools/r1-cost-probe/Cargo.toml
+@@ -39,3 +39,8 @@ wincode = "=0.5.5"
+ 
+ [profile.release]
+ opt-level = 3
++
++# Host client only: the on-chain programs use the root workspace profiles.
++[profile.client]
++inherits = "release"
++panic = "abort"
+diff --git a/tools/r1-cost-probe/build-client.sh b/tools/r1-cost-probe/build-client.sh
+new file mode 100755
+index 0000000000..71a445aef8
+--- /dev/null
++++ b/tools/r1-cost-probe/build-client.sh
+@@ -0,0 +1,8 @@
++#!/bin/sh
++# Reviewed Linux client recipe; root-workspace SBF builds never invoke this.
++set -eu
++cd "$(dirname "$0")"
++unset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP
++export RUSTFLAGS='--cfg getrandom_backend="linux_raw" --check-cfg=cfg(getrandom_backend,values("linux_raw")) -C link-arg=-Wl,--threads=4'
++exec cargo build --profile client --locked --offline -j 4 \
++  --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend
+diff --git a/tools/r1-cost-probe/src/bin/devnet_spend.rs b/tools/r1-cost-probe/src/bin/devnet_spend.rs
+index c28b8ab398..a206dbfd57 100644
+--- a/tools/r1-cost-probe/src/bin/devnet_spend.rs
++++ b/tools/r1-cost-probe/src/bin/devnet_spend.rs
+@@ -1,5 +1,9 @@
+ //! Host-only TxV1 signer for the config-driven devnet driver. Keys never leave host.
+-use anyhow::{Result,ensure};
++#[path="devnet_spend/diagnostics.rs"]
++mod diagnostics;
++use diagnostics::{Result,ensure,anyhow,err};
++#[cfg(all(not(test), not(all(target_os = "linux", panic = "abort", getrandom_backend = "linux_raw"))))]
++compile_error!("build the Linux client with build-client.sh");
+ use serde_json::Value;
+ use solana_address::Address;
+ use solana_instruction::{Instruction,AccountMeta};
+@@ -10,15 +14,22 @@ use solana_transaction::versioned::VersionedTransaction;
+ use std::{io::{self,Read},str::FromStr,fs};
+ #[path="devnet_spend/plan.rs"]
+ mod plan;
+-fn main()->Result<()> {
+- let mut s=String::new();io::stdin().read_to_string(&mut s)?;let q:Value=serde_json::from_str(&s)?;
++fn main() -> std::process::ExitCode {
++ diagnostics::initialize();
++ match run() {
++  Ok(()) => std::process::ExitCode::SUCCESS,
++  Err(e) => { diagnostics::report(e); std::process::ExitCode::FAILURE }
++ }
++}
++fn run()->Result<()> {
++ let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;let q:Value=serde_json::from_str(&s).map_err(err)?;
+  if q.get("action").is_some(){println!("{}",plan::run(&q)?);return Ok(())}
+  let keys:Vec<Keypair>=q["keys"].as_array().unwrap().iter().map(|p|{let b:Vec<u8>=serde_json::from_slice(&fs::read(p.as_str().unwrap()).unwrap()).unwrap();Keypair::try_from(b.as_slice()).unwrap()}).collect();
+  let ixs:Vec<Instruction>=q["instructions"].as_array().unwrap().iter().map(|i|Instruction{program_id:Address::from_str(i["program"].as_str().unwrap()).unwrap(),accounts:i["accounts"].as_array().unwrap().iter().map(|a|AccountMeta{pubkey:Address::from_str(a[0].as_str().unwrap()).unwrap(),is_signer:a[1].as_bool().unwrap(),is_writable:a[2].as_bool().unwrap()}).collect(),data:unhex(i["data"].as_str().unwrap())}).collect();
+  let conf=TransactionConfig::empty().with_priority_fee(10000).with_compute_unit_limit(1_400_000).with_loaded_accounts_data_size_limit(8*1024*1024).with_heap_size(256*1024);
+- let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q["blockhash"].as_str().unwrap().parse()?,conf)?;
+- let refs:Vec<&Keypair>=keys.iter().collect();let tx=VersionedTransaction::try_new(VersionedMessage::V1(m),&refs)?;
+- let b=wincode::serialize(&tx)?;ensure!(b.len()<=4096,"TxV1 exceeds 4096 bytes");
++ let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q["blockhash"].as_str().unwrap().parse().map_err(err)?,conf).map_err(err)?;
++ let refs:Vec<&Keypair>=keys.iter().collect();let tx=VersionedTransaction::try_new(VersionedMessage::V1(m),&refs).map_err(err)?;
++ let b=wincode::serialize(&tx).map_err(err)?;ensure!(b.len()<=4096,"TxV1 exceeds 4096 bytes");
+  println!("{}",serde_json::json!({"hex":hex(&b),"signature":tx.signatures[0].to_string(),"bytes":b.len()}));Ok(())
+ }
+ fn unhex(s:&str)->Vec<u8>{(0..s.len()).step_by(2).map(|i|u8::from_str_radix(&s[i..i+2],16).unwrap()).collect()}
+diff --git a/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs b/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs
+index ca4493ae70..0c9d25cfc0 100644
+--- a/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs
++++ b/tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs
+@@ -1,5 +1,5 @@
+ //! Concrete retained-key policy, not a restriction on the adapter's public policy.
+-use anyhow::{anyhow, ensure, Result};
++use crate::diagnostics::{anyhow, ensure, Result, err};
+ use serde_json::{json, Value};
+ use solana_program::pubkey::Pubkey;
+ use std::str::FromStr;
+@@ -17,7 +17,7 @@ impl Accounts {
+         let mut keys = [Pubkey::default(); CAP];
+         for (i, value) in list.iter().enumerate() {
+             let text = value.as_str().ok_or_else(|| anyhow!("proof account must be a string"))?;
+-            let key = Pubkey::from_str(text)?;
++            let key = Pubkey::from_str(text).map_err(err)?;
+             ensure!(key.to_string() == text && key != Pubkey::default(), "noncanonical/zero proof account");
+             ensure!(!keys[..i].contains(&key), "duplicate proof account");
+             keys[i] = key;
+diff --git a/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs b/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs
+new file mode 100644
+index 0000000000..6323be788f
+--- /dev/null
++++ b/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs
+@@ -0,0 +1,59 @@
++//! Local diagnostics have no operand, source error or backtrace storage.
++use std::{backtrace::{Backtrace, BacktraceStatus}, fmt, io::Write};
++
++#[derive(Debug, Clone, Copy)]
++pub struct Error(&'static str);
++impl fmt::Display for Error {
++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result { f.write_str(self.0) }
++}
++impl std::error::Error for Error {}
++pub type Result<T> = std::result::Result<T, Error>;
++pub fn err<T>(_: T) -> Error { Error("client operation failed") }
++macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
++macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
++pub(super) use {anyhow, ensure};
++impl Error { pub fn literal(message: &'static str) -> Self { Self(message) } }
++
++pub fn initialize() {
++    std::panic::set_hook(Box::new(|_| {
++        let _ = std::io::stderr().write_all(b"client panic\n");
++    }));
++    // First operation before input, errors, workers or witness processing.
++    // Rust 1.94.1 caches this disabled state process-wide. Later environment
++    // changes cannot enable Backtrace::capture (also used by anyhow).
++    std::env::set_var("RUST_BACKTRACE", "0");
++    std::env::set_var("RUST_LIB_BACKTRACE", "0");
++    if Backtrace::capture().status() != BacktraceStatus::Disabled {
++        // Fail closed if an earlier constructor ever primes the std cache.
++        std::process::abort();
++    }
++}
++pub fn report(_: Error) {
++    let _ = std::io::stderr().write_all(b"client error\n");
++}
++
++// The default std allocation-error handler prints the requested layout size,
++// bypassing the panic hook. Never return null to that handler in this client.
++struct Allocator;
++#[global_allocator]
++static ALLOCATOR: Allocator = Allocator;
++unsafe impl std::alloc::GlobalAlloc for Allocator {
++    unsafe fn alloc(&self, layout: std::alloc::Layout) -> *mut u8 {
++        let p = std::alloc::System.alloc(layout);
++        if p.is_null() { std::process::abort(); }
++        p
++    }
++    unsafe fn alloc_zeroed(&self, layout: std::alloc::Layout) -> *mut u8 {
++        let p = std::alloc::System.alloc_zeroed(layout);
++        if p.is_null() { std::process::abort(); }
++        p
++    }
++    unsafe fn realloc(&self, p: *mut u8, layout: std::alloc::Layout, size: usize) -> *mut u8 {
++        let q = std::alloc::System.realloc(p, layout, size);
++        if q.is_null() { std::process::abort(); }
++        q
++    }
++    unsafe fn dealloc(&self, p: *mut u8, layout: std::alloc::Layout) {
++        std::alloc::System.dealloc(p, layout);
++    }
++}
+diff --git a/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs b/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs
+index 3db2162a8d..7bebdd60a6 100644
+--- a/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs
++++ b/tools/r1-cost-probe/src/bin/devnet_spend/plan.rs
+@@ -1,6 +1,6 @@
+ #[path="Client64_accounts.rs"]
+ mod client64_accounts;
+-use anyhow::{anyhow,ensure,Result};
++use super::diagnostics::{anyhow,ensure,Result,err};
+ use serde_json::{Value,json};
+ use solana_program::pubkey::Pubkey;
+ use std::{str::FromStr,fs,path::Path,time::Instant};
+@@ -18,7 +18,6 @@ fn meta(p:Pubkey,s:bool,w:bool)->Value{json!([p.to_string(),s,w])}
+ fn ro(p:Pubkey)->Value{meta(p,false,false)}
+ fn rw(p:Pubkey)->Value{meta(p,false,true)}
+ fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{json!({"program":p.to_string(),"accounts":a,"data":super::hex(d.as_ref())})}
+-fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!("{e:?}")}
+ fn digest(seed:u32)->Digest{core::array::from_fn(|i|M31((seed+17*i as u32+1)%P))}
+ // Choose fixture notes whose deposit lane is also their spend output lane.
+ // This exercises existing deposit-created pages without manufacturing PDA data.
+@@ -27,7 +26,7 @@ fn note(n:u32)->(Digest,Digest,Digest){let mut found=0;for j in 0..10000{let k=d
+ fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(q[k].as_str().unwrap())}
+ pub fn run(q:&Value)->Result<Value>{
+  let pool=pk(q,"pool");let mint=pk(q,"mint");let payer=pk(q,"payer");let registry=pk(q,"registry");let verifier=pk(q,"verifier");
+- let system=Pubkey::from_str(SYSTEM)?;let token=Pubkey::from_str(TOKEN)?;
++ let system=Pubkey::from_str(SYSTEM).map_err(err)?;let token=Pubkey::from_str(TOKEN).map_err(err)?;
+  let master=pool_v1_pair_forest_master_address(&pool,&mint).0;
+  let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();
+  let vault=pool_v1_vault_token_account_address(&pool,&master).0;
+@@ -38,7 +37,7 @@ pub fn run(q:&Value)->Result<Value>{
+  "setup"=>{
+  let init=PoolInitializationV1{asset_mint:mint.to_bytes(),token_program:token.to_bytes(),asset_id:M31(77),deployment_domain:[5;32],verifier_policy:VerifierPolicyV1{flags:POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY|POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,registry_program:registry.to_bytes(),registry_authority:[0;32],policy_binding:[7;32]}};
+  let mut a=vec![rw(master)];a.extend(lanes.iter().copied().map(rw));a.extend([ro(mint),rw(vault),ro(token),meta(payer,true,true),ro(system)]);
+- let slot=q["activation_slot"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER)?;
++ let slot=q["activation_slot"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER).map_err(err)?;
+  let rd=Pubkey::find_program_address(&[registry.as_ref()],&loader).0;let vd=Pubkey::find_program_address(&[verifier.as_ref()],&loader).0;
+  let rh:[u8;32]=bytes(q,"registry_hash").try_into().unwrap();let vh:[u8;32]=bytes(q,"verifier_hash").try_into().unwrap();
+  let reginit=ix(registry,vec![rw(reg),meta(payer,true,false),meta(pk(q,"funding_payer"),true,true),ro(system),ro(registry),ro(rd)],aspis_registry::encode_initialize_registry_v2(master.to_bytes(),[7;32],20,rh));
+@@ -106,22 +105,22 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
+  let common=PoolV1PairForestTerminalCommonV1{master_account:master.to_bytes(),checkpoint_account:pk(q,"checkpoint").to_bytes(),selected_lane_account:lanes[output_lane as usize].to_bytes(),output_lane,checkpoint_sequence:cp.checkpoint_sequence,historical_global_anchor:cp.global_root,lane_transition:compiled.public_statement};
+  let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};
+  let dir=Path::new(q["proof_dir"].as_str().unwrap());
+- {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}
++ {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)?;}
+  // Retain note recovery data on the host, alongside the durable nonce store.
+  // This is excluded from evidence export even though these are public fixtures.
+  let recovery=json!({"input_nullifier_key":super::hex(&encode_digest_canonical(&k)),"input_salt":super::hex(&encode_digest_canonical(&salt)),"input_value":1000,"asset_id":77,"output_lane":output_lane,"output_pair_index":lane.tree.next_leaf_index,"change":{"nullifier_key":super::hex(&encode_digest_canonical(&digest(500+n))),"salt":super::hex(&encode_digest_canonical(&change.salt)),"value":change.value,"selected_second":!withdrawal},"recipient":if withdrawal{Value::Null}else{json!({"nullifier_key":super::hex(&encode_digest_canonical(&digest(300))),"salt":super::hex(&encode_digest_canonical(&recipient.salt)),"value":recipient.value,"selected_second":false})}});
+- {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join("note-recovery.json"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}
++ {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join("note-recovery.json")).map_err(err)?;file.write_all(serde_json::to_string_pretty(&recovery).map_err(err)?.as_bytes()).map_err(err)?;file.sync_all().map_err(err)?;}
+  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
+- let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger"))?;
++ let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger")).map_err(err)?;
+  let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;
+  let (attempt_index,proof_account)=accounts.selected(result.attempts)?;
+  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);
+- fs::write(dir.join("proof.bin"),&proof)?;fs::write(dir.join("statement.bin"),public)?;
++ fs::write(dir.join("proof.bin"),&proof).map_err(err)?;fs::write(dir.join("statement.bin"),public).map_err(err)?;
+  let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};
+  let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);
+  let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);
+  let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;
+- let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;
++ let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf)).map_err(err)?.0;
+  let mut a=vec![ro(master),ro(pk(q,"checkpoint")),rw(lanes[output_lane as usize]),rw(page),rw(marker),meta(pk(q,"payer"),true,true),ro(system),ro(reg),ro(entry),ro(pk(q,"verifier"))];
+  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
+  if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}

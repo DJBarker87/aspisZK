@@ -1,0 +1,70 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling version_check v0.9.5
+   Compiling generic-array v0.14.7
+   Compiling serde v1.0.228
+   Compiling equivalent v1.0.2
+   Compiling typenum v1.20.1
+   Compiling hashbrown v0.15.5
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcCSJy2a/symbols.o" "<2 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcCSJy2a/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,-znostart-stop-gc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-pv-c474-20261029/sbf-target-verifier/release/build/quote-158d427fd1727142/build_script_build-158d427fd1727142" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  rust-lld       0x00005db04796ecf0
+          1  rust-lld       0x00005db04796c2b1
+          2  libc.so.6      0x0000791e3b645330
+          3  libc.so.6      0x0000791e3b69ec0c pthread_kill + 284
+          4  libc.so.6      0x0000791e3b64527e gsignal + 30
+          5  libc.so.6      0x0000791e3b6288ff abort + 223
+          6  libstdc++.so.6 0x0000791e3baa5ff5
+          7  libstdc++.so.6 0x0000791e3babb0da
+          8  libstdc++.so.6 0x0000791e3baa5a55 std::unexpected() + 0
+          9  libstdc++.so.6 0x0000791e3babb391
+          10 libstdc++.so.6 0x0000791e3baaa2a5 std::__throw_system_error(int) + 167
+          11 libstdc++.so.6 0x0000791e3baaa311
+          12 rust-lld       0x00005db04ad89d03
+          13 libstdc++.so.6 0x0000791e3baecdb4
+          14 libc.so.6      0x0000791e3b69cb84
+          15 libc.so.6      0x0000791e3b729ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `quote` (build script) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+error: linking with `cc` failed: exit status: 1
+  |
+  = note:  "cc" "-m64" "/tmp/rustcpyARPN/symbols.o" "<3 object files omitted>" "-Wl,--as-needed" "-Wl,-Bstatic" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib/{libstd-*,libpanic_unwind-*,libobject-*,libmemchr-*,libaddr2line-*,libgimli-*,librustc_demangle-*,libstd_detect-*,libhashbrown-*,librustc_std_workspace_alloc-*,libminiz_oxide-*,libadler2-*,libunwind-*,libcfg_if-*,liblibc-*,librustc_std_workspace_core-*,liballoc-*,libcore-*,libcompiler_builtins-*}.rlib" "-Wl,-Bdynamic" "-lgcc_s" "-lutil" "-lrt" "-lpthread" "-lm" "-ldl" "-lc" "-L" "/tmp/rustcpyARPN/raw-dylibs" "-B<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/bin/gcc-ld" "-fuse-ld=lld" "-Wl,-znostart-stop-gc" "-Wl,--eh-frame-hdr" "-Wl,-z,noexecstack" "-L" "<sysroot>/lib/rustlib/x86_64-unknown-linux-gnu/lib" "-o" "/home/dombarker/project-offloads/codex-pv-c474-20261029/sbf-target-verifier/release/build/proc-macro2-4ccfd0bc6b8d82f4/build_script_build-4ccfd0bc6b8d82f4" "-Wl,--gc-sections" "-pie" "-Wl,-z,relro,-z,now" "-Wl,--strip-debug" "-nodefaultlibs"
+  = note: some arguments are omitted. use `--verbose` to show all linker arguments
+  = note: terminate called after throwing an instance of 'std::system_error'
+            what():  Resource temporarily unavailable
+          PLEASE submit a bug report to https://github.com/llvm/llvm-project/issues/ and include the crash backtrace.
+          Stack dump without symbol names (ensure you have llvm-symbolizer in your PATH or set the environment var `LLVM_SYMBOLIZER_PATH` to point to it):
+          0  rust-lld       0x000064cced8ffcf0
+          1  rust-lld       0x000064cced8fd2b1
+          2  libc.so.6      0x00007f86c6645330
+          3  libc.so.6      0x00007f86c669ec0c pthread_kill + 284
+          4  libc.so.6      0x00007f86c664527e gsignal + 30
+          5  libc.so.6      0x00007f86c66288ff abort + 223
+          6  libstdc++.so.6 0x00007f86c6aa5ff5
+          7  libstdc++.so.6 0x00007f86c6abb0da
+          8  libstdc++.so.6 0x00007f86c6aa5a55 std::unexpected() + 0
+          9  libstdc++.so.6 0x00007f86c6abb391
+          10 libstdc++.so.6 0x00007f86c6aaa2a5 std::__throw_system_error(int) + 167
+          11 libstdc++.so.6 0x00007f86c6aaa311
+          12 rust-lld       0x000064ccf0d1ad03
+          13 libstdc++.so.6 0x00007f86c6aecdb4
+          14 libc.so.6      0x00007f86c669cb84
+          15 libc.so.6      0x00007f86c6729ecc
+          collect2: fatal error: ld terminated with signal 6 [Aborted], core dumped
+          compilation terminated.
+          
+
+error: could not compile `proc-macro2` (build script) due to 1 previous error
+{"mode": "default", "exit": 1, "expected": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4", "byte_identical": false}

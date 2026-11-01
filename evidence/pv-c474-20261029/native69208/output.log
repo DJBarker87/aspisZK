@@ -1,0 +1,196 @@
+warning: unused macro definition: `anyhow`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:12:14
+   |
+12 | macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
+   |              ^^^^^^
+   |
+   = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused macro definition: `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:13:14
+   |
+13 | macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
+   |              ^^^^^^
+
+warning: unused imports: `anyhow` and `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:14:17
+   |
+14 | pub(super) use {anyhow, ensure};
+   |                 ^^^^^^  ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Error` is never constructed
+ --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:5:12
+  |
+5 | pub struct Error(&'static str);
+  |            ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: type alias `Result` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:10:10
+   |
+10 | pub type Result<T> = std::result::Result<T, Error>;
+   |          ^^^^^^
+
+warning: function `err` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:11:8
+   |
+11 | pub fn err<T>(_: T) -> Error { Error("client operation failed") }
+   |        ^^^
+
+warning: associated function `literal` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:15:21
+   |
+15 | impl Error { pub fn literal(message: &'static str) -> Self { Self(message) } }
+   | ----------          ^^^^^^^
+   | |
+   | associated function in this implementation
+
+warning: function `report` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:31:8
+   |
+31 | pub fn report(_: Error) {
+   |        ^^^^^^
+
+warning: 8 warnings emitted
+
+warning: unused macro definition: `anyhow`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:12:14
+   |
+12 | macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
+   |              ^^^^^^
+   |
+   = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused macro definition: `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:13:14
+   |
+13 | macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
+   |              ^^^^^^
+
+warning: unused imports: `anyhow` and `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:14:17
+   |
+14 | pub(super) use {anyhow, ensure};
+   |                 ^^^^^^  ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Error` is never constructed
+ --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:5:12
+  |
+5 | pub struct Error(&'static str);
+  |            ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: type alias `Result` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:10:10
+   |
+10 | pub type Result<T> = std::result::Result<T, Error>;
+   |          ^^^^^^
+
+warning: function `err` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:11:8
+   |
+11 | pub fn err<T>(_: T) -> Error { Error("client operation failed") }
+   |        ^^^
+
+warning: associated function `literal` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:15:21
+   |
+15 | impl Error { pub fn literal(message: &'static str) -> Self { Self(message) } }
+   | ----------          ^^^^^^^
+   | |
+   | associated function in this implementation
+
+warning: function `report` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:31:8
+   |
+31 | pub fn report(_: Error) {
+   |        ^^^^^^
+
+warning: 8 warnings emitted
+
+{
+  "client_sha256": "75b6ac5517d33014aad4d60a2c1d530203ee37ae9c1d54bbd05c03dd28077e4d",
+  "process_tests": [
+    {
+      "name": "parse",
+      "exit": 1,
+      "stderr": "client error\n",
+      "stdout_bytes": 0,
+      "passed": true
+    },
+    {
+      "name": "panic",
+      "exit": -6,
+      "stderr": "client panic\n",
+      "stdout_bytes": 0,
+      "passed": true
+    }
+  ],
+  "controls": [
+    {
+      "label": "direct",
+      "command": [
+        "/home/dombarker/.cargo/bin/rustc",
+        "+1.94.1",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "panic=abort",
+        "probe.rs",
+        "-L",
+        "dependency=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps",
+        "--extern",
+        "getrandom=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libgetrandom-d16119ec6122d673.rlib",
+        "--extern",
+        "anyhow=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/deps/libanyhow-1d89d6a582e41ef3.rlib",
+        "-L",
+        "native=/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-l",
+        "dylib=interposer",
+        "-C",
+        "link-arg=-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-direct"
+      ],
+      "stdout": "ok=true counts=0\n",
+      "binary_sha256": "1bae0544d3a435cf6b3a352088eb2c5f00faab44c74bc028373cfbbf55903923"
+    },
+    {
+      "label": "fallback-control",
+      "command": [
+        "/home/dombarker/.cargo/bin/rustc",
+        "+1.94.1",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "panic=abort",
+        "probe.rs",
+        "-L",
+        "dependency=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps",
+        "--extern",
+        "getrandom=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/libgetrandom-13427f77686b1b02.rlib",
+        "--extern",
+        "anyhow=/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/libanyhow-06417ef6c7ce6f5a.rlib",
+        "-L",
+        "native=/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-l",
+        "dylib=interposer",
+        "-C",
+        "link-arg=-Wl,-rpath,/home/dombarker/project-offloads/codex-pv-c474-20261029",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-c474-20261029/probe-fallback-control"
+      ],
+      "stdout": "ok=false counts=4294967297\n",
+      "binary_sha256": "310d4ef63c8a4835848cb0ad78f215c08994b8fa80674a92023751cb6c4f30a3"
+    }
+  ],
+  "scope": "Finite validation. The direct harness links the identical getrandom/anyhow rlibs used by the client; baseline is the matched interposition control. Environment starts enabled, then is re-enabled after initialize; both std and anyhow remain disabled."
+}

@@ -87,6 +87,7 @@ pub fn encoded(values:impl IntoIterator<Item=E>)->Vec<u8> {values.into_iter().fl
 
 /// Deterministic fixture-only rejection sampling of K limbs. No distribution
 /// property is inferred from these fixed test samples.
+#[cfg(feature="insecure-spend-fixture")]
 fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {
     let mut counter=0u64;
     let mut limb=||loop {
@@ -98,6 +99,7 @@ fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {
 }
 /// Convenience API, deliberately fixture-only: it always emits a fully masked
 /// P3 proof in the adopted compact binary-multiproof format.
+#[cfg(feature="insecure-spend-fixture")]
 pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {
     prove_masked_fixture(public,compiled,variant,hash,seed).map(|(proof,_)|proof)
 }
@@ -113,6 +115,7 @@ pub struct MaskedFixtureAudit {
     pub h1_total_balanced: bool,
 }
 
+#[cfg(feature="insecure-spend-fixture")]
 fn fixture_secret(hash:HashFn,domain:&[u8],seed:&[u8;32],public:&[u8],variant:Variant)->Result<[u8;32],Error> {
     let mut value=hash(&[domain,seed,public,&[variant.tag()]]);
     if value==[0;32] { return Err(Error::Semantic); }
@@ -141,6 +144,7 @@ fn inactive_sum_k(values:&[K],masks:&[u16;64])->K {
 
 /// Deterministic, insecure masked fixture path. Its derivations exist only for
 /// reproducible local cost experiments and are not production entropy.
+#[cfg(feature="insecure-spend-fixture")]
 pub fn prove_masked_fixture(
     public:Public<'_>,
     compiled:&PoolV1PairForestMergedC1CompilationV1,

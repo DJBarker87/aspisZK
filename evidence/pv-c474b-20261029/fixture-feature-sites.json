@@ -1,0 +1,102 @@
+{
+  "evidence_class": "structural argument",
+  "sites": [
+    {
+      "path": "crates/aspis-prover/src/r14_raw_disclosure.rs",
+      "line": 3,
+      "text": "#![cfg(feature = \"insecure-spend-fixture\")]",
+      "source_sha256": "258f15132af69257c9edafb8e9b27e72b481b61ae15760e13d2f6c6aa43b5287"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 1801,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 1847,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 1994,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 2024,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 2054,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/v6_onefold_prover.rs",
+      "line": 2086,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "1715970722d3e183771ff41711a760578deac0522038a3a7d2dd519f90c9a433"
+    },
+    {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "line": 41,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "596cd01b06226f05204cc2175bb70b0e64ca10c36d1d467bc02a9cb0ce354510"
+    },
+    {
+      "path": "crates/aspis-prover/src/lib.rs",
+      "line": 1609,
+      "text": "#[cfg(all(feature = \"r0\", feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "596cd01b06226f05204cc2175bb70b0e64ca10c36d1d467bc02a9cb0ce354510"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_spend.rs",
+      "line": 972,
+      "text": "#[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "38147f2e8e92acc43a9a31c43afbba0a3370f4a9bef58614366fe032095a69db"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "line": 170,
+      "text": "    #[cfg(any(test, feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/lib.rs",
+      "line": 29,
+      "text": "#[cfg(all(feature = \"r1p-check\", feature = \"insecure-spend-fixture\"))]",
+      "source_sha256": "dd76fcb6c4774ea061149ab81641d762ff2bfd729246ae86acffa2419bf1f119"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 90,
+      "text": "#[cfg(feature=\"insecure-spend-fixture\")]",
+      "source_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 102,
+      "text": "#[cfg(feature=\"insecure-spend-fixture\")]",
+      "source_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 118,
+      "text": "#[cfg(feature=\"insecure-spend-fixture\")]",
+      "source_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "line": 147,
+      "text": "#[cfg(feature=\"insecure-spend-fixture\")]",
+      "source_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c"
+    }
+  ],
+  "argument": "The only source-level tests of this feature are cfg gates adding fixture constructors, helper APIs and modules, including the unchanged simulator. No cfg! branch, replacement production definition or change to a production body. A successful feature-OFF client compile proves its selected static calls resolve without these definitions; adding audit definitions does not redirect these static calls. Fixture entrypoints intentionally call the additional constructor; every production prover/verifier body selected by the harness is identical under deployed ct-host-prover/r1p-check/private-leaf-salts. Compiler preservation V370 retained."
+}

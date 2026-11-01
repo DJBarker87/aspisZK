@@ -1,0 +1,242 @@
+[
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "line": 25,
+    "source": " let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;let q:Value=serde_json::from_str(&s).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "line": 30,
+    "source": " let m=Message::try_compile_with_config(&keys[0].pubkey(),&ixs,q[\"blockhash\"].as_str().unwrap().parse().map_err(err)?,conf).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "line": 31,
+    "source": " let refs:Vec<&Keypair>=keys.iter().collect();let tx=VersionedTransaction::try_new(VersionedMessage::V1(m),&refs).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend.rs",
+    "line": 32,
+    "source": " let b=wincode::serialize(&tx).map_err(err)?;ensure!(b.len()<=4096,\"TxV1 exceeds 4096 bytes\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs",
+    "line": 13,
+    "source": "macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 14,
+    "source": "        ensure!(q.get(\"proof_account\").is_none(), \"legacy proof_account input is unsupported\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 15,
+    "source": "        let list = q[\"proof_accounts\"].as_array().ok_or_else(|| anyhow!(\"proof_accounts must be eight public keys\"))?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 16,
+    "source": "        ensure!(list.len() == CAP, \"proof_accounts must contain eight public keys\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 19,
+    "source": "            let text = value.as_str().ok_or_else(|| anyhow!(\"proof account must be a string\"))?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 20,
+    "source": "            let key = Pubkey::from_str(text).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 21,
+    "source": "            ensure!(key.to_string() == text && key != Pubkey::default(), \"noncanonical/zero proof account\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 22,
+    "source": "            ensure!(!keys[..i].contains(&key), \"duplicate proof account\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 38,
+    "source": "        ensure!(settlement.len() == 10, \"unexpected settlement proof-account position\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/Client64_accounts.rs",
+    "line": 46,
+    "source": "        ensure!((1..=CAP).contains(&attempts) && attempts == self.entered, \"invalid successful attempt count\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 29,
+    "source": " let system=Pubkey::from_str(SYSTEM).map_err(err)?;let token=Pubkey::from_str(TOKEN).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 40,
+    "source": " let slot=q[\"activation_slot\"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 48,
+    "source": " let activate=ix(registry,vec![rw(reg),rw(entry),meta(gov,true,false)],aspis_registry::encode_simple_mutation_v2(aspis_registry::RegistryMutationOpcodeV1::Activate,1).map_err(err)?);"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 49,
+    "source": " let freeze=ix(registry,vec![rw(reg),meta(gov,true,false)],aspis_registry::encode_simple_mutation_v2(aspis_registry::RegistryMutationOpcodeV1::Freeze,2).map_err(err)?);"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 50,
+    "source": " Ok(json!({\"master\":master.to_string(),\"lanes\":lanes.iter().map(ToString::to_string).collect::<Vec<_>>(),\"vault\":vault.to_string(),\"vault_authority\":authority.to_string(),\"registry_account\":reg.to_string(),\"entry\":entry.to_string(),\"initialize\":ix(pool,a,encode_pair_forest_initialize_instruction_v1(&init).map_err(err)?),\"registry_initialize\":reginit,\"schedule\":schedule,\"activate\":activate,\"freeze\":freeze}))"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 53,
+    "source": " let n=q[\"note\"].as_u64().unwrap() as u32;let(k,salt,cm)=note(n);let lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 57,
+    "source": " let d=encode_pair_forest_deposit_instruction_v1(&DepositRequestV1{owner_key:derive_owner_key(&k),amount:1000,salt,encrypted_note_payload:&[]}).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 58,
+    "source": " let nf=pool_v1_nullifier(&k,&salt);let out=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 63,
+    "source": " let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,\"lane_bytes\"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 64,
+    "source": " let marker=decode_pool_v1_nullifier_marker(&bytes(q,\"marker_bytes\")).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 65,
+    "source": " let after=decode_pool_v1_pair_verified_afterstate_v1(&bytes(q,\"candidate_bytes\")).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 67,
+    "source": " ensure!(lane.master==master.to_bytes()&&lane.tree.next_leaf_index==after.next_pair_index&&lane.tree.root==after.next_root&&lane.tree.frontier==after.next_frontier,\"settled lane differs from proved afterstate\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 68,
+    "source": " ensure!(marker.pool==master.to_bytes()&&marker.deployment_domain==[5;32]&&marker.nullifier==pool_v1_nullifier(&k,&salt),\"consumed marker identity differs\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 72,
+    "source": " _=>Err(anyhow!(\"unknown action\"))"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 76,
+    "source": "fn prove(_: &Value,_:Pubkey,_:Pubkey,_:&[Pubkey],_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey,_:Pubkey)->Result<Value>{Err(anyhow!(\"build with --features r1p-check\"))}"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 84,
+    "source": " let input_lane=pool_v1_pair_forest_deposit_lane_v1(&cm).map_err(err)? as usize;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 85,
+    "source": " let output_lane=pool_v1_pair_forest_output_lane_v1(&nf).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 86,
+    "source": " let lane=decode_pool_v1_pair_forest_lane_state_v1(&bytes(q,\"lane_bytes\"),&POOL_V1_PAIR_EMPTY_ROOTS).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 87,
+    "source": " ensure!(lane.master==master.to_bytes()&&lane.lane_id==output_lane,\"wrong live output lane\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 88,
+    "source": " let cp=decode_pool_v1_pair_forest_checkpoint_v1(&bytes(q,\"checkpoint_bytes\")).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 89,
+    "source": " ensure!(cp.master==master.to_bytes(),\"checkpoint master mismatch\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 91,
+    "source": " for j in 0..2{let(_,_,c)=note(j);let l=pool_v1_pair_forest_deposit_lane_v1(&c).map_err(err)? as usize;if j==n{input_index=leafs[l].len() as u64;}leafs[l].push(PoolV1PairLeafWitnessV1::single_output(c).map_err(err)?.leaf_digest().map_err(err)?);}"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 96,
+    "source": " ensure!(roots[0]==cp.global_root,\"deposits do not reconstruct finalized anchor\");"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 97,
+    "source": " let input=PoolV1PairForestInputNoteWitnessV1{pair:PoolV1PairInputNoteWitnessV1{nullifier_key:k,salt,value:1000,pair_leaf:PoolV1PairLeafWitnessV1::single_output(cm).map_err(err)?,selected_second:false,membership:PoolV1MembershipWitnessV1{siblings,index:input_index as u32}},super_root_siblings:supers,super_root_directions:directions};"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 104,
+    "source": " let compiled=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(p)=>compile_pool_v1_pair_forest_private_transfer_merged_c1_v1(&p,&PoolV1PairForestPrivateTransferWitnessV1{input,recipient,change},context,live),PoolV1PairForestTerminalPaymentV1::Withdrawal(p)=>compile_pool_v1_pair_forest_withdrawal_merged_c1_v1(&p,&PoolV1PairForestWithdrawalWitnessV1{input,change},context,live)}.map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 108,
+    "source": " {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)?;}"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 112,
+    "source": " {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join(\"note-recovery.json\")).map_err(err)?;file.write_all(serde_json::to_string_pretty(&recovery).map_err(err)?.as_bytes()).map_err(err)?;file.sync_all().map_err(err)?;}"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 113,
+    "source": " let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 114,
+    "source": " let mut store=DurableStateOnlyMaskNonceStore::open(dir.join(\"mask-nonce-ledger\")).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 115,
+    "source": " let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 117,
+    "source": " let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 118,
+    "source": " fs::write(dir.join(\"proof.bin\"),&proof).map_err(err)?;fs::write(dir.join(\"statement.bin\"),public).map_err(err)?;"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 121,
+    "source": " let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);"
+  },
+  {
+    "path": "tools/r1-cost-probe/src/bin/devnet_spend/plan.rs",
+    "line": 123,
+    "source": " let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf)).map_err(err)?.0;"
+  }
+]

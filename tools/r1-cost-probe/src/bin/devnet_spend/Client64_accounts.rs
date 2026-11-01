@@ -1,5 +1,5 @@
 //! Concrete retained-key policy, not a restriction on the adapter's public policy.
-use anyhow::{anyhow, ensure, Result};
+use crate::diagnostics::{anyhow, ensure, Result, err};
 use serde_json::{json, Value};
 use solana_program::pubkey::Pubkey;
 use std::str::FromStr;
@@ -17,7 +17,7 @@ impl Accounts {
         let mut keys = [Pubkey::default(); CAP];
         for (i, value) in list.iter().enumerate() {
             let text = value.as_str().ok_or_else(|| anyhow!("proof account must be a string"))?;
-            let key = Pubkey::from_str(text)?;
+            let key = Pubkey::from_str(text).map_err(err)?;
             ensure!(key.to_string() == text && key != Pubkey::default(), "noncanonical/zero proof account");
             ensure!(!keys[..i].contains(&key), "duplicate proof account");
             keys[i] = key;

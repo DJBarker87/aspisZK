@@ -1,6 +1,6 @@
 #[path="Client64_accounts.rs"]
 mod client64_accounts;
-use anyhow::{anyhow,ensure,Result};
+use super::diagnostics::{anyhow,ensure,Result,err};
 use serde_json::{Value,json};
 use solana_program::pubkey::Pubkey;
 use std::{str::FromStr,fs,path::Path,time::Instant};
@@ -18,7 +18,6 @@ fn meta(p:Pubkey,s:bool,w:bool)->Value{json!([p.to_string(),s,w])}
 fn ro(p:Pubkey)->Value{meta(p,false,false)}
 fn rw(p:Pubkey)->Value{meta(p,false,true)}
 fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{json!({"program":p.to_string(),"accounts":a,"data":super::hex(d.as_ref())})}
-fn err(e:impl std::fmt::Debug)->anyhow::Error{anyhow!("{e:?}")}
 fn digest(seed:u32)->Digest{core::array::from_fn(|i|M31((seed+17*i as u32+1)%P))}
 // Choose fixture notes whose deposit lane is also their spend output lane.
 // This exercises existing deposit-created pages without manufacturing PDA data.
@@ -27,7 +26,7 @@ fn note(n:u32)->(Digest,Digest,Digest){let mut found=0;for j in 0..10000{let k=d
 fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(q[k].as_str().unwrap())}
 pub fn run(q:&Value)->Result<Value>{
  let pool=pk(q,"pool");let mint=pk(q,"mint");let payer=pk(q,"payer");let registry=pk(q,"registry");let verifier=pk(q,"verifier");
- let system=Pubkey::from_str(SYSTEM)?;let token=Pubkey::from_str(TOKEN)?;
+ let system=Pubkey::from_str(SYSTEM).map_err(err)?;let token=Pubkey::from_str(TOKEN).map_err(err)?;
  let master=pool_v1_pair_forest_master_address(&pool,&mint).0;
  let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();
  let vault=pool_v1_vault_token_account_address(&pool,&master).0;
@@ -38,7 +37,7 @@ pub fn run(q:&Value)->Result<Value>{
  "setup"=>{
  let init=PoolInitializationV1{asset_mint:mint.to_bytes(),token_program:token.to_bytes(),asset_id:M31(77),deployment_domain:[5;32],verifier_policy:VerifierPolicyV1{flags:POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_REGISTRY|POOL_V1_VERIFIER_POLICY_FLAG_IMMUTABLE_DEPLOYMENT,registry_program:registry.to_bytes(),registry_authority:[0;32],policy_binding:[7;32]}};
  let mut a=vec![rw(master)];a.extend(lanes.iter().copied().map(rw));a.extend([ro(mint),rw(vault),ro(token),meta(payer,true,true),ro(system)]);
- let slot=q["activation_slot"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER)?;
+ let slot=q["activation_slot"].as_u64().unwrap();let loader=Pubkey::from_str(LOADER).map_err(err)?;
  let rd=Pubkey::find_program_address(&[registry.as_ref()],&loader).0;let vd=Pubkey::find_program_address(&[verifier.as_ref()],&loader).0;
  let rh:[u8;32]=bytes(q,"registry_hash").try_into().unwrap();let vh:[u8;32]=bytes(q,"verifier_hash").try_into().unwrap();
  let reginit=ix(registry,vec![rw(reg),meta(payer,true,false),meta(pk(q,"funding_payer"),true,true),ro(system),ro(registry),ro(rd)],aspis_registry::encode_initialize_registry_v2(master.to_bytes(),[7;32],20,rh));
@@ -106,22 +105,22 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let common=PoolV1PairForestTerminalCommonV1{master_account:master.to_bytes(),checkpoint_account:pk(q,"checkpoint").to_bytes(),selected_lane_account:lanes[output_lane as usize].to_bytes(),output_lane,checkpoint_sequence:cp.checkpoint_sequence,historical_global_anchor:cp.global_root,lane_transition:compiled.public_statement};
  let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};
  let dir=Path::new(q["proof_dir"].as_str().unwrap());
- {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir)?;}
+ {use std::os::unix::fs::DirBuilderExt;fs::DirBuilder::new().mode(0o700).create(dir).map_err(err)?;}
  // Retain note recovery data on the host, alongside the durable nonce store.
  // This is excluded from evidence export even though these are public fixtures.
  let recovery=json!({"input_nullifier_key":super::hex(&encode_digest_canonical(&k)),"input_salt":super::hex(&encode_digest_canonical(&salt)),"input_value":1000,"asset_id":77,"output_lane":output_lane,"output_pair_index":lane.tree.next_leaf_index,"change":{"nullifier_key":super::hex(&encode_digest_canonical(&digest(500+n))),"salt":super::hex(&encode_digest_canonical(&change.salt)),"value":change.value,"selected_second":!withdrawal},"recipient":if withdrawal{Value::Null}else{json!({"nullifier_key":super::hex(&encode_digest_canonical(&digest(300))),"salt":super::hex(&encode_digest_canonical(&recipient.salt)),"value":recipient.value,"selected_second":false})}});
- {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join("note-recovery.json"))?;file.write_all(serde_json::to_string_pretty(&recovery)?.as_bytes())?;file.sync_all()?;}
+ {use std::io::Write;use std::os::unix::fs::OpenOptionsExt;let mut file=fs::OpenOptions::new().create_new(true).write(true).mode(0o600).open(dir.join("note-recovery.json")).map_err(err)?;file.write_all(serde_json::to_string_pretty(&recovery).map_err(err)?.as_bytes()).map_err(err)?;file.sync_all().map_err(err)?;}
  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
- let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger"))?;
+ let mut store=DurableStateOnlyMaskNonceStore::open(dir.join("mask-nonce-ledger")).map_err(err)?;
  let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public(),&compiled,HOST_HASH,&mut store,|k| accounts.nonce(k)).map_err(err)?;
  let (attempt_index,proof_account)=accounts.selected(result.attempts)?;
  let mut proof=encode_pool_v1_pair_verified_afterstate_v1(&compiled.public_statement.candidate_afterstate).map_err(err)?.to_vec();proof.extend_from_slice(&result.proof);
- fs::write(dir.join("proof.bin"),&proof)?;fs::write(dir.join("statement.bin"),public)?;
+ fs::write(dir.join("proof.bin"),&proof).map_err(err)?;fs::write(dir.join("statement.bin"),public).map_err(err)?;
  let request=PoolV1PairForestTerminalRequestV1{verifier_profile:PROFILE,verifier_release:RELEASE,pool_program:pool.to_bytes(),public:payment};
  let hints=pool_v1_pair_forest_terminal_bump_hints_v1(&pool,&master,&lanes[output_lane as usize],lane.tree.next_leaf_index,withdrawal);
  let data=encode_pair_forest_terminal_instruction_data_v1(&encode_pool_v1_pair_forest_terminal_request_v1(&request).map_err(err)?,hints);
  let page=pool_v1_root_page_address(&pool,&lanes[output_lane as usize],0).0;
- let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf))?.0;
+ let marker=pool_v1_pair_forest_nullifier_marker_address(&pool,&master,&encode_digest_canonical(&nf)).map_err(err)?.0;
  let mut a=vec![ro(master),ro(pk(q,"checkpoint")),rw(lanes[output_lane as usize]),rw(page),rw(marker),meta(pk(q,"payer"),true,true),ro(system),ro(reg),ro(entry),ro(pk(q,"verifier"))];
  let stage1_accounts=accounts.publication(result.attempts,&mut a,pk(q,"public_account"),pk(q,"verifier_checkpoint"))?;
  if withdrawal{a.extend([ro(pk(q,"mint")),rw(vault),rw(pk(q,"destination")),ro(authority),ro(token)]);}

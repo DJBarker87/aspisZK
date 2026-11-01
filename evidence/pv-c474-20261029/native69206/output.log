@@ -1,0 +1,66 @@
+warning: unused macro definition: `anyhow`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:12:14
+   |
+12 | macro_rules! anyhow { ($message:literal) => { $crate::diagnostics::Error::literal($message) }; }
+   |              ^^^^^^
+   |
+   = note: `#[warn(unused_macros)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused macro definition: `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:13:14
+   |
+13 | macro_rules! ensure { ($condition:expr, $message:literal) => { if !$condition { return Err(anyhow!($message)); } }; }
+   |              ^^^^^^
+
+warning: unused imports: `anyhow` and `ensure`
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:14:17
+   |
+14 | pub(super) use {anyhow, ensure};
+   |                 ^^^^^^  ^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `Error` is never constructed
+ --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:5:12
+  |
+5 | pub struct Error(&'static str);
+  |            ^^^^^
+  |
+  = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: type alias `Result` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:10:10
+   |
+10 | pub type Result<T> = std::result::Result<T, Error>;
+   |          ^^^^^^
+
+warning: function `err` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:11:8
+   |
+11 | pub fn err<T>(_: T) -> Error { Error("client operation failed") }
+   |        ^^^
+
+warning: associated function `literal` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:15:21
+   |
+15 | impl Error { pub fn literal(message: &'static str) -> Self { Self(message) } }
+   | ----------          ^^^^^^^
+   | |
+   | associated function in this implementation
+
+warning: function `report` is never used
+  --> src/tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs:31:8
+   |
+31 | pub fn report(_: Error) {
+   |        ^^^^^^
+
+warning: 8 warnings emitted
+
+Traceback (most recent call last):
+  File "/home/dombarker/project-offloads/codex-pv-c474-20261029/diagnostics-test.py", line 20, in <module>
+    cmd=['/home/dombarker/.cargo/bin/rustc','+1.94.1','--edition=2021','-C','opt-level=3','-C','panic=abort','probe.rs','-L','dependency='+str(base/profile/'deps'),'--extern','getrandom='+str(rlib(profile,'getrandom','0.3.4')),'--extern','anyhow='+str(rlib(profile,'anyhow','1.0.104')),'-L','native='+str(H),'-l','dylib=interposer','-C','link-arg=-Wl,-rpath,'+str(H),'-o',str(H/('probe-'+label))]
+                                                                                                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/dombarker/project-offloads/codex-pv-c474-20261029/diagnostics-test.py", line 16, in rlib
+    assert len(ds)==1,(profile,crate,ds)
+           ^^^^^^^^^^
+AssertionError: ('release', 'getrandom', [PosixPath('/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/getrandom-48cb88df4a19f518.d'), PosixPath('/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/getrandom-13427f77686b1b02.d'), PosixPath('/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/release/deps/getrandom-f125dd7a1ecdc11c.d')])
