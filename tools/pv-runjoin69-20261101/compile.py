@@ -100,6 +100,9 @@ if elapsed:
 intent.update(exit=int(ex[1]) if ex else None,host_wall_seconds=wall,peak_rss_bytes=int(rss[1])*1024 if rss else None,swaps=int(swap[1]) if swap else None,completed_modules=len(records),accepted=bool(ex and int(ex[1])==0 and len(records)==len(mods) and all(v['accepted'] for v in records)),failed_module=next((v['module'] for v in records if not v['accepted']),None),axioms=[line for v in records for line in v['axioms']],axiom_note='Per-module original #print axioms retained; empty means no print in that unchanged source. Root audits follow rebuild.')
 (E/f'receipt-{a}.json').write_text(json.dumps(intent,indent=2)+'\n')
 
-if not intent['accepted']:print(out[-3500:],flush=True)
+if not intent['accepted']:
+ lines=out.splitlines()
+ for i,line in enumerate(lines):
+  if 'error' in line: print('\n'.join(lines[i:i+10]),flush=True)
 print('RECEIPT',json.dumps({k:intent[k] for k in ['attempt','accepted','completed_modules','failed_module','host_wall_seconds','peak_rss_bytes','swaps']}),flush=True)
 sys.exit(0 if intent['accepted'] else 1)

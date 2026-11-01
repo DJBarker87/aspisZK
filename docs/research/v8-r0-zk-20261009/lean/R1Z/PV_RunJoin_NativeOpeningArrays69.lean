@@ -71,11 +71,14 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
   have ks : source d.k=toW k := by
     simpa only [ProverRwDictionaryTower.native_w_roundtrip] using congrArg toW (hk'.trans hk)
   have native := PV_RunJoin_NativeBinding63.native base heap box ops runtime world
+  let value : @PV_RunJoin_NativeControl55.Phase (types base) := phase.val
   let p : PV_RunJoin_NativeActual62.P base heap box (PV_RunJoin_NativeBinding63.remaining base ops runtime world) :=
     ⟨phase.val,by
-      have produced := phase.property
-      rw [native] at produced
-      exact produced⟩
+      change @PV_RunJoin_ActualProvenance60.Produced (types base)
+        (PV_RunJoin_NativeResidual62.opsNative base heap box
+          (PV_RunJoin_NativeBinding63.remaining base ops runtime world)) value
+      rw [←native]
+      exact phase.property⟩
   have domain := PV_RunJoin_CircleCanonical69.data base heap box
     (PV_RunJoin_NativeBinding63.remaining base ops runtime world) p
   change (∀ i,i<10 → ProverCommitSubfieldOps47.Canonical (d.p i)) ∧
