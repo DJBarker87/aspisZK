@@ -37,8 +37,9 @@ theorem step_plain (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     aspis_prover.state_only_entropy.entropy_nonzero32_loop.body
   by_cases h : i < 32#usize
   · simp only [h,if_true]
-    simp only [PV_EVH_LiftLaws.bind_lift]
+    cases read : Array.index_usize bytes i <;> rfl
   · simp only [h,if_false]
+    rfl
 
 theorem step_total (bytes : Array U8 32#usize) (combined : U8) (i : Usize) :
     ∃ cf, aspis_prover.state_only_entropy.entropy_nonzero32_loop.body bytes combined i = .ok cf := by
