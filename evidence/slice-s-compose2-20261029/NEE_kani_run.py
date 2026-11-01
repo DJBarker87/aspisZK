@@ -3,7 +3,8 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,tomllib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose2-20261029';H='dombarker@100.108.41.90'
 a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NEE_M' if kind=='metadata' else 'NEE_K')
-assert not (E/a).exists();assert len(list(E.glob('NEE_K*/receipt.json')))<40
+assert not (E/a).exists();assert len(list(E.glob('NEE_K*/receipt.json')))<55
+assert 1<=int(a[5:])<=55 if kind=='kani' else True
 active=E/'NEE_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
 def ssh(code,stdin=None,submitted=False):
  for retry in range(11):
