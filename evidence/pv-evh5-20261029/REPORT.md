@@ -1,131 +1,127 @@
-# D540 resume: composed prover source spine; complete event task unfinished
+# D542 continuation — prover event task remains unfinished
 
 Branch `codex/pv-evh-20261029`, exact worktree
-`/Users/dominic/ZK/.worktrees/pv-evh`. This resume began at `ddd4d92391`;
-EVH5 originally began at `841ae0f9a9`. **Rows removed: NONE. Target not yet
-established.** This stop is an explicitly requested context handoff, not budget
-exhaustion, a source counterexample, or an owner blocker.
+`/Users/dominic/ZK/.worktrees/pv-evh`. Baseline `80a4631574`;
+source/evidence snapshot `c49188cb0383a421a87518a50bce82cf562d596b`.
+**Rows removed: NONE. Target not yet established.**
 
-## Established in this resume
+## Established source result
 
-`PV_EVH_Prefix` composes finite state/writer executions. Exhaustion, source
-failure and source divergence are separate cases; state and ordered event
-prefixes survive each. `FinishedView` asserts Result erasure only for finished
-finite runs. `PV_EVH_PrefixLoop.fixed_recursive` transports nested finite
-executions through an actual source recursive equation without normalizing a
-prover recurrence. It is axiom-free. The old accepted modules were not edited.
+`PV_EVH_ExpandedProver.entry_fixed` (73696) is the strongest accepted LOCAL
+Result-transport theorem. It runs the exact emitted proof-account entry through
+its callback and FnMut restoration, entropy generation and recursion, retry
+owner, masked attempt, actual durable store specialization, reserve/build and
+nonce helper spines. It also installs mask-material construction/application,
+semantic construction, private-salt derivation and semantic-proof production
+through their source interpreters. The whole callees replaced by these
+interpreters are not assumed as erasure laws. Their remaining named leaves are
+explicit hypotheses, not native implementations or a supplied whole trace.
 
-`PV_EVH_EntropyGenerate.generate_fixed` binds the emitted nonzero guard to the
-existing entropy interpreter. `PV_EVH_AccountCallback.callMut_fixed` and
-`next_fixed` follow the actual proof-account FnMut callback and wrapper,
-retaining the exact `(r1,t,back)` tuple and applying `back c1`. Account acquisition
-is still a named D520 input. The inherited entropy `afterDraw` tail remains
-Result-only for some helpers and earns no complete event-coverage credit.
+The new path no longer executes the old Result-only entropy afterDraw or
+nonce reservation_path/helper spine. It retains each source restoration tuple
+and function, and permits leaf state/events before success, failure, source
+divergence or nested finite exhaustion. Exhaustion remains distinct from .div;
+all erasure claims apply only to completed finite evaluations on the stated
+compatible dictionary domain. Advancing reject-then-success entropy is not
+silently put into the uniform fixed view.
 
-`PV_EVH_PrefixRetryBody` and `PrefixRetryRun` use that nested execution carrier
-through the actual retry source spine. `PV_EVH_AccountEntry.entry_fixed`
-connects it to emitted `RealR1_client.prove_for_proof_accounts`, with its retry
-entry guard. `PV_EVH_MaskedAttempt.run_fixed`, `MaskedWithAttempt.run_fixed`
-and `ReserveBuild.run_fixed` expand the exact emitted masked-attempt,
-with-attempt and reserve-and-build control spines. They use named, typed OPEN
-callee interpretations, not a whole-program trace answer. Their hypotheses are
-local erasure conditions, not native observation laws or new trust items.
+The retry op233/trait-default comparison is now an explicitly unfinished
+source callee. Seven entropy helpers, eight nonce-path helpers, seven fallible
+reserve helpers and the outer error-kind operation remain open. LeafInstall
+leaves fourteen with-attempt, nine reserve-build and three semantic-proof
+callees, plus the installed subinterpreters' own leaves. See
+`D542-open-native-leaves.json` and generation manifests for exact typed lists.
+These lists overlap and are not a native coverage count.
 
-`PV_EVH_ReserveJoin.install_fixed` replaces the whole reserve-and-build callee
-with its source interpreter. `PV_EVH_ProverSpine.entry_fixed` composes the
-library entry, actual account callback, retry, masked-attempt, with-attempt
-and reserve-and-build spines. It has NO whole `next_OPEN`, `prove_OPEN`,
-`prove_masked_with_attempt` or reserve-and-build erasure hypothesis. Instead it
-retains five head callees, eighteen with-attempt callees and eleven generic
-reserve callees, plus the account and entropy boundary conditions. These are
-explicit unfinished leaves, not discharged source effects.
+## What is NOT established
 
-`PV_EVH_DurableReserveBuild.run_fixed` specializes reserve-and-build to the
-actual durable nonce-store instance and uses existing `NonceSource.reserve`
-through `Prefix.ofM`. It retains the nonce source's file request/delivery
-prefixes, with ten other reserve callees OPEN. This specialization is compiled
-but NOT YET installed into the generic ProverSpine composition. The old nonce
-helper coverage gaps remain; this is not a full filesystem adequacy claim.
+Complete native event coverage is still missing: allocation, drop/zeroize,
+panic/abort, checked-primitive failures, source hash/oracle byte fidelity,
+nonce path/digest/options/error helpers and faithful formatting remain proof
+work. No Unit formatting carrier earns fmt-1 credit. The textual census
+(628 source declarations and 255 external aliases) is explicitly not a
+transitive native-fidelity proof. PrepareOpening is a checked generated draft
+with sixteen open callees; it has NOT been compiled or installed.
 
-Generators check byte-identical output and retain original extraction/body
-hashes, exact field signatures and open-callee inventories. No extraction,
-source dictionary, NativeTrace projection or privacy theorem was edited.
+No full oraclePrefix/countTrace/nonce-fileTrace equality against the unchanged
+NativeTrace projections, native deployment installation, or successful worldRun
+at runjoin opsNative AND its allocator world has been proved. Callees may emit
+count or file events. No actual-family conjunction/nonemptiness proof exists,
+so ruling (v') consistency reduction is NOT claimed. NativeObstruction62's
+op132/uniform-success obstruction remains relevant. No unrelated model witness
+was introduced. D520 client/account inputs remain named for pv-uc/U/D524.
 
-## Remaining obligations and before/after
+Before/after at the privacy endpoint: all nineteen runtime selections and all
+native/deployment/privacy premises remain OPEN and unchanged. No T field,
+simulator, observer, actual-family quantifier, native projection, frozen
+extraction or shipped source/artifact changed. V370/V371/rdea-1, V400/V396,
+D159/D166 and L1/L2/L3 retain their prior classification. Local Compatible and
+FinishedView hypotheses are not added privacy trust or endpoint discharges.
 
-Before this resume, retry transport needed whole next/prove callee laws. The
-new LOCAL composed source-spine theorem expands those calls into their exact
-control graphs and named leaf laws. Before/after at the PRIVACY endpoint:
-all nineteen runtime selections and all native/deployment/privacy premises
-remain OPEN and unchanged. No ledger row is removed. No simulator, observer,
-T field, error term, actual-family quantifier or NativeTrace definition changes.
+## Validation and resources
 
-The complete source event producer is still missing. In addition to the named
-leaf inventories, Result-only entropy/nonce helper tails and the retry-entry
-comparison (op233 under its trait default) still lack event interpretation.
-Source failure Results alone do not emit native panic/abort diagnostics.
-Allocation/drop/runtime paths, hash request/answer byte fidelity, complete
-oracle/count/file trace projection links and rtDeployed installation remain
-unproved. Count projections must allow events from ALL instantiated callees.
-D520 client-before/after and account acquisition stay explicit for pv-uc/U/D524.
+The final read-only audit PASS reconciles every EVH5 receipt, source/blob/hash,
+prepare fingerprint, accepted object and generator output with the retained
+host workspace and finds no live owned scope. `validation.json`,
+`host-final.json` and `resume-final-checks.json` contain the exact results.
+Every accepted theorem's printed axioms are a subset of propext,
+Classical.choice, Quot.sound; SliceBind's pure lemma is axiom-free. No separate
+final audit/closure/release regression was launched because acceptance remains
+unfinished. Audit 73699 is preserved. All unchanged objects/cohort were reused.
 
-No successful full run at runjoin opsNative and allocator world, complete
-actual-family link conjunction, or actual-domain nonemptiness is proved.
-NativeObstruction62/op132 still prevents inferring uniform success. Ruling
-(v') consistency reduction has NOT been earned by these conditional local
-lemmas. The measured headline at `8fa34d9fb4` is unchanged; no finite-carrier
-work or alternative event definition was introduced. V370/V371/rdea-1,
-V400/V396, D159/D166 and L1/L2/L3 retain their existing classification.
+Every compile used same-shell admission (exit 0 AND allowed:true), one scope,
+MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64 and Lean -M7000.
+Every receipt records exact source revision/blob/SHA, dependency fingerprint,
+target, command, exit, wall, peak RSS, swaps and full #print axioms. There were
+no memory kills, transport failures or cap increases. 73671 hit the ordinary
+heartbeat limit; its changed symbolic replacement is SliceBind plus the
+restructured entropy proof, not a higher limit. Other failures and their
+source replacements are recorded in RESUME-D542.md and original receipts.
+Admission refusals were uncharged and retried on the SAME ID after the full
+180-second cooldown. Source/failed-hash guard compile.py is unchanged; SHA-256 `4e1903fa17f5b353d43336c0acc3cf4384629f3a9c01e86c917a2b9abb6a5785`.
 
-## Validation, resources and budget
+| Accepted new target | ID | Exit | Wall | RSS KiB | Swap | Source revision |
+| --- | --- | --- | --- | --- | --- | --- |
+| PV_EVH_DurableWithAttempt | 73661 | 0 | 0:10.99 | 2654488 | 0 | b85a41babbcf |
+| PV_EVH_AccountGuard | 73663 | 0 | 0:02.39 | 2600848 | 0 | f397d047baab |
+| PV_EVH_DurableProver | 73664 | 0 | 0:02.25 | 2602672 | 0 | 26a848b45f84 |
+| PV_EVH_SliceBind | 73672 | 0 | 0:03.16 | 2581532 | 0 | 66d32a67c5b1 |
+| PV_EVH_EntropyStep | 73674 | 0 | 0:07.18 | 2643800 | 0 | a5486b692a8e |
+| PV_EVH_EntropyFlow | 73676 | 0 | 0:01.84 | 2598100 | 0 | 883475dd5ab8 |
+| PV_EVH_AccountFlow | 73677 | 0 | 0:02.89 | 2600072 | 0 | 883475dd5ab8 |
+| PV_EVH_AccountFlowEntry | 73678 | 0 | 0:02.95 | 2601352 | 0 | 883475dd5ab8 |
+| PV_EVH_DurableFlow | 73679 | 0 | 0:03.55 | 2602052 | 0 | 883475dd5ab8 |
+| PV_EVH_NoncePath | 73681 | 0 | 0:07.16 | 2665748 | 0 | 2a62b28f3960 |
+| PV_EVH_SyncDirectory | 73682 | 0 | 0:02.54 | 2602844 | 0 | 2a62b28f3960 |
+| PV_EVH_NonceReserveFallible | 73683 | 0 | 0:02.37 | 2614772 | 0 | 2a62b28f3960 |
+| PV_EVH_NonceReserve | 73684 | 0 | 0:01.83 | 2603276 | 0 | 2a62b28f3960 |
+| PV_EVH_NonceReserveBuild | 73686 | 0 | 0:03.63 | 2619428 | 0 | fa5380da4d57 |
+| PV_EVH_NonceWithAttempt | 73687 | 0 | 0:09.43 | 2650944 | 0 | fa5380da4d57 |
+| PV_EVH_NonceProver | 73688 | 0 | 0:03.26 | 2603512 | 0 | c01185edee9b |
+| PV_EVH_MaterialFromEntropy | 73689 | 0 | 0:03.63 | 2609504 | 0 | c01185edee9b |
+| PV_EVH_ApplyMaterial | 73690 | 0 | 0:02.29 | 2604876 | 0 | c01185edee9b |
+| PV_EVH_BuildSemantics | 73691 | 0 | 0:03.36 | 2607584 | 0 | c01185edee9b |
+| PV_EVH_ProveSemantics | 73693 | 0 | 0:03.33 | 2603396 | 0 | f3abad04afd5 |
+| PV_EVH_PrivateSalts | 73694 | 0 | 0:03.10 | 2602380 | 0 | f3abad04afd5 |
+| PV_EVH_LeafInstall | 73695 | 0 | 0:03.65 | 2610132 | 0 | 998f7672db62 |
+| PV_EVH_ExpandedProver | 73696 | 0 | 0:02.47 | 2603608 | 0 | 998f7672db62 |
 
-Initial read-only audit reconciled all 19 inherited EVH5 receipts and accepted
-objects with the host and found no live owned scope. Every new compile used
-the retained workspace/cache and verified SAME project/external cohort and
-first-root namespace resolution before launch. No dependency was rebuilt.
-There were no admission refusals, transport errors or memory/time kills in
-this resume. All scopes used same-shell admission exit 0 and allowed:true,
-MemoryHigh=6G, MemoryMax=8G, MemorySwapMax=0, TasksMax=64, Lean -M7000.
+## Budget and stopping condition
 
-| Accepted target | ID | Exit | Wall | RSS KiB | Swap |
-| --- | --- | --- | --- | --- | --- |
-| PV_EVH_Prefix | 73642 | 0 | 0:01.69 | 2588912 | 0 |
-| PV_EVH_EntropyGenerate | 73644 | 0 | 0:01.42 | 2582928 | 0 |
-| PV_EVH_AccountCallback | 73645 | 0 | 0:01.64 | 2585012 | 0 |
-| PV_EVH_PrefixRetryBody | 73647 | 0 | 0:01.93 | 2595220 | 0 |
-| PV_EVH_PrefixLoop | 73648 | 0 | 0:01.54 | 2580316 | 0 |
-| PV_EVH_PrefixRetryRun | 73649 | 0 | 0:01.50 | 2581352 | 0 |
-| PV_EVH_AccountEntry | 73650 | 0 | 0:01.61 | 2586556 | 0 |
-| PV_EVH_MaskedAttempt | 73651 | 0 | 0:01.88 | 2600204 | 0 |
-| PV_EVH_ReserveBuild | 73654 | 0 | 0:02.91 | 2605996 | 0 |
-| PV_EVH_MaskedWithAttempt | 73656 | 0 | 0:09.32 | 2645220 | 0 |
-| PV_EVH_ReserveJoin | 73657 | 0 | 0:02.78 | 2591336 | 0 |
-| PV_EVH_ProverSpine | 73658 | 0 | 0:03.17 | 2595284 | 0 |
-| PV_EVH_DurableReserveBuild | 73659 | 0 | 0:02.60 | 2616092 | 0 |
+This resume spent **37 attempts: 23 accepted, 14 failed**, IDs 73660–73696.
+EVH5 total: 74 attempts; cumulative EVH4+EVH5: **91/100**, with **9 nominal
+attempts unspent**. There are **NO fresh focused IDs** in the assigned block.
+73697/73698 were consumed by EVH4; 73699 alone is fresh and reserved for final
+audit. The eight old skipped admission-only IDs (73600–73603, 73605/73606,
+73613/73615) remain unavailable under the inherited instruction to leave them
+alone. The nominal budget does not authorize reuse or an out-of-block ID.
+Further focused compilation therefore requires a new ID allocation. This is
+ID-range exhaustion, NOT task completion, budget exhaustion, an owner/client
+blocker or a checked source counterexample. The proof frontier remains open.
 
-Each `receipt-ID.json` records exact target, source revision/blob/SHA,
-dependency fingerprint, command, admission, exit, wall time, RSS, swap and
-#print axioms. Accepted theorem axioms are subsets of propext,
-Classical.choice and Quot.sound. All five failed elaborations retain their
-original source/receipts and have no credit: namespace alias, loop equation
-arity, parenthesized result carrier and generated local-alias tactics. The
-last category required two source fixes. No arithmetic recurrence was reduced.
-
-The failed-source guard caught a byte-identical regeneration BEFORE ID scan
-or submission at 73655. `guard-73655.json` records that uncharged refusal. The
-actual later 73655 launch used changed generated bytes. The guard itself was
-unchanged; no failed source was recompiled unchanged. No ID was reused.
-
-`audit.py` now checks every focused receipt dynamically plus all generator
-outputs. `validation.json` and `host-final.json` validate all 37 EVH5 receipt
-sets, accepted source/objects and absence of live owned scopes. The scan of
-this resume's paths and forbidden proof constructs passed. No file exceeds
-20 MB. There was no separate final closure/audit launch: full event acceptance
-is unfinished, and audit ID 73699 is preserved. No unchanged release regression
-was repeated. No Kani/native run, key/account/funds operation or push occurred.
-
-Usage this resume: **18 attempts, 13 accepted, 5 failed** (73642–73659).
-EVH5 total: 37 attempts, 17 accepted, 20 failed. Cumulative with EVH4:
-**54/100 attempts spent, 46 remaining**, 0 native and 0 Kani. Next fresh ID
-**73660**; audit **73699** unused. The existing 73697/73698 stay consumed.
-The committed HANDOFF.md gives the exact next implementation steps.
+No native/Kani run, key/account/funds operation, push, crates/programs edit,
+other worktree write, external cohort extension or host infrastructure change
+occurred. No file exceeds 20 MiB. The pinned host workspace/cache is retained.
+`commits-D542.txt` is the path-limited commit log through the above snapshot;
+a final evidence-only handoff commit follows. HANDOFF.md specifies the next
+source/native work; the final output must not call this full event coverage.

@@ -1,131 +1,137 @@
-# D540 continuation handoff — full prover event task still unfinished
+# D542 handoff — full native event task remains unfinished
 
 Continue ONLY in `/Users/dominic/ZK/.worktrees/pv-evh`, branch
-`codex/pv-evh-20261029`. Read the prompt-pv-evh5.txt chain, pv-common.txt
-(all rulings through k3, dup-1', fmt-1 and ae1), root/worktree AGENTS.md and
-this directory's REPORT.md. ONLY writer; no delegation authorized. No pushes,
-crates/programs changes, soundness edits, extracted-source edits or other
-worktree writes. New modules use PV_EVH_. This is a CONTEXT handoff, not an
-owner blocker, exhausted budget, completed task or checked counterexample.
+`codex/pv-evh-20261029`. Read the prompt-pv-evh5.txt chain, pv-common.txt again,
+root/worktree AGENTS.md and REPORT.md. This resume began at `80a4631574`;
+source/evidence work through `c49188cb0383a421a87518a50bce82cf562d596b`, followed by an evidence-only
+handoff commit. ONLY writer; no delegation, pushes, crates/programs edits,
+soundness edits, extracted-source edits or other worktree writes authorized.
+New modules use PV_EVH_. **Rows removed NONE; target not yet established.**
 
-## Receipts, IDs, host
+## IDs and evidence: IMPORTANT
 
-- This resume began at `ddd4d92391`, proof work through `7cd97b6f6c` plus the
-  final evidence/handoff commit. EVH5 originally resumed at `841ae0f9a9`.
-- EVH4 spent 17; EVH5 now spent **37** (73623–73659 inclusive). Cumulative
-  **54/100**, nominal **46 attempts remaining**, 0 native and 0 Kani.
-- Next fresh ID **73660**. Audit **73699** UNUSED. Never reuse 73623–73659,
-  73697/73698 or earlier consumed IDs. Leave the old admission-only skipped
-  73600–73603, 73605/73606, 73613/73615 alone as already instructed. The
-  nominal budget does not authorize an ID outside 73600–73699 or skipped IDs;
-  only 73660–73696 and reserved 73699 remain fresh in this block.
-- Read-only audit passed after 73659. `validation.json`, `host-final.json`
-  and `resume-final-checks.json` reconcile all 37 EVH5 admission/out/time
-  receipts, current accepted sources/objects and no live owned scope.
-- FIRST git status and read-only host/receipt reconciliation before launching.
-  Keep `/home/dombarker/project-offloads/codex-pv-evh-20261029` and its cache.
-- New accepted modules in this resume: Prefix 73642, EntropyGenerate 73644,
-  AccountCallback 73645, PrefixRetryBody 73647, PrefixLoop 73648,
-  PrefixRetryRun 73649, AccountEntry 73650, MaskedAttempt 73651,
-  ReserveBuild 73654, MaskedWithAttempt 73656, ReserveJoin 73657,
-  ProverSpine 73658, DurableReserveBuild 73659. DO NOT rebuild or edit them
-  unchanged. Earlier accepted RetryBody/RetrySource/WorldRecursion/RetryRun
-  and the EVH4 substrate are retained and unchanged.
-- `guard-73655.json` is an UNCHARGED pre-ID-scan/pre-submission guard refusal.
-  The later actual 73655 used changed source and failed; it IS consumed.
+- This resume used **37** focused attempts, **23 passed / 14 failed**, precisely
+  73660–73696. EVH5 total 74; cumulative EVH4+EVH5 **91/100**.
+- **9 nominal attempts remain, but NO fresh focused ID remains.** 73697/73698
+  were consumed in EVH4. **73699 is UNUSED, reserved for final audit**; do not
+  repurpose it for a focused proof. Leave skipped 73600–73603, 73605/73606,
+  73613/73615 alone as inherited. Never reuse consumed IDs or leave the block.
+  Further focused compilation needs a new explicit allocation. Do NOT claim
+  budget exhaustion or imply the nominal budget authorizes new IDs.
+- Final read-only audit PASS: validation.json, host-final.json,
+  resume-final-checks.json reconcile all 74 EVH5 receipts, committed source,
+  accepted objects and generators and show no live owned scope.
+- No final compiler audit/closure/manifest replay was run. 73699 remains fresh.
+  No native or Kani run; no wallet/key/funds operation. No infrastructure edit.
+- FIRST git status and read-only receipt/host reconciliation before any launch.
+  Reuse `/home/dombarker/project-offloads/codex-pv-evh-20261029` and all caches.
+  Never rebuild the accepted unchanged modules merely to test a new consumer.
 
-## What is actually proved
+## Strongest accepted theorem
 
-`PV_EVH_ProverSpine.entry_fixed` is now the most composed LOCAL source Result
-transport. It follows actual emitted prove_for_proof_accounts, its callback
-and FnMut wrapper, retry owner, prove_masked_attempt, prove_masked_with_attempt
-and reserve-and-build. No whole next/prove/with-attempt/reserve erasure law is
-assumed there. The source spines are composed from named OPEN leaf executions.
+`PV_EVH_ExpandedProver.entry_fixed` (73696) composes the actual emitted
+RealR1_client.prove_for_proof_accounts source through callback and FnMut
+restoration, entropy generation/recursion, retry owner, masked attempt, durable
+with-attempt, reserve/build and the expanded nonce path/reservation source.
+It installs mask-material construction/application, semantic construction,
+private-salt derivation and semantic-proof production from their source spines.
 
-It is NOT the requested complete event-producing worldRun. Account acquisition
-remains a D520 input. Five head, eighteen with-attempt and eleven generic
-reserve callees remain OPEN. Entropy afterDraw, nonce helper tails and
-AccountEntry's op233 comparison under trait_default still contain Result-only
-calls with incomplete event coverage. Allocation/drop/runtime/panic/abort,
-source hash/oracle byte fidelity and actual success remain open. No full
-NativeTrace projection or rtDeployed installation has been supplied.
+It is **LOCAL Result transport**, not the requested complete native worldRun.
+The replaced whole helpers are not erasure hypotheses, but their remaining
+native leaves are OPEN. Source failure/divergence and finite exhaustion retain
+prefixes separately. FinishedView is restricted to finished finite runs on
+its stated compatible dictionary domain; it does NOT create a uniform view
+for advancing reject-then-success entropy, or prove a successful run exists.
 
-Prefix.bind and PrefixLoop retain state/events at exhaustion separately from
-source .div. All erasure claims are restricted to completed finite executions
-on their named compatible dictionary domain. Preserve that distinction.
+The new entry no longer calls the inherited Result-only entropy afterDraw or
+nonce helper spine. The old accepted modules remain unchanged and are still
+imported where needed; imports do not mean those old interpreters execute.
+The retry op233/trait-default comparison is explicitly unfinished and can
+emit effects/exhaust; it is not silently a completed Result lift.
 
-`PV_EVH_DurableReserveBuild` additionally specializes reserve-and-build to the
-ACTUAL durable store instance and interprets its reservation through existing
-NonceSource.reserve, lifted by Prefix.ofM. It has ten other callees OPEN and
-inherits every documented nonce-helper coverage gap. It is compiled, but
-NOT YET installed into the generic ProverSpine source composition.
+Accepted new chain (IDs): DurableWithAttempt 73661, AccountGuard 73663,
+DurableProver 73664, SliceBind 73672, EntropyStep 73674, EntropyFlow 73676,
+AccountFlow 73677, AccountFlowEntry 73678, DurableFlow 73679, NoncePath 73681,
+SyncDirectory 73682, NonceReserveFallible 73683, NonceReserve 73684,
+NonceReserveBuild 73686, NonceWithAttempt 73687, NonceProver 73688,
+MaterialFromEntropy 73689, ApplyMaterial 73690, BuildSemantics 73691,
+ProveSemantics 73693, PrivateSalts 73694, LeafInstall 73695,
+ExpandedProver 73696. Each exact revision/blob/SHA, object/dependency hash,
+exit/wall/RSS/swap and #print axioms is in receipt-ID.json. All accepted axiom
+sets are subsets of propext, Classical.choice, Quot.sound. SliceBind is
+axiom-free. No memory kill or cap increase occurred.
 
-## Exact next proof work
+## Exact next proof work (after fresh focused IDs are allocated)
 
-1. Install DurableReserveBuild in an actual-store specialized with-attempt
-   source interpreter (new module, do not edit accepted generated modules).
-   The existing generic ReserveJoin requires universal store/trait fields;
-   avoid imposing those as actual-domain premises. Specialize the source
-   header to DurableStateOnlyMaskNonceStore and the exact emitted instance,
-   as open_spine.py's DurableReserveBuild does. Replace the whole reserve
-   callee by the accepted specialized interpreter, carrying its ten remaining
-   OPEN leaves and file Compatible domain. Then compose that actual-store
-   source spine through MaskedAttempt and the account entry.
-2. Replace the Result-only retry-entry op233/trait-default comparison by its
-   source interpretation or an explicit named unfinished callee. Do not count
-   the current Result lift as complete effect coverage. Continue expanding
-   the remaining named leaf inventories in *-generation.json: allocation,
-   zeroize/drop, context encode, hash/oracle, mask generation/application,
-   host_semantic.build_with_material and prove_from_semantics. They are
-   source-association/proof work, not a new T or an OS answer for a whole helper.
-3. Close inherited Entropy.afterDraw and NonceSource reservation_path/other
-   helper coverage gaps. Instantiate every reached external operation with
-   its actual world state update, ordered requests/deliveries and failure,
-   panic/abort/allocation paths. Preserve source restoration tuples/functions.
-   Ruling fmt-1 applies to ANY reached formatting, no Unit-carrier credit.
-4. Only after full coverage: complete prover worldRun and erasure on its honest
-   compatible domain; prove source oraclePrefix/countTrace/nonce-fileTrace
-   equal to UNCHANGED NativeTrace projections. Callees may themselves emit
-   count events: never silently assume otherwise. D520 before/after/account
-   inputs remain named for pv-uc, owner U/D524.
-5. Only after every link is on provenance-fixed actual families and proved,
+1. Implement the explicit native leaves, never whole-helper OS answers.
+   D542-open-native-leaves.json and *-generation.json give typed lists.
+   LeafInstall has fourteen with-attempt, nine reserve and three semantic-proof
+   leaves; installed children retain their own leaves. EntropyStep has seven,
+   NoncePath eight, fallible reserve seven and reserve's error-kind one.
+   Head operations, op233 comparison, outer entropy nonzero guard, and D520
+   account acquisition remain named. Reuse the same actual nonzero/hash/error
+   handlers at every source call site rather than assuming silent effects.
+2. `PV_EVH_PrepareOpening.lean` is GENERATED/CHECKED but **UNCOMPILED**, with
+   sixteen named callees. It is a concrete next focused target, then install
+   it into LeafInstall.SemanticsCallees.prepare_opening_OPEN. Continue exact
+   source expansion of finish_opening, publish_compact, private-salts loop,
+   mask generation/application and semantic builder leaves. Check signatures
+   against actual definitions before launch. Do not use 73699 for this.
+3. Implement actual world state updates and native payload/failure paths:
+   allocation/heap/address effects, zeroize/drop, path/digest/options metadata,
+   hash/oracle bytes, runtime panic/abort/checked-primitive failures. Existing
+   file Answers adapters and fixed-view source laws are not native fidelity.
+   **fmt-1 applies to every reached formatting path**; no Unit-carrier credit.
+   reservation_name remains an open formatting-relevant helper. Preserve each
+   mutable-borrow restoration tuple/function in every expansion.
+4. ONLY AFTER full native event coverage, prove the unchanged NativeTrace
+   oraclePrefix, countTrace and nonce-store fileTrace projections. All reached
+   callees may emit count/file/oracle events: never assume their projections
+   empty from local Result transport. D520 client-before/after and account
+   inputs remain named for pv-uc/U/D524. Do not work on finite carriers.
+5. ONLY AFTER each link is on provenance-fixed actual families and proved,
    reduce (v') consistency to successful actual worldRun nonemptiness at
-   runjoin's opsNative AND allocator world. NativeObstruction62/op132 still
+   runjoin opsNative AND its allocator world. NativeObstruction62/op132 still
    blocks inferring uniform success. No unrelated MODEL VIEW earns this.
-6. Focused module, dependent entry bridge, final axioms audit 73699 and one
-   closure replay only when acceptance is actually ready. pv-meas's measured
-   arbitrary-law event headline at `8fa34d9fb4` is unchanged and consumes the
-   same links. Do not work on finite carriers or redefine native projections.
+6. Focused changed module, dependent entry bridge, final axioms audit 73699
+   and one closure/manifest replay only when actual acceptance is ready.
+   Do not promote local Compatible/FinishedView structs to endpoint links.
+   All nineteen native runtime selections and deployment/privacy premises
+   remain OPEN; no source/native adequacy was folded into a new T field.
 
-## Tools and proof pitfalls
+## Tools, regeneration and proof pitfalls
 
-Commit each new source first, then:
+With a NEW authorized focused ID, commit source first, then:
 
     python3 tools/pv-evh5-20261029/stage.py PV_EVH_NewModule
-    python3 tools/pv-evh5-20261029/compile.py 73660 PV_EVH_NewModule
+    python3 tools/pv-evh5-20261029/compile.py NEW_ID PV_EVH_NewModule
 
-stage.py verifies the inherited SAME project/external cohort and first-root
-resolution, reusing all accepted own objects. New imports outside its known
-set need the inherited full prepare/cohort resolution, never a guessed object.
-compile.py uses one 6G/8G/swap0/64-task scope, -M7000, same-shell admission,
-cross-job ID scan, exact committed source and failed-hash guard. Admission
-refusal: keep same unlaunched ID, wait FULL 180s. Pre-launch SSH reset: retain
-evidence and wait 60s. Post-submission reset: recover receipts, never resubmit.
-No host infrastructure changes are authorized.
+compile.py currently enforces the old assigned range. A new allocation needs
+an explicitly authorized range-only update; do not infer one. stage.py checks
+SAME project/external cohort and first-root resolution and reuses accepted own
+objects. A new import outside its known set needs full inherited resolution,
+not a guessed object. One scope, 6G/8G/swap0/64 tasks, Lean -M7000. Admission
+requires exit 0 AND allowed:true in the same shell. Refusal: SAME unlaunched ID,
+full 180s cooldown. Pre-submit SSH reset: 60s retries; post-submit: recover
+receipts, never resubmit. No host infrastructure changes authorized.
 
-All generators have --check and are checked by audit.py (read-only, no compile):
-retry.py, prefix_retry.py, masked.py, open_spine.py with MaskedWithAttempt,
-ReserveBuild or DurableReserveBuild, and reserve_join.py. Their original
-extraction/body/source hashes and exact OPEN field signatures are retained.
+All generators have --check and are audited by audit.py: retry/prefix_retry,
+masked/open_spine/reserve_join/account_guard, entropy_entry/durable_flow,
+nonce_build/nonce_entry/leaf_install. open_spine includes PrepareOpening.
+frontier.py is only a TEXTUAL reference census (628 declarations/255 aliases),
+not proof of transitive native coverage. Audit now reports next_fresh_id=null
+rather than erroneously suggesting consumed 73697.
 
-open_spine.py emits per-bind FinishedView proofs and preserves source calls;
-no recurrence/field arithmetic is normalized. When a source pure let introduces
-an alias i, dsimp at the goal can remove it before case splitting. The final
-proof tracks indented let aliases and uses `try dsimp only [aliases] at condition`
-then exact branch simp. Do not repeat failed 73652/73653/73655 text. Result
-carrier applications must be parenthesized (`P (alloc.vec.Vec T)`). Source
-constants without argument binders need the generator's special signature path.
+RESUME-D542.md records failures/replacements. Key fixes: exact actual store
+instance inside closure arguments; explicit comparison compatibility; Bool
+false equality normalization; Prefix carrier qualification where `(P : Type)`
+shadows its alias; retain `salts` as a local tuple alias after rcases; do not
+add helper parameters to the leaf Compatible structure. Do not repeat failed
+source bytes. Mutable-slice pure conversion requires the small symbolic
+SliceBind.pure_bind_fixed law, not huge explicit source continuations or broad
+unfolding. 73671 hit the normal heartbeat limit; no limit increase was used.
 
-Do not promote the conditional local erasure structs to endpoint link proofs.
-No privacy skeleton consistency credit is claimed. All endpoint/deployment
-rows remain OPEN; **rows removed NONE; target not yet established**.
+This stop is assigned focused-ID exhaustion with nominal budget unspent,
+not completion, a checked source counterexample or an owner/client blocker.
+The next deliverable remains actual native effect coverage, followed by the
+requested trace equalities and successful actual-family nonemptiness.
