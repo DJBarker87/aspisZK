@@ -1,0 +1,41 @@
+{"attempt": "NEJ_L001", "exit_status": 1, "wall_seconds": 2.063101181993261, "peak_rss_kib": "744740", "swaps": "0", "print_axioms": ["'NEJ_CommonFrame.run_spec' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEJ_CommonFrame.touched_windows' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEJ_CommonFrame.common_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEJ_CommonFrame.reserved_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEJ_CommonFrame.window_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+NEJ_generated/NEJ_CommonFrame.lean:76:16: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => (if _a then src k else dst k) = if k < 7 ∨ 8 ≤ k ∧ k < 148 then src k else dst k
+Error: Application type mismatch: The argument
+  instDecidableTouched windows k
+has type
+  Decidable (touched windows k)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite α _a (instDecidableTouched windows k)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to a
+...
+ dst k) = if k < 7 ∨ 8 ≤ k ∧ k < 148 then src k else dst k
+Error: Application type mismatch: The argument
+  instDecidableTouched windows k
+has type
+  Decidable (touched windows k)
+but is expected to have type
+  Decidable _a
+in the application
+  @ite α _a (instDecidableTouched windows k)
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+α : Type
+src dst : Nat → α
+k : Nat
+⊢ (if touched windows k then src k else dst k) = if k < 7 ∨ 8 ≤ k ∧ k < 148 then src k else dst k
+'NEJ_CommonFrame.run_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEJ_CommonFrame.touched_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEJ_CommonFrame.common_bytes' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEJ_CommonFrame.reserved_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEJ_CommonFrame.window_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-rcde69f2f917549e6993e63f94af6f8e4.scope; invocation ID: 8c2c98cb83c743faa024b452af2cc7da
