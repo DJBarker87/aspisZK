@@ -1,4 +1,4 @@
-"""Concrete source callback constructors. No implicit-drop/native credit."""
+"""Concrete source callback constructors with explicit native drops."""
 from pathlib import Path
 import ast,hashlib,json,re,subprocess,sys
 E=Path('evidence/pv-evh8-20261101');rev='8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7'
@@ -13,16 +13,20 @@ namespace PV_EVH_CallbackCtor
 open Aeneas Aeneas.Std ProverRwFull PV_EVH_World
 open PV_EVH_Prefix (P FinishedView)
 variable [ExternalTypes] [ExternalFuns]
-/- Concrete callback value laws ONLY. Reached native capture/argument drops,
-source operator selection and actual runtime adequacy remain OPEN. -/
+/- Constructor callbacks execute native argument/capture drops first. Their
+actual drop associations, operator selection and runtime adequacy remain OPEN. -/
 '''
 rows=[]
 for i,v in enumerate(json.load(open(E/'callback-frontier.json'))['callbacks']):
  if 'body' not in v:continue
  name='callback_'+str(i);fn=v['callback'];h,r,b,_,ex=g['get'](fn);m=re.fullmatch(r'\s*ok (\w+(?:\.\w+)*)\s*',b);assert m,b
  value=m[1];args=' '.join(ex)
- out+='\ndef '+name+' '+h+' : P '+r+' := pure '+value+'\n'
- out+='\ntheorem '+name+'_fixed '+h+' :\n    FinishedView ('+name+' '+args+') ('+fn+' '+args+') :=\n  PV_EVH_Prefix.lift_fixed (.ok '+value+')\n'
+ cap=re.search(r'\(c : ([\s\S]*?)\)\s*\(tupled_args :',h)[1]
+ arg=re.search(r'\(tupled_args : ([\s\S]*?)\)\s*$',h)[1]
+ drops=' (dropArgument : '+arg+' → P Unit) (dropCapture : '+cap+' → P Unit)'
+ out+='\ndef '+name+' '+h+drops+' : P '+r+' := do\n  let _ ← dropArgument tupled_args\n  let _ ← dropCapture c\n  pure '+value+'\n'
+ out+='\ntheorem '+name+'_fixed '+h+drops+'\n    (ha : FinishedView (dropArgument tupled_args) (.ok ()))\n    (hc : FinishedView (dropCapture c) (.ok ())) :\n    FinishedView ('+name+' '+args+' dropArgument dropCapture) ('+fn+' '+args+') := by\n'
+ out+='  exact PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok '+value+') ha\n    (fun _ => PV_EVH_Prefix.bind_fixed _ _ (.ok ()) (fun _ => .ok '+value+') hc\n      (fun _ => PV_EVH_Prefix.lift_fixed (.ok '+value+')))\n'
  out+='\n#print axioms '+name+'_fixed\n'
  rows.append(dict(name=name,source_callback=fn,body_sha256=hashlib.sha256(b.encode()).hexdigest(),native_status='OPEN capture/argument drop and source/native association'))
 out+='end PV_EVH_CallbackCtor\n'
