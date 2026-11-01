@@ -1,0 +1,26 @@
+import NEE_ValidatorContinuationResult
+set_option autoImplicit false
+noncomputable section
+namespace NEE_RawValidatorCohort
+open Aeneas Aeneas.Std Result NBN_StatementResult NED_ErrorCarriers
+open AspisR1AdapterReconstruct
+attribute [local instance] Classical.propDecidable
+
+/-- Total emitted-family transport, including every rejection/error. This is
+the model substitution part of the native composition, not a native-root claim. -/
+theorem result (s : Statement) :
+    aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      (NED_ReconstructCarriers.toRaw s) =
+    ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+      (NED_ValidatorStatus.status s)) := by
+  rw [NEE_RawValidatorPrefix.source_factor,NED_ReconstructCarriers.common_argument]
+  simp only [bind_tc_ok]
+  rw [NEE_ValidatorGate.result,NEE_ValidatorContinuation.source_factor,
+    NEE_ValidatorContinuationResult.result]
+  unfold NEE_ValidatorGate.normalized NED_ValidatorStatus.status NEE_ValidatorContinuationResult.model
+  dsimp (config := {zeta := true,zetaHave := true}) only
+  repeat' first | split | rfl
+  all_goals simp_all only [if_pos,if_neg]
+
+#print axioms result
+end NEE_RawValidatorCohort

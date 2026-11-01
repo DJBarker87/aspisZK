@@ -1,0 +1,94 @@
+import NEE_OracleCallDomains
+set_option autoImplicit false
+noncomputable section
+namespace NEE_ReachedSubstitution
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+open NED_ValidatorTrace NEE_ValidatorMutation
+attribute [local instance] Classical.propDecidable
+
+/-- Full child equality is required only where the native caller reaches
+that exact argument. The temporary late output is discarded by the caller. -/
+def ReplyLaw (pay : Pay) (lane : Lane) (late : Late) : Call → Prop
+  | .payment a => pay a = NED_ValidatorTrace.payment a
+  | .lane d => lane d = NBN_FirstByteDependency.lane enc d
+  | .late a out => ignore (late a out) = ignore (NBN_LateSummary.run enc a out)
+
+def Children (pay : Pay) (lane : Lane) (late : Late) (s : Statement) : Prop :=
+  ∀ c, c ∈ (NEE_ValidatorOracle.run pay lane late s).2 → ReplyLaw pay lane late c
+
+theorem tail (pay : Pay) (lane : Lane) (late : Late) (s : Statement)
+    (lane_bridge : lane (parts s).2.2.2.2.1 =
+      NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1)
+    (late_bridge : ∀ a out, Call.late a out ∈ (NEE_ValidatorOracle.tail pay lane late s).2 →
+      ignore (late a out) = ignore (NBN_LateSummary.run enc a out)) :
+    NEE_ValidatorOracle.tail pay lane late s = NED_ValidatorTrace.tail s := by
+  unfold NEE_ValidatorOracle.tail NED_ValidatorTrace.tail
+  dsimp only
+  rw [lane_bridge]
+  cases h : NBN_FirstByteDependency.lane enc (parts s).2.2.2.2.1 with
+  | fail e => simp only [h]
+  | div => simp only [h]
+  | ok r => cases r with
+    | Err e => simp only [h]
+    | Ok l =>
+      simp only [h]
+      split
+      · rfl
+      · rename_i same
+        have reached : Call.late (common s).lane_transition NBN_LateResult.zero ∈
+            (NEE_ValidatorOracle.tail pay lane late s).2 := by
+          simp only [NEE_ValidatorOracle.tail,lane_bridge,h,bind_tc_ok,same,if_false]
+          simp
+        change (ignore (late _ _),_) = (ignore (NBN_LateSummary.run enc _ _),_)
+        rw [late_bridge _ _ reached]
+
+theorem bindings (pay : Pay) (lane : Lane) (late : Late) (s : Statement)
+    (children : ∀ c, c ∈ (NEE_ValidatorOracle.bindings pay lane late s).2 →
+      ReplyLaw pay lane late c) :
+    NEE_ValidatorOracle.bindings pay lane late s = NED_ValidatorTrace.bindings s := by
+  unfold NEE_ValidatorOracle.bindings NED_ValidatorTrace.bindings at children ⊢
+  repeat' first | rfl | split
+  have child_tail : ∀ c, c ∈ (NEE_ValidatorOracle.tail pay lane late s).2 →
+      ReplyLaw pay lane late c := by
+    simpa only [*] using children
+  have reached : Call.lane (parts s).2.2.2.2.1 ∈ (NEE_ValidatorOracle.tail pay lane late s).2 := by
+    rcases NEE_OracleCallDomains.tail_shape pay lane late s with one | two <;>
+      simp only [*,List.mem_cons,List.mem_singleton,true_or]
+  exact tail pay lane late s (child_tail _ reached) (fun a out h => child_tail _ h)
+
+/-- Exact caller Result and ordered arguments after substituting ONLY reached
+child bridges. These are explicit inner hypotheses, not PhysicalInterpretation.
+Native association and child framed contracts are separate evidence gates. -/
+theorem result_and_effects (pay : Pay) (lane : Lane) (late : Late) (s : Statement)
+    (children : Children pay lane late s) :
+    NEE_ValidatorOracle.run pay lane late s = NED_ValidatorTrace.run s := by
+  by_cases h0 : (common s).master_account = zero ∨ (common s).checkpoint_account = zero ∨
+      (common s).selected_lane_account = zero
+  · simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,if_true]
+  by_cases h1 : 8 ≤ (common s).output_lane.val
+  · simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,h1,if_false,if_true]
+  have reached : Call.payment s ∈ (NEE_ValidatorOracle.run pay lane late s).2 := by
+    simp only [NEE_ValidatorOracle.run,h0,h1,if_false]
+    cases pay s with
+    | fail e => simp
+    | div => simp
+    | ok r => cases r <;> simp
+  have hp : pay s = NED_ValidatorTrace.payment s := children _ reached
+  cases hpay : NED_ValidatorTrace.payment s with
+  | fail e => simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,h1,if_false,hp,hpay]
+  | div => simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,h1,if_false,hp,hpay]
+  | ok r => cases r with
+    | Err e => simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,h1,if_false,hp,hpay]
+    | Ok bytes =>
+      have hb : ∀ c, c ∈ (NEE_ValidatorOracle.bindings pay lane late s).2 → ReplyLaw pay lane late c := by
+        intro c hc
+        apply children c
+        simp only [NEE_ValidatorOracle.run,h0,h1,if_false,hp,hpay]
+        exact List.mem_cons_of_mem _ hc
+      simp only [NEE_ValidatorOracle.run,NED_ValidatorTrace.run,h0,h1,if_false,hp,hpay,
+        bindings pay lane late s hb]
+
+#print axioms bindings
+#print axioms result_and_effects
+#print axioms tail
+end NEE_ReachedSubstitution

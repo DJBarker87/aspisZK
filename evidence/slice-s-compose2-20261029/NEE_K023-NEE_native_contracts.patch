@@ -1,0 +1,45 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -163,13 +163,21 @@
+ }
+ 
+ #[inline]
++#[cfg_attr(kani,kani::requires(unsafe {NEE_loop_frame::START<=8 && NEE_loop_frame::END==NEE_loop_frame::START}))]
++#[cfg_attr(kani,kani::modifies(unsafe { &mut NEE_loop_frame::END }))]
++#[cfg_attr(kani,kani::ensures(|r| unsafe { let i=NEE_loop_frame::START; let good=i>=8||digest[i].0<P;
++ *r==good && NEE_loop_frame::END==if i<8&&good {i+1} else {i} }))]
+ fn digest_is_canonical(digest: &Digest) -> bool {
+     let mut i = 0;
++    #[cfg(kani)]
++    { i = unsafe { NEE_loop_frame::START }; }
+     while i < digest.len() {
+         if digest[i].0 >= P {
+             return false;
+         }
+         i += 1;
++        #[cfg(kani)]
++        { unsafe { NEE_loop_frame::END = i; } return true; }
+     }
+     true
+ }
+@@ -819,3 +827,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEE_forest_loop_frame.rs"]
++mod NEE_loop_frame;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEE_forest_loop_frame.rs
+@@ -0,0 +1,10 @@
++#![allow(non_snake_case)]
++use super::*;
++pub(super) static mut START:usize=0;
++pub(super) static mut END:usize=0;
++fn d()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(digest_is_canonical)]
++#[kani::unwind(2)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn step_frame(){let input=d();let i:usize=kani::any();kani::assume(i<=8);unsafe{START=i;END=i;}let _=digest_is_canonical(&input);}

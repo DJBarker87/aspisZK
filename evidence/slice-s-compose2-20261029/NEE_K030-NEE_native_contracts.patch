@@ -1,0 +1,53 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEE_shape.rs"]
++mod NEE_shape;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEE_shape.rs
+@@ -0,0 +1,40 @@
++#![allow(non_snake_case,unused_variables)]
++use super::*;
++use crate::pool_v1::{PoolV1PairForestTerminalCommonV1,PoolV1PairLatePublicStatementV1,PoolV1PairVerifiedAfterstateV1};
++fn NEE_digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn NEE_frontier()->[Digest;20] {[NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest()]}
++fn NEE_common()->PoolV1PairForestTerminalCommonV1 {PoolV1PairForestTerminalCommonV1{master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:NEE_digest(),lane_transition:PoolV1PairLatePublicStatementV1{live_snapshot:super::super::PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:NEE_digest(),frontier:NEE_frontier()},candidate_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:NEE_digest(),next_frontier:NEE_frontier()}}}}
++
++type A=[u8;4];
++fn same(x:&A,y:&A)->bool{*x==*y}
++#[kani::modifies()]
++#[kani::ensures(|_| true)]
++fn weak(x:A)->A {x}
++#[kani::modifies(&mut buf[0])]
++#[kani::ensures(|_| true)]
++fn bad_frame(buf:&mut[u8;2],x:A)->A {buf[1]=buf[1].wrapping_add(1);x}
++#[kani::proof_for_contract(weak)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn native_weak(){let x=kani::any::<A>();let r=weak(x);assert!(same(&r,&x),"NEE weak real-body identity");}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn unimplied(){let x=kani::any::<A>();let r=weak(x);assert!(same(&r,&x),"NEE weak replacement cannot imply identity");}
++#[kani::proof_for_contract(bad_frame)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::clone_from_slice,crate::KMX_stubs::KMX_clone_from_slice)]
++#[kani::stub(alloc::vec::Vec::<u8>::extend_from_slice,crate::KMX_stubs::KMX_extend_from_slice)]
++#[kani::stub(<[u8]>::to_vec,crate::KMX_stubs::KMX_to_vec)]
++#[kani::stub(alloc::alloc::realloc,crate::KMX_stubs::KMX_realloc)]
++fn frame_violation(){let mut b:[u8;2]=kani::any();let x=kani::any::<A>();let _=bad_frame(&mut b,x);}

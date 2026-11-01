@@ -1,0 +1,34 @@
+import NEE_ValidatorContinuationResult
+set_option autoImplicit false
+noncomputable section
+namespace NEE_RawValidatorCohort
+open Aeneas Aeneas.Std Result NBN_StatementResult NED_ErrorCarriers
+open AspisR1AdapterReconstruct
+attribute [local instance] Classical.propDecidable
+
+/-- Total emitted-family transport, including every rejection/error. This is
+the model substitution part of the native composition, not a native-root claim. -/
+theorem result (s : Statement) :
+    aspis_statement.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      (NED_ReconstructCarriers.toRaw s) =
+    ok (NED_LateValidatorCohorts.mapResult toRawPoolV1PairForestTerminalFormatErrorV1
+      (NED_ValidatorStatus.status s)) := by
+  rw [NEE_RawValidatorPrefix.source_factor,NED_ReconstructCarriers.common_argument]
+  simp only [bind_tc_ok]
+  rw [NEE_ValidatorGate.result,NEE_ValidatorContinuation.source_factor,
+    NEE_ValidatorContinuationResult.result]
+  unfold NEE_ValidatorGate.normalized NED_ValidatorStatus.status NEE_ValidatorContinuationResult.model
+  dsimp (config := {zeta := true,zetaHave := true}) only
+  by_cases hz : (common s).master_account = zero ∨ (common s).checkpoint_account = zero ∨
+      (common s).selected_lane_account = zero
+  · simp only [hz,if_true]
+    rfl
+  · simp only [hz,if_false]
+    by_cases hl : 8 ≤ (common s).output_lane.val
+    · simp only [hl,if_true]
+      rfl
+    · simp only [hl,if_false]
+      rfl
+
+#print axioms result
+end NEE_RawValidatorCohort

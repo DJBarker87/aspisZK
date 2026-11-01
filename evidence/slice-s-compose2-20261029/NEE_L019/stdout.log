@@ -1,0 +1,32 @@
+NEE_generated/NEE_CanonicalFrame.lean:36:16: error: simp_all made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    fun r =>
+      match r with
+      | ControlFlow.done y => y.2 = state
+      | ControlFlow.cont x' => ↑x'.1 ≤ 8 ∧ x'.2 = state ∧ 8 - ↑x'.1 < 8 - ↑i
+  has type
+    ControlFlow (Usize × State) (Bool × State) → Prop
+  but is expected to have type
+    Post (ControlFlow (Usize × State) (Bool × State))
+  in the application
+    (do
+        let r ←
+          if ↑i < 8 then do
+              let m ← d.index_usize i
+              if ↑aspis_core.field.P ≤ ↑m then ok (ControlFlow.done false)
+                else do
+                  let i2 ← i + 1#usize
+                  ok (ControlFlow.cont i2)
+            else ok (ControlFlow.done true)
+        match r with
+          | ControlFlow.cont i => ok (ControlFlow.cont (i, state))
+          | ControlFlow.done b => ok (ControlFlow.done (b, state))) ⦃
+      r =>
+      match r with
+      | ControlFlow.done y => y.2 = state
+      | ControlFlow.cont x' => ↑x'.1 ≤ 8 ∧ x'.2 = state ∧ 8 - ↑x'.1 < 8 - ↑i ⦄
+'NEE_CanonicalFrame.frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEE_CanonicalFrame.tree_body' depends on axioms: [propext, Classical.choice, Quot.sound]

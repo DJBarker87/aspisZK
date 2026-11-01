@@ -1,0 +1,50 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -236,6 +236,8 @@
+     Ok(())
+ }
+ 
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| *r == NEE_payment_frames::w_spec(public)))]
+ pub fn validate_pool_v1_withdrawal_public_v1(
+     public: &PoolV1WithdrawalPublicV1,
+ ) -> Result<(), PoolV1PaymentStatementFormatError> {
+@@ -1158,3 +1160,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEE_payment_frames.rs"]
++mod NEE_payment_frames;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEE_payment_frames.rs
+@@ -0,0 +1,28 @@
++use super::*;
++fn NEE_digest()->Digest {[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn NEE_frontier()->[Digest;20] {[NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest(),NEE_digest()]}
++
++fn t()->PoolV1PrivateTransferPublicV1 {PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NEE_digest(),nullifier:NEE_digest(),asset_id:M31(kani::any()),recipient_commitment:NEE_digest(),change_commitment:NEE_digest()}}
++fn w()->PoolV1WithdrawalPublicV1 {PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:NEE_digest(),nullifier:NEE_digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:NEE_digest()}}
++pub(super) fn canonical(d:&Digest)->bool {d[0].0<P&&d[1].0<P&&d[2].0<P&&d[3].0<P&&d[4].0<P&&d[5].0<P&&d[6].0<P&&d[7].0<P}
++pub(super) fn common_spec(c:&CommonPublicV1)->Result<(),PoolV1PaymentStatementFormatError> {
++ if c.pool==[0;32]||c.deployment_domain==[0;32]{Err(PoolV1PaymentStatementFormatError::ZeroRequiredBinding)}
++ else if c.anchor_sequence>POOL_V1_LEAF_CAPACITY{Err(PoolV1PaymentStatementFormatError::InvalidAnchorSequence)}
++ else if !canonical(&c.anchor_root)||!canonical(&c.nullifier){Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)}
++ else if c.asset_id.0>=P{Err(PoolV1PaymentStatementFormatError::NonCanonicalAssetId)}else{Ok(())}
++}
++pub(super) fn t_spec(p:&PoolV1PrivateTransferPublicV1)->Result<(),PoolV1PaymentStatementFormatError> {
++ common_spec(&CommonPublicV1{pool:p.pool,deployment_domain:p.deployment_domain,anchor_sequence:p.anchor_sequence,anchor_root:p.anchor_root,nullifier:p.nullifier,asset_id:p.asset_id})?;
++ if !canonical(&p.recipient_commitment)||!canonical(&p.change_commitment){Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)}else{Ok(())}
++}
++pub(super) fn w_spec(p:&PoolV1WithdrawalPublicV1)->Result<(),PoolV1PaymentStatementFormatError> {
++ common_spec(&CommonPublicV1{pool:p.pool,deployment_domain:p.deployment_domain,anchor_sequence:p.anchor_sequence,anchor_root:p.anchor_root,nullifier:p.nullifier,asset_id:p.asset_id})?;
++ if p.amount==0||p.amount>=VALUE_LIMIT{Err(PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount)}
++ else if p.destination_token_account==[0;32]{Err(PoolV1PaymentStatementFormatError::InvalidDestination)}
++ else if !canonical(&p.change_commitment){Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)}else{Ok(())}
++}
++
++#[kani::proof_for_contract(validate_pool_v1_withdrawal_public_v1)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn frame_validate_withdrawal(){let p=w();let _=validate_pool_v1_withdrawal_public_v1(&p);}

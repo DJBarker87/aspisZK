@@ -1,0 +1,11 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -215,6 +215,8 @@
+     }
+ }
+ 
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| *r == match statement {PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id)}))]
+ fn statement_public_common(
+     statement: &PoolV1PairForestTerminalStatementV1,
+ ) -> ([u8; 32], [u8; 32], u64, Digest, Digest, M31) {

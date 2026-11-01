@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,hashlib,shutil
+b=Path('/home/dombarker/project-offloads/codex-cx-slice-s-compose2-20261029');spec={'NEE_ValidatorBindings': '7f3e2f38be5aea7587ab11543ae99654c5f3819702b2990be1665f7a30185f0e', 'NEE_ValidatorOracle': 'b7d00fad14ff515d21202b50648e9997c2f4af13f822bc8660208abd49f8d7de', 'NEE_ValidatorMutation': '5c303a98b5fcdb792e8b637c9200c7fdd590f183e97f8a535133ec4acd9fa870', 'NEE_RawValidatorPrefix': '50ee52854910f6a38013c9f3a7bb456ac6992b077c5b08f0b1fde15fb2a9807c', 'NEE_ValidatorGate': 'c2bc40211fd97f884624c79ad0f0df28acd5439eb86fca2e9215e2ed2cdbe68e', 'NEE_M31SerializerDomain': '16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e', 'NEE_ValidatorContinuation': 'e1832f9b0d4990735feafe7991fd8db143693b91cf0016debd24fe33d62ddc74', 'NEE_ValidatorContinuationResult': '439ffe2207bf74d6fc69bdaf29d1c2b3fd1661cc3596fc80e0fcf23725813d77', 'NEE_RawValidatorCohort': 'fef5dd2c019204f530c5a0e659847d50392a3c49c1959aee1f38240bb13d1d5a', 'NEE_FramePostProbe': 'b140fde58522b8ddff3e09734171678e5f7f58fe82433ca5d04a88e88371b462', 'NEE_CanonicalFrame': 'f5c71f1b5ece8d4f26edbefd7e6cb3600e04cf62de4d052c8d84f4f817c943c7', 'NEE_OracleCallDomains': 'c0f90c40a95ddd1b6bfcd6d76faa24e7e1f2ed39a81f02f70b634a218af572e5', 'NEE_ReachedSubstitution': '8029cb60bf732d3edaa63127bd725d7c0176ade667aafb2c3424da801843f603', 'NEE_ReachedRootModel': '97095e7bda51294f87bb95d3a12839230c94283e39dff147cca8fdcd40624459', 'NEE_Rule16Audit': 'bf3687ed3e0fa2e488e35a810a1d84ae3411c35b22dbd5f015687f47d9b33833'};cache=b.parent/'codex-cx-slice-s-compose2-cache-20261029';dest=cache/'NEE_final_objects_20261101'
+assert cache.is_dir() and not dest.exists();rows=[]
+for name,expected in spec.items():
+ rel=name.replace('.','/');src=b/'NEE_generated'/(rel+'.lean');obj=b/'NEE_objects'/(rel+'.olean')
+ assert src.exists() and hashlib.sha256(src.read_bytes()).hexdigest()==expected and obj.exists(),name
+ for suffix,root in [('.lean',b/'NEE_generated'),('.olean',b/'NEE_objects'),('.ilean',b/'NEE_objects')]:
+  p=root/(rel+suffix)
+  if not p.exists():continue
+  q=dest/(rel+suffix);q.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,q)
+  digest=hashlib.sha256(q.read_bytes()).hexdigest();assert digest==hashlib.sha256(p.read_bytes()).hexdigest()
+  rows.append(dict(module=name,path=str(q),sha256=digest,bytes=q.stat().st_size))
+manifest=dict(cache=str(dest),objects=rows,cleanup=[])
+for name in ['NEE_target','NEE_objects','NEE_tmp']:
+ p=b/name;assert p.parent==b and not p.is_symlink()
+ if p.exists():shutil.rmtree(p)
+ manifest['cleanup'].append(dict(path=str(p),absent=not p.exists()))
+(b/'NEE_CACHE_FINAL.json').write_text(json.dumps(manifest,indent=1)+'\n')
+print(json.dumps(dict(copied=len(rows),modules=len(spec),cache=str(dest),cleanup=manifest['cleanup'])))
