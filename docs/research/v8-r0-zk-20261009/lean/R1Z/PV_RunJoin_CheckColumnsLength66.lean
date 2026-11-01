@@ -29,14 +29,15 @@ theorem loop (columns : Columns) (n : Nat) (lane : Usize) (rank : lane.val+n=26)
     omega
   | succ n ih =>
     have more : lane<26#usize := by change lane.val<26;omega
+    have moreNat : lane.val<26 := more
     have next : (Usize.wrapping_add lane 1#usize).val=lane.val+1 :=
-      PV_RunJoin_CompactStep39.offset lane 1#usize (by have h : 26≤Usize.max := by scalar_tac;omega)
+      ProverCommitPairCounter47.next_val lane (by omega)
     have hc : Array.index_usize columns lane=ok (column columns lane.val) := by
       rw [ProverCommitArrayIndex25.array_index_usize_ok columns lane more]
-      simp only [column,Nat.mod_eq_of_lt more]
+      simp only [column,Nat.mod_eq_of_lt moreNat]
     unfold host_semantic.check_base_columns_loop at success
     rw [ProverRw19LoopBind.loop_bind] at success
-    simp only [host_semantic.check_base_columns_loop.body,more,if_true,hc,bind_tc_ok] at success
+    simp only [host_semantic.check_base_columns_loop.body,more,if_true,hc,bind_tc_ok,bind_assoc_eq] at success
     obtain ⟨checked,hchecked,success⟩ := PV_RunJoin_ResultPost.bind_eq_ok success
     cases checked with
     | Err e =>
