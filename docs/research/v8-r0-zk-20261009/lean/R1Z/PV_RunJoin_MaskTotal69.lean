@@ -10,15 +10,37 @@ theorem selected_values (i : Usize) (hi : i∈selectedIndices) :
     ∃ e,Array.index_usize host_arithmetic.FACTOR_EXPONENTS i=ok e ∧ e.val<27 := by
   simp only [selectedIndices,List.mem_cons,List.not_mem_nil,or_false] at hi
   rcases hi with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl
-  all_goals refine ⟨_,?_,?_⟩
-  all_goals first | (unfold host_arithmetic.FACTOR_EXPONENTS;rfl) | decide
+  · exact ⟨0#u8,PV_B3_ZeroMask117.factor0,by decide⟩
+  · exact ⟨2#u8,PV_B3_ZeroMask117.factor1,by decide⟩
+  · exact ⟨4#u8,PV_B3_ZeroMask117.factor2,by decide⟩
+  · exact ⟨6#u8,PV_B3_ZeroMask117.factor3,by decide⟩
+  · exact ⟨8#u8,PV_B3_ZeroMask117.factor4,by decide⟩
+  · exact ⟨10#u8,PV_B3_ZeroMask117.factor5,by decide⟩
+  · exact ⟨12#u8,PV_B3_ZeroMask117.factor6,by decide⟩
+  · exact ⟨14#u8,PV_B3_ZeroMask117.factor7,by decide⟩
+  · exact ⟨16#u8,PV_B3_ZeroMask117.factor8,by decide⟩
+  · exact ⟨18#u8,PV_B3_ZeroMask117.factor9,by decide⟩
+  · exact ⟨20#u8,PV_B3_ZeroMask117.factor10,by decide⟩
+  · exact ⟨22#u8,PV_B3_ZeroMask117.factor11,by decide⟩
+  · exact ⟨24#u8,PV_B3_ZeroMask117.factor12,by decide⟩
+  · exact ⟨26#u8,PV_B3_ZeroMask117.factor13,by decide⟩
+  · exact ⟨13#u8,PV_B3_ZeroMask117.factor14,by decide⟩
+  · exact ⟨25#u8,PV_B3_ZeroMask117.factor15,by decide⟩
 
 theorem mask_values (i : Usize) (hi : i∈maskIndices) :
     ∃ e,Array.index_usize host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS i=ok e ∧ e.val<27 := by
   simp only [maskIndices,List.mem_cons,List.not_mem_nil,or_false] at hi
   rcases hi with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl
-  all_goals refine ⟨_,?_,?_⟩
-  all_goals first | (unfold host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS;rfl) | decide
+  · exact ⟨1#u8,PV_B3_ZeroMask117.maskfactor0,by decide⟩
+  · exact ⟨3#u8,PV_B3_ZeroMask117.maskfactor1,by decide⟩
+  · exact ⟨5#u8,PV_B3_ZeroMask117.maskfactor2,by decide⟩
+  · exact ⟨7#u8,PV_B3_ZeroMask117.maskfactor3,by decide⟩
+  · exact ⟨9#u8,PV_B3_ZeroMask117.maskfactor4,by decide⟩
+  · exact ⟨11#u8,PV_B3_ZeroMask117.maskfactor5,by decide⟩
+  · exact ⟨15#u8,PV_B3_ZeroMask117.maskfactor6,by decide⟩
+  · exact ⟨17#u8,PV_B3_ZeroMask117.maskfactor7,by decide⟩
+  · exact ⟨19#u8,PV_B3_ZeroMask117.maskfactor8,by decide⟩
+  · exact ⟨21#u8,PV_B3_ZeroMask117.maskfactor9,by decide⟩
 
 theorem complete (c1 : Array Q 16#usize) (mask : Array Q 10#usize) (g : Q)
     (point : Array Q 10#usize) :
@@ -54,7 +76,9 @@ theorem complete (c1 : Array Q 16#usize) (mask : Array Q 10#usize) (g : Q)
   obtain ⟨out,ho⟩ := qadd shared1 explicit_value
   refine ⟨out,?_⟩
   rw [PV_B3_AuditSourceD324.Mask117.source]
-  simp only [PV_B3_AuditSourceD324.Mask117.reference,hl,hc,hc1,hp,hs,hs1,hpow,hf,he,ho,bind_tc_ok]
+  simp only [PV_B3_AuditSourceD324.Mask117.reference,hl,bind_tc_ok,Aeneas.Std.uncurry]
+  dsimp only
+  simp only [hc,hc1,hp,hs,hs1,hpow,hf,he,ho,bind_tc_ok]
 
 #print axioms selected_values
 #print axioms mask_values
