@@ -15,5 +15,5 @@ theorem bind_lift {A B : Type} (r : Result A) (f : A → Result B) :
 #print Aeneas.Std.Array.index_usize
 #check Aeneas.Std.Array.index_usize_spec
 #print Aeneas.Std.Usize.wrapping_add
-#print Aeneas.Std.core.result.Result.map
+#print ProverRwFull.core.result.Result.map
 end PV_EVH_LiftLaws
