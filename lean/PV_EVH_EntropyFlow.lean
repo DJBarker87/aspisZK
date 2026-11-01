@@ -29,6 +29,10 @@ theorem loop_fixed (fuel : Nat) (answers : EntropyAnswers) (c : PV_EVH_EntropySt
   · intro i
     unfold aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop
     rw [Aeneas.Std.loop.eq_def]
+    cases h : aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit i with
+    | ok cf => cases cf <;> rfl
+    | fail e => rfl
+    | div => rfl
   · intro i
     exact PV_EVH_EntropyStep.run_fixed nonce limit i answers c hc same
 
