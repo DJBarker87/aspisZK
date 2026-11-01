@@ -184,6 +184,8 @@ def proof(x,n=2,lets=()):
   m=re.match(r'let (\w+) :=',x.text.strip())
   nextlets=lets+((m[1],) if m else ())
   return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
+ if filemode and x.kind=='bind' and x.expr.kind=='if' and x.expr.yes.kind==x.expr.no.kind==x.next.kind=='pure':
+  return pad+'by_cases condition : '+x.expr.cond+'\n'+pad+'· simp only [condition,if_true]\n'+pad+'  exact PV_EVH_Prefix.lift_fixed _\n'+pad+'· simp only [condition,Bool.false_eq_true,if_false]\n'+pad+'  exact PV_EVH_Prefix.lift_fixed _'
  if x.kind=='bind':
   v=x.var;intro='rintro ⟨'+v[1:-1]+'⟩' if v.startswith('(') else 'intro '+v
   if entropy and x.expr.kind=='call' and 'Array.to_slice_mut' in x.expr.expr:

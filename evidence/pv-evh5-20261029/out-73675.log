@@ -1,0 +1,35 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_EntropyFlow.lean:29:2: error: unsolved goals
+case equation
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+fuel : ℕ
+answers : EntropyAnswers
+c : PV_EVH_EntropyStep.Callees
+hc : PV_EVH_EntropyStep.Compatible c
+same : ∀ (n : ℕ) (s : Slice U8), answers n s = getrandom.fill s
+nonce : Std.Array U8 32#usize
+limit retry i : Usize
+⊢ (match aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit i with
+    | Result.ok r =>
+      match r with
+      | ControlFlow.cont x =>
+        Std.loop
+          (fun retry1 =>
+            aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit
+              retry1)
+          x
+      | ControlFlow.done x => Result.ok x
+    | Result.fail e => Result.fail e
+    | Result.div => Result.div) =
+    Std.bind (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit i)
+      fun cf =>
+      match cf with
+      | ControlFlow.done a => Result.ok a
+      | ControlFlow.cont next =>
+        Std.loop
+          (fun retry1 =>
+            aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit
+              retry1)
+          next
+'PV_EVH_EntropyFlow.loop_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_EntropyFlow.generate_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

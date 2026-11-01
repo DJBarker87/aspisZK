@@ -277,17 +277,10 @@ theorem run_fixed
                   ·
                     exact compatible.op2_fixed _ _
                   · intro b
-                    try dsimp only
-                    apply PV_EVH_Prefix.bind_fixed
-                    ·
-                      by_cases condition : b
-                      · try dsimp only [oo2,options1,options2] at condition
-                        simp only [condition,if_true]
-                        exact PV_EVH_Prefix.lift_fixed _
-                      · try dsimp only [oo2,options1,options2] at condition
-                        simp only [condition,if_false]
-                        exact PV_EVH_Prefix.lift_fixed _
-                    · intro r1
+                    by_cases condition : b
+                    · simp only [condition,if_true]
+                      exact PV_EVH_Prefix.lift_fixed _
+                    · simp only [condition,Bool.false_eq_true,if_false]
                       exact PV_EVH_Prefix.lift_fixed _
 
 #print axioms run_fixed
