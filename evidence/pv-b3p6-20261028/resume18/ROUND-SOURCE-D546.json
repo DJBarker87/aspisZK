@@ -1,0 +1,205 @@
+{
+  "functions": [
+    {
+      "function": "full_round",
+      "item": {
+        "name": "full_round",
+        "start": 332,
+        "end": 341,
+        "signature": "fn full_round(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [QM31; POSEIDON2_WIDTH],\n) -> [QM31; POSEIDON2_WIDTH] ",
+        "body": "{\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane] = pow5(state[lane].add(constants[lane]));\n    }\n    external_linear_lazy(&mut state);\n    state\n}",
+        "context": [],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "source_path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "domain": "all raw QM31 state[16] and constants[16]; no canonicality narrowing",
+      "interpreter": "native_round_QPlain15",
+      "source_steps": [
+        {
+          "source": "owned mutable state[16], owned constants[16]",
+          "model": "RoundState10 and exact extracted array carriers",
+          "argument": "No references into external mutable state; full input arrays preserved; no allocation, custom destructor, address-based branch or input invariant."
+        },
+        {
+          "source": "for lane in 0..16",
+          "model": "range_loop13, range_sixteen13",
+          "argument": "Exact ordered Range/IntoIterator/next/spec_next/Step source chain already captured in resume17/SUM-SOURCE-BINDING-D542.json and direct range extraction. range_sixteen13 proves the loop equals the ordered fold, including complete Result failure/divergence. Increment reaches16 and cannot overflow; no arithmetic reassociation."
+        },
+        {
+          "source": "state[lane]=pow5(state[lane].add(constants[lane]));",
+          "model": "round_q_step10",
+          "argument": "Read state then constants; QM31.add then the identical pow5 callee; restore Array.update before next lane."
+        },
+        {
+          "source": "external_linear_lazy(&mut state);state",
+          "model": "reference_poseidon.external_linear_lazy",
+          "argument": "One identical frozen source callee after all16 lane steps. Lazy mutable loan returns the complete state and is restored before returning; packed consumes the whole state. Local equality is modulo that named external-layer source row; no assertion that dependency closure is complete."
+        }
+      ],
+      "theorem": "round_qplain_source_link546",
+      "D188": "M31 subfield update explicitly applies index_mut_back before reread; final full element write uses source_store_update543/source_store_continuation543. External lazy whole-array restoration is retained, not discarded. Full D188 endpoint closure remains separate.",
+      "features": "Source bodies have no cfg/cfg! inside their spans. The enclosing frozen module is ct-host-prover; exact deployed feature graph in resume18/reference-rounds/inputs.json. Release overflow and debug assertions off.",
+      "route": "Lean complete-Result equality + own-1 structural argument",
+      "retained": "V370 / D381,D386 compiler, copy/drop and intrinsic lowering. External-layer, pow5 and field dependencies remain separately named source rows. No endpoint or T premise changed."
+    },
+    {
+      "function": "full_round_m31_constants",
+      "item": {
+        "name": "full_round_m31_constants",
+        "start": 347,
+        "end": 357,
+        "signature": "fn full_round_m31_constants(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [u32; POSEIDON2_WIDTH],\n) -> [QM31; POSEIDON2_WIDTH] ",
+        "body": "{\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = pow5(state[lane]);\n    }\n    external_linear_lazy(&mut state);\n    state\n}",
+        "context": [],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "source_path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "domain": "all raw QM31 state[16] and constants[16]; no canonicality narrowing",
+      "interpreter": "native_round_MPlain15",
+      "source_steps": [
+        {
+          "source": "owned mutable state[16], owned constants[16]",
+          "model": "RoundState10 and exact extracted array carriers",
+          "argument": "No references into external mutable state; full input arrays preserved; no allocation, custom destructor, address-based branch or input invariant."
+        },
+        {
+          "source": "for lane in 0..16",
+          "model": "range_loop13, range_sixteen13",
+          "argument": "Exact ordered Range/IntoIterator/next/spec_next/Step source chain already captured in resume17/SUM-SOURCE-BINDING-D542.json and direct range extraction. range_sixteen13 proves the loop equals the ordered fold, including complete Result failure/divergence. Increment reaches16 and cannot overflow; no arithmetic reassociation."
+        },
+        {
+          "source": "state[lane].c0.a=state[lane].c0.a.add(M31(constants[lane]));state[lane]=pow5(state[lane]);",
+          "model": "round_m_step10",
+          "argument": "Read old c0.a and constants, call M31.add; obtain the whole element mutable back function, replace only c0.a and APPLY it to the full state; reread the updated element, pow5, Array.update. Both writes and their order are retained. ArrayInterface543.source_store_continuation543 records arbitrary continuation after the last store."
+        },
+        {
+          "source": "external_linear_lazy(&mut state);state",
+          "model": "reference_poseidon.external_linear_lazy",
+          "argument": "One identical frozen source callee after all16 lane steps. Lazy mutable loan returns the complete state and is restored before returning; packed consumes the whole state. Local equality is modulo that named external-layer source row; no assertion that dependency closure is complete."
+        }
+      ],
+      "theorem": "round_mplain_source_link546",
+      "D188": "M31 subfield update explicitly applies index_mut_back before reread; final full element write uses source_store_update543/source_store_continuation543. External lazy whole-array restoration is retained, not discarded. Full D188 endpoint closure remains separate.",
+      "features": "Source bodies have no cfg/cfg! inside their spans. The enclosing frozen module is ct-host-prover; exact deployed feature graph in resume18/reference-rounds/inputs.json. Release overflow and debug assertions off.",
+      "route": "Lean complete-Result equality + own-1 structural argument",
+      "retained": "V370 / D381,D386 compiler, copy/drop and intrinsic lowering. External-layer, pow5 and field dependencies remain separately named source rows. No endpoint or T premise changed."
+    },
+    {
+      "function": "full_round_packed",
+      "item": {
+        "name": "full_round_packed",
+        "start": 360,
+        "end": 368,
+        "signature": "fn full_round_packed(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [QM31; POSEIDON2_WIDTH],\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] ",
+        "body": "{\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane] = pow5(state[lane].add(constants[lane]));\n    }\n    external_linear_packed(state)\n}",
+        "context": [],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "source_path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "domain": "all raw QM31 state[16] and constants[16]; no canonicality narrowing",
+      "interpreter": "source_round_qpacked546",
+      "source_steps": [
+        {
+          "source": "owned mutable state[16], owned constants[16]",
+          "model": "RoundState10 and exact extracted array carriers",
+          "argument": "No references into external mutable state; full input arrays preserved; no allocation, custom destructor, address-based branch or input invariant."
+        },
+        {
+          "source": "for lane in 0..16",
+          "model": "range_loop13, range_sixteen13",
+          "argument": "Exact ordered Range/IntoIterator/next/spec_next/Step source chain already captured in resume17/SUM-SOURCE-BINDING-D542.json and direct range extraction. range_sixteen13 proves the loop equals the ordered fold, including complete Result failure/divergence. Increment reaches16 and cannot overflow; no arithmetic reassociation."
+        },
+        {
+          "source": "state[lane]=pow5(state[lane].add(constants[lane]));",
+          "model": "round_q_step10",
+          "argument": "Read state then constants; QM31.add then the identical pow5 callee; restore Array.update before next lane."
+        },
+        {
+          "source": "external_linear_packed(state)",
+          "model": "reference_poseidon.external_linear_packed",
+          "argument": "One identical frozen source callee after all16 lane steps. Lazy mutable loan returns the complete state and is restored before returning; packed consumes the whole state. Local equality is modulo that named external-layer source row; no assertion that dependency closure is complete."
+        }
+      ],
+      "theorem": "round_qpacked_source_link546",
+      "D188": "M31 subfield update explicitly applies index_mut_back before reread; final full element write uses source_store_update543/source_store_continuation543. External lazy whole-array restoration is retained, not discarded. Full D188 endpoint closure remains separate.",
+      "features": "Source bodies have no cfg/cfg! inside their spans. The enclosing frozen module is ct-host-prover; exact deployed feature graph in resume18/reference-rounds/inputs.json. Release overflow and debug assertions off.",
+      "route": "Lean complete-Result equality + own-1 structural argument",
+      "retained": "V370 / D381,D386 compiler, copy/drop and intrinsic lowering. External-layer, pow5 and field dependencies remain separately named source rows. No endpoint or T premise changed."
+    },
+    {
+      "function": "full_round_m31_constants_packed",
+      "item": {
+        "name": "full_round_m31_constants_packed",
+        "start": 371,
+        "end": 380,
+        "signature": "fn full_round_m31_constants_packed(\n    mut state: [QM31; POSEIDON2_WIDTH],\n    constants: [u32; POSEIDON2_WIDTH],\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] ",
+        "body": "{\n    for lane in 0..POSEIDON2_WIDTH {\n        state[lane].c0.a = state[lane].c0.a.add(M31(constants[lane]));\n        state[lane] = pow5(state[lane]);\n    }\n    external_linear_packed(state)\n}",
+        "context": [],
+        "macros": []
+      },
+      "whole_body_tokens_checked": true,
+      "source_path": "crates/aspis-statement/src/state_only_poseidon.rs",
+      "source_sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+      "domain": "all raw QM31 state[16] and constants[16]; no canonicality narrowing",
+      "interpreter": "native_round_MPacked15",
+      "source_steps": [
+        {
+          "source": "owned mutable state[16], owned constants[16]",
+          "model": "RoundState10 and exact extracted array carriers",
+          "argument": "No references into external mutable state; full input arrays preserved; no allocation, custom destructor, address-based branch or input invariant."
+        },
+        {
+          "source": "for lane in 0..16",
+          "model": "range_loop13, range_sixteen13",
+          "argument": "Exact ordered Range/IntoIterator/next/spec_next/Step source chain already captured in resume17/SUM-SOURCE-BINDING-D542.json and direct range extraction. range_sixteen13 proves the loop equals the ordered fold, including complete Result failure/divergence. Increment reaches16 and cannot overflow; no arithmetic reassociation."
+        },
+        {
+          "source": "state[lane].c0.a=state[lane].c0.a.add(M31(constants[lane]));state[lane]=pow5(state[lane]);",
+          "model": "round_m_step10",
+          "argument": "Read old c0.a and constants, call M31.add; obtain the whole element mutable back function, replace only c0.a and APPLY it to the full state; reread the updated element, pow5, Array.update. Both writes and their order are retained. ArrayInterface543.source_store_continuation543 records arbitrary continuation after the last store."
+        },
+        {
+          "source": "external_linear_packed(state)",
+          "model": "reference_poseidon.external_linear_packed",
+          "argument": "One identical frozen source callee after all16 lane steps. Lazy mutable loan returns the complete state and is restored before returning; packed consumes the whole state. Local equality is modulo that named external-layer source row; no assertion that dependency closure is complete."
+        }
+      ],
+      "theorem": "round_mpacked_source_link546",
+      "D188": "M31 subfield update explicitly applies index_mut_back before reread; final full element write uses source_store_update543/source_store_continuation543. External lazy whole-array restoration is retained, not discarded. Full D188 endpoint closure remains separate.",
+      "features": "Source bodies have no cfg/cfg! inside their spans. The enclosing frozen module is ct-host-prover; exact deployed feature graph in resume18/reference-rounds/inputs.json. Release overflow and debug assertions off.",
+      "route": "Lean complete-Result equality + own-1 structural argument",
+      "retained": "V370 / D381,D386 compiler, copy/drop and intrinsic lowering. External-layer, pow5 and field dependencies remain separately named source rows. No endpoint or T premise changed."
+    }
+  ],
+  "helper": {
+    "source_item": {
+      "name": "pow5",
+      "start": 124,
+      "end": 127,
+      "signature": "fn pow5(value: QM31) -> QM31 ",
+      "body": "{\n    let square = value.square();\n    square.square().mul(value)\n}",
+      "context": [],
+      "macros": []
+    },
+    "reference_item": {
+      "name": "pow5",
+      "start": 62,
+      "end": 65,
+      "signature": "fn pow5(value: QM31) -> QM31 ",
+      "body": "{\n    let square = value.square();\n    square.square().mul(value)\n}",
+      "context": [],
+      "macros": []
+    },
+    "reference_path": "tools/pv-b3p6-20261028/v244/reference_poseidon.rs",
+    "reference_sha256": "b1c375ce58fb025e26b3c3427e150ebd27020466394168e17addf5075b136638",
+    "body_token_identity": true
+  },
+  "scope": "four local body associations; source argument not machine proof; full dependency and callback closure open",
+  "status": "pending fresh reference-model comparison and accepted Lean receipt"
+}

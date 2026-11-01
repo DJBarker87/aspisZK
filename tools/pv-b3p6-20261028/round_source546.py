@@ -1,0 +1,23 @@
+"""Script-checked own-1 source map for four round bodies; no machine proof."""
+from pathlib import Path
+import json,hashlib
+D=Path('evidence/pv-b3p6-20261028');R=D/'resume18'
+ns={};exec(compile(Path('tools/pv-b3p6-20261028/std_resolve_d540.py').read_text().split('indices={}')[0],'<parser>','exec'),ns)
+tokens,index=ns['tokens'],ns['index']
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+p=Path('crates/aspis-statement/src/state_only_poseidon.rs');assert sha(p)==json.loads((D/'resume17/deployed-source-pins.json').read_text())[str(p)]
+items=index(p.read_text());rows=[]
+for name,kind,packed in [('full_round','q',False),('full_round_m31_constants','m',False),('full_round_packed','q',True),('full_round_m31_constants_packed','m',True)]:
+ step='state[lane]=pow5(state[lane].add(constants[lane]));'if kind=='q'else 'state[lane].c0.a=state[lane].c0.a.add(M31(constants[lane]));state[lane]=pow5(state[lane]);'
+ end='external_linear_packed(state)'if packed else'external_linear_lazy(&mut state);state'
+ expected='{for lane in 0..POSEIDON2_WIDTH {'+step+'}'+end+'}'
+ item=next(x for x in items if x['name']==name);assert tokens(item['body'])==tokens(expected),name
+ rows.append(dict(function=name,item=item,whole_body_tokens_checked=True,source_path=str(p),source_sha256=sha(p),domain='all raw QM31 state[16] and constants[16]; no canonicality narrowing',interpreter=('source_round_qpacked546'if name=='full_round_packed'else 'native_round_'+('Q'if kind=='q'else'M')+('Packed'if packed else'Plain')+'15'),source_steps=[
+ dict(source='owned mutable state[16], owned constants[16]',model='RoundState10 and exact extracted array carriers',argument='No references into external mutable state; full input arrays preserved; no allocation, custom destructor, address-based branch or input invariant.'),
+ dict(source='for lane in 0..16',model='range_loop13, range_sixteen13',argument='Exact ordered Range/IntoIterator/next/spec_next/Step source chain already captured in resume17/SUM-SOURCE-BINDING-D542.json and direct range extraction. range_sixteen13 proves the loop equals the ordered fold, including complete Result failure/divergence. Increment reaches16 and cannot overflow; no arithmetic reassociation.'),
+ dict(source=step,model='round_'+kind+'_step10',argument=('Read state then constants; QM31.add then the identical pow5 callee; restore Array.update before next lane.'if kind=='q'else'Read old c0.a and constants, call M31.add; obtain the whole element mutable back function, replace only c0.a and APPLY it to the full state; reread the updated element, pow5, Array.update. Both writes and their order are retained. ArrayInterface543.source_store_continuation543 records arbitrary continuation after the last store.')), 
+ dict(source=end,model='reference_poseidon.external_linear_'+('packed'if packed else'lazy'),argument='One identical frozen source callee after all16 lane steps. Lazy mutable loan returns the complete state and is restored before returning; packed consumes the whole state. Local equality is modulo that named external-layer source row; no assertion that dependency closure is complete.')],theorem='round_'+('q'if kind=='q'else'm')+('packed'if packed else'plain')+'_source_link546',D188='M31 subfield update explicitly applies index_mut_back before reread; final full element write uses source_store_update543/source_store_continuation543. External lazy whole-array restoration is retained, not discarded. Full D188 endpoint closure remains separate.',features='Source bodies have no cfg/cfg! inside their spans. The enclosing frozen module is ct-host-prover; exact deployed feature graph in resume18/reference-rounds/inputs.json. Release overflow and debug assertions off.',route='Lean complete-Result equality + own-1 structural argument',retained='V370 / D381,D386 compiler, copy/drop and intrinsic lowering. External-layer, pow5 and field dependencies remain separately named source rows. No endpoint or T premise changed.'))
+# Actual shared pow5 source is identical to the frozen reference helper.
+a=next(x for x in items if x['name']=='pow5');q=Path('tools/pv-b3p6-20261028/v244/reference_poseidon.rs');b=next(x for x in index(q.read_text())if x['name']=='pow5');assert tokens(a['body'])==tokens(b['body'])
+(R/'ROUND-SOURCE-D546.json').write_text(json.dumps(dict(functions=rows,helper=dict(source_item=a,reference_item=b,reference_path=str(q),reference_sha256=sha(q),body_token_identity=True),scope='four local body associations; source argument not machine proof; full dependency and callback closure open',status='pending fresh reference-model comparison and accepted Lean receipt'),indent=2)+'\n')
+print(json.dumps(dict(bodies=len(rows),helper_identity=True)))
