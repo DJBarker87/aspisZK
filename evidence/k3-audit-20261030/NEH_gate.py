@@ -12,7 +12,7 @@ pins=json.loads((B/'NEH_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
-ni=x['native_command'];manifest=x.get('metadata_manifest') or ni[ni.index('--manifest-path')+1];selected=x.get('metadata_features') or ni[ni.index('--features')+1]
+ni=x['native_command'];manifest=ni[ni.index('--manifest-path')+1];selected=ni[ni.index('--features')+1]
 r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--manifest-path',manifest,'--features',selected],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr

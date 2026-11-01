@@ -81,40 +81,6 @@ def split_constructor(start=112):
   if not (E/a/'receipt.json').exists():publish(a,rp,changed,neg)
  remember(rp,f'NEH_K{start:03}',f'NEH_K{start+1:03}')
 
-def ndt_copy(start=114):
- for i,num in enumerate([8,9]):
-  rp=f'evidence/native-front2-20261028/NDE_K{num:03}/receipt.json';r=read_json(ROOT/rp);ni=r.get('native_command') or r['command'];manifest=ni[ni.index('--manifest-path')+1];suffix=manifest.split('_src/')[1].removesuffix('/Cargo.toml');h=r.get('module') or ni[ni.index('--harness')+1];mod=h.split('::')[0]
-  o=root_overlay(suffix,mod,'extern crate alloc; include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));')
-  a=f'NEH_K{start+i:03}'
-  if not (E/a/'receipt.json').exists():publish(a,rp,o,i==1)
- p=E/'NEH_EXTRA_PAIRS.json';pairs=read_json(p) if p.exists() else []
- pair=[f'evidence/native-front2-20261028/NDE_K{n:03}/receipt.json' for n in [8,9]]
- if pair not in pairs:pairs.append(pair)
- p.write_text(json.dumps(pairs,indent=2)+'\n')
-
-def knf(start=116):
- # Preserve the original standalone crate filename, module names and sources.
- base=ROOT/'evidence/kani-k2leaf-20261028'
- field=(base/'KNF_field.rs').read_text();wide=(base/'KNF_wide_exact.rs').read_text();audit=[]
- for i,num in enumerate([4,5,6,7,8]):
-  rp=f'evidence/kani-k2leaf-20261028/KNF_K{num:03}/receipt.json';r=read_json(ROOT/rp);h=r['selected_harness'];a=f'NEH_K{start+i:03}'
-  source=(base/f'sources/KNF_K{num:03}.rs').read_text()
-  for name,data in [('KNF_harness.rs',source),('KNF_field.rs',field),('KNF_wide_exact.rs',wide)]:assert sha(data.encode())==r['source_hashes'][name],(rp,name)
-  body=source.replace('#[kani::proof]', '#[kani::proof] #[kani::stub(core::ptr::copy_nonoverlapping,NEH_kmx::KMX_copy_nonoverlapping)]')
-  body='#![feature(allocator_api)]\n'+body+'\nextern crate alloc;\nmod NEH_kmx {include!("KMX_stubs.rs");}\n'
-  o={'KNF_harness.rs':body,'KNF_field.rs':field,'KNF_wide_exact.rs':wide}
-  cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver',B+'/NEH_src/KNF_harness.rs','-Z','unstable-options','-Z','stubbing','--harness-timeout','90s','--harness',h,'--output-format','regular','--solver','kissat','-Z','concrete-playback','--concrete-playback','print','--cbmc-args','--unwinding-assertions','--slice-formula']
-  path=E/(a+'_native_template.json');path.write_text(json.dumps(cmd,indent=2)+'\n')
-  os.environ['NEH_NATIVE_TEMPLATE']=str(path);os.environ['NEH_STANDALONE']='1'
-  if not (E/a/'receipt.json').exists():publish(a,rp,o,num in [5,7])
-  del os.environ['NEH_NATIVE_TEMPLATE'];del os.environ['NEH_STANDALONE']
-  audit.append(dict(attempt=a,original_receipt=rp,original_hashes=r['source_hashes'],method='original standalone filename and names, original arbitrary-prestate single transition, identical field helper bytes, exact KMX ptr stub',limitation='K-3 only; existing standalone/native association qualifications unchanged'))
- p=E/'NEH_EXTRA_PAIRS.json';pairs=read_json(p) if p.exists() else []
- for positive,control in [(4,5),(6,7)]:
-  pair=[f'evidence/kani-k2leaf-20261028/KNF_K{n:03}/receipt.json' for n in [positive,control]]
-  if pair not in pairs:pairs.append(pair)
- p.write_text(json.dumps(pairs,indent=2)+'\n');(E/'NEH_KNF_AUDIT.json').write_text(json.dumps(audit,indent=2)+'\n')
-
 def common_repairs(start=114):
  from NEH_migrate_common import migrate
  c=read_json(ROOT/'evidence/slice-s-leaves-20261029/NEC_CLOSED.json')[0]
