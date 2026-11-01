@@ -117,7 +117,7 @@ def emit(x,n=2,world=False):
 def proof(x,n=2,lets=()):
  pad=' '*n
  if x.kind=='let':
-  m=re.match(r'let (\w+) :=',x.text)
+  m=re.match(r'let (\w+) :=',x.text.strip())
   nextlets=lets+((m[1],) if m else ())
   return '\n'.join(pad+z.strip() for z in x.text.splitlines())+'\n'+pad+'try dsimp only\n'+proof(x.next,n,nextlets)
  if x.kind=='bind':
