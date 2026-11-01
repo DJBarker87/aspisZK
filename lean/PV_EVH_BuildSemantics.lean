@@ -113,7 +113,7 @@ theorem run_fixed
       simp only [condition,if_true]
       exact PV_EVH_Prefix.lift_fixed _
     · try dsimp only [i] at condition
-      simp only [condition,if_false]
+      simp only [condition,Bool.false_eq_true,if_false]
       try dsimp only
       apply PV_EVH_Prefix.bind_fixed
       ·
@@ -126,7 +126,7 @@ theorem run_fixed
           simp only [condition,if_true]
           exact PV_EVH_Prefix.lift_fixed _
         · try dsimp only [i,i1] at condition
-          simp only [condition,if_false]
+          simp only [condition,Bool.false_eq_true,if_false]
           try dsimp only
           apply PV_EVH_Prefix.bind_fixed
           ·
@@ -142,7 +142,7 @@ theorem run_fixed
                 simp only [condition,if_true]
                 exact PV_EVH_Prefix.lift_fixed _
               · try dsimp only [i,i1] at condition
-                simp only [condition,if_false]
+                simp only [condition,Bool.false_eq_true,if_false]
                 try dsimp only
                 apply PV_EVH_Prefix.bind_fixed
                 ·

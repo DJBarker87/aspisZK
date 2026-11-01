@@ -80,6 +80,7 @@ theorem run_fixed
   (salts : (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
   aspis_core.state_only_hiding.StateOnlyHidingContext)) (c : Callees) (compatible : Compatible c) :
     FinishedView (run public1 variant hash backend sem salts c) (prover.prove_from_semantics public1 variant hash backend sem salts) := by
+  rcases salts with ⟨reserved,context⟩
   unfold run prover.prove_from_semantics
   let (reserved, context) := salts
   try dsimp only
