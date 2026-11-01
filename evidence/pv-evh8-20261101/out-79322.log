@@ -1,0 +1,14 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:28:6: error: 'change' tactic failed, pattern
+  PV_EVH_Prefix.bind (PV_EVH_NonzeroStep.run bytes combined i { })
+      (fun cf =>
+        match cf with
+        | done a => PV_EVH_Prefix.lift (Result.ok a)
+        | cont next => PV_EVH_PrefixLoop.loop (fun state => PV_EVH_NonzeroStep.run bytes state.1 state.2 { }) fuel next)
+      w =
+    ?m.148
+is not definitionally equal to target
+  PV_EVH_NonzeroFlow.loop (fuel + 1) bytes combined i w =
+    { status := PV_EVH_WorldLoop.Status.finished (Result.ok combined), world := w, events := [] }
+'PV_EVH_NonzeroTotal.loop_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonzeroTotal.run_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonzeroTotal.source_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

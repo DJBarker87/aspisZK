@@ -1,0 +1,25 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroFlow.lean:18:2: error: Tactic `apply` failed: could not unify the conclusion of `PV_EVH_PrefixLoop.fixed_recursive (fun x => ?m.10)
+  (fun x => ?m.13) fun x => ?m.16`
+  FinishedView (PV_EVH_PrefixLoop.loop (fun x => ?m.10) ?n ?s) (?m.17 ?s)
+with the goal
+  FinishedView (loop fuel bytes combined i) (aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i)
+
+Note: The full type of `PV_EVH_PrefixLoop.fixed_recursive (fun x => ?m.10) (fun x => ?m.13) fun x => ?m.16` is
+  (∀ (s : ?m.7),
+      ?m.16 =
+        Std.bind ?m.13 fun cf =>
+          match cf with
+          | ControlFlow.done a => Result.ok a
+          | ControlFlow.cont next => ?m.16) →
+    (∀ (s : ?m.7), FinishedView ?m.10 ?m.13) →
+      ∀ (n : ℕ) (s : ?m.7), FinishedView (PV_EVH_PrefixLoop.loop (fun x => ?m.10) n s) ?m.16
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+fuel : ℕ
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+⊢ FinishedView (loop fuel bytes combined i) (aspis_prover.state_only_entropy.entropy_nonzero32_loop bytes combined i)
+'PV_EVH_NonzeroFlow.loop_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonzeroFlow.run_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

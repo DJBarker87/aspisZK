@@ -1,0 +1,166 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:21:16: error: unsolved goals
+case zero.succ
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+combined : U8
+i : Usize
+w : World
+bound : ↑i + 0 = 32
+fuel : ℕ
+enough : 0 + 1 ≤ fuel + 1
+stop : ¬i < 32#usize
+⊢ (match (pure (done combined) w).status with
+    | PV_EVH_WorldLoop.Status.exhausted =>
+      { status := PV_EVH_WorldLoop.Status.exhausted, world := (pure (done combined) w).world,
+        events := (pure (done combined) w).events }
+    | PV_EVH_WorldLoop.Status.finished (Result.fail e) =>
+      { status := PV_EVH_WorldLoop.Status.finished (Result.fail e), world := (pure (done combined) w).world,
+        events := (pure (done combined) w).events }
+    | PV_EVH_WorldLoop.Status.finished Result.div =>
+      { status := PV_EVH_WorldLoop.Status.finished Result.div, world := (pure (done combined) w).world,
+        events := (pure (done combined) w).events }
+    | PV_EVH_WorldLoop.Status.finished (Result.ok a) =>
+      {
+        status :=
+          ((match a with
+              | done a => PV_EVH_Prefix.ofM (PV_EVH_World.lift (Result.ok a))
+              | cont next =>
+                PV_EVH_PrefixLoop.loop
+                  (fun state =>
+                    if state.2 < 32#usize then do
+                      let i1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (bytes.index_usize state.2))
+                      let combined1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.1 ||| i1)))
+                      let i2 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.2.wrapping_add 1#usize)))
+                      pure (cont (combined1, i2))
+                    else pure (done state.1))
+                  fuel next)
+              (pure (done combined) w).world).status,
+        world :=
+          ((match a with
+              | done a => PV_EVH_Prefix.ofM (PV_EVH_World.lift (Result.ok a))
+              | cont next =>
+                PV_EVH_PrefixLoop.loop
+                  (fun state =>
+                    if state.2 < 32#usize then do
+                      let i1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (bytes.index_usize state.2))
+                      let combined1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.1 ||| i1)))
+                      let i2 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.2.wrapping_add 1#usize)))
+                      pure (cont (combined1, i2))
+                    else pure (done state.1))
+                  fuel next)
+              (pure (done combined) w).world).world,
+        events :=
+          (pure (done combined) w).events ++
+            ((match a with
+                | done a => PV_EVH_Prefix.ofM (PV_EVH_World.lift (Result.ok a))
+                | cont next =>
+                  PV_EVH_PrefixLoop.loop
+                    (fun state =>
+                      if state.2 < 32#usize then do
+                        let i1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (bytes.index_usize state.2))
+                        let combined1 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.1 ||| i1)))
+                        let i2 ← PV_EVH_Prefix.ofM (PV_EVH_World.lift (Std.lift (state.2.wrapping_add 1#usize)))
+                        pure (cont (combined1, i2))
+                      else pure (done state.1))
+                    fuel next)
+                (pure (done combined) w).world).events }) =
+    { status := PV_EVH_WorldLoop.Status.finished (Result.ok combined), world := w, events := [] }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:26:27: warning: This simp argument is unused:
+  PV_EVH_Prefix.ofM
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵l̵o̵o̵p̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵L̵o̵o̵p̵.̵l̵o̵o̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵S̵t̵e̵p̵.̵r̵u̵n̵,̵s̵t̵o̵p̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲L̲o̲o̲p̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲S̲t̲e̲p̲.̲r̲u̲n̲,̲ ̲s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:26:45: warning: This simp argument is unused:
+  PV_EVH_World.lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵l̵o̵o̵p̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵L̵o̵o̵p̵.̵l̵o̵o̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵S̵t̵e̵p̵.̵r̵u̵n̵,̵s̵t̵o̵p̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲L̲o̲o̲p̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲S̲t̲e̲p̲.̲r̲u̲n̲,̲ ̲s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:26:63: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵l̵o̵o̵p̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵L̵o̵o̵p̵.̵l̵o̵o̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵S̵t̵e̵p̵.̵r̵u̵n̵,̵s̵t̵o̵p̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲L̲o̲o̲p̲.̲l̲o̲o̲p̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲S̲t̲e̲p̲.̲r̲u̲n̲,̲ ̲s̲t̲o̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:52:77: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+bytes : Std.Array U8 32#usize
+w : World
+combined : U8
+completed :
+  PV_EVH_NonzeroFlow.loop 33 bytes 0#u8 0#usize w =
+    { status := PV_EVH_WorldLoop.Status.finished (Result.ok combined), world := w, events := [] }
+⊢ (PV_EVH_NonzeroFlow.loop 33 bytes 0#u8 0#usize >>= fun combined => pure (combined != 0#u8)) w =
+    { status := PV_EVH_WorldLoop.Status.finished (Result.ok (combined != 0#u8)), world := w, events := [] }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:55:36: warning: This simp argument is unused:
+  PV_EVH_Prefix.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:55:55: warning: This simp argument is unused:
+  completed
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:56:4: warning: This simp argument is unused:
+  PV_EVH_Prefix.lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:56:23: warning: This simp argument is unused:
+  PV_EVH_Prefix.ofM
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:56:41: warning: This simp argument is unused:
+  PV_EVH_World.lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲ ̲L̲i̲s̲t̲.̲n̲i̲l̲_̲a̲p̲p̲e̲n̲d̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NonzeroTotal.lean:56:59: warning: This simp argument is unused:
+  List.nil_append
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵E̵V̵H̵_̵N̵o̵n̵z̵e̵r̵o̵F̵l̵o̵w̵.̵r̵u̵n̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵b̵i̵n̵d̵,̵c̵o̵m̵p̵l̵e̵t̵e̵d̵,̵
+  ̵ ̵ ̵ ̵ ̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵l̵i̵f̵t̵,̵P̵V̵_̵E̵V̵H̵_̵P̵r̵e̵f̵i̵x̵.̵o̵f̵M̵,̵P̵V̵_̵E̵V̵H̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵n̵i̵l̵_̵a̵p̵p̵e̵n̵d̵]̵[̲P̲V̲_̲E̲V̲H̲_̲N̲o̲n̲z̲e̲r̲o̲F̲l̲o̲w̲.̲r̲u̲n̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲b̲i̲n̲d̲,̲ ̲c̲o̲m̲p̲l̲e̲t̲e̲d̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲l̲i̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲P̲V̲_̲E̲V̲H̲_̲P̲r̲e̲f̲i̲x̲.̲o̲f̲M̲,̲ ̲P̲V̲_̲E̲V̲H̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_NonzeroTotal.loop_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonzeroTotal.run_terminal' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_NonzeroTotal.source_total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

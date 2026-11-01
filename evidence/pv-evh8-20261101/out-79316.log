@@ -1,0 +1,77 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:12:37: warning: Variable name `reserved` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:13:3: warning: Variable name `context` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:14:3: warning: Variable name `hash` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:15:3: warning: Variable name `tag` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:15:18: warning: Variable name `index` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:16:3: warning: Variable name `salts` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_PrivateSaltsStep.lean:64:6: error: Tactic `apply` failed: could not unify the conclusion of `@PV_EVH_Prefix.bind_fixed`
+  FinishedView (PV_EVH_Prefix.bind ?m ?k) (Std.bind ?r ?f)
+with the goal
+  FinishedView
+    (do
+      let i ← PV_EVH_Prefix.lift (Std.lift (UScalar.cast UScalarTy.U32 index))
+      let result1 ← c.derive_private_salt_step_OPEN reserved context hash tag i salts
+      let index1 ← PV_EVH_Prefix.lift (Std.lift (index.wrapping_add 1#usize))
+      pure (cont (result1, index1)))
+    do
+    let result1 ←
+      do
+        let i ← Std.lift (UScalar.cast UScalarTy.U32 index)
+        prover.derive_private_salt_step reserved context hash tag i salts
+    let index1 ← Std.lift (index.wrapping_add 1#usize)
+    Result.ok (cont (result1, index1))
+
+Note: The full type of `@PV_EVH_Prefix.bind_fixed` is
+  ∀ {A B : Type} (m : P A) (k : A → P B) (r : Result A) (f : A → Result B),
+    FinishedView m r → (∀ (a : A), FinishedView (k a) (f a)) → FinishedView (PV_EVH_Prefix.bind m k) (Std.bind r f)
+
+case pos.Ok
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets
+context : aspis_core.state_only_hiding.StateOnlyHidingContext
+hash : Slice (Slice U8) → Result (Std.Array U8 32#usize)
+tag : U8
+count index : Usize
+c : Callees
+compatible : Compatible c
+condition : index < count
+salts : alloc.vec.Vec (Std.Array U8 32#usize)
+⊢ FinishedView
+    (do
+      let i ← PV_EVH_Prefix.lift (Std.lift (UScalar.cast UScalarTy.U32 index))
+      let result1 ← c.derive_private_salt_step_OPEN reserved context hash tag i salts
+      let index1 ← PV_EVH_Prefix.lift (Std.lift (index.wrapping_add 1#usize))
+      pure (cont (result1, index1)))
+    do
+    let result1 ←
+      do
+        let i ← Std.lift (UScalar.cast UScalarTy.U32 index)
+        prover.derive_private_salt_step reserved context hash tag i salts
+    let index1 ← Std.lift (index.wrapping_add 1#usize)
+    Result.ok (cont (result1, index1))
+'PV_EVH_PrivateSaltsStep.run_fixed' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

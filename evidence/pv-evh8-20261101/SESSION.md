@@ -36,3 +36,9 @@ fidelity, panic-free termination and sufficient fuel are not yet proved.
 ValueBind and inherited PrepareOpening staging pass against hash-checked
 same-cohort dependencies. Staging is not a Lean run. The complete new ID block
 has no host receipt or sent.txt collisions.
+
+Focused accepted IDs 79300–79306: ValueBind, PrepareOpening, FinishOpening,
+PublishCompact, OpeningInstall, OpeningProver, NonzeroStep. All standard axioms
+or empty, swap zero, under 8 GiB. 79307 NonzeroFlow failed elaboration because
+the tuple state of fixed_recursive was not inferred; the replacement explicitly
+types the carrier U8 × Usize at every lambda. No cap/heartbeat change.

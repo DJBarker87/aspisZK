@@ -1,0 +1,14 @@
+'PV_EVH_LiftLaws.bind_lift' depends on axioms: [Quot.sound]
+def Aeneas.Std.Array.index_usize.{u} : {α : Type u} → {n : Usize} → Std.Array α n → Usize → Result α :=
+fun {α} {n} v i =>
+  match v[i]? with
+  | none => Result.fail Error.arrayOutOfBounds
+  | some x => Result.ok x
+Aeneas.Std.Array.index_usize_spec.{u} {α : Type u} {n : Usize} (v : Std.Array α n) (i : Usize)
+  (hbound : ↑i < v.length) : v.index_usize i ⦃ x => x = (↑v)[↑i] ⦄
+def Aeneas.Std.Usize.wrapping_add : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_add x y
+@[reducible] def ProverRwFull.core.result.Result.map : [types : ProverRwFull.ExternalTypes] →
+  [ext : ProverRwFull.ExternalFuns] →
+    {T E U F : Type} → core.ops.function.FnOnce F T U → core.result.Result T E → F → Result (core.result.Result U E) :=
+fun [types : ProverRwFull.ExternalTypes] [ext : ProverRwFull.ExternalFuns] => @ProverRwFull.ExternalFuns.op11 types ext
