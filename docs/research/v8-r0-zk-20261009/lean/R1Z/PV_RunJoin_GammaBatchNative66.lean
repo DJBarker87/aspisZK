@@ -26,6 +26,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     @prover.opening_batch (types base) (selected base heap box ops)
       (Array.to_slice (amap (amap fromW) c)) (fromW g)=
         mapResult (PV_RunJoin_PrefixFold50.image fromW) (ProverCommitGammaOutput53.run c g) := by
+  letI : ExternalTypes := types base
   let incoming := @PV_DL_EncoderSelected.selected (types base) (@PV_RunJoin_GammaPowers44.inputs (types base) ops)
   have hz := (PV_RunJoin_InactiveFields48.zero base heap box ops).trans
     (PV_RunJoin_InactiveFields48.zero base heap box incoming).symm
