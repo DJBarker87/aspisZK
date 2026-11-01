@@ -1,0 +1,11 @@
+# Stage 3: NDH replays
+
+NEH_K030–K071 are terminal: 42 original receipts / 21 native-property and control pairs. Every positive reports SUCCESSFUL and every matched negative reports FAILED, under its original module/harness/function names. All harness state is local or owned; no writable static logger is present. Exact original patches were replayed on frozen Rust sources in the single existing own scratch, with frozen lock, offline exact graph checks, deployed features and exact KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. The native KMX source hashes are verified by NEH_gate.py. Copy controls are not substituted across configurations.
+
+This clears these 42 support receipts for K-3 only. Original domains, Lean/native association, P6/D188 semantic-transport trust, K-2 quarantine and caller obligations remain. It does not establish all 66 NEB parent rows or any security headline. Native source snapshots, per-run resource/cgroup/feature/graph/lock receipts and output are retained. Axioms N/A; no Lean module added.
+
+Own replay wrapper was extended for local overlays, but K045 initially hit a missing Python os import before any host submission. NEH_K045-input-error.log retains that error; the import was fixed and the same unsubmitted attempt continued. No timed-out/memory-killed job was rerun. K038 had a prelaunch ssh255 and used the required wait/retry, without resubmitting a scope. No host infrastructure was changed. One scope at a time, High6G/Max8G/Swap0/Tasks64; no cap increase.
+
+The classifier was strengthened to flag unknown macros/attributes/custom derives. Final source-scan counts are 797 receipts: 686 AFFECTED and 111 UNAFFECTED within receipt-pinned input scope. It still accounts for all 578 Kani + 70 separate Lean active NDT support receipts; no native credit is inferred from an unresolved closure. Prior stage-2 counts are superseded by NEH_SCAN3.log / NEH_APPLICABILITY.json.
+
+Budget through this stage: 71/120 capped Kani attempts, 0/10 Lean. Evidence-only changes; crates/programs and release artifacts remain unchanged. No ELF rebuild triggered, no key operations, no push. Next: NEC common projections with local snapshots; indexed direct observations must not silently replace function-contract certificates.

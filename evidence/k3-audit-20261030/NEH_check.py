@@ -8,6 +8,9 @@ for p in sorted(E.glob('NEH_K*.rs')):
  false_pass='VERIFICATION:- SUCCESSFUL' in log
  if false_pass:assert c['classification']=='AFFECTED',p
  checks.append(dict(source=p.name,sha256=sha(p.read_bytes()),classification=c['classification'],observed_false_pass=false_pass,exit=r['exit_status']))
+assert classify({'x':'custom_static_macro!();'})['classification']=='AFFECTED'
+assert classify({'x':'#[unknown_attr] fn f(){}'})['classification']=='AFFECTED'
+assert classify({'x':'#[derive(Custom)] struct R;'})['classification']=='AFFECTED'
 assert classify({'x':'macro_rules! m {()=>{}}'})['classification']=='AFFECTED'
 assert classify({'x':'fn f(){}'},['unresolved_stub.rs'])['classification']=='AFFECTED'
 assert classify({})['classification']=='AFFECTED'

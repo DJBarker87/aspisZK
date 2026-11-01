@@ -14,7 +14,19 @@ def classify(texts,missing=()):
  hits=[dict(source=n,line=i+1,text=l.strip()[:300]) for n,t in texts.items() for i,l in enumerate(t.splitlines()) if re.search(r'\bstatic\b',l)]
  # Includes macro-generated statics whenever literal token appears. Unknown
  # inputs/macros are not licensed by a NOT-EXPOSED result.
- macro=[n for n,t in texts.items() if re.search(r'(?:include!|macro_rules!|\bproc_macro\b)',t)]
+ safe_macros={'assert','assert_eq','assert_ne','debug_assert','debug_assert_eq','debug_assert_ne','matches','panic','unreachable','unimplemented','todo','vec','format','format_args','write','writeln','print','println','eprint','eprintln','concat','concat_idents','stringify','line','file','column','module_path','env','option_env','cfg','kani::cover'}
+ builtin_derives={'Copy','Clone','Debug','Default','PartialEq','Eq','PartialOrd','Ord','Hash'}
+ def unknown_macro(t):
+  if re.search(r'(?:include!|macro_rules!|\bproc_macro\b)',t):return True
+  if any(m not in safe_macros for m in re.findall(r'\b([A-Za-z_][\w:]*)!\s*[\[({]',t)):return True
+  for args in re.findall(r'#\s*\[\s*derive\(([^)]*)\)',t):
+   if any(a.strip() not in builtin_derives for a in args.split(',')):return True
+  # Unknown attribute macros can synthesize storage too. Kani/cfg/builtin
+  # attributes remain pinned tool trust, not arbitrary expansion credit.
+  for a in re.findall(r'#\s*!?\s*\[\s*([A-Za-z_][\w:]*)',t):
+   if a.split('::')[0] not in {'cfg','cfg_attr','derive','inline','repr','allow','warn','deny','forbid','must_use','no_std','no_main','no_mangle','export_name','link_section','path','doc','test','ignore','should_panic','deprecated','cold','track_caller','feature','recursion_limit','rustfmt','kani'}:return True
+  return False
+ macro=[n for n,t in texts.items() if unknown_macro(t)]
  reasons=[]
  if hits:reasons.append('STATIC_TOKEN: conservatively includes mutable, interior-mutable, immutable and unwritten statics')
  if missing:reasons.append('UNRESOLVED_PINNED_SOURCE')
