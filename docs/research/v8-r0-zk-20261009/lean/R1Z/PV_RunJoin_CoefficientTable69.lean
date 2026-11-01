@@ -49,7 +49,7 @@ theorem table (c : Nat → Nat → Old.Q)
   funext j
   simp only [PV_RunJoin_ArrayEntries41.entries,ProverCommitArray49.array]
   rw [List.getElem?_eq_getElem (by rw [List.length_ofFn];exact AspisR1.rowNat_lt j.val)]
-  simp only [Option.getD_some,List.getElem_ofFn,ProverRwDictionaryTower.w_inverse]
+  simp only [Option.getD_some,List.getElem_ofFn,ProverRwDictionaryTower.native_w_roundtrip]
   rw [ProverCommitGammaCoefficients53.wide,coefficient_row c hc l.val j.val l.isLt j.isLt]
   rfl
 
