@@ -29,7 +29,7 @@ theorem success_iff {T S F : Type} (base : ExternalTypes) (heap : Heap) (box : B
   letI : ExternalTypes := types base
   rw [source]
   cases (PV_RunJoin_AllocatorWorld63.execute runtime world v n).returned with
-  | ok u => cases u;exact Iff.rfl
+  | ok u => cases u;exact ⟨fun _ => rfl,fun _ => rfl⟩
   | error e => simp only [PV_FXM_ReserveSelected.returned,Result.ok.injEq,Prod.mk.injEq,
       reduceCtorEq,and_true]
 
