@@ -1,0 +1,1 @@
+LOG D547. Entry d53d4af262. Sole writer; same worktree and branch. Receipts here; pinned runjoin32 cache reused. Six clean leftovers 78091–78096 first; then 79400–79496; audits 79497–79499. At most 90 charged attempts, including leftovers; 78300–78302 remain unused. No release claim.
