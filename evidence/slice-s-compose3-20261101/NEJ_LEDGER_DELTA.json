@@ -3,7 +3,7 @@
  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
  "edges": {
   "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes": {
-   "id": "NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+   "id": "NEJ_NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
    "kind": "alternative-resolution",
    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -53,20 +53,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-     "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+     "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-     "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+     "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-     "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+     "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
     },
     {
      "path": "evidence/slice-s-compose2-20261029/NEE_M31_RESOLUTION.json",
@@ -85,13 +85,120 @@
    "hypotheses": [
     "NativeContractSemanticTransport"
    ],
-   "semantic_review_sha256": "b577a2d89fd8f302702ca67763298ef5b28e68a88fcd0976d92c346525535c5b"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.widths_distinct",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem widths_distinct : (4 : Nat) \u2260 32 := by decide\n",
+      "statement_sha256": "180c112a8cba7e9ff53edcc99c74f9ac0eebc3856883d7e8f5872579b1d805f7"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.widths_distinct",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem widths_distinct : (4 : Nat) \u2260 32 := by decide\n",
+      "statement_sha256": "180c112a8cba7e9ff53edcc99c74f9ac0eebc3856883d7e8f5872579b1d805f7"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "526918ecfa94a09b6296c8933f0d9501481b5ac2c6edc91f7b3e729ec1c113c9"
   }
  },
  "roots": {},
  "members": {
   "crates/aspis-core/src/field.rs::M31::to_le_bytes": {
-   "id": "NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes",
+   "id": "NEJ_NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes",
    "kind": "root-composition",
    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -127,20 +234,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-     "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+     "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-     "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+     "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-     "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+     "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
     }
    ],
    "same_inputs": true,
@@ -170,95 +277,95 @@
      "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes"
     ],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == self.0.to_le_bytes()))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-      "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+      "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/stdout.log",
-      "sha256": "286f34abf4c55f48561c328216356f98ca1389dfa7e17f70d01e93bef39d935c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/stdout.log",
+      "sha256": "700b88dc499fcfc43844ae9dd92fe02b83066876956504be7385358bafa9e2b2"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005.json",
-      "sha256": "9ec32c7a50cc6850e913aa9b35f7b9045c9566a3c446d230baad51b76aa1bdc4"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034.json",
+      "sha256": "cee59538dc89a0d9e173f5406f5e09e4bd7f6af9cbad249e792cdc903e86dd0f"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-      "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+      "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-      "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+      "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/stdout.log",
-      "sha256": "30879125c1efc96dfbd82d6f1e6faecb222e8b384e32ec47b2b4802405b26b9d"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/stdout.log",
+      "sha256": "7f2aa570ab8d41175263da18ec4449350ad41bbb21297f098705eac4af5bc86d"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006.json",
-      "sha256": "fcd3661ad6878bd87b515096650bd9a8a250a9d88ef8e7649fc2b8f0d5826059"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035.json",
+      "sha256": "d2690616282f59351e9531249ae1f68b38daecb42c387aa50f7d2466e7ef9976"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_native_contracts.patch",
-      "sha256": "5c9eac6e2eea8f3ecd83c8c37962267ca015ef79067e65afa3f33400c4dc8d3b"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_native_contracts.patch",
+      "sha256": "2cc0535f86d166385546e655600b3b24c328cd50494e338637e6c50b54059980"
      }
     },
     "proof_target": "aspis_core::field::M31::to_le_bytes",
@@ -293,10 +400,89 @@
      }
     ]
    },
-   "semantic_review_sha256": "811c1f8d8ee7a66b1443e2b54e027db30fbb4ae68e136deefee9dfb909a8e224"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "115305d08b61f6b7f4b9d6d206bfe912744c78e29082d4fa12e1ae005233661a"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
    "kind": "root-composition",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -318,20 +504,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-     "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+     "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-     "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+     "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-     "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+     "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
     }
    ],
    "same_inputs": true,
@@ -358,95 +544,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| core::ptr::eq(*r, match self {Self::PrivateTransfer{common,..}|Self::Withdrawal{common,..}=>common})))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-      "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+      "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/stdout.log",
-      "sha256": "fff0dc74ab6da7f93ebdf9385561b88f05be213afaf8b39aa2bb045735ebceb7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/stdout.log",
+      "sha256": "51bff53296455ffd0dfc4bb8d7ee39ee53a06bdfd6f40f627a0b60b26b974300"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007.json",
-      "sha256": "f29b6244f7ae626a498c486fd72b6de666661a90e4ff6e2965c4cc3629b9cf41"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038.json",
+      "sha256": "36a0d2cf9f121913ae255b4b08ea92023fd322c8d4245fd7902281b369313675"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-      "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+      "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-      "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+      "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/stdout.log",
-      "sha256": "6baf0c6a74e6ff816c15d68052b1119192d328a8f0045425290c83b02d2af246"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/stdout.log",
+      "sha256": "db1c30ea52fdf5b569e337c0e484a0add50b88f6d10169acad3a2d6a950b9b25"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008.json",
-      "sha256": "5884040266a8663a75441b1a7a7ebd9d75e53d7a853ebb12b7681826ae78de02"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039.json",
+      "sha256": "ff5fca93f14e7145a8dab64cf0f5733358af99f7c9f461a14fccfc230c1cfc84"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_native_contracts.patch",
-      "sha256": "a977eb1940014d9784fb7d2fb7b06893242dba0668784536fed5cbdea567e16f"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_native_contracts.patch",
+      "sha256": "03a314b844d4d6873deac3653d42710f14a6584b98ebd44a5aad9bd1a537a626"
      }
     },
     "proof_target": "PoolV1PairForestTerminalStatementV1::common",
@@ -467,10 +653,61 @@
      }
     ]
    },
-   "semantic_review_sha256": "1dd0177ebbab5410177a5e465bbc13c178931c6df87ecda647cdedf666a942a3"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "3e45b31b52f3905f73086091e23a986c31cb0302a02f234d17296ea5c8d530e8"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common",
    "kind": "root-composition",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -492,20 +729,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-     "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+     "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-     "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+     "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-     "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+     "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
     }
    ],
    "same_inputs": true,
@@ -532,95 +769,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == match statement {PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id)}))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-      "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+      "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/stdout.log",
-      "sha256": "6fa2508f0d36698466c8180daecb1877b4535420e71f560f713ccf67ff17e8ab"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/stdout.log",
+      "sha256": "67fbd8275dc587aa04b674661cf2ed51ef3bb6bd1f16c0fee364c653aa9dcb52"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009.json",
-      "sha256": "2a6a303a425b83d956863a409f4d4689547f88f2cba4d10d488682b4bac99451"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036.json",
+      "sha256": "b188de0ad699039ce48829a26d155f401e5c679006f53aa45945a4cb9ce623de"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-      "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+      "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-      "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+      "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/stdout.log",
-      "sha256": "c90de45a3a203055de0ecada661910058ea0bf515b132f0f4ff976b00145d9c7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/stdout.log",
+      "sha256": "63d16150b5d852d971a5d4a92de60e4c2a5d6774a7efe2d768659114fdcd342c"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010.json",
-      "sha256": "d78ab009fd67b2a3f5c2cbeeba13e9f91970378f19e1464ce7bfd3735cf7e88c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037.json",
+      "sha256": "36e7d605ce4378384efb666d8083a4e49324bdb0abacd9794819db28ce74576a"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_native_contracts.patch",
-      "sha256": "c4bb56e94d08a77e1f168f31174e72f68ea1fd66d9a4e2bacb9cd1b8f3156088"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_native_contracts.patch",
+      "sha256": "435924caa8daa8a1b0c7b120b1cb55f72c84296a5417996c256779be5ebda005"
      }
     },
     "proof_target": "statement_public_common",
@@ -641,7 +878,58 @@
      }
     ]
    },
-   "semantic_review_sha256": "0db4fed3e92487072bccf2932bcd03a073419b8fda644521e984c110b147bfa5"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "d6dd807aa89ab2cb61f1c8118b04754327eada21f5d6268bcb6a1b1e53cda30f"
   },
   "crates/aspis-statement/src/pool_v1/payment_relation.rs::transfer_common": {
    "id": "NEE::crates/aspis-statement/src/pool_v1/payment_relation.rs::transfer_common",
@@ -1168,7 +1456,7 @@
  },
  "hypotheses": {
   "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PacketDomain": {
-   "id": "NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PacketDomain",
+   "id": "NEJ_NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PacketDomain",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PacketDomain",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -1204,20 +1492,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-     "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+     "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-     "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+     "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-     "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+     "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
     }
    ],
    "same_inputs": true,
@@ -1247,95 +1535,95 @@
      "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes"
     ],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == self.0.to_le_bytes()))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-      "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+      "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/stdout.log",
-      "sha256": "286f34abf4c55f48561c328216356f98ca1389dfa7e17f70d01e93bef39d935c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/stdout.log",
+      "sha256": "700b88dc499fcfc43844ae9dd92fe02b83066876956504be7385358bafa9e2b2"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005.json",
-      "sha256": "9ec32c7a50cc6850e913aa9b35f7b9045c9566a3c446d230baad51b76aa1bdc4"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034.json",
+      "sha256": "cee59538dc89a0d9e173f5406f5e09e4bd7f6af9cbad249e792cdc903e86dd0f"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-      "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+      "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-      "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+      "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/stdout.log",
-      "sha256": "30879125c1efc96dfbd82d6f1e6faecb222e8b384e32ec47b2b4802405b26b9d"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/stdout.log",
+      "sha256": "7f2aa570ab8d41175263da18ec4449350ad41bbb21297f098705eac4af5bc86d"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006.json",
-      "sha256": "fcd3661ad6878bd87b515096650bd9a8a250a9d88ef8e7649fc2b8f0d5826059"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035.json",
+      "sha256": "d2690616282f59351e9531249ae1f68b38daecb42c387aa50f7d2466e7ef9976"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_native_contracts.patch",
-      "sha256": "5c9eac6e2eea8f3ecd83c8c37962267ca015ef79067e65afa3f33400c4dc8d3b"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_native_contracts.patch",
+      "sha256": "2cc0535f86d166385546e655600b3b24c328cd50494e338637e6c50b54059980"
      }
     },
     "proof_target": "aspis_core::field::M31::to_le_bytes",
@@ -1370,10 +1658,89 @@
      }
     ]
    },
-   "semantic_review_sha256": "3ae70312be1d43a993e4e35a6d58944256a9d45ea67c7fe7289c8786437f3f82"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PacketDomain",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "4149166946a569d3720926e19ff7384833e08366f57da1717cf03b030399e9a5"
   },
   "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PhysicalInterpretation": {
-   "id": "NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PhysicalInterpretation",
+   "id": "NEJ_NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PhysicalInterpretation",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PhysicalInterpretation",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -1409,20 +1776,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-     "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+     "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-     "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+     "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-     "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+     "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
     }
    ],
    "same_inputs": true,
@@ -1452,95 +1819,95 @@
      "crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes"
     ],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == self.0.to_le_bytes()))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-      "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+      "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005/stdout.log",
-      "sha256": "286f34abf4c55f48561c328216356f98ca1389dfa7e17f70d01e93bef39d935c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034/stdout.log",
+      "sha256": "700b88dc499fcfc43844ae9dd92fe02b83066876956504be7385358bafa9e2b2"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005.json",
-      "sha256": "9ec32c7a50cc6850e913aa9b35f7b9045c9566a3c446d230baad51b76aa1bdc4"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034.json",
+      "sha256": "cee59538dc89a0d9e173f5406f5e09e4bd7f6af9cbad249e792cdc903e86dd0f"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-      "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+      "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-      "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+      "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006/stdout.log",
-      "sha256": "30879125c1efc96dfbd82d6f1e6faecb222e8b384e32ec47b2b4802405b26b9d"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035/stdout.log",
+      "sha256": "7f2aa570ab8d41175263da18ec4449350ad41bbb21297f098705eac4af5bc86d"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006.json",
-      "sha256": "fcd3661ad6878bd87b515096650bd9a8a250a9d88ef8e7649fc2b8f0d5826059"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035.json",
+      "sha256": "d2690616282f59351e9531249ae1f68b38daecb42c387aa50f7d2466e7ef9976"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_oracle.patch",
-      "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_oracle.patch",
+      "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K006-NEE_native_contracts.patch",
-      "sha256": "5c9eac6e2eea8f3ecd83c8c37962267ca015ef79067e65afa3f33400c4dc8d3b"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K035-NEJ_native_contracts.patch",
+      "sha256": "2cc0535f86d166385546e655600b3b24c328cd50494e338637e6c50b54059980"
      }
     },
     "proof_target": "aspis_core::field::M31::to_le_bytes",
@@ -1575,10 +1942,89 @@
      }
     ]
    },
-   "semantic_review_sha256": "e34ff005bfe7abc652ef6e2adbeea3e3a877b69afd70f1969d102a0c0fb42de1"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes::NCS_R050.PhysicalInterpretation",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "f05fe42d72ad36ad8cf392ecc072f27f37aa36e7c890e0626ef844be21b31ddc"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PacketDomain": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PacketDomain",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PacketDomain",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PacketDomain",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -1600,20 +2046,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-     "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+     "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-     "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+     "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-     "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+     "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
     }
    ],
    "same_inputs": true,
@@ -1640,95 +2086,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| core::ptr::eq(*r, match self {Self::PrivateTransfer{common,..}|Self::Withdrawal{common,..}=>common})))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-      "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+      "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/stdout.log",
-      "sha256": "fff0dc74ab6da7f93ebdf9385561b88f05be213afaf8b39aa2bb045735ebceb7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/stdout.log",
+      "sha256": "51bff53296455ffd0dfc4bb8d7ee39ee53a06bdfd6f40f627a0b60b26b974300"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007.json",
-      "sha256": "f29b6244f7ae626a498c486fd72b6de666661a90e4ff6e2965c4cc3629b9cf41"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038.json",
+      "sha256": "36a0d2cf9f121913ae255b4b08ea92023fd322c8d4245fd7902281b369313675"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-      "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+      "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-      "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+      "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/stdout.log",
-      "sha256": "6baf0c6a74e6ff816c15d68052b1119192d328a8f0045425290c83b02d2af246"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/stdout.log",
+      "sha256": "db1c30ea52fdf5b569e337c0e484a0add50b88f6d10169acad3a2d6a950b9b25"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008.json",
-      "sha256": "5884040266a8663a75441b1a7a7ebd9d75e53d7a853ebb12b7681826ae78de02"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039.json",
+      "sha256": "ff5fca93f14e7145a8dab64cf0f5733358af99f7c9f461a14fccfc230c1cfc84"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_native_contracts.patch",
-      "sha256": "a977eb1940014d9784fb7d2fb7b06893242dba0668784536fed5cbdea567e16f"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_native_contracts.patch",
+      "sha256": "03a314b844d4d6873deac3653d42710f14a6584b98ebd44a5aad9bd1a537a626"
      }
     },
     "proof_target": "PoolV1PairForestTerminalStatementV1::common",
@@ -1749,10 +2195,61 @@
      }
     ]
    },
-   "semantic_review_sha256": "abf5172ec614f5913fd143449d727ed85f247a7f7f414b1810c098f1feefb4d5"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PacketDomain",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "4339475ca868c5965e673cf9325309e04a00c9aebd276178c3ae3f81fa5f973b"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PhysicalInterpretation": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PhysicalInterpretation",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PhysicalInterpretation",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PhysicalInterpretation",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -1774,20 +2271,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-     "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+     "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-     "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+     "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-     "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+     "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
     }
    ],
    "same_inputs": true,
@@ -1814,95 +2311,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-     "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+     "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| core::ptr::eq(*r, match self {Self::PrivateTransfer{common,..}|Self::Withdrawal{common,..}=>common})))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/receipt.json",
-      "sha256": "6f71f99c7a6b0ff61a46bc2e0e1e92908e59f5277e774bc54774fa7540b93f33"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/receipt.json",
+      "sha256": "4ae00492bc28b55f198e4ab345520d1d99ae3708e0f0ffb3b4ca0633ff7593cd"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007/stdout.log",
-      "sha256": "fff0dc74ab6da7f93ebdf9385561b88f05be213afaf8b39aa2bb045735ebceb7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038/stdout.log",
+      "sha256": "51bff53296455ffd0dfc4bb8d7ee39ee53a06bdfd6f40f627a0b60b26b974300"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007.json",
-      "sha256": "f29b6244f7ae626a498c486fd72b6de666661a90e4ff6e2965c4cc3629b9cf41"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038.json",
+      "sha256": "36a0d2cf9f121913ae255b4b08ea92023fd322c8d4245fd7902281b369313675"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K007-NEE_native_contracts.patch",
-      "sha256": "5d0c7eafbca1f4ca7addfc538085328fc29e6453383c44cf007ef6b6117c0688"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K038-NEJ_native_contracts.patch",
+      "sha256": "dd811c882fd29f6dcb52c762f5115e8983b612dc2e1ed13f359f3eb1e929be5a"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/receipt.json",
-      "sha256": "6442cc102c80294316fe1707ce8ad178abd426f75279f3d062ad71d49b2163cf"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/receipt.json",
+      "sha256": "d8bacb40dd34eaec6a0f25494ed9a5063c470d22b2a737cc7a74a299787af8eb"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008/stdout.log",
-      "sha256": "6baf0c6a74e6ff816c15d68052b1119192d328a8f0045425290c83b02d2af246"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039/stdout.log",
+      "sha256": "db1c30ea52fdf5b569e337c0e484a0add50b88f6d10169acad3a2d6a950b9b25"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008.json",
-      "sha256": "5884040266a8663a75441b1a7a7ebd9d75e53d7a853ebb12b7681826ae78de02"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039.json",
+      "sha256": "ff5fca93f14e7145a8dab64cf0f5733358af99f7c9f461a14fccfc230c1cfc84"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_oracle.patch",
-      "sha256": "a23edb378bd0a1be4ae6c063673b0a9b6f2616500803b5204616fb3667656f14"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_oracle.patch",
+      "sha256": "f3858223e1d0cad996abce937ced4c82c30998b5b23c0f54cbc9d83797c6286c"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K008-NEE_native_contracts.patch",
-      "sha256": "a977eb1940014d9784fb7d2fb7b06893242dba0668784536fed5cbdea567e16f"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K039-NEJ_native_contracts.patch",
+      "sha256": "03a314b844d4d6873deac3653d42710f14a6584b98ebd44a5aad9bd1a537a626"
      }
     },
     "proof_target": "PoolV1PairForestTerminalStatementV1::common",
@@ -1923,10 +2420,61 @@
      }
     ]
    },
-   "semantic_review_sha256": "feac7a8f7093ecf0e8f4e0c5590283716d7161a0653dd9eec6f7a4430cdff264"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common::NCS_R030.PhysicalInterpretation",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.common_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem common_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1.common (toRaw s) =\n    ok (toRawCommon (NBN_StatementResult.common s)) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "a00aa349bc9a45d8e66af979217de16e62db611dc512894341c9521d7d0016b2"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::PoolV1PairForestTerminalStatementV1::common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "6828af37c899ad48aba007da76066aafc4fbc9500f649d23b5f49531a175e66c"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PacketDomain": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PacketDomain",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PacketDomain",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PacketDomain",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -1948,20 +2496,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-     "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+     "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-     "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+     "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-     "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+     "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
     }
    ],
    "same_inputs": true,
@@ -1988,95 +2536,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == match statement {PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id)}))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-      "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+      "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/stdout.log",
-      "sha256": "6fa2508f0d36698466c8180daecb1877b4535420e71f560f713ccf67ff17e8ab"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/stdout.log",
+      "sha256": "67fbd8275dc587aa04b674661cf2ed51ef3bb6bd1f16c0fee364c653aa9dcb52"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009.json",
-      "sha256": "2a6a303a425b83d956863a409f4d4689547f88f2cba4d10d488682b4bac99451"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036.json",
+      "sha256": "b188de0ad699039ce48829a26d155f401e5c679006f53aa45945a4cb9ce623de"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-      "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+      "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-      "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+      "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/stdout.log",
-      "sha256": "c90de45a3a203055de0ecada661910058ea0bf515b132f0f4ff976b00145d9c7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/stdout.log",
+      "sha256": "63d16150b5d852d971a5d4a92de60e4c2a5d6774a7efe2d768659114fdcd342c"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010.json",
-      "sha256": "d78ab009fd67b2a3f5c2cbeeba13e9f91970378f19e1464ce7bfd3735cf7e88c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037.json",
+      "sha256": "36e7d605ce4378384efb666d8083a4e49324bdb0abacd9794819db28ce74576a"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_native_contracts.patch",
-      "sha256": "c4bb56e94d08a77e1f168f31174e72f68ea1fd66d9a4e2bacb9cd1b8f3156088"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_native_contracts.patch",
+      "sha256": "435924caa8daa8a1b0c7b120b1cb55f72c84296a5417996c256779be5ebda005"
      }
     },
     "proof_target": "statement_public_common",
@@ -2097,10 +2645,61 @@
      }
     ]
    },
-   "semantic_review_sha256": "2ce9303b8819215ee66c7cc364938a7b96096f09b10e7c22af53a70f38791149"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PacketDomain",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "1152f1646e745d7f0a41b0c02bf463cf5537a3d5328bf47ed1e89e01272084d1"
   },
   "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PhysicalInterpretation": {
-   "id": "NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PhysicalInterpretation",
+   "id": "NEJ_NEE::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PhysicalInterpretation",
    "kind": "hypothesis-discharge",
    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PhysicalInterpretation",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -2122,20 +2721,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-     "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+     "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-     "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+     "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-     "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+     "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
     }
    ],
    "same_inputs": true,
@@ -2162,95 +2761,95 @@
     "real_internal_calls": [],
     "alternative_targets_resolved": [],
     "contract_source": {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-     "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+     "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
     },
     "modifies_statement": "#[cfg_attr(kani,kani::modifies())]",
     "ensures_statement": "#[cfg_attr(kani,kani::ensures(|r| *r == match statement {PoolV1PairForestTerminalStatementV1::PrivateTransfer{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id),PoolV1PairForestTerminalStatementV1::Withdrawal{public,..}=>(public.pool,public.deployment_domain,public.anchor_sequence,public.anchor_root,public.nullifier,public.asset_id)}))]",
     "positive": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/receipt.json",
-      "sha256": "06fab25f92805d50d05325e6d958b3f69ce0b8930b7fafa32986064f5d2f8985"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/receipt.json",
+      "sha256": "4410f2a404425dcf28d54ed521b293eb23bab12575f9ec7027227d33e7c02141"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009/stdout.log",
-      "sha256": "6fa2508f0d36698466c8180daecb1877b4535420e71f560f713ccf67ff17e8ab"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036/stdout.log",
+      "sha256": "67fbd8275dc587aa04b674661cf2ed51ef3bb6bd1f16c0fee364c653aa9dcb52"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009.json",
-      "sha256": "2a6a303a425b83d956863a409f4d4689547f88f2cba4d10d488682b4bac99451"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036.json",
+      "sha256": "b188de0ad699039ce48829a26d155f401e5c679006f53aa45945a4cb9ce623de"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K009-NEE_native_contracts.patch",
-      "sha256": "512d4c592ef0593d15546e98bf54ecc0f122c3a28864f9ffda28090e6bd653fd"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K036-NEJ_native_contracts.patch",
+      "sha256": "1196dbebd9823b9340ec5c9cb2ec32d8504a35169d6b31ba0fe436a000a1becd"
      }
     },
     "negative": {
-     "harness_key": "NEE_oracle.patch",
+     "harness_key": "NEJ_oracle.patch",
      "oracle_patch": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "receipt": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/receipt.json",
-      "sha256": "30d4d7e8025ceabe177c1058bfb3b136751218307916e6a126a7965131b4374e"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/receipt.json",
+      "sha256": "d700e277c8a87bc8f2bb9a81fab3c857d2f8bd4979fc4c8bb63babe4aed21cab"
      },
      "stdout": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010/stdout.log",
-      "sha256": "c90de45a3a203055de0ecada661910058ea0bf515b132f0f4ff976b00145d9c7"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037/stdout.log",
+      "sha256": "63d16150b5d852d971a5d4a92de60e4c2a5d6774a7efe2d768659114fdcd342c"
      },
      "graph": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-graph-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-graph-check.json",
       "sha256": "bed3ae4e0141721af6ca3a12ad8b0e415f4c6c5e6407fa00369431f178943164"
      },
      "lock": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-lock-check.json",
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-lock-check.json",
       "sha256": "1ea06bda7e7043fbfeaca08f4b29ed31ec5c7a38d29bd149213424ad8fec9e17"
      },
      "features": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-metadata-pin.json",
-      "sha256": "b516577c6e71a3fc6976124b70d7b58971ada5cdba34506255fe767e33160c45"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-metadata-pin.json",
+      "sha256": "bd78196f33483fd7a9e11d162a773e711038a09216b58ac0a34d4d25086869f7"
      },
      "config": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010.json",
-      "sha256": "d78ab009fd67b2a3f5c2cbeeba13e9f91970378f19e1464ce7bfd3735cf7e88c"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037.json",
+      "sha256": "36e7d605ce4378384efb666d8083a4e49324bdb0abacd9794819db28ce74576a"
      },
      "source_check": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-source-check.json",
-      "sha256": "165bfe67d3421699eb52f4c1d898757b5d3d0a078249c1b2c0eb8abb6ff43524"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-source-check.json",
+      "sha256": "938efdf4d71164fc08b8416051b9213e3f0f5aa92db2fb6f4e052c37ac0b0b8c"
      },
      "harness": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_oracle.patch",
-      "sha256": "048e6d754150bbb4dbe14042507ae26e833bb6b6ab7358a465b1cacb39b3eef6"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_oracle.patch",
+      "sha256": "9541ae4183957dd26c452c7811b0a7646b0fe6e8f1f395520aca9ff884c2998a"
      },
      "contract_source": {
-      "path": "evidence/slice-s-compose2-20261029/NEE_K010-NEE_native_contracts.patch",
-      "sha256": "c4bb56e94d08a77e1f168f31174e72f68ea1fd66d9a4e2bacb9cd1b8f3156088"
+      "path": "evidence/slice-s-compose3-20261101/NEJ_K037-NEJ_native_contracts.patch",
+      "sha256": "435924caa8daa8a1b0c7b120b1cb55f72c84296a5417996c256779be5ebda005"
      }
     },
     "proof_target": "statement_public_common",
@@ -2271,7 +2870,58 @@
      }
     ]
    },
-   "semantic_review_sha256": "c87f35c1c8362437fda983e93ff1076fdc32e988d8b45526370932d1e7758760"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common::NCS_R031.PhysicalInterpretation",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NED_ReconstructCarriers.parts_argument",
+      "source": {
+       "path": "evidence/slice-s-compose-20261029/NED_ReconstructCarriers.lean",
+       "sha256": "3066ce236aa74ebd17c92871d7fdeb10c8617f2d3ed8cf2ae8ab45ba063d8489"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose-20261029/NED_L045/receipt.json",
+       "sha256": "742c1db2dd9005ff1aebb257d73d6ccd2d45b4ba5efdc35475f712d5daf9bf37"
+      },
+      "snapshot_path": "NED_generated/NED_ReconstructCarriers.lean",
+      "statement": "theorem parts_argument (s : Terminal) :\n    AspisR1AdapterReconstruct.aspis_statement.pool_v1.pair_forest_terminal.statement_public_common (toRaw s) =\n    ok (NBN_StatementResult.parts s) := by\n  cases s <;> rfl\n",
+      "statement_sha256": "14a8d58ef15524eee5e03f2037abc28c575b4eac621a2fb2dae3ea564e884cd4"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBD::crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::statement_public_common"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "5e7cf27fae57bffa9006772e11042fdd8084b3645c3ab508aaa66aec502c9f40"
   },
   "crates/aspis-statement/src/pool_v1/payment_relation.rs::transfer_common::NCS_R085.PacketDomain": {
    "id": "NEE::crates/aspis-statement/src/pool_v1/payment_relation.rs::transfer_common::NCS_R085.PacketDomain",
@@ -3330,7 +3980,7 @@
  "externals": {},
  "inventory_edges": {
   "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes": {
-   "id": "NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
+   "id": "NEJ_NEE::crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
    "kind": "alternative-resolution",
    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
@@ -3380,20 +4030,20 @@
    ],
    "native_association": [
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005/receipt.json",
-     "sha256": "9fb3e45d5814c2541b9950fe002148dcd139d38102506a84dfbf69068ae693e7"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034/receipt.json",
+     "sha256": "c1b6282032e1797b883ab21a32863f815d52d02bff5c78874b6fe01534226d63"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K006/receipt.json",
-     "sha256": "4c81775ab15e9be78972899ec1a83e2c820ef115174aca2bded6b566c9ea1c6e"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K035/receipt.json",
+     "sha256": "45defc7cf6dd57388fe18ec8975c6c4dcb854b5cba9a9740e95ebf6924120c3e"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_native_contracts.patch",
-     "sha256": "a198e9d172b56f2e8c08e69b3c4cfbb40092c6201a7dc0530f08ee541ca9ad55"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_native_contracts.patch",
+     "sha256": "b7cf3e1d7c27d7964b3e86d6d58b3f178f54040762656ba11870b23da9c92404"
     },
     {
-     "path": "evidence/slice-s-compose2-20261029/NEE_K005-NEE_oracle.patch",
-     "sha256": "77bdb008c7af33a8030bef37a827ef62e4b2abeaf6404c093a1af34b590f1602"
+     "path": "evidence/slice-s-compose3-20261101/NEJ_K034-NEJ_oracle.patch",
+     "sha256": "1a807fa77d93f90e8a1f5bffd09d1eeed3a58051f98145eec4f6ff2e635e02be"
     },
     {
      "path": "evidence/slice-s-compose2-20261029/NEE_M31_RESOLUTION.json",
@@ -3412,7 +4062,114 @@
    "hypotheses": [
     "NativeContractSemanticTransport"
    ],
-   "semantic_review_sha256": "26f216e90eea340e718c167229d434f373d5f5061269daeee222cc8b2ea597f5"
+   "call_domain_certificate": {
+    "subject": "crates/aspis-core/src/field.rs::M31::to_le_bytes -> crates/aspis-core/src/field.rs::M31::to_le_bytes",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "native_association_kind": "native-contract",
+    "domain_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.widths_distinct",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem widths_distinct : (4 : Nat) \u2260 32 := by decide\n",
+      "statement_sha256": "180c112a8cba7e9ff53edcc99c74f9ac0eebc3856883d7e8f5872579b1d805f7"
+     }
+    ],
+    "physical_theorems": [
+     {
+      "name": "NEE_M31SerializerDomain.primitive",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem primitive (word : U32) :\n    aspis_core.field.M31.to_le_bytes word = ok (core.num.U32.to_le_bytes word) := by rfl\n\n/-- Fixed-array carrier size distinguishes this source call from WideExact's\n32-byte serializer. The native source receiver is self.0 : u32. -/",
+      "statement_sha256": "fd6d3e61e20ef35374c14224c0bb2bd8645da2e40fd696aa42d256dc7cacbda8"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.width",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem width (word : U32) : (core.num.U32.to_le_bytes word).val.length = 4 := by\n  exact (core.num.U32.to_le_bytes word).property\n",
+      "statement_sha256": "df0e35355935bbeb90ecf18c05b0d584706b29564424d48ea9725e128185561f"
+     },
+     {
+      "name": "NEE_M31SerializerDomain.widths_distinct",
+      "source": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_M31SerializerDomain.lean",
+       "sha256": "16c99b0a6dab7c8696cd834cd0ee083956653474be608bf580df01326f6a479e"
+      },
+      "receipt": {
+       "path": "evidence/slice-s-compose2-20261029/NEE_L011/receipt.json",
+       "sha256": "78a283a04026a1008baba3fa4f5c7a772112d3249bd6b59c0a7b12282ad679e7"
+      },
+      "snapshot_path": "NEE_generated/NEE_M31SerializerDomain.lean",
+      "statement": "theorem widths_distinct : (4 : Nat) \u2260 32 := by decide\n",
+      "statement_sha256": "180c112a8cba7e9ff53edcc99c74f9ac0eebc3856883d7e8f5872579b1d805f7"
+     }
+    ],
+    "selected_callee_claims": [
+     "NBG::crates/aspis-core/src/field.rs::M31::to_le_bytes"
+    ],
+    "inner_hypotheses_remaining": [],
+    "exact_callsite": "same frozen source span as the original NEE direct contract; new source contains only pure constructors and this harness",
+    "canonical_carrier": true,
+    "same_arguments": true,
+    "same_prestate": true,
+    "same_result": true,
+    "same_ordered_effects": true,
+    "trust_classification": "P6/D188 option A reclassification",
+    "new_trust_rows": [],
+    "native_frame_complete": true,
+    "inner_names_discharged": []
+   },
+   "semantic_review_sha256": "d4520f25451d3ed0c3b956fe4370cb13a0be8895adc4f7662da6493e008b54cc"
   }
  }
 }

@@ -1,0 +1,19 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -130,6 +130,8 @@
+     }
+ 
+     #[inline]
++    #[cfg_attr(kani,kani::modifies())]
++    #[cfg_attr(kani,kani::ensures(|r| !(core::ptr::eq(*r, match self {Self::PrivateTransfer{common,..}|Self::Withdrawal{common,..}=>common}))))]
+     pub fn common(&self) -> &PoolV1PairForestTerminalCommonV1 {
+         match self {
+             Self::PrivateTransfer { common, .. } | Self::Withdrawal { common, .. } => common,
+@@ -1563,3 +1565,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEJ_oracle.rs"]
++mod NEJ_oracle;

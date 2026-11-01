@@ -1,0 +1,37 @@
+import NBP_Store
+import NEJ_CommonFrame
+set_option autoImplicit false
+noncomputable section
+namespace NEJ_ArrayFrame
+open Aeneas Aeneas.Std Result
+
+theorem list_frame {α : Type} (dst src : List α) (start k : Nat)
+    (fits : start + src.length ≤ dst.length)
+    (outside : k < start ∨ start + src.length ≤ k) :
+    (dst.setSlice! start src)[k]? = dst[k]? := by
+  have hs : start ≤ dst.length := by omega
+  have hroom : min src.length (dst.length-start) = src.length := Nat.min_eq_left (by omega)
+  simp only [List.setSlice!, hroom, List.take_length]
+  rw [List.append_assoc]
+  have hlen : (dst.take start).length = start := by
+    exact (List.length_take).trans (Nat.min_eq_left hs)
+  rcases outside with before | after
+  · rw [List.getElem?_append_left (by rw [hlen]; exact before)]
+    exact List.getElem?_take_of_lt before
+  · rw [List.getElem?_append_right (by rw [hlen]; omega)]
+    rw [List.getElem?_append_right (by rw [hlen]; omega)]
+    rw [List.getElem?_drop, hlen]
+    congr 1
+    omega
+
+/-- Concrete emitted back-write frame, independent of the allocation's values. -/
+theorem array_frame {N : Usize} (dst : Array U8 N) (src : List U8) (start k : Nat)
+    (fits : start + src.length ≤ N.val)
+    (outside : k < start ∨ start + src.length ≤ k) :
+    (dst.setSlice! start src).val[k]? = dst.val[k]? := by
+  change (dst.val.setSlice! start src)[k]? = dst.val[k]?
+  exact list_frame dst.val src start k (by simpa only [dst.property] using fits) outside
+
+#print axioms list_frame
+#print axioms array_frame
+end NEJ_ArrayFrame

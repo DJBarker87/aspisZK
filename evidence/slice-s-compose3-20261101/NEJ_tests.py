@@ -34,4 +34,28 @@ class CertificateMutations(unittest.TestCase):
   prior=v.predecessor.certificate
   with self.assertRaises(KeyError):v.compose({},self.packet,self.review)
   self.assertIs(v.predecessor.certificate,prior)
+class RevalidatedMutations(CertificateMutations):
+ @classmethod
+ def setUpClass(cls):
+  super().setUpClass()
+  cls.f=next(f for f in cls.packet['members'] if f.endswith('M31::to_le_bytes'))
+ def changed(self,edit):
+  import hashlib
+  p=copy.deepcopy(self.packet);c=p['members'][self.f];edit(c)
+  c.pop('semantic_review_sha256',None)
+  digest=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest()
+  c['semantic_review_sha256']=digest;review=dict(self.review);review[self.f]=digest
+  return self.states(p,review)
+ def test_new_domain_binding_is_required(self):
+  self.assertEqual(set(self.changed(lambda c:c.pop('call_domain_certificate'))),{'OPEN'})
+ def test_wrong_domain_binding_even_if_reviewed_is_open(self):
+  self.assertEqual(set(self.changed(lambda c:c['call_domain_certificate'].update(subject='wrong edge'))),{'OPEN'})
+ def test_missing_physical_theorem_even_if_reviewed_is_open(self):
+  self.assertEqual(set(self.changed(lambda c:c['call_domain_certificate'].update(physical_theorems=[]))),{'OPEN'})
+ def test_missing_native_frame_even_if_reviewed_is_open(self):
+  self.assertEqual(set(self.changed(lambda c:c['call_domain_certificate'].update(native_frame_complete=False))),{'OPEN'})
+ def test_wrong_canonical_carrier_even_if_reviewed_is_open(self):
+  self.assertEqual(set(self.changed(lambda c:c['call_domain_certificate'].update(canonical_carrier=False))),{'OPEN'})
+ def test_missing_direct_native_contract_even_if_reviewed_is_open(self):
+  self.assertEqual(set(self.changed(lambda c:c.pop('direct_contract'))),{'OPEN'})
 if __name__=='__main__':unittest.main()

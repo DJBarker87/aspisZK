@@ -1,0 +1,43 @@
+NEJ_generated/NEJ_ArrayFrame.lean:16:38: error: `simp` made no progress
+NEJ_generated/NEJ_ArrayFrame.lean:17:4: error: Type mismatch
+  List.getElem?_take_of_lt before
+has type
+  (List.take start ?m.84)[k]? = ?m.84[k]?
+but is expected to have type
+  (List.take start dst ++ src)[k]? = dst[k]?
+NEJ_generated/NEJ_ArrayFrame.lean:18:39: error: `simp` made no progress
+NEJ_generated/NEJ_ArrayFrame.lean:19:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?m.94 ++ ?m.95)[?m.96]?
+in the target expression
+  (List.drop (start + src.length) dst)[k - (List.take start dst ++ src).length]? = dst[k]?
+
+case inr
+α : Type
+dst src : List α
+start k : ℕ
+fits : start + src.length ≤ dst.length
+hs : start ≤ dst.length
+hroom : min src.length (dst.length - start) = src.length
+after : start + src.length ≤ k
+⊢ (List.drop (start + src.length) dst)[k - (List.take start dst ++ src).length]? = dst[k]?
+NEJ_generated/NEJ_ArrayFrame.lean:19:39: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≥ 1
+  c ≥ 0
+  b ≥ 0
+  b - f ≤ 0
+  a ≥ 0
+  a + f ≥ 0
+  a + b - c ≤ 0
+where
+ a := ↑start
+ b := if ↑src.length ≤ ↑(dst.length - start) then ↑src.length else ↑(dst.length - start)
+ c := ↑k
+ d := ↑(List.length ?m.94)
+ e := ↑?m.96
+ f := ↑(dst.length - start)
+'NEJ_ArrayFrame.list_frame' depends on axioms: [propext, sorryAx, Quot.sound]
+'NEJ_ArrayFrame.array_frame' depends on axioms: [propext, sorryAx, Quot.sound]

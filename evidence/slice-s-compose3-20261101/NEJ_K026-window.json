@@ -1,0 +1,19 @@
+{
+ "slot": 9,
+ "start": 144,
+ "size": 4,
+ "negative": false,
+ "statement": "output[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]\n        .copy_from_slice(&common.asset_id.to_le_bytes());",
+ "window_statement": "output[ASSET_ID_OFFSET..AMOUNT_OR_RESERVED_OFFSET]\n        .copy_from_slice(&common.asset_id.to_le_bytes());",
+ "source": "crates/aspis-statement/src/pool_v1/payment_relation.rs",
+ "frozen_body_sha256": "4dff4aef58deb2d12173546f3e6b060b2840d0f0c238317fffb97602de77e57d",
+ "child_evaluations": "two arbitrary replies; child evaluation correspondence separate",
+ "classification": "sequential native statement window, indexed prestate frame; not a whole native root",
+ "exact_statement_projection": true,
+ "one_iteration": true,
+ "kmx_body": "dst[i]=src[i];i+=1;",
+ "no_replacement_stub": true,
+ "loop_invariant": "0 <= offset < width; arbitrary complete destination prestate and observation byte",
+ "step_modifies": "output only",
+ "composition": "NEJ_CommonFrame.run_spec and KMX_CopyMeaning.loop_spec; emitted setSlice frame in NEJ_ArrayFrame"
+}
