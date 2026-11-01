@@ -28,8 +28,9 @@ without a field-value or canonicality premise. -/
 theorem occupancy_indices543 (lane : Usize) (bound : lane.val < 8) :
     (Usize.wrapping_add 2#usize lane).val < 16 ∧
     (Usize.wrapping_add 3#usize lane).val < 12 := by
-  have size_bound : 16 < UScalar.size .Usize := by
+  have size_bound : (16#usize).val < UScalar.size .Usize := by
     simpa only [UScalar.size] using (16#usize).hBounds
+  change 16 < UScalar.size .Usize at size_bound
   have h2 := PV_B3P_Offset226V3.add_value 2#usize lane (by change 2 + lane.val < _; omega)
   have h3 := PV_B3P_Offset226V3.add_value 3#usize lane (by change 3 + lane.val < _; omega)
   constructor <;> scalar_tac
