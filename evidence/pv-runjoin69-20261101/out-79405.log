@@ -1,0 +1,147 @@
+START 79405 R1Z.PV_RunJoin_NativeArithmeticTrace69
+DONE 79405 R1Z.PV_RunJoin_NativeArithmeticTrace69 exit 1 wall 4.15 RSS 4500545536
+69.lean:87:2: error: unsolved goals
+case refine_1
+State Fail : Type
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+runtime : PV_RunJoin_AllocatorWorld63.Runtime State Fail
+world : PV_FXM_ReserveWorld.World State Fail
+phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world
+prepared : prover.PreparedOpening
+salts : host_commitment.PrivateSalts
+p : prover.Publication
+hp :
+  prover.prepare_opening transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem =
+    ok (core.result.Result.Ok prepared)
+hs :
+  prover.derive_private_salts (↑phase).salts.1 (↑phase).salts.2 (↑phase).hash 114#u8 = ok (core.result.Result.Ok salts)
+hf : prover.finish_opening transport.Variant.S2 (↑phase).hash prepared salts = ok (core.result.Result.Ok p)
+q w : ℕ → Raw
+hq : ∀ j < 1024, canonical (q j)
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+claim : alloc.vec.Vec U8
+g inactive k : aspis_core.field.wide_exact.WideExact
+ht :
+  PV_RunJoin_PrepareTail48.run transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem tr claim g inactive k
+      (array 1024#usize q).to_slice (array 1024#usize w).to_slice =
+    ok (core.result.Result.Ok prepared)
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box ops runtime world
+first : Std.Array PV_RunJoin_PreparedDomain48.W 7#usize
+bc0 : alloc.vec.Vec U8
+a : PV_RunJoin_PreparedDomain48.W
+tr3 : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+q1 w1 folded : alloc.vec.Vec PV_RunJoin_PreparedDomain48.W
+hr0 : prover.round (array 1024#usize q).to_slice (array 1024#usize w).to_slice = ok first
+hbc0 : prover.encoded_slice first.to_slice = ok bc0
+hat :
+  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 tr 29#u8 bc0.deref
+      false =
+    ok (a, tr3)
+hq1 :
+  prover.fold (array 1024#usize q).to_slice
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualData59.data ↑phase).a)) false =
+    ok prepared.q1
+hw1 :
+  prover.fold (array 1024#usize w).to_slice
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualData59.data ↑phase).a)) true =
+    ok prepared.w1
+hfolded :
+  host_commitment.EncodingDomain.evaluate aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField
+      (↑phase).backend.domain q1.deref 0#usize =
+    ok (core.result.Result.Ok folded)
+hb : prepared.backend = (↑phase).backend
+hsem : prepared.sem = (↑phase).sem
+ht3 : prepared.transcript = tr3
+hclaim : prepared.y1 = claim
+hg : prepared.gamma = g
+hi : prepared.inactive = inactive
+hk : prepared.kappa = k
+haa : prepared.alpha0 = a
+hbytes : prepared.c0bytes = bc0
+hqq : prepared.q1 = q1
+hww : prepared.w1 = w1
+hff : prepared.folded_word = folded
+hg' : ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualData59.data ↑phase).g) = prepared.gamma
+hk' : ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualData59.data ↑phase).k) = prepared.kappa
+ha : ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualData59.data ↑phase).a) = prepared.alpha0
+hca : canonical (PV_RunJoin_ActualRun.data ↑phase).a
+r : ℕ → Raw
+v : alloc.vec.Vec PV_RunJoin_WideArithmetic44.W
+hfold :
+  prover.fold (array 1024#usize q).to_slice
+      (PV_RunJoin_WideArithmetic44.current (source (PV_RunJoin_ActualRun.data ↑phase).a)) false =
+    ok v
+hmodel :
+  AspisR1ProducerRelease47.fold_first (sourceArray 1024#usize q) (source (PV_RunJoin_ActualRun.data ↑phase).a)
+      (Array.repeat 256#usize AspisR1ProducerRelease47.field.wide_exact.WideExact.ZERO) 0#usize 256#u16 =
+    ok (sourceArray 256#usize r)
+himage : (array 256#usize r).to_slice = v.deref
+hcr : ∀ j < 256, canonical (r j)
+hdr :
+  ∀ j < 256,
+    value (r j) =
+      ProverCommitFoldOutput48.mathCell (fun i => value (q i)) (value (PV_RunJoin_ActualRun.data ↑phase).a) j
+veq : v = prepared.q1
+small : prepared.q1.deref.length / 4 ≤ 256
+second : Std.Array PV_RunJoin_NativeFinalFold63.W 7#usize
+fin : alloc.vec.Vec PV_RunJoin_NativeFinalFold63.W
+hr1 : prover.round prepared.q1.deref prepared.w1.deref = ok second
+hbc1 : prover.encoded_slice second.to_slice = ok p.c1bytes
+hfin :
+  prover.fold prepared.q1.deref (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).b)) false =
+    ok fin
+hbf : prover.encoded_slice fin.deref = ok p.fbytes
+hcb : canonical (PV_RunJoin_ActualRun.data ↑phase).b
+hr1' : prover.round prepared.q1.deref prepared.w1.deref = ok second
+hfin' :
+  prover.fold prepared.q1.deref (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).b)) false =
+    ok fin
+hbc0' : prover.encoded_slice first.to_slice = ok bc0
+hbc1' : prover.encoded_slice second.to_slice = ok p.c1bytes
+hbf' : prover.encoded_slice fin.deref = ok p.fbytes
+frame : p.c0bytes = prepared.c0bytes
+⊢ (do
+      let q1 ←
+        prover.fold (array 1024#usize q).to_slice
+            (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).a)) false
+      let w1 ←
+        prover.fold (array 1024#usize w).to_slice
+            (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).a)) true
+      let c1 ← prover.round q1.deref w1.deref
+      let fin ← prover.fold q1.deref (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).b)) false
+      ok (first, q1, c1, fin)) =
+    ok (first, prepared.q1, second, fin)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticTrace69.lean:87:50: warning: This simp argument is unused:
+  hq1
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_OpeningKernel44.run, ̲hr0, ̲hq̵1̵,̵h̵w1, ̲hr1', ̲hfin', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticTrace69.lean:87:54: warning: This simp argument is unused:
+  hw1
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_OpeningKernel44.run, ̲hr0, ̲hq1, ̲hw̵1̵,̵h̵r1', ̲hfin', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticTrace69.lean:87:58: warning: This simp argument is unused:
+  hr1'
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_OpeningKernel44.run, ̲hr0, ̲hq1, ̲hw1, ̲hr̵1̵'̵,̵h̵fin', ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticTrace69.lean:87:63: warning: This simp argument is unused:
+  hfin'
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_RunJoin_OpeningKernel44.run, ̲hr0, ̲hq1, ̲hw1, ̲hr1',h̵f̵i̵n̵'̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NativeArithmeticTrace69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

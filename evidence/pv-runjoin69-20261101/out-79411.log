@@ -1,0 +1,125 @@
+START 79411 R1Z.PV_RunJoin_NativeArithmeticImages69
+DONE 79411 R1Z.PV_RunJoin_NativeArithmeticImages69 exit 1 wall 5.27 RSS 4497256448
+ ops runtime world
+d : PV_RunJoin_OpeningImages54.Data := PV_RunJoin_ActualRun.data ↑phase
+q w : ℕ → Raw
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+claim : alloc.vec.Vec U8
+g inactive k : aspis_core.field.wide_exact.WideExact
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+hqmodel :
+  ProverCommitGammaOutput53.run
+      (ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide (PV_RunJoin_ActualRun.data ↑phase).c ⋯))
+      (source (PV_RunJoin_ActualRun.data ↑phase).g) =
+    ok (sourceArray 1024#usize q)
+hwmodel :
+  ProverCommitWeightsMaterial53.run (ProverCommitQArray48.array 10#usize (PV_RunJoin_ActualRun.data ↑phase).p)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).x0)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).y0)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).x1)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).y1)
+      (source (PV_RunJoin_ActualRun.data ↑phase).k) =
+    ok (sourceArray 1024#usize w)
+ht :
+  PV_RunJoin_PrepareTail48.run transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem tr claim g inactive k
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice =
+    ok (core.result.Result.Ok prepared)
+first second : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+fin : alloc.vec.Vec aspis_core.field.wide_exact.WideExact
+hrun :
+  PV_RunJoin_OpeningKernel44.run (PV_RunJoin_NativeResidual63.residual base ops runtime world)
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).a))
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).b)) =
+    ok (first, prepared.q1, second, fin)
+hg : canonical (PV_RunJoin_ActualRun.data ↑phase).g
+hk : canonical (PV_RunJoin_ActualRun.data ↑phase).k
+ha : canonical (PV_RunJoin_ActualRun.data ↑phase).a
+hb : canonical (PV_RunJoin_ActualRun.data ↑phase).b
+c0 : ℕ → Raw
+hb0 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c0).to_slice = ok p.c0bytes
+q1 c1 : ℕ → Raw
+hb1 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c1).to_slice = ok p.c1bytes
+finRaw : ℕ → Raw
+vq vf : alloc.vec.Vec PV_RunJoin_WideArithmetic44.W
+hbf : prover.encoded_slice vf.deref = ok p.fbytes
+bc0 bc1 bfin : alloc.vec.Vec U8
+hcc0 : ∀ j < 7, canonical (c0 j)
+hcc1 : ∀ j < 7, canonical (c1 j)
+hcfin : ∀ j < 64, canonical (finRaw j)
+hnative :
+  PV_RunJoin_OpeningKernel44.run (PV_RunJoin_NativeResidual63.residual base ops runtime world)
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice
+      (PV_RunJoin_WideArithmetic44.current (source d.a)) (PV_RunJoin_WideArithmetic44.current (source d.b)) =
+    ok (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf)
+hmodel :
+  ProverCommitOpeningKernel49.run (sourceArray 1024#usize q) (sourceArray 1024#usize w) (source d.a) (source d.b) =
+    ok
+      (List.ofFn fun k => source (c0 ↑k), sourceArray 256#usize q1, List.ofFn fun k => source (c1 ↑k),
+        sourceArray 64#usize finRaw)
+hbc0 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c0).to_slice = ok bc0
+hbc1 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c1).to_slice = ok bc1
+hbfin : prover.encoded_slice vf.deref = ok bfin
+hi0 : List.map PV_RunJoin_WideImage43.byte ↑bc0 = ProverCommitOpeningBytes49.stream 7 c0 hcc0
+hi1 : List.map PV_RunJoin_WideImage43.byte ↑bc1 = ProverCommitOpeningBytes49.stream 7 c1 hcc1
+hif : List.map PV_RunJoin_WideImage43.byte ↑bfin = ProverCommitOpeningBytes49.stream 64 finRaw hcfin
+eqNative :
+  (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf) =
+    (first, prepared.q1, second, fin)
+efirst : PV_RunJoin_FoldCell44.array 7#usize c0 = first
+esecond : PV_RunJoin_FoldCell44.array 7#usize c1 = second
+efinal : vf = fin
+bytes0 : bc0 = p.c0bytes
+bytes1 : bc1 = p.c1bytes
+bytesf : bfin = p.fbytes
+m0 mq1 m1 mfin : ℕ → Raw
+hcm0 : ∀ i < 7, canonical (m0 i)
+hcm1 : ∀ i < 7, canonical (m1 i)
+hcmfin : ∀ i < 64, canonical (mfin i)
+hm0 : ProverCommitOpeningBytes49.stream 7 m0 hcm0 = PV_RunJoin_OpeningImages54.round0 (PV_RunJoin_ActualRun.data ↑phase)
+hm1 : ProverCommitOpeningBytes49.stream 7 m1 hcm1 = PV_RunJoin_OpeningImages54.round1 (PV_RunJoin_ActualRun.data ↑phase)
+hmfin :
+  ProverCommitOpeningBytes49.stream 64 mfin hcmfin =
+    PV_RunJoin_OpeningImages54.finalBytes (PV_RunJoin_ActualRun.data ↑phase)
+hm :
+  (do
+      let q ←
+        ProverCommitGammaOutput53.run (ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide d.c hc))
+            (source d.g)
+      let w ←
+        ProverCommitWeightsMaterial53.run (ProverCommitQArray48.array 10#usize d.p) (ProverCommitNativeQ48.source d.x0)
+            (ProverCommitNativeQ48.source d.y0) (ProverCommitNativeQ48.source d.x1) (ProverCommitNativeQ48.source d.y1)
+            (source d.k)
+      ProverCommitOpeningKernel49.run q w (source d.a) (source d.b)) =
+    ok
+      (List.ofFn fun i => source (m0 ↑i), sourceArray 256#usize mq1, List.ofFn fun i => source (m1 ↑i),
+        sourceArray 64#usize mfin)
+⊢ PV_RunJoin_PublishSkeleton54.bytes ↑p.c0bytes = PV_RunJoin_OpeningImages54.round0 (PV_RunJoin_ActualRun.data ↑phase) ∧
+    PV_RunJoin_PublishSkeleton54.bytes ↑p.c1bytes =
+        PV_RunJoin_OpeningImages54.round1 (PV_RunJoin_ActualRun.data ↑phase) ∧
+      PV_RunJoin_PublishSkeleton54.bytes ↑p.fbytes =
+        PV_RunJoin_OpeningImages54.finalBytes (PV_RunJoin_ActualRun.data ↑phase)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticImages69.lean:64:44: warning: This simp argument is unused:
+  hqmodel
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitOpeningModel53.run, ̲hq̵m̵o̵d̵e̵l̵,̵h̵wmodel, ̲bind_tc_ok] at hm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticImages69.lean:64:52: warning: This simp argument is unused:
+  hwmodel
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitOpeningModel53.run, ̲hqmodel,h̵w̵m̵o̵d̵e̵l̵,̵ ̲bind_tc_ok] at hm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticImages69.lean:64:60: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverCommitOpeningModel53.run, ̲hqmodel, ̲hwmodel,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵] at hm
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_NativeArithmeticImages69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

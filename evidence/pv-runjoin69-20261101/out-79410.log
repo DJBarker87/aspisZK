@@ -1,0 +1,119 @@
+START 79410 R1Z.PV_RunJoin_NativeArithmeticImages69
+DONE 79410 R1Z.PV_RunJoin_NativeArithmeticImages69 exit 1 wall 3.15 RSS 4493205504
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeArithmeticImages69.lean:52:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (first, prepared.q1, second, fin).1
+in the target expression
+  prover.encoded_slice first.to_slice = ok p.c0bytes
+
+State Fail : Type
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+runtime : PV_RunJoin_AllocatorWorld63.Runtime State Fail
+world : PV_FXM_ReserveWorld.World State Fail
+phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world
+prepared : prover.PreparedOpening
+salts : host_commitment.PrivateSalts
+p : prover.Publication
+hp :
+  prover.prepare_opening transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem =
+    ok (core.result.Result.Ok prepared)
+hs :
+  prover.derive_private_salts (↑phase).salts.1 (↑phase).salts.2 (↑phase).hash 114#u8 = ok (core.result.Result.Ok salts)
+hf : prover.finish_opening transport.Variant.S2 (↑phase).hash prepared salts = ok (core.result.Result.Ok p)
+hc : PV_RunJoin_OpeningImages54.Coefficients (PV_RunJoin_ActualRun.data ↑phase)
+images : PV_RunJoin_OpeningImages54.Images (PV_RunJoin_ActualRun.data ↑phase) hc
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box ops runtime world
+d : PV_RunJoin_OpeningImages54.Data := PV_RunJoin_ActualRun.data ↑phase
+q w : ℕ → Raw
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+claim : alloc.vec.Vec U8
+g inactive k : aspis_core.field.wide_exact.WideExact
+hq : ∀ j < 1024, canonical (q j)
+hw : ∀ j < 1024, canonical (w j)
+hqmodel :
+  ProverCommitGammaOutput53.run
+      (ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide (PV_RunJoin_ActualRun.data ↑phase).c ⋯))
+      (source (PV_RunJoin_ActualRun.data ↑phase).g) =
+    ok (sourceArray 1024#usize q)
+hwmodel :
+  ProverCommitWeightsMaterial53.run (ProverCommitQArray48.array 10#usize (PV_RunJoin_ActualRun.data ↑phase).p)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).x0)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).y0)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).x1)
+      (ProverCommitNativeQ48.source (PV_RunJoin_ActualRun.data ↑phase).y1)
+      (source (PV_RunJoin_ActualRun.data ↑phase).k) =
+    ok (sourceArray 1024#usize w)
+ht :
+  PV_RunJoin_PrepareTail48.run transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem tr claim g inactive k
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice =
+    ok (core.result.Result.Ok prepared)
+first second : Std.Array aspis_core.field.wide_exact.WideExact 7#usize
+fin : alloc.vec.Vec aspis_core.field.wide_exact.WideExact
+hrun :
+  PV_RunJoin_OpeningKernel44.run (PV_RunJoin_NativeResidual63.residual base ops runtime world)
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).a))
+      (ProverRwDictionaryTower.fromW (source (PV_RunJoin_ActualRun.data ↑phase).b)) =
+    ok (first, prepared.q1, second, fin)
+hb0 : prover.encoded_slice first.to_slice = ok p.c0bytes
+hb1 : prover.encoded_slice second.to_slice = ok p.c1bytes
+hbf : prover.encoded_slice fin.deref = ok p.fbytes
+hg : canonical (PV_RunJoin_ActualRun.data ↑phase).g
+hk : canonical (PV_RunJoin_ActualRun.data ↑phase).k
+ha : canonical (PV_RunJoin_ActualRun.data ↑phase).a
+hb : canonical (PV_RunJoin_ActualRun.data ↑phase).b
+c0 q1 c1 finRaw : ℕ → Raw
+vq vf : alloc.vec.Vec PV_RunJoin_WideArithmetic44.W
+bc0 bc1 bfin : alloc.vec.Vec U8
+hcc0 : ∀ j < 7, canonical (c0 j)
+hcc1 : ∀ j < 7, canonical (c1 j)
+hcfin : ∀ j < 64, canonical (finRaw j)
+hnative :
+  PV_RunJoin_OpeningKernel44.run (PV_RunJoin_NativeResidual63.residual base ops runtime world)
+      (PV_RunJoin_FoldCell44.array 1024#usize q).to_slice (PV_RunJoin_FoldCell44.array 1024#usize w).to_slice
+      (PV_RunJoin_WideArithmetic44.current (source d.a)) (PV_RunJoin_WideArithmetic44.current (source d.b)) =
+    ok (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf)
+hmodel :
+  ProverCommitOpeningKernel49.run (sourceArray 1024#usize q) (sourceArray 1024#usize w) (source d.a) (source d.b) =
+    ok
+      (List.ofFn fun k => source (c0 ↑k), sourceArray 256#usize q1, List.ofFn fun k => source (c1 ↑k),
+        sourceArray 64#usize finRaw)
+hbc0 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c0).to_slice = ok bc0
+hbc1 : prover.encoded_slice (PV_RunJoin_FoldCell44.array 7#usize c1).to_slice = ok bc1
+hbfin : prover.encoded_slice vf.deref = ok bfin
+hi0 : List.map PV_RunJoin_WideImage43.byte ↑bc0 = ProverCommitOpeningBytes49.stream 7 c0 hcc0
+hi1 : List.map PV_RunJoin_WideImage43.byte ↑bc1 = ProverCommitOpeningBytes49.stream 7 c1 hcc1
+hif : List.map PV_RunJoin_WideImage43.byte ↑bfin = ProverCommitOpeningBytes49.stream 64 finRaw hcfin
+eqNative :
+  (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf) =
+    (first, prepared.q1, second, fin)
+efirst :
+  (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf).1 =
+    (first, prepared.q1, second, fin).1
+esecond :
+  (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf).2.2.1 =
+    (first, prepared.q1, second, fin).2.2.1
+efinal :
+  (PV_RunJoin_FoldCell44.array 7#usize c0, vq, PV_RunJoin_FoldCell44.array 7#usize c1, vf).2.2.2 =
+    (first, prepared.q1, second, fin).2.2.2
+⊢ PV_RunJoin_PublishSkeleton54.bytes ↑p.c0bytes = PV_RunJoin_OpeningImages54.round0 (PV_RunJoin_ActualRun.data ↑phase) ∧
+    PV_RunJoin_PublishSkeleton54.bytes ↑p.c1bytes =
+        PV_RunJoin_OpeningImages54.round1 (PV_RunJoin_ActualRun.data ↑phase) ∧
+      PV_RunJoin_PublishSkeleton54.bytes ↑p.fbytes =
+        PV_RunJoin_OpeningImages54.finalBytes (PV_RunJoin_ActualRun.data ↑phase)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (7 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_NativeArithmeticImages69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

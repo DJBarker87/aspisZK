@@ -1,0 +1,95 @@
+START 78095 R1Z.PV_RunJoin_CircleCanonical69
+DONE 78095 R1Z.PV_RunJoin_CircleCanonical69 exit 1 wall 3.09 RSS 4471296000
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleCanonical69.lean:55:2: error: Tactic `apply` failed: could not unify the conclusion of `@PV_RunJoin_ResultPost41.bind`
+  Post ?p (?r >>= ?f)
+with the goal
+  Post
+    (fun pair =>
+      match pair.1 with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok p => Good p)
+    (match tag with
+    | 25#8#uscalar => do
+      let (r, self1) ← host_wire.SemanticTranscript.sample_block D t 25#u8 framed
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let scp ← sampler.circle_sample val aspis_core.r0_transcript.CircleRow.First
+          ok (core.result.Result.Ok scp, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)
+    | 26#8#uscalar => do
+      let (r, self1) ← host_wire.SemanticTranscript.sample_block D t 26#u8 framed
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let scp ← sampler.circle_sample val aspis_core.r0_transcript.CircleRow.Second
+          ok (core.result.Result.Ok scp, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)
+    | x => ok (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+
+Note: The full type of `@PV_RunJoin_ResultPost41.bind` is
+  ∀ {A B : Type} (p : B → Prop) (r : Result A) (f : A → Result B), (∀ (a : A), Post p (f a)) → Post p (r >>= f)
+
+base : ExternalTypes
+heap : PV_RunJoin_WeightInstalled46.Heap
+box : PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+H : Type
+D : aspis_core.digest.Digest32 H
+t : host_wire.SemanticTranscript H
+tag : U8
+framed : Slice U8
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box ops
+⊢ Post
+    (fun pair =>
+      match pair.1 with
+      | core.result.Result.Err a => True
+      | core.result.Result.Ok p => Good p)
+    (match tag with
+    | 25#8#uscalar => do
+      let (r, self1) ← host_wire.SemanticTranscript.sample_block D t 25#u8 framed
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let scp ← sampler.circle_sample val aspis_core.r0_transcript.CircleRow.First
+          ok (core.result.Result.Ok scp, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)
+    | 26#8#uscalar => do
+      let (r, self1) ← host_wire.SemanticTranscript.sample_block D t 26#u8 framed
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let scp ← sampler.circle_sample val aspis_core.r0_transcript.CircleRow.Second
+          ok (core.result.Result.Ok scp, self1)
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                aspis_core.circle.SecureCirclePoint (core.convert.FromSame r1_wire.Error) residual
+          ok (r1, self1)
+    | x => ok (core.result.Result.Err r1_wire.Error.InvalidRow, t))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CircleCanonical69.lean:71:26: error: Application type mismatch: The argument
+  (PV_RunJoin_ActualRun.data ↑p).p
+has type
+  ℕ → ProverCommitPrimitive47.Old.Q
+but is expected to have type
+  AspisR1Qm31ArithmeticProbe.field.QM31
+in the application
+  Canonical (PV_RunJoin_ActualRun.data ↑p).p
+'R1Z.PV_RunJoin_CircleCanonical69.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleCanonical69.Good' does not depend on any axioms
+'R1Z.PV_RunJoin_CircleCanonical69.challenge' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CircleCanonical69.data' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

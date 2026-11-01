@@ -1,0 +1,28 @@
+START 78091 R1Z.PV_RunJoin_CoefficientTable69
+DONE 78091 R1Z.PV_RunJoin_CoefficientTable69 exit 1 wall 4.79 RSS 4478738432
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CoefficientTable69.lean:40:2: error: Tactic `apply` failed: could not unify the conclusion of `congrArg List.ofFn`
+  List.ofFn ?m.86 = List.ofFn ?m.87
+with the goal
+  List.ofFn
+      ((amap toW ∘ PV_RunJoin_CoefficientActualCell50.permuted) ∘ fun l =>
+        ProverCommitArray49.array 1024#usize fun j => fromW (ProverCommitNativeOps47.embedded (c (↑l) j))) =
+    ↑(ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide c hc))
+
+Note: The full type of `congrArg List.ofFn` is
+  ?m.86 = ?m.87 → List.ofFn ?m.86 = List.ofFn ?m.87
+
+c : ℕ → ℕ → Old.Q
+hc : ∀ l < 29, ∀ j < 1024, Canonical (c l j)
+coeff : alloc.vec.Vec PV_RunJoin_CoefficientActualCell50.Column
+hlen : coeff.length = 29
+hcoeff :
+  ↑coeff =
+    List.map PV_RunJoin_CoefficientActualCell50.permuted
+      ↑(PV_RunJoin_BackendMatrix58.matrix fun l j => fromW (ProverCommitNativeOps47.embedded (c l j)))
+⊢ List.ofFn
+      ((amap toW ∘ PV_RunJoin_CoefficientActualCell50.permuted) ∘ fun l =>
+        ProverCommitArray49.array 1024#usize fun j => fromW (ProverCommitNativeOps47.embedded (c (↑l) j))) =
+    ↑(ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide c hc))
+'R1Z.PV_RunJoin_CoefficientTable69.coefficient_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CoefficientTable69.table' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

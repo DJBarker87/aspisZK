@@ -1,0 +1,110 @@
+START 79402 R1Z.PV_RunJoin_NativeOpeningArrays69
+DONE 79402 R1Z.PV_RunJoin_NativeOpeningArrays69 exit 1 wall 6.39 RSS 4495638528
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_NativeOpeningArrays69.lean:77:10: error: Tactic `rewrite` failed: motive is not type correct:
+  fun _a => PV_RunJoin_ActualProvenance60.Produced ↑phase
+Error: Application type mismatch: The argument
+  phase
+has type
+  PV_RunJoin_NativeActual63.P base heap box ops runtime world
+but is expected to have type
+  { p // PV_RunJoin_ActualProvenance60.Produced p }
+in the application
+  ↑phase
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+State Fail : Type
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+runtime : PV_RunJoin_AllocatorWorld63.Runtime State Fail
+world : PV_FXM_ReserveWorld.World State Fail
+phase : PV_RunJoin_NativeActual63.P base heap box ops runtime world
+prepared : prover.PreparedOpening
+hp :
+  prover.prepare_opening transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem =
+    ok (core.result.Result.Ok prepared)
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box ops runtime world
+d : PV_RunJoin_OpeningImages54.Data := PV_RunJoin_ActualRun.data ↑phase
+hc : PV_RunJoin_OpeningImages54.Coefficients (PV_RunJoin_ActualData59.data ↑phase) :=
+  PV_RunJoin_ActualData59.canonical_coefficients ↑phase
+coeff : alloc.vec.Vec PV_RunJoin_CoefficientActualCell50.Column
+kw : PV_B2_F_ConstructorCarrier.Weight
+qs ws : Std.Array PV_RunJoin_NativePreparedArrays66.S 1024#usize
+tr : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+claim : alloc.vec.Vec U8
+g inactive k : PV_RunJoin_NativePreparedArrays66.W
+hlen : coeff.length = 29
+hcoeff :
+  ↑coeff =
+    List.map PV_RunJoin_CoefficientActualCell50.permuted
+      ↑(PV_RunJoin_BackendMatrix58.matrix fun l j =>
+          fromW (ProverCommitNativeOps47.embedded ((PV_RunJoin_ActualRun.data ↑phase).c l j)))
+hq : ProverCommitGammaOutput53.run (PV_RunJoin_GammaActualInputs50.table coeff.deref hlen) (toW g) = ok qs
+hw :
+  ProverCommitWeightsMaterial53.run
+      (ProverCommitQArray48.array 10#usize (PV_RunJoin_SemanticMaterialInputs50.alpha (↑phase).sem))
+      (ProverCommitNativeQ48.source (PV_RunJoin_SemanticMaterialInputs50.x0 (↑phase).sem))
+      (ProverCommitNativeQ48.source (PV_RunJoin_SemanticMaterialInputs50.y0 (↑phase).sem))
+      (ProverCommitNativeQ48.source (PV_RunJoin_SemanticMaterialInputs50.x1 (↑phase).sem))
+      (ProverCommitNativeQ48.source (PV_RunJoin_SemanticMaterialInputs50.y1 (↑phase).sem)) (toW k) =
+    ok ws
+hbox : box transport.Variant.S2 (↑phase).sem.alpha (↑phase).sem.z = ok ()
+hheap : heap (PV_B2_F_ConstructorCarrier.toWeight kw) k = ok PV_B2_F_AllocationTransport.Outcome.supplied
+ht :
+  PV_RunJoin_PrepareTail48.run transport.Variant.S2 (↑phase).hash (↑phase).backend (↑phase).sem tr claim g inactive k
+      (amap fromW qs).to_slice (amap fromW ws).to_slice =
+    ok (core.result.Result.Ok prepared)
+matrix :
+  (↑phase).backend.messages =
+    PV_RunJoin_BackendMatrix58.matrix fun l j =>
+      fromW (ProverCommitNativeOps47.embedded ((PV_RunJoin_ActualRun.data ↑phase).c l j))
+htable :
+  PV_RunJoin_GammaActualInputs50.table coeff.deref hlen =
+    ProverCommitGammaCell53.table (ProverCommitGammaCoefficients53.wide d.c hc)
+c0 : Std.Array PV_RunJoin_PreparedDomain48.W 7#usize
+bc0 : alloc.vec.Vec U8
+a : PV_RunJoin_PreparedDomain48.W
+tr3 : host_transcript.Transcript aspis_core.digest.LegacyHashFn
+q1 w1 folded : alloc.vec.Vec PV_RunJoin_PreparedDomain48.W
+hr0 : prover.round (amap fromW qs).to_slice (amap fromW ws).to_slice = ok c0
+hbc0 : prover.encoded_slice c0.to_slice = ok bc0
+ha :
+  host_transcript.Transcript.scalar aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32 tr 29#u8 bc0.deref
+      false =
+    ok (a, tr3)
+hq1 : prover.fold (amap fromW qs).to_slice a false = ok q1
+hw1 : prover.fold (amap fromW ws).to_slice a true = ok w1
+hfolded :
+  host_commitment.EncodingDomain.evaluate aspis_core.field.wide_exact.WideExact.Insts.Aspis_coreR0ScalarCodeField
+      (↑phase).backend.domain q1.deref 0#usize =
+    ok (core.result.Result.Ok folded)
+hb : prepared.backend = (↑phase).backend
+hs : prepared.sem = (↑phase).sem
+ht3 : prepared.transcript = tr3
+hclaim : prepared.y1 = claim
+hg : prepared.gamma = g
+hi : prepared.inactive = inactive
+hk : prepared.kappa = k
+haa : prepared.alpha0 = a
+hbytes : prepared.c0bytes = bc0
+hqq : prepared.q1 = q1
+hww : prepared.w1 = w1
+hff : prepared.folded_word = folded
+ha' : fromW (source (PV_RunJoin_ActualData59.data ↑phase).a) = prepared.alpha0
+hg' : fromW (source d.g) = prepared.gamma
+hk' : fromW (source d.k) = prepared.kappa
+gs : source d.g = toW g
+ks : source d.k = toW k
+native :
+  opsNative base heap box ops runtime world =
+    PV_RunJoin_NativeResidual62.opsNative base heap box (PV_RunJoin_NativeBinding63.remaining base ops runtime world)
+produced : PV_RunJoin_ActualProvenance60.Produced ↑phase
+⊢ PV_RunJoin_ActualProvenance60.Produced ↑phase
+'R1Z.PV_RunJoin_NativeOpeningArrays69.image' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_NativeOpeningArrays69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
