@@ -24,7 +24,8 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   rw [hn]
   apply congrArg Result.ok
   apply Subtype.ext
-  simpa only [show (alloc.vec.Vec.with_capacity Q 1024#usize).val=[] from rfl,List.nil_append] using hv
+  change next.val=PV_RunJoin_LiftPayload66.payload columns hlen lane.val 0 1024
+  simpa only [alloc.vec.Vec.with_capacity,List.nil_append,show (0#usize).val=0 from rfl] using hv
 
 #print axioms row
 #print axioms complete
