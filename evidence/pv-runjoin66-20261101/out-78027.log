@@ -1,0 +1,38 @@
+START 78027 R1Z.PV_RunJoin_CheckColumnsLength66
+DONE 78027 R1Z.PV_RunJoin_CheckColumnsLength66 exit 1 wall 4.42 RSS 4354039808
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:33:6: error(lean.unknownIdentifier): Unknown identifier `PV_RunJoin_CompactStep39.offset`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:34:77: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+columns : Columns
+n : ℕ
+ih :
+  ∀ (lane : Usize),
+    ↑lane + n = 26 →
+      ∀ (result : Option (core.result.Result Unit r1_wire.Error)),
+        host_semantic.check_base_columns_loop columns lane = ok result → Status columns (↑lane) result
+lane : Usize
+rank : ↑lane + (n + 1) = 26
+result : Option (core.result.Result Unit r1_wire.Error)
+success : host_semantic.check_base_columns_loop columns lane = ok result
+more : lane < 26#usize
+next : ↑(lane.wrapping_add 1#usize) = ↑lane + 1
+⊢ ok (↑columns)[↑lane] = ok (↑columns)[↑lane % 26]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:42:4: error: Invalid alternative name `Err`: Expected `cont` or `done`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:48:4: error: Invalid alternative name `Ok`: Expected `cont` or `done`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:41:4: error: Alternative `cont` has not been provided
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:41:4: error: Alternative `done` has not been provided
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:36:24: warning: This simp argument is unused:
+  Nat.mod_eq_of_lt more
+
+Hint: Omit it from the simp argument list.
+  simp only [column,̵N̵a̵t̵.̵m̵o̵d̵_̵e̵q̵_̵o̵f̵_̵l̵t̵ ̵m̵o̵r̵e̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_CheckColumnsLength66.lean:76:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'R1Z.PV_RunJoin_CheckColumnsLength66.Status' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CheckColumnsLength66.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_CheckColumnsLength66.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

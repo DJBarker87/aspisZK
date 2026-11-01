@@ -1,0 +1,104 @@
+START 78037 R1Z.PV_RunJoin_LiftColumnsLoop66
+DONE 78037 R1Z.PV_RunJoin_LiftColumnsLoop66 exit 1 wall 5.49 RSS 4359188480
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsLoop66.lean:26:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Std.Array.set (matrix ?m.75) lane (?m.75 ↑lane)
+in the target expression
+  (let (v, index_mut_back) :=
+      (filled p (row columns hlen) ↑lane ↑lane, Std.Array.set (matrix (filled p (row columns hlen) ↑lane)) lane)
+    do
+    let columns2 ← (index_mut_back v).update lane (row columns hlen ↑lane)
+    let lane1 ← lift (lane.wrapping_add 1#usize)
+    ok (ControlFlow.cont (columns2, lane1))) =
+    ok (ControlFlow.cont (matrix (filled p (row columns hlen) (↑lane + 1)), lane.wrapping_add 1#usize))
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+columns : Columns
+hlen : ∀ l < 26, (column columns l).length = 1024
+p : ℕ → Row
+lane : Usize
+hl : ↑lane < 26
+h26 : lane < 26#usize
+h29 : lane < 29#usize
+⊢ (let (v, index_mut_back) :=
+      (filled p (row columns hlen) ↑lane ↑lane, Std.Array.set (matrix (filled p (row columns hlen) ↑lane)) lane)
+    do
+    let columns2 ← (index_mut_back v).update lane (row columns hlen ↑lane)
+    let lane1 ← lift (lane.wrapping_add 1#usize)
+    ok (ControlFlow.cont (columns2, lane1))) =
+    ok (ControlFlow.cont (matrix (filled p (row columns hlen) (↑lane + 1)), lane.wrapping_add 1#usize))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftColumnsLoop66.lean:50:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  host_semantic.lift_columns_loop0.body columns (matrix (filled p (row columns hlen) ↑lane)) lane
+in the target expression
+  (do
+      let cf ←
+        match (matrix (filled p (row columns hlen) ↑lane), lane) with
+          | (columns1, lane1) => host_semantic.lift_columns_loop0.body columns columns1 lane1
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (columns1, lane1) => host_semantic.lift_columns_loop0.body columns columns1 lane1)
+            next
+        | ControlFlow.done out => ok out) =
+    ok (matrix (filled p (row columns hlen) 26))
+
+case succ
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+columns : Columns
+hlen : ∀ l < 26, (column columns l).length = 1024
+p : ℕ → Row
+n : ℕ
+ih :
+  ∀ (lane : Usize),
+    ↑lane + n = 26 →
+      host_semantic.lift_columns_loop0 columns (matrix (filled p (row columns hlen) ↑lane)) lane =
+        ok (matrix (filled p (row columns hlen) 26))
+lane : Usize
+rank : ↑lane + (n + 1) = 26
+hl : ↑lane < 26
+inc : ↑(lane.wrapping_add 1#usize) = ↑lane + 1
+⊢ (do
+      let cf ←
+        match (matrix (filled p (row columns hlen) ↑lane), lane) with
+          | (columns1, lane1) => host_semantic.lift_columns_loop0.body columns columns1 lane1
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              match x with
+              | (columns1, lane1) => host_semantic.lift_columns_loop0.body columns columns1 lane1)
+            next
+        | ControlFlow.done out => ok out) =
+    ok (matrix (filled p (row columns hlen) 26))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (29 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_LiftColumnsLoop66.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftColumnsLoop66.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

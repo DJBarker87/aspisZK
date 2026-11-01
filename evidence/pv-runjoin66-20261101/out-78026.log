@@ -1,0 +1,58 @@
+START 78026 R1Z.PV_RunJoin_LiftPayload66
+DONE 78026 R1Z.PV_RunJoin_LiftPayload66 exit 1 wall 4.88 RSS 4358139904
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_LiftPayload66.lean:68:42: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let col ← Array.index_usize columns lane
+    let m ← alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) col row
+    host_semantic.lift m
+in the target expression
+  (do
+      let q ←
+        (do
+              let column ← Array.index_usize columns lane
+              alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) column row) >>=
+            host_semantic.lift
+      out.push q) =
+    ok mid
+
+base : ExternalTypes
+heap : Heap
+box : Box
+ops : ExternalFuns
+columns : Columns
+hlen : ∀ l < 26, (column columns l).length = 1024
+lane : Usize
+hl : ↑lane < 26
+n : ℕ
+ih :
+  ∀ (row : Usize),
+    ↑row + n ≤ 1024 →
+      ∀ (out : alloc.vec.Vec Q),
+        out.length + n ≤ Usize.max →
+          ∃ next,
+            PV_RunJoin_LiftRow63.phase host_semantic.lift columns lane n out row = ok next ∧
+              ↑next = ↑out ++ payload columns hlen (↑lane) (↑row) n
+row : Usize
+bound : ↑row + (n + 1) ≤ 1024
+out : alloc.vec.Vec Q
+room : out.length + (n + 1) ≤ Usize.max
+hr : ↑row < 1024
+ri : ↑(row.wrapping_add 1#usize) = ↑row + 1
+mid : alloc.vec.Vec Q
+hm : out.push (PV_RunJoin_LiftCell63.lifted (element columns hlen ↑lane ↑row)) = ok mid
+hv : ↑mid = ↑out ++ [PV_RunJoin_LiftCell63.lifted (element columns hlen ↑lane ↑row)]
+ml : mid.length = out.length + 1
+next : alloc.vec.Vec PV_RunJoin_LiftRow63.Q
+hn : PV_RunJoin_LiftRow63.phase host_semantic.lift columns lane n mid (row.wrapping_add 1#usize) = ok next
+hnext : ↑next = ↑mid ++ payload columns hlen (↑lane) (↑(row.wrapping_add 1#usize)) n
+⊢ (do
+      let q ←
+        (do
+              let column ← Array.index_usize columns lane
+              alloc.vec.Vec.index (core.slice.index.SliceIndexUsizeSlice aspis_core.field.M31) column row) >>=
+            host_semantic.lift
+      out.push q) =
+    ok mid
+'R1Z.PV_RunJoin_LiftPayload66.read' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_LiftPayload66.phase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
