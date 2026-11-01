@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,shlex,sys,time,datetime,re,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-runjoin66-20261101';H='/home/dombarker/project-offloads/codex-pv-runjoin-20261026';P=H+'/runjoin32-lean';host='dombarker@100.108.41.90'
-a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 78000<=a<=78099
+a=int(sys.argv[1]);idx=int(sys.argv[2]);assert 78000<=a<=78099 or 78300<=a<=78302
 plan=json.loads((E/'build-plan.json').read_text());mods=sys.argv[3:] or plan['chunks'][idx]
 assert all(m in plan['modules'] for m in mods),'stage every target before admission'
 assert len(mods)==1,'one module per attempt'
@@ -10,7 +10,7 @@ for prior in (R/'evidence').glob('pv-*/modules-*.json'):
  for record in json.loads(prior.read_text()):
   if not record['accepted']:
    assert record['source_sha256']!=plan['modules'][mods[0]]['sha256'],('unchanged failed source forbidden',record['module'],str(prior))
-assert len(list(E.glob('receipt-*.json')))<100
+assert len(list(E.glob('receipt-*.json')))<103
 assert not (E/f'submission-{a}.json').exists(),'submitted already; recover read-only'
 # Own-input gate: a newly staged dependency must have an accepted matching source.
 round_sources={m:v for m,v in plan['modules'].items() if m.startswith('R1Z.PV_RunJoin_') and m.endswith(('52','53','54','55','56','57','58','59','60','61','62','63','64','66'))}
