@@ -16,7 +16,13 @@ theorem source_injective : Function.Injective source := by
   intro x y h
   simpa only [unpack_source] using congrArg unpack h
 
-attribute [local irreducible] source List.ofFn
+attribute [local irreducible] source List.ofFn ProverCommitWideBytes48.sourceCell
+
+theorem cell (x y : Raw) (hx : canonical x) (hy : canonical y) (h : x=y) :
+    List.ofFn (ProverCommitWideBytes48.sourceCell x hx)=
+      List.ofFn (ProverCommitWideBytes48.sourceCell y hy) := by
+  subst y
+  rfl
 
 theorem stream (n : Nat) (x y : Nat → Raw)
     (hx : ∀ i,i<n → canonical (x i)) (hy : ∀ i,i<n → canonical (y i))
@@ -32,12 +38,11 @@ theorem stream (n : Nat) (x y : Nat → Raw)
   apply congrArg List.flatten
   apply congrArg List.ofFn
   funext i
-  exact congrArg (fun z : {r : Raw // canonical r} =>
-    List.ofFn (ProverCommitWideBytes48.sourceCell z.val z.property))
-    (Subtype.ext (point i))
+  exact cell (x i.val) (y i.val) (hx i.val i.isLt) (hy i.val i.isLt) (point i)
 
 #print axioms unpack
 #print axioms unpack_source
 #print axioms source_injective
+#print axioms cell
 #print axioms stream
 end R1Z.PV_RunJoin_OpeningStreamUnique69
