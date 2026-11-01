@@ -14,7 +14,10 @@ theorem cell (q : Old.Q) :
       (ProverCommitNativeOps47.embedded q))).val).drop 16=List.replicate 16 (0#u8) := by
   simp only [ProverCommitNativeOps47.embedded,ProverRwDictionaryTower.fromW,
     ProverRwDictionaryTower.fromQ,ProverRwDictionaryTower.fromC,
-    ProverCommitSubfieldOps47.zero,PV_RunJoin_FlatBytes35.wire,Array.make,
+    ProverCommitRelease47.convE,ProverCommitRelease47.convQ,ProverCommitRelease47.convC,
+    ProverCommitSubfieldOps47.embedded,ProverCommitSubfieldOps47.zero,
+    ProverCommitPrimitive47.fromQ,ProverCommitPrimitive47.fromC,
+    PV_RunJoin_FlatBytes35.wire,Array.make,
     List.drop_succ_cons,List.drop_zero]
   simp only [PV_RunJoin_FlatBytes35.byte,PV_RunJoin_ZeroWord40.bytes,
     List.getElem_cons_zero,List.getElem_cons_succ]
