@@ -20,7 +20,7 @@ theorem finite (point : Array Q 10#usize) (suffix weighted : Q)
     have more : i>0#usize := by change i.val>0;omega
     have dec : (Usize.wrapping_sub i 1#usize).val=n := by
       rw [PV_RunJoin_SamplerCounters54.sub_one i (by omega)];omega
-    obtain ⟨q,hq⟩ := ProverRwP6ArrayRead.read point (Usize.wrapping_sub i 1#usize) (by rw [dec];omega)
+    obtain ⟨q,hq⟩ := ProverRwP6ArrayRead.read point (Usize.wrapping_sub i 1#usize) (by change (Usize.wrapping_sub i 1#usize).val<10;rw [dec];omega)
     obtain ⟨suffix1,hs⟩ := qadd suffix q
     obtain ⟨weighted1,hw⟩ := qadd weighted suffix1
     obtain ⟨outA,ha⟩ := ih suffix1 weighted1 (Usize.wrapping_sub i 1#usize) dec (by omega)
@@ -35,7 +35,7 @@ theorem finite (point : Array Q 10#usize) (suffix weighted : Q)
 theorem complete (point : Array Q 10#usize) :
     ∃ out,host_arithmetic.selected_mask_linears point=ok out := by
   obtain ⟨⟨suffix,weighted⟩,hfirst⟩ := finite point aspis_core.field.QM31.ZERO aspis_core.field.QM31.ZERO
-    10 aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS rfl (by omega)
+    10 aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS (by unfold aspis_core.state_only_hiding.STATE_ONLY_HIDING_SUMCHECK_ROUNDS;rfl) (by omega)
   obtain ⟨q,hq⟩ := qscale suffix 3#u32
   obtain ⟨q1,hq1⟩ := qscale weighted 22#u32
   obtain ⟨q2,hq2⟩ := qadd q q1
