@@ -30,7 +30,7 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
       ProverCommitWeightsMaterial53.run (ProverCommitQArray48.array 10#usize (alpha phase.val.sem))
         (ProverCommitNativeQ48.source (x0 phase.val.sem)) (ProverCommitNativeQ48.source (y0 phase.val.sem))
         (ProverCommitNativeQ48.source (x1 phase.val.sem)) (ProverCommitNativeQ48.source (y1 phase.val.sem)) (toW kappa)=ok wSource ∧
-      box .S2 phase.val.sem.alpha phase.val.phase.val.sem.z=ok () ∧ heap (toWeight kw) kappa=ok .supplied ∧
+      box .S2 phase.val.sem.alpha phase.val.sem.z=ok () ∧ heap (toWeight kw) kappa=ok .supplied ∧
       @PV_RunJoin_PrepareTail48.run (types base) (opsNative base heap box ops runtime world) .S2 phase.val.hash phase.val.backend phase.val.sem
         tr claim gamma inactive kappa (Array.to_slice (amap fromW qSource))
           (Array.to_slice (amap fromW wSource))=ok (.Ok prepared) := by
