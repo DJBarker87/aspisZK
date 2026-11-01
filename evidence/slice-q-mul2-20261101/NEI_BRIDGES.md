@@ -17,3 +17,7 @@ CLOSED-CONDITIONAL local D188 packet, with the exact E002 root and E001's alread
 ## Stage 3: batch_prefix_products
 
 OPEN. NEI_PREFIX_OBLIGATIONS.md records exact kernel results, native controls and the unresolved actual Vec append/frame. K005/K006/K009 timeouts earn zero credit; no narrower capacity, shorter buffer or invalid-state substitute is admitted. K007/K008 restore only the native read/product-log/index component. No whole-prefix or composed-row credit is booked.
+
+## Residue row
+
+NEI_ROW_PACKET.json is a checked local CLOSED-CONDITIONAL D188 packet with explicit iterator semantic transport, arbitrary-flush checked-addition domain, and no suspended NEB credit. NEI_L035/L036 standard-axiom proofs; K010/K011 carrier control, K012/K013 actual iterator context/control; N006/N007 native/emitted fixtures/control; L037 coherent model fixture replay. Zero composed rows.

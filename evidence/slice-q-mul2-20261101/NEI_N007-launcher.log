@@ -1,0 +1,49 @@
+{"attempt": "NEI_N007", "exit_status": 101, "wall_seconds": 65.46301131392829, "peak_rss_kib": "578792", "swaps": "0", "print_axioms": "N/A: native"}
+{"command": ["/home/dombarker/.cargo/bin/cargo", "test", "--release", "--offline", "--manifest-path", "/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_native_line/Cargo.toml", "-j", "1", "NEI_row_differential", "--", "--exact", "--nocapture"], "expected_time": "Optimized compilation, then shared emitted-model frozen-row/native-emitted fidelity cases; not a proof or arithmetic release gate"}
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> /home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_src/crates/aspis-core/src/circle_pre
+...
+>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> /home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_src/crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `aspis-core` (lib) generated 18 warnings (run `cargo fix --lib -p aspis-core` to apply 1 suggestion)
+   Compiling nei_native_row v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029/NEI_native_line)
+warning: function `NEI_row_differential` should have a snake case name
+  --> src/lib.rs:16:12
+   |
+16 | #[test] fn NEI_row_differential(){
+   |            ^^^^^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `nei_row_differential`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: `nei_native_row` (lib test) generated 1 warning
+    Finished `release` profile [optimized] target(s) in 1m 05s
+     Running unittests src/lib.rs (NEI_extract_target/release/build/nei_native_row/15b0b5c74e3a577b/out/nei_native_row-15b0b5c74e3a577b)
+
+running 1 test
+
+thread 'NEI_row_differential' (3412726) panicked at src/lib.rs:17:253:
+assertion `left == right` failed: shared row 0
+  left: [2147483648, 2147483649, 2147483650, 2147483651]
+ right: [2147483649, 2147483649, 2147483650, 2147483651]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test NEI_row_differential ... FAILED
+
+failures:
+
+failures:
+    NEI_row_differential
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`
+
+
+Running as unit: run-rb35b78f010334b47b981f52d570345c0.scope; invocation ID: cbff615e0f7942cbafc142e0d5d71b84

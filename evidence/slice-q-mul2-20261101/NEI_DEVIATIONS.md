@@ -17,3 +17,5 @@
 - Recovered the actual LEAN_PATH Aeneas/AeneasMeta object/sidecar inventory read-only: 239 artifacts. Every overlapping hash matches the previous manifest (zero hash differences); future configs now name the actual resolved paths. This supplements earlier receipts without changing any library object. The library remains b59d5188 + lean432 + formatter-repair, not bare upstream.
 - PrefixProduct L030 failed only on reserved Lean binder name prefix; L031 changes that local binder. No failed receipt supplies credit.
 - Earlier read-only host progress queries sometimes overlapped the serial launcher's waiting SSH connection. No additional scope or resubmission occurred. Subsequent collection uses serial completed-attempt output.
+
+N005: native family was omitted, so the runner selected line and stopped at the frozen-core preflight before testing. N006 explicitly selects row and the own row runner restores the known private cfg(kani) addition; validation remains byte-exact. L033/L034 active-iterator equation drafts failed; L035 uses extensional equality of the backward transformer and passes. No limits increased.

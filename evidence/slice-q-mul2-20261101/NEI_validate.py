@@ -100,6 +100,9 @@ def audit_circle(packet):
 def main():
  packet=obj(E/'NEI_LINE_PACKET.json');results=[audit_line(packet)]
  if (E/'NEI_CIRCLE_PACKET.json').is_file():results.append(audit_circle(obj(E/'NEI_CIRCLE_PACKET.json')))
+ if (E/'NEI_ROW_PACKET.json').is_file():
+  import NEI_row_validate
+  results.append(NEI_row_validate.audit(E,R,obj(E/'NEI_ROW_PACKET.json'),neb,require,function))
  delta=obj(E/'NEI_LEDGER_DELTA.json')
  require(delta['composed_rows_closed']==[],'uncertified composed promotion')
  require(delta['added_local_bridges']==[r['function'] for r in results],'wrong local delta')

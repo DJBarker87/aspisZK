@@ -32,14 +32,14 @@ for name,text in frozen_sources.items():
  else:
   assert actual.startswith(text),('changed frozen body',name)
   tail=actual[len(text):]
-  if name.endswith('verifier.rs'):assert tail=='\n#[cfg(kani)] #[path="NEI_prefix_step.rs"] mod NEI_prefix_step;\n',name
+  if name.endswith('verifier.rs'):assert tail=='\n#[cfg(kani)] #[path="NEI_prefix_step.rs"] mod NEI_prefix_step;\n\n#[cfg(kani)] #[path="NEI_row_step.rs"] mod NEI_row_step;\n',name
   else:assert tail=='\n#[cfg(kani)]\nmod NEI_arbitrary {\n    impl kani::Arbitrary for super::M31 {\n        fn any() -> Self { Self(kani::any()) }\n    }\n}\n',name
  checked.append(name)
 (B/(a+'-frozen-source-check.json')).write_text(json.dumps(dict(passed=True,files=checked,allowed_changes=sorted(changed),qualification='Only exact cfg(kani) module/feature additions; every frozen body unchanged'),indent=2))
 # Rule 16: reject every static declaration in own harnesses and exact KMX files.
 # This is stricter than checking writes/interior mutability only.
 import re
-harnesses=[S/'crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
+harnesses=[S/'crates/aspis-r1-cost-probe/src/NEI_row_step.rs',S/'crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
 static_errors=[str(p) for p in harnesses if re.search(r'\bstatic\s+(?:mut\s+)?[A-Za-z_]',p.read_text())]
 (B/(a+'-rule16-check.json')).write_text(json.dumps(dict(static_declarations=static_errors,files={str(p):sha(p) for p in harnesses}),indent=2)+'\n')
 assert not static_errors,('STOP rule16',static_errors)
