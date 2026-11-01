@@ -21,9 +21,16 @@ theorem loop_terminal (bytes : Array U8 32#usize) (remaining fuel : Nat)
     | succ fuel =>
       have stop : ¬i < 32#usize := by change ¬i.val < 32; omega
       refine ⟨combined,?_⟩
-      simp only [PV_EVH_NonzeroFlow.loop,PV_EVH_PrefixLoop.loop,
-        PV_EVH_NonzeroStep.run,stop,if_false,PV_EVH_Prefix.bind,
-        PV_EVH_Prefix.lift,PV_EVH_Prefix.ofM,PV_EVH_World.lift,List.nil_append]
+      have stopStep : PV_EVH_NonzeroStep.run bytes combined i {} =
+          PV_EVH_Prefix.lift (.ok (.done combined)) := by
+        rw [PV_EVH_NonzeroSafety.step_plain]
+        simp only [aspis_prover.state_only_entropy.entropy_nonzero32_loop.body,stop,if_false]
+      change PV_EVH_Prefix.bind (PV_EVH_NonzeroStep.run bytes combined i {})
+        (fun cf => match cf with
+          | .done a => PV_EVH_Prefix.lift (.ok a)
+          | .cont state => PV_EVH_NonzeroFlow.loop fuel bytes state.1 state.2) w = _
+      rw [stopStep]
+      rfl
   | succ remaining ih =>
     cases fuel with
     | zero => omega
@@ -52,8 +59,10 @@ theorem run_terminal (bytes : Array U8 32#usize) (w : World) :
     ∃ out, PV_EVH_NonzeroFlow.run 33 bytes w = ⟨.finished (.ok out),w,[]⟩ := by
   obtain ⟨combined,completed⟩ := loop_terminal bytes 32 33 0#u8 0#usize w rfl (by omega)
   refine ⟨combined != 0#u8,?_⟩
-  simp only [PV_EVH_NonzeroFlow.run,PV_EVH_Prefix.bind,completed,
-    PV_EVH_Prefix.lift,PV_EVH_Prefix.ofM,PV_EVH_World.lift,List.nil_append]
+  change PV_EVH_Prefix.bind (PV_EVH_NonzeroFlow.loop 33 bytes 0#u8 0#usize)
+    (fun combined => PV_EVH_Prefix.lift (.ok (combined != 0#u8))) w = _
+  simp only [PV_EVH_Prefix.bind,completed,PV_EVH_Prefix.lift,
+    PV_EVH_Prefix.ofM,PV_EVH_World.lift,List.nil_append]
 
 theorem source_total (bytes : Array U8 32#usize) :
     ∃ out, aspis_prover.state_only_entropy.entropy_nonzero32 bytes = .ok out := by
