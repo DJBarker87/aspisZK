@@ -77,4 +77,17 @@ def nbq_error(start=11):
   if neg:oo[p]=o[p].replace('assert!(ctx.CALLS==1);','assert!(ctx.CALLS!=1);')
   publish(a,rp,oo,neg,'error native-step explicit local log receiver; same formatting abstraction, invalid-data result and one-call assertion; msg expansion association retained')
 
+
+
+def nbp_debug(start=13):
+ rp='evidence/native-tx2g-20261028/NBP_K002/receipt.json';d=read_json(E/'NEK_NBP_K002_recovered.json.xz');h=next(iter(d.values()));h=h[h.index('use core::fmt::Write;'):]
+ assert 'static mut' not in h
+ o=kmx('programs/r1-cost-probe');o['programs/r1-cost-probe/src/lib.rs']+='\n#[cfg(kani)] mod NBP_error;\n';o['programs/r1-cost-probe/src/NBP_error.rs']=h
+ for neg in [False,True]:
+  a=f'NEK_K{start+int(neg):03}'
+  if (E/a/'receipt.json').exists():continue
+  oo=dict(o)
+  if neg:oo['programs/r1-cost-probe/src/NBP_error.rs']=h.replace('assert!(w.seen==5);','assert!(w.seen!=5);')
+  publish(a,rp,oo,neg,'exact recovered local Writer byte/length check; unselected static log module omitted')
+
 if __name__=='__main__':globals()[sys.argv[1]](int(sys.argv[2]))

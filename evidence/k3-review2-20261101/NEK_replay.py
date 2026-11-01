@@ -45,6 +45,8 @@ pins={{str(q.relative_to(s)):hashlib.sha256(q.read_bytes()).hexdigest() for q in
  assert 'cargo-kani' in ni[0],('unresolved native argv',rp)
  if '--features' not in ni:
   ni+=['--features',('r0' if '/aspis-core/' in ' '.join(ni) else 'r0,pool-v1-kernel' if '/aspis-statement/' in ' '.join(ni) else 'private-leaf-salts,optimized-terminal,program-build')]
+ if os.environ.get('NEK_HARNESS'):
+  ni[ni.index('--harness')+1]=os.environ['NEK_HARNESS']
  manifest=ni[ni.index('--manifest-path')+1]
  oldsrc=manifest.split('/crates/')[0] if '/crates/' in manifest else manifest.split('/programs/')[0]
  ni=[v.replace(oldsrc,B+'/NEK_src') for v in ni]

@@ -24,6 +24,17 @@ def recover(rp):
   if t is not None and sha(t.encode())==v['sha256']:out[n]=t
   else:missing.append(dict(source=n,sha256=v['sha256']))
  missing+=row.get('missing_sources',[])
+ # Strictly content-addressed recovery from reviewed source bundles/patch chains.
+ bundles=[ROOT/'evidence/slice-q-compose-20261029/NEB_ADDITIVE_FILES.json']
+ bundles+=list(E.glob('NEK_*_variants.json.xz'))+list(E.glob('NEK_*_chain.json.xz'))
+ candidates={}
+ for p in bundles:
+  if p.exists():
+   for k,t in read_json(p).items():
+    if isinstance(t,str):candidates[sha(t.encode())]=t
+ for item in missing:
+  if item['sha256'] in candidates:out[item['source']]=candidates[item['sha256']]
+ missing=[v for v in missing if v['source'] not in out]
  if missing:
   receipt=read_json(ROOT/rp);ni=receipt.get('native_command') or receipt['command'];manifest=ni[ni.index('--manifest-path')+1];base=manifest.split('/crates/')[0] if '/crates/' in manifest else manifest.split('/programs/')[0];hostdir=str(Path(base).parent)
   code=f'''from pathlib import Path

@@ -1,0 +1,1 @@
+Stopped only the local sequential common dispatcher (PID70099) after K049 submission. K049 is allowed to finish and is recovered read-only; never resubmitted. Prepare one immutable cfg-selected bundle before up to three concurrent scopes, within job-specific throughput authorization. No source upload while K049 is running.

@@ -1,0 +1,1 @@
+NEK_K031 row_contract timed out at 90s. The previously loaded batch submitted K032 before the source edit that stops on OPEN could take effect. Local batch parent 68521 was terminated to prevent K033+ submission; submitted K032 is recovered read-only, never resubmitted. No cap increase. New Vec shape attempts require a one-window split and Lean frame transport.
