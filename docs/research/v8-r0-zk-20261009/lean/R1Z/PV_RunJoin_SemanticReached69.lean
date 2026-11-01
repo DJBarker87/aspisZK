@@ -29,7 +29,6 @@ def tail (self : host_semantic.SemanticOracle) (point : Array Q 10#usize)
   | core.ops.control_flow.ControlFlow.Break residual =>
     core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
       aspis_core.field.QM31 (core.convert.FromSame r1_wire.Error) residual
-  core.ops.control_flow.ControlFlow.Break residual =>
 
 /-- Factor at the actual point_claims output; no existential terminal input. -/
 theorem reached (self : host_semantic.SemanticOracle) (point : Array Q 10#usize)
