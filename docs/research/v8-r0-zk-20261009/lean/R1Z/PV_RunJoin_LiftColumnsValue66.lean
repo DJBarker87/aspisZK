@@ -44,7 +44,7 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_LiftArray66.set _ 26#usize (by decide)] at success
   simp only [bind_tc_ok,lift] at success
   rw [PV_RunJoin_CloneQ66.complete base heap box ops] at success
-  simp only [bind_tc_ok,massert,show 27#usize<29#usize from by decide,if_true] at success
+  simp only [Array.to_slice,bind_tc_ok,massert,show 27#usize<29#usize from by decide,if_true] at success
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ 27#usize (by decide)] at success
   simp only [bind_tc_ok,Aeneas.Std.uncurry] at success
   rw [PV_RunJoin_LiftArray66.restore _ 27#usize (by decide),
@@ -52,7 +52,7 @@ theorem source (base : ExternalTypes) (heap : Heap) (box : Box)
     PV_RunJoin_LiftArray66.set _ 27#usize (by decide)] at success
   simp only [bind_tc_ok,lift] at success
   rw [PV_RunJoin_CloneQ66.complete base heap box ops] at success
-  simp only [bind_tc_ok,massert,show 28#usize<29#usize from by decide,if_true] at success
+  simp only [Array.to_slice,bind_tc_ok,massert,show 28#usize<29#usize from by decide,if_true] at success
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ 28#usize (by decide)] at success
   simp only [bind_tc_ok,Aeneas.Std.uncurry] at success
   rw [PV_RunJoin_LiftArray66.restore _ 28#usize (by decide),
