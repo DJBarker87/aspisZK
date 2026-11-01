@@ -49,6 +49,7 @@ theorem complete {State Fail : Type} (base : ExternalTypes) (heap : Heap) (box :
   have efirst := congrArg (fun t => t.1) eqNative
   have esecond := congrArg (fun t => t.2.2.1) eqNative
   have efinal := congrArg (fun t => t.2.2.2) eqNative
+  dsimp only [Prod.fst,Prod.snd] at efirst esecond efinal
   rw [←efirst] at hb0
   rw [←esecond] at hb1
   rw [←efinal] at hbf
