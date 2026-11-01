@@ -58,15 +58,18 @@ theorem power (value : Q) : ∃ out,host_arithmetic.mask_power_26 value=ok out :
 
 theorem tower (a : Q) (i : Usize) (bound : i.val<4) :
     ∃ out,host_arithmetic.mul_tower_basis a i=ok out := by
-  unfold host_arithmetic.mul_tower_basis
   have cases : i.val=0 ∨ i.val=1 ∨ i.val=2 ∨ i.val=3 := by omega
-  rcases cases with h|h|h|h <;> rw [h]
-  all_goals
-    repeat' first
-      | (apply ProverRwP6BindTotal.bind_total _ _ (hostR _); intro _)
-      | (apply ProverRwP6BindTotal.bind_total _ _ (hostI _); intro _)
-    exact ⟨_,rfl⟩
-
+  rcases cases with h|h|h|h
+  · exact ⟨a,by simp only [host_arithmetic.mul_tower_basis,h]⟩
+  · obtain ⟨c,hc⟩ := hostI a.c0
+    obtain ⟨c1,hc1⟩ := hostI a.c1
+    exact ⟨⟨c,c1⟩,by simp only [host_arithmetic.mul_tower_basis,h,hc,hc1,bind_tc_ok]⟩
+  · obtain ⟨c,hc⟩ := hostR a.c1
+    exact ⟨⟨c,a.c0⟩,by simp only [host_arithmetic.mul_tower_basis,h,hc,bind_tc_ok]⟩
+  · obtain ⟨c,hc⟩ := hostR a.c1
+    obtain ⟨c1,hc1⟩ := hostI c
+    obtain ⟨c2,hc2⟩ := hostI a.c0
+    exact ⟨⟨c1,c2⟩,by simp only [host_arithmetic.mul_tower_basis,h,hc,hc1,hc2,bind_tc_ok]⟩
 
 #print axioms component
 #print axioms mul
