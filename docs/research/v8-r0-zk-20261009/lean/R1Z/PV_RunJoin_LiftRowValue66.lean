@@ -11,6 +11,8 @@ def row (columns : Columns) (hlen : ∀ l,l<26 → (column columns l).length=102
   ⟨PV_RunJoin_LiftPayload66.payload columns hlen lane 0 1024,by
     simp only [PV_RunJoin_LiftPayload66.payload,List.length_ofFn];scalar_tac⟩
 
+attribute [local irreducible] PV_RunJoin_LiftPayload66.payload
+
 theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base)) (columns : Columns)
     (hlen : ∀ l,l<26 → (column columns l).length=1024)
