@@ -134,7 +134,7 @@ variable (pool domain : Array U8 32#usize) (seq : U64)
 
 /-- The existing consumer uses only the complete Result success guard. This
 boundary exposes canonical NDR payloads without reducing validate_common. -/
-def validateCommonShared : Result (core.result.Result Unit AdmissionError) :=
+noncomputable def validateCommonShared : Result (core.result.Result Unit AdmissionError) :=
   mapRunError toShared
     (pool_v1.pair_trace.validate_common pool domain seq anchor nullifier asset input context)
 
