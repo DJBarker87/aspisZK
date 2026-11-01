@@ -101,3 +101,18 @@ protocol loop or unoptimized arithmetic gate ran in Kani. All scopes used
 6G high/8G max/swap 0/64 tasks and admission allowed:true with exit 0. No cap
 or timeout increased, no killed/timed-out shape was rerun unchanged, no shared
 launcher or live worktree was edited, and nothing was pushed.
+
+## Permanent objects and disk
+
+NEJ_ARCHIVE ran once in its own admitted capped scope: exit 0, wall
+0.14981381897814572 seconds, peak 16,884 KiB, swap 0. Sixteen source/object
+files (eight accepted modules) were copied with hash equality to:
+/home/dombarker/project-offloads/codex-cx-slice-s-compose3-cache-20261029/NEJ_final_objects_20261101.
+NEJ_CACHE_FINAL.json records every hash/size and the exact own scratch removed:
+NEJ_target, NEJ_objects and NEJ_tmp. The own permanent cache and frozen Rust
+inputs/lock remain. Seed cache hashes and first-selected precedence are in
+NEJ_HOST_PINS.json; predecessor caches were copied/read, never edited.
+
+NEJ_run.py now includes this permanent final-object directory after future
+NEJ_objects and before the seed cache, with the same dependency and Aeneas-object
+hashing. This path-only own-runner update required no additional compiler run.

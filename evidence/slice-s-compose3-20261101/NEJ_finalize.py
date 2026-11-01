@@ -22,6 +22,11 @@ old=read(E.parent/'slice-s-compose2-20261029/NEE_STOP_AUDIT.json');members=[]
 closed_functions={f for f,rs in by.items() if all(r['composed_status']=='CLOSED' for r in rs)}
 for x in old['members']:
  f=x['function'];x=copy.deepcopy(x);x['composed_status']='CLOSED' if f in closed_functions else 'OPEN'
+ rs=by[f]
+ x['retained_inner_hypotheses']=sorted({h['name'] for row in rs for h in row['named_hypotheses'] if not h['discharged_by']})
+ x['discharged_inner_hypotheses']=[dict(name=h['name'],certificate=h['discharged_by']) for row in rs for h in row['named_hypotheses'] if h['discharged_by']]
+ x['retained_internal_edges']=[e for e in edges['edges'] if e['caller']==f and e['status']!='CLOSED']
+ x['retained_external_obligations']=[o for row in rs for o in row['caller_domain_obligations'] if 'callee' not in o and o['status']!='CLOSED']
  if f in closed_functions:
   x.update(why_no_further_attempt='Standalone result/domain/frame certificate accepted by NEJ validator. Incoming caller edges still require their own certificates.',native_obligation='None for this standalone selected row.',lean_obligation='No remaining standalone Lean obligation; do not reprove unchanged accepted theorem.')
  elif not x['first_root_conservative_dependency']:
