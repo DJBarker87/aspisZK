@@ -181,6 +181,7 @@ def proof(x,n=2,lets=()):
   return pad+'exact compatible.'+field.replace('_OPEN','_fixed')+(' '+' '.join(['_']*len(ex)) if ex else '')
  return pad+'exact PV_EVH_Prefix.lift_fixed _'
 
+if entropy:out+='\nopen ControlFlow\n'
 out+='\ndef run\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) : P '+result+' := do\n'+emit(node,world=True)+'\n'
 out+='\ntheorem run_fixed\n  '+header+(' (entropyAnswers : PV_EVH_Entropy.EntropyAnswers)' if entropy else '')+(' (fileAnswers : PV_EVH_NonceWorld.Answers)'+(' (reserveCallees : PV_EVH_DurableReserveBuild.Callees)' if joined else '') if durable else '')+' (c : Callees) (compatible : Compatible c)'+(' (entropy_same : ∀ n s, entropyAnswers n s = getrandom.fill s)' if entropy else '')+(' (files_same : PV_EVH_NonceWorld.Compatible fileAnswers)'+(' (reserve_same : PV_EVH_DurableReserveBuild.Compatible reserveCallees)' if joined else '') if durable else '')+' :\n    FinishedView (run '+' '.join(explicit)+(' entropyAnswers' if entropy else '')+(' fileAnswers'+(' reserveCallees' if joined else '') if durable else '')+' c) ('+name+' '+(inst+' ' if durable else '')+' '.join(explicit)+''') := by
   unfold run '''+name+'\n'+proof(node)+'\n\n#print axioms run_fixed\nend '+namespace+'\n'

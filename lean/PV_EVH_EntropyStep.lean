@@ -29,6 +29,8 @@ structure Compatible (c : Callees) : Prop where
   sliceCopy_fixed : ∀ {T : Type} (inst : core.marker.Copy T) (dst src : Slice T), FinishedView (c.sliceCopy_OPEN inst dst src) (core.slice.Slice.copy_from_slice inst dst src)
   entropy_nonzero32_fixed : ∀ (bytes : Array Std.U8 32#usize), FinishedView (c.entropy_nonzero32_OPEN bytes) (aspis_prover.state_only_entropy.entropy_nonzero32 bytes)
 
+open ControlFlow
+
 def run
   (mask_nonce : Array Std.U8 32#usize) (limit : Std.Usize) (retry : Std.Usize) (entropyAnswers : PV_EVH_Entropy.EntropyAnswers) (c : Callees) : P (ControlFlow Std.Usize (core.result.Result
     aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
