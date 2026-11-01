@@ -23,6 +23,7 @@ theorem step (base : ExternalTypes) (heap : Heap) (box : Box)
   simp only [bind_tc_ok,massert,h29,if_true]
   rw [Array.index_mut_usize,PV_RunJoin_LiftArray66.read _ lane h29]
   simp only [bind_tc_ok]
+  dsimp only
   rw [PV_RunJoin_LiftArray66.restore _ lane h29,
     PV_RunJoin_WeightArrayUpdate47.complete _ lane h29,
     PV_RunJoin_LiftArray66.step _ _ lane h29]
@@ -47,6 +48,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
     have inc := ProverCommitPairCounter47.next_val lane (by omega)
     unfold host_semantic.lift_columns_loop0
     rw [ProverRw19LoopBind.loop_bind]
+    dsimp only
     rw [step base heap box ops columns hlen p lane hl]
     simp only [bind_tc_ok]
     have next := ih (Usize.wrapping_add lane 1#usize) (by rw [inc];omega)
