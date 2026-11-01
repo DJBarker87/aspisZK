@@ -60,6 +60,7 @@ theorem run_fixed
     try dsimp only
     cases result with
     | Ok salts =>
+      simp only [Aeneas.Std.bind_assoc_eq]
       try dsimp only
       apply PV_EVH_Prefix.bind_fixed
       ·
@@ -77,6 +78,7 @@ theorem run_fixed
           · intro index1
             exact PV_EVH_Prefix.lift_fixed _
     | Err unused1 =>
+      simp only [Aeneas.Std.bind_assoc_eq]
       try dsimp only
       apply PV_EVH_Prefix.bind_fixed
       ·

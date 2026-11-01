@@ -235,6 +235,7 @@ def proof(x,n=2,lets=()):
   for j,(pat,branch) in enumerate(x.expr.branches):
    bits=pat.split();vs=[('unused'+str(j)) if z=='_' else z for z in bits[1:]]
    out+=pad+'| '+bits[0].split('.')[-1]+(' '+' '.join(vs) if vs else '')+' =>\n'
+   out+=pad+'  simp only [Aeneas.Std.bind_assoc_eq]\n'
    out+=proof(x.next if branch.kind=='pure' else then_node(branch,x.var,x.next),n+2,lets)+'\n'
   return out.rstrip()
  if x.kind=='bind':
