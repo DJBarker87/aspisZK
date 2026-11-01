@@ -13,15 +13,17 @@ theorem scatter {n : Usize} (input : Array Q n) (exponents : Array U8 n)
   | nil => exact ⟨coefficients,rfl⟩
   | cons i rest ih =>
     obtain ⟨q,hq⟩ := ProverRwP6ArrayRead.read input i (bound i (by simp))
-    have coord : (i &&& 3#usize).val<4 := by scalar_tac
+    have coord : (i &&& 3#usize).val<4 := by
+      change (i &&& 3#usize).bv.toNat<4
+      rw [UScalar.bv_and,BitVec.toNat_and]
+      exact lt_of_le_of_lt Nat.and_le_right (by decide)
     obtain ⟨value,hv⟩ := PV_RunJoin_MaskPreparedTotal69.tower q (i &&& 3#usize) coord
     obtain ⟨exponent,he,hsmall⟩ := values i (by simp)
     have cast : (UScalar.cast .Usize exponent).val<27 := by scalar_tac
-    obtain ⟨next,hn⟩ := ProverRwP6ArrayRead.read coefficients (UScalar.cast .Usize exponent) cast
-    have update : Array.update coefficients (UScalar.cast .Usize exponent) value=
-        ok (Aeneas.Std.Array.set coefficients (UScalar.cast .Usize exponent) value) := by
-      simp only [Array.update,cast,if_pos]
-    obtain ⟨out,ho⟩ := ih (Aeneas.Std.Array.set coefficients (UScalar.cast .Usize exponent) value)
+    obtain ⟨next,update,hvalue⟩ := WP.spec_imp_exists
+      (Array.update_spec coefficients (UScalar.cast .Usize exponent) value
+        (by simpa only [Array.length,coefficients.property] using cast))
+    obtain ⟨out,ho⟩ := ih next
       (fun j hj => bound j (by simp only [List.mem_cons];exact Or.inr hj))
       (fun j hj => values j (by simp only [List.mem_cons];exact Or.inr hj))
     exact ⟨out,by simp only [PV_B3_Range117.scatter,lift,hq,hv,he,update,ho,bind_tc_ok]⟩
