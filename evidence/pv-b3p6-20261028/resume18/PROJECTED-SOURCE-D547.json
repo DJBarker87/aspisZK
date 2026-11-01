@@ -1,0 +1,57 @@
+{
+  "function": "evaluate_state_only_poseidon_oracle_projected",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "evaluate_state_only_poseidon_oracle_projected",
+      "start": 585,
+      "end": 617,
+      "signature": "fn evaluate_state_only_poseidon_oracle_projected(\n    openings: &StateOnlyPoseidonOpenings,\n    selectors: &StateOnlyPoseidonSelectors,\n) -> [QM31; STATE_ONLY_POSEIDON_PACKED_LANES] ",
+      "body": "{\n    let leading_low = selectors.local[0];\n    let full_low = [1usize, 9, 10]\n        .into_iter()\n        .fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));\n    let internal_low = (2usize..=8).fold(QM31::ZERO, |sum, row| sum.add(selectors.local[row]));\n    let leading = leading_pair_packed(openings);\n    let full = interpolated_full_pair_packed(openings.z, &selectors.local);\n    let internal = interpolated_internal_pair(openings.z, &selectors.local);\n    let prepared_weights = [leading_low, full_low, internal_low].map(PreparedQm31Multiplier::new);\n    let prepared_block = PreparedQm31Multiplier::new(selectors.block);\n\n    core::array::from_fn(|group| {\n        let start = 4 * group;\n        let target = qm31_pack_base4(&openings.succ_z[start..start + 4]);\n        let internal = qm31_pack_base4(&internal[start..start + 4]);\n        // `active_low = leading_low + full_low + internal_low`, so the\n        // four-product residual is exactly three weighted differences. This\n        // removes one QM31 product per packed group without changing the\n        // polynomial or its selector basis.\n        prepared_block.mul(qm31_sum_products3_prepared(\n            &prepared_weights,\n            &[\n                target.sub(leading[group]),\n                target.sub(full[group]),\n                target.sub(internal),\n            ],\n        ))\n    })\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "interpreter": "source_projected547 = projected_prefix13 source_leading546",
+  "theorem": "projected_source_link547",
+  "source_steps": [
+    {
+      "source": "read local[0]; full fold[1,9,10] from ZERO",
+      "model": "projected_prefix13 first binds",
+      "argument": "Array IntoIterator visits exactly1,9,10. Unroll with same left-associated QM31.add and selector reads; no arithmetic identity, permutation or dropped ZERO add. All indices<16. Owned copied usize elements have no Drop effects; iterator and generated FnMut lowering retained V370."
+    },
+    {
+      "source": "inclusive Range2..=8 fold from ZERO",
+      "model": "projected_prefix13 next seven additions",
+      "argument": "Exactly2,3,4,5,6,7,8 in order, each index<16; source RangeInclusive advances once after each callback, reaches done without overflow, no other source effects. Same seven sequential calls, no reassociation or input narrowing. Existing range/Step capture in D542 source dossier plus explicit finite endpoint bound; generated closure/drop V370."
+    },
+    {
+      "source": "leading, full, internal source calls",
+      "model": "projected_prefix13 source_leading546 then full/internal reference callees",
+      "argument": "Leading executes the bound source_leading546 and is replaced by its complete-Result equality only in projected_source_reference547. Full and internal are the same separately named source callee slots with whole fixed-array ownership. No callee effect is silently omitted; their source rows remain explicit."
+    },
+    {
+      "source": "map three weights through PreparedQm31Multiplier::new; prepare block",
+      "model": "projected_prefix13 three new calls then block new",
+      "argument": "Map visits leading_low,full_low,internal_low in order. Same frozen constructor for all four values. Array.map/try_map/Guard source mapping in ArrayInterface543 and STD-STRUCTURAL-D542 preserves initialized prefix and suffix cleanup; owned non-dropping field records. Constructor source row remains named."
+    },
+    {
+      "source": "from_fn group0..4; start4*group; pack succ and internal slices",
+      "model": "projected_stage13_0..3",
+      "argument": "from_fn/try_from_fn_erased fills exactly four elements in increasing group order, invokes the FnMut callback once per element, and restores prefix before next call; same captured immutable arrays and prepared block/weights. Source pair slices [0..4],[4..8],[8..12],[12..16] have length4 and preserve order; the model builds the identical four-element Array.to_slice. All bounds hold on every carrier, no failing slice path is omitted. Same qm31_pack_base4 callee is used twice in order."
+    },
+    {
+      "source": "three target differences; prepared three-product; outer prepared block multiplication",
+      "model": "projected_stage13_0..3 suffixes",
+      "argument": "Each group reads leading[group], full[group], then internal packed result; calls sub in exactly that order and constructs right[3] with corresponding weights[3]. No field-chain reassociation and no product is replaced by a model value. Same prepared product and mul source slots; native prepared matrix association remains separately open. Return full four outputs in ascending group order."
+    }
+  ],
+  "domain": "every raw openings and selector fixed carrier; no canonicality, Boolean selector, or success-only restriction",
+  "D188": "No writes through mutable input loans; from_fn initialized-prefix/Guard stores retained, each output is constructed once in increasing index order",
+  "feature_profile": "ct-host-prover, no cfg/cfg! inside the body; pinned deployed metadata and release profile in new reference-projected extraction",
+  "route": "own-1 structural argument plus complete-Result Lean equality",
+  "retained": "Full/internal/field/prepared helper source rows; std/D188/matrix/callback closure and V370/D381/D386 compiler/FnMut/drop semantics. No endpoint/T change.",
+  "status": "pending own focused receipt and reference-project declaration comparison"
+}
