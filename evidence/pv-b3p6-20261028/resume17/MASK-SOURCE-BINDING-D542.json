@@ -1,0 +1,128 @@
+{
+  "rule": "User D542: mask source laws under V370; own-1 structural wrappers",
+  "label": "reclassification within existing Charon/Aeneas tool trust (owner fifth amendment), with structural source-wrapper binding and retained V370 intrinsic semantics",
+  "wrappers": [
+    {
+      "rust_item": "core::num::u16::count_ones",
+      "source": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/num/uint_macros.rs.deployed",
+      "source_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "item": {
+        "name": "count_ones",
+        "start": 81,
+        "end": 83,
+        "signature": "fn count_ones(self) -> u32 ",
+        "body": "{\n            return intrinsics::ctpop(self);\n        }",
+        "context": [],
+        "macros": [
+          "uint_impl"
+        ]
+      },
+      "intrinsic": {
+        "name": "core::intrinsics::ctpop",
+        "classification": "V370 compiler-cohort item",
+        "owner": [
+          "D381",
+          "D386"
+        ],
+        "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+        "groups": [
+          "external",
+          "host-mask",
+          "statement-mask"
+        ],
+        "kani": {
+          "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+          "line": 1659,
+          "declaration": "fn ctpop<T: Copy>(x: T) -> u32;",
+          "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+        },
+        "deployed": {
+          "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+          "line": 1664,
+          "declaration": "fn ctpop<T: Copy>(x: T) -> u32;",
+          "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+        },
+        "declaration_tokens_identical": true
+      },
+      "model_spec": "ctpop16_spec542",
+      "statement_map": [
+        "self: u16 maps to the same 16 input bits, without narrowing or sign extension",
+        "call ctpop on those input bits; mathematical bitvector specification is explicit",
+        "return the u32 result, represented by Result.ok; no panic branch, store, loan or cleanup"
+      ],
+      "observable_behaviour": "Pure total wrapper; count range 0..16, trailing zero returns16 for zero. No nonzero-only intrinsic used.",
+      "retained": "V370 / D381,D386 must preserve the named intrinsic specification; declaration identity does not prove semantics. This is the existing compiler-cohort obligation, not a new T field."
+    },
+    {
+      "rust_item": "core::num::u16::trailing_zeros",
+      "source": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/num/uint_macros.rs.deployed",
+      "source_sha256": "ff30a284097cb163dbc983e3f1ebfe078e8150944689c61d9b61220eb9842465",
+      "item": {
+        "name": "trailing_zeros",
+        "start": 152,
+        "end": 154,
+        "signature": "fn trailing_zeros(self) -> u32 ",
+        "body": "{\n            return intrinsics::cttz(self);\n        }",
+        "context": [],
+        "macros": [
+          "uint_impl"
+        ]
+      },
+      "intrinsic": {
+        "name": "core::intrinsics::cttz",
+        "classification": "V370 compiler-cohort item",
+        "owner": [
+          "D381",
+          "D386"
+        ],
+        "semantics": "retained at existing compiler-cohort boundary; no source-law axiom installed",
+        "groups": [
+          "host-mask",
+          "statement-mask"
+        ],
+        "kani": {
+          "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.kani",
+          "line": 1763,
+          "declaration": "fn cttz<T: Copy>(x: T) -> u32;",
+          "file_sha256": "a40a72fe0dcc3d4bc025206361980aad6a328a32e8a6da9d2e7877d648d0908d"
+        },
+        "deployed": {
+          "file": "evidence/pv-b3p6-20261028/resume17/std-sources/core/src/intrinsics/mod.rs.deployed",
+          "line": 1768,
+          "declaration": "fn cttz<T: Copy>(x: T) -> u32;",
+          "file_sha256": "c672eca0a550f9ce783d74a6dfb0d96614390db3fd6868e1a78673b42197aa3b"
+        },
+        "declaration_tokens_identical": true
+      },
+      "model_spec": "cttz16_spec542",
+      "statement_map": [
+        "self: u16 maps to the same 16 input bits, without narrowing or sign extension",
+        "call cttz on those input bits; mathematical bitvector specification is explicit",
+        "return the u32 result, represented by Result.ok; no panic branch, store, loan or cleanup"
+      ],
+      "observable_behaviour": "Pure total wrapper; count range 0..16, trailing zero returns16 for zero. No nonzero-only intrinsic used.",
+      "retained": "V370 / D381,D386 must preserve the named intrinsic specification; declaration identity does not prove semantics. This is the existing compiler-cohort obligation, not a new T field."
+    }
+  ],
+  "finite_equations": 28,
+  "boundary_cases": [
+    "count_ones(0)=0",
+    "trailing_zeros(0)=16"
+  ],
+  "source_module": {
+    "path": "evidence/pv-b3p6-20261028/lean/PV_B3P_MaskSource542227.lean",
+    "sha256": "c9ef6d36ab3e6cf6a19ad3ee10ee7a0c7b8528fd80bf7101a5d8382a8e9d8c8a"
+  },
+  "bridge_module": {
+    "path": "evidence/pv-b3p6-20261028/lean/PV_B3P_MaskBridge542227.lean",
+    "sha256": "7e77d8b7f0782cd83bdcd106afc60f68da787b399af55a91a0bbec6e15f47103"
+  },
+  "native_authority": "No prior candidate model, lookup table, template axiom, Kani intrinsic gate or rust_fun annotation is used as intrinsic authority. Mathematical bitvector specifications are explicit at the user-retained V370 boundary.",
+  "direct_source_association": "Exact direct extraction parameterized by the two source wrappers; all seven MaskAllowed values and every values array. No total frozen-mask reference equality outside that domain is claimed.",
+  "caller_domain": "Existing resume16/DOMAINS.json: active_literal passes only nonzero ACTIVE_ROW_MASKS, the seven MaskAllowed values. This report does not weaken the original total Link for other masks.",
+  "endpoint_premise_changes": {
+    "removed": [],
+    "added": [],
+    "weakened": []
+  }
+}

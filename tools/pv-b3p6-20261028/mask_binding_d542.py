@@ -1,0 +1,15 @@
+"""Source-law provenance for mask wrappers; intrinsic implementations stay V370."""
+from pathlib import Path
+import hashlib,json
+D=Path('evidence/pv-b3p6-20261028/resume17');ns={}
+exec(compile(Path('tools/pv-b3p6-20261028/std_resolve_d540.py').read_text().split('indices={}')[0],'<parser>','exec'),ns)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest();index,tokens=ns['index'],ns['tokens'];rows=[]
+inv=json.loads((D/'STD-ITEM-INVENTORY-D540.json').read_text())
+for name,intrinsic,spec in [('count_ones','ctpop','ctpop16_spec542'),('trailing_zeros','cttz','cttz16_spec542')]:
+ capture=D/'std-sources/core/src/num/uint_macros.rs.deployed';s=capture.read_text();fs=[f for f in index(s)if f['name']==name];assert len(fs)==1
+ f=fs[0];assert tokens(f['body'])==tokens('{ return intrinsics::'+intrinsic+'(self); }')
+ ir=next(r for r in inv['intrinsic_items']if r['name']=='core::intrinsics::'+intrinsic);assert ir['declaration_tokens_identical']
+ rows.append(dict(rust_item='core::num::u16::'+name,source=str(capture),source_sha256=sha(capture),item=f,intrinsic=ir,model_spec=spec,statement_map=['self: u16 maps to the same 16 input bits, without narrowing or sign extension','call '+intrinsic+' on those input bits; mathematical bitvector specification is explicit','return the u32 result, represented by Result.ok; no panic branch, store, loan or cleanup'],observable_behaviour='Pure total wrapper; count range 0..16, trailing zero returns16 for zero. No nonzero-only intrinsic used.',retained='V370 / D381,D386 must preserve the named intrinsic specification; declaration identity does not prove semantics. This is the existing compiler-cohort obligation, not a new T field.'))
+source=Path('evidence/pv-b3p6-20261028/lean/PV_B3P_MaskSource542227.lean');bridge=source.with_name('PV_B3P_MaskBridge542227.lean')
+out=dict(rule='User D542: mask source laws under V370; own-1 structural wrappers',label='reclassification within existing Charon/Aeneas tool trust (owner fifth amendment), with structural source-wrapper binding and retained V370 intrinsic semantics',wrappers=rows,finite_equations=28,boundary_cases=['count_ones(0)=0','trailing_zeros(0)=16'],source_module=dict(path=str(source),sha256=sha(source)),bridge_module=dict(path=str(bridge),sha256=sha(bridge)),native_authority='No prior candidate model, lookup table, template axiom, Kani intrinsic gate or rust_fun annotation is used as intrinsic authority. Mathematical bitvector specifications are explicit at the user-retained V370 boundary.',direct_source_association='Exact direct extraction parameterized by the two source wrappers; all seven MaskAllowed values and every values array. No total frozen-mask reference equality outside that domain is claimed.',caller_domain='Existing resume16/DOMAINS.json: active_literal passes only nonzero ACTIVE_ROW_MASKS, the seven MaskAllowed values. This report does not weaken the original total Link for other masks.',endpoint_premise_changes=dict(removed=[],added=[],weakened=[]))
+(D/'MASK-SOURCE-BINDING-D542.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(dict(wrappers=len(rows),finite_equations=28,V370='retained')))
