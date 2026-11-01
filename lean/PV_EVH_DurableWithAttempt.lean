@@ -138,14 +138,14 @@ def run
         noised_c1 material
     let r3 ← PV_EVH_Prefix.lift (core.result.Result.map_err
         (prover.prove_masked_with_attempt.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyMaskBuildErrorError
-        aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst) r2 ())
+        aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore) r2 ())
     let cf1 ← PV_EVH_Prefix.lift (core.result.Result.Insts.CoreOpsTry.branch r3)
     match cf1 with
     | core.ops.control_flow.ControlFlow.Continue val1 =>
       let r4 ← c.op134_OPEN
       let r5 ← PV_EVH_Prefix.lift (core.result.Result.map_err
           (prover.prove_masked_with_attempt.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairHidingLayoutErrorV1Error
-          aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst) r4 ())
+          aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore) r4 ())
       let cf2 ← PV_EVH_Prefix.lift (core.result.Result.Insts.CoreOpsTry.branch r5)
       match cf2 with
       | core.ops.control_flow.ControlFlow.Continue val2 =>
@@ -161,7 +161,7 @@ def run
               val3
           let r9 ← PV_EVH_Prefix.lift (core.result.Result.map_err
               (prover.prove_masked_with_attempt.closure_2.Insts.CoreOpsFunctionFnOnceTupleVecQM31Error
-              aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst) r8 ())
+              aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore) r8 ())
           let cf4 ← PV_EVH_Prefix.lift (core.result.Result.Insts.CoreOpsTry.branch r9)
           match cf4 with
           | core.ops.control_flow.ControlFlow.Continue val4 =>
@@ -207,7 +207,7 @@ def run
                               let r12 ← c.new_OPEN
                               let r13 ← PV_EVH_Prefix.lift (core.result.Result.map_err
                                   (prover.prove_masked_with_attempt.closure_3.Insts.CoreOpsFunctionFnOnceTupleErrorError
-                                  aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst)
+                                  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore.Insts.Aspis_proverState_only_hidingStateOnlyMaskNonceStore)
                                   r12 ())
                               let cf7 ← PV_EVH_Prefix.lift (core.result.Result.Insts.CoreOpsTry.branch r13)
                               match cf7 with

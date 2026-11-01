@@ -122,10 +122,11 @@ def emit(x,n=2,world=False):
  if x.kind=='match':return pad+'match '+x.discr+' with\n'+'\n'.join(pad+'| '+pat+' =>\n'+emit(child,n+2,world) for pat,child in x.branches)
  if x.kind=='pure':return pad+('pure ' if world else 'Result.ok ')+x.expr.replace('\n','\n'+pad+'  ')
  exp=x.expr;label=exp.split()[0]
+ if joined:exp=exp.replace('aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst',inst)
  if not world:return pad+exp.replace('\n','\n'+pad+'  ')
  if joined and label==reserveLabel:
   args=exp[len(label):].strip().split(None,1)
-  assert args[0]=='aspis_proverstate_only_hidingStateOnlyMaskNonceStoreInst'
+  assert args[0]==inst
   return pad+'PV_EVH_DurableReserveBuild.run '+args[1].replace('\n',' ')+' fileAnswers reserveCallees'
  if durable and label==reserveLabel:
   return pad+'PV_EVH_Prefix.ofM (PV_EVH_NonceSource.reserve fileAnswers '+exp[len(label):].strip().replace('\n',' ') +')'
