@@ -52,23 +52,26 @@ theorem challenge (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.He
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops
   unfold host_wire.SemanticTranscript.challenge_reference_circle_point
-  apply PV_RunJoin_ResultPost41.bind
-  rintro ⟨status,next⟩
-  dsimp only [Aeneas.Std.uncurry]
-  cases status with
-  | Err e => trivial
-  | Ok block =>
-    simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-    split <;> (obtain ⟨p,hp,hx,hy⟩ := complete base heap box ops block _
-               rw [hp]
-               exact ⟨hx,hy⟩)
+  split
+  all_goals first
+  | trivial
+  | (apply PV_RunJoin_ResultPost41.bind
+     rintro ⟨status,next⟩
+     dsimp only [Aeneas.Std.uncurry]
+     cases status with
+     | Err e => trivial
+     | Ok block =>
+       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+       obtain ⟨p,hp,hx,hy⟩ := complete base heap box ops block _
+       rw [hp]
+       exact ⟨hx,hy⟩)
 
 theorem data (base : ExternalTypes) (heap : PV_RunJoin_WeightInstalled46.Heap)
     (box : PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base))
     (p : PV_RunJoin_NativeActual62.P base heap box ops) :
     letI : ExternalTypes := types base
     letI : ExternalFuns := opsNative base heap box ops
-    (∀ i,i<10 → Canonical (PV_RunJoin_ActualRun.data p.val).p i) ∧
+    (∀ i,i<10 → Canonical ((PV_RunJoin_ActualRun.data p.val).p i)) ∧
       Canonical (PV_RunJoin_ActualRun.data p.val).x0 ∧
       Canonical (PV_RunJoin_ActualRun.data p.val).y0 ∧
       Canonical (PV_RunJoin_ActualRun.data p.val).x1 ∧
