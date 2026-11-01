@@ -64,6 +64,12 @@ def signature(label):
   parts.append(typ[last:].strip());ret=parts.pop();assert ret.startswith('Result '),ret
   h+=''.join(' (arg'+str(i)+' : '+v+')' for i,v in enumerate(parts))
   return h.strip(),ret[7:].strip(),binder_names(h),op+'_OPEN'
+ if label=='core.array.equality.PartialEqArray.ne':
+  return '{T : Type} {N : Usize} (inst : core.cmp.PartialEq T T) (a b : Array T N)','Bool',['inst','a','b'],'arrayNe_OPEN'
+ if label=='hash':
+  return '(hash : Slice (Slice U8) → Result (Array U8 32#usize)) (s : Slice (Slice U8))','(Array U8 32#usize)',['hash','s'],'hash_OPEN'
+ if label=='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»':
+  return '{T0 : Type} (state_only_hidingStateOnlyMaskNonceStoreInst : aspis_prover.state_only_hiding.StateOnlyMaskNonceStore T0) (store : T0) (digest nonce : Array U8 32#usize)','(Bool × T0)',['state_only_hidingStateOnlyMaskNonceStoreInst','store','digest','nonce'],'reserve_OPEN'
  if label=='alloc.vec.from_elem':
   return '{T : Type} (inst : core.clone.Clone T) (value : T) (count : Usize)','alloc.vec.Vec T',['inst','value','count'],'fromElem_OPEN'
  try:
@@ -88,11 +94,11 @@ variable [ExternalTypes] [ExternalFuns]
 neither a complete native event trace nor any successful run witness. -/
 structure Callees where
 '''
-for label,(h,r,ex,field) in spec.items():out+='  '+field+' : '+('∀ '+h+', ' if h else '')+'P '+r+'\n'
+for label,(h,r,ex,field) in spec.items():out+='  '+field+' : '+('∀ '+h+', ' if h else '')+'P ('+r+')\n'
 out+='\nstructure Compatible (c : Callees) : Prop where\n'
 for label,(h,r,ex,field) in spec.items():
  app=' '.join(ex)
- out+='  '+field.replace('_OPEN','_fixed')+' : '+('∀ '+h+', ' if h else '')+'FinishedView (c.'+field+(' '+app if app else '')+') ('+label+(' '+app if app else '')+')\n'
+ out+='  '+field.replace('_OPEN','_fixed')+' : '+('∀ '+h+', ' if h else '')+'FinishedView (c.'+field+(' '+app if app else '')+') ('+label+(' '+' '.join(ex[1:]) if label in ['hash','state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»'] else (' '+app if app else ''))+')\n'
 
 def emit(x,n=2,world=False):
  pad=' '*n
@@ -105,7 +111,7 @@ def emit(x,n=2,world=False):
  if x.kind=='pure':return pad+('pure ' if world else 'Result.ok ')+x.expr.replace('\n','\n'+pad+'  ')
  exp=x.expr;label=exp.split()[0]
  if not world:return pad+exp.replace('\n','\n'+pad+'  ')
- if label in spec:return pad+('c.'+spec[label][3]+exp[len(label):]).replace('\n','\n'+pad+'  ')
+ if label in spec:return pad+('c.'+spec[label][3]+(' hash' if label=='hash' else ' state_only_hidingStateOnlyMaskNonceStoreInst' if label=='state_only_hidingStateOnlyMaskNonceStoreInst.«reserve»' else '')+exp[len(label):]).replace('\n','\n'+pad+'  ')
  return pad+'PV_EVH_Prefix.lift ('+exp.replace('\n','\n'+pad+'  ')+')'
 
 def proof(x,n=2):

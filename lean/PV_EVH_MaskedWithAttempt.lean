@@ -15,39 +15,39 @@ structure Callees where
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (precommit_binding : Array Std.U8 32#usize)
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
-  (nonce_store : T0), P ((core.result.Result
+  (nonce_store : T0), P (((core.result.Result
     (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
     aspis_prover.state_only_hiding.StateOnlyMaskMaterial)
-    aspis_prover.state_only_hiding.StateOnlyMaskBuildError) × T0)
-  op231_OPEN : ∀ (arg0 : aspis_statement.state_only_trace.StateOnlyTraceFoundation), P aspis_statement.state_only_trace.StateOnlyTraceFoundation
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError) × T0))
+  op231_OPEN : ∀ (arg0 : aspis_statement.state_only_trace.StateOnlyTraceFoundation), P (aspis_statement.state_only_trace.StateOnlyTraceFoundation)
   apply_pool_v1_pair_forest_mask_material_v1_OPEN : ∀ (trace : aspis_statement.state_only_trace.StateOnlyTraceFoundation)
-  (material : aspis_prover.state_only_hiding.StateOnlyMaskMaterial), P ((core.result.Result
+  (material : aspis_prover.state_only_hiding.StateOnlyMaskMaterial), P (((core.result.Result
     aspis_prover.state_only_hiding.AppliedStateOnlyMasks
     aspis_prover.state_only_hiding.StateOnlyMaskBuildError) ×
-    aspis_statement.state_only_trace.StateOnlyTraceFoundation)
-  op134_OPEN : P (core.result.Result (Array Std.U16 64#usize) aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1)
+    aspis_statement.state_only_trace.StateOnlyTraceFoundation))
+  op134_OPEN : P ((core.result.Result (Array Std.U16 64#usize) aspis_statement.pool_v1.pair_tree_hiding.PoolV1PairHidingLayoutErrorV1))
   derive_pool_v1_pair_forest_zero_factor_d_OPEN : ∀ (self : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
-  (context : aspis_core.state_only_hiding.StateOnlyHidingContext), P (core.result.Result (alloc.vec.Vec aspis_core.field.QM31)
-    aspis_prover.state_only_hiding.StateOnlyMaskBuildError)
-  op36_OPEN : ∀ {T : Type} (A : Type) (N : Std.Usize) (arg0 : (alloc.vec.Vec T)), P (core.result.Result (Array T N) (alloc.vec.Vec T))
-  fixed_k_column_OPEN : ∀ (values : Slice aspis_core.field.QM31), P (Array aspis_core.field.QM31 1024#usize)
+  (context : aspis_core.state_only_hiding.StateOnlyHidingContext), P ((core.result.Result (alloc.vec.Vec aspis_core.field.QM31)
+    aspis_prover.state_only_hiding.StateOnlyMaskBuildError))
+  op36_OPEN : ∀ {T : Type} (A : Type) (N : Std.Usize) (arg0 : (alloc.vec.Vec T)), P ((core.result.Result (Array T N) (alloc.vec.Vec T)))
+  fixed_k_column_OPEN : ∀ (values : Slice aspis_core.field.QM31), P ((Array aspis_core.field.QM31 1024#usize))
   audit_masks_OPEN : ∀ (c1 : Slice (alloc.vec.Vec aspis_core.field.M31))
   (mask_only : Array (alloc.vec.Vec aspis_core.field.M31) 10#usize)
   (d : Array aspis_core.field.QM31 1024#usize)
   (g : Array aspis_core.field.QM31 1024#usize)
   (h1_padding : Array aspis_core.field.QM31 1024#usize)
-  (masks : Array Std.U16 64#usize), P prover.MaskedFixtureAudit
-  op82_OPEN : P Std.U8
+  (masks : Array Std.U16 64#usize), P (prover.MaskedFixtureAudit)
+  op82_OPEN : P (Std.U8)
   derive_private_salts_OPEN : ∀ (reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
-  (tag : Std.U8), P (core.result.Result host_commitment.PrivateSalts verifier.Error)
-  op83_OPEN : P Std.U8
-  new_OPEN : P (core.result.Result host_commitment.EncodingDomain
-    aspis_core.r0.Error)
-  op42_OPEN : P aspis_core.field.wide_exact.WideExact
-  fromElem_OPEN : ∀ {T : Type} (inst : core.clone.Clone T) (value : T) (count : Usize), P alloc.vec.Vec T
+  (tag : Std.U8), P ((core.result.Result host_commitment.PrivateSalts verifier.Error))
+  op83_OPEN : P (Std.U8)
+  new_OPEN : P ((core.result.Result host_commitment.EncodingDomain
+    aspis_core.r0.Error))
+  op42_OPEN : P (aspis_core.field.wide_exact.WideExact)
+  fromElem_OPEN : ∀ {T : Type} (inst : core.clone.Clone T) (value : T) (count : Usize), P (alloc.vec.Vec T)
   build_with_material_OPEN : ∀ {H : Type} {T1 : Type} (aspis_coredigestDigest32Inst :
   aspis_core.digest.Digest32 H) (CommitmentsInst : host_semantic.Commitments
   T1)
@@ -60,18 +60,18 @@ structure Callees where
   (d : Array aspis_core.field.QM31 1024#usize)
   (g : Array aspis_core.field.QM31 1024#usize)
   (h1_padding : Array aspis_core.field.QM31 1024#usize) (commitments : T1)
-  (hash : H) (variant : transport.Variant), P ((core.result.Result (host_semantic.BuiltSemantics H) r1_wire.Error)
-    × T1)
-  op230_OPEN : ∀ (arg0 : (Slice aspis_core.field.QM31)), P (Option aspis_core.field.QM31)
-  op64_OPEN : P aspis_core.field.QM31
-  op8_OPEN : ∀ {T : Type} (cmpPartialEqInst : core.cmp.PartialEq T T) (arg0 : (Option T)) (arg1 : (Option T)), P Bool
+  (hash : H) (variant : transport.Variant), P (((core.result.Result (host_semantic.BuiltSemantics H) r1_wire.Error)
+    × T1))
+  op230_OPEN : ∀ (arg0 : (Slice aspis_core.field.QM31)), P ((Option aspis_core.field.QM31))
+  op64_OPEN : P (aspis_core.field.QM31)
+  op8_OPEN : ∀ {T : Type} (cmpPartialEqInst : core.cmp.PartialEq T T) (arg0 : (Option T)) (arg1 : (Option T)), P (Bool)
   prove_from_semantics_OPEN : ∀ (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)
   (variant : transport.Variant)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (backend : prover.Backend)
   (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
   (salts : (aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets ×
-  aspis_core.state_only_hiding.StateOnlyHidingContext)), P (core.result.Result (alloc.vec.Vec Std.U8) verifier.Error)
+  aspis_core.state_only_hiding.StateOnlyHidingContext)), P ((core.result.Result (alloc.vec.Vec Std.U8) verifier.Error))
 
 structure Compatible (c : Callees) : Prop where
   reserve_and_build_pool_v1_pair_forest_mask_material_v1_fixed : ∀ {T0 : Type} (state_only_hidingStateOnlyMaskNonceStoreInst :
