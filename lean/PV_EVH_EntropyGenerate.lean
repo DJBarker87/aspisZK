@@ -25,8 +25,8 @@ theorem generate_fixed (fuel : Nat) (answers : EntropyAnswers)
     (same : ∀ n s, answers n s = getrandom.fill s)
     (nonce : Array U8 32#usize) :
     FinishedView (generate fuel answers nonce)
-      (Secrets.generate_for_mask_nonce nonce) := by
-  unfold generate Secrets.generate_for_mask_nonce
+      (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce nonce) := by
+  unfold generate aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce
   apply PV_EVH_Prefix.bind_fixed
   · exact PV_EVH_Prefix.lift_fixed _
   · intro b
