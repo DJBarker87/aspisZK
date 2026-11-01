@@ -234,7 +234,7 @@ theorem run_fixed
                                             simp only [condition,if_true]
                                             exact PV_EVH_Prefix.lift_fixed _
                                           · try dsimp only [a,bytes1,a1,a2,s2,to_slice_mut_back,a5,field_mask_entropy1,s5,to_slice_mut_back1,a7,leaf_salt_seed1] at condition
-                                            simp only [condition,if_false]
+                                            simp only [condition,Bool.false_eq_true,if_false]
                                             try dsimp only
                                             apply PV_EVH_Prefix.bind_fixed
                                             ·
@@ -242,7 +242,7 @@ theorem run_fixed
                                             · intro retry1
                                               exact PV_EVH_Prefix.lift_fixed _
                                     · try dsimp only [a,bytes1,a1,a2,s2,to_slice_mut_back,a5,field_mask_entropy1,s5,to_slice_mut_back1,a7,leaf_salt_seed1] at condition
-                                      simp only [condition,if_false]
+                                      simp only [condition,Bool.false_eq_true,if_false]
                                       try dsimp only
                                       apply PV_EVH_Prefix.bind_fixed
                                       ·
@@ -256,7 +256,7 @@ theorem run_fixed
                 exact PV_EVH_Prefix.lift_fixed _
               · intro r1
                 exact PV_EVH_Prefix.lift_fixed _
-  · simp only [condition,if_false]
+  · simp only [condition,Bool.false_eq_true,if_false]
     exact PV_EVH_Prefix.lift_fixed _
 
 #print axioms run_fixed
