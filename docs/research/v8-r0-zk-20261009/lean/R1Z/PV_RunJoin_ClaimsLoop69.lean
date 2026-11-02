@@ -9,7 +9,9 @@ variable [ExternalTypes] [ExternalFuns]
 abbrev Q := aspis_core.field.QM31
 
 /-- The evaluator obligation is on each column actually read by the source. -/
-theorem complete (columns : Array (alloc.vec.Vec Q) 29#usize)
+theorem complete
+    (some_ok : ∀ q : Q,core.option.Option.ok_or (some q) r1_wire.Error.Public=ok (.Ok q))
+    (columns : Array (alloc.vec.Vec Q) 29#usize)
     (point : Array Q 10#usize)
     (evaluates : ∀ (lane : Usize) (v : alloc.vec.Vec Q), lane.val<29 →
       Array.index_usize columns lane=ok v →
@@ -27,14 +29,14 @@ theorem complete (columns : Array (alloc.vec.Vec Q) 29#usize)
     have more : lane<29#usize := by change lane.val<29;omega
     obtain ⟨v,hv⟩ := ProverRwP6ArrayRead.read columns lane more
     obtain ⟨q,hq⟩ := evaluates lane v more hv
-    obtain ⟨next,hn,_⟩ := WP.spec_imp_exists (Array.update_spec claims lane q more)
+    obtain ⟨next,hn,_⟩ := WP.spec_imp_exists (Array.update_spec claims lane q (by simpa only [Array.length,claims.property] using more))
     have inc := PV_RunJoin_SamplerCounters54.increment lane (by change lane.val<32;omega)
     obtain ⟨out,ho⟩ := ih (Usize.wrapping_add lane 1#usize) next (by rw [inc];omega)
     refine ⟨out,?_⟩
     unfold host_semantic.claims_at_point_loop
     rw [ProverRw19LoopBind.loop_bind]
     simp only [host_semantic.claims_at_point_loop.body,more,if_true,hv,hq,
-      core.option.Option.ok_or,core.result.Result.Insts.CoreOpsTry.branch,
+      some_ok,core.result.Result.Insts.CoreOpsTry.branch,
       hn,lift,bind_tc_ok]
     exact ho
 
