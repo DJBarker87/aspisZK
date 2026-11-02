@@ -34,9 +34,9 @@ theorem v236 (base : ExternalTypes)
   exact PV_RDCD5_V236.op216_instance base ops uc less nz self input hp
 #print axioms v236
 
-theorem v197_finding :
+theorem v197_corrected :
     ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes
-      (⟨[],by simp⟩ : Slice U8) ≠ PV_RDCD4_BytesSource.qm [] :=
-  PV_RDCD5_ParserErrors.carrier_mismatch
-#print axioms v197_finding
+      (⟨[],by simp⟩ : Slice U8) = PV_RDCD4_BytesSource.qm [] :=
+  PV_RDCD5_ParserErrors.carrier_agreement _
+#print axioms v197_corrected
 end R1Z.PV_RDCD5_FocusedReplay

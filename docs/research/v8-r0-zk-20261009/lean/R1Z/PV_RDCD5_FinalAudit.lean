@@ -169,7 +169,7 @@ import R1Z.ProverRwSuccessParserSource
 #check @R1Z.PV_RDCD5_BufferSource.cursor_transport
 #check @R1Z.PV_RDCD5_BufferSource.finish_binding
 #check @R1Z.PV_RDCD5_BufferSource.source_instance
-#check @R1Z.PV_RDCD5_ParserErrors.carrier_mismatch
+#check @R1Z.PV_RDCD5_ParserErrors.carrier_agreement
 #check @R1Z.PV_RDCD5_ParserErrors.existing_empty
 #check @R1Z.PV_RDCD5_ParserErrors.owned_empty
 #check @R1Z.PV_RDCD5_ParserFlat.cm_window
@@ -292,7 +292,7 @@ import R1Z.ProverRwSuccessParserSource
 #print axioms R1Z.PV_RDCD5_BufferSource.cursor_transport
 #print axioms R1Z.PV_RDCD5_BufferSource.finish_binding
 #print axioms R1Z.PV_RDCD5_BufferSource.source_instance
-#print axioms R1Z.PV_RDCD5_ParserErrors.carrier_mismatch
+#print axioms R1Z.PV_RDCD5_ParserErrors.carrier_agreement
 #print axioms R1Z.PV_RDCD5_ParserErrors.existing_empty
 #print axioms R1Z.PV_RDCD5_ParserErrors.owned_empty
 #print axioms R1Z.PV_RDCD5_ParserFlat.cm_window
