@@ -27,7 +27,7 @@ theorem body_independent {α β σ : Type} (index1 add1 index2 add2 : Result Uni
       body index2 add2 length generate store s := by
   by_cases active : s.1.val < length.val
   · have safe := initializer_conditions s.1 length active
-    simp only [body,active,if_true,check_safe _ _ active,check_safe _ _ safe.2.1]
+    simp only [body,active,if_true,check,safe.2.1,if_true]
   · simp only [body,active,if_false]
 
 theorem loop_independent {α β σ : Type} (index1 add1 index2 add2 : Result Unit)
