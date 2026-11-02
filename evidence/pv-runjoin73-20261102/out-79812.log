@@ -1,0 +1,37 @@
+START 79812 R1Z.PV_RunJoin_FieldValidation73
+DONE 79812 R1Z.PV_RunJoin_FieldValidation73 exit 1 wall 1.77 RSS 4392722432
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_FieldValidation73.lean:29:2: error: 'change' tactic failed, pattern
+  (do
+      let b ←
+        do
+          let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
+          let z ← aspis_core.field.QM31.ZERO
+          core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 h z
+      if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row i)))
+        else ok (cont (i.wrapping_add 1#usize))) =
+    ?m.68
+is not definitionally equal to target
+  (do
+      let r ← ExternalFuns.op7 (some w) (r1_wire.Error.NonCanonical row i)
+      let cf ←
+        match r with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let q ← aspis_core.field.wide_exact.WideExact.impl.c1 val
+          let q1 ← aspis_core.field.QM31.ZERO
+          let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q q1
+          if b = true then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row i)))
+            else ok (cont (i.wrapping_add 1#usize))
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          let r1 ←
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame r1_wire.Error) residual
+          ok (done r1)) =
+    ok (cont (i.wrapping_add 1#usize))
+'R1Z.PV_RunJoin_FieldValidation73.Cells' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FieldValidation73.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FieldValidation73.stop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_FieldValidation73.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

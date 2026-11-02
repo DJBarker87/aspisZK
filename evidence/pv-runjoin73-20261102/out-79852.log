@@ -1,0 +1,44 @@
+START 79852 R1Z.PV_RunJoin_SliceImage73
+DONE 79852 R1Z.PV_RunJoin_SliceImage73 exit 1 wall 2.0 RSS 4374339584
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SliceImage73.lean:16:35: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 0
+  d ≥ 0
+  c ≥ 0
+  c - d ≤ -1
+  c - g ≥ 0
+  b ≥ 0
+  b - c ≥ 1
+  a ≥ 0
+  a - c ≥ 1
+  a - e ≤ 0
+where
+ a := ↑↑count
+ b := ↑(↑s).length
+ c := ↑k
+ d := ↑(↑(ProverCommitArray49.array count f).to_slice).length
+ e := ↑Usize.max
+ g := ↑2 ^ UScalarTy.Usize.numBits
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SliceImage73.lean:17:25: error: unsolved goals
+T : Type
+s : Slice T
+count : Usize
+f : ℕ → T
+size : s.length = ↑count
+agrees : ∀ (i : Usize), ↑i < ↑count → s.index_usize i = ok (f ↑i)
+k : ℕ
+hk : k < (↑s).length
+hk' : k < (↑(ProverCommitArray49.array count f).to_slice).length
+bound : k < ↑count
+max : ↑count ≤ Usize.max
+i : UScalar UScalarTy.Usize := Usize.ofNatCore k ⋯
+⊢ ↑(Usize.ofNatCore k ⋯) = k
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SliceImage73.lean:17:41: warning: This simp argument is unused:
+  UScalar.ofNatCore_val_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [i,̵U̵S̵c̵a̵l̵a̵r̵.̵o̵f̵N̵a̵t̵C̵o̵r̵e̵_̵v̵a̵l̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_SliceImage73.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

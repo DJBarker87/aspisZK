@@ -1,0 +1,87 @@
+START 79823 R1Z.PV_RunJoin_RecordParser73
+DONE 79823 R1Z.PV_RunJoin_RecordParser73 exit 1 wall 1.85 RSS 4410912768
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RecordParser73.lean:52:48: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+row : U8
+s : Slice U8
+⊢ (do
+      let o ← r1_wire.row_shape row
+      let r ← core.option.Option.ok_or o r1_wire.Error.InvalidRow
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          let (tag, size) := val
+          if (s.len != Usize.wrapping_add 5#usize size) = true then
+            ok (core.result.Result.Err (r1_wire.Error.Length row))
+          else do
+            let i2 ← s.index_usize 0#usize
+            if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+              else do
+                let i3 ← s.index_usize 1#usize
+                let i4 ← s.index_usize 2#usize
+                let i5 ← s.index_usize 3#usize
+                let i6 ← s.index_usize 4#usize
+                if
+                      (UScalar.cast UScalarTy.Usize
+                            (core.num.U32.from_le_bytes (Array.make 4#usize [i3, i4, i5, i6] ⋯)) !=
+                          size) =
+                        true then
+                    ok (core.result.Result.Err (r1_wire.Error.Length row))
+                  else do
+                    let payload ←
+                      core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) s
+                          { start := 5#usize }
+                    if row ≥ 14#u8 then do
+                        let r1 ← host_wire.validate_record_fields row payload
+                        let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                        match cf1 with
+                          | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                          | core.ops.control_flow.ControlFlow.Break residual =>
+                            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              (Slice U8) (core.convert.FromSame r1_wire.Error) residual
+                      else ok (core.result.Result.Ok payload)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let o ← r1_wire.row_shape row
+    let r ← core.option.Option.ok_or o r1_wire.Error.InvalidRow
+    let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+    match cf with
+      | core.ops.control_flow.ControlFlow.Continue val =>
+        let (tag, size) := val
+        if (s.len != Usize.wrapping_add 5#usize size) = true then ok (core.result.Result.Err (r1_wire.Error.Length row))
+        else do
+          let i2 ← s.index_usize 0#usize
+          if (i2 != tag) = true then ok (core.result.Result.Err (r1_wire.Error.Tag row))
+            else do
+              let x ← s.index_usize 1#usize
+              let x_1 ← s.index_usize 2#usize
+              let x_2 ← s.index_usize 3#usize
+              let x_3 ← s.index_usize 4#usize
+              if
+                    (UScalar.cast UScalarTy.Usize
+                          (core.num.U32.from_le_bytes (Array.make 4#usize [x, x_1, x_2, x_3] ⋯)) !=
+                        size) =
+                      true then
+                  ok (core.result.Result.Err (r1_wire.Error.Length row))
+                else do
+                  let payload ←
+                    core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8) s
+                        { start := 5#usize }
+                  if row ≥ 14#u8 then do
+                      let r1 ← host_wire.validate_record_fields row payload
+                      let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r1
+                      match cf1 with
+                        | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok payload)
+                        | core.ops.control_flow.ControlFlow.Break residual =>
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+                            (core.convert.FromSame r1_wire.Error) residual
+                    else ok (core.result.Result.Ok payload)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual (Slice U8)
+          (core.convert.FromSame r1_wire.Error) residual
+'R1Z.PV_RunJoin_RecordParser73.parse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RecordParser73.source' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
