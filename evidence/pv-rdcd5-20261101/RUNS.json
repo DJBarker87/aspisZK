@@ -3,7 +3,7 @@
     "lean": 41,
     "lean_pass": 37,
     "lean_fail": 4,
-    "native": 2,
+    "native": 3,
     "kani": 0
   },
   "receipts": [
@@ -45,6 +45,45 @@
         "TasksMax": 64
       },
       "receipt_path": "external-preflight/receipt.json"
+    },
+    {
+      "target": [
+        "systemd-run",
+        "--user",
+        "--scope",
+        "-q",
+        "-p",
+        "MemoryHigh=6G",
+        "-p",
+        "MemoryMax=8G",
+        "-p",
+        "MemorySwapMax=0",
+        "-p",
+        "TasksMax=64",
+        "python3",
+        "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+        "/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/final-coherence/admission-barrier.json",
+        "/usr/bin/time",
+        "-v",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/final-coherence/time.log",
+        "python3",
+        "/home/dombarker/project-offloads/codex-pv-rdcd5-20261101/coherence.py"
+      ],
+      "exit": 0,
+      "wall": "0:01.76",
+      "peak_rss_kib": "45684",
+      "swap": "0",
+      "source_revision": "c3de9847e1627ac6c0402cf81f871f23808ef54e",
+      "expected_phase": "Native",
+      "axioms": "N/A native configuration/body audit",
+      "limits": {
+        "MemoryHigh": "6G",
+        "MemoryMax": "8G",
+        "MemorySwapMax": 0,
+        "TasksMax": 64
+      },
+      "receipt_path": "final-coherence/receipt.json"
     },
     {
       "target": [
