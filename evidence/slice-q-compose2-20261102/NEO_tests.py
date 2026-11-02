@@ -10,7 +10,7 @@ class Gates(unittest.TestCase):
   with patch.object(v,'peer_inputs',return_value=self.data):
    return v.compose(self.base if base is None else base,self.peer if peer is None else peer,self.edges if edges is None else edges)
  def test_positive(self):
-  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(96,74,108));self.assertEqual(set(d['roots'].values()),{'OPEN'})
+  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(114,92,114));self.assertEqual(set(d['roots'].values()),{'OPEN'})
  def test_baseline_suspension_cannot_be_cleared(self):
   b=copy.deepcopy(self.base);next(c for c in b['NEN_credits'] if c['k3_status']=='SUSPENDED')['k3_status']='UNAFFECTED'
   with self.assertRaises(ValueError):self.run_case(base=b)
@@ -44,6 +44,15 @@ class Gates(unittest.TestCase):
   with self.assertRaises(ValueError):self.run_case(peer=p)
  def test_edge_inventory_retained(self):
   e=copy.deepcopy(self.edges);e['edges'].pop()
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_q_raw_domain(self):
+  e=copy.deepcopy(self.edges);next(iter(e['NEO_q_row_certificates'].values()))['domain']='canonical inputs only'
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_q_missing_call(self):
+  e=copy.deepcopy(self.edges);next(c for c in e['NEO_q_row_certificates'].values() if c['calls'])['calls'].clear()
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_q_wrong_native_pair(self):
+  e=copy.deepcopy(self.edges);next(iter(e['NEO_q_row_certificates'].values()))['native_pair'][0]='NBQ_K005'
   with self.assertRaises(ValueError):self.run_case(edges=e)
  def mutate_parser(self,change):
   e=copy.deepcopy(self.edges);p=e['NEO_parser_row_certificates']['TX1:015'];change(p)

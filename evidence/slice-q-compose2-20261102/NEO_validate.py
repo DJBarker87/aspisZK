@@ -7,7 +7,7 @@ its own unchanged NEB/NEI gate replay and complete committed input corpus.
 No historical suspension is cleared and no missing certificate earns credit.
 """
 from pathlib import Path
-import sys,json,hashlib,copy,lzma,re,subprocess
+import sys,json,hashlib,copy,lzma,re,subprocess,base64
 sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent;N=R/'evidence/ledger4-20261102'
 sys.path.insert(0,str(N))
@@ -16,8 +16,8 @@ sha=lambda data:hashlib.sha256(data).hexdigest()
 obj=lambda p:json.loads(Path(p).read_text())
 require=nen.require
 BASE_SHA='cedade116302fea804b3f223a8d889815ef41ebd6f0ea1d5234945fddb89c3ab'
-PEER_REV='66c32b92421564a57aa9b98547b3bafbbe88a304'
-PEER_ROWS={'TX1:107','TX1:110','TX2:073','TX2:076'}
+PEER_REV='1dbf5ad1511b14687a27a2e5043ed50a8515547c'
+PEER_ROWS={'TX2:123', 'TX1:194', 'TX1:192', 'TX1:049', 'TX1:110', 'TX1:107', 'TX1:195', 'TX2:101', 'TX2:076', 'TX1:177', 'TX2:120', 'TX2:073', 'TX2:032', 'TX2:125'}
 def baseline():
  raw=(N/'NEN_LEDGER.json').read_bytes();require(sha(raw)==BASE_SHA,'authoritative baseline changed')
  outputs=obj(N/'NEN_OUTPUTS.json')
@@ -49,10 +49,13 @@ def peer_inputs():
   raw=(E/chunk['path']).read_bytes();require(len(raw)<20*1024**2,'oversized archive')
   require(sha(raw)==chunk['sha256'],'peer archive drift')
   plain=lzma.decompress(raw);require(sha(plain)==chunk['uncompressed_sha256'],'peer decompression pin')
-  current=json.loads(plain);require(not set(data)&set(current),'duplicate peer input');data.update(current)
+  current=json.loads(plain);
+  if chunk.get('role')!='update':require(not set(data)&set(current),'duplicate peer input')
+  data.update(current)
+ for path in provenance.get('deleted_paths',[]):data.pop(path,None)
  require(set(data)==set(provenance['files']),'peer input inventory')
  for path,text in data.items():
-  raw=text.encode();require(sha(raw)==provenance['files'][path]['sha256'],'peer input hash: '+path)
+  raw=text.encode() if isinstance(text,str) else base64.b64decode(text['base64']);require(sha(raw)==provenance['files'][path]['sha256'],'peer input hash: '+path)
   require(hashlib.sha1(b'blob '+str(len(raw)).encode()+b'\0'+raw).hexdigest()==tree[path][0],'peer input differs from committed Git blob')
  return data
 
@@ -63,7 +66,7 @@ def audit_peer(data,packet):
  require(obj(E/'NEO_PEER_POSITIVE.json')==packet,'peer assembly capsule drift')
  require(set(r['row'] for r in packet['rows'])==PEER_ROWS,'peer row scope')
  require(set(packet['delta']['composed_rows_closed'])==PEER_ROWS,'peer delta scope')
- require(len(packet['edges'])==1 and packet['delta']['edge_closed']==1,'peer edge scope')
+ require(len(packet['edges'])==4 and packet['delta']['edge_closed']==4,'peer edge scope')
  approved_rows={r['row']:r for r in json.loads(data['evidence/slice-q-mul2-20261101/NEI_DERIVED_LEDGER.json'])['rows'] if r['row'] in PEER_ROWS}
  require({r['row']:r for r in packet['rows']}==approved_rows,'unregistered peer row content')
  approved_edges=json.loads(data['evidence/slice-q-mul2-20261101/NEI_COMPOSE_EDGES.json'])
@@ -92,23 +95,35 @@ def audit_peer(data,packet):
   require(all(h['discharged_by'] for h in row['named_hypotheses']),'peer open hypothesis')
   require(all(o['status']=='CLOSED' and o['discharged_by'] for o in row['caller_domain_obligations']),'peer open call')
 
+def peer_support(data,function):
+ prefix='evidence/slice-q-mul2-20261101/'
+ packets=json.loads(data[prefix+'NEI_CTOR_PACKETS.json'])+json.loads(data[prefix+'NEI_GETTER_PACKETS.json'])
+ packets += [json.loads(data[prefix+f]) for f in ['NEI_ROW_PACKET.json','NEI_PUSH_PACKET.json','NEI_WIDE_CTOR_PACKET.json']]
+ p=next(p for p in packets if p['function']==function)
+ support=([p['native_pair'][0]] if 'native_pair' in p else [pair.split('/')[0] for pair in p['new_kani_credits']])
+ return [prefix+a+'/receipt.json' for a in support]
+
 def compose(base,peer,edges,parsers=None):
  require(sha(nen.encode(base).encode())==BASE_SHA,'unregistered baseline mutation')
  data=peer_inputs();audit_peer(data,peer)
  import NEO_certificates as own
  registered=own.expected(base,nen.q.check_receipt)
+ import NEO_q_certificates as qcert
+ qrows,qedges=qcert.expected(base,nen.q.check_receipt)
  if parsers is None:parsers=obj(E/'NEO_PARSER_CERTIFICATES.json')
  require(parsers==registered,'unregistered parser certificate')
  old=obj(R/'evidence/slice-q-compose-20261029/NEB_EDGES.json')
- require(set(edges)==set(old)|{'NEO_peer_row_certificates','NEO_baseline','NEO_parser_row_certificates'},'unexpected edge artifact keys')
+ require(set(edges)==set(old)|{'NEO_peer_row_certificates','NEO_baseline','NEO_parser_row_certificates','NEO_q_row_certificates'},'unexpected edge artifact keys')
  for key in set(old)-{'edges'}:require(edges[key]==old[key],'changed inherited edge artifact field: '+key)
  require(edges['NEO_peer_row_certificates']==peer['row_certificates'],'peer root certificate artifact drift')
  require(edges['NEO_parser_row_certificates']==parsers,'parser root certificate artifact drift')
+ require(edges['NEO_q_row_certificates']==qrows,'unregistered private-Q certificate')
  require(edges['NEO_baseline']=='NEN_LEDGER.json:'+BASE_SHA,'edge baseline pin drift')
  require(len(edges['edges'])==257 and {e['edge'] for e in edges['edges']}=={e['edge'] for e in old['edges']},'slice edge inventory drift')
  byedge={e['edge']:e for e in edges['edges']};new={e['edge']:e for e in peer['edges']}
  for original in old['edges']:
   expected=copy.deepcopy(new.get(original['edge'],original))
+  if original['edge'] in qedges:expected.update(qedges[original['edge']])
   parser_functions={p['function'] for p in parsers.values()}
   if expected['callee'] in parser_functions:
    require(expected['status']=='OPEN','new parser refresh shadows an inherited edge certificate')
@@ -123,14 +138,17 @@ def compose(base,peer,edges,parsers=None):
   # Preserve the NEN historical record and add the independently replayed row.
   historical=copy.deepcopy(oldrow)
   oldrow.clear();oldrow.update(copy.deepcopy(r))
-  support=['evidence/slice-q-mul2-20261101/NEI_K021/receipt.json']
-  if r['function'].endswith('::EbyKDot::new'):support.append('evidence/slice-q-mul2-20261101/NEI_K023/receipt.json')
+  support=peer_support(data,r['function'])
   credits={path:dict(receipt=path,k3_status='UNAFFECTED',k2_quarantined=False,reason='Unchanged NEI native-pair gate, rule16 static_declarations=[] and full context/copy controls revalidated') for path in support}
   require(not nen.support_gate(support,credits),'new peer support denied')
   oldrow.update(NEO_NEN_before=historical,NEO_peer_composed_certificate=r,active_support_receipts=support,k3_status='UNAFFECTED',NEO_native_credits=credits,NEO_disposition='Imported committed NEI constructor; unchanged gate replay; no old K-3/K-2 support restored')
   require(all(h['discharged_by'] for h in oldrow['named_hypotheses']),'new row retained an inner hypothesis')
   require(all(o['status']=='CLOSED' and o['discharged_by'] for o in oldrow['caller_domain_obligations']),'new row retained an open call')
  for key,cert in parsers.items():
+  if key in PEER_ROWS:
+   require(index[key]['function']==cert['function'],'overlapping peer/parser function differs')
+   index[key]['NEO_alternative_certificate']=cert
+   continue
   row=index[key];require(row['composed_status']=='OPEN' and row['function']==cert['function'],'parser row collision')
   historical=copy.deepcopy(row);identity=cert['id']
   row['NEO_NEN_before']=historical
@@ -146,9 +164,23 @@ def compose(base,peer,edges,parsers=None):
   row['NEO_certificate']=cert;row['NEO_native_credits']=support
   require(all(h['discharged_by'] for h in row['named_hypotheses']),'parser inner hypothesis retained')
   require(all(o['status']=='CLOSED' and o['discharged_by'] for o in row['caller_domain_obligations']),'parser call left open')
+ for key,cert in sorted(qrows.items(),key=lambda item:item[1]['function'].endswith('::checked_q')):
+  row=index[key];require(row['composed_status']=='OPEN','private-Q row collision')
+  for oid,call in cert['calls'].items():
+   callee=call['callee'];children=[r for r in out['rows'] if r['function']==callee]
+   # Leaf order is explicit below; checked_q comes after the two leaf roots.
+   require(children and all(r['composed_status']=='CLOSED' for r in children),'private-Q open callee')
+   require(row['function']+' -> '+callee in qedges,'private-Q missing real edge')
+  historical=copy.deepcopy(row);row['NEO_NEN_before']=historical
+  row.update(bridge_status='CLOSED-CONDITIONAL',composed_status='CLOSED',selected_claims=[cert['claim_id']],active_support_receipts=cert['active_support_receipts'],k3_status='UNAFFECTED',open_transitive_dependencies=[],NEN_rejections=[],NEO_certificate=cert,composed_reason='Full raw private-Q reference/Result/frame with three exact unrestricted callee-domain associations')
+  row['named_hypotheses']=[dict(name=cert['claim_id']+'.'+kind,statement=cert['domain'],discharged_by=cert['id']) for kind in ['PacketDomain','PhysicalInterpretation']]
+  for o in row['caller_domain_obligations']:
+   require(o['id'] in cert['calls'] or o['id'] in cert['external_obligations'],'private-Q missing occurrence')
+   o.update(status='CLOSED',discharged_by=cert['id']+':'+o['id'])
+  for o in row['inventory_domain_obligations']:o.update(status='CLOSED',discharged_by=cert['id'])
  require(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function'] in ROOTS),'root accidentally closed')
- delta=dict(schema='NEO-additive-NEN-v1',baseline_sha256=BASE_SHA,baseline_closed=88,newly_closed=sorted(PEER_ROWS|set(parsers)),new_count=len(PEER_ROWS|set(parsers)),total_closed=sum(r['composed_status']=='CLOSED' for r in out['rows']),q_closed=sum(r['composed_status']=='CLOSED' and r['function'] in Q for r in out['rows']),roots={r:'OPEN' for r in ROOTS},edge_closed=sum(e['status']=='CLOSED' for e in edges['edges']),edge_total=257,trust='P6/D188 semantic transport retained; reclassification, never removal',authoritative_input_unmodified=True)
- require(delta['total_closed']==96 and delta['q_closed']==74 and delta['edge_closed']==108,'unexpected additive counts')
+ delta=dict(schema='NEO-additive-NEN-v1',baseline_sha256=BASE_SHA,baseline_closed=88,newly_closed=sorted(PEER_ROWS|set(parsers)|set(qrows)),new_count=len(PEER_ROWS|set(parsers)|set(qrows)),total_closed=sum(r['composed_status']=='CLOSED' for r in out['rows']),q_closed=sum(r['composed_status']=='CLOSED' and r['function'] in Q for r in out['rows']),roots={r:'OPEN' for r in ROOTS},edge_closed=sum(e['status']=='CLOSED' for e in edges['edges']),edge_total=257,trust='P6/D188 semantic transport retained; reclassification, never removal',authoritative_input_unmodified=True)
+ require(delta['total_closed']==114 and delta['q_closed']==92 and delta['edge_closed']==114,'unexpected additive counts')
  return delta
 
 SLICES=obj(R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json')['slices']
