@@ -32,6 +32,16 @@ theorem increment_wrap (item end_ : Usize) (guard : item.val < end_.val) :
     UScalar.eq_of_val_eq (value.trans wrap.symm)
   exact same ▸ run
 
+/-- The generated numeral may carry a different elaboration of its bound
+proof; state the increment law through the scalar value before matching it. -/
+theorem increment_wrap_one (item end_ : Usize) (guard : item.val < end_.val)
+    (count : Usize) (one : count.val = 1) :
+    core.iter.range.StepUsize.forward_checked item count =
+      .ok (some (Usize.wrapping_add item 1#usize)) := by
+  have equal : count = 1#usize := UScalar.eq_of_val_eq one
+  subst count
+  exact increment_wrap item end_ guard
+
 /-- Complete Result equality to the unchanged extracted control. The only
 external expect_failed call is eliminated by a proved branch guard. -/
 theorem source_binding (r : Range Usize) (n : Usize) :
@@ -48,11 +58,15 @@ theorem source_binding (r : Range Usize) (n : Usize) :
       simp only [less_value,bind_tc_ok]
       by_cases guard : item.val < r.end.val
       · simp only [guard,decide_true,↓reduceIte]
-        simp only [clone_value,bind_tc_ok,increment_wrap item r.end guard]
+        simp only [clone_value,bind_tc_ok]
+        rw [increment_wrap_one item r.end guard]
+        · rfl
+        · rfl
       · simp only [guard,decide_false,Bool.false_eq_true,if_false,clone_value,bind_tc_ok]
 
 #print axioms clone_value
 #print axioms less_value
 #print axioms increment_wrap
+#print axioms increment_wrap_one
 #print axioms source_binding
 end PV_B3P_NthSource559227
