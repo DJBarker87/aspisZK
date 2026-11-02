@@ -1,0 +1,54 @@
+{
+  "positive": true,
+  "reference": {
+    "order": [
+      "mul(a,a)",
+      "mul(b,b)",
+      "add(reply0,reply1)",
+      "M31::inv(reply2)",
+      "mul(a,reply3)",
+      "neg(b)",
+      "mul(reply5,reply3)"
+    ],
+    "result": [
+      "reply4",
+      "reply6"
+    ],
+    "modifies": "only the local NEF_Log events and next; replies retained",
+    "fn_pointer_values": false
+  },
+  "mutation_tests": [
+    {
+      "name": "norm left",
+      "rejected": true,
+      "reason": "ordered source-to-log ANF"
+    },
+    {
+      "name": "callback argument",
+      "rejected": true,
+      "reason": "ordered source-to-log ANF"
+    },
+    {
+      "name": "conjugate",
+      "rejected": true,
+      "reason": "ordered source-to-log ANF"
+    },
+    {
+      "name": "final inverse reuse",
+      "rejected": true,
+      "reason": "ordered source-to-log ANF"
+    },
+    {
+      "name": "output carrier",
+      "rejected": true,
+      "reason": "ordered source-to-log ANF"
+    },
+    {
+      "name": "inverse tag",
+      "rejected": true,
+      "reason": "('operation tag identity', 'inv')"
+    }
+  ],
+  "query_tail": "mark(obs, Phase::Query(i));\n    Ok((a, pending))",
+  "unit_effects": "empty body: no Result/state/effect operation"
+}
