@@ -9,7 +9,7 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) (block : Array U8 32#usize) :
-    ∃ q, @sampler.qm31_sample (types base) (opsNative base heap box ops runtime world) block=ok q := by
+    ∃ q, @ProverRwFull.sampler.qm31_sample (types base) (opsNative base heap box ops runtime world) block=ok q := by
   obtain ⟨q,hq,hcanonical,hcoordinates⟩ := AspisR1.ExtractedQM31SamplerCorrect.sample_total block
   refine ⟨ProverRwFullSampler.fromSelected (ProverRwSamplerModel.fromOld q),?_⟩
   change (opsNative base heap box ops runtime world).op248 _=_
