@@ -20,7 +20,7 @@ fn main(){
 fn run()->Result<()>{
  let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;
  let q:Value=serde_json::from_str(&s).map_err(err)?;
- print_json(plan::run(&q)?);Ok(())
+ let rendered=render_json(&plan::run(&q)?);print_json(rendered);Ok(())
 }
 fn unhex(s:&str)->Vec<u8>{let mut out=Vec::new();let mut i=0;while i<s.len(){out.push(u8::from_str_radix(&s[i..i+2],16).unwrap());i+=2;}out}
 fn hex(b:&[u8])->String{let digits=b"0123456789abcdef";let mut out=Vec::with_capacity(2*b.len());let mut i=0;while i<b.len(){out.push(digits[(b[i]>>4u32) as usize]);out.push(digits[(b[i]&15) as usize]);i+=1;}String::from_utf8(out).unwrap()}
@@ -43,7 +43,12 @@ fn value_text(v:&Value)->Result<String>{match v.as_str(){Some(s)=>Ok(s.to_owned(
 
 // Extraction boundaries retain actual operands rather than erased fmt Arguments.
 fn wallet_fd_path(fd:i32)->String{format!("/proc/self/fd/{fd}")}
-fn print_json(value:Value){println!("{}",value);}
+fn render_json(value:&Value)->String{format!("{}",value)}
+fn print_json(mut text:String){
+ use std::io::Write;
+ text.push('\n');let mut output=std::io::stdout().lock();
+ if output.write_all(text.as_bytes()).is_err(){panic!("client output failed");}
+}
 fn json_string(value:String)->Value{Value::String(value)}
 fn json_array(value:Vec<Value>)->Value{Value::Array(value)}
 fn json_bool(value:bool)->Value{Value::Bool(value)}
