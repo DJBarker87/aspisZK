@@ -36,7 +36,9 @@ theorem requests (syscall : Nat → Nat → Array U8 64#usize → PV_EVH_World.W
   unfold PV_EVH_LinuxRawBounds.Suffix at h
   change c.address < modulus ∧ c.length < modulus ∧ c.address+c.length = sp+64 ∧
     (∀ i, i < c.length → c.address+i < sp+64 ∧ c.address+i < sp+96 ∧ c.address+i < sp+128)
-  unfold modulus at *
+  unfold modulus at hframe ⊢
+  refine ⟨by omega, by omega, h.2.2, ?_⟩
+  intro i hi
   omega
 
 #print axioms suffix_inputs
