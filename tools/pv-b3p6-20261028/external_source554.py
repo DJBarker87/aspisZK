@@ -45,14 +45,11 @@ for j in range(4):
 s+='\n#print axioms external_group_reference554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_ExternalGroup554227.lean',s)
 print('four symbolic raw rows and all four reconstructions emitted')
-# Global sums and final add keep source arithmetic trees. During the immutable
-# sum pass, repeated reads of each four column entries use the same snapshots.
-s='import PV_B3P_FromFnFour550227\nimport PV_B3P_P227_02\nimport PV_B3P_DigestCpsEq9227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head
-s+='''
-def external_sums_source554 (state : Array aspis_core.field.QM31 16#usize) :
-    Result (Array (Array U64 4#usize) 4#usize) := do
-'''
+# Each global column is an independent bounded continuation; never elaborate
+# the rejected 256-bind source definition again.
+s='import PV_B3P_FromFnFour550227\nimport PV_B3P_P227_02\nimport PV_B3P_DigestCpsEq9227\n'+head
 for col in range(4):
+ s+=f'\ndef external_sums_column{col}_554 {{α : Type}} (state : Array aspis_core.field.QM31 16#usize) (next : Array U64 4#usize → Result α) : Result α := do\n'
  for limb in range(4):
   for row in range(4):
    if limb==0:s+=f'  let q{col}_{row} ← Array.index_usize state {4*row+col}#usize\n'
@@ -60,10 +57,12 @@ for col in range(4):
    s+=f'  let b{col}_{limb}_{row} ← Array.index_usize a{col}_{limb}_{row} {limb}#usize\n'
    s+=f'  let c{col}_{limb}_{row} ← lift (core.convert.num.FromU64U32.from b{col}_{limb}_{row})\n'
    if row:s+=f'  let sum{col}_{limb}_{row} ← lift (U64.wrapping_add '+(f'c{col}_{limb}_0'if row==1 else f'sum{col}_{limb}_{row-1}')+f' c{col}_{limb}_{row})\n'
-s+='  .ok (Array.make 4#usize [\n'
-for col in range(4):s+='    Array.make 4#usize ['+','.join(f'sum{col}_{k}_3'for k in range(4))+'] (by simp only [List.length_cons,List.length_nil]; rfl)'+(','if col<3 else'')+'\n'
-s+='  ] (by simp only [List.length_cons,List.length_nil]; rfl))\n'
-s+='''
+ s+='  next (Array.make 4#usize ['+','.join(f'sum{col}_{k}_3'for k in range(4))+'] (by simp only [List.length_cons,List.length_nil]; rfl))\n'
+s+='\ndef external_sums_source554 (state : Array aspis_core.field.QM31 16#usize) : Result (Array (Array U64 4#usize) 4#usize) :=\n'
+for col in range(4):s+='  external_sums_column'+str(col)+'_554 state fun row'+str(col)+' =>\n'
+s+='  .ok (Array.make 4#usize [row0,row1,row2,row3] (by simp only [List.length_cons,List.length_nil]; rfl))\n\n#print axioms external_sums_source554\nend PV_B3P_Association554227\n'
+emit(L/'PV_B3P_ExternalSumsDefs554227.lean',s)
+s='import PV_B3P_ExternalSumsDefs554227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head+'''
 attribute [local irreducible] Aeneas.Std.bind Array.index_usize
   reference_poseidon.extension_limbs U64.wrapping_add core.convert.num.FromU64U32.from
 
@@ -74,13 +73,18 @@ theorem external_sums_reference554 (state : Array aspis_core.field.QM31 16#usize
 ref=(L/'PV_B3P_P227_02.lean').read_text().split('def reference_poseidon.global_sums227',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
 import re
 bs=[re.match(r'  let (\w+) ←',x)[1]for x in ref.splitlines()if re.match(r'  let (\w+) ←',x)]
+assert len(bs)==256
 indent='  '
-for j,b in enumerate(bs):
- if j%16==0:s+=indent+'as_aux_lemma =>\n';indent+='  '
- s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
-s+=indent+'rfl\n\n#print axioms external_sums_reference554\nend PV_B3P_Association554227\n'
+for col in range(4):
+ s+=indent+'as_aux_lemma =>\n';indent+='  '
+ s+=indent+f'unfold external_sums_column{col}_554\n'
+ if col==3:break
+ for j,b in enumerate(bs[col*64:(col+1)*64]):
+  if j and j%16==0:s+=indent+'as_aux_lemma =>\n';indent+='  '
+  s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
+s+=indent+'try rfl\n\n#print axioms external_sums_reference554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_ExternalSums554227.lean',s)
-print('global sums independently generated; bounded proof steps',len(bs))
+print('four bounded global sum continuations; rejected monolithic source retired')
 s='import PV_B3P_RawRowContinuation550227\nimport PV_B3P_P227_02\n'+head+'''
 def external_add_source554 (value : aspis_core.field.QM31) (sums : Limbs64_550) :
     Result aspis_core.field.QM31 := do

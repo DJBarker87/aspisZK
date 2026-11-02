@@ -1,0 +1,109 @@
+{
+  "functions": [
+    "expand",
+    "at_point"
+  ],
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "expand": {
+      "name": "expand",
+      "start": 62,
+      "end": 78,
+      "signature": "fn expand<const N: usize>(coordinates: &[QM31]) -> [QM31; N] ",
+      "body": "{\n        debug_assert_eq!(N, 1usize << coordinates.len());\n        let mut weights = [QM31::ZERO; N];\n        weights[0] = QM31::ONE;\n        let mut len = 1usize;\n        for coordinate in coordinates {\n            let prepared = PreparedQm31Multiplier::new(*coordinate);\n            for index in (0..len).rev() {\n                let parent = weights[index];\n                let right = prepared.mul(parent);\n                weights[2 * index] = parent.sub(right);\n                weights[2 * index + 1] = right;\n            }\n            len *= 2;\n        }\n        weights\n    }",
+      "context": [
+        "impl StateOnlyPoseidonSelectors "
+      ],
+      "macros": []
+    },
+    "statement_constructor": {
+      "name": "at_point",
+      "start": 80,
+      "end": 90,
+      "signature": "fn at_point(point: &[QM31; 10]) -> Self ",
+      "body": "{\n        let high = Self::expand::<64>(&point[..6]);\n        let block = high[..STATE_ONLY_POSEIDON_BLOCKS]\n            .iter()\n            .copied()\n            .fold(QM31::ZERO, QM31::add);\n        Self {\n            block,\n            local: Self::expand(&point[6..]),\n        }\n    }",
+      "context": [
+        "impl StateOnlyPoseidonSelectors "
+      ],
+      "macros": []
+    },
+    "statement_blocks": 49
+  },
+  "terminal_origin": {
+    "path": "crates/aspis-r1-cost-probe/src/host_terminal.rs",
+    "sha256": "fec5549637a0ce641d0db7689af0b0dbf2b00c076d41fecbd6c7937709578cb5",
+    "item": {
+      "name": "poseidon_selectors",
+      "start": 248,
+      "end": 253,
+      "signature": "fn poseidon_selectors(selectors: &Selectors) -> StateOnlyPoseidonSelectors ",
+      "body": "{\n    StateOnlyPoseidonSelectors {\n        block: sum_high(selectors, &[0..57]),\n        local: selectors.low,\n    }\n}",
+      "context": [],
+      "macros": []
+    },
+    "terminal_blocks": 57
+  },
+  "source_steps": [
+    {
+      "source": "release debug assertion",
+      "model": "removed",
+      "argument": "Profile has debug_assertions=false; no shift or comparison is reached. No equality N=2^len is silently assumed for arbitrary calls."
+    },
+    {
+      "source": "initial array and weights0 store",
+      "model": "expand_source554",
+      "argument": "Same ZERO repeat and ONE store, including initial out-of-bounds failure for capacity0. Actual callers use N64 and16."
+    },
+    {
+      "source": "coordinates slice iterator",
+      "model": "expand_coordinate_step554",
+      "argument": "At the actual checked slices point[..6] and point[6..], SliceIter current pointer corresponds to coordinate0..5 and6..9. Each next returns the immutable pointed QM31 before preparing it. Retain iterator exhaustion and no read past end. Generic point/start/count interpreter equality is unconditional; source association is claimed only for these two slices, not arbitrary malformed adapters."
+    },
+    {
+      "source": "checked slicing",
+      "model": "expand_point_slices15",
+      "argument": "point has length10; bounds0\u22646\u226410 hold for every raw point. The checked subslice panic branch is unreachable for these exact callers. The separate high[..49] check holds because high length64. No error-path correspondence is claimed for a different start/end or short slice."
+    },
+    {
+      "source": "reversed range0..len",
+      "model": "expand_reverse_step554 and range_next_back14",
+      "argument": "Range::next_back checks0<finish, decrements before returning index; next-back value/empty/decrement laws already compiled. Model finish startslen, declines by1, returns done at0. No reordering of two child writes or parent read."
+    },
+    {
+      "source": "two weights writes",
+      "model": "expand_reverse_step554",
+      "argument": "Parent read before prepared multiply/sub; even write then odd write, with independently computed twice expressions. Direct indexing retains each update; no mutable element loan continuation is dropped. expand_two_write_bounds15 and expand_reverse_frame15 cover actual stages; count6/4 and capacity64/16 ensure enough space. Compiler/Copy/drop lowering remains V370."
+    },
+    {
+      "source": "len*=2 and advance slice",
+      "model": "expand_coordinate_step554",
+      "argument": "Length doubles only after the full reverse loop; point coordinate advances once per slice element. Existing expand_total proves actual capacity and read bounds, avoiding kernel enumeration of weights."
+    },
+    {
+      "source": "statement constructor high49 then local",
+      "model": "statement_constructor49_source554",
+      "argument": "The actual Rust origin sums the49 prefix before local expansion. The comparison to constructor14 49 commutes only the pure total local expansion; existing expand_total supplies totality. No claim49=57."
+    },
+    {
+      "source": "terminal constructor both arrays then sum57",
+      "model": "terminal_constructor57_source554",
+      "argument": "Distinct Rust origin: host_copy_terminal::Selectors::at_point supplies high64/low16; host_terminal::poseidon_selectors sums0..57 and copies low. Uses source expansion plus previously associated native_poseidon_selectors15 and total source_sum interval."
+    },
+    {
+      "source": "sum iter/copied/fold",
+      "model": "source_sum_interval11",
+      "argument": "high[..49] is traversed from0 through48, Copy returns the QM31 value unchanged, fold startsZERO and calls QM31::add(acc,value) in exactly that order. Reuse range/sum source arguments; whole differing std-item catalogue remains separate."
+    }
+  ],
+  "source_domain": "all raw point[10] at the exact two slices; no field canonicality hypothesis",
+  "reference": "Existing E227_13 exact point-index reference; source-only49 constructor is independently associated to constructor14 49; terminal target is57",
+  "theorems": [
+    "PV_B3P_Association554227.expand_source_link554",
+    "PV_B3P_Association554227.statement_constructor49_reference554",
+    "PV_B3P_Association554227.terminal_constructor57_link554"
+  ],
+  "route": "Lean equality + own-1 structural",
+  "retained": "complete std, D188/native differential, matrix, callback, V370/D381/D386",
+  "status": "pending focused compiles; no credit yet"
+}
