@@ -23,7 +23,10 @@ theorem loop (column : Slice Q) (size : column.length=1024)
     have read : host_multilinear.sparse_weight_at weights i=ok pair := by
       simp only [host_multilinear.sparse_weight_at,Array.index_usize,Array.getElem?_Usize_eq,
         List.getElem?_eq_getElem inside]
-    have rowbound : pair.1.val<column.val.length := by rw [size];exact valid pair pairmem
+      rfl
+    have rowbound : pair.1.val<column.val.length := by
+      have sz : column.val.length=1024 := size
+      exact sz.symm ▸ valid pair pairmem
     obtain ⟨q,hq,_⟩ := WP.spec_imp_exists (Slice.index_usize_spec column pair.1 rowbound)
     obtain ⟨product,hp⟩ := qmul pair.2 q
     obtain ⟨next,hn⟩ := qadd sum product
@@ -41,7 +44,7 @@ theorem complete (column : Slice Q) (point : Array Q 10#usize) (size : column.le
   obtain ⟨out,ho⟩ := loop column size weights hb hv weights.len.val 0#usize
     aspis_core.field.QM31.ZERO (by simp)
   have len : Slice.len column=1024#usize := by apply UScalar.eq_of_val_eq;exact size
-  exact ⟨out,by simp only [host_multilinear.multilinear_evaluate_qm31,len,bne_self_eq_false,if_false,hw,ho,bind_tc_ok]⟩
+  exact ⟨out,by simp only [host_multilinear.multilinear_evaluate_qm31,len,bne_self_eq_false,Bool.false_eq_true,if_false,hw,ho,bind_tc_ok]⟩
 
 #print axioms loop
 #print axioms complete
