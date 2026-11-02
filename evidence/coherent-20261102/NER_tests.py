@@ -59,6 +59,31 @@ for path in sorted(E.glob('NER_R*/receipt.json')):
  assert ad['allowed'] is True
  admissions=[json.loads(l) for l in (E/'NER_ATTEMPTS.jsonl').read_text().splitlines()]
  assert any(x['attempt']==a and x['event']=='admission' and x['exit']==0 for x in admissions)
+plan=json.loads((E/'NER_REBUILD_PLAN.json').read_text())
+assert plan['required_modules']==len(plan['modules'])==1387
+assert all(r['status']=='source_located' for r in plan['modules'])
+assert [r['module'] for r in plan['modules']]==scan['rebuild_order']
+outputs=json.loads((E/'NER_REBUILT_OBJECT_PINS.json').read_text())
+assert len(outputs)==5
+for r in outputs:
+ assert hashlib.sha256((E/(r['module']+'.lean')).read_bytes()).hexdigest()==r['source_sha256']
+ assert r['source_sha256']==next(p['source_sha256'] for p in plan['modules'] if p['module']==r['module'])
+for a in ['NER_R020','NER_R021','NER_R022','NER_R023','NER_R024']:
+ r=json.loads((E/a/'receipt.json').read_text());assert r['exit_status']==0
+ assert r['print_axioms']
+ for item in r['deps_fingerprint']['selected_objects'].values():
+  for output in outputs:
+   if item['path']==output['path']:assert item['sha256']==output['sha256']
+axioms=json.loads((E/'NER_AXIOMS.json').read_text())
+assert axioms['final_agg16_runs']==0
+assert all(r['raw_complete'] is None and r['equal'] is None for r in axioms['roots'])
+assert len(axioms['focused'])==3
+for row in axioms['focused']:
+ assert row['raw_complete'] and row['equal']
+ assert row['walked_axioms']==row['collect_axioms']==['Classical.choice','Quot.sound','propext']
+ r=json.loads((E/row['receipt']).read_text());assert r['exit_status']==0
+ assert len((E/('NER_focused_'+{'AspisR1.JGx_SdkAfterValidationEq.source':'sdk','AspisR1.JFw_Validator.loop_valid':'validator','AspisR1.JFw_Record.success':'record'}[row['root']]+'_REACHABLE.txt')).read_text().splitlines())==row['reachable_constants']
+assert (E/'NER_Walker.lean').read_bytes()==(REPO/'evidence/axaudit2-20261102/NEP_WALKER.lean').read_bytes()
 result=dict(valid=True,modules=len(rows),standard_table_mutation=True,body_removal_control=True,import_drift_detected=True,negative_validator_controls=3,ndr_object_pins=len(expected),dangling_modules=[r['module'] for r in rows if r['dangling']])
 (E/'NER_TEST_RESULTS.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result))
