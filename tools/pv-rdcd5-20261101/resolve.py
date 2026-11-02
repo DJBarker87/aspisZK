@@ -25,7 +25,8 @@ def go(m):
 roots=['R1Z.PV_RDCD5_ParserWindows','R1Z.PV_RDCD5_V197',
        'R1Z.PV_RDCD5_V233','R1Z.PV_RDCD5_BufferSource',
        'R1Z.PV_RDCD5_V236','R1Z.PV_RDCD5_ParserFlat',
-       'R1Z.ProverRwSuccessParserSource','R1Z.PV_DL_UpdateSelected']
+       'R1Z.ProverRwSuccessParserSource','R1Z.PV_DL_UpdateSelected',
+       'R1Z.PV_RDCD5_ParserErrors']
 for m in roots:go(m)
 checks={};conflicts=[]
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json',
