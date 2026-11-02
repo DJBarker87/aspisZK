@@ -1,0 +1,49 @@
+{
+  "status": "CONFIRMED: model is adopted linux_raw direct-syscall backend, not dlsym",
+  "evidence_class": "structural source/config association, not compiler or kernel preservation",
+  "adopted_build_receipt": {
+    "revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+    "path": "evidence/pv-c474b-20261029/client-build.json",
+    "sha256": "8f43e49cde723a9cd3007ca530091705806336c4bcba31f90e15253eb632ce60",
+    "receipt": {
+      "sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+      "bytes": 2281512,
+      "path": "/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/devnet_spend",
+      "recipe": "#!/bin/sh\n# Reviewed Linux client recipe; root-workspace SBF builds never invoke this.\nset -eu\ncd \"$(dirname \"$0\")\"\nunset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP\nexport RUSTFLAGS='--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4'\nexec cargo +1.94.1 build --profile client --locked --offline -j 4 \\\n  --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin devnet_spend\n",
+      "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+      "unit_graph_command": [
+        "cargo",
+        "+1.94.1",
+        "build",
+        "--profile",
+        "client",
+        "--locked",
+        "--offline",
+        "-j",
+        "4",
+        "--features",
+        "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+        "--bin",
+        "devnet_spend",
+        "-Z",
+        "unstable-options",
+        "--unit-graph"
+      ],
+      "bootstrap_scope": "graph-only; no bootstrap on production compilation",
+      "insecure_spend_fixture": false,
+      "ct_host_prover": true
+    }
+  },
+  "dependency_source_sha256": "2647e9492e46afdb1838c824094f6ab6e14fb4a82fa8274bea8dd2d4151f32dd",
+  "source_control_sha256": "d60b492405f12fa86e45c7c7afacba95009ee4bc1af0760b0d5f8cdb492810a8",
+  "correction": "da36d6aa is a client binary SHA-256 prefix, not a git revision. Inherited native-sources inventory uses later user_client recipe; exact adopted devnet_spend receipt checked separately here. Backend flags match.",
+  "retained": [
+    "V370 source/compiled preservation",
+    "actual raw syscall ABI/kernel memory footprint",
+    "native source-frame provenance",
+    "non-MSAN artifact selection",
+    "full native entry/L3"
+  ],
+  "trust_fields_added": [],
+  "rows_removed": []
+}
