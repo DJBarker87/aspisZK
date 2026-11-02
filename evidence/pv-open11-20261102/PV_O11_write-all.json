@@ -1,0 +1,42 @@
+{
+  "row": "V267",
+  "status": "OPEN",
+  "classification": "script-checked complete source dispatch census only, not an installed native op261 or a whole source/world proof",
+  "checks": {
+    "complete_default_loop": true,
+    "owned_file_uses_default_write_all": true,
+    "borrowed_file_uses_default_write_all": true,
+    "owned_write_delegates": true,
+    "borrowed_write_delegates": true,
+    "sys_file_write_delegates": true,
+    "fd_write_complete": true,
+    "writezero_static_message": true,
+    "interrupted_uses_packed_data": true,
+    "os_interrupted_is_errno_only": true,
+    "negative_bounded_retry_rejected": true,
+    "existing_model_has_explicit_prefix_cut": true
+  },
+  "ok": true,
+  "source_chain": [
+    "default std::io::Write::write_all on owned File",
+    "File::write -> (&*self).write",
+    "&File::write -> self.inner.write",
+    "sys::fs::File::write -> FileDesc::write",
+    "FileDesc::write -> libc::write(fd,ptr,min(len,READ_LIMIT)); cvt -> errno/Error association"
+  ],
+  "existing_consumer_signature": "  op261 : std.fs.File \u2192 Slice Std.U8 \u2192 Result ((core.result.Result Unit std.io.error.Error) \u00d7 std.fs.File)",
+  "exact_remaining_premise": "Instantiate that same op261 with complete Result/error/divergence and the returned File token in the same native post-world. Bind fd provenance/ownership, every libc write outcome and partial offset update, errno capture/cvt, OS Interrupted predicate, static WriteZero error, and all success/error/failure prefixes. Prove native count bounds (or retain the actual slice panic if not) rather than mapping contract violation to a new model error. Unbounded Interrupted traces need a completion/divergence relation; no finite fuel bound follows from the three public input lengths. Existing fuelled DIAG12 writeAll is a prefix model, not an exact native operation. V271, V370 and actual observer/world adequacy remain, without a new T field.",
+  "caller": "reserve_fallible writes RESERVATION_MAGIC, statement_digest, mask_nonce in that order, branches on each full Result, and syncs only after all writes succeed. Retain the existing Error/Drop/caller frame.",
+  "native_tools": "Direct extraction of the reached Error representation is already rejected by pinned ae1 (N90502). No unchanged translator failure was rerun. No bounded prefix is installed as the total op.",
+  "pins": {
+    "inputs/io/fd-unix.rs": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+    "inputs/io/fs-unix.rs": "bdd7dbe59f56df067504141fd6c04f46601f8eb7af39c672921eb2c7e4bc12df",
+    "inputs/io/mod.rs": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+    "inputs/io/ProverRwFullExternalFuns.lean.txt": "ba71e3be7eab2c4c59fe09d6f859ab323e74ca207b66fdf44b770382bfb8faf1",
+    "inputs/io/fs.rs": "b5737fd7f7733ba33166bb9a5cdb373778763acc633d50960ad01b447e57a647",
+    "inputs/io/PV_DIAG12_WriteAll.lean.txt": "7a1afccdffad3955aa1ec6b9d0636f421812eef0fcbfe16fba7e47a64edbdb5f"
+  },
+  "premises_removed": 0,
+  "premises_added": 0,
+  "premises_weakened": 0
+}

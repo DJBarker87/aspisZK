@@ -1,0 +1,34 @@
+// Finite source-identical diagnostic/profile fixture, not the complete client.
+#[path = "inputs/client/diagnostics.rs"] mod diagnostics;
+struct Marker;
+impl Drop for Marker { fn drop(&mut self) { eprintln!("PV_O11_DROP"); } }
+fn main() {
+    diagnostics::initialize();
+    match std::env::args().nth(1).as_deref() {
+        Some("success") => {
+            let _marker = Marker;
+            let s = String::with_capacity(69);
+            assert!(s.is_empty() && s.capacity() >= 69);
+        }
+        Some("overflow") => {
+            let _marker = Marker;
+            let _s = String::with_capacity(usize::MAX);
+            panic!("overflow unexpectedly returned");
+        }
+        Some("oom") => {
+            let _marker = Marker;
+            let layout = std::alloc::Layout::from_size_align(std::hint::black_box(1usize << 30), 1).unwrap();
+            let p = unsafe { std::alloc::alloc(layout) };
+            // A successful huge reservation would invalidate this finite check.
+            if !std::hint::black_box(p).is_null() { std::process::exit(23); }
+            std::process::exit(24);
+        }
+        Some("unwind-control") => {
+            let _ = std::panic::catch_unwind(|| {
+                let _marker = Marker;
+                let _s = String::with_capacity(usize::MAX);
+            });
+        }
+        _ => panic!("unknown fixture mode"),
+    }
+}

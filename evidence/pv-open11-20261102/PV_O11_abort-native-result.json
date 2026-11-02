@@ -1,0 +1,87 @@
+{
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "commands": [
+    [
+      "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Copt-level=3",
+      "-Cdebug-assertions=false",
+      "-Coverflow-checks=false",
+      "-Cpanic=abort",
+      "-Clink-arg=-Wl,--threads=4",
+      "/home/dombarker/project-offloads/codex-pv-open11-20261102/PV_O11_abort_native.rs",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-open11-20261102/PV_O11_abort_abort"
+    ],
+    [
+      "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/bin/rustc",
+      "--edition=2021",
+      "-Copt-level=3",
+      "-Cdebug-assertions=false",
+      "-Coverflow-checks=false",
+      "-Cpanic=unwind",
+      "-Clink-arg=-Wl,--threads=4",
+      "/home/dombarker/project-offloads/codex-pv-open11-20261102/PV_O11_abort_native.rs",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-open11-20261102/PV_O11_abort_unwind"
+    ]
+  ],
+  "binaries": {
+    "abort": {
+      "sha256": "bd4460f97519b282a1f0b0bad09866ce6657f823592b9b750118ee1cd37d3327",
+      "bytes": 3958184
+    },
+    "unwind": {
+      "sha256": "77372233cab8a908a1ff7662f81490ec76a2a386195efced7d466a280eae2744",
+      "bytes": 3965832
+    }
+  },
+  "source_sha256": "034114ee909b1192c3275f8f419f54ccf87479119b6c5257b291677cd630e1bc",
+  "diagnostics_sha256": "728cc3a4aaae37a89fdaad3e7cd89171d31fc91633e6e0e4ab8242de65b316af",
+  "results": [
+    {
+      "profile": "abort",
+      "mode": "success",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "PV_O11_DROP\n",
+      "expected_exit": 0,
+      "expected_stderr": "PV_O11_DROP\n",
+      "ok": true
+    },
+    {
+      "profile": "abort",
+      "mode": "overflow",
+      "exit": -6,
+      "stdout": "",
+      "stderr": "client panic\n",
+      "expected_exit": -6,
+      "expected_stderr": "client panic\n",
+      "ok": true
+    },
+    {
+      "profile": "abort",
+      "mode": "oom",
+      "exit": 23,
+      "stdout": "",
+      "stderr": "",
+      "expected_exit": -6,
+      "expected_stderr": "",
+      "ok": false
+    },
+    {
+      "profile": "unwind",
+      "mode": "unwind-control",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "client panic\nPV_O11_DROP\n",
+      "expected_exit": 0,
+      "expected_stderr": "client panic\nPV_O11_DROP\n",
+      "ok": true
+    }
+  ],
+  "ok": false,
+  "classification": "finite validation of adopted source-identical diagnostic module under deployed release settings; unwind is a deliberately different-profile control, no deployed credit for that profile; no whole-client or witness-independence claim",
+  "features": "standalone std fixture; exact client diagnostic module has no Cargo feature guards; native std 1.94.1, profile panic=abort,opt3,overflow_checks=false,debug_assertions=false; no project prover execution",
+  "expected_time": "optimized tiny fixture compilation and four bounded subprocesses, not proof generation or an arithmetic gate"
+}

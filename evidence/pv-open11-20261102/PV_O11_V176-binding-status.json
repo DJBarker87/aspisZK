@@ -1,0 +1,54 @@
+{
+  "row": "V176",
+  "status": "OPEN",
+  "resume_scopes": [
+    "N90503",
+    "N90504",
+    "90404",
+    "90405",
+    "90406",
+    "90407",
+    "90498"
+  ],
+  "bounded_effort": "7 new scopes; including inherited 8 getter scopes, conservatively 15 total. V176 bounded pass is ended; no further attempts without a new instruction.",
+  "reference_law": "PV_O11_BorrowedLaw.complete/frame; summary axioms empty. NEP_Driver importAll/private hard-error raw walk at 90498 resolves both roots completely (270/276 constants, 1564/1623 edges), walked axioms=[] and equal collectAxioms. Focused reference audit only, not a native/endpoint/release audit.",
+  "native_consumer": "R1Z.PDict_OwnedErrorTransport.reserve_transport",
+  "exact_remaining_premise": "For every valid deployed Error in its unchanged borrow/world frame, bind native Repr::data, packed tag decode, valid ErrorKind conversion, provenance-preserving pointer subtraction and both typed shared loads, and Linux errno decoding to the complete borrowed getter; then instantiate the existing hkind on native op3 and replace only op23. No such native carrier/load instance is constructed.",
+  "steps": [
+    {
+      "source": "inputs/std-error.rs",
+      "sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "source_step": "Error.repr field and four-arm Error::kind; Custom.payload never called or dropped",
+      "status": "source pinned and inspected; native carrier/load binding not discharged"
+    },
+    {
+      "source": "inputs/std-repr-bitpacked.rs",
+      "sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "source_step": "tag mask3; tag2 signed upper32 OS; tag3 upper32 ErrorKind checked conversion; tag0 static typed message shared load; tag1 wrapping_byte_sub(1), preserve provenance, shared Custom.kind load; invalid-simple bits and default arms remain unreachable only on valid native representation",
+      "status": "source pinned and inspected; native carrier/load binding not discharged"
+    },
+    {
+      "source": "inputs/std-unix-error.rs",
+      "sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+      "source_step": "all Linux errno branches including EACCES|EPERM, EAGAIN|EWOULDBLOCK and Uncategorized default",
+      "status": "source pinned and inspected; native carrier/load binding not discharged"
+    }
+  ],
+  "premises_removed": 0,
+  "premises_added": 0,
+  "premises_weakened": 0,
+  "source_to_reference_field_projection": {
+    "source": "borrowed/lib.rs",
+    "sha256": "e8e062ea96145e3b60c1f7083f38c2ff2e3e0d89ce14b3b1bf1bb0c7e2c29102",
+    "llbc_sha256": "3df42640b4c0c8e9733b8690ce9c68bd3dee31cb32b2babd5ce30069c897dceb",
+    "translation": "pinned ae1-2, unchanged tool; N90504",
+    "mutable_borrow_scan": "shared references only; no mutable borrow, backward restoration, iterator, slice/array write or dropped continuation in borrowed_kind; C/M retained in shared records",
+    "qualification": "OS decoder explicit osKind parameter, not instantiated; packed native Error is not Data merely because four constructors correspond"
+  },
+  "revision_label_correction": {
+    "attempt": "N90503",
+    "receipt_revision": "95c8cc2d5f18efe69c0439d8853ec64bb0d65497",
+    "actual_launch_head": "ce764e00a636e34292746534a42424aff03f57ba",
+    "reason": "Inherited host revision.txt was stale until immediately after N90503; source_sha256 identifies the exact dirty input. Original receipt retained unchanged."
+  }
+}

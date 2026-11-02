@@ -14,7 +14,9 @@ module=sys.argv[3] if len(sys.argv)>3 else 'PV_O11_KindView'
 source=D/(('lean/'+module+'.lean') if mode in ('lean','rawaudit') else 'extract/PV_O11_ErrorKind.llbc' if mode=='translate' else 'extract/lib.rs' if mode=='extract' else 'PV_O11_kind_native.rs')
 sha=hashlib.sha256(source.read_bytes()).hexdigest()
 for rec in D.glob('*/receipt.json'):
- old=json.loads(rec.read_text());assert not(old.get('exit')!=0 and old.get('source_sha256')==sha),'unchanged FAILED source guard'
+ old=json.loads(rec.read_text());status=rec.parent/'semantic-status.json'
+ rejected=status.exists() and json.loads(status.read_text()).get('accepted') is False
+ assert not((old.get('exit')!=0 or rejected) and old.get('source_sha256')==sha),'unchanged FAILED source guard'
 if mode in ('lean','rawaudit'):
  manifest=json.loads((D/'inputs/external-object-manifest.json').read_text());checks=[]
  for x in manifest:
