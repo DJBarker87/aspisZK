@@ -19,7 +19,7 @@ fn main(){
 }
 fn run()->Result<()>{
  let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;
- let q:Value=serde_json::from_str(&s).map_err(err)?;
+ let q:Value=parse_request(&s)?;
  let rendered=render_json(&plan::run(&q)?);print_json(rendered);Ok(())
 }
 fn unhex(s:&str)->Vec<u8>{let mut out=Vec::new();let mut i=0;while i<s.len(){out.push(u8::from_str_radix(&s[i..i+2],16).unwrap());i+=2;}out}
@@ -68,3 +68,6 @@ fn wallet_read_record(channel:&mut std::fs::File)->Result<[u8;wallet::WIDTH]>{
  let mut record=[0u8;wallet::WIDTH];channel.read_exact(&mut record).map_err(err)?;
  let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");Ok(record)
 }
+
+fn parse_request(text:&str)->Result<Value>{serde_json::from_str(text).map_err(err)}
+fn pubkey_text(value:solana_program::pubkey::Pubkey)->String{value.to_string()}

@@ -18,7 +18,7 @@ impl Accounts {
         for (i, value) in list.iter().enumerate() {
             let text = value.as_str().ok_or_else(|| anyhow!("proof account must be a string"))?;
             let key = Pubkey::from_str(text).map_err(err)?;
-            ensure!(key.to_string() == text && key != Pubkey::default(), "noncanonical/zero proof account");
+            ensure!(crate::pubkey_text(key) == text && key != Pubkey::default(), "noncanonical/zero proof account");
             ensure!(!keys[..i].contains(&key), "duplicate proof account");
             keys[i] = key;
         }
@@ -33,9 +33,9 @@ impl Accounts {
                        public: Pubkey, checkpoint: Pubkey) -> Result<Value> {
         ensure!(settlement.len() == 10, "unexpected settlement proof-account position");
         let (_, key) = self.selected(attempts)?;
-        let proof = crate::json_array(crate::triple(crate::json_string(key.to_string()),crate::json_bool(false),crate::json_bool(false)));
+        let proof = crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(key)),crate::json_bool(false),crate::json_bool(false)));
         settlement.push(proof.clone());
-        Ok(crate::json_array(crate::triple(proof,crate::json_array(crate::triple(crate::json_string(public.to_string()),crate::json_bool(false),crate::json_bool(false))),crate::json_array(crate::triple(crate::json_string(checkpoint.to_string()),crate::json_bool(false),crate::json_bool(true))))))
+        Ok(crate::json_array(crate::triple(proof,crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(public)),crate::json_bool(false),crate::json_bool(false))),crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(checkpoint)),crate::json_bool(false),crate::json_bool(true))))))
     }
     pub fn selected(&self, attempts: usize) -> Result<(usize, Pubkey)> {
         ensure!((1..=CAP).contains(&attempts), "invalid successful attempt count");
