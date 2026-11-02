@@ -2,6 +2,7 @@
 -- [pv_b3p6_reference227]: function definitions
 import Aeneas
 import PV_B3P_Std559Types227
+import PV_B3P_StringBound559227
 import PV_B3P_Std559External227
 open Aeneas Aeneas.Std Result ControlFlow Error
 set_option linter.dupNamespace false
@@ -44,7 +45,7 @@ def core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
       match self1 with
       | none =>
         let _ ←
-          PV_B3P_Std559Nth227.core.option.expect_failed (toStr "`Step` invariants not upheld" (by decide))
+          PV_B3P_Std559Nth227.core.option.expect_failed (toStr "`Step` invariants not upheld" PV_B3P_StringBound559227.step_message_bound)
         fail panic
       | some val => ok (o, { self with start := val })
     else

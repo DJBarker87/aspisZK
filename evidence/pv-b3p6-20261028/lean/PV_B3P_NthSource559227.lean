@@ -1,7 +1,7 @@
-import PV_B3P_NthGuard559227
+import PV_B3P_NthKernelGuard559227
 import PV_B3P_Std559KernelFuns227
 namespace PV_B3P_NthSource559227
-open Aeneas Aeneas.Std core.ops.range PV_B3P_NthGuard559227
+open Aeneas Aeneas.Std core.ops.range PV_B3P_NthKernelGuard559227
 set_option autoImplicit false
 /-- Source default spec_nth over Usize, with the guarded successor represented
 by wrapping_add. The safety proof below shows it cannot wrap. Exhaustion sets
@@ -49,8 +49,7 @@ theorem source_binding (r : Range Usize) (n : Usize) :
       by_cases guard : item.val < r.end.val
       · simp only [guard,decide_true,↓reduceIte]
         rw [clone_value,bind_tc_ok,increment_wrap item r.end guard,bind_tc_ok]
-      · simp only [guard,decide_false,↓reduceIte]
-        rw [clone_value,bind_tc_ok]
+      · simp only [guard,decide_false,Bool.false_eq_true,if_false,clone_value,bind_tc_ok]
 
 #print axioms clone_value
 #print axioms less_value
