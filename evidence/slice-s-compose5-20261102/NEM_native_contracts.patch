@@ -10,7 +10,7 @@
 +mod NEM_slice_contract;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NEM_slice_contract.rs
-@@ -0,0 +1,16 @@
+@@ -0,0 +1,37 @@
 +use super::*;
 +use crate::pool_v1::*;
 +use aspis_core::field::M31;
@@ -19,11 +19,32 @@
 +impl kani::Arbitrary for PoolV1PairLiveSnapshotErrorV1{fn any()->Self{any_error()}}
 +#[kani::requires(out.len()==800)]
 +#[kani::modifies(out)]
-+#[kani::ensures(|r| *r==if b{Ok(())}else{Err(PoolV1PairLiveSnapshotErrorV1::TreeFull)})]
-+fn weak(_s:&PoolV1PairLiveSnapshotV1,out:&mut[u8],b:bool)->Result<(),PoolV1PairLiveSnapshotErrorV1>{out[0]=42;if b{Ok(())}else{Err(PoolV1PairLiveSnapshotErrorV1::TreeFull)}}
++#[kani::ensures(|r| true)]
++fn weak(_s:&PoolV1PairLiveSnapshotV1,out:&mut[u8;800],b:bool)->Result<(),PoolV1PairLiveSnapshotErrorV1>{out[0]=42;if kani::any(){Ok(())}else{Err(any_error())}}
 +fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
 +fn snapshot()->PoolV1PairLiveSnapshotV1{PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}
 +#[kani::proof_for_contract(weak)]
 +fn support(){let s=snapshot();let mut out:[u8;800]=kani::any();let _=weak(&s,&mut out,kani::any());}
++fn any_after_error()->crate::pool_v1::PoolV1PairVerifierTransportErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongStatementVersion,4=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidTransitionKind,6=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongSuccessCode,7=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongPairFormat,8=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::ZeroRequiredBinding,9=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidProofBodyLength,10=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidStatementPayloadLength,11=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidLiveSnapshotPayloadLength,12=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalOutputPair,13=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex,_=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate} }
++
++fn afterstate()->PoolV1PairVerifiedAfterstateV1{PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}
++struct TailFrame<'a>{expected:&'a PoolV1PairLatePublicStatementV1,other:&'a PoolV1PairVerifiedAfterstateV1,after_reply:Result<[u8;688],PoolV1PairVerifierTransportErrorV1>,live:Result<(),PoolV1PairLiveSnapshotErrorV1>,calls:u8,j:usize,post:u8,offset:usize}
++fn child_after(s:&PoolV1PairVerifiedAfterstateV1,f:&mut TailFrame)->Result<[u8;688],PoolV1PairVerifierTransportErrorV1>{assert!(f.calls==1 && core::ptr::eq(s,&f.expected.candidate_afterstate),"actual candidate child after snapshot success");f.calls=2;f.after_reply}
++fn tail(s:&PoolV1PairLatePublicStatementV1,out:&mut[u8;1520],f:&mut TailFrame)->Result<(),PoolV1PairLatePublicStatementErrorV1>{
++ assert!(core::ptr::eq(&s.live_snapshot,&f.expected.live_snapshot));let base=out.as_mut_ptr();let window=&mut out[32..832];assert!(window.len()==800&&window.as_mut_ptr()==base.wrapping_add(32));
++ let array:&mut[u8;800]=window.try_into().unwrap();assert!(array.as_mut_ptr()==base.wrapping_add(32));let reply=weak(&s.live_snapshot,array,kani::any());f.live=reply;f.calls=1;f.post=out[f.j];
++ reply.map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error))?;
++ let bytes=child_after(&s.candidate_afterstate,f).map_err(|error| PoolV1PairLatePublicStatementErrorV1::Afterstate(error))?;
++ let dst=&mut out[832..];let src=&bytes;let mut i=f.offset;dst[i]=src[i]^1;i+=1;assert!(i==f.offset+1);
++ Ok(())
++}
 +#[kani::proof]
-+fn shape_control(){let s=snapshot();let mut out:[u8;800]=kani::any();let old=out[799];let _=weak(&s,&mut out,kani::any());assert!(out[799]==old,"unimplied full slice mutation frame");}
++#[kani::stub_verified(weak)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn tail_control(){let s=PoolV1PairLatePublicStatementV1{live_snapshot:snapshot(),candidate_afterstate:afterstate()};let other=afterstate();let mut output:[u8;1520]=kani::any();let j:usize=kani::any();kani::assume(j<1520);let offset:usize=kani::any();kani::assume(offset<688);let mut f=TailFrame{expected:&s,other:&other,after_reply:if kani::any(){Ok(kani::any())}else{Err(any_after_error())},live:Ok(()),calls:0,j,post:0,offset};
++ let actual=tail(&s,&mut output,&mut f);let expected=match f.live{Err(e)=>Err(PoolV1PairLatePublicStatementErrorV1::Snapshot(e)),Ok(())=>match f.after_reply{Err(e)=>Err(PoolV1PairLatePublicStatementErrorV1::Afterstate(e)),Ok(_)=>Ok(())}};
++ assert!(actual==expected && f.calls==if f.live.is_err(){1}else{2},"full native Result and child order");
++ let expected_byte=if f.live.is_ok()&&f.after_reply.is_ok()&&j==832+offset{match f.after_reply{Ok(bytes)=>bytes[offset],_=>0}}else{f.post};
++ assert!(output[j]==expected_byte,"same whole child poststate, exact suffix reply and complete prestate frame");
++}

@@ -1,0 +1,76 @@
+import NEM_LaneReached
+import NEM_SnapshotBorrow
+set_option autoImplicit false
+noncomputable section
+namespace NEM_LateOracle
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+open NBN_LateSummary (Statement)
+abbrev Live := NBH_LiveValidator.Snapshot → Slice U8 →
+  Result (core.result.Result Unit NBH_LiveValidator.Error × Slice U8)
+abbrev After := NBH_Validators.Afterstate →
+  Result (core.result.Result (Array U8 688#usize) NBH_Validators.AfterError)
+
+def tail (live : Live) (after : After) (s : Statement) (output : Slice U8) :
+    Result (core.result.Result Unit NBN_LateSummary.Error × Slice U8) := do
+  let i7 ← 32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+  let (child,back) ← core.slice.index.Slice.index_mut
+    (core.slice.index.SliceIndexRangeUsizeSlice U8) output {start := 32#usize, «end» := i7}
+  let (r,post) ← live s.live_snapshot child
+  match r with
+  | .Err e => ok (.Err (.Snapshot e),back post)
+  | .Ok _ =>
+    let r2 ← after s.candidate_afterstate
+    match r2 with
+    | .Err e => ok (.Err (.Afterstate e),back post)
+    | .Ok bytes =>
+      let (dest,back2) ← core.slice.index.Slice.index_mut
+        (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back post) {start := i7}
+      let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+      ok (.Ok (),back2 copied)
+
+def run (live : Live) (after : After) (s : Statement) (output : Slice U8) :
+    Result (core.result.Result Unit NBN_LateSummary.Error × Slice U8) :=
+  if output.length ≠ 1520 then ok (.Err .WrongLength,output)
+  else if U64.checked_add s.live_snapshot.next_pair_index 1#u64 ≠
+      some s.candidate_afterstate.next_pair_index then ok (.Err .AfterstateIndexMismatch,output)
+  else do
+    let filled ← core.slice.Slice.fill core.clone.CloneU8 output 0#u8
+    NBN_LatePrepare.run filled (tail live after s)
+
+theorem tail_substitution (s : Statement) (out : Slice U8) :
+    tail pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+      pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s out =
+      NBN_LateSummary.tail NED_ValidatorTrace.enc s out := by
+  unfold tail NBN_LateSummary.tail
+  simp only [← NED_SubtreeComposition.live_encode,← NED_SubtreeComposition.after_encode]
+
+theorem run_substitution (s : Statement) (out : Slice U8) :
+    run pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+      pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s out =
+      NBN_LateSummary.run NED_ValidatorTrace.enc s out := by
+  have same : tail pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+      pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s =
+      NBN_LateSummary.tail NED_ValidatorTrace.enc s := funext (tail_substitution s)
+  unfold run NBN_LateSummary.run
+  rw [same]
+
+def late : NEE_ValidatorMutation.Late :=
+  pool_v1.pair_tree_profile.encode_pool_v1_pair_late_public_statement_v1
+
+theorem value_and_frame (s : Statement) (out : Slice U8) :
+    run pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1
+      pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 s out = late s out :=
+  (run_substitution s out).trans (NED_SubtreeComposition.late_encode s out)
+
+theorem late_reached (s : NBN_StatementResult.Statement) (a : Statement) (out : Slice U8)
+    (_reached : NED_ValidatorTrace.Call.late a out ∈
+      (NEE_ValidatorOracle.run NEM_PaymentReached.pay NEM_LaneReached.lane late s).2) :
+    NEE_ValidatorMutation.ignore (late a out) =
+      NEE_ValidatorMutation.ignore (NBN_LateSummary.run NED_ValidatorTrace.enc a out) :=
+  congrArg NEE_ValidatorMutation.ignore (NED_SubtreeComposition.late_encode a out).symm
+
+#print axioms tail_substitution
+#print axioms run_substitution
+#print axioms value_and_frame
+#print axioms late_reached
+end NEM_LateOracle

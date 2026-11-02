@@ -87,6 +87,12 @@ def certificate(c,expected,ledger,reviewed):
  if not predecessor.predecessor.predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
  if not predecessor.predecessor.call_domain(c,expected,ledger):return False
  if 'digest_composition' in c:return digest(c,expected,ledger)
+ if 'validator_root' in c:
+  import NEM_root_checks
+  return NEM_root_checks.validate(c,expected,ledger,sys.modules[__name__])
+ if 'late_composition' in c:
+  import NEM_late_checks
+  return NEM_late_checks.validate(c,expected,ledger,sys.modules[__name__])
  if 'encoder_composition' in c:
   import NEM_encoder_checks
   return NEM_encoder_checks.validate(c,expected,ledger,sys.modules[__name__])

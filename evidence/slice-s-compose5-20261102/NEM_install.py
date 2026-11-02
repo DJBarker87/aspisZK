@@ -13,7 +13,7 @@ def install(f,field,q,theorems,native,domain,physical,derivation,skip=(),alterna
   c['call_domain_certificate']=dict(subject=key,frozen_revision=b['frozen_revision'],native_association_kind='native-loop' if field=='digest_composition' else 'ruling-y',domain_theorems=domain,physical_theorems=physical,selected_callee_claims=selected,inner_hypotheses_remaining=[],exact_callsite=derivation,canonical_carrier=True,same_arguments=True,same_prestate=True,same_result=True,same_ordered_effects=True,trust_classification='P6/D188 option A reclassification',new_trust_rows=[],native_frame_complete=True,inner_names_discharged=names)
   h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review[key]=h;p[group][key]=c
  claims=sorted({v for r in rows for v in r['selected_claims']})
- add('roots' if f in p['roots'] else 'members',f,'root-composition',[],claims)
+ add('roots' if f in p['roots'] or field=='validator_root' else 'members',f,'root-composition',[],claims)
  for name in sorted({h['name'] for r in rows for h in r['named_hypotheses']}):add('hypotheses',f+'::'+name,'hypothesis-discharge',[name],claims)
  for callee in sorted({g for r in rows for g in r['canonical_callees']}):
   if callee in skip:continue
