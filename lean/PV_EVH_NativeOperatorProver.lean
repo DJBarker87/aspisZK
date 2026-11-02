@@ -16,15 +16,14 @@ open PV_EVH_Entropy (EntropyAnswers)
 open PV_EVH_ProverSpine (Head HeadFixed)
 open PV_EVH_OpLeafInstall
 open R1Z.PV_RunJoin_NativeResidual62
-variable (base : ExternalTypes) (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
-  (box : R1Z.PV_RunJoin_WeightInstalled46.Box)
-local instance : ExternalTypes := types base
-variable (ops : @ExternalFuns (types base))
-local instance : ExternalFuns := opsNative base heap box ops
 
 /-- Source-spine composition only. Every remaining native leaf and its
 observation/allocator/formatting adequacy is OPEN; no success is asserted. -/
-def entry_OPEN {T : Type} (inst : AccountInst T)
+def entry_OPEN (base : ExternalTypes) (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
+    (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :=
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops
+  fun {T : Type} (inst : AccountInst T)
     (retryFuel entropyFuel nonzeroFuel saltFuel : Nat) (answers : EntropyAnswers)
     (entropy : PV_EVH_NonzeroInstall.Callees)
     (public1 : Public) (compiled : Compiled) (hash : Hash)
@@ -40,12 +39,16 @@ def entry_OPEN {T : Type} (inst : AccountInst T)
     (prepare : PV_EVH_OperatorInstall.PrepareOpening.Leaves) (finish : PV_EVH_FinishOpening.Callees)
     (publish : PV_EVH_OperatorInstall.PublishCompact.Leaves)
     (materialCallees : PV_EVH_OperatorInstall.MaterialFromEntropy.Leaves)
-    (frames : PV_EVH_OperatorFrames.Frames) : P Outcome :=
+    (frames : PV_EVH_OperatorFrames.Frames) =>
   PV_EVH_OpSaltsProver.entry_OPEN inst retryFuel entropyFuel nonzeroFuel saltFuel answers entropy
       public1 compiled hash store account account_OPEN h b r files fallibleCallees pathCallees
       nonceCallees PV_EVH_VariantGuard.guard (PV_EVH_OperatorInstall.ApplyMaterial.install applyCallees frames) buildCallees saltLeaves (PV_EVH_OperatorInstall.PrivateSaltStep.install saltStep frames) (PV_EVH_OperatorInstall.PrepareOpening.install prepare frames) finish (PV_EVH_OperatorInstall.PublishCompact.install publish frames) (PV_EVH_OperatorInstall.MaterialFromEntropy.install materialCallees frames) frames
 
-theorem entry_fixed {T : Type} (inst : AccountInst T)
+theorem entry_fixed (base : ExternalTypes) (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
+    (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops
+  ∀ {T : Type} (inst : AccountInst T)
     (retryFuel entropyFuel nonzeroFuel saltFuel : Nat) (answers : EntropyAnswers)
     (entropy : PV_EVH_NonzeroInstall.Callees)
     (public1 : Public) (compiled : Compiled) (hash : Hash)
@@ -78,12 +81,14 @@ theorem entry_fixed {T : Type} (inst : AccountInst T)
     (hfinish : PV_EVH_FinishOpening.Compatible finish)
     (hpublish : PV_EVH_OperatorInstall.PublishCompact.Compatible publish)
     (hmaterial : PV_EVH_OperatorInstall.MaterialFromEntropy.Compatible materialCallees)
-    (frame_fixed : PV_EVH_OperatorFrames.Compatible frames)
-    :
+    (frame_fixed : PV_EVH_OperatorFrames.Compatible frames), 
     FinishedView (entry_OPEN base heap box ops inst retryFuel entropyFuel nonzeroFuel saltFuel answers entropy
       public1 compiled hash store account account_OPEN h b r files fallibleCallees pathCallees
       nonceCallees applyCallees buildCallees saltLeaves saltStep prepare finish publish materialCallees frames)
       (RealR1_client.prove_for_proof_accounts inst public1 compiled hash store account) := by
+  letI : ExternalTypes := types base
+  letI : ExternalFuns := opsNative base heap box ops
+  intro T inst retryFuel entropyFuel nonzeroFuel saltFuel answers entropy public1 compiled hash store account account_OPEN h b r files fallibleCallees pathCallees nonceCallees applyCallees buildCallees saltLeaves saltStep prepare finish publish materialCallees frames he same account_fixed hh hb hr hf fallible_same path_same nonce_same ha hbuild hsaltLeaves hsaltStep hprepare hfinish hpublish hmaterial frame_fixed
   exact PV_EVH_OpSaltsProver.entry_fixed inst retryFuel entropyFuel nonzeroFuel saltFuel answers entropy
       public1 compiled hash store account account_OPEN h b r files fallibleCallees pathCallees
       nonceCallees PV_EVH_VariantGuard.guard (PV_EVH_OperatorInstall.ApplyMaterial.install applyCallees frames) buildCallees saltLeaves (PV_EVH_OperatorInstall.PrivateSaltStep.install saltStep frames) (PV_EVH_OperatorInstall.PrepareOpening.install prepare frames) finish (PV_EVH_OperatorInstall.PublishCompact.install publish frames) (PV_EVH_OperatorInstall.MaterialFromEntropy.install materialCallees frames) frames
