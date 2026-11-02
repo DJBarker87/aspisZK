@@ -1,0 +1,108 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeRawReceipt.lean:66:12: error(lean.unknownIdentifier): Unknown identifier `PV_EVH_NativeRawSpatial.error_with_request_frames`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeRawReceipt.lean:61:70: error: unsolved goals
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this : ExternalTypes := types (rawBase base)
+mask : Std.Array U8 32#usize
+limit retry : Usize
+owner address : ℕ
+kernel : ℕ → ℕ → Std.Array U8 64#usize → PV_EVH_World.World → PV_EVH_LinuxRawControl.Reply
+fuel : ℕ
+success : (Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)) → Slice U8 → Q Answer
+w : State
+e : ℤ
+hr : retry < limit
+hs : PV_EVH_StackAdmission.HeapSeparate (PV_EVH_EntropySourceSlot.original owner address w) w
+hl : PV_EVH_StackAdmission.LiveSeparate (PV_EVH_EntropySourceSlot.original owner address w) w
+hc : PV_EVH_StackAdmission.HeapCoherent w
+he :
+  (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+          (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                  (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).delivery.status =
+    PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e))
+⊢ ((PV_EVH_Runtime.sourceProjection
+            (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address fuel)
+                success w).outcome =
+          some
+            (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body mask limit
+              retry) ∧
+        Cleared (PV_EVH_EntropySourceSlot.original owner address w)
+            (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address fuel)
+                success w).state ∧
+          PV_EVH_LinuxRawCodes.ValidCode e ∧
+            PV_EVH_StackAdmission.HeapCoherent
+                (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                    (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address fuel)
+                    success w).state ∧
+              (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                          (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address
+                            fuel)
+                          success w).state.frame.live =
+                  w.frame.live ∧
+                (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                      (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address
+                        fuel)
+                      success w).events =
+                  (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+                          (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                                  (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).delivery.events ++
+                    PV_EVH_StackZero.emitted (PV_EVH_EntropySourceSlot.original owner address w)) ∧
+      ∀
+        c ∈
+          (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+              (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                      (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).calls,
+        ∀ i < c.length,
+          (∀ b ∈ w.frame.runtime.heap, ∀ j < List.length b.bytes, c.address + i ≠ b.address + j) ∧
+            ∀ old ∈ w.frame.live, ∀ j < old.initialized, c.address + i ≠ old.address + j) ∧
+    PV_EVH_LinuxRawThreaded.Threaded initial
+        (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base
+        (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+            (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                    (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).calls
+        (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+              (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                      (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).delivery.buffer
+        (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+              (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                      (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).delivery.world ∧
+      (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+              (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address fuel)
+              success w).events =
+          List.flatMap (fun c => c.after.events)
+              (PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel) address fuel 0 initial
+                  (PV_EVH_StackAdmission.enter (PV_EVH_EntropySourceSlot.original owner address w)
+                          (PV_EVH_StackEntropyFill.encode initial) w).frame.runtime.base).calls ++
+            PV_EVH_StackZero.emitted (PV_EVH_EntropySourceSlot.original owner address w) ∧
+        ∀ old ∈ w.frame.live,
+          ∀ i < old.initialized,
+            (run mask limit retry (PV_EVH_EntropySourceSlot.original owner address w)
+                      (PV_EVH_LinuxRawControl.driver (fun code => code) (PV_EVH_LinuxRawObserve.call kernel) address
+                        fuel)
+                      success w).state.memory
+                (old.address + i) =
+              w.memory (old.address + i)
+'PV_EVH_NativeRawReceipt.error_receipts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{
+  "attempt": 79555,
+  "target": "PV_EVH_NativeRawReceipt",
+  "source_revision": "56fa4aa0a62221cef7ade07b48315d929fcf5f87",
+  "source_path": "lean/PV_EVH_NativeRawReceipt.lean",
+  "source_git_blob": "e973ba9f3180bd99a5d01b28aff47ee949c85d59",
+  "source_sha256": "632c38431666ffad3c37d81ec08e2699c7d7ea809ea2e9418bb33264ac7de364",
+  "exit": "1",
+  "peak_rss_kbytes": "4411392",
+  "swaps": "0",
+  "wall": "0:04.34",
+  "axioms": [
+    "'PV_EVH_NativeRawReceipt.error_receipts' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "deps_fingerprint": "0da48775f3d5bab2a620c8f49f8e69e9df9403d1642f85ee5db73cce1a3ee0c2",
+  "accepted": false
+}

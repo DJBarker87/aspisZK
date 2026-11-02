@@ -1,0 +1,187 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:29:102: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.error` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.error`
+  [apply] `MessageType.error`
+  [apply] `EST.Out.error`
+  [apply] `EStateM.Result.error`
+  [apply] `Lean.Exception.error`
+  [apply] `Lean.MessageSeverity.error`
+  [apply] `Lean.Parser.error`
+  [apply] `Lean.TraceResult.error`
+  [apply] `Lean.Lsp.DiagnosticSeverity.error`
+  [apply] `Lean.Macro.Exception.error`
+  [apply] `Mathlib.Tactic.BehaviorIfUnchanged.error`
+  [apply] `Lean.Server.FileWorker.FileSetupResult.error`
+  [apply] `Std.Internal.Parsec.ParseResult.error`
+  [apply] `Lean.Meta.Tactic.TryThis.SuggestionStyle.error`
+  [apply] `Std.Http.Protocol.H1.Machine.error`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:31:89: error: unsolved goals
+driver : Driver
+fuel : ℕ
+head : UInt8
+tail : Bytes
+w : State
+h : (driver.write (head :: tail) w).outcome = Outcome.returned (Result.ok (Except.ok 0))
+⊢ {
+      outcome :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure (Except.error a)
+                      (driver.writeZero (driver.write (head :: tail) w).state).state).events }).outcome,
+      state :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure (Except.error a)
+                      (driver.writeZero (driver.write (head :: tail) w).state).state).events }).state,
+      events :=
+        (driver.write (head :: tail) w).events ++
+          (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e),
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              {
+                outcome :=
+                  (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+                state := (pure (Except.error a) (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+                events :=
+                  (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                    (pure (Except.error a)
+                        (driver.writeZero (driver.write (head :: tail) w).state).state).events }).events } =
+    {
+      outcome :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).outcome,
+      state :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).state,
+      events :=
+        (driver.write (head :: tail) w).events ++
+          (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e),
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+                state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+                events :=
+                  (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                    (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).events }
+'PV_EVH_LiteralWriteAll.error_dispatch' depends on axioms: [propext, Quot.sound]
+'PV_EVH_LiteralWriteAll.zero_dispatch' depends on axioms: [sorryAx]
+
+{
+  "attempt": 79561,
+  "target": "PV_EVH_LiteralWriteAll",
+  "source_revision": "9535c22a1c82c7e797ba82ee17d0c3dc3375bb77",
+  "source_path": "lean/PV_EVH_LiteralWriteAll.lean",
+  "source_git_blob": "080de6edc5ef95f23c3d166c503df23d65031343",
+  "source_sha256": "28ddd5ea62699b96a210dcdfb834f6d5de8b0f6e109d1ea35bce229468bd4e8a",
+  "exit": "1",
+  "peak_rss_kbytes": "2628812",
+  "swaps": "0",
+  "wall": "0:01.34",
+  "axioms": [
+    "'PV_EVH_LiteralWriteAll.error_dispatch' depends on axioms: [propext, Quot.sound]",
+    "'PV_EVH_LiteralWriteAll.zero_dispatch' depends on axioms: [sorryAx]"
+  ],
+  "deps_fingerprint": "5b7ebd446e4fd35dc14757e88ceb38626bdb4d498e537c03eef3c4fb5e7e423c",
+  "accepted": false
+}

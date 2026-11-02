@@ -1,0 +1,62 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:29:82: error: unsolved goals
+case zero
+E : Type
+write : Bytes → Q (Except E ℕ)
+dropError : E → Q Unit
+interrupted : E → Bool
+writeZero : E
+oversize : Q (Except E Unit)
+⊢ (if True then pure (Except.ok ()) else fun w => { outcome := Outcome.exhausted, state := w, events := [] }) =
+    pure (Except.ok ())
+
+case succ
+E : Type
+write : Bytes → Q (Except E ℕ)
+dropError : E → Q Unit
+interrupted : E → Bool
+writeZero : E
+oversize : Q (Except E Unit)
+n✝ : ℕ
+⊢ (if True then pure (Except.ok ())
+    else do
+      let r ← write []
+      match r with
+        | Except.ok n =>
+          if n = 0 then pure (Except.error writeZero)
+          else
+            if n ≤ [].length then run write dropError interrupted writeZero oversize n✝ (List.drop n []) else oversize
+        | Except.error e =>
+          if interrupted e = true then do
+            dropError e
+            run write dropError interrupted writeZero oversize n✝ []
+          else pure (Except.error e)) =
+    pure (Except.ok ())
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:30:32: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [run,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:40:41: error: unexpected identifier; expected ')', ',' or ':'
+'PV_EVH_LiteralWriteAll.empty' depends on axioms: [propext, sorryAx]
+'PV_EVH_LiteralWriteAll.interrupted_drop' depends on axioms: [sorryAx]
+
+{
+  "attempt": 79558,
+  "target": "PV_EVH_LiteralWriteAll",
+  "source_revision": "169cf3617ba8d5eb2d9dd9922060755c4290df08",
+  "source_path": "lean/PV_EVH_LiteralWriteAll.lean",
+  "source_git_blob": "77a9c9a640844e58db92b95c525910d6a6b07416",
+  "source_sha256": "ed54e2724bb44a4918ca2762d1f68f73ec2a0b6c6e946a076620e51552608d25",
+  "exit": "1",
+  "peak_rss_kbytes": "2629108",
+  "swaps": "0",
+  "wall": "0:01.62",
+  "axioms": [
+    "'PV_EVH_LiteralWriteAll.empty' depends on axioms: [propext, sorryAx]",
+    "'PV_EVH_LiteralWriteAll.interrupted_drop' depends on axioms: [sorryAx]"
+  ],
+  "deps_fingerprint": "c0cc085dac9ec23a70117a9bd83109c97046ec85edfa403e61d7653f00161a66",
+  "accepted": false
+}

@@ -1,0 +1,75 @@
+{
+  "evidence_class": "structural association of inspected std1.94.1 writer control to checked local models, not complete native diagnostics",
+  "sources": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/mod.rs",
+      "sha256": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+      "anchor": "fn write_all(&mut self, mut buf: &[u8])"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "anchor": "impl Write for StderrLock"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "anchor": "impl Write for StderrRaw"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "anchor": "impl Write for Stderr {"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/stdio/unix.rs",
+      "sha256": "c5b0a649c25c0db0bf85dcbe953f849fa14e5c64806e5991b5a4ccec8825b019",
+      "anchor": "impl io::Write for Stderr"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "anchor": "fn handle_ebadf"
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/io/stdio.rs",
+      "sha256": "83a4386e70e8d7127213c24854ffb985beac0efac8b8617275db0cc16babe040",
+      "anchor": "impl Write for &Stderr {"
+    }
+  ],
+  "laws": [
+    {
+      "module": "PV_EVH_ClientOverflow",
+      "source_sha256": "2d979f7cf81c12e22c62efc326cb71d450a584ae18f37d09cce7adb97a5b1a9c",
+      "attempt": 79557
+    },
+    {
+      "module": "PV_EVH_LiteralWriteAll",
+      "source_sha256": "d15f97b9b0c2c56bcc68c0edf894900463ee507043d598e8395f7e20edb6cf26",
+      "attempt": 79562
+    },
+    {
+      "module": "PV_EVH_StderrWrite",
+      "source_sha256": "1a8ac3bd8aaa4a6910c634e544b845fd6cce2821e1ca3dbdd9e0585cab85a3e1",
+      "attempt": 79564
+    }
+  ],
+  "control": [
+    "write_all empty/zero/partial/interrupted/error branches retain world and prefix",
+    "interrupted classification, error drop and WriteZero construction use the inherited stateful WriteAll.Driver",
+    "StderrRaw EBADF classification and error drop occur inside guard scope",
+    "ordinary error reaches caller after guard release; ignoreWrite then drops returned io::Error",
+    "no_success for capacity overflow; source-failure projections are explicitly retained"
+  ],
+  "retained": [
+    "actual libc/FileDesc write and signed return/errno association",
+    "ErrorKind/EBADF classification and full io::Error constructor/drop representation",
+    "stderr lock/RefCell acquire/release, reentrancy/borrow faults and scheduling",
+    "hook Box allocation, installation, environment/cache/backtrace disabled law and adopted abort profile",
+    "allocator metadata/ValidAnswer/RawVec/Global/System and exact actual WORLD selection",
+    "full extracted client/prover entry and callback installation; D520/U/D524 inputs",
+    "L3 joint observation and V370/V371"
+  ],
+  "trust_fields_added": [],
+  "rows_removed": []
+}

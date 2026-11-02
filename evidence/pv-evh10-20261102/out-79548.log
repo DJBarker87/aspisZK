@@ -1,0 +1,79 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:51:54: error: don't know how to synthesize placeholder for argument `w`
+context:
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address : ℕ
+hk : KernelFrame syscall address
+fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    offset ≤ 64 → Prefix (PV_EVH_LinuxRawControl.loop syscall address fuel offset a w).buffer a offset
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ho : offset ≤ 64
+hlocal : Prefix (syscall (address + offset) (64 - offset) a w).buffer a offset
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+hnonneg : 0 ≤ ret
+hnz : ¬ret = 0
+hfit : ret.toNat ≤ 64 - offset
+hmore : ¬offset + ret.toNat = 64
+⊢ World
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:51:52: error: don't know how to synthesize placeholder for argument `a`
+context:
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address : ℕ
+hk : KernelFrame syscall address
+fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    offset ≤ 64 → Prefix (PV_EVH_LinuxRawControl.loop syscall address fuel offset a w).buffer a offset
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ho : offset ≤ 64
+hlocal : Prefix (syscall (address + offset) (64 - offset) a w).buffer a offset
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+hnonneg : 0 ≤ ret
+hnz : ¬ret = 0
+hfit : ret.toNat ≤ 64 - offset
+hmore : ¬offset + ret.toNat = 64
+⊢ Std.Array U8 64#usize
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:51:21: error: failed to infer `have` declaration type
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:33:28: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:34:30: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:37:29: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:38:26: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawFrame.lean:40:19: warning: This simp argument is unused:
+  hr
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵h̵r̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_LinuxRawFrame.consumed_prefix' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

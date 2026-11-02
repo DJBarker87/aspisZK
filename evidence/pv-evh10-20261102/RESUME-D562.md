@@ -107,3 +107,19 @@ actual-family oraclePrefix/countTrace/nonce-store fileTrace links and (v-prime)
 reduction to successful ACTUAL worldRun at opsNative AND allocator world.
 D520/U/D524 inputs, NativeObstruction62/op132 and all deployment/privacy rows
 remain. No MODEL witness, extra trust item or blanket FinishedView shortcut.
+
+## Final accounting for this context checkpoint
+
+Charged79545–79564:20 attempts,12 accepted/8 failed. Cumulative83/100,
+55 accepted/28 failed. **17 REMAIN; NEXT FRESH79565.** Both audit triplets
+79397–79399 and79597–79599 untouched. No pending submitted/refused compile,
+no WIP Lean source; accepted bytes immutable. StderrWrite79563 failed because
+`scoped` is reserved Lean syntax; renamed withGuards,79564 passed. Every new
+accepted theorem prints only standard axioms (or none).
+
+New peak4,465,004KiB; slowest12.79s. Cumulative peak remains4,616,200KiB.
+All runs used retained cohort, same admission guard, one6G/8G/swap0/tasks64
+scope and Lean-M7000. No timeout/kill/swap/cap rise, native/Kani/new extraction,
+release replay, push/delegation, crates/programs/soundness edit, other-worktree
+write or keys/accounts/funds action. Native closure preflight remains required
+to FAIL. See validation.json/host-final.json for final read-only reconciliation.

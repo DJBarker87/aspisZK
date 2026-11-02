@@ -1,0 +1,265 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:21:13: error: Ambiguous term
+  loop
+Possible interpretations:
+  PV_EVH_WriteAll.loop : (driver : Driver) → ℕ → Bytes → Q (Except driver.Error Unit)
+  
+  Std.loop : (?m.65 → Result (ControlFlow ?m.65 ?m.66)) → ?m.65 → Result ?m.66
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:20:89: error: unsolved goals
+driver : Driver
+fuel : ℕ
+head : UInt8
+tail : Bytes
+w : State
+e : driver.Error
+h : (driver.write (head :: tail) w).outcome = Outcome.returned (Result.ok (Except.error e))
+⊢ PV_EVH_WriteAll.loop driver (fuel + 1) (head :: tail) w =
+    {
+      outcome :=
+        (match (driver.interrupted e (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e_1 =>
+            { outcome := Outcome.fault e_1, state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e_1) =>
+            { outcome := Outcome.returned (Result.fail e_1),
+              state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                ((if a = true then
+                      PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                        PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                    else pure (Except.error e))
+                    (driver.interrupted e (driver.write (head :: tail) w).state).state).outcome,
+              state :=
+                ((if a = true then
+                      PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                        PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                    else pure (Except.error e))
+                    (driver.interrupted e (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.interrupted e (driver.write (head :: tail) w).state).events ++
+                  ((if a = true then
+                        PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                          PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                      else pure (Except.error e))
+                      (driver.interrupted e (driver.write (head :: tail) w).state).state).events }).outcome,
+      state :=
+        (match (driver.interrupted e (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e_1 =>
+            { outcome := Outcome.fault e_1, state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e_1) =>
+            { outcome := Outcome.returned (Result.fail e_1),
+              state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+              events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                ((if a = true then
+                      PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                        PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                    else pure (Except.error e))
+                    (driver.interrupted e (driver.write (head :: tail) w).state).state).outcome,
+              state :=
+                ((if a = true then
+                      PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                        PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                    else pure (Except.error e))
+                    (driver.interrupted e (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.interrupted e (driver.write (head :: tail) w).state).events ++
+                  ((if a = true then
+                        PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                          PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                      else pure (Except.error e))
+                      (driver.interrupted e (driver.write (head :: tail) w).state).state).events }).state,
+      events :=
+        (driver.write (head :: tail) w).events ++
+          (match (driver.interrupted e (driver.write (head :: tail) w).state).outcome with
+            | Outcome.fault e_1 =>
+              { outcome := Outcome.fault e_1,
+                state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+                events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted,
+                state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+                events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.fail e_1) =>
+              { outcome := Outcome.returned (Result.fail e_1),
+                state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+                events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (driver.interrupted e (driver.write (head :: tail) w).state).state,
+                events := (driver.interrupted e (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              {
+                outcome :=
+                  ((if a = true then
+                        PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                          PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                      else pure (Except.error e))
+                      (driver.interrupted e (driver.write (head :: tail) w).state).state).outcome,
+                state :=
+                  ((if a = true then
+                        PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                          PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                      else pure (Except.error e))
+                      (driver.interrupted e (driver.write (head :: tail) w).state).state).state,
+                events :=
+                  (driver.interrupted e (driver.write (head :: tail) w).state).events ++
+                    ((if a = true then
+                          PV_EVH_Runtime.bind (driver.dropInterrupted e) fun __x =>
+                            PV_EVH_WriteAll.loop driver fuel (head :: tail)
+                        else pure (Except.error e))
+                        (driver.interrupted e (driver.write (head :: tail) w).state).state).events }).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:21:48: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [loop, ̲Bind.bind, ̲PV_EVH_Runtime.bind,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:29:54: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.error` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.error`
+  [apply] `MessageType.error`
+  [apply] `EST.Out.error`
+  [apply] `EStateM.Result.error`
+  [apply] `Lean.Exception.error`
+  [apply] `Lean.MessageSeverity.error`
+  [apply] `Lean.Parser.error`
+  [apply] `Lean.TraceResult.error`
+  [apply] `Lean.Lsp.DiagnosticSeverity.error`
+  [apply] `Lean.Macro.Exception.error`
+  [apply] `Mathlib.Tactic.BehaviorIfUnchanged.error`
+  [apply] `Lean.Server.FileWorker.FileSetupResult.error`
+  [apply] `Std.Internal.Parsec.ParseResult.error`
+  [apply] `Lean.Meta.Tactic.TryThis.SuggestionStyle.error`
+  [apply] `Std.Http.Protocol.H1.Machine.error`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:32:13: error: Ambiguous term
+  loop
+Possible interpretations:
+  PV_EVH_WriteAll.loop : (driver : Driver) → ℕ → Bytes → Q (Except driver.Error Unit)
+  
+  Std.loop : (?m.56 → Result (ControlFlow ?m.56 ?m.57)) → ?m.56 → Result ?m.57
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:31:89: error: unsolved goals
+driver : Driver
+fuel : ℕ
+head : UInt8
+tail : Bytes
+w : State
+h : (driver.write (head :: tail) w).outcome = Outcome.returned (Result.ok (Except.ok 0))
+⊢ PV_EVH_WriteAll.loop driver (fuel + 1) (head :: tail) w =
+    {
+      outcome :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).outcome,
+      state :=
+        (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+              events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+              state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+              events :=
+                (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                  (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).state,
+      events :=
+        (driver.write (head :: tail) w).events ++
+          (match (driver.writeZero (driver.write (head :: tail) w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e),
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (driver.writeZero (driver.write (head :: tail) w).state).state,
+                events := (driver.writeZero (driver.write (head :: tail) w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              { outcome := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).outcome,
+                state := (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).state,
+                events :=
+                  (driver.writeZero (driver.write (head :: tail) w).state).events ++
+                    (pure sorry (driver.writeZero (driver.write (head :: tail) w).state).state).events }).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:32:48: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [loop, ̲Bind.bind, ̲PV_EVH_Runtime.bind,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_LiteralWriteAll.error_dispatch' depends on axioms: [sorryAx, Quot.sound]
+'PV_EVH_LiteralWriteAll.zero_dispatch' depends on axioms: [sorryAx]
+
+{
+  "attempt": 79559,
+  "target": "PV_EVH_LiteralWriteAll",
+  "source_revision": "e63bda42a01891e19403d17d925330438b356f1d",
+  "source_path": "lean/PV_EVH_LiteralWriteAll.lean",
+  "source_git_blob": "9a7d30bd29f56e14ad1b76a7efc2f25aef1bd3ff",
+  "source_sha256": "b4d4daa77d58cf6c44a8ff336acb186fa41fad35339e9a202b02f11d01efcde3",
+  "exit": "1",
+  "peak_rss_kbytes": "2626924",
+  "swaps": "0",
+  "wall": "0:01.41",
+  "axioms": [
+    "'PV_EVH_LiteralWriteAll.error_dispatch' depends on axioms: [sorryAx, Quot.sound]",
+    "'PV_EVH_LiteralWriteAll.zero_dispatch' depends on axioms: [sorryAx]"
+  ],
+  "deps_fingerprint": "935617c5cbabe10a5ad16c06d5140b29f6b4cc45bf9267cc23863f8109752398",
+  "accepted": false
+}

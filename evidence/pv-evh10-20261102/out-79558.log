@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:29:82: error: unsolved goals
+case zero
+E : Type
+write : Bytes → Q (Except E ℕ)
+dropError : E → Q Unit
+interrupted : E → Bool
+writeZero : E
+oversize : Q (Except E Unit)
+⊢ (if True then pure (Except.ok ()) else fun w => { outcome := Outcome.exhausted, state := w, events := [] }) =
+    pure (Except.ok ())
+
+case succ
+E : Type
+write : Bytes → Q (Except E ℕ)
+dropError : E → Q Unit
+interrupted : E → Bool
+writeZero : E
+oversize : Q (Except E Unit)
+n✝ : ℕ
+⊢ (if True then pure (Except.ok ())
+    else do
+      let r ← write []
+      match r with
+        | Except.ok n =>
+          if n = 0 then pure (Except.error writeZero)
+          else
+            if n ≤ [].length then run write dropError interrupted writeZero oversize n✝ (List.drop n []) else oversize
+        | Except.error e =>
+          if interrupted e = true then do
+            dropError e
+            run write dropError interrupted writeZero oversize n✝ []
+          else pure (Except.error e)) =
+    pure (Except.ok ())
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:30:32: warning: This simp argument is unused:
+  if_pos rfl
+
+Hint: Omit it from the simp argument list.
+  simp only [run,̵i̵f̵_̵p̵o̵s̵ ̵r̵f̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LiteralWriteAll.lean:40:41: error: unexpected identifier; expected ')', ',' or ':'
+'PV_EVH_LiteralWriteAll.empty' depends on axioms: [propext, sorryAx]
+'PV_EVH_LiteralWriteAll.interrupted_drop' depends on axioms: [sorryAx]
