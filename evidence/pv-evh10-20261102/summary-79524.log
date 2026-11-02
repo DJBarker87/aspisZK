@@ -1,0 +1,132 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:45:66: error: unsolved goals
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+limit retry : Usize
+slot : Slot
+driver : Slice U8 → State → PV_EVH_StackEntropyFill.Delivery
+success : (Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)) → Slice U8 → Q Answer
+w : State
+e : getrandom.error.Error
+hr : retry < limit
+hn : slot.initialized = 64
+hd : State := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
+hf : PV_EVH_StackEntropyFill.Delivery := driver buffer hd
+wi : State := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
+d : PV_EVH_StackEntropyFill.Delivery := driver buffer wi
+⊢ (match (driver buffer wi).status with
+    | PV_EVH_Runtime.Outcome.returned (Result.ok r) =>
+      PV_EVH_Runtime.Outcome.returned (Result.ok (r, (driver buffer wi).buffer.to_slice_mut.1))
+    | PV_EVH_Runtime.Outcome.returned (Result.fail e) => PV_EVH_Runtime.Outcome.returned (Result.fail e)
+    | PV_EVH_Runtime.Outcome.returned Result.div => PV_EVH_Runtime.Outcome.returned Result.div
+    | PV_EVH_Runtime.Outcome.fault e => PV_EVH_Runtime.Outcome.fault e
+    | PV_EVH_Runtime.Outcome.exhausted => PV_EVH_Runtime.Outcome.exhausted) =
+    PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1))
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:56:39: error: Application type mismatch: The argument
+  hf
+has type
+  PV_EVH_StackEntropyFill.Delivery
+of sort `Type` but is expected to have type
+  getrandom.fill buffer = Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1)
+of sort `Prop` in the application
+  PV_EVH_NativeEntropyIteration.source_error base heap box ops mask limit retry e d.buffer.to_slice_mut.1 hr hf
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:38:62: error: unsolved goals
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+limit retry : Usize
+slot : Slot
+driver : Slice U8 → State → PV_EVH_StackEntropyFill.Delivery
+success : (Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)) → Slice U8 → Q Answer
+w : State
+e : getrandom.error.Error
+hr : retry < limit
+hn : slot.initialized = 64
+hd : State := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
+hf : PV_EVH_StackEntropyFill.Delivery := driver buffer hd
+wi : State := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
+d : PV_EVH_StackEntropyFill.Delivery := driver buffer wi
+hout :
+  (PV_EVH_StackEntropyFill.fill slot driver buffer wi).outcome =
+    PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1))
+hlookup :
+  List.find? (PV_EVH_StackCleanup.sameKey slot.key)
+      (PV_EVH_StackEntropyFill.fill slot driver buffer
+              (PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w)).state.frame.live =
+    some slot
+⊢ hf.status = PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e)) →
+    getrandom.fill buffer = Result.ok (core.result.Result.Err e, hf.buffer.to_slice_mut.1) →
+      PV_EVH_Runtime.sourceProjection
+            { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                events :=
+                  (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++
+                    PV_EVH_StackZero.emitted slot }.outcome =
+          some
+            (aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body mask limit
+              retry) ∧
+        Cleared slot
+            { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                events :=
+                  (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++ PV_EVH_StackZero.emitted slot }.state ∧
+          { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                      state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                      events :=
+                        (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++
+                          PV_EVH_StackZero.emitted slot }.state.frame.runtime =
+              hf.runtime ∧
+            { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                        state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                        events :=
+                          (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++
+                            PV_EVH_StackZero.emitted slot }.state.frame.retired =
+                slot :: w.frame.retired ∧
+              { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                        state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                        events :=
+                          (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++
+                            PV_EVH_StackZero.emitted slot }.state.history =
+                  w.history ++
+                    List.map (PV_EVH_ZeroAddressBridge.physical slot.address)
+                      (PV_EVH_ZeroizeArray.events slot.key 0 slot.initialized) ∧
+                { outcome := PV_EVH_Runtime.Outcome.returned (Result.ok (PV_EVH_NativeEntropyError.returnedError e)),
+                      state := PV_EVH_StackZero.drop slot (PV_EVH_StackEntropyFill.fill slot driver buffer wi).state,
+                      events :=
+                        (PV_EVH_StackEntropyFill.fill slot driver buffer wi).events ++
+                          PV_EVH_StackZero.emitted slot }.events =
+                  hf.events ++ PV_EVH_StackZero.emitted slot
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:46:74: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_EVH_StackEntropyFill.fill, ̲PV_EVH_StackEntropyFill.reply,̵h̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_NativeEntropyIterationError.error_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{
+  "attempt": 79524,
+  "target": "PV_EVH_NativeEntropyIterationError",
+  "source_revision": "1ea78e7a06e42640083b46ba17a3cf7ed6d2539c",
+  "source_path": "lean/PV_EVH_NativeEntropyIterationError.lean",
+  "source_git_blob": "b19e9af2b6f57bf7ad0153802ad81182541fa0d6",
+  "source_sha256": "f6f6cf301810c9769bd3b544cf6d377133fd931c6af4e5849f3c755021988ae8",
+  "exit": "1",
+  "peak_rss_kbytes": "4439456",
+  "swaps": "0",
+  "wall": "0:03.49",
+  "axioms": [
+    "'PV_EVH_NativeEntropyIterationError.error_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "deps_fingerprint": "b9916e819cfa4df97748b618357c3e235c1be755cb496a2689405d481723ff4b",
+  "accepted": false
+}

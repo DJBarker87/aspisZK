@@ -38,7 +38,9 @@ theorem error_native (base : ExternalTypes)
       r.events = d.events ++ PV_EVH_StackZero.emitted slot := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
-  intro mask limit retry slot driver success w e hr hn hd hf
+  intro mask limit retry slot driver success w e hr hn
+  dsimp only
+  intro hd hf
   let wi := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
   let d := driver buffer wi
   have hout : (PV_EVH_StackEntropyFill.fill slot driver buffer wi).outcome =
