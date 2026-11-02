@@ -36,12 +36,13 @@ s+=indent+'conv_lhs => simp only [four_index_zero550,four_index_one550,four_inde
 for j in range(4):
  s+=indent+'as_aux_lemma =>\n';indent+='  '
  s+=indent+'rw [raw_row_continuation550]\n'
+ if j==3:break
  for k in range(36):
   if j==0 and k in [0,2,4,6]:s+=indent+'conv_rhs => rw [four_index_'+['zero','one','two','three'][k//2]+'550,bind_tc_ok]\n'
   if k==18:s+=indent+'as_aux_lemma =>\n';indent+='  '
   s+=indent+'apply bind_equal9\n'+indent+f'intro row{j}cell{k}\n'
  s+=indent+'apply bind_equal9\n'+indent+f'intro output{j}\n'
-s+=indent+'rfl\n\n#print axioms external_group_reference554\nend PV_B3P_Association554227\n'
+s+='\n#print axioms external_group_reference554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_ExternalGroup554227.lean',s)
 print('four symbolic raw rows and all four reconstructions emitted')
 # Global sums and final add keep source arithmetic trees. During the immutable
