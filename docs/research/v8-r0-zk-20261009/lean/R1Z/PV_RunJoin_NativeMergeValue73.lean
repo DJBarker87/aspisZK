@@ -7,6 +7,7 @@ namespace R1Z.PV_RunJoin_NativeMergeValue73
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual63
 open PV_RunJoin_FieldData34 (value canonical)
 open PV_RunJoin_SampleDomain34 (count assignments)
+open scoped BigOperators
 abbrev Q := aspis_core.field.QM31
 variable {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
