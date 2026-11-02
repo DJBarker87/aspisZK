@@ -17,6 +17,19 @@ theorem window_instance (bytes : List U8) (base : Nat) (h : base+8 ≤ bytes.len
     PV_RDCD4_BytesSource.cm (PV_RDCD4_SliceRange194.window bytes base (base+8)) =
       PV_RDCD5_ParserFlat.cmAt bytes base := PV_RDCD5_ParserFlat.cm_window bytes base h
 
+/-- The actual checked borrowed source window transports into absolute backing
+component offsets; no borrowed Slice is identified by success/failure alone. -/
+theorem native_window (bytes : Slice U8) (a b : Usize)
+    (width : b.val = a.val+8) (bounded : b.val ≤ bytes.val.length) :
+    (do let part ← core.slice.index.Slice.index
+          (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes {start:=a, «end»:=b}
+        ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes part) =
+      PV_RDCD5_ParserFlat.cmAt bytes.val a.val := by
+  simp_rw [PV_RDCD5_ParserTransport.complex]
+  rw [PV_RDCD5_ParserTransport.range_bind,
+    PV_RDCD5_ParserRange.success bytes.val a.val b.val (by omega) bounded,bind_tc_ok]
+  simpa only [width] using PV_RDCD5_ParserFlat.cm_window bytes.val a.val (by omega)
+
 /-- No returned borrow and no input mutation; failure remains in Result. -/
 theorem input_frame (bytes : Slice U8) :
     (do let out ← ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes
@@ -32,6 +45,7 @@ theorem rdcd4_instance (bytes : Slice U8) :
 
 #print axioms parser_instance
 #print axioms window_instance
+#print axioms native_window
 #print axioms input_frame
 #print axioms rdcd4_instance
 end R1Z.PV_RDCD5_V197Restored

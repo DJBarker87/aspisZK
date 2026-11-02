@@ -49,6 +49,7 @@ unsafe def main (_args : List String) : IO UInt32 := do
     `R1Z.PV_RDCD5_ParserErrors.carrier_agreement,
     `R1Z.PV_RDCD5_V197Restored.parser_instance,
     `R1Z.PV_RDCD5_V197Restored.window_instance,
+    `R1Z.PV_RDCD5_V197Restored.native_window,
     `R1Z.PV_RDCD5_V197Restored.input_frame,
     `R1Z.PV_RDCD5_V197Restored.rdcd4_instance,
     `R1Z.PV_RDCD5_V197ConsumerReplay.v197_corrected]
