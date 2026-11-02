@@ -1,4 +1,4 @@
-import PV_B3P_DotSourceDefs554227
+import PV_B3P_DotContinuation554227
 import PV_B3P_LinkDefinitions13227
 import Lean.Elab.Tactic.AsAuxLemma
 namespace PV_B3P_Association554227
@@ -14,8 +14,8 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
     (values : Array aspis_core.field.M31 7#usize) :
     dot_source554 weights values = reference_field.qm31_m31_dot weights values := by
   unfold dot_source554 reference_field.qm31_m31_dot
-  unfold dot_cell554 dot_reduce554 dot_finish554
   as_aux_lemma =>
+    rw [dot_cell554_continuation]
     apply bind_equal9
     intro m
     apply bind_equal9
@@ -48,21 +48,23 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
     intro i12
     apply bind_equal9
     intro i13
+    apply bind_equal9
+    intro i14
+    apply bind_equal9
+    intro raw4
+    apply bind_equal9
+    intro i16
+    apply bind_equal9
+    intro i17
+    apply bind_equal9
+    intro i18
+    apply bind_equal9
+    intro i19
+    apply bind_equal9
+    intro raw5
+    simp only [bind_tc_ok]
     as_aux_lemma =>
-      apply bind_equal9
-      intro i14
-      apply bind_equal9
-      intro raw4
-      apply bind_equal9
-      intro i16
-      apply bind_equal9
-      intro i17
-      apply bind_equal9
-      intro i18
-      apply bind_equal9
-      intro i19
-      apply bind_equal9
-      intro raw5
+      rw [dot_cell554_continuation]
       apply bind_equal9
       intro m1
       apply bind_equal9
@@ -81,393 +83,406 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
       intro raw6
       apply bind_equal9
       intro i26
+      apply bind_equal9
+      intro i27
+      apply bind_equal9
+      intro i28
+      apply bind_equal9
+      intro i29
+      apply bind_equal9
+      intro raw7
+      apply bind_equal9
+      intro i31
+      apply bind_equal9
+      intro i32
+      apply bind_equal9
+      intro i33
+      apply bind_equal9
+      intro i34
+      apply bind_equal9
+      intro raw8
+      apply bind_equal9
+      intro i36
+      apply bind_equal9
+      intro i37
+      apply bind_equal9
+      intro i38
+      apply bind_equal9
+      intro i39
+      apply bind_equal9
+      intro raw9
+      simp only [bind_tc_ok]
       as_aux_lemma =>
-        apply bind_equal9
-        intro i27
-        apply bind_equal9
-        intro i28
-        apply bind_equal9
-        intro i29
-        apply bind_equal9
-        intro raw7
-        apply bind_equal9
-        intro i31
-        apply bind_equal9
-        intro i32
-        apply bind_equal9
-        intro i33
-        apply bind_equal9
-        intro i34
-        apply bind_equal9
-        intro raw8
-        apply bind_equal9
-        intro i36
-        apply bind_equal9
-        intro i37
-        apply bind_equal9
-        intro i38
-        apply bind_equal9
-        intro i39
-        apply bind_equal9
-        intro raw9
+        rw [dot_cell554_continuation]
         apply bind_equal9
         intro m2
         apply bind_equal9
         intro value2
+        apply bind_equal9
+        intro weight2
+        apply bind_equal9
+        intro i41
+        apply bind_equal9
+        intro i42
+        apply bind_equal9
+        intro i43
+        apply bind_equal9
+        intro i44
+        apply bind_equal9
+        intro raw10
+        apply bind_equal9
+        intro i46
+        apply bind_equal9
+        intro i47
+        apply bind_equal9
+        intro i48
+        apply bind_equal9
+        intro i49
+        apply bind_equal9
+        intro raw11
+        apply bind_equal9
+        intro i51
+        apply bind_equal9
+        intro i52
+        apply bind_equal9
+        intro i53
+        apply bind_equal9
+        intro i54
+        apply bind_equal9
+        intro raw12
+        apply bind_equal9
+        intro i56
+        apply bind_equal9
+        intro i57
+        apply bind_equal9
+        intro i58
+        apply bind_equal9
+        intro i59
+        apply bind_equal9
+        intro raw13
+        simp only [bind_tc_ok]
         as_aux_lemma =>
+          rw [dot_cell554_continuation]
           apply bind_equal9
-          intro weight2
+          intro m3
           apply bind_equal9
-          intro i41
+          intro value3
           apply bind_equal9
-          intro i42
+          intro weight3
           apply bind_equal9
-          intro i43
+          intro i61
           apply bind_equal9
-          intro i44
+          intro i62
           apply bind_equal9
-          intro raw10
+          intro i63
           apply bind_equal9
-          intro i46
+          intro i64
           apply bind_equal9
-          intro i47
+          intro raw14
           apply bind_equal9
-          intro i48
+          intro i66
           apply bind_equal9
-          intro i49
+          intro i67
           apply bind_equal9
-          intro raw11
+          intro i68
           apply bind_equal9
-          intro i51
+          intro i69
           apply bind_equal9
-          intro i52
+          intro raw15
           apply bind_equal9
-          intro i53
+          intro i71
           apply bind_equal9
-          intro i54
+          intro i72
           apply bind_equal9
-          intro raw12
+          intro i73
+          apply bind_equal9
+          intro i74
+          apply bind_equal9
+          intro raw16
+          apply bind_equal9
+          intro i76
+          apply bind_equal9
+          intro i77
+          apply bind_equal9
+          intro i78
+          apply bind_equal9
+          intro i79
+          apply bind_equal9
+          intro raw17
+          simp only [bind_tc_ok]
           as_aux_lemma =>
+            rw [dot_reduce554_continuation]
             apply bind_equal9
-            intro i56
+            intro i80
             apply bind_equal9
-            intro i57
+            intro m4
             apply bind_equal9
-            intro i58
+            intro i81
             apply bind_equal9
-            intro i59
+            intro i82
             apply bind_equal9
-            intro raw13
+            intro i83
             apply bind_equal9
-            intro m3
+            intro sums1
             apply bind_equal9
-            intro value3
+            intro i84
             apply bind_equal9
-            intro weight3
+            intro m5
             apply bind_equal9
-            intro i61
+            intro i85
             apply bind_equal9
-            intro i62
+            intro i86
             apply bind_equal9
-            intro i63
+            intro i87
             apply bind_equal9
-            intro i64
+            intro sums2
             apply bind_equal9
-            intro raw14
+            intro i88
             apply bind_equal9
-            intro i66
+            intro m6
             apply bind_equal9
-            intro i67
+            intro i89
             apply bind_equal9
-            intro i68
+            intro i90
+            apply bind_equal9
+            intro i91
+            apply bind_equal9
+            intro sums3
+            apply bind_equal9
+            intro i92
+            apply bind_equal9
+            intro m7
+            apply bind_equal9
+            intro i93
+            apply bind_equal9
+            intro i94
+            apply bind_equal9
+            intro i95
+            apply bind_equal9
+            intro sums4
+            simp only [bind_tc_ok]
             as_aux_lemma =>
+              rw [dot_cell554_continuation]
               apply bind_equal9
-              intro i69
+              intro m8
               apply bind_equal9
-              intro raw15
+              intro value4
               apply bind_equal9
-              intro i71
+              intro weight4
               apply bind_equal9
-              intro i72
+              intro i97
               apply bind_equal9
-              intro i73
+              intro i98
               apply bind_equal9
-              intro i74
+              intro i99
               apply bind_equal9
-              intro raw16
+              intro i100
               apply bind_equal9
-              intro i76
+              intro raw19
               apply bind_equal9
-              intro i77
+              intro i102
               apply bind_equal9
-              intro i78
+              intro i103
               apply bind_equal9
-              intro i79
+              intro i104
               apply bind_equal9
-              intro raw17
+              intro i105
               apply bind_equal9
-              intro i80
+              intro raw20
               apply bind_equal9
-              intro m4
+              intro i107
               apply bind_equal9
-              intro i81
+              intro i108
               apply bind_equal9
-              intro i82
+              intro i109
+              apply bind_equal9
+              intro i110
+              apply bind_equal9
+              intro raw21
+              apply bind_equal9
+              intro i112
+              apply bind_equal9
+              intro i113
+              apply bind_equal9
+              intro i114
+              apply bind_equal9
+              intro i115
+              apply bind_equal9
+              intro raw22
+              simp only [bind_tc_ok]
               as_aux_lemma =>
+                rw [dot_cell554_continuation]
                 apply bind_equal9
-                intro i83
+                intro m9
                 apply bind_equal9
-                intro sums1
+                intro value5
                 apply bind_equal9
-                intro i84
+                intro weight5
                 apply bind_equal9
-                intro m5
+                intro i117
                 apply bind_equal9
-                intro i85
+                intro i118
                 apply bind_equal9
-                intro i86
+                intro i119
                 apply bind_equal9
-                intro i87
+                intro i120
                 apply bind_equal9
-                intro sums2
+                intro raw23
                 apply bind_equal9
-                intro i88
+                intro i122
                 apply bind_equal9
-                intro m6
+                intro i123
                 apply bind_equal9
-                intro i89
+                intro i124
                 apply bind_equal9
-                intro i90
+                intro i125
                 apply bind_equal9
-                intro i91
+                intro raw24
                 apply bind_equal9
-                intro sums3
+                intro i127
                 apply bind_equal9
-                intro i92
+                intro i128
                 apply bind_equal9
-                intro m7
+                intro i129
+                apply bind_equal9
+                intro i130
+                apply bind_equal9
+                intro raw25
+                apply bind_equal9
+                intro i132
+                apply bind_equal9
+                intro i133
+                apply bind_equal9
+                intro i134
+                apply bind_equal9
+                intro i135
+                apply bind_equal9
+                intro raw26
+                simp only [bind_tc_ok]
                 as_aux_lemma =>
+                  rw [dot_cell554_continuation]
                   apply bind_equal9
-                  intro i93
+                  intro m10
                   apply bind_equal9
-                  intro i94
+                  intro value6
                   apply bind_equal9
-                  intro i95
+                  intro weight6
                   apply bind_equal9
-                  intro sums4
+                  intro i137
                   apply bind_equal9
-                  intro m8
+                  intro i138
                   apply bind_equal9
-                  intro value4
+                  intro i139
                   apply bind_equal9
-                  intro weight4
+                  intro i140
                   apply bind_equal9
-                  intro i97
+                  intro raw27
                   apply bind_equal9
-                  intro i98
+                  intro i142
                   apply bind_equal9
-                  intro i99
+                  intro i143
                   apply bind_equal9
-                  intro i100
+                  intro i144
                   apply bind_equal9
-                  intro raw19
+                  intro i145
                   apply bind_equal9
-                  intro i102
+                  intro raw28
                   apply bind_equal9
-                  intro i103
+                  intro i147
                   apply bind_equal9
-                  intro i104
+                  intro i148
                   apply bind_equal9
-                  intro i105
+                  intro i149
+                  apply bind_equal9
+                  intro i150
+                  apply bind_equal9
+                  intro raw29
+                  apply bind_equal9
+                  intro i152
+                  apply bind_equal9
+                  intro i153
+                  apply bind_equal9
+                  intro i154
+                  apply bind_equal9
+                  intro i155
+                  apply bind_equal9
+                  intro raw30
+                  simp only [bind_tc_ok]
                   as_aux_lemma =>
+                    rw [dot_reduce554_continuation]
                     apply bind_equal9
-                    intro raw20
+                    intro i156
                     apply bind_equal9
-                    intro i107
+                    intro m11
                     apply bind_equal9
-                    intro i108
+                    intro i157
                     apply bind_equal9
-                    intro i109
+                    intro i158
                     apply bind_equal9
-                    intro i110
+                    intro i159
                     apply bind_equal9
-                    intro raw21
+                    intro sums5
                     apply bind_equal9
-                    intro i112
+                    intro i160
                     apply bind_equal9
-                    intro i113
+                    intro m12
                     apply bind_equal9
-                    intro i114
+                    intro i161
                     apply bind_equal9
-                    intro i115
+                    intro i162
                     apply bind_equal9
-                    intro raw22
+                    intro i163
                     apply bind_equal9
-                    intro m9
+                    intro sums6
                     apply bind_equal9
-                    intro value5
+                    intro i164
                     apply bind_equal9
-                    intro weight5
+                    intro m13
                     apply bind_equal9
-                    intro i117
+                    intro i165
                     apply bind_equal9
-                    intro i118
+                    intro i166
+                    apply bind_equal9
+                    intro i167
+                    apply bind_equal9
+                    intro sums7
+                    apply bind_equal9
+                    intro i168
+                    apply bind_equal9
+                    intro m14
+                    apply bind_equal9
+                    intro i169
+                    apply bind_equal9
+                    intro i170
+                    apply bind_equal9
+                    intro i171
+                    apply bind_equal9
+                    intro sums8
+                    simp only [bind_tc_ok]
                     as_aux_lemma =>
+                      unfold dot_finish554
                       apply bind_equal9
-                      intro i119
+                      intro i172
                       apply bind_equal9
-                      intro i120
+                      intro m15
                       apply bind_equal9
-                      intro raw23
+                      intro i173
                       apply bind_equal9
-                      intro i122
+                      intro m16
                       apply bind_equal9
-                      intro i123
+                      intro c
                       apply bind_equal9
-                      intro i124
+                      intro i174
                       apply bind_equal9
-                      intro i125
+                      intro m17
                       apply bind_equal9
-                      intro raw24
+                      intro i175
                       apply bind_equal9
-                      intro i127
+                      intro m18
                       apply bind_equal9
-                      intro i128
-                      apply bind_equal9
-                      intro i129
-                      apply bind_equal9
-                      intro i130
-                      apply bind_equal9
-                      intro raw25
-                      apply bind_equal9
-                      intro i132
-                      apply bind_equal9
-                      intro i133
-                      apply bind_equal9
-                      intro i134
-                      as_aux_lemma =>
-                        apply bind_equal9
-                        intro i135
-                        apply bind_equal9
-                        intro raw26
-                        apply bind_equal9
-                        intro m10
-                        apply bind_equal9
-                        intro value6
-                        apply bind_equal9
-                        intro weight6
-                        apply bind_equal9
-                        intro i137
-                        apply bind_equal9
-                        intro i138
-                        apply bind_equal9
-                        intro i139
-                        apply bind_equal9
-                        intro i140
-                        apply bind_equal9
-                        intro raw27
-                        apply bind_equal9
-                        intro i142
-                        apply bind_equal9
-                        intro i143
-                        apply bind_equal9
-                        intro i144
-                        apply bind_equal9
-                        intro i145
-                        apply bind_equal9
-                        intro raw28
-                        apply bind_equal9
-                        intro i147
-                        as_aux_lemma =>
-                          apply bind_equal9
-                          intro i148
-                          apply bind_equal9
-                          intro i149
-                          apply bind_equal9
-                          intro i150
-                          apply bind_equal9
-                          intro raw29
-                          apply bind_equal9
-                          intro i152
-                          apply bind_equal9
-                          intro i153
-                          apply bind_equal9
-                          intro i154
-                          apply bind_equal9
-                          intro i155
-                          apply bind_equal9
-                          intro raw30
-                          apply bind_equal9
-                          intro i156
-                          apply bind_equal9
-                          intro m11
-                          apply bind_equal9
-                          intro i157
-                          apply bind_equal9
-                          intro i158
-                          apply bind_equal9
-                          intro i159
-                          apply bind_equal9
-                          intro sums5
-                          apply bind_equal9
-                          intro i160
-                          as_aux_lemma =>
-                            apply bind_equal9
-                            intro m12
-                            apply bind_equal9
-                            intro i161
-                            apply bind_equal9
-                            intro i162
-                            apply bind_equal9
-                            intro i163
-                            apply bind_equal9
-                            intro sums6
-                            apply bind_equal9
-                            intro i164
-                            apply bind_equal9
-                            intro m13
-                            apply bind_equal9
-                            intro i165
-                            apply bind_equal9
-                            intro i166
-                            apply bind_equal9
-                            intro i167
-                            apply bind_equal9
-                            intro sums7
-                            apply bind_equal9
-                            intro i168
-                            apply bind_equal9
-                            intro m14
-                            apply bind_equal9
-                            intro i169
-                            apply bind_equal9
-                            intro i170
-                            apply bind_equal9
-                            intro i171
-                            as_aux_lemma =>
-                              apply bind_equal9
-                              intro sums8
-                              apply bind_equal9
-                              intro i172
-                              apply bind_equal9
-                              intro m15
-                              apply bind_equal9
-                              intro i173
-                              apply bind_equal9
-                              intro m16
-                              apply bind_equal9
-                              intro c
-                              apply bind_equal9
-                              intro i174
-                              apply bind_equal9
-                              intro m17
-                              apply bind_equal9
-                              intro i175
-                              apply bind_equal9
-                              intro m18
-                              apply bind_equal9
-                              intro c1
-                              rfl
+                      intro c1
+                      simp only [bind_tc_ok]
+                      rfl
 
 theorem dot_source_link554 :
     PV_B3P_Links13227.PV_B3P_Link_field_qm31_m31_dot dot_source554 :=

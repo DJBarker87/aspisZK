@@ -59,11 +59,22 @@ s+='  let sums1 ← dot_reduce554 raw4 sums\n  let rawNext := Array.repeat 4#usi
 for j in range(3):s+=f'  let rawNext{j+1} ← dot_cell554 weights values {j+4}#usize '+('rawNext'if j==0 else f'rawNext{j}')+'\n'
 s+='  let sums2 ← dot_reduce554 rawNext3 sums1\n  dot_finish554 sums2\n\n#print axioms dot_source554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_DotSourceDefs554227.lean',s)
-# Only the proof navigation uses actual pinned reference syntax; interpreter above
-# is assembled independently from the source's two loops, component order and stores.
+# Normalize one bounded cell at a time using a named continuation law.
+defs=s
+cps='import PV_B3P_DotSourceDefs554227\nimport PV_B3P_Ordered227\n'+head
+for helper,args in [('dot_cell554','weights values index raw'),('dot_reduce554','raw sums')]:
+ decl=defs.split('def '+helper,1)[1].split('\ndef ',1)[0].split('\n#print',1)[0]
+ binders,body=decl.split(' := do\n',1)
+ binders=binders.split(' : Result DotRaw554')[0]
+ body=body.rstrip().removesuffix('.ok raw4' if helper=='dot_cell554' else '.ok sums4')+'k '+('raw4' if helper=='dot_cell554' else 'sums4')+'\n'
+ cps+='\ntheorem '+helper+'_continuation {β : Type}'+binders+' (k : DotRaw554 → Result β) :\n    (do let next ← '+helper+' '+args+'; k next) = (do\n'+body+') := by\n  simp only ['+helper+',PV_B3P_Ordered227.bind_assoc,bind_tc_ok]\n'
+ cps+='\n#print axioms '+helper+'_continuation\n'
+cps+='end PV_B3P_Association554227\n'
+emit(L/'PV_B3P_DotContinuation554227.lean',cps)
+# Only proof navigation uses actual reference syntax.
 ref=(L/'PV_B3P_P227_01.lean').read_text();body=ref.split('def reference_field.qm31_m31_dot',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
 lines=body.splitlines(); binders=[(i,re.match(r'  let (\w+) ←',v)[1]) for i,v in enumerate(lines) if re.match(r'  let (\w+) ←',v)]
-s='import PV_B3P_DotSourceDefs554227\nimport PV_B3P_LinkDefinitions13227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head+'''
+s='import PV_B3P_DotContinuation554227\nimport PV_B3P_LinkDefinitions13227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head+'''
 attribute [local irreducible] Aeneas.Std.bind Array.index_usize Array.update
   U64.wrapping_add U64.wrapping_mul aspis_core.field.M31.reduce_u64
   aspis_core.field.CM31.new
@@ -72,14 +83,16 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
     (values : Array aspis_core.field.M31 7#usize) :
     dot_source554 weights values = reference_field.qm31_m31_dot weights values := by
   unfold dot_source554 reference_field.qm31_m31_dot
-  unfold dot_cell554 dot_reduce554 dot_finish554
 '''
-indent='  ';ctx=['weights','values']
-for n,(i,name) in enumerate(binders):
- if n%16==0:
-  s+=indent+'as_aux_lemma =>\n';indent+='  '
- s+=indent+'apply bind_equal9\n'+indent+'intro '+name+'\n';ctx.append(name)
- # Keep all contexts initially; clear is unsafe across differently named local let aliases.
+indent='  ';counts=[23]*4+[24]+[23]*3+[24,10];n=0
+for j,count in enumerate(counts):
+ s+=indent+'as_aux_lemma =>\n';indent+='  '
+ s+=indent+('rw [dot_cell554_continuation]\n' if j in [0,1,2,3,5,6,7] else 'rw [dot_reduce554_continuation]\n' if j in [4,8] else 'unfold dot_finish554\n')
+ for k in range(count):
+  i,name=binders[n];n+=1
+  s+=indent+'apply bind_equal9\n'+indent+'intro '+name+'\n'
+ s+=indent+'simp only [bind_tc_ok]\n'
+assert n==len(binders)
 s+=indent+'rfl\n\ntheorem dot_source_link554 :\n    PV_B3P_Links13227.PV_B3P_Link_field_qm31_m31_dot dot_source554 :=\n  funext fun weights => funext (dot_source_reference554 weights)\n\n#print axioms dot_source_reference554\n#print axioms dot_source_link554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_DotSource554227.lean',s)
-print(json.dumps(dict(reference_monadic_steps=len(binders),auxiliary_block=16,independent_source=True)))
+print(json.dumps(dict(reference_monadic_steps=len(binders),maximum_stage=24,independent_source=True)))
