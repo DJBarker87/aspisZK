@@ -12,12 +12,12 @@ theorem wrappers_native (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
     let selected := @PV_EVH_ZeroWrappers.selected (types base) ops
-    (opsNative base heap box selected).op125 = @PV_EVH_ZeroWrappers.asMut ∧
-    (opsNative base heap box selected).op126 = @PV_EVH_ZeroWrappers.derefMut ∧
-    (opsNative base heap box selected).op127 = @PV_EVH_ZeroWrappers.deref ∧
-    (opsNative base heap box selected).op128 = @PV_EVH_ZeroWrappers.new ∧
-    (opsNative base heap box selected).op130 = @PV_EVH_ZeroWrappers.zeroize ∧
-    (opsNative base heap box selected).op131 = @PV_EVH_ZeroWrappers.asRef := by
+    @ExternalFuns.op125 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.asMut ∧
+    @ExternalFuns.op126 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.derefMut ∧
+    @ExternalFuns.op127 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.deref ∧
+    @ExternalFuns.op128 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.new ∧
+    @ExternalFuns.op130 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.zeroize ∧
+    @ExternalFuns.op131 (types base) (opsNative base heap box selected) = @PV_EVH_ZeroWrappers.asRef := by
   dsimp only
   unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_125,PV_B2_F_RawNative.preserved_126,
@@ -62,7 +62,7 @@ theorem array_native (base : ExternalTypes)
       (Array.Insts.ZeroizeZeroize n
         (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)).zeroize a =
       .ok (Array.repeat n 0#u8) :=
-  PV_EVH_NativeZeroInstall.array_value_native base heap box (PV_EVH_ZeroWrappers.selected ops)
+  PV_EVH_NativeZeroInstall.array_value_native base heap box (@PV_EVH_ZeroWrappers.selected (types base) ops)
 
 #print axioms wrappers_native
 #print axioms constructor_native
