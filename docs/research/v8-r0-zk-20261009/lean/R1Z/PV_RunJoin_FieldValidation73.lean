@@ -10,8 +10,7 @@ abbrev W := aspis_core.field.wide_exact.WideExact
 def Cells (payload : Slice U8) (count : Usize) : Prop :=
   ∀ i : Usize, i.val<count.val → ∃ s w,
     core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
-      payload {start := (Usize.wrapping_mul 32#usize i),
-        «end» := (Usize.wrapping_add (Usize.wrapping_mul 32#usize i) 32#usize)}=ok s ∧
+      payload ({ start := Usize.wrapping_mul 32#usize i, «end» := Usize.wrapping_add (Usize.wrapping_mul 32#usize i) 32#usize } : core.ops.range.Range Usize)=ok s ∧
     aspis_core.field.wide_exact.WideExact.from_le_bytes s=ok (some w) ∧
     (do let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
         let z ← aspis_core.field.QM31.ZERO
@@ -56,7 +55,6 @@ theorem complete (row : U8) (payload : Slice U8) (count i : Usize) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
     unfold host_wire.validate_record_fields_loop
     rw [ProverRw19LoopBind.loop_bind]
-    dsimp only []
     rw [step row payload count i divide (by omega) cells]
     simp only [bind_tc_ok]
     exact ih (Usize.wrapping_add i 1#usize) (by rw [inc];omega)
