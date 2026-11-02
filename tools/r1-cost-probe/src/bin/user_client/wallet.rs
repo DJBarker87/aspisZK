@@ -15,7 +15,7 @@ fn digest(r:&[u8;WIDTH],start:usize)->Digest{
  let mut out=[M31(0);8];let mut i=0;
  while i<8{out[i]=M31(word(r,start+4*i));i+=1;}out
 }
-fn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32)}
+fn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32u32)}
 // Fixed offsets and fixed trip counts; content validity is checked separately.
 #[inline(never)]
 pub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{
