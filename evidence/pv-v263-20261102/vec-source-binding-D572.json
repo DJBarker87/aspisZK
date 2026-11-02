@@ -1,0 +1,160 @@
+{
+  "source_revision": "daee5b0fa5832ab1e858a7f001c976ccc3fc38e7",
+  "evidence_class": "structural source argument for reserved append control/stores; NOT a complete worker/native refinement",
+  "std_toolchain": "1.94.1-x86_64-unknown-linux-gnu",
+  "exact_std_bodies": [
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "signature": "pub fn append(",
+      "body_token_sha256": "1df5cee7b07a3fb1fe1f5d6e026e2306be78c6376ed10f0e655b03f12eab1818",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "borrow initialized donor slice",
+          "source.values.val; distinct owned vector allocations in source"
+        ],
+        [
+          "append_elements call",
+          "reserved append scalar/copy steps below"
+        ],
+        [
+          "other.set_len(0)",
+          "VectorDrain.drain_source; AppendBinding.stores"
+        ],
+        [
+          "return Unit with both mutable owners restored",
+          "VecSpine.append returns (out,drained); donor destructor follows"
+        ]
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "signature": "unsafe fn append_elements(",
+      "body_token_sha256": "473c10d4a6e336679c175eaa8ccf44067d58b13179946b9f652be0874c946aad",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "count=other.len()",
+          "source.values.length"
+        ],
+        [
+          "reserve(count)",
+          "AppendBinding.reserve_no_growth under existing sufficient reservation"
+        ],
+        [
+          "len=self.len()",
+          "out.values.length"
+        ],
+        [
+          "copy_nonoverlapping to suffix",
+          "VectorDrain.drain_values; memory primitive/compiler V370 retained"
+        ],
+        [
+          "self.len+=count",
+          "VectorDrain.drain_length; AppendBinding.length_add_no_wrap"
+        ]
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "signature": "pub fn reserve(",
+      "body_token_sha256": "8b30dd5ec767cfd4a6c93defb4cb028755685930c7bd4a65bb42684c0b560729",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "delegate with current length and added count",
+          "unchanged count/length to RawVec.reserve"
+        ]
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "signature": "pub(crate) fn reserve(",
+      "body_token_sha256": "542245d93571098f8babc887fb4f442a37c226398908d85ad9b5f56d8ada0e10",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "layout argument",
+          "same element layout as both allocated Vec owners"
+        ],
+        [
+          "delegate",
+          "RawVecInner.reserve"
+        ]
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "signature": "unsafe fn reserve(",
+      "body_token_sha256": "6496f1e14afebe56acf9feeae1460e993690b67b0dec13dafb2513d30f54912c",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "needs_to_grow guard",
+          "AppendBinding.reserve_no_growth"
+        ],
+        [
+          "grow_amortized/error handler branch",
+          "unreachable ONLY under the room bound; not erased for arbitrary calls"
+        ],
+        [
+          "return on no growth",
+          "no allocator request or native failure at this method"
+        ]
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "signature": "const fn needs_to_grow(",
+      "body_token_sha256": "1865c70b444ed2d1f015eb75a28826b4f680418b93f8679917866092af1f48c1",
+      "exact_body_checked": true,
+      "steps": [
+        [
+          "capacity minus initialized length",
+          "AppendBinding.no_sub_wrap; Buffer.fits and Buffer.bounded"
+        ],
+        [
+          "compare added count",
+          "room implies guard false"
+        ],
+        [
+          "ZST capacity",
+          "lower reservation bound suffices; native validation includes ZST"
+        ]
+      ]
+    }
+  ],
+  "collect_selection": {
+    "range_usize": "TrustedStep/TrustedLen",
+    "map": "preserves TrustedLen",
+    "in_place_collect": "Range has no SourceIter or InPlaceIterable",
+    "selected": "SpecFromIterNested TrustedLen",
+    "capacity": "upper bound before any next/callback",
+    "store": "extend_trusted writes prefix and SetLenOnDrop publishes length; guard/lifetime binding still required"
+  },
+  "models": {
+    "VectorDrain": "2d5d44d76f359df39546acdd59ccf36dbc52766f3bbf69bc14aef82964f7c71e",
+    "VecSpine": "b324d80af6b4099b75bb8a718739518dd711c7764719c9beb948f2d8ac3e8aaf",
+    "AppendBinding": "98f1b4e3c1acf4d7cf4b358ed227bf58ae1597e64b62c73629508a0a9df077cb",
+    "CollectBinding": "b9bf38a0592c713520e22b474295308a4be860401295598d0ded50401476fd96",
+    "Captures": "2c7753441f65a82fb15997ef0310fcfa6677b5ae2bb801d27e1a2792cd8f4a1c",
+    "BufferLoop": "0c346fc9cb2f770330da88ee30104236d45f4dcbc2af1539db130431666a7a8e",
+    "BufferFamily": "cadcdd69a0388a0a1906b441158cf514fcb6ae801f7729cdce67c2d100e78c1d"
+  },
+  "native_validation": {
+    "attempt": "N90123",
+    "checks": 221,
+    "credit": "finite validation only; not callback-source success"
+  },
+  "remaining": [
+    "Substitute BufferFamily and reservation-preserving drains into the outer Vec spine; its Vec.new donor currently forgets capacity. Complete physical heap/reservation/deallocation relation",
+    "VecSpine lifecycle hooks do not yet supply the native std/thread/TLS/handle/closure/drop codec",
+    "CollectBinding.stores is a full-outcome logical refinement; native SetLenOnDrop and collect heap/lifetime binding remains",
+    "Native realisation of join-late scheduling and EVH codec",
+    "Actual captured callback source laws, actual opsNative installation and reached successful capture"
+  ],
+  "complete_worker_binding": false,
+  "op257_installed": false,
+  "actual_reached_success": false,
+  "nonempty_P": false
+}

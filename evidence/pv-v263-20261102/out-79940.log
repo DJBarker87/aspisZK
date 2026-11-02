@@ -1,0 +1,87 @@
+START 79940 R1Z.PV_V263_CollectBinding
+DONE 79940 R1Z.PV_V263_CollectBinding exit 1 wall 1.96 RSS 4534583296
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_CollectBinding.lean:40:8: error: unsolved goals
+case nil
+S A : Type
+runtime : PV_V263_VecSpine.Runtime S
+f : ℕ → Q S A
+out : alloc.vec.Vec A
+room : out.length + [].length ≤ Usize.max
+w : State S
+⊢ {
+      outcome :=
+        match (pure out w).outcome with
+        | Outcome.returned r =>
+          Outcome.returned
+            (match r with
+            | Result.ok a => Result.ok ↑a
+            | Result.fail e => Result.fail e
+            | Result.div => Result.div)
+        | Outcome.fault e => Outcome.fault e
+        | Outcome.exhausted => Outcome.exhausted,
+      state := (pure out w).state, events := (pure out w).events } =
+    { outcome := Outcome.returned (Result.ok ↑out), state := w, events := [] }
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_CollectBinding.lean:58:13: error: unsolved goals
+case rec
+S A : Type
+runtime : PV_V263_VecSpine.Runtime S
+f : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : alloc.vec.Vec A),
+    out.length + ids.length ≤ Usize.max →
+      ∀ (w : State S),
+        mapRun (fun v => ↑v) (PV_V263_VecSpine.collectLoop runtime f ids out w) =
+          mapRun (fun values => ↑out ++ values) (PV_V263_WorkerControl.traverse f ids w)
+out : alloc.vec.Vec A
+room : out.length + (i :: ids).length ≤ Usize.max
+w : State S
+a : A
+hf : (f i w).outcome = Outcome.returned (Result.ok a)
+bound : out.length + 1 ≤ Usize.max
+next : alloc.vec.Vec A
+hpush : out.push a = Result.ok next
+hvalues : ↑next = ↑out ++ [a]
+hlength : next.length = out.length + 1
+remaining : next.length + ids.length ≤ Usize.max
+⊢ ?m.259
+
+case cons.returned.ok
+S A : Type
+runtime : PV_V263_VecSpine.Runtime S
+f : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : alloc.vec.Vec A),
+    out.length + ids.length ≤ Usize.max →
+      ∀ (w : State S),
+        mapRun (fun v => ↑v) (PV_V263_VecSpine.collectLoop runtime f ids out w) =
+          mapRun (fun values => ↑out ++ values) (PV_V263_WorkerControl.traverse f ids w)
+out : alloc.vec.Vec A
+room : out.length + (i :: ids).length ≤ Usize.max
+w : State S
+a : A
+hf : (f i w).outcome = Outcome.returned (Result.ok a)
+bound : out.length + 1 ≤ Usize.max
+next : alloc.vec.Vec A
+hpush : out.push a = Result.ok next
+hvalues : ↑next = ↑out ++ [a]
+hlength : next.length = out.length + 1
+remaining : next.length + ids.length ≤ Usize.max
+rec : ?m.259
+⊢ mapRun (fun v => ↑v)
+      (PV_V263_World.bind (f i)
+        (fun a =>
+          PV_V263_World.bind (PV_V263_VecSpine.value runtime (out.push a)) fun next =>
+            PV_V263_VecSpine.collectLoop runtime f ids next)
+        w) =
+    mapRun (fun values => ↑out ++ values) (PV_V263_WorkerControl.traverse f (i :: ids) w)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_CollectBinding.lean:70:17: error: unexpected token ':='; expected command
+'R1Z.PV_V263_CollectBinding.mapResult' does not depend on any axioms
+'R1Z.PV_V263_CollectBinding.mapOutcome' does not depend on any axioms
+'R1Z.PV_V263_CollectBinding.mapRun' does not depend on any axioms
+'R1Z.PV_V263_CollectBinding.compose' does not depend on any axioms
+'R1Z.PV_V263_CollectBinding.stores' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

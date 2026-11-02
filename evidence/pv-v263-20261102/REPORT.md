@@ -1,42 +1,48 @@
-# V263 D571 continuation — target not yet established
+# V263 D572 continuation — target not yet established
 
-Branch codex/pv-runjoin-20261026; entry b905f867a7; proof-source head16c9acf945.
-COMMITS-D571.txt records the stage history. No push/merge. HANDOFF.md preserves
-the complete resume state; SOURCE-BINDING-D571.md gives the source audit.
+Entry8ecf771f50,branch codex/pv-runjoin-20261026,same sparse worktree.
+COMMITS-D572.txt records source/bookkeeping commits; no push or merge.
+SOURCE-BINDING-D572.md and HANDOFF.md give the exact incomplete checkpoint.
 
-New results: the revised candidate explicitly retains item push effects;
-GrantRun.run_total composes both complete worker branches in a constructed
-primitive-resource-granting world, conditional on the still-undischarged
-bounded callback law. VectorLoop.granting_run constructs the exact INNER
-alloc.vec.Vec with symbolic length/counter/capacity bounds. These are model
-component results, NOT deployed success or a completed source refinement.
+New source work: VecSpine uses actual Vec stores for handles/caught chunks/
+family and output values and exposes remaining iterator/ownership lifetimes.
+VectorDrain and AppendBinding retain donor reservations and prove the reserved
+append no-growth/no-wrap/store laws. CollectBinding.stores preserves EVERY
+outcome, post-world and event while relating Vec stores to list traversal.
+BufferLoop/BufferFamily construct reservation-carrying inner stores and prove
+complete-run erasure equality to VectorLoop, without callback success premises.
+Captures reifies exact commitment/sumcheck tuples and proves the outer pool's
+one-element family ranges. These are model/source helper results, not native
+worker completion or actual capture success.
 
-The source/control audit checks29 correspondences and all8 frozen input
-source hashes against9c131667ca. It deliberately reports INCOMPLETE: actual
-heap/capacity metadata, chosen collect/store/drop semantics, EVH codec and
-schedule realisation, outer Vec carriers and actual callback source laws
-remain. The actual opsNative op257 remains residual; NativeBoundary.retained
-still applies. Actual capture post-world threading and Nonempty P are unproved.
-No endpoint callback-totality/success/vector premise was added to hide this.
+Nine pinned Rust1.94.1 std source files now support a six-complete-body exact
+token gate for reserved append/reserve, plus TrustedLen selection. Whole
+source binding remains INCOMPLETE: the outer port still needs retained-capacity
+integration, physical heap and std/thread/TLS/drop/event/schedule binding.
+Actual opsNative op257 is STILL RESIDUAL; actual callback success and Nonempty P
+remain unproved. No endpoint success hypothesis was introduced to hide this.
 
-Before/after:V263 OPEN→OPEN; op257 residual→residual; Nonempty P unproved→unproved.
-Zero premises/rows removed or added; seven links and all earlier removals,
-three TrustItems,observer,simulator,frozen implementation/release pins unchanged.
-V400-257-* and V370 remain named P obligations; V183 stays SUSPENDED(K-3).
-Skeleton consistency: reduced to non-emptiness.
+N90123:221 finite optimized panic=abort checks across every recorded worker
+count passed; frozen source helpers included verbatim, inner Err and ZST cases
+retained. This is isolated finite validation, not full-crate execution or
+universal native refinement. Its late cross-job ID scan is explicitly recorded:
+no collision found; admission was compliant; no unchanged rerun. N90122's
+thread-exhaustion SIGABRT finding/stderr reused, not rerun.
 
-Validation:11 additional focused attempts,7 accepted/4 rejected, no unchanged
-failed rerun. Cumulative34/97 charged,20 accepted/14 rejected,63 left,next79934;
-audits79997–79999 unused. Native3/20 total,17 left,nextN90123;no new native or
-Kani run. Cumulative Lean wall72.26s,peak4555718656bytes,swap0;one6G/8G/no-swap/
-tasks64 scope at a time,-M7000. Exact receipts and archived original logs are
-retained. Accepted #print axioms summaries contain only standard axioms; per
-ax1/ax1' this is not a raw/NEP/coherence/release audit. No final manifest replay
-while source/capture are open. No SBF/ELF/key/fund operation.
+Validation:14 additional focused Lean attempts,7 accepted/7 rejected; cumulative
+48/97 charged,27 accepted/21 rejected,49 left,next79948. Audits79997–79999 unused.
+Native4/20 charged,16 left,nextN90124;0 Kani. Cumulative Lean wall115.41s,
+peak4,561,240,064bytes,swap0;one6G/8G/no-swap/tasks64 scope at a time,-M7000.
+Original rejected source revisions/hashes/logs and exact accepted targets,
+exit/wall/RSS/swap/#print axioms are retained in the individual receipts and
+original-module-logs.json.xz. Accepted summary-based axioms are standard only;
+no raw/NEP/coherence/release audit or full frozen replay is claimed.
 
-Fresh pinned-cache/source/fingerprint and namespace checks passed; no live own
-scopes remain. This is an incomplete CONTEXT CHECKPOINT, not a claim of budget
-exhaustion or impossibility. Next deliverable: finish the deployed source
-binding/real Vec and std lifecycle correspondence, then actual stateful
-opsNative installation and actual callback/capture success. Do not spend the
-next continuation just restating generic candidate-success components.
+Before/after:V263 OPEN→OPEN;op257 residual→residual;Nonempty P unproved→unproved.
+Zero rows/premises removed or added. Three TrustItems,seven links,observer,
+simulator,frozen Rust and release pins unchanged. V400-257-* and V370 remain
+named P obligations;V183 stays SUSPENDED(K-3). Skeleton consistency:reduced to
+non-emptiness. No SBF/ELF/key/fund work. This is an incomplete CONTEXT CHECKPOINT,
+not a budget-exhaustion or impossibility claim. Next:substitute retained buffers
+into the outer spine and finish native binding, then install at the actual
+boundary and discharge the actual reached capture.
