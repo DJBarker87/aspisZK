@@ -14,7 +14,7 @@ for m in mods:
 out='import R1Z.PV_RDCD5_V197ConsumerReplay\n'
 for n in queries:out+='#check @'+n+'\n#print axioms '+n+'\n'
 (L/'PV_RDCD5_V197Audit.lean').write_text(out)
-(L/'PV_RDCD5_V197Focused.lean').write_text('''import R1Z.PV_RDCD5_V197Audit
+(L/'PV_RDCD5_V197Focused.lean').write_text('''import R1Z.PV_RDCD5_V197ConsumerReplay
 #check @R1Z.PV_RDCD5_V197Restored.parser_instance
 #print axioms R1Z.PV_RDCD5_V197Restored.parser_instance
 #check @R1Z.PV_RDCD5_V197Restored.native_window

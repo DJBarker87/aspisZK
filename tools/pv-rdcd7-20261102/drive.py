@@ -18,6 +18,7 @@ for dotted in plan['compile_order']:
 
 for dotted in plan['compile_order']:
  m=dotted.replace('.','/')
+ if plan.get('module_kinds',{}).get(dotted,'ordinary-focused')!='ordinary-focused':continue
  if m in passed:continue
  assert n<90797
  for tries in range(11):

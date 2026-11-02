@@ -65,6 +65,7 @@ unsafe def main (_args : List String) : IO UInt32 := do
     let mut failed := false
     for root in roots do
       try
+        elabCommand (← `(command| #check @$(mkIdent root)))
         elabCommand (← `(command| #print axioms $(mkIdent root)))
         NEP.audit root ("NEP_" ++ mode ++ "_" ++ root.toString)
       catch e =>

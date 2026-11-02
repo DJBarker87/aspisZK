@@ -5,6 +5,7 @@ n=int(sys.argv[1]);m=sys.argv[2];assert 90700<=n<=90799
 run_audit=len(sys.argv)==4 and sys.argv[3]=='--audit-runtime'
 assert len(sys.argv)==3 or run_audit
 if run_audit:assert n==90797 and m=='R1Z/PV_RDCD5_NEPDriver'
+if n>=90797:assert (n,m,run_audit) in [(90797,'R1Z/PV_RDCD5_NEPDriver',True),(90798,'R1Z/PV_RDCD5_V197Focused',False),(90799,'R1Z/PV_RDCD5_V197FrozenManifest',False)]
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 if not p.exists():p=R/'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023'/(m.split('/')[-1]+'.lean')
 s=p.read_bytes()

@@ -3,6 +3,13 @@ from pathlib import Path
 import hashlib,json,re,shlex,subprocess,sys,time
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';D='/home/dombarker/project-offloads/codex-pv-rdcd7-20261102';H='dombarker@100.108.41.90';G='/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy'
 name,phase,*cmd=sys.argv[1:];assert re.fullmatch(r'[A-Za-z0-9_-]+',name) and cmd
+prior_receipts=[json.loads(p.read_text()) for p in E.glob('*/receipt.json')]
+if phase=='Lean':
+ assert name.startswith('lean-') and 90700<=int(name[5:])<=90799
+ assert sum(j['expected_phase']=='Lean' for j in prior_receipts)<60,'Lean budget exhausted'
+else:
+ assert re.fullmatch('N9080[0-9]',name)
+ assert sum(j['expected_phase']!='Lean' for j in prior_receipts)<10,'native budget exhausted'
 # A refusal imposes a job-wide180s cooldown, even if later host admission would allow.
 from datetime import datetime,timezone
 refusals=[]
