@@ -35,7 +35,9 @@ theorem grant_exact {S : Type} (encode : {A : Type} → Request A → Bytes)
     · simp only [launch,traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
       rw [ho]
       rfl
-    · change (launch (grants encode) is w').state.nextHandle = _
+    · simp only [launch,traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
+      rw [ho]
+      change (launch (grants encode) is w').state.nextHandle = _
       rw [hs]
       simp only [w',List.length_cons]
       omega
