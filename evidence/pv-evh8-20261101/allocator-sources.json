@@ -1,0 +1,60 @@
+{
+  "toolchain_directory": "1.94.1-x86_64-unknown-linux-gnu",
+  "files": [
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/raw_vec/mod.rs",
+      "sha256": "0c006d1bedcc8c1aa6d8f37ad5553e1b14c452c732745612cf23c4663c090965",
+      "bytes": 34150,
+      "spans": [
+        {
+          "first": 24,
+          "last": 34,
+          "text": "// only one location which panics rather than a bunch throughout the module.\n#[cfg(not(no_global_oom_handling))]\n#[cfg_attr(not(panic = \"immediate-abort\"), inline(never))]\nconst fn capacity_overflow() -> ! {\n    panic!(\"capacity overflow\");\n}\n\nenum AllocInit {\n    /// The contents of the new memory are uninitialized.\n    Uninitialized,\n    #[cfg(not(no_global_oom_handling))]\n"
+        },
+        {
+          "first": 410,
+          "last": 473,
+          "text": "}\n\n#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]\n#[rustfmt::skip] // FIXME(fee1-dead): temporary measure before rustfmt is bumped\nconst impl<A: [const] Allocator + [const] Destruct> RawVecInner<A> {\n    #[cfg(not(no_global_oom_handling))]\n    #[inline]\n    fn with_capacity_in(capacity: usize, alloc: A, elem_layout: Layout) -> Self {\n        match Self::try_allocate_in(capacity, AllocInit::Uninitialized, alloc, elem_layout) {\n            Ok(this) => {\n                unsafe {\n                    // Make it more obvious that a subsequent Vec::reserve(capacity) will not allocate.\n                    hint::assert_unchecked(!this.needs_to_grow(0, capacity, elem_layout));\n                }\n                this\n            }\n            Err(err) => handle_error(err),\n        }\n    }\n\n    fn try_allocate_in(\n        capacity: usize,\n        init: AllocInit,\n        alloc: A,\n        elem_layout: Layout,\n    ) -> Result<Self, TryReserveError> {\n        // We avoid `unwrap_or_else` here because it bloats the amount of\n        // LLVM IR generated.\n        let layout = match layout_array(capacity, elem_layout) {\n            Ok(layout) => layout,\n            Err(_) => return Err(CapacityOverflow.into()),\n        };\n\n        // Don't allocate here because `Drop` will not deallocate when `capacity` is 0.\n        if layout.size() == 0 {\n            return Ok(Self::new_in(alloc, elem_layout.alignment()));\n        }\n\n        let result = match init {\n            AllocInit::Uninitialized => alloc.allocate(layout),\n            #[cfg(not(no_global_oom_handling))]\n            AllocInit::Zeroed => alloc.allocate_zeroed(layout),\n        };\n        let ptr = match result {\n            Ok(ptr) => ptr,\n            Err(_) => return Err(AllocError { layout, non_exhaustive: () }.into()),\n        };\n\n        // Allocators currently return a `NonNull<[u8]>` whose length\n        // matches the size requested. If that ever changes, the capacity\n        // here should change to `ptr.len() / size_of::<T>()`.\n        Ok(Self {\n            ptr: Unique::from(ptr.cast()),\n            cap: unsafe { Cap::new_unchecked(capacity) },\n            alloc,\n        })\n    }\n\n    /// # Safety\n    /// - `elem_layout` must be valid for `self`, i.e. it must be the same `elem_layout` used to\n    ///   initially construct `self`\n    /// - `elem_layout`'s size must be a multiple of its alignment\n    #[cfg(not(no_global_oom_handling))]\n    #[inline]\n"
+        },
+        {
+          "first": 850,
+          "last": 880,
+          "text": "    }\n}\n\n// Central function for reserve error handling.\n#[cfg(not(no_global_oom_handling))]\n#[cold]\n#[optimize(size)]\n#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]\nconst fn handle_error(e: TryReserveError) -> ! {\n    match e.kind() {\n        CapacityOverflow => capacity_overflow(),\n        AllocError { layout, .. } => handle_alloc_error(layout),\n    }\n}\n\n#[inline]\n#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]\nconst fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout, TryReserveError> {\n    // FIXME(const-hack) return to using `map` and `map_err` once `const_closures` is implemented\n    match elem_layout.repeat(cap) {\n        Ok((layout, _pad)) => Ok(layout),\n        Err(_) => Err(CapacityOverflow.into()),\n    }\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/alloc/src/alloc.rs",
+      "sha256": "03fac86ce9f1ec183926f7ba9c5e8d8c8f3c90eeea79686de04f34ed67099585",
+      "bytes": 22216,
+      "spans": [
+        {
+          "first": 180,
+          "last": 216,
+          "text": "}\n\nimpl Global {\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn alloc_impl_runtime(layout: Layout, zeroed: bool) -> Result<NonNull<[u8]>, AllocError> {\n        match layout.size() {\n            0 => Ok(NonNull::slice_from_raw_parts(layout.dangling(), 0)),\n            // SAFETY: `layout` is non-zero in size,\n            size => unsafe {\n                let raw_ptr = if zeroed { alloc_zeroed(layout) } else { alloc(layout) };\n                let ptr = NonNull::new(raw_ptr).ok_or(AllocError)?;\n                Ok(NonNull::slice_from_raw_parts(ptr, size))\n            },\n        }\n    }\n\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn deallocate_impl_runtime(ptr: NonNull<u8>, layout: Layout) {\n        if layout.size() != 0 {\n            // SAFETY:\n            // * We have checked that `layout` is non-zero in size.\n            // * The caller is obligated to provide a layout that \"fits\", and in this case,\n            //   \"fit\" always means a layout that is equal to the original, because our\n            //   `allocate()`, `grow()`, and `shrink()` implementations never returns a larger\n            //   allocation than requested.\n            // * Other conditions must be upheld by the caller, as per `Allocator::deallocate()`'s\n            //   safety documentation.\n            unsafe { dealloc(ptr.as_ptr(), layout) }\n        }\n    }\n\n    // SAFETY: Same as `Allocator::grow`\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn grow_impl_runtime(\n"
+        },
+        {
+          "first": 420,
+          "last": 441,
+          "text": "    }\n}\n\n#[unstable(feature = \"allocator_api\", issue = \"32838\")]\n#[rustc_const_unstable(feature = \"const_heap\", issue = \"79597\")]\nunsafe impl const Allocator for Global {\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn allocate(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {\n        self.alloc_impl(layout, false)\n    }\n\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    fn allocate_zeroed(&self, layout: Layout) -> Result<NonNull<[u8]>, AllocError> {\n        self.alloc_impl(layout, true)\n    }\n\n    #[inline]\n    #[cfg_attr(miri, track_caller)] // even without panics, this helps for Miri backtraces\n    unsafe fn deallocate(&self, ptr: NonNull<u8>, layout: Layout) {\n        // SAFETY: all conditions must be upheld by the caller\n"
+        },
+        {
+          "first": 525,
+          "last": 574,
+          "text": "///   [The panic handler] applies as to any panic.\n///\n/// [`set_alloc_error_hook`]: ../../std/alloc/fn.set_alloc_error_hook.html\n/// [`take_alloc_error_hook`]: ../../std/alloc/fn.take_alloc_error_hook.html\n/// [The panic handler]: https://doc.rust-lang.org/reference/runtime.html#the-panic_handler-attribute\n/// [no_std]: https://doc.rust-lang.org/reference/names/preludes.html#the-no_std-attribute\n#[stable(feature = \"global_alloc\", since = \"1.28.0\")]\n#[rustc_const_unstable(feature = \"const_alloc_error\", issue = \"92523\")]\n#[cfg(not(no_global_oom_handling))]\n#[cold]\n#[optimize(size)]\npub const fn handle_alloc_error(layout: Layout) -> ! {\n    const fn ct_error(_: Layout) -> ! {\n        panic!(\"allocation failed\");\n    }\n\n    #[inline]\n    fn rt_error(layout: Layout) -> ! {\n        unsafe {\n            __rust_alloc_error_handler(layout.size(), layout.align());\n        }\n    }\n\n    #[cfg(not(panic = \"immediate-abort\"))]\n    {\n        core::intrinsics::const_eval_select((layout,), ct_error, rt_error)\n    }\n\n    #[cfg(panic = \"immediate-abort\")]\n    ct_error(layout)\n}\n\n#[cfg(not(no_global_oom_handling))]\n#[doc(hidden)]\n#[allow(unused_attributes)]\n#[unstable(feature = \"alloc_internals\", issue = \"none\")]\npub mod __alloc_error_handler {\n    // called via generated `__rust_alloc_error_handler` if there is no\n    // `#[alloc_error_handler]`.\n    #[rustc_std_internal_symbol]\n    pub unsafe fn __rdl_alloc_error_handler(size: usize, _align: usize) -> ! {\n        core::panicking::panic_nounwind_fmt(\n            format_args!(\"memory allocation of {size} bytes failed\"),\n            /* force_no_backtrace */ false,\n        )\n    }\n}\n"
+        }
+      ]
+    }
+  ],
+  "status": "READ-ONLY deployed-library source inventory; structural binding OPEN",
+  "model": "PV_EVH_AllocatorWorld",
+  "obligations": [
+    "RawVec layout and zero-size branch",
+    "allocator state/errno/address validity",
+    "initialized regions and ownership",
+    "capacity overflow and handle_alloc_error diagnostic/abort paths under fmt-1",
+    "native event encoding",
+    "V370 compiler boundary"
+  ],
+  "rows_removed": []
+}
