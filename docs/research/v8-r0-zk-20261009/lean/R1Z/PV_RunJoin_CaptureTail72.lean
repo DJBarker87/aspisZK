@@ -27,6 +27,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨h,o,q,hr,ho,hq,heq⟩ := balanced
   have hm : core.result.Result.map_err (BuiltinFnOnce r1_wire.Error verifier.Error)
       (.Ok built) prover.semantic_error=ok (.Ok built) := by
+    change @ExternalFuns.op12 (types base) (selected base heap box ops) _ _ _ _ _ _ _=_
     rw [PV_RunJoin_CaptureBoundary61.selected_mapErr base heap box ops]
     rfl
   simp only [PV_RunJoin_NativeAfterBuild55.run,hm,
