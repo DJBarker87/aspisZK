@@ -1,0 +1,149 @@
+START 79651 R1Z.PV_RunJoin_InterpolationSteps72
+DONE 79651 R1Z.PV_RunJoin_InterpolationSteps72 exit 1 wall 2.06 RSS 2644254720
+s denominator degree i =>
+        Lean.Order.fix
+          (fun f basis denominator degree j =>
+            if j = 28#usize then ok (basis, denominator)
+            else
+              if i = j then do
+                let i1 ← lift (j.wrapping_add 1#usize)
+                f basis denominator degree i1
+              else do
+                let basis1 ← _a basis degree j
+                let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+                let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+                let m ← aspis_core.field.M31.sub i1 i2
+                let denominator1 ← denominator.mul m
+                let i3 ← lift (degree.wrapping_add 1#usize)
+                let i4 ← lift (j.wrapping_add 1#usize)
+                f basis1 denominator1 i3 i4)
+          ⋯ basis denominator degree) =
+      fun basis denominator degree i =>
+      Lean.Order.fix
+        (fun f basis denominator degree j =>
+          if j = 28#usize then ok (basis, denominator)
+          else
+            if i = j then do
+              let i1 ← lift (j.wrapping_add 1#usize)
+              f basis denominator degree i1
+            else do
+              let basis1 ← host_sumcheck.interpolation_extend basis degree j
+              let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+              let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+              let m ← aspis_core.field.M31.sub i1 i2
+              let denominator1 ← denominator.mul m
+              let i3 ← lift (degree.wrapping_add 1#usize)
+              let i4 ← lift (j.wrapping_add 1#usize)
+              f basis1 denominator1 i3 i4)
+        ⋯ basis denominator degree
+Error: Application type mismatch: The argument
+  host_sumcheck.interpolation_basis_steps.mutual._proof_1 i
+has type
+  Lean.Order.monotone fun f basis denominator degree j =>
+    if j = 28#usize then ok (basis, denominator)
+    else
+      if i = j then do
+        let i1 ← lift (j.wrapping_add 1#usize)
+        f basis denominator degree i1
+      else do
+        let basis1 ← host_sumcheck.interpolation_extend basis degree j
+        let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+        let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+        let m ← aspis_core.field.M31.sub i1 i2
+        let denominator1 ← denominator.mul m
+        let i3 ← lift (degree.wrapping_add 1#usize)
+        let i4 ← lift (j.wrapping_add 1#usize)
+        f basis1 denominator1 i3 i4
+but is expected to have type
+  Lean.Order.monotone fun f basis denominator degree j =>
+    if j = 28#usize then ok (basis, denominator)
+    else
+      if i = j then do
+        let i1 ← lift (j.wrapping_add 1#usize)
+        f basis denominator degree i1
+      else do
+        let basis1 ← _a basis degree j
+        let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+        let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+        let m ← aspis_core.field.M31.sub i1 i2
+        let denominator1 ← denominator.mul m
+        let i3 ← lift (degree.wrapping_add 1#usize)
+        let i4 ← lift (j.wrapping_add 1#usize)
+        f basis1 denominator1 i3 i4
+in the application
+  Lean.Order.fix
+    (fun f basis denominator degree j =>
+      if j = 28#usize then ok (basis, denominator)
+      else
+        if i = j then do
+          let i1 ← lift (j.wrapping_add 1#usize)
+          f basis denominator degree i1
+        else do
+          let basis1 ← _a basis degree j
+          let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+          let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+          let m ← aspis_core.field.M31.sub i1 i2
+          let denominator1 ← denominator.mul m
+          let i3 ← lift (degree.wrapping_add 1#usize)
+          let i4 ← lift (j.wrapping_add 1#usize)
+          f basis1 denominator1 i3 i4)
+    ⋯
+
+Explanation: The rewrite tactic rewrites an expression 'e' using an equality 'a = b' by the following process. First, it looks for all 'a' in 'e'. Second, it tries to abstract these occurrences of 'a' to create a function 'm := fun _a => ...', called the *motive*, with the property that 'm a' is definitionally equal to 'e'. Third, we observe that 'congrArg' implies that 'm a = m b', which can be used with lemmas such as 'Eq.mpr' to change the goal. However, if 'e' depends on specific properties of 'a', then the motive 'm' might not typecheck.
+
+Possible solutions: use rewrite's 'occs' configuration option to limit which occurrences are rewritten, or use 'simp' or 'conv' mode, which have strategies for certain kinds of dependencies (these tactics can handle proofs and 'Decidable' instances whose types depend on the rewritten term, and 'simp' can apply user-defined '@[congr]' theorems as well).
+
+inst✝ : ExternalTypes
+a b : ExternalFuns
+h55 : ExternalFuns.op55 = ExternalFuns.op55
+h57 : ExternalFuns.op57 = ExternalFuns.op57
+h74 : ExternalFuns.op74 = ExternalFuns.op74
+⊢ (fun basis denominator degree i =>
+      Lean.Order.fix
+        (fun f basis denominator degree j =>
+          if j = 28#usize then ok (basis, denominator)
+          else
+            if i = j then do
+              let i1 ← lift (j.wrapping_add 1#usize)
+              f basis denominator degree i1
+            else do
+              let basis1 ← host_sumcheck.interpolation_extend basis degree j
+              let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+              let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+              let m ← aspis_core.field.M31.sub i1 i2
+              let denominator1 ← denominator.mul m
+              let i3 ← lift (degree.wrapping_add 1#usize)
+              let i4 ← lift (j.wrapping_add 1#usize)
+              f basis1 denominator1 i3 i4)
+        ⋯ basis denominator degree) =
+    fun basis denominator degree i =>
+    Lean.Order.fix
+      (fun f basis denominator degree j =>
+        if j = 28#usize then ok (basis, denominator)
+        else
+          if i = j then do
+            let i1 ← lift (j.wrapping_add 1#usize)
+            f basis denominator degree i1
+          else do
+            let basis1 ← host_sumcheck.interpolation_extend basis degree j
+            let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+            let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+            let m ← aspis_core.field.M31.sub i1 i2
+            let denominator1 ← denominator.mul m
+            let i3 ← lift (degree.wrapping_add 1#usize)
+            let i4 ← lift (j.wrapping_add 1#usize)
+            f basis1 denominator1 i3 i4)
+      ⋯ basis denominator degree
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (28 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'R1Z.PV_RunJoin_InterpolationSteps72.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,88 @@
+START 79652 R1Z.PV_RunJoin_InterpolationSteps72
+DONE 79652 R1Z.PV_RunJoin_InterpolationSteps72 exit 1 wall 2.72 RSS 2643312640
+'R1Z.PV_RunJoin_InterpolationSteps72.fix_congr' depends on axioms: [propext, Classical.choice, Quot.sound]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_InterpolationSteps72.lean:22:2: error: Tactic `apply` failed: could not unify the conclusion of `congrArg fun recurse => ?m.50`
+  ?m.51 ?m.47 = ?m.51 ?m.48
+with the goal
+  Lean.Order.fix
+      (fun f basis denominator degree j =>
+        if j = 28#usize then ok (basis, denominator)
+        else
+          if i = j then do
+            let i1 ← lift (j.wrapping_add 1#usize)
+            f basis denominator degree i1
+          else do
+            let basis1 ← host_sumcheck.interpolation_extend basis degree j
+            let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+            let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+            let m ← aspis_core.field.M31.sub i1 i2
+            let denominator1 ← denominator.mul m
+            let i3 ← lift (degree.wrapping_add 1#usize)
+            let i4 ← lift (j.wrapping_add 1#usize)
+            f basis1 denominator1 i3 i4)
+      ⋯ basis denominator degree =
+    Lean.Order.fix
+      (fun f basis denominator degree j =>
+        if j = 28#usize then ok (basis, denominator)
+        else
+          if i = j then do
+            let i1 ← lift (j.wrapping_add 1#usize)
+            f basis denominator degree i1
+          else do
+            let basis1 ← host_sumcheck.interpolation_extend basis degree j
+            let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+            let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+            let m ← aspis_core.field.M31.sub i1 i2
+            let denominator1 ← denominator.mul m
+            let i3 ← lift (degree.wrapping_add 1#usize)
+            let i4 ← lift (j.wrapping_add 1#usize)
+            f basis1 denominator1 i3 i4)
+      ⋯ basis denominator degree
+
+Note: The full type of `congrArg fun recurse => ?m.50` is
+  ?m.47 = ?m.48 → ?m.51 ?m.47 = ?m.51 ?m.48
+
+inst✝ : ExternalTypes
+a b : ExternalFuns
+h55 : ExternalFuns.op55 = ExternalFuns.op55
+h57 : ExternalFuns.op57 = ExternalFuns.op57
+h74 : ExternalFuns.op74 = ExternalFuns.op74
+basis : Std.Array aspis_core.field.M31 28#usize
+denominator : aspis_core.field.M31
+degree i : Usize
+⊢ Lean.Order.fix
+      (fun f basis denominator degree j =>
+        if j = 28#usize then ok (basis, denominator)
+        else
+          if i = j then do
+            let i1 ← lift (j.wrapping_add 1#usize)
+            f basis denominator degree i1
+          else do
+            let basis1 ← host_sumcheck.interpolation_extend basis degree j
+            let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+            let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+            let m ← aspis_core.field.M31.sub i1 i2
+            let denominator1 ← denominator.mul m
+            let i3 ← lift (degree.wrapping_add 1#usize)
+            let i4 ← lift (j.wrapping_add 1#usize)
+            f basis1 denominator1 i3 i4)
+      ⋯ basis denominator degree =
+    Lean.Order.fix
+      (fun f basis denominator degree j =>
+        if j = 28#usize then ok (basis, denominator)
+        else
+          if i = j then do
+            let i1 ← lift (j.wrapping_add 1#usize)
+            f basis denominator degree i1
+          else do
+            let basis1 ← host_sumcheck.interpolation_extend basis degree j
+            let i1 ← lift (UScalar.cast UScalarTy.U32 i)
+            let i2 ← lift (UScalar.cast UScalarTy.U32 j)
+            let m ← aspis_core.field.M31.sub i1 i2
+            let denominator1 ← denominator.mul m
+            let i3 ← lift (degree.wrapping_add 1#usize)
+            let i4 ← lift (j.wrapping_add 1#usize)
+            f basis1 denominator1 i3 i4)
+      ⋯ basis denominator degree
+'R1Z.PV_RunJoin_InterpolationSteps72.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

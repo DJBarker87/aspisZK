@@ -1,0 +1,98 @@
+START 79632 R1Z.PV_RunJoin_RoundSequencePlan72
+DONE 79632 R1Z.PV_RunJoin_RoundSequencePlan72 exit 1 wall 3.59 RSS 4480413696
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:12:31: error: Ambiguous term
+  Q
+Possible interpretations:
+  PV_RunJoin_RoundThread38.Q : Type
+  
+  PV_RunJoin_Sequential64.Q : Type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:25:31: error: Ambiguous term
+  Q
+Possible interpretations:
+  PV_RunJoin_RoundThread38.Q : Type
+  
+  PV_RunJoin_Sequential64.Q : Type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:30:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:33:70: error: Ambiguous term
+  Q
+Possible interpretations:
+  PV_RunJoin_RoundThread38.Q : Type
+  
+  PV_RunJoin_Sequential64.Q : Type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:44:21: error: Ambiguous term
+  Q
+Possible interpretations:
+  PV_RunJoin_RoundThread38.Q : Type
+  
+  PV_RunJoin_Sequential64.Q : Type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:57:12: error: unsolved goals
+case succ.Err
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F S E : Type
+runtime : PV_RunJoin_AllocatorWorld63.Runtime S E
+world : PV_FXM_ReserveWorld.World S E
+digest : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+n : ℕ
+ih :
+  ∀ (t : host_wire.SemanticTranscript H) (o : alloc.vec.Vec U8) (p : Point) (q : sorry) (r : Usize),
+    execute runtime (phase digest oi n t o p q r oracle) world = do
+      let triple ← PV_RunJoin_RoundThread38.phase digest oi n t o p sorry r oracle
+      ok (triple, world)
+t : host_wire.SemanticTranscript H
+o : alloc.vec.Vec U8
+p : Point
+q : sorry
+r : Usize
+t' : host_wire.SemanticTranscript H
+o' : alloc.vec.Vec U8
+e : r1_wire.Error
+⊢ ok ((core.result.Result.Err e, t', o'), world) = do
+    let triple ←
+      let (r, transcript1, output1) := (core.result.Result.Err e, t', o')
+        do
+        let cf ←
+          match r with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let (point1, running1) := val
+            do
+            let i ← lift (r.wrapping_add 1#usize)
+            PV_RunJoin_RoundThread38.phase digest oi n transcript1 output1 point1 running1 i oracle
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r1 ←
+              match residual with
+                | core.result.Result.Ok x =>
+                  core.convert.Infallible.rec
+                    (fun x =>
+                      Result
+                        (core.result.Result (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                          r1_wire.Error))
+                    x
+                | core.result.Result.Err e => ok (core.result.Result.Err (core.convert.FromSame.from e))
+            ok (r1, transcript1, output1)
+    ok (triple, world)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:60:8: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [core.result.Result.Insts.CoreOpsTry.branch, ̲bind_tc_ok,
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
+  ̵  ̵ ̵ ̵ ̵ ̵ ̵ ̵c̵o̵r̵e.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵e̵xecute]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:49:23: warning: declaration uses `sorry`
+'R1Z.PV_RunJoin_RoundSequencePlan72.round' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.round_execute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.phase' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.phase_execute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

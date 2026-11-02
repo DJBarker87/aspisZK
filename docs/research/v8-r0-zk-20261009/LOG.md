@@ -11611,3 +11611,20 @@ runjoin49 (head 3b72078039, pushed) used all 100 Lean attempts (72 accepted, 28 
 It also placed the incoming installations as D430 asked. The hinput backend-messages association is a step (2) producer obligation. The op79 and op254 installation identifications belong to step (4), at the deployed caller. Still open in step (2): the final claim-stream polynomial aggregate, the complete prepare and common-challenge association, the hinput producer proof, FinishContext and the ordered publication bytes. Rows removed: 0.
 
 runjoin50 launched (IDs 63600-63699; 100 Lean, 0 Kani) on those items in order, aggregating the 29 columns by induction or fold. Privacy target not yet established.
+
+## D552 — Runjoin72 native claims, helper balance and worker-to-polynomial composition (2026-11-02)
+
+Same branch/worktree; continuation of D551. The native multilinear adapter and
+statement-point loop now compose into point_claims success for every actual
+1024-row reached column. The final capture tail's helper-balance check is
+transported from build_with_material through the exact lifted column26.
+The complete dependent ten-round source sequence is reified, and the native
+op257 output/count/callback agreement composes with reached op227 sufficiency
+through merge, symbolic interpolation and exact polynomial bytes. Remaining
+boundary/record/transcript and earlier audit/build obligations are explicit.
+No Nonempty P or NodeAppend removal is claimed. Same seven retained links;
+no rows removed. V183 support remains SUSPENDED(K-3), D549; no deployed credit
+restored. Three trust items, observer, simulator and release pins unchanged.
+Checkpoint and exact receipts: evidence/pv-runjoin72-20261102/HANDOFF.md and
+SESSION-D552.json. Final audit/report will follow completion of this budget.
+Privacy target not yet established.

@@ -1,0 +1,42 @@
+START 79633 R1Z.PV_RunJoin_RoundSequencePlan72
+DONE 79633 R1Z.PV_RunJoin_RoundSequencePlan72 exit 1 wall 3.74 RSS 4481884160
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:57:12: error: unsolved goals
+case succ.Err
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H F S E : Type
+runtime : PV_RunJoin_AllocatorWorld63.Runtime S E
+world : PV_FXM_ReserveWorld.World S E
+digest : aspis_core.digest.Digest32 H
+oi : host_sumcheck.Oracle F
+oracle : F
+n : ℕ
+ih :
+  ∀ (t : host_wire.SemanticTranscript H) (o : alloc.vec.Vec U8) (p : Point) (q : Q) (r : Usize),
+    execute runtime (phase digest oi n t o p q r oracle) world = do
+      let triple ← PV_RunJoin_RoundThread38.phase digest oi n t o p q r oracle
+      ok (triple, world)
+t : host_wire.SemanticTranscript H
+o : alloc.vec.Vec U8
+p : Point
+q : Q
+r : Usize
+t' : host_wire.SemanticTranscript H
+o' : alloc.vec.Vec U8
+e : r1_wire.Error
+⊢ ok ((core.result.Result.Err e, t', o'), world) =
+    ok ((core.result.Result.Err (core.convert.FromSame.from e), t', o'), world)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundSequencePlan72.lean:60:8: warning: This simp argument is unused:
+  core.convert.FromSame
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵r̵e̵s̵u̵l̵t̵.̵R̵e̵s̵u̵l̵t̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵[̲c̲o̲r̲e̲.̲r̲e̲s̲u̲l̲t̲.̲R̲e̲s̲u̲l̲t̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲.̲b̲r̲a̲n̲c̲h̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual, c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵F̵r̵o̵m̵S̵a̵m̵e̵,̵e̵x̵e̵c̵u̵t̵e̵,̵A̵e̵n̵e̵a̵s̵.̵S̵t̵d̵.̵u̵n̵c̵u̵r̵r̵y̵]̵e̲x̲e̲c̲u̲t̲e̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲A̲e̲n̲e̲a̲s̲.̲S̲t̲d̲.̲u̲n̲c̲u̲r̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_RoundSequencePlan72.round' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.round_execute' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.phase' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundSequencePlan72.phase_execute' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

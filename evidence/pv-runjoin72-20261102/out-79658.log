@@ -1,0 +1,102 @@
+START 79658 R1Z.PV_RunJoin_RoundAfterPolynomial72
+DONE 79658 R1Z.PV_RunJoin_RoundAfterPolynomial72 exit 1 wall 4.19 RSS 4561858560
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_RoundAfterPolynomial72.lean:70:69: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+H : Type
+digest : aspis_core.digest.Digest32 H
+transcript : host_wire.SemanticTranscript H
+output : alloc.vec.Vec U8
+point : Std.Array Q 10#usize
+running : Q
+round assignments : Usize
+evaluations : PV_RunJoin_RoundWorkerReached69.Evaluations
+values polynomial : Std.Array Q 28#usize
+merged :
+  host_sumcheck.merge_evaluations (alloc.vec.Vec.deref evaluations) assignments = ok (core.result.Result.Ok values)
+interpolated : host_sumcheck.interpolate values = ok polynomial
+⊢ (do
+      let q ← aspis_core.state_only_sumcheck.state_only_boundary_sum polynomial
+      let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q running
+      if b = true then ok (core.result.Result.Err (r1_wire.Error.Boundary round), transcript, output)
+        else do
+          let polynomial_bytes ← host_sumcheck.encode_polynomial polynomial
+          let i2 ← lift (UScalar.cast UScalarTy.U8 round)
+          let i3 ← lift (U8.wrapping_add 15#u8 i2)
+          let r1 ← host_wire.record i3 polynomial_bytes.deref
+          let cf1 ←
+            match r1 with
+              | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+              | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => do
+              let i4 ← lift (UScalar.cast UScalarTy.U8 round)
+              let i5 ← lift (U8.wrapping_add 15#u8 i4)
+              let (r2, transcript1) ← host_wire.SemanticTranscript.semantic digest transcript i5 val1.deref
+              let cf2 ←
+                match r2 with
+                  | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                  | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+              match cf2 with
+                | core.ops.control_flow.ControlFlow.Continue val2 => do
+                  let point1 ← point.update round val2
+                  let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output val1.deref
+                  let q1 ← point1.index_usize round
+                  let running1 ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial polynomial q1
+                  ok (core.result.Result.Ok (point1, running1), transcript1, output1)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r3 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                        (core.convert.FromSame r1_wire.Error) residual
+                  ok (r3, transcript1, output)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r2 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                    (core.convert.FromSame r1_wire.Error) residual
+              ok (r2, transcript, output)) =
+    do
+    let q ← aspis_core.state_only_sumcheck.state_only_boundary_sum polynomial
+    let b ← core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 q running
+    if b = true then ok (core.result.Result.Err (r1_wire.Error.Boundary round), transcript, output)
+      else do
+        let polynomial_bytes ← host_sumcheck.encode_polynomial polynomial
+        let i2 ← lift (UScalar.cast UScalarTy.U8 round)
+        let i3 ← lift (U8.wrapping_add 15#u8 i2)
+        let r1 ← host_wire.record i3 polynomial_bytes.deref
+        let cf1 ←
+          match r1 with
+            | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+            | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+        match cf1 with
+          | core.ops.control_flow.ControlFlow.Continue val1 => do
+            let i4 ← lift (UScalar.cast UScalarTy.U8 round)
+            let i5 ← lift (U8.wrapping_add 15#u8 i4)
+            let (r2, transcript1) ← host_wire.SemanticTranscript.semantic digest transcript i5 val1.deref
+            let cf2 ←
+              match r2 with
+                | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+                | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+            match cf2 with
+              | core.ops.control_flow.ControlFlow.Continue val2 => do
+                let point1 ← point.update round val2
+                let output1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU8 output val1.deref
+                let q1 ← point1.index_usize round
+                let running1 ← aspis_core.state_only_sumcheck.evaluate_state_only_polynomial polynomial q1
+                ok (core.result.Result.Ok (point1, running1), transcript1, output1)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r3 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                      (core.convert.FromSame r1_wire.Error) residual
+                ok (r3, transcript1, output)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r2 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  (Std.Array aspis_core.field.QM31 10#usize × aspis_core.field.QM31)
+                  (core.convert.FromSame r1_wire.Error) residual
+            ok (r2, transcript, output)
+'R1Z.PV_RunJoin_RoundAfterPolynomial72.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_RoundAfterPolynomial72.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
