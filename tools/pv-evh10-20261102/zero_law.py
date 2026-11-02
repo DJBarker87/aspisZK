@@ -33,3 +33,8 @@ p=Path('lean/PV_EVH_DeployedZeroSelected.lean')
 if '--check' in sys.argv:assert p.read_text()==text
 else:p.write_text(text)
 print('PASS source-identical deployed zeroize selected-law replay')
+
+r=dict(module='R1Z/PV_RDCD_ZeroSelected',revision=rev,path=v['path'],recorded_sha256=v['sha256'],replayed_sha256=sha(text.encode()),edits=['import world law from this cohort','namespace renaming only'],no_old_dictionary_objects_loaded=True)
+p=E/'zero-selected-replay.json'
+if '--check' in sys.argv:assert json.load(open(p))==r
+else:p.write_text(json.dumps(r,indent=2)+'\n')
