@@ -41,7 +41,7 @@ theorem badfd_dispatch {E : Type} (work : Q (Except E Unit))
     (dropError : E → Q Unit) (isBadFd : E → Q Bool) (w : State) (e : E)
     (hw : (work w).outcome = .returned (.ok (.error e))) :
     handleBadFd work dropError isBadFd w =
-      let tail := (do
+      let tail : PV_EVH_Runtime.Run (Except E Unit) := (do
         let bad ← isBadFd e
         if bad then do let _ ← dropError e; pure (.ok ())
         else pure (.error e)) (work w).state
@@ -55,7 +55,7 @@ theorem scoped_error {E : Type} (acquire release : Q Unit) (work : Q (Except E U
     (ha : (acquire w).outcome = .returned (.ok ()))
     (hw : (work (acquire w).state).outcome = .returned (.ok (.error e))) :
     scoped acquire release work w =
-      let tail := (do let _ ← release; pure (.error e)) (work (acquire w).state).state
+      let tail : PV_EVH_Runtime.Run (Except E Unit) := (do let _ ← release; pure (.error e)) (work (acquire w).state).state
       ⟨tail.outcome,tail.state,(acquire w).events ++
         ((work (acquire w).state).events ++ tail.events)⟩ := by
   simp only [scoped,Bind.bind,PV_EVH_Runtime.bind,ha,hw]
