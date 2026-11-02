@@ -1,0 +1,103 @@
+{
+  "evidence_class": "structural source association (own-1), existing deployed dependency law replay",
+  "source_revision": "0ea9f8a3afaf1504b838032d3dd2542c6e125047",
+  "recorded_source": {
+    "path": "evidence/pv-rdcd-20261028/zeroize190-complete-structural.json",
+    "sha256": "eb419c461fc077431f0e537ec6fbde6ce97766fbcb07754823d62dd82f17d038"
+  },
+  "deployed_zeroize_sha256": "61012679ef3d0cc4e29b6f9c9d6c572c4ba8110e70a1e1c527da6bfaf77494ef",
+  "steps": [
+    {
+      "anchor": "impl<Z> Drop for Zeroizing<Z>",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+      "body_sha256": "abf4aec0a4ba532d42d7eba0091abedc9bfde902c4f4cf2e7ccabf5d8eeae40b",
+      "structural_step": "delegate once to the owned array, then end stack lifetime",
+      "law": "PV_EVH_StackZero.drop"
+    },
+    {
+      "anchor": "impl<Z, const N: usize> Zeroize for [Z; N]",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+      "body_sha256": "c35c3a3c87206f6f42076529828db44957951dec3ff76d90d850f461eea6df00",
+      "structural_step": "delegate to exclusive iter_mut over initialized array",
+      "law": "PV_EVH_DeployedZeroCursor.source"
+    },
+    {
+      "anchor": "impl<Z> Zeroize for IterMut<'_, Z>",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+      "body_sha256": "69ffc83fffa05af3c8eb2980e5bfc4ea577de73c23df7ba2e5b860a16c3684fe",
+      "structural_step": "visit every element once and restore each changed byte",
+      "law": "PV_EVH_ZeroAddressBridge.cells_deployed"
+    },
+    {
+      "anchor": "impl<Z> Zeroize for Z",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+      "body_sha256": "dd6a22e3825af044bda1dea0de57ec88aa658b2b3ae8889cd0709799cf635fec",
+      "structural_step": "volatile default-zero store followed by barrier for EACH element",
+      "law": "PV_EVH_DeployedZeroWorld.byte"
+    },
+    {
+      "anchor": "fn volatile_write<T: Copy + Sized>(dst: &mut T, src: T)",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+      "body_sha256": "db7ba3e640be0b1f8082a44116237cfe9e753e42d476310534511fbc664723c6",
+      "structural_step": "ptr::write_volatile to the same exclusive address",
+      "law": "PV_EVH_DeployedZeroWorld.byte"
+    },
+    {
+      "anchor": "pub fn optimization_barrier<T: ?Sized>",
+      "source": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/barrier.rs",
+      "body_sha256": "fda23000911ceab4a811598cad98398973657eb93689296591f43e2bcaa0c31d",
+      "structural_step": "selected x86_64 readonly/preserves_flags/nostack assembly barrier",
+      "law": "PV_EVH_ZeroAddressBridge.physical_trace"
+    },
+    {
+      "anchor": "fn next(&mut self) -> Option<$elem>",
+      "source": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/iter/macros.rs",
+      "body_sha256": "d83750b4a226cb9021cc57d3337707cb6730a0bec1bab1e263f223e9d593d064",
+      "structural_step": "non-ZST cursor: detect end, advance one byte, return OLD exclusive reference",
+      "law": "PV_EVH_DeployedZeroCursor.source"
+    }
+  ],
+  "project_entropy": {
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+    "error_cleanup": "? ordinarily drops the original initialized 64-byte stack array, including partially written bytes",
+    "laws": [
+      "PV_EVH_StackCleanup.error_drop_full",
+      "PV_EVH_StackCleanup.error_zeroized",
+      "PV_EVH_StackCleanup.abort_preserves_prefix"
+    ]
+  },
+  "extracted_dictionary": {
+    "module": "R1Z.ProverRwFullFuns",
+    "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+    "revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+    "authority": "h5 HEAD",
+    "git_blob": "43a49073e14747f1bc231d5b55fcd8b22e184098",
+    "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+    "object_sha256": "fe160e3b876cd081174ef9892c20c2e8d3f3b354f9d7c3dcc5b28ac6c8ebe1cb",
+    "imports": [
+      "Aeneas",
+      "R1Z.ProverRwFullTypes",
+      "R1Z.ProverRwFullExternalFuns"
+    ],
+    "cache": "runjoin32",
+    "object_path": "/home/dombarker/project-offloads/codex-pv-rjdec-20261028/objects/R1Z/ProverRwFullFuns.olean"
+  },
+  "version_boundary": "Retained extraction names zeroize1.8.1; only its dictionary routing is used. Deployed effects/values come from the separately bound recorded 1.9.0 law, never the old fence law.",
+  "native_selection": [
+    "PV_EVH_NativeZeroBoundary.array_residual",
+    "PV_EVH_NativeZeroBoundary.scalar_residual",
+    "PV_EVH_NativeZeroInstall.execution_native"
+  ],
+  "status": "zeroize leaf association only; native entry closure remains OPEN",
+  "retained": [
+    "V370 source-to-machine compiler preservation",
+    "valid exclusive initialized array and actual stack admission",
+    "whole residual dictionary family provenance at entry",
+    "heap/stack address coherence",
+    "L3 register/spill/copy/retired-memory observation and joint law",
+    "all remaining heap, diagnostic, callback and mutable-restoration leaves"
+  ],
+  "trust_fields_added": [],
+  "endpoint_rows_removed": []
+}
