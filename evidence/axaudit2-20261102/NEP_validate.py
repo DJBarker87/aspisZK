@@ -64,7 +64,7 @@ def validate(final=True):
  manifest=(E/'NDR_FINAL_COHORT_PINS.json').read_bytes();assert sha(manifest)==pins['ndr_manifest_sha256']
  pinned={r['path']:r['sha256'] for r in pins['checks'] if r.get('ndr_pin')}
  for row in json.loads(manifest)['entries']:assert pinned[row['module'].replace('.','/')+'.olean']==row['object_sha256']
- output={'schema':'NEP_AXIOMS/v1','complete':False,'scope':'Own axiom-audit script completeness; no security contract changed','fixture_results':fixture,'missing_dependency':failure[0],'cache_verification':{'ndr_modules':16057,'checks':len(pins['checks']),'sha256':sha(pinraw)},'roots':{},'scope_count':len(scopes),'receipts':{a:{k:r[k] for k in ['module','command','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','source_hashes','limits','print_axioms']} for a,r in receipts.items()}}
+ output={'schema':'NEP_AXIOMS/v1','complete':False,'scope':'Own axiom-audit script completeness; no security contract changed','fixture_results':fixture,'missing_dependency':failure[0],'cache_verification':{'ndr_modules':16057,'checks':len(pins['checks']),'sha256':sha(pinraw)},'roots':{},'scope_count':len(scopes),'receipts':{a:{k:r[k] for k in ['module','command','exit_status','wall_seconds','peak_rss_kib','swaps','source_revision','source_hashes','limits','cgroup_memory_peak_bytes','print_axioms']} for a,r in receipts.items()}}
  if final:
   r=receipts['NEP_R900'];assert r['exit_status']==1
   completed=rows('NEP_R900','NEP_RESULT');failed=rows('NEP_R900','NEP_FAILURE');assert len(completed)==len(failed)==1

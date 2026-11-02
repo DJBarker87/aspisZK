@@ -81,3 +81,33 @@ All 25 focused scopes (counting R006 conservatively) remain within the budget.
 Admission used the unchanged agg16 reservation scanner conservatively for
 16 GiB even when the actual scope cap was 8 GiB. All admissions allowed=true
 and exit 0. No refusals, transport retries or cap raises occurred.
+
+## Stage C: the single combined attempt
+
+`NEP_R900` ran the unchanged lead-owned agg16 runner once; no retry or cap raise.
+The standalone driver loaded RPx_Deployed and NDR_CombinedAudit together with
+all private data from the verified NDR copy. Source revision:
+`d3602156d620dbb8878a671b33b561919a9e2f75`. Exact command:
+`lake env lean -j1 -M15000 -DElab.async=false --run NEP_Driver.lean final`.
+Exit 1; wall 40.06736564391758 s; peak RSS 11,379,716 KiB; swaps 0.
+Cgroup memory.peak 4,931,346,432 bytes is retained separately from process RSS;
+these are different measurements. Limits: MemoryHigh 14G, MemoryMax 16G,
+MemorySwapMax 0, TasksMax 64. Admission allowed=true, exit 0; the reservation
+already charged another 8 GiB. The receipt, source snapshot, runner snapshots,
+verified cache pins, output and time log are committed.
+
+| Root | Raw status | Constants | Edges | Raw axioms | Equals collectAxioms |
+|---|---|---:|---:|---|---|
+| AspisR1.RPx_Deployed.deployed | complete | 115256 | 5743676 | Classical.choice, Quot.sound, propext | yes |
+| AspisR1.NDR_CombinedAudit.sourceOnHeadline | hard error | 679614 discovered before failure | 9837080 scanned before failure | unavailable | unavailable |
+
+Both actual #print axioms queries reported propext, Classical.choice, Quot.sound.
+For sourceOnHeadline this is summary evidence only, not a complete raw result.
+Its error is the same direct edge identified in the small reproduction.
+NEP_AXIOMS.json deliberately uses null for the missing raw set and equality;
+it does not convert the imported summary into a successful complete walk.
+
+The fixed private-data entry point establishes the planted-case coverage and
+preserves fail-closed behavior. It does not repair the absent serialized
+matcher. Overall walker completeness for the combined source root is **not
+established**. No frozen proved module or authoritative cache was modified.
