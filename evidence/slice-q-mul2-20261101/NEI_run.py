@@ -125,7 +125,7 @@ if {kind!r}=='extract':
  names += [str(p.relative_to(b)) for p in (b/'NEI_extracted').rglob('*.lean')]
 result={{n:(b/n).read_text() for n in names if (b/n).is_file()}}
 if {kind!r}=='extract' and (b/'NEI_isolated/src/lib.rs').is_file():
- for n in ['src/lib.rs','Cargo.toml','Cargo.lock']:
+ for n in ['src/lib.rs','src/NEI_pairing.rs','Cargo.toml','Cargo.lock']:
   if (b/'NEI_isolated'/n).is_file():result[a+'/NEI_isolation_'+n.replace('/','_')+'.txt']=(b/'NEI_isolated'/n).read_text()
 print(json.dumps(result))
 '''

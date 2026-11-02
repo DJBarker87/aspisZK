@@ -29,3 +29,7 @@ NEI_PUSH_PACKET.json is a local CLOSED-CONDITIONAL actual-body packet. Literal r
 ## Accumulation (OPEN)
 
 E005 successfully extracts the exact frozen body with complete Prepared/Accumulator records. E003 full-crate dependency compilation timed out; E004 missed the original CodeField trait import; both are excluded. L060 compiles literal Types and L061 proves independent global/local counter windows. The emitted CodeField::from_m31 call is outside Q and remains an explicit boundary; no field/constructor external template is adopted. NBO source assumptions next<10 and terms=next do not cover TX2's fresh local counter and global indices10..21. See NEI_ACCUMULATE_BOUNDARY.json; zero bridge/composed credit.
+
+## Independent dot constructors and composition
+
+Literal E006 constructors, L063/L067 whole records and nominal/window transport, K021/K022 and K023/K024 actual full private-state/context controls close canonical::Dot::new and EbyKDot::new. NEB-derived rows TX1:110, TX2:076, TX1:107, TX2:073 are CLOSED, one direct edge certified, no old native credit. NEI_VALIDATOR_SOURCE_DELTA.json proves every original NEB check retained verbatim; the added rule binds both TX2 duplicate external constructor entries to their independently certified real callee edge and exact native calls. Ten mutation/invariant controls pass. This does not close either dot function or any other arithmetic member.

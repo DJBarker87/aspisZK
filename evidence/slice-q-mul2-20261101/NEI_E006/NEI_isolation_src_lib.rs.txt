@@ -1,0 +1,55 @@
+extern crate alloc;
+use alloc::vec::Vec;
+use aspis_core::field::{M31,QM31 as K,WideExact as E};
+const QUARTER:M31=M31(536870912);
+fn residue_limb_at(row:&[u64;4],index:usize)->u64 {row[index]}
+fn power_limb_at(limbs:&[u32;4],index:usize)->u32 {limbs[index]}
+fn update_residue_row(row:&mut [u64;4],power:K,basis:M31,flush:bool) {
+    let limbs=[power.c0.a.0,power.c0.b.0,power.c1.a.0,power.c1.b.0];
+    for j in 0..4 {
+        let old=residue_limb_at(row,j);
+        let limb=power_limb_at(&limbs,j);
+        row[j]=old+u64::from(limb)*u64::from(basis.0);
+    }
+    if flush {
+        for limb in row {*limb=(*limb&0x7fff_ffff)+(*limb>>31);}
+    }
+}
+fn batch_prefix_products(flat:&[M31])->(Vec<M31>,M31) {
+    let mut prefixes=Vec::with_capacity(flat.len());
+    let mut product=M31::ONE;
+    let mut index=0;
+    while index<flat.len() {
+        let value=flat[index];
+        prefixes.push(product);
+        product=product.mul(value);
+        index+=1;
+    }
+    (prefixes,product)
+}
+fn circle_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
+    let [ix,iy,_,_,_]=*inverse;let [a,b,c,d]=a;
+    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);
+    let h1=a.sub(b).sub(c).add(d).mul_m31(QUARTER.mul(iy));
+    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(ix));
+    let h3=a.sub(b).add(c).sub(d).mul_m31(QUARTER.mul(ix).mul(iy));
+    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))
+}
+fn line_fold_with_inverses(alpha:E,a:[E;4],inverse:&[M31;5])->E {
+    let [_,_,ix,iy,iz]=*inverse;let half=M31(1073741824);let [a,b,c,d]=a;
+    let h0=a.add(b).add(c).add(d).mul_m31(QUARTER);
+    let h2=a.add(b).sub(c).sub(d).mul_m31(QUARTER.mul(iz));
+    let c0=a.sub(b).mul_m31(half.mul(ix));
+    let c1=d.sub(c).mul_m31(half.mul(iy));
+    let h1=c0.add(c1).mul_m31(half);
+    let h3=c0.sub(c1).mul_m31(half.mul(iz));
+    h0.add(alpha.mul(h1.add(alpha.mul(h2.add(alpha.mul(h3))))))
+}
+struct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }
+impl BatchedWeights{fn push(&mut self,index:usize,power:K,basis:M31) {
+        let flush=self.terms&3==3;
+        update_residue_row(&mut self.raw[index],power,basis,flush);
+    }}
+
+#[path="NEI_pairing.rs"] mod fast_pairing;
+#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_dots.rs"] mod fast_dots;

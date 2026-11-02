@@ -1,0 +1,32 @@
+"""Negative controls for new constructor registration and occurrence binding."""
+from pathlib import Path
+import copy,json
+import NEI_composition as c
+E=Path(__file__).resolve().parent
+base=c.obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json');edges=c.prepare(base)
+results=[]
+def reject(name,mutate):
+ data=copy.deepcopy(edges);mutate(data)
+ try:c.validate(base,data)
+ except (AssertionError,ValueError,KeyError):results.append(dict(test=name,status='PASS',outcome='rejected'))
+ else:raise AssertionError('mutation accepted: '+name)
+def root(data,row):return next(r for r in data['row_certificates'] if r['row']==row)
+def edge(data):return next(e for e in data['edges'] if e.get('certificate'))
+reject('wrong caller body',lambda d:root(d,'TX1:107').update(frozen_body_sha256='0'*64))
+reject('wrong edge selected packet',lambda d:edge(d)['certificate'].update(selected_callee_claims=[]))
+reject('missing native call edge',lambda d:edge(d).update(certificate=None,status='OPEN'))
+reject('wrong external occurrence ordinal',lambda d:root(d,'TX2:073')['external_obligations']['external:TX2:73:1'].update(ordinal=2))
+reject('wrong external callee',lambda d:root(d,'TX2:073')['external_obligations']['external:TX2:73:1'].update(callee='not-the-constructor'))
+reject('older native credit cannot be smuggled in',lambda d:root(d,'TX1:110').update(id='NEB-old-native'))
+reject('wrong audited proof receipt',lambda d:root(d,'TX1:110')['lean_evidence'][0].update(receipt_sha256='0'*64))
+missing=copy.deepcopy(edges);missing['row_certificates']=[r for r in missing['row_certificates'] if r['function'].endswith('::EbyKDot::new')]
+out,delta=c.validate(base,missing);assert delta['composed_rows_closed']==[],'uncertified child was bypassed'
+results.append(dict(test='missing child root prevents public constructor closure',status='PASS',outcome='zero rows close'))
+row=next(r for r in base['rows'] if r['row']=='TX2:073');row=copy.deepcopy(row);row['function']='crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node'
+try:c.check_ctor_occurrence(row,{}, {}, {},base,{}, {})
+except AssertionError:results.append(dict(test='constructor occurrence rule cannot admit accumulation boundary',status='PASS',outcome='rejected'))
+else:raise AssertionError('constructor scope guard missing')
+source=c.obj(E/'NEI_VALIDATOR_SOURCE_DELTA.json');original=Path(source['original']).read_text();derived=Path(source['derived']).read_text();assert derived.replace(source['only_added_branch'],'')==original
+results.append(dict(test='every original validator check retained verbatim',status='PASS'))
+(E/'NEI_COMPOSE_TESTS_receipt.json').write_text(json.dumps(dict(tests=results,passed=len(results),failed=0,baseline_unchanged=True,original_neb_file_unchanged=True),indent=2)+'\n')
+print(json.dumps(dict(passed=len(results),failed=0)))

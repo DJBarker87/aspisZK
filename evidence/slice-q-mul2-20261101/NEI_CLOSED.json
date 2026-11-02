@@ -1,6 +1,11 @@
 {
   "schema": "NEI-closed-v1",
-  "composed_rows_closed": [],
+  "composed_rows_closed": [
+    "TX1:110",
+    "TX2:076",
+    "TX1:107",
+    "TX2:073"
+  ],
   "closed_conditional_bridges": [
     {
       "function": "crates/aspis-r1-cost-probe/src/verifier.rs::line_fold_with_inverses",
@@ -29,7 +34,22 @@
       "packet": "NEI_PUSH_PACKET.json",
       "validation": "NEI_PUSH_VALIDATE.json",
       "depends_on_suspended_neb_kani_credits": []
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new",
+      "route": "D188_LITERAL_CTOR_FULL_CONTEXT",
+      "packet": "NEI_CTOR_PACKETS.json",
+      "validation": "NEI_CTOR_VALIDATE.json",
+      "depends_on_suspended_neb_kani_credits": []
+    },
+    {
+      "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new",
+      "route": "D188_LITERAL_CTOR_FULL_CONTEXT",
+      "packet": "NEI_CTOR_PACKETS.json",
+      "validation": "NEI_CTOR_VALIDATE.json",
+      "depends_on_suspended_neb_kani_credits": []
     }
   ],
-  "qualification": "Local conditional packets are not authoritative adoption; every original caller/child and root composition gate remains necessary."
+  "qualification": "Local conditional packets are not authoritative adoption; every original caller/child and root composition gate remains necessary.",
+  "composed_validation": "NEI_COMPOSE_VALIDATE.json"
 }

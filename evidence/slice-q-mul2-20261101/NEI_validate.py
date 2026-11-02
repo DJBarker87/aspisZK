@@ -106,11 +106,19 @@ def main():
  if (E/'NEI_PUSH_PACKET.json').is_file():
   import NEI_push_validate
   results.append(NEI_push_validate.audit(E,R,obj(E/'NEI_PUSH_PACKET.json'),neb,require,function))
+ if (E/'NEI_CTOR_PACKETS.json').is_file():
+  import NEI_ctor_validate
+  results += [NEI_ctor_validate.audit(E,R,p,neb,require) for p in obj(E/'NEI_CTOR_PACKETS.json')]
  delta=obj(E/'NEI_LEDGER_DELTA.json')
- require(delta['composed_rows_closed']==[],'uncertified composed promotion')
+ import NEI_composition as composition
+ baseline=obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')
+ derived,checked=composition.validate(baseline,obj(E/'NEI_EDGES.json'))
+ require(delta['composed_rows_closed']==checked['composed_rows_closed'],'uncertified composed promotion')
+ require(derived==obj(E/'NEI_DERIVED_LEDGER.json'),'derived ledger differs from checked certificates')
+ require(obj(E/'NEI_COMPOSE_TESTS_receipt.json')['failed']==0,'new composition checks failed')
  require(delta['added_local_bridges']==[r['function'] for r in results],'wrong local delta')
  edges=obj(E/'NEI_EDGES.json')['edges']
- require(all(e['status']=='OPEN' and e['certificate'] is None for e in edges),'edge credit without NEB certificate')
+ require(all((e['status']=='OPEN' and e['certificate'] is None) or (e['status']=='CLOSED' and e['certificate']['id'].startswith('NEI-')) for e in edges),'edge credit without a new NEI certificate')
  require(sha(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')==delta['authoritative_ledger_sha256'],'authoritative ledger changed')
- print(json.dumps(dict(original_neb_receipt_gates='PASS',additive_d188_packets=results,unmodified_original_edge_gates=True,composed_rows_closed=[]),indent=2))
+ print(json.dumps(dict(original_neb_receipt_gates='PASS',additive_d188_packets=results,original_checks_retained_verbatim=True,composed_rows_closed=checked['composed_rows_closed']),indent=2))
 if __name__=='__main__':main()

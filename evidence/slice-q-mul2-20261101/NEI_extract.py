@@ -47,6 +47,11 @@ if cfg.get('isolate'):
  prelude+='\n'.join(take(n) for n in funcs)
  prelude+='\nstruct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }\nimpl BatchedWeights{'+take('push')+'}\n'
  prelude+='\n#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"] mod fast_pairing;\n#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_dots.rs"] mod fast_dots;\n'
+ if cfg.get('pairing_constructors'):
+  pair=frozen['crates/aspis-r1-cost-probe/src/fast_pairing.rs']
+  end=pair.index('/// Candidate exact accumulator for sums of `WideExact * WideExact`.')
+  (mini/'src/NEI_pairing.rs').write_text(pair[:end])
+  prelude=prelude.replace('#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"] mod fast_pairing;', '#[path="NEI_pairing.rs"] mod fast_pairing;')
  if cfg.get('accumulate'):
   def item(source,kind,name):
    m=re.search(r'pub '+kind+' '+name+r'\b',source);start=source.index('{',m.start());i=start+1;d=1
@@ -71,6 +76,7 @@ pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),charon_command=cmd,toolchain
 if cfg.get('isolate'):
  pins['isolated_source_sha256']=sha(mini/'src/lib.rs')
  pins['isolated_manifest_sha256']=sha(mini/'Cargo.toml')
+ if cfg.get('pairing_constructors'):pins['pairing_prefix_sha256']=sha(mini/'src/NEI_pairing.rs')
 (B/'NEI_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2));print(json.dumps(pins),flush=True)
 r=subprocess.run(cmd,cwd=manifest.parent,env=env)
 pins['charon_exit']=r.returncode

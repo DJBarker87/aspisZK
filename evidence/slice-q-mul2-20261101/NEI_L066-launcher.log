@@ -1,0 +1,42 @@
+{"attempt": "NEI_L066", "exit_status": 1, "wall_seconds": 4.244481072993949, "peak_rss_kib": "5244036", "swaps": "0", "print_axioms": ["'NEI_DotCtorAssociation.fromtoD' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.tofromD' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.fromtoE' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.tofromE' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.emitted_dot' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.emitted_eby' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.array_zero' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.dot_windows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEI_DotCtorAssociation.eby_windows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEI_generated/NEI_DotCtorAssociation.lean:52:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  { sums := sums✝ }.sums
+in the target expression
+  { sums := sums✝ } = { sums := Array.repeat 4#usize 0#u64 }
+
+case mk
+sums✝ : Std.Array U64 4#usize
+windows : ∀ (j : ℕ) (bound : j < 4), (↑{ sums := sums✝ }.sums)[j] = 0#u64
+words : { sums := sums✝ }.sums = Array.repeat 4#usize 0#u64
+⊢ { sums := sums✝ } = { sums := Array.repeat 4#usize 0#u64 }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option 
+...
+t := count✝ }.c1.sums)[j] = 0#u64
+count : { c0 := c0✝, c1 := c1✝, count := count✝ }.count = 0#usize
+l : { c0 := c0✝, c1 := c1✝, count := count✝ }.c0 = NEI_DotConstructors.zero
+r : { c0 := c0✝, c1 := c1✝, count := count✝ }.c1 = NEI_DotConstructors.zero
+⊢ { c0 := c0✝, c1 := c1✝, count := count✝ } =
+    { c0 := NEI_DotConstructors.zero, c1 := NEI_DotConstructors.zero, count := 0#usize }
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEI_DotCtorAssociation.fromtoD' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.tofromD' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.fromtoE' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.tofromE' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.emitted_dot' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.emitted_eby' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.array_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.dot_windows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_DotCtorAssociation.eby_windows' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r92b7fdb35e524694986f5151f2857b08.scope; invocation ID: bd14e67a0b3247d88997d220abc46d6c

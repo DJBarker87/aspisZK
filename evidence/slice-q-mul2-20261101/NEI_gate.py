@@ -19,13 +19,17 @@ errors=[n for n,h in pins.items() if sha(S/n)!=h]
 assert not errors,errors
 # Strict frozen-source erasure check, in addition to the inherited source pins.
 frozen_sources=json.loads((B/'NEI_FROZEN.json').read_text())
-changed={'crates/aspis-core/src/field.rs','crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/verifier.rs'}
+changed={'crates/aspis-r1-cost-probe/src/fast_pairing.rs','crates/aspis-core/src/field.rs','crates/aspis-r1-cost-probe/src/lib.rs','crates/aspis-r1-cost-probe/src/verifier.rs'}
 checked=[]
 for name,text in frozen_sources.items():
  p=S/name
  if not p.is_file():continue
  actual=p.read_text()
  if name not in changed:assert actual==text,('frozen source drift',name)
+ elif name.endswith('fast_pairing.rs'):
+  marker='\n}\n\n\nuse aspis_core::field'
+  insert='\n#[cfg(kani)] mod NEI_dot_ctor { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEI_dot_ctor.rs")); }\n'
+  assert text.count(marker)==1 and actual==text.replace(marker,insert+marker),'changed frozen fast_pairing body'
  elif name.endswith('src/lib.rs'):
   prefix=text.replace('#![no_std]','#![no_std]\n#![cfg_attr(kani,feature(allocator_api))]')
   assert actual==prefix+'\n#[cfg(kani)] pub(crate) mod NEI_copy { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs")); }\n',name
@@ -39,7 +43,7 @@ for name,text in frozen_sources.items():
 # Rule 16: reject every static declaration in own harnesses and exact KMX files.
 # This is stricter than checking writes/interior mutability only.
 import re
-harnesses=[S/'crates/aspis-r1-cost-probe/src/NEI_row_step.rs',S/'crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
+harnesses=[S/'crates/aspis-r1-cost-probe/src/NEI_dot_ctor.rs',S/'crates/aspis-r1-cost-probe/src/NEI_row_step.rs',S/'crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs',S/'KMX_stubs.rs',S/'KMX_native.rs']
 static_errors=[str(p) for p in harnesses if re.search(r'\bstatic\s+(?:mut\s+)?[A-Za-z_]',p.read_text())]
 (B/(a+'-rule16-check.json')).write_text(json.dumps(dict(static_declarations=static_errors,files={str(p):sha(p) for p in harnesses}),indent=2)+'\n')
 assert not static_errors,('STOP rule16',static_errors)
