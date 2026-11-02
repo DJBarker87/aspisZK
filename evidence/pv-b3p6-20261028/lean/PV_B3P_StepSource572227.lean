@@ -18,8 +18,8 @@ theorem event_guard (item finish : Usize) (answer : Option Usize)
   by_cases active : item.val < finish.val
   · obtain ⟨next,run,_⟩ := PV_B3P_NthFinalGuard559227.increment_some item finish active
     have same : answer = some next := by
-      have equal := observed.symm.trans (by
-        simp only [event, if_pos active, run, bind_tc_ok])
+      have equal : Result.ok (some answer) = .ok (some (some next)) :=
+        observed.symm.trans (by simp only [event, if_pos active, run, bind_tc_ok])
       cases equal
       rfl
     rw [same]
