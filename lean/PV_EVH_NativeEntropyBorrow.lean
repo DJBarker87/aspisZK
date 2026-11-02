@@ -27,7 +27,7 @@ theorem array_borrow (base : ExternalTypes)
 theorem restore_array (n : Usize) (before after : Array U8 n) :
     (Array.to_slice_mut before).2 (Array.to_slice_mut after).1 = after := by
   apply Subtype.ext
-  simp only [Array.to_slice_mut]
+  simp [Array.to_slice_mut,Array.from_slice,Array.to_slice,after.property]
 
 #print axioms array_borrow
 #print axioms restore_array
