@@ -51,7 +51,7 @@ theorem stores {A : Type} (out source : Buffer A)
 when the previous families have been drained in source order. -/
 theorem family_room (n k : Nat) (hk : k < 16) :
     PV_RunJoin_WorkRange35.start n k+PV_RunJoin_WorkRange35.width n k ≤ n :=
-  PV_RunJoin_WorkRange35.bounded n k hk
+  (PV_RunJoin_WorkRange35.bounded n k hk).2
 
 #print axioms wrappedRemaining
 #print axioms no_sub_wrap
