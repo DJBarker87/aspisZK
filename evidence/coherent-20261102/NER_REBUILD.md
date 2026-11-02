@@ -77,3 +77,12 @@ The unchanged lead S2W_run_host runner records each batch's limits, process
 peak RSS, swap, exit and wall time. The payload records per-module commands,
 source/object hashes, selected import object hashes, time, RSS, swap and any
 #print axioms output. The final loaded scan runs in the aggregation environment.
+
+
+After B005, the local serial submission controller was paused while its
+already-submitted B006 scope completed normally. The continuation uses
+NER_parallel_batches.py: at most two independently admitted scopes, one Lean
+process per scope. Its ready-set rule excludes in-flight imports; every
+required direct import must have completed successfully or occur earlier in
+the same batch. The pinned dependency graph and source bytes are unchanged.
+No submitted compilation is cancelled or resubmitted for this scheduling change.
