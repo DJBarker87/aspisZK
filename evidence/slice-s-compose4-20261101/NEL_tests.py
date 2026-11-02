@@ -9,7 +9,7 @@ class Mutations(unittest.TestCase):
   o=v.compose(self.base,p,self.review if review is None else review)
   return {r['composed_status'] for r in o['rows'] if r['function']==self.f}
  def test_inherited_fourteen_and_getter(self):
-  out=v.compose(self.base,self.packet,self.review);self.assertEqual(len(v.predecessor.summary(out)['slice_closed']),18)
+  out=v.compose(self.base,self.packet,self.review);self.assertEqual(len(v.predecessor.summary(out)['slice_closed']),22)
  def test_missing_member(self):
   p=copy.deepcopy(self.packet);p['members'].pop(self.f);self.assertEqual(self.status(p),{'OPEN'})
  def test_wrong_subject(self):
@@ -43,5 +43,19 @@ class CommonMutations(Mutations):
   p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller']['all_typed_inputs']=False;c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});self.assertEqual(self.common_status(p,review),{'OPEN'})
  def test_scalar_wrong_substitution_after_review(self):
   p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller']['model_theorems'][0]['name']='wrong';c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});self.assertEqual(self.common_status(p,review),{'OPEN'})
+
+
+class PaymentMutations(Mutations):
+ def payment_status(self,p,review=None):
+  out=v.compose(self.base,p,self.review if review is None else review)
+  return {r['composed_status'] for r in out['rows'] if r['function'].endswith('::validate_pool_v1_private_transfer_public_v1')}
+ def test_payment_missing_field_identity(self):
+  p=copy.deepcopy(self.packet);f=next(f for f in p['members'] if f.endswith('::validate_pool_v1_private_transfer_public_v1'));c=p['members'][f];c['payment_caller']['theorems'].pop();c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{f:h});self.assertEqual(self.payment_status(p,review),{'OPEN'})
+ def test_payment_missing_common_domain(self):
+  p=copy.deepcopy(self.packet);p['members'].pop(v.COMMON);self.assertEqual(self.payment_status(p),{'OPEN'})
+ def test_common_needs_corrupted_reply_control(self):
+  p=copy.deepcopy(self.packet);c=p['members'][v.COMMON];c['framed_scalar_caller'].pop('corrupted_reply_control');c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{v.COMMON:h});o=v.compose(self.base,p,review);self.assertIn('OPEN',{r['composed_status'] for r in o['rows'] if r['function']==v.COMMON})
+ def test_false_receiver_alternative_rejected_after_review(self):
+  p=copy.deepcopy(self.packet);key=next(k for k,c in p['edges'].items() if 'receiver_resolution' in c);c=p['edges'][key];c['receiver_resolution']['receiver']='&WideExact';c.pop('semantic_review_sha256');h=v.hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;review=dict(self.review,**{key:h});self.assertFalse(v.certificate(c,key,self.base,review))
 
 if __name__=='__main__':unittest.main()

@@ -1,51 +1,90 @@
 --- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
 +++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
-@@ -1158,3 +1158,23 @@
+@@ -1158,3 +1158,7 @@
          );
      }
  }
 +
 +#[cfg(kani)]
-+#[kani::requires(frame.log==0)]
-+#[kani::modifies(&mut frame.log)]
-+#[kani::ensures(|r| *r==NEL_payment_validator::reference(public,frame) && frame.log==NEL_payment_validator::calls(public,frame))]
-+fn NEL_payment_validator(
-+    public: &PoolV1PrivateTransferPublicV1,
-+    frame:&mut NEL_payment_validator::Frame,
-+) -> Result<(), PoolV1PaymentStatementFormatError> {
-+    NEL_payment_validator::common(transfer_common(public),frame)?;
-+    if !NEL_payment_validator::canonical(&public.recipient_commitment,frame)
-+        || !NEL_payment_validator::canonical(&public.change_commitment,frame)
-+    {
-+        return Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest);
-+    }
-+    Ok(())
-+}
-+#[cfg(kani)]
-+#[path="NEL_payment_validator.rs"]
-+mod NEL_payment_validator;
++#[path="NEL_payment_fields.rs"]
++mod NEL_payment_fields;
 --- /dev/null
-+++ b/crates/aspis-statement/src/pool_v1/NEL_payment_validator.rs
-@@ -0,0 +1,22 @@
++++ b/crates/aspis-statement/src/pool_v1/NEL_payment_fields.rs
+@@ -0,0 +1,18 @@
 +use super::*;
-+pub(super) struct Frame{pub reply:Result<(),PoolV1PaymentStatementFormatError>,pub a:bool,pub b:bool,pub log:usize}
-+pub(super) fn common(_c:CommonPublicV1,f:&mut Frame)->Result<(),PoolV1PaymentStatementFormatError>{assert!(f.log==0);f.log=1;f.reply}
-+pub(super) fn canonical(_d:&Digest,f:&mut Frame)->bool{assert!(f.log>=1&&f.log<3);let r=if f.log==1{f.a}else{f.b};f.log+=1;r}
-+pub(super) fn reference(
-+    public: &PoolV1PrivateTransferPublicV1,
-+    frame:&Frame,
-+) -> Result<(), PoolV1PaymentStatementFormatError> {
-+    frame.reply?;
-+    if !frame.a
-+        || !frame.b
-+    {
-+        return Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest);
-+    }
-+    Ok(())
-+}
-+pub(super) fn calls(p:&PoolV1PrivateTransferPublicV1,f:&Frame)->usize{if f.reply.is_err(){1}else if !f.a{2}else{3}}
-+fn any_error()->crate::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>crate::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>crate::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
 +fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
-+#[kani::proof_for_contract(NEL_payment_validator)]
-+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-+fn payment_validator(){let p=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()};let mut f=Frame{reply:if kani::any(){Ok(())}else{Err(any_error())},a:kani::any(),b:kani::any(),log:0};let _=NEL_payment_validator(&p,&mut f);}
++fn recipient(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.change_commitment}
++fn transfer_change(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.recipient_commitment}
++fn withdrawal_change(p:&PoolV1WithdrawalPublicV1)->&Digest{&p.nullifier}
++#[kani::proof]
++fn field_binding(){let mode:u8=kani::any();kani::assume(mode<4);match mode{
++0=>assert!(super::super::pair_forest_accounts::NEL_lane_relation()),
++1=>assert!(super::super::pair_forest_accounts::NEL_first_relation()),
++2=>{ let t=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()};
++ let w=PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:digest()};
++ let field:u8=kani::any();kani::assume(field<3);match field{
++ 0=>assert!(core::ptr::eq(recipient(&t),&t.recipient_commitment),"actual transfer recipient place"),
++ 1=>assert!(core::ptr::eq(transfer_change(&t),&t.change_commitment),"actual transfer change place"),
++ _=>assert!(core::ptr::eq(withdrawal_change(&w),&w.change_commitment),"actual withdrawal change place")}},
++_=>{let mut out:[u8;32]=kani::any();let start:usize=kani::any();let width:usize=kani::any();kani::assume(start<=32&&width<=32-start&&width>0);let offset:usize=kani::any();kani::assume(offset<width);let j:usize=kani::any();kani::assume(j<32);let old=out[j];let value:u8=kani::any();let dst=&mut out[start..start+width];let src=&[value];let mut i=offset;dst[i]=src[0]^1;i+=1;assert!(i==offset+1);assert!(out[j]==if j==start+offset{value}else{old});}
++}}
++
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs
+@@ -819,3 +819,31 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[kani::requires(frame.log==0 && *nullifier==frame.expected)]
++#[kani::modifies(&mut frame.log)]
++#[kani::ensures(|r| *r==if frame.canon {Ok(frame.byte&7)}else{Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)} && frame.log==if frame.canon{2}else{1})]
++fn NEL_threaded_lane(
++    nullifier: &Digest,
++    frame: &mut NEL_lane_oracle::Frame,
++) -> Result<u8, PoolV1PairForestAccountErrorV1> {
++    if !NEL_lane_oracle::canonical(nullifier,frame) {
++        return Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest);
++    }
++    Ok(NEL_lane_oracle::first(nullifier,frame) & 7)
++}
++
++#[cfg(kani)]
++#[path="NEL_lane_oracle.rs"]
++mod NEL_lane_oracle;
++
++#[cfg(kani)]
++#[path="NEL_first.rs"]
++mod NEL_first;
++
++#[cfg(kani)]
++pub(super) fn NEL_lane_relation()->bool {let d=[aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any())];let mut f=NEL_lane_oracle::Frame{expected:d,canon:kani::any(),byte:kani::any(),log:0};let r=NEL_threaded_lane(&d,&mut f);(r==(if f.canon{Ok(f.byte&7)}else{Err(PoolV1PairForestAccountErrorV1::NonCanonicalDigest)})) && f.log==(if f.canon{2}else{1})}
++
++#[cfg(kani)]
++pub(super) fn NEL_first_relation()->bool{let d=[aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any()),aspis_core::field::M31(kani::any())];let mut f=NEL_first::Frame{expected:d,reply:kani::any(),called:false};let r=NEL_first::threaded_first(&d,&mut f);r==f.reply[0] && f.called}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_lane_oracle.rs
+@@ -0,0 +1,8 @@
++#![allow(non_snake_case)]
++use super::*;
++use aspis_core::field::M31;
++pub(super) struct Frame{pub expected:Digest,pub canon:bool,pub byte:u8,pub log:usize}
++pub(super) fn canonical(d:&Digest,f:&mut Frame)->bool{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==0 && d[k].0==f.expected[k].0);f.log=1;f.canon}
++pub(super) fn first(d:&Digest,f:&mut Frame)->u8{let k:usize=kani::any();kani::assume(k<8);assert!(f.log==1 && f.canon && d[k].0==f.expected[k].0);f.log=2;f.byte^1}
++#[kani::proof_for_contract(NEL_threaded_lane)]
++fn lane_oracle(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut f=Frame{expected:d,canon:kani::any(),byte:kani::any(),log:0};let _=NEL_threaded_lane(&d,&mut f);}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_first.rs
+@@ -0,0 +1,11 @@
++#![allow(non_snake_case)]
++use super::*;
++use aspis_core::field::M31;
++pub(super) struct Frame{pub expected:Digest,pub reply:[u8;32],pub called:bool}
++fn encode(d:&Digest,f:&mut Frame)->[u8;32]{let k:usize=kani::any();kani::assume(k<8);assert!(d[k].0==f.expected[k].0&&!f.called,"same first-byte digest argument");f.called=true;let mut reply=f.reply;reply[0]^=1;reply}
++#[kani::requires(!f.called && *d==f.expected)]
++#[kani::modifies(&mut f.called)]
++#[kani::ensures(|r| *r==f.reply[0] && f.called)]
++pub(super) fn threaded_first(d:&Digest,f:&mut Frame)->u8{encode(d,f)[0]}
++#[kani::proof_for_contract(threaded_first)]
++fn first(){let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];let mut f=Frame{expected:d,reply:kani::any(),called:false};let _=threaded_first(&d,&mut f);}

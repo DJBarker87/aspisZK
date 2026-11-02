@@ -1,0 +1,42 @@
+import NEL_CommonOracle
+import NEL_CopyArrayLaw
+import NEL_DigestGeometry
+import NEL_DigestLoopFrame
+import NEL_FrontierGeometry
+import NEL_LateDomains
+import NEL_OrderedWrites
+import NEL_PaymentDomains
+import NEL_PaymentFieldCarriers
+import NEL_PaymentOracle
+import NEL_SliceCopyLaw
+import NEE_ReachedRootModel
+#print axioms NEL_CommonOracle.substitution
+#print axioms NEL_CommonOracle.reached_argument
+#print axioms NEL_CommonOracle.call_count
+#print axioms NEL_CopyArrayLaw.list_inside
+#print axioms NEL_CopyArrayLaw.array_spec
+#print axioms NEL_CopyArrayLaw.loop_binding
+#print axioms NEL_DigestGeometry.window_bound
+#print axioms NEL_DigestGeometry.distinct_words
+#print axioms NEL_DigestGeometry.coordinate_unique
+#print axioms NEL_DigestLoopFrame.step_and_bytes
+#print axioms NEL_FrontierGeometry.bounds
+#print axioms NEL_FrontierGeometry.coordinate_unique
+#print axioms NEL_FrontierGeometry.header_disjoint
+#print axioms NEL_LateDomains.child_window_lengths
+#print axioms NEL_LateDomains.child_windows
+#print axioms NEL_LateDomains.header_frame
+#print axioms NEL_OrderedWrites.two_windows
+#print axioms NEL_PaymentDomains.common_accepted
+#print axioms NEL_PaymentDomains.transfer_accepted
+#print axioms NEL_PaymentDomains.withdrawal_accepted
+#print axioms NEL_PaymentFieldCarriers.transfer_fields
+#print axioms NEL_PaymentFieldCarriers.withdrawal_fields
+#print axioms NEL_PaymentOracle.transfer_substitution
+#print axioms NEL_PaymentOracle.withdrawal_substitution
+#print axioms NEL_PaymentOracle.transfer_call_count
+#print axioms NEL_PaymentOracle.withdrawal_call_count
+#print axioms NEL_SliceCopyLaw.loop_binding
+#print axioms NEE_ReachedRootModel.result_and_effects
+#print NEL_CommonOracle.reached_argument
+#print NEE_ReachedRootModel.result_and_effects

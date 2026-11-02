@@ -86,7 +86,7 @@ def scalar_caller(c,expected,ledger):
   assert q['shape']=='Result<(),PoolV1PaymentStatementFormatError>; mutable local record'
   assert q['controls']=={'native':'NEL_K034','contract':'NEL_K035','unimplied':'NEL_K039','inverted':'NEL_K040','frame':'NEL_K041'}
   from NEL_artifacts import native_support
-  expected_support=native_support(['NEL_K032','NEL_K033','NEL_K034','NEL_K035','NEL_K039','NEL_K040','NEL_K041'])
+  expected_support=native_support(['NEL_K032','NEL_K033','NEL_K034','NEL_K035','NEL_K039','NEL_K040','NEL_K041','NEL_K060'])
   assert q['native_support']==expected_support
   for ref in q['native_support']:predecessor.inherited.artifact(ref)
   assert native_pair('NEL_K032','NEL_K033') and native_pair('NEL_K034','NEL_K040') and native_pair('NEL_K035','NEL_K041')
@@ -114,12 +114,81 @@ def scalar_caller(c,expected,ledger):
   assert '#[kani::modifies(&mut frame.log)]' in source
   assert '#[kani::requires(frame.log==0 && common.pool==frame.expected.pool' in source
   assert q['positive']=='NEL_K032' and q['negative']=='NEL_K033'
+  assert q['corrupted_reply_control']=='NEL_K060' and native_pair('NEL_K032','NEL_K060')
+  assert 'f.log+=1;!r}' in (E/'NEL_K060-NEL_native_contracts.patch').read_text()
+  assert 'f.log+=1;r}' in (E/'NEL_K032-NEL_native_contracts.patch').read_text()
   assert [t['name'] for t in q['model_theorems']]==['NEL_CommonOracle.substitution','NEL_CommonOracle.reached_argument','NEL_CommonOracle.call_count']
   assert [t['name'] for t in q['emitted_association']]==['NED_CommonValidation.common_result','NED_PaymentCohorts.canonical_result']
   assert all(predecessor.inherited.theorem(t) for t in q['model_theorems']+q['emitted_association'])
   if c['kind']=='external-domain':
    row_ob=next(o for o in obs if o['id']==expected)
    assert row_ob['call'].get('expression',row_ob['call'].get('syntax')) in {'Err','Ok'}
+  return True
+ except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
+def payment_caller(c,expected,ledger):
+ try:
+  q=c['payment_caller'];case=q['case'];assert case in {'transfer','withdrawal'}
+  fn='validate_pool_v1_'+('private_transfer' if case=='transfer' else 'withdrawal')+'_public_v1'
+  f='crates/aspis-statement/src/pool_v1/payment_relation.rs::'+fn
+  assert q['function']==f and q['method']=='ruling y with y-prime immutable field projections'
+  rows=[r for r in ledger['rows'] if r['function']==f];obs=[o for r in rows for o in r['caller_domain_obligations']]
+  allowed={f}|{f+'::'+h['name'] for r in rows for h in r['named_hypotheses']}|{f+' -> '+g for r in rows for g in r['canonical_callees']}|{o['id'] for o in obs if 'callee' not in o}
+  assert expected in allowed
+  assert q['all_typed_inputs'] and q['full_Result'] and q['empty_external_modifies'] and q['frame_constructed'] and q['control_and_arguments_split']
+  assert q['trust_classification']=='P6/D188 option A reclassification'
+  pos,neg=('NEL_K038','NEL_K044') if case=='transfer' else ('NEL_K042','NEL_K043')
+  assert q['positive']==pos and q['negative']==neg and q['field_positive']=='NEL_K058' and q['field_negative']=='NEL_K059'
+  from NEL_artifacts import native_support
+  assert q['native_support']==native_support([pos,neg,'NEL_K058','NEL_K059'])
+  for ref in q['native_support']:predecessor.inherited.artifact(ref)
+  assert native_pair(pos,neg) and native_pair('NEL_K058','NEL_K059')
+  # All three wrong-field controls fail independently, in separate branches.
+  log=(E/'NEL_K059/stdout.log').read_text();assert '** 6 of 380 failed' in log
+  assert 'line 13,' in log and 'line 14,' in log and 'line 15,' in log
+  positive=(E/'NEL_K058-NEL_native_contracts.patch').read_text();negative=(E/'NEL_K059-NEL_native_contracts.patch').read_text()
+  assert 'fn recipient(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.recipient_commitment}' in positive
+  assert 'fn transfer_change(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.change_commitment}' in positive
+  assert 'fn withdrawal_change(p:&PoolV1WithdrawalPublicV1)->&Digest{&p.change_commitment}' in positive
+  assert 'fn recipient(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.change_commitment}' in negative
+  assert 'fn transfer_change(p:&PoolV1PrivateTransferPublicV1)->&Digest{&p.recipient_commitment}' in negative
+  assert 'fn withdrawal_change(p:&PoolV1WithdrawalPublicV1)->&Digest{&p.nullifier}' in negative
+  import subprocess
+  frozen=subprocess.check_output(['git','show',ledger['frozen_revision']+':'+f.split('::')[0]],cwd=R,text=True)
+  a=frozen.index('pub fn '+fn+'(');z=frozen.index('\n}',a)+2;old=frozen[a:z]
+  ty='PoolV1'+('PrivateTransfer' if case=='transfer' else 'Withdrawal')+'PublicV1'
+  projected=old.replace('pub fn '+fn+'(','fn NEL_payment_validator(').replace('public: &'+ty+',','public: &'+ty+',\n    frame:&mut NEL_payment_validator::Frame,').replace('validate_common('+case+'_common(public))','NEL_payment_validator::common('+case+'_common(public),frame)')
+  for field in ['recipient_commitment','change_commitment']:projected=projected.replace('digest_is_canonical(&public.'+field+')','NEL_payment_validator::canonical(&public.'+field+',frame)')
+  source='\n'.join(l[1:] for l in (E/(pos+'-NEL_native_contracts.patch')).read_text().splitlines() if l.startswith('+') and not l.startswith('+++'))
+  assert projected in source and '#[kani::requires(frame.log==0)]' in source and '#[kani::modifies(&mut frame.log)]' in source
+  assert 'pub(super) fn common(_c:CommonPublicV1,f:&mut Frame)' in source and 'pub(super) fn canonical(_d:&Digest,f:&mut Frame)' in source
+  assert 'pub expected:' not in source # no hidden input equality precondition
+  assert [t['name'] for t in q['theorems']]==['NED_PaymentValidation.'+case+'_result','NED_PaymentCohorts.'+case+'_common','NEL_PaymentOracle.'+case+'_substitution','NEL_PaymentOracle.'+case+'_call_count','NEL_PaymentFieldCarriers.'+case+'_fields']
+  assert all(predecessor.inherited.theorem(t) for t in q['theorems'])
+  assert q['common_certificate_subject']==COMMON
+  if c['kind']=='external-domain':
+   o=next(o for o in obs if o['id']==expected)
+   assert o['call'].get('expression',o['call'].get('syntax')) in {'Err','Ok'}
+  # Do not duplicate or bypass the complete Result-shape fidelity controls.
+  assert scalar_caller({'kind':'root-composition','framed_scalar_caller':q['unit_fidelity']},COMMON,ledger)
+  return True
+ except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
+def receiver_resolution(c,expected,ledger):
+ try:
+  import NEL_receiver_check as checker
+  q=c['receiver_resolution'];f='crates/aspis-statement/src/atomic_statement.rs::encode_digest_canonical'
+  assert c['kind']=='alternative-resolution' and expected==f+' -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes'
+  assert q['function']==f and q['receiver']=='&M31' and q['excluded']=='WideExact' and q['no_execution_of_alternative']
+  assert q['trust_classification']=='P6/D188 option A reclassification'
+  record=json.loads(predecessor.inherited.artifact(q['source_check']));sources=checker.frozen()
+  assert checker.check(sources) and record['frozen_revision']==ledger['frozen_revision']
+  assert record['source_sha256']=={p:hashlib.sha256(s.encode()).hexdigest() for p,s in sources.items()}
+  r=json.loads(predecessor.inherited.artifact(q['compile_receipt']));source=predecessor.inherited.artifact(q['compile_source']).decode()
+  assert r['exit_status']==0 and r['source_hashes']['NEL_native_contracts.patch']==q['compile_source']['sha256']
+  assert 'fn serialize(value:&M31,frame:&mut Frame)->[u8;4]' in source and 'let value=&digest[index]' in source
+  assert q['actual_source_expression']=='value.to_le_bytes()'
+  assert any(t['name']=='NEL_DigestLoopFrame.step_and_bytes' for t in c['theorems'])
   return True
  except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
 
@@ -130,6 +199,8 @@ def certificate(c,expected,ledger,reviewed):
  if not predecessor.predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
  # Original NEJ exact domain/physical/site gates are still mandatory.
  if not predecessor.call_domain(c,expected,ledger):return False
+ if 'receiver_resolution' in c:return receiver_resolution(c,expected,ledger)
+ if 'payment_caller' in c:return payment_caller(c,expected,ledger)
  return scalar_caller(c,expected,ledger) if 'framed_scalar_caller' in c else borrowed_projection(c,expected,ledger)
 
 def compose(base,packet,reviewed):

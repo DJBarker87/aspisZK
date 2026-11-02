@@ -1,0 +1,27 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_frontier_step.rs"]
++mod NEL_frontier_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_frontier_step.rs
+@@ -0,0 +1,14 @@
++use super::*;
++struct Frame{expected:*const Digest,reply:[u8;32],called:bool}
++fn encode(d:&Digest,f:&mut Frame)->[u8;32]{assert!(!f.called && (d as *const Digest)==f.expected,"same frontier digest place");f.called=true;f.reply}
++#[kani::requires(level<20 && offset<32 && j<800 && old==out[j] && !f.called && f.expected==(&nodes[level] as *const Digest))]
++#[kani::modifies(out,&mut f.called)]
++#[kani::ensures(|r| *r==offset+1 && f.called && out[j]==if j==160+32*level+offset{f.reply[offset]}else{old})]
++fn step(nodes:&[Digest;20],out:&mut[u8;800],level:usize,offset:usize,j:usize,old:u8,f:&mut Frame)->usize{
++ let mut iter=nodes[level..].iter();let node=iter.next().unwrap();assert!(core::ptr::eq(node,&nodes[level]));assert!(iter.as_slice().len()==19-level && iter.as_slice().as_ptr()==nodes[level+1..].as_ptr());assert!(level+1<=20);
++ let reply=encode(node,f);let start=160+32*level;let dst=&mut out[start..start+32];let src=&reply;let mut i=offset;dst[i]=src[i];i+=1;i
++}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof_for_contract(step)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn frontier_step(){let nodes=[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()];let mut out:[u8;800]=kani::any();let level:usize=kani::any();kani::assume(level<20);let offset:usize=kani::any();kani::assume(offset<32);let j:usize=kani::any();kani::assume(j<800);let old=out[j];let mut f=Frame{expected:&nodes[level] as *const Digest,reply:kani::any(),called:false};step(&nodes,&mut out,level,offset,j,old,&mut f);}

@@ -1,0 +1,24 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_result_shape.rs"]
++mod NEL_result_shape;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_result_shape.rs
+@@ -0,0 +1,11 @@
++use super::*;
++#[derive(kani::Arbitrary)]
++struct State{x:usize,y:usize}
++#[kani::modifies(f)]
++#[kani::ensures(|r| *r==if b{Ok(17u8)}else{Err(crate::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest)})]
++fn weak(f:&mut State,b:bool)->Result<u8,crate::pool_v1::PoolV1PairForestAccountErrorV1>{f.x=42;if b{Ok(17u8)}else{Err(crate::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest)}}
++fn any_PoolV1TreeError()->crate::pool_v1::PoolV1TreeError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1TreeError::TreeFull,1=>crate::pool_v1::PoolV1TreeError::InsufficientCapacity,2=>crate::pool_v1::PoolV1TreeError::IndexOutOfRange,3=>crate::pool_v1::PoolV1TreeError::RootMismatch,4=>crate::pool_v1::PoolV1TreeError::NonCanonicalFrontier,5=>crate::pool_v1::PoolV1TreeError::WrongLength,6=>crate::pool_v1::PoolV1TreeError::WrongMagic,7=>crate::pool_v1::PoolV1TreeError::WrongVersion,8=>crate::pool_v1::PoolV1TreeError::WrongDepth,9=>crate::pool_v1::PoolV1TreeError::WrongTreeHash,10=>crate::pool_v1::PoolV1TreeError::WrongDigestEncoding,11=>crate::pool_v1::PoolV1TreeError::NonCanonicalDigest,_=>crate::pool_v1::PoolV1TreeError::NonZeroReserved} }
++fn any_PoolV1PairForestAccountErrorV1()->crate::pool_v1::PoolV1PairForestAccountErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongLaneCount,4=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongDepth,6=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongFormatBinding,7=>crate::pool_v1::PoolV1PairForestAccountErrorV1::NonZeroReserved,8=>crate::pool_v1::PoolV1PairForestAccountErrorV1::ZeroRequiredBinding,9=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidBoolean,10=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidMasterState,11=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidLane,12=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneMasterMismatch,13=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneOrderMismatch,14=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneSequenceDecreased,15=>crate::pool_v1::PoolV1PairForestAccountErrorV1::DuplicateCheckpoint,16=>crate::pool_v1::PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow,17=>crate::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest,18=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Identity,19=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Policy,_=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Tree(any_PoolV1TreeError())} }
++impl kani::Arbitrary for crate::pool_v1::PoolV1PairForestAccountErrorV1 {fn any()->Self{any_PoolV1PairForestAccountErrorV1()}}
++#[kani::proof_for_contract(weak)]
++fn shape_control(){let mut f=State{x:kani::any(),y:kani::any()};let _=weak(&mut f,kani::any());}

@@ -1,6 +1,6 @@
 from pathlib import Path
 import sys,subprocess,json,difflib,hashlib
-E=Path(__file__).resolve().parent;negative=sys.argv[1]=='negative'
+E=Path(__file__).resolve().parent;negative=sys.argv[1]=='negative';corrupt_reply=sys.argv[1]=='corrupt_reply'
 subprocess.run([sys.executable,str(E/'NEL_prepare_window.py'),'1','positive'],check=True)
 path='crates/aspis-statement/src/pool_v1/payment_relation.rs';frozen=subprocess.check_output(['git','show','4bb3b3f51e16b4525f1d10336e2b0bcbbd775387:'+path],text=True)
 a=frozen.index('fn validate_common(');z=frozen.index('\n}',a)+2;old=frozen[a:z]
@@ -25,8 +25,11 @@ fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
 fn common_validator(){let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any())};let mut f=Frame{expected:c,a:kani::any(),b:kani::any(),log:0};let _=NEL_common_validator(c,&mut f);}
 '''
+if corrupt_reply:
+ assert body.count('f.log+=1;r}')==1
+ body=body.replace('f.log+=1;r}','f.log+=1;!r}')
 changed=frozen+attrs+new+'\n#[cfg(kani)]\n#[path="NEL_common_validator.rs"]\nmod NEL_common_validator;\n'
 patch=''.join(difflib.unified_diff(frozen.splitlines(True),changed.splitlines(True),fromfile='a/'+path,tofile='b/'+path))
 patch+='--- /dev/null\n+++ b/crates/aspis-statement/src/pool_v1/NEL_common_validator.rs\n@@ -0,0 +1,'+str(len(body.splitlines()))+' @@\n'+''.join('+'+s+'\n' for s in body.splitlines())
 (E/'NEL_native_contracts.patch').write_text(patch)
-(E/'NEL_COMMON_VALIDATOR_CURRENT.json').write_text(json.dumps(dict(negative=negative,source=path,frozen_body_sha256=hashlib.sha256(old.encode()).hexdigest(),exact_body_projection=project==old,all_typed_inputs=True,arbitrary_bool_children=True,full_result=True,ordered_effects=True,external_modifies=[],child_domain='every typed Digest; no canonicality assumption',trust_classification='P6/D188 option A reclassification'),indent=1)+'\n')
+(E/'NEL_COMMON_VALIDATOR_CURRENT.json').write_text(json.dumps(dict(negative=negative,corrupt_reply=corrupt_reply,source=path,frozen_body_sha256=hashlib.sha256(old.encode()).hexdigest(),exact_body_projection=project==old,all_typed_inputs=True,arbitrary_bool_children=True,full_result=True,ordered_effects=True,external_modifies=[],child_domain='every typed Digest; no canonicality assumption',trust_classification='P6/D188 option A reclassification'),indent=1)+'\n')

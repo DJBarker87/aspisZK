@@ -1,0 +1,15 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_frontier_step.rs"]
++mod NEL_frontier_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_frontier_step.rs
+@@ -0,0 +1,2 @@
++#[kani::proof]
++fn frontier_step(){let mut out:[u8;32]=kani::any();let start:usize=kani::any();let width:usize=kani::any();kani::assume(start<=32 && width<=32-start && width>0);let offset:usize=kani::any();kani::assume(offset<width);let j:usize=kani::any();kani::assume(j<32);let old=out[j];let value:u8=kani::any();let dst=&mut out[start..start+width];let src=&[value];let mut i=offset;dst[i]=src[0];i+=1;assert!(i==offset+1);assert!(out[j]==if j==start+offset{value}else{old});}
