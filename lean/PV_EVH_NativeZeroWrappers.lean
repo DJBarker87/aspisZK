@@ -11,13 +11,13 @@ residual operations are still explicit; no whole-entry adequacy is inferred. -/
 theorem wrappers_native (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    let selected := PV_EVH_ZeroWrappers.selected ops
-    (opsNative base heap box selected).op125 = @PV_EVH_ZeroWrappers.asMut (types base) ∧
-    (opsNative base heap box selected).op126 = @PV_EVH_ZeroWrappers.derefMut (types base) ∧
-    (opsNative base heap box selected).op127 = @PV_EVH_ZeroWrappers.deref (types base) ∧
-    (opsNative base heap box selected).op128 = @PV_EVH_ZeroWrappers.new (types base) ∧
-    (opsNative base heap box selected).op130 = @PV_EVH_ZeroWrappers.zeroize (types base) ∧
-    (opsNative base heap box selected).op131 = @PV_EVH_ZeroWrappers.asRef (types base) := by
+    let selected := @PV_EVH_ZeroWrappers.selected (types base) ops
+    (opsNative base heap box selected).op125 = @PV_EVH_ZeroWrappers.asMut ∧
+    (opsNative base heap box selected).op126 = @PV_EVH_ZeroWrappers.derefMut ∧
+    (opsNative base heap box selected).op127 = @PV_EVH_ZeroWrappers.deref ∧
+    (opsNative base heap box selected).op128 = @PV_EVH_ZeroWrappers.new ∧
+    (opsNative base heap box selected).op130 = @PV_EVH_ZeroWrappers.zeroize ∧
+    (opsNative base heap box selected).op131 = @PV_EVH_ZeroWrappers.asRef := by
   dsimp only
   unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_125,PV_B2_F_RawNative.preserved_126,
