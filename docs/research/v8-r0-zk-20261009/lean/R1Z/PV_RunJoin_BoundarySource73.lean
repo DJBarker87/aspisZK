@@ -21,15 +21,15 @@ theorem complete (p : Nat → Q) :
       finish (fold p 27 1 (initial (p 0))) := by
   unfold ProverRwP6BoundarySource.boundary_flat
   rw [PV_RunJoin_MergeArray35.read p 0#usize (by decide)]
-  simp only [lift,bind_tc_ok]
+  simp only [lift,bind_tc_ok,UScalar.ofNatCore_val_eq]
   have init : (⟨U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c0.a),
       U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c0.b),
       U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c1.a),
       U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c1.b)⟩ : ProverRwP6BoundaryStep.Acc)=initial (p 0) := by unfold initial;rfl
   rw [init]
   repeat' first
-    | (rw [PV_RunJoin_MergeArray35.read p _ (by decide)];simp only [lift,bind_tc_ok])
-    | (rw [ProverRwP6BoundaryStep.step];simp only [lift,bind_tc_ok])
+    | (rw [PV_RunJoin_MergeArray35.read p _ (by decide)];simp only [lift,bind_tc_ok,UScalar.ofNatCore_val_eq])
+    | (rw [ProverRwP6BoundaryStep.step];simp only [lift,bind_tc_ok,UScalar.ofNatCore_val_eq])
   simp only [fold]
   rfl
 
