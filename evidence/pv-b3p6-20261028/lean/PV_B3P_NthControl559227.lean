@@ -68,8 +68,7 @@ theorem source_binding (message : Str) (handler : Str → Result Never)
       by_cases guard : item.val < r.end.val
       · simp only [guard,decide_true,↓reduceIte]
         rw [clone_value,bind_tc_ok,increment_wrap item r.end guard,bind_tc_ok]
-      · simp only [guard,decide_false,↓reduceIte]
-        rw [clone_value,bind_tc_ok]
+      · simp only [guard,decide_false,Bool.false_eq_true,if_false,clone_value,bind_tc_ok]
 
 theorem formatting_independent (message1 message2 : Str)
     (first second : Str → Result Never) (r : Range Usize) (n : Usize) :
