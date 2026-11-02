@@ -92,4 +92,15 @@ class Root(Fixtures):
  def test_wrong_root_state(self):self.mutate_root('empty_external_modifies',False)
  def test_wrong_root_order(self):self.mutate_root('ordered_effects',False)
  def test_missing_root_theorem(self):self.mutate_root('theorems',[])
+class Kind(Fixtures):
+ def test_wrong_kind_theorem(self):
+  from NEM_kind_checks import FUNCTIONS
+  f=FUNCTIONS['statement'];c=copy.deepcopy(self.p['members'][f]);c['kind_composition']['theorems'][0]['name']='NEM_KindInstance.parser_result_frame'
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
+ def test_missing_kind_control(self):
+  from NEM_kind_checks import FUNCTIONS
+  f=FUNCTIONS['parse'];c=copy.deepcopy(self.p['members'][f]);c['kind_composition']['native_pairs']=[]
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
 if __name__=='__main__':unittest.main()

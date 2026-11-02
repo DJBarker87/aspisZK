@@ -65,3 +65,51 @@ end NEM_ValidatorComposed
 ```
 
 Axioms: propext, Classical.choice, Quot.sound. Native caller source erasure, complete Results, ordered effects and same child places are checked by NEM_root_checks.py against NEE_K052/053 and NEL_K006/007. Original NEM native_pair remains unchanged; a separate inherited-pair adapter checks the original differently named positive/negative harnesses, identical patches and all frozen/cap/feature/lock gates. 42 mutation tests passed.
+
+## Transition-kind caller instances
+
+NEM_L019 closes the three typed getter/parser instances using inherited NBN_U05.encoder_kind and NBD_TerminalProjection.source_kind; no adopted getter is invented. K102..110 provide actual native calls, arbitrary prestate scalar frames and every invalid parser byte, with six failing controls. The controller expected exit 10 on K103 but the pinned Kani returned 1 for its expected verification failure; the own controller was corrected to require exactly exit1 plus the failure banner, then continued from K104 without rerunning K103. All 110 Kani attempts are used. The additive validator reports 50/97 rows CLOSED (first root remains 2/2, other roots OPEN).
+
+```lean
+import NBN_U05
+set_option autoImplicit false
+noncomputable section
+namespace NEM_KindInstance
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+
+def write (before : Nat → U8) (value : U8) (j : Nat) : U8 :=
+  if j=5 then value else before j
+
+/-- Actual enclosing encoder's SAME variant tag, with the complete scalar-write frame. -/
+theorem statement_window (s : Statement) (before : Nat → U8) (j : Nat) :
+    write before (NBN_EncoderBytes.tag s) j =
+      if j=5 then (match s with | .PrivateTransfer _ _ => 1#u8 | .Withdrawal _ _ => 2#u8)
+      else before j := by
+  rw [NBN_U05.encoder_kind]
+  rfl
+
+/-- A payment carrier keeps its SAME public value and variant when joined to any common carrier. -/
+def join (c : NBD_TerminalProjection.Common)
+    (p : Sum NBN_ValidatorSummary.Transfer NBN_ValidatorSummary.Withdrawal) : Statement :=
+  match p with | .inl t => .PrivateTransfer c t | .inr w => .Withdrawal c w
+
+theorem payment_window (c : NBD_TerminalProjection.Common)
+    (p : Sum NBN_ValidatorSummary.Transfer NBN_ValidatorSummary.Withdrawal)
+    (before : Nat → U8) (j : Nat) :
+    write before (NBN_EncoderBytes.tag (join c p)) j =
+      if j=5 then (match p with | .inl _ => 1#u8 | .inr _ => 2#u8) else before j := by
+  cases p <;> exact statement_window _ before j
+
+/-- The caller supplies this SAME header byte. Both valid and every invalid byte preserve state. -/
+theorem parser_result_frame {State : Type} (header : Nat → U8) (state : State) :
+    (pool_v1.pair_forest_terminal.transition_kind (header 5),state) =
+      (ok (NBD_TerminalProjection.kind (header 5)),state) := by
+  rw [NBD_TerminalProjection.source_kind]
+
+#print axioms statement_window
+#print axioms payment_window
+#print axioms parser_result_frame
+end NEM_KindInstance
+```
+
+All three theorem audits: propext, Classical.choice, Quot.sound. These compose scalar-member rows; they do not close any later enclosing root.
