@@ -49,3 +49,21 @@ finding beyond V197 is presently identified.
 
 Recheck results are provisional until the focused receipts and final audit are
 complete; this inventory does not itself claim compilation.
+
+New consumers introduced by this correction (on this branch):
+
+| Consumer | Failure-kind dependence | Verification target |
+|---|---|---|
+| PV_RDCD5_ParserRange | Complete Result, literal panic; uses old helper's window only | binding on every Slice/Usize range |
+| PV_RDCD5_ParserTransport | Complete Result, every panic/None/Some; typed component/CM/QM transport | component_binding, complex, quartic |
+| PV_RDCD5_V197Restored | Complete Result and actual checked borrowed windows | parser_instance, native_window, input_frame, rdcd4_instance |
+| PV_RDCD5_V197ConsumerReplay | KIND: corrected empty-input equality; exact corrected replay proof | v197_corrected |
+| PV_RDCD5_V197Audit / V197Focused / V197FrozenManifest | Full declaration-type/axiom queries, including KIND-sensitive statements | affected-consumer audit, focused, final manifest |
+| PV_RDCD5_NEPDriver | Dynamic root/constant-graph audit, no parser execution or error erasure | fixed full-private-data raw walk |
+| tools/pv-rdcd7-20261102/parser-source.py | KIND: asserts panic and all three migrated calls | structural schema plus explicit syntactic mutation controls |
+| Other new census/staging/receipt tools | Source names, hashes and query inventories only | source/fingerprint checks, no parser result credit |
+
+Historical `SliceRange194.index` retains its old model error tag. The parser no
+longer calls it. No universal native failure-kind credit is claimed for it;
+V236 uses bounded success windows. The corrected parser's faithful helper has
+a complete, proved Result binding.
