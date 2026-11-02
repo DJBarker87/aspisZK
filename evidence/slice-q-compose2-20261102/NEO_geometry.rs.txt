@@ -1,6 +1,6 @@
 // Scratch-only one source gather iteration; no writable static or function pointer.
 use super::{Error};
-use aspis_core::{field::M31,r0::domain::{self,FibreIndex,Point}};
+use aspis_core::{field::{M31,QM31},r0::domain::{self,FibreIndex,Point}};
 include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
 #[derive(Clone,Copy)]
 struct NEO_RowLog { query:u32,u:usize,left:usize,right:usize,px:M31,py:M31,lx:M31,ly:M31,square:M31,doubled:M31,z:M31 }
@@ -51,4 +51,51 @@ fn gather_values(){
    assert!(log.square.0<2147483647&&log.doubled.0<2147483647);
   }
  }
+}
+
+mod NEO_getter_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_getter_reference.rs"));}
+// Actual borrowed getter, all Slice-Q produced lengths, arbitrary raw words.
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn for_query(){
+ let raw:[[M31;5];22]=kani::any();let n:usize=kani::any();kani::assume(n<=22);
+ let start:usize=kani::any();let index:usize=kani::any();
+ kani::assume(index>=start&&index-start<n);
+ let j:usize=kani::any();kani::assume(j<5);
+ let boxed:alloc::boxed::Box<[[M31;5]]>=alloc::boxed::Box::new(raw);
+ let mut inverses=boxed.into_vec();inverses.truncate(n);
+ let nz:usize=kani::any();kani::assume(nz<=22);
+ let zraw:[M31;22]=kani::any();let zbox:alloc::boxed::Box<[M31]>=alloc::boxed::Box::new(zraw);
+ let mut line_z=zbox.into_vec();line_z.truncate(nz);
+ let geometry=super::QueryGeometry{start,inverses,line_z};
+ let actual=geometry.for_query(index);
+ // Split from the timed-out whole value observation: exact borrowed row identity.
+ let expected=NEO_getter_reference::selected(geometry.start,index,&geometry.inverses);
+ let copied=*actual;
+ let same=core::ptr::eq(actual,expected)&&copied[j].0==expected[j].0;
+ #[cfg(not(NEO_wrong_getter))] assert!(same);
+ #[cfg(NEO_wrong_getter)] assert!(!same);
+}
+
+mod NEO_cell_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_cell_reference.rs"));}
+
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn basis_cell(){
+ let raw:[M31;256]=kani::any();let i:usize=kani::any();kani::assume(i<256);
+ let actual=super::basis_at(&raw,i);
+ let expected=NEO_cell_reference::cell(&raw,i);
+ #[cfg(not(NEO_wrong_cell))] assert_eq!(actual.0,expected.0);
+ #[cfg(NEO_wrong_cell)] assert_ne!(actual.0,expected.0);
+}
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn accumulated_cell(){
+ let raw:[QM31;64]=kani::any();let n:usize=kani::any();kani::assume(n<=64);
+ let i:usize=kani::any();kani::assume(i<n);
+ let boxed:alloc::boxed::Box<[QM31]>=alloc::boxed::Box::new(raw);let mut values=boxed.into_vec();values.truncate(n);
+ let a=super::accumulated_weight_at(&values,i);let e=NEO_cell_reference::cell(&values,i);
+ let same=a.c0.a.0==e.c0.a.0&&a.c0.b.0==e.c0.b.0&&a.c1.a.0==e.c1.a.0&&a.c1.b.0==e.c1.b.0;
+ #[cfg(not(NEO_wrong_cell))] assert!(same);
+ #[cfg(NEO_wrong_cell)] assert!(!same);
 }

@@ -1,0 +1,139 @@
+NEO_GeometryGather.lean:38:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  p ≥ 262144
+  0 ≤ o ≤ 2147483646
+  0 ≤ n ≤ 2147483646
+  0 ≤ m ≤ 2147483646
+  0 ≤ l ≤ 2147483646
+  0 ≤ k ≤ 2147483646
+  0 ≤ j ≤ 262143
+  0 ≤ i ≤ 2147483646
+  0 ≤ h ≤ 262143
+  0 ≤ g ≤ 2147483646
+  0 ≤ f ≤ 2147483646
+  0 ≤ e ≤ 262143
+where
+ e := ↑↑fibre
+ f := ↑↑point.x
+ g := ↑↑point.y
+ h := ↑↑fleft
+ i := ↑↑r.lineX
+ j := ↑↑fright
+ k := ↑↑r.lineY
+ l := ↑↑square
+ m := ↑↑doubled
+ n := ↑↑one
+ o := ↑↑r.lineZ
+ p := ↑↑u
+NEO_GeometryGather.lean:45:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+  (let (circle_x, circle_y) := (point.x, point.y)
+    do
+    let i ← ok parent
+    let i1 ← lift (Usize.wrapping_mul i 4#usize)
+    let line_x ← (NEB_GeometryIndices.install ops error).op14 i1
+    let i2 ← lift (Usize.wrapping_mul i 4#usize)
+    let i3 ← lift (i2.wrapping_add 3#usize)
+    let line_y ← (NEB_GeometryIndices.install ops error).op14 i3
+    let i4 ← (NEB_GeometryIndices.install ops error).op9 line_x line_x
+    let i5 ← (NEB_GeometryIndices.install ops error).op10 i4
+    let line_z ← (NEB_GeometryIndices.install ops error).op8 i5 1#u32
+    if circle_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+      else
+        if circle_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+        else
+          if line_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+          else
+            if line_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+            else
+              if line_z = 0#u32 then ok (core.result.Result.Err 0#u8)
+              else ok (core.result.Result.Ok (Array.make 5#usize [circle_x, circle_y, line_x, line_y, line_z] ⋯))) =
+    ok (core.result.Result.Ok (Array.make 5#usize [r.x, r.y, r.lineX, r.lineY, r.lineZ] ⋯))
+
+case refine_1
+C : Type
+ops : Ops C
+error : C
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install (NEB_GeometryIndices.install ops error)) start
+      iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u parent left right : Usize
+point : aspis_core.r0.domain.Point U32
+square doubled : U32
+it : iterOut = iter1
+cast : lift (UScalar.cast UScalarTy.Usize query) = ok u
+cx : ↑point.x < 2147483647
+cy : ↑point.y < 2147483647
+div : u / 4#usize = ok parent
+le : left = parent.wrapping_mul 4#usize
+clx : ↑r.lineX < 2147483647
+re : right = left.wrapping_add 3#usize
+cly : ↑r.lineY < 2147483647
+rx : r.x = point.x
+ry : r.y = point.y
+mul : (NEB_GeometryIndices.install ops error).op9 r.lineX r.lineX = ok square
+cs : ↑square < 2147483647
+dbl : (NEB_GeometryIndices.install ops error).op10 square = ok doubled
+cd : ↑doubled < 2147483647
+cz : ↑r.lineZ < 2147483647
+nonzero : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+zseq : ↑zsOut = ↑zs ++ [r.lineZ]
+ne : r.x ≠ 0#u32 ∧ r.y ≠ 0#u32 ∧ r.lineX ≠ 0#u32 ∧ r.lineY ≠ 0#u32 ∧ r.lineZ ≠ 0#u32
+small : ¬u ≥ 262144#usize
+idx : NEB_GeometryIndices.indexPort error u = ok (core.result.Result.Ok u)
+bound : ↑u < 262144
+pt : (NEB_GeometryIndices.install ops error).op15 u = ok point
+il : NEB_GeometryIndices.indexPort error left = ok (core.result.Result.Ok left)
+bl : ↑left < 262144
+lx : (NEB_GeometryIndices.install ops error).op14 left = ok r.lineX
+ir : NEB_GeometryIndices.indexPort error right = ok (core.result.Result.Ok right)
+br : ↑right < 262144
+ly : (NEB_GeometryIndices.install ops error).op14 right = ok r.lineY
+unit : (NEB_GeometryIndices.install ops error).op7 = ok 1#u32
+co : ↑1#u32 < 2147483647
+sub : (NEB_GeometryIndices.install ops error).op8 doubled 1#u32 = ok r.lineZ
+⊢ (let (circle_x, circle_y) := (point.x, point.y)
+    do
+    let i ← ok parent
+    let i1 ← lift (Usize.wrapping_mul i 4#usize)
+    let line_x ← (NEB_GeometryIndices.install ops error).op14 i1
+    let i2 ← lift (Usize.wrapping_mul i 4#usize)
+    let i3 ← lift (i2.wrapping_add 3#usize)
+    let line_y ← (NEB_GeometryIndices.install ops error).op14 i3
+    let i4 ← (NEB_GeometryIndices.install ops error).op9 line_x line_x
+    let i5 ← (NEB_GeometryIndices.install ops error).op10 i4
+    let line_z ← (NEB_GeometryIndices.install ops error).op8 i5 1#u32
+    if circle_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+      else
+        if circle_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+        else
+          if line_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+          else
+            if line_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+            else
+              if line_z = 0#u32 then ok (core.result.Result.Err 0#u8)
+              else ok (core.result.Result.Ok (Array.make 5#usize [circle_x, circle_y, line_x, line_y, line_z] ⋯))) =
+    ok (core.result.Result.Ok (Array.make 5#usize [r.x, r.y, r.lineX, r.lineY, r.lineZ] ⋯))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEO_GeometryGather.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

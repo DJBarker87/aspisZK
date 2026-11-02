@@ -1,0 +1,59 @@
+{"attempt": "NEO_L024", "exit_status": 1, "wall_seconds": 6.191249676980078, "peak_rss_kib": "4303444", "swaps": "0", "print_axioms": ["'NEO_GetterReference.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEO_GetterReference.lean:10:63: error: Application type mismatch: The argument
+  ↑g.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.5
+of sort `Type (?u.5 + 1)` in the application
+  @InitialSeg ↑g.start
+NEO_GetterReference.lean:10:76: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.4
+NEO_GetterReference.lean:19:1: error: Tactic `rfl` failed: The left-hand side
+  g.inverses.deref.index_usize k
+is not definitionally equal to the right-hand side
+  do
+    let i ← i - g.start
+    alloc.vec.Vec.index
+        (core.slice.index.SliceIndexUsizeSlice (Std.Array S7OwnedP6QueryRead.aspis_core.field.M31 5#usize)) g.inver
+...
+NEO_GetterReference.lean:10:63: error: Application type mismatch: The argument
+  ↑g.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.5
+of sort `Type (?u.5 + 1)` in the application
+  @InitialSeg ↑g.start
+NEO_GetterReference.lean:10:76: error(lean.invalidDottedIdent): Invalid dotted identifier notation: Not supported on type universe
+  Type ?u.4
+NEO_GetterReference.lean:19:1: error: Tactic `rfl` failed: The left-hand side
+  g.inverses.deref.index_usize k
+is not definitionally equal to the right-hand side
+  do
+    let i ← i - g.start
+    alloc.vec.Vec.index
+        (core.slice.index.SliceIndexUsizeSlice (Std.Array S7OwnedP6QueryRead.aspis_core.field.M31 5#usize)) g.inverses i
+
+g : verifier.QueryGeometry
+i : Usize
+lower : InitialSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+k : UScalar UScalarTy.Usize
+sub : UScalar.sub i g.start = ok k
+value : ↑k = ↑i - ↑g.start
+wrap : i.wrapping_sub g.start = k
+⊢ g.inverses.deref.index_usize k = do
+    let i ← i - g.start
+    alloc.vec.Vec.index
+        (core.slice.index.SliceIndexUsizeSlice (Std.Array S7OwnedP6QueryRead.aspis_core.field.M31 5#usize)) g.inverses i
+NEO_GetterReference.lean:18:72: warning: This simp argument is unused:
+  sub
+
+Hint: Omit it from the simp argument list.
+  simp only [NEO_GetterRef.selected, ̲NEO_GeometryGetter.read,
+     ̲S7OwnedP6QueryRead.QueryGeometry.for_query, ̲NEO_GeometryGetter.carrier,s̵u̵b̵,̵ ̲wrap, ̲bind_tc_ok, ̲lift]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEO_GetterReference.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb073875731e248baae3ebeda2653f8fc.scope; invocation ID: c911c0761a1c4dc585041217ed857d4d

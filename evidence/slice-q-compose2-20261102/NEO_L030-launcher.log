@@ -1,0 +1,72 @@
+{"attempt": "NEO_L030", "exit_status": 1, "wall_seconds": 6.213366003008559, "peak_rss_kib": "4923660", "swaps": "0", "print_axioms": ["'NEO_GeometryGather.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEO_GeometryGather.lean:38:2: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  p ≥ 262144
+  0 ≤ o ≤ 2147483646
+  0 ≤ n ≤ 2147483646
+  0 ≤ m ≤ 2147483646
+  0 ≤ l ≤ 2147483646
+  0 ≤ k ≤ 2147483646
+  0 ≤ j ≤ 262143
+  0 ≤ i ≤ 2147483646
+  0 ≤ h ≤ 262143
+  0 ≤ g ≤ 2147483646
+  0 ≤ f ≤ 2147483646
+  0 ≤ e ≤ 262143
+where
+ e := ↑↑fibre
+ f := ↑↑point.x
+ g := ↑↑point.y
+ h := ↑↑fleft
+ i := ↑↑r.lineX
+ j := ↑↑fright
+ k := ↑↑r.lineY
+ l := ↑↑square
+ m := ↑↑doubled
+ n := ↑↑one
+ o := ↑↑r.lineZ
+ p := ↑↑u
+NEO_GeometryGather.lean:45:11: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  do
+    let y ← ok ?x
+    ?f y
+in the target expression
+ 
+...
+neZ
+⊢ (let (circle_x, circle_y) := (point.x, point.y)
+    do
+    let i ← ok parent
+    let i1 ← lift (Usize.wrapping_mul i 4#usize)
+    let line_x ← (NEB_GeometryIndices.install ops error).op14 i1
+    let i2 ← lift (Usize.wrapping_mul i 4#usize)
+    let i3 ← lift (i2.wrapping_add 3#usize)
+    let line_y ← (NEB_GeometryIndices.install ops error).op14 i3
+    let i4 ← (NEB_GeometryIndices.install ops error).op9 line_x line_x
+    let i5 ← (NEB_GeometryIndices.install ops error).op10 i4
+    let line_z ← (NEB_GeometryIndices.install ops error).op8 i5 1#u32
+    if circle_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+      else
+        if circle_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+        else
+          if line_x = 0#u32 then ok (core.result.Result.Err 0#u8)
+          else
+            if line_y = 0#u32 then ok (core.result.Result.Err 0#u8)
+            else
+              if line_z = 0#u32 then ok (core.result.Result.Err 0#u8)
+              else ok (core.result.Result.Ok (Array.make 5#usize [circle_x, circle_y, line_x, line_y, line_z] ⋯))) =
+    ok (core.result.Result.Ok (Array.make 5#usize [r.x, r.y, r.lineX, r.lineY, r.lineZ] ⋯))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (5 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEO_GeometryGather.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r988967d985334c4eb87e59f8614a9a09.scope; invocation ID: 1f45081657ad42ffbb01b8e0c0613535

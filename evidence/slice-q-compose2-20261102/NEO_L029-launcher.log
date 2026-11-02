@@ -1,0 +1,63 @@
+{"attempt": "NEO_L029", "exit_status": 1, "wall_seconds": 9.75374885299243, "peak_rss_kib": "4892416", "swaps": "0", "print_axioms": ["'NEO_GeometryGather.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEO_GeometryGather.lean:41:9: error: could not synthesize default value for parameter 'hl' using tactics
+NEO_GeometryGather.lean:41:9: error: unsolved goals
+C : Type
+ops : Ops C
+error : C
+start : Usize
+iter iter1 iterOut : core.slice.iter.Iter U32
+query : U32
+zs zsOut flat flatOut : alloc.vec.Vec U32
+next : core.slice.iter.IteratorSliceIter.next iter = ok (some query, iter1)
+run :
+  verifier.QueryGeometry.for_range_loop0.body (Port4C_GeometryStd.install (NEB_GeometryIndices.install ops error)) start
+      iter zs flat =
+    ok (cont (iterOut, zsOut, flatOut))
+r : Port4C_GeometryGather.Row
+u parent left right : Usize
+point : aspis_core.r0.domain.Point U32
+square doubled : U32
+it : iterOut = i
+...
+< 2147483647
+cy : ↑point.y < 2147483647
+div : u / 4#usize = ok parent
+le : left = parent.wrapping_mul 4#usize
+clx : ↑r.lineX < 2147483647
+re : right = left.wrapping_add 3#usize
+cly : ↑r.lineY < 2147483647
+rx : r.x = point.x
+ry : r.y = point.y
+mul : (NEB_GeometryIndices.install ops error).op9 r.lineX r.lineX = ok square
+cs : ↑square < 2147483647
+dbl : (NEB_GeometryIndices.install ops error).op10 square = ok doubled
+cd : ↑doubled < 2147483647
+cz : ↑r.lineZ < 2147483647
+nonzero : ∀ x ∈ r.words, x ≠ 0#u32
+append : ↑flatOut = ↑flat ++ r.words
+zseq : ↑zsOut = ↑zs ++ [r.lineZ]
+ne : r.x ≠ 0#u32 ∧ r.y ≠ 0#u32 ∧ r.lineX ≠ 0#u32 ∧ r.lineY ≠ 0#u32 ∧ r.lineZ ≠ 0#u32
+small : (u ≥ 262144#usize) = (false = true)
+idx : NEB_GeometryIndices.indexPort error u = ok (core.result.Result.Ok u)
+bound : ↑u < 262144
+pt : (NEB_GeometryIndices.install ops error).op15 u = ok point
+il : NEB_GeometryIndices.indexPort error left = ok (core.result.Result.Ok left)
+bl : ↑left < 262144
+lx : (NEB_GeometryIndices.install ops error).op14 left = ok r.lineX
+ir : NEB_GeometryIndices.indexPort error right = ok (core.result.Result.Ok right)
+br : ↑right < 262144
+ly : (NEB_GeometryIndices.install ops error).op14 right = ok r.lineY
+unit : (NEB_GeometryIndices.install ops error).op7 = ok 1#u32
+co : ↑1#u32 < 2147483647
+sub : (NEB_GeometryIndices.install ops error).op8 doubled 1#u32 = ok r.lineZ
+⊢ r.words.length = 5
+NEO_GeometryGather.lean:42:76: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [NEO_GeometryScalarRef.gather, ̲dictionary, ̲cast, ̲bind_tc_ok, ̲small,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲pt]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEO_GeometryGather.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rb5ac8eaee7df496fbf091e4309d6b203.scope; invocation ID: 741398e57a934cbb8c7dd5de32b898fe

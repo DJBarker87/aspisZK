@@ -18,7 +18,7 @@
  pub mod semantic_wire;
 --- /dev/null
 +++ b/crates/aspis-r1-cost-probe/src/verifier/NEO_geometry.rs
-@@ -0,0 +1,54 @@
+@@ -0,0 +1,78 @@
 +// Scratch-only one source gather iteration; no writable static or function pointer.
 +use super::{Error};
 +use aspis_core::{field::M31,r0::domain::{self,FibreIndex,Point}};
@@ -73,3 +73,32 @@
 +  }
 + }
 +}
++
++mod NEO_getter_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_getter_reference.rs"));}
++// Actual borrowed getter, all Slice-Q produced lengths, arbitrary raw words.
++#[kani::proof] #[kani::unwind(24)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn for_query(){
++ let raw:[[M31;5];22]=kani::any();let n:usize=kani::any();kani::assume(n<=22);
++ let start:usize=kani::any();let index:usize=kani::any();
++ kani::assume(index>=start&&index-start<n);
++ let j:usize=kani::any();kani::assume(j<5);
++ let boxed:alloc::boxed::Box<[[M31;5]]>=alloc::boxed::Box::new(raw);
++ let mut inverses=boxed.into_vec();inverses.truncate(n);
++ let nz:usize=kani::any();kani::assume(nz<=22);
++ let zraw:[M31;22]=kani::any();let zbox:alloc::boxed::Box<[M31]>=alloc::boxed::Box::new(zraw);
++ let mut line_z=zbox.into_vec();line_z.truncate(nz);
++ let geometry=super::QueryGeometry{start,inverses,line_z};
++ let actual=geometry.for_query(index);
++ // Split from the timed-out whole value observation: exact borrowed row identity.
++ let expected=NEO_getter_reference::selected(geometry.start,index,&geometry.inverses);
++ let copied=*actual;
++ let same=core::ptr::eq(actual,expected)&&copied[j].0==expected[j].0;
++ #[cfg(not(NEO_wrong_getter))] assert!(same);
++ #[cfg(NEO_wrong_getter)] assert!(!same);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_getter_reference.rs
+@@ -0,0 +1,2 @@
++// Independent safe borrowed reference for the frozen getter, generic raw values.
++pub fn selected<T>(start:usize,index:usize,rows:&[[T;5]])->&[T;5] {&rows[index-start]}

@@ -19,7 +19,7 @@
  
 --- /dev/null
 +++ b/crates/aspis-core/src/field/NEO_parsers.rs
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,81 @@
 +// Scratch-only direct native/reference comparisons. No static writes or callbacks.
 +use super::{M31,CM31,QM31};
 +use super::wide_exact::WideExact;
@@ -69,6 +69,38 @@
 +check!(m_stdref_wrong,b,[u8;4],M31::from_le_bytes(b).map(|x|x.0),NEO_reference::m_ref(b),true);
 +check!(limbs_ref,b,[u32;8],WideExact::from_limbs(b).map(wide_words),NEO_reference::limbs_ref(b),false);
 +check!(limbs_ref_wrong,b,[u32;8],WideExact::from_limbs(b).map(wide_words),NEO_reference::limbs_ref(b),true);
++
++// Raw-domain construction only; no canonicality filtering.
++impl kani::Arbitrary for M31 { fn any()->Self {Self(kani::any())} }
++
++// Arbitrary-offset read-only windows, not whole proof-buffer loops.
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn c_window(){
++ let raw:[u8;16]=kani::any();let offset:usize=kani::any();kani::assume(offset<=8);
++ let real=CM31::from_le_bytes(&raw[offset..]).map(c_words);let expected=c_ref(&raw[offset..]);
++ #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
++ #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
++}
++#[kani::proof] #[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn q_window(){
++ let raw:[u8;32]=kani::any();let offset:usize=kani::any();kani::assume(offset<=16);
++ let real=QM31::from_le_bytes(&raw[offset..]).map(q_words);let expected=q_ref(&raw[offset..]);
++ #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
++ #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn wide_window(){
++ let raw:[u8;64]=kani::any();let offset:usize=kani::any();kani::assume(offset<=32);
++ let real=WideExact::from_le_bytes(&raw[offset..offset+32]).map(wide_words);let expected=wide_ref(&raw[offset..offset+32]);
++ #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
++ #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
++}
 --- /dev/null
 +++ b/crates/aspis-core/src/field/NEO_parser_reference.rs
 @@ -0,0 +1,5 @@
