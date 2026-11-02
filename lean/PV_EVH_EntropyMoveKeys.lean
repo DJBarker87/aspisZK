@@ -42,7 +42,39 @@ theorem original_lookup (owner sp result : Nat) (w origin : State)
   exact PV_EVH_EntropyMoveBacking.original_lookup _ _ _ _ _ w hl h.1 h.2
     (sameKey_false _ _ h.1) (sameKey_false _ _ h.2)
 
+/-- The actual initializer/fill/copy ordering, including original64 admission.
+This defines only the already checked physical-state interpretation. -/
+noncomputable def ready [ProverRwFull.ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) : State :=
+  PV_EVH_EntropyPhysicalCopy.copies (original owner sp w) (field owner sp w) (seed owner sp w)
+    (PV_EVH_EntropyPhysicalCopy.admit_pair (field owner sp w) (seed owner sp w)
+      (PV_EVH_StackEntropyFill.post (original owner sp w) d (entered owner sp w)))
+
+/-- The remaining pre-move original lookup follows from the source-shaped
+state, not from a supplied lookup answer. -/
+theorem ready_lookup [ProverRwFull.ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
+    (ready owner sp d w).frame.live.find? (sameKey (original owner sp w).key) =
+      some (original owner sp w) := by
+  have h := original_distinct owner sp w
+  have hf := sameKey_false (original owner sp w) (field owner sp w) h.1
+  have hs := sameKey_false (original owner sp w) (seed owner sp w) h.2
+  change (seed owner sp w :: field owner sp w :: original owner sp w :: w.frame.live).find?
+    (sameKey (original owner sp w).key) = some (original owner sp w)
+  simp only [List.find?_cons,hs,hf,Bool.false_eq_true,if_false]
+  simp only [sameKey,beq_self_eq_true,Bool.and_self,if_true]
+
+theorem moved_ready_lookup [ProverRwFull.ExternalTypes] (owner sp result : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
+    (PV_EVH_EntropyMoveBacking.pair (field owner sp w) (seed owner sp w)
+      (returnedField owner sp result w) (returnedSeed owner sp result w)
+      (ready owner sp d w)).frame.live.find? (sameKey (original owner sp w).key) =
+        some (original owner sp w) :=
+  original_lookup owner sp result (ready owner sp d w) w (ready_lookup owner sp d w)
+
 #print axioms original_distinct
 #print axioms sameKey_false
 #print axioms original_lookup
+#print axioms ready_lookup
+#print axioms moved_ready_lookup
 end PV_EVH_EntropyMoveKeys
