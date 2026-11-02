@@ -29,7 +29,7 @@ theorem complete {E K C M : Type} (data : E → View K C M)
     (osKind : Int → K) (customKind : C → K) (messageKind : M → K) (e : E) :
     source data osKind customKind messageKind e =
       .ok (project osKind customKind messageKind (data e)) := by
-  cases h : data e <;> rfl
+  cases h : data e <;> simp only [source, h, project]
 
 /-- The getter model returns the same world, borrowed error and payloads.
 This does not prove the native data/load interpretation. -/
