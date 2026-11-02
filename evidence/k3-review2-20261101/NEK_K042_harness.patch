@@ -1,0 +1,92 @@
+--- a/programs/r1-cost-probe/src/lib.rs
++++ b/programs/r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. Local measurement entrypoint only.
+ use aspis_r1_cost_probe::verifier::{self,Phase};
+ use aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_statement_v1;
+@@ -168,3 +169,7 @@
+ #[cfg(all(test, feature="pool-adapter"))]
+ #[path="r1_pool_adapter_original.rs"]
+ mod r1_pool_adapter_original;
++
++#[cfg(kani)] mod NEK_kmx {
++extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++}
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -807,7 +807,10 @@
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::requires(record.index<32 && record.level<aspis_statement::pool_v1::POOL_V1_PAIR_TREE_DEPTH))]
++#[cfg_attr(kani,kani::ensures(|r| !(authenticated.selected_lane.lane_id == old(authenticated.selected_lane.lane_id))))]
+ fn asq8_common(
++    record:&NDM_native::NEK_Context,
+     authenticated: &AuthenticatedAsq8Accounts,
+     candidate_afterstate: &aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1,
+ ) -> Box<PoolV1PairForestTerminalCommonV1> {
+@@ -871,7 +874,7 @@
+     if authenticated.master.identity.asset_id != requested_asset_id {
+         return Err(ProgramError::InvalidInstructionData);
+     }
+-    let common = asq8_common(authenticated, candidate_afterstate);
++    let common = asq8_common(&NDM_native::NEK_Context{index:0,level:0},authenticated,candidate_afterstate);
+     match request.public {
+         PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public) => {
+             transfer_statement_box(common, public)
+@@ -971,3 +974,5 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)] #[path="NDM_native.rs"] mod NDM_native;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NDM_native.rs
+@@ -0,0 +1,28 @@
++pub(super) struct NEK_Context{pub(super) index:usize,pub(super) level:usize}
++use super::*;
++#[path="NDM_reference.rs"] pub mod reference;
++pub fn reference_tuple(a:&AuthenticatedAsq8Accounts,c:&aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1)->([u8;32],[u8;32],[u8;32],u8,u64,[M31;8],PoolV1PairLiveSnapshotV1,aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1) {
++ reference::common_ref(a.master_account,a.checkpoint_account,a.selected_lane_account,a.selected_lane.lane_id,a.checkpoint.checkpoint_sequence,a.checkpoint.global_root,*a.live_snapshot,*c)
++}
++// Every raw carrier below has only integer/array/struct fields: every bit pattern is a valid Rust value.
++fn account()->AuthenticatedAsq8Accounts {
++ let master=PoolV1PairForestMasterV1 {
++  bump:kani::any(),
++  identity:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolIdentityV1>()]>())},
++  verifier_policy:unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::VerifierPolicyV1>()]>())},
++  initialized_lane_mask:kani::any(),has_checkpoint:kani::any(),next_checkpoint_sequence:kani::any(),last_checkpoint_lane_sequences:kani::any()
++ };
++ let checkpoint:PoolV1PairForestCheckpointV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestCheckpointV1>()]>())};
++ let selected_lane:PoolV1PairForestLaneStateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairForestLaneStateV1>()]>())};
++ let live_snapshot:PoolV1PairLiveSnapshotV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<PoolV1PairLiveSnapshotV1>()]>())};
++ AuthenticatedAsq8Accounts {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),master:Box::new(master),checkpoint:Box::new(checkpoint),selected_lane:Box::new(selected_lane),live_snapshot:Box::new(live_snapshot)}
++}
++#[kani::proof_for_contract(super::asq8_common)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn common_contract(){
++ let k:usize=kani::any();kani::assume(k<32);let l:usize=kani::any();kani::assume(l<aspis_statement::pool_v1::POOL_V1_PAIR_TREE_DEPTH);let record=NEK_Context{index:k,level:l};
++ let a=account();
++ let c:aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1=unsafe{core::mem::transmute(kani::any::<[u8;core::mem::size_of::<aspis_statement::pool_v1::PoolV1PairVerifiedAfterstateV1>()]>())};
++ let _=asq8_common(&record,&a,&c);
++}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NDM_reference.rs
+@@ -0,0 +1,15 @@
++pub fn common_ref<K,D,L,C>(master:K,checkpoint:K,lane:K,output:u8,sequence:u64,anchor:D,live:L,candidate:C)->(K,K,K,u8,u64,D,L,C) {
++ (master,checkpoint,lane,output,sequence,anchor,live,candidate)
++}
++pub fn zero_tail_ref(byte:u8,empty:bool)->u8 { if empty {0} else if byte!=0 {1} else {2} }
++
++pub fn identity_ref<T>(value:T)->T {value}
++
++pub fn snapshot_select_ref(length:usize,limit1:usize,limit2:usize)->bool {length==limit1 || length==limit2}
++pub fn snapshot_value_ref<K,B>(metadata:(K,K,bool,bool,bool),length:usize,admitted:bool,bytes:B)->((K,K,bool,bool,bool),usize,Option<B>) {
++ (metadata,length,if admitted {Some(bytes)} else {None})
++}
++pub fn failed_snapshot_ref<T,E>(error:E)->Result<T,E> {Err(error)}
++pub fn validation_ref<C,P>(common:C,public:P,valid:bool)->Result<(C,P),u8> {
++ if valid {Ok((common,public))} else {Err(0)}
++}

@@ -28,7 +28,14 @@ def make_fidelity():
  b=body.replace('let _=asq8_common(&record,&a,&c);','let _=super::NEK_bad_modifies(&record,&a,&c);')
  base[m]+='\n#[kani::proof_for_contract(super::NEK_bad_modifies)]\n'+attrs+'fn NEK_modifies(){'+b+'}\n'
  manifest='programs/r1-cost-probe/Cargo.toml';base[manifest]=base[manifest].replace('[features]','[features]\nNEK_shape_weak = []',1)
- (E/'NEK_COMMON_FIDELITY.json.xz').write_bytes(lzma.compress(json.dumps(base,sort_keys=True).encode()))
+ # Valid typed nondeterminism for the verified Box stub; no raw fabricated
+ # pointers. Kani's Box<T> Arbitrary uses Box::new(any::<T>()).
+ source=dict(patched_files((ROOT/'evidence/slice-s-leaves-20261029/NEC_K001/NEC_harness.patch').read_text()))
+ arb=source['crates/aspis-statement/src/pool_v1/NEC_arbitrary.rs']
+ arb='\n'.join(arb.splitlines()[:4])+'\n'
+ core='crates/aspis-core/src/lib.rs';base[core]=frozen(core).decode()+'\n#[cfg(kani)] mod NEK_box_arbitrary;\n';base['crates/aspis-core/src/NEK_box_arbitrary.rs']='impl kani::Arbitrary for crate::field::M31{fn any()->Self{Self(kani::any())}}\n'
+ pool='crates/aspis-statement/src/pool_v1/mod.rs';base[pool]=frozen(pool).decode()+'\n#[cfg(kani)] mod NEK_box_arbitrary;\n';base['crates/aspis-statement/src/pool_v1/NEK_box_arbitrary.rs']=arb
+ (E/'NEK_COMMON_FIDELITY_TYPED.json.xz').write_bytes(lzma.compress(json.dumps(base,sort_keys=True).encode()))
  return base
 
 def run(start=190):
@@ -36,8 +43,10 @@ def run(start=190):
  # Same parameter and result types throughout, including the harness-local Cell
  # which supplies a safe-Rust modifies violation without a written static.
  tests=[('common_contract',False),('common_contract',True),('NEK_real',False),('NEK_unimplied',True),('NEK_modifies',True)]
+ repair=bool(os.environ.get('NEK_FIDELITY_REPAIR_ONLY'))
+ if repair:tests=tests[3:]
  for j,(name,negative) in enumerate(tests):
-  a=f'NEK_K{start+j:03}'
+  a=['NEK_K194','NEK_K197'][j] if repair else f'NEK_K{start+j:03}'
   if (E/a/'receipt.json').exists():continue
   item=dict(attempt=a,original_receipt='evidence/native-front4b-20261028/NDM_K035/receipt.json',cfg='NEK_shape_weak',clause='fidelity',negative=negative)
   x=cfg(item,base)
@@ -46,7 +55,7 @@ def run(start=190):
   if name!='common_contract':
    k=x['native_command'].index('--features')+1;x['native_command'][k]=x['native_command'][k].replace(',NEK_invert','')
   x['native_command'][x['native_command'].index('--harness')+1]='r1_pool_adapter::NDM_native::'+name;x['module']='r1_pool_adapter::NDM_native::'+name
-  x['deps_fingerprint'].update(support_role='Box_common_shape_fidelity',fidelity_bundle_sha256=sha((E/'NEK_COMMON_FIDELITY.json.xz').read_bytes()))
+  x['deps_fingerprint'].update(support_role='Box_common_shape_fidelity',fidelity_bundle_sha256=sha((E/'NEK_COMMON_FIDELITY_TYPED.json.xz').read_bytes()))
   rc=launch(x)
   r=py(f'''from pathlib import Path
 import json

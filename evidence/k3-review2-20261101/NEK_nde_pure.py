@@ -3,7 +3,7 @@ from NEK_priority import *
 from NEK_recover import recover
 import re
 
-def prune(t):
+def prune(t,selected):
  statics=set(re.findall(r'\bstatic\s+mut\s+(\w+)',t))
  t=re.sub(r'^.*\bstatic\s+mut\b.*\n','',t,flags=re.M)
  lines=t.splitlines(True);out=[];i=0;pending=[]
@@ -12,10 +12,13 @@ def prune(t):
   if re.match(r'(?:pub(?:\([^)]*\))?\s+)?fn \w+',lines[i]):
    body=lines[i];i+=1;depth=body.count('{')-body.count('}')
    while depth>0 and i<len(lines):body+=lines[i];depth+=lines[i].count('{')-lines[i].count('}');i+=1
-   if not any(re.search(r'\b'+n+r'\b',body) for n in statics) and 'NDE_field' not in ''.join(pending)+body:out+=pending+[body]
+   if not any(re.search(r'\b'+n+r'\b',body) for n in statics) and 'NDE_field' not in ''.join(pending)+body and (not any('kani::proof' in a for a in pending) or re.search(r'fn '+selected+r'\s*\(',body)):out+=pending+[body]
    pending=[]
   else:out+=pending+[lines[i]];pending=[];i+=1
- return ''.join(out+pending)
+ result=''.join(out+pending)
+ if not re.search(r'fn same_public[<(]',result):
+  result=re.sub(r'pub\(super\) fn (?:private_matches|withdrawal_matches)\([^\n]*\n[^\n]*\n\}\n','',result)
+ return result
 def make(rp):
  o,missing=recover(rp)
  if missing:return None,'missing source'
@@ -29,10 +32,27 @@ def make(rp):
  if not mm:return None,'module path unresolved'
  mod=str(Path(path).parent/mm[1]);native=o.get(prefix+mod)
  if native is None:return None,'native module source missing'
- n=prune(native)
+ n=prune(native,function)
  if not re.search(r'fn '+function+r'\s*\(',n):return None,'selected function needs local-log migration'
  if 'static mut' in n:return None,'unmigrated storage'
  result=root('crates/aspis-statement','NDE_kmx','extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));')
+ # Retain only the selected callee's contract attributes. Unselected proof
+ # harnesses are omitted above, so no disabled contract is used as credit.
+ selected_pos=n.index('fn '+function+'(')
+ before=n[:selected_pos]
+ match=list(re.finditer(r'kani::proof_for_contract\(super::(\w+)\)',before))
+ target=match[-1][1] if match else None
+ lines=parent.splitlines(True);filtered=[]
+ for idx,line in enumerate(lines):
+  if 'cfg_attr(kani' in line:
+   rest=''.join(lines[idx+1:]);nextfn=re.search(r'\bfn\s+(\w+)\s*\(',rest)
+   if not (target and nextfn and nextfn[1]==target):continue
+  filtered.append(line)
+ parent=''.join(filtered)
+ if target:
+  target_at=parent.index('fn '+target+'(')
+  attrs=parent[max(0,parent.rfind('\n}',0,target_at)):target_at]
+  assert 'kani::ensures' in attrs,('lost selected postcondition',rp,target)
  result[path]=parent;result[mod]=n
  # Exact recorded auxiliary pure reference modules; no arbitrary substitutions.
  for key,t in o.items():

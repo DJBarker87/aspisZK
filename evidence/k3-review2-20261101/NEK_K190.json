@@ -1,0 +1,73 @@
+{
+  "attempt": "NEK_K190",
+  "kind": "kani",
+  "module": "r1_pool_adapter::NDM_native::common_contract",
+  "sources": [
+    "NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "NEK_src/programs/r1-cost-probe/src/NDM_native.rs",
+    "NEK_src/programs/r1-cost-probe/src/NDM_reference.rs",
+    "NEK_src/programs/r1-cost-probe/src/lib.rs",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K190.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts,NEK_shape_weak",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::NDM_native::common_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 240,
+  "source_revision": "f98fecb9213fa5dad537f68957ec1b890fba99ef",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front4b-20261028/NDM_K035/receipt.json",
+    "original_sha256": "b0e3e5b4ecc5b621c788467c71f765d0e80d7bf51d97c8dea0aafac98332ff4b",
+    "immutable_bundle_sha256": "c269950828f4084bc7db1f9c61b529876faab501e6e56cc1cafa94c4a427a6da",
+    "split_conjunct": "fidelity",
+    "selected_cfg": "NEK_shape_weak",
+    "support_role": "Box_common_shape_fidelity",
+    "fidelity_bundle_sha256": "34591a345ffcd64b9eedadec0715007dd2c1e012d5d5d643e17db4c2f350f9a0"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "optimized cached compile, one independent original postcondition conjunct, no native field multiplication",
+  "print_axioms": "N/A: kani",
+  "concurrency_policy": "at most three 8GiB scopes, immutable source/manifest/pins; independent cfg targets and disjoint evidence paths",
+  "reservation_retries": 0
+}

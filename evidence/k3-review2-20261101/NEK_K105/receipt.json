@@ -1,0 +1,93 @@
+{
+  "attempt": "NEK_K105",
+  "kind": "kani",
+  "module": "state_only_poseidon::NDE_native::NDE_raw_contract",
+  "sources": [
+    "NEK_src/crates/aspis-statement/src/lib.rs",
+    "NEK_src/crates/aspis-statement/src/state_only_poseidon.rs",
+    "NEK_src/crates/aspis-statement/src/NDE_poseidon.rs",
+    "NEK_src/crates/aspis-statement/src/NDE_reference.rs",
+    "NEK_src/crates/aspis-core/src/lib.rs",
+    "NEK_src/crates/aspis-core/src/NEK_arbitrary.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K105.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/crates/aspis-statement/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--features",
+    "r0,pool-v1-kernel,pool-v1-pair-forest-packed-digest-selector-tensor-audit,pool-v1-pair-forest-binary-copy-weights-audit,pool-v1-pair-forest-endpoint-selector-cache-audit,pool-v1-pair-forest-semantic-factor-audit,pool-v1-pair-forest-pattern-window-audit,pool-v1-pair-forest-copy-tag-dot-basis-audit,pool-v1-pair-forest-copy-finish-dot-basis-audit,pool-v1-pair-forest-packed-range-audit,pool-v1-pair-forest-active-mask-basis-audit",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "state_only_poseidon::NDE_native::NDE_raw_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "f98fecb9213fa5dad537f68957ec1b890fba99ef",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front2-20261028/NDE_K010/receipt.json",
+    "original_sha256": "82c5f63a8bede1138a7f41bb00d60307528959a47e1a8da6d63cdd056dcb5e8e",
+    "patch": "evidence/k3-review2-20261101/NEK_K105_harness.patch",
+    "patch_sha256": "b5eeb82da73ef408a517aefe24cba0dbf4f28b9407e46b7ab20eecf3f8014078"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 13.983855708036572,
+  "peak_rss_kib": "523868",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r89d0aa8c0e264d5f9fd79dd26598bf90.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "692097024",
+  "source_hashes": {
+    "NEK_src/crates/aspis-statement/src/lib.rs": "0ece63e4c5a7af52dfe613d445c2329af83c5a33be25c9f7919eb615327a286a",
+    "NEK_src/crates/aspis-statement/src/state_only_poseidon.rs": "1e06bfecad90ef860eec0f633cadf0193518cdbf19ccbcdb4a86930b51e5a61f",
+    "NEK_src/crates/aspis-statement/src/NDE_poseidon.rs": "2e5a8bc8da4d16628e7767f968d77861f66d103a929e6d77e33e88b874cbeb04",
+    "NEK_src/crates/aspis-statement/src/NDE_reference.rs": "51620fa48a66983596663dd13e959e8b4d77abfea9fb5b6da6bfc6417309e1c3",
+    "NEK_src/crates/aspis-core/src/lib.rs": "c947bb6b48c94ec723a0ae1050f1b25ae3b5ca1c7df5a583d87e0e5f2501cefe",
+    "NEK_src/crates/aspis-core/src/NEK_arbitrary.rs": "f8817bd6d634b15f33c13f9c1a5d4a64aa4ab05689e59438cc861519b8124a80",
+    "NEK_gate.py": "51f1266c02ca3e4766d21a831f543d58d9e8727a84c613d2bffc37f1c457fe91",
+    "NEK_graph.py": "518544a3919ca526a3dcc2fe532dc773cd1bddab8a0dd77005729227d88c4403",
+    "NEK_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  }
+}

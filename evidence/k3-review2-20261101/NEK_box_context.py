@@ -51,7 +51,7 @@ def make(rp):
  h,names=local_module(o[m]);parent=o[p]
  # Keep only the selected native module; unused global-backed diagnostics are
  # absent. Their annotations are removed, never substituted as callee credit.
- parent='\n'.join(l for l in parent.splitlines() if not('cfg_attr(kani' in l and module+'::' not in l and 'kani::requires' not in l))+'\n'
+ parent='\n'.join(l for l in parent.splitlines() if not('cfg_attr(kani' in l and module+'::' not in l and 'kani::requires' not in l and 'kani::modifies()' not in l))+'\n'
  # Both boxed wrapper definitions carry the same local context type. Frozen
  # signatures/child calls reappear under the recorded inverse projection.
  for wrapper,child in [('decode_pair_afterstate_boxed_v1','after_child'),('decode_pair_live_snapshot_boxed_v1','live_child')]:
@@ -60,7 +60,7 @@ def make(rp):
   if child=='after_child':parent=parent.replace('decode_pool_v1_pair_verified_afterstate_v1(bytes)\n            .map_err','ctx.after_child(bytes)\n            .map_err',1)
   else:parent=parent.replace('decode_pool_v1_pair_live_snapshot_v1(bytes)\n            .map_err','ctx.live_child(bytes)\n            .map_err',1)
   parent=parent.replace(wrapper+'(&bytes[',wrapper+'(&mut '+module+'::NEK_Context::new(),&bytes[')
- parent=re.sub(r'#\[cfg_attr\(kani,kani::modifies\([^\n]*\)\)\]', '#[cfg_attr(kani,kani::modifies(ctx))]',parent)
+ parent=re.sub(r'#\[cfg_attr\(kani,kani::modifies\(([^\n]*)\)\)\]',lambda mm:'#['+'cfg_attr(kani,kani::modifies('+mm[1].replace(module+'::','ctx.')+'))]',parent)
  for post in ['post_after','post_live','after_post','live_post']:parent=parent.replace(module+'::'+post+'(', 'ctx.'+post+'(')
  # Strip all appended harness module declarations then retain selected one only.
  at=parent.find('\n#[cfg(kani)]',parent.find('pub(crate) fn decode_pool_v1_pair_late_public_statement_boxed_v1'))
