@@ -4,7 +4,7 @@
   "command": [
     "ssh",
     "dombarker@100.108.41.90",
-    "python3 -c 'import pathlib,hashlib,json; items={'\"'\"'inputs/io/fs.rs'\"'\"': '\"'\"'std/src/fs.rs'\"'\"', '\"'\"'inputs/io/fs-unix.rs'\"'\"': '\"'\"'std/src/sys/fs/unix.rs'\"'\"', '\"'\"'inputs/io/fd-unix.rs'\"'\"': '\"'\"'std/src/sys/fd/unix.rs'\"'\"', '\"'\"'inputs/io/mod.rs'\"'\"': '\"'\"'std/src/io/mod.rs'\"'\"', '\"'\"'inputs/io/small_c_string.rs'\"'\"': '\"'\"'std/src/sys/helpers/small_c_string.rs'\"'\"', '\"'\"'inputs/io/pal-unix.rs'\"'\"': '\"'\"'std/src/sys/pal/unix/mod.rs'\"'\"', '\"'\"'inputs/io/owned-fd.rs'\"'\"': '\"'\"'std/src/os/fd/owned.rs'\"'\"', '\"'\"'inputs/io/c_string.rs'\"'\"': '\"'\"'alloc/src/ffi/c_str.rs'\"'\"'}; root='\"'\"'/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/'\"'\"'; print(json.dumps({k:dict(path=root+v,sha256=hashlib.sha256(pathlib.Path(root+v).read_bytes()).hexdigest()) for k,v in items.items()}))'"
+    "python3 -c 'import pathlib,hashlib,json; items={'\"'\"'inputs/io/fs.rs'\"'\"': '\"'\"'std/src/fs.rs'\"'\"', '\"'\"'inputs/io/fs-unix.rs'\"'\"': '\"'\"'std/src/sys/fs/unix.rs'\"'\"', '\"'\"'inputs/io/fd-unix.rs'\"'\"': '\"'\"'std/src/sys/fd/unix.rs'\"'\"', '\"'\"'inputs/io/mod.rs'\"'\"': '\"'\"'std/src/io/mod.rs'\"'\"', '\"'\"'inputs/io/small_c_string.rs'\"'\"': '\"'\"'std/src/sys/helpers/small_c_string.rs'\"'\"', '\"'\"'inputs/io/pal-unix.rs'\"'\"': '\"'\"'std/src/sys/pal/unix/mod.rs'\"'\"', '\"'\"'inputs/io/owned-fd.rs'\"'\"': '\"'\"'std/src/os/fd/owned.rs'\"'\"', '\"'\"'inputs/io/c_string.rs'\"'\"': '\"'\"'alloc/src/ffi/c_str.rs'\"'\"', '\"'\"'inputs/io/core-fmt.rs'\"'\"': '\"'\"'core/src/fmt/mod.rs'\"'\"'}; root='\"'\"'/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/'\"'\"'; print(json.dumps({k:dict(path=root+v,sha256=hashlib.sha256(pathlib.Path(root+v).read_bytes()).hexdigest()) for k,v in items.items()}))'"
   ],
   "exit": 0,
   "inputs": {
@@ -55,9 +55,15 @@
       "sha256": "a32fba26220b7349c5fc2b60464721729bf1b01285f90dbfe3f159abc6709789",
       "snapshot_sha256": "a32fba26220b7349c5fc2b60464721729bf1b01285f90dbfe3f159abc6709789",
       "equal": true
+    },
+    "inputs/io/core-fmt.rs": {
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/fmt/mod.rs",
+      "sha256": "ff56f0d7f3ce245b6171f2b742bfa07e1a7596158e43a9917a0340c7e9eb8a27",
+      "snapshot_sha256": "ff56f0d7f3ce245b6171f2b742bfa07e1a7596158e43a9917a0340c7e9eb8a27",
+      "equal": true
     }
   },
-  "source_capture": "The four newly retained helper/owner/CString files were copied by scp from these exact paths; the other four snapshots were retained by D571.",
+  "source_capture": "The five newly retained helper/owner/CString/Formatter files were copied by scp from these exact paths; the other four snapshots were retained by D571.",
   "profile": "Adopted client inherits release opt3, debug_assertions=false, overflow_checks=false, panic=abort. This source inspection does not establish a compiled std UB-check setting.",
   "memory_scope": "N/A read-only source hashing; no Lean/Rust compiler or native gate launched",
   "print_axioms": "N/A"

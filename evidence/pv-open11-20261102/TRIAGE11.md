@@ -792,3 +792,7 @@ Next uninspected ranked row: V171, then V175 and V172. Keep all live-owned exclu
 ## D573 bounded pass — ranks 6–10
 
 V171/V175/V172/V268/V271 remain OPEN; each has its exact source/world premise in `PROGRESS11.md` and `PV_O11_open-sync.json`. No scopes or new endpoint premises. The 38 source checks and eight deployed rust-src hash matches do not supply native installation. Next rank:11 V239.
+
+## D573 bounded pass — ranks 11–14
+
+V239/V249/V269/V403 remain OPEN with exact existing-link premises in `PROGRESS11.md` and `PV_O11_ranked-links.json`. SourceDense/model satisfiability remain inherited, not deployed instances. P_R1 panic=abort and the adopted ct-host-prover prefix are explicitly retained. Next uninspected rank:15 V374. No new scopes; remaining87 Lean/22 native.
