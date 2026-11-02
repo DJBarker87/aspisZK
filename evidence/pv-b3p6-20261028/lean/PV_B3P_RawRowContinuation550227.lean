@@ -7,7 +7,7 @@ set_option autoImplicit false
 
 attribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs
   reference_poseidon.raw_limb227 U64.wrapping_add U64.wrapping_sub U64.wrapping_mul
-  core.convert.num.FromU64U32.from reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+  core.convert.num.FromU64U32.from
 
 theorem raw_row_continuation550 {α : Type} (a b c d : Limbs32_550) (output : Usize)
     (next : Limbs64_550 → Result α) :

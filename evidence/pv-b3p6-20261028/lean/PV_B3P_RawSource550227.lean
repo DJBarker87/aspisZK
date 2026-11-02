@@ -31,7 +31,7 @@ def raw_source550 (input : Array aspis_core.field.QM31 4#usize) : Result Limbs64
 
 attribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs
   reference_poseidon.raw_limb227 U64.wrapping_add U64.wrapping_sub U64.wrapping_mul
-  core.convert.num.FromU64U32.from reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+  core.convert.num.FromU64U32.from
 
 /-- The prefix map is factored without opening any raw row or packing output. -/
 theorem raw_input_continuation550 {α : Type} (input : Array aspis_core.field.QM31 4#usize)

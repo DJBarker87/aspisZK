@@ -5,7 +5,7 @@ set_option autoImplicit false
 
 attribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs
   reference_poseidon.raw_limb227 U64.wrapping_add U64.wrapping_sub U64.wrapping_mul
-  core.convert.num.FromU64U32.from reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+  core.convert.num.FromU64U32.from
 
 theorem raw_suffix550 (i4 i9 i14 i19 i24 i29 i34 i39 i44 i49 i54 i59 i64 i69 i74 i79 : U64) :
     (do

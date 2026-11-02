@@ -11,7 +11,7 @@ set_option autoImplicit false
 '''
 attrs='''\nattribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs
   reference_poseidon.raw_limb227 U64.wrapping_add U64.wrapping_sub U64.wrapping_mul
-  core.convert.num.FromU64U32.from reference_poseidon.EXTERNAL_LOCAL_LIMB_MODULUS_BOUND
+  core.convert.num.FromU64U32.from
 '''
 s=head+attrs
 # Exactly one output's four callbacks; its arithmetic helper is opaque.
