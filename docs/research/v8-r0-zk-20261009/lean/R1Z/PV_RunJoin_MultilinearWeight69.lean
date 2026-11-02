@@ -30,10 +30,7 @@ theorem complete (point : Array Q 10#usize) (prefix_len prefix1 : Usize)
     unfold host_multilinear.sparse_eq_weights_loop2_loop0
     rw [ProverRw19LoopBind.loop_bind]
     simp only [host_multilinear.sparse_eq_weights_loop2_loop0.body,more,if_true,lift,hq,bind_tc_ok]
-    change (do let q ← (if bit=0#usize then aspis_core.field.QM31.sub aspis_core.field.QM31.ONE q else ok q)
-               let w ← aspis_core.field.QM31.mul weight q
-               host_multilinear.sparse_eq_weights_loop2_loop0 point prefix_len prefix1 w
-                 (Usize.wrapping_add coordinate 1#usize))=ok out
+    simp only [bind_assoc_eq]
     rw [hf,bind_tc_ok,hn,bind_tc_ok]
     exact ho
 
