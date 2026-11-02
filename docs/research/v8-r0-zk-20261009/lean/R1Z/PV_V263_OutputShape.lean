@@ -46,11 +46,14 @@ theorem traversal_length {S A : Type} (callback : Nat → Q S A) (ids : List Nat
   induction ids with
   | nil => exact pure_post _ [] rfl
   | cons i ids ih =>
-    apply bind_any
-    intro a
-    apply bind_post (fun (values : List A) => values.length = ids.length) _ _ _ ih
-    intro rest hr
-    exact pure_post _ (a::rest) (by simpa only [List.length_cons] using congrArg Nat.succ hr)
+    exact bind_any (fun (values : List A) => values.length = (i::ids).length)
+      (callback i) _ (fun a =>
+        bind_post (fun (values : List A) => values.length = ids.length)
+          (fun (values : List A) => values.length = (i::ids).length)
+          (PV_V263_WorkerControl.traverse callback ids)
+          (fun rest => PV_V263_World.lift (.ok (a::rest))) ih
+          (fun rest hr => pure_post _ (a::rest)
+            (by simpa only [List.length_cons] using congrArg Nat.succ hr)))
 
 /-- The source item vector has exactly the requested width whenever it returns;
 no callback result, vector value or successful run is assumed. -/
@@ -71,15 +74,15 @@ theorem family_shape {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
     Post (fun (chunks : List (List A × Nat)) => ∃ values, chunks = [(values,values.length)] ∧
       values.length = PV_RunJoin_WorkRange35.width n k)
       (PV_V263_MapSpine.family runtime layouts n k callback) := by
-  change Post _ (PV_V263_World.bind _ _)
-  apply bind_any
-  intro unit
-  apply bind_post (fun (values : List A) => values.length = PV_RunJoin_WorkRange35.width n k) _
-    (PV_V263_MapSpine.items runtime layouts n k callback)
-    (fun values => PV_V263_World.lift (.ok [(values,values.length)]))
-    (items_length runtime layouts n k callback)
-  intro values hv
-  exact pure_post _ [(values,values.length)] ⟨values,rfl,hv⟩
+  let predicate := fun (chunks : List (List A × Nat)) => ∃ values,
+    chunks = [(values,values.length)] ∧ values.length = PV_RunJoin_WorkRange35.width n k
+  exact bind_any predicate (runtime.vector (.collect 1 k 1 layouts.family)) _
+    (fun _ => bind_post
+      (fun (values : List A) => values.length = PV_RunJoin_WorkRange35.width n k)
+      predicate (PV_V263_MapSpine.items runtime layouts n k callback)
+      (fun values => PV_V263_World.lift (.ok [(values,values.length)]))
+      (items_length runtime layouts n k callback)
+      (fun values hv => pure_post predicate [(values,values.length)] ⟨values,rfl,hv⟩))
 
 #print axioms Post
 #print axioms bind_success
