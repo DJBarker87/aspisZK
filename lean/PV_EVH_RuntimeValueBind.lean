@@ -10,12 +10,12 @@ theorem value_bind_fixed {A B : Type} (m : Q A) (a : A)
     PartialView (PV_EVH_Runtime.bind m k) r := by
   intro w s hs
   cases he : (m w).outcome with
-  | fault e => simp only [bind,he,sourceProjection] at hs; cases hs
-  | exhausted => simp only [bind,he,sourceProjection] at hs; cases hs
+  | fault e => simp only [PV_EVH_Runtime.bind,he,sourceProjection] at hs; cases hs
+  | exhausted => simp only [PV_EVH_Runtime.bind,he,sourceProjection] at hs; cases hs
   | returned t =>
     have ht := hm w t (by rw [he]; rfl)
     have he' : (m w).outcome = .returned (.ok a) := he.trans (congrArg _ ht.symm)
-    simp only [bind,he'] at hs
+    simp only [PV_EVH_Runtime.bind,he'] at hs
     exact hk (m w).state s hs
 #print axioms value_bind_fixed
 end PV_EVH_RuntimeValueBind
