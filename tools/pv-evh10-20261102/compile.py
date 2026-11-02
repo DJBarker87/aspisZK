@@ -2,24 +2,25 @@
 from pathlib import Path
 import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-evh10-20261102'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'
-a=int(sys.argv[1]);assert 79362<=a<=79399 or 79500<=a<=79599
+a=int(sys.argv[1]);assert 79565<=a<=79599 or 90200<=a<=90299
 assert not (E/f'submission-{a}.json').exists()
 charged=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
-assert len(charged)<100, 'D551 budget exhausted'
-audit_ids={79397,79398,79399,79597,79598,79599}
-old_ids={r['attempt'] for r in charged if 79362<=r['attempt']<=79396}
+resume_charged=[r for r in charged if r['attempt']>=79565]
+assert len(resume_charged)<100, 'D566 resume budget exhausted'
+audit_ids={79597,79598,79599,90297,90298,90299}
+old_ids={r['attempt'] for r in charged if 79565<=r['attempt']<=79596}
 if a not in audit_ids:
- if a<79500:
-  assert len(old_ids)<18 and a==79362+len(old_ids), 'consume 18 inherited attempts in order'
+ if a<90200:
+  assert len(old_ids)<17 and a==79565+len(old_ids), 'consume 17 inherited attempts in order'
  else:
-  assert len(old_ids)==18, '18 inherited attempts first'
-  new_ids={r['attempt'] for r in charged if 79500<=r['attempt']<=79596}
-  assert a==79500+len(new_ids), 'fresh new-block order'
+  assert len(old_ids)==17, '17 inherited attempts first'
+  new_ids={r['attempt'] for r in charged if 90200<=r['attempt']<=90296}
+  assert a==90200+len(new_ids), 'fresh new-block order'
 
 module=sys.argv[2] if len(sys.argv)>2 else 'PV_EVH_Interface'
 assert module.startswith('PV_EVH_')
 assert module != 'PV_EVH_FixtureConsumer', 'lead-only 16 GiB consumer; worker launch forbidden'
-if a in [79397,79398,79399,79597,79598,79599]:
+if a in audit_ids:
  assert module in ['PV_EVH_ProverAudit','PV_EVH_ProverReplay'], 'reserved audit ID'
 source=Path('lean/'+module+'.lean').read_bytes()
 assert hashlib.sha256(source).hexdigest()==json.load(open(E/('prepare-'+module+'.json')))['result']['source_sha256']
