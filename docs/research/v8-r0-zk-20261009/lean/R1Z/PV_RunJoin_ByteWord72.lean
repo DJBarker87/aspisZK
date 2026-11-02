@@ -1,5 +1,4 @@
 import R1Z.ProverRwDictionaryBytesSource
-import Std.Tactic.BVDecide
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_ByteWord72
 open Aeneas Aeneas.Std
@@ -8,9 +7,10 @@ theorem complete (x : U32) : core.num.U32.from_le_bytes (core.num.U32.to_le_byte
   cases x with
   | mk word =>
     apply congrArg UScalar.mk
-    simp only [core.num.U32.from_le_bytes,core.num.U32.to_le_bytes,
-      List.map_map,Function.comp_def,BitVec.fromLEBytes,BitVec.toLEBytes]
-    all_goals bv_decide
+    apply BitVec.eq_of_toNat_eq
+    simp only [BitVec.toNat_cast,U8.bv,U32.bv,List.map_map,Function.comp_def,List.map_id]
+    rw [BitVec.fromLEBytes_toLEBytes (by decide)]
+    rfl
 
 #print axioms complete
 end R1Z.PV_RunJoin_ByteWord72
