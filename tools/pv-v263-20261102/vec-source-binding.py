@@ -66,7 +66,13 @@ map_src=(std/'core/src/iter/adapters/map.rs').read_text();range_src=(std/'core/s
 assert 'unsafe impl<A: TrustedStep> TrustedLen for ops::Range<A> {}' in range_src
 assert 'SourceIter' not in range_src and 'InPlaceIterable' not in range_src
 assert contains(tokens(map_src),tokens('unsafe impl<B,I,F> TrustedLen for Map<I,F> where I: TrustedLen,F:FnMut(I::Item)->B,{}'))
-assert 'for usize' in range_src or 'usize' in range_src
+assert contains(tokens(range_src),tokens('''macro_rules! unsafe_impl_trusted_step {
+ ($($type:ty)*) => {$(
+ #[unstable(feature = "trusted_step", issue = "85731")]
+ unsafe impl TrustedStep for $type {}
+ )*};
+}'''))
+assert contains(tokens(range_src),tokens('unsafe_impl_trusted_step![AsciiChar char i8 i16 i32 i64 i128 isize u8 u16 u32 u64 u128 usize Ipv4Addr Ipv6Addr];'))
 models={n:sha((R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_V263_'+n+'.lean')).read_bytes()) for n in ['VectorDrain','VecSpine','AppendBinding','CollectBinding','Captures','BufferLoop','BufferFamily']}
 accepted={v['module']:v for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
 for n in ['VectorDrain','VecSpine','AppendBinding','CollectBinding','Captures','BufferLoop','BufferFamily']:
