@@ -1,4 +1,5 @@
-import R1Z.PV_RunJoin_NativeClaimsApi69
+import R1Z.ProverRwSuccessArithmeticTotal
+import R1Z.ProverRwP6QuarticTotal
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_PointsArithmetic72
@@ -6,16 +7,16 @@ open Aeneas Aeneas.Std Result
 abbrev Q := ProverRwDictionaryTower.Q
 
 theorem add (a b : Q) : ∃ c,ProverRwDictionaryTower.qAdd a b=ok c := by
-  obtain ⟨c,hc⟩ := ProverRwP6QuarticTotal.add (ProverRwDictionaryTower.toQ a) (ProverRwDictionaryTower.toQ b)
-  exact ⟨ProverRwDictionaryTower.fromQ c,by simp only [ProverRwDictionaryTower.qAdd,hc,ProverRwDictionaryTower.mapResult]⟩
+  unfold ProverRwDictionaryTower.qAdd
+  exact ProverRwSuccessArithmeticTotal.mapped_total _ _ (ProverRwP6QuarticTotal.add _ _)
 
 theorem mul (a b : Q) : ∃ c,ProverRwDictionaryTower.qMul a b=ok c := by
-  obtain ⟨c,hc⟩ := ProverRwP6QuarticTotal.mul (ProverRwDictionaryTower.toQ a) (ProverRwDictionaryTower.toQ b)
-  exact ⟨ProverRwDictionaryTower.fromQ c,by simp only [ProverRwDictionaryTower.qMul,hc,ProverRwDictionaryTower.mapResult]⟩
+  unfold ProverRwDictionaryTower.qMul
+  exact ProverRwSuccessArithmeticTotal.mapped_total _ _ (ProverRwP6QuarticTotal.mul _ _)
 
 theorem sub (a b : Q) : ∃ c,ProverRwDictionaryTower.qSub a b=ok c := by
-  obtain ⟨c,hc⟩ := ProverRwP6QuarticTotal.sub (ProverRwDictionaryTower.toQ a) (ProverRwDictionaryTower.toQ b)
-  exact ⟨ProverRwDictionaryTower.fromQ c,by simp only [ProverRwDictionaryTower.qSub,hc,ProverRwDictionaryTower.mapResult]⟩
+  unfold ProverRwDictionaryTower.qSub
+  exact ProverRwSuccessArithmeticTotal.mapped_total _ _ (ProverRwP6QuarticTotal.sub _ _)
 
 #print axioms add
 #print axioms mul
