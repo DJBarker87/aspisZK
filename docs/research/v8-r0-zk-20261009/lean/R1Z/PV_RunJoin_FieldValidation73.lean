@@ -31,7 +31,7 @@ theorem step (row : U8) (payload : Slice U8) (count i : Usize)
       let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
       let z ← aspis_core.field.QM31.ZERO
       core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 h z)
-    if b then ok (done (.Err (r1_wire.Error.NonCanonical row i)))
+    if b then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row i) : core.result.Result Unit r1_wire.Error))
     else ok (cont (Usize.wrapping_add i 1#usize))) = _)
   rw [hzero]
   rfl
