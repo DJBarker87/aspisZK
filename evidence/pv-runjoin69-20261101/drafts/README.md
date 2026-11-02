@@ -1,0 +1,1 @@
+NativeMultilinear69 is an UNCHECKED draft for the next budget. It is not staged, imported by the final audits, or credited. It requires the final source evaluator theorem and must be compiled before use.

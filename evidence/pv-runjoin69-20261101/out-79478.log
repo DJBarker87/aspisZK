@@ -1,0 +1,30 @@
+START 79478 R1Z.PV_RunJoin_MultilinearSparse69
+DONE 79478 R1Z.PV_RunJoin_MultilinearSparse69 exit 1 wall 5.01 RSS 4350058496
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearSparse69.lean:42:21: error: unsolved goals
+point : Std.Array Q 10#usize
+pref : Usize
+hp : host_multilinear.sparse_eq_weights_loop0 point 10#usize = ok pref
+hbound : ↑pref ≤ 10
+trailing : Usize := Usize.wrapping_sub 10#usize pref
+ht : ↑trailing = 10 - ↑pref
+sum : ↑pref + ↑trailing = 10
+suffix : Usize
+hs : host_multilinear.sparse_eq_weights_loop1 point 0#usize pref = ok suffix
+hsmall : ↑suffix < 2 ^ (10 - ↑pref)
+hs' : ↑suffix < 2 ^ ↑trailing
+bound : Usize := Usize.wrapping_shl 1#usize (UScalar.cast UScalarTy.U32 pref)
+cast : ↑(UScalar.cast UScalarTy.U32 pref) = ↑pref
+powbound : 2 ^ ↑pref ≤ 1024
+big : 1024 < UScalar.size UScalarTy.Usize
+hb : ↑bound = 2 ^ ↑pref
+out : Std.Array (Usize × aspis_core.field.QM31) 1024#usize
+ho :
+  host_multilinear.sparse_eq_weights_loop2 point pref (Usize.wrapping_sub 10#usize pref) suffix
+      (Array.repeat 1024#usize (0#usize, aspis_core.field.QM31.ZERO))
+      (Usize.wrapping_shl 1#usize (UScalar.cast UScalarTy.U32 pref)) 0#usize =
+    ok out
+valid : PV_RunJoin_MultilinearData69.Valid out
+⊢ ok { data := out, len := Usize.wrapping_shl 1#usize (UScalar.cast UScalarTy.U32 pref) } =
+    ok { data := out, len := bound }
+'R1Z.PV_RunJoin_MultilinearSparse69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

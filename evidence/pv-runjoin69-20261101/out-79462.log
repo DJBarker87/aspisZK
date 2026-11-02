@@ -1,0 +1,59 @@
+START 79462 R1Z.PV_RunJoin_PointClaimsSuff69
+DONE 79462 R1Z.PV_RunJoin_PointClaimsSuff69 exit 1 wall 3.6 RSS 4468609024
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PointClaimsSuff69.lean:38:11: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+some_ok : ∀ (q : Q), core.option.Option.ok_or (some q) r1_wire.Error.Public = ok (core.result.Result.Ok q)
+zero : ∃ z, aspis_core.field.QM31.ZERO = ok z
+columns : Std.Array (alloc.vec.Vec Q) 29#usize
+point : Std.Array Q 10#usize
+points : Std.Array (Std.Array Q 10#usize) 3#usize
+hp : r1_wire.statement_points point = ok points
+evaluates :
+  ∀ (p : Std.Array Q 10#usize) (lane : Usize) (v : alloc.vec.Vec Q),
+    ↑lane < 29 →
+      columns.index_usize lane = ok v →
+        ∃ q, aspis_statement.constraints_v4.multilinear_evaluate_qm31 v.deref p = ok (some q)
+p0 : Std.Array Q 10#usize
+h0 : points.index_usize 0#usize = ok p0
+p1 : Std.Array Q 10#usize
+h1 : points.index_usize 1#usize = ok p1
+p2 : Std.Array Q 10#usize
+h2 : points.index_usize 2#usize = ok p2
+c0 : Std.Array aspis_core.field.QM31 29#usize
+hc0 : host_semantic.claims_at_point columns p0 = ok (core.result.Result.Ok c0)
+c1 : Std.Array aspis_core.field.QM31 29#usize
+hc1 : host_semantic.claims_at_point columns p1 = ok (core.result.Result.Ok c1)
+c2 : Std.Array aspis_core.field.QM31 29#usize
+hc2 : host_semantic.claims_at_point columns p2 = ok (core.result.Result.Ok c2)
+⊢ ok (core.result.Result.Ok (Array.make 3#usize [c0, c1, c2] ⋯)) = ok (core.result.Result.Ok ?m.150)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PointClaimsSuff69.lean:31:67: error: unsolved goals
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+some_ok : ∀ (q : Q), core.option.Option.ok_or (some q) r1_wire.Error.Public = ok (core.result.Result.Ok q)
+zero : ∃ z, aspis_core.field.QM31.ZERO = ok z
+columns : Std.Array (alloc.vec.Vec Q) 29#usize
+point : Std.Array Q 10#usize
+points : Std.Array (Std.Array Q 10#usize) 3#usize
+hp : r1_wire.statement_points point = ok points
+evaluates :
+  ∀ (p : Std.Array Q 10#usize) (lane : Usize) (v : alloc.vec.Vec Q),
+    ↑lane < 29 →
+      columns.index_usize lane = ok v →
+        ∃ q, aspis_statement.constraints_v4.multilinear_evaluate_qm31 v.deref p = ok (some q)
+p0 : Std.Array Q 10#usize
+h0 : points.index_usize 0#usize = ok p0
+p1 : Std.Array Q 10#usize
+h1 : points.index_usize 1#usize = ok p1
+p2 : Std.Array Q 10#usize
+h2 : points.index_usize 2#usize = ok p2
+c0 : Std.Array aspis_core.field.QM31 29#usize
+hc0 : host_semantic.claims_at_point columns p0 = ok (core.result.Result.Ok c0)
+c1 : Std.Array aspis_core.field.QM31 29#usize
+hc1 : host_semantic.claims_at_point columns p1 = ok (core.result.Result.Ok c1)
+c2 : Std.Array aspis_core.field.QM31 29#usize
+hc2 : host_semantic.claims_at_point columns p2 = ok (core.result.Result.Ok c2)
+⊢ ∃ out, host_semantic.point_claims columns point = ok (core.result.Result.Ok out)
+'R1Z.PV_RunJoin_PointClaimsSuff69.claims' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PointClaimsSuff69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -1,0 +1,77 @@
+START 79480 R1Z.PV_RunJoin_MultilinearEval69
+DONE 79480 R1Z.PV_RunJoin_MultilinearEval69 exit 1 wall 5.59 RSS 4357758976
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearEval69.lean:23:71: error: unsolved goals
+column : Slice Q
+size : column.length = 1024
+weights : host_multilinear.SparseWeights
+bound : ↑weights.len ≤ 1024
+valid : PV_RunJoin_MultilinearData69.Valid weights.data
+n : ℕ
+ih :
+  ∀ (i : Usize) (sum : Q),
+    ↑i + n = ↑weights.len → ∃ out, host_multilinear.multilinear_evaluate_qm31_loop column weights sum i = ok out
+i : Usize
+sum : Q
+rank : ↑i + (n + 1) = ↑weights.len
+more : i < weights.len
+inside : ↑i < (↑weights.data).length
+pair : Usize × aspis_core.field.QM31 := (↑weights.data)[↑i]
+pairmem : pair ∈ ↑weights.data
+⊢ ok (↑weights.data)[↑i] = ok pair
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearEval69.lean:26:59: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  column.length
+in the target expression
+  ↑pair.1 < (↑column).length
+
+column : Slice Q
+size : column.length = 1024
+weights : host_multilinear.SparseWeights
+bound : ↑weights.len ≤ 1024
+valid : PV_RunJoin_MultilinearData69.Valid weights.data
+n : ℕ
+ih :
+  ∀ (i : Usize) (sum : Q),
+    ↑i + n = ↑weights.len → ∃ out, host_multilinear.multilinear_evaluate_qm31_loop column weights sum i = ok out
+i : Usize
+sum : Q
+rank : ↑i + (n + 1) = ↑weights.len
+more : i < weights.len
+inside : ↑i < (↑weights.data).length
+pair : Usize × aspis_core.field.QM31 := (↑weights.data)[↑i]
+pairmem : pair ∈ ↑weights.data
+read : host_multilinear.sparse_weight_at weights i = ok pair
+⊢ ↑pair.1 < (↑column).length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    column
+  has type
+    Slice Q
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑column
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearEval69.lean:44:13: error: unsolved goals
+column : Slice Q
+point : Std.Array Q 10#usize
+size : column.length = 1024
+weights : host_multilinear.SparseWeights
+hw : host_multilinear.sparse_eq_weights point = ok weights
+hb : ↑weights.len ≤ 1024
+hv : PV_RunJoin_MultilinearData69.Valid weights.data
+out : aspis_core.field.QM31
+ho : host_multilinear.multilinear_evaluate_qm31_loop column weights aspis_core.field.QM31.ZERO 0#usize = ok out
+len : column.len = 1024#usize
+⊢ (if false = true then ok none else ok (some out)) = ok (some out)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearEval69.lean:44:92: warning: This simp argument is unused:
+  if_false
+
+Hint: Omit it from the simp argument list.
+  simp only [host_multilinear.multilinear_evaluate_qm31, ̲len, ̲bne_self_eq_false,i̵f̵_̵f̵a̵l̵s̵e̵,̵ ̲hw,
+  ̲ ̲ ̲ ̲ ̲ho, ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_MultilinearEval69.loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MultilinearEval69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

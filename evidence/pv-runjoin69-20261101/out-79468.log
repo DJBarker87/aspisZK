@@ -1,0 +1,45 @@
+START 79468 R1Z.PV_RunJoin_MultilinearWeight69
+DONE 79468 R1Z.PV_RunJoin_MultilinearWeight69 exit 1 wall 2.5 RSS 4359737344
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearWeight69.lean:33:4: error: 'change' tactic failed, pattern
+  (do
+      let q ← if bit = 0#usize then aspis_core.field.QM31.ONE.sub q else ok q
+      let w ← aspis_core.field.QM31.mul weight q
+      host_multilinear.sparse_eq_weights_loop2_loop0 point prefix_len prefix1 w (coordinate.wrapping_add 1#usize)) =
+    ok out
+is not definitionally equal to target
+  (do
+      let cf ←
+        do
+          let q ←
+            if
+                  prefix1.wrapping_shr
+                        (UScalar.cast UScalarTy.U32 ((prefix_len.wrapping_sub 1#usize).wrapping_sub coordinate)) &&&
+                      1#usize =
+                    0#usize then
+                aspis_core.field.QM31.ONE.sub q
+              else ok q
+          let weight1 ← aspis_core.field.QM31.mul weight q
+          ok (ControlFlow.cont (weight1, coordinate.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < prefix_len then do
+                let q ←
+                  if
+                        prefix1.wrapping_shr
+                              (UScalar.cast UScalarTy.U32 ((prefix_len.wrapping_sub 1#usize).wrapping_sub x.2)) &&&
+                            1#usize =
+                          0#usize then
+                      do
+                      let q1 ← point.index_usize x.2
+                      aspis_core.field.QM31.ONE.sub q1
+                    else point.index_usize x.2
+                let weight1 ← x.1.mul q
+                ok (ControlFlow.cont (weight1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok out
+'R1Z.PV_RunJoin_MultilinearWeight69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

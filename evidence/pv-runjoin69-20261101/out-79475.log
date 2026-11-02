@@ -1,0 +1,35 @@
+START 79475 R1Z.PV_RunJoin_MultilinearData69
+DONE 79475 R1Z.PV_RunJoin_MultilinearData69 exit 1 wall 3.67 RSS 4357103616
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearData69.lean:41:4: error: Type mismatch
+  ho
+has type
+  host_multilinear.sparse_eq_weights_loop2 point pref trailing suffix next bound (i.wrapping_add 1#usize) = ok out
+but is expected to have type
+  (do
+      let cf ←
+        do
+          let a1 ← Array.update a i (i.wrapping_shl (UScalar.cast UScalarTy.U32 trailing) ||| suffix, weight)
+          ok (ControlFlow.cont (a1, i.wrapping_add 1#usize))
+      match cf with
+        | ControlFlow.cont next =>
+          loop
+            (fun x =>
+              if x.2 < bound then do
+                let weight ←
+                  host_multilinear.sparse_eq_weights_loop2_loop0 point pref x.2 aspis_core.field.QM31.ONE 0#usize
+                let a1 ← x.1.update x.2 (x.2.wrapping_shl (UScalar.cast UScalarTy.U32 trailing) ||| suffix, weight)
+                ok (ControlFlow.cont (a1, x.2.wrapping_add 1#usize))
+              else ok (ControlFlow.done x.1))
+            next
+        | ControlFlow.done out => ok out) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MultilinearData69.lean:40:82: warning: This simp argument is unused:
+  hn
+
+Hint: Omit it from the simp argument list.
+  simp only [host_multilinear.sparse_eq_weights_loop2.body, ̲more, ̲if_true, ̲lift, ̲hw,h̵n̵,̵ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_MultilinearData69.Valid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MultilinearData69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
