@@ -1,0 +1,9 @@
+import NEG_PushAssociation
+#print Aeneas.Std.alloc.vec.Vec.index_mut
+#print Aeneas.Std.core.slice.index.SliceIndexUsizeSlice
+#print Aeneas.Std.alloc.vec.Vec.to_slice_mut
+#print Aeneas.Std.Slice.index_mut_usize
+#check Aeneas.Std.UScalar.and_eq
+#check S7Kani2OwnedPush.push_owned
+#print S7Kani2OwnedPush.push_owned
+#check S7Kani2OwnedPush.push_total

@@ -21,3 +21,7 @@ OPEN. NEI_PREFIX_OBLIGATIONS.md records exact kernel results, native controls an
 ## Residue row
 
 NEI_ROW_PACKET.json is a checked local CLOSED-CONDITIONAL D188 packet with explicit iterator semantic transport, arbitrary-flush checked-addition domain, and no suspended NEB credit. NEI_L035/L036 standard-axiom proofs; K010/K011 carrier control, K012/K013 actual iterator context/control; N006/N007 native/emitted fixtures/control; L037 coherent model fixture replay. Zero composed rows.
+
+## BatchedWeights::push
+
+NEI_PUSH_PACKET.json is a local CLOSED-CONDITIONAL actual-body packet. Literal raw generated records are preserved and connected by L057/L059; L040 supplies same-call normalization; L042/L046/L047 supply borrow and KMX frame induction. Native geometry/disjointness K015/K016 and K019/K020 have matched controls; N008/N009 shared/actual64 fixtures and L048 coherent evaluation pass. Bulk K014/K017/K018 timeouts earn no credit. No suspended NEB credit, zero composed rows.

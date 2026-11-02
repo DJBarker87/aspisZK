@@ -2,10 +2,8 @@
 from pathlib import Path
 import subprocess, json, sys, time, shlex, hashlib, os
 E=Path(__file__).resolve().parent
-# Own orchestration lock; does not wrap or alter the shared host launcher.
-import fcntl
-serial_lock=(E/'NEI_serial.lock').open('a')
-fcntl.flock(serial_lock,fcntl.LOCK_EX)
+# Serial launch discipline is enforced by the worker: await each receipt before
+# another invocation. Do not wrap the host launcher in an additional flock.
 B='/home/dombarker/project-offloads/codex-cx-slice-q-mul2-20261029'
 H='dombarker@100.108.41.90'
 C='/home/dombarker/project-offloads/codex-cx-slice-q-mul2-cache-20261029'

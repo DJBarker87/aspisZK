@@ -32,3 +32,21 @@ fn copy_row_window() {
  let at:usize=kani::any();kani::assume(at<4);
  assert_eq!(after[at],if cfg!(NEI_wrong_row_copy){before[at]^1}else{before[at]});
 }
+// Caller allocation: BatchedWeights::new allocates exactly 64 four-word rows.
+// One arbitrary mutable index, row result and disjoint row/lane window.
+#[kani::proof]
+#[kani::unwind(68)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
+fn vector_row_context() {
+ let mut raw=kani::vec::exact_vec::<[u64;4],64>();
+ let index:usize=kani::any(); let at:usize=kani::any();let lane:usize=kani::any();
+ kani::assume(index<64 && at<64 && lane<4);
+ let before=raw[at][lane];let old=raw[index];
+ let replacement:[u64;4]=kani::any();let reply;
+ let pointer=raw.as_ptr();let capacity=raw.capacity();
+ {let row=&mut raw[index];reply=*row;*row=replacement;}
+ assert_eq!(reply,old);
+ assert!(raw.len()==64 && raw.capacity()==capacity && raw.as_ptr()==pointer);
+ let expected=if at==index {replacement[lane]}else{before};
+ assert_eq!(raw[at][lane],if cfg!(NEI_wrong_vector_row){expected^1}else{expected});
+}

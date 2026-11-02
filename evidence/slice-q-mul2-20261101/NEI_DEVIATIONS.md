@@ -19,3 +19,9 @@
 - Earlier read-only host progress queries sometimes overlapped the serial launcher's waiting SSH connection. No additional scope or resubmission occurred. Subsequent collection uses serial completed-attempt output.
 
 N005: native family was omitted, so the runner selected line and stopped at the frozen-core preflight before testing. N006 explicitly selects row and the own row runner restores the known private cfg(kani) addition; validation remains byte-exact. L033/L034 active-iterator equation drafts failed; L035 uses extensional equality of the backward transformer and passes. No limits increased.
+
+Own runner correction: removed the local orchestration flock to follow common rule 5 literally. It never changed host/shared launcher locking, but its lifetime included the launch. Subsequent scopes are serialized by awaiting the prior receipt. Existing concurrent local waiters were serialized by that lock; no overlapping host scopes were created.
+
+L054 was an own-input prelaunch failure (missing successful raw-association object after L053 failed). It invoked no Lean compiler; prelaunch metadata is retained separately. The dependent bridge is postponed until its predecessor passes. L052/L053 drafts are excluded.
+
+Push audit caught NEG working Types aliases rather than literal raw nominal records. Added namespace-only raw copies plus explicit bidirectional carrier and full-Result transport; raw definitions are unchanged. Failed L052/L053/L055/L056 drafts are excluded; L057/L059 pass. Standalone Kani harness source copies were removed from evidence root; exact patch, runner-input payload receipt and archived per-attempt source receipts retain them. No repository crate/program was edited.
