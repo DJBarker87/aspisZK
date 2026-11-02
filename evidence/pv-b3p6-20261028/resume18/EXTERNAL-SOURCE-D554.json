@@ -1,0 +1,113 @@
+{
+  "function": "external_linear_lazy",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "external_linear_lazy",
+      "start": 144,
+      "end": 191,
+      "signature": "fn external_linear_lazy(state: &mut [QM31; POSEIDON2_WIDTH]) ",
+      "body": "{\n    let mut group = 0usize;\n    while group < 4 {\n        let start = 4 * group;\n        let input = [\n            state[start],\n            state[start + 1],\n            state[start + 2],\n            state[start + 3],\n        ];\n        let input = input.map(extension_limbs);\n        let mut output = 0usize;\n        while output < 4 {\n            let raw = core::array::from_fn(|limb| {\n                let a = u64::from(input[0][limb]);\n                let b = u64::from(input[1][limb]);\n                let c = u64::from(input[2][limb]);\n                let d = u64::from(input[3][limb]);\n                match output {\n                    0 => 2 * a + 3 * b + c + d,\n                    1 => a + 2 * b + 3 * c + d,\n                    2 => a + b + 2 * c + 3 * d,\n                    3 => 3 * a + b + c + 2 * d,\n                    _ => unreachable!(),\n                }\n            });\n            state[start + output] = extension_from_raw_limbs(raw);\n            output += 1;\n        }\n        group += 1;\n    }\n    let sums: [[u64; 4]; 4] = core::array::from_fn(|column| {\n        core::array::from_fn(|limb| {\n            u64::from(extension_limbs(state[column])[limb])\n                + u64::from(extension_limbs(state[4 + column])[limb])\n                + u64::from(extension_limbs(state[8 + column])[limb])\n                + u64::from(extension_limbs(state[12 + column])[limb])\n        })\n    });\n    let mut index = 0usize;\n    while index < POSEIDON2_WIDTH {\n        let limbs = extension_limbs(state[index]);\n        state[index] = extension_from_raw_limbs(core::array::from_fn(|limb| {\n            u64::from(limbs[limb]) + sums[index & 3][limb]\n        }));\n        index += 1;\n    }\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "reference": {
+    "receipt": "N79167",
+    "comparison": "REFERENCE-PROJECTED-D547.json",
+    "comparison_sha256": "6890bb5ae7122ce0ddaa1b028d115c07e3ac17726ba6881474c9381937a2d522",
+    "complete_declarations": [
+      "reference_poseidon.external_linear_lazy",
+      "reference_poseidon.external_group227",
+      "reference_poseidon.global_sums227",
+      "reference_poseidon.add_global227"
+    ]
+  },
+  "source_steps": [
+    {
+      "source": "groups0..3, start4*g, four state snapshots",
+      "model": "external_source554 group prefix",
+      "argument": "Exact group order0,1,2,3 and input indices0..15. Each input is copied before the group writes; no later group reads an earlier group cell."
+    },
+    {
+      "source": "input.map(extension_limbs)",
+      "model": "raw_input550",
+      "argument": "Reused ordered4 map/from_fn source argument and raw_input_continuation550. All array lengths and indices4 fixed; owned input snapshot persists for every output."
+    },
+    {
+      "source": "output0..3, limb0..3",
+      "model": "raw_row550 and raw_limb_zero/one/two/three550",
+      "argument": "Four distinct match trees with left-associated wrapping64 sums and products; no signed or field reassociation. Match default unreachable because output<4. Raw cell/row complete Result equalities previously accepted."
+    },
+    {
+      "source": "extension_from_raw_limbs(raw), state[start+output]",
+      "model": "external_group_source554 and sixteen local stores in external_source554",
+      "argument": "All four reductions/reconstructions occur in output order. Representing the four writes after the helper returns uses the immutable input snapshot, and the proved total fixed-index row/reconstruction calls; no intermediate write is read. No error can observe a partially updated local group. V370 allocation/abort and compiler semantics remain named."
+    },
+    {
+      "source": "nested from_fn(column)(limb) for sums",
+      "model": "external_sums_source554",
+      "argument": "Column-major0..3 then limb-major0..3, each scalar adds rows0,4,8,12+column in source order. Immutable repeated state reads use cached q snapshots only within this no-write phase. All indices<16; extension_limbs and widening are pure total; retaining each repeated extension call. Never shift these reads into the output-write pass."
+    },
+    {
+      "source": "index0..15, sums[index&3]",
+      "model": "external_source554 output pass",
+      "argument": "The mask yields0,1,2,3 repeated four times. The immutable sums columns are cached at first use, unchanged thereafter. All sixteen sequential state reads and writes retained; each read uses the latest state. Since different indices are written, the cell is its pre-pass value; no restoration omitted."
+    },
+    {
+      "source": "from_fn limb addition then reconstruction",
+      "model": "external_add_source554",
+      "argument": "Exactly four limb projections, zero extensions, corresponding sum reads, wrapping additions and extension_from_raw_limbs call; named external_add_reference554."
+    },
+    {
+      "source": "iteration/drop/error paths",
+      "model": "fixed loops plus existing four-element array model",
+      "argument": "Bounds: group/output/limb<4, start+output<16, column+12<16, index<16, index&3<4. Counters cannot overflow. Raw QM31/M31/u64 Copy carriers have no source drop effect. Source writes are direct array indexing, never a discarded iterator backward continuation. Whole pre-inline std catalogue and native differential still required by final closure."
+    }
+  ],
+  "interpreter": "PV_B3P_Association554227.external_source554",
+  "theorem": "PV_B3P_Association554227.external_source_link554",
+  "local_stores": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "global_stores": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "domain": "all raw16 QM31 inputs; no canonicality or bounded-limb hypothesis",
+  "feature_profile": "deployed ct-host-prover/release; resolved features and source hashes from N79167",
+  "route": "Lean equality + own-1 structural",
+  "retained": "whole std/D188/differential/matrix/callback, V370/D381/D386",
+  "status": "pending focused helper and whole Result equalities; no credit yet"
+}

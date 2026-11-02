@@ -29,14 +29,15 @@ theorem external_group_reference554 (input : Array aspis_core.field.QM31 4#usize
     external_group_source554 input = reference_poseidon.external_group227 input := by
   unfold external_group_source554 reference_poseidon.external_group227
   rw [raw_input_continuation550]
-  simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
 '''
 indent='  '
 for n in range(8):s+=indent+'apply bind_equal9\n'+indent+f'intro input{n}\n'
+s+=indent+'conv_lhs => simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]\n'
 for j in range(4):
  s+=indent+'as_aux_lemma =>\n';indent+='  '
  s+=indent+'rw [raw_row_continuation550]\n'
  for k in range(36):
+  if j==0 and k in [0,2,4,6]:s+=indent+'conv_rhs => rw [four_index_'+['zero','one','two','three'][k//2]+'550,bind_tc_ok]\n'
   if k==18:s+=indent+'as_aux_lemma =>\n';indent+='  '
   s+=indent+'apply bind_equal9\n'+indent+f'intro row{j}cell{k}\n'
  s+=indent+'apply bind_equal9\n'+indent+f'intro output{j}\n'

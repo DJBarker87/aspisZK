@@ -30,7 +30,6 @@ theorem external_group_reference554 (input : Array aspis_core.field.QM31 4#usize
     external_group_source554 input = reference_poseidon.external_group227 input := by
   unfold external_group_source554 reference_poseidon.external_group227
   rw [raw_input_continuation550]
-  simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
   apply bind_equal9
   intro input0
   apply bind_equal9
@@ -47,20 +46,25 @@ theorem external_group_reference554 (input : Array aspis_core.field.QM31 4#usize
   intro input6
   apply bind_equal9
   intro input7
+  conv_lhs => simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
   as_aux_lemma =>
     rw [raw_row_continuation550]
+    conv_rhs => rw [four_index_zero550,bind_tc_ok]
     apply bind_equal9
     intro row0cell0
     apply bind_equal9
     intro row0cell1
+    conv_rhs => rw [four_index_one550,bind_tc_ok]
     apply bind_equal9
     intro row0cell2
     apply bind_equal9
     intro row0cell3
+    conv_rhs => rw [four_index_two550,bind_tc_ok]
     apply bind_equal9
     intro row0cell4
     apply bind_equal9
     intro row0cell5
+    conv_rhs => rw [four_index_three550,bind_tc_ok]
     apply bind_equal9
     intro row0cell6
     apply bind_equal9
