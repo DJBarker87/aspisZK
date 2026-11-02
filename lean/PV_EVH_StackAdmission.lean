@@ -13,7 +13,7 @@ never choose an allocation or a replacement owner. -/
 def write (slot : Slot) (bytes : Bytes) (w : State) : State :=
   {w with memory := fun address =>
     if slot.address ≤ address ∧ address < slot.address+slot.initialized
-    then bytes[address-slot.address]?.getD 0 else w.memory address}
+    then (bytes[address-slot.address]?.getD 0).toNat else w.memory address}
 
 /-- A ghost lifetime admission accompanying the source stack initializer.
 Freshness, address separation and actual source-frame association are proof
@@ -25,7 +25,7 @@ def enter (slot : Slot) (bytes : Bytes) (w : State) : State :=
 
 def HeapCoherent (w : State) : Prop :=
   ∀ b ∈ w.frame.runtime.heap, ∀ i, i < b.bytes.length →
-    w.memory (b.address+i) = b.bytes[i]?.getD 0
+    w.memory (b.address+i) = (b.bytes[i]?.getD 0).toNat
 
 def HeapSeparate (slot : Slot) (w : State) : Prop :=
   ∀ b ∈ w.frame.runtime.heap, ∀ i, i < b.bytes.length → Outside slot (b.address+i)
@@ -35,7 +35,7 @@ def LiveSeparate (slot : Slot) (w : State) : Prop :=
 
 theorem write_inside (slot : Slot) (bytes : Bytes) (w : State)
     (i : Nat) (hi : i < slot.initialized) :
-    (write slot bytes w).memory (slot.address+i) = bytes[i]?.getD 0 := by
+    (write slot bytes w).memory (slot.address+i) = (bytes[i]?.getD 0).toNat := by
   simp only [write]
   rw [if_pos (by omega),Nat.add_sub_cancel_left]
 
