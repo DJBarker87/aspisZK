@@ -37,7 +37,7 @@ source=local.read_text() if local.exists() else imported.read_text() if imported
 code=f'''from pathlib import Path
 import re,json,hashlib
 b=Path({B!r});coherent=b.parent/'codex-cx-sound-int2-20261025'
-roots=[b/'NEM_objects',b.parent/'codex-cx-slice-s-compose5-cache-20261029',coherent,coherent/'objects']
+roots=[b/'NEM_objects',b.parent/'codex-cx-slice-s-compose5-cache-20261029/NEM_final_objects_20261102',b.parent/'codex-cx-slice-s-compose5-cache-20261029',coherent,coherent/'objects']
 selected={{}};missing=[];seen=set()
 def visit(n):
  if n in seen:return
@@ -56,7 +56,7 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NEM_generated','-o','NEM_objects/'+moduleRel+'.olean','NEM_generated/'+moduleRel+'.lean']
-cfg=dict(attempt=a,kind='lean',module=target,sources=['NEM_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NEM_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose5-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean',module=target,sources=['NEM_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NEM_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose5-cache-20261029/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-slice-s-compose5-cache-20261029:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NEM_SOURCE.lean.txt').write_text(source)
 files={'NEM_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 code=f'''from pathlib import Path

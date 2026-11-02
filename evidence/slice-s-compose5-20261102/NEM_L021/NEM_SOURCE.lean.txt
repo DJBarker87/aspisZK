@@ -1,0 +1,47 @@
+import NEM_DigestInstance
+import NEM_PaymentReached
+import NEM_PaymentFrame
+import NEM_LaneReached
+import NEM_FrontierValidatorInstance
+import NEM_EncoderFrame
+import NEM_BorrowAudit
+import NEM_SnapshotBorrow
+import NEM_LateOracle
+import NEM_ArraySnapshotView
+import NEM_ValidatorComposed
+import NEM_KindInstance
+import NEM_EncoderReceiver
+
+#print axioms NEM_ArraySnapshotView.cover
+#print axioms NEM_ArraySnapshotView.poststate
+#print axioms NEM_DigestInstance.next_call
+#print axioms NEM_DigestInstance.result_and_frame
+#print axioms NEM_EncoderFrame.after_step_and_bytes
+#print axioms NEM_EncoderFrame.after_value_and_frame
+#print axioms NEM_EncoderFrame.fill_value
+#print axioms NEM_EncoderFrame.frontier_next
+#print axioms NEM_EncoderFrame.live_step_and_bytes
+#print axioms NEM_EncoderFrame.live_value_and_frame
+#print axioms NEM_EncoderReceiver.sequence_width
+#print axioms NEM_FrontierValidatorInstance.after_result_and_frame
+#print axioms NEM_FrontierValidatorInstance.after_step
+#print axioms NEM_FrontierValidatorInstance.live_result_and_frame
+#print axioms NEM_FrontierValidatorInstance.live_step
+#print axioms NEM_KindInstance.parser_result_frame
+#print axioms NEM_KindInstance.payment_window
+#print axioms NEM_KindInstance.statement_window
+#print axioms NEM_LaneReached.lane_instance
+#print axioms NEM_LaneReached.lane_reached
+#print axioms NEM_LateOracle.late_reached
+#print axioms NEM_LateOracle.run_substitution
+#print axioms NEM_LateOracle.tail_substitution
+#print axioms NEM_LateOracle.value_and_frame
+#print axioms NEM_PaymentFrame.common_reserved
+#print axioms NEM_PaymentFrame.transfer_reply
+#print axioms NEM_PaymentFrame.withdrawal_reply
+#print axioms NEM_PaymentReached.payment_instance
+#print axioms NEM_PaymentReached.payment_reached
+#print axioms NEM_SnapshotBorrow.after_preserves_child
+#print axioms NEM_SnapshotBorrow.poststate
+#print axioms NEM_SnapshotBorrow.rejoin
+#print axioms NEM_ValidatorComposed.result_state_effects

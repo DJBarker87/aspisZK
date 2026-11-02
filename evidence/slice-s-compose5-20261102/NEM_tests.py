@@ -103,4 +103,14 @@ class Kind(Fixtures):
   f=FUNCTIONS['parse'];c=copy.deepcopy(self.p['members'][f]);c['kind_composition']['native_pairs']=[]
   c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
   self.assertFalse(v.certificate(c,f,self.b,r))
+class Alternatives(Fixtures):
+ def test_wrong_receiver_keeps_alternative_open(self):
+  from NEM_alternative_checks import F,TARGETS
+  key=F+' -> '+TARGETS[0];c=copy.deepcopy(self.p['edges'][key]);c['encoder_alternative']['actual_receivers']=['M31']
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[key]=h
+  self.assertFalse(v.certificate(c,key,self.b,r))
+ def test_tx2_constructor_schema(self):
+  from NEM_kind_checks import FUNCTIONS
+  f=FUNCTIONS['parse'];key='external:TX2:167:0'
+  self.assertTrue(v.certificate(self.p['externals'][key],key,self.b,self.r))
 if __name__=='__main__':unittest.main()

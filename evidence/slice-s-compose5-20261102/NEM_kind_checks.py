@@ -29,6 +29,8 @@ def validate(c,expected,b,v):
    assert 'let mut output:[u8;1880]=kani::any();' in positive
   allowed={f}|{f+'::'+h['name'] for r in rs for h in r['named_hypotheses']}|{o['id'] for r in rs for o in r['caller_domain_obligations']}
   assert expected in allowed
-  if c['kind']=='external-domain':assert next(o for r in rs for o in r['caller_domain_obligations'] if o['id']==expected)['call'].get('expression') in ['Ok','Err']
+  if c['kind']=='external-domain':
+   call=next(o for r in rs for o in r['caller_domain_obligations'] if o['id']==expected)['call']
+   assert call.get('expression',call.get('syntax')) in ['Ok','Err']
   return True
  except (KeyError,AssertionError,OSError,ValueError,TypeError):return False

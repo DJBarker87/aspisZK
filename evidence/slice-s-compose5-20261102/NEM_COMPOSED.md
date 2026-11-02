@@ -113,3 +113,11 @@ end NEM_KindInstance
 ```
 
 All three theorem audits: propext, Classical.choice, Quot.sound. These compose scalar-member rows; they do not close any later enclosing root.
+
+## Later-root review and source dispatch resolution
+
+Four terminal encoder inventory alternatives are resolved before pruning: the actual receiver is Statement for transition_kind and primitive u64 for checkpoint_sequence.to_le_bytes. NEM_EncoderReceiver.sequence_width (NEM_L020) and NEM_KindInstance.statement_window are the source/width/tag witnesses, with successful full-file typechecking in NEM_K102 and its failing control. This adds no composed row and does not certify the mutable late window. TX2 parser constructor keys use syntax rather than expression; the gate now checks both exact schema variants, with a dedicated mutation regression. Final count remains 50/97.
+
+NBU_K042/043 were reviewed read-only: their encoder cut returns Result<()> and uses a late closure that leaves output untouched. It cannot transport the exact returned 1880 bytes or arbitrary mutation of the same late window. These are precise remaining native obligations, not missing arithmetic lemmas. NED_CodecComposition.encoder already supplies the concrete emitted/model substitution; it is reused, not reproved or presented as native closure.
+
+NEM_L021 audits all 33 new theorem names at their exact accepted source hashes. Only propext, Classical.choice and Quot.sound occur. No complete frozen release manifest was run: six requested roots remain OPEN, so this is not a formal release result.
