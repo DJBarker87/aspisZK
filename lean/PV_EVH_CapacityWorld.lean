@@ -57,7 +57,7 @@ theorem capacity_view (allocator : Allocator) (encode : AllocationEvent → Byte
     cases hs
   | ok layout =>
     by_cases hz : layout.size = 0
-    · simp only [hl,hz,if_true,lift,sourceProjection] at hs
+    · simp only [hl,hz,if_true,PV_EVH_Runtime.lift,sourceProjection] at hs
       exact Option.some.inj hs
     · simp only [hl,hz,if_false,allocateOrFault,Bind.bind,PV_EVH_Runtime.bind,tryAllocate] at hs
       cases ha : (allocator w layout).answer with
@@ -65,7 +65,7 @@ theorem capacity_view (allocator : Allocator) (encode : AllocationEvent → Byte
         simp only [ha,allocationFault,sourceProjection] at hs
         cases hs
       | allocated address backing =>
-        simp only [ha,Pure.pure,lift,sourceProjection] at hs
+        simp only [ha,Pure.pure,PV_EVH_Runtime.lift,sourceProjection] at hs
         exact Option.some.inj hs
 
 theorem allocator_failure (allocator : Allocator) (encode : AllocationEvent → Bytes)
