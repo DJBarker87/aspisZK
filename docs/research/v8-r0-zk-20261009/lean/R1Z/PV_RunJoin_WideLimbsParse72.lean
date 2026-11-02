@@ -29,7 +29,9 @@ theorem complete (x : W) (canonical : Canonical x) :
   have b7 : ¬x.c1.c1.b≥P := Nat.not_le.mpr h7
   unfold ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_limbs
   repeat' (rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)]; simp only [bind_tc_ok,b0,b1,b2,b3,b4,b5,b6,b7,if_false])
-  rfl
+  simp only [limbs,Array.make,UScalar.ofNatCore_val_eq,List.getElem_cons_zero,
+    List.getElem_cons_succ,b0,b1,b2,b3,b4,b5,b6,b7,if_false]
+  all_goals rfl
 
 #print axioms Canonical
 #print axioms limbs
