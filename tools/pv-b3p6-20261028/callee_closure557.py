@@ -24,9 +24,12 @@ s=header+semantic+'''
 
 theorem semantic_callees_reference557 :
     semantic_callees557 = reference_terminal.semantic_packed := by
+  have preweighted (N : Usize) :
+      @local_bodies557.body3 N = @reference_terminal.add_preweighted N :=
+    congrArg (fun operation => @operation N) local_links557.link3
   unfold semantic_callees557 reference_terminal.semantic_packed
   rw [local_links557.link4,local_links557.link2,local_links557.link5,
-    local_links557.link11,local_links557.link3]
+    local_links557.link11,preweighted 8#usize,preweighted 2#usize]
 
 #print axioms semantic_callees_reference557
 end
