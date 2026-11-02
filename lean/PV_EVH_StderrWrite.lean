@@ -11,13 +11,13 @@ def handleBadFd {E : Type} (work : Q (Except E Unit))
     (dropError : E → Q Unit) (isBadFd : E → Q Bool) : Q (Except E Unit) := do
   let r ← work
   match r with
-  | .ok _ => pure (.ok ())
+  | .ok _ => pure (Except.ok () : Except E Unit)
   | .error e =>
     let bad ← isBadFd e
     if bad then do
       let _ ← dropError e
-      pure (.ok ())
-    else pure (.error e)
+      pure (Except.ok () : Except E Unit)
+    else pure (Except.error e : Except E Unit)
 
 /-- Ordinary Result exits release the RefCell/stderr guards before the caller
 ignores (and destroys) the returned io::Error. Abort/fault prefixes are retained.
@@ -43,8 +43,8 @@ theorem badfd_dispatch {E : Type} (work : Q (Except E Unit))
     handleBadFd work dropError isBadFd w =
       let tail : PV_EVH_Runtime.Run (Except E Unit) := (do
         let bad ← isBadFd e
-        if bad then do let _ ← dropError e; pure (.ok ())
-        else pure (.error e)) (work w).state
+        if bad then do let _ ← dropError e; pure (Except.ok () : Except E Unit)
+        else pure (Except.error e : Except E Unit)) (work w).state
       ⟨tail.outcome,tail.state,(work w).events ++ tail.events⟩ := by
   simp only [handleBadFd,Bind.bind,PV_EVH_Runtime.bind,hw]
 
@@ -55,7 +55,7 @@ theorem scoped_error {E : Type} (acquire release : Q Unit) (work : Q (Except E U
     (ha : (acquire w).outcome = .returned (.ok ()))
     (hw : (work (acquire w).state).outcome = .returned (.ok (.error e))) :
     scoped acquire release work w =
-      let tail : PV_EVH_Runtime.Run (Except E Unit) := (do let _ ← release; pure (.error e)) (work (acquire w).state).state
+      let tail : PV_EVH_Runtime.Run (Except E Unit) := (do let _ ← release; pure (Except.error e : Except E Unit)) (work (acquire w).state).state
       ⟨tail.outcome,tail.state,(acquire w).events ++
         ((work (acquire w).state).events ++ tail.events)⟩ := by
   simp only [scoped,Bind.bind,PV_EVH_Runtime.bind,ha,hw]

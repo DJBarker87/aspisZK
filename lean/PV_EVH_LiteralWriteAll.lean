@@ -16,7 +16,7 @@ theorem error_dispatch (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Byt
         if retry then do
           let _ ← driver.dropInterrupted e
           loop driver fuel (head :: tail)
-        else pure (.error e)) (driver.write (head :: tail) w).state
+        else pure (Except.error e : Except driver.Error Unit)) (driver.write (head :: tail) w).state
       ⟨next.outcome,next.state,(driver.write (head :: tail) w).events ++ next.events⟩ := by
   simp only [PV_EVH_WriteAll.loop,Bind.bind,PV_EVH_Runtime.bind,h]
 
@@ -26,7 +26,7 @@ theorem zero_dispatch (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Byte
     (w : State)
     (h : (driver.write (head :: tail) w).outcome = .returned (.ok (.ok 0))) :
     loop driver (fuel+1) (head :: tail) w =
-      let next : PV_EVH_Runtime.Run (Except driver.Error Unit) := (do let e ← driver.writeZero; pure (.error e))
+      let next : PV_EVH_Runtime.Run (Except driver.Error Unit) := (do let e ← driver.writeZero; pure (Except.error e : Except driver.Error Unit))
         (driver.write (head :: tail) w).state
       ⟨next.outcome,next.state,(driver.write (head :: tail) w).events ++ next.events⟩ := by
   simp only [PV_EVH_WriteAll.loop,Bind.bind,PV_EVH_Runtime.bind,h]
