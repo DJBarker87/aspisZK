@@ -66,6 +66,7 @@ if cfg.get('isolate'):
  (mini/'src/lib.rs').write_text(prelude)
  manifest=mini/'Cargo.toml'
  if cfg.get('row_reference'):(mini/'src/lib.rs').write_bytes((B/'NEI_row_reference.rs').read_bytes())
+ if cfg.get('wide_constructor'):(mini/'src/lib.rs').write_text('use aspis_core::field::WideExact as E;\npub fn NEI_wide_from_limbs(words:[u32;8])->Option<E>{E::from_limbs(words)}\n')
 env=dict(os.environ,RUSTUP_TOOLCHAIN='nightly-2026-09-17',CARGO_TARGET_DIR=str(B/'NEI_extract_target'),CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',RUSTFLAGS='-Zthreads=1 -C link-arg=-Wl,--threads=1',RAYON_NUM_THREADS='1')
 cmd=[str(C),'cargo','--preset','aeneas','--mir',cfg.get('mir','built'),'--sysroot','default','--include','core::option::Option','--include','core::result::Result','--include','core::option::_::ok_or']
 for root in cfg['roots']:cmd+=['--start-from',root]
