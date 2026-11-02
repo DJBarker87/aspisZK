@@ -69,7 +69,7 @@ attribute [local irreducible] Aeneas.Std.bind Array.index_usize
 
 theorem external_sums_reference554 (state : Array aspis_core.field.QM31 16#usize) :
     external_sums_source554 state = reference_poseidon.global_sums227 state := by
-  delta external_sums_source554 reference_poseidon.global_sums227
+  unfold external_sums_source554
 '''
 ref=(L/'PV_B3P_P227_02.lean').read_text().split('def reference_poseidon.global_sums227',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
 import re
