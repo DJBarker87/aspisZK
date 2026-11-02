@@ -23,7 +23,8 @@ theorem samples (input out : Nat → Q)
       (fun j : Fin 28 => (j.val : K)) (fun j => value (input j.val))) (i : Fin 28) :
     (poly out).eval (i.val : K)=value (input i.val) := by
   rw [image]
-  exact Lagrange.eval_interpolate_at_node (fun _ _ _ _ h => nodes h) (Finset.mem_univ i)
+  exact Lagrange.eval_interpolate_at_node (fun j : Fin 28 => value (input j.val))
+    (fun _ _ _ _ h => nodes h) (Finset.mem_univ i)
 
 theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
