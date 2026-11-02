@@ -101,3 +101,46 @@ final REPORT/ROWS/RUNS/association beforeafter, cleanup OWN object caches last.
 No full manifest rerun unchanged. Keep T exactly entropy_law/entropy_kernel/
 observation; endpoint premises unchanged. E1/E2, real RunJoin/world/physical
 observer, client route and L1/L2/L3 remain. Privacy target not established.
+
+## Latest checkpoint
+
+Driver exec session19289 is ACTIVE, launched90703 through ParserTransport using
+current25-module plan. 90703 TryArray194,90704 Endian194,90705 ExternalTypes,
+90706 FullTypes,90707 FieldSource all PASS. Thus8/60 Lean used (7pass,1fail),
+2/10 native (1pass,1fail),0Kani. Next90708 BytesSource; driver will stop on failure
+or after ParserTransport (expected90714 if no further errors).
+Transport scalar draft now explicitly unfolds the two P constants, because
+FieldSource.P is irreducible. Uncompiled Restored adds native_window (actual
+checked source window to cmAt); prepare-audits and NEP roots now47 queries.
+These late source proof edits are committed but source-resolution/host stage
+hashes need refresh before final coherence (lean.py transports each actual
+committed target immediately before its compile, so focused launches are current).
+
+Supplemental all-file textual reference scan ACTIVE in exec session97733, script
+all-references.py. It scans9 distinct revisions whose complete executable-source
+census contained the model; negative executable-source results cover remaining
+refs. Output ALL-REFERENCES-census.json complete=false until finished. Prior
+77-revision all-file scan was cancelled as unnecessary after1 negative revision;
+no compiler involved. Code census and consumer variant census are complete.
+
+BEFORE-sources.json preserves old model and counterexample proof verbatim with
+revision/blob/hash. Native-validation-reuse.json pins historical6,420 paired
+parser cases (panic.is_err then exact Option on success), FINITE validation only,
+not a constructor-equivalence proof. No native rerun; all Rust unchanged.
+NEP-provenance.json pins the exact fixed walker source and original driver.
+coherence.py and audit-runtime.py drafted; final coherence must exclude
+NEPDriver from object-required modules if run only via --run at90797 (runtime
+source is pinned separately; no .olean emitted by --run). NEPAudit requires an
+ordinary focused compile before that runtime. No compiled Stream A objects used.
+
+Checkpoint correction: previous receipt-staging commit failed because a quoted
+git directory glob did not match untracked directories. This commit stages
+finished receipt paths explicitly. Through90709 all targets pass except90701;
+10/60 Lean used (9pass,1fail),2/10 native,0Kani. Driver19289 still active through
+ParserTransport. Next90710 ParserFlat. Corrected BytesSource90708 and
+ParserWindows90709 both PASS. Raw wrapper now supports reserved90797 via
+`python3 tools/pv-rdcd7-20261102/lean.py 90797 R1Z/PV_RDCD5_NEPDriver --audit-runtime`,
+including dynamic consumer-root dependency fingerprint and helper source pin.
+NEPDriver remains runtime-only, exclude it from object-required coherence.
+Focused90798 now queries actual native_window rather than only owned cm_window.
+Supplemental textual reference scan97733 is5/9 complete.
