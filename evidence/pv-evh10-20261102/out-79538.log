@@ -1,0 +1,27 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeRawSelection.lean:46:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  if ?m.48 = ?m.48 then ?m.50 else ?m.51
+in the target expression
+  ExternalFuns.op129 buffer = Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1)
+
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this : ExternalTypes := types base
+d : PV_EVH_StackEntropyFill.Delivery
+e : getrandom.error.Error
+hd : d.status = PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e))
+⊢ ExternalFuns.op129 buffer = Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_EVH_NativeRawSelection.error_carrier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_EVH_NativeRawSelection.error_fill' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
