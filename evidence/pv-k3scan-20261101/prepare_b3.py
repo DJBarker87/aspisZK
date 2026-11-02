@@ -34,12 +34,17 @@ def block(t,name):
 assert block(old,'reconstruct_10')==block(eq,'reconstruct_10')
 # Selected-module projection: retain original helpers + original reconstruct body;
 # unrelated proof functions containing global-oracle stub attributes are excluded.
-prefix=eq[:eq.index('#[kani::proof]')];selected=prefix+block(eq,'reconstruct_10')+'\n'
+prefix=eq[:eq.index('#[kani::proof]')];names=['reconstruct_10','selector_domain']+[f'selector_mask_{side}_{mask}' for side in ['host','statement'] for mask in [1749,2048,2049,4097,6144,6145,26214]]
+selected=prefix+'\n'.join(block(eq,n) for n in names)+'\n'
+for name in names[1:]:
+ b=block(eq,name);inv=b.replace('assert_eq!(','assert_ne!(',1) if 'assert_eq!(' in b else b.replace('assert!(masks[b]==0||frozen(masks[b]));','assert!(!(masks[b]==0||frozen(masks[b])));')
+ assert inv!=b,name
+ selected=selected.replace(b,'#[cfg(not(feature="negative-'+name+'"))]\n'+b+'\n#[cfg(feature="negative-'+name+'")]\n'+inv)
 selected=selected.replace('assert_eq!(dep::reconstruct(&v),reference::reconstruct(&v));','if cfg!(feature="negative-reconstruct") { assert_ne!(dep::reconstruct(&v),reference::reconstruct(&v)); } else { assert_eq!(dep::reconstruct(&v),reference::reconstruct(&v)); }')
 files[B+'v244/equivalence16.rs']=selected.encode()
 t=files[B+'v244/lib_leaf16.rs'].decode();assert t.count('#[cfg(kani)] mod shared_callee16;')==1;t=t.replace('#[cfg(kani)] mod shared_callee16;','// Unselected shared memo oracle omitted; selected harnesses never call it.');files[B+'v244/lib_leaf16.rs']=t.encode()
 t=files[B+'v244/remaining_equivalence16.rs'].decode();oldassert='assert_eq!(d::validate(p),r::validate(p));';assert t.count(oldassert)==1;t=t.replace(oldassert,'if cfg!(feature="negative-transition") { assert_ne!(d::validate(p),r::validate(p)); } else { '+oldassert+' }');files[B+'v244/remaining_equivalence16.rs']=t.encode()
-manifest=B+'v244-leaf16/Cargo.toml';assert sha(files[manifest])==runs['K72135']['manifest_sha256'];t=files[manifest].decode();t=t.replace('[features]','[features]\nnegative-reconstruct=[]\nnegative-transition=[]');files[manifest]=t.encode()
+manifest=B+'v244-leaf16/Cargo.toml';assert sha(files[manifest])==runs['K72135']['manifest_sha256'];t=files[manifest].decode();t=t.replace('[features]','[features]\nnegative-reconstruct=[]\nnegative-transition=[]\n'+'\n'.join('negative-'+n+'=[]' for n in names[1:]));files[manifest]=t.encode()
 assert sha(files[B+'kmx/KMX_stubs.rs'])==runs['K72135']['KMX_stubs_sha256']
 # Remove unrelated root workspace members, keeping every reached body unchanged.
 t=files['Cargo.toml'].decode();t=re.sub(r'members\s*=\s*\[.*?\]', 'members=["crates/aspis-core","crates/aspis-statement","crates/aspis-prover","docs/research/v8-r0-zk-20261009/refine/poseidon"]',t,count=1,flags=re.S);files['Cargo.toml']=t.encode()

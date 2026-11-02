@@ -8,6 +8,7 @@ for p in Path(os.environ['CARGO_TARGET_DIR']).rglob('*.kani-metadata.json'):
   if h.get('pretty_name')!=harness:continue
   q=Path(h['goto_file'])
   if not q.exists():continue
+  if q.stat().st_mtime < json.loads((out/'STARTED.json').read_text())['epoch']:continue
   raw=subprocess.check_output(['/home/dombarker/.kani/kani-0.67.0/bin/cbmc',str(q),'--show-symbol-table','--json-ui'],stderr=subprocess.STDOUT)
   f=out/f'symbols-{len(records)}.json.xz';f.write_bytes(lzma.compress(raw,preset=1))
   records.append({'metadata':str(p),'metadata_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),'harness':h,'goto_sha256':hashlib.sha256(q.read_bytes()).hexdigest(),'symbols':f.name,'symbols_raw_sha256':hashlib.sha256(raw).hexdigest()})

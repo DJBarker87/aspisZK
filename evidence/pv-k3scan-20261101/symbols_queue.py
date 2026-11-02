@@ -15,6 +15,6 @@ for ident in sys.argv[1:]:
    print('Transport loss after submission: read-only recovery required, no resubmission',flush=True);raise SystemExit(255)
   cfg=json.loads((E/f'config-{ident}.json').read_text());log=(E/'host'/ident/'output.log').read_text()
   if cfg.get('negative'):
-   assert r.returncode==1 and 'VERIFICATION:- FAILED' in log and 'Failed Checks: assertion failed:' in log,(ident,log[-1500:])
+   assert r.returncode==1 and 'VERIFICATION:- FAILED' in log and 'Failed Checks:' in log and ('assertion failed:' in log or 'core::panicking::assert_failed_inner' in log),(ident,log[-1500:])
   else:assert r.returncode==0 and 'VERIFICATION:- SUCCESSFUL' in log,(ident,log[-1500:])
   break
