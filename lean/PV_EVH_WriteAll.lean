@@ -2,47 +2,70 @@ import PV_EVH_LiteralDiagnostics
 set_option autoImplicit false
 namespace PV_EVH_WriteAll
 open Aeneas Aeneas.Std PV_EVH_Runtime
-open PV_RJ4IDB (Bytes NativeEvent)
+open PV_RJ4IDB (Bytes)
 
-/-- std1.94.1 Write::write_all control. Writer, io::Error classification/drop,
-WRITE_ALL_EOF construction, and oversize indexing panic remain source-binding
-obligations. Exhaustion is a prefix, not a Rust io::Error. -/
-def run {E : Type} (write : Bytes → Q (Except E Nat)) (dropError : E → Q Unit)
-    (interrupted : E → Bool) (writeZero : E) (oversize : Q (Except E Unit)) :
-    Nat → Bytes → Q (Except E Unit)
-  | 0, buf => if buf = [] then pure (.ok ()) else fun w => ⟨.exhausted,w,[]⟩
-  | fuel+1, buf => if buf = [] then pure (.ok ()) else do
-      let r ← write buf
-      match r with
-      | .ok n =>
-        if n = 0 then pure (.error writeZero)
-        else if n ≤ buf.length then run write dropError interrupted writeZero oversize fuel (buf.drop n)
-        else oversize
-      | .error e =>
-        if interrupted e then do
-          let _ ← dropError e
-          run write dropError interrupted writeZero oversize fuel buf
-        else pure (.error e)
+/-- All reached operations remain explicit, including ErrorKind inspection,
+WriteZero construction, interrupted-error destruction and bad-count panic. -/
+structure Driver where
+  Error : Type
+  write : Bytes → Q (Except Error Nat)
+  interrupted : Error → Q Bool
+  dropInterrupted : Error → Q Unit
+  writeZero : Q Error
+  badCount : Nat → Bytes → Q (Except Error Unit)
 
-theorem empty {E : Type} (write : Bytes → Q (Except E Nat)) (dropError : E → Q Unit)
-    (interrupted : E → Bool) (writeZero : E) (oversize : Q (Except E Unit)) (fuel : Nat) :
-    run write dropError interrupted writeZero oversize fuel [] = pure (.ok ()) := by
-  cases fuel <;> simp only [run,if_pos rfl]
+def loop (driver : Driver) : Nat → Bytes → Q (Except driver.Error Unit)
+  | _, [] => PV_EVH_Runtime.lift (.ok (.ok ()))
+  | 0, _ :: _ => fun w => ⟨.exhausted,w,[]⟩
+  | fuel+1, pending@(_ :: _) => do
+    let result ← driver.write pending
+    match result with
+    | .ok 0 => do
+      let e ← driver.writeZero
+      pure (.error e)
+    | .ok (n+1) =>
+      if n+1 ≤ pending.length then loop driver fuel (pending.drop (n+1))
+      else driver.badCount (n+1) pending
+    | .error e => do
+      let retry ← driver.interrupted e
+      if retry then do
+        let _ ← driver.dropInterrupted e
+        loop driver fuel pending
+      else pure (.error e)
 
-/-- An EINTR owns an error value whose destructor runs before retry. This is
-not a silent retry or an infallible stderr assertion. -/
-theorem interrupted_drop {E : Type} (write : Bytes → Q (Except E Nat))
-    (dropError : E → Q Unit) (interrupted : E → Bool) (writeZero : E)
-    (oversize : Q (Except E Unit)) (fuel : Nat) (buf : Bytes) (w : State) (e : E)
-    (hb : buf ≠ []) (hr : (write buf w).outcome = .returned (.ok (.error e)))
-    (he : interrupted e = true) :
-    run write dropError interrupted writeZero oversize (fuel+1) buf w =
-      let next := (do let _ ← dropError e
-                     run write dropError interrupted writeZero oversize fuel buf)
-      let r := next (write buf w).state
-      ⟨r.outcome,r.state,(write buf w).events ++ r.events⟩ := by
-  simp only [run,if_neg hb,Bind.bind,PV_EVH_Runtime.bind,hr,he,if_true]
+def writer (driver : Driver) (fuel : Nat) (dropError : driver.Error → Q Unit) :
+    PV_EVH_LiteralDiagnostics.Writer :=
+  ⟨driver.Error,loop driver fuel,dropError⟩
 
-#print axioms empty
-#print axioms interrupted_drop
+theorem empty_request (driver : Driver) (fuel : Nat) (w : State) :
+    loop driver fuel [] w = ⟨.returned (.ok (.ok ())),w,[]⟩ := by
+  cases fuel <;> rfl
+
+theorem exhausted_pending (driver : Driver) (head : UInt8) (tail : Bytes) (w : State) :
+    loop driver 0 (head :: tail) w = ⟨.exhausted,w,[]⟩ := rfl
+
+theorem raw_write_fault (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Bytes)
+    (w : State) (fault : Fault)
+    (h : (driver.write (head :: tail) w).outcome = .fault fault) :
+    loop driver (fuel+1) (head :: tail) w =
+      ⟨.fault fault,(driver.write (head :: tail) w).state,
+        (driver.write (head :: tail) w).events⟩ := by
+  simp only [loop,Bind.bind,PV_EVH_Runtime.bind,h]
+
+/-- A successful short write forwards precisely the suffix and post-state;
+its prefix stays before all later events, including a later failure. -/
+theorem short_write_suffix (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Bytes)
+    (w : State) (n : Nat)
+    (h : (driver.write (head :: tail) w).outcome = .returned (.ok (.ok (n+1))))
+    (hn : n+1 ≤ (head :: tail).length) :
+    loop driver (fuel+1) (head :: tail) w =
+      let next := loop driver fuel ((head :: tail).drop (n+1))
+        (driver.write (head :: tail) w).state
+      ⟨next.outcome,next.state,(driver.write (head :: tail) w).events ++ next.events⟩ := by
+  simp only [loop,Bind.bind,PV_EVH_Runtime.bind,h,hn,if_true]
+
+#print axioms empty_request
+#print axioms exhausted_pending
+#print axioms raw_write_fault
+#print axioms short_write_suffix
 end PV_EVH_WriteAll

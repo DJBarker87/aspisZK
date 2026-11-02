@@ -1,4 +1,4 @@
-import PV_EVH_WriteAll
+import PV_EVH_LiteralWriteAll
 set_option autoImplicit false
 namespace PV_EVH_StderrWrite
 open Aeneas Aeneas.Std PV_EVH_Runtime
@@ -33,7 +33,7 @@ def writer (E : Type) (write : Bytes → Q (Except E Nat)) (dropError : E → Q 
     (acquire release : Q Unit) (fuel : Nat) : PV_EVH_LiteralDiagnostics.Writer where
   Error := E
   writeAll := fun buf => scoped acquire release
-    (handleBadFd (PV_EVH_WriteAll.run write dropError interrupted writeZero oversize fuel buf)
+    (handleBadFd (PV_EVH_LiteralWriteAll.run write dropError interrupted writeZero oversize fuel buf)
       dropError isBadFd)
   dropError := dropError
 
