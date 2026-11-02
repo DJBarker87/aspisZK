@@ -10,7 +10,7 @@ attribute [local irreducible] Aeneas.Std.bind Array.index_usize
 
 theorem external_sums_reference554 (state : Array aspis_core.field.QM31 16#usize) :
     external_sums_source554 state = reference_poseidon.global_sums227 state := by
-  unfold external_sums_source554 reference_poseidon.global_sums227
+  delta external_sums_source554 reference_poseidon.global_sums227
   as_aux_lemma =>
     unfold external_sums_column0_554
     apply bind_equal9
