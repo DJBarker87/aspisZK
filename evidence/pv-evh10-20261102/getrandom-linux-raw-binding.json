@@ -1,0 +1,70 @@
+{
+  "evidence_class": "structural argument (own-1), deployed dependency body to source control model",
+  "recipe": {
+    "path": "tools/r1-cost-probe/build-client.sh",
+    "revision": "9917a5b8df742db3c7ca4c1c080e6a0ef1a8f5b6",
+    "blob": "a61812259d8f6d60d8bebc46c5f6d456c28ed7ef",
+    "sha256": "e14554484d6384e846c54ad04442e0e7f15b428d309bea85648bb42aef6f8026",
+    "text": "#!/bin/sh\n# Reviewed Linux client recipe; root-workspace SBF builds never invoke this.\nset -eu\ncd \"$(dirname \"$0\")\"\nunset CARGO_ENCODED_RUSTFLAGS CARGO_PROFILE_CLIENT_PANIC RUSTC_BOOTSTRAP\nexport RUSTFLAGS='--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4'\nexec cargo +1.94.1 build --profile client --locked --offline -j 4 \\\n  --features r1p-check,aspis-r1-cost-probe/ct-host-prover --bin user_client\n"
+  },
+  "lockfile_sha256": "8f9334eb99bad527e191e545def30f103640fbcb28100abb3da9edae4fa6af43",
+  "dependency": "getrandom0.3.4",
+  "target": "adopted D474(C) Linux x86_64, pointer_width64, backend linux_raw, no MSAN",
+  "complete_source_sha256": "2647e9492e46afdb1838c824094f6ab6e14fb4a82fa8274bea8dd2d4151f32dd",
+  "complete_fill_inner": "pub fn fill_inner(mut dest: &mut [MaybeUninit<u8>]) -> Result<(), Error> {\n    // Value of this error code is stable across all target arches.\n    const EINTR: isize = -4;\n\n    loop {\n        let ret = unsafe { getrandom_syscall(dest.as_mut_ptr().cast(), dest.len(), 0) };\n        unsafe { sanitizer::unpoison_linux_getrandom_result(dest, ret) };\n        match usize::try_from(ret) {\n            Ok(0) => return Err(Error::UNEXPECTED),\n            Ok(len) => {\n                dest = dest.get_mut(len..).ok_or(Error::UNEXPECTED)?;\n                if dest.is_empty() {\n                    return Ok(());\n                }\n            }\n            Err(_) if ret == EINTR => continue,\n            Err(_) => {\n                let code = i32::try_from(ret).map_err(|_| Error::UNEXPECTED)?;\n                return Err(Error::from_neg_error_code(code));\n            }\n        }\n    }\n}\n",
+  "steps": [
+    {
+      "source": "const EINTR: isize = -4;",
+      "model": "loop ret = -4; interrupted"
+    },
+    {
+      "source": "getrandom_syscall(dest.as_mut_ptr().cast(), dest.len(), 0)",
+      "model": "syscall (address+offset) (64-offset); raw ABI flags=0"
+    },
+    {
+      "source": "sanitizer::unpoison_linux_getrandom_result(dest, ret)",
+      "model": "non-MSAN unpoison is no-op, bounds checks do not panic"
+    },
+    {
+      "source": "match usize::try_from(ret)",
+      "model": "loop checks nonnegative signed64 raw return; nonnegative fits usize64"
+    },
+    {
+      "source": "Ok(0) => return Err(Error::UNEXPECTED)",
+      "model": "zero; retains raw post-buffer"
+    },
+    {
+      "source": "dest = dest.get_mut(len..).ok_or(Error::UNEXPECTED)?",
+      "model": "oversized; otherwise partial advances offset with entire original buffer retained"
+    },
+    {
+      "source": "if dest.is_empty()",
+      "model": "complete; offset+length=64"
+    },
+    {
+      "source": "Err(_) if ret == EINTR => continue",
+      "model": "interrupted; same offset, post-buffer/world/events passed to next call"
+    },
+    {
+      "source": "i32::try_from(ret).map_err(|_| Error::UNEXPECTED)?",
+      "model": "negative_overflow; lower bound signed32, upper bound automatic from negativity"
+    },
+    {
+      "source": "return Err(Error::from_neg_error_code(code))",
+      "model": "negative; preserves negative OS error without libc errno read or write"
+    }
+  ],
+  "runtime_frame": "No allocation, deallocation, handles or libc errno calls in fill/fill_uninit/fill_inner/raw syscall source cone. Model updates only output buffer and OS world.",
+  "source_buffer": "Only the reached fresh zero-initialized64 array. Driver is not an arbitrary-length getrandom law.",
+  "retained": [
+    "actual op7 NonZeroI32 representation map",
+    "actual op129 dictionary installation at each reached world",
+    "raw syscall ABI and kernel memory footprint under existing P/compiler and entropy obligations",
+    "non-MSAN deployed artifact/config provenance",
+    "original source stack key/address provenance",
+    "full entropy success/retry and entry",
+    "L3 joint observation and V370"
+  ],
+  "trust_fields_added": [],
+  "rows_removed": []
+}
