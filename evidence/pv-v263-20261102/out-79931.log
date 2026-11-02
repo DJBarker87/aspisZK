@@ -1,0 +1,62 @@
+START 79931 R1Z.PV_V263_VectorLoop
+DONE 79931 R1Z.PV_V263_VectorLoop exit 1 wall 1.97 RSS 4532084736
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:43:107: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b - c ≤ 0
+  b - c - d ≥ 0
+where
+ b := ↑Usize.max
+ c := ↑out.length
+ d := ↑(i :: ids).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:70:39: error: Type mismatch
+  UScalar.hmax n
+has type
+  ↑n < 2 ^ UScalarTy.Usize.numBits
+but is expected to have type
+  ↑n ≤ Usize.max
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:73:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  f ≥ 0
+  e ≥ 0
+  d ≥ 0
+  d - e ≤ 0
+  c ≥ 0
+  c - e + f ≥ 1
+  b ≥ 0
+  b + c - d ≤ 0
+  0 ≤ a ≤ 15
+where
+ a := ↑k
+ b := ↑(PV_RunJoin_WorkRange35.start (↑n) k)
+ c := ↑(PV_RunJoin_WorkRange35.width (↑n) k)
+ d := ↑↑n
+ e := ↑Usize.max
+ f := ↑(alloc.vec.Vec.length ⟨[], alloc.vec.Vec.new._proof_1⟩)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:80:4: error: Type mismatch: After simplification, term
+  hlen
+ has type
+  result.1.length = alloc.vec.Vec.length ⟨[], alloc.vec.Vec.new._proof_1⟩ + PV_RunJoin_WorkRange35.width (↑n) k
+but is expected to have type
+  result.1.length = PV_RunJoin_WorkRange35.width (↑n) k
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:72:33: warning: This simp argument is unused:
+  List.length_nil
+
+Hint: Omit it from the simp argument list.
+  simp only [̵a̵l̵l̵o̵c̵.̵v̵e̵c̵.̵V̵e̵c̵.̵n̵e̵w̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵n̵i̵l̵,̵N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵P̵V̵_̵V̵2̵6̵3̵_̵F̵a̵m̵i̵l̵y̵.̵i̵n̵d̵i̵c̵e̵s̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵r̵a̵n̵g̵e̵'̵]̵[̲a̲l̲l̲o̲c̲.̲v̲e̲c̲.̲V̲e̲c̲.̲n̲e̲w̲,̲ ̲N̲a̲t̲.̲z̲e̲r̲o̲_̲a̲d̲d̲,̲ ̲P̲V̲_̲V̲2̲6̲3̲_̲F̲a̲m̲i̲l̲y̲.̲i̲n̲d̲i̲c̲e̲s̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲r̲a̲n̲g̲e̲'̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_VectorLoop.lean:72:49: warning: This simp argument is unused:
+  Nat.zero_add
+
+Hint: Omit it from the simp argument list.
+  simp only [alloc.vec.Vec.new, ̲List.length_nil,N̵a̵t̵.̵z̵e̵r̵o̵_̵a̵d̵d̵,̵ ̲PV_V263_Family.indices, ̲List.length_range']
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_V263_VectorLoop.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_V263_VectorLoop.run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_V263_VectorLoop.granting_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_V263_VectorLoop.granting_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

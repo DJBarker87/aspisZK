@@ -1,5 +1,5 @@
 {
-  "source_revision": "30c12395013f7d42906dbaa7e0385e8b14e7b4b5",
+  "source_revision": "16c9acf945eccfced90b94aa8e337c9ac3e60512",
   "frozen_source_revision": "9c131667ca00f4daae78da6299b09a9fe0d00da9",
   "evidence_class": "mechanically checked source/control correspondence inventory; NOT a complete own-1 binding",
   "features": [
@@ -70,7 +70,8 @@
     "SourceItems": "823b271c19728e819913af3c8179c0eebbde876f31e12f2746631afec2ed6680",
     "WorkerControl": "2d5ae42fe3f614f2b534879a30e2e08c446562bffabd2cffe47b03b1eecfcd20",
     "DeferredJoin": "8f3d1862e05ecc1bac09c134abe2de6d2329705bc844b971baaca657c89b7801",
-    "GrantRun": "6eefaaa21c9b7a3e5472bd81e6119aba0a6c92dd2c861290dfac3b62a03ecf80"
+    "GrantRun": "6eefaaa21c9b7a3e5472bd81e6119aba0a6c92dd2c861290dfac3b62a03ecf80",
+    "VectorLoop": "4954db87ad421465c6eda74c1c1e304e24b01ebb232172a1bf067d4e369c2e3e"
   },
   "steps": [
     {
@@ -369,15 +370,37 @@
       "remaining": [
         "std LocalKey/Cell and thread lifetime lowering"
       ]
+    },
+    {
+      "step": "exact inner Vec value store",
+      "source_fragment": "out.push(f(i));completed+=1;",
+      "source_fragment_sha256": "3d6ce699b9922c8f42173269e82654564457d56a0d53043fddf08a882db344ee",
+      "model": "R1Z.PV_V263_VectorLoop",
+      "model_fragment": "lift (alloc.vec.Vec.push out a)",
+      "status": "control correspondence checked; primitive adequacy retained",
+      "remaining": [
+        "Aeneas Vec carrier/store value; physical capacity/heap relation retained"
+      ]
+    },
+    {
+      "step": "explicit completed increment",
+      "source_fragment": "out.push(f(i));completed+=1;",
+      "source_fragment_sha256": "3d6ce699b9922c8f42173269e82654564457d56a0d53043fddf08a882db344ee",
+      "model": "R1Z.PV_V263_VectorLoop",
+      "model_fragment": "ids next (completed+1)",
+      "status": "control correspondence checked; primitive adequacy retained",
+      "remaining": [
+        "granting_loop proves completed exactly; machine arithmetic/source lowering retained"
+      ]
     }
   ],
   "candidate_omission": {
     "old": "MapSpine.items has no item-push method step",
     "replacement": "SourceItems.step and revised SourceSpine.items",
-    "logical_values": "List only; not native heap/Vec proof"
+    "logical_values": "Revised SourceSpine is List; separate VectorLoop uses actual inner Vec and explicit pushes. No outer Vec or native heap proof"
   },
   "unbound": [
-    "Actual alloc.vec.Vec carrier and heap representation; value stores, source-draining appends and capacity metadata",
+    "Outer pool/host alloc.vec.Vec carrier and all physical heap representations; draining appends/capacity metadata. VectorLoop supplies the inner Vec carrier only",
     "Pinned std collect specialization and all implicit IntoIter/closure/handle/scope/drop glue",
     "Native realisation of join-late schedule and EVH event codec",
     "Exact deployed callback captures and bounded callback success, including op227 bridge and other source laws",

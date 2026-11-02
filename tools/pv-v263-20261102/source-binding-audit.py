@@ -13,7 +13,7 @@ for pin in pins['files']:
  sources[pin['path']]=dict(path=str(p.relative_to(R)),sha256=sha(b),frozen_revision=pin['revision'],git_blob=pin['blob'])
 host=(E/'inputs/crates/aspis-r1-cost-probe/src/host_work.rs').read_text()
 pool=(E/'inputs/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs').read_text()
-models={n:(L/('PV_V263_'+n+'.lean')).read_text() for n in ['MapSpine','SourceSpine','SourceItems','WorkerControl','DeferredJoin','GrantRun']}
+models={n:(L/('PV_V263_'+n+'.lean')).read_text() for n in ['MapSpine','SourceSpine','SourceItems','WorkerControl','DeferredJoin','GrantRun','VectorLoop']}
 rows=[]
 def row(name,src,snippet,model,needle,remaining):
  assert snippet in src,(name,'source')
@@ -46,17 +46,19 @@ row('source-order error after joins',pool,'Err(p)=>std::panic::resume_unwind(p)'
 row('pool append and emptied family drop',pool,'Ok(mut v)=>out.append(&mut v)','SourceSpine','.drop 1 length layouts.family',['actual drained Vec heap relation and IntoIter drop order'])
 row('TLS replace',pool,'ACTIVE.with(|a| a.replace(true))','WorkerControl','runtime.answer (.tlsReplace thread true)',['std LocalKey/Cell and thread lifetime lowering'])
 row('TLS restore',pool,'ACTIVE.with(|a| a.set(self.0))','WorkerControl','runtime.answer (.tlsRestore thread previous)',['std LocalKey/Cell and thread lifetime lowering'])
+row('exact inner Vec value store',host,'out.push(f(i));completed+=1;','VectorLoop','lift (alloc.vec.Vec.push out a)',['Aeneas Vec carrier/store value; physical capacity/heap relation retained'])
+row('explicit completed increment',host,'out.push(f(i));completed+=1;','VectorLoop','ids next (completed+1)',['granting_loop proves completed exactly; machine arithmetic/source lowering retained'])
 old=models['MapSpine'];old_items=old[old.index('def items '):old.index('def family ')]
 assert '.push 0' not in old_items
 new=models['SourceSpine'];assert 'abbrev items := @PV_V263_SourceItems.run' in new
 unbound=[
- 'Actual alloc.vec.Vec carrier and heap representation; value stores, source-draining appends and capacity metadata',
+ 'Outer pool/host alloc.vec.Vec carrier and all physical heap representations; draining appends/capacity metadata. VectorLoop supplies the inner Vec carrier only',
  'Pinned std collect specialization and all implicit IntoIter/closure/handle/scope/drop glue',
  'Native realisation of join-late schedule and EVH event codec',
  'Exact deployed callback captures and bounded callback success, including op227 bridge and other source laws',
  'Actual opsNative installation plus stateful NativeControl capture; no total source projection on faults',
  'V400-257-entry/layout/lowering/callback/answer-timing, V370 compiler cohort; V183 remains suspended K-3']
 revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
-out=dict(source_revision=revision,frozen_source_revision=pins['freeze'],evidence_class='mechanically checked source/control correspondence inventory; NOT a complete own-1 binding',features=['r1p-check','aspis-r1-cost-probe/ct-host-prover'],public_work_trace=False,profile={'rustc':'1.94.1','profile':'release','panic':'abort','overflow_checks':False,'debug_assertions':False},sources=sources,models={n:sha(s.encode()) for n,s in models.items()},steps=rows,candidate_omission={'old':'MapSpine.items has no item-push method step','replacement':'SourceItems.step and revised SourceSpine.items','logical_values':'List only; not native heap/Vec proof'},unbound=unbound,complete_source_binding=False,op257_installed=False,actual_reached_callback_law_discharged=False,nonempty_P=False)
+out=dict(source_revision=revision,frozen_source_revision=pins['freeze'],evidence_class='mechanically checked source/control correspondence inventory; NOT a complete own-1 binding',features=['r1p-check','aspis-r1-cost-probe/ct-host-prover'],public_work_trace=False,profile={'rustc':'1.94.1','profile':'release','panic':'abort','overflow_checks':False,'debug_assertions':False},sources=sources,models={n:sha(s.encode()) for n,s in models.items()},steps=rows,candidate_omission={'old':'MapSpine.items has no item-push method step','replacement':'SourceItems.step and revised SourceSpine.items','logical_values':'Revised SourceSpine is List; separate VectorLoop uses actual inner Vec and explicit pushes. No outer Vec or native heap proof'},unbound=unbound,complete_source_binding=False,op257_installed=False,actual_reached_callback_law_discharged=False,nonempty_P=False)
 (E/'source-binding-audit.json').write_text(json.dumps(out,indent=2)+'\n')
 print('Frozen sources match; '+str(len(rows))+' source/control rows checked; complete binding INCOMPLETE; op257 NOT installed')

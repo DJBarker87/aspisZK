@@ -73,3 +73,20 @@ world. `traversal_length` and `items_length` prove exact element counts for
 arbitrary stateful callbacks, and `family_shape` proves the one-family tuple
 shape. These are the starting lemmas for a total output-length proof and the
 source Vec carrier conversion. They do not assert an actual successful run.
+
+## D571 continuation
+
+SourceItems and the separate SourceSpine candidate add explicit item-push
+method effects after each callback. GrantControl/GrantItems/GrantTeam/GrantRun
+prove COMPLETE revised candidate success in a constructed granting world,
+conditional only on its still-undischarged bounded CallbackLaw. Both TLS
+branches are covered; no successful vector or worker-output oracle is supplied.
+This is not successful execution of the deployed captured callbacks.
+
+VectorLoop supplies an actual alloc.vec.Vec INNER loop with explicit push
+results and completed counter. Its successful output length/counter bounds
+are constructive and symbolic. The outer SourceSpine is still List; physical
+heap stores/capacity and native Vec lowering remain unbound. Source/Result
+reification is not full native adequacy. SOURCE-BINDING-D571.md and the 29-row
+source-binding-audit.json record the exact remaining source frontier. Actual
+opsNative op257 is still residual. No new endpoint success premise was added.

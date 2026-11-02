@@ -1,0 +1,47 @@
+START 79923 R1Z.PV_V263_SourceItems
+DONE 79923 R1Z.PV_V263_SourceItems exit 1 wall 1.78 RSS 4499353600
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_SourceItems.lean:33:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_SourceItems.lean:50:18: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case left
+S A : Type
+runtime : Runtime S
+layouts : Layouts
+n k i : ℕ
+callback : ℕ → Q S A
+w : State S
+value : A
+e : Fault
+hc : (callback i w).outcome = Outcome.returned (Result.ok value)
+hp :
+  (runtime.vector (VecCall.push 0 k (i - PV_RunJoin_WorkRange35.start n k) layouts.item) (callback i w).state).outcome =
+    Outcome.fault e
+⊢ True
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_SourceItems.lean:50:18: error: Tactic `rfl` failed: Expected the goal to be a binary relation
+
+Hint: Reflexivity tactics can only be used on goals of the form `x ~ x` or `R x x`
+
+case right
+S A : Type
+runtime : Runtime S
+layouts : Layouts
+n k i : ℕ
+callback : ℕ → Q S A
+w : State S
+value : A
+e : Fault
+hc : (callback i w).outcome = Outcome.returned (Result.ok value)
+hp :
+  (runtime.vector (VecCall.push 0 k (i - PV_RunJoin_WorkRange35.start n k) layouts.item) (callback i w).state).outcome =
+    Outcome.fault e
+⊢ True
+'R1Z.PV_V263_SourceItems.step' does not depend on any axioms
+'R1Z.PV_V263_SourceItems.run' does not depend on any axioms
+'R1Z.PV_V263_SourceItems.length' depends on axioms: [Quot.sound]
+'R1Z.PV_V263_SourceItems.push_fault' depends on axioms: [propext, sorryAx]
+'R1Z.PV_V263_SourceItems.callback_failure' depends on axioms: [propext]
+

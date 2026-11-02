@@ -1,96 +1,98 @@
-# V263 D567 context checkpoint — target not yet established
+# V263 D571 context checkpoint — target not yet established
 
-Only writer; exact sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
-branch codex/pv-runjoin-20261026. Resume entry649e98edb7; proof-source head
-6402d84e09df0d9939ded1cd42290cf24c1e9f68. Evidence commit follows. No push/merge.
-New ruling rdea-2 has been read. Thread denial refutes all-world success,
-NOT existential Nonempty P. Resource success is a legitimate existential world
-only after the actual source/callback/capture correspondence is supplied.
+Only writer; exact assigned sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
+branch codex/pv-runjoin-20261026. Resume entry b905f867a7; latest proof-source
+head 16c9acf945. Evidence checkpoint commit follows; no push/merge.
+Read SOURCE-BINDING-D571.md before continuing. User's priorities remain:
+(1) complete deployed-source binding; (2) INSTALL at actual opsNative;
+(3) prove actual reached success in a resource-granting world. NONE of these
+three is complete. Do not report a generic candidate success as actual success.
 
-## Accepted state
+## What changed in this continuation
 
-Original four modules retained: World79900,Sequential79902,
-NativeBoundary79903,Range79906. Frozen source9c131667ca remains distinct from
-candidate tip8e450dab55, which lacks host_work. Source inputs/feature pins and
-all C1/C2/sumcheck reached instantiations remain in SOURCE.md/frozen-source.json.
+Seven new modules accepted; all R1Z.PV_V263_, old modules unchanged:
+SourceItems79924,SourceSpine79925,GrantControl79926,GrantItems79927,
+GrantTeam79929,GrantRun79930,VectorLoop79933.
 
-New accepted components (all R1Z.PV_V263_):
-PublicRequests79907,WorkerRequests79908,WorkerControl79910,Team79914,
-Family79915,FamilyWorld79916,DeferredJoin79918,MapSpine79919,OutputShape79922.
-WORKER-MODEL.md states exactly what each proves and the native frontier.
-Grants/denies are stateful primitive resource models, not worker-output
-oracles. Team derives exact15 handle values and counter advance, retains the
-first denied spawn/event, and no callback-success law is needed for that
-prefix. Callback traversal/catches/TLS finalization retain post-worlds and
-full Result/fault/exhaustion. The deferred-join model runs both caught-panic
-actions before merge. MapSpine is a CANDIDATE join-late, panic=abort source
-spine with explicit vector method effects and nested TLS branch. It is NOT
-source-bound or installed. It returns List, not the source Vec.
-OutputShape proves traversal/item lengths and outer-family tuple shape on
-returned-ok outcomes, WITHOUT assuming termination/success/vector values.
+The old candidate lacked an explicit item-push method effect. SourceItems
+executes callback THEN push on the callback post-world and retains faults,
+source failure and exact successful output length. SourceSpine is a SEPARATE
+revised candidate (still List) using this step. It is not fully source-bound.
 
-N90122 adds exact frozen helper finite checks under rustc1.94.1 opt3,
-panic=abort (N90121 used unwind). Nested TLS/order/inner Err checks pass;
-resource denial at stage200,count27 gives SIGABRT(-6),OS code11,61 occupied
-local handles,NO callback marker. Not a full deployed crate/client run.
-Actual native stderr is retained. The model abort classification's empty
-message is NOT an adequacy claim for native diagnostics/hooks/formatting.
+GrantControl constructs primitive resource grants, never worker-output or
+callback-value answers. GrantItems/Team/Run compose BOTH TLS branches,
+fifteen forks, stored worker actions, caller family, successive post-world
+joins, source-order merge and output append. GrantRun.run_total proves whole
+REVISED CANDIDATE completion for every count conditional on CallbackLaw n
+callback. This bounded callback law is NOT discharged for actual captured
+closures and MUST NOT be added to P or privacy as a success premise.
 
-V400-257-entry/layout/lowering/callback/answer-timing are now precisely named
-in V400-WORKER-RESOURCES.md and V400-worker-resources.json. Shape congruence
-is proved; actual public request-history equality is NOT. Vec capacity sites
-are NOT raw allocation syscall sizes/counts. Nested TLS history, actual
-layouts, std allocation/growth/stack/TLS lowering, callback allocations and
-D159 scheduling/failure timing remain P obligations. No new T field.
+VectorLoop independently supplies the exact INNER alloc.vec.Vec carrier,
+explicit accumulated Vec.push results and completed counter. granting_loop
+and granting_run construct a returned Vec and prove its length/counter using
+symbolic Usize bounds and the existing Vector44.push law. No successful Vec
+is supplied as a premise. This loop is not yet substituted into the outer
+SourceSpine, and it does not supply physical heap/capacity/drop correspondence.
 
-## What is still NOT done / exact next deliverable
+source-binding-audit.py rechecks all8 frozen input source files against git
+9c131667ca and records29 checked source/control rows plus hashes. It FAILS
+CLOSED as an INCOMPLETE binding inventory: complete_source_binding=false,
+op257_installed=false,actual_reached_callback_law_discharged=false,NonemptyP=false.
+This is NOT completed own-1 structural binding or b3p6-1 extraction credit.
+A vector-method runtime fault is not proof that native preallocated push can
+fail: native method constraints remain an obligation, not a counterexample.
 
-V263 OPEN→OPEN; actual opsNative op257 still retained from residual ops
-(NativeBoundary.retained still applies). Nonempty P unproved→unproved.
-No endpoint success/vector/callback-totality premise added; no link/row removed.
-T/observer/simulator/frozen source/release pins unchanged. V183 SUSPENDED(K-3)
-stays suspended. Skeleton consistency: reduced to non-emptiness.
+## Exact next work — bind before more model-success wrappers
 
-1. Complete output invariants: caughtFamily preserves family_shape on its
-   success branch; forks gives source-indexed task graph; joinChunks preserves
-   that order; mergePool/appendItems plus Range.coverage give run length=n.
-   Then convert to exact alloc.vec.Vec with the Usize bound, retaining faults,
-   source fail/div and exhaustion. OutputShape.bind_success carries the exact
-   intermediate state. Do not assume successful vectors to avoid this proof.
-2. Source-bind the candidate spine, including heap stores/item pushes, chosen
-   collect specialisations, all implicit Vec/iterator drops, scope packets,
-   TLS lifetimes and cleanup. DeferredJoin is ONE candidate allowed schedule,
-   not a general scheduler adequacy theorem. Bind an actual EVH event codec;
-   no EVH compiled cohort was mixed here. V370/D381/D386 remain.
-3. Reify the actual commitment/sumcheck closures with exact captured args;
-   prove successful execution at every reached index using op227's exact
-   bridge and the other source laws. The generic FamilyWorld callback law is
-   NOT discharged and must NOT be added at the endpoint as a success premise.
-4. Install the complete stateful worker at actual opsNative and thread its
-   post-world through actual NativeControl capture. Old Sequential64.worker
-   still reuses w. Source projection is partial; never fabricate div for a
-   native fault. Finally build the actual captured witness for Nonempty P.
+1. Complete the source binding: substitute real Vec carriers and draining
+   appends into pool/host output; bind capacity and logical/physical stores;
+   chosen std collect specializations; EVERY implicit IntoIter/enumerate,
+   handle, closure, scope-packet and Vec drop. Bind TLS lifetimes, the EVH codec
+   and an actual native realisation of the chosen join-late scheduling world.
+   SOURCE-BINDING-D571.md and source-binding-audit.json name each retained gap.
+2. Reify ACTUAL callbacks/captures. Commitment tuple is
+   (domain,messages,variant,lanes), Fn source indexes lanes then calls
+   encode_commitment_lane. Sumcheck tuple is (oracle,point,round,assignments).
+   NativeAssignment72.semantic is reusable, but its Rows and exact reached
+   terminal-success law still need proof from provenance/op227 source laws.
+   OracleBridge38.selected_callback is an equality, NOT terminal success.
+   Do not substitute zero claims or arbitrary successful vectors.
+3. Install complete source-bound STATEFUL worker at the ACTUAL opsNative
+   boundary and thread its post-world through NativeControl capture.
+   NativeBoundary.retained STILL APPLIES: op257 is still residual. Existing
+   Sequential64.worker still reuses w. Fault/exhaustion have NO source Result
+   projection; never fabricate .div/.fail for a native fault.
+4. Construct actual successful capture in granting world, then Nonempty P.
 
-## Budgets, validation and caches
+Rdea-2 retains exhaustion/panic=abort failures. N90122 native SIGABRT finding
+and original stderr remain unchanged, not rerun. V400-257-entry/layout/
+lowering/callback/answer-timing and V370/D381/D386 remain named P obligations;
+no new T field. V183 stays SUSPENDED(K-3). Compiler/allocator restoration,
+all seven links, observer/simulator/frozen source/release pins unchanged.
+V263 OPEN→OPEN; Nonempty P unproved→unproved; zero premises/rows removed/added.
+Skeleton consistency: reduced to non-emptiness.
 
-23/97 Lean charged: 13 accepted,10 rejected;
-74 left. Next79923; audits79997–79999 UNUSED.
-3/20 native charged;17 left;nextN90123.0 Kani. No unchanged failed reruns.
-New failures were namespace ambiguity, proof-state/predicate elaboration or
-simplified truth goals; their sources/revisions/full logs are retained.
-No memory kill, cap increase, barrier refusal, full/frozen replay or raw audit.
+## Budgets, evidence, cache
 
-Lean wall48.17s,peak4531744768bytes,swap0.
-All scopes6G/8G/no-swap/tasks64,Lean-M7000,optimized native.
-SUMMARY.json/receipt-*.json/modules-*.json record exact targets/revisions/hashes,
-dependency fingerprints/exits/wall/RSS/swap and summary-based #print axioms.
-Accepted lists only standard axioms; rejected sorryAx is rejection evidence.
-Per ax1/ax1', summary prints are NOT raw or release audits. No NEP audit claimed.
-Compile guard sha1bc93e7f9e67723cc2f410ed3be5453a2faf00f83541ee5945275e39fb73da7d.
+34/97 Lean charged:20 accepted,14 rejected;63 left. Next79934;
+audits79997–79999 UNUSED. This continuation11 charged:7 accepted,4 rejected.
+The rejected sources/hashes and full original logs are retained. Failures:
+simplified True goals79923; implicit world carrier79928; symbolic bounds/
+empty Vec simplification79931–32. No unchanged failed source rerun.
+3/20 native total;17 left;nextN90123.0 Kani. No new native/SBF/ELF/key work.
 
-Reusable runjoin32-lean objects remain. Reconciliation checked accepted
-source/object hashes and no own live scopes; fresh preflight and namespace
-resolution receipts are refreshed at this checkpoint. Original module logs
-are archived in original-module-logs.json.xz plus uncompressed sha256.
-Native binaries/Lean objects are caches, not committed evidence. No wallet,
-key, fund, SBF or ELF operation. Retain every input/source/receipt.
+Cumulative Lean wall72.26s,peak4555718656bytes,swap0. Every attempt in own
+6G/8G/no-swap/tasks64 scope,Lean-M7000; no memory kill/cap increase/barrier
+refusal. One module per compile. No full/frozen replay while target is open.
+Accepted summary-based #print axioms contain only standard axioms. This is
+NOT raw/NEP/coherence/release audit; rejected sorryAx is rejection evidence.
+SUMMARY.json,receipt-*.json,modules-*.json and original-module-logs.json.xz
+record exact targets/revisions/hash/dependency fingerprints/exit/wall/RSS/swap.
+Compile failed-source guard sha1bc93e7f9e67723cc2f410ed3be5453a2faf00f83541ee5945275e39fb73da7d.
+
+Reuse runjoin32-lean objects. Fresh preflight:4285 project objects,9631
+direct dependency fingerprints,5673 external objects,5438 IR companions all
+match;9958 namespace resolutions match,no links. Accepted source/object and
+no-live-own-scope reconciliation passed. Do not mix EVH/NDR compiled cohorts.
+Every input source/receipt retained. No wallets/keys/funds were touched.
+This is an incomplete context checkpoint, not budget exhaustion/impossibility.
