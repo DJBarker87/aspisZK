@@ -34,6 +34,7 @@ theorem complete (point : Array Q 10#usize) (pref trailing suffix bound : Usize)
         exact rows i more
     have inc := PV_B3_EvalRank222.increment i bound more
     obtain ⟨out,ho,vo⟩ := ih (Usize.wrapping_add i 1#usize) next (by rw [inc];omega) vnext
+    dsimp only [row] at hn
     refine ⟨out,?_,vo⟩
     unfold host_multilinear.sparse_eq_weights_loop2
     rw [ProverRw19LoopBind.loop_bind]
