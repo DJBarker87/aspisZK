@@ -13,7 +13,8 @@ variable {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (world : PV_FXM_ReserveWorld.World S F)
 
 theorem one : @aspis_core.field.QM31.ONE (types base) (opsNative base heap box ops runtime world)=
-    @aspis_core.field.QM31.ONE (types base) (ProverRwDictionaryScalar.selected ops) := by
+    @aspis_core.field.QM31.ONE (types base) (@ProverRwDictionaryScalar.selected (types base) ops) := by
+  letI : ExternalTypes := types base
   change @ExternalFuns.op65 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_65]
@@ -21,7 +22,8 @@ theorem one : @aspis_core.field.QM31.ONE (types base) (opsNative base heap box o
   rfl
 
 theorem complex : @aspis_core.field.CM31.from_m31 (types base) (opsNative base heap box ops runtime world)=
-    @aspis_core.field.CM31.from_m31 (types base) (ProverRwDictionaryScalar.selected ops) := by
+    @aspis_core.field.CM31.from_m31 (types base) (@ProverRwDictionaryScalar.selected (types base) ops) := by
+  letI : ExternalTypes := types base
   change @ExternalFuns.op61 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_61]
@@ -29,7 +31,8 @@ theorem complex : @aspis_core.field.CM31.from_m31 (types base) (opsNative base h
   rfl
 
 theorem quartic : @aspis_core.field.QM31.from_cm31 (types base) (opsNative base heap box ops runtime world)=
-    @aspis_core.field.QM31.from_cm31 (types base) (ProverRwDictionaryScalar.selected ops) := by
+    @aspis_core.field.QM31.from_cm31 (types base) (@ProverRwDictionaryScalar.selected (types base) ops) := by
+  letI : ExternalTypes := types base
   change @ExternalFuns.op66 (types base) (opsNative base heap box ops runtime world)=_
   unfold opsNative PV_RunJoin_WeightInstalled46.selected
   rw [PV_B2_F_RawNative.preserved_66]

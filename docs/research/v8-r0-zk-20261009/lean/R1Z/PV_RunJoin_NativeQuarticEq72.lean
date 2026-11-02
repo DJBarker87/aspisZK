@@ -6,6 +6,7 @@ open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual63
 attribute [local irreducible] PV_B2_F_ResourceFamilies.selected PV_B2_E_GammaOriginal.selected
 set_option allowUnsafeReducibility true in
 attribute [local irreducible] ProverRwP6BoundaryInstall.selected
+attribute [local instance] Classical.propDecidable
 abbrev Q := aspis_core.field.QM31
 variable {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
