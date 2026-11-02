@@ -1,0 +1,47 @@
+START 79604 R1Z.PV_RunJoin_PointsTotal72
+DONE 79604 R1Z.PV_RunJoin_PointsTotal72 exit 1 wall 3.5 RSS 4319866880
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PointsTotal72.lean:68:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let successor ←
+      ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop
+          { iter := { start := 0#usize, «end» := 10#usize } } z z ProverRwSuccessPointsSource.field.QM31.ONE
+    ok (Array.make 3#usize [z, successor, final] ⋯)
+is not definitionally equal to the right-hand side
+  ok (Array.make 3#usize [z, successor, final] ⋯)
+
+z : Points
+len : (Array.to_slice z).len = 10#usize
+successor : Std.Array ProverRwSuccessPointsSource.field.QM31 10#usize
+hs : sourceLoop (before 10#usize) z z ProverRwSuccessPointsSource.field.QM31.ONE = ok successor
+q : Q
+hq : Array.index_usize z 7#usize = ok q
+q1 : ProverRwDictionaryTower.Q
+hq1 : ProverRwDictionaryTower.qSub ProverRwSuccessPointsSource.field.QM31.ONE q = ok q1
+absorption : Std.Array Q 10#usize
+ha : Array.update z 7#usize q1 = ok absorption
+q2 : Q
+hq2 : absorption.index_usize 6#usize = ok q2
+q3 : ProverRwDictionaryTower.Q
+hq3 : ProverRwDictionaryTower.qSub ProverRwSuccessPointsSource.field.QM31.ONE q2 = ok q3
+final : Std.Array Q 10#usize
+hf : absorption.update 6#usize q3 = ok final
+⊢ (do
+      let successor ←
+        ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points_loop
+            { iter := { start := 0#usize, «end» := 10#usize } } z z ProverRwSuccessPointsSource.field.QM31.ONE
+      ok (Array.make 3#usize [z, successor, final] ⋯)) =
+    ok (Array.make 3#usize [z, successor, final] ⋯)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_PointsTotal72.lean:66:51: warning: This simp argument is unused:
+  hs
+
+Hint: Omit it from the simp argument list.
+  simp only [source, ̲ProverRwSuccessPointsSource.state_only_prefix.state_only_statement_points,
+      lift, ̲bind_tc_ok, ̲len, ̲core.iter.traits.iterator.Iterator.rev.trait_default,
+      core.iter.traits.iterator.Iterator.rev.default, ̲hs̵,̵h̵q, ̲hq1, ̲ha, ̲hq2, ̲hq3, ̲hf,
+      ProverRwSuccessPointsSource.field.QM31.sub]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_PointsTotal72.update' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RunJoin_PointsTotal72.loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_PointsTotal72.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -50,6 +50,19 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box)
   rw [hp]
   exact shape columns hlen p h hs g d
 
+theorem helper (base : ExternalTypes) (heap : Heap) (box : Box)
+    (ops : @ExternalFuns (types base)) (columns : Columns)
+    (hlen : ∀ l,l<26 → (column columns l).length=1024)
+    (h : Row) (g d : Array aspis_core.field.QM31 1024#usize) (out : Matrix)
+    (success : @host_semantic.lift_columns (types base) (selected base heap box ops) columns h g d=ok out) :
+    Array.index_usize out 26#usize=ok h := by
+  obtain ⟨p,hp⟩ := PV_RunJoin_LiftColumnsValue66.source base heap box ops columns hlen h g d out success
+  rw [hp,PV_RunJoin_LiftArray66.read _ 26#usize (by decide)]
+  simp only [tails,Function.update_of_ne (by decide : (26:Nat)≠28),
+    Function.update_of_ne (by decide : (26:Nat)≠27),Function.update_self]
+
+#print axioms helper
+
 #print axioms row_length
 #print axioms vec_length
 #print axioms shape
