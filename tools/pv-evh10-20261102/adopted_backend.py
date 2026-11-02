@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,hashlib,sys
 E=Path('evidence/pv-evh10-20261102')
-rev=subprocess.check_output(['git','rev-parse','codex/pv-c474-draft-20261029'],text=True).strip()
+rev='4ea2abfcc3a50f1b6e766ed41ff07cf815085a87'  # exact inspected bundle revision, never a moving branch
 p='evidence/pv-c474b-20261029/client-build.json'
 raw=subprocess.check_output(['git','show',rev+':'+p]);x=json.loads(raw)
 assert x['sha256']=='da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0'
