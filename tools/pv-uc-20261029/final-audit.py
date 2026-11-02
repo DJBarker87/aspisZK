@@ -13,6 +13,7 @@ def check(p,want,kind):
 for path,want in x['production_sources'].items():check(H/'src'/path,want,'production source')
 for name,pin in x['client_pins'].items():check(Path(pin['path']),pin['sha256'],'final optimized executable')
 for name,want in x['audit_pins'].items():check(H/'native-target/client'/name,want,'unchanged differential executable')
+for name,want in x['extraction'].items():check(H/'output75135'/name,want,'original unedited full-entry emission')
 for mode,want in x['elf_pins'].items():
  name='aspis_pool.so' if mode=='pool' else 'aspis_r1_cost_probe_program.so'
  check(H/f'final-gates/elf-{mode}'/name,want,'release ELF; checksum only')
