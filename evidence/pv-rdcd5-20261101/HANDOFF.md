@@ -20,11 +20,11 @@ Native scopes external-preflight and more-cache PASS: all5673 h4 externals,
 33 SAME pv-dlib-cohort project objects accepted (21 initial+12 more), zero
 rejections in the extension, zero swap. New preflight-result.json is committed.
 
-Unified exec session **36823** is RUNNING:
+Unified exec session **25454** is RUNNING:
 `python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V236`.
-All SplitSelected dependencies through78232 PASS. V233 failed78233 on local-let unfolding for its tail bound and implicit List.take_length API; source changed and committed before retry. The driver next retries V233 as78234, then Copy194/CopyWindow194/BufferSource/UpdateSplit/V236. Parser finding remains retained. It stops immediately on failure. Do NOT launch a second scope. The same
+V233 focused root PASSED78234 (all six theorems standard axioms), after78233 elaboration repair. Copy194/CopyWindow194 PASSED78235/78236. BufferSource FAILED78237 only on leftover if True in zero-cursor branch; changed source replaces the guard simplifier with if_true and is committed. Driver next retries BufferSource78238, then UpdateSplit and V236. Parser finding remains retained. It stops immediately on failure. Do NOT launch a second scope. The same
 native/Lean admission/caps/failed-source guard/cooldown rules apply.
-Checkpoint actual use21/100 Lean (19pass,2fail),2/30 native,0 Kani. BlockCarrier passed78214, Layout78215, Memory78216 (one uncharged race refusal then pass), SplitBounds/Model/BlockPrefix/SplitCarrier78217–78220 pass. Ordinary next78234; current actual34 Lean (31pass,3fail),2native,0Kani;
+Checkpoint actual use21/100 Lean (19pass,2fail),2/30 native,0 Kani. BlockCarrier passed78214, Layout78215, Memory78216 (one uncharged race refusal then pass), SplitBounds/Model/BlockPrefix/SplitCarrier78217–78220 pass. Ordinary next78238; current actual38 Lean (34pass,4fail),2native,0Kani;
 audits78297–78299. Run progress.py to recover exact current counts.
 
 ## V197 FINDING — kernel-confirmed counterexample
