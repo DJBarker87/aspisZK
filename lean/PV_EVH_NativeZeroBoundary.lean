@@ -14,7 +14,7 @@ theorem array_residual (base : ExternalTypes)
     @ExternalFuns.op122 (types base) (opsNative base heap box ops) =
       @ExternalFuns.op122 (types base) ops := by
   unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
-  rw [R1Z.PV_B2_F_RawNative.preserved_122]
+  rw [PV_B2_F_RawNative.preserved_122]
   rfl
 
 theorem scalar_residual (base : ExternalTypes)
@@ -23,7 +23,7 @@ theorem scalar_residual (base : ExternalTypes)
     @ExternalFuns.op123 (types base) (opsNative base heap box ops) =
       @ExternalFuns.op123 (types base) ops := by
   unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
-  rw [R1Z.PV_B2_F_RawNative.preserved_123]
+  rw [PV_B2_F_RawNative.preserved_123]
   rfl
 
 /-- The extracted source dictionary is precisely Array -> scalar -> op123.
