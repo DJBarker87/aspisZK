@@ -1,0 +1,19 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NextFormatting569227.lean:16:2: error: unsolved goals
+case pos
+handler : Str → Result Never
+r : Range Usize
+guard : ↑r.start < ↑r.end
+⊢ Result.ok (some r.start, { start := r.start.wrapping_add 1#usize, «end» := r.end }) =
+    if r.start < r.end then Result.ok (some r.start, { start := r.start.wrapping_add 1#usize, «end» := r.end })
+    else Result.ok (none, r)
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NextFormatting569227.lean:18:2: error: unsolved goals
+case neg
+handler : Str → Result Never
+r : Range Usize
+guard : ¬↑r.start < ↑r.end
+⊢ Result.ok (none, r) =
+    if r.start < r.end then Result.ok (some r.start, { start := r.start.wrapping_add 1#usize, «end» := r.end })
+    else Result.ok (none, r)
+'PV_B3P_NextFormatting569227.binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_NextFormatting569227.handler_independent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_NextFormatting569227.model_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

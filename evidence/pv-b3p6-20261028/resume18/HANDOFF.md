@@ -1,62 +1,57 @@
-# D559 context checkpoint — local std controls improved; deployed bridge OPEN
+# D569 context checkpoint — formatting controls extended; deployed bridge OPEN
 
-Worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`, branch `codex/pv-b3p6-20261028`, entry `784bf3c44b`. **36/36 prior changed-function associations remain. `PV_B3P_Closure557227.DeployedWrapper557 base ops` is NOT discharged. No endpoint premise removed, added or weakened.** Context checkpoint, not budget exhaustion. Previous checkpoint: HANDOFF-D557.md.
+Worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`, branch `codex/pv-b3p6-20261028`, entry `457a24539d`. **36/36 changed-function associations remain. `PV_B3P_Closure557227.DeployedWrapper557 base ops` is NOT discharged. No endpoint premise removed, added or weakened.** This is a context checkpoint, not budget exhaustion. Prior checkpoint preserved as HANDOFF-D559.md. Read CLOSURE-COMPONENTS-D569.json next, retaining the complete D559 signatures, environments and origins.
 
 ## Budget and IDs
 
-**36 Lean /7 extraction /25 Kani remain; next Lean79766.** TALLY-resume18 is144 charged (112 at entry,32 new). Fresh normal IDs79766..79796 plus audits79797..79799 give34 unused slots.79742 was an uncharged reservation refusal;79749 an unsubmitted own staging-authority failure. Retain both IDs; do not reuse. Thus two numerical budget units lack unused slots. All unused790xx and earlier retired Kani IDs stay retired.
+**121 Lean counter units remain: 21 from the old allocation plus the NEW 100-unit 906xx block. Next Lean79781.** TALLY159 (entry144;15 new charged). Normal IDs79781..79796, then90600..90696; new reserved audits90697..90699. The D569 private wrapper implements that order and budget280. Do not invent IDs to fill numerical deficits: these normal/audit ranges provide116 unused slots. Old79797..79799 remain unused; the latest prompt names90697..90699 as audits, so do not allocate the old audit IDs without explicit direction. Previously observed79742 and79749 remain retired; all old790xx leftovers remain retired. No audit-reserve ID spent here.
 
-15 new extraction scopes: N79168/69/70/72/74/76/77/78/79/80/81/82/83/84/85. N79171/73/75 occurred only in earlier driver preparations, never launched: no directory/receipt. Use N79186..79189 first. No Kani spent or credit released.
+**3 extraction /25 Kani remain.** N79186/87/88/89 are now spent. The earlier unlaunched preparation-only N79171/73/75 are the three numerical native slots left; scan host and disk for collisions before using them. No new Kani run or credit release. Keep previously retired Kani IDs retired.
 
-32 Lean receipts:20 exit0,12 failed retained. **Quarantined intermediate exit0 scope results:79740,79741,79751,79758,79760**, owing to raw/default `toStr` native proof dependencies. Use the FINAL cohort below. Final79765 prints12 standard-only outputs and the visibly conditional original callback statement. Peak Lean2693972KiB; longest3.962s; zero swap. Every scope6G/8G/swap0/Tasks64; Lean-M7000. No limit increases. Reservation79742 required180s wait before retry. No live own scope/transport at collection. Final frozen manifest and reserved closure audits remain unspent.
+## Proved local components
 
-## Credited final cohort
+-79767 `PV_B3P_NextFormatting569227`: complete default Range-next source control equals b3q's source and pinned IteratorRange model, with an arbitrary panic handler, for ALL range states.79766 failed only because scalar ordering needed an explicit named conversion; corrected source retained.
+-79768 `PV_B3P_InclusiveFormatting569227`: complete inclusive-next source control equals the pinned model for arbitrary start/end/exhausted, including reversed, exhausted and singleton states; arbitrary handler.
+-79771 `PV_B3P_InclusiveFoldFormatting569227`: default inclusive-fold source-control handler independence, preserving initial emptiness, every early residual, callback failure/divergence, cursor advance before callback, exhausted write and final endpoint callback. This is NOT an extracted inclusive-fold/native dictionary association.
+-79772 `PV_B3P_PreconditionFormatting569227`: exact IndexRange assertion/add guards, initializer index/add and successor bounds, shared/mutable index preconditions, and the ZST slice-next nonzero-length unchecked-subtraction guard. Pointer and encoded-length association separate.
+-79774 `PV_B3P_InitializerFormatting569227`: numeric body/loop handler independence with arbitrary generator and write/restoration Result computations. Source body applies generically to all16 recorded370 instances. Actual MaybeUninit region, prefix state, Guard drop/unwind and mem::forget association OPEN.79773 failed due simplification changing a check predicate to True; corrected by unfolding only the tiny check.
+-79775 `PV_B3P_LiteralEvents569227`: eight exact direct-literal index statements, each with a named tiny kernel bound and diagnostic exclusion. LITERAL-EVENTS-D569.json binds actual instance/statement/span/constant operands. No dynamic-site or pointer credit inferred.
+-79776 `PV_B3P_IndexRangeFormatting569227`: source-control handler independence on an explicit internal ordered/length-bounded Cursor; shared closure index bound follows from the SAME cursor. Bind this invariant to actual IntoIter constructors/backing buffer before native/caller credit.
+-79777/78 `PV_B3P_Std569KernelFuns227`, `PV_B3P_NextExtraction569227`: actual ae1-2 default Range-next emission, proof-normalized only for imports/sentinel/explicit diagnostic string bound; complete Result equality to arbitrary-handler source and the pinned model. Raw emission never compiled. Source default body token-identical deployed1.94.1/extractor nightly; deployed specialization/caller application remains separate.
+-79779 `PV_B3P_Dependency569227.partial_closure`: extends13 typed local source-control ports to14 with emitted default next. NOT complete320-instance native catalogue.
 
--79732 `PV_B3P_ArrayHelpers559227`: shared range array Index delegation; mutable four-cell prefix IndexMut retaining its back continuation; slice-copy control equal pinned model roots. **Native cast/pointer/copy realization remains open.**
--79735/37 `PV_B3P_CopyPrefix559227`, `PV_B3P_PackCopyGuard559227`: destination prefix has source length; existing <=4 pack shape excludes copy mismatch formatting. Local event guards, not whole-source safety.
--79748 `PV_B3P_StringBound559227`: fixed diagnostic bound by `U32.max_eq` then kernel `decide` on the small string; no native proof.
--79750 `PV_B3P_Std559KernelFuns227`: separate proof-normalized ae1-2 default std spec_nth emission, standard-only axioms. `normalize_nth559.py` checks exact imports/namespace/explicit Prop-proof transformation. Rust body unchanged. This is own-1 proof normalization, NOT byte-identical emitted text.
--79761 `PV_B3P_NthFinalGuard559227`: below-end checked increment always Some; arbitrary panic handler irrelevant. Its auxiliary message ALSO supplies the explicit kernel bound.
--79762 `PV_B3P_NthSourceFinal559227`: complete Result equality, ALL start/end/skip including exhausted/reversed ranges, to normalized extraction. Named `forward_projection` is essential: actual trait field versus tagged StepUsize helper are equal by a small defining equation; rewrite transparency did not unfold the semireducible dictionary automatically.
--79763 `PV_B3P_NthFormattingFinal559227`: entire nth control independent of arbitrary diagnostic message and handler. No Unit/always-Ok semantics.
--79764 `PV_B3P_DependencyFinal559227`: `PV_B3P_ClosureFinal559227.partial_closure559`:13 typed source-control entries, previously9. **Not full320-instance native catalogue.**
--79765 `PV_B3P_IntegrationFinal559227`: focused joint check,12 standard-only outputs. This FINAL cohort does not import this continuation's quarantined raw/auxiliary modules. Original callback remains conditional on DeployedWrapper557.
+## Source inventory and extraction
 
-## Extraction, source checks and failures
+FORMATTING-EVENTS-D569.json exhaustively inventories the CAPTURED AVAILABLE-BODY graph's528 sites:451 builtin indices (including implicit bounds diagnostics),29 MIR assertions,43 explicit diagnostic/precondition calls,5 direct panics. It records exact instance, statement ID, span, operands and lexical branch conditions. Opaque helper interiors remain explicit obligations. **This is not a universal execution/caller certificate; fmt-1(a) is NOT complete.** Retain the earlier b3q2 frozen weight/column/endpoint/dot and D559 nth/pack-copy exclusions.
 
-`STD-SOURCE-IDENTITY-D559.json` pins20 compressed core Rust files from deployed1.94.1 and extractor nightly1.98. Reached DEFAULT spec_nth body is token-identical. Not global std parity or deployed specialization selection/caller association. `DRAIN-SOURCE-PARITY-D559.json` resolves all SIX447 instances: element types are non-ZST QM31/Usize; reached non-ZST call_mut source arm token-identical across versions. **STRUCTURAL parity only; pointer/closure/drop/init/unwind association OPEN.** Drain::drop/layout differs and needs constructor/end-pointer invariants.
+CONTROL-SOURCE-PARITY-D569.json records exact body-token parity for IndexRange try_fold/next_unchecked, try_from_fn_erased/push_unchecked and slice-iterator next across1.94.1/nightly, plus every16 initializer environment. Signatures, native carriers, pointer/drop and actual caller application are NOT inferred from body parity. FORMATTING-EVENTS also compares the two default next bodies and inclusive default try_fold.
 
-ae1-2 hash fda587d25a66604a973bbc2947a4416ba373b56dd8c98655991c1b6eaa240b68 verified; pinned Charon daad69be... unchanged. Lowering success is not model credit. Refusals preserved:
-- N79169: missing function, fmt/mod.rs815..823 (str macro154), before translation.
-- N79177: unsupported CopyNonOverlapping.
-- N79179: Can't copy a mutable borrow, array/mod.rs403.
-- N79181/83: unimplemented binary operation, uint_macros.rs896.
-- N79170 own lock preflight, N79172/74 own feature preflights. Corrected using existing direct-wrapper lock and comparing ALL dependency features, explicitly excluding new adapter/replaced cost-probe roots. No extraction credit before parity passed.
-- N79184/85: isolated default nth lowers/translates; arithmetic callees stay at pinned Std roots.
+N79186 Charon captured both next controls, exit0. N79187 Aeneas exit2, verbatim failure:
+`Can't retrieve the variants of non-adt type: ... core::ops::range::RangeInclusive`.
+No credit from this refusal. Changed scope to ordinary Range only: N79188 Charon and N79189 Aeneas exit0. No unchanged failed rerun or limit increase. charon/aeneas hashes checked against prior pins; ae1-2 translator unchanged. Dependency features match the frozen graph with only adapter/replaced root exclusions, optimized-terminal inactive.
 
-Raw emitted Funs AND early auxiliary increment_with literals elaborated through default native_decide. Axioms audits exposed these; do not credit79740/41/51/58/60. Use79748/50/61..65. Raw generated axiom template is archived INPUT only, never compiled. Actual external module is a local fail/panic sentinel, whose call is excluded by arbitrary-handler proofs; no semantics assigned to native formatting.
+`std569-source-revision` pins adapter631bbf1eb9. First Charon input inherited the older `source_revision` field for frozen Rust; adapter SHA/manifest/lock are exact. Subsequent driver inputs add a distinct adapter_revision. No historical receipt rewritten. NEXT-PROOF-NORMALIZATION-D569.json checks exact proof-only transformation; no native_decide literal elaboration credited. External axiomatic template is archived input only; never compiled.
 
-Failures79733/34/36 are parser/scalar proof fixes;79743/52..56 are exact extracted-control/projection proof diagnostics;79744/45 are explicit string-bound preflights. No failed source retried unchanged.79749 pin guard stopped BEFORE any scope after partial own staging; corrected source authority then used79750. No infrastructure repair/shared source overwrite.
+## ax1' NEP audits and coherence scope
 
-Uncompiled older draft `PV_B3P_DependencyClosure559227` targets the raw cohort; do not use it. The authoritative final module is DependencyFinal559227. Earlier Control559/Source559 mathematical results are diagnostic predecessors; prefer FINAL names consistently.
+79769 compiles a BYTE-IDENTICAL copy of research's NEP_WALKER. Driver adaptations change only import name, module/root arrays, label and unused argument name. Both use standalone runtime `importAll=true`, private loading and HARD ERROR on unresolved constants. NDR authority is NOT used.
 
-## Exact remaining components
+79770 audits Range and inclusive-next model bindings:3496/3527 reachable constants, standard-only raw axiom sets matching summary lists.79780 audits TEN focused roots, including next extraction, fold, initializer, IndexRange/shared/subtraction controls, partial catalogue and the unchanged original conditional callback/source-cone theorem. ALL requested graphs resolve completely; only propext/Classical.choice/Quot.sound. Original conditional callback root8982 constants; source-cone root8750. This is NOT an audit of every unused imported declaration or a release audit. `#print axioms` remains labelled SUMMARY-BASED. NEP-PROVENANCE-D569.json pins upstream reuse; upstream NDR validation remains incomplete and supplies no authority here.
 
-`CLOSURE-COMPONENTS-D559.json` retains FULL original signature/environment/Rust origin for EVERY16 opaque instance, incoming sites, proved local components and exact remaining source obligations. No body silently removed because one control law compiled.
+## Exact remaining premise and next work
 
-1. fmt-1(a): b3q2 frozen weight/column/endpoint/dot exclusions and new nth/pack-copy exclusions exist. **Complete actual source-event/caller certificate on existing runjoin guarded domain OPEN.** Apply guards at actual sites, including remaining precondition paths; do not infer event exclusion merely from successful Result.
-2. Helper association still needs actual applications: expect_failed at next186/try_fold217/next337; IndexRange207 assert_unchecked; unchecked_add at17 existing incoming instances; panic_nounwind_fmt under unchecked_sub317; shared unchecked-index329; sixteen mutable unchecked-index/try_from_fn sites; six447 pointer/closure/drop paths. Index318, IndexMut422, copy423 have control equalities but native region/cast/copy/restoration OPEN. Default nth294 local law proved; complete deployed specialization/source/caller application remains separate.
-3. Pointer/drop/init/caller: `SOURCE-EVENT-REMAINDERS-D559.json` records540 builtin entries,147 global references,242 drops,821 abort entries. STATIC inventory, not runtime counts/safety results. Bind valid regions/restoration; partial initialized prefixes; tail/closure drop/unwind; globals; all actual caller sites applying existing336 arithmetic prerequisites. Only exhaustive association supplies actual DeployedWrapper557.
-
-Residual unchanged:
+Residual unchanged, at ACTUAL ops:
 `forall p claims point c, ops.op227 p claims point c = PV_B3P_Install227.transport (PV_B3P_TopDown13227.source_continuation base (PV_B3P_Closure557227.composed_ports557 base) p claims point c)`.
 
-Must hold for ACTUAL ops. Never choose Install227.actual/source_install15/model dictionary as witness. Only then consume original runjoin callback with no new hypothesis.
+1. Finish fmt-1(a): apply the prior arithmetic guards and new handler-independence laws to each ACTUAL source-event state/caller on the EXISTING guarded domain. The528-site inventory and eight literal bounds are evidence inputs, not a proof of the remaining dynamic bounds/assertions. Bind internal IndexRange/initializer/slice state to source constructors and operations. Never infer absence of formatting from Result success or Unit/always-Ok models.
+2. Finish each16 opaque helper's full association. Numeric controls now cover more local paths; exact signature/carrier, conversions, caller states and source continuations remain. CLOSURE-COMPONENTS-D569.json retains all16 entries without silently deleting any native body.
+3. Pointer/drop/init/caller: valid native regions/read/write/copy, borrow restoration, partial initialized prefix, tail/closure/Guard drop and unwind, Drain constructor/end-pointer/version layout, global initializers, and every actual caller composition. Prior static counts540 builtins/147 globals/242 drops/821 aborts remain inventory only.
+4. Construct DeployedWrapper557 at actual ops, then consume unchanged runjoin bridge. Never choose Install227.actual/source_install15/model dictionary as witness. Reserved closure audits and full frozen manifest are for genuine completion.
 
-## Verification and qualifications
+rdea-2 remains in force: resource/thread/OS answers are stateful, failure branches observable and retained, witness independence remains an obligation; no fixed-success callback or new T field introduced. V370/D381/D386, own-1, b3p6-1/fifth-amendment reclassification, P6/k''/k''' STRUCTURAL qualifications, K-1/K-2/K-3 and the seven-mask/zero-skip/distinct49/57 origin restrictions remain unchanged. Privacy target NOT established.
 
-`verify_d559.py` checks537 host artifact hashes, every h5 source blob, caps/swap/admission, quarantines, source capture and final12-output audit. `verification-summary-D559.json` records target/exit/wall/RSS/swap/revisions/axioms for each attempt. Recovery checked174 prior hashes; external preflight5673/private847, no mismatch. `COMMITS-D559.txt` records continuation commits.
+## Validation and artifacts
 
-No crates/programs edit, ELF rebuild, foreign-worktree write, push/merge, key operation, cache cleanup, T addition or simulator/observer/failure/side-channel weakening. own-1, b3p6-1/fifth-amendment reclassification, P6/k-double-prime/k-triple-prime STRUCTURAL qualifications, K-1/K-2/K-3 and V370/pending D381,D386 retained. Active features exclude optimized-terminal; seven-mask/zero-skip domain and distinct49/57 origins retained. Privacy target NOT established.
+verify_d569.py verifies234 host artifact hashes, every new h5 source blob, successful standard-only summaries, complete NEP outputs, caps/admission/swap, no overlapping own scopes, source states and budget.15 Lean receipts:13 exit0,2 corrected failures retained.4 extraction scopes:3 exit0,1 refusal. Peak Lean4719692KiB; longest3.985s; zero swap,6G/8G/swap0/Tasks64,-M7000. Preflight5673 external/867 retained private objects, no mismatch. Final own scope inventory empty. No full frozen manifest replay: source-cone association remains incomplete.
 
-Resume requested order: complete actual fmt events; associate remaining actual std helpers using FINAL local laws; pointer/drop/init/caller composition; instantiate unchanged residual at actual ops. Reserved audits/final manifest only for genuine closure.
+No crates/programs edit, release rebuild, foreign-worktree write, push/merge, wallet/key operation, cache deletion, new T, or weakening of simulator/observer/failure/side-channel obligations. COMMITS-D569.txt lists this continuation's commits; source/receipt artifacts stay under resume18 and the existing owned Lean/tools directories.

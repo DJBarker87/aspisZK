@@ -1,0 +1,47 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_InitializerFormatting569227.lean:29:2: error: unsolved goals
+case pos
+α β σ : Type
+index1 add1 index2 add2 : Result Unit
+length : Usize
+generate : Usize → Result (ControlFlow α β)
+store : Usize → α → σ → Result σ
+s : Usize × σ
+active : ↑s.1 < ↑length
+safe : ↑s.1 < ↑length ∧ ↑s.1 + 1 ≤ UScalar.max UScalarTy.Usize ∧ ↑(s.1.wrapping_add 1#usize) ≤ ↑length
+⊢ (do
+      let item ← generate s.1
+      match item with
+        | ControlFlow.done residual => Result.ok (ControlFlow.done (s.1, ControlFlow.done residual))
+        | ControlFlow.cont value => do
+          check index1 True
+          let written ← store s.1 value s.2
+          Result.ok ()
+          Result.ok (ControlFlow.cont (s.1.wrapping_add 1#usize, written))) =
+    do
+    let item ← generate s.1
+    match item with
+      | ControlFlow.done residual => Result.ok (ControlFlow.done (s.1, ControlFlow.done residual))
+      | ControlFlow.cont value => do
+        check index2 True
+        let written ← store s.1 value s.2
+        Result.ok ()
+        Result.ok (ControlFlow.cont (s.1.wrapping_add 1#usize, written))
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_InitializerFormatting569227.lean:30:35: warning: This simp argument is unused:
+  check_safe _ _ active
+
+Hint: Omit it from the simp argument list.
+  simp only [̵b̵o̵d̵y̵,̵a̵c̵t̵i̵v̵e̵,̵i̵f̵_̵t̵r̵u̵e̵,̵c̵h̵e̵c̵k̵_̵s̵a̵f̵e̵[̲b̲o̲d̲y̲,̲ ̲a̲c̲t̲i̲v̲e̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲,̲ ̲c̲h̲e̲c̲k̲_̲s̲a̲f̲e̲ _ _ a̵c̵t̵i̵v̵e̵,̵c̵h̵e̵c̵k̵_̵s̵a̵f̵e̵ ̵_̵ ̵_̵ ̵safe.2.1]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_InitializerFormatting569227.body_independent' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PV_B3P_InitializerFormatting569227.loop_independent' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PV_B3P_InitializerFormatting569227.initial_independent' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
