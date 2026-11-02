@@ -9,7 +9,10 @@ open PV_EVH_StackZero (Slot State)
 This is a symbolic bounded-scalar law, not reduction of an entropy array. -/
 theorem lossless (x : U8) : (UInt8.ofNat x.val).toNat = x.val := by
   change x.val % 256 = x.val
-  exact Nat.mod_eq_of_lt x.hSize
+  have hs : UScalar.size .U8 = 256 := by rw [UScalar.size_def]; rfl
+  have hx := x.hSize
+  rw [hs] at hx
+  exact Nat.mod_eq_of_lt hx
 
 theorem encode_read {n : Usize} (a : Array U8 n) (i : Nat) (x : U8)
     (h : a.val[i]? = some x) :
