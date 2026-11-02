@@ -61,7 +61,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
     intro i19
     apply bind_equal9
     intro raw5
-    simp only [bind_tc_ok]
     as_aux_lemma =>
       rw [dot_cell554_continuation]
       apply bind_equal9
@@ -110,7 +109,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
       intro i39
       apply bind_equal9
       intro raw9
-      simp only [bind_tc_ok]
       as_aux_lemma =>
         rw [dot_cell554_continuation]
         apply bind_equal9
@@ -159,7 +157,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
         intro i59
         apply bind_equal9
         intro raw13
-        simp only [bind_tc_ok]
         as_aux_lemma =>
           rw [dot_cell554_continuation]
           apply bind_equal9
@@ -208,7 +205,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
           intro i79
           apply bind_equal9
           intro raw17
-          simp only [bind_tc_ok]
           as_aux_lemma =>
             rw [dot_reduce554_continuation]
             apply bind_equal9
@@ -259,7 +255,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
             intro i95
             apply bind_equal9
             intro sums4
-            simp only [bind_tc_ok]
             as_aux_lemma =>
               rw [dot_cell554_continuation]
               apply bind_equal9
@@ -308,7 +303,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
               intro i115
               apply bind_equal9
               intro raw22
-              simp only [bind_tc_ok]
               as_aux_lemma =>
                 rw [dot_cell554_continuation]
                 apply bind_equal9
@@ -357,7 +351,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
                 intro i135
                 apply bind_equal9
                 intro raw26
-                simp only [bind_tc_ok]
                 as_aux_lemma =>
                   rw [dot_cell554_continuation]
                   apply bind_equal9
@@ -406,7 +399,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
                   intro i155
                   apply bind_equal9
                   intro raw30
-                  simp only [bind_tc_ok]
                   as_aux_lemma =>
                     rw [dot_reduce554_continuation]
                     apply bind_equal9
@@ -457,7 +449,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
                     intro i171
                     apply bind_equal9
                     intro sums8
-                    simp only [bind_tc_ok]
                     as_aux_lemma =>
                       unfold dot_finish554
                       apply bind_equal9
