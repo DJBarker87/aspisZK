@@ -24,6 +24,9 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   let zero : Q := ⟨⟨0#u32,0#u32⟩,⟨0#u32,0#u32⟩⟩
   have hz : aspis_core.field.QM31.ZERO=ok zero := by
     rw [PV_RunJoin_NativeQuarticTotal69.zero_source base heap box ops runtime world]
+    simp only [ProverRwDictionaryTower.fromQ,ProverRwDictionaryTower.fromC,
+      AspisR1ProducerRelease47.field.QM31.ZERO,AspisR1ProducerRelease47.field.CM31.ZERO,
+      AspisR1ProducerRelease47.field.M31.ZERO]
     rfl
   have hh : aspis_core.field.wide_exact.WideExact.impl.c1 (PV_RunJoin_PolyCell38.wide q)=ok zero := by
     rw [PV_RunJoin_NativeWideParse73.c1]

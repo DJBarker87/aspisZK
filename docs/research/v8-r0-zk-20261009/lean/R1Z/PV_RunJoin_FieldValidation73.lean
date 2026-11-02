@@ -3,15 +3,15 @@ import R1Z.ProverRw19LoopBind
 import R1Z.PV_RunJoin_MergeLoop35
 set_option autoImplicit false
 namespace R1Z.PV_RunJoin_FieldValidation73
-open Aeneas Aeneas.Std Result ProverRwFull
+open Aeneas Aeneas.Std Result ControlFlow ProverRwFull
 variable [ExternalTypes] [ExternalFuns]
 abbrev W := aspis_core.field.wide_exact.WideExact
 
 def Cells (payload : Slice U8) (count : Usize) : Prop :=
   ∀ i : Usize, i.val<count.val → ∃ s w,
     core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8)
-      payload {start:=Usize.wrapping_mul 32#usize i,
-        «end»:=Usize.wrapping_add (Usize.wrapping_mul 32#usize i) 32#usize}=ok s ∧
+      payload {start := (Usize.wrapping_mul 32#usize i),
+        «end» := (Usize.wrapping_add (Usize.wrapping_mul 32#usize i) 32#usize)}=ok s ∧
     aspis_core.field.wide_exact.WideExact.from_le_bytes s=ok (some w) ∧
     (do let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
         let z ← aspis_core.field.QM31.ZERO
@@ -27,16 +27,18 @@ theorem step (row : U8) (payload : Slice U8) (count i : Usize)
   unfold host_wire.validate_record_fields_loop.body
   simp only [divide,bind_tc_ok,less,if_true,lift,hs,hw,core.option.Option.ok_or,
     core.result.Result.Insts.CoreOpsTry.branch]
-  change (do let b ← (do let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
-                        let z ← aspis_core.field.QM31.ZERO
-                        core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 h z)
-             if b then ok (done (.Err (r1_wire.Error.NonCanonical row i)))
-             else ok (cont (Usize.wrapping_add i 1#usize))) = _
+  change ((do
+    let b ← (do
+      let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
+      let z ← aspis_core.field.QM31.ZERO
+      core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 h z)
+    if b then ok (done (.Err (r1_wire.Error.NonCanonical row i)))
+    else ok (cont (Usize.wrapping_add i 1#usize))) = _)
   rw [hzero]
   rfl
 
 theorem stop (row : U8) (payload : Slice U8) (count i : Usize)
-    (divide : Slice.len payload / 32#usize=ok count) (bound : count.val≤i.val) :
+    (divide : Slice.len payload / 32#usize=ok count) (bound : count.val ≤ i.val) :
     host_wire.validate_record_fields_loop.body row payload i=ok (done (.Ok ())) := by
   have less : ¬i<count := Nat.not_lt.mpr bound
   simp only [host_wire.validate_record_fields_loop.body,divide,bind_tc_ok,less,if_false]
@@ -54,7 +56,7 @@ theorem complete (row : U8) (payload : Slice U8) (count i : Usize) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
     unfold host_wire.validate_record_fields_loop
     rw [ProverRw19LoopBind.loop_bind]
-    dsimp only
+    dsimp only []
     rw [step row payload count i divide (by omega) cells]
     simp only [bind_tc_ok]
     exact ih (Usize.wrapping_add i 1#usize) (by rw [inc];omega)
