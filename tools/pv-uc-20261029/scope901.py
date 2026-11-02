@@ -28,10 +28,6 @@ out.mkdir()
 inputs={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (R/'tools/r1-cost-probe/src/bin').rglob('*.rs')}
 (out/'source-inputs.json').write_text(json.dumps(dict(revision=source_revision_at_launch,files=inputs,dirty=subprocess.check_output(['git','status','--porcelain'],cwd=R,text=True)),indent=2)+'\n')
 def ssh(c,retry=True):
- if os.environ.get('PV_C474_QUIET_OWNER')=='1':
-  assert name.startswith('native751') and cmd[-1]==D+'/bundle/timing.py'
-  check="import json,time; x=json.load(open('/home/dombarker/project-offloads/QUIET_WINDOW.json')); assert x['owner']=='pv-c474-20261029' and time.time()<x['until']"
-  c='python3 -c '+shlex.quote(check)+' && export QUIET_WINDOW_OWNER=1 && '+c
  for attempt in range(1,11):
   q=subprocess.run(['ssh',H,c],text=True,capture_output=True)
   if q.returncode!=255 or not retry:return q
@@ -40,16 +36,21 @@ def ssh(c,retry=True):
   if attempt<10:
    print('SSH 255 before launch/read-only recovery; waiting 60s',flush=True);time.sleep(60)
  return q
-if phase == 'd543-paired-timing':
- q=ssh(f'mkdir -p {D}/{name} && python3 /home/dombarker/project-offloads/codex-pv-c474-20261029/quiet-preflight.py {D}/{name}/timing-before-admission.json')
- (out/'timing-before-admission.json').write_text(q.stdout)
- quiet=json.loads(q.stdout)
- # The preceding invalid gate had a foreign Kani job. Require a changed,
- # quiet environment and low recorded load BEFORE normal admission.
- if q.returncode != 0 or not quiet['quiet'] or quiet['load'][0] >= 2.0:
-  print('TIMING NOT SUBMITTED: pre-admission quiet/load check failed',q.stdout)
-  sys.exit(78)
-r=ssh(f'mkdir -p {D}/{name}; python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
+timing = phase == 'd561-timing'
+if timing:
+ assert name == 'native90119' and cmd == ['python3',D+'/timing-window.py']
+ # Inline the committed pure guard without writing host files before admission.
+ guard_source=(R/'tools/pv-uc-20261029/timing-window-guard.py').read_text()
+ assert subprocess.check_output(['git','show','HEAD:tools/pv-uc-20261029/timing-window-guard.py'],cwd=R,text=True)==guard_source
+ code=guard_source.split("if __name__=='__main__':",1)[0]+"\nx=check(require_live=True); print(json.dumps(x)); assert x['load'][0]<2.0\n"
+ auth='python3 -c '+shlex.quote(code)
+ q=ssh(auth)
+ (out/'timing-before-admission.json').write_text(q.stdout+q.stderr)
+ if q.returncode!=0:
+  print('TIMING NOT SUBMITTED: named live window/quiet/load check failed');sys.exit(78)
+else:
+ auth='true'
+r=ssh(f'mkdir -p {D}/{name} && '+auth+(' && export QUIET_WINDOW_OWNER=1' if timing else '')+f' && python3 {G}/reservation.py {D}/{name}/admission-before.json > {D}/{name}/reservation.log 2>&1')
 for f in ['admission-before.json','reservation.log']:
  q=ssh(f'cat {D}/{name}/{f}');(out/f).write_text(q.stdout+q.stderr)
 ad=json.loads((out/'admission-before.json').read_text())
@@ -59,7 +60,7 @@ prepared=json.loads((R/'tools/pv-uc-20261029/resume-stages.json').read_text())
 staging=[]
 for local in prepared.get(phase,[]):
  raw=(R/local).read_bytes();assert subprocess.check_output(['git','show','HEAD:'+local],cwd=R)==raw
- remote=D+'/'+(local if local.startswith('src/') else 'src/'+local) if local.startswith('tools/r1-cost-probe/') else D+'/'+Path(local).name
+ remote=D+'/src/'+local if local.startswith('tools/r1-cost-probe/') else D+'/'+Path(local).name
  q=ssh('mkdir -p '+shlex.quote(str(Path(remote).parent)));assert q.returncode==0,q.stderr
  for attempt in range(10):
   q=subprocess.run(['scp',str(R/local),H+':'+remote],capture_output=True,text=True)
@@ -71,8 +72,8 @@ for local in prepared.get(phase,[]):
  assert q.returncode==0 and q.stdout.split()[0]==want,q.stdout+q.stderr
  staging.append(dict(source=local,host_path=remote,sha256=want))
 if staging:(out/'staged-inputs.json').write_text(json.dumps(staging,indent=2)+'\n')
-run=['systemd-run','--user','--scope','-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',G+'/barrier.py',D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
-admit=f'python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/reservation-launch.log 2>&1'
+run=['systemd-run','--user','--scope','--unit=pv-uc-'+name,'-q','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64','python3',(D+'/window-barrier.py' if timing else G+'/barrier.py'),D+'/'+name+'/admission-barrier.json','/usr/bin/time','-v','-o',D+'/'+name+'/time.log',*cmd]
+admit=auth+(' && export QUIET_WINDOW_OWNER=1' if timing else '')+f' && python3 {G}/reservation.py {D}/{name}/admission-launch.json > {D}/{name}/reservation-launch.log 2>&1'
 check='python3 -c '+shlex.quote("import json; assert json.load(open("+repr(D+'/'+name+'/admission-launch.json')+"))['allowed'] is True")
 launch=admit+' && '+check+' && '+shlex.join(run)+f' > {D}/{name}/output.log 2>&1'
 if True:
