@@ -12,6 +12,8 @@ for p in sorted(E.glob('native*/receipt.json')):
 pending=[];refused=[]
 for d in sorted(E.glob('native751*')):
  if d.is_dir() and not (d/'receipt.json').exists():
+  if (d/'refusal.json').is_file():
+   refused.append(dict(id=d.name,status='PRE-ADMISSION REFUSAL; NO SCOPE; ID RETIRED',evidence=str((d/'refusal.json').relative_to(E))));continue
   decisions=[json.loads(p.read_text()) for p in d.glob('admission-*.json')]
   if any(a.get('allowed') is False for a in decisions):
    refused.append(dict(id=d.name,status='REFUSED BEFORE WORK; ID retired, no resubmission'));continue
