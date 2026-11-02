@@ -1,0 +1,53 @@
+{
+  "deployed": "1.94.1",
+  "extractor": "nightly-2026-06-01",
+  "items": [
+    {
+      "file": "std-error.rs",
+      "anchor": "pub fn kind(&self)",
+      "deployed_source_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "extractor_source_sha256": "6b6127919e98b35a41610e750edc601de89f8f8475a399d37d49b50365e3b730",
+      "deployed_body": "{\n        match self.repr.data() {\n            ErrorData::Os(code) => sys::io::decode_error_kind(code),\n            ErrorData::Custom(c) => c.kind,\n            ErrorData::Simple(kind) => kind,\n            ErrorData::SimpleMessage(m) => m.kind,\n        }\n    }",
+      "extractor_body": "{\n        match self.repr.data() {\n            ErrorData::Os(code) => sys::io::decode_error_kind(code),\n            ErrorData::Custom(c) => c.kind,\n            ErrorData::Simple(kind) => kind,\n            ErrorData::SimpleMessage(m) => m.kind,\n        }\n    }",
+      "token_equal": true
+    },
+    {
+      "file": "std-repr-bitpacked.rs",
+      "anchor": "pub(super) fn data(&self)",
+      "deployed_source_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "extractor_source_sha256": "8e0ded5fcc69e74941adee6a13ec7e365623d5913ac4b2d938ddf00799372121",
+      "deployed_body": "{\n        \n        unsafe { decode_repr(self.0, |c| &*c) }\n    }",
+      "extractor_body": "{\n        \n        unsafe { decode_repr(self.0, |c| &*c) }\n    }",
+      "token_equal": true
+    },
+    {
+      "file": "std-repr-bitpacked.rs",
+      "anchor": "unsafe fn decode_repr<",
+      "deployed_source_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "extractor_source_sha256": "8e0ded5fcc69e74941adee6a13ec7e365623d5913ac4b2d938ddf00799372121",
+      "deployed_body": "{\n    let bits = ptr.as_ptr().addr();\n    match bits & TAG_MASK {\n        TAG_OS => {\n            let code = ((bits as i64) >> 32) as RawOsError;\n            ErrorData::Os(code)\n        }\n        TAG_SIMPLE => {\n            let kind_bits = (bits >> 32) as u32;\n            let kind = kind_from_prim(kind_bits).unwrap_or_else(|| {\n                debug_assert!(false, \"Invalid io::error::Repr bits: `Repr({:#018x})`\", bits);\n                \n                \n                \n                \n                \n                \n                unsafe { core::hint::unreachable_unchecked() };\n            });\n            ErrorData::Simple(kind)\n        }\n        TAG_SIMPLE_MESSAGE => {\n            \n            unsafe { ErrorData::SimpleMessage(&*ptr.cast::<SimpleMessage>().as_ptr()) }\n        }\n        TAG_CUSTOM => {\n            \n            \n            \n            let custom = ptr.as_ptr().wrapping_byte_sub(TAG_CUSTOM).cast::<Custom>();\n            ErrorData::Custom(make_custom(custom))\n        }\n        _ => {\n            \n            unreachable!();\n        }\n    }\n}",
+      "extractor_body": "{\n    let bits = ptr.as_ptr().addr();\n    match bits & TAG_MASK {\n        TAG_OS => {\n            let code = ((bits as i64) >> 32) as RawOsError;\n            ErrorData::Os(code)\n        }\n        TAG_SIMPLE => {\n            let kind_bits = (bits >> 32) as u32;\n            let kind = ErrorKind::from_prim(kind_bits).unwrap_or_else(|| {\n                debug_assert!(false, \"Invalid io::error::Repr bits: `Repr({:#018x})`\", bits);\n                \n                \n                \n                \n                \n                \n                unsafe { core::hint::unreachable_unchecked() };\n            });\n            ErrorData::Simple(kind)\n        }\n        TAG_SIMPLE_MESSAGE => {\n            \n            unsafe { ErrorData::SimpleMessage(&*ptr.cast::<SimpleMessage>().as_ptr()) }\n        }\n        TAG_CUSTOM => {\n            \n            \n            \n            let custom = ptr.as_ptr().wrapping_byte_sub(TAG_CUSTOM).cast::<Custom>();\n            ErrorData::Custom(make_custom(custom))\n        }\n        _ => {\n            \n            unreachable!();\n        }\n    }\n}",
+      "token_equal": false
+    },
+    {
+      "file": "std-repr-bitpacked.rs",
+      "anchor": "fn kind_from_prim(",
+      "deployed_source_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "extractor_source_sha256": "8e0ded5fcc69e74941adee6a13ec7e365623d5913ac4b2d938ddf00799372121",
+      "deployed_body": "{\n    macro_rules! from_prim {\n        ($prim:expr => $Enum:ident { $($Variant:ident),* $(,)? }) => {{\n            \n            const _: fn(e: $Enum) = |e: $Enum| match e {\n                $($Enum::$Variant => ()),*\n            };\n            match $prim {\n                $(v if v == ($Enum::$Variant as _) => Some($Enum::$Variant),)*\n                _ => None,\n            }\n        }}\n    }\n    from_prim!(ek => ErrorKind {\n        NotFound,\n        PermissionDenied,\n        ConnectionRefused,\n        ConnectionReset,\n        HostUnreachable,\n        NetworkUnreachable,\n        ConnectionAborted,\n        NotConnected,\n        AddrInUse,\n        AddrNotAvailable,\n        NetworkDown,\n        BrokenPipe,\n        AlreadyExists,\n        WouldBlock,\n        NotADirectory,\n        IsADirectory,\n        DirectoryNotEmpty,\n        ReadOnlyFilesystem,\n        FilesystemLoop,\n        StaleNetworkFileHandle,\n        InvalidInput,\n        InvalidData,\n        TimedOut,\n        WriteZero,\n        StorageFull,\n        NotSeekable,\n        QuotaExceeded,\n        FileTooLarge,\n        ResourceBusy,\n        ExecutableFileBusy,\n        Deadlock,\n        CrossesDevices,\n        TooManyLinks,\n        InvalidFilename,\n        ArgumentListTooLong,\n        Interrupted,\n        Other,\n        UnexpectedEof,\n        Unsupported,\n        OutOfMemory,\n        InProgress,\n        Uncategorized,\n    })\n}",
+      "extractor_body": null,
+      "token_equal": false
+    },
+    {
+      "file": "std-unix-error.rs",
+      "anchor": "pub fn decode_error_kind(",
+      "deployed_source_sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+      "extractor_source_sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+      "deployed_body": "{\n    use io::ErrorKind::*;\n    match errno as libc::c_int {\n        libc::E2BIG => ArgumentListTooLong,\n        libc::EADDRINUSE => AddrInUse,\n        libc::EADDRNOTAVAIL => AddrNotAvailable,\n        libc::EBUSY => ResourceBusy,\n        libc::ECONNABORTED => ConnectionAborted,\n        libc::ECONNREFUSED => ConnectionRefused,\n        libc::ECONNRESET => ConnectionReset,\n        libc::EDEADLK => Deadlock,\n        libc::EDQUOT => QuotaExceeded,\n        libc::EEXIST => AlreadyExists,\n        libc::EFBIG => FileTooLarge,\n        libc::EHOSTUNREACH => HostUnreachable,\n        libc::EINTR => Interrupted,\n        libc::EINVAL => InvalidInput,\n        libc::EISDIR => IsADirectory,\n        libc::ELOOP => FilesystemLoop,\n        libc::ENOENT => NotFound,\n        libc::ENOMEM => OutOfMemory,\n        libc::ENOSPC => StorageFull,\n        libc::ENOSYS => Unsupported,\n        libc::EMLINK => TooManyLinks,\n        libc::ENAMETOOLONG => InvalidFilename,\n        libc::ENETDOWN => NetworkDown,\n        libc::ENETUNREACH => NetworkUnreachable,\n        libc::ENOTCONN => NotConnected,\n        libc::ENOTDIR => NotADirectory,\n        #[cfg(not(target_os = \"aix\"))]\n        libc::ENOTEMPTY => DirectoryNotEmpty,\n        libc::EPIPE => BrokenPipe,\n        libc::EROFS => ReadOnlyFilesystem,\n        libc::ESPIPE => NotSeekable,\n        libc::ESTALE => StaleNetworkFileHandle,\n        libc::ETIMEDOUT => TimedOut,\n        libc::ETXTBSY => ExecutableFileBusy,\n        libc::EXDEV => CrossesDevices,\n        libc::EINPROGRESS => InProgress,\n        libc::EOPNOTSUPP => Unsupported,\n\n        libc::EACCES | libc::EPERM => PermissionDenied,\n\n        \n        \n        \n        x if x == libc::EAGAIN || x == libc::EWOULDBLOCK => WouldBlock,\n\n        _ => Uncategorized,\n    }\n}",
+      "extractor_body": "{\n    use io::ErrorKind::*;\n    match errno as libc::c_int {\n        libc::E2BIG => ArgumentListTooLong,\n        libc::EADDRINUSE => AddrInUse,\n        libc::EADDRNOTAVAIL => AddrNotAvailable,\n        libc::EBUSY => ResourceBusy,\n        libc::ECONNABORTED => ConnectionAborted,\n        libc::ECONNREFUSED => ConnectionRefused,\n        libc::ECONNRESET => ConnectionReset,\n        libc::EDEADLK => Deadlock,\n        libc::EDQUOT => QuotaExceeded,\n        libc::EEXIST => AlreadyExists,\n        libc::EFBIG => FileTooLarge,\n        libc::EHOSTUNREACH => HostUnreachable,\n        libc::EINTR => Interrupted,\n        libc::EINVAL => InvalidInput,\n        libc::EISDIR => IsADirectory,\n        libc::ELOOP => FilesystemLoop,\n        libc::ENOENT => NotFound,\n        libc::ENOMEM => OutOfMemory,\n        libc::ENOSPC => StorageFull,\n        libc::ENOSYS => Unsupported,\n        libc::EMLINK => TooManyLinks,\n        libc::ENAMETOOLONG => InvalidFilename,\n        libc::ENETDOWN => NetworkDown,\n        libc::ENETUNREACH => NetworkUnreachable,\n        libc::ENOTCONN => NotConnected,\n        libc::ENOTDIR => NotADirectory,\n        #[cfg(not(target_os = \"aix\"))]\n        libc::ENOTEMPTY => DirectoryNotEmpty,\n        libc::EPIPE => BrokenPipe,\n        libc::EROFS => ReadOnlyFilesystem,\n        libc::ESPIPE => NotSeekable,\n        libc::ESTALE => StaleNetworkFileHandle,\n        libc::ETIMEDOUT => TimedOut,\n        libc::ETXTBSY => ExecutableFileBusy,\n        libc::EXDEV => CrossesDevices,\n        libc::EINPROGRESS => InProgress,\n        libc::EOPNOTSUPP => Unsupported,\n\n        libc::EACCES | libc::EPERM => PermissionDenied,\n\n        \n        \n        \n        x if x == libc::EAGAIN || x == libc::EWOULDBLOCK => WouldBlock,\n\n        _ => Uncategorized,\n    }\n}",
+      "token_equal": true
+    }
+  ],
+  "all_token_equal": false,
+  "scope": "five named bodies only; not a complete reached-std closure and not native/refinement credit. Dynamic-trait translation failed; pointer arithmetic/load helpers and ErrorKind interpretation remain."
+}
