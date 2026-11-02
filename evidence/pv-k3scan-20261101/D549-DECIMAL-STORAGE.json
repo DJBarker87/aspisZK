@@ -1,0 +1,103 @@
+{
+  "source_authority": "https://static.rust-lang.org/dist/2025-11-21/rust-src-nightly.tar.xz",
+  "component_sha256": "98b8b6438977b621e0db0ef90fdcf7563105b54cecdf13d22a83a542c5beb38f",
+  "member": "rust-src-nightly/rust-src/lib/rustlib/src/rust/library/core/src/fmt/num.rs",
+  "retained_source": "std-sources/kani/core/src/fmt/num.rs",
+  "source_sha256": "0beb56ce116b6dcee9c25677aca707ec28aa5ff0ec5fd7d5255f212c392022cb",
+  "occurrences": [
+    {
+      "line": 100,
+      "text": "static DECIMAL_PAIRS: &[u8; 200] = b\"\\"
+    },
+    {
+      "line": 213,
+      "text": "                    buf[offset + 0].write(DECIMAL_PAIRS[pair1 * 2 + 0]);"
+    },
+    {
+      "line": 214,
+      "text": "                    buf[offset + 1].write(DECIMAL_PAIRS[pair1 * 2 + 1]);"
+    },
+    {
+      "line": 215,
+      "text": "                    buf[offset + 2].write(DECIMAL_PAIRS[pair2 * 2 + 0]);"
+    },
+    {
+      "line": 216,
+      "text": "                    buf[offset + 3].write(DECIMAL_PAIRS[pair2 * 2 + 1]);"
+    },
+    {
+      "line": 231,
+      "text": "                    buf[offset + 0].write(DECIMAL_PAIRS[pair * 2 + 0]);"
+    },
+    {
+      "line": 232,
+      "text": "                    buf[offset + 1].write(DECIMAL_PAIRS[pair * 2 + 1]);"
+    },
+    {
+      "line": 248,
+      "text": "                    buf[offset].write(DECIMAL_PAIRS[last * 2 + 1]);"
+    },
+    {
+      "line": 482,
+      "text": "                        buf[i - 1].write(DECIMAL_PAIRS[pair * 2 + 0]);"
+    },
+    {
+      "line": 483,
+      "text": "                        buf[i - 0].write(DECIMAL_PAIRS[pair * 2 + 1]);"
+    },
+    {
+      "line": 514,
+      "text": "                        buf[coef_len + 1].write(DECIMAL_PAIRS[exp * 2 + 0]);"
+    },
+    {
+      "line": 515,
+      "text": "                        buf[coef_len + 2].write(DECIMAL_PAIRS[exp * 2 + 1]);"
+    },
+    {
+      "line": 698,
+      "text": "            buf[offset + 0].write(DECIMAL_PAIRS[pair1 * 2 + 0]);"
+    },
+    {
+      "line": 699,
+      "text": "            buf[offset + 1].write(DECIMAL_PAIRS[pair1 * 2 + 1]);"
+    },
+    {
+      "line": 700,
+      "text": "            buf[offset + 2].write(DECIMAL_PAIRS[pair2 * 2 + 0]);"
+    },
+    {
+      "line": 701,
+      "text": "            buf[offset + 3].write(DECIMAL_PAIRS[pair2 * 2 + 1]);"
+    },
+    {
+      "line": 716,
+      "text": "            buf[offset + 0].write(DECIMAL_PAIRS[pair * 2 + 0]);"
+    },
+    {
+      "line": 717,
+      "text": "            buf[offset + 1].write(DECIMAL_PAIRS[pair * 2 + 1]);"
+    },
+    {
+      "line": 733,
+      "text": "            buf[offset].write(DECIMAL_PAIRS[last * 2 + 1]);"
+    },
+    {
+      "line": 832,
+      "text": "        buf[quad_index * 4 + OFFSET + 0].write(DECIMAL_PAIRS[pair1 * 2 + 0]);"
+    },
+    {
+      "line": 833,
+      "text": "        buf[quad_index * 4 + OFFSET + 1].write(DECIMAL_PAIRS[pair1 * 2 + 1]);"
+    },
+    {
+      "line": 834,
+      "text": "        buf[quad_index * 4 + OFFSET + 2].write(DECIMAL_PAIRS[pair2 * 2 + 0]);"
+    },
+    {
+      "line": 835,
+      "text": "        buf[quad_index * 4 + OFFSET + 3].write(DECIMAL_PAIRS[pair2 * 2 + 1]);"
+    }
+  ],
+  "review": "The source declares immutable static DECIMAL_PAIRS: &[u8; 200], an immutable shared byte slice. Every use indexes it to obtain an immutable byte value and writes that byte into a local formatting buffer; no harness, stub or oracle writes this item. This is source review, not initializer-whitelisting. Its type has no interior mutability, and it is never an assignment destination. It is not a writable harness/stub/oracle static. Separate std behaviour/cohort transfer remains withheld.",
+  "no_install_or_sysroot_modification": true
+}
