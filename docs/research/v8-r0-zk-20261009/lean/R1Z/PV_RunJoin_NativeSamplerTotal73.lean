@@ -13,8 +13,9 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   obtain ⟨q,hq,hcanonical,hcoordinates⟩ := AspisR1.ExtractedQM31SamplerCorrect.sample_total block
   refine ⟨ProverRwFullSampler.fromSelected (ProverRwSamplerModel.fromOld q),?_⟩
   change (opsNative base heap box ops runtime world).op248 _=_
-  rw [PV_RunJoin_SemanticSamplerField51.installed
-    (PV_RunJoin_NativeResidual62.baseTypes base) heap box (residual base ops runtime world)]
+  unfold opsNative PV_RunJoin_WeightInstalled46.selected
+  rw [PV_B2_F_RawNative.preserved_248]
+  change ProverRwFullSampler.selected block=_
   unfold ProverRwFullSampler.selected
   rw [ProverRwSamplerModel.sample_exact,hq]
   rfl
