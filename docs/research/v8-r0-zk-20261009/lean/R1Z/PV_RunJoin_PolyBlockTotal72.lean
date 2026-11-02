@@ -6,7 +6,10 @@ open Aeneas Aeneas.Std Result PV_B3_Copy_117 PV_RunJoin_MaskFieldTotal69
 theorem complete (polynomial : Array Q 28#usize) (powers : Array Q 3#usize)
     (block : Usize) (bound : block.val≤6) :
     ∃ out,host_arithmetic.evaluate_state_only_polynomial.block_value polynomial powers block=ok out := by
-  have bits : 28<UScalar.size .Usize := by scalar_tac
+  have hsize : 2^32≤UScalar.size .Usize := by
+    rw [UScalar.size_def]
+    exact Nat.pow_le_pow_right (by decide) System.Platform.le_numBits
+  have bits : 28<UScalar.size .Usize := lt_of_lt_of_le (by decide : 28<2^32) hsize
   let start := Usize.wrapping_mul 4#usize block
   have hs : start.val=4*block.val := by
     unfold start
