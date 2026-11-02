@@ -1,4 +1,4 @@
-# D541 rdcd5 handoff — active host gate wait
+# D541 rdcd5 handoff — gated after 24 polls
 
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-rdcd3`, branch
 `codex/pv-rdcd5-20261101`, base **ba1fa07d9e** (explicit user authority).
@@ -11,24 +11,20 @@ compiled. Budget unspent: 100 Lean, up to 30 capped native scopes, 0 Kani.
 IDs ONLY 78200–78299; audits ONLY 78297–78299. No ID consumed/reserved yet.
 Take V197, V233, V236 in that cheapest-first order.
 
-## Gate — continue waiting, not authorization
+## Gate — required wait exhausted
 
-Required flag from pv-common rulings (f)/(g) is absent:
+The flag path from common rulings (f)/(g) is still absent:
 `/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag`.
-An asynchronous question asks whether D541 supersedes it or a replacement
-path exists. No reply so far. Do not infer approval from elapsed time.
-The common file requires ten-minute polls up to 24; do not end early solely
-for this absent flag. Local process `tools/pv-rdcd5-20261101/wait-gate.py`
-(executor session 77980) polls without launching anything or modifying the
-external gate. Each sleep ≤60s. `poll-gate.py` enforces spacing and records
-actual polls, not missed/artificial ones. If the process ends, inspect its
-output and continue from the existing poll file. At 24 absent polls report
-"gated: budget unspent". If a flag or explicit override arrives, read it and
-record its authority before resuming host scopes.
+The asynchronous clarification received no response. All **24 actual polls**
+are recorded, minimum spacing 600.026s and elapsed 15754.122s.
+The local monitoring process exited 0 after poll24; no work remains running.
+Stop basis is common ruling (g): **gated: budget unspent**. A later resume
+still needs the flag or an explicit replacement/override; elapsed time is not
+authorization. Read the final REPORT and SESSION before launching anything.
 
 ## Exact preparation and remaining proof work
 
-- V197: new ParserWindows/V197 drafts preserve arbitrary byte lists, Option,
+- V197: new ParserWindows/ParserFlat/V197 drafts preserve arbitrary byte lists, Option,
   failure and late second-half check. The root draft changes the prior proof
   to congruence of bind continuations; no unchanged failed source is retried.
   It is still only owned qm/reference equality; prove transport to the existing
@@ -47,6 +43,8 @@ record its authority before resuming host scopes.
   PV_DL_UpdateCarrier and op216 association. buffer-source.py checks wrapper,
   digest_blocks, get_pos, size, set_pos_unchecked, Eager.invariant exactly.
   Only original compression callback is parametric. No singleton-fold premise.
+  New PV_RDCD5_V236.carrier_instance/op216_instance drafts typed composition
+  against the existing selected_native law; both remain uncompiled.
 
 ## Host/cache preparation
 
@@ -58,7 +56,7 @@ objects against the unchanged d9187c80… authority manifest, zero bad hashes.
 This was a source/object inspection, not a capped native or Lean release gate.
 No host directory was created or changed by rdcd5.
 
-`resolve.py` produced a 66-project-module tracked source plan, exact blobs and
+`resolve.py` produced a 68-project-module tracked source plan, exact blobs and
 sha256s, with no EJR/freeze hits. Resolve/reuse through h5/h6/h6'/h6'' and verify
 first-namespace resolution before first compile. Never load Stream A objects.
 Choose one coherent cohort; namespace-complete plain-copy overlays, no mixed

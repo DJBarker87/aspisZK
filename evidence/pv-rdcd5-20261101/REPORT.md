@@ -1,68 +1,81 @@
-# PV_RDCD5 — work in progress (D541)
+# PV_RDCD5 — gated: budget unspent
 
-Branch `codex/pv-rdcd5-20261101`, created at explicit candidate commit
-`ba1fa07d9e`, in the exact sparse worktree `/Users/dominic/ZK/.worktrees/pv-rdcd3`.
-The local `codex/cx-prover-rw-20261023` ref was different; the user-specified
-commit is the base authority. No merge, push, or release-source edits.
+Branch `codex/pv-rdcd5-20261101`, base **ba1fa07d9e**, exact sparse worktree
+`/Users/dominic/ZK/.worktrees/pv-rdcd3`. Reporting source revision `c798300132ce0f01916be668bfc80e6a055cc758`.
+No row restored. The local candidate branch ref differed, so the explicit user
+commit was used. Source/preparation log: [COMMITS.txt](COMMITS.txt).
 
-All three rows remain **SUSPENDED**. No restoration or endpoint premise removal
-is claimed by these preparations. The requested order is cheapest first:
-V197, V233, V236. Budget remains 100 Lean attempts, 30 native scopes, 0 Kani;
-only IDs 78200–78299, with 78297–78299 reserved for audits.
+| Row | Disposition and exact remaining link |
+|---|---|
+| V197 | **SUSPENDED / D** — component-window and complete Result/frame drafts uncompiled; additionally prove association to the EXISTING `ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes` / op71 carrier. Owned qm/reference equality alone does not discharge it. Preserve arbitrary slices, None short circuits and late second-half bounds check. |
+| V233 | **SUSPENDED / D** — typed GenericArray inverse and `PV_AL_SplitSelected.consumed` instance uncompiled. Source/layout binding and coherent typed-carrier transport remain required; byte geometry alone earns no credit. |
+| V236 | **SUSPENDED / D** — complete branch/cursor/ordered-callback draft and typed `PV_DL_UpdateSelected.selected_native` instance uncompiled. Concrete split/compression carrier binding remains required under the original safe Eager64 guard. |
 
-V197: drafted `PV_RDCD5_ParserWindows` and `PV_RDCD5_V197`, preserving the
-original late second-half bounds check and complete Result/Option branches.
-The complete existing parser/callback association still needs to be proved;
-a theorem about the owned reference alone does not discharge it.
+## Stop basis and actual budget
 
-V233: drafted `PV_RDCD5_BlockCarrier.encode_flatten/flatten_injective` and
-`PV_RDCD5_V233.consumed_instance`, against the existing
-`PV_AL_SplitSelected.consumed` and its concrete U64 GenericArray carrier.
-The native layout structural argument and coherent compilation remain required.
+The mandatory scratchpad `pv-host-restored.flag` from common rulings (f)/(g)
+was absent throughout **24 actual polls**, from `2026-11-01T20:50:41.282431+00:00` to
+`2026-11-02T01:13:15.404088+00:00`. Elapsed **15754.122 seconds**; minimum spacing
+**600.026 seconds**. [GATE-POLLS.jsonl](GATE-POLLS.jsonl) records every
+poll. The flag was never created/edited. No replacement was found in the
+scratchpad tree; an asynchronous clarification received no response. Common
+ruling (g)'s required waiting window is exhausted: **gated: budget unspent**.
+No monitoring or host work remains running.
 
-V236: complete digest_blocks/get_pos/set_pos branch, cursor and ordered
-compression callback transport remains outstanding. CopyWindow194 and the
-original 99,328 finite native pairs are retained historical evidence only.
+Actual use: **0/100 Lean attempts, 0/30 capped native scopes, 0 Kani**.
+No Env-J ID consumed; 78200–78299 remain available, with 78297–78299 reserved
+for audits. No local Lean compilation, host scope, extraction, source upload,
+or host-directory mutation occurred. All `#print axioms` commands are
+**unexecuted**. No axioms audit, focused replay or frozen manifest was run:
+there were no green focused proofs to consume. [RUNS.json](RUNS.json) explicitly
+records zero runs; no formal release measurements are asserted.
 
-Host gate: the scratchpad `pv-host-restored.flag` required by common rulings
-(f)/(g) is absent. A read-only host inspection found env/J.json and retained
-sources, but the rdcd4 private objects were removed by its recorded cleanup.
-No host scope, extraction, native gate, or local Lean compile has been launched.
-Clarification about the D541 gate was requested asynchronously. Continue
-compile-free work and the required gate polling; absence is not permission.
+## What was checked and what is only proposed
 
-Retained qualifications: structural source binding at the existing compiler
-boundary V370/D381/D386, E1/E2, native RunJoin/carrier/world/physical observer,
-client route, L1/L2/L3, and T exactly entropy_law/entropy_kernel/observation.
-No source-to-machine-code, panic-formatting/observer, or privacy-endpoint claim
-is supplied by the drafts. No Aeneas.Std core::fmt credit. No Kani credit is
-introduced or restored (including K-3 suspended credits). No extractor is run;
-any future extraction must satisfy ae1. No repeated extraction declarations
-have been unified or reclassified; duplicate-origin/feature audit is pending
-if such declarations enter the closure.
+Seven [uncompiled modules](UNCOMPILED-DRAFTS.json) prepare parser windows/Result,
+absolute component offsets, GenericArray carrier inverse, typed Eager split,
+complete buffer branch/cursor/callback flow, and typed op216 composition.
+Each intended result targets the existing link listed above; these drafts
+supply no accepted proof or source-to-machine-code result.
 
-Before/after: all original concrete source-to-reference links retain their
-input quantifiers, Result carriers, error order and qualifications. Endpoint
-premises removed/added/changed: zero. All draft axioms commands are unexecuted.
+`parser-source.py` checks the three frozen application parser bodies against
+explicit token shapes and records nine inherited library spans. `buffer-source.py`
+checks six complete dependency source shapes against the inherited snapshots:
+wrapper, digest_blocks, get_pos, size, set_pos_unchecked, Eager invariant.
+Both small Python checkers and Python syntax checks pass. These are preparation,
+not complete native bindings. The source scripts were not relabelled as the
+original checkers. Prior 6,420 / 66,064 / 99,328 native cases remain historical
+finite validation; no unchanged differential suite was repeated.
 
-Preparation checks: parser source-shape checker verifies the three original
-Rust parser bodies and records nine library spans against inherited snapshots.
-The buffer source-shape checker verifies six complete native bodies. Both are
-source checks, not complete native/Lean links. Read-only h4 inventory verifies
-all 5,673 authoritative external object hashes (manifest sha256 d9187c80…);
-this neither opens the gate nor establishes a compiled project closure.
-The tracked-HEAD closure plan has 66 project modules and zero EJR/freeze hits.
-`source-resolution.json` and `compile-order.txt` record exact source blobs and
-hashes; no project object is accepted by this source census.
+The read-only host inventory verifies all **5,673** external object hashes
+against the unchanged h4 manifest `d9187c80…`, zero mismatches;
+[receipt](external-authority-readonly.json). This neither opens the gate nor
+establishes a compiled project closure. The tracked source plan has 68 project
+modules and no EJR/freeze hits, with exact blobs/hashes in
+[source-resolution.json](source-resolution.json). No project object was reused.
+The rdcd4 private objects had been deleted in its documented cleanup.
 
-The new `PV_RDCD5_BufferSource.source_instance` draft targets the EXISTING
-`PV_DL_UpdatePlan.model`, with all branches and arbitrary Result callback.
-`finish_binding` isolates the bulk callback and suffix write. These remain
-uncompiled. The concrete typed `PV_DL_UpdateCarrier` and op216 association
-are still required; source-shape checks cannot supply those equalities.
+## Statements, trust and next deliverable
 
-`PV_RDCD5_V236.carrier_instance/op216_instance` now drafts the typed
-composition against the existing `PV_DL_UpdateSelected.selected_native` link,
-without installing/changing a dictionary. The original safe cursor guard is
-explicit. It is uncompiled, and the source-to-typed compression-carrier binding
-remains required before any restoration.
+Before/after: the original three concrete source-to-reference links remain
+obligations, with original inputs, carriers, error order, guarded domains and
+conclusions. Endpoint premises removed/added/changed: **zero**. T remains
+exactly entropy_law/entropy_kernel/observation. V370/D381/D386, E1/E2, native
+RunJoin/carrier/world/physical observer, client route and L1/L2/L3 remain.
+No privacy target is established.
+
+No Aeneas.Std core::fmt semantics earns credit. The buffer draft excludes
+get_pos's UB/debug path under its original safe guard; arbitrary parser panic
+formatting is not proved for the observer. No Kani credit, K-3 re-credit or
+extraction is introduced; ae1 remains mandatory for any later extraction.
+No generated declaration pair was unified or reclassified; dup-1-prime's
+crate/path/feature census remains required for any such pair entering the
+accepted closure. No crates/programs, dictionaries, simulator, observer,
+soundness files or keys were changed.
+
+Next: resolve the flag or obtain an explicit replacement/override; verify and
+reuse a coherent source/object cohort under h5/h6/h6'/h6''; compile the smallest
+V197 dependency first, then parser window, whole Result and actual callback
+transport. Continue V233 then V236. Only after focused proofs are green perform
+the reserved audit/replays. [HANDOFF.md](HANDOFF.md) retains exact targets and
+launch/admission/cooldown constraints.
