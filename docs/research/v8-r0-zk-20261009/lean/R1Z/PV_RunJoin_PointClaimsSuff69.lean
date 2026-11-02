@@ -35,7 +35,7 @@ theorem complete
   obtain ⟨c0,hc0⟩ := claims some_ok zero columns p0 (evaluates p0)
   obtain ⟨c1,hc1⟩ := claims some_ok zero columns p1 (evaluates p1)
   obtain ⟨c2,hc2⟩ := claims some_ok zero columns p2 (evaluates p2)
-  exact ⟨_,by simp only [host_semantic.point_claims,hp,h0,h1,h2,hc0,hc1,hc2,
+  exact ⟨Array.make 3#usize [c0,c1,c2],by simp only [host_semantic.point_claims,hp,h0,h1,h2,hc0,hc1,hc2,
     core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]⟩
 
 #print axioms claims
