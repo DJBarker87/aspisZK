@@ -1,8 +1,9 @@
 """Continue unchanged logical jobs with fresh IDs after refused admissions."""
 from pathlib import Path
 import subprocess,json,time,datetime,sys
-E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';R='/home/dombarker/project-offloads/codex-pv-k3scan-20261101';rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();ident=int(sys.argv[1]);jobs=sys.argv[2:];records=[]
-prior=json.loads((E/'D549-QUEUE-K79220.json').read_text())[-1];assert prior['id']=='K79230'and prior['exit']==78
+E=Path(__file__).resolve().parent;H='dombarker@100.108.41.90';R='/home/dombarker/project-offloads/codex-pv-k3scan-20261101';rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();ident=int(sys.argv[1]);jobs=sys.argv[2:];records=json.loads((E/'D549-CONTINUATION-QUEUE.json').read_text()) if (E/'D549-CONTINUATION-QUEUE.json').exists() else []
+prior=records[-1] if records else json.loads((E/'D549-QUEUE-K79220.json').read_text())[-1]
+assert int(prior['id'][1:])<ident
 not_before=datetime.datetime.fromisoformat(prior['utc']).timestamp()+180
 for job in jobs:
  for retry in range(10):
@@ -14,7 +15,12 @@ for job in jobs:
   if r.returncode==255:raise SystemExit('Transport failed after possible submission; recover read-only, never resubmit')
   subprocess.run(['scp','-r',H+':'+R+'/'+label,str(E/'host')],check=True)
   ident+=1
-  if r.returncode==78:
+  folder=E/'host'/label
+  denied=[x for x in ['admission.json','barrier.json'] if (folder/x).exists() and not json.loads((folder/x).read_text()).get('allowed',False)]
+  if denied:
+   assert not(folder/'time.log').exists() and not(folder/'symbols-index.json').exists(),'denied after worker started'
+   rec['uncharged_refusal']=True;rec['denied_gates']=denied;(E/'D549-CONTINUATION-QUEUE.json').write_text(json.dumps(records,indent=2)+'\n')
+  if r.returncode==78 or denied:
    not_before=time.time()+180;continue
   log=(E/'host'/label/'output.log').read_text()
   if cfg.get('negative'):assert r.returncode==1 and 'VERIFICATION:- FAILED'in log and 'Failed Checks:'in log and ('assertion failed:'in log or 'core::panicking::assert_failed_inner'in log),(label,log[-1500:])

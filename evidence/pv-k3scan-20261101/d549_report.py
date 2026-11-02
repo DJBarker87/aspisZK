@@ -9,6 +9,8 @@ for i in range(100):
  if not (p/'receipt.json').exists():continue
  r=json.loads((p/'receipt.json').read_text())
  if r['exit_status']==78:continue
+ if (p/'barrier.json').exists() and not json.loads((p/'barrier.json').read_text()).get('allowed',False):
+  assert not(p/'time.log').exists() and not(p/'symbols-index.json').exists();continue
  log=(p/'output.log').read_text();a=json.loads((p/'admission.json').read_text());b=json.loads((p/'barrier.json').read_text())
  assert a['allowed'] and b['allowed'];assert b['own_limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
  kind='PASS' if 'VERIFICATION:- SUCCESSFUL' in log else 'EXPECTED_CONTROL_FAIL' if r['negative_control'] and 'VERIFICATION:- FAILED' in log else 'SETUP_FAILURE' if 'could not compile' in log or 'Failed to execute cargo' in log else 'TIMEOUT' if r['exit_status']==124 else 'UNRESOLVED'

@@ -5,7 +5,7 @@ E=Path(__file__).resolve().parent;root=E.parents[1]
 assert str(root)=='/Users/dominic/ZK/.worktrees/pv-k3scan'
 assert subprocess.check_output(['git','branch','--show-current'],text=True).strip()=='codex/pv-k3scan-20261101'
 s=json.loads((E/'D549-RESULTS.json').read_text());assert s['charged_invocations']==60 and not s['campaign_in_progress'];rs=s['results'];assert len({r['id']for r in rs})==60 and all(re.fullmatch(r'K792[0-9]{2}',r['id'])for r in rs)
-assert 'K79230'not in {r['id']for r in rs}
+assert not {'K79230','K79243'} & {r['id']for r in rs}
 assert s['counts']=={'PASS':29,'EXPECTED_CONTROL_FAIL':29,'SETUP_FAILURE':2},s['counts']
 assert [r['id']for r in rs if r['result']=='SETUP_FAILURE']==['K79208','K79219']
 assert len(s['pairs'])==29 and s['Lean']==0 and s['endpoint_premises_removed_added_weakened']==[0,0,0]

@@ -9,8 +9,11 @@ base=json.loads((E/'SUMMARY.json').read_text());base.update(final_status=s['cred
 ref=[]
 for p in sorted((E/'host').glob('K792[0-9][0-9]')):
  a=p/'admission.json';b=p/'barrier.json'
- if a.exists()and not json.loads(a.read_text())['allowed']:
-  d=json.loads(a.read_text());assert not(p/'STARTED.json').exists();ref.append({'id':p.name,'allowed':False,'admission_exit':78,'STARTED_exists':False,'charged':0,'bounded_reserved_bytes':d.get('bounded_reserved_bytes'),'projected_reserved_bytes':d.get('projected_reserved_bytes')})
+ if a.exists():
+  gates={name:json.loads((p/name).read_text())for name in ['admission.json','barrier.json']if (p/name).exists()}
+  denied=[name for name,d in gates.items()if not d.get('allowed',False)]
+  if denied:
+   assert not(p/'time.log').exists()and not(p/'symbols-index.json').exists();d=gates[denied[0]];ref.append({'id':p.name,'allowed':False,'denied_gates':denied,'STARTED_exists':(p/'STARTED.json').exists(),'compiler_started':False,'charged':0,'error':d.get('error'),'bounded_reserved_bytes':d.get('bounded_reserved_bytes'),'projected_reserved_bytes':d.get('projected_reserved_bytes')})
 base['uncharged_refused_IDs']=[x['id']for x in ref];(E/'SUMMARY.json').write_text(json.dumps(base,indent=2)+'\n')
 r=json.loads((E/'D549-REFUSALS.json').read_text());r['final_refusal_inventory']=ref;r['charged_invocations']=60;(E/'D549-REFUSALS.json').write_text(json.dumps(r,indent=2)+'\n')
 p=json.loads((E/'D549-RUN-PLAN.json').read_text());p['actual_charged_IDs']=base['used_IDs'];p['uncharged_refusals']=base['uncharged_refused_IDs'];p['last_invocation']=s['results'][-1]['id'];p['complete']=True;p['IDs']='Logical configs K79200..K79259; actual charged IDs and refused IDs enumerated below';(E/'D549-RUN-PLAN.json').write_text(json.dumps(p,indent=2)+'\n')
