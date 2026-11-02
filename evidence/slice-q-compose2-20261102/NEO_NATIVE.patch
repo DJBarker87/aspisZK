@@ -19,7 +19,7 @@
  
 --- /dev/null
 +++ b/crates/aspis-core/src/field/NEO_parsers.rs
-@@ -0,0 +1,81 @@
+@@ -0,0 +1,95 @@
 +// Scratch-only direct native/reference comparisons. No static writes or callbacks.
 +use super::{M31,CM31,QM31};
 +use super::wide_exact::WideExact;
@@ -73,13 +73,14 @@
 +// Raw-domain construction only; no canonicality filtering.
 +impl kani::Arbitrary for M31 { fn any()->Self {Self(kani::any())} }
 +
++mod NEO_window_reference {include!("NEO_window_reference.rs");}
 +// Arbitrary-offset read-only windows, not whole proof-buffer loops.
 +#[kani::proof] #[kani::unwind(34)]
 +#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn c_window(){
 + let raw:[u8;16]=kani::any();let offset:usize=kani::any();kani::assume(offset<=8);
-+ let real=CM31::from_le_bytes(&raw[offset..]).map(c_words);let expected=c_ref(&raw[offset..]);
++ let real=CM31::from_le_bytes(&raw[offset..]).map(c_words);let expected=NEO_window_reference::complex(&raw[offset..]);
 + #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
 + #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
 +}
@@ -88,7 +89,7 @@
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn q_window(){
 + let raw:[u8;32]=kani::any();let offset:usize=kani::any();kani::assume(offset<=16);
-+ let real=QM31::from_le_bytes(&raw[offset..]).map(q_words);let expected=q_ref(&raw[offset..]);
++ let real=QM31::from_le_bytes(&raw[offset..]).map(q_words);let expected=NEO_window_reference::quadratic(&raw[offset..]);
 + #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
 + #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
 +}
@@ -97,10 +98,23 @@
 +#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
 +fn wide_window(){
 + let raw:[u8;64]=kani::any();let offset:usize=kani::any();kani::assume(offset<=32);
-+ let real=WideExact::from_le_bytes(&raw[offset..offset+32]).map(wide_words);let expected=wide_ref(&raw[offset..offset+32]);
++ let real=WideExact::from_le_bytes(&raw[offset..offset+32]).map(wide_words);let expected=NEO_window_reference::wide(&raw[offset..offset+32]);
 + #[cfg(not(NEO_wrong_window))] assert_eq!(real,expected);
 + #[cfg(NEO_wrong_window)] assert_ne!(real,expected);
 +}
++
++impl kani::Arbitrary for CM31 {fn any()->Self {Self{a:kani::any(),b:kani::any()}}}
++impl kani::Arbitrary for QM31 {fn any()->Self {Self{c0:kani::any(),c1:kani::any()}}}
++
++// Dedicated u8 copy fidelity controls using only the exact approved KMX stub.
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NEO_u8_copy_correct(){let src:[u8;16]=kani::any();let mut dst=[0u8;16];dst.copy_from_slice(&src);let j:usize=kani::any();kani::assume(j<16);assert_eq!(dst[j],src[j]);}
++#[kani::proof] #[kani::unwind(18)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn NEO_u8_copy_wrong(){let mut src=[0u8;16];src[15]=17;let mut dst=[0u8;16];dst.copy_from_slice(&src);assert_eq!(dst[15],0);}
 --- /dev/null
 +++ b/crates/aspis-core/src/field/NEO_parser_reference.rs
 @@ -0,0 +1,5 @@
@@ -108,4 +122,17 @@
 +pub fn m_ref(b:[u8;4])->Option<u32> {let v=u32::from_le_bytes(b);if v<MODULUS{Some(v)}else{None}}
 +pub fn limbs_ref(x:[u32;8])->Option<[u32;8]> {
 + if x[0]>=MODULUS||x[1]>=MODULUS||x[2]>=MODULUS||x[3]>=MODULUS||x[4]>=MODULUS||x[5]>=MODULUS||x[6]>=MODULUS||x[7]>=MODULUS{None}else{Some(x)}
++}
+--- /dev/null
++++ b/crates/aspis-core/src/field/NEO_window_reference.rs
+@@ -0,0 +1,10 @@
++// Independent safe parser references: scalar byte order is the std primitive.
++pub const P:u32=2147483647;
++pub fn word(b:&[u8],i:usize)->u32 {u32::from_le_bytes([b[i],b[i+1],b[i+2],b[i+3]])}
++pub fn complex(b:&[u8])->Option<[u32;2]> {let a=word(b,0);if a>=P{return None;}let c=word(b,4);if c>=P{return None;}Some([a,c])}
++pub fn quadratic(b:&[u8])->Option<[u32;4]> {let a=match complex(&b[0..8]){Some(x)=>x,None=>return None};let c=match complex(&b[8..16]){Some(x)=>x,None=>return None};Some([a[0],a[1],c[0],c[1]])}
++pub fn wide(b:&[u8])->Option<[u32;8]> {
++ if b.len()!=32{return None;}
++ let a=word(b,0);let c=word(b,4);let d=word(b,8);let e=word(b,12);let f=word(b,16);let g=word(b,20);let h=word(b,24);let k=word(b,28);
++ if a>=P||c>=P||d>=P||e>=P||f>=P||g>=P||h>=P||k>=P{None}else{Some([a,c,d,e,f,g,h,k])}
 +}

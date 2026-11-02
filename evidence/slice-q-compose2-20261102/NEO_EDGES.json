@@ -13157,13 +13157,56 @@
    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/candidate.rs::query_values->crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-getter-copied-call:crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query",
+    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
+    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query",
+    "frozen_body_sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
+    "domain": "Root geometry constructor lengths are finish-start; start<=a.next<finish<=22. These are caller input invariants, not callee-success or output-equality assumptions.",
+    "native": {
+     "positive": "NEO_K043",
+     "negative": "NEO_K044",
+     "controls": [
+      "NEO_K045",
+      "NEO_K046"
+     ],
+     "extraction": "NEO_E006",
+     "domain": "Arbitrary raw inverse rows and raw z cells, each Vec length<=22; start<=index and index-start<inverse length; every selected lane<5",
+     "borrowed_return": "same live reference as safe generic reference on same Vec",
+     "contracts": [],
+     "historical_credit_restored": [],
+     "k2_quarantined": false,
+     "k3_status": "UNAFFECTED"
+    },
+    "source_query_body_sha256": "e331b12a46ba47ebfded70d4f48cf23d609631c8ba5abd3e9c84abe18e5b6665",
+    "same_input": "Same geometry and i=a.next; no prior write to either; original dereference/copy at the reached call",
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L026/receipt.json",
+      "receipt_sha256": "aa3d52f68f6ae8f4395e871b7fe7d877cd1bd1c7036d794087e5979ade754cd5",
+      "theorems": [
+       "NEO_GetterCaller.caller",
+       "NEO_GetterCaller.complete"
+      ]
+     }
+    ],
+    "parts": [
+     "packet_domain",
+     "canonical_carrier",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "residual_inner_hypotheses": [],
+    "root_domain_retained": true
+   },
    "required_named_hypotheses": [
     "NDT::local::NDI::02.PacketDomain",
     "NDT::local::NDI::02.PhysicalInterpretation"
@@ -13196,7 +13239,7 @@
      ]
     }
    ],
-   "obstacle": "Actual Observer=Option<fn> is carried by the native root/call/mark interface. Rule14 bars native credit; approved composition trust does not lift this quarantine. query_loop also needs same-state repeated query_values rejection/Result and ordered effects. EXACT EDGE: crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_query. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
@@ -17439,16 +17482,254 @@
    "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
    "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::WideExact::from_limbs"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::WideExact::from_limbs.PacketDomain",
+     "NEI::WideExact::from_limbs.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::WideExact::from_limbs.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::WideExact::from_limbs.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
    "required_named_hypotheses": [
-    "NEO::crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs.PacketDomain",
-    "NEO::crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs.PhysicalInterpretation"
+    "NEI::WideExact::from_limbs.PacketDomain",
+    "NEI::WideExact::from_limbs.PhysicalInterpretation"
    ],
    "callee_packet_domains": [
     [
@@ -17468,27 +17749,261 @@
      ]
     }
    ],
-   "obstacle": "Inherited NBQ/LPn private-Q/dot array/receiver passes are explicitly K-1 conditional. Re-establish copy-dependent whole selected carriers and state/log windows under exact KMX plus matched same-configuration copy controls. Public push must keep both actual mutable c0/c1 receiver states and scalar validation/rejection in order. EXACT EDGE: crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit.",
-   "NEO_previous_required_named_hypotheses": [
-    "NCS_R066.PacketDomain",
-    "NCS_R066.PhysicalInterpretation"
-   ]
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
    "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
    "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::canonical::Dot::finish"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::Dot::finish.PacketDomain",
+     "NEI::canonical::Dot::finish.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::Dot::finish.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::canonical::Dot::finish.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
    "required_named_hypotheses": [
-    "NCS_R136.PacketDomain",
-    "NCS_R136.PhysicalInterpretation"
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
    ],
    "callee_packet_domains": [
     [
@@ -17519,23 +18034,261 @@
      ]
     }
    ],
-   "obstacle": "Inherited NBQ/LPn private-Q/dot array/receiver passes are explicitly K-1 conditional. Re-establish copy-dependent whole selected carriers and state/log windows under exact KMX plus matched same-configuration copy controls. Public push must keep both actual mutable c0/c1 receiver states and scalar validation/rejection in order. EXACT EDGE: crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
    "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
    "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::canonical::Q::limbs"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::Q::limbs.PacketDomain",
+     "NEI::canonical::Q::limbs.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::Q::limbs.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::canonical::Q::limbs.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
    "required_named_hypotheses": [
-    "NCS_R141.PacketDomain",
-    "NCS_R141.PhysicalInterpretation"
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
    ],
    "callee_packet_domains": [
     [
@@ -17566,7 +18319,7 @@
      ]
     }
    ],
-   "obstacle": "Inherited NBQ/LPn private-Q/dot array/receiver passes are explicitly K-1 conditional. Re-establish copy-dependent whole selected carriers and state/log windows under exact KMX plus matched same-configuration copy controls. Public push must keep both actual mutable c0/c1 receiver states and scalar validation/rejection in order. EXACT EDGE: crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new",
@@ -17946,16 +18699,228 @@
    "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
    "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+    "selected_callee_claims": [
+     "NEI::canonical::reduce"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::reduce.PacketDomain",
+     "NEI::canonical::reduce.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::reduce.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_DotFinishAssociation.finish",
+      "NEI_DotFinishValues.source"
+     ],
+     "NEI::canonical::reduce.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_DotFinishAssociation.finish",
+      "NEI_DotFinishValues.source"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+      "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+      "theorems": [
+       "NEI_DotFinishAssociation.finish"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+      "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+      "theorems": [
+       "NEI_DotFinishValues.source"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_DotFinishAssociation.finish",
+     "NEI_DotFinishValues.source"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
    "required_named_hypotheses": [
-    "NCS_R142.PacketDomain",
-    "NCS_R142.PhysicalInterpretation"
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
    ],
    "callee_packet_domains": [
     [
@@ -18008,7 +18973,7 @@
      ]
     }
    ],
-   "obstacle": "Inherited NBQ/LPn private-Q/dot array/receiver passes are explicitly K-1 conditional. Re-establish copy-dependent whole selected carriers and state/log windows under exact KMX plus matched same-configuration copy controls. Public push must keep both actual mutable c0/c1 receiver states and scalar validation/rejection in order. EXACT EDGE: crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::from_wide -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_limbs",
@@ -20263,13 +21228,62 @@
    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node->crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "4bb575a783c944b146f564b076a7cd1d3df4db7cce59a10f225e8eae12994afa",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-cell-call:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node -> crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
+    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
+    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
+    "source_body_sha256": "4bb575a783c944b146f564b076a7cd1d3df4db7cce59a10f225e8eae12994afa",
+    "domain": "Same root a.weights allocation with length<=64 and current native j<a.weights.len(); local basis has exactly256 cells",
+    "native": {
+     "positive": "NEO_K049",
+     "negative": "NEO_K050",
+     "controls": [
+      "NEO_K051",
+      "NEO_K052"
+     ],
+     "extraction": "NEO_E007",
+     "contracts": [],
+     "historical_credit_restored": [],
+     "k2_quarantined": false,
+     "k3_status": "UNAFFECTED"
+    },
+    "parts": [
+     "packet_domain",
+     "canonical_carrier",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+      "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+      "theorems": [
+       "NEO_CellReference.slice",
+       "NEO_CellReference.array",
+       "NEO_CellReference.basis",
+       "NEO_CellReference.accumulated"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+      "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+      "theorems": [
+       "NEO_CellCarrier.qm",
+       "NEO_CellCarrier.caller"
+      ]
+     }
+    ],
+    "residual_inner_hypotheses": [],
+    "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+   },
    "required_named_hypotheses": [
     "NCS_R176.PacketDomain",
     "NCS_R176.PhysicalInterpretation"
@@ -20292,20 +21306,69 @@
      ]
     }
    ],
-   "obstacle": "Need exact arbitrary native row/limb prestate, selected tuple/getter ports, product/add/write/conditional-flush frame,64 row/6 basis-stage loops, and same returned rhs/power/next/terms. accumulate_batched_with_node is NOT Observer-quarantined under deployed features; trace no-op closes independently. EXACT EDGE: crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node -> crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node -> crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node->crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "4bb575a783c944b146f564b076a7cd1d3df4db7cce59a10f225e8eae12994afa",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-cell-call:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node -> crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
+    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
+    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
+    "source_body_sha256": "4bb575a783c944b146f564b076a7cd1d3df4db7cce59a10f225e8eae12994afa",
+    "domain": "Same root a.weights allocation with length<=64 and current native j<a.weights.len(); local basis has exactly256 cells",
+    "native": {
+     "positive": "NEO_K047",
+     "negative": "NEO_K048",
+     "controls": [
+      "NEO_K051",
+      "NEO_K052"
+     ],
+     "extraction": "NEO_E007",
+     "contracts": [],
+     "historical_credit_restored": [],
+     "k2_quarantined": false,
+     "k3_status": "UNAFFECTED"
+    },
+    "parts": [
+     "packet_domain",
+     "canonical_carrier",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+      "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+      "theorems": [
+       "NEO_CellReference.slice",
+       "NEO_CellReference.array",
+       "NEO_CellReference.basis",
+       "NEO_CellReference.accumulated"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+      "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+      "theorems": [
+       "NEO_CellCarrier.qm",
+       "NEO_CellCarrier.caller"
+      ]
+     }
+    ],
+    "residual_inner_hypotheses": [],
+    "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+   },
    "required_named_hypotheses": [
     "NCS_R177.PacketDomain",
     "NCS_R177.PhysicalInterpretation"
@@ -20339,7 +21402,7 @@
      ]
     }
    ],
-   "obstacle": "Need exact arbitrary native row/limb prestate, selected tuple/getter ports, product/add/write/conditional-flush frame,64 row/6 basis-stage loops, and same returned rhs/power/next/terms. accumulate_batched_with_node is NOT Observer-quarantined under deployed features; trace no-op closes independently. EXACT EDGE: crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node -> crates/aspis-r1-cost-probe/src/verifier.rs::basis_at. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products -> crates/aspis-core/src/field.rs::CM31::mul",
@@ -32561,6 +33624,804 @@
      ]
     }
    }
+  },
+  {
+   "id": "NEI-dot-root:TX1:106",
+   "row": "TX1:106",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::EbyKDot::finish.PacketDomain",
+    "NEI::EbyKDot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+     "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+     "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+     "theorems": [
+      "NEI_PublicDotFinishValues.source"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+     "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+     "theorems": [
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:106:3": {
+     "kind": "NEI_EBY_CTOR_UNWRAP",
+     "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "line": 180,
+     "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_PublicDotFinishValues.source"
+     ],
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX1:109",
+   "row": "TX1:109",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+     "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+     "theorems": [
+      "NEI_DotFinishValues.source"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:109:1": {
+     "kind": "NEI_DOT_VALUE_CTOR",
+     "syntax": "Q",
+     "line": 123,
+     "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX1:114",
+   "row": "TX1:114",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.limbs"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {}
+  },
+  {
+   "id": "NEI-dot-root:TX1:115",
+   "row": "TX1:115",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:115:0": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 11,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:1": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 12,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:2": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:3": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:072",
+   "row": "TX2:072",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::EbyKDot::finish.PacketDomain",
+    "NEI::EbyKDot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+     "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+     "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+     "theorems": [
+      "NEI_PublicDotFinishValues.source"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+     "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+     "theorems": [
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:72:3": {
+     "kind": "NEI_EBY_CTOR_UNWRAP",
+     "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "line": 180,
+     "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_PublicDotFinishValues.source"
+     ],
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:075",
+   "row": "TX2:075",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+     "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+     "theorems": [
+      "NEI_DotFinishValues.source"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:75:1": {
+     "kind": "NEI_DOT_VALUE_CTOR",
+     "syntax": "Q",
+     "line": 123,
+     "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:080",
+   "row": "TX2:080",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.limbs"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {}
+  },
+  {
+   "id": "NEI-dot-root:TX2:081",
+   "row": "TX2:081",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:81:0": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 11,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:1": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 12,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:2": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:3": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    }
+   }
   }
  ],
  "NEO_baseline": "NEN_LEDGER.json:cedade116302fea804b3f223a8d889815ef41ebd6f0ea1d5234945fddb89c3ab",
@@ -34036,6 +35897,200 @@
    ],
    "frozen_body_sha256": "585cf3766ded55b1585fd713f8b7501bb9d2fc43728b0336f5101d5c01309765",
    "association_sha256": "ca770eabf122eed10a26d358146ccdd00388fa53b95ed9dc5435028d0794337f"
+  }
+ },
+ "NEO_cell_row_certificates": {
+  "TX1:183": {
+   "id": "NEO-cell-root:TX1:183",
+   "row": "TX1:183",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
+   "domain": "Every raw QM31 slice of length<=64, index<len",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+     "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+     "theorems": [
+      "NEO_CellReference.slice",
+      "NEO_CellReference.array",
+      "NEO_CellReference.basis",
+      "NEO_CellReference.accumulated"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+     "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+     "theorems": [
+      "NEO_CellCarrier.qm",
+      "NEO_CellCarrier.caller"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K049",
+    "NEO_K050"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K049/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "9bae9bc0891859f088e0e1dca4c9e8db7e8b4a14d0c2fecb21a74a8e6ab459fd",
+   "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+  },
+  "TX1:184": {
+   "id": "NEO-cell-root:TX1:184",
+   "row": "TX1:184",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
+   "domain": "Every raw [M31;256], index<256",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+     "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+     "theorems": [
+      "NEO_CellReference.slice",
+      "NEO_CellReference.array",
+      "NEO_CellReference.basis",
+      "NEO_CellReference.accumulated"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+     "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+     "theorems": [
+      "NEO_CellCarrier.qm",
+      "NEO_CellCarrier.caller"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K047",
+    "NEO_K048"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K047/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "486bc40aa1bda4eb6488bea22dff0d7d5b3d474eeab3c8c9054af3d1d47bd998",
+   "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+  },
+  "TX2:109": {
+   "id": "NEO-cell-root:TX2:109",
+   "row": "TX2:109",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulated_weight_at",
+   "domain": "Every raw QM31 slice of length<=64, index<len",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+     "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+     "theorems": [
+      "NEO_CellReference.slice",
+      "NEO_CellReference.array",
+      "NEO_CellReference.basis",
+      "NEO_CellReference.accumulated"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+     "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+     "theorems": [
+      "NEO_CellCarrier.qm",
+      "NEO_CellCarrier.caller"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K049",
+    "NEO_K050"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K049/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "9bae9bc0891859f088e0e1dca4c9e8db7e8b4a14d0c2fecb21a74a8e6ab459fd",
+   "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+  },
+  "TX2:110": {
+   "id": "NEO-cell-root:TX2:110",
+   "row": "TX2:110",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::basis_at",
+   "domain": "Every raw [M31;256], index<256",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L038/receipt.json",
+     "receipt_sha256": "f021f24ee1c0ea239908c9580372dad36c4423ce54bbba9b51ee32f688f6f50f",
+     "theorems": [
+      "NEO_CellReference.slice",
+      "NEO_CellReference.array",
+      "NEO_CellReference.basis",
+      "NEO_CellReference.accumulated"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L039/receipt.json",
+     "receipt_sha256": "daaebe643605dd817a168cf27aebbde773ace4c9803f4bcdc4a274dcc5220b6e",
+     "theorems": [
+      "NEO_CellCarrier.qm",
+      "NEO_CellCarrier.caller"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K047",
+    "NEO_K048"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K047/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "486bc40aa1bda4eb6488bea22dff0d7d5b3d474eeab3c8c9054af3d1d47bd998",
+   "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
   }
  }
 }

@@ -1,0 +1,43 @@
+// Exact addition-chain fission with LOCAL records; no writable static or callback.
+#[derive(Clone,Copy)]
+struct NEO_InvLog {kind:[u8;17],a:[u32;17],b:[u32;17],result:[u32;17],used:usize}
+fn NEO_inv_product(x:M31,y:M31,log:&mut NEO_InvLog)->M31 {
+ let r:u32=kani::any();kani::assume(r<2147483647);
+ kani::assume(r as u64==(x.0 as u64*y.0 as u64)%2147483647);
+ let i=log.used;assert!(i<17);log.kind[i]=1;log.a[i]=x.0;log.b[i]=y.0;log.result[i]=r;log.used=i+1;M31(r)
+}
+fn NEO_inv_square(x:M31,count:usize,log:&mut NEO_InvLog)->M31 {
+ assert!(count==2||count==4||count==8);
+ let r:u32=kani::any();kani::assume(r<2147483647);
+ let i=log.used;assert!(i<17);log.kind[i]=2;log.a[i]=x.0;log.b[i]=count as u32;log.result[i]=r;log.used=i+1;M31(r)
+}
+fn NEO_inverse_log(x:M31)->(M31,NEO_InvLog){
+ assert!(x.0!=0,"inverse of zero");
+ let mut log=NEO_InvLog{kind:[0;17],a:[0;17],b:[0;17],result:[0;17],used:0};
+ let t2=NEO_inv_product(NEO_inv_product(x,x,&mut log),x,&mut log);
+ let t4=NEO_inv_product(NEO_inv_square(t2,2,&mut log),t2,&mut log);
+ let t8=NEO_inv_product(NEO_inv_square(t4,4,&mut log),t4,&mut log);
+ let t16=NEO_inv_product(NEO_inv_square(t8,8,&mut log),t8,&mut log);
+ let t24=NEO_inv_product(NEO_inv_square(t16,8,&mut log),t8,&mut log);
+ let t28=NEO_inv_product(NEO_inv_square(t24,4,&mut log),t4,&mut log);
+ let t29=NEO_inv_product(NEO_inv_product(t28,t28,&mut log),x,&mut log);
+ let t30=NEO_inv_product(t29,t29,&mut log);
+ let out=NEO_inv_product(NEO_inv_product(t30,t30,&mut log),x,&mut log);
+ (out,log)
+}
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn inverse_log(){
+ let x:u32=kani::any();kani::assume(x!=0);let j:usize=kani::any();kani::assume(j<17);
+ let (out,log)=NEO_inverse_log(M31(x));let r=log.result;
+ let left=[x,r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8],r[9],r[10],r[11],r[12],r[13],r[14],r[15]];
+ let right=[x,x,2,r[1],4,r[3],8,r[5],8,r[5],4,r[3],r[11],x,r[13],r[14],x];
+ let kinds=[1,1,2,1,2,1,2,1,2,1,2,1,1,1,1,1,1];
+ let same=log.used==17&&log.a[j]==left[j]&&log.b[j]==right[j]&&log.kind[j]==kinds[j]&&out.0==r[16]&&r[j]<2147483647;
+ #[cfg(not(NEO_wrong_inverse))] assert!(same);
+ #[cfg(NEO_wrong_inverse)] assert!(!same);
+}
+fn NEO_no_panic(_:M31)->M31 {M31::ONE}
+#[kani::proof] #[kani::should_panic]
+#[cfg_attr(NEO_wrong_zero,kani::stub(M31::inv,NEO_no_panic))]
+fn inverse_zero(){let _=M31(0).inv();}

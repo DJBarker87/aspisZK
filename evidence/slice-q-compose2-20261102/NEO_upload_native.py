@@ -7,6 +7,7 @@ original={n:subprocess.check_output(['git','show',rev+':'+n],cwd=R,text=True) fo
 new={f:original[f]+'\n#[cfg(kani)]\nmod NEO_parsers;\n',l:original[l].replace('#![no_std]','#![no_std]\n#![cfg_attr(kani,feature(allocator_api))]')}
 new['crates/aspis-core/src/field/NEO_parsers.rs']=(E/'NEO_parsers.rs.txt').read_text()
 new['crates/aspis-core/src/field/NEO_parser_reference.rs']=(E/'NEO_parser_reference.rs').read_text()
+new['crates/aspis-core/src/field/NEO_window_reference.rs']=(E/'NEO_window_reference.rs').read_text()
 patch=''.join(''.join(difflib.unified_diff(original.get(n,'').splitlines(True),s.splitlines(True),fromfile='a/'+n if n in original else '/dev/null',tofile='b/'+n)) for n,s in new.items())
 (E/'NEO_NATIVE.patch').write_text(patch)
 # Validation clients preserve all NEB checks; own path/prefix adaptation only.

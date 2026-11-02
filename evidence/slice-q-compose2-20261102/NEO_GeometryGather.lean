@@ -45,7 +45,6 @@ theorem accepted {C : Type} (ops : Ops C) (error : C) (start : Usize)
    rw [div,bind_tc_ok]
    simp only [lift,←le,←re,lx,ly,mul,dbl,sub,bind_tc_ok]
    simp only [←rx,←ry,ne.1,ne.2.1,ne.2.2.1,ne.2.2.2.1,ne.2.2.2.2,if_false]
-   rfl
  · simpa [Array.make,Port4C_GeometryGather.Row.words] using append
 
 #print axioms accepted

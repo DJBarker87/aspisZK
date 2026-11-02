@@ -4,20 +4,28 @@
   "composed_rows_closed": [
    "TX1:049",
    "TX1:110",
+   "TX1:114",
+   "TX1:115",
    "TX1:192",
    "TX1:194",
    "TX2:032",
    "TX2:076",
+   "TX2:080",
+   "TX2:081",
    "TX2:120",
    "TX2:123",
    "TX2:125",
    "TX1:107",
+   "TX1:109",
    "TX1:195",
    "TX2:073",
+   "TX2:075",
    "TX2:101",
-   "TX1:177"
+   "TX1:106",
+   "TX1:177",
+   "TX2:072"
   ],
-  "closed_count": 14,
+  "closed_count": 22,
   "slice": "Q",
   "roots": {
    "crates/aspis-r1-cost-probe/src/candidate.rs::query_loop": [
@@ -27,7 +35,7 @@
     "OPEN"
    ]
   },
-  "edge_closed": 4,
+  "edge_closed": 8,
   "edge_total": 257,
   "baseline_unchanged": true,
   "local_packet_refresh": [
@@ -455,6 +463,337 @@
    "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [
     {
+     "expression": "self.c0.finish().limbs",
+     "inventory_rows": [
+      "F114"
+     ],
+     "line": 177,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs@29"
+     ]
+    },
+    {
+     "expression": "self.c0.finish",
+     "inventory_rows": [
+      "F109"
+     ],
+     "line": 177,
+     "resolution": "receiver owner",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish@123"
+     ]
+    },
+    {
+     "expression": "self.c1.finish().limbs",
+     "inventory_rows": [
+      "F114"
+     ],
+     "line": 178,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs@29"
+     ]
+    },
+    {
+     "expression": "self.c1.finish",
+     "inventory_rows": [
+      "F109"
+     ],
+     "line": 178,
+     "resolution": "receiver owner",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish@123"
+     ]
+    },
+    {
+     "expression": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "inventory_rows": [],
+     "line": 180,
+     "resolution": "standard library/runtime or callback",
+     "targets": []
+    },
+    {
+     "expression": "E::from_limbs",
+     "inventory_rows": [
+      "F049"
+     ],
+     "line": 180,
+     "resolution": "qualified type",
+     "targets": [
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs@207"
+     ]
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "callee_claims": [
+      "NEI::WideExact::from_limbs"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::WideExact::from_limbs.PacketDomain",
+      "NEI::WideExact::from_limbs.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "callee_claims": [
+      "NEI::canonical::Dot::finish"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::Dot::finish.PacketDomain",
+      "NEI::canonical::Dot::finish.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+     "callee_claims": [
+      "NEI::canonical::Q::limbs"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::Q::limbs.PacketDomain",
+      "NEI::canonical::Q::limbs.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "expression": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+      "inventory_rows": [],
+      "line": 180,
+      "resolution": "standard library/runtime or callback",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:106:exact-finisher-terminal",
+     "id": "external:TX1:106:3",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
+   ],
+   "claim_ids": [
+    "NBQ::EbyKDot::finish",
+    "NEI::EbyKDot::finish"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 317,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F106 `EbyKDot::finish`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:176`|`887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56`|F049,F109,F114|no|M099,M392|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1560,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `CM31::add`, `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `M31::add`, `M31::from_le_bytes`, `M31::reduce_u64`, `QM31::add`, `QM31::from_le_bytes`, `WideExact::add`, `WideExact::from_limbs`, `WideExact::to_limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1590,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F072 `EbyKDot::finish` \u2014 U06 (M)"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2289,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `field`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2689,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2706,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `field`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2739,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `CM31::mul`, `EbyKDot::finish`, `EbyKDot::new`, `M31::mul`, `QM31::mul`, `Weights::scalar_factor`, `Weights::tensor`, `WideExact::mul`, `push_byte_products`."
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::EbyKDot::finish",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    8187,
+    8415
+   ],
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
+    "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
+    "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
+    "crates/aspis-r1-cost-probe/src/weights.rs::process_kind"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX1:106",
+     "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
+     "status": "CLOSED",
+     "unit": "dots"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.json",
+    "sha256": "385cc45057ecef2f7330f7623c0f8d20d3f19fb413f51ef040b41b74132de9e5"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish@176",
+   "inventory_row": "F106",
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::EbyKDot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:106"
+    },
+    {
+     "name": "NEI::EbyKDot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:106"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json": "9e43e49624131c0889df7d92f02a293fe70b351cb66471243ed0a12aacd84a1b",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json": "ca9e2b809c52a397354f0ce116b71d38608d8b56ee7d6497dc432b3f0be8ead1",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX1:106",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 176,
+   "transaction": "TX1",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
      "expression": "canonical::Dot::new",
      "inventory_rows": [
       "F110"
@@ -689,6 +1028,252 @@
   },
   {
    "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
+     "expression": "Q",
+     "inventory_rows": [],
+     "line": 123,
+     "resolution": "external/constructor/callback",
+     "targets": []
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+     "callee_claims": [
+      "NEI::canonical::reduce"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "discharged_by": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::reduce.PacketDomain",
+      "NEI::canonical::reduce.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "expression": "Q",
+      "inventory_rows": [],
+      "line": 123,
+      "resolution": "external/constructor/callback",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:109:exact-finisher-terminal",
+     "id": "external:TX1:109:1",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+   ],
+   "claim_ids": [
+    "NBQ::canonical::Dot::finish",
+    "NEI::canonical::Dot::finish"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 320,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F109 `canonical::Dot::finish`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:123`|`ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573`|F115|no|M057,M100,M395|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1594,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `WideExact::from_limbs`, `canonical::Dot::finish`, `canonical::Q::limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1643,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F075 `canonical::Dot::finish` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::Dot::finish",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    6676,
+    6766
+   ],
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX1:109",
+     "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
+     "status": "CLOSED",
+     "unit": "dots"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.json",
+    "sha256": "385cc45057ecef2f7330f7623c0f8d20d3f19fb413f51ef040b41b74132de9e5"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish@123",
+   "inventory_row": "F109",
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::Dot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:109"
+    },
+    {
+     "name": "NEI::canonical::Dot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:109"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json": "9f4056fd244ef84a4c6a1f2e44fc1a917feb7f1739a9393aa123f13d1abee0aa",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX1:109",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 123,
+   "transaction": "TX1",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [],
    "caller_domain_obligations": [],
    "canonical_callees": [],
@@ -838,6 +1423,412 @@
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
    "source_line": 112,
+   "transaction": "TX1",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [],
+   "caller_domain_obligations": [],
+   "canonical_callees": [],
+   "claim_ids": [
+    "NBQ::canonical::Q::limbs",
+    "NEI::canonical::Q::limbs"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 325,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F114 `canonical::Q::limbs`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:29`|`294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab`||no|M101,M400|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1594,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `WideExact::from_limbs`, `canonical::Dot::finish`, `canonical::Q::limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1729,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F080 `canonical::Q::limbs` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::Q::limbs",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    1381,
+    1389
+   ],
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX1:114",
+     "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
+     "status": "CLOSED",
+     "unit": "dots"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.json",
+    "sha256": "385cc45057ecef2f7330f7623c0f8d20d3f19fb413f51ef040b41b74132de9e5"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs@29",
+   "inventory_row": "F114",
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::Q::limbs.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:114"
+    },
+    {
+     "name": "NEI::canonical::Q::limbs.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:114"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json": "20424059399244720e9e551ae7e62442caf03176f5a1b54fcc2f0ff9aa88cacf",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX1:114",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 29,
+   "transaction": "TX1",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
+     "expression": "u64::from",
+     "inventory_rows": [],
+     "line": 11,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    {
+     "expression": "u64::from",
+     "inventory_rows": [],
+     "line": 12,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    {
+     "expression": "u64::from",
+     "inventory_rows": [],
+     "line": 13,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    },
+    {
+     "expression": "u64::from",
+     "inventory_rows": [],
+     "line": 13,
+     "resolution": "standard scalar/container operation",
+     "targets": []
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "call": {
+      "expression": "u64::from",
+      "inventory_rows": [],
+      "line": 11,
+      "resolution": "standard scalar/container operation",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
+     "id": "external:TX1:115:0",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "expression": "u64::from",
+      "inventory_rows": [],
+      "line": 12,
+      "resolution": "standard scalar/container operation",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
+     "id": "external:TX1:115:1",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "expression": "u64::from",
+      "inventory_rows": [],
+      "line": 13,
+      "resolution": "standard scalar/container operation",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
+     "id": "external:TX1:115:2",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "expression": "u64::from",
+      "inventory_rows": [],
+      "line": 13,
+      "resolution": "standard scalar/container operation",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
+     "id": "external:TX1:115:3",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [],
+   "claim_ids": [
+    "NBQ::canonical::reduce",
+    "NEI::canonical::reduce"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 326,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F115 `canonical::reduce`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:10`|`33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823`||no|M058,M102,M401|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1647,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `canonical::reduce`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1746,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F081 `canonical::reduce` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::reduce",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    518,
+    674
+   ],
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX1:115",
+     "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
+     "status": "CLOSED",
+     "unit": "dots"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.json",
+    "sha256": "385cc45057ecef2f7330f7623c0f8d20d3f19fb413f51ef040b41b74132de9e5"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10",
+   "inventory_row": "F115",
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::reduce.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:115"
+    },
+    {
+     "name": "NEI::canonical::reduce.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:115"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json": "eb05d5a84a48a67b82df4120874c9877df9435aaafda7df598a75efcc82ec593",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX1:115",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 10,
    "transaction": "TX1",
    "trust_rows": []
   },
@@ -2105,6 +3096,340 @@
    "callees": [
     {
      "cfg": [],
+     "line": 177,
+     "name": "limbs",
+     "receiver": "self.c0.finish()",
+     "resolution": "private finished Q",
+     "syntax": "self.c0.finish().limbs",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 177,
+     "name": "finish",
+     "receiver": "self.c0",
+     "resolution": "typed dot receiver",
+     "syntax": "self.c0.finish",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 178,
+     "name": "limbs",
+     "receiver": "self.c1.finish()",
+     "resolution": "private finished Q",
+     "syntax": "self.c1.finish().limbs",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 178,
+     "name": "finish",
+     "receiver": "self.c1",
+     "resolution": "typed dot receiver",
+     "syntax": "self.c1.finish",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 180,
+     "name": "unwrap",
+     "receiver": "E::from_limbs([a,b,c,d,e,f,g,h])",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "targets": []
+    },
+    {
+     "cfg": [],
+     "line": 180,
+     "name": "from_limbs",
+     "resolution": "explicit type dispatch",
+     "syntax": "E::from_limbs",
+     "targets": [
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+     ]
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "callee_claims": [
+      "NEI::WideExact::from_limbs"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::WideExact::from_limbs.PacketDomain",
+      "NEI::WideExact::from_limbs.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "callee_claims": [
+      "NEI::canonical::Dot::finish"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::Dot::finish.PacketDomain",
+      "NEI::canonical::Dot::finish.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+     "callee_claims": [
+      "NEI::canonical::Q::limbs"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::Q::limbs.PacketDomain",
+      "NEI::canonical::Q::limbs.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "cfg": [],
+      "line": 180,
+      "name": "unwrap",
+      "receiver": "E::from_limbs([a,b,c,d,e,f,g,h])",
+      "resolution": "standard/runtime/closure boundary",
+      "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:072:exact-finisher-terminal",
+     "id": "external:TX2:72:3",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
+   ],
+   "claim_ids": [
+    "NBQ::EbyKDot::finish",
+    "NEI::EbyKDot::finish"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 317,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F106 `EbyKDot::finish`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:176`|`887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56`|F049,F109,F114|no|M099,M392|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1560,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `CM31::add`, `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `M31::add`, `M31::from_le_bytes`, `M31::reduce_u64`, `QM31::add`, `QM31::from_le_bytes`, `WideExact::add`, `WideExact::from_limbs`, `WideExact::to_limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1590,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F072 `EbyKDot::finish` \u2014 U06 (M)"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2289,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `field`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2689,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2706,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `field`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 2739,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `CM31::mul`, `EbyKDot::finish`, `EbyKDot::new`, `M31::mul`, `QM31::mul`, `Weights::scalar_factor`, `Weights::tensor`, `WideExact::mul`, `push_byte_products`."
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::EbyKDot::finish",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    8187,
+    8415
+   ],
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
+    "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
+    "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
+    "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
+    "crates/aspis-r1-cost-probe/src/weights.rs::process_kind"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX2:072",
+     "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
+     "status": "CLOSED",
+     "unit": "U06"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.json",
+    "sha256": "cd5440b8fa464bd230f2967f4058dcd12b48ff0ccfe18f28a3ccdd4e305628e9"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "inventory_row": null,
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::EbyKDot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:072"
+    },
+    {
+     "name": "NEI::EbyKDot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:072"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json": "9e43e49624131c0889df7d92f02a293fe70b351cb66471243ed0a12aacd84a1b",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json": "ca9e2b809c52a397354f0ce116b71d38608d8b56ee7d6497dc432b3f0be8ead1",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K013/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K014/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX2:072",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 176,
+   "transaction": "TX2",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
+     "cfg": [],
      "line": 161,
      "name": "new",
      "resolution": "standard/runtime/closure boundary",
@@ -2368,6 +3693,250 @@
   },
   {
    "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
+     "cfg": [],
+     "line": 123,
+     "name": "Q",
+     "resolution": "constructor (no function body)",
+     "syntax": "Q",
+     "targets": []
+    },
+    {
+     "cfg": [],
+     "line": 123,
+     "name": "reduce",
+     "resolution": "selected unique source helper",
+     "syntax": "reduce",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 123,
+     "name": "reduce",
+     "resolution": "selected unique source helper",
+     "syntax": "reduce",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 123,
+     "name": "reduce",
+     "resolution": "selected unique source helper",
+     "syntax": "reduce",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+     ]
+    },
+    {
+     "cfg": [],
+     "line": 123,
+     "name": "reduce",
+     "resolution": "selected unique source helper",
+     "syntax": "reduce",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+     ]
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+     "callee_claims": [
+      "NEI::canonical::reduce"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
+     "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+     "discharged_by": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
+     "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
+     "required_named_hypotheses": [
+      "NEI::canonical::reduce.PacketDomain",
+      "NEI::canonical::reduce.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "cfg": [],
+      "line": 123,
+      "name": "Q",
+      "resolution": "constructor (no function body)",
+      "syntax": "Q",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:075:exact-finisher-terminal",
+     "id": "external:TX2:75:1",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
+   ],
+   "claim_ids": [
+    "NBQ::canonical::Dot::finish",
+    "NEI::canonical::Dot::finish"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 320,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F109 `canonical::Dot::finish`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:123`|`ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573`|F115|no|M057,M100,M395|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1594,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `WideExact::from_limbs`, `canonical::Dot::finish`, `canonical::Q::limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1643,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F075 `canonical::Dot::finish` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::Dot::finish",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    6676,
+    6766
+   ],
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX2:075",
+     "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
+     "status": "CLOSED",
+     "unit": "U06"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.json",
+    "sha256": "cd5440b8fa464bd230f2967f4058dcd12b48ff0ccfe18f28a3ccdd4e305628e9"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "inventory_row": null,
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::Dot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:075"
+    },
+    {
+     "name": "NEI::canonical::Dot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:075"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json": "9f4056fd244ef84a4c6a1f2e44fc1a917feb7f1739a9393aa123f13d1abee0aa",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX2:075",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 123,
+   "transaction": "TX2",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [],
    "caller_domain_obligations": [],
    "canonical_callees": [],
@@ -2517,6 +4086,420 @@
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
    "source_line": 112,
+   "transaction": "TX2",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [],
+   "caller_domain_obligations": [],
+   "canonical_callees": [],
+   "claim_ids": [
+    "NBQ::canonical::Q::limbs",
+    "NEI::canonical::Q::limbs"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 325,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F114 `canonical::Q::limbs`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:29`|`294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab`||no|M101,M400|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1594,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `WideExact::from_limbs`, `canonical::Dot::finish`, `canonical::Q::limbs`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1729,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F080 `canonical::Q::limbs` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::Q::limbs",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    1381,
+    1389
+   ],
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX2:080",
+     "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
+     "status": "CLOSED",
+     "unit": "U06"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.json",
+    "sha256": "cd5440b8fa464bd230f2967f4058dcd12b48ff0ccfe18f28a3ccdd4e305628e9"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "inventory_row": null,
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::Q::limbs.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:080"
+    },
+    {
+     "name": "NEI::canonical::Q::limbs.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:080"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json": "20424059399244720e9e551ae7e62442caf03176f5a1b54fcc2f0ff9aa88cacf",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX2:080",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 29,
+   "transaction": "TX2",
+   "trust_rows": []
+  },
+  {
+   "bridge_status": "CLOSED-CONDITIONAL",
+   "callees": [
+    {
+     "cfg": [],
+     "line": 11,
+     "name": "from",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "u64::from",
+     "targets": []
+    },
+    {
+     "cfg": [],
+     "line": 12,
+     "name": "from",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "u64::from",
+     "targets": []
+    },
+    {
+     "cfg": [],
+     "line": 13,
+     "name": "from",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "u64::from",
+     "targets": []
+    },
+    {
+     "cfg": [],
+     "line": 13,
+     "name": "from",
+     "resolution": "standard/runtime/closure boundary",
+     "syntax": "u64::from",
+     "targets": []
+    }
+   ],
+   "caller_domain_obligations": [
+    {
+     "call": {
+      "cfg": [],
+      "line": 11,
+      "name": "from",
+      "resolution": "standard/runtime/closure boundary",
+      "syntax": "u64::from",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
+     "id": "external:TX2:81:0",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "cfg": [],
+      "line": 12,
+      "name": "from",
+      "resolution": "standard/runtime/closure boundary",
+      "syntax": "u64::from",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
+     "id": "external:TX2:81:1",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "cfg": [],
+      "line": 13,
+      "name": "from",
+      "resolution": "standard/runtime/closure boundary",
+      "syntax": "u64::from",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
+     "id": "external:TX2:81:2",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    },
+    {
+     "call": {
+      "cfg": [],
+      "line": 13,
+      "name": "from",
+      "resolution": "standard/runtime/closure boundary",
+      "syntax": "u64::from",
+      "targets": []
+     },
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
+     "id": "external:TX2:81:3",
+     "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
+     "owner_packets": [
+      "NBQ"
+     ],
+     "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
+     "status": "CLOSED"
+    }
+   ],
+   "canonical_callees": [],
+   "claim_ids": [
+    "NBQ::canonical::reduce",
+    "NEI::canonical::reduce"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
+   "discovery_mentions": [
+    {
+     "association": "owner token plus source-file context",
+     "line": 326,
+     "path": "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+     "text": "|F115 `canonical::reduce`|`crates/aspis-r1-cost-probe/src/fast_pairing.rs:10`|`33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823`||no|M058,M102,M401|none|dots|"
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 89,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Functions: `EbyKDot::finish`, `EbyKDot::new`, `EbyKDot::push`, `canonical::Dot::finish`, `canonical::Dot::new`, `canonical::Dot::push`, `canonical::Q::from_limbs`, `canonical::Q::from_wide`, `canonical::Q::limbs`, `canonical::reduce`, `checked_q`, `limbs_of`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1647,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "Callees: `canonical::reduce`."
+    },
+    {
+     "association": "owner token plus source-file context",
+     "line": 1746,
+     "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+     "text": "### F081 `canonical::reduce` \u2014 U06 (M)"
+    }
+   ],
+   "evidence": [
+    "evidence/native-featparity-20261028/NCS_ASSOCIATIONS.json",
+    "evidence/native-featparity-20261028/NCS_RESULTS.json",
+    "evidence/native-inv1-20261027/NBI1_INVENTORY.md",
+    "evidence/native-inv2-20261027/NBI2_INVENTORY.md",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_U06_BRIDGE.md"
+   ],
+   "feature_parity": [
+    {
+     "claim": "NBQ::canonical::reduce",
+     "status": "SAME BODIES"
+    }
+   ],
+   "feature_parity_summary": "Selected local claim has NCS/KNG or explicit deployed-feature association, with target/ABI limits retained",
+   "frozen_body_byte_range": [
+    518,
+    674
+   ],
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "frozen_body_verified": true,
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "incoming_domain_obligation_owners": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish"
+   ],
+   "inventory_domain_obligations": [
+    {
+     "discharged_by": "NEI-dot-root:TX2:081",
+     "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
+     "status": "CLOSED",
+     "unit": "U06"
+    }
+   ],
+   "inventory_evidence": {
+    "path": "evidence/native-inv2-20261027/NBI2_INVENTORY.json",
+    "sha256": "cd5440b8fa464bd230f2967f4058dcd12b48ff0ccfe18f28a3ccdd4e305628e9"
+   },
+   "inventory_id": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "inventory_row": null,
+   "medium": [
+    "P6 hybrid"
+   ],
+   "named_hypotheses": [
+    {
+     "name": "NEI::canonical::reduce.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:081"
+    },
+    {
+     "name": "NEI::canonical::reduce.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:081"
+    }
+   ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
+   "receipt_sha256": {
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json": "1afd433d178ecbcd83e2e0f81abde08d7e6c0a4ec43aea0d57fcf7f7548cbc7f",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json": "089633ca4fb19311f64fbb195cd3a1854f34e7fe31999900985a756ae3d8a6ba",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json": "f39ec39e715e536b5fa6f5c7e74dd30d9ce07b9fafbb3c6c1530910c93f2693d",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json": "b3eeb9b776271b47f4f653f26f265871ee2ef0c22d01537bebf2f4fddc180c0d",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json": "1be694ddc093d519bb627490fbd86be1799fa1ab56d602091c7836fee7bd1189",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json": "21a04b6c3d0329f5ac6a9955be8718684874442ac9b77db190203a3bc25757b9",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json": "3301d97e7e3c3277edca1910bb2d759e79bcb37aa0a3313d5d20096b9d551d75",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json": "eb05d5a84a48a67b82df4120874c9877df9435aaafda7df598a75efcc82ec593",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json": "18a12dd857f1c1e011ba1544def310162ff1ab50025daa0ed5735d9829763631",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json": "c5e8fa4ac247ee417a3c548226b440c5a579e853e85c2d035bd9c37757338b62",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json": "7a6a87d1e3673f453bc9f9591a82b8c8d3acf1308b9bbe35cdfa3b9c28d1dfe9",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json": "cf442c0886657e811ca6daa209e6b5e34c5ed10e8860d96493d541564f4e8210",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json": "d67a4b99cc595f4979b9e1a8ba12fb643fbd786b9f6a3ee9b47c668342a36b1a",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json": "4619d19426ae5df58aae0e22df932c98bcc595a6668d0384585cf7ae70bd5d6b",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json": "c305fa051bf40c497177c78c1ca2da34e433b7c7269996ed0d07e924ccad7561",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json": "b65d77b51c394fe3a956ae4168c8ce28e6695f931f195df40f3693b8728ec3e7",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json": "33709f7e8e9f349b2a7d49dc93847ed0bed04bc7cefef53f060fe8df6ebc1209",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json": "f17684f33fbf9d760997a88b1565bd63947d4e1bdea765a75fd72397604a8fee"
+   },
+   "receipts": [
+    "evidence/leaf-p6-5-20261027/LPe_K001/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K004/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K005/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K006/receipt.json",
+    "evidence/leaf-p6-5-20261027/LPe_K007/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K002/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K035/receipt.json",
+    "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_K016/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L001/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L002/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L004/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L006/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L008/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L012/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
+    "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
+   ],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
+   "row": "TX2:081",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
+   "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
+   "source_line": 10,
    "transaction": "TX2",
    "trust_rows": []
   },
@@ -3376,6 +5359,850 @@
  ],
  "edges": [
   {
+   "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+   "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+   "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+   "status": "CLOSED",
+   "classification": "UNRESOLVED_CALL_SITE",
+   "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "static_resolution": null,
+   "selected_target": null,
+   "model_domain_theorems": [],
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::WideExact::from_limbs"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::WideExact::from_limbs.PacketDomain",
+     "NEI::WideExact::from_limbs.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::WideExact::from_limbs.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::WideExact::from_limbs.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
+   "required_named_hypotheses": [
+    "NEI::WideExact::from_limbs.PacketDomain",
+    "NEI::WideExact::from_limbs.PhysicalInterpretation"
+   ],
+   "callee_packet_domains": [
+    [
+     "{\"id\": \"crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs\", \"name\": \"WideExact::from_limbs\", \"body_sha256\": \"06e57d0dfbbd626fa98d79d2d0948690302173d64a9f88f830873b398e0f2dd2\", \"status\": \"CLOSED local\", \"evidence\": \"K014; NBG_WideCarriers.limbs_result; all raw eight-limb arrays, full Option\", \"domain\": \"all raw eight-limb arrays, full Option\"}"
+    ]
+   ],
+   "actual_inventory_calls": [
+    {
+     "expression": "E::from_limbs",
+     "inventory_rows": [
+      "F049"
+     ],
+     "line": 180,
+     "resolution": "qualified type",
+     "targets": [
+      "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs@207"
+     ]
+    }
+   ],
+   "obstacle": null
+  },
+  {
+   "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "status": "CLOSED",
+   "classification": "UNRESOLVED_CALL_SITE",
+   "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "static_resolution": null,
+   "selected_target": null,
+   "model_domain_theorems": [],
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::canonical::Dot::finish"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::Dot::finish.PacketDomain",
+     "NEI::canonical::Dot::finish.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::Dot::finish.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::canonical::Dot::finish.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
+   "required_named_hypotheses": [
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
+   ],
+   "callee_packet_domains": [
+    [
+     "K004, arbitrary four u64 | LPf_DotFinish.source, all four residues and bounds"
+    ]
+   ],
+   "actual_inventory_calls": [
+    {
+     "expression": "self.c0.finish",
+     "inventory_rows": [
+      "F109"
+     ],
+     "line": 177,
+     "resolution": "receiver owner",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish@123"
+     ]
+    },
+    {
+     "expression": "self.c1.finish",
+     "inventory_rows": [
+      "F109"
+     ],
+     "line": 178,
+     "resolution": "receiver owner",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish@123"
+     ]
+    }
+   ],
+   "obstacle": null
+  },
+  {
+   "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "status": "CLOSED",
+   "classification": "UNRESOLVED_CALL_SITE",
+   "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "static_resolution": null,
+   "selected_target": null,
+   "model_domain_theorems": [],
+   "certificate": {
+    "id": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+    "selected_callee_claims": [
+     "NEI::canonical::Q::limbs"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::Q::limbs.PacketDomain",
+     "NEI::canonical::Q::limbs.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::Q::limbs.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ],
+     "NEI::canonical::Q::limbs.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same",
+      "NEI_PublicDotFinishValues.source",
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same",
+       "NEI_PublicDotFinishValues.source",
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+      "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+      "theorems": [
+       "NEI_EbyFinishAssociation.ctor_unwrap",
+       "NEI_EbyFinishAssociation.same"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+      "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+      "theorems": [
+       "NEI_PublicDotFinishValues.source"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+      "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+      "theorems": [
+       "NEI_WideCtorAssociation.same_result"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_EbyFinishAssociation.ctor_unwrap",
+     "NEI_EbyFinishAssociation.same",
+     "NEI_PublicDotFinishValues.source",
+     "NEI_WideCtorAssociation.same_result"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
+   "required_named_hypotheses": [
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
+   ],
+   "callee_packet_domains": [
+    [
+     "K006 | FIo_Native body returns identical array"
+    ]
+   ],
+   "actual_inventory_calls": [
+    {
+     "expression": "self.c0.finish().limbs",
+     "inventory_rows": [
+      "F114"
+     ],
+     "line": 177,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs@29"
+     ]
+    },
+    {
+     "expression": "self.c1.finish().limbs",
+     "inventory_rows": [
+      "F114"
+     ],
+     "line": 178,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs@29"
+     ]
+    }
+   ],
+   "obstacle": null
+  },
+  {
    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new",
    "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new",
    "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new",
@@ -3621,6 +6448,287 @@
      "resolution": "qualified type",
      "targets": [
       "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new@112"
+     ]
+    }
+   ],
+   "obstacle": null
+  },
+  {
+   "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "status": "CLOSED",
+   "classification": "UNRESOLVED_CALL_SITE",
+   "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "static_resolution": null,
+   "selected_target": null,
+   "model_domain_theorems": [],
+   "certificate": {
+    "id": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
+    "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+    "status": "CLOSED",
+    "kind": "DIRECT_CALL",
+    "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+    "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+    "selected_callee_claims": [
+     "NEI::canonical::reduce"
+    ],
+    "inner_hypotheses_discharged": [
+     "NEI::canonical::reduce.PacketDomain",
+     "NEI::canonical::reduce.PhysicalInterpretation"
+    ],
+    "hypothesis_discharge_theorems": {
+     "NEI::canonical::reduce.PacketDomain": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_DotFinishAssociation.finish",
+      "NEI_DotFinishValues.source"
+     ],
+     "NEI::canonical::reduce.PhysicalInterpretation": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value",
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame",
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer",
+      "NEI_DotFinishAssociation.finish",
+      "NEI_DotFinishValues.source"
+     ]
+    },
+    "parts": {
+     "packet_domain": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "canonical_carrier": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "same_inputs_result": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "state_ordered_effects": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "physical_interpretation": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     },
+     "native_callsite_association": {
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value",
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame",
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer",
+       "NEI_DotFinishAssociation.finish",
+       "NEI_DotFinishValues.source"
+      ]
+     }
+    },
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+      "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+      "theorems": [
+       "NEI_DotReduction.constant_cast",
+       "NEI_DotReduction.same",
+       "NEI_DotReduction.value"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+      "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+      "theorems": [
+       "NEI_ReduceRefLaw.same",
+       "NEI_ReduceRefLaw.actual_reference",
+       "NEI_ReduceRefLaw.frame"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+      "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+      "theorems": [
+       "NEI_DotFinishFrames.reduce",
+       "NEI_DotFinishFrames.limbs",
+       "NEI_DotFinishFrames.dot",
+       "NEI_DotFinishFrames.outer"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+      "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+      "theorems": [
+       "NEI_DotFinishAssociation.finish"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+      "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+      "theorems": [
+       "NEI_DotFinishValues.source"
+      ]
+     }
+    ],
+    "theorems": [
+     "NEI_DotReduction.constant_cast",
+     "NEI_DotReduction.same",
+     "NEI_DotReduction.value",
+     "NEI_ReduceRefLaw.same",
+     "NEI_ReduceRefLaw.actual_reference",
+     "NEI_ReduceRefLaw.frame",
+     "NEI_DotFinishFrames.reduce",
+     "NEI_DotFinishFrames.limbs",
+     "NEI_DotFinishFrames.dot",
+     "NEI_DotFinishFrames.outer",
+     "NEI_DotFinishAssociation.finish",
+     "NEI_DotFinishValues.source"
+    ],
+    "residual_hypotheses": [],
+    "review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+     "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+     "conclusion_hiding": false,
+     "statement_and_native_association_checked": true
+    },
+    "native_review": {
+     "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+     "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+    },
+    "trust": "Fresh whole actual caller result/control; unconditional child domains; P6/D188 retained; old native credits withheld"
+   },
+   "required_named_hypotheses": [
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
+   ],
+   "callee_packet_domains": [
+    [
+     "K001, all u64 | LPf_ReductionWord.native_reduce: result x%P and <P"
+    ]
+   ],
+   "actual_inventory_calls": [
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
+     ]
+    },
+    {
+     "expression": "reduce",
+     "inventory_rows": [
+      "F115"
+     ],
+     "line": 123,
+     "resolution": "unique source symbol",
+     "targets": [
+      "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce@10"
      ]
     }
    ],
@@ -5558,6 +8666,804 @@
      "theorems": [
       "NEI_RowEdges.widen"
      ]
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX1:106",
+   "row": "TX1:106",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::EbyKDot::finish.PacketDomain",
+    "NEI::EbyKDot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+     "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+     "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+     "theorems": [
+      "NEI_PublicDotFinishValues.source"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+     "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+     "theorems": [
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:106:3": {
+     "kind": "NEI_EBY_CTOR_UNWRAP",
+     "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "line": 180,
+     "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_PublicDotFinishValues.source"
+     ],
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX1:109",
+   "row": "TX1:109",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+     "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+     "theorems": [
+      "NEI_DotFinishValues.source"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:109:1": {
+     "kind": "NEI_DOT_VALUE_CTOR",
+     "syntax": "Q",
+     "line": 123,
+     "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX1:114",
+   "row": "TX1:114",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.limbs"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {}
+  },
+  {
+   "id": "NEI-dot-root:TX1:115",
+   "row": "TX1:115",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "dots"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX1:115:0": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 11,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:1": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 12,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:2": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX1:115:3": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:072",
+   "row": "TX2:072",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
+   "frozen_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+   "selected_claims": [
+    "NEI::EbyKDot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::EbyKDot::finish.PacketDomain",
+    "NEI::EbyKDot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L118/receipt.json",
+     "receipt_sha256": "13bb92c3c45ab7d41ac7fe4db36a2230ea07523a1febfc2bc9a91994c946ad8c",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_EbyFinishAssociation.same"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L121/receipt.json",
+     "receipt_sha256": "4a6bca91aaf064a28d16c0b0855a40b9eba84b61aef41065cedf13350abe46e3",
+     "theorems": [
+      "NEI_PublicDotFinishValues.source"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L085/receipt.json",
+     "receipt_sha256": "ee4405b5e6c362905062dbb634bda4b5a6f164b382bc6c632176186f9c2b381d",
+     "theorems": [
+      "NEI_WideCtorAssociation.same_result"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:72:3": {
+     "kind": "NEI_EBY_CTOR_UNWRAP",
+     "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
+     "line": 180,
+     "source_body_sha256": "887e378cc8c8a8c8267e56b7b66477a5e7a9000a91c8cfab47057a50da40ae56",
+     "theorems": [
+      "NEI_EbyFinishAssociation.ctor_unwrap",
+      "NEI_PublicDotFinishValues.source"
+     ],
+     "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
+     "edge": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish -> crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs"
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:075",
+   "row": "TX2:075",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
+   "frozen_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+   "selected_claims": [
+    "NEI::canonical::Dot::finish"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Dot::finish.PacketDomain",
+    "NEI::canonical::Dot::finish.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L120/receipt.json",
+     "receipt_sha256": "ec0e1de57c6cbbb01e60871c5e670a58701748bd0d269b9d90388807d312188e",
+     "theorems": [
+      "NEI_DotFinishValues.source"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:75:1": {
+     "kind": "NEI_DOT_VALUE_CTOR",
+     "syntax": "Q",
+     "line": 123,
+     "source_body_sha256": "ee1535d1a977f8acee0e7e445421cc921e069c8994e07a529946ccfbecf74573",
+     "theorems": [
+      "NEI_DotFinishAssociation.finish"
+     ]
+    }
+   }
+  },
+  {
+   "id": "NEI-dot-root:TX2:080",
+   "row": "TX2:080",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
+   "frozen_body_sha256": "294ecea20b56a78b8af6286113bae45eeeb445a16b7f90fceb163cba8ec98bab",
+   "selected_claims": [
+    "NEI::canonical::Q::limbs"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::Q::limbs.PacketDomain",
+    "NEI::canonical::Q::limbs.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L102/receipt.json",
+     "receipt_sha256": "0fa73b149036374d70cb0b3b42d6f6579d78b2cfb178211f838d25717c5493e0",
+     "theorems": [
+      "NEI_DotFinishAssociation.limbs"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {}
+  },
+  {
+   "id": "NEI-dot-root:TX2:081",
+   "row": "TX2:081",
+   "function": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
+   "frozen_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+   "selected_claims": [
+    "NEI::canonical::reduce"
+   ],
+   "named_hypotheses_discharged": [
+    "NEI::canonical::reduce.PacketDomain",
+    "NEI::canonical::reduce.PhysicalInterpretation"
+   ],
+   "inventory_domains_discharged": [
+    "U06"
+   ],
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L101/receipt.json",
+     "receipt_sha256": "b50a06e3c3fc2c8f107f23edcb7b90a55e8958e892fd73e2a668b70dd8e08fa1",
+     "theorems": [
+      "NEI_DotReduction.constant_cast",
+      "NEI_DotReduction.same",
+      "NEI_DotReduction.value"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L100/receipt.json",
+     "receipt_sha256": "b46a3882a148e7ee52033f5374b371a50d5f5ff33827a167d483b8e6d1784310",
+     "theorems": [
+      "NEI_ReduceRefLaw.same",
+      "NEI_ReduceRefLaw.actual_reference",
+      "NEI_ReduceRefLaw.frame"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-mul2-20261101/NEI_L122/receipt.json",
+     "receipt_sha256": "4f258bb58173865d23966f9190286165f58ca9ec1018f38fa2b1524406a5056a",
+     "theorems": [
+      "NEI_DotFinishFrames.reduce",
+      "NEI_DotFinishFrames.limbs",
+      "NEI_DotFinishFrames.dot",
+      "NEI_DotFinishFrames.outer"
+     ]
+    }
+   ],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PacketDomain",
+    "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce.PhysicalInterpretation",
+    "CompositionTrustOptionA"
+   ],
+   "review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_ASSOCIATION.md",
+    "sha256": "bda5160f244a6f0c49bf3bc22f66826bed76e278e7259eaafe12d703d05abb39",
+    "conclusion_hiding": false,
+    "statement_and_native_association_checked": true
+   },
+   "native_review": {
+    "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+    "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+   },
+   "external_obligations": {
+    "external:TX2:81:0": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 11,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:1": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 12,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:2": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
+    },
+    "external:TX2:81:3": {
+     "kind": "NEI_PRIVATE_MODULUS_CAST",
+     "syntax": "u64::from",
+     "line": 13,
+     "caller_body_sha256": "33b2e64d82b52ace1b69f3d5bc6f711cbcfa45e2b5737f035876ec5b15dc9823",
+     "source_value": 2147483647,
+     "theorems": [
+      "NEI_DotReduction.constant_cast"
+     ],
+     "native_review": {
+      "path": "evidence/slice-q-mul2-20261101/NEI_DOT_FINISH_REVIEW.json",
+      "sha256": "8f0543b3ac607e1f5f29a03ba696cfaba8840951083af4df62c8452dcb2a1cf0"
+     }
     }
    }
   }
