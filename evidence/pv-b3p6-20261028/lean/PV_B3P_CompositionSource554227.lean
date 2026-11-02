@@ -57,7 +57,18 @@ theorem composition_source_reference554 (p : reference_terminal.SemanticPublic)
     composition_source554 p claims point lambda chi theta =
       reference_terminal.composition_parts p claims point lambda chi theta := by
   unfold composition_source554 reference_terminal.composition_parts
-  simp only [horner_semantic_loop_binding8,horner_poseidon_loop_binding8]
+  apply PV_B3P_Binding9227.bind_equal9
+  rintro ⟨amount,invalid⟩
+  cases invalid <;> simp only [Bool.false_eq_true,Bool.true_eq_true,if_false,if_true]
+  apply PV_B3P_Binding9227.bind_equal9
+  intro transition
+  apply PV_B3P_Binding9227.bind_equal9
+  intro branch
+  cases branch with
+  | Break residual => rfl
+  | Continue value =>
+    simp only [horner_semantic_loop_binding8,horner_poseidon_loop_binding8]
+    try rfl
 
 theorem composition_source_link554 :
     PV_B3P_Links13227.PV_B3P_Link_terminal_composition_parts composition_source554 :=
