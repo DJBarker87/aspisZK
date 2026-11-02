@@ -1,0 +1,41 @@
+'PV_B3P_Closure557227.local_links557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.partial_closure557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.store_links557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.selected_callback_residual557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.joint_local_closure557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.semantic_callees_reference557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.composition_callees_reference557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.frontier_vec_projection557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.frontier_twenty_projection557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.composed_ports_eq557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.source_cone_reference557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.deployed_wrapper_iff557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_Closure557227.runjoin_consumer_residual557' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_OracleBridge38.selected_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+def PV_B3P_Closure557227.DeployedWrapper557 : (base : ProverRwFull.ExternalTypes) → ProverRwFull.ExternalFuns → Prop :=
+fun base ops =>
+  PV_B3P_TopDown13227.PV_B3P_Link_terminal_qm31 base ops
+    (PV_B3P_Binding13227.source_ports13 base PV_B3P_Closure557227.local_bodies557.body6
+      PV_B3P_Closure557227.local_bodies557.body7)
+theorem PV_B3P_Closure557227.selected_callback_residual557 : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns),
+  PV_B3P_Closure557227.DeployedWrapper557 base ops →
+    ∀ (self : ProverRwFull.host_semantic.SemanticOracle)
+      (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize)
+      (claims : Aeneas.Std.Array (Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 29#usize) 3#usize),
+      ProverRwFull.ExternalFuns.op227 self.public claims point self.challenges =
+        PV_B3P_TopDown13227.transported_reference base self.public claims point self.challenges :=
+fun base ops wrapper self point =>
+  PV_B3P_Binding13227.selected_callback13 base ops PV_B3P_Closure557227.local_bodies557.body6
+    PV_B3P_Closure557227.local_bodies557.body7 wrapper PV_B3P_Closure557227.local_links557.link6
+    PV_B3P_Closure557227.local_links557.link7 self point
+theorem PV_B3P_Closure557227.runjoin_consumer_residual557 : ∀ (base : ProverRwFull.ExternalTypes)
+  (ops : ProverRwFull.ExternalFuns),
+  PV_B3P_Closure557227.DeployedWrapper557 base ops →
+    ∀ (self : ProverRwFull.host_semantic.SemanticOracle)
+      (point : Aeneas.Std.Array ProverRwFull.aspis_core.field.QM31 10#usize),
+      ProverRwFull.host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate self point =
+        R1Z.PV_RunJoin_OracleBridge38.withTerminal (PV_B3P_TopDown13227.transported_reference base) self point :=
+fun base ops wrapper self point =>
+  R1Z.PV_RunJoin_OracleBridge38.selected_callback ops (PV_B3P_TopDown13227.transported_reference base) self point
+    (PV_B3P_Closure557227.selected_callback_residual557 base ops wrapper self point)
