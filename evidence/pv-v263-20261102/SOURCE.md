@@ -40,7 +40,8 @@ Reached project call sites (frozen lines):
 * host_commitment.rs:242, stage=200, count=lanes.len(), closure
   (domain,messages,variant,lanes), T=Result<Word,r0::Error>. Validation of every
   lane precedes launch. The reverse/pop caller subsequently picks the first
-  returned Err in source order. Both base/secure/wide lane results remain.
+  returned Err in source order. C1 reaches count=27 (lanes 0..25,28), C2 count=2 (lanes 26,27).
+  Both base/secure/wide lane results remain.
 * host_sumcheck.rs:82, stage=100+round, count=28*2^(9-round), round=0..9,
   closure (oracle,point,round,assignments), T=Result<QM31,r1_wire::Error>.
   The counts are 14336,7168,3584,1792,896,448,224,112,56,28. Each callback

@@ -1,6 +1,6 @@
 from pathlib import Path
 import subprocess,json,shlex,time,hashlib
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-v263-20261102';P='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native';H='dombarker@100.108.41.90';a='N90120'
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-v263-20261102';P='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native';H='dombarker@100.108.41.90';a='N90121'
 files=list((E/'inputs').rglob('*'))+[R/'tools/pv-v263-20261102/native.rs',R/'tools/pv-v263-20261102/native-host.py'];payload={str(p.relative_to(R)):p.read_text() for p in files if p.is_file()}
 code="import pathlib,json,sys;p=pathlib.Path("+repr(P)+");p.mkdir(exist_ok=True);x=json.load(sys.stdin)\nfor f,s in x.items():\n q=p/f;q.parent.mkdir(parents=True,exist_ok=True);q.write_text(s)"
 subprocess.run(['ssh',H,'python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,check=True)
@@ -11,4 +11,4 @@ q=subprocess.run(['ssh',H,'bash -o pipefail -c '+shlex.quote(admit+' && '+check+
 (E/(a+'-transport.json')).write_text(json.dumps(dict(exit=q.returncode,stdout=q.stdout,stderr=q.stderr,command=cmd,input_hashes={p:hashlib.sha256(s.encode()).hexdigest() for p,s in payload.items()}),indent=2)+'\n')
 for f in ['reservation.json','reservation.log','time.log','stdout.log','native-results.json']:
  r=subprocess.run(['ssh',H,'cat '+shlex.quote(P+'/'+f)],capture_output=True,text=True);(E/(a+'-'+f)).write_text(r.stdout+r.stderr)
-print('native gate transport exit',q.returncode);print((E/(a+'-stdout.log')).read_text());print((E/(a+'-reservation.json')).read_text())
+print('native gate transport exit',q.returncode);print((E/(a+'-stdout.log')).read_text());print('admission',json.loads((E/(a+'-reservation.json')).read_text())['allowed'])

@@ -2,10 +2,11 @@ extern crate alloc;
 #[path = "../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs"]
 mod host_work;
 use std::sync::{Arc,Mutex,Condvar};
+use std::sync::atomic::{AtomicUsize,Ordering};
 fn main() {
     let mode=std::env::args().nth(1).unwrap();
     if mode=="success" {
-        for n in [0,28,56,112,224,448,896,1792,3584,7168,14336] {
+        for n in [0,2,27,28,56,112,224,448,896,1792,3584,7168,14336] {
             let xs=host_work::map(200,n,|i| if i%7==0 {Err(i)} else {Ok(i)});
             assert_eq!(xs,(0..n).map(|i|if i%7==0 {Err(i)} else {Ok(i)}).collect::<Vec<_>>());
             println!("ordered-inner-results count={n}");
@@ -27,12 +28,16 @@ fn main() {
                 while !*released {released=cv.wait(released).unwrap();}
             }) {Ok(h)=>handles.push(h),Err(_)=>break}
         }
-        let observed=std::panic::catch_unwind(||host_work::map(200,28,Ok::<usize,usize>));
+        let calls=AtomicUsize::new(0);
+        let observed=std::panic::catch_unwind(||host_work::map(200,27,|i| {
+            calls.fetch_add(1,Ordering::SeqCst);Ok::<usize,usize>(i)
+        }));
         {let (lock,cv)=&*gate;*lock.lock().unwrap()=true;cv.notify_all();}
         let count=handles.len();
         for h in handles {h.join().unwrap();}
         println!("scope slots occupied by {count} retained local handles");
+        assert_eq!(calls.load(Ordering::SeqCst),0);
         assert!(observed.is_err(),"matched control: thread exhaustion must panic");
-        println!("captured-stage=200 count=28: scope.spawn panics under task exhaustion");
+        println!("captured-stage=200 count=27 callbacks=0: scope.spawn panics under task exhaustion");
     }
 }
