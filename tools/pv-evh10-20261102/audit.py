@@ -34,7 +34,7 @@ for r in rows:
   accepted.append(r)
 # Reproducible read-only source pin checks, no native/extraction execution.
 subprocess.run(['python3','tools/pv-evh10-20261102/source_inventory.py','--check'],check=True,capture_output=True)
-for script in ['zero_law.py','zero_binding.py','zero_wrappers.py','entropy_iteration.py','callback_inventory.py']:
+for script in ['zero_law.py','zero_binding.py','zero_wrappers.py','entropy_iteration.py','callback_inventory.py','raw_source.py','raw_binding.py']:
  subprocess.run(['python3','tools/pv-evh10-20261102/'+script,'--check'],check=True,capture_output=True)
 closure=subprocess.run(['python3','tools/pv-evh8-20261101/native_preflight.py','--check','--require-native-closure'],capture_output=True,text=True)
 assert closure.returncode==1

@@ -11,7 +11,7 @@ open PV_EVH_NativeEntropyIteration (buffer)
 primitive delivery, never from a whole-helper answer or final trace. Other slice
 inputs retain the residual dictionary. Faults/exhaustion have no source view.
 This is not a uniform FinishedView across advancing entropy worlds. -/
-def atWorld [ExternalTypes] (ops : ExternalFuns)
+@[reducible] def atWorld [ExternalTypes] (ops : ExternalFuns)
     (d : PV_EVH_StackEntropyFill.Delivery) : ExternalFuns := by
   classical
   exact {ops with op129 := fun s =>
@@ -24,7 +24,7 @@ def atWorld [ExternalTypes] (ops : ExternalFuns)
 /-- The source wrapper's error carrier is fixed to its underlying integer;
 all_codes proves every reached code is nonzero and representable by i32.
 Representation and machine-code preservation remain explicitly V370. -/
-def rawBase (base : ExternalTypes) : ExternalTypes := {base with op7 := Int}
+@[reducible] def rawBase (base : ExternalTypes) : ExternalTypes := {base with op7 := Int}
 
 theorem error_carrier (base : ExternalTypes) :
     @getrandom.error.Error (types (rawBase base)) = Int := rfl
@@ -42,7 +42,9 @@ theorem error_fill (base : ExternalTypes)
   letI : ExternalTypes := types base
   intro d e hd
   change (atWorld ops d).op129 buffer = _
-  simp only [atWorld,if_pos rfl,PV_EVH_StackEntropyFill.reply,hd]
+  unfold atWorld
+  rw [if_pos rfl]
+  rw [PV_EVH_StackEntropyFill.reply,hd]
 
 #print axioms error_carrier
 #print axioms error_fill
