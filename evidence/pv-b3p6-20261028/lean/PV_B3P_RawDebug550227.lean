@@ -9,7 +9,7 @@ def debug_row550 (bound : U64) (row : Limbs64_550) : Result Bool := do
   let b ← Array.index_usize row 1#usize
   let c ← Array.index_usize row 2#usize
   let d ← Array.index_usize row 3#usize
-  .ok (((true && a < bound) && b < bound) && c < bound && d < bound)
+  .ok ((((true && decide (a < bound)) && decide (b < bound)) && decide (c < bound)) && decide (d < bound))
 
 def debug_matrix550 (bound : U64) (rows : Array Limbs64_550 4#usize) : Result Bool := do
   let values ← from_fn_four550 (fun i => do
