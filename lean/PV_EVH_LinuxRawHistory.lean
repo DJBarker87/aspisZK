@@ -29,7 +29,7 @@ def execute (syscall : Nat → Nat → Array U8 64#usize → World → Reply)
     let terminal := fun status => (⟨⟨status,r.buffer,r.world,r.events⟩,[]⟩ : Execution)
     let again := fun next =>
       let e := execute syscall address fuel next r.buffer r.world
-      ⟨{e.delivery with events := r.events ++ e.delivery.events},e.calls⟩
+      (⟨{e.delivery with events := r.events ++ e.delivery.events},e.calls⟩ : Execution)
     let tail := match r.result with
     | .fault e => terminal (.fault e)
     | .exhausted => terminal .exhausted
