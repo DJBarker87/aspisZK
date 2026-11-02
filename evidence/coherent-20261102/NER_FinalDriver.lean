@@ -2,6 +2,20 @@ import Lean
 import NER_Walker
 open Lean
 namespace NER
+/-- Include recursor reduction rules and constant-name metadata, not only values. -/
+def referenceNames (c : ConstantInfo) : Array Name := Id.run do
+ let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
+ match c with
+ | .defnInfo v => refs := refs ++ v.all.toArray
+ | .thmInfo v => refs := refs ++ v.all.toArray
+ | .opaqueInfo v => refs := refs ++ v.all.toArray
+ | .inductInfo v => refs := refs ++ v.ctors.toArray ++ v.all.toArray
+ | .ctorInfo v => refs := refs.push v.induct
+ | .recInfo v =>
+  refs := refs ++ v.all.toArray
+  for rule in v.rules do refs := refs.push rule.ctor ++ rule.rhs.getUsedConstants
+ | _ => pure ()
+ return refs
 /-- Inspect each module's own declarations against the checked private environment. -/
 def loadedScan (env : Environment) (output : System.FilePath)
     (expected : Std.HashMap String (Array String)) : IO Bool := do
@@ -14,8 +28,7 @@ def loadedScan (env : Environment) (output : System.FilePath)
   let mut dangling : Array Json := #[]
   let mut edges := 0
   for c in data.constants do
-   let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
-   if let .inductInfo v := c then refs := refs ++ v.ctors.toArray
+   let refs := referenceNames c
    for dep in refs do
     edges := edges + 1
     if (env.checked.get.find? dep).isNone then

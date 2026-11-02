@@ -18,7 +18,7 @@ for r in json.loads((E/'NER_REBUILT_OBJECT_PINS.json').read_text()):
    obj=original[dep]['artifacts'][0]
   selected[dep]={'path':obj['path'],'sha256':obj['sha256']}
  rows.append({**r,'object_sha256':r['sha256'],'exit_status':receipt['exit_status'],'selected_imports':selected,'scope':a})
-for p in sorted(E.glob('NER_B*-details/modules.jsonl')):
+for p in sorted([*E.glob('NER_B*-details/modules.jsonl'),*E.glob('NER_A900-details/modules.jsonl')]):
  for line in p.read_text().splitlines():rows.append({**json.loads(line),'scope':p.parent.name.removesuffix('-details')})
 
 def validate(rows):

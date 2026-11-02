@@ -10,7 +10,8 @@ for p in sorted(E.glob('NER_B*-details/modules.jsonl')):
   r=json.loads(line)
   if r['exit_status']==0:done.add(r['module'])
   else:sys.exit('Existing failed branch: '+r['module'])
-todo={r['module']:r for r in plan if r['module'] not in done}
+# The final whole-closure aggregation belongs to the lead-owned agg16 run.
+todo={r['module']:r for r in plan if r['module'] not in done and r['module']!='NDR_CombinedAudit'}
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 def run(args,**kw):return subprocess.run(args,check=True,**kw)
 def event(x):
@@ -73,4 +74,4 @@ with cf.ThreadPoolExecutor(max_workers=2) as pool:
    if status:failed=True
    else:done.update(r['module'] for r in batch)
   if failed and not active:sys.exit('Compilation failure; branch stopped')
-print('All affected modules rebuilt',len(done),flush=True)
+print('All 8 GiB batch targets rebuilt',len(done),'NDR_CombinedAudit reserved for agg16',flush=True)

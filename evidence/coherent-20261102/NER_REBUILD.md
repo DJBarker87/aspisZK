@@ -86,3 +86,17 @@ process per scope. Its ready-set rule excludes in-flight imports; every
 required direct import must have completed successfully or occur earlier in
 the same batch. The pinned dependency graph and source bytes are unchanged.
 No submitted compilation is cancelled or resubmitted for this scheduling change.
+
+
+Preflight for the aggregation boundary: the original NDR_A001 receipt uses
+-M15000 for NDR_CombinedAudit. The batch controller was paused after B013;
+B011 and B013 both completed and their receipts were recovered without
+resubmission. NDR_CombinedAudit is excluded from 8 GiB scheduling and will
+compile unchanged inside the one final agg16 scope before the audit driver.
+NER_R029 tests the exact new final scanner definitions on a deliberately
+malformed recursor rule and a body-removal control: exit 0, 3.314852 s,
+2,338,728 KiB peak RSS, zero swaps. It detects exactly NER_RecursorMissing.
+This adds recursor rules and declaration name metadata to type/value and
+constructor-reference coverage. The unchanged NEP hardened raw walker is
+retained separately. No new logical theorem is introduced by this control;
+#print axioms is N/A for the inspection program.
