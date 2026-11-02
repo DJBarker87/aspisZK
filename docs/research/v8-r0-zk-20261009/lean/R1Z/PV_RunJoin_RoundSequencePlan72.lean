@@ -4,7 +4,7 @@ set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_RoundSequencePlan72
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_Sequential64
-open PV_RunJoin_RoundThread38 (Q Point Output)
+open PV_RunJoin_RoundThread38 (Point Output)
 variable [ExternalTypes] [ExternalFuns]
 
 def round {H F A : Type} (digest : aspis_core.digest.Digest32 H) (oi : host_sumcheck.Oracle F)
@@ -57,10 +57,10 @@ theorem phase_execute {H F S E : Type} (runtime : PV_RunJoin_AllocatorWorld63.Ru
     | Err e =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-        core.convert.FromSame,execute]
+        core.convert.FromSame,execute,Aeneas.Std.uncurry]
     | Ok pair =>
       rcases pair with ⟨p',q'⟩
-      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift]
+      simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift,Aeneas.Std.uncurry]
       exact ih t' o' p' q' (Usize.wrapping_add r 1#usize)
 
 #print axioms round
