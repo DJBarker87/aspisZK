@@ -1,6 +1,6 @@
 import PV_B3P_RawRowContinuation550227
 namespace PV_B3P_Association550227
-open Aeneas Aeneas.Std PV_B3P_227
+open Aeneas Aeneas.Std PV_B3P_227 Result
 set_option autoImplicit false
 
 attribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs

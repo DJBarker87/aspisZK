@@ -38,7 +38,7 @@ assert all(re.search(r'\b'+v+r'\b',suffix)for v in values)
 rows=[f'(Array.make 4#usize [{",".join(values[4*r:4*r+4])}] (by simp only [List.length_cons,List.length_nil]; rfl))'for r in range(4)]
 code='''import PV_B3P_RawRowContinuation550227
 namespace PV_B3P_Association550227
-open Aeneas Aeneas.Std PV_B3P_227
+open Aeneas Aeneas.Std PV_B3P_227 Result
 set_option autoImplicit false
 '''+attrs+'\ntheorem raw_suffix550 ('+' '.join(values)+''' : U64) :
     (do
