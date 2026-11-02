@@ -28,7 +28,7 @@ theorem error_cleanup_world {E B : Type} (fill : Q (core.result.Result Unit E))
       let cleaned := PV_EVH_Runtime.bind dropBuffer
         (fun _ => PV_EVH_Runtime.lift (.ok (core.result.Result.Err (T := B) e))) (fill w).state
       ⟨cleaned.outcome,cleaned.state,(fill w).events ++ cleaned.events⟩ := by
-  simp only [fillScope,Bind.bind,PV_EVH_Runtime.bind,h]
+  exact bind_ok _ _ _ _ h
 
 theorem cleanup_fault_prefix {E B : Type} (fill : Q (core.result.Result Unit E))
     (consume : Q (core.result.Result B E)) (dropBuffer : Q Unit)
