@@ -18,12 +18,12 @@ def GoodTask {B : Type} (task : PV_V263_DeferredJoin.Task S B) : Prop :=
 
 theorem forks_good (law : CallbackLaw n callback) :
     Returns (fun tasks => ∀ task, task ∈ tasks → GoodTask task)
-      (PV_V263_SourceSpine.forks (resourceWorld osCodec vecCodec) layouts n callback) := by
+      (PV_V263_SourceSpine.forks (resourceWorld (S := S) osCodec vecCodec) layouts n callback) := by
   apply traverse_returns
   intro k hk
   have bound : k < 16 := by simp only [List.mem_range'] at hk; omega
   have hf : Returns GoodTask (PV_V263_DeferredJoin.fork (grants osCodec) k
-      (PV_V263_SourceSpine.caughtFamily (resourceWorld osCodec vecCodec) layouts n k callback)) := by
+      (PV_V263_SourceSpine.caughtFamily (resourceWorld (S := S) osCodec vecCodec) layouts n k callback)) := by
     intro w
     exact ⟨⟨k,w.nextHandle,_⟩,rfl,
       caught_family osCodec vecCodec layouts n callback k bound law⟩
@@ -44,7 +44,7 @@ theorem join_chunks_good (length : Nat)
     (tasks : List (PV_V263_DeferredJoin.Task S (List (List A × Nat))))
     (law : ∀ task, task ∈ tasks → GoodTask task) :
     Returns (fun chunks => ∀ chunk, chunk ∈ chunks → IsOk chunk)
-      (PV_V263_SourceSpine.joinChunks (resourceWorld osCodec vecCodec) layouts length tasks) := by
+      (PV_V263_SourceSpine.joinChunks (resourceWorld (S := S) osCodec vecCodec) layouts length tasks) := by
   induction tasks generalizing length with
   | nil => exact pure_returns _ [] (by intro a h; cases h)
   | cons task tasks ih =>
@@ -64,12 +64,13 @@ theorem join_chunks_good (length : Nat)
 
 theorem merge_total (length : Nat) (chunks : List (Except Bytes (List (List A × Nat))))
     (law : ∀ chunk, chunk ∈ chunks → IsOk chunk) :
-    Total (PV_V263_SourceSpine.mergePool (resourceWorld osCodec vecCodec) layouts length chunks) := by
+    Total (PV_V263_SourceSpine.mergePool (resourceWorld (S := S) osCodec vecCodec) layouts length chunks) := by
   induction chunks generalizing length with
-  | nil => exact pure_returns _ [] trivial
+  | nil => exact pure_returns (fun _ => True) [] trivial
   | cons chunk chunks ih =>
     obtain ⟨value,hvalue⟩ := law chunk (by simp)
     subst chunk
+    change Total (PV_V263_World.bind _ _)
     apply bind_total _ _ (vector_total osCodec vecCodec _)
     intro unit
     apply bind_total _ _ (vector_total osCodec vecCodec _)
@@ -80,11 +81,12 @@ theorem merge_total (length : Nat) (chunks : List (Except Bytes (List (List A ×
     exact pure_returns _ (value++rest) trivial
 
 theorem append_total (length k : Nat) (chunks : List (List A × Nat)) :
-    Total (PV_V263_SourceSpine.appendItems (resourceWorld osCodec vecCodec) layouts length k chunks) := by
+    Total (PV_V263_SourceSpine.appendItems (resourceWorld (S := S) osCodec vecCodec) layouts length k chunks) := by
   induction chunks generalizing length k with
-  | nil => exact pure_returns _ [] trivial
+  | nil => exact pure_returns (fun _ => True) [] trivial
   | cons chunk chunks ih =>
     rcases chunk with ⟨value,completed⟩
+    change Total (PV_V263_World.bind _ _)
     apply bind_total _ _ (vector_total osCodec vecCodec _)
     intro unit
     apply bind_total _ _ (vector_total osCodec vecCodec _)
