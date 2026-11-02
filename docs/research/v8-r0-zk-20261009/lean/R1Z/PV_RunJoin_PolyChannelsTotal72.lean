@@ -22,44 +22,44 @@ theorem store {T : Type} {n : Usize} (a : Array T n) (i : Usize) (hi : i.val<n.v
 theorem accumulate (sums : Array (Array U64 3#usize) 3#usize) (left right : Q) :
     ∃ out,host_arithmetic.accumulate_channels sums left right=ok out := by
   unfold host_arithmetic.accumulate_channels
-  simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
+  try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
   repeat' first
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (borrow _ _ (by decide));intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (store _ _ (by decide) _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.add _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (borrow _ _ (by decide));intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (store _ _ (by decide) _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
   exact ⟨_,rfl⟩
 
 theorem component (channels : Array U64 3#usize) :
     ∃ out,host_arithmetic.reconstruct_component channels=ok out := by
   unfold host_arithmetic.reconstruct_component
-  simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
+  try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
   repeat' first
-    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.reduce _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (PV_RunJoin_MaskScalarTotal69.sub _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
   exact ⟨_,rfl⟩
 
 theorem reconstruct (sums : Array (Array U64 3#usize) 3#usize) :
     ∃ out,host_arithmetic.reconstruct_channels sums=ok out := by
   unfold host_arithmetic.reconstruct_channels
-  simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
+  try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
   repeat' first
-    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (component _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (hostR _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (component _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (hostR _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (cadd _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (csub _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
   exact ⟨_,rfl⟩
 
 theorem complete (left right : Array Q 3#usize) :
     ∃ out,host_arithmetic.qm31_sum_products3 left right=ok out := by
   unfold host_arithmetic.qm31_sum_products3
-  simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
+  try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry]
   repeat' first
-    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
-    | (apply ProverRwP6BindTotal.bind_total _ _ (accumulate _ _ _);intro _;simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (ProverRwP6ArrayRead.read _ _ (by decide));intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
+    | (apply ProverRwP6BindTotal.bind_total _ _ (accumulate _ _ _);intro _;try simp only [lift,bind_tc_ok,Aeneas.Std.uncurry])
   exact reconstruct _
 
 #print axioms borrow
