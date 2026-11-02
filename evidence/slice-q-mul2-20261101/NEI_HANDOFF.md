@@ -45,3 +45,35 @@ PASS and NEI_validate exit0, fourteen composed rows. K039/K040 strict pair PASS:
 full positive metadata domain, valid single-witness negative (n=1,index=0).
 K041 actual appended-cell cut TIMEOUT, no credit or unchanged retry. K042 separate
 old-word observation cut submitted, then continue independent dot finish leaves.
+
+Dot finish work: E009 actual reducer/Q getter/Dot finish/Eby finish extraction
+PASS. L088/L091/L092 raw modules PASS, wide constructor external is an explicit
+nominal transport to actual E008, not an axiom. Original LPf_ReductionWord import
+collides with a coherent RPz7 S1 decoder (L089 excluded); NEI_ReductionWord L090
+replays identical proof bodies with coherent import and private namespace.
+L097 actual checked reducer equals coherent wrapping reducer, unconditional U64
+value/modulo/canonical law PASS. L093-L096 failed drafts excluded. E010 extracts
+the safe wrapping reference, L098/L099 compile it, L100 reference equality and
+pure-state frame PASS. K043/K044 native actual/reference + control strict pair
+PASS. L101 adds exact constant cast, required by new native root certificate.
+L086 wrapper all-Result equality PASS. L087 prelaunch-only missing NBO module,
+not a Lean run. Read-only prerequisite plan found14 missing unchanged NBO
+modules with no absent source, to build serially before the independent-counter
+shell. No accumulator/native closure is thereby claimed.
+Own extractor now has a dedicated frozen NEI_extract_src scratch to avoid Kani
+cfg edits invalidating unchanged extraction objects. Same frozen graph/source,
+lock checks and NCO pins remain; E010 records this. No shared workspace modified.
+K041 and K042 value/frame cuts TIMEOUT; no credit or unchanged retry. Native
+metadata K039/K040 is qualified only, complete prefix still OPEN.
+
+Dot stage complete:22 composed rows /11 functions,8 edges,24 mutation tests PASS,
+NEI_validate exit0. Coherent combined forest L123 PASS, standard axioms. Field
+primitive bodies were already included in E001; continuing their direct D188
+native/emitted fidelity checks using existing generic Lean associations (no new
+Kani, no field multiplication in Kani). L124 evaluates100 tiny actual-emitted
+fixtures across20 reached field methods; N010 Rust differential running. This
+is not universal native proof: generic universal facts are the existing
+NEI_FieldScalar/CM/QM/Wide all-Result associations, and P6/D188 stays explicit.
+Current actual use120 Lean (L054,L079,L087 prelaunch gaps),50 Kani exhausted,
+10 extraction. Continue field callee audit/composition only if it passes the
+same actual-body D188 criteria; otherwise record exact missing obligation.

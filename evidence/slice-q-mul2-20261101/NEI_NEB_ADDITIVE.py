@@ -196,6 +196,12 @@ def extend(baseline,edges):
      elif ext['kind']=='NEI_CERTIFIED_CTOR_OCCURRENCE':
       _NEI_check_ctor_occurrence(row,o,ext,index,baseline,approved_edges,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':certified-ctor-occurrence')
+     elif ext['kind'] in ['NEI_DOT_VALUE_CTOR','NEI_EBY_CTOR_UNWRAP']:
+      _NEI_check_finish_external(row,o,ext,index,baseline,approved_edges,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':exact-finisher-terminal')
+     elif ext['kind']=='NEI_PRIVATE_MODULUS_CAST':
+      _NEI_check_dot_cast(row,o,ext,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':private-modulus-cast')
      elif ext['kind']=='NEI_WIDE_OPTION_CONSTRUCTOR':
       _NEI_check_wide_some(row,o,ext,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':wide-option-constructor')

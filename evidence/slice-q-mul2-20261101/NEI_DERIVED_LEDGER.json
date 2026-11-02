@@ -170480,7 +170480,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one",
@@ -170490,8 +170490,8 @@
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -171291,7 +171291,7 @@
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -171302,16 +171302,16 @@
       "NEI::WideExact::from_limbs.PacketDomain",
       "NEI::WideExact::from_limbs.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
      "callee_claims": [
-      "NBQ::canonical::Dot::finish"
+      "NEI::canonical::Dot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -171319,19 +171319,19 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R136.PacketDomain",
-      "NCS_R136.PhysicalInterpretation"
+      "NEI::canonical::Dot::finish.PacketDomain",
+      "NEI::canonical::Dot::finish.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
      "callee_claims": [
-      "NBQ::canonical::Q::limbs"
+      "NEI::canonical::Q::limbs"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -171339,10 +171339,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R141.PacketDomain",
-      "NCS_R141.PhysicalInterpretation"
+      "NEI::canonical::Q::limbs.PacketDomain",
+      "NEI::canonical::Q::limbs.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -171352,14 +171352,14 @@
       "resolution": "standard library/runtime or callback",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:106:exact-finisher-terminal",
      "id": "external:TX1:106:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
@@ -171368,10 +171368,11 @@
     "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
    ],
    "claim_ids": [
-    "NBQ::EbyKDot::finish"
+    "NBQ::EbyKDot::finish",
+    "NEI::EbyKDot::finish"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -171455,9 +171456,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:106",
      "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "dots"
     }
    ],
@@ -171472,14 +171473,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R133.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::EbyKDot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:106"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R133.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::EbyKDot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:106"
     }
    ],
    "no_credit_reason": null,
@@ -171528,10 +171529,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:106",
    "selected_claims": [
-    "NBQ::EbyKDot::finish"
+    "NEI::EbyKDot::finish"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -172192,11 +172201,11 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
      "callee_claims": [
-      "NBQ::canonical::reduce"
+      "NEI::canonical::reduce"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
      "owner_packets": [
@@ -172204,10 +172213,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R142.PacketDomain",
-      "NCS_R142.PhysicalInterpretation"
+      "NEI::canonical::reduce.PacketDomain",
+      "NEI::canonical::reduce.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -172217,24 +172226,25 @@
       "resolution": "external/constructor/callback",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:109:exact-finisher-terminal",
      "id": "external:TX1:109:1",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
     "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
    ],
    "claim_ids": [
-    "NBQ::canonical::Dot::finish"
+    "NBQ::canonical::Dot::finish",
+    "NEI::canonical::Dot::finish"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -172288,9 +172298,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:109",
      "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "dots"
     }
    ],
@@ -172305,14 +172315,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R136.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::Dot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:109"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R136.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::Dot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:109"
     }
    ],
    "no_credit_reason": null,
@@ -172359,10 +172369,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:109",
    "selected_claims": [
-    "NBQ::canonical::Dot::finish"
+    "NEI::canonical::Dot::finish"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -173314,10 +173332,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NBQ::canonical::Q::limbs"
+    "NBQ::canonical::Q::limbs",
+    "NEI::canonical::Q::limbs"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -173371,9 +173390,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:114",
      "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "dots"
     }
    ],
@@ -173388,14 +173407,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R141.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::Q::limbs.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:114"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R141.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::Q::limbs.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:114"
     }
    ],
    "no_credit_reason": null,
@@ -173442,10 +173461,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:114",
    "selected_claims": [
-    "NBQ::canonical::Q::limbs"
+    "NEI::canonical::Q::limbs"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -173494,14 +173521,14 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
      "id": "external:TX1:115:0",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -173511,14 +173538,14 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
      "id": "external:TX1:115:1",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -173528,14 +173555,14 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
      "id": "external:TX1:115:2",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -173545,22 +173572,23 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:115:private-modulus-cast",
      "id": "external:TX1:115:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [],
    "claim_ids": [
-    "NBQ::canonical::reduce"
+    "NBQ::canonical::reduce",
+    "NEI::canonical::reduce"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -173614,9 +173642,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX1:115",
      "domain": "Exact opening832 (dot prefix608), g29 canonical from same powers; 26 base terms plus three K tails per slot; private-Q canonicality; count<4096; reuse LPn Dot.push on same state, not independent dots.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "dots"
     }
    ],
@@ -173631,14 +173659,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R142.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::reduce.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX1:115"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R142.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::reduce.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX1:115"
     }
    ],
    "no_credit_reason": null,
@@ -173685,10 +173713,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:115",
    "selected_claims": [
-    "NBQ::canonical::reduce"
+    "NEI::canonical::reduce"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -203186,7 +203222,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::prepared_claim",
@@ -203199,8 +203235,8 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -289535,7 +289571,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots_one",
@@ -289545,8 +289581,8 @@
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -290386,7 +290422,7 @@
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:WideExact::from_limbs",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-core/src/field/wide_exact.rs::WideExact::from_limbs",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -290397,16 +290433,16 @@
       "NEI::WideExact::from_limbs.PacketDomain",
       "NEI::WideExact::from_limbs.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
      "callee_claims": [
-      "NBQ::canonical::Dot::finish"
+      "NEI::canonical::Dot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Dot::finish",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -290414,19 +290450,19 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R136.PacketDomain",
-      "NCS_R136.PhysicalInterpretation"
+      "NEI::canonical::Dot::finish.PacketDomain",
+      "NEI::canonical::Dot::finish.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
      "callee_claims": [
-      "NBQ::canonical::Q::limbs"
+      "NEI::canonical::Q::limbs"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:EbyKDot::finish:canonical::Q::limbs",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
@@ -290434,10 +290470,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R141.PacketDomain",
-      "NCS_R141.PhysicalInterpretation"
+      "NEI::canonical::Q::limbs.PacketDomain",
+      "NEI::canonical::Q::limbs.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -290449,14 +290485,14 @@
       "syntax": "E::from_limbs([a,b,c,d,e,f,g,h]).unwrap",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:072:exact-finisher-terminal",
      "id": "external:TX2:72:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
@@ -290465,10 +290501,11 @@
     "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Q::limbs"
    ],
    "claim_ids": [
-    "NBQ::EbyKDot::finish"
+    "NBQ::EbyKDot::finish",
+    "NEI::EbyKDot::finish"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -290552,9 +290589,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:072",
      "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U06"
     }
    ],
@@ -290569,14 +290606,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R133.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::EbyKDot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:072"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R133.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::EbyKDot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:072"
     }
    ],
    "no_credit_reason": null,
@@ -290625,10 +290662,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:072",
    "selected_claims": [
-    "NBQ::EbyKDot::finish"
+    "NEI::EbyKDot::finish"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -291318,11 +291363,11 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
      "callee_claims": [
-      "NBQ::canonical::reduce"
+      "NEI::canonical::reduce"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish",
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-edge:canonical::Dot::finish:canonical::reduce",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish->crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
      "owner_packets": [
@@ -291330,10 +291375,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R142.PacketDomain",
-      "NCS_R142.PhysicalInterpretation"
+      "NEI::canonical::reduce.PacketDomain",
+      "NEI::canonical::reduce.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -291344,24 +291389,25 @@
       "syntax": "Q",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:075:exact-finisher-terminal",
      "id": "external:TX2:75:1",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::finish bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
     "crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce"
    ],
    "claim_ids": [
-    "NBQ::canonical::Dot::finish"
+    "NBQ::canonical::Dot::finish",
+    "NEI::canonical::Dot::finish"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -291415,9 +291461,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:075",
      "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U06"
     }
    ],
@@ -291432,14 +291478,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R136.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::Dot::finish.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:075"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R136.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::Dot::finish.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:075"
     }
    ],
    "no_credit_reason": null,
@@ -291486,10 +291532,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:075",
    "selected_claims": [
-    "NBQ::canonical::Dot::finish"
+    "NEI::canonical::Dot::finish"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -292479,10 +292533,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NBQ::canonical::Q::limbs"
+    "NBQ::canonical::Q::limbs",
+    "NEI::canonical::Q::limbs"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -292536,9 +292591,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:080",
      "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U06"
     }
    ],
@@ -292553,14 +292608,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R141.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::Q::limbs.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:080"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R141.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::Q::limbs.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:080"
     }
    ],
    "no_credit_reason": null,
@@ -292607,10 +292662,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:080",
    "selected_claims": [
-    "NBQ::canonical::Q::limbs"
+    "NEI::canonical::Q::limbs"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -292664,14 +292727,14 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
      "id": "external:TX2:81:0",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -292682,14 +292745,14 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
      "id": "external:TX2:81:1",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -292700,14 +292763,14 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
      "id": "external:TX2:81:2",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -292718,22 +292781,23 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:081:private-modulus-cast",
      "id": "external:TX2:81:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::reduce bridge owner",
      "owner_packets": [
       "NBQ"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [],
    "claim_ids": [
-    "NBQ::canonical::reduce"
+    "NBQ::canonical::reduce",
+    "NEI::canonical::reduce"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -292787,9 +292851,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-dot-root:TX2:081",
      "domain": "CLOSED LPn private Dot::push: two private canonical Q operands, arbitrary four-u64 pre-state and actual wrap update. Public EbyKDot establishes checked_q and WideExact canonicality, count<4096 and SAME two accumulator writes; prove aggregate bound for finish, count<=4096, not just the local wrapping step.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U06"
     }
    ],
@@ -292804,14 +292868,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R142.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::canonical::reduce.PacketDomain",
+     "statement": "All valid typed inputs; raw words unrestricted; count unrestricted",
+     "discharged_by": "NEI-dot-root:TX2:081"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R142.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::canonical::reduce.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-dot-root:TX2:081"
     }
    ],
    "no_credit_reason": null,
@@ -292858,10 +292922,18 @@
     "evidence/native-tx2h-20261028/NBQ_L015/receipt.json",
     "evidence/native-tx2h-20261028/NBQ_L018/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:081",
    "selected_claims": [
-    "NBQ::canonical::reduce"
+    "NEI::canonical::reduce"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/fast_pairing.rs",
    "source_file_sha256": "7f75b58bfcaf7f586acb0152671e42565a549a8ace2b90dab794533dcdb6335e",
@@ -303680,7 +303752,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::finish_query_dot",
@@ -303690,8 +303762,8 @@
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -315788,7 +315860,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::high_dot",
@@ -315800,8 +315872,8 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -316220,7 +316292,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::partial_dot",
@@ -316230,8 +316302,8 @@
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },
@@ -316873,7 +316945,7 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::finish",
      "callee_claims": [
-      "NBQ::EbyKDot::finish"
+      "NEI::EbyKDot::finish"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/weights.rs::process_kind",
@@ -316883,8 +316955,8 @@
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R133.PacketDomain",
-      "NCS_R133.PhysicalInterpretation"
+      "NEI::EbyKDot::finish.PacketDomain",
+      "NEI::EbyKDot::finish.PhysicalInterpretation"
      ],
      "status": "OPEN"
     },

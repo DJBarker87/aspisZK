@@ -68,7 +68,7 @@ elif kind=='kani':
     if os.environ.get('NEI_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEI_gate.py',a+'.json']
 elif kind=='native':
-    family=os.environ.get('NEI_NATIVE_FAMILY','line');assert family in ['line','circle','prefix','push','row','accumulate','dots']
+    family=os.environ.get('NEI_NATIVE_FAMILY','line');assert family in ['line','circle','prefix','push','row','accumulate','dots','field']
     for name in [f'NEI_{family}_native.py',f'NEI_{family}_native.rs','NEI_FROZEN.json']:files[name]=(E/name).read_text()
     if os.environ.get('NEI_WRONG'):env['NEI_WRONG']=os.environ['NEI_WRONG']
     sources=list(files);command=['python3',f'NEI_{family}_native.py']

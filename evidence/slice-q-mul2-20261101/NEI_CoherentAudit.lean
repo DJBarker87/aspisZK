@@ -1,0 +1,16 @@
+import NEI_LineBridge
+import NEI_CircleBridge
+import NEI_PushRawBridge
+import NEI_RowEdges
+import NEI_PrefixProduct
+import NEI_FourWrapperLaw
+import NEI_AccumIndependentCounters
+import NEI_DotFinishFrames
+import NEI_PublicDotFinishValues
+#print axioms NEI_AccumIndependentCounters.independent_counters
+#print axioms NEI_DotReduction.same
+#print axioms NEI_EbyFinishAssociation.same
+#print axioms NEI_DotFinishFrames.outer
+#print axioms NEI_PublicDotFinishValues.source
+#print axioms NEI_FourWrapperLaw.emitted_to_cohort
+#print axioms NEI_PrefixProduct.actual

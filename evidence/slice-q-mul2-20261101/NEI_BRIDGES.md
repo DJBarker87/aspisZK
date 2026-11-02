@@ -47,3 +47,15 @@ TX2:032) close; total fourteen rows /seven functions, four direct edges. The
 additional Option constructor class binds exact source line213, function/body,
 and named emitted association; M31 remains the original transparent-constructor
 class. No old native credit used. Incoming dot/decoder edges remain separate.
+
+## Reducer and finish chain
+
+Fresh actual E009 and safe-reference E010 extractions, L101/L100/L102/L118,
+canonical value laws L119-L121 and frames L122 close the private reducer,
+Q::limbs, Dot::finish and EbyKDot::finish. K043-K050 are four matched passing
+result/failing-control pairs, with every scalar/coordinate observed. The four
+real callee edges close. Total: twenty-two composed rows /eleven functions,
+eight edges; twenty-four mutation checks and NEI_validate pass. L123 co-imports
+the accepted arithmetic/fold/push/counter/wrapper proofs and audits their axioms:
+standard only. Fresh same-body certificates replace suspended older registry
+entries only after an allowlisted native/model audit; none is used as credit.

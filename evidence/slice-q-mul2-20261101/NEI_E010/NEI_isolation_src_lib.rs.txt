@@ -1,0 +1,6 @@
+const P:u32=2147483647;
+pub fn NEI_reduce_ref(mut x:u64)->u32 {
+ x=(x & u64::from(P)).wrapping_add(x>>31u32);
+ x=(x & u64::from(P)).wrapping_add(x>>31u32);
+ if x>=u64::from(P) {x.wrapping_sub(u64::from(P)) as u32}else{x as u32}
+}

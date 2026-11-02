@@ -28,7 +28,7 @@ except AssertionError:results.append(dict(test='constructor occurrence rule cann
 else:raise AssertionError('constructor scope guard missing')
 reject('wrong row widening source',lambda d:root(d,'TX1:195')['external_obligations']['external:TX1:195:2'].update(source_body_sha256='0'*64))
 reject('wrong row widening syntax',lambda d:root(d,'TX2:125')['external_obligations']['external:TX2:125:2'].update(syntax='u32::from'))
-independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new') and r['function']!=c.arithmetic.WIDE]
+independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new') and r['function']!=c.arithmetic.WIDE and r['function'] not in c.dots.gate.FUNCTIONS]
 _,independent_delta=c.validate(base,independent)
 assert len(independent_delta['composed_rows_closed'])==8 and not any(x in independent_delta['composed_rows_closed'] for x in ['TX1:107','TX2:073','TX1:110','TX2:076'])
 results.append(dict(test='independent row/getter/push members proceed while dot constructor is open',status='PASS',outcome='eight independent rows close'))
@@ -41,6 +41,24 @@ wide_independent=copy.deepcopy(edges);wide_independent['row_certificates']=[r fo
 _,wide_delta=c.validate(base,wide_independent)
 assert set(wide_delta['composed_rows_closed'])=={'TX1:049','TX2:032'}
 results.append(dict(test='wide constructor is independent of dot products and old native credit',status='PASS',outcome='exactly two wide constructor rows close'))
+reject('private modulus value mismatch',lambda d:root(d,'TX1:115')['external_obligations']['external:TX1:115:0'].update(source_value=2147483648))
+reject('Q constructor occurrence mismatch',lambda d:root(d,'TX2:075')['external_obligations']['external:TX2:75:1'].update(line=124))
+reject('outer unwrap wrong callee',lambda d:root(d,'TX1:106')['external_obligations']['external:TX1:106:3'].update(callee='not-wide-constructor'))
+reject('old private reducer certificate cannot be supplied',lambda d:root(d,'TX2:081').update(id='NEB-private-reducer-root:TX2:081'))
+missing_reducer=copy.deepcopy(edges);missing_reducer['row_certificates']=[r for r in missing_reducer['row_certificates'] if r['function']!=c.dots.gate.FUNCTIONS[0]]
+_,without_reducer=c.validate(base,missing_reducer)
+assert not set(without_reducer['composed_rows_closed'])&{'TX1:115','TX2:081','TX1:109','TX2:075','TX1:106','TX2:072'}
+assert {'TX1:114','TX2:080','TX1:049','TX2:032'}<=set(without_reducer['composed_rows_closed'])
+results.append(dict(test='missing reducer blocks both finishers but permits independent getters/constructor',status='PASS'))
+missing_wide=copy.deepcopy(edges);missing_wide['row_certificates']=[r for r in missing_wide['row_certificates'] if r['function']!=c.arithmetic.WIDE]
+_,without_wide=c.validate(base,missing_wide)
+assert not set(without_wide['composed_rows_closed'])&{'TX1:106','TX2:072','TX1:049','TX2:032'}
+assert {'TX1:109','TX2:075','TX1:114','TX2:080'}<=set(without_wide['composed_rows_closed'])
+results.append(dict(test='missing actual wide constructor prevents outer finisher closure',status='PASS'))
+p=copy.deepcopy(c.dots.packets()[-1]);p['lean_evidence']=[e for e in p['lean_evidence'] if not any(n.startswith('NEI_EbyFinishAssociation.') for n in e['theorems'])]
+try:c.dots.audit(p,c.neb)
+except (AssertionError,ValueError):results.append(dict(test='unrelated reducer/frame proofs cannot replace outer Result association',status='PASS'))
+else:raise AssertionError('missing outer association admitted')
 source=c.obj(E/'NEI_VALIDATOR_SOURCE_DELTA.json');original=Path(source['original']).read_text();derived=Path(source['derived']).read_text();assert derived.replace(source['only_added_branch'],'')==original
 results.append(dict(test='every original validator check retained verbatim',status='PASS'))
 (E/'NEI_COMPOSE_TESTS_receipt.json').write_text(json.dumps(dict(tests=results,passed=len(results),failed=0,baseline_unchanged=True,original_neb_file_unchanged=True),indent=2)+'\n')

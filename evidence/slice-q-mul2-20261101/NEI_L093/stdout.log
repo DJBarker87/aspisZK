@@ -1,0 +1,88 @@
+NEI_generated/NEI_DotReduction.lean:13:27: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (?x &&& 2147483647#u64) + U64.wrapping_shr ?x 31#u32
+in the target expression
+  (do
+      let i2 ← ok (x.wrapping_shr 31#u32)
+      let x1 ← (x &&& core.convert.num.FromU64U32.from 2147483647#u32) + i2
+      let i5 ← x1 >>> 31#u32
+      let x2 ← (x1 &&& core.convert.num.FromU64U32.from 2147483647#u32) + i5
+      if x2 ≥ core.convert.num.FromU64U32.from 2147483647#u32 then do
+          let i8 ← x2 - core.convert.num.FromU64U32.from 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i8)
+        else ok (UScalar.cast UScalarTy.U32 x2)) =
+    if
+        U64.wrapping_add
+            (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              core.convert.num.FromU64U32.from 2147483647#u32)
+            ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                  (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32) ≥
+          core.convert.num.FromU64U32.from 2147483647#u32 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add
+                (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                  core.convert.num.FromU64U32.from 2147483647#u32)
+                ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                      (x.wrapping_shr 31#u32)).wrapping_shr
+                  31#u32)).wrapping_sub
+            (core.convert.num.FromU64U32.from 2147483647#u32)))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add
+            (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              core.convert.num.FromU64U32.from 2147483647#u32)
+            ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                  (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32)))
+
+x : U64
+⊢ (do
+      let i2 ← ok (x.wrapping_shr 31#u32)
+      let x1 ← (x &&& core.convert.num.FromU64U32.from 2147483647#u32) + i2
+      let i5 ← x1 >>> 31#u32
+      let x2 ← (x1 &&& core.convert.num.FromU64U32.from 2147483647#u32) + i5
+      if x2 ≥ core.convert.num.FromU64U32.from 2147483647#u32 then do
+          let i8 ← x2 - core.convert.num.FromU64U32.from 2147483647#u32
+          ok (UScalar.cast UScalarTy.U32 i8)
+        else ok (UScalar.cast UScalarTy.U32 x2)) =
+    if
+        U64.wrapping_add
+            (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              core.convert.num.FromU64U32.from 2147483647#u32)
+            ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                  (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32) ≥
+          core.convert.num.FromU64U32.from 2147483647#u32 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add
+                (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+                  core.convert.num.FromU64U32.from 2147483647#u32)
+                ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                      (x.wrapping_shr 31#u32)).wrapping_shr
+                  31#u32)).wrapping_sub
+            (core.convert.num.FromU64U32.from 2147483647#u32)))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add
+            (U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32) (x.wrapping_shr 31#u32) &&&
+              core.convert.num.FromU64U32.from 2147483647#u32)
+            ((U64.wrapping_add (x &&& core.convert.num.FromU64U32.from 2147483647#u32)
+                  (x.wrapping_shr 31#u32)).wrapping_shr
+              31#u32)))
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (31 ≤ UScalar.cMax UScalarTy.U32)) true
+  in the application
+    id (Eq.refl true)
+'NEI_DotReduction.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_DotReduction.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
