@@ -153,10 +153,10 @@
           "text": "impl<Z> Zeroize for IterMut<'_, Z>\nwhere\n    Z: Zeroize,\n{\n    fn zeroize(&mut self) {\n        for elem in self {\n            elem.zeroize();\n        }\n    }\n}"
         },
         {
-          "anchor": "Drop for Zeroizing",
+          "anchor": "impl<Z> Drop for Zeroizing<Z>",
           "found": true,
-          "first": 694,
-          "text": "impl<Z> ZeroizeOnDrop for Zeroizing<Z> where Z: Zeroize + ?Sized {}"
+          "first": 696,
+          "text": "impl<Z> Drop for Zeroizing<Z>\nwhere\n    Z: Zeroize + ?Sized,\n{\n    fn drop(&mut self) {\n        self.0.zeroize();\n    }\n}"
         },
         {
           "anchor": "Zeroize for [Z; N]",
@@ -171,8 +171,10 @@
           "text": "fn volatile_write<T: Copy + Sized>(dst: &mut T, src: T) {\n    unsafe { ptr::write_volatile(dst, src) }\n}"
         },
         {
-          "anchor": "fn atomic_fence",
-          "found": false
+          "anchor": "impl<Z> Zeroize for Z",
+          "found": true,
+          "first": 270,
+          "text": "impl<Z> Zeroize for Z\nwhere\n    Z: DefaultIsZeroes,\n{\n    fn zeroize(&mut self) {\n        volatile_write(self, Z::default());\n        optimization_barrier(self);\n    }\n}"
         }
       ]
     }

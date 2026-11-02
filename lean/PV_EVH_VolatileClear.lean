@@ -56,7 +56,9 @@ theorem clear_length (b : Block) (n : Nat) (h : n ≤ b.bytes.length) :
 theorem clear_initialized (b : Block) (n : Nat) :
     (clearBlock b n).bytes.take n = List.replicate n 0 := by
   simp only [clearBlock]
-  exact List.take_left (List.replicate n 0) (b.bytes.drop n)
+  simpa only [List.length_replicate] using
+    (show ((List.replicate n (0 : UInt8)) ++ b.bytes.drop n).take
+      (List.replicate n (0 : UInt8)).length = List.replicate n 0 from List.take_left)
 
 #print axioms cells_exact
 #print axioms clear_exact

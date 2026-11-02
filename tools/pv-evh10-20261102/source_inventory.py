@@ -24,7 +24,7 @@ from pathlib import Path
 import json,hashlib
 root=Path('/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library')
 paths=[root/'core/src/alloc/layout.rs',root/'alloc/src/raw_vec/mod.rs',root/'alloc/src/alloc.rs',next(Path('/home/dombarker/.cargo/registry/src').glob('*/zeroize-1.9.0/src/lib.rs'))]
-anchors=[['pub const fn repeat(', 'pub const fn repeat_packed(', 'pub const fn pad_to_align(', 'const fn from_size_alignment(', 'const fn max_size_for_align('], ['fn try_allocate_in(', 'const fn handle_error(', 'const fn layout_array('], ['fn alloc_impl_runtime(', 'fn deallocate_impl_runtime('], ['Zeroize for IterMut', 'Drop for Zeroizing', 'Zeroize for [Z; N]', 'fn volatile_write', 'fn atomic_fence']]
+anchors=[['pub const fn repeat(', 'pub const fn repeat_packed(', 'pub const fn pad_to_align(', 'const fn from_size_alignment(', 'const fn max_size_for_align('], ['fn try_allocate_in(', 'const fn handle_error(', 'const fn layout_array('], ['fn alloc_impl_runtime(', 'fn deallocate_impl_runtime('], ['Zeroize for IterMut', 'impl<Z> Drop for Zeroizing<Z>', 'Zeroize for [Z; N]', 'fn volatile_write', 'impl<Z> Zeroize for Z']]
 rows=[]
 for p,aa in zip(paths,anchors):
  raw=p.read_bytes();s=raw.decode();spans=[]
