@@ -50,7 +50,6 @@ theorem error_world (key : Key) (fill : Fill) (success : Slice U8 → Q Answer)
 /-- Joins the actual source error branch at opsNative to the partial-fill
 cleanup world. It discharges this branch, not the enclosing entry's admission,
 success branch, other slots, or the L3 joint observation law. -/
-omit [ExternalTypes] in
 theorem error_native (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
