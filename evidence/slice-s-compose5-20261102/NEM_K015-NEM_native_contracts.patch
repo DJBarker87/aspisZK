@@ -1,0 +1,21 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_payment_prefix.rs"]
++mod NEM_payment_prefix;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_payment_prefix.rs
+@@ -0,0 +1,8 @@
++use super::*;
++struct Frame<'a>{expected:&'a PoolV1WithdrawalPublicV1,reply:Result<(),PoolV1PaymentStatementFormatError>,log:u8,reached:bool}
++fn child(p:&PoolV1WithdrawalPublicV1,f:&mut Frame)->Result<(),PoolV1PaymentStatementFormatError>{assert!(core::ptr::eq(p,f.expected)&&f.log==0,"actual caller public and empty prestate log");f.log=1;if f.reply.is_ok(){Err(PoolV1PaymentStatementFormatError::WrongLength)}else{Ok(())}}
++fn prefix(public:&PoolV1WithdrawalPublicV1,f:&mut Frame)->Result<(),PoolV1PaymentStatementFormatError>{child(public,f)?;f.reached=true;Ok(())}
++fn any_error()->crate::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>crate::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>crate::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn payment_prefix(){let p=PoolV1WithdrawalPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),amount:kani::any(),destination_token_account:kani::any(),change_commitment:digest()};let mut f=Frame{expected:&p,reply:if kani::any(){Ok(())}else{Err(any_error())},log:0,reached:false};let actual=prefix(&p,&mut f);assert!(actual==f.reply && f.log==1 && f.reached==f.reply.is_ok(),"complete Result and short-circuit continuation");}

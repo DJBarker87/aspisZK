@@ -1,0 +1,25 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_payment_call.rs"]
++mod NEM_payment_call;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_payment_call.rs
+@@ -0,0 +1,12 @@
++use super::*;
++struct Frame{reply:[u8;32],called:bool}
++fn child(v:&Digest,expected:&Digest,f:&mut Frame)->[u8;32]{assert!(!f.called && core::ptr::eq(v,expected),"actual payment child borrow");f.called=true;f.reply}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn payment_call(){let p=PoolV1PrivateTransferPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any()),recipient_commitment:digest(),change_commitment:digest()};
++ let mut output:[u8;216]=kani::any();let offset:usize=kani::any();kani::assume(offset<32);let j:usize=kani::any();kani::assume(j<216);let old=output[j];let mut f=Frame{reply:kani::any(),called:false};
++ let reply=child(&p.recipient_commitment,&p.anchor_root,&mut f);let src=&reply;
++ let dst=&mut output[152..152+32];let mut i=offset;dst[i]=src[i];i+=1;
++ assert!(i==offset+1 && output[j]==if j==152+offset{f.reply[offset]}else{old},"same payment source reply and complete prestate frame");
++ assert!(f.called);
++}

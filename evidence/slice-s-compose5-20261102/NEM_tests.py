@@ -30,4 +30,14 @@ class Common(Certificates):
  def test_wrong_frame(self):self.common_mutation('frame','all bytes may change')
  def test_wrong_width(self):self.common_mutation('reply_widths',[32,32,32])
  def test_missing_same_call(self):self.common_mutation('native_pairs',[])
+class Payment(Certificates):
+ def mutate_payment(self,field,value):
+  f='crates/aspis-statement/src/pool_v1/payment_relation.rs::encode_pool_v1_private_transfer_public_v1';c=copy.deepcopy(self.p['members'][f]);c['payment_encode_composition'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
+ def test_missing_prefix(self):self.mutate_payment('prefix',[])
+ def test_wrong_payment_field(self):self.mutate_payment('fields',['change_commitment','recipient_commitment'])
+ def test_wrong_payment_window(self):self.mutate_payment('windows',[[148,32],[184,32]])
+ def test_missing_payment_frame(self):self.mutate_payment('frames',[])
+ def test_inner_payment_hypothesis(self):self.mutate_payment('no_inner_native_hypotheses',False)
 if __name__=='__main__':unittest.main()
