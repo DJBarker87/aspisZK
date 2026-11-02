@@ -3,12 +3,12 @@ from pathlib import Path
 import hashlib,json,os,statistics,subprocess,time,importlib.util,signal
 H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029';O=H/'final-gates/timing-d561';O.mkdir(exist_ok=False)
 spec=importlib.util.spec_from_file_location('guard',Path(__file__).with_name('timing-window-guard.py'));g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
-monitor=g.Monitor()
+monitor=g.Monitor(event_watch=True)
 B={'baseline':CONTROL/'artifacts/baseline-devnet_spend','draft':H/'native-target/client/user_client'}
 rows=[]
 def write(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
 def guard(label):
- write(O/(label+'-quiet.json'),monitor.poll())
+ write(O/(label+'-quiet.json'),monitor.checkpoint())
 def invoke(command,**kwargs):
  # Keep monitoring while communicate waits for the actual prover.
  import threading
@@ -102,9 +102,10 @@ try:
    n=len(groups['all']['values']['draft'])
    summary.append(dict(fixture=f,groups=groups,minimum_paired_samples=10,under_15_seconds=groups['all']['median_seconds']['draft']<15,verdict=('PASS' if groups['all']['within_10_percent'] and groups['all']['median_seconds']['draft']<15 else 'FAIL') if n==10 else 'INCOMPLETE'))
   guard('final-before-summary')
+  write(O/'scope-events.json',dict(events=monitor.events.history,subscription='persistent systemd user UnitNew; all streams use this build user',inventory_interval_seconds=monitor.interval))
   write(O/'summary.json',dict(start=start,end=time.time(),pairs=10,rows=rows,summary=summary,scope='Finite actual client fixture timing; stdout field and external process duration. D359(A) owner-adopted gate evidence: measured under throttling, paired; ratio <=1.10 and candidate median <15 seconds. No universal unthrottled upper bound claimed. Timing remains observable under D478.'))
   print(json.dumps(summary,indent=2),flush=True)
 except BaseException as exc:
- write(O/'INVALID.json',dict(valid=False,pair=i,error=repr(exc),guard_failure=monitor.failure,unaccepted_current_pair=pair,previous_complete_rows=rows,checks=monitor.checks))
+ write(O/'INVALID.json',dict(valid=False,pair=i,error=repr(exc),guard_failure=monitor.failure,scope_events=monitor.events.history if monitor.events else [],unaccepted_current_pair=pair,previous_complete_rows=rows,checks=monitor.checks))
  raise
 finally:monitor.close()

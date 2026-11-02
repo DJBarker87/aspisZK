@@ -93,4 +93,26 @@ class Tests(unittest.TestCase):
    scope['invoke']([sys.executable,'-c','import time; time.sleep(5)'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
   self.assertEqual(len(spawned),1);self.assertIsNotNone(spawned[0].poll())
   self.assertIsNotNone(m.failure)
+ def test_short_lived_scope_event_survives_empty_inventory(self):
+  events=g.ScopeEvents(own_unit='pv-uc-native90115.scope')
+  events.feed_unit('pv-uc-native90115.scope');events.feed_unit('background.service')
+  self.assertFalse(events.history)
+  events.feed_unit('foreign-transient.scope')
+  m=g.Monitor(probe=lambda:{'foreign_capped_scopes':[]});m.events=events
+  with self.assertRaises(g.Hold):m.poll()
+  self.assertEqual(m.failure['event']['unit'],'foreign-transient.scope')
+ def test_event_stream_failure_refuses(self):
+  events=g.ScopeEvents(own_unit='own.scope');events.failure={'reason':'event stream disconnected'}
+  m=g.Monitor(probe=lambda:{});m.events=events
+  with self.assertRaises(g.Hold):m.poll()
+ def test_event_subscription_failure_cleans_up(self):
+  class Fake:
+   failure=None
+   def start(self):raise g.Hold('subscription unavailable')
+   def close(self):self.closed=True
+  fake=Fake();original=g.ScopeEvents;g.ScopeEvents=lambda:fake
+  try:
+   with self.assertRaises(g.Hold):g.Monitor(probe=lambda:{},event_watch=True).start()
+   self.assertTrue(fake.closed)
+  finally:g.ScopeEvents=original
 if __name__=='__main__':unittest.main(verbosity=2)
