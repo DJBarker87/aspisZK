@@ -225,7 +225,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
                                             | true => trivial
                                             | false =>
                                               try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift,Aeneas.Std.uncurry,bind_assoc_eq]
-                                              exact ⟨commit1,root1,root2,_,size_of_guard _ sizeGuard,hcommitted,hcommitted2,hcolumns,helperSum,zero,hhelperSum,hzero,?_⟩
+                                              refine ⟨commit1,root1,root2,_,size_of_guard _ sizeGuard,hcommitted,hcommitted2,hcolumns,helperSum,zero,hhelperSum,hzero,?_⟩
                                               apply PV_RunJoin_BoolNegation72.complete
                                               exact hsumDifferent
 #print axioms size_of_guard
