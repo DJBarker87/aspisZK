@@ -36,6 +36,8 @@ for module,old,new,application in [
  ('PV_RDCD5_V236','op216_instance','v236','PV_RDCD5_V236.op216_instance base ops uc less nz self input hp')]:
  source=(L/(module+'.lean')).read_text();start=source.index('theorem '+old);end=source.index(':= by',start)
  declaration=source[start:end].replace('theorem '+old,'theorem '+new,1)
+ declaration=re.sub(r'\binterpreted\b','PV_RDCD5_V233.interpreted',declaration)
+ declaration=re.sub(r'\btypedSource\b','PV_RDCD5_V236.typedSource',declaration)
  s+='\n'+declaration+':= by\n  exact '+application+'\n#print axioms '+new+'\n'
 s+='''
 theorem v197_finding :

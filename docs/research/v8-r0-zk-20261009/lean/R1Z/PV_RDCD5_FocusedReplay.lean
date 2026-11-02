@@ -8,7 +8,7 @@ theorem v233 (base : ProverRwFull.ExternalTypes)
     (ops : @ProverRwFull.ExternalFuns (PV_AL_SplitNativeShape.Types base))
     (input : Slice U8) (origin : Nat) :
     letI : ProverRwFull.ExternalTypes := PV_AL_SplitNativeShape.Types base
-    interpreted (PV_AL_SplitNativeShape.Size base 6) input origin =
+    PV_RDCD5_V233.interpreted (PV_AL_SplitNativeShape.Size base 6) input origin =
       (@ProverRwFull.block_buffer.Eager.Insts.Block_bufferSealedSealed
         (PV_AL_SplitNativeShape.Types base)
         (PV_AL_SplitSelected.selected base ops)).split_blocks
@@ -30,7 +30,7 @@ theorem v236 (base : ExternalTypes)
       T block_buffer.Eager (PV_AL_SplitNativeShape.Size base 6) (Storage U8 6)
       N1 (Storage U8 6) O (PV_DL_UpdateSelected.bufferKind base ops T)
       uc less nz self input =
-      typedSource (PV_DL_UpdateSelected.updater base uc) self input := by
+      PV_RDCD5_V236.typedSource (PV_DL_UpdateSelected.updater base uc) self input := by
   exact PV_RDCD5_V236.op216_instance base ops uc less nz self input hp
 #print axioms v236
 
