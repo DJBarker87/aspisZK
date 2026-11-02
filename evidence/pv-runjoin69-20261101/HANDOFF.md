@@ -1,112 +1,112 @@
-# Runjoin69 LOG D547 context checkpoint — next 79423
+# Runjoin69 LOG D548 checkpoint — next79458,27 attempts remain
 
 Worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
-`codex/pv-runjoin-20261026`, sole writer, no push. Entry d53d4af262.
-Checked source-stage HEAD 32c20bb7c7. Reporting commits follow it.
+`codex/pv-runjoin-20261026`, sole writer, no push. Entry3765209e4f.
+Checked source-stage HEAD58b581488d; reporting commits follow it.
 
-Used clean leftovers 78091–78096 FIRST, then 79400–79422. Exactly 29 charged
-attempts: 11 accepted, 18 rejected, zero refusals. Budget remaining 61 TOTAL
-(including any future audits). NEXT 79423. Proof IDs 79423–79496 are unused,
-but do not consume more than the remaining budget. Audits 79497–79499 are
-reserved and UNUSED. Old audits 78300–78302 remain UNUSED. Fresh host/local/
-sent-table scans confirm these reserves. This is the requested context
-checkpoint, not exhaustion. Keep working after removals.
+63 charged attempts in this90-attempt block:30 accepted,33 rejected.
+This continuation used34:19 accepted,15 rejected. NEXT79458;27 TOTAL attempts
+remain INCLUDING future audits.79497–79499 remain RESERVED and UNUSED;
+78300–78302 remain unused.79434 was refused before compilation and skipped;
+it remains UNLAUNCHED, not charged. Do not accidentally count the refusal or
+reuse a compiler ID. Fresh unused-range and host/sent/local scans are recorded.
 
-## Finished and installed: full FinishContext removal
+## Prior accepted endpoint progress retained
 
-79416 NativeArithmeticImages69.complete proves all three c0/c1/f byte images
-against the supplied OpeningImages54.Images for the ORIGINAL data family.
-79417 NativeFinishContext69.complete proves the unchanged original Link in full.
-79418 NativeFinishDischarge69.links/publication installs it into the original
-native RUNJOIN_PUBLISH_COMPACT consumer. See FINISH-REMOVAL.md for before/after.
-It now requires exactly the same other SEVEN links after QueryAppend and
-FinishContext: R24Sampler, CommonSample, BackendInput, QueryContext, QueryRange,
-NodeAppend, PublishOrder. No replacement hypothesis or domain narrowing.
-No ledger row physically removed. Exact native premise removed: FinishContext.
+The lead accepted FinishContext removal. NativeFinishDischarge69 (79418)
+constructs the unchanged FinishContext Link and original publication consumer.
+See FINISH-REMOVAL.md and SESSION-D547.json. It still requires exactly seven
+other links: R24Sampler, CommonSample, BackendInput, QueryContext, QueryRange,
+NodeAppend, PublishOrder. No new removal in D548, no physical ledger row edit,
+no added consumer hypothesis. QueryAppend was removed in the prior round.
 
-The checked source chain is:
-- CoefficientTable69 (78094): coefficient_row proves the canonical chosen
-  column equals the S2 row permutation; table joins actual backend cells and
-  produced coefficient Vec with GammaCoefficients53.wide. Uses NativeBackendMatrix66.
-- CircleCanonical69 (78096): all-block native circle coordinate canonicality,
-  source challenge tag match, and stored alpha/point raw canonicality from
-  Produced. DOES NOT import or require the unchecked circle-unit drafts.
-- NativeOpeningArrays69 (79403): actual prepare q/w source outputs, canonical
-  raw arrays and exact prepare-tail equation. Consumes NativePreparedArrays66,
-  coefficient table, actual prepared scalars and NativeBinding63. All arrays
-  remain symbolic. To rewrite dependent provenance, freeze phase.val in a
-  typed local `value`; never rewrite directly inside the subtype coercion.
-- NativeArithmeticTrace69 (79406): actual first round, BOTH first folds,
-  second round, final fold and all three encoders transported to OpeningKernel44.
-  q1 length follows from PrimalFirst44, not an added bound. Keep ActualRun.data
-  scalar projections syntactically aligned before rewriting; use equality
-  transitivity where rw produces malformed numeric proof motives.
-- OpeningStreamUnique69 (79409): exact source-value injectivity and stream
-  congruence; byte cell kept opaque. An inferred dependent congrArg exhausted
-  default heartbeats (79408), replaced by the small named `cell` theorem.
-- OpeningArrayStream69 (79415): generic Usize array stream congruence plus
-  byte carrier identity from the explicit 8-bit bound. Broad byte simp at79414
-  hit recursion limit; replaced with Nat.mod_eq_of_lt. Limits never raised.
+## New CHECKED source proofs — all19 current hashes accepted
 
-All eleven CURRENT source hashes are accepted; original #print axioms are
-standard-only. SESSION-D547.json contains exact targets, revisions, hashes,
-exit/wall/RSS/swap and axioms. Original failed and accepted logs are retained
-in original-module-logs.json.xz, with uncompressed SHA. No unchecked draft is
-claimed checked. Earlier NativeSample62/sourceFacts/common and
-NativeSampleSource66 remain unchecked and unnecessary for this removal.
+NativeSemanticSuff69.complete (79450): on the ACTUAL self/point and the claims
+returned by actual point_claims, success of ORIGINAL residual op227 at
+(self.public,claims,point,self.challenges) implies actual evaluator success.
+The complete native tail is proved internally, including op117, both source
+slice copies, eta multiplication/additions, point[8]/point[9] and extra.
+NativeSemanticPlan69.complete (79453) provides Sequential64.Success for the
+terminal node and full native continuation. SemanticReached69.reached/plan
+(79424) identify that node with the source evaluator under actual point_claims
+success. This is LOCAL reached-input sufficiency, NOT Nonempty P.
 
-## Continued after removal: allocator portion of Nonempty P
+The checked tail chain:
+- NativeQuarticTotal69 (79426): actual opsNative op64/op67/op69 equations and
+  all-input totality; source dictionary is retained.
+- ExtraTotal69 (79428), NativeExtraTotal69 (79430): inner28/outer2 loops by
+  symbolic rank induction and proven bounds, arbitrary symbolic1024-cell input.
+- MaskScalarTotal69 (79431), MaskFieldTotal69 (79435): actual installed mask
+  copy's CT scalar and complex/quartic operations, symbolic raw limbs.
+- MaskPreparedTotal69 (79437): prepared components, multiplier, power26 and
+  four tower-coordinate cases. Explicit equations replaced tactic search.
+- MaskLinearsTotal69 (79439): actual ten-step loop, symbolic induction.
+- MaskRangeTotal69 (79441): scatter/Horner with explicit bounds and stores.
+- MaskTotal69 (79445): complete installed extraction, using existing named
+  factor/maskfactor cells for the exceptional sparse exponent layout.
+- NativeMaskValueTotal69 (79446): native op117 binding and totality.
+- ClaimMaskTotal69 (79448): BOTH actual slice copies and restored arrays.
+- MaskCopyApi69 (79447): exact standard-library API inspection only.
 
-79421 NativeAllocator69.source/success_iff/bind identifies the ACTUAL opsNative63
-op32 callback with AllocatorWorld63.execute at the supplied runtime/world,
-retaining both errors and its original error carrier. success_iff states the
-exact request-specific allocator success condition; no adequacy is proved.
+RoundWorkerReached69.reached (79452) factors ACTUAL sumcheck op257 with its
+ZERO callback, cost100+round, count28*assignments and the exact
+(oracle,point,round,assignments) closure. Tail keeps merge/length checks,
+boundary check, transcript, point update, append and original errors.
+RoundWorkerPlan69.complete/native (79454) reify this source and prove complete
+native/original callback equality, retaining the actual returned vector/length.
 
-79422 NativeAllocatorSequence69.complete relates two consecutive ACTUAL source
-callbacks to the threaded world events. The second request and size depend on
-the FIRST returned status. It exposes `compatible`: equality between the
-second callback's returned status at the source dictionary's fixed world and
-at the first event's post-world. This is a conditional proof tool, NOT a new
-consumer premise, NOT a proved allocator-adequacy law and NOT Nonempty P.
-The source dictionary is immutable; do not silently equate its callbacks with
-Sequential64.execute's threaded .reserve interpreter. Bind this condition on
-the requests actually reached or use an equivalent explicit source argument.
+CommitWorkerReached69.reached (79456) factors ACTUAL commitment worker with
+cost200, lanes length and exact(domain,messages,variant,lanes), retaining both
+result-processing loops. It requires request-specific allocator success and
+actual lane validation. CommitWorkerPlan69.complete (79457) identifies reserve
+THEN worker with this source call and the exact event post-world.
+It is not a proof of allocator adequacy. The immutable source dictionary uses
+its original world; a subsequent reservation STILL requires compatibility
+with the preceding event's post-world. NativeAllocatorSequence69.complete
+(79422) exposes that condition; do not silently identify worlds.
 
 ## Next work, in order
 
-Nonempty P remains UNPROVED. Bind Sequential64/SequentialSource64 to actual
-NativeControl55.run/capture; prove sequential op227/op257 success on the inputs
-that source reaches, retaining allocator world binding. Old ResidualSuccess63's
-two unrelated existential success facts are NOT sufficient. No separate model
-witness under(v'). Do not add capture success as a replacement hypothesis.
+Nonempty P remains UNPROVED. Bind these checked local source/plan results to
+Sequential64/SequentialSource64 and NativeControl55.run/capture. Prove
+point_claims success on columns the source actually reaches; the sequential
+op257 condition must retain both commitment worker outputs and their exact
+lengths/shapes, all round-dependent workers/transcript points, and their
+continuations. Do not replace this by unrelated successful closures/counts.
+Derive lane validation from actual message domains. Keep allocator binding
+for each request at the source-fixed world AND the threaded world.
+The run has earlier audit checks and a helper-sum balance check after
+build_with_material; all must be discharged, not assumed as capture success.
 
-The source op227 call is in
-host_semantic.SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle.evaluate:
-point_claims self.columns point yields the EXACT points passed to terminal_qm31;
-then claim_mask_value, eta multiply/add, extra at point[8]/point[9]. It is called
-through host_sumcheck.prove_sumcheck in build_with_helper_mode, after the C1/C2
-workers, and iteratively depends on its actual transcript/points.
-Source op257 sites in ProverRwFullFuns are lines19758 (wide leaves) and21690
-(other commitment path). NativeFrames63.op227/op257 preserves actual callbacks;
-never substitute success on unrelated closures/counts or ignore output lengths.
-NativeControl55.run has the audit checks before NativeAfterAudit55; after
-build_with_material it also checks helper-sum balance before capture.
+Then finish Nonempty P, NodeAppend, CommonSample, BackendInput, QueryContext
+and QueryRange as possible. After each removal record before/after and
+CONTINUE. No separate model witness under(v'). Never weaken Fields/Links or
+add capture success/allocator adequacy to the native consumer. Skeleton
+consistency: reduced to non-emptiness. Privacy target NOT established.
+NativeSample62/sourceFacts/common and NativeSampleSource66 remain unchecked;
+tracked presence is not validation. The unchecked circle-unit drafts remain
+unnecessary to the accepted FinishContext chain.
 
-After Nonempty P, do NodeAppend, then CommonSample and BackendInput. Do not
-weaken Fields or any fixed Links. No new endpoint-wide or non-vacuity credit
-is claimed. Skeleton consistency: reduced to non-emptiness. Target NOT established.
+## Evidence / tools / resource boundaries
 
-## Tools and validation
+Use tools/pv-runjoin69-20261101/focused.py ID MODULE, source committed first.
+Pinned runjoin32 host cache; one6G/8G/swap0/TasksMax64 scope,Lean-M7000.
+Changed-source guard unchanged. No full regression or final-audit ID used.
+SESSION-D548.json has exact targets/revisions/hashes/metrics/axioms; original
+logs retained in original-module-logs.json.xz with uncompressed SHA.
+REPORT-D548.md and COMMITS-D548.txt explain progress and failures.
 
-Use tools/pv-runjoin69-20261101/focused.py ID MODULE (committed source first).
-Pinned runjoin32 host workspace/cache reused. One6G/8G/swap0/TasksMax64 scope,
-Lean-M7000. Guard rejects unchanged failed sources. Dependency success/source
-hashes are checked before launch. The output is intentionally short.
-All new receipts are under this directory. Do NOT put new receipts under66.
+A single refusal at79434 was uncharged. The wrapper was stopped before its
+retry and79435 used after the full180s cooldown; this unnecessary advancement
+rather than same-ID retry deviated from(m')'s preferred handling. No compiler
+was interrupted, no cooldown bypass, no VOID result. Preserve this history.
+Default-heartbeat failures79433/79436 were replaced by explicit symbolic source
+equations, not larger limits. New wall219.47s,peak4505219072 bytes,swap0.
+Reconciliation matches63 results/190 host-local files,no collisions/active scope.
+Fresh preflight4150 projects/9296 fingerprints/5673 external/5438 IR and9823
+namespace resolutions all match. Source hashes of all19 new modules checked.
+No key/funds, Rust/SBF/Kani, implementation edit, merge or push occurred.
 
-Read-only reconciliation matches29 host results and87 local/host files, finds
-no ID collision or active own scope/reservation. Host wall143.70s,peak RSS
-4534013952 bytes,swap0. Fresh preflight and namespace checks are recorded.
-No package/frozen-manifest replay or final audit ID consumed at this checkpoint.
-No key, funds, Rust/SBF/Kani, implementation edit, merge or push operation ran.
-Three TrustItems, observer, simulator and release pins unchanged.
+This is the requested context checkpoint, NOT budget exhaustion. Continue
+from79458 with27 attempts remaining; audit reserves remain unused.

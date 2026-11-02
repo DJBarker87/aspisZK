@@ -1,0 +1,82 @@
+START 79423 R1Z.PV_RunJoin_SemanticReached69
+DONE 79423 R1Z.PV_RunJoin_SemanticReached69 exit 1 wall 3.67 RSS 4471357440
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticReached69.lean:32:2: error: Type mismatch
+  core.ops.control_flow.ControlFlow.Break ?m.26
+has type
+  core.ops.control_flow.ControlFlow ?m.24 ?m.25
+but is expected to have type
+  Result (core.result.Result Q r1_wire.Error)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticReached69.lean:32:42: error: Application type mismatch: The argument
+  residual
+has type
+  (X : Type ?u.24) → [TopologicalSpace X] → Filter X
+of sort `Type (?u.24 + 1)` but is expected to have type
+  ?m.24
+of sort `Type` in the application
+  core.ops.control_flow.ControlFlow.Break residual
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticReached69.lean:32:51: error: unexpected token '=>'; expected command
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_SemanticReached69.lean:44:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let r1 ← self.public.terminal_qm31 claims point self.challenges
+    let r2 ←
+      core.result.Result.map_err
+          host_semantic.OracleSemanticOracle.evaluate.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+    let cf1 ←
+      match r2 with
+        | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+        | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+    match cf1 with
+      | core.ops.control_flow.ControlFlow.Continue val1 => do
+        let a ← claims.index_usize 0#usize
+        let mask ← host_semantic.claim_mask_value a point
+        let q ← self.eta.mul val1
+        let q1 ← mask.add q
+        let q2 ← point.index_usize 8#usize
+        let q3 ← point.index_usize 9#usize
+        let q4 ← host_semantic.extra self.d q2 q3
+        let q5 ← q1.add q4
+        ok (core.result.Result.Ok q5)
+      | core.ops.control_flow.ControlFlow.Break residual =>
+        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+          (core.convert.FromSame r1_wire.Error) residual
+is not definitionally equal to the right-hand side
+  do
+    let status ← self.public.terminal_qm31 claims point self.challenges
+    tail self point claims status
+
+inst✝¹ : ExternalTypes
+inst✝ : ExternalFuns
+self : host_semantic.SemanticOracle
+point : Std.Array Q 10#usize
+claims : Std.Array (Std.Array Q 29#usize) 3#usize
+hc : host_semantic.point_claims self.columns point = ok (core.result.Result.Ok claims)
+⊢ (do
+      let r1 ← self.public.terminal_qm31 claims point self.challenges
+      let r2 ←
+        core.result.Result.map_err
+            host_semantic.OracleSemanticOracle.evaluate.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError r1 ()
+      let cf1 ←
+        match r2 with
+          | core.result.Result.Ok v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          | core.result.Result.Err e => ok (core.ops.control_flow.ControlFlow.Break (core.result.Result.Err e))
+      match cf1 with
+        | core.ops.control_flow.ControlFlow.Continue val1 => do
+          let a ← claims.index_usize 0#usize
+          let mask ← host_semantic.claim_mask_value a point
+          let q ← self.eta.mul val1
+          let q1 ← mask.add q
+          let q2 ← point.index_usize 8#usize
+          let q3 ← point.index_usize 9#usize
+          let q4 ← host_semantic.extra self.d q2 q3
+          let q5 ← q1.add q4
+          ok (core.result.Result.Ok q5)
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual aspis_core.field.QM31
+            (core.convert.FromSame r1_wire.Error) residual) =
+    do
+    let status ← self.public.terminal_qm31 claims point self.challenges
+    tail self point claims status
+'R1Z.PV_RunJoin_SemanticReached69.tail' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticReached69.reached' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_SemanticReached69.plan' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

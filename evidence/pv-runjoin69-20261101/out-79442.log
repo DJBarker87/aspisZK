@@ -1,0 +1,141 @@
+START 79442 R1Z.PV_RunJoin_MaskTotal69
+DONE 79442 R1Z.PV_RunJoin_MaskTotal69 exit 1 wall 4.94 RSS 4355592192
+loads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:29:37: error: don't know how to synthesize implicit argument `α`
+  @rfl ?m.65 (?m.57 i)
+context:
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+linear explicit_linear : aspis_core.field.QM31
+hl : host_arithmetic.selected_mask_linears point = ok (linear, explicit_linear)
+i : Usize
+hi : i ∈ selectedIndices
+⊢ Type ?u.29
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:29:27: error: don't know how to synthesize placeholder
+context:
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+linear explicit_linear : aspis_core.field.QM31
+hl : host_arithmetic.selected_mask_linears point = ok (linear, explicit_linear)
+i : Usize
+hi : i ∈ selectedIndices
+⊢ Usize → ?m.65
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:29:27: error: don't know how to synthesize placeholder
+context:
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+linear explicit_linear : aspis_core.field.QM31
+hl : host_arithmetic.selected_mask_linears point = ok (linear, explicit_linear)
+i : Usize
+hi : i ∈ selectedIndices
+⊢ ?m.65
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:29:27: error: don't know how to synthesize placeholder
+context:
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+linear explicit_linear : aspis_core.field.QM31
+hl : host_arithmetic.selected_mask_linears point = ok (linear, explicit_linear)
+i : Usize
+hi : i ∈ selectedIndices
+⊢ Type ?u.29
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:29:9: error: failed to infer `have` declaration type
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:25:83: error: unsolved goals
+c1 : Std.Array Q 16#usize
+mask : Std.Array Q 10#usize
+g : Q
+point : Std.Array Q 10#usize
+linear explicit_linear : aspis_core.field.QM31
+hl : host_arithmetic.selected_mask_linears point = ok (linear, explicit_linear)
+selected_bound : ∀ i ∈ selectedIndices, ↑i < ↑16#usize
+mask_bound : ∀ i ∈ maskIndices, ↑i < ↑10#usize
+horner_bound : ∀ i ∈ hornerIndices, ↑i < 27
+coefficients : Coefficients
+hc :
+  scatter c1 host_arithmetic.FACTOR_EXPONENTS selectedIndices (Array.repeat 27#usize aspis_core.field.QM31.ZERO) =
+    ok coefficients
+coefficients1 : Coefficients
+hc1 : scatter mask host_arithmetic.MASK_ONLY_FACTOR_EXPONENTS maskIndices coefficients = ok coefficients1
+prepared : host_arithmetic.PreparedQm31Multiplier
+hp : host_arithmetic.PreparedQm31Multiplier.new linear = ok prepared
+shared : PV_B3_Range117.Q
+hs : Array.index_usize coefficients1 aspis_core.state_only_hiding.STATE_ONLY_HIDING_FACTOR_DEGREE = ok shared
+shared1 : PV_B3_Range117.Q
+hs1 : horner coefficients1 prepared hornerIndices shared = ok shared1
+power : aspis_core.field.QM31
+hpow : host_arithmetic.mask_power_26 explicit_linear = ok power
+factor : aspis_core.field.QM31
+hf : aspis_core.field.QM31.ONE.add power = ok factor
+explicit_value : aspis_core.field.QM31
+he : factor.mul g = ok explicit_value
+out : aspis_core.field.QM31
+ho : aspis_core.field.QM31.add shared1 explicit_value = ok out
+⊢ (let (linear, explicit_linear) := (linear, explicit_linear)
+    do
+    let shared ←
+      do
+        let prepared ← host_arithmetic.PreparedQm31Multiplier.new linear
+        horner coefficients1 prepared hornerIndices shared
+    let power ← host_arithmetic.mask_power_26 explicit_linear
+    let factor ← aspis_core.field.QM31.ONE.add power
+    let explicit_value ← factor.mul g
+    aspis_core.field.QM31.add shared explicit_value) =
+    ok out
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:63: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_AuditSourceD324.Mask117.reference, ̲hl, ̲hc, ̲hc1, ̲hp̵,̵h̵s, ̲hs1, ̲hpow, ̲hf, ̲he, ̲ho,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:69: warning: This simp argument is unused:
+  hs1
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_AuditSourceD324.Mask117.reference, ̲hl, ̲hc, ̲hc1, ̲hp, ̲hs, ̲hs̵1̵,̵h̵pow, ̲hf, ̲he, ̲ho,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:73: warning: This simp argument is unused:
+  hpow
+
+Hint: Omit it from the simp argument list.
+  simp only [̵P̵V̵_̵B̵3̵_̵A̵u̵d̵i̵t̵S̵o̵u̵r̵c̵e̵D̵3̵2̵4̵.̵M̵a̵s̵k̵1̵1̵7̵.̵r̵e̵f̵e̵r̵e̵n̵c̵e̵,̵h̵l̵,̵h̵c̵,̵h̵c̵1̵,̵h̵p̵,̵h̵s̵,̵h̵s̵1̵,̵h̵p̵o̵w̵,̵h̵f̵,̵h̵e̵,̵h̵o̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲P̲V̲_̲B̲3̲_̲A̲u̲d̲i̲t̲S̲o̲u̲r̲c̲e̲D̲3̲2̲4̲.̲M̲a̲s̲k̲1̲1̲7̲.̲r̲e̲f̲e̲r̲e̲n̲c̲e̲,̲ ̲h̲l̲,̲ ̲h̲c̲,̲ ̲h̲c̲1̲,̲ ̲h̲p̲,̲ ̲h̲s̲,̲ ̲h̲s̲1̲,̲ ̲h̲f̲,̲ ̲h̲e̲,̲ ̲h̲o̲,̲
+  ̲ ̲ ̲ ̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:78: warning: This simp argument is unused:
+  hf
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_AuditSourceD324.Mask117.reference, ̲hl, ̲hc, ̲hc1, ̲hp, ̲hs, ̲hs1, ̲hpow, ̲hf̵,̵h̵e, ̲ho,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:81: warning: This simp argument is unused:
+  he
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_AuditSourceD324.Mask117.reference, ̲hl, ̲hc, ̲hc1, ̲hp, ̲hs, ̲hs1, ̲hpow, ̲hf, ̲he̵,̵h̵o,
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_RunJoin_MaskTotal69.lean:57:84: warning: This simp argument is unused:
+  ho
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_B3_AuditSourceD324.Mask117.reference, ̲hl, ̲hc, ̲hc1, ̲hp, ̲hs, ̲hs1, ̲hpow, ̲hf, ̲he,h̵o̵,̵
+  ̲ ̲ ̲ ̲ ̲bind_tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RunJoin_MaskTotal69.selected_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MaskTotal69.mask_values' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RunJoin_MaskTotal69.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
