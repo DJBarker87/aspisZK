@@ -1,6 +1,6 @@
 """Revalidate the committed sibling corpus in an owned review workspace."""
 from pathlib import Path
-import subprocess,json,lzma,hashlib,sys,time
+import subprocess,json,lzma,hashlib,sys,time,base64
 E=Path(__file__).resolve().parent;R=E.parent.parent
 W=Path('/private/tmp/NEO_peer_review_20261102');W.mkdir(exist_ok=True)
 manifest=json.loads((E/'NEO_NEI_PROVENANCE.json').read_text())
@@ -8,13 +8,15 @@ files={}
 for chunk in manifest['archives']:
  blob=(E/chunk['path']).read_bytes();assert hashlib.sha256(blob).hexdigest()==chunk['sha256']
  raw=lzma.decompress(blob);assert hashlib.sha256(raw).hexdigest()==chunk['uncompressed_sha256']
- current=json.loads(raw);assert not set(current)&set(files);files.update(current)
+ current=json.loads(raw)
+ if chunk.get('role')!='update':assert not set(current)&set(files)
+ files.update(current)
+for name in manifest.get('deleted_paths',[]):files.pop(name,None)
 assert set(files)==set(manifest['files'])
 for name,data in files.items():
- assert hashlib.sha256(data.encode()).hexdigest()==manifest['files'][name]['sha256']
- p=W/name;p.parent.mkdir(parents=True,exist_ok=True)
- # Inputs may be re-materialized only if a previous review wrote declared outputs.
- if not p.exists():p.write_text(data)
+ raw=data.encode() if isinstance(data,str) else base64.b64decode(data['base64'])
+ assert hashlib.sha256(raw).hexdigest()==manifest['files'][name]['sha256']
+ p=W/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(raw)
 for p in R.iterdir():
  if p.name=='evidence':continue
  q=W/p.name

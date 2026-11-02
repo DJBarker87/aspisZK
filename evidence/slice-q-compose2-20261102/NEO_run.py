@@ -9,8 +9,9 @@ COHERENT='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,module=sys.argv[1:];assert a.startswith('NEO_L') and 1<=int(a[-3:])<=100
 assert not (E/a).exists()
 rel=module.replace('.','/')+'.lean'
-if module.startswith('NEO_ParserRef.'):
- dep=json.loads((E/'NEO_GENERATED.json').read_text())[module];source_file=E/dep['path']
+generated=json.loads((E/'NEO_GENERATED.json').read_text())
+if module in generated:
+ dep=generated[module];source_file=E/dep['path']
  assert hashlib.sha256(source_file.read_bytes()).hexdigest()==dep['sha256']
 elif module.startswith('NEO_'):source_file=E/rel
 else:raise ValueError('Only own new modules may compile through this driver')

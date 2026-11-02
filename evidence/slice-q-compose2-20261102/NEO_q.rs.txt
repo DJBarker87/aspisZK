@@ -1,0 +1,29 @@
+// Included INSIDE the frozen private canonical module, under cfg(kani) only.
+use super::Q;
+use aspis_core::field::{M31,CM31,QM31,WideExact};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+mod NEO_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_q_reference.rs"));}
+macro_rules! check {
+ ($name:ident,$input:ident,$ty:ty,$real:expr,$reference:expr)=>{
+ #[kani::proof] #[kani::unwind(18)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
+ fn $name(){let $input:$ty=kani::any();let real=$real;let expected=$reference;
+ #[cfg(not(NEO_wrong_q))] assert_eq!(real,expected);
+ #[cfg(NEO_wrong_q)] assert_ne!(real,expected);
+ }
+ }
+}
+fn raw_qm(x:[u32;4])->QM31 {QM31{c0:CM31{a:M31(x[0]),b:M31(x[1])},c1:CM31{a:M31(x[2]),b:M31(x[3])}}}
+check!(q_limbs,x,[u32;4],Q(x).limbs(),NEO_reference::limbs(x));
+check!(q_from_limbs,x,[u32;4],Q::from_limbs(x).map(|q|q.0),NEO_reference::from_limbs(x));
+#[kani::proof] #[kani::unwind(18)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn q_from_wide(){
+ let x:[u32;8]=kani::any();let real=Q::from_wide(WideExact::NEO_from_raw(x)).map(|q|q.0);let expected=NEO_reference::from_wide(x);
+ let same=real[0][0]==expected[0][0]&&real[0][1]==expected[0][1]&&real[0][2]==expected[0][2]&&real[0][3]==expected[0][3]&&real[1][0]==expected[1][0]&&real[1][1]==expected[1][1]&&real[1][2]==expected[1][2]&&real[1][3]==expected[1][3];
+ #[cfg(not(NEO_wrong_q))] assert!(same);
+ #[cfg(NEO_wrong_q)] assert!(!same);
+}
+check!(limbs_of,x,[u32;4],super::super::limbs_of(raw_qm(x)),NEO_reference::limbs_of(x));
+check!(checked_q,x,[u32;4],super::super::checked_q(raw_qm(x)).map(|q|q.0),NEO_reference::checked(x));
