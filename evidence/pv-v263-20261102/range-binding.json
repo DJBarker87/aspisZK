@@ -1,0 +1,34 @@
+{
+  "evidence_class": "structural argument (own-1), pure range helper only",
+  "source_sha256": "0d45ccdb746d7fd2bbdc9776458df8a657c9d186dadb3745d74ae270a3a3314a",
+  "body_token_sha256": "bae4aaa1541ecfb2e9117a72d8a742d378621a65649b827f07155ff6d6e7840a",
+  "model_sha256": "86f0ca0a872720883d35cb8c30fe0d2688b4838b53089cc7eeac2ec8d300e6f9",
+  "steps": [
+    [
+      "assert k<THREADS",
+      "PV_V263_Range hk"
+    ],
+    [
+      "q=n/16; r=n%16",
+      "fixed nonzero divisor 16"
+    ],
+    [
+      "q*k+min(k,r)",
+      "WorkRange35.start; Range.intermediates proves each arithmetic intermediate <=n"
+    ],
+    [
+      "start+q+(k<r) as usize",
+      "start+width; Boolean cast is 0/1; Range.usize_safe"
+    ],
+    [
+      "tuple return",
+      "same pair, no stores through mutable borrows, no allocation or drop glue"
+    ]
+  ],
+  "retained": [
+    "compiler preservation V370",
+    "all worker/TLS/spawn/join/allocator/unwind/diagnostic associations",
+    "actual capture Nonempty P"
+  ],
+  "source_revision": "900dc1a15405fbdb504e719d5b36e23f412a1f49"
+}
