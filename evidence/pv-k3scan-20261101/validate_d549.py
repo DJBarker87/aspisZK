@@ -19,10 +19,14 @@ for pair in s['pairs']:
  text=(E/'host'/n/'output.log').read_text();assert 'unwinding assertion'not in text.lower();assert 'Failed Checks: assertion failed:'in text or ('Failed Checks: This is a placeholder message;'in text and 'in core::panicking::assert_failed_inner'in text),n
  checks.append({'positive':p,'control':n,'source_hashes_equal':True,'control_failed_checks':1,'source_local_or_typed_assertion_panic':True})
 for r in rs:
+ raw=json.loads((E/'host'/r['id']/'receipt.json').read_text());assert raw['profile']=={'opt-level':3,'debug-assertions':False,'overflow-checks':False};assert raw['caps']=={'MemoryHigh':'6G','MemoryMax':'8G','MemorySwapMax':0,'TasksMax':64}
+ metadata=json.loads((E/'host'/r['id']/'metadata.json').read_text());assert metadata['resolve']['nodes']and all(isinstance(n['features'],list)for n in metadata['resolve']['nodes'])
  assert r['swap']==0 and r['peak_rss_kib'] is not None and r['wall_seconds']>0
  assert r['print_axioms']=='N/A: Kani; 0 Lean';assert r['resolved_revision']
  a=json.loads((E/'host'/r['id']/'admission.json').read_text());b=json.loads((E/'host'/r['id']/'barrier.json').read_text());assert a['allowed'] and b['allowed'];assert b['own_limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
 for a,b in zip(rs,rs[1:]):assert b['epoch']-a['epoch']>=180,(a['id'],b['id'])
+for ident,gate,started in [('K79230','admission.json',False),('K79243','barrier.json',True)]:
+ folder=E/'host'/ident;assert not json.loads((folder/gate).read_text())['allowed'];assert (folder/'STARTED.json').exists()==started;assert not(folder/'time.log').exists()and not(folder/'symbols-index.json').exists()
 pre=E/'host/K79206-preflight';assert (pre/'metadata.stderr').exists() and not (pre/'STARTED.json').exists()
 c=json.loads(lzma.decompress((E/'CREDITS.json.xz').read_bytes()));assert len(c)==305 and len({x['credit_id']for x in c})==305
 assert hashlib.sha256(lzma.decompress((E/'CREDITS.json.xz').read_bytes())).hexdigest()==(E/'CREDITS.json.sha256').read_text().strip()
