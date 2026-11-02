@@ -1,0 +1,54 @@
+// Scratch-only one source gather iteration; no writable static or function pointer.
+use super::{Error};
+use aspis_core::{field::M31,r0::domain::{self,FibreIndex,Point}};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct NEO_RowLog { query:u32,u:usize,left:usize,right:usize,px:M31,py:M31,lx:M31,ly:M31,square:M31,doubled:M31,z:M31 }
+fn NEO_point(index:FibreIndex)->Point<M31> {
+ assert!(index.get()<262144);
+ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647&&b<2147483647);
+ Point{x:M31(a),y:M31(b)}
+}
+fn NEO_line(index:FibreIndex)->M31 {
+ assert!(index.get()<262144);let a:u32=kani::any();kani::assume(a<2147483647);M31(a)
+}
+fn NEO_product(x:M31,y:M31)->M31 {
+ assert!(x.0<2147483647&&y.0<2147483647);
+ let r:u32=kani::any();kani::assume(r<2147483647);
+ kani::assume((r as u64)==((x.0 as u64)*(y.0 as u64))%2147483647u64);M31(r)
+}
+fn NEO_gather_values(query:u32)->Result<([M31;5],NEO_RowLog),Error> {
+ let u=query as usize;
+ let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
+ let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
+ let left=u/4*4;
+ let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(left).map_err(|_|Error::Query)?);
+ let right=u/4*4+3;
+ let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(right).map_err(|_|Error::Query)?);
+ let square=line_x.mul(line_x);let doubled=square.double();let line_z=doubled.sub(M31::ONE);
+ let values=[circle_x,circle_y,line_x,line_y,line_z];
+ if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+ let mut log=NEO_RowLog{query,u,left,right,px:circle_x,py:circle_y,lx:line_x,ly:line_y,square,doubled,z:line_z};
+ #[cfg(NEO_wrong_geometry)] {log.left=left+1;}
+ Ok((values,log))
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(crate::fast_domain::fibre_point,NEO_point)]
+#[kani::stub(crate::fast_domain::line_node,NEO_line)]
+#[kani::stub(M31::mul,NEO_product)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn gather_values(){
+ let query:u32=kani::any();
+ let result=NEO_gather_values(query);
+ match result {
+  Err(e)=>assert!(matches!(e,Error::Query)),
+  Ok((v,log))=>{
+   assert!(query<262144);assert!(log.query==query&&log.u==query as usize);
+   assert!(log.left==log.u/4*4,"exact left input");assert!(log.right==log.u/4*4+3);
+   assert!(log.left<262144&&log.right<262144);
+   assert!(v==[log.px,log.py,log.lx,log.ly,log.z]);
+   for x in v {assert!(x.0>0&&x.0<2147483647);}
+   assert!(log.square.0<2147483647&&log.doubled.0<2147483647);
+  }
+ }
+}

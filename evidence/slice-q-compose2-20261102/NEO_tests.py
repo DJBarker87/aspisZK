@@ -10,7 +10,7 @@ class Gates(unittest.TestCase):
   with patch.object(v,'peer_inputs',return_value=self.data):
    return v.compose(self.base if base is None else base,self.peer if peer is None else peer,self.edges if edges is None else edges)
  def test_positive(self):
-  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(92,70,108));self.assertEqual(set(d['roots'].values()),{'OPEN'})
+  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(96,74,108));self.assertEqual(set(d['roots'].values()),{'OPEN'})
  def test_baseline_suspension_cannot_be_cleared(self):
   b=copy.deepcopy(self.base);next(c for c in b['NEN_credits'] if c['k3_status']=='SUSPENDED')['k3_status']='UNAFFECTED'
   with self.assertRaises(ValueError):self.run_case(base=b)
@@ -45,6 +45,17 @@ class Gates(unittest.TestCase):
  def test_edge_inventory_retained(self):
   e=copy.deepcopy(self.edges);e['edges'].pop()
   with self.assertRaises(ValueError):self.run_case(edges=e)
+ def mutate_parser(self,change):
+  e=copy.deepcopy(self.edges);p=e['NEO_parser_row_certificates']['TX1:015'];change(p)
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_parser_no_state_part(self):self.mutate_parser(lambda p:p['parts'].remove('state'))
+ def test_parser_narrower_input_domain(self):self.mutate_parser(lambda p:p.update(domain='Only canonical inputs'))
+ def test_parser_old_suspended_receipt(self):self.mutate_parser(lambda p:p['native_pair'].__setitem__(0,'NBG_K009'))
+ def test_parser_hidden_equivalence_premise(self):self.mutate_parser(lambda p:p.update(remaining_inner_hypotheses=['assume whole native equality']))
+ def test_parser_missing_external(self):self.mutate_parser(lambda p:p['external_obligations'].clear())
+ def test_parser_wrong_proof_hash(self):self.mutate_parser(lambda p:p['lean_evidence'][0].update(receipt_sha256='0'*64))
+ def test_parser_wrong_top_theorem(self):self.mutate_parser(lambda p:p['lean_evidence'][0].update(theorems=['unproved_statement']))
+ def test_parser_wrong_frozen_body(self):self.mutate_parser(lambda p:p.update(frozen_body_sha256='0'*64))
 if __name__=='__main__':
  start=time.monotonic();suite=unittest.defaultTestLoader.loadTestsFromTestCase(Gates);result=unittest.TextTestRunner(verbosity=2).run(suite)
  receipt=dict(target='NEO_tests.py',tests=result.testsRun,failures=len(result.failures),errors=len(result.errors),exit_status=0 if result.wasSuccessful() else 1,wall_seconds=time.monotonic()-start,peak_aggregate_rss_bytes_sampled=v.nen.PEAK_AGGREGATE_RSS,swap='not measured: Python evidence validation',print_axioms='N/A: preserved printed proof audits checked in replay')

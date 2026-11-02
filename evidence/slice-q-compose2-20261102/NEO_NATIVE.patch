@@ -19,7 +19,7 @@
  
 --- /dev/null
 +++ b/crates/aspis-core/src/field/NEO_parsers.rs
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,49 @@
 +// Scratch-only direct native/reference comparisons. No static writes or callbacks.
 +use super::{M31,CM31,QM31};
 +use super::wide_exact::WideExact;
@@ -35,12 +35,12 @@
 +fn q_ref(b:&[u8])->Option<[u32;4]> {
 + let a=c_ref(&b[0..8])?;let z=c_ref(&b[8..16])?;Some([a[0],a[1],z[0],z[1]])
 +}
-+fn limbs_ref(x:[u32;8])->Option<[u32;8]> {
++fn limbs_words_reference(x:[u32;8])->Option<[u32;8]> {
 + if x[0]>=MODULUS||x[1]>=MODULUS||x[2]>=MODULUS||x[3]>=MODULUS||x[4]>=MODULUS||x[5]>=MODULUS||x[6]>=MODULUS||x[7]>=MODULUS {None}else{Some(x)}
 +}
 +fn wide_ref(b:&[u8])->Option<[u32;8]> {
 + if b.len()!=32{return None;}
-+ limbs_ref([word(b,0),word(b,4),word(b,8),word(b,12),word(b,16),word(b,20),word(b,24),word(b,28)])
++ limbs_words_reference([word(b,0),word(b,4),word(b,8),word(b,12),word(b,16),word(b,20),word(b,24),word(b,28)])
 +}
 +fn c_words(x:CM31)->[u32;2] {[x.a.0,x.b.0]}
 +fn q_words(x:QM31)->[u32;4] {[x.c0.a.0,x.c0.b.0,x.c1.a.0,x.c1.b.0]}
@@ -59,7 +59,21 @@
 +check!(c_parser_wrong,b,[u8;8],CM31::from_le_bytes(&b).map(c_words),c_ref(&b),true);
 +check!(q_parser,b,[u8;16],QM31::from_le_bytes(&b).map(q_words),q_ref(&b),false);
 +check!(q_parser_wrong,b,[u8;16],QM31::from_le_bytes(&b).map(q_words),q_ref(&b),true);
-+check!(limbs_parser,b,[u32;8],WideExact::from_limbs(b).map(wide_words),limbs_ref(b),false);
-+check!(limbs_parser_wrong,b,[u32;8],WideExact::from_limbs(b).map(wide_words),limbs_ref(b),true);
++check!(limbs_parser,b,[u32;8],WideExact::from_limbs(b).map(wide_words),limbs_words_reference(b),false);
++check!(limbs_parser_wrong,b,[u32;8],WideExact::from_limbs(b).map(wide_words),limbs_words_reference(b),true);
 +check!(wide_parser,b,[u8;32],WideExact::from_le_bytes(&b).map(wide_words),wide_ref(&b),false);
 +check!(wide_parser_wrong,b,[u8;32],WideExact::from_le_bytes(&b).map(wide_words),wide_ref(&b),true);
++
++mod NEO_reference {include!("NEO_parser_reference.rs");}
++check!(m_stdref,b,[u8;4],M31::from_le_bytes(b).map(|x|x.0),NEO_reference::m_ref(b),false);
++check!(m_stdref_wrong,b,[u8;4],M31::from_le_bytes(b).map(|x|x.0),NEO_reference::m_ref(b),true);
++check!(limbs_ref,b,[u32;8],WideExact::from_limbs(b).map(wide_words),NEO_reference::limbs_ref(b),false);
++check!(limbs_ref_wrong,b,[u32;8],WideExact::from_limbs(b).map(wide_words),NEO_reference::limbs_ref(b),true);
+--- /dev/null
++++ b/crates/aspis-core/src/field/NEO_parser_reference.rs
+@@ -0,0 +1,5 @@
++pub const MODULUS:u32=2147483647;
++pub fn m_ref(b:[u8;4])->Option<u32> {let v=u32::from_le_bytes(b);if v<MODULUS{Some(v)}else{None}}
++pub fn limbs_ref(x:[u32;8])->Option<[u32;8]> {
++ if x[0]>=MODULUS||x[1]>=MODULUS||x[2]>=MODULUS||x[3]>=MODULUS||x[4]>=MODULUS||x[5]>=MODULUS||x[6]>=MODULUS||x[7]>=MODULUS{None}else{Some(x)}
++}

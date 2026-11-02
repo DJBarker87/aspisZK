@@ -1,0 +1,37 @@
+{"attempt": "NEO_K014", "exit_status": 1, "wall_seconds": 7.329790789051913, "peak_rss_kib": "504096", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-compose2-20261102/NEO_src/crates/aspis-core)
+error[E0428]: the name `limbs_ref` is defined multiple times
+  --> crates/aspis-core/src/field/NEO_parsers.rs:31:2
+   |
+16 | fn limbs_ref(x:[u32;8])->Option<[u32;8]> {
+   | ---------------------------------------- previous definition of the value `limbs_ref` here
+...
+31 |  fn $name(){let $b:$ty=kani::any();let real=$actual;let expected=$reference;if $neg {assert_ne!(real,expected);}else{assert_eq!(real...
+   |  ^^^^^^^^^^ `limbs_ref` redefined here
+...
+48 | check!(limbs_ref,b,[u32;8],WideExact::from_limbs(b).map(wide_words),NE
+...
+rn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+For more information about this error, try `rustc --explain E0428`.
+error: could not compile `aspis-core` (lib) due to 1 previous error; 15 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-rd8d7138d1e8c4037bc4ccda095ae2c06.scope; invocation ID: 76b6316425c94f1a8f1aa1d43005bc7b
