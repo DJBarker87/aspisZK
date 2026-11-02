@@ -14,6 +14,21 @@ structure Views where
   blocks : BlockSpan
   tail : Span U8
 
+/-- A native typed block is recovered exactly from its byte view. This
+rules out a merely byte-equal replacement of a distinct storage tree. -/
+theorem typed_roundtrip (N : Type) (block : PV_AL_SplitCarrier.Block N) :
+    PV_AL_SplitCarrier.encodeBlock N (PV_AL_SplitCarrier.decodeBlock block) = block := by
+  cases block with
+  | mk data =>
+    unfold PV_AL_SplitCarrier.encodeBlock PV_AL_SplitCarrier.decodeBlock
+    rw [PV_RDCD5_BlockCarrier.encode_flatten]
+
+theorem typed_projection_injective (N : Type) :
+    Function.Injective (PV_AL_SplitCarrier.decodeBlock (N := N)) := by
+  intro a b h
+  have e := congrArg (PV_AL_SplitCarrier.encodeBlock N) h
+  rwa [typed_roundtrip,typed_roundtrip] at e
+
 /-- Exact source constructors: the block cast preserves the base pointer;
 the tail pointer advances by nb*64 bytes. No data is copied or allocated. -/
 def source (input : Slice U8) (origin : Nat) : Views :=
@@ -83,6 +98,8 @@ theorem consumed_instance (base : ProverRwFull.ExternalTypes)
   rw [source_reference,PV_AL_SplitSelected.consumed]
   rfl
 
+#print axioms typed_roundtrip
+#print axioms typed_projection_injective
 #print axioms source_reference
 #print axioms aliases
 #print axioms valid_tail
