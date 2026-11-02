@@ -21,7 +21,7 @@ theorem usize_safe (n : Usize) (k : Nat) (hk : k < 16) :
     start n.val k + width n.val k ≤ Usize.max := by
   have h := intermediates n.val k hk
   have hn := n.hmax
-  simp only [Usize.max]
+  simp only [Usize.max,UScalarTy.numBits,Usize.numBits] at *
   omega
 
 /-- ordered_families(16,...) partitions family indices, separately from the

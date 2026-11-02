@@ -57,3 +57,15 @@ EVH8 D550's Runtime model explicitly distinguishes source Result, runtime fault
 and finite-fuel exhaustion, retains events and post-state, and uses partial source
 projection. Any worker extension must do the same. No source binding, success,
 termination, allocator restoration or privacy endpoint closure is claimed here.
+
+Concrete Oracle instantiation: host_semantic.rs:99 constructs SemanticOracle
+with borrowed Public, 29 Vec<QM31> columns, Challenges, eta and 1024 D cells.
+Its evaluate at lines 135–141 computes point_claims, calls terminal_qm31 with
+those claims/point/challenges (mapping its returned error to Public), and adds
+claim_mask_value plus eta*terminal plus extra(D,point[8],point[9]). The extracted
+trait is SemanticOracle.Insts.Aspis_r1_cost_probeHost_sumcheckOracle. The actual
+prover supplies LegacyHashFn(hash) to build_with_material. Those are the reached
+sumcheck instantiations, rather than arbitrary user callbacks. The commitment
+callback captures EncodingDomain, WideExact messages, Variant and the exact
+C1/C2 lane vector; its inner encoder selects the appropriate Word carrier.
+Frozen host_semantic.rs is also committed as an evidence input.
