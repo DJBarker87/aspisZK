@@ -1,8 +1,8 @@
 from pathlib import Path
 import sys,subprocess,json,hashlib,time,os,re
 D=Path('/home/dombarker/project-offloads/codex-pv-open11-20261102'); mode=sys.argv[1];a=sys.argv[2]
-assert (mode=='lean' and 90400<=int(a)<=90499) or (mode=='native' and 90500<=int(a)<=90529)
-R=D/('N'+a if mode=='native' else a);R.mkdir(exist_ok=True)
+assert (mode=='lean' and 90400<=int(a)<=90499) or (mode in ('native','extract') and 90500<=int(a)<=90529)
+R=D/('N'+a if mode in ('native','extract') else a);R.mkdir(exist_ok=True)
 assert not (R/'receipt.json').exists(),'attempt used'
 last=D/'last-refusal.json'
 if last.exists():assert time.time()-json.loads(last.read_text())['epoch']>=180,'cooldown'
@@ -10,7 +10,7 @@ ad=R/'admission.json'
 with (R/'admission.log').open('a') as f:p=subprocess.run(['python3',str(D/'PV_O11_reservation.py'),str(ad)],stdout=f,stderr=subprocess.STDOUT)
 if p.returncode or not ad.exists() or json.loads(ad.read_text()).get('allowed') is not True:
  last.write_text(json.dumps(dict(epoch=time.time(),id=a,exit=p.returncode)));print('REFUSED',p.returncode);sys.exit(78)
-source=D/('lean/PV_O11_KindView.lean' if mode=='lean' else 'PV_O11_kind_native.rs')
+source=D/('lean/PV_O11_KindView.lean' if mode=='lean' else 'extract/lib.rs' if mode=='extract' else 'PV_O11_kind_native.rs')
 sha=hashlib.sha256(source.read_bytes()).hexdigest()
 for rec in D.glob('*/receipt.json'):
  old=json.loads(rec.read_text());assert not(old.get('exit')!=0 and old.get('source_sha256')==sha),'unchanged FAILED source guard'
@@ -27,7 +27,7 @@ if mode=='lean':
  (D/'objects').mkdir(exist_ok=True)
  cmd=['python3',str(D.parent/'aspis-fs-generic-20261006/evidence/run2.py'),str(D/'env.json'),str(D/'objects'),str(D/'lean'),str(D/'objects/PV_O11_KindView.olean'),str(source),'7000']
 else:
- cmd=['python3',str(D/'PV_O11_native.py')]
+ cmd=['python3',str(D/('PV_O11_extract.py' if mode=='extract' else 'PV_O11_native.py'))]
 limits=['systemd-run','--user','--scope','--quiet','-p','MemoryHigh=6G','-p','MemoryMax=8G','-p','MemorySwapMax=0','-p','TasksMax=64']
 cmd=limits+['/usr/bin/time','-v','-o',str(R/'time.log'),'timeout','900']+cmd
 start=time.time()
