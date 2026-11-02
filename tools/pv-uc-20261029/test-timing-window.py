@@ -68,4 +68,29 @@ class Tests(unittest.TestCase):
    self.assertIsNotNone(m.failure)
    with self.assertRaises(g.Hold):m.poll()
   self.assertFalse(m.thread.is_alive())
+ def test_marker_changes_during_pair(self):
+  import time
+  self.marker({'until':time.time()+100,'for':'pv-uc-timing'})
+  m=g.Monitor(lambda:g.check(self.m,True,lambda:[]));m.poll()
+  self.marker({'until':time.time()+100,'for':'foreign'})
+  with self.assertRaises(g.Hold):m.poll()
+  self.marker({'until':time.time()+100,'for':'pv-uc-timing'})
+  with self.assertRaises(g.Hold):m.poll()
+ def test_foreign_scope_terminates_client_process(self):
+  # Load only invoke's AST. Never import/execute timing-window.py's main body.
+  import ast,os,signal,subprocess,sys
+  tree=ast.parse(Path(__file__).with_name('timing-window.py').read_text())
+  fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='invoke')
+  spawned=[];real_popen=subprocess.Popen
+  class Popen(real_popen):
+   def __init__(self,*args,**kwargs):super().__init__(*args,**kwargs);spawned.append(self)
+  from types import SimpleNamespace
+  api=SimpleNamespace(Popen=Popen,PIPE=subprocess.PIPE,TimeoutExpired=subprocess.TimeoutExpired,CompletedProcess=subprocess.CompletedProcess)
+  m=g.Monitor(lambda:(_ for _ in ()).throw(g.Hold('other capped scope: synthetic')))
+  scope=dict(subprocess=api,os=os,signal=signal,monitor=m,result_input='')
+  exec(compile(ast.Module(body=[fn],type_ignores=[]),'<offline invoke only>','exec'),scope)
+  with self.assertRaises(g.Hold):
+   scope['invoke']([sys.executable,'-c','import time; time.sleep(5)'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+  self.assertEqual(len(spawned),1);self.assertIsNotNone(spawned[0].poll())
+  self.assertIsNotNone(m.failure)
 if __name__=='__main__':unittest.main(verbosity=2)
