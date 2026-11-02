@@ -13,8 +13,8 @@ theorem complete {T : Type} (s : Slice T) (count : Usize) (f : Nat → T)
   · intro k hk hk'
     have bound : k<count.val := by rw [←size];exact hk
     have max : count.val ≤ Usize.max := by scalar_tac
-    let i := Usize.ofNatCore k (by omega)
-    have iv : i.val=k := by simp only [i,UScalar.ofNatCore_val_eq]
+    let i := Usize.ofNatCore k (by scalar_tac)
+    have iv : i.val=k := by simp only [i,Usize.ofNatCore_val_eq]
     have hi : i.val<s.length := by rw [iv,size];exact bound
     obtain ⟨v,read,hv⟩ := WP.spec_imp_exists (Slice.index_usize_spec s i hi)
     have eq := Result.ok.inj (read.symm.trans (agrees i (by rw [iv];exact bound)))
