@@ -54,10 +54,11 @@
       "model": "negative; preserves negative OS error without libc errno read or write"
     }
   ],
+  "observation": "LinuxRawObserve replaces LinuxRawSyscall; syscall response carries return metadata only, buffer remains in physical/mutable state; L3 joint observation remains P",
   "runtime_frame": "No allocation, deallocation, handles or libc errno calls in fill/fill_uninit/fill_inner/raw syscall source cone. Model updates only output buffer and OS world.",
   "source_buffer": "Only the reached fresh zero-initialized64 array. Driver is not an arbitrary-length getrandom law.",
   "retained": [
-    "actual op7 NonZeroI32 representation map",
+    "complete source/carrier association; all_codes proves reached nonzero i32 representation",
     "actual op129 dictionary installation at each reached world",
     "raw syscall ABI and kernel memory footprint under existing P/compiler and entropy obligations",
     "non-MSAN deployed artifact/config provenance",

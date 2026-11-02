@@ -60,16 +60,17 @@ assert 'getrandom_msan' in s['build.rs'] and 'if #[cfg(getrandom_msan)]' in s['s
 assert 'let _ = buf;' in s['src/backends/sanitizer.rs']
 assert 'getrandom_backend = "linux_raw"' in s['src/backends.rs']
 for t in ['INTERNAL_START: RawOsError = 1 << 16','UNEXPECTED: Error = Self::new_internal(2)','if code < 0','Self(code)']:assert t in s['src/error.rs']
-for mod in ['LinuxRawControl','LinuxRawBranches']:
+for mod in ['LinuxRawControl','LinuxRawBranches','LinuxRawObserve']:
  text=Path('lean/PV_EVH_'+mod+'.lean').read_text();assert 'sorry' not in text
 out=dict(evidence_class='structural argument (own-1), deployed dependency body to source control model',
  recipe=recipe,lockfile_sha256=sha(lock.encode()),dependency='getrandom0.3.4',
  target='adopted D474(C) Linux x86_64, pointer_width64, backend linux_raw, no MSAN',
  complete_source_sha256=next(x['sha256'] for x in rows if x['relative']=='src/backends/linux_raw.rs'),
  complete_fill_inner=body,steps=[dict(source=a,model=b) for a,b in steps],
+ observation='LinuxRawObserve replaces LinuxRawSyscall; syscall response carries return metadata only, buffer remains in physical/mutable state; L3 joint observation remains P',
  runtime_frame='No allocation, deallocation, handles or libc errno calls in fill/fill_uninit/fill_inner/raw syscall source cone. Model updates only output buffer and OS world.',
  source_buffer='Only the reached fresh zero-initialized64 array. Driver is not an arbitrary-length getrandom law.',
- retained=['actual op7 NonZeroI32 representation map','actual op129 dictionary installation at each reached world','raw syscall ABI and kernel memory footprint under existing P/compiler and entropy obligations','non-MSAN deployed artifact/config provenance','original source stack key/address provenance','full entropy success/retry and entry','L3 joint observation and V370'],
+ retained=['complete source/carrier association; all_codes proves reached nonzero i32 representation','actual op129 dictionary installation at each reached world','raw syscall ABI and kernel memory footprint under existing P/compiler and entropy obligations','non-MSAN deployed artifact/config provenance','original source stack key/address provenance','full entropy success/retry and entry','L3 joint observation and V370'],
  trust_fields_added=[],rows_removed=[])
 p=E/'getrandom-linux-raw-binding.json'
 if '--check' in sys.argv:assert json.load(open(p))==out
