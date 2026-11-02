@@ -13290,13 +13290,46 @@
    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/candidate.rs::query_values->crates/aspis-r1-cost-probe/src/verifier.rs::mark",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-observer-call:crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
+    "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+    "domain": "Exact deployed forwarded None established by adopted complete constructor/forwarding certificate",
+    "phase": "Phase::Query(i), evaluated before the no-effect call",
+    "parts": [
+     "packet_domain",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L001/receipt.json",
+      "receipt_sha256": "d905527648a6a9ffe23f0d0872b1da88dfba0e600e3b04f5f2f6dbb7dd7663bd",
+      "theorems": [
+       "NEO_ObserverPort.mark",
+       "NEO_ObserverPort.continuation",
+       "NEO_ObserverPort.frame"
+      ]
+     }
+    ],
+    "flow": {
+     "path": "crates/aspis-r1-cost-probe/src/candidate.rs",
+     "caller": "query_values",
+     "callee": "mark",
+     "argument": 0,
+     "arity": 2
+    },
+    "native_credit_restored": [],
+    "review_sha256": "f6707cc89483c7497fe0a0a064d80ca9d82fba7a0033c6538f27c75004446266"
+   },
    "required_named_hypotheses": [],
    "callee_packet_domains": [],
    "actual_inventory_calls": [
@@ -13312,7 +13345,7 @@
      ]
     }
    ],
-   "obstacle": "Actual Observer=Option<fn> is carried by the native root/call/mark interface. Rule14 bars native credit; approved composition trust does not lift this quarantine. query_loop also needs same-state repeated query_values rejection/Result and ordered effects. EXACT EDGE: crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/verifier.rs::mark. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/weights.rs::field",
@@ -33815,6 +33848,88 @@
     "NativeContractSemanticTransport"
    ],
    "association_sha256": "611bd8fd7f811923dd5aefd88885329de5989b7ea827f7c48fe35ff11f392e5c"
+  }
+ },
+ "NEO_observer_row_certificates": {
+  "TX1:191": {
+   "id": "NEO-observer-root:TX1:191",
+   "row": "TX1:191",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+   "domain": "Deployed cfg-constant None; every Phase after its original argument evaluation",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L001/receipt.json",
+     "receipt_sha256": "d905527648a6a9ffe23f0d0872b1da88dfba0e600e3b04f5f2f6dbb7dd7663bd",
+     "theorems": [
+      "NEO_ObserverPort.mark",
+      "NEO_ObserverPort.continuation",
+      "NEO_ObserverPort.frame"
+     ]
+    }
+   ],
+   "external_obligations": {
+    "external:TX1:191:0": {
+     "kind": "UNREACHED_NONE_BRANCH",
+     "same_cfg": "deployed program without cu-profiling; candidate forwarding graph exact",
+     "observer": "None",
+     "writes": [],
+     "events": [],
+     "calls": [],
+     "panic": false,
+     "diverges": false
+    }
+   },
+   "active_support_receipts": [],
+   "historical_support_restored": [],
+   "source_body_sha256": "8d11b2880963463305373885b0ac2b54c695091dad56461a54b77bffd87775d3",
+   "trust": "Adopted z(1) P6/D188 no-effect oracle; reclassification, never removal",
+   "review_sha256": "f6707cc89483c7497fe0a0a064d80ca9d82fba7a0033c6538f27c75004446266"
+  },
+  "TX2:118": {
+   "id": "NEO-observer-root:TX2:118",
+   "row": "TX2:118",
+   "function": "crates/aspis-r1-cost-probe/src/verifier.rs::mark",
+   "domain": "Deployed cfg-constant None; every Phase after its original argument evaluation",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L001/receipt.json",
+     "receipt_sha256": "d905527648a6a9ffe23f0d0872b1da88dfba0e600e3b04f5f2f6dbb7dd7663bd",
+     "theorems": [
+      "NEO_ObserverPort.mark",
+      "NEO_ObserverPort.continuation",
+      "NEO_ObserverPort.frame"
+     ]
+    }
+   ],
+   "external_obligations": {
+    "external:TX2:118:0": {
+     "kind": "UNREACHED_NONE_BRANCH",
+     "same_cfg": "deployed program without cu-profiling; candidate forwarding graph exact",
+     "observer": "None",
+     "writes": [],
+     "events": [],
+     "calls": [],
+     "panic": false,
+     "diverges": false
+    }
+   },
+   "active_support_receipts": [],
+   "historical_support_restored": [],
+   "source_body_sha256": "8d11b2880963463305373885b0ac2b54c695091dad56461a54b77bffd87775d3",
+   "trust": "Adopted z(1) P6/D188 no-effect oracle; reclassification, never removal",
+   "review_sha256": "f6707cc89483c7497fe0a0a064d80ca9d82fba7a0033c6538f27c75004446266"
   }
  }
 }

@@ -110,20 +110,24 @@ def compose(base,peer,edges,parsers=None):
  registered=own.expected(base,nen.q.check_receipt)
  import NEO_q_certificates as qcert
  qrows,qedges=qcert.expected(base,nen.q.check_receipt)
+ import NEO_observer_certificates as ocert
+ orows,oedges=ocert.expected(base,nen.q.check_receipt)
  if parsers is None:parsers=obj(E/'NEO_PARSER_CERTIFICATES.json')
  require(parsers==registered,'unregistered parser certificate')
  old=obj(R/'evidence/slice-q-compose-20261029/NEB_EDGES.json')
- require(set(edges)==set(old)|{'NEO_peer_row_certificates','NEO_baseline','NEO_parser_row_certificates','NEO_q_row_certificates'},'unexpected edge artifact keys')
+ require(set(edges)==set(old)|{'NEO_peer_row_certificates','NEO_baseline','NEO_parser_row_certificates','NEO_q_row_certificates','NEO_observer_row_certificates'},'unexpected edge artifact keys')
  for key in set(old)-{'edges'}:require(edges[key]==old[key],'changed inherited edge artifact field: '+key)
  require(edges['NEO_peer_row_certificates']==peer['row_certificates'],'peer root certificate artifact drift')
  require(edges['NEO_parser_row_certificates']==parsers,'parser root certificate artifact drift')
  require(edges['NEO_q_row_certificates']==qrows,'unregistered private-Q certificate')
+ require(edges['NEO_observer_row_certificates']==orows,'unregistered observer certificate')
  require(edges['NEO_baseline']=='NEN_LEDGER.json:'+BASE_SHA,'edge baseline pin drift')
  require(len(edges['edges'])==257 and {e['edge'] for e in edges['edges']}=={e['edge'] for e in old['edges']},'slice edge inventory drift')
  byedge={e['edge']:e for e in edges['edges']};new={e['edge']:e for e in peer['edges']}
  for original in old['edges']:
   expected=copy.deepcopy(new.get(original['edge'],original))
   if original['edge'] in qedges:expected.update(qedges[original['edge']])
+  if original['edge'] in oedges:expected.update(oedges[original['edge']])
   parser_functions={p['function'] for p in parsers.values()}
   if expected['callee'] in parser_functions:
    require(expected['status']=='OPEN','new parser refresh shadows an inherited edge certificate')
@@ -178,9 +182,18 @@ def compose(base,peer,edges,parsers=None):
    require(o['id'] in cert['calls'] or o['id'] in cert['external_obligations'],'private-Q missing occurrence')
    o.update(status='CLOSED',discharged_by=cert['id']+':'+o['id'])
   for o in row['inventory_domain_obligations']:o.update(status='CLOSED',discharged_by=cert['id'])
+ for key,cert in orows.items():
+  row=index[key];require(row['composed_status']=='OPEN','observer row collision')
+  historical=copy.deepcopy(row);row['NEO_NEN_before']=historical
+  row.update(bridge_status='CLOSED-CONDITIONAL',composed_status='CLOSED',selected_claims=['NEO::deployed_mark_none'],active_support_receipts=[],k3_status='UNAFFECTED',open_transitive_dependencies=[],NEN_rejections=[],NEO_certificate=cert,composed_reason='Adopted z(1) exact deployed None specialization and emitted no-effect port; historical function-pointer results remain quarantined')
+  row['named_hypotheses']=[dict(name='NEO::deployed_mark_none.PacketDomain',statement=cert['domain'],discharged_by=cert['id'])]
+  for o in row['caller_domain_obligations']:
+   require(o['id'] in cert['external_obligations'],'observer missing unreachable occurrence')
+   o.update(status='CLOSED',discharged_by=cert['id']+':'+o['id'])
+  for o in row['inventory_domain_obligations']:o.update(status='CLOSED',discharged_by=cert['id'])
  require(all(r['composed_status']=='OPEN' for r in out['rows'] if r['function'] in ROOTS),'root accidentally closed')
- delta=dict(schema='NEO-additive-NEN-v1',baseline_sha256=BASE_SHA,baseline_closed=88,newly_closed=sorted(PEER_ROWS|set(parsers)|set(qrows)),new_count=len(PEER_ROWS|set(parsers)|set(qrows)),total_closed=sum(r['composed_status']=='CLOSED' for r in out['rows']),q_closed=sum(r['composed_status']=='CLOSED' and r['function'] in Q for r in out['rows']),roots={r:'OPEN' for r in ROOTS},edge_closed=sum(e['status']=='CLOSED' for e in edges['edges']),edge_total=257,trust='P6/D188 semantic transport retained; reclassification, never removal',authoritative_input_unmodified=True)
- require(delta['total_closed']==114 and delta['q_closed']==92 and delta['edge_closed']==114,'unexpected additive counts')
+ delta=dict(schema='NEO-additive-NEN-v1',baseline_sha256=BASE_SHA,baseline_closed=88,newly_closed=sorted(PEER_ROWS|set(parsers)|set(qrows)|set(orows)),new_count=len(PEER_ROWS|set(parsers)|set(qrows)|set(orows)),total_closed=sum(r['composed_status']=='CLOSED' for r in out['rows']),q_closed=sum(r['composed_status']=='CLOSED' and r['function'] in Q for r in out['rows']),roots={r:'OPEN' for r in ROOTS},edge_closed=sum(e['status']=='CLOSED' for e in edges['edges']),edge_total=257,trust='P6/D188 semantic transport retained; reclassification, never removal',authoritative_input_unmodified=True)
+ require(delta['total_closed']==116 and delta['q_closed']==94 and delta['edge_closed']==115,'unexpected additive counts')
  return delta
 
 SLICES=obj(R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLICES-20261029.json')['slices']
