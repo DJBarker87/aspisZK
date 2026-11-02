@@ -23,7 +23,7 @@ It does not assert allocator clearing or erase retired memory from L3. -/
 def retire (slot : Slot) (w : State) : State :=
   {w with frame := {w.frame with
     live := w.frame.live.filter (fun s => s.key != slot.key)
-    retired := slot :: w.frame.retired}
+    retired := slot :: w.frame.retired},
     drops := w.drops+1}
 
 def drop (slot : Slot) (w : State) : State :=
@@ -32,13 +32,15 @@ def drop (slot : Slot) (w : State) : State :=
 
 /-- Physical address-bearing observations, not a claim that cleanup is silent.
 The text here is the mathematical event serialization, not Rust fmt semantics. -/
+def ascii (s : String) : Bytes := s.toUTF8.toList
+
 def nativeEvent : PV_EVH_DeployedZeroWorld.Event → NativeEvent
   | .volatileWrite address value =>
-    .side (PV_EVH_World.ascii "zeroize.volatileWrite")
-      (PV_EVH_World.ascii (toString address ++ ":" ++ toString value))
+    .side (ascii "zeroize.volatileWrite")
+      (ascii (toString address ++ ":" ++ toString value))
   | .asmReadBarrier address =>
-    .side (PV_EVH_World.ascii "zeroize.asmReadBarrier")
-      (PV_EVH_World.ascii (toString address))
+    .side (ascii "zeroize.asmReadBarrier")
+      (ascii (toString address))
 
 def emitted (slot : Slot) : List NativeEvent :=
   (PV_EVH_DeployedZeroTrace.trace slot.address slot.initialized).map nativeEvent
