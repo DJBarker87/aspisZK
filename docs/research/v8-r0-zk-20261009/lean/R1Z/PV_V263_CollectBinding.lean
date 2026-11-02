@@ -27,8 +27,27 @@ theorem compose {S A B C : Type} (f : A → B) (g : B → C) (r : Run S A) :
     | exhausted => rfl
     | returned result => cases result <;> rfl
 
-/-- This is equality of complete runs, not just successful lengths. The room
-condition is an initial-capacity bound, independent of callback answers. -/
+def prefix {S A : Type} (events : List PV_RJ4IDB.NativeEvent) (r : Run S A) : Run S A :=
+  ⟨r.outcome,r.state,events++r.events⟩
+
+theorem map_prefix {S A B : Type} (f : A → B) (events : List PV_RJ4IDB.NativeEvent)
+    (r : Run S A) : mapRun f (prefix events r) = prefix events (mapRun f r) := rfl
+
+theorem pure_bind {S A B : Type} (f : A → B) (m : Q S A) (w : State S) :
+    PV_V263_World.bind m (fun a => lift (.ok (f a))) w = mapRun f (m w) := by
+  cases h : (m w).outcome with
+  | fault e => simp only [PV_V263_World.bind,h,mapRun,mapOutcome]
+  | exhausted => simp only [PV_V263_World.bind,h,mapRun,mapOutcome]
+  | returned result => cases result <;>
+      simp only [PV_V263_World.bind,h,mapRun,mapOutcome,mapResult,lift,List.append_nil]
+
+theorem bind_ok {S A B : Type} (m : Q S A) (k : A → Q S B) (w : State S) (a : A)
+    (h : (m w).outcome = .returned (.ok a)) :
+    PV_V263_World.bind m k w = prefix (m w).events (k a (m w).state) := by
+  simp only [PV_V263_World.bind,h,prefix]
+
+/-- Equality of complete runs. Room is an initial-capacity bound and has no
+callback-answer or successful-vector dependency. -/
 theorem stores {S A : Type} (runtime : PV_V263_VecSpine.Runtime S)
     (f : Nat → Q S A) (ids : List Nat) (out : alloc.vec.Vec A)
     (room : out.length+ids.length ≤ Usize.max) (w : State S) :
@@ -37,8 +56,10 @@ theorem stores {S A : Type} (runtime : PV_V263_VecSpine.Runtime S)
     mapRun (fun values => out.val++values)
       (PV_V263_WorkerControl.traverse f ids w) := by
   induction ids generalizing out w with
-  | nil => simp only [PV_V263_VecSpine.collectLoop,PV_V263_WorkerControl.traverse,
-      mapRun,mapOutcome,mapResult,PV_V263_World.lift,List.append_nil]
+  | nil =>
+    change mapRun (fun v : alloc.vec.Vec A => v.val) (lift (.ok out) w) =
+      mapRun (fun values => out.val++values) (lift (.ok []) w)
+    simp only [mapRun,mapOutcome,mapResult,lift,List.append_nil]
   | cons i ids ih =>
     change mapRun (fun v : alloc.vec.Vec A => v.val)
       (PV_V263_World.bind (f i) (fun a =>
@@ -67,39 +88,32 @@ theorem stores {S A : Type} (runtime : PV_V263_VecSpine.Runtime S)
           rw [hlength]
           simp only [List.length_cons] at room
           omega
-        have rec := ih next remaining (f i w).state
+        have recursion := ih next remaining (f i w).state
         have functions : (fun values : List A => next.val++values) =
             (fun values => out.val++(a::values)) := by
           funext values
           rw [hvalues,List.append_assoc]
           rfl
-        rw [functions] at rec
-        simp only [PV_V263_World.bind,hf,PV_V263_VecSpine.value,hpush,
-          PV_V263_World.lift,PV_V263_WorkerControl.traverse] 
-        have ho := congrArg Run.outcome rec
-        have hs := congrArg Run.state rec
-        have he := congrArg Run.events rec
-        simp only [mapRun] at ho hs he
-        simp only [mapRun,mapOutcome,mapResult]
-        rw [hs,he]
-        cases hr : (PV_V263_WorkerControl.traverse f ids (f i w).state).outcome with
-        | fault e => simpa only [mapOutcome,hr] using congrArg
-            (fun outcome => Run.mk outcome
-              (PV_V263_WorkerControl.traverse f ids (f i w).state).state
-              ((f i w).events++(PV_V263_WorkerControl.traverse f ids (f i w).state).events)) ho
-        | exhausted => simpa only [mapOutcome,hr] using congrArg
-            (fun outcome => Run.mk outcome
-              (PV_V263_WorkerControl.traverse f ids (f i w).state).state
-              ((f i w).events++(PV_V263_WorkerControl.traverse f ids (f i w).state).events)) ho
-        | returned r => cases r <;> simpa only [mapOutcome,mapResult,hr,
-            PV_V263_World.lift,List.append_nil,List.append_assoc] using congrArg
-            (fun outcome => Run.mk outcome
-              (PV_V263_WorkerControl.traverse f ids (f i w).state).state
-              ((f i w).events++(PV_V263_WorkerControl.traverse f ids (f i w).state).events)) ho
+        rw [functions] at recursion
+        have leftStep : PV_V263_World.bind (f i) (fun a =>
+            PV_V263_World.bind (PV_V263_VecSpine.value runtime (alloc.vec.Vec.push out a))
+              (fun next => PV_V263_VecSpine.collectLoop runtime f ids next)) w =
+            prefix (f i w).events (PV_V263_VecSpine.collectLoop runtime f ids next (f i w).state) := by
+          rw [bind_ok _ _ _ _ hf]
+          simp only [PV_V263_VecSpine.value,hpush,PV_V263_World.bind,lift,List.nil_append]
+        rw [leftStep,map_prefix,recursion]
+        change _ = mapRun (fun values => out.val++values)
+          (PV_V263_World.bind (f i) (fun a => PV_V263_World.bind
+            (PV_V263_WorkerControl.traverse f ids) (fun values => lift (.ok (a::values)))) w)
+        rw [bind_ok _ _ _ _ hf,pure_bind,map_prefix,compose]
 
 #print axioms mapResult
 #print axioms mapOutcome
 #print axioms mapRun
 #print axioms compose
+#print axioms prefix
+#print axioms map_prefix
+#print axioms pure_bind
+#print axioms bind_ok
 #print axioms stores
 end R1Z.PV_V263_CollectBinding
