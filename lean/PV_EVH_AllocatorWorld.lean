@@ -68,8 +68,7 @@ theorem denied_retains_heap (allocator : Allocator) (encode : AllocationEvent �
     (tryAllocate allocator encode layout owner w).state.allocator = (allocator w layout).allocator ∧
     (tryAllocate allocator encode layout owner w).events =
       [event encode (.request layout),event encode (.denied layout (allocator w layout).errno)] := by
-  simp only [tryAllocate,h]
-  exact ⟨rfl,rfl,rfl,rfl,rfl⟩
+  simp only [tryAllocate,h,and_self]
 
 theorem allocated_installs_block (allocator : Allocator) (encode : AllocationEvent → Bytes)
     (layout : Layout) (owner address : Nat) (backing : Bytes) (w : State)
@@ -78,8 +77,7 @@ theorem allocated_installs_block (allocator : Allocator) (encode : AllocationEve
     (tryAllocate allocator encode layout owner w).outcome = .returned (.ok (some block)) ∧
     (tryAllocate allocator encode layout owner w).state.heap = block :: w.heap ∧
     (tryAllocate allocator encode layout owner w).state.nextIdentity = w.nextIdentity + 1 := by
-  simp only [tryAllocate,h]
-  exact ⟨rfl,rfl,rfl⟩
+  simp only [tryAllocate,h,and_self]
 
 /-- Unchecked allocation failure handling is a runtime fault in the world,
 with an explicitly supplied diagnostic prefix. Formatting/source binding OPEN. -/
@@ -103,8 +101,7 @@ theorem failure_world_prefix (allocator : Allocator) (encode : AllocationEvent �
     run.events = [event encode (.request layout),
       event encode (.denied layout (allocator w layout).errno)] ++ diagnostics ∧
     sourceProjection run.outcome = none := by
-  simp only [allocateOrFault,Bind.bind,PV_EVH_Runtime.bind,tryAllocate,h,allocationFault,sourceProjection]
-  exact ⟨rfl,rfl,rfl,rfl,rfl,rfl⟩
+  simp only [allocateOrFault,Bind.bind,PV_EVH_Runtime.bind,tryAllocate,h,allocationFault,sourceProjection,and_self]
 
 #print axioms denied_retains_heap
 #print axioms allocated_installs_block
