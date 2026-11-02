@@ -1,0 +1,79 @@
+{
+  "source_capture": [
+    {
+      "version": "1.94.1",
+      "name": "array/iter.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "sha256": "ff710496ba82edc0b2d7c8e569b243267eb93bf12f9036689150d86690ac5e90",
+      "local_path": "evidence/pv-b3p6-20261028/resume18/std571-source/1.94.1/array/iter.rs.xz",
+      "bytes": 13507
+    },
+    {
+      "version": "1.94.1",
+      "name": "array/iter/iter_inner.rs",
+      "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter/iter_inner.rs",
+      "sha256": "b12ffcb34aeac42367411691e5dd9fedf723140cbd9d6c0bfbcfb9694cbe4105",
+      "local_path": "evidence/pv-b3p6-20261028/resume18/std571-source/1.94.1/array/iter/iter_inner.rs.xz",
+      "bytes": 10628
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "array/iter.rs",
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter.rs",
+      "sha256": "570b98951edb1bf47932c2de58dc4d3f38f34d37b3dffeac2fe80572dc0475cb",
+      "local_path": "evidence/pv-b3p6-20261028/resume18/std571-source/nightly-2026-06-01/array/iter.rs.xz",
+      "bytes": 13728
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "array/iter/iter_inner.rs",
+      "path": "/home/dombarker/.rustup/toolchains/nightly-2026-06-01-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/array/iter/iter_inner.rs",
+      "sha256": "6906e8e1e1956d415a9058df036e2a28fe0938dbae0b2c499a5889d8b983c4c1",
+      "local_path": "evidence/pv-b3p6-20261028/resume18/std571-source/nightly-2026-06-01/array/iter/iter_inner.rs.xz",
+      "bytes": 12132
+    }
+  ],
+  "items": [
+    {
+      "name": "array/iter.rs",
+      "needle": "fn into_iter(self)",
+      "bodies": {
+        "1.94.1": "fn into_iter(self) -> Self::IntoIter {\n        // SAFETY: The transmute here is actually safe. The docs of `MaybeUninit`\n        // promise:\n        //\n        // > `MaybeUninit<T>` is guaranteed to have the same size and alignment\n        // > as `T`.\n        //\n        // The docs even show a transmute from an array of `MaybeUninit<T>` to\n        // an array of `T`.\n        //\n        // With that, this initialization satisfies the invariants.\n        //\n        // FIXME: If normal `transmute` ever gets smart enough to allow this\n        // directly, use it instead of `transmute_unchecked`.\n        let data: [MaybeUninit<T>; N] = unsafe { transmute_unchecked(self) };\n        // SAFETY: The original array was entirely initialized and the the alive\n        // range we're passing here represents that fact.\n        let inner = unsafe { InnerSized::new_unchecked(IndexRange::zero_to(N), data) };\n        IntoIter { inner: ManuallyDrop::new(inner) }\n    }",
+        "nightly-2026-06-01": "fn into_iter(self) -> Self::IntoIter {\n        // SAFETY: The transmute here is actually safe. The docs of `MaybeUninit`\n        // promise:\n        //\n        // > `MaybeUninit<T>` is guaranteed to have the same size and alignment\n        // > as `T`.\n        //\n        // The docs even show a transmute from an array of `MaybeUninit<T>` to\n        // an array of `T`.\n        //\n        // With that, this initialization satisfies the invariants.\n        //\n        // FIXME: If normal `transmute` ever gets smart enough to allow this\n        // directly, use it instead of `transmute_unchecked`.\n        let data: [MaybeUninit<T>; N] = unsafe { transmute_unchecked(self) };\n        // SAFETY: The original array was entirely initialized and the alive\n        // range we're passing here represents that fact.\n        let inner = unsafe { InnerSized::new_unchecked(IndexRange::zero_to(N), data) };\n        IntoIter { inner: ManuallyDrop::new(inner) }\n    }"
+      },
+      "body_tokens_identical": true
+    },
+    {
+      "name": "array/iter.rs",
+      "needle": "fn fold<",
+      "bodies": {
+        "1.94.1": "fn fold<Acc, Fold>(mut self, init: Acc, fold: Fold) -> Acc\n    where\n        Fold: FnMut(Acc, Self::Item) -> Acc,\n    {\n        self.unsize_mut().fold(init, fold)\n    }",
+        "nightly-2026-06-01": "fn fold<Acc, Fold>(mut self, init: Acc, fold: Fold) -> Acc\n    where\n        Fold: FnMut(Acc, Self::Item) -> Acc,\n    {\n        self.unsize_mut().fold(init, fold)\n    }"
+      },
+      "body_tokens_identical": true
+    },
+    {
+      "name": "array/iter/iter_inner.rs",
+      "needle": "const unsafe fn new_unchecked",
+      "bodies": {
+        "1.94.1": "const unsafe fn new_unchecked(alive: IndexRange, data: [MaybeUninit<T>; N]) -> Self {\n        Self { alive, data }\n    }",
+        "nightly-2026-06-01": "const unsafe fn new_unchecked(alive: IndexRange, data: [MaybeUninit<T>; N]) -> Self {\n        Self { alive, data }\n    }"
+      },
+      "body_tokens_identical": true
+    },
+    {
+      "name": "array/iter/iter_inner.rs",
+      "needle": "fn try_fold<",
+      "bodies": {
+        "1.94.1": "fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R\n    where\n        F: FnMut(B, T) -> R,\n        R: Try<Output = B>,\n    {\n        // `alive` is an `IndexRange`, not an arbitrary iterator, so we can\n        // trust that its `try_fold` isn't going to do something weird like\n        // call the fold-er multiple times for the same index.\n        let data = &mut self.data;\n        self.alive.try_fold(init, move |accum, idx| {\n            // SAFETY: `idx` has been removed from the alive range, so we're not\n            // going to drop it (even if `f` panics) and thus its ok to give\n            // out ownership of that item to `f` to handle.\n            let elem = unsafe { data.get_unchecked(idx).assume_init_read() };\n            f(accum, elem)\n        })\n    }",
+        "nightly-2026-06-01": "fn try_fold<B, F, R>(&mut self, init: B, mut f: F) -> R\n    where\n        F: FnMut(B, T) -> R,\n        R: Try<Output = B>,\n    {\n        // `alive` is an `IndexRange`, not an arbitrary iterator, so we can\n        // trust that its `try_fold` isn't going to do something weird like\n        // call the fold-er multiple times for the same index.\n        let data = &mut self.data;\n        self.alive.try_fold(init, move |accum, idx| {\n            // SAFETY: `idx` has been removed from the alive range, so we're not\n            // going to drop it (even if `f` panics) and thus its ok to give\n            // out ownership of that item to `f` to handle.\n            let elem = unsafe { data.get_unchecked(idx).assume_init_read() };\n            f(accum, elem)\n        })\n    }"
+      },
+      "body_tokens_identical": true
+    }
+  ],
+  "numeric_lemma": "PV_B3P_CounterGuards571227.initial_cursor_handler_independent",
+  "constructor_projection": "inspect exact constructor before credit; source state includes transmute and drop fields",
+  "full_source_association": false,
+  "pointer_borrow_drop": "OPEN",
+  "premises_removed": []
+}
