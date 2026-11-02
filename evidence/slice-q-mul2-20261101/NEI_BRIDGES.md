@@ -37,3 +37,13 @@ Literal E006 constructors, L063/L067 whole records and nominal/window transport,
 ## Composed row/getter/push path
 
 Fresh K025/K026 and K027/K028 complete both actual immutable scalar read helpers. L069 derives their same-input Results and every actual Range index domain, plus the lossless all-U32 conversion law. The additional row-widening gate preserves all original checks and binds exactly the two actual line240 u64::from occurrences; it cannot admit another parent or constructor boundary. The row/getter/push and constructor path now closes twelve TX occurrence rows /six functions, with four direct edges. Fourteen mutation/invariant tests pass, including independent row progress when the unrelated dot constructor child is absent. No old native credit restored or required.
+
+## Wide constructor
+
+NEI_WIDE_CTOR_PACKET.json binds actual E008 emitted guards/records to the coherent
+model via L085, with full raw-U32 observation theorem L075 and fresh actual
+K031/K032 full-Option/eight-field controls. Two more composed rows (TX1:049,
+TX2:032) close; total fourteen rows /seven functions, four direct edges. The
+additional Option constructor class binds exact source line213, function/body,
+and named emitted association; M31 remains the original transparent-constructor
+class. No old native credit used. Incoming dot/decoder edges remain separate.

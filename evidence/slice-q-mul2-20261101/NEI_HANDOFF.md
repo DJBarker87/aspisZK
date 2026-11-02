@@ -26,3 +26,22 @@ PASS/standard axioms, K031/K032 pair PASS. E007 actual wrapper extraction PASS;
 L082 exact four-call wrapper theorem PASS. No new composed rows in this update.
 L079 prelaunch-only, as L054 was. K035 running a distinct metadata-only
 postcondition for the valid arbitrary Vec prestate; no old timeout is rerun.
+
+Wide constructor stage complete: E008 actual field guard/record extraction has
+no external holes; L083/L084 literal modules and L085 nominal Result association
+PASS. L075 full Option/eight-field observation and K031/K032 fresh controls are
+paired. NEB additive composition now closes fourteen rows /seven functions,
+four edges. All original validator checks retained; exact Option source-site
+branch added. Further tests/validation pending before this stage's commit.
+Prefix K036 and K038 negative controls timed out, so K035/K037 uncredited.
+K039 universal positive PASS; K040 isolates valid n=1,index=0 wrong-length
+counterexample, pending. Positive domain never strengthened. Continue whole
+budget: current83 actual Lean runs (L054,L079 prelaunch gaps),40 Kani submitted,
+8 extraction. No stop; finish prefix native append/frame and independent dot
+children, then accumulator Lean-only broader TX2 shell as feasible.
+
+Wide constructor stage validation finished: seventeen mutation/invariant tests
+PASS and NEI_validate exit0, fourteen composed rows. K039/K040 strict pair PASS:
+full positive metadata domain, valid single-witness negative (n=1,index=0).
+K041 actual appended-cell cut TIMEOUT, no credit or unchanged retry. K042 separate
+old-word observation cut submitted, then continue independent dot finish leaves.

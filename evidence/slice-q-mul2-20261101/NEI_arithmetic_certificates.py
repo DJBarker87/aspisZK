@@ -1,7 +1,8 @@
 """Additional same-call row/getter/push certificates, never old native credit."""
 from pathlib import Path
 import json,hashlib,copy
-import NEI_getter_validate,NEI_row_validate,NEI_push_validate
+import NEI_getter_validate,NEI_row_validate,NEI_push_validate,NEI_wide_ctor_validate
+WIDE=NEI_wide_ctor_validate.FUNCTION
 from NEI_validate import function
 E=Path(__file__).resolve().parent;R=E.parent.parent
 obj=lambda p:json.loads(p.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
@@ -11,9 +12,11 @@ def packets():
  ps=obj(E/'NEI_GETTER_PACKETS.json')
  for name in ['ROW','PUSH']:
   p=obj(E/('NEI_'+name+'_PACKET.json'));p['claim_id']='NEI::'+p['function'].split('::')[-1];ps.append(p)
+ if (E/'NEI_WIDE_CTOR_PACKET.json').exists():ps.append(obj(E/'NEI_WIDE_CTOR_PACKET.json'))
  return ps
 
 def audit(p,neb):
+ if p['function']==WIDE:return NEI_wide_ctor_validate.audit(E,R,p,neb,neb.require)
  if p['route']=='D188_ACTUAL_GETTER_FRAME':return NEI_getter_validate.audit(E,R,p,neb,neb.require)
  if p['function']==ROW:return NEI_row_validate.audit(E,R,p,neb,neb.require,function)
  if p['function']==PUSH:return NEI_push_validate.audit(E,R,p,neb,neb.require,function)
@@ -26,12 +29,16 @@ def recipes(base,neb):
  ps={p['function']:p for p in packets()};rows={};edges={}
  for r in base['rows']:
   if r['function'] not in ps:continue
-  p=ps[r['function']];lean=p['lean_evidence']+[proof()]
+  p=ps[r['function']];lean=p['lean_evidence']+([] if r['function']==WIDE else [proof()])
   review=dict(**p['review'],conclusion_hiding=False,statement_and_native_association_checked=True)
   external={}
   for o in r['caller_domain_obligations']:
    if 'call' not in o:continue
    syntax=o['call'].get('expression',o['call'].get('syntax'))
+   if r['function']==WIDE:
+    assert syntax in ['Some','M31'],'unregistered wide constructor operation'
+    external[o['id']]=dict(kind='NEI_WIDE_OPTION_CONSTRUCTOR' if syntax=='Some' else 'TRANSPARENT_M31_CONSTRUCTOR',source_body_sha256=r['frozen_body_sha256'],syntax=syntax,line=o['call']['line'],theorems=['NEI_WideCtorAssociation.same_result'])
+    continue
    assert r['function']==ROW and syntax=='u64::from' and o['call']['line']==240,'unregistered row external operation'
    external[o['id']]=dict(kind='NEI_ROW_U32_U64_WIDEN',source_body_sha256=r['frozen_body_sha256'],syntax='u64::from',line=240,theorems=['NEI_RowEdges.widen'])
   rows[r['row']]=dict(id='NEI-arithmetic-root:'+r['row'],row=r['row'],function=r['function'],frozen_body_sha256=r['frozen_body_sha256'],selected_claims=r['selected_claims'],named_hypotheses_discharged=[h['name'] for h in r['named_hypotheses']],inventory_domains_discharged=[o['unit'] for o in r['inventory_domain_obligations']],parts=['result','state','ordered_effects','native_association'],lean_evidence=lean,remaining_inner_hypotheses=[],top_hypotheses=[r['function']+'.PacketDomain',r['function']+'.PhysicalInterpretation','CompositionTrustOptionA'],review=review,native_review=dict(path=str((E/'NEI_ARITHMETIC_REVIEW.json').relative_to(R)),sha256=sha(E/'NEI_ARITHMETIC_REVIEW.json')),external_obligations=external)

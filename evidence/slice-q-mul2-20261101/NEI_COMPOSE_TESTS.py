@@ -28,13 +28,19 @@ except AssertionError:results.append(dict(test='constructor occurrence rule cann
 else:raise AssertionError('constructor scope guard missing')
 reject('wrong row widening source',lambda d:root(d,'TX1:195')['external_obligations']['external:TX1:195:2'].update(source_body_sha256='0'*64))
 reject('wrong row widening syntax',lambda d:root(d,'TX2:125')['external_obligations']['external:TX2:125:2'].update(syntax='u32::from'))
-independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new')]
+independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new') and r['function']!=c.arithmetic.WIDE]
 _,independent_delta=c.validate(base,independent)
 assert len(independent_delta['composed_rows_closed'])==8 and not any(x in independent_delta['composed_rows_closed'] for x in ['TX1:107','TX2:073','TX1:110','TX2:076'])
 results.append(dict(test='independent row/getter/push members proceed while dot constructor is open',status='PASS',outcome='eight independent rows close'))
 try:c.arithmetic.check_widen(dict(function='not-the-row'),{}, {}, {})
 except AssertionError:results.append(dict(test='row widening class cannot admit another function',status='PASS',outcome='rejected'))
 else:raise AssertionError('widening scope guard missing')
+reject('wide Option source occurrence mismatch',lambda d:root(d,'TX1:049')['external_obligations']['external:TX1:49:0'].update(line=214))
+reject('wide packet wrong actual body',lambda d:root(d,'TX2:032').update(frozen_body_sha256='0'*64))
+wide_independent=copy.deepcopy(edges);wide_independent['row_certificates']=[r for r in wide_independent['row_certificates'] if r['function']==c.arithmetic.WIDE]
+_,wide_delta=c.validate(base,wide_independent)
+assert set(wide_delta['composed_rows_closed'])=={'TX1:049','TX2:032'}
+results.append(dict(test='wide constructor is independent of dot products and old native credit',status='PASS',outcome='exactly two wide constructor rows close'))
 source=c.obj(E/'NEI_VALIDATOR_SOURCE_DELTA.json');original=Path(source['original']).read_text();derived=Path(source['derived']).read_text();assert derived.replace(source['only_added_branch'],'')==original
 results.append(dict(test='every original validator check retained verbatim',status='PASS'))
 (E/'NEI_COMPOSE_TESTS_receipt.json').write_text(json.dumps(dict(tests=results,passed=len(results),failed=0,baseline_unchanged=True,original_neb_file_unchanged=True),indent=2)+'\n')

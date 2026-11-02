@@ -15,8 +15,13 @@ theorem same_four_calls (q : Slice U8) (g : Array E 29#usize) :
   let c ← AspisR1.FIp_NativeDots.fast_dots.four_dots_one q1 g 2#usize
   let d ← AspisR1.FIp_NativeDots.fast_dots.four_dots_one q1 g 3#usize
   ok (Array.make 4#usize [a,b,c,d])) := by rfl
+/-- All Result branches agree, without assuming any child success. -/
+theorem emitted_to_cohort (q : Slice U8) (g : Array E 29#usize) :
+ NEI_FourWrapper.fast_dots.four_dots q g =
+ AspisR1.FIp_NativeDots.fast_dots.four_dots q g := by rfl
 /-- Slot arithmetic is unconditional; every child sees the same q/g carriers. -/
 theorem slots : ∀ slot ∈ ([0,1,2,3] : List Nat), slot < 4 := by decide
+#print axioms emitted_to_cohort
 #print axioms same_four_calls
 #print axioms slots
 end NEI_FourWrapperLaw

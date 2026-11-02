@@ -21,6 +21,9 @@ marker="     else:require(False,'unregistered external obligation kind')"
 addition="""     elif ext['kind']=='NEI_CERTIFIED_CTOR_OCCURRENCE':
       _NEI_check_ctor_occurrence(row,o,ext,index,baseline,approved_edges,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':certified-ctor-occurrence')
+     elif ext['kind']=='NEI_WIDE_OPTION_CONSTRUCTOR':
+      _NEI_check_wide_some(row,o,ext,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':wide-option-constructor')
      elif ext['kind']=='NEI_ROW_U32_U64_WIDEN':
       _NEI_check_row_widen(row,o,ext,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':lossless-row-u32-u64')
@@ -72,6 +75,7 @@ def check_ctor_occurrence(row,o,ext,index,base,approved_edges,rc):
  text=source[source.index('impl EbyKDot {'):source.index('    #[inline(always)]',source.index('impl EbyKDot {'))]
  assert text.count('canonical::Dot::new()')==2,'native source does not have those two calls'
 extended._NEI_check_ctor_occurrence=check_ctor_occurrence
+extended._NEI_check_wide_some=arithmetic.NEI_wide_ctor_validate.check_some
 extended._NEI_check_row_widen=arithmetic.check_widen
 
 def new_certificates(base):

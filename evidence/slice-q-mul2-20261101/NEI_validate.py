@@ -112,6 +112,9 @@ def main():
  if (E/'NEI_GETTER_PACKETS.json').is_file():
   import NEI_getter_validate
   results += [NEI_getter_validate.audit(E,R,p,neb,require) for p in obj(E/'NEI_GETTER_PACKETS.json')]
+ if (E/'NEI_WIDE_CTOR_PACKET.json').is_file():
+  import NEI_wide_ctor_validate
+  results.append(NEI_wide_ctor_validate.audit(E,R,obj(E/'NEI_WIDE_CTOR_PACKET.json'),neb,require))
  delta=obj(E/'NEI_LEDGER_DELTA.json')
  import NEI_composition as composition
  baseline=obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')

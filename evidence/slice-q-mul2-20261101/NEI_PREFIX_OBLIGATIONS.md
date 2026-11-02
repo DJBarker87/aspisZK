@@ -17,3 +17,12 @@ Do not replace this with capacity=110, shorter-buffer, uniformly initialized-pre
 Next independent dependency: inspect BatchedWeights::push, then close its real update_residue_row child before attempting to compose the parent. No progress is counted from local lemmas alone.
 
 K029 reduced geometry+written-cell test timed out. K030 retains its original name/property/domain but initializes all live slots by valid typed writes before set_len, eliminating repeated Vec::push setup; it still timed out (about6.1GiB peak RSS, swap0). Neither is credited or repeated unchanged. K033 independently passes a one-word actual pointer write/frame on arbitrary Vec<M31,110> windows; matched K034 is pending. This primitive does not prove the complete actual Vec::push binding/capacity/result association.
+
+K034 FAIL intended; strict K033/K034 pair audit PASS. K035 actual push metadata
+postcondition PASS in77.8s (6G/8G/swap0/tasks64). K036 negative control TIMEOUT,
+so K035 is NOT credited. No resubmission of K036's shape. Own harness repair
+removes the extra unconditional positive postcondition from the negative branch:
+negative now asserts the actual length is NOT index+1; positive asserts the same
+original three geometry facts, as a single postcondition. This changes the
+negative solver goal rather than raising timeout/cap or renaming the harness.
+A fresh positive/negative pair is required under the repaired source.

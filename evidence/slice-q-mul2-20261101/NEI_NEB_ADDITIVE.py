@@ -196,6 +196,9 @@ def extend(baseline,edges):
      elif ext['kind']=='NEI_CERTIFIED_CTOR_OCCURRENCE':
       _NEI_check_ctor_occurrence(row,o,ext,index,baseline,approved_edges,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':certified-ctor-occurrence')
+     elif ext['kind']=='NEI_WIDE_OPTION_CONSTRUCTOR':
+      _NEI_check_wide_some(row,o,ext,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':wide-option-constructor')
      elif ext['kind']=='NEI_ROW_U32_U64_WIDEN':
       _NEI_check_row_widen(row,o,ext,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':lossless-row-u32-u64')
