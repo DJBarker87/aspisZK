@@ -14,6 +14,7 @@ hypothesis, and therefore its source evaluation equality, while P is empty.
 This does not assert DeployedWrapper557 or describe the deployed dictionary. -/
 theorem complete (self : @host_semantic.SemanticOracle (types base))
     (point : Array aspis_core.field.QM31 10#usize) :
+    letI : ExternalTypes := types base
     let candidate := PV_RunJoin_BridgeObstruction73.diagnostic base ops terminal
     let native := opsNative base heap box candidate runtime world
     (∀ claims,native.op227 self.«public» claims point self.challenges=
