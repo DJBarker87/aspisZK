@@ -34,7 +34,7 @@ for result,axioms,modules in blocks:
  printed=next(s for s in receipt['print_axioms_lines'] if s.startswith("'"+root+"'"))
  printed_axioms=set() if 'does not depend' in printed else set(printed.split('depends on axioms: [',1)[1].rstrip(']').split(', '))
  assert printed_axioms==reached
- rows.append(dict(**result,standard_only=True,reachable_sha256=hashlib.sha256(raw).hexdigest(),print_axioms=printed,explicit_external_parameters=('ExternalTypes (25 carriers), ExternalFuns (119 operations); faithful instance unproved' if root=='PV_UC_EntryParam.main' else None)))
+ rows.append(dict(**result,standard_only=True,reachable_sha256=hashlib.sha256(raw).hexdigest(),print_axioms=printed,explicit_external_parameters=('ExternalTypes (26 carriers), ExternalFuns (124 operations); faithful instance unproved' if root=='PV_UC_BoundEntry.main' else None)))
 x=dict(status='PASS raw-walk audit for the exact listed roots',receipt=ident+'/receipt.json',roots=rows,raw_walk_equals_collect_axioms=True,serialized_kernel_inventory_checked=True,limitations=['Full-entry root is a parametric compilation, not a proof that native external bindings satisfy privacy.','No credit relies on Aeneas builtin fmt/stdout semantics. Their effect association remains open.','The fd renderer local source law and generic renderer congruence do not discharge public-transcript/retry/timing laws.','Cached authoritative dependency cohort; no cold/full release closure replay.'])
 (E/'final-gates/d561/axioms/validation.json').write_text(json.dumps(x,indent=2)+'\n')
 print(json.dumps(dict(roots=len(rows),status=x['status'],axioms={r['root']:r['walked_axioms'] for r in rows}),indent=2))

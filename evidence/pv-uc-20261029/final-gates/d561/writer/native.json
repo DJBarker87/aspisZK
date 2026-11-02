@@ -1,0 +1,40 @@
+{
+  "status": "CHECKED WRITER COUNTEREXAMPLE",
+  "evidence_class": "Finite deployed-configuration diagnostic of the reached serde_json Value Display and println expressions; no whole-client equivalence claim",
+  "command": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/audit-src/Cargo.toml",
+    "--profile",
+    "client",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--bin",
+    "pv-uc-writer-d561"
+  ],
+  "source_sha256": "55df954f82973f579798a5b5e329cec0c9d690e7e9d243fd42e4be92dfae44d4",
+  "binary_sha256": "03cecf4b3767134516a2426b1ce5c0a60bfad3ae239cfd811131785ab02d8926",
+  "binary_bytes": 482928,
+  "manifest_before_sha256": "3b3646b369e2f7d4d7310fb365c9a20ede3ca2fa2b9ebce3afd6fc13a53b5652",
+  "manifest_after_sha256": "05d1dc63167b62fb7d1301e838f2261c6c15ffc59183dfcf02f53f1865f80138",
+  "string_writer": "Ok; exact JSON string",
+  "failing_fmt_writer": "Err(fmt::Error)",
+  "stdout_success": {
+    "exit": 0,
+    "stdout": "\"public operand\"\n"
+  },
+  "stdout_full": {
+    "exit": -6,
+    "stderr": "client panic\n"
+  },
+  "consequence": "The actual println writer is fallible stdout, not String. Pure serialization of a public Value may be abstracted separately, but the stdout prefix/error/abort event must still be bound; the new String exemption alone does not discharge this call."
+}

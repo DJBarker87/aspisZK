@@ -1,0 +1,88 @@
+{
+  "command": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--profile",
+    "client",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--bin",
+    "user_client"
+  ],
+  "audit_command": [
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "cargo",
+    "+1.94.1",
+    "build",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/audit-src/Cargo.toml",
+    "--profile",
+    "client",
+    "--locked",
+    "--offline",
+    "-j",
+    "4",
+    "--features",
+    "r1p-check,aspis-r1-cost-probe/ct-host-prover",
+    "--bin",
+    "pv-uc-user-audit"
+  ],
+  "environment": {
+    "RUSTFLAGS": "--cfg getrandom_backend=\"linux_raw\" --check-cfg=cfg(getrandom_backend,values(\"linux_raw\")) -C link-arg=-Wl,--threads=4",
+    "CARGO_TARGET_DIR": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target"
+  },
+  "toolchain": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "binaries": {
+    "user_client": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/user_client",
+      "sha256": "17091d2f0be2d595cd3af598f9444265cebab0fae0b82b96173530c25e03537b",
+      "bytes": 2029480
+    },
+    "devnet_spend": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/devnet_spend",
+      "sha256": "6db76577e5f3331152bbcd6c22739ceea1e0413ed77cf34f10789f4d72488194",
+      "bytes": 2281544
+    },
+    "pv-uc-user-audit": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/pv-uc-user-audit",
+      "sha256": "21a3843a57146f38eeb76fe1acf68feea72486d4fd8e7899f4a8300e437a1c3d",
+      "bytes": 2037472
+    },
+    "pv-uc-fixture-audit": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/native-target/client/pv-uc-fixture-audit",
+      "sha256": "616552bc1237f828168d78863b01fabab500c737ebf50b256c91f6209d059d4a",
+      "bytes": 2291552
+    }
+  },
+  "elf_identity": {
+    "default": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/elf-default/aspis_r1_cost_probe_program.so",
+      "sha256": "f8c0ec72621fd5029a97d796c4a3623d0dc44a8e7074122372f9872915d143d4",
+      "byte_identical": true,
+      "method": "retained ELF hash; client-only source cannot reach SBF roots, N75137/38/39 build evidence reused"
+    },
+    "devnet": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/elf-devnet/aspis_r1_cost_probe_program.so",
+      "sha256": "63ad3e9cc096dcbb55b3ca7ac7c8e89e6a845796ab5e4f5b7d15db96f3784299",
+      "byte_identical": true,
+      "method": "retained ELF hash; client-only source cannot reach SBF roots, N75137/38/39 build evidence reused"
+    },
+    "pool": {
+      "path": "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/elf-pool/aspis_pool.so",
+      "sha256": "121f3e29741f510e6dc42d0345fc3c36217600f0be337094855c4a9da2581548",
+      "byte_identical": true,
+      "method": "retained ELF hash; client-only source cannot reach SBF roots, N75137/38/39 build evidence reused"
+    }
+  },
+  "fixture_unchanged": true
+}

@@ -1,4 +1,5 @@
 import Aeneas
+import PVUCBoundEntry.Funs
 
 /- Privacy needs congruence of a deterministic renderer, not a model of text.
    These renderers are explicit parameters, not global axioms or installed
@@ -33,20 +34,18 @@ theorem pubkey_recomputable {Json Key : Type} (r : Renderers Json Key)
   cases h
   rfl
 
--- The clock is an additional input, not a consequence of the request.
--- This isolates the honest-run obligation for the actual Number::from_f64
--- call; no witness-independence law for elapsed is postulated here.
-def elapsedArgument {Public Witness : Type} (elapsed : Public → Witness → Nat)
-    (p : Public) (w : Witness) : Nat := elapsed p w
-
-theorem elapsed_public_iff {Public Witness : Type}
-    (elapsed : Public → Witness → Nat) :
-    (∀ p w₁ w₂, elapsedArgument elapsed p w₁ = elapsedArgument elapsed p w₂) ↔
-    (∀ p w₁ w₂, elapsed p w₁ = elapsed p w₂) := by
+-- The actual emitted call now retains the I32 operand. Source data-flow
+-- checks establish that this operand is parsed only from public q, before
+-- the first private record read. No text semantics or Unit fmt carrier used.
+theorem extracted_fd_formatter_public
+    [PV_UC_BoundEntry.ExternalTypes] [PV_UC_BoundEntry.ExternalFuns]
+    (fd₁ fd₂ : Aeneas.Std.I32) (h : fd₁ = fd₂) :
+    PV_UC_BoundEntry.wallet_fd_path fd₁ = PV_UC_BoundEntry.wallet_fd_path fd₂ := by
+  cases h
   rfl
 
 #print axioms walletPath_same_public
 #print axioms stdout_recomputable
 #print axioms pubkey_recomputable
-#print axioms elapsed_public_iff
+#print axioms extracted_fd_formatter_public
 end PV_UC_PublicFormatting
