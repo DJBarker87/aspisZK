@@ -9,9 +9,9 @@ def composition_source554 : PV_B3P_Binding13227.CompositionFn13 :=
   let (amount, invalid) ← match public1.withdrawal_amount with
     | none => .ok (none,false)
     | some value => do
-      let bad ← if value = 0#u32 then .ok true else do
+      let bad : Bool ← if value = 0#u32 then .ok true else do
         let upper ← lift (U32.wrapping_shl 1#u32 30#u32)
-        .ok (value >= upper)
+        .ok (decide (value >= upper))
       .ok (public1.withdrawal_amount,bad)
   if invalid then
     .ok (.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
