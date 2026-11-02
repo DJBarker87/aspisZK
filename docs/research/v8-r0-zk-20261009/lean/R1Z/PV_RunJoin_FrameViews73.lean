@@ -29,14 +29,15 @@ theorem word (s payload : Slice U8) (t : U8) (w : U32)
     rfl
   apply PV_RunJoin_FourReader73.complete
   all_goals
-    rw [read s _ (by change _<s.val.length;rw [view];simp only [List.length_append,List.length_cons,List.length_nil];omega)]
-    simp only [view,List.cons_append,List.getElem_cons_succ,List.getElem_cons_zero]
+    rw [read s _ (by change _<s.val.length;rw [view];simp only [List.length_append,List.length_cons,List.length_nil,UScalar.ofNatCore_val_eq];omega)]
+    simp only [UScalar.ofNatCore_val_eq,view,List.cons_append,List.getElem_cons_succ,List.getElem_cons_zero]
 
 theorem payload (s body : Slice U8) (t : U8) (w : U32)
     (value : s.val=t::(core.num.U32.to_le_bytes w).val++body.val) :
     core.slice.index.Slice.index (core.slice.index.SliceIndexRangeFromUsizeSlice U8)
       s {start:=5#usize}=ok body := by
-  have len := (core.num.U32.to_le_bytes w).property
+  have len : (core.num.U32.to_le_bytes w).val.length=4 := by
+    simpa only [UScalar.ofNatCore_val_eq] using (core.num.U32.to_le_bytes w).property
   have bound : (5#usize).val ≤ s.length := by
     change 5 ≤ s.val.length
     rw [value,List.length_append,List.length_cons,len]
@@ -46,10 +47,11 @@ theorem payload (s body : Slice U8) (t : U8) (w : U32)
       ({start:=5#usize} : core.ops.range.RangeFrom Usize) s bound)
   have eq : p=body := by
     apply Subtype.ext
-    rw [hv.1,value,List.drop_append]
+    have pv : p.val=s.val.drop 5 := by simpa only [UScalar.ofNatCore_val_eq] using hv.1
+    rw [pv,value]
     have five : (t::(core.num.U32.to_le_bytes w).val).length=5 := by
       rw [List.length_cons,len]
-    rw [five,List.drop_length,List.nil_append,Nat.sub_self,List.drop_zero]
+    rw [←five,List.drop_left]
   exact hp.trans (congrArg Result.ok eq)
 
 #print axioms read
