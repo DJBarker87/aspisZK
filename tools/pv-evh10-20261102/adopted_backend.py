@@ -10,6 +10,12 @@ assert '--cfg getrandom_backend="linux_raw"' in x['recipe']
 assert '--bin devnet_spend' in x['recipe']
 assert 'x86_64-unknown-linux-gnu' in x['toolchain'] and 'rustc 1.94.1' in x['toolchain']
 assert x['ct_host_prover'] and not x['insecure_spend_fixture']
+gp='evidence/pv-c474b-20261029/client-unit-graph.json'
+graw=subprocess.check_output(['git','show',rev+':'+gp]);graph=json.loads(graw)
+gunit=next(u for u in graph['units'] if u['pkg_id'].endswith('#getrandom@0.3.4') and u['target']['kind']==['lib'])
+assert gunit['profile']['name']=='client' and gunit['profile']['opt_level']=='3'
+assert not gunit['profile']['debug_assertions'] and not gunit['profile']['overflow_checks']
+assert gunit['profile']['panic']=='abort'
 src=json.load(open(E/'getrandom-034-linux-raw-source.json'))
 s={r['relative']:r['text'] for r in src}
 rawbody=s['src/backends/linux_raw.rs']
@@ -22,6 +28,7 @@ assert 'else if ret = -4' in m and 'dlsym' not in m
 out=dict(status='CONFIRMED: model is adopted linux_raw direct-syscall backend, not dlsym',
  evidence_class='structural source/config association, not compiler or kernel preservation',
  adopted_build_receipt=dict(revision=rev,path=p,sha256=hashlib.sha256(raw).hexdigest(),receipt=x),
+ adopted_getrandom=dict(graph_path=gp,graph_sha256=hashlib.sha256(graw).hexdigest(),unit=gunit),
  dependency_source_sha256=next(r['sha256'] for r in src if r['relative']=='src/backends/linux_raw.rs'),
  source_control_sha256=hashlib.sha256(m.encode()).hexdigest(),
  correction='da36d6aa is a client binary SHA-256 prefix, not a git revision. Inherited native-sources inventory uses later user_client recipe; exact adopted devnet_spend receipt checked separately here. Backend flags match.',
