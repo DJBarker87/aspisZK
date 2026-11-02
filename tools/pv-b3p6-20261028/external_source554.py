@@ -130,13 +130,15 @@ attribute [local irreducible] Aeneas.Std.bind Array.index_usize Array.update
 theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usize) :
     external_source554 state = reference_poseidon.external_linear_lazy state := by
   unfold external_source554 reference_poseidon.external_linear_lazy
-  simp only [external_group_reference554,external_sums_reference554,external_add_reference554]
 '''
 ref=(L/'PV_B3P_P227_03b.lean').read_text().split('def reference_poseidon.external_linear_lazy',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
-bs=[re.match(r'  let (\w+) ←',x)[1]for x in ref.splitlines()if re.match(r'  let (\w+) ←',x)]
+steps=list(re.finditer(r'  let (\w+) ←([\s\S]*?)(?=  let |\Z)',ref))
 indent='  '
-for j,b in enumerate(bs):
+for j,m in enumerate(steps):
+ b,expr=m.groups()
  if j%16==0:s+=indent+'as_aux_lemma =>\n';indent+='  '
+ for native,law in [('external_group227','external_group_reference554'),('global_sums227','external_sums_reference554'),('add_global227','external_add_reference554')]:
+  if 'reference_poseidon.'+native in expr:s+=indent+'rw ['+law+']\n'
  s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
 s+=indent+'simp only [bind_tc_ok]\n'
 s+='''

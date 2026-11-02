@@ -123,7 +123,6 @@ attribute [local irreducible] Aeneas.Std.bind Array.index_usize Array.update
 theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usize) :
     external_source554 state = reference_poseidon.external_linear_lazy state := by
   unfold external_source554 reference_poseidon.external_linear_lazy
-  simp only [external_group_reference554,external_sums_reference554,external_add_reference554]
   as_aux_lemma =>
     apply bind_equal9
     intro q
@@ -133,6 +132,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
     intro q2
     apply bind_equal9
     intro q3
+    rw [external_group_reference554]
     apply bind_equal9
     intro output
     apply bind_equal9
@@ -160,6 +160,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
     as_aux_lemma =>
       apply bind_equal9
       intro q11
+      rw [external_group_reference554]
       apply bind_equal9
       intro output1
       apply bind_equal9
@@ -186,6 +187,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
       intro q18
       apply bind_equal9
       intro q19
+      rw [external_group_reference554]
       apply bind_equal9
       intro output2
       apply bind_equal9
@@ -213,6 +215,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
         intro q26
         apply bind_equal9
         intro q27
+        rw [external_group_reference554]
         apply bind_equal9
         intro output3
         apply bind_equal9
@@ -232,12 +235,14 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
           intro q31
           apply bind_equal9
           intro state16
+          rw [external_sums_reference554]
           apply bind_equal9
           intro sums
           apply bind_equal9
           intro q32
           apply bind_equal9
           intro a
+          rw [external_add_reference554]
           apply bind_equal9
           intro q33
           apply bind_equal9
@@ -246,6 +251,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
           intro q34
           apply bind_equal9
           intro a1
+          rw [external_add_reference554]
           apply bind_equal9
           intro q35
           apply bind_equal9
@@ -254,6 +260,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
           intro q36
           apply bind_equal9
           intro a2
+          rw [external_add_reference554]
           apply bind_equal9
           intro q37
           as_aux_lemma =>
@@ -263,30 +270,35 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
             intro q38
             apply bind_equal9
             intro a3
+            rw [external_add_reference554]
             apply bind_equal9
             intro q39
             apply bind_equal9
             intro state20
             apply bind_equal9
             intro q40
+            rw [external_add_reference554]
             apply bind_equal9
             intro q41
             apply bind_equal9
             intro state21
             apply bind_equal9
             intro q42
+            rw [external_add_reference554]
             apply bind_equal9
             intro q43
             apply bind_equal9
             intro state22
             apply bind_equal9
             intro q44
+            rw [external_add_reference554]
             apply bind_equal9
             intro q45
             apply bind_equal9
             intro state23
             apply bind_equal9
             intro q46
+            rw [external_add_reference554]
             apply bind_equal9
             intro q47
             as_aux_lemma =>
@@ -294,30 +306,35 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
               intro state24
               apply bind_equal9
               intro q48
+              rw [external_add_reference554]
               apply bind_equal9
               intro q49
               apply bind_equal9
               intro state25
               apply bind_equal9
               intro q50
+              rw [external_add_reference554]
               apply bind_equal9
               intro q51
               apply bind_equal9
               intro state26
               apply bind_equal9
               intro q52
+              rw [external_add_reference554]
               apply bind_equal9
               intro q53
               apply bind_equal9
               intro state27
               apply bind_equal9
               intro q54
+              rw [external_add_reference554]
               apply bind_equal9
               intro q55
               apply bind_equal9
               intro state28
               apply bind_equal9
               intro q56
+              rw [external_add_reference554]
               apply bind_equal9
               intro q57
               apply bind_equal9
@@ -325,18 +342,21 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
               as_aux_lemma =>
                 apply bind_equal9
                 intro q58
+                rw [external_add_reference554]
                 apply bind_equal9
                 intro q59
                 apply bind_equal9
                 intro state30
                 apply bind_equal9
                 intro q60
+                rw [external_add_reference554]
                 apply bind_equal9
                 intro q61
                 apply bind_equal9
                 intro state31
                 apply bind_equal9
                 intro q62
+                rw [external_add_reference554]
                 apply bind_equal9
                 intro q63
                 simp only [bind_tc_ok]
