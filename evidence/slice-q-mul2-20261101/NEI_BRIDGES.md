@@ -25,3 +25,7 @@ NEI_ROW_PACKET.json is a checked local CLOSED-CONDITIONAL D188 packet with expli
 ## BatchedWeights::push
 
 NEI_PUSH_PACKET.json is a local CLOSED-CONDITIONAL actual-body packet. Literal raw generated records are preserved and connected by L057/L059; L040 supplies same-call normalization; L042/L046/L047 supply borrow and KMX frame induction. Native geometry/disjointness K015/K016 and K019/K020 have matched controls; N008/N009 shared/actual64 fixtures and L048 coherent evaluation pass. Bulk K014/K017/K018 timeouts earn no credit. No suspended NEB credit, zero composed rows.
+
+## Accumulation (OPEN)
+
+E005 successfully extracts the exact frozen body with complete Prepared/Accumulator records. E003 full-crate dependency compilation timed out; E004 missed the original CodeField trait import; both are excluded. L060 compiles literal Types and L061 proves independent global/local counter windows. The emitted CodeField::from_m31 call is outside Q and remains an explicit boundary; no field/constructor external template is adopted. NBO source assumptions next<10 and terms=next do not cover TX2's fresh local counter and global indices10..21. See NEI_ACCUMULATE_BOUNDARY.json; zero bridge/composed credit.

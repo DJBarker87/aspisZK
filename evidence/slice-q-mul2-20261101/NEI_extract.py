@@ -19,6 +19,9 @@ if not scratch.exists():
   if n in frozen:q.write_text(frozen[n])
   elif p.name=='Cargo.toml':q.write_bytes(p.read_bytes())
   else:q.symlink_to(p.resolve())
+# Never restore over a drifted frozen lock. A mismatch is a finding, not repair.
+if (scratch/'Cargo.lock').exists():
+ assert (scratch/'Cargo.lock').read_text()==frozen['Cargo.lock'],'STOP existing frozen lock drift before extraction'
 for n,t in frozen.items():
  if n.startswith(('crates/','programs/')) and not (scratch/Path(n).parts[0]/Path(n).parts[1]).exists():continue
  q=scratch/n;q.parent.mkdir(parents=True,exist_ok=True)
@@ -44,6 +47,17 @@ if cfg.get('isolate'):
  prelude+='\n'.join(take(n) for n in funcs)
  prelude+='\nstruct BatchedWeights { raw:Vec<[u64;4]>, terms:usize }\nimpl BatchedWeights{'+take('push')+'}\n'
  prelude+='\n#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_pairing.rs"] mod fast_pairing;\n#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/fast_dots.rs"] mod fast_dots;\n'
+ if cfg.get('accumulate'):
+  def item(source,kind,name):
+   m=re.search(r'pub '+kind+' '+name+r'\b',source);start=source.index('{',m.start());i=start+1;d=1
+   while d:
+    d+=(source[i]=='{')-(source[i]=='}');i+=1
+   return source[m.start():i]
+  transport=frozen['crates/aspis-r1-cost-probe/src/transport.rs']
+  prelude+='\nuse aspis_core::r0::CodeField;\nuse aspis_core::circle::SecureCirclePoint;\nmod transport { #[derive(Debug,Clone,Copy,PartialEq,Eq)] '+item(transport,'enum','Variant')+'}\nuse transport::Variant;\n'
+  prelude+=item(src,'struct','Prepared')+'\n'+item(src,'struct','Accumulator')+'\n'
+  prelude+='\n'.join(take(n) for n in ['basis_at','accumulated_weight_at','accumulate_batched_with_node'])
+  prelude+='\n#[path="../../NEI_src/crates/aspis-r1-cost-probe/src/trace.rs"] pub mod trace;\n'
  (mini/'src/lib.rs').write_text(prelude)
  manifest=mini/'Cargo.toml'
  if cfg.get('row_reference'):(mini/'src/lib.rs').write_bytes((B/'NEI_row_reference.rs').read_bytes())
@@ -54,6 +68,9 @@ cmd+=cfg.get('charon_options',[])
 llbc=B/(ns+'.llbc')
 cmd+=['--dest-file',str(llbc),'--','--manifest-path',str(manifest),'--offline','--release','--lib','--jobs','1','--features','private-leaf-salts,optimized-terminal,program-build']
 pins=dict(charon_sha256=sha(C),aeneas_sha256=sha(A),charon_command=cmd,toolchain='nightly-2026-09-17',lock_before=sha(B/'NEI_src/Cargo.lock'),actual_source={p:sha(B/'NEI_src'/p) for p in ['crates/aspis-r1-cost-probe/src/fast_dots.rs','crates/aspis-r1-cost-probe/src/verifier.rs']})
+if cfg.get('isolate'):
+ pins['isolated_source_sha256']=sha(mini/'src/lib.rs')
+ pins['isolated_manifest_sha256']=sha(mini/'Cargo.toml')
 (B/'NEI_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2));print(json.dumps(pins),flush=True)
 r=subprocess.run(cmd,cwd=manifest.parent,env=env)
 pins['charon_exit']=r.returncode
