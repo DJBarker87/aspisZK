@@ -22,7 +22,7 @@ def handleBadFd {E : Type} (work : Q (Except E Unit))
 /-- Ordinary Result exits release the RefCell/stderr guards before the caller
 ignores (and destroys) the returned io::Error. Abort/fault prefixes are retained.
 The guard and syscall implementations remain explicit native P obligations. -/
-def scoped {E : Type} (acquire release : Q Unit) (work : Q (Except E Unit)) :
+def withGuards {E : Type} (acquire release : Q Unit) (work : Q (Except E Unit)) :
     Q (Except E Unit) := do
   let _ ← acquire
   let r ← work
@@ -33,7 +33,7 @@ def writer (driver : PV_EVH_WriteAll.Driver) (dropError : driver.Error → Q Uni
     (isBadFd : driver.Error → Q Bool) (acquire release : Q Unit) (fuel : Nat) :
     PV_EVH_LiteralDiagnostics.Writer where
   Error := driver.Error
-  writeAll := fun buf => scoped acquire release
+  writeAll := fun buf => withGuards acquire release
     (handleBadFd (PV_EVH_WriteAll.loop driver fuel buf) dropError isBadFd)
   dropError := dropError
 
@@ -54,11 +54,11 @@ theorem scoped_error {E : Type} (acquire release : Q Unit) (work : Q (Except E U
     (w : State) (e : E)
     (ha : (acquire w).outcome = .returned (.ok ()))
     (hw : (work (acquire w).state).outcome = .returned (.ok (.error e))) :
-    scoped acquire release work w =
+    withGuards acquire release work w =
       let tail : PV_EVH_Runtime.Run (Except E Unit) := (do let _ ← release; pure (Except.error e : Except E Unit)) (work (acquire w).state).state
       ⟨tail.outcome,tail.state,(acquire w).events ++
         ((work (acquire w).state).events ++ tail.events)⟩ := by
-  simp only [scoped,Bind.bind,PV_EVH_Runtime.bind,ha,hw]
+  simp only [withGuards,Bind.bind,PV_EVH_Runtime.bind,ha,hw]
 
 #print axioms badfd_dispatch
 #print axioms scoped_error
