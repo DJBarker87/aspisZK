@@ -25,9 +25,9 @@ for kind,count in [('Types',25),('Funs',119)]:
   rows.append(dict(kind=kind,index=i,name=name,original_signature=rest,signature_sha256=sha(rest)))
  text+='\nend '+ns+'\n';(O/(kind+'External.lean')).write_text(text)
 for kind in ['Types','Funs']:
- raw=(I/(kind+'.lean')).read_text();s=raw.replace('PVUCEntry.','PVUCEntryParam.').replace('namespace PV_UC_Entry\n','namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n').replace('end PV_UC_Entry\n','end '+ns+'\n')
+ raw=(I/(kind+'.lean')).read_text();s=raw.replace('PVUCEntryD561.','PVUCEntryParam.').replace('namespace PV_UC_Entry\n','namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n').replace('end PV_UC_Entry\n','end '+ns+'\n')
  # Mechanical inverse checks: no emitted function/structure body edits.
- restored=s.replace('PVUCEntryParam.','PVUCEntry.').replace('namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n','namespace PV_UC_Entry\n').replace('end '+ns+'\n','end PV_UC_Entry\n')
+ restored=s.replace('PVUCEntryParam.','PVUCEntryD561.').replace('namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n','namespace PV_UC_Entry\n').replace('end '+ns+'\n','end PV_UC_Entry\n')
  assert restored==raw
  (O/(kind+'.lean')).write_text(s)
 assert not any(re.search(r'\b(?:axiom|sorry|admit|native_decide)\b',p.read_text()) for p in O.glob('*.lean'))
