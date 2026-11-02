@@ -25,7 +25,7 @@ pub fn run(q:&Value)->Result<Value>{
  ensure!(crate::public_field(q,"action").as_str()==Some("prove"),"user client supports prove only");
  let pool=pk(q,"pool");let mint=pk(q,"mint");let registry=pk(q,"registry");
  let master=pool_v1_pair_forest_master_address(&pool,&mint).0;
- let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();
+ let lanes:Vec<Pubkey>=crate::public_lanes(pool,master);
  let vault=pool_v1_vault_token_account_address(&pool,&master).0;
  let authority=pool_v1_vault_authority_address(&pool,&master).0;
  let reg=aspis_registry::pool_v1_verifier_registry_v2_address(&registry,&master).0;

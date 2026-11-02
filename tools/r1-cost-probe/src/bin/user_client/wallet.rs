@@ -39,11 +39,10 @@ fn canonical(w:&Wallet)->bool{
 pub fn read(q:&Value)->Result<Wallet>{
  let fd=i32::try_from(crate::public_field(q,"wallet_bytes_fd").as_u64().ok_or_else(||anyhow!("missing wallet FD"))?).map_err(err)?;
  ensure!(fd>2,"wallet FD must be inherited separately from stdio");
- let mut channel=std::fs::File::open(crate::wallet_fd_path(fd)).map_err(err)?;
- let mut record=[0u8;WIDTH];channel.read_exact(&mut record).map_err(err)?;
- let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");
- let wallet=decode_wallet_record(&record);
- ensure!(canonical(&wallet),"noncanonical wallet field");Ok(wallet)
+ let mut channel=crate::wallet_open_channel(crate::wallet_fd_path(fd))?;
+ let record=crate::wallet_read_record(&mut channel)?;
+ let decoded=decode_wallet_record(&record);
+ ensure!(canonical(&decoded),"noncanonical wallet field");Ok(decoded)
 }
 pub fn retain(dir:&Path,record:&[u8;WIDTH])->Result<()>{
  use std::os::unix::fs::OpenOptionsExt;

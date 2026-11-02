@@ -50,3 +50,15 @@ fn json_bool(value:bool)->Value{Value::Bool(value)}
 fn json_number(value:serde_json::Number)->Value{Value::Number(value)}
 fn json_object(value:serde_json::Map<String,Value>)->Value{Value::Object(value)}
 fn json_into_array(value:Value)->Result<Vec<Value>>{match value{Value::Array(a)=>Ok(a),_=>Err(diagnostics::Error::new())}}
+
+fn public_lanes(pool:solana_program::pubkey::Pubkey,master:solana_program::pubkey::Pubkey)->Vec<solana_program::pubkey::Pubkey>{
+ use aspis_pool::pool_v1_pair_forest_lane_address;
+ (0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect()
+}
+fn parent_capacity(len:usize)->usize{len.div_ceil(2).max(1)}
+fn wallet_open_channel(path:String)->Result<std::fs::File>{std::fs::File::open(path).map_err(err)}
+fn wallet_read_record(channel:&mut std::fs::File)->Result<[u8;wallet::WIDTH]>{
+ use std::io::Read;
+ let mut record=[0u8;wallet::WIDTH];channel.read_exact(&mut record).map_err(err)?;
+ let mut tail=[0u8;1];diagnostics::ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");Ok(record)
+}

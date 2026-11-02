@@ -32,7 +32,7 @@ fn hashes(leaves:&[PoolV1PairLeafWitnessV1])->Result<Vec<Digest>>{
 }
 fn push_hash(out:Result<Vec<Digest>>,v:&PoolV1PairLeafWitnessV1)->Result<Vec<Digest>>{let mut out=out?;out.push(v.leaf_digest().map_err(err)?);Ok(out)}
 fn parent_level(nodes:&[Digest],empty:Digest)->Vec<Digest>{
- let mut out=Vec::with_capacity(nodes.len().div_ceil(2).max(1));
+ let mut out=Vec::with_capacity(crate::parent_capacity(nodes.len()));
  if nodes.is_empty(){out.push(pool_v1_tree_parent(&empty,&empty));}else{
  let mut i=0;while i<nodes.len(){let right=if i+1<nodes.len(){nodes[i+1]}else{empty};out.push(pool_v1_tree_parent(&nodes[i],&right));i+=2;}}
  out
@@ -70,12 +70,12 @@ fn lane_selection(lane:usize,p:&Lane)->Option<Selection>{
  match p.selected{Some((pair,index,second,siblings))=>Some(Selection{lane,pair,index,second,siblings}),None=>None}
 }
 fn collect_selection(prepared:&[Lane])->Result<Selection>{
- let mut selected=None;let mut matches=0;let mut l=0;
+ let mut selected=None;let mut match_count=0;let mut l=0;
  while l<prepared.len(){
-  match lane_selection(l,&prepared[l]){Some(s)=>{matches+=1;selected=Some(s);},None=>{}}
+  match lane_selection(l,&prepared[l]){Some(s)=>{match_count+=1;selected=Some(s);},None=>{}}
   l+=1;
  }
- ensure!(matches==1,"input commitment must occur in one lane");
+ ensure!(match_count==1,"input commitment must occur in one lane");
  selected.ok_or_else(||anyhow!("input absent"))
 }
 fn super_path(mut roots:Vec<Digest>,lane:usize,anchor:Digest)->Result<([Digest;3],[bool;3])>{
