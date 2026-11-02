@@ -47,7 +47,6 @@ theorem granting_loop {S A : Type} (osCodec : {B : Type} → Request B → Bytes
       rw [hval,List.length_append,List.length_singleton]
     have nextRoom : next.length+ids.length ≤ Usize.max := by
       rw [nextLength]
-      simp only [List.length_cons] at room
       omega
     obtain ⟨result,hr,hlen,hcompleted⟩ := ih
       (fun j hj => law j (by simp only [List.mem_cons]; exact Or.inr hj)) next
@@ -82,7 +81,7 @@ theorem granting_run {S A : Type} (osCodec : {B : Type} → Request B → Bytes)
     (alloc.vec.Vec.new A) 0 room w
   refine ⟨result,?_,?_,?_⟩
   · simpa only [run,PV_V263_World.bind,resourceWorld] using hr
-  · simpa only [alloc.vec.Vec.new,List.length_nil,Nat.zero_add,PV_V263_Family.indices,List.length_range'] using hlen
+  · simpa only [emptyLength,Nat.zero_add,PV_V263_Family.indices,List.length_range'] using hlen
   · rw [emptyLength,Nat.zero_add] at hlen
     omega
 
