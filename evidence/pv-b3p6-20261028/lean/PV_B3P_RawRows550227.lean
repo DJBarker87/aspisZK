@@ -28,24 +28,28 @@ theorem raw_limb_zero550 (a b c d : U64) :
       .ok (U64.wrapping_add (U64.wrapping_add
         (U64.wrapping_add (U64.wrapping_mul 2#u64 a) (U64.wrapping_mul 3#u64 b)) c) d) := by
   simp only [reference_poseidon.raw_limb227, lift, bind_tc_ok]
+  rfl
 
 theorem raw_limb_one550 (a b c d : U64) :
     reference_poseidon.raw_limb227 1#usize a b c d =
       .ok (U64.wrapping_add (U64.wrapping_add
         (U64.wrapping_add a (U64.wrapping_mul 2#u64 b)) (U64.wrapping_mul 3#u64 c)) d) := by
   simp only [reference_poseidon.raw_limb227, lift, bind_tc_ok]
+  rfl
 
 theorem raw_limb_two550 (a b c d : U64) :
     reference_poseidon.raw_limb227 2#usize a b c d =
       .ok (U64.wrapping_add (U64.wrapping_add
         (U64.wrapping_add a b) (U64.wrapping_mul 2#u64 c)) (U64.wrapping_mul 3#u64 d)) := by
   simp only [reference_poseidon.raw_limb227, lift, bind_tc_ok]
+  rfl
 
 theorem raw_limb_three550 (a b c d : U64) :
     reference_poseidon.raw_limb227 3#usize a b c d =
       .ok (U64.wrapping_add (U64.wrapping_add
         (U64.wrapping_add (U64.wrapping_mul 3#u64 a) b) c) (U64.wrapping_mul 2#u64 d)) := by
   simp only [reference_poseidon.raw_limb227, lift, bind_tc_ok]
+  rfl
 
 theorem raw_cell_total550 (a b c d : Limbs32_550) (output limb : Usize)
     (ho : output.val < 4) (hl : limb.val < 4) :
@@ -53,16 +57,16 @@ theorem raw_cell_total550 (a b c d : Limbs32_550) (output limb : Usize)
   unfold raw_cell550
   apply bind _ _ (index a limb hl)
   intro a0
-  simp only [lift, bind_tc_ok]
+  try simp only [lift, bind_tc_ok]
   apply bind _ _ (index b limb hl)
   intro b0
-  simp only [lift, bind_tc_ok]
+  try simp only [lift, bind_tc_ok]
   apply bind _ _ (index c limb hl)
   intro c0
-  simp only [lift, bind_tc_ok]
+  try simp only [lift, bind_tc_ok]
   apply bind _ _ (index d limb hl)
   intro d0
-  simp only [lift, bind_tc_ok]
+  try simp only [lift, bind_tc_ok]
   exact raw_limb_total _ _ _ _ _ ho
 
 theorem raw_row_total550 (a b c d : Limbs32_550) (output : Usize)
