@@ -172,7 +172,9 @@ theorem append_fault {S A : Type} (runtime : Runtime S) (layouts : Layouts)
     (site thread : Nat) (out source : alloc.vec.Vec A) (w : State S) (e : Fault)
     (h : (runtime.methods.vector (.append site thread out.length source.length layouts.item) w).outcome = .fault e) :
     (append runtime layouts site thread out source w).outcome = .fault e := by
-  simp only [append,PV_V263_World.bind,h]
+  change (PV_V263_World.bind
+    (runtime.methods.vector (.append site thread out.length source.length layouts.item)) _ w).outcome = _
+  simp only [PV_V263_World.bind,h]
 
 #print axioms Life
 #print axioms Runtime
