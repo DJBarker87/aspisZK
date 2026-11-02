@@ -46,10 +46,10 @@ def interpreted (N : Type) (input : Slice U8) (origin : Nat) :
     Result (Slice (PV_AL_SplitCarrier.Block N) × Slice U8) :=
   let views := source input origin
   let blocks : Slice (PV_AL_SplitCarrier.Block N) := ⟨blockValues N views.blocks,by
-    simp only [blockValues,source,List.length_map,List.length_range]
+    simp only [views,blockValues,source,List.length_map,List.length_range]
     exact le_trans (Nat.div_le_self _ _) input.property⟩
   let tail : Slice U8 := ⟨values views.tail,by
-    simp only [values,source,sliceRawFromRawParts,ptrSliceFromRawParts,
+    simp only [views,values,source,sliceRawFromRawParts,ptrSliceFromRawParts,
       metadataFromRawParts,aggregate,advance,List.length_take,List.length_drop]
     have h := input.property
     omega⟩
@@ -68,7 +68,7 @@ theorem source_reference (N : Type) (input : Slice U8) (origin : Nat) :
     change (input.val.drop ((input.val.length/64)*64)).take
       (input.val.length-(input.val.length/64)*64)=input.val.drop ((input.val.length/64)*64)
     rw [←List.length_drop]
-    exact List.take_length _
+    exact List.take_length
 
 theorem aliases (input : Slice U8) (origin : Nat) :
     (source input origin).blocks.pointer.origin=origin ∧

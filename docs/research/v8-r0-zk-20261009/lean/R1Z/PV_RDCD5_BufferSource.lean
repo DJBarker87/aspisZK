@@ -92,7 +92,7 @@ theorem source_instance {S : Type} (compress : S → List U8 → Result S)
       have hr : PV_RDCD4_SliceRange194.window input (64-pos) input.length = input.drop (64-pos) := by
         unfold PV_RDCD4_SliceRange194.window
         rw [← List.length_drop]
-        exact List.take_length _
+        exact List.take_length
       rw [hw,hr]
       have hf := PV_DL_UpdatePlan.first_length buffer input pos hb hp hrem
       have he : PV_RDCD4_CopyWindow194.splice buffer pos (input.take (64-pos)) =
