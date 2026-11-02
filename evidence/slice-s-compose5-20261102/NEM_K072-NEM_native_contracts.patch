@@ -1,0 +1,15 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_frontier_geometry.rs"]
++mod NEM_frontier_geometry;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_frontier_geometry.rs
+@@ -0,0 +1,2 @@
++#[kani::proof]
++fn frontier_geometry(){let mut output:[u8;800]=kani::any();let level:usize=kani::any();kani::assume(level<20);let offset:usize=kani::any();kani::assume(offset<32);let original=output.as_mut_ptr();let start=160+32*level;let dst=&mut output[start..start+32];assert!(dst.len()==32);assert!(dst.as_mut_ptr().wrapping_add(offset)==original.wrapping_add(160+32*level+offset),"same actual frontier child output place");}

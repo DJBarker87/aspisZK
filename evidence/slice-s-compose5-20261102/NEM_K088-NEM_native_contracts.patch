@@ -1,0 +1,30 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_slice_contract.rs"]
++mod NEM_slice_contract;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_slice_contract.rs
+@@ -0,0 +1,17 @@
++use super::*;
++use crate::pool_v1::*;
++use aspis_core::field::M31;
++use crate::Digest;
++fn any_error()->crate::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++impl kani::Arbitrary for PoolV1PairLiveSnapshotErrorV1{fn any()->Self{any_error()}}
++#[kani::requires(out.len()==800)]
++#[kani::modifies(out)]
++#[kani::ensures(|r| *r==if b{Ok(())}else{Err(PoolV1PairLiveSnapshotErrorV1::TreeFull)})]
++fn weak(_s:&PoolV1PairLiveSnapshotV1,out:&mut[u8],b:bool)->Result<(),PoolV1PairLiveSnapshotErrorV1>{out[0]=42;if b{Ok(())}else{Err(PoolV1PairLiveSnapshotErrorV1::TreeFull)}}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn snapshot()->PoolV1PairLiveSnapshotV1{PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}
++#[kani::proof_for_contract(weak)]
++fn support(){let s=snapshot();let mut out:[u8;800]=kani::any();let _=weak(&s,&mut out,kani::any());}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++fn shape_control(){let s=snapshot();let mut out:[u8;800]=kani::any();let old=out[799];let _=weak(&s,&mut out,kani::any());assert!(out[799]==old,"unimplied full slice mutation frame");}

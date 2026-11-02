@@ -1,0 +1,28 @@
+{"attempt": "NEM_L010", "exit_status": 0, "wall_seconds": 3.187713598017581, "peak_rss_kib": "5255756", "swaps": "0", "print_axioms": []}
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    Aeneas.Std.Result.ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def Aeneas.Std.Slice.setSlice!.{u} : {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α :=
+fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+def Aeneas.Std.core.slice.index.Slice.index_mut : {T I Output : Type} →
+  Aeneas.S
+...
+def Aeneas.Std.core.slice.index.SliceIndexRangeUsizeSlice.index_mut : {T : Type} →
+  Aeneas.Std.core.ops.range.Range Aeneas.Std.Usize →
+    Aeneas.Std.Slice T → Aeneas.Std.Result (Aeneas.Std.Slice T × (Aeneas.Std.Slice T → Aeneas.Std.Slice T)) :=
+fun {T} r s =>
+  if r.start ≤ r.end ∧ ↑r.end ≤ s.length then
+    Aeneas.Std.Result.ok (⟨List.slice ↑r.start ↑r.end ↑s, ⋯⟩, fun s' => ⟨(↑s).setSlice! ↑r.start ↑s', ⋯⟩)
+  else Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+def Aeneas.Std.Slice.setSlice!.{u} : {α : Type u} → Aeneas.Std.Slice α → ℕ → List α → Aeneas.Std.Slice α :=
+fun {α} s i s' => ⟨(↑s).setSlice! i s', ⋯⟩
+def Aeneas.Std.core.slice.index.Slice.index_mut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.Slice T → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.Slice T)) :=
+fun {T I Output} inst s i => inst.index_mut i s
+
+Running as unit: run-r2429a267bb1243769bd74404508065b8.scope; invocation ID: ac308cfc0cf34f448a705763f2080456

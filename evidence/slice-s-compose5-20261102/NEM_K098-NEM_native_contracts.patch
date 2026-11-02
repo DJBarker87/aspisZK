@@ -1,0 +1,34 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_slice_contract.rs"]
++mod NEM_slice_contract;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_slice_contract.rs
+@@ -0,0 +1,21 @@
++use super::*;
++use crate::pool_v1::*;
++use aspis_core::field::M31;
++use crate::Digest;
++fn any_error()->crate::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++impl kani::Arbitrary for PoolV1PairLiveSnapshotErrorV1{fn any()->Self{any_error()}}
++#[kani::requires(out.len()==800)]
++#[kani::modifies(out)]
++#[kani::ensures(|r| true)]
++fn weak(_s:&PoolV1PairLiveSnapshotV1,out:&mut[u8;800],b:bool)->Result<(),PoolV1PairLiveSnapshotErrorV1>{out[0]=42;if kani::any(){Ok(())}else{Err(any_error())}}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++fn snapshot()->PoolV1PairLiveSnapshotV1{PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}
++#[kani::proof_for_contract(weak)]
++fn support(){let s=snapshot();let mut out:[u8;800]=kani::any();let _=weak(&s,&mut out,kani::any());}
++fn cut(s:&PoolV1PairLiveSnapshotV1,out:&mut[u8;1520])->(Result<(),PoolV1PairLatePublicStatementErrorV1>,Result<(),PoolV1PairLiveSnapshotErrorV1>){
++ let expected=out.as_mut_ptr().wrapping_add(32);let window=&mut out[32..32+800];assert!(window.as_mut_ptr()==expected && window.len()==800,"same actual late child window");
++ let array:&mut[u8;800]=window.try_into().unwrap();assert!(array.as_mut_ptr()==expected,"same fixed-array view place");let reply=weak(s,array,kani::any());let status=reply.map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error));(status,reply)
++}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++fn full_mutation_caller(){let s=snapshot();let mut output:[u8;1520]=kani::any();let j:usize=kani::any();kani::assume(j<1520);kani::assume(j<32||j>=832);let old=output[j];let inside=output[831];let(status,reply)=cut(&s,&mut output);assert!(status==reply.map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error)),"full arbitrary child Result mapped unchanged");assert!(output[j]==old,"complete outside-child allocation frame");assert!(output[831]==inside,"unimplied caller inside window value");}

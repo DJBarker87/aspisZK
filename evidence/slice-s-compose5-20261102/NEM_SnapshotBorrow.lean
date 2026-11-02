@@ -1,0 +1,49 @@
+import NEL_LateDomains
+set_option autoImplicit false
+noncomputable section
+namespace NEM_SnapshotBorrow
+open Aeneas Aeneas.Std Result
+
+/-- The actual emitted borrow and its back function, on the same allocation.
+The poststate is arbitrary: this is not a one-cell mutation restriction. -/
+theorem rejoin (out : Slice U8) (size : out.length = 1520) :
+    ∃ child back,
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8)
+        out {start := 32#usize, «end» := 832#usize} = ok (child,back) ∧
+      child.length = 800 ∧ ∀ post : Slice U8, back post = out.setSlice! 32 post.val := by
+  have guard : (32#usize) ≤ 832#usize ∧ (832#usize).val ≤ out.length := by
+    constructor
+    · decide
+    · rw [size]; decide
+  simp only [core.slice.index.Slice.index_mut,
+    core.slice.index.SliceIndexRangeUsizeSlice.index_mut,if_pos guard]
+  refine ⟨_,_,rfl,?_,?_⟩
+  · have len : out.val.length = 1520 := size
+    simp only [Slice.length,List.slice,List.length_take,List.length_drop,len]
+    decide
+  · intro post
+    rfl
+
+/-- All possible 800-byte child poststates and every external allocation byte. -/
+theorem poststate (out post : Slice U8) (size : out.length = 1520)
+    (post_size : post.length = 800) (k : Nat) :
+    (out.setSlice! 32 post.val).val[k]? =
+      if 32 ≤ k ∧ k < 832 then post.val[k-32]? else out.val[k]? := by
+  rw [← NEL_SliceCopyLaw.loop_binding out post 32 k (by rw [post_size,size]; decide)]
+  rw [KMX_CopyMeaning.loop_spec,post_size]
+
+/-- The later afterstate write preserves the exact child's whole poststate. -/
+theorem after_preserves_child (out post : Slice U8) (size : out.length = 1520)
+    (after : Array U8 688#usize) (k : Nat) (earlier : k < 832) :
+    ((out.setSlice! 32 post.val).setSlice! 832 after.val).val[k]? =
+      (out.setSlice! 32 post.val).val[k]? := by
+  apply NEJ_ArrayFrame.list_frame
+  · have len : out.val.length = 1520 := size
+    simp only [Slice.setSlice!,List.length_setSlice!,after.property,len]
+    decide
+  · exact Or.inl earlier
+
+#print axioms rejoin
+#print axioms poststate
+#print axioms after_preserves_child
+end NEM_SnapshotBorrow

@@ -1,0 +1,19 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_frontier_enumerate.rs"]
++mod NEM_frontier_enumerate;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_frontier_enumerate.rs
+@@ -0,0 +1,6 @@
++use super::*;
++use aspis_core::field::M31;
++use crate::Digest;
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn frontier_enumerate(){let nodes=[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()];let level:usize=kani::any();kani::assume(level<=20);let mut iter=nodes.iter().enumerate();if level>0{let _=iter.nth(level-1);}let next=iter.next();if level<20{let(count,node)=next.unwrap();assert!(count==level+1 && core::ptr::eq(node,&nodes[level]),"actual frontier Enumerate count and node");assert!(iter.len()==19-level);}else{assert!(next.is_none()&&iter.len()==0);}}

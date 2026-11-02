@@ -1,0 +1,58 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_validator_prefix.rs"]
++mod NEM_validator_prefix;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_validator_prefix.rs
+@@ -0,0 +1,45 @@
++use super::*;
++use aspis_core::field::M31;
++use crate::Digest;
++struct Frame<'a>{expected:&'a Digest,reply:bool,called:bool,reached:bool}
++fn child(d:&Digest,f:&mut Frame)->bool{assert!(!f.called&&core::ptr::eq(d,f.expected),"same exact validator root digest");f.called=true;f.reply}
++fn prefix(
++    snapshot: &PoolV1PairLiveSnapshotV1,
++    frame:&mut Frame,
++) -> Result<(), PoolV1PairLiveSnapshotErrorV1> {
++    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {
++        return Err(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);
++    }
++    if snapshot.sequence != snapshot.next_pair_index {
++        return Err(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);
++    }
++    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
++        return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);
++    }
++    if !child(&snapshot.current_root,frame) {
++        return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
++    }
++    frame.reached=true;
++    Ok(())
++}
++fn reference(
++    snapshot: &PoolV1PairLiveSnapshotV1,
++    reply:bool,
++) -> Result<(), PoolV1PairLiveSnapshotErrorV1> {
++    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {
++        return Err(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);
++    }
++    if snapshot.sequence != snapshot.next_pair_index {
++        return Err(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);
++    }
++    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {
++        return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);
++    }
++    if !reply {
++        return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);
++    }
++    Ok(())
++}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn validator_prefix(){let s=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]};let mut f=Frame{expected:&s.current_root,reply:kani::any(),called:false,reached:false};let actual=prefix(&s,&mut f);let expected=reference(&s,f.reply);assert!(actual==expected && f.reached==actual.is_ok(),"exact validator prefix Result and continuation");}

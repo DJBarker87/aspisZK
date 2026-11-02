@@ -1,0 +1,26 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_encoder_window.rs"]
++mod NEM_encoder_window;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_encoder_window.rs
+@@ -0,0 +1,13 @@
++use super::*;
++use aspis_core::field::M31;
++use crate::Digest;
++fn child(d:&Digest,want:&Digest,called:&mut bool,reply:[u8;32])->[u8;32]{assert!(!*called&&core::ptr::eq(d,want),"same actual root at encoder child call");*called=true;reply}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn encoder_window(){let s=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]};let mut output:[u8;688]=kani::any();let j:usize=kani::any();kani::assume(j<688);let old=output[j];let offset:usize=kani::any();kani::assume(offset<4);let mut called=false;let reply:[u8;32]=kani::any();
++ 
++ let src=&(POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);let dst=&mut output[0..4];let mut i=offset;dst[i]=src[i]^1;i+=1;
++ assert!(i==offset+1);
++ assert!(output[j]==if j==0+offset{(POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC)[offset]}else{old},"same caller field byte and full prestate frame");
++ 
++}

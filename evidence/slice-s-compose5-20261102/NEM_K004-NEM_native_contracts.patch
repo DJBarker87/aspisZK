@@ -1,0 +1,28 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_digest_call.rs"]
++mod NEM_digest_call;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEM_digest_call.rs
+@@ -0,0 +1,15 @@
++use super::*;
++struct Frame{reply:[u8;4],called:bool}
++fn serialize(v:&M31,expected:&M31,f:&mut Frame)->[u8;4]{assert!(!f.called && core::ptr::eq(v,expected),"same-call actual iterator word");f.called=true;f.reply}
++#[kani::proof]
++fn digest_call(){
++ let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let cursor:usize=kani::any();kani::assume(cursor<8);let offset:usize=kani::any();kani::assume(offset<4);let j:usize=kani::any();kani::assume(j<32);
++ let mut bytes:[u8;32]=kani::any();let old=bytes[j];let mut f=Frame{reply:kani::any(),called:false};
++ let mut iter=d.iter().enumerate();if cursor>0{let _=iter.nth(cursor-1);}
++ let (index,value)=iter.next().unwrap();let reply=serialize(value,&d[cursor],&mut f);
++ // Exactly the KMX copy value iteration for this actual native window.
++ let dst=&mut bytes[index*4..index*4+4];let mut i=offset;dst[i]=reply[i];i+=1;
++ assert!(index==cursor && f.called && i==offset+1 && iter.len()==7-cursor,"native next, call, and copy cursor");
++ assert!(bytes[j]==if j==cursor*4+offset{f.reply[offset]}else{old},"same prestate indexed byte and full external frame");
++}

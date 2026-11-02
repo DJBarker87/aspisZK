@@ -1,0 +1,48 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_validator_prefix.rs"]
++mod NEM_validator_prefix;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_validator_prefix.rs
+@@ -0,0 +1,35 @@
++use super::*;
++use aspis_core::field::M31;
++use crate::Digest;
++struct Frame<'a>{expected:&'a Digest,reply:bool,called:bool,reached:bool}
++fn child(d:&Digest,f:&mut Frame)->bool{assert!(!f.called&&core::ptr::eq(d,f.expected),"same exact validator root digest");f.called=true;f.reply}
++fn prefix(
++    afterstate: &PoolV1PairVerifiedAfterstateV1,
++    frame:&mut Frame,
++) -> Result<(), PoolV1PairVerifierTransportErrorV1> {
++    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > super::POOL_V1_PAIR_CAPACITY
++    {
++        return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
++    }
++    if !child(&afterstate.next_root,frame) {
++        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++    }
++    frame.reached=true;
++    Ok(())
++}
++fn reference(
++    afterstate: &PoolV1PairVerifiedAfterstateV1,
++    reply:bool,
++) -> Result<(), PoolV1PairVerifierTransportErrorV1> {
++    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > super::POOL_V1_PAIR_CAPACITY
++    {
++        return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);
++    }
++    if !reply {
++        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);
++    }
++    Ok(())
++}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn validator_prefix(){let s=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]};let mut f=Frame{expected:&s.next_root,reply:kani::any(),called:false,reached:false};let actual=prefix(&s,&mut f);let expected=reference(&s,f.reply);assert!(actual==expected && f.reached==actual.is_ok(),"exact validator prefix Result and continuation");}

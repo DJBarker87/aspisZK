@@ -1,0 +1,54 @@
+NEM_generated/NEM_LateOracle.lean:43:59: error: unsolved goals
+s : Statement
+out : Slice U8
+⊢ (do
+      let i7 ← 32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+      let (child, back) ←
+        core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+            { start := 32#usize, «end» := i7 }
+      let (r, post) ← NBN_EncoderSummary.live atomic_statement.encode_digest_canonical s.live_snapshot child
+      match r with
+        | core.result.Result.Err e =>
+          ok
+            (core.result.Result.Err (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Snapshot e),
+              back post)
+        | core.result.Result.Ok a => do
+          let r2 ← NBN_EncoderSummary.after atomic_statement.encode_digest_canonical s.candidate_afterstate
+          match r2 with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Afterstate e),
+                  back post)
+            | core.result.Result.Ok bytes => do
+              let (dest, back2) ←
+                core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back post)
+                    { start := i7 }
+              let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+              ok (core.result.Result.Ok (), back2 copied)) =
+    do
+    let i7 ← 32#usize + pool_v1.pair_tree_profile.POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES
+    let (s15, back) ←
+      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8) out
+          { start := 32#usize, «end» := i7 }
+    let (r, s16) ← NBN_EncoderSummary.live atomic_statement.encode_digest_canonical s.live_snapshot s15
+    match r with
+      | core.result.Result.Err e =>
+        ok
+          (core.result.Result.Err (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Snapshot e), back s16)
+      | core.result.Result.Ok a => do
+        let r2 ← NBN_EncoderSummary.after atomic_statement.encode_digest_canonical s.candidate_afterstate
+        match r2 with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err (pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1.Afterstate e),
+                back s16)
+          | core.result.Result.Ok bytes => do
+            let (dest, back2) ←
+              core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeFromUsizeSlice U8) (back s16)
+                  { start := i7 }
+            let copied ← core.slice.Slice.copy_from_slice core.marker.CopyU8 dest bytes.to_slice
+            ok (core.result.Result.Ok (), back2 copied)
+'NEM_LateOracle.tail_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEM_LateOracle.run_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEM_LateOracle.value_and_frame' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEM_LateOracle.late_reached' depends on axioms: [propext, Classical.choice, Quot.sound]

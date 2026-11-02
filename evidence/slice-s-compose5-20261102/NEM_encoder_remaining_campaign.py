@@ -1,0 +1,10 @@
+from pathlib import Path
+import sys,subprocess,re
+E=Path(__file__).resolve().parent
+plan=[(72,'frontier_geometry',['live','positive'],'pair_tree_profile::NEM_frontier_geometry::frontier_geometry'),(73,'frontier_geometry',['live','negative'],'pair_tree_profile::NEM_frontier_geometry::frontier_geometry'),(74,'frontier_geometry',['after','positive'],'pair_terminal::NEM_frontier_geometry::frontier_geometry'),(75,'frontier_geometry',['after','negative'],'pair_terminal::NEM_frontier_geometry::frontier_geometry'),(76,'frontier_enumerate',['positive'],'pair_tree_profile::NEM_frontier_enumerate::frontier_enumerate'),(77,'frontier_enumerate',['negative'],'pair_tree_profile::NEM_frontier_enumerate::frontier_enumerate'),(78,'encode_prefix',['live','positive'],'pair_tree_profile::NEM_encode_prefix::encode_prefix'),(79,'encode_prefix',['live','negative'],'pair_tree_profile::NEM_encode_prefix::encode_prefix'),(80,'encode_prefix',['after','positive'],'pair_terminal::NEM_encode_prefix::encode_prefix'),(81,'encode_prefix',['after','negative'],'pair_terminal::NEM_encode_prefix::encode_prefix'),(82,'after_init',['positive'],'pair_terminal::NEM_after_init::after_init'),(83,'after_init',['negative'],'pair_terminal::NEM_after_init::after_init')]
+for n,script,args,harness in plan:
+ a=f'NEM_K{n:03}';subprocess.run([sys.executable,str(E/('NEM_prepare_'+script+'.py')),*args],check=True)
+ for p in E.glob('NEM_*CURRENT.json'):
+  if re.fullmatch(r'NEM_[A-Z_]+CURRENT\.json',p.name):(E/(a+'-'+p.name)).write_bytes(p.read_bytes())
+ r=subprocess.run([sys.executable,str(E/'NEM_kani_run.py'),a,'kani','pool_v1::'+harness],capture_output=True,text=True);print(a,script,args,r.stdout[-1300:],r.stderr,flush=True)
+ assert (E/a/'receipt.json').exists();t=(E/a/'stdout.log').read_text();assert 'timed out' not in t.lower();assert ('VERIFICATION:- SUCCESSFUL' in t)==(args[-1]=='positive') and ('Failed Checks:' in t)==(args[-1]=='negative')

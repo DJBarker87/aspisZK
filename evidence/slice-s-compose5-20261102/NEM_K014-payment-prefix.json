@@ -1,0 +1,12 @@
+{
+ "case": "withdrawal",
+ "negative": false,
+ "source": "crates/aspis-statement/src/pool_v1/payment_relation.rs",
+ "frozen_body": "pub fn encode_pool_v1_withdrawal_public_v1(\n    public: &PoolV1WithdrawalPublicV1,\n) -> Result<[u8; POOL_V1_PAYMENT_STATEMENT_BYTES], PoolV1PaymentStatementFormatError> {\n    validate_pool_v1_withdrawal_public_v1(public)?;\n    let mut output = [0u8; POOL_V1_PAYMENT_STATEMENT_BYTES];\n    encode_common(\n        &mut output,\n        POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,\n        PoolV1TransitionKind::Withdrawal,\n        withdrawal_common(public),\n    );\n    output[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET]\n        .copy_from_slice(&public.amount.to_le_bytes());\n    output[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET]\n        .copy_from_slice(&public.destination_token_account);\n    output[SECOND_OUTPUT_OFFSET..]\n        .copy_from_slice(&encode_digest_canonical(&public.change_commitment));\n    Ok(output)\n}",
+ "frozen_body_sha256": "085a486e0302ec65612bccb816d6d2f0336b92c8d4fa2b29179b1e60a58e0796",
+ "exact_prefix": "validate_pool_v1_withdrawal_public_v1(public)?;",
+ "child_domain": "all typed publics; no acceptance restriction",
+ "frame": "only local log and reached-continuation flag; no output is initialized on rejection",
+ "reply": "full arbitrary Result<(),PaymentError> including every error variant",
+ "classification": "native source prefix with explicit pure continuation cut; suffix windows separate"
+}

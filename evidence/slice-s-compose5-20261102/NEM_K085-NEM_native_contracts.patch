@@ -1,0 +1,17 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_late_prefix.rs"]
++mod NEM_late_prefix;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_late_prefix.rs
+@@ -0,0 +1,4 @@
++use super::*;
++fn prefix(length:usize,before:u64,after:u64)->Result<(),PoolV1PairLatePublicStatementErrorV1>{if length!=POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES{return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);}if before.checked_add(2)!=Some(after){return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);}Ok(())}
++#[kani::proof]
++fn late_prefix(){let length:usize=kani::any();let before:u64=kani::any();let after:u64=kani::any();let actual=prefix(length,before,after);let expected=if length!=1520{Err(PoolV1PairLatePublicStatementErrorV1::WrongLength)}else if before==u64::MAX||after!=before+1{Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch)}else{Ok(())};assert!(actual==expected,"all length/index values, overflow and rejection prefix before any mutation");}

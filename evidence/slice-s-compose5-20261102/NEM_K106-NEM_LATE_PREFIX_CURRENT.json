@@ -1,0 +1,9 @@
+{
+ "negative": true,
+ "frozen_body": "pub fn encode_pool_v1_pair_late_public_statement_v1(\n    statement: &PoolV1PairLatePublicStatementV1,\n    output: &mut [u8],\n) -> Result<(), PoolV1PairLatePublicStatementErrorV1> {\n    if output.len() != POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES {\n        return Err(PoolV1PairLatePublicStatementErrorV1::WrongLength);\n    }\n    if statement.live_snapshot.next_pair_index.checked_add(1)\n        != Some(statement.candidate_afterstate.next_pair_index)\n    {\n        return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);\n    }\n    output.fill(0);\n    output[..8].copy_from_slice(&POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_MAGIC);\n    output[8] = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_VERSION;\n    output[9] = POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_ITEM_COUNT;\n    output[10..12]\n        .copy_from_slice(&(POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_HEADER_BYTES as u16).to_le_bytes());\n    output[12..16].copy_from_slice(&(POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES as u32).to_le_bytes());\n    output[16..20].copy_from_slice(&(POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES as u32).to_le_bytes());\n    output[20..24]\n        .copy_from_slice(&(POOL_V1_PAIR_LATE_PUBLIC_STATEMENT_BYTES as u32).to_le_bytes());\n    encode_pool_v1_pair_live_snapshot_v1(\n        &statement.live_snapshot,\n        &mut output[32..32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES],\n    )\n    .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Snapshot(error))?;\n    let encoded_afterstate =\n        encode_pool_v1_pair_verified_afterstate_v1(&statement.candidate_afterstate)\n            .map_err(|error| PoolV1PairLatePublicStatementErrorV1::Afterstate(error))?;\n    output[32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES..].copy_from_slice(&encoded_afterstate);\n    Ok(())\n}",
+ "all_usize_lengths": true,
+ "all_u64_indices": true,
+ "overflow_included": true,
+ "exact_prefix": true,
+ "no_mutation": true
+}
