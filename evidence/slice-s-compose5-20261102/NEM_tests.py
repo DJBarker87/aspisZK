@@ -48,4 +48,13 @@ class Lane(Certificates):
  def test_wrong_nullifier(self):self.mutate_lane('child_log','canonical(other); first(other)')
  def test_missing_corrupt_control(self):self.mutate_lane('native_pairs',[['NEL_K002','NEL_K003']])
  def test_canonical_restriction(self):self.mutate_lane('all_raw_digests',False)
+class FrontierValidator(Certificates):
+ def mutate_validator(self,field,value):
+  f='crates/aspis-statement/src/pool_v1/pair_tree_profile.rs::validate_pool_v1_pair_live_snapshot_v1';c=copy.deepcopy(self.p['members'][f]);c['frontier_validator'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
+ def test_missing_induction(self):self.mutate_validator('induction','')
+ def test_missing_loop_step(self):self.mutate_validator('step',[])
+ def test_wrong_validator_order(self):self.mutate_validator('ordered_children','frontier before root')
+ def test_stronger_validator_domain(self):self.mutate_validator('all_raw_frontiers',False)
 if __name__=='__main__':unittest.main()

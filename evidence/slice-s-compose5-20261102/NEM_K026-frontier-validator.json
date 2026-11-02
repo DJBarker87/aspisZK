@@ -1,0 +1,13 @@
+{
+ "case": "live",
+ "negative": false,
+ "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+ "frozen_body": "fn validate_pool_v1_pair_live_snapshot_v1(\n    snapshot: &PoolV1PairLiveSnapshotV1,\n) -> Result<(), PoolV1PairLiveSnapshotErrorV1> {\n    if snapshot.pool == [0u8; 32] || snapshot.deployment_domain == [0u8; 32] {\n        return Err(PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding);\n    }\n    if snapshot.sequence != snapshot.next_pair_index {\n        return Err(PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch);\n    }\n    if snapshot.next_pair_index >= POOL_V1_PAIR_CAPACITY {\n        return Err(PoolV1PairLiveSnapshotErrorV1::TreeFull);\n    }\n    if !digest_is_canonical(&snapshot.current_root) {\n        return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n    }\n    let mut level = 0;\n    while level < snapshot.frontier.len() {\n        if !digest_is_canonical(&snapshot.frontier[level]) {\n            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n        }\n        level += 1;\n    }\n    Ok(())\n}",
+ "frozen_body_sha256": "d4125aba6ff237e5934de9210e9d7252ff46132dc5f3fe2a4df176426c083785",
+ "loop_source": "    let mut level = 0;\n    while level < snapshot.frontier.len() {\n        if !digest_is_canonical(&snapshot.frontier[level]) {\n            return Err(PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest);\n        }\n        level += 1;\n    }\n",
+ "invariant": "0<=level<=20, exact original frontier and external state; one canonical reply at the same index",
+ "one_iteration": true,
+ "all_raw_frontiers": true,
+ "empty_external_modifies": true,
+ "classification": "rule B: exact native while step with local record and arbitrary scanner Bool; existing NBH induction after child substitution"
+}

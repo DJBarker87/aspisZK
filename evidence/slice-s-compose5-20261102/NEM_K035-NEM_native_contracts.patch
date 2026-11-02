@@ -1,0 +1,15 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_fill.rs"]
++mod NEM_fill;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_fill.rs
+@@ -0,0 +1,2 @@
++#[kani::proof]
++fn fill_intrinsic(){let mut output:[u8;802]=kani::any();let j:usize=kani::any();kani::assume(j<802);let old=output[j];let out=&mut output[1..801];out.fill(0);assert!(output[j]==if j>=1&&j<801{0}else{old},"actual std u8 fill with complete allocation frame");}

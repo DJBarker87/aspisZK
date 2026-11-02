@@ -1,0 +1,30 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_frontier_validator.rs"]
++mod NEM_frontier_validator;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_frontier_validator.rs
+@@ -0,0 +1,17 @@
++use super::*;
++use aspis_core::field::M31;
++use crate::Digest;
++struct Frame<'a>{start:usize,end:usize,expected:&'a Digest,reply:bool,called:bool}
++fn child(d:&Digest,f:&mut Frame)->bool{assert!(!f.called&&core::ptr::eq(d,f.expected),"same actual frontier scanner argument");f.called=true;f.reply}
++fn step(s:&PoolV1PairVerifiedAfterstateV1,f:&mut Frame)->Result<(),PoolV1PairVerifierTransportErrorV1>{
++ let mut level=f.start;
++ while level<s.next_frontier.len(){
++  if !child(&s.next_frontier[level],f){return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);}
++  level+=1;f.end=level;return Ok(());
++ }
++ Ok(())
++}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++#[kani::unwind(2)]
++fn frontier_validator(){let s=PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]};let start:usize=kani::any();kani::assume(start<=20);let expected=&s.next_frontier[if start<20{start}else{0}];let mut f=Frame{start,end:start,expected,reply:kani::any(),called:false};let r=step(&s,&mut f);assert!(r==if start<20&&!f.reply{Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate)}else{Ok(())},"full loop-step Result");assert!(f.called==(start<20) && f.end==if start<20&&f.reply{start+1}else{start},"same step cursor and ordered child count");}
