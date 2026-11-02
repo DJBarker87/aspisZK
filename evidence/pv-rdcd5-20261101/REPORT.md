@@ -1,4 +1,14 @@
-# PV_RDCD5 — gated: budget unspent
+# PV_RDCD5 — D555 active compilation
+
+D555 resume: the flag was re-created and read; the gate is satisfied.
+The active scoped driver has passed IDs78200–78204 (five leaf dependencies),
+with zero swap. One capped native preflight verified5673 external hashes and
+accepted21 coherent project objects. No rdcd5 draft or row yet earns credit.
+See RUNS.json and HANDOFF.md for the authoritative current receipt/next-ID state.
+A possible existing-parser `.panic` versus owned `.arrayOutOfBounds` mismatch
+is drafted in ParserErrors and awaits kernel confirmation. The earlier gated
+report below is retained as historical evidence; its zero-run totals and absent
+flag descriptions refer to D541, not this resumed run.
 
 Branch `codex/pv-rdcd5-20261101`, base **ba1fa07d9e**, exact sparse worktree
 `/Users/dominic/ZK/.worktrees/pv-rdcd3`. Reporting source revision `c798300132ce0f01916be668bfc80e6a055cc758`.
@@ -11,7 +21,7 @@ commit was used. Source/preparation log: [COMMITS.txt](COMMITS.txt).
 | V233 | **SUSPENDED / D** — typed GenericArray inverse and `PV_AL_SplitSelected.consumed` instance uncompiled. Source/layout binding and coherent typed-carrier transport remain required; byte geometry alone earns no credit. |
 | V236 | **SUSPENDED / D** — complete branch/cursor/ordered-callback draft and typed `PV_DL_UpdateSelected.selected_native` instance uncompiled. Concrete split/compression carrier binding remains required under the original safe Eager64 guard. |
 
-## Stop basis and actual budget
+## Historical D541 stop basis and budget
 
 The mandatory scratchpad `pv-host-restored.flag` from common rulings (f)/(g)
 was absent throughout **24 actual polls**, from `2026-11-01T20:50:41.282431+00:00` to
