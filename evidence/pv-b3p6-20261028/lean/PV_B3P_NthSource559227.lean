@@ -48,7 +48,7 @@ theorem source_binding (r : Range Usize) (n : Usize) :
       simp only [less_value,bind_tc_ok]
       by_cases guard : item.val < r.end.val
       · simp only [guard,decide_true,↓reduceIte]
-        rw [clone_value,bind_tc_ok,increment_wrap item r.end guard,bind_tc_ok]
+        simp only [clone_value,bind_tc_ok,increment_wrap item r.end guard]
       · simp only [guard,decide_false,Bool.false_eq_true,if_false,clone_value,bind_tc_ok]
 
 #print axioms clone_value
