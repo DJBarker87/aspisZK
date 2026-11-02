@@ -52,7 +52,7 @@ theorem after_draw (base : ExternalTypes)
   simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
     PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
     PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
-    bind_tc_ok,Aeneas.Std.lift,Array.to_slice_mut,
+    bind_tc_ok,Aeneas.Std.lift,Aeneas.Std.uncurry,Array.to_slice_mut,
     PV_EVH_EntropyHalves.first_index,PV_EVH_EntropyHalves.second_index,
     hcopy,hback,id_eq]
   rfl
