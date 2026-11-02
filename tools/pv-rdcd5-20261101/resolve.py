@@ -23,10 +23,9 @@ def go(m):
         if dep.startswith('R1Z.'):go(dep)
     order.append(m)
 roots=['R1Z.PV_RDCD5_ParserWindows','R1Z.PV_RDCD5_V197',
+       'R1Z.PV_RDCD5_ParserFlat','R1Z.PV_RDCD5_ParserErrors',
        'R1Z.PV_RDCD5_V233','R1Z.PV_RDCD5_BufferSource',
-       'R1Z.PV_RDCD5_V236','R1Z.PV_RDCD5_ParserFlat',
-       'R1Z.ProverRwSuccessParserSource','R1Z.PV_DL_UpdateSelected',
-       'R1Z.PV_RDCD5_ParserErrors']
+       'R1Z.PV_RDCD5_V236']
 for m in roots:go(m)
 checks={};conflicts=[]
 for ref in ['evidence/envj-rebuild-20261026/EJR_final-inventory.json',
