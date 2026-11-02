@@ -10,6 +10,14 @@ variable {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F)
 
+theorem digest (hash : aspis_core.digest.LegacyHashFn) (parts : Slice (Slice U8)) :
+    @ExternalFuns.op39 (types base) (opsNative base heap box ops runtime world) hash parts=hash parts := by
+  unfold opsNative PV_RunJoin_WeightInstalled46.selected
+  rw [PV_B2_F_RawNative.preserved_39]
+  rfl
+
+#print axioms digest
+
 theorem validated (t : T) (row : U8) (framed : Slice U8) (order : row=t.next_row)
     (total : ∀ parts,∃ b,t.hash parts=ok b) :
     letI : ExternalTypes := types base
@@ -24,8 +32,10 @@ theorem validated (t : T) (row : U8) (framed : Slice U8) (order : row=t.next_row
   obtain ⟨block,hb⟩ := total (PV_RunJoin_TranscriptRequests51.message absorbed 1#u8)
   obtain ⟨advanced,hc⟩ := total (PV_RunJoin_TranscriptRequests51.message absorbed 2#u8)
   refine ⟨block,advanced,?_⟩
-  rw [PV_RunJoin_SemanticDigest51.source (PV_RunJoin_NativeResidual62.baseTypes base)
-    heap box (residual base ops runtime world)]
+  rw [PV_RunJoin_SemanticRequests51.source]
+  simp only [aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32,
+    aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32.digest,
+    digest base heap box ops runtime world]
   simp only [bne_self_eq_false,Bool.false_eq_true,if_false,ha,hb,hc,bind_tc_ok]
 
 theorem complete (t : T) (row : U8) (framed payload : Slice U8) (order : row=t.next_row)
