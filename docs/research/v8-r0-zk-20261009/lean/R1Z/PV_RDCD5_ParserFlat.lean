@@ -28,7 +28,7 @@ theorem cm_window (bytes : List U8) (base : Nat) (hb : base+8 ≤ bytes.length) 
   | none => rfl
   | some a =>
     dsimp only
-    rw [PV_RDCD5_ParserWindows.component_window bytes base 4 (by omega) hb]
+    rw [PV_RDCD5_ParserWindows.component_window bytes base 4 (by omega) hb] <;> rfl
 
 #print axioms cm_window
 end R1Z.PV_RDCD5_ParserFlat
