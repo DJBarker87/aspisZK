@@ -3,6 +3,8 @@ import PV_B3P_Std559KernelFuns227
 namespace PV_B3P_NthSource559227
 open Aeneas Aeneas.Std core.ops.range PV_B3P_NthKernelGuard559227
 set_option autoImplicit false
+set_option pp.fullNames true
+set_option pp.explicit true
 /-- Source default spec_nth over Usize, with the guarded successor represented
 by wrapping_add. The safety proof below shows it cannot wrap. Exhaustion sets
 start=end even for an initially reversed range. -/
