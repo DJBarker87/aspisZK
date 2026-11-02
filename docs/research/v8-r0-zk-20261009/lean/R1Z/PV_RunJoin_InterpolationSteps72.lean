@@ -19,7 +19,9 @@ theorem complete (a b : ExternalFuns) (h55 : a.op55=b.op55)
     @host_sumcheck.interpolation_basis_steps _ a=@host_sumcheck.interpolation_basis_steps _ b := by
   funext basis denominator degree i
   delta host_sumcheck.interpolation_basis_steps host_sumcheck.interpolation_basis_steps.mutual
-  apply congrArg (fun recurse => recurse basis denominator degree)
+  apply congrArg (fun recurse : Array aspis_core.field.M31 28#usize → aspis_core.field.M31 →
+      Usize → Usize → Result (Array aspis_core.field.M31 28#usize × aspis_core.field.M31) =>
+    recurse basis denominator degree)
   apply fix_congr
   funext recurse cells den deg j
   rw [PV_RunJoin_InterpolationCongruence72.extend a b h55 h57 h74]
