@@ -38,7 +38,7 @@ def thermal():
  assert d,'thermal counters unavailable'
  return d
 assert hashlib.sha256(B['baseline'].read_bytes()).hexdigest()=='30d883a8d97f12c315898aaf9170eb7a542b5e935881f089506fd4601ddb6a20'
-expected=json.loads((H/'final-gates/bound/build.json').read_text())['binaries']['user_client']['sha256']
+expected=json.loads((H/'final-gates/closed/build.json').read_text())['binaries']['user_client']['sha256']
 assert hashlib.sha256(B['draft'].read_bytes()).hexdigest()==expected
 pins={k:dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size) for k,p in B.items()};write(O/'binary-pins.json',pins)
 # Requests were produced by the existing actual-client/SBF fixture gate.
