@@ -40,9 +40,9 @@ result=dict(evidence_class='structural source association (own-1), existing depl
  recorded_source=dict(path=old_path,sha256=sha(raw)),deployed_zeroize_sha256=z['sha256'],
  steps=steps,project_entropy=dict(path=p['path'],sha256=p['sha256'],
  error_cleanup='? ordinarily drops the original initialized 64-byte stack array, including partially written bytes',
- laws=['PV_EVH_StackCleanup.error_drop_full','PV_EVH_StackCleanup.error_zeroized','PV_EVH_StackCleanup.abort_preserves_prefix']),
+ laws=['PV_EVH_StackCleanup.error_drop_full','PV_EVH_StackCleanup.error_zeroized','PV_EVH_StackCleanup.abort_preserves_prefix','PV_EVH_NativeEntropyError.error_native']),
  extracted_dictionary=funs,version_boundary='Retained extraction names zeroize1.8.1; only its dictionary routing is used. Deployed effects/values come from the separately bound recorded 1.9.0 law, never the old fence law.',
- native_selection=['PV_EVH_NativeZeroBoundary.array_residual','PV_EVH_NativeZeroBoundary.scalar_residual','PV_EVH_NativeZeroInstall.execution_native'],
+ native_selection=['PV_EVH_NativeZeroBoundary.array_residual','PV_EVH_NativeZeroBoundary.scalar_residual','PV_EVH_NativeZeroInstall.execution_native','PV_EVH_NativeStackDrop.native_drop64'],
  status='zeroize leaf association only; native entry closure remains OPEN',
  retained=['V370 source-to-machine compiler preservation','valid exclusive initialized array and actual stack admission','whole residual dictionary family provenance at entry','heap/stack address coherence','L3 register/spill/copy/retired-memory observation and joint law','all remaining heap, diagnostic, callback and mutable-restoration leaves'],
  trust_fields_added=[],endpoint_rows_removed=[])
