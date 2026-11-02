@@ -11625,6 +11625,10 @@ boundary/record/transcript and earlier audit/build obligations are explicit.
 No Nonempty P or NodeAppend removal is claimed. Same seven retained links;
 no rows removed. V183 support remains SUSPENDED(K-3), D549; no deployed credit
 restored. Three trust items, observer, simulator and release pins unchanged.
-Checkpoint and exact receipts: evidence/pv-runjoin72-20261102/HANDOFF.md and
-SESSION-D552.json. Final audit/report will follow completion of this budget.
+Full native polynomial evaluator totality and canonical word/limb helpers
+checked; full wire-parser assembly remains open and is isolated as a draft.
+97 attempts spent:58 accepted,39 rejected; final audits79697–79699 passed
+with standard axioms only. Exact receipts, V183 K-3 citation, unchanged
+NodeAppend before/after and next steps: evidence/pv-runjoin72-20261102/
+REPORT-D552.md, HANDOFF.md and SESSION-D552.json. No compiler budget remains.
 Privacy target not yet established.

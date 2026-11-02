@@ -1,88 +1,86 @@
-# Runjoin72 LOG D552 — running checkpoint
+# Runjoin72 — D552 final handoff
 
-Same worktree /Users/dominic/ZK/.worktrees/pv-runjoin, branch
-codex/pv-runjoin-20261026, entry a778c445977bf568dda0cd81b7a63fe5b401909b.
-Sole writer. No merge/push, implementation, keys/funds, Rust/SBF or Kani work.
+Same worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
+`codex/pv-runjoin-20261026`, entry a778c445977bf568dda0cd81b7a63fe5b401909b.
+Sole writer. No merge/push. Final source/audit revision is
+06949c02fad7cbe6ebbbbcb4550ef88a5d86f8d9; reporting commits follow.
 
-## Accounting at this checkpoint
+## Stop/accounting
 
-63/97 charged attempts; 41 accepted, 22 rejected; 34 remain.
-IDs79600–79662 are charged. Never reuse a compiler ID. Audits79697–79699
-remain UNUSED. The focused wrapper is currently retrying UNLAUNCHED79663
-PolyChannelsTotal72 after a cgroup-scan race refusal and full180s cooldown.
-The same shell schedules79664 PolyBlockTotal72,79665 PolyEvalTotal72,
-79666 NativeSumcheckArithmetic72,79667 NativeRoundContinuation72 ONLY if
-predecessors pass. Reconcile that shell and receipts BEFORE another launch.
-No refusal is charged. See all receipt-/modules-/refusal-*.json files.
+**97/97 charged attempts spent:58 accepted,39 rejected. Budget zero.**
+79600–79693 and79697–79699 charged;79694–79696 unused. All three final audits
+passed. No pending shell, scope or reservation remains. Six host refusals were
+uncharged, with180s cooldowns. Do not launch more compilers under this budget.
+Reconciliation and original logs have been collected; REPORT-D552.md,
+SUMMARY.json, SESSION-D552.json and target-results-D552.json are final.
+The earlier running checkpoint is superseded.
 
-## Checked endpoints
+## Checked proof frontier
 
-NativeMultilinear72(79600), PointsTotal72(79605), NativePointClaims72(79606)
-close native statement points and all29 source column evaluations for rows1024.
-LiftRows72(79609), ProducedRows72(79611), ProducedClaims72(79613) derive the
-row shapes and point claims from the actual reached lifted columns, with no
-new consumer premise. SemanticSuff72(79614) and SemanticPlan72(79631) consume
-op227 success on the exact SOURCE-produced claims. The original callback and
-all local error branches are retained; no callback source credit restored.
+NativeMultilinear72(79600), PointsTotal72(79605), NativePointClaims72(79606),
+LiftRows72(79609), ProducedRows72(79611), ProducedClaims72(79613) establish
+actual reached column shapes and point_claims success. SemanticSuff72(79614)
+and SemanticPlan72(79631) use reached op227 terminal sufficiency.
+BackendBuildBalanced72(79621), BuiltHelper72(79623), CaptureBuilt72(79627),
+NativeCaptureBuilt72(79646) close the exact helper-balance post-build capture
+tail, conditional on original successful build_with_material.
+RoundSequencePlan72(79634), SumcheckPlan72(79647) bind all dependent source
+rounds. AllocatorCompat72(79636) only equates statuses from BOTH fixed-world
+and threaded-world success; it does not discharge either success.
 
-NativeCaptureBuilt72(79646), via BackendBuildBalanced72(79621),
-MaterialBackendBalanced72(79622), BuiltHelper72(79623), CaptureTail72(79625)
-and CaptureBuilt72(79627), proves the final native capture tail after an actual
-successful build_with_material. The source helper-balance guard is retained
-through the exact padded helper and lifted column26. There is NO assumed
-capture-success input. Earlier audit prefix and build success remain open.
+NativeAssignment72(79641), NativeWorkerMerge72(79642),
+NativeInterpolation72(79656), NativePolynomialBytes72(79657),
+NativeRoundPolynomial72(79660), NativeSemanticRound72(79661) compose actual
+op257 vector/count/callback agreement with reached op227 sufficiency, merge,
+symbolic interpolation and exact896-byte source polynomial encoding.
+PolyChannelsTotal72(79664), PolyBlockTotal72(79666), PolyEvalTotal72(79667),
+NativeSumcheckArithmetic72(79668) close the actual evaluator totality/op121.
+NativeRoundContinuation72(79669) composes storage/append/evaluation given
+exact boundary, record, sample and room conditions. SumcheckFinish72(79649)
+still requires actual terminal value equality.
 
-RoundSequencePlan72(79634) and SumcheckPlan72(79647) reify the complete ten
-source rounds, original worker outputs and dependent point/running/transcript/
-byte continuations. Final oracle comparison is retained. SumcheckFinish72
-(79649) closes it at the exact expected oracle value, not from totality alone.
-AllocatorCompat72(79636) proves compatibility from success at BOTH fixed and
-threaded worlds; it does not assert adequacy or world equality.
+WideLimbsParse72(79674), ByteWord72(79681), ByteArrayFour72(79683),
+ByteWordGroups72(79684), PolyCellCanonical72(79691), PolyPayloadWindow72(79693)
+are checked. The full32-byte parser assembly failed79685–79689; the source
+was moved to drafts/ with the never-compiled NativeWideParse72,
+NativePolyCellParse72, PolyPayloadCanonicalWindow72 and
+NativePolynomialByteDomain72 adapters. NO credit for those drafts.
 
-NativeAssignment72(79641), NativeWorkerMerge72(79642), NativeInterpolation72
-(79656), NativePolynomialBytes72(79657), NativeRoundPolynomial72(79660), and
-NativeSemanticRound72(79661) compose the actual op257 output/count/per-index
-callback agreement and reached op227 condition through the complete merge,
-interpolator and896-byte polynomial serializer to the exact remaining source
-round continuation. The interpolation fixed point was transported by equality
-of its functionals and proof irrelevance; NO28x28 concrete recurrence reduced.
+## Next work with a new authorized budget
 
-## Pending and next work
+1. Factor the source parser into opaque four-byte readers BEFORE expanding
+   the entire32-byte term. Prove each reader using ByteWordGroups72, compose
+   the8 reader equations and WideLimbsParse72. Do not repeat the expanded
+   full-parser rewrites/whnf timeout or increase heartbeat/memory limits.
+2. Independently check the draft canonical payload-window bridge; then use
+   the exact896-byte source encoding to discharge record/header/field parse
+   checks. Prove row order, hash/semantic transcript outputs and append room.
+3. Derive each round boundary equation and final oracle-running equality from
+   actual worker outputs. Produce the actual op257 vectors/count/agreement,
+   both commitment workers' output/lane shapes, and each source/post-world
+   allocator success/compatibility. Preserve the original callbacks/worlds.
+4. Discharge NativeControl55.run's earlier audit/build prefix and compose full
+   capture. Prove Nonempty P at opsNative. Only then remove NodeAppend with
+   actual before/after evidence. Do not replace these by a consumer premise.
 
-Current UNCHECKED drafts: PolyChannelsTotal72 has a changed source after79662
-(parse error plus whnf timeout); now named opaque primitive bind laws replace
-the rejected unification shape. Then prove polynomial block/loop totality and
-native op121, which NativeRoundContinuation72 consumes. ByteInspect72 is an
-UNCOMPILED diagnostic for future exact record/header/field validation.
+## Unchanged open status and qualifications
 
-After those: discharge each source record and transcript success on serialized
-polynomial bytes, including row order, hash result, parse fields and append
-room; prove each round boundary equation from actual workers, not just worker
-success. Compose ten rounds plus actual terminal value comparison. Prove both
-commitment worker outputs/lanes, each allocator source/post-world success and
-compatibility. Discharge NativeControl55.run's earlier audit prefix, build the
-full run/capture, hence Nonempty P at opsNative. Then NodeAppend with before/
-after; then remaining links. Do not replace any of these by a consumer premise.
-
-Nonempty P UNPROVED; NodeAppend NOT removed. Same seven links before/after:
+Nonempty P UNPROVED; NodeAppend NOT removed. Seven links before/after:
 R24Sampler, CommonSample, BackendInput, QueryContext, QueryRange, NodeAppend,
-PublishOrder. Prior accepted QueryAppend and FinishContext removals retained.
-No ledger row or new privacy premise removed; three TrustItems, observer,
-simulator and release pins unchanged. Skeleton consistency: reduced to
-non-emptiness. Privacy target not yet established.
+PublishOrder. Earlier QueryAppend/FinishContext removals retained. No new
+native consumer premise or ledger row removed; three TrustItems, observer,
+simulator and release pins unchanged. Skeleton consistency remains reduced
+to non-emptiness. Privacy target not yet established.
 
-## Qualifications and verification
+V183 Kani-backed support remains **SUSPENDED(K-3), D549**. Allocator family
+retained in opsNative. V183-K3-D549.json pins research revision
+21d447956e44895bbd1c235b5c16ae0c5aba8159 and full D549 excerpt. No restored
+deployed credit; V370/compiler/extraction/source-binding qualifications stay.
 
-V183 Kani-backed support remains SUSPENDED(K-3), D549; installed world-indexed
-allocator family retained. V183-K3-D549.json pins research21d447956e44895b...
-and the D549 excerpt. These Lean proofs do not restore deployed support.
-All V370 and existing extraction/source-binding qualifications remain.
-
-Pinned runjoin32 cache reused. Fresh initial preflight:4165 project objects,
-9324 direct fingerprints,5673 external objects,5438 IR companions;9838 namespace
-resolutions,all match. Original compiler logs are on host under per-module
-output_path and must be collected losslessly before final reporting. All
-accepted targets print standard-only axioms; final audits not yet run. Caps
-remain6G/8G/swap0/TasksMax64,Lean-M7000.79601's memory failure was replaced by
-generic mapped_total with narrower imports; it passed79602. No limit raised,
-no unchanged failed source rerun, no full manifest replay while capture open.
+Pinned runjoin32 cache reused; final preflight4223 projects/9482 fingerprints/
+5673 external objects/5438 IR,9896 namespace checks, all match. Final audits
+79697–79699 expose only propext/Classical.choice/Quot.sound. One module per
+6G/8G/swap0/TasksMax64 scope, Lean-M7000; no limits increased.79601's memory
+failure was replaced by generic mapped_total and narrower imports79602.
+Full original module logs are losslessly collected with hashes. No frozen
+manifest replay while capture is open. No Rust/Kani/SBF/ELF/key/funds work.
