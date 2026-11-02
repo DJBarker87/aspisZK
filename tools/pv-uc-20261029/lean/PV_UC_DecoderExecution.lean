@@ -17,7 +17,7 @@ def execute (r : Array U8 212#usize) : List Nat :=
   | _ => []
 
 def dump (r : Array U8 212#usize) : _root_.IO Unit :=
-  _root_.IO.println (_root_.String.intercalate "," ((execute r).map (fun n => _root_.toString n)))
+  _root_.IO.println (_root_.String.intercalate "," ((execute r).map (fun n => _root_.Nat.repr n)))
 
 -- Finite executable model validation only; no native_decide proof.
 #eval dump (Array.repeat 212#usize 0#u8)
