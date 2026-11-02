@@ -1,3 +1,23 @@
+# D540 privacy bridge — READY for lead aggregation review
+
+**The bridge is kernel-checked; combined closure elaboration remains unverified.** All work is on `codex/pv-evhc-20261029` in the exact sparse worktree. No push. `READY.json` is the current handoff; the earlier stage notes below are historical. Source `UNCOMPILED` comments denote preparation time; the actual receipts determine validation.
+
+The 78 normal-cap Lean attempts include 75 successes and three failures (78103, 78173, 78177). All 69 active private modules match successful source hashes. One native audit passed; no Kani ran. Every scope used 6G high / 8G max / swap0 / TasksMax64 and Lean -M7000. No 16 GiB scope was launched or authorized. `COMPILE-SUMMARY.json` contains every exact target, exit, wall, peak RSS, swap, revision and actual stdout axioms reports. All completed printed axiom sets are within {propext, Classical.choice, Quot.sound}. The combined audit 78197 was NOT run.
+
+`PV_BR_Transport` and `PV_BR_AdmissionTransport` prove concrete carrier inverses, discriminant commutation, the eight-error embedding, a reversible eight-plus-three prover outcome split, complete nested Result transport, and the exact actual `validate_common` success iff/roundtrip. These are model/interface laws, not new native source bindings or a privacy theorem. Stream A's selected fixture definitions are reused by import: all 17 data files are byte-identical and the wrapper body is byte-identical after import headers. No old fixture provider remains reachable in the revised graph.
+
+Re-key counts: 112 nonidentical names cover 7,975 differing provider pairs. 109 names / 7,972 pairs are generated Lean proof/equation auxiliaries with no Rust-origin key. Literal extraction-crate keys give A=1, A-prime=0, B=2; original-item interpretation gives A=2, A-prime=1, B=0. Both wrapper/copy identities and feature qualifications are explicit in `RUST-ORIGINS.json` / `REKEYED.json`. No same-feature A semantic disagreement was found. Full historical dependency feature metadata and the four inherited source/object binding qualifications from pv-dup remain qualified, not silently closed.
+
+The repaired full smoke 78177 failed at interpreter initialization, not a proof/recurrence cell: exit 134, 8.258035 s, 8,190,532 KiB peak RSS, swaps 0. No smoke query was reached. The declaration collision reported at 78173 is absent from this output; this is NOT a claim that the complete import elaborated. The failed smoke was not retried unchanged or at a larger cap. Focused predecessors and all concrete fixture work passed normally, including rebuilt bundle 78175 (244.211512 s, 6,800,412 KiB, swaps 0), so the remaining resource boundary is bulk combined-environment initialization. **STOP: READY for the lead to review one new actual-consumer-plus-audit aggregation after checking with Stream A.** The proposed scope in READY.json is explicitly NOT AUTHORIZED. Remaining Lean budget is 2; no further worker compile is launched.
+
+`lean/PV_EVH_FixtureConsumer.lean` has only its privacy imports redirected to the bridge. Its entire non-import body is byte-identical; `NDR_CombinedAudit` stays imported unchanged. The consumer's existing LEAD-ONLY 16 GiB annotation is retained. `PV_BR_FixtureConsumer.lean` is the concrete unlaunched new consumer-plus-inline-audit target. Neither consumer is newly kernel-validated. `CONSUMER-IMPORT-CHANGE.json` records the before/after hashes.
+
+RPx_Deployed, NDR_CombinedAudit, manifest cbd00ba4, every Stream A source/object, crates/ and programs/ remain unchanged by this task. No wallet/account/key operation occurred. The pre-existing pv-dup dirty/untracked files remain untouched.
+
+Before/after endpoint conditions: unchanged `PrivacyR1HeadlineDeployedReal.privacy_headline_deployed` premises. Removed: none. Added/weakened: none. Native event acquisition and joint simulation links, actual trace/handle/source associations, FixturePdaRuntime, allocator/abort obligations and compiler/tool boundaries remain. The bridge does not prove the conjunction of event links satisfiable or establish privacy. **Target not yet established.**
+
+---
+
 # D540 privacy bridge — preparation
 
 Branch codex/pv-evhc-20261029; input HEAD d3526387bdba9f89adb24aa5c616c1fc5bdba6d1. Worktree exactly /Users/dominic/ZK/.worktrees/pv-evhc, sparse. Existing pv-dup dirty/untracked files were present before this task and are untouched. No push.

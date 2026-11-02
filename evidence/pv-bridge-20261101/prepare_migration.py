@@ -65,7 +65,9 @@ import NDR_CombinedAudit
 ''')
 raw=subprocess.check_output(['git','show','HEAD:lean/PV_EVH_FixtureConsumer.lean'],cwd=R).decode()
 for old in ['PV_EVH_Deployed','PV_RJ4IDB_CallerLive']:raw=raw.replace('import '+old+'\n','import '+name[old]+'\n')
-raw='import PV_BR_AdmissionTransport\n'+raw
+if 'import PV_BR_AdmissionTransport\n' not in raw:raw='import PV_BR_AdmissionTransport\n'+raw
+audit=[l for l in (B/'PV_BR_Audit.lean').read_text().splitlines() if l.startswith('#print axioms ')]
+raw+='\n/- Lead-only consumer plus combined audit; NOT LAUNCHED. -/\n'+'\n'.join(audit)+'\n'
 (B/'PV_BR_FixtureConsumer.lean').write_text(raw)
 obsolete=['PV_BR_R1Z_PV_RJDec_V047Native','PV_BR_PV_RJ4IDB_CallerPublic','PV_BR_PV_RJ4IDB_CallerLive']
 for n in obsolete:
