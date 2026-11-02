@@ -53,5 +53,9 @@ def validate(c,expected,ledger,v):
   rs=[r for r in ledger['rows'] if r['function']==f];obs=[o for r in rs for o in r['caller_domain_obligations']]
   allowed={f}|{f+'::'+h['name'] for r in rs for h in r['named_hypotheses']}|{f+' -> '+g for r in rs for g in r['canonical_callees']}|{o['id'] for o in obs if 'callee' not in o}
   assert expected in allowed
+  if c['kind']=='alternative-resolution':
+   assert case=='withdrawal' and expected in {f+' -> crates/aspis-core/src/field.rs::M31::to_le_bytes',f+' -> crates/aspis-core/src/field/wide_exact.rs::WideExact::to_le_bytes'}
+   assert 'pub amount: u32,' in source and '&public.amount.to_le_bytes()' in body
+   assert 'let reply=(p.amount).to_le_bytes()' in (v.E/'NEM_K020-NEM_native_contracts.patch').read_text()
   return True
  except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
