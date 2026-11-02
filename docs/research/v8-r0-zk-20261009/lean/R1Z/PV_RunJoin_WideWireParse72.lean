@@ -19,7 +19,13 @@ theorem complete (x : aspis_core.field.wide_exact.WideExact)
   repeat' (rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];simp only [bind_tc_ok,lift])
   simp only [wire,Array.make,UScalar.ofNatCore_val_eq,List.getElem_cons_zero,
     List.getElem_cons_succ]
-  repeat' rw [PV_RunJoin_ByteWordGroups72.word]
+  have decode (w : U32) : core.num.U32.from_le_bytes
+      (⟨[PV_RunJoin_FlatBytes35.byte w ⟨0,by decide⟩,PV_RunJoin_FlatBytes35.byte w ⟨1,by decide⟩,
+        PV_RunJoin_FlatBytes35.byte w ⟨2,by decide⟩,PV_RunJoin_FlatBytes35.byte w ⟨3,by decide⟩],
+        by simp only [List.length_cons,List.length_nil,UScalar.ofNatCore_val_eq]⟩ : Array U8 4#usize)=w :=
+    PV_RunJoin_ByteWordGroups72.word w
+  rw [decode]
+  repeat' rw [decode]
   exact PV_RunJoin_WideLimbsParse72.complete x canonical
 
 #print axioms complete
