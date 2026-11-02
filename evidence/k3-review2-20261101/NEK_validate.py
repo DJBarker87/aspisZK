@@ -1,6 +1,8 @@
 """Strict receipt/source/budget audit; incomplete checks earn no credit."""
 from NEK_scan import *
 from NEK_verdict import verdict
+import ast
+from NEK_host import B
 
 def main():
  attempts=[json.loads(l) for l in (E/'NEK_ATTEMPTS.jsonl').read_text().splitlines()];ids=[r['attempt'] for r in attempts];assert len(ids)==len(set(ids))
@@ -11,17 +13,23 @@ def main():
    try:v=read_json(p)
    except Exception:continue
    if isinstance(v,dict) and any(k.startswith(('crates/','programs/')) for k in v):blobs[sha(p.read_bytes())]=(p,v)
+ transport=[json.loads(l) for l in (E/'NEK_NATIVE_TRANSPORT.jsonl').read_text().splitlines()]
+ tree=ast.parse((E/'NEK_host.py').read_text());fn=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='admit');call=next(n for n in ast.walk(fn) if isinstance(n,ast.Call) and isinstance(n.func,ast.Name) and n.func.id=='py')
+ admission_expr=compile(ast.Expression(call.args[0]),'<own admission template>','eval')
  rows=[]
  for r in attempts:
-  a=r['attempt'];disk=read_json(E/a/'receipt.json');assert disk==r,a
+  a=r['attempt'];ad=read_json(E/(a+'-reservation.json'));assert ad.get('allowed') is True,a
+  admission_code=eval(admission_expr,{'B':B,'a':a,'retry':r['reservation_retries']});sig=sha(admission_code.encode());assert any(t['input_sha256']==sig and t['exit']==0 for t in transport if t.get('input_sha256')),('admission exit0 absent',a)
+  disk=read_json(E/a/'receipt.json');assert disk==r,a
   assert r['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'},a
   assert int(r['swaps'])==0 and r['source_revision'] and r['module']
-  log=(E/a/'stdout.log').read_text();row=dict(attempt=a,kind=r['kind'],exit=r['exit_status'],wall=r['wall_seconds'],rss=r['peak_rss_kib'],swap=r['swaps'],source_revision=r['source_revision'])
+  log=(E/a/'stdout.log').read_text();row=dict(attempt=a,kind=r['kind'],exit=r['exit_status'],wall=r['wall_seconds'],rss=r['peak_rss_kib'],swap=r['swaps'],source_revision=r['source_revision'],admission='allowed true AND exit 0, exact request code hash')
   if r['kind']=='lean':
-   assert r['exit_status']==0
-   axioms=[l for l in log.splitlines() if 'depends on axioms:' in l];assert len(axioms)==2
+   if r['exit_status']!=0:
+    row.update(verdict='OPEN',incomplete_reason='Lean compilation failed; printed sorryAx during error is rejected and earns no credit');rows.append(row);continue
+   axioms=[l for l in log.splitlines() if 'depends on axioms:' in l or 'does not depend on any axioms' in l];assert len(axioms)==len(r['print_axioms'])
    for line in axioms:
-    names=line.split('[',1)[1].split(']',1)[0].replace(' ','').split(',');assert set(names)<={'propext','Quot.sound','Classical.choice'}
+    names=line.split('[',1)[1].split(']',1)[0].replace(' ','').split(',') if '[' in line else [];assert set(names)<={'propext','Quot.sound','Classical.choice'}
    row['axioms']=axioms;rows.append(row);continue
   assert r['env']['CARGO_NET_OFFLINE']=='true' and r['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
   ni=r['native_command'];assert '--locked' not in ni and '--features' in ni

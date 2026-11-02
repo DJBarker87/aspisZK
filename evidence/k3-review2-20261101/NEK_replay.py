@@ -54,7 +54,7 @@ pins={{str(q.relative_to(s)):hashlib.sha256(q.read_bytes()).hexdigest() for q in
  if os.environ.get('NEK_KMX_REQUIRED'):original['copy_patch_sha256']='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
  env={k:v for k,v in original['env'].items() if k!='LEAN_PATH'};env['TMPDIR']=B+'/NEK_tmp';env['CARGO_NET_OFFLINE']='true'
  env['CARGO_PROFILE_DEV_OPT_LEVEL']='3';env['CARGO_PROFILE_DEV_DEBUG']='0';env['CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS']='true'
- cfg=dict(attempt=a,kind='kani',module=original.get('module') or ni[ni.index('--harness')+1],sources=['NEK_src/'+n for n in overlay]+['NEK_gate.py','NEK_graph.py','NEK_src/Cargo.lock'],command=['python3','NEK_gate.py',a+'.json'],native_command=ni,env=env,timeout=original.get('timeout',240),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(original_receipt=rp,original_sha256=sha((ROOT/rp).read_bytes()),patch=patch,patch_sha256=sha((ROOT/patch).read_bytes())),copy_patch_sha256=original.get('copy_patch_sha256'),expected_time='Optimized cached compilation then original native harness, static-free local/owned records; no multiplication',print_axioms='N/A: kani')
+ cfg=dict(attempt=a,kind='kani',module=ni[ni.index('--harness')+1],sources=['NEK_src/'+n for n in overlay]+['NEK_gate.py','NEK_graph.py','NEK_src/Cargo.lock'],command=['python3','NEK_gate.py',a+'.json'],native_command=ni,env=env,timeout=original.get('timeout',240),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(original_receipt=rp,original_sha256=sha((ROOT/rp).read_bytes()),patch=patch,patch_sha256=sha((ROOT/patch).read_bytes())),copy_patch_sha256=original.get('copy_patch_sha256'),expected_time='Optimized cached compilation then original native harness, static-free local/owned records; no multiplication',print_axioms='N/A: kani')
  rc=launch(cfg)
  r=py(f'''from pathlib import Path
 import json
@@ -67,4 +67,4 @@ if __name__=='__main__':
  else:
   replay(*sys.argv[1:])
   log=(E/sys.argv[1]/'stdout.log').read_text()
-  if re.search(r'could not compile|Found [0-9]+ compilation errors|no matching harness|Failed to execute cargo',log):raise SystemExit('own compile/selection failure; repair before dependent launch')
+  if re.search(r'could not compile|Found [0-9]+ compilation errors|no matching harness|Failed to match the following harness|Failed to execute cargo',log):raise SystemExit('own compile/selection failure; repair before dependent launch')

@@ -1,1 +1,5 @@
 Stopped only the local sequential common dispatcher (PID70099) after K049 submission. K049 is allowed to finish and is recovered read-only; never resubmitted. Prepare one immutable cfg-selected bundle before up to three concurrent scopes, within job-specific throughput authorization. No source upload while K049 is running.
+
+Second-pass tail scheduling correction: stop only local dispatcher PID34128 while its independent NEK_ndn_matrix.py child finishes/retrieves submitted K304. No native scope, launcher, reservation or remote process is interrupted. Resume only after child terminal. Prioritize exact KMX controls for the matrix/scan/simple compiler configurations over the unneeded live Box admission suite. Completed IDs are never resubmitted.
+
+Tail priority repair: stop only local dispatcher PID37965 while its decoder-fidelity child finishes all submitted/queued admission controls. Replace the later, independent live decoder pair with NBP formatting replay carrying the official KMX pointer stub explicitly. The initial NBP301/302 pair retains its verdict but is provisional for copy fidelity. No native job is killed or resubmitted. Resume after child terminal.

@@ -59,8 +59,12 @@ def closure(row):
    history.update(receipts(r.get('receipts',[])));support.update(receipts(replacement))
    selected=[]
   else:
-   support.update(receipts(r.get('receipts',[])))
-   support.update(receipts(r.get('receipt_sha256',{})))
+   # Flat ledger receipt lists retain superseded unit-wide discovery evidence.
+   # Active support is selected claims plus the exact current row/edge
+   # certificates below, then real canonical callees. Never suspend a getter
+   # behind an unrelated historical Vec receipt.
+   history.update(receipts(r.get('receipts',[])))
+   history.update(receipts(r.get('receipt_sha256',{})))
   # Domain/root certificates can cite native review tables by content hash,
   # rather than listing those native receipts in the ledger row itself.
   certs=[q for q in Q['row_certificates'] if q['function']==fn]
@@ -114,7 +118,7 @@ def closure(row):
    except FileNotFoundError:unknown.append(rp);continue
    if str(r.get('kind','')).lower()=='kani':ks.append(dict(receipt=rp,outcome='UNREVIEWED',harness=r.get('module')))
    else:lean.append(rp)
- return dict(functions=sorted(seen),edges=edges,claims=sorted(cids),kani=ks,reused_non_kani=lean,historical_references=sorted(history),unresolved=sorted(set(missing+unknown)))
+ return dict(functions=sorted(seen),edges=edges,claims=sorted(cids),kani=ks,reused_non_kani=lean,historical_references=sorted(history-support),unresolved=sorted(set(missing+unknown)))
 rows=[]
 for group,d in [('NEB',D),('NEE',S)]:
  for r in d['rows']:

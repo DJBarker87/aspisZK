@@ -32,7 +32,7 @@ def suite(which,start):
  keep=['PoolV1PairForestTerminalCommonV1','PoolV1PairLatePublicStatementV1','PoolV1PairLiveSnapshotV1','PoolV1PairVerifiedAfterstateV1','PoolV1PairLatePublicStatementErrorV1','PoolV1PairLiveSnapshotErrorV1','PoolV1PairVerifierTransportErrorV1']
  arb='\n'.join(l for l in raw.splitlines() if any('::'+k+' {' in l for k in keep))+'\n'
  base['crates/aspis-statement/src/pool_v1/NEC_arbitrary.rs']=arb
- tests=[('NEK_shape_contract',False),('NEK_shape_contract',True),('NEK_shape_real',False),('NEK_shape_client',True),('NEK_shape_frame',True),('KMX_ptr_positive',False),('KMX_ptr_wrong',True)]
+ tests=[('NEK_shape_contract',False),('NEK_shape_contract',True),('NEK_shape_real',False),('NEK_shape_client',True),('NEK_shape_frame',True),('KMX_ptr_correct',False),('KMX_ptr_wrong',True)]
  for i,(name,neg) in enumerate(tests):
   a=f'NEK_K{start+i:03}'
   if (E/a/'receipt.json').exists():continue

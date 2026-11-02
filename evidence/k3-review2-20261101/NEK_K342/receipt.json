@@ -1,0 +1,85 @@
+{
+  "attempt": "NEK_K342",
+  "kind": "kani",
+  "module": "NBP_error::NBP_error_forward",
+  "sources": [
+    "NEK_src/programs/r1-cost-probe/src/lib.rs",
+    "NEK_src/programs/r1-cost-probe/src/NBP_error.rs",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K342.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--lib",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NBP_error::NBP_error_forward",
+    "--output-format",
+    "terse",
+    "--features",
+    "pool-adapter,private-leaf-salts"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "b27327ed8239277939d6efdb2796452320e5c298",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-tx2g-20261028/NBP_K040/receipt.json",
+    "original_sha256": "9f8107c568675c322ec00d53fd46f1fcd70544bd26559fa40cf619dd313c64dc",
+    "patch": "evidence/k3-review2-20261101/NEK_K342_harness.patch",
+    "patch_sha256": "c91486c353fdcb24280028e73dd9961f22a168b308dff8db06d3155adf8a5c6b"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0,
+  "exit_status": 0,
+  "wall_seconds": 21.17057801305782,
+  "peak_rss_kib": "729292",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r1f75df37aef54c5185f7c3d8dd571927.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "814379008",
+  "source_hashes": {
+    "NEK_src/programs/r1-cost-probe/src/lib.rs": "900584c053aacc9cf23509a7e3fcc1e638e8f4de23f3d341f5b4d574cd0aac2b",
+    "NEK_src/programs/r1-cost-probe/src/NBP_error.rs": "654fa18bc3691a6be241aa15726a3ebc550d4811bd35f861bc3fc4e8d3976e86",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter_owned.rs": "7360bfa86cc663ba0b4111aec6439a165bec6ee7bfa9a09b8706cfae434beebd",
+    "NEK_gate.py": "51f1266c02ca3e4766d21a831f543d58d9e8727a84c613d2bffc37f1c457fe91",
+    "NEK_graph.py": "518544a3919ca526a3dcc2fe532dc773cd1bddab8a0dd77005729227d88c4403",
+    "NEK_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  }
+}

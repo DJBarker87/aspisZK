@@ -8,6 +8,7 @@ def run(start=301):
  split=h.index('#[kani::proof]');methods=h[:split];harness=h[split:]
  harness=re.sub(r'^#\[kani::stub.*\n','',harness,flags=re.M).replace('fn NBP_error_forward() {','fn NBP_error_forward() {let mut ctx=NEK_Context{NBP_FORMAT_PTR:core::ptr::null(),NBP_CALLS:0};')
  harness=harness.replace('NBP_CALLS=0','ctx.NBP_CALLS=0').replace('NBP_CALLS==1','ctx.NBP_CALLS==1').replace('super::error(e)','super::error(e,&mut ctx)')
+ harness=harness.replace('#[kani::proof]','#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]',1)
  h='pub(super) struct NEK_Context{NBP_FORMAT_PTR:*const u8,NBP_CALLS:usize}\nimpl NEK_Context{pub(super) fn new()->Self{Self{NBP_FORMAT_PTR:core::ptr::null(),NBP_CALLS:0}}\n'+methods.replace('fn NBP_', 'pub(super) fn NBP_')+'}\n'+harness
  p='programs/r1-cost-probe/src/lib.rs';old=frozen(p).decode();signature='fn error(e:verifier::Error)->ProgramError{msg!("r1:error:{:?}",e);ProgramError::InvalidInstructionData}'
  new='fn error(e:verifier::Error,ctx:&mut NBP_error::NEK_Context)->ProgramError{let s=ctx.NBP_format_reply(format_args!("r1:error:{:?}",e));ctx.NBP_log_reply(&s);ProgramError::InvalidInstructionData}'
