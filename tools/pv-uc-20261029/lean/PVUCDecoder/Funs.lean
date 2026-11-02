@@ -69,7 +69,7 @@ def wallet.digest
   wallet.digest_loop r start out 0#usize
 
 /-- [user_client::wallet::long]:
-    Source: 'src/bin/user_client/wallet.rs', lines 18:0-18:82 -/
+    Source: 'src/bin/user_client/wallet.rs', lines 18:0-18:85 -/
 def wallet.long
   (r : Array Std.U8 212#usize) (i : Std.Usize) : Result Std.U64 := do
   let i1 ← wallet.word r i
@@ -77,7 +77,7 @@ def wallet.long
   let i3 ← lift (Std.Usize.wrapping_add i 4#usize)
   let i4 ← wallet.word r i3
   let i5 ← lift (UScalar.cast .U64 i4)
-  let i6 ← lift (Std.U64.wrapping_shl i5 32#i32)
+  let i6 ← lift (Std.U64.wrapping_shl i5 32#u32)
   ok (i2 ||| i6)
 
 /-- [user_client::wallet::decode_wallet_record]:
