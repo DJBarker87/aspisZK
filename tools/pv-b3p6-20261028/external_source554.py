@@ -43,3 +43,39 @@ for j in range(4):
 s+=indent+'rfl\n\n#print axioms external_group_reference554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_ExternalGroup554227.lean',s)
 print('four symbolic raw rows and all four reconstructions emitted')
+# Global sums and final add keep source arithmetic trees. During the immutable
+# sum pass, repeated reads of each four column entries use the same snapshots.
+s='import PV_B3P_FromFnFour550227\nimport PV_B3P_P227_02\nimport PV_B3P_DigestCpsEq9227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head
+s+='''
+def external_sums_source554 (state : Array aspis_core.field.QM31 16#usize) :
+    Result (Array (Array U64 4#usize) 4#usize) := do
+'''
+for col in range(4):
+ for limb in range(4):
+  for row in range(4):
+   if limb==0:s+=f'  let q{col}_{row} ← Array.index_usize state {4*row+col}#usize\n'
+   s+=f'  let a{col}_{limb}_{row} ← reference_poseidon.extension_limbs q{col}_{row}\n'
+   s+=f'  let b{col}_{limb}_{row} ← Array.index_usize a{col}_{limb}_{row} {limb}#usize\n'
+   s+=f'  let c{col}_{limb}_{row} ← lift (core.convert.num.FromU64U32.from b{col}_{limb}_{row})\n'
+   if row:s+=f'  let sum{col}_{limb}_{row} ← lift (U64.wrapping_add '+(f'c{col}_{limb}_0'if row==1 else f'sum{col}_{limb}_{row-1}')+f' c{col}_{limb}_{row})\n'
+s+='  .ok (Array.make 4#usize [\n'
+for col in range(4):s+='    Array.make 4#usize ['+','.join(f'sum{col}_{k}_3'for k in range(4))+'] (by simp only [List.length_cons,List.length_nil]; rfl)'+(','if col<3 else'')+'\n'
+s+='  ] (by simp only [List.length_cons,List.length_nil]; rfl))\n'
+s+='''
+attribute [local irreducible] Aeneas.Std.bind Array.index_usize
+  reference_poseidon.extension_limbs U64.wrapping_add core.convert.num.FromU64U32.from
+
+theorem external_sums_reference554 (state : Array aspis_core.field.QM31 16#usize) :
+    external_sums_source554 state = reference_poseidon.global_sums227 state := by
+  unfold external_sums_source554 reference_poseidon.global_sums227
+'''
+ref=(L/'PV_B3P_P227_02.lean').read_text().split('def reference_poseidon.global_sums227',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
+import re
+bs=[re.match(r'  let (\w+) ←',x)[1]for x in ref.splitlines()if re.match(r'  let (\w+) ←',x)]
+indent='  '
+for j,b in enumerate(bs):
+ if j%16==0:s+=indent+'as_aux_lemma =>\n';indent+='  '
+ s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
+s+=indent+'rfl\n\n#print axioms external_sums_reference554\nend PV_B3P_Association554227\n'
+emit(L/'PV_B3P_ExternalSums554227.lean',s)
+print('global sums independently generated; bounded proof steps',len(bs))
