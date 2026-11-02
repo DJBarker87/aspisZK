@@ -12,24 +12,22 @@ prompt-rdcd4, prompt-rdcd5, common/r1p/local rules and user/handoff scope read.
 
 ## Running work — recover before submitting
 
-The focused parser driver has FINISHED. IDs78200–78213 are consumed:
-12 passes,2 elaboration failures (78206,78207) repaired before passing78208.
-All three original parser drafts pass (Windows78205,V19778208,Flat78209).
-Existing parser dependencies78210–78212 pass; ParserErrors78213 passes.
+The parser driver and native reuse queue have FINISHED. IDs78200–78213 consumed:
+12 passes,2 elaboration failures (78206,78207), repaired before passing78208.
+All original parser drafts pass (Windows78205,V19778208,Flat78209).
+Existing parser dependencies78210–78212 and ParserErrors78213 pass.
+Native scopes external-preflight and more-cache PASS: all5673 h4 externals,
+33 SAME pv-dlib-cohort project objects accepted (21 initial+12 more), zero
+rejections in the extension, zero swap. New preflight-result.json is committed.
 
-Unified exec session **55135** is RUNNING a local cooldown/stage/native-reuse
-queue. It waits182s after78213, uploads committed reuse inputs under recorded
-admission, then runs capped `more-cache` and fetches preflight-result.json and
-more-cache-result.json. Do NOT start another scope until it finishes. The task's
-own scripts are under tools/pv-rdcd5-20261101. Recover any submitted scope
-read-only rather than resubmit. All completed runs swap0.
-
-Current actual use14/100 Lean (12pass,2fail),1/30 native (preflight pass),0 Kani;
-more-cache will be native2 if launched. Next ordinary ID78214, audits78297–78299.
-Source plan70 modules; updated root order explicitly compiles BlockCarrier
-FIRST in V233 before the larger SplitSelected dependency closure. Native reuse
-inputs can recover up to12 additional same-cohort objects beyond the21 already
-accepted. Run `progress.py` to regenerate all actual counts/draft statuses.
+Unified exec session **78183** is RUNNING:
+`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V233`.
+It waits182s after native2, compiles smallest BlockCarrier as78214 FIRST, then
+BlockLayout194,Memory194 and missing16 SplitSelected dependency objects, then
+V233. It stops immediately on failure. Do NOT launch a second scope. The same
+native/Lean admission/caps/failed-source guard/cooldown rules apply.
+Actual use14/100 Lean (12pass,2fail),2/30 native,0 Kani. Ordinary next78214;
+audits78297–78299. Run progress.py to recover exact current counts.
 
 ## V197 FINDING — kernel-confirmed counterexample
 
@@ -49,16 +47,16 @@ but confer no restoration. ae1/fmt-1/k3/dup-1-prime boundaries retained.
 
 ## Continue exact order
 
-1. Let current native reuse queue finish; fetch and commit its receipts/updated preflight result. Never duplicate its scope.
+1. Let current V233 driver finish, fixing genuinely failed changed sources only. Native reuse is complete and committed; never repeat it unchanged.
 2. `resolve.py` now includes ParserFlat, ParserErrors early, then V233,
    BufferSource, V236 (70 project modules, no higher-priority EJR/freeze hits).
-   ParserErrors is DONE. Run drive.py through V233 next; it skips current-hash accepted receipts/reused objects and assigns the next unused ID.
+   ParserErrors is DONE. The V233 driver is RUNNING; after it passes, run through V236, which skips current-hash accepted receipts/reused objects and assigns the next unused ID.
 3. Before rebuilding update cone, run the prepared `reuse-more.py` in ONE capped
    native scope, under normal cooldown/admission, with uploaded
    more-cache-records.json and current source-resolution.json. It recovers up to
    twelve more pv-dlib objects using committed original successful launch
    receipts and the resume final fingerprint. Inputs/scripts are committed.
-   This pass is QUEUED in session55135; inspect completion before taking action. Fetch preflight-result.json AND more-cache-result.json
+   This pass is DONE:12 extra objects accepted, no rejects, committed receipts; never repeat it. Fetch preflight-result.json AND more-cache-result.json
    afterwards. Every source transport still needs recorded admission first.
 4. Compile V233 through smallest BlockCarrier inverse before root; root now adds
    typed_roundtrip/typed_projection_injective and exact consumed_instance.
