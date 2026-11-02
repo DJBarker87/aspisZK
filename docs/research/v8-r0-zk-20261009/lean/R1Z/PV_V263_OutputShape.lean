@@ -21,7 +21,7 @@ theorem bind_success {S A B : Type} (action : Q S A) (next : A → Q S B)
     cases r with
     | fail e => simp only [PV_V263_World.bind,ha] at h; cases h
     | div => simp only [PV_V263_World.bind,ha] at h; cases h
-    | ok a => exact ⟨a,ha,by simpa only [PV_V263_World.bind,ha] using h⟩
+    | ok a => exact ⟨a,rfl,by simpa only [PV_V263_World.bind,ha] using h⟩
 
 theorem pure_post {S A : Type} (p : A → Prop) (a : A) (h : p a) :
     Post (S := S) p (PV_V263_World.lift (.ok a)) := by
@@ -42,22 +42,21 @@ theorem bind_any {S A B : Type} (q : B → Prop) (action : Q S A) (next : A → 
   bind_post (fun _ => True) q action next (fun _ _ _ => trivial) (fun a _ => hn a)
 
 theorem traversal_length {S A : Type} (callback : Nat → Q S A) (ids : List Nat) :
-    Post (fun values => values.length = ids.length) (PV_V263_WorkerControl.traverse callback ids) := by
+    Post (fun (values : List A) => values.length = ids.length) (PV_V263_WorkerControl.traverse callback ids) := by
   induction ids with
   | nil => exact pure_post _ [] rfl
   | cons i ids ih =>
     apply bind_any
     intro a
-    apply bind_post (fun values => values.length = ids.length) _ _ _ ih
+    apply bind_post (fun (values : List A) => values.length = ids.length) _ _ _ ih
     intro rest hr
-    apply pure_post
-    simpa only [List.length_cons] using congrArg Nat.succ hr
+    exact pure_post _ (a::rest) (by simpa only [List.length_cons] using congrArg Nat.succ hr)
 
 /-- The source item vector has exactly the requested width whenever it returns;
 no callback result, vector value or successful run is assumed. -/
 theorem items_length {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
     (layouts : PV_V263_MapSpine.Layouts) (n k : Nat) (callback : Nat → Q S A) :
-    Post (fun values => values.length = PV_RunJoin_WorkRange35.width n k)
+    Post (fun (values : List A) => values.length = PV_RunJoin_WorkRange35.width n k)
       (PV_V263_MapSpine.items runtime layouts n k callback) := by
   change Post _ (PV_V263_World.bind _ _)
   apply bind_any
@@ -69,16 +68,18 @@ theorem items_length {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
 This is the second range layer, distinct from the original item count. -/
 theorem family_shape {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
     (layouts : PV_V263_MapSpine.Layouts) (n k : Nat) (callback : Nat → Q S A) :
-    Post (fun chunks => ∃ values, chunks = [(values,values.length)] ∧
+    Post (fun (chunks : List (List A × Nat)) => ∃ values, chunks = [(values,values.length)] ∧
       values.length = PV_RunJoin_WorkRange35.width n k)
       (PV_V263_MapSpine.family runtime layouts n k callback) := by
   change Post _ (PV_V263_World.bind _ _)
   apply bind_any
   intro unit
-  apply bind_post _ _ _ _ (items_length runtime layouts n k callback)
+  apply bind_post (fun (values : List A) => values.length = PV_RunJoin_WorkRange35.width n k) _
+    (PV_V263_MapSpine.items runtime layouts n k callback)
+    (fun values => PV_V263_World.lift (.ok [(values,values.length)]))
+    (items_length runtime layouts n k callback)
   intro values hv
-  apply pure_post
-  exact ⟨values,rfl,hv⟩
+  exact pure_post _ [(values,values.length)] ⟨values,rfl,hv⟩
 
 #print axioms Post
 #print axioms bind_success
