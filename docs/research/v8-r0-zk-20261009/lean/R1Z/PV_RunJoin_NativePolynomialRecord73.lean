@@ -6,6 +6,9 @@ namespace R1Z.PV_RunJoin_NativePolynomialRecord73
 open Aeneas Aeneas.Std Result ProverRwFull PV_RunJoin_NativeResidual63
 abbrev Q := aspis_core.field.QM31
 
+theorem capacity : (901 : Nat) ≤ Usize.max := by scalar_tac
+#print axioms capacity
+
 theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
@@ -36,14 +39,14 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
   have wordLen : (Array.to_slice word).length=4 := by
     rw [Array.length_to_slice];rfl
   obtain ⟨head,hh,vh⟩ := PV_RunJoin_ByteAppend38.append one (Array.to_slice word) (by
-    rw [oneLen,wordLen];scalar_tac)
+    rw [oneLen,wordLen];have cap := capacity;omega)
   have headLen : head.length=5 := by
     change head.val.length=5
     rw [vh,List.length_append]
     change one.length+(Array.to_slice word).length=5
     rw [oneLen,wordLen]
   obtain ⟨framed,hf,vf⟩ := PV_RunJoin_ByteAppend38.append head payload (by
-    rw [headLen,len];scalar_tac)
+    rw [headLen,len];exact capacity)
   have frame : framed.val=tag::word.val++payload.val := by
     rw [vf,vh,oneval]
     rfl
