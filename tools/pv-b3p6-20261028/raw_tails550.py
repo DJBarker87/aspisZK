@@ -41,11 +41,7 @@ for j in range(3,-1,-1):
  s+=f'\ndef raw_native_tail{j}_550 (a b c d : Limbs32_550)'+(' ('+' '.join('r'+str(k)for k in range(j))+' : Limbs64_550)'if j else'')+' : Result Limbs64_550 := do\n'
  s+=f'  let r{j} ← raw_row550 a b c d {j}#usize\n'
  s+='  raw_native_tail'+str(j+1)+'_550 '+('a b c d 'if j+1<4 else'')+' '.join('r'+str(k)for k in range(j+1))+'\n'
-s+='''\n/-- Pure delta refactoring of the exact emission, with every primitive opaque.
-No recurrence, raw arithmetic or numerical cell is evaluated here. -/
-theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
-    reference_poseidon.external_local_packed_raw input = (do
-'''+prefix+'  raw_reference_tail0_550 a a1 a2 a3) := by\n  rfl\n\n#print axioms raw_reference_factor550\nend PV_B3P_Association550227\n'
+s+='\n#print axioms raw_reference_tail0_550\n#print axioms raw_native_tail0_550\nend PV_B3P_Association550227\n'
 emit(L/'PV_B3P_RawTails550227.lean',s)
 # Round-trip syntax check, including all reference input projections, constants,
 # exact operations, proof arguments and the original dead debug reads.
@@ -68,7 +64,7 @@ for j in range(4,-1,-1):
   code+=f'  simp only [raw_tail{j+1}_binding550]\n  rfl\n'
  code+=f'\n#print axioms raw_tail{j}_binding550\nend PV_B3P_Association550227\n'
  emit(L/f'PV_B3P_RawTail{j}550227.lean',code)
-emit(R/'RAW-TAILS-GENERATOR-D550.json',json.dumps(dict(exact_reference_syntax_roundtrip=True,original_emission_sha256=hashlib.sha256(old.encode()).hexdigest(),fragments=len(chunks),source_is_reference=False,source='native tails use raw_row550, source_debug_matrix550 and raw_pack0..3_550',proof_shape='one row per bridge, no raised limits; reference factor is only exact syntax delta with primitives opaque'),indent=2)+'\n')
+emit(R/'RAW-TAILS-GENERATOR-D550.json',json.dumps(dict(exact_reference_syntax_roundtrip=True,original_emission_sha256=hashlib.sha256(old.encode()).hexdigest(),fragments=len(chunks),source_is_reference=False,source='native tails use raw_row550, source_debug_matrix550 and raw_pack0..3_550',proof_shape='one row per native bridge and one continuation per reference factor; no raised limits, no monolithic delta equality'),indent=2)+'\n')
 # Replace the failed whole-row-flattening bridge; keep the small prefix law.
 p=L/'PV_B3P_RawSource550227.lean';s=p.read_text().replace('import PV_B3P_RawSuffix550227','import PV_B3P_RawTail0550227')
 if '  let r0 ← raw_row550' in s:
