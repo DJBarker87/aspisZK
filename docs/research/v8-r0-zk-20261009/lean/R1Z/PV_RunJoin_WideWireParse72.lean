@@ -18,7 +18,8 @@ theorem complete (x : aspis_core.field.wide_exact.WideExact)
   simp only [size,bne_self_eq_false,Bool.false_eq_true,if_false,PV_RunJoin_MergeArray35.slice_read]
   repeat' (rw [ProverCommitArrayIndex25.array_index_usize_ok _ _ (by decide)];simp only [bind_tc_ok,lift])
   simp only [wire,Array.make,UScalar.ofNatCore_val_eq,List.getElem_cons_zero,
-    List.getElem_cons_succ,PV_RunJoin_ByteWordGroups72.word]
+    List.getElem_cons_succ]
+  repeat' rw [PV_RunJoin_ByteWordGroups72.word]
   exact PV_RunJoin_WideLimbsParse72.complete x canonical
 
 #print axioms complete
