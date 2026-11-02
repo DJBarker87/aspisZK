@@ -1,8 +1,11 @@
 """Prepared only: D561 paired timing in a lead-arranged pv-uc-timing window."""
 from pathlib import Path
 import hashlib,json,os,statistics,subprocess,time,importlib.util,signal
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029';O=H/'final-gates/timing-d561';O.mkdir(exist_ok=False)
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');CONTROL=H.parent/'codex-pv-c474-20261029'
 spec=importlib.util.spec_from_file_location('guard',Path(__file__).with_name('timing-window-guard.py'));g=importlib.util.module_from_spec(spec);spec.loader.exec_module(g)
+own=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].strip())
+scope_id=g.scope_identifier(own.name,{k:(own/k).read_text().strip() for k in ['memory.high','memory.max','memory.swap.max','pids.max']})
+O=H/'final-gates/timing-d561'/scope_id;O.parent.mkdir(exist_ok=True);O.mkdir(exist_ok=False)
 monitor=g.Monitor(event_watch=True)
 B={'baseline':CONTROL/'artifacts/baseline-devnet_spend','draft':H/'native-target/client/user_client'}
 rows=[]
@@ -63,7 +66,7 @@ try:
      q=dict(q0);q['proof_dir']=str(O/f'{i}-{f}-{side}-proof')
      # Fresh fixture-only public nonce labels per pair, same in both experiments.
      # No private key/account exists for these labels; all ledgers are retained.
-     q['proof_accounts']=[public_key(f'PV-UC D561 pair {i} {f} attempt {j}') for j in range(8)]
+     q['proof_accounts']=[public_key(f'PV-UC D561 {scope_id} pair {i} {f} attempt {j}') for j in range(8)]
      rfd=None
      if side=='draft':
       q.pop('note');q.update(lane_leaf_sets=fixtures['lane_leaf_sets'],withdrawal_amount=250)

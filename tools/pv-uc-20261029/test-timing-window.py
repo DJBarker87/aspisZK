@@ -115,4 +115,12 @@ class Tests(unittest.TestCase):
    with self.assertRaises(g.Hold):g.Monitor(probe=lambda:{},event_watch=True).start()
    self.assertTrue(fake.closed)
   finally:g.ScopeEvents=original
+ def test_scope_id_and_caps(self):
+  limits={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+  self.assertEqual(g.scope_identifier('pv-uc-native90115.scope',limits),'native90115')
+  for name in ['pv-uc-native75115.scope','pv-uc-native90120.scope','session-1.scope']:
+   with self.assertRaises(g.Hold):g.scope_identifier(name,limits)
+  for key in limits:
+   bad=dict(limits);bad[key]='max'
+   with self.assertRaises(g.Hold):g.scope_identifier('pv-uc-native90115.scope',bad)
 if __name__=='__main__':unittest.main(verbosity=2)

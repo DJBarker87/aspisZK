@@ -4,10 +4,16 @@ No timing or scopes are launched by importing this module or by --check.
 The lead creates the shared marker; this code never changes it.
 """
 from pathlib import Path
-import argparse, json, math, os, threading, time
+import argparse, json, math, os, threading, time, re
 MARKER=Path('/home/dombarker/project-offloads/QUIET_WINDOW.json')
 RUN='pv-uc-timing'
 class Hold(RuntimeError):pass
+
+def scope_identifier(unit, limits):
+    m=re.fullmatch(r'pv-uc-(native901[01][0-9])\.scope',unit)
+    expected={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+    if not m or limits!=expected:raise Hold('timing must run in its authorized 6G/8G/swap0/Tasks64 native901xx scope')
+    return m[1]
 
 def marker_guard(marker=MARKER, now=None, require_live=False):
     now=time.time() if now is None else now

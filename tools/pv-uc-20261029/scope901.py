@@ -47,6 +47,8 @@ if timing:
  q=ssh(auth)
  (out/'timing-before-admission.json').write_text(q.stdout+q.stderr)
  if q.returncode!=0:
+  import datetime
+  (out/'admission-before.json').write_text(json.dumps(dict(allowed=False,utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),error='named live window/quiet/load guard refused before admission; no capped scope or sample',scope_started=False),indent=2)+'\n')
   print('TIMING NOT SUBMITTED: named live window/quiet/load check failed');sys.exit(78)
 else:
  auth='true'
