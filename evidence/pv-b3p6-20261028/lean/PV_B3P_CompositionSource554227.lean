@@ -65,7 +65,8 @@ theorem composition_source_reference554 (p : reference_terminal.SemanticPublic)
     try rfl
   | some amount =>
     by_cases zero : amount = 0#u32
-    · simp only [h,zero,if_true,bind_tc_ok,Bool.true_eq_true]
+    · simp only [h,zero,if_true,bind_tc_ok]
+      try rfl
     · simp only [h,zero,if_false,lift,bind_tc_ok,
         horner_semantic_loop_binding8,horner_poseidon_loop_binding8]
       try rfl
