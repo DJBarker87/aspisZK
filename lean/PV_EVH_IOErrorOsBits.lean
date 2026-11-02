@@ -30,6 +30,7 @@ theorem roundtrip (code : Int) (lo : -(2^31 : Int) ≤ code)
     Int.emod_lt_of_pos _ (by positivity)
   unfold decode
   rw [high_word]
+  dsimp only
   split <;> omega
 
 /-- decode_repr's custom Box factory is selected ONLY by tag1. OS errors have
