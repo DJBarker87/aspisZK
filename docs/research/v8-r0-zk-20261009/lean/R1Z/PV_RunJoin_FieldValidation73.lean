@@ -18,23 +18,21 @@ def Cells (payload : Slice U8) (count : Usize) : Prop :=
 
 theorem step (row : U8) (payload : Slice U8) (count i : Usize)
     (divide : Slice.len payload / 32#usize=ok count)
-    (bound : i.val<count.val) (cells : Cells payload count) :
+    (bound : i.val<count.val)
+    (some_ok : ∀ (w : W) (e : r1_wire.Error), core.option.Option.ok_or (some w) e=ok (.Ok w))
+    (cells : Cells payload count) :
     host_wire.validate_record_fields_loop.body row payload i=
       ok (cont (Usize.wrapping_add i 1#usize)) := by
   obtain ⟨s,w,hs,hw,hzero⟩ := cells i bound
   have less : i<count := bound
   unfold host_wire.validate_record_fields_loop.body
-  simp only [divide,bind_tc_ok,less,if_true,lift,hs,hw,core.option.Option.ok_or,
+  simp only [divide,bind_tc_ok,less,if_true,lift,hs,hw,some_ok,
     core.result.Result.Insts.CoreOpsTry.branch]
-  change ((do
-    let b ← (do
-      let h ← aspis_core.field.wide_exact.WideExact.impl.c1 w
-      let z ← aspis_core.field.QM31.ZERO
-      core.cmp.PartialEq.ne.trait_default aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31 h z)
+  have hc := congrArg (fun r : Result Bool => (do
+    let b ← r
     if b then ok (done (core.result.Result.Err (r1_wire.Error.NonCanonical row i) : core.result.Result Unit r1_wire.Error))
-    else ok (cont (Usize.wrapping_add i 1#usize))) = _)
-  rw [hzero]
-  rfl
+    else ok (cont (Usize.wrapping_add i 1#usize)))) hzero
+  simpa only [bind_assoc_eq,bind_tc_ok,Bool.false_eq_true,if_false] using hc
 
 theorem stop (row : U8) (payload : Slice U8) (count i : Usize)
     (divide : Slice.len payload / 32#usize=ok count) (bound : count.val ≤ i.val) :
@@ -44,7 +42,9 @@ theorem stop (row : U8) (payload : Slice U8) (count i : Usize)
 
 theorem complete (row : U8) (payload : Slice U8) (count i : Usize) (n : Nat)
     (divide : Slice.len payload / 32#usize=ok count)
-    (bound : i.val+n=count.val) (small : count.val<1024) (cells : Cells payload count) :
+    (bound : i.val+n=count.val) (small : count.val<1024)
+    (some_ok : ∀ (w : W) (e : r1_wire.Error), core.option.Option.ok_or (some w) e=ok (.Ok w))
+    (cells : Cells payload count) :
     host_wire.validate_record_fields_loop row payload i=ok (.Ok ()) := by
   induction n generalizing i with
   | zero =>
@@ -55,7 +55,7 @@ theorem complete (row : U8) (payload : Slice U8) (count i : Usize) (n : Nat)
     have inc := PV_RunJoin_MergeLoop35.increment i (by omega)
     unfold host_wire.validate_record_fields_loop
     rw [ProverRw19LoopBind.loop_bind]
-    rw [step row payload count i divide (by omega) cells]
+    rw [step row payload count i divide (by omega) some_ok cells]
     simp only [bind_tc_ok]
     exact ih (Usize.wrapping_add i 1#usize) (by rw [inc];omega)
 
