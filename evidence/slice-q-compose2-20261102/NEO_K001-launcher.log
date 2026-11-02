@@ -1,0 +1,40 @@
+{"attempt": "NEO_K001", "exit_status": 1, "wall_seconds": 10.57227373495698, "peak_rss_kib": "503960", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-compose2-20261102/NEO_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`
+...
+                                         ++
+
+error[E0616]: field `c1` of struct `field::wide_exact::WideExact` is private
+  --> crates/aspis-core/src/field/NEO_parsers.rs:25:113
+   |
+25 | fn wide_words(x:WideExact)->[u32;8] {[x.c0.c0.a.0,x.c0.c0.b.0,x.c0.c1.a.0,x.c0.c1.b.0,x.c1.c0.a.0,x.c1.c0.b.0,x.c1.c1.a.0,x.c1.c1.b.0]}
+   |                                                                                                                 ^^ private field
+   |
+help: a method `c1` also exists, call it with parentheses
+   |
+25 | fn wide_words(x:WideExact)->[u32;8] {[x.c0.c0.a.0,x.c0.c0.b.0,x.c0.c1.a.0,x.c0.c1.b.0,x.c1.c0.a.0,x.c1.c0.b.0,x.c1().c1.a.0,x.c1.c1.b.0]}
+   |                                                                                                                   ++
+
+error[E0616]: field `c1` of struct `field::wide_exact::WideExact` is private
+  --> crates/aspis-core/src/field/NEO_parsers.rs:25:125
+   |
+25 | fn wide_words(x:WideExact)->[u32;8] {[x.c0.c0.a.0,x.c0.c0.b.0,x.c0.c1.a.0,x.c0.c1.b.0,x.c1.c0.a.0,x.c1.c0.b.0,x.c1.c1.a.0,x.c1.c1.b.0]}
+   |                                                                                                                             ^^ private field
+   |
+help: a method `c1` also exists, call it with parentheses
+   |
+25 | fn wide_words(x:WideExact)->[u32;8] {[x.c0.c0.a.0,x.c0.c0.b.0,x.c0.c1.a.0,x.c0.c1.b.0,x.c1.c0.a.0,x.c1.c0.b.0,x.c1.c1.a.0,x.c1().c1.b.0]}
+   |                                                                                                                               ++
+
+For more information about this error, try `rustc --explain E0616`.
+error: could not compile `aspis-core` (lib) due to 8 previous errors; 15 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 8 compilation errors.
+
+Running as unit: run-ra6b80a4b15914aefac5c49d8dcbe46dd.scope; invocation ID: 3ea952c38353497fa32286e36fec4464

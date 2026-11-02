@@ -1,0 +1,21 @@
+
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn basis_cell(){
+ let raw:[M31;256]=kani::any();let i:usize=kani::any();kani::assume(i<256);
+ let actual=super::basis_at(&raw,i);
+ let expected=NEO_cell_reference::cell(&raw,i);
+ #[cfg(not(NEO_wrong_cell))] assert_eq!(actual.0,expected.0);
+ #[cfg(NEO_wrong_cell)] assert_ne!(actual.0,expected.0);
+}
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn accumulated_cell(){
+ let raw:[QM31;64]=kani::any();let n:usize=kani::any();kani::assume(n<=64);
+ let i:usize=kani::any();kani::assume(i<n);
+ let boxed:alloc::boxed::Box<[QM31]>=alloc::boxed::Box::new(raw);let mut values=boxed.into_vec();values.truncate(n);
+ let a=super::accumulated_weight_at(&values,i);let e=NEO_cell_reference::cell(&values,i);
+ let same=a.c0.a.0==e.c0.a.0&&a.c0.b.0==e.c0.b.0&&a.c1.a.0==e.c1.a.0&&a.c1.b.0==e.c1.b.0;
+ #[cfg(not(NEO_wrong_cell))] assert!(same);
+ #[cfg(NEO_wrong_cell)] assert!(!same);
+}

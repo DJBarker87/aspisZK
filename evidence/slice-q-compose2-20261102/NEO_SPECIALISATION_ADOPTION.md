@@ -1,0 +1,5 @@
+# Fixed-backend adoption evidence requested by ruling z(2)
+
+NEO_SPECIALISATION_INPUTS.json retains all seventeen Rust text inputs reconstructed from the committed NEF_REFERENCE_INPUTS.patch plus the regenerated specialization payload, patch and certificate. No NEF directory or live worker worktree was modified. The regenerated patch is byte-identical to the committed NEF_SPECIALISATION.patch. Each restored input and the unchanged scripts are SHA256-pinned in NEO_SPECIALISATION_RECEIPT.json.
+
+The unchanged NEF_SPECIALISATION_TESTS.py reran from the owned review workspace: positive true; six mutations rejected; exit 0. NEO_SPECIALISATION_TEST_RESULTS.json is its complete output. This meets the missing-input/replay prerequisite in ruling z(2), with committed inputs under rule 17. Request lead consideration of the deferred fixed-backend specialization. This records passing evidence, not self-adoption or closure of CM31::inv, inv_with, QM31 inverse or their callers. No historical K-2/K-3 verdict is restored. Batch injected inverse remains outside the certificate. P6/D188 semantic transport remains explicit reclassification.

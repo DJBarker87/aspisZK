@@ -1,0 +1,142 @@
+// Scratch-only one source gather iteration; no writable static or function pointer.
+use super::{Error};
+use aspis_core::{field::{M31,QM31},r0::domain::{self,FibreIndex,Point}};
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[derive(Clone,Copy)]
+struct NEO_RowLog { query:u32,u:usize,left:usize,right:usize,px:M31,py:M31,lx:M31,ly:M31,square:M31,doubled:M31,z:M31 }
+fn NEO_point(index:FibreIndex)->Point<M31> {
+ assert!(index.get()<262144);
+ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647&&b<2147483647);
+ Point{x:M31(a),y:M31(b)}
+}
+fn NEO_line(index:FibreIndex)->M31 {
+ assert!(index.get()<262144);let a:u32=kani::any();kani::assume(a<2147483647);M31(a)
+}
+fn NEO_product(x:M31,y:M31)->M31 {
+ assert!(x.0<2147483647&&y.0<2147483647);
+ let r:u32=kani::any();kani::assume(r<2147483647);
+ kani::assume((r as u64)==((x.0 as u64)*(y.0 as u64))%2147483647u64);M31(r)
+}
+fn NEO_gather_values(query:u32)->Result<([M31;5],NEO_RowLog),Error> {
+ let u=query as usize;
+ let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
+ let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
+ let left=u/4*4;
+ let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(left).map_err(|_|Error::Query)?);
+ let right=u/4*4+3;
+ let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(right).map_err(|_|Error::Query)?);
+ let square=line_x.mul(line_x);let doubled=square.double();let line_z=doubled.sub(M31::ONE);
+ let values=[circle_x,circle_y,line_x,line_y,line_z];
+ if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+ let mut log=NEO_RowLog{query,u,left,right,px:circle_x,py:circle_y,lx:line_x,ly:line_y,square,doubled,z:line_z};
+ #[cfg(NEO_wrong_geometry)] {log.left=left+1;}
+ Ok((values,log))
+}
+#[kani::proof] #[kani::unwind(7)]
+#[kani::stub(crate::fast_domain::fibre_point,NEO_point)]
+#[kani::stub(crate::fast_domain::line_node,NEO_line)]
+#[kani::stub(M31::mul,NEO_product)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn gather_values(){
+ let query:u32=kani::any();
+ let result=NEO_gather_values(query);
+ match result {
+  Err(e)=>assert!(matches!(e,Error::Query)),
+  Ok((v,log))=>{
+   assert!(query<262144);assert!(log.query==query&&log.u==query as usize);
+   assert!(log.left==log.u/4*4,"exact left input");assert!(log.right==log.u/4*4+3);
+   assert!(log.left<262144&&log.right<262144);
+   assert!(v==[log.px,log.py,log.lx,log.ly,log.z]);
+   for x in v {assert!(x.0>0&&x.0<2147483647);}
+   assert!(log.square.0<2147483647&&log.doubled.0<2147483647);
+  }
+ }
+}
+
+mod NEO_getter_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_getter_reference.rs"));}
+// Actual borrowed getter, all Slice-Q produced lengths, arbitrary raw words.
+#[kani::proof] #[kani::unwind(24)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn for_query(){
+ let raw:[[M31;5];22]=kani::any();let n:usize=kani::any();kani::assume(n<=22);
+ let start:usize=kani::any();let index:usize=kani::any();
+ kani::assume(index>=start&&index-start<n);
+ let j:usize=kani::any();kani::assume(j<5);
+ let boxed:alloc::boxed::Box<[[M31;5]]>=alloc::boxed::Box::new(raw);
+ let mut inverses=boxed.into_vec();inverses.truncate(n);
+ let nz:usize=kani::any();kani::assume(nz<=22);
+ let zraw:[M31;22]=kani::any();let zbox:alloc::boxed::Box<[M31]>=alloc::boxed::Box::new(zraw);
+ let mut line_z=zbox.into_vec();line_z.truncate(nz);
+ let geometry=super::QueryGeometry{start,inverses,line_z};
+ let actual=geometry.for_query(index);
+ // Split from the timed-out whole value observation: exact borrowed row identity.
+ let expected=NEO_getter_reference::selected(geometry.start,index,&geometry.inverses);
+ let copied=*actual;
+ let same=core::ptr::eq(actual,expected)&&copied[j].0==expected[j].0;
+ #[cfg(not(NEO_wrong_getter))] assert!(same);
+ #[cfg(NEO_wrong_getter)] assert!(!same);
+}
+
+mod NEO_cell_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_cell_reference.rs"));}
+
+#[kani::proof] #[kani::unwind(258)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn basis_cell(){
+ let raw:[M31;256]=kani::any();let i:usize=kani::any();kani::assume(i<256);
+ let actual=super::basis_at(&raw,i);
+ let expected=NEO_cell_reference::cell(&raw,i);
+ #[cfg(not(NEO_wrong_cell))] assert_eq!(actual.0,expected.0);
+ #[cfg(NEO_wrong_cell)] assert_ne!(actual.0,expected.0);
+}
+#[kani::proof] #[kani::unwind(66)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn accumulated_cell(){
+ let raw:[QM31;64]=kani::any();let n:usize=kani::any();kani::assume(n<=64);
+ let i:usize=kani::any();kani::assume(i<n);
+ let boxed:alloc::boxed::Box<[QM31]>=alloc::boxed::Box::new(raw);let mut values=boxed.into_vec();values.truncate(n);
+ let a=super::accumulated_weight_at(&values,i);let e=NEO_cell_reference::cell(&values,i);
+ let same=a.c0.a.0==e.c0.a.0&&a.c0.b.0==e.c0.b.0&&a.c1.a.0==e.c1.a.0&&a.c1.b.0==e.c1.b.0;
+ #[cfg(not(NEO_wrong_cell))] assert!(same);
+ #[cfg(NEO_wrong_cell)] assert!(!same);
+}
+
+mod NEO_tail {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_tail_reference.rs"));}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn index_new(){
+ let i:usize=kani::any();let actual=FibreIndex::new(i);let expected=NEO_tail::checked(i);
+ let same=match actual {Ok(x)=>expected==Ok(x.get()),Err(aspis_core::r0::Error::IndexOutOfRange)=>expected==Err(0),Err(_)=>false};
+ #[cfg(not(NEO_wrong_index))] assert!(same);
+ #[cfg(NEO_wrong_index)] assert!(!same);
+}
+
+mod NEO_wire_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_window_reference.rs"));}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn field_ok(){
+ let bytes:[u8;128]=kani::any();let i:usize=kani::any();kani::assume(i<4);
+ let expected=NEO_wire_reference::wide(&bytes[32*i..32*i+32]);
+ if let Some(expected)=expected {
+  let actual=crate::weights::field(&bytes,i).to_limbs();let j:usize=kani::any();kani::assume(j<8);
+  #[cfg(not(NEO_wrong_field))] assert_eq!(actual[j],expected[j]);
+  #[cfg(NEO_wrong_field)] assert_ne!(actual[j],expected[j]);
+ }
+}
+#[kani::proof] #[kani::should_panic] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn field_bad(){
+ let mut bytes=[0u8;128];bytes[0]=255;bytes[1]=255;bytes[2]=255;bytes[3]=127;
+ #[cfg(not(NEO_wrong_badfield))] let _=crate::weights::field(&bytes,0);
+ #[cfg(NEO_wrong_badfield)] let _=NEO_wire_reference::wide(&bytes[0..32]);
+}
+#[kani::proof] #[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn geometry_empty(){
+ let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
+ let result=super::QueryGeometry::for_range(&queries,start,start).unwrap();
+ let same=result.start==start&&result.inverses.is_empty()&&result.line_z.is_empty();
+ #[cfg(not(NEO_wrong_empty))] assert!(same);
+ #[cfg(NEO_wrong_empty)] assert!(!same);
+}

@@ -1,0 +1,21 @@
+NEO_TailPackets.lean:8:39: error: unsolved goals
+u : Usize
+h : ↑u < 262144
+small : ¬u ≥ 262144#usize
+⊢ (if u < 262144#usize then ok (core.result.Result.Ok u) else ok (core.result.Result.Err 0#u8)) =
+    ok (core.result.Result.Ok u)
+NEO_TailPackets.lean:10:32: warning: This simp argument is unused:
+  if_neg small
+
+Hint: Omit it from the simp argument list.
+  simp only [NEO_TailRef.checked,̵i̵f̵_̵n̵e̵g̵ ̵s̵m̵a̵l̵l̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEO_TailPackets.lean:19:5: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  e ≥ 262144
+where
+ e := ↑↑u
+'NEO_TailPackets.admitted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEO_TailPackets.accepted' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEO_TailPackets.opening' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -1,0 +1,230 @@
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -526,3 +526,6 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)]
++mod NEO_geometry;
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,5 +1,6 @@
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
++#![cfg_attr(kani,feature(allocator_api))]
+ extern crate alloc;
+ pub mod sampler;
+ pub mod semantic_wire;
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/verifier/NEO_geometry.rs
+@@ -0,0 +1,142 @@
++// Scratch-only one source gather iteration; no writable static or function pointer.
++use super::{Error};
++use aspis_core::{field::{M31,QM31},r0::domain::{self,FibreIndex,Point}};
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++#[derive(Clone,Copy)]
++struct NEO_RowLog { query:u32,u:usize,left:usize,right:usize,px:M31,py:M31,lx:M31,ly:M31,square:M31,doubled:M31,z:M31 }
++fn NEO_point(index:FibreIndex)->Point<M31> {
++ assert!(index.get()<262144);
++ let a:u32=kani::any();let b:u32=kani::any();kani::assume(a<2147483647&&b<2147483647);
++ Point{x:M31(a),y:M31(b)}
++}
++fn NEO_line(index:FibreIndex)->M31 {
++ assert!(index.get()<262144);let a:u32=kani::any();kani::assume(a<2147483647);M31(a)
++}
++fn NEO_product(x:M31,y:M31)->M31 {
++ assert!(x.0<2147483647&&y.0<2147483647);
++ let r:u32=kani::any();kani::assume(r<2147483647);
++ kani::assume((r as u64)==((x.0 as u64)*(y.0 as u64))%2147483647u64);M31(r)
++}
++fn NEO_gather_values(query:u32)->Result<([M31;5],NEO_RowLog),Error> {
++ let u=query as usize;
++ let fibre=domain::FibreIndex::new(u).map_err(|_|Error::Query)?;
++ let domain::Point{x:circle_x,y:circle_y}=crate::fast_domain::fibre_point(fibre);
++ let left=u/4*4;
++ let line_x=crate::fast_domain::line_node(domain::FibreIndex::new(left).map_err(|_|Error::Query)?);
++ let right=u/4*4+3;
++ let line_y=crate::fast_domain::line_node(domain::FibreIndex::new(right).map_err(|_|Error::Query)?);
++ let square=line_x.mul(line_x);let doubled=square.double();let line_z=doubled.sub(M31::ONE);
++ let values=[circle_x,circle_y,line_x,line_y,line_z];
++ if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
++ let mut log=NEO_RowLog{query,u,left,right,px:circle_x,py:circle_y,lx:line_x,ly:line_y,square,doubled,z:line_z};
++ #[cfg(NEO_wrong_geometry)] {log.left=left+1;}
++ Ok((values,log))
++}
++#[kani::proof] #[kani::unwind(7)]
++#[kani::stub(crate::fast_domain::fibre_point,NEO_point)]
++#[kani::stub(crate::fast_domain::line_node,NEO_line)]
++#[kani::stub(M31::mul,NEO_product)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn gather_values(){
++ let query:u32=kani::any();
++ let result=NEO_gather_values(query);
++ match result {
++  Err(e)=>assert!(matches!(e,Error::Query)),
++  Ok((v,log))=>{
++   assert!(query<262144);assert!(log.query==query&&log.u==query as usize);
++   assert!(log.left==log.u/4*4,"exact left input");assert!(log.right==log.u/4*4+3);
++   assert!(log.left<262144&&log.right<262144);
++   assert!(v==[log.px,log.py,log.lx,log.ly,log.z]);
++   for x in v {assert!(x.0>0&&x.0<2147483647);}
++   assert!(log.square.0<2147483647&&log.doubled.0<2147483647);
++  }
++ }
++}
++
++mod NEO_getter_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_getter_reference.rs"));}
++// Actual borrowed getter, all Slice-Q produced lengths, arbitrary raw words.
++#[kani::proof] #[kani::unwind(24)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn for_query(){
++ let raw:[[M31;5];22]=kani::any();let n:usize=kani::any();kani::assume(n<=22);
++ let start:usize=kani::any();let index:usize=kani::any();
++ kani::assume(index>=start&&index-start<n);
++ let j:usize=kani::any();kani::assume(j<5);
++ let boxed:alloc::boxed::Box<[[M31;5]]>=alloc::boxed::Box::new(raw);
++ let mut inverses=boxed.into_vec();inverses.truncate(n);
++ let nz:usize=kani::any();kani::assume(nz<=22);
++ let zraw:[M31;22]=kani::any();let zbox:alloc::boxed::Box<[M31]>=alloc::boxed::Box::new(zraw);
++ let mut line_z=zbox.into_vec();line_z.truncate(nz);
++ let geometry=super::QueryGeometry{start,inverses,line_z};
++ let actual=geometry.for_query(index);
++ // Split from the timed-out whole value observation: exact borrowed row identity.
++ let expected=NEO_getter_reference::selected(geometry.start,index,&geometry.inverses);
++ let copied=*actual;
++ let same=core::ptr::eq(actual,expected)&&copied[j].0==expected[j].0;
++ #[cfg(not(NEO_wrong_getter))] assert!(same);
++ #[cfg(NEO_wrong_getter)] assert!(!same);
++}
++
++mod NEO_cell_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_cell_reference.rs"));}
++
++#[kani::proof] #[kani::unwind(258)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn basis_cell(){
++ let raw:[M31;256]=kani::any();let i:usize=kani::any();kani::assume(i<256);
++ let actual=super::basis_at(&raw,i);
++ let expected=NEO_cell_reference::cell(&raw,i);
++ #[cfg(not(NEO_wrong_cell))] assert_eq!(actual.0,expected.0);
++ #[cfg(NEO_wrong_cell)] assert_ne!(actual.0,expected.0);
++}
++#[kani::proof] #[kani::unwind(66)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn accumulated_cell(){
++ let raw:[QM31;64]=kani::any();let n:usize=kani::any();kani::assume(n<=64);
++ let i:usize=kani::any();kani::assume(i<n);
++ let boxed:alloc::boxed::Box<[QM31]>=alloc::boxed::Box::new(raw);let mut values=boxed.into_vec();values.truncate(n);
++ let a=super::accumulated_weight_at(&values,i);let e=NEO_cell_reference::cell(&values,i);
++ let same=a.c0.a.0==e.c0.a.0&&a.c0.b.0==e.c0.b.0&&a.c1.a.0==e.c1.a.0&&a.c1.b.0==e.c1.b.0;
++ #[cfg(not(NEO_wrong_cell))] assert!(same);
++ #[cfg(NEO_wrong_cell)] assert!(!same);
++}
++
++mod NEO_tail {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_tail_reference.rs"));}
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn index_new(){
++ let i:usize=kani::any();let actual=FibreIndex::new(i);let expected=NEO_tail::checked(i);
++ let same=match actual {Ok(x)=>expected==Ok(x.get()),Err(aspis_core::r0::Error::IndexOutOfRange)=>expected==Err(0),Err(_)=>false};
++ #[cfg(not(NEO_wrong_index))] assert!(same);
++ #[cfg(NEO_wrong_index)] assert!(!same);
++}
++
++mod NEO_wire_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_window_reference.rs"));}
++#[kani::proof] #[kani::unwind(130)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn field_ok(){
++ let bytes:[u8;128]=kani::any();let i:usize=kani::any();kani::assume(i<4);
++ let expected=NEO_wire_reference::wide(&bytes[32*i..32*i+32]);
++ if let Some(expected)=expected {
++  let actual=crate::weights::field(&bytes,i).to_limbs();let j:usize=kani::any();kani::assume(j<8);
++  #[cfg(not(NEO_wrong_field))] assert_eq!(actual[j],expected[j]);
++  #[cfg(NEO_wrong_field)] assert_ne!(actual[j],expected[j]);
++ }
++}
++#[kani::proof] #[kani::should_panic] #[kani::unwind(130)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn field_bad(){
++ let mut bytes=[0u8;128];bytes[0]=255;bytes[1]=255;bytes[2]=255;bytes[3]=127;
++ #[cfg(not(NEO_wrong_badfield))] let _=crate::weights::field(&bytes,0);
++ #[cfg(NEO_wrong_badfield)] let _=NEO_wire_reference::wide(&bytes[0..32]);
++}
++#[kani::proof] #[kani::unwind(3)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn geometry_empty(){
++ let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
++ let result=super::QueryGeometry::for_range(&queries,start,start).unwrap();
++ let same=result.start==start&&result.inverses.is_empty()&&result.line_z.is_empty();
++ #[cfg(not(NEO_wrong_empty))] assert!(same);
++ #[cfg(NEO_wrong_empty)] assert!(!same);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_getter_reference.rs
+@@ -0,0 +1,2 @@
++// Independent safe borrowed reference for the frozen getter, generic raw values.
++pub fn selected<T>(start:usize,index:usize,rows:&[[T;5]])->&[T;5] {&rows[index-start]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_cell_reference.rs
+@@ -0,0 +1,2 @@
++// A safe reference for the frozen read-only indexed scalar/record helpers.
++pub fn cell<T>(values:&[T],index:usize)->&T {&values[index]}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_tail_reference.rs
+@@ -0,0 +1,16 @@
++// Safe references for the remaining small scalar/borrowed source cuts.
++pub fn checked(index:usize)->Result<usize,u8> {if index<262144{Ok(index)}else{Err(0)}}
++pub fn opening(proof:&[u8],i:usize)->&[u8] {let at=10055+i*832;&proof[at..at+832]}
++pub trait InverseOps {fn mul(x:u32,y:u32)->u32;fn square(x:u32,count:usize)->u32;}
++pub fn inverse<O:InverseOps>(x:u32)->u32 {
++ assert!(x!=0,"inverse of zero");
++ let t2=O::mul(O::mul(x,x),x);
++ let t4=O::mul(O::square(t2,2),t2);
++ let t8=O::mul(O::square(t4,4),t4);
++ let t16=O::mul(O::square(t8,8),t8);
++ let t24=O::mul(O::square(t16,8),t8);
++ let t28=O::mul(O::square(t24,4),t4);
++ let t29=O::mul(O::mul(t28,t28),x);
++ let t30=O::mul(t29,t29);
++ O::mul(O::mul(t30,t30),x)
++}
+--- a/crates/aspis-r1-cost-probe/src/candidate.rs
++++ b/crates/aspis-r1-cost-probe/src/candidate.rs
+@@ -338,3 +338,6 @@
+     mark(obs, Phase::Parsed);
+     tx2_common(public_bytes, proof, checkpoint, hash, obs)
+ }
++
++#[cfg(kani)]
++mod NEO_opening { include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_opening.rs")); }
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_opening.rs
+@@ -0,0 +1,13 @@
++// Actual borrowed opening on the complete Slice-Q proof allocation.
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++mod NEO_tail {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_tail_reference.rs"));}
++#[kani::proof] #[kani::unwind(2)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++fn opening(){
++ let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);
++ let actual=super::opening(&proof,i);let expected=NEO_tail::opening(&proof,i);
++ let same=core::ptr::eq(actual.as_ptr(),expected.as_ptr())&&actual.len()==expected.len()&&actual.len()==832;
++ #[cfg(not(NEO_wrong_opening))] assert!(same);
++ #[cfg(NEO_wrong_opening)] assert!(!same);
++}
+--- /dev/null
++++ b/crates/aspis-r1-cost-probe/src/NEO_window_reference.rs
+@@ -0,0 +1,10 @@
++// Independent safe parser references: scalar byte order is the std primitive.
++pub const P:u32=2147483647;
++pub fn word(b:&[u8],i:usize)->u32 {u32::from_le_bytes([b[i],b[i+1],b[i+2],b[i+3]])}
++pub fn complex(b:&[u8])->Option<[u32;2]> {let a=word(b,0);if a>=P{return None;}let c=word(b,4);if c>=P{return None;}Some([a,c])}
++pub fn quadratic(b:&[u8])->Option<[u32;4]> {let a=match complex(&b[0..8]){Some(x)=>x,None=>return None};let c=match complex(&b[8..16]){Some(x)=>x,None=>return None};Some([a[0],a[1],c[0],c[1]])}
++pub fn wide(b:&[u8])->Option<[u32;8]> {
++ if b.len()!=32{return None;}
++ let a=word(b,0);let c=word(b,4);let d=word(b,8);let e=word(b,12);let f=word(b,16);let g=word(b,20);let h=word(b,24);let k=word(b,28);
++ if a>=P||c>=P||d>=P||e>=P||f>=P||g>=P||h>=P||k>=P{None}else{Some([a,c,d,e,f,g,h,k])}
++}

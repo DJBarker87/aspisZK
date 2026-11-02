@@ -1,0 +1,13 @@
+// Actual borrowed opening on the complete Slice-Q proof allocation.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+mod NEO_tail {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_tail_reference.rs"));}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn opening(){
+ let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);
+ let actual=super::opening(&proof,i);let expected=NEO_tail::opening(&proof,i);
+ let same=core::ptr::eq(actual.as_ptr(),expected.as_ptr())&&actual.len()==expected.len()&&actual.len()==832;
+ #[cfg(not(NEO_wrong_opening))] assert!(same);
+ #[cfg(NEO_wrong_opening)] assert!(!same);
+}

@@ -1,0 +1,29 @@
+NEO_ParserCanonical.lean:12:2: error: Tactic `split` failed: Could not split an `if` or `match` expression in the type
+  ok
+      (have word := core.num.U32.from_le_bytes bytes;
+      if word ≥ 2147483647#u32 then none else some word) =
+    ok (some value)
+of `run`
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+bytes : Std.Array U8 4#usize
+value : U32
+run :
+  ok
+      (have word := core.num.U32.from_le_bytes bytes;
+      if word ≥ 2147483647#u32 then none else some word) =
+    ok (some value)
+⊢ ↑value < 2147483647
+NEO_ParserCanonical.lean:26:2: error: unsolved goals
+case isTrue
+a b c d e f g h : U32
+h✝ :
+  ↑a < 2147483647 ∧
+    ↑b < 2147483647 ∧
+      ↑c < 2147483647 ∧ ↑d < 2147483647 ∧ ↑e < 2147483647 ∧ ↑f < 2147483647 ∧ ↑g < 2147483647 ∧ ↑h < 2147483647
+⊢ LPi_CMProduct.Canon { a := a, b := b } ∧
+    LPi_CMProduct.Canon { a := c, b := d } ∧
+      LPi_CMProduct.Canon { a := e, b := f } ∧ LPi_CMProduct.Canon { a := g, b := h }
+'NEO_ParserCanonical.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEO_ParserCanonical.wide' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
