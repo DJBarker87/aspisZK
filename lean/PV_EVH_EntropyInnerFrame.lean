@@ -40,8 +40,9 @@ theorem old_distinct (owner fieldAddress seedAddress : Nat) (w : State)
   · exact fresh_live_and_retired owner fieldAddress w old (List.mem_append_left _ ho)
   · exact fresh_live_and_retired owner seedAddress
       (PV_EVH_StackAdmission.enter (fieldSlot owner fieldAddress w) (List.replicate 32 0) w)
-      old (by simp only [PV_EVH_StackAdmission.enter]; exact List.mem_append_left _
-        (List.mem_cons_of_mem _ ho))
+      old (by
+        change old ∈ (fieldSlot owner fieldAddress w :: w.frame.live) ++ w.frame.retired
+        exact List.mem_append_left _ (List.mem_cons_of_mem _ ho))
 
 theorem live_order (owner fieldAddress seedAddress : Nat) (w : State) :
     (PV_EVH_EntropyPhysicalCopy.admit_pair (fieldSlot owner fieldAddress w)
