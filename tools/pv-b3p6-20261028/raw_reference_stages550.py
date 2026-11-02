@@ -30,7 +30,7 @@ for j in range(4,-1,-1):
  if j:params+=' ('+' '.join(vals[:4*j])+' : U64)'
  raw=''.join(chunks[j:])
  code=f'import {predecessor}\nimport PV_B3P_DigestCpsEq9227\n'+head
- code+=f'\ntheorem raw_reference_tail{j}_factor550'+params+' :\n    (do\n'+raw+'\n    ) = raw_reference_tail'+str(j)+'_550 '+' '.join(arrays+vals[:4*j])+f' := by\n  unfold raw_reference_tail{j}_550\n'
+ code+=f'\ntheorem raw_reference_tail{j}_factor550'+params+' :\n    '+('(show Result Limbs64_550 from do\n'if j==0 else'(do\n')+raw+'\n    ) = raw_reference_tail'+str(j)+'_550 '+' '.join(arrays+vals[:4*j])+f' := by\n  unfold raw_reference_tail{j}_550\n'
  if j==4:code+='  rfl\n'
  else:
   for line in chunks[j].splitlines():

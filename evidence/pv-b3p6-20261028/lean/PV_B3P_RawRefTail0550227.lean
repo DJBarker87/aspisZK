@@ -8,7 +8,7 @@ attribute [local irreducible] Array.index_usize reference_poseidon.extension_lim
   core.convert.num.FromU64U32.from
 
 theorem raw_reference_tail0_factor550 (a a1 a2 a3 : Limbs32_550) :
-    (do
+    (show Result Limbs64_550 from do
   let a4 ← Array.index_usize (Array.make 4#usize [ a, a1, a2, a3 ] (PV_B3P_Length227.size4 (a) (a1) (a2) (a3))) 0#usize
   let i ← Array.index_usize a4 0#usize
   let a5 ← lift (core.convert.num.FromU64U32.from i)
