@@ -6,6 +6,7 @@ set_option autoImplicit false
 attribute [local irreducible] Array.index_usize reference_poseidon.extension_limbs
   reference_poseidon.raw_limb227 U64.wrapping_add U64.wrapping_sub U64.wrapping_mul
   core.convert.num.FromU64U32.from
+attribute [local irreducible] Aeneas.Std.bind raw_reference_tail1_550
 
 theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
     reference_poseidon.external_local_packed_raw input = (do
@@ -118,6 +119,7 @@ theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
       intro d3
       apply bind_equal9
       intro i19
+      clear input q a q1 a1 q2 a2 q3 a3 i a5 i1 b i2 c i3 d i5 a9 i6 b1 i7 c1 i8 d1 i10 a10 i11 b2 i12 c2 i13 d2 i15 a11 i16 b3 i17 c3 i18 d3
       exact raw_reference_tail1_factor550 a4 a6 a7 a8 i4 i9 i14 i19
 
 #print axioms raw_reference_factor550
