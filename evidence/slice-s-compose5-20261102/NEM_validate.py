@@ -87,6 +87,9 @@ def certificate(c,expected,ledger,reviewed):
  if not predecessor.predecessor.predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
  if not predecessor.predecessor.call_domain(c,expected,ledger):return False
  if 'digest_composition' in c:return digest(c,expected,ledger)
+ if 'lane_composition' in c:
+  import NEM_lane_checks
+  return NEM_lane_checks.validate(c,expected,ledger,sys.modules[__name__])
  if 'payment_encode_composition' in c:
   import NEM_payment_checks
   return NEM_payment_checks.validate(c,expected,ledger,sys.modules[__name__])

@@ -40,4 +40,12 @@ class Payment(Certificates):
  def test_wrong_payment_window(self):self.mutate_payment('windows',[[148,32],[184,32]])
  def test_missing_payment_frame(self):self.mutate_payment('frames',[])
  def test_inner_payment_hypothesis(self):self.mutate_payment('no_inner_native_hypotheses',False)
+class Lane(Certificates):
+ def mutate_lane(self,field,value):
+  f='crates/aspis-statement/src/pool_v1/pair_forest_accounts.rs::pool_v1_pair_forest_output_lane_v1';c=copy.deepcopy(self.p['members'][f]);c['lane_composition'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
+ def test_wrong_nullifier(self):self.mutate_lane('child_log','canonical(other); first(other)')
+ def test_missing_corrupt_control(self):self.mutate_lane('native_pairs',[['NEL_K002','NEL_K003']])
+ def test_canonical_restriction(self):self.mutate_lane('all_raw_digests',False)
 if __name__=='__main__':unittest.main()
