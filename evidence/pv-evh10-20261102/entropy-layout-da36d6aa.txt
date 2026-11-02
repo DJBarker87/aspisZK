@@ -1,0 +1,150 @@
+
+/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/devnet_spend:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000001457a0 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce>:
+  1457a0:	55                   	push   %rbp
+  1457a1:	41 57                	push   %r15
+  1457a3:	41 56                	push   %r14
+  1457a5:	41 55                	push   %r13
+  1457a7:	41 54                	push   %r12
+  1457a9:	53                   	push   %rbx
+  1457aa:	48 81 ec e8 00 00 00 	sub    $0xe8,%rsp
+  1457b1:	48 89 fb             	mov    %rdi,%rbx
+  1457b4:	f3 0f 6f 06          	movdqu (%rsi),%xmm0
+  1457b8:	f3 0f 6f 4e 10       	movdqu 0x10(%rsi),%xmm1
+  1457bd:	66 0f eb c8          	por    %xmm0,%xmm1
+  1457c1:	66 0f ef e4          	pxor   %xmm4,%xmm4
+  1457c5:	66 0f 74 cc          	pcmpeqb %xmm4,%xmm1
+  1457c9:	66 0f d7 c1          	pmovmskb %xmm1,%eax
+  1457cd:	35 ff ff 00 00       	xor    $0xffff,%eax
+  1457d2:	0f 84 1f 01 00 00    	je     1458f7 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x157>
+  1457d8:	49 89 f6             	mov    %rsi,%r14
+  1457db:	4c 8d 44 24 20       	lea    0x20(%rsp),%r8
+  1457e0:	31 ed                	xor    %ebp,%ebp
+  1457e2:	49 89 e5             	mov    %rsp,%r13
+  1457e5:	4c 8d 7c 24 60       	lea    0x60(%rsp),%r15
+  1457ea:	4c 8d 64 24 40       	lea    0x40(%rsp),%r12
+  1457ef:	66 0f 7f 64 24 30    	movdqa %xmm4,0x30(%rsp)
+  1457f5:	66 0f 7f 64 24 20    	movdqa %xmm4,0x20(%rsp)
+  1457fb:	66 0f 7f 64 24 10    	movdqa %xmm4,0x10(%rsp)
+  145801:	66 0f 7f 24 24       	movdqa %xmm4,(%rsp)
+  145806:	be 40 00 00 00       	mov    $0x40,%esi
+  14580b:	4c 89 ef             	mov    %r13,%rdi
+  14580e:	66 90                	xchg   %ax,%ax
+  145810:	b8 3e 01 00 00       	mov    $0x13e,%eax
+  145815:	31 d2                	xor    %edx,%edx
+  145817:	0f 05                	syscall
+  145819:	48 85 c0             	test   %rax,%rax
+  14581c:	79 0b                	jns    145829 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x89>
+  14581e:	48 83 f8 fc          	cmp    $0xfffffffffffffffc,%rax
+  145822:	74 ec                	je     145810 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x70>
+  145824:	e9 da 00 00 00       	jmp    145903 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x163>
+  145829:	48 8d 48 ff          	lea    -0x1(%rax),%rcx
+  14582d:	48 39 f1             	cmp    %rsi,%rcx
+  145830:	0f 83 20 01 00 00    	jae    145956 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x1b6>
+  145836:	48 29 c6             	sub    %rax,%rsi
+  145839:	74 05                	je     145840 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0xa0>
+  14583b:	48 01 c7             	add    %rax,%rdi
+  14583e:	eb d0                	jmp    145810 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x70>
+  145840:	66 0f 6f 14 24       	movdqa (%rsp),%xmm2
+  145845:	66 0f 6f 5c 24 10    	movdqa 0x10(%rsp),%xmm3
+  14584b:	66 0f 7f 5c 24 50    	movdqa %xmm3,0x50(%rsp)
+  145851:	66 0f 7f 54 24 40    	movdqa %xmm2,0x40(%rsp)
+  145857:	f3 41 0f 6f 00       	movdqu (%r8),%xmm0
+  14585c:	f3 41 0f 6f 48 10    	movdqu 0x10(%r8),%xmm1
+  145862:	66 0f 7f 4c 24 70    	movdqa %xmm1,0x70(%rsp)
+  145868:	66 0f 7f 44 24 60    	movdqa %xmm0,0x60(%rsp)
+  14586e:	66 0f eb d3          	por    %xmm3,%xmm2
+  145872:	66 0f 74 d4          	pcmpeqb %xmm4,%xmm2
+  145876:	66 0f d7 c2          	pmovmskb %xmm2,%eax
+  14587a:	35 ff ff 00 00       	xor    $0xffff,%eax
+  14587f:	74 3c                	je     1458bd <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x11d>
+  145881:	66 0f eb c1          	por    %xmm1,%xmm0
+  145885:	66 0f 70 c8 ee       	pshufd $0xee,%xmm0,%xmm1
+  14588a:	66 0f eb c8          	por    %xmm0,%xmm1
+  14588e:	66 0f 70 c1 55       	pshufd $0x55,%xmm1,%xmm0
+  145893:	66 0f eb c1          	por    %xmm1,%xmm0
+  145897:	66 0f 6f c8          	movdqa %xmm0,%xmm1
+  14589b:	66 0f 72 d1 10       	psrld  $0x10,%xmm1
+  1458a0:	66 0f eb c8          	por    %xmm0,%xmm1
+  1458a4:	66 0f 6f c1          	movdqa %xmm1,%xmm0
+  1458a8:	66 0f 71 d0 08       	psrlw  $0x8,%xmm0
+  1458ad:	66 0f eb c1          	por    %xmm1,%xmm0
+  1458b1:	66 0f 7e c0          	movd   %xmm0,%eax
+  1458b5:	84 c0                	test   %al,%al
+  1458b7:	0f 85 a0 00 00 00    	jne    14595d <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x1bd>
+  1458bd:	4c 89 ff             	mov    %r15,%rdi
+  1458c0:	e8 fb f1 ff ff       	call   144ac0 <<[Z; N] as zeroize::Zeroize>::zeroize>
+  1458c5:	4c 89 e7             	mov    %r12,%rdi
+  1458c8:	e8 f3 f1 ff ff       	call   144ac0 <<[Z; N] as zeroize::Zeroize>::zeroize>
+  1458cd:	31 c0                	xor    %eax,%eax
+  1458cf:	90                   	nop
+  1458d0:	48 8d 0c 04          	lea    (%rsp,%rax,1),%rcx
+  1458d4:	c6 04 04 00          	movb   $0x0,(%rsp,%rax,1)
+  1458d8:	48 ff c0             	inc    %rax
+  1458db:	48 83 f8 40          	cmp    $0x40,%rax
+  1458df:	75 ef                	jne    1458d0 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x130>
+  1458e1:	48 ff c5             	inc    %rbp
+  1458e4:	48 83 fd 10          	cmp    $0x10,%rbp
+  1458e8:	66 0f ef e4          	pxor   %xmm4,%xmm4
+  1458ec:	4c 8d 44 24 20       	lea    0x20(%rsp),%r8
+  1458f1:	0f 85 f8 fe ff ff    	jne    1457ef <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x4f>
+  1458f7:	c7 43 04 00 00 00 00 	movl   $0x0,0x4(%rbx)
+  1458fe:	c6 03 01             	movb   $0x1,(%rbx)
+  145901:	eb 3e                	jmp    145941 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x1a1>
+  145903:	b9 02 00 01 00       	mov    $0x10002,%ecx
+  145908:	48 3d 00 00 00 80    	cmp    $0xffffffff80000000,%rax
+  14590e:	72 0a                	jb     14591a <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x17a>
+  145910:	89 c7                	mov    %eax,%edi
+  145912:	ff 15 48 30 0a 00    	call   *0xa3048(%rip)        # 1e8960 <_DYNAMIC+0xe78>
+  145918:	89 c1                	mov    %eax,%ecx
+  14591a:	89 4b 04             	mov    %ecx,0x4(%rbx)
+  14591d:	c6 03 01             	movb   $0x1,(%rbx)
+  145920:	31 c0                	xor    %eax,%eax
+  145922:	66 66 66 66 66 2e 0f 	data16 data16 data16 data16 cs nopw 0x0(%rax,%rax,1)
+  145929:	1f 84 00 00 00 00 00 
+  145930:	48 8d 0c 04          	lea    (%rsp,%rax,1),%rcx
+  145934:	c6 04 04 00          	movb   $0x0,(%rsp,%rax,1)
+  145938:	48 ff c0             	inc    %rax
+  14593b:	48 83 f8 40          	cmp    $0x40,%rax
+  14593f:	75 ef                	jne    145930 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x190>
+  145941:	48 89 d8             	mov    %rbx,%rax
+  145944:	48 81 c4 e8 00 00 00 	add    $0xe8,%rsp
+  14594b:	5b                   	pop    %rbx
+  14594c:	41 5c                	pop    %r12
+  14594e:	41 5d                	pop    %r13
+  145950:	41 5e                	pop    %r14
+  145952:	41 5f                	pop    %r15
+  145954:	5d                   	pop    %rbp
+  145955:	c3                   	ret
+  145956:	b9 02 00 01 00       	mov    $0x10002,%ecx
+  14595b:	eb bd                	jmp    14591a <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x17a>
+  14595d:	66 0f 6f 04 24       	movdqa (%rsp),%xmm0
+  145962:	66 0f 6f 4c 24 10    	movdqa 0x10(%rsp),%xmm1
+  145968:	66 0f 7f 8c 24 b0 00 	movdqa %xmm1,0xb0(%rsp)
+  14596f:	00 00 
+  145971:	66 0f 7f 84 24 a0 00 	movdqa %xmm0,0xa0(%rsp)
+  145978:	00 00 
+  14597a:	f3 41 0f 6f 10       	movdqu (%r8),%xmm2
+  14597f:	f3 41 0f 6f 58 10    	movdqu 0x10(%r8),%xmm3
+  145985:	66 0f 7f 94 24 c0 00 	movdqa %xmm2,0xc0(%rsp)
+  14598c:	00 00 
+  14598e:	66 0f 7f 9c 24 d0 00 	movdqa %xmm3,0xd0(%rsp)
+  145995:	00 00 
+  145997:	f3 41 0f 6f 26       	movdqu (%r14),%xmm4
+  14599c:	41 0f 10 6e 10       	movups 0x10(%r14),%xmm5
+  1459a1:	0f 29 ac 24 90 00 00 	movaps %xmm5,0x90(%rsp)
+  1459a8:	00 
+  1459a9:	66 0f 7f a4 24 80 00 	movdqa %xmm4,0x80(%rsp)
+  1459b0:	00 00 
+  1459b2:	f3 0f 7f 5b 51       	movdqu %xmm3,0x51(%rbx)
+  1459b7:	0f 11 6b 11          	movups %xmm5,0x11(%rbx)
+  1459bb:	f3 0f 7f 63 01       	movdqu %xmm4,0x1(%rbx)
+  1459c0:	f3 0f 7f 53 41       	movdqu %xmm2,0x41(%rbx)
+  1459c5:	f3 0f 7f 4b 31       	movdqu %xmm1,0x31(%rbx)
+  1459ca:	f3 0f 7f 43 21       	movdqu %xmm0,0x21(%rbx)
+  1459cf:	c6 03 00             	movb   $0x0,(%rbx)
+  1459d2:	e9 49 ff ff ff       	jmp    145920 <aspis_prover::state_only_entropy::StateOnlyAttemptSecrets::generate_for_mask_nonce+0x180>
