@@ -118,5 +118,27 @@
   "deployed_configuration_reused": "evidence/pv-rdcd5-20261101/deployed-config-reuse.json",
   "configuration_sha256": "d7e11dd6d7c95b9528f47ac0cbf53641b6202cea848b5848dd828d05efe6ac6b",
   "wrong_kind_consequence": "V197 only: local short_failure plus historical mismatch diagnostic; no restored consumer depends on wrong kind",
-  "negative_controls": "Replacing panic by arrayOutOfBounds or restoring any old range call is rejected by the structural source gate; syntactic controls only, not Kani or native universal proofs"
+  "negative_controls": "Replacing panic by arrayOutOfBounds or restoring any old range call is rejected by the structural source gate; syntactic controls only, not Kani or native universal proofs",
+  "range_failure_dispatch": {
+    "path": "/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/slice/index.rs",
+    "file_sha256": "e49dbe39882d407a3354a090a2acfbc0af7b9e0063ea8625981a7edc72a9c460",
+    "body": "const fn slice_index_fail(start: usize, end: usize, len: usize) -> ! {\n    if start > len {\n        const_panic!(\n            \"slice start index is out of range for slice\",\n            \"range start index {start} out of range for slice of length {len}\",\n            start: usize,\n            len: usize,\n        )\n    }\n\n    if end > len {\n        const_panic!(\n            \"slice end index is out of range for slice\",\n            \"range end index {end} out of range for slice of length {len}\",\n            end: usize,\n            len: usize,\n        )\n    }\n\n    if start > end {\n        const_panic!(\n            \"slice index start is larger than end\",\n            \"slice index starts at {start} but ends at {end}\",\n            start: usize,\n            end: usize,\n        )\n    }\n\n    // Only reachable if the range was a `RangeInclusive` or a\n    // `RangeToInclusive`, with `end == len`.\n    const_panic!(\n        \"slice end index is out of range for slice\",\n        \"range end index {end} out of range for slice of length {len}\",\n        end: usize,\n        len: usize,\n    )\n}",
+    "body_sha256": "cef343b22a1c50551640a2c6a7410cbfda798239511733d40c8bfd6aac89449e",
+    "binding": "All four terminal arms invoke const_panic!, represented as fail.panic at the existing source/Result projection. Fixed parser ranges are ordered, so failed bounds reach the end>len arm. No arrayOutOfBounds constructor exists in this Rust dispatch.",
+    "fmt_qualification": "No Aeneas.Std fmt value law is used. Panic diagnostics, writer state/errors, allocation, timing and abort/world observations remain physical-observer/runtime obligations; no always-Ok formatter claim."
+  },
+  "syntactic_negative_controls": [
+    {
+      "mutation": "wrong range constructor",
+      "status": "REJECTED by syntactic structural-schema control; no compiled fidelity claim"
+    },
+    {
+      "mutation": "one legacy range call",
+      "status": "REJECTED by syntactic structural-schema control; no compiled fidelity claim"
+    },
+    {
+      "mutation": "wrong late reference constructor",
+      "status": "REJECTED by syntactic structural-schema control; no compiled fidelity claim"
+    }
+  ]
 }

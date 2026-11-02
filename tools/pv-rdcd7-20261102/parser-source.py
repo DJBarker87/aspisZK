@@ -53,3 +53,26 @@ assert config['configuration']
 out.update(before_model=old,after_model=owned,correction='Only the three range calls and their import change in BytesSource. The helper uses identical ordered/bounded predicate and backing window, returning panic on invalid ranges. No branch, input, None or successful value is dropped.',complete_transport='R1Z.PV_RDCD5_ParserTransport.quartic : forall bytes : Slice U8, existing(bytes) = qm(bytes.val)',deployed_configuration_reused='evidence/pv-rdcd5-20261101/deployed-config-reuse.json',configuration_sha256=hashlib.sha256((R/'evidence/pv-rdcd5-20261101/deployed-config-reuse.json').read_bytes()).hexdigest(),wrong_kind_consequence='V197 only: local short_failure plus historical mismatch diagnostic; no restored consumer depends on wrong kind',negative_controls='Replacing panic by arrayOutOfBounds or restoring any old range call is rejected by the structural source gate; syntactic controls only, not Kani or native universal proofs')
 (E/'v197-source-bindings.json').write_text(json.dumps(out,indent=2)+'\n')
 print('Corrected range failure and all three parser call sites checked; V197 source structural gate complete; kernel/cohort gates pending.')
+
+# Bind the source's terminal range-failure dispatch explicitly; never infer its
+# error constructor from a theorem about successful windows.
+fail_body=span(lib['slice/index.rs']['text'],'const fn slice_index_fail(', 'const fn slice_index_fail(')
+assert fail_body.count('const_panic!(')==4
+assert fail_body.index('if start > len') < fail_body.index('if end > len') < fail_body.index('if start > end')
+def schema(range_text,owned_text,reference_text):
+ return ('else fail .panic' in range_text and 'else fail .arrayOutOfBounds' not in range_text
+  and owned_text.count('PV_RDCD5_ParserRange.index')==3
+  and 'PV_RDCD4_SliceRange194.index' not in owned_text
+  and reference_text.count('else fail .panic')==2
+  and 'fail .arrayOutOfBounds' not in reference_text)
+assert schema(rng,owned,ref)
+controls=[]
+for label,r2,o2,f2 in [
+ ('wrong range constructor',rng.replace('else fail .panic','else fail .arrayOutOfBounds'),owned,ref),
+ ('one legacy range call',rng,owned.replace('PV_RDCD5_ParserRange.index','PV_RDCD4_SliceRange194.index',1),ref),
+ ('wrong late reference constructor',rng,owned,ref.replace('else fail .panic','else fail .arrayOutOfBounds',1))]:
+ assert not schema(r2,o2,f2),label
+ controls.append(dict(mutation=label,status='REJECTED by syntactic structural-schema control; no compiled fidelity claim'))
+out.update(range_failure_dispatch=dict(path=lib['slice/index.rs']['path'],file_sha256=lib['slice/index.rs']['sha256'],body=fail_body,body_sha256=hashlib.sha256(fail_body.encode()).hexdigest(),binding='All four terminal arms invoke const_panic!, represented as fail.panic at the existing source/Result projection. Fixed parser ranges are ordered, so failed bounds reach the end>len arm. No arrayOutOfBounds constructor exists in this Rust dispatch.',fmt_qualification='No Aeneas.Std fmt value law is used. Panic diagnostics, writer state/errors, allocation, timing and abort/world observations remain physical-observer/runtime obligations; no always-Ok formatter claim.'),syntactic_negative_controls=controls)
+(E/'v197-source-bindings.json').write_text(json.dumps(out,indent=2)+'\n')
+print('Explicit terminal panic dispatch and three syntactic mutation controls checked.')
