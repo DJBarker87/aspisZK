@@ -39,8 +39,9 @@ theorem granting_loop {S A : Type} (osCodec : {B : Type} → Request B → Bytes
   induction ids generalizing out completed w with
   | nil => exact ⟨(out,completed),rfl,by simp,by simp⟩
   | cons i ids ih =>
+    simp only [List.length_cons] at room
     obtain ⟨a,ha,_⟩ := law i (by simp) w
-    obtain ⟨next,hpush,hval⟩ := PV_RunJoin_Vector44.push out a (by simpa only [List.length_cons] using (by omega : out.length+1 ≤ Usize.max))
+    obtain ⟨next,hpush,hval⟩ := PV_RunJoin_Vector44.push out a (by omega)
     have nextLength : next.length=out.length+1 := by
       change next.val.length=out.val.length+1
       rw [hval,List.length_append,List.length_singleton]
@@ -67,9 +68,13 @@ theorem granting_run {S A : Type} (osCodec : {B : Type} → Request B → Bytes)
       .returned (.ok result) ∧ result.1.length = PV_RunJoin_WorkRange35.width n.val k ∧
       result.2 = result.1.length := by
   have widthBound := PV_RunJoin_WorkRange35.bounded n.val k hk
-  have maxBound : n.val ≤ Usize.max := n.hmax
+  have maxBound : n.val ≤ Usize.max := by
+    have hn := n.hmax
+    simp only [Usize.max,UScalarTy.numBits,Usize.numBits] at *
+    omega
+  have emptyLength : (alloc.vec.Vec.new A).length = 0 := rfl
   have room : (alloc.vec.Vec.new A).length + (PV_V263_Family.indices n.val k).length ≤ Usize.max := by
-    simp only [alloc.vec.Vec.new,List.length_nil,Nat.zero_add,PV_V263_Family.indices,List.length_range']
+    simp only [emptyLength,Nat.zero_add,PV_V263_Family.indices,List.length_range']
     omega
   obtain ⟨result,hr,hlen,hcompleted⟩ := granting_loop osCodec vecCodec layouts k callback
     (PV_V263_Family.indices n.val k)
@@ -78,7 +83,8 @@ theorem granting_run {S A : Type} (osCodec : {B : Type} → Request B → Bytes)
   refine ⟨result,?_,?_,?_⟩
   · simpa only [run,PV_V263_World.bind,resourceWorld] using hr
   · simpa only [alloc.vec.Vec.new,List.length_nil,Nat.zero_add,PV_V263_Family.indices,List.length_range'] using hlen
-  · simpa only [alloc.vec.Vec.new,List.length_nil,Nat.zero_add] using hcompleted.trans hlen.symm
+  · rw [emptyLength,Nat.zero_add] at hlen
+    omega
 
 #print axioms loop
 #print axioms run
