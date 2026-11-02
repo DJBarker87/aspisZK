@@ -1,0 +1,100 @@
+{
+  "id": "K79209",
+  "command": [
+    "cargo",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-pv-k3scan-20261101/b3-source/tools/pv-b3p6-20261028/v244-leaf16/Cargo.toml",
+    "--lib",
+    "--exact",
+    "--harness",
+    "equivalence16::reconstruct_10",
+    "--no-overflow-checks",
+    "--keep-temps",
+    "--solver",
+    "kissat",
+    "--output-format",
+    "terse",
+    "-j",
+    "4",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "stubbing",
+    "--cbmc-args",
+    "--unwinding-assertions"
+  ],
+  "scope_command": [
+    "systemd-run",
+    "--user",
+    "--scope",
+    "--unit",
+    "pv-k3scan-K79209",
+    "-p",
+    "MemoryHigh=6G",
+    "-p",
+    "MemoryMax=8G",
+    "-p",
+    "MemorySwapMax=0",
+    "-p",
+    "TasksMax=64",
+    "python3",
+    "/home/dombarker/project-offloads/codex-cx-prover-rw-20261023/src/tools/prover-rw-20261023/native-entropy/barrier.py",
+    "/home/dombarker/project-offloads/codex-pv-k3scan-20261101/K79209/barrier.json",
+    "/usr/bin/time",
+    "-v",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-k3scan-20261101/K79209/time.log",
+    "timeout",
+    "900",
+    "taskset",
+    "--cpu-list",
+    "0-3",
+    "python3",
+    "/home/dombarker/project-offloads/codex-pv-k3scan-20261101/symbol_worker.py",
+    "/home/dombarker/project-offloads/codex-pv-k3scan-20261101/K79209",
+    "[\"cargo\", \"kani\", \"--manifest-path\", \"/home/dombarker/project-offloads/codex-pv-k3scan-20261101/b3-source/tools/pv-b3p6-20261028/v244-leaf16/Cargo.toml\", \"--lib\", \"--exact\", \"--harness\", \"equivalence16::reconstruct_10\", \"--no-overflow-checks\", \"--keep-temps\", \"--solver\", \"kissat\", \"--output-format\", \"terse\", \"-j\", \"4\", \"-Z\", \"unstable-options\", \"-Z\", \"stubbing\", \"--cbmc-args\", \"--unwinding-assertions\"]"
+  ],
+  "exit_status": 0,
+  "wall_seconds": 69.38069105148315,
+  "source_revision": "0cc5a5c2200c959d76db9dab0cbd77e5d2342c7c",
+  "wrapper_sha256": "8da8ae26b147885dbb953ddf5c9a6d361ec835aa972c7873a9dd8aa2a4570017",
+  "worker_sha256": "1e6b0e47270638619aaf4307388a8cdeb7b0150c4e61a35acf8d293ae1ec2209",
+  "negative_control": false,
+  "caps": {
+    "MemoryHigh": "6G",
+    "MemoryMax": "8G",
+    "MemorySwapMax": 0,
+    "TasksMax": 64
+  },
+  "print_axioms": "N/A: Kani; 0 Lean",
+  "profile": {
+    "opt-level": 3,
+    "debug-assertions": false,
+    "overflow-checks": false
+  },
+  "stubs": [
+    "core::ptr::copy_nonoverlapping => crate::KMX_stubs::KMX_copy_nonoverlapping"
+  ],
+  "config": {
+    "package": "b3-source/tools/pv-b3p6-20261028/v244-leaf16",
+    "source_root": "b3-source",
+    "harness": "equivalence16::reconstruct_10",
+    "features": "",
+    "negative": false,
+    "kani_extra": [
+      "-Z",
+      "stubbing"
+    ],
+    "stubs": [
+      "core::ptr::copy_nonoverlapping => crate::KMX_stubs::KMX_copy_nonoverlapping"
+    ],
+    "expected_phase": "optimized compilation then named bounded local-body equivalence; no dense field elimination",
+    "original_credit": "C155",
+    "std_transfer": "Original per-item std parity and structural qualifications retained pending exact new reached-set comparison"
+  },
+  "oracle": "none; all records local",
+  "std_transfer": "withheld pending exact reached-item 1.93-nightly/1.94.1 parity",
+  "peak_rss_kib": 491892,
+  "swap": 0
+}

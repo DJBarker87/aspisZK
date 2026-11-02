@@ -1,0 +1,12 @@
+use aspis_core::field::pv_rl_bytes as native_and_reference;
+fn check(w:[u32;8]){let (n,r)=native_and_reference(w);assert_eq!(n,r,"raw words={w:?}");
+ for i in 0..8 {for j in 0..4 {assert_eq!(n[4*i+j],(w[i]>>(8*j))as u8);}}
+}
+fn main(){let mut cases=0u64;
+ let edge=[0,1,127,128,255,256,65535,65536,0x7ffffffe,0x7fffffff,0x80000000,0xfffffffe,0xffffffff];
+ for x in edge {check([x;8]);cases+=1;}
+ for i in 0..8 {for x in edge{let mut w=[0;8];w[i]=x;check(w);cases+=1;}}
+ for i in 0..8 {for j in 0..4{for x in 0..=255{let mut w=[0xa5b6c7d8;8];w[i]=x<<(j*8);check(w);cases+=1;}}}
+ let mut state=0x5046524c195u64;
+ for _ in 0..100000 {let mut w=[0;8];for x in &mut w{state^=state<<13;state^=state>>7;state^=state<<17;*x=state as u32;}check(w);cases+=1;}
+ println!("V195 finite validation: {cases} same-input comparisons, all 32 output bytes; includes noncanonical carriers; no disagreement");}

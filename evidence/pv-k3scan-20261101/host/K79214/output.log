@@ -1,0 +1,39 @@
+Running as unit: pv-k3scan-K79214.scope; invocation ID: e5deba63c2b94614ab1dbd32d851e7ad
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling pv-cb-references v0.0.0 (/home/dombarker/project-offloads/codex-pv-k3scan-20261101/standalones/push)
+warning: unexpected `cfg` condition name: `pv_cb_extract`
+ --> lib.rs:3:20
+  |
+3 | #[cfg(all(kani,not(pv_cb_extract)))]
+  |                    ^^^^^^^^^^^^^
+  |
+  = help: expected names are: `docsrs`, `feature`, `kani`, and `test` and 31 more
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(pv_cb_extract)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(pv_cb_extract)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+  = note: `#[warn(unexpected_cfgs)]` on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized + debuginfo] target(s) in 0.61s
+Thread 1: Checking harness checks::push_ascii1...
+Thread 1: 
+VERIFICATION RESULT:
+ ** 1 of 430 failed (10 unreachable)
+Failed Checks: assertion failed: actual.as_bytes() != &[a,b]
+ File: "lib.rs", line 153, in checks::push_ascii1
+
+VERIFICATION:- FAILED
+Verification Time: 5.1805534s
+
+Manual Harness Summary:
+Verification failed for - checks::push_ascii1
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
