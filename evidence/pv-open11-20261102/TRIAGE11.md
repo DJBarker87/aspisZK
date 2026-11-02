@@ -788,3 +788,7 @@ No row restored and no endpoint premise removed/added/weakened (0/0/0). The init
 - V267: exact selected write_all loop is unbounded, with WriteZero, partial progress, Interrupted retry and other errors. Existing DIAG12 fuelled writeAll is a prefix model, not the complete op261. Native fd/errno/offset/world and completion/divergence association remain.
 
 Next uninspected ranked row: V171, then V175 and V172. Keep all live-owned exclusions and qualifications above.
+
+## D573 bounded pass — ranks 6–10
+
+V171/V175/V172/V268/V271 remain OPEN; each has its exact source/world premise in `PROGRESS11.md` and `PV_O11_open-sync.json`. No scopes or new endpoint premises. The 38 source checks and eight deployed rust-src hash matches do not supply native installation. Next rank:11 V239.

@@ -39,3 +39,31 @@ Two procedural corrections are explicit. N90503 inherited a stale host revision.
 `PV_O11_validate.py` checks all18 receipts, both audits, source hashes, exact generated copies, failed-source snapshots and rejected LLBC, standard accepted proof axioms, source gates and artifact limits. No frozen release replay or unchanged runtime/reproducibility suite was rerun. Retained object fingerprints are in `PV_O11_retained-object-hashes-D571.json`; no scope is running, no local target/ exists, no key action occurred. Do not delete the retained host cache.
 
 Continue with ranked **V171**, then V175/V172. Their native Unix open/options/fd/error/world association must be installed into the existing links, with current panic/allocator behavior and the same observer. Preserve live-owned exclusions. No row closure follows from the source census or reference laws above.
+
+## D573 continuation — ranks 6–10
+
+No row restored; endpoint premises removed/added/weakened = **0/0/0**. Ranks 1–5 were not reopened. Each new row received one bounded source/consumer inspection pass, with **zero Lean/native launches**, below the 12-attempt-per-row limit. No unchanged rejected allocator/dynamic-trait extraction was attempted through another wrapper.
+
+### Rank 6 V171 — OPEN
+
+Instantiate the SAME op14/fileOpen typed algebra on the native caller, not a pure world lift. Bind generic P::as_ref and P destruction; new/read-only options; Unix path bytes, stack/heap conversion at 384, allocation-before-NUL-validation, NUL Error and CString zero-store/deallocation; ordered flag validation, open64/errno and unbounded Interrupted retry; fd adoption and complete returned Result with its post-world. Preserve native ownership, cleanup/abort prefixes and the existing sync_directory caller/observer. DIAG12 openRetry is a finite prefix, not completion/divergence. No new success assumption or T field.
+
+### Rank 7 V175 — OPEN
+
+Instantiate the SAME op22/optionsOpen on actual Options and P in the full native world. Path conversion occurs BEFORE access/creation validation. Bind all flag/mode bits (custom i32 masks ACCMODE only), validation Error::new payload/allocation and abort, open64 pointer/mode ABI, errno capture, unbounded EINTR retries, successful FileDesc ownership and all argument/temporary drops. The actual reservation domain is write/create_new/custom0/mode0600, but every other reached caller needs an exclusion or the general branch law. Preserve complete Result/error/world/observer and no fuel bound. Source validation checks alone do not install this link.
+
+### Rank 8 V172 — OPEN
+
+Instantiate the SAME op15/fileSync typed algebra for the actual borrowed fd and native pre/post-world. Bind fsync (Linux, not Apple F_FULLFSYNC), cvt of -1, immediate errno/Error capture, unbounded Interrupted retry, other errors and successful unit return, with the owner preserved during the borrow. The surrounding caller closes the directory File on ordinary return, and the reservation File after its later directory-sync prefix or ordinary error; panic=abort does not unwind. Retain per-attempt resources, failures, blocking/divergence and ordered native observation. No success/fuel premise or new T field.
+
+### Rank 9 V268 — OPEN
+
+Supply the SAME ExternalTypes.op3 native interpretation for all four Error representations, preserving OS code, valid Simple discriminant, static SimpleMessage and entire Custom {kind, Box<dyn Error+Send+Sync>} with its allocation/payload/vtable ownership. Bind constructors, moves, into_data ManuallyDrop, decoding, shared/mutable access, observations and Custom destruction/deallocation exactly once, in the actual world and caller frame. Error::new allocation/abort and errno-based construction remain included. The borrowed reference and a Kind-only quotient do not supply this ownership/type law; no getter reattempt is made. V176 remains the separately recorded pure getter obligation, and neither row is discharged by assigning its missing work to the other. Dynamic payload/drop/formatting associations and reached domains remain explicit.
+
+### Rank 10 V271 — OPEN
+
+Bind std File -> sys File -> FileDesc -> OwnedFd/ValidRawFd to the existing nonnegative I32 value view with a live ownership invariant in the SAME world. A subtype or descriptor roundtrip supplies no live fd authority. Prove successful open transfers the returned live fd once; borrowed I/O never duplicates/releases it; each ordinary scope exit destroys the owner once. Linux Drop issues one close, ignores its result and does NOT retry EINTR. Bind the check_library_ub/debug fcntl/abort gate at the adopted configuration, fd reuse/provenance and all native returned/post-world observations. Abort paths retain their actually performed prefixes without invented stack cleanup. No availability or exactly-once physical-close success assumed.
+
+Validation: `PV_O11_open_sync.py` passes 38 exact source/consumer checks. `PV_O11_io_provenance.py` matches all eight retained std/alloc snapshots to the deployed 1.94.1 host rust-src, including four newly retained helper/owner/CString files. These are source checks, not own-1 complete structural bindings or native installations. Original typed algebra/caller and prefix-model sources are retained under `inputs/io/`. The `CString` slice specialization allocates/copies before checking NUL; its later destruction first zeros byte0 then destroys its boxed slice. `OwnedFd` destruction has the source `check_library_ub` gate before its single close; its compiled setting is not silently inferred from the client profile.
+
+Counters unchanged: **10/97 Lean, 8/30 native, 0 Kani**; remaining **87/22**, next IDs **90408/N90508**, reserved audit **90499**. No scope running. Next rank **11 V239**, then V249/V269/V403. All exclusions, three-field T, V370 and final coherent replay remain.

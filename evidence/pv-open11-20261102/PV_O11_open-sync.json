@@ -1,0 +1,136 @@
+{
+  "classification": "script-checked source branches and exact existing consumer census; NOT own-1 complete structural binding, native installation, release audit or restored rows",
+  "revision": "ccdc7f48c9",
+  "checks": {
+    "file_open_read_wrapper": true,
+    "options_open_wrapper": true,
+    "options_inner_wrapper": true,
+    "unix_open_converts_path_first": true,
+    "open_c_complete": true,
+    "access_complete": true,
+    "creation_complete": true,
+    "path_encoded_bytes": true,
+    "path_threshold": true,
+    "linux_stack_threshold_384": true,
+    "stack_path_complete": true,
+    "heap_path_complete": true,
+    "heap_allocates_before_nul_validation": true,
+    "heap_slice_specialization": true,
+    "cstring_termination_and_boxing": true,
+    "cstring_drop_zero_store": true,
+    "cvt_checks_minus_one_not_any_negative": true,
+    "cvt_r_complete_unbounded": true,
+    "file_sync_complete": true,
+    "fsync_complete_with_cfg": true,
+    "fd_wraps_ownedfd": true,
+    "fd_from_raw": true,
+    "owned_from_raw_checks_minus_one": true,
+    "owned_drop_single_close_no_retry": true,
+    "close_debug_gate_retained": true,
+    "caller_open_then_sync": true,
+    "reservation_options_domain": true,
+    "old_open_has_cut": true,
+    "old_carrier_does_not_create_authority": true,
+    "original_typed_algebra_has_three_fields": true,
+    "original_sync_calls_same_typed_primitives": true,
+    "negative_bounded_retry_rejected": true,
+    "negative_nul_after_options_rejected": true,
+    "error_complete_payload_field": true,
+    "error_new_allocates_custom": true,
+    "error_os_captures_errno": true,
+    "error_owned_conversion_prevents_double_drop": true,
+    "error_drop_reconstructs_custom_owner": true
+  },
+  "ok": true,
+  "rows": {
+    "V171": {
+      "status": "OPEN",
+      "rank": 6,
+      "exact_premise": "Instantiate the SAME op14/fileOpen typed algebra on the native caller, not a pure world lift. Bind generic P::as_ref and P destruction; new/read-only options; Unix path bytes, stack/heap conversion at 384, allocation-before-NUL-validation, NUL Error and CString zero-store/deallocation; ordered flag validation, open64/errno and unbounded Interrupted retry; fd adoption and complete returned Result with its post-world. Preserve native ownership, cleanup/abort prefixes and the existing sync_directory caller/observer. DIAG12 openRetry is a finite prefix, not completion/divergence. No new success assumption or T field."
+    },
+    "V175": {
+      "status": "OPEN",
+      "rank": 7,
+      "exact_premise": "Instantiate the SAME op22/optionsOpen on actual Options and P in the full native world. Path conversion occurs BEFORE access/creation validation. Bind all flag/mode bits (custom i32 masks ACCMODE only), validation Error::new payload/allocation and abort, open64 pointer/mode ABI, errno capture, unbounded EINTR retries, successful FileDesc ownership and all argument/temporary drops. The actual reservation domain is write/create_new/custom0/mode0600, but every other reached caller needs an exclusion or the general branch law. Preserve complete Result/error/world/observer and no fuel bound. Source validation checks alone do not install this link."
+    },
+    "V172": {
+      "status": "OPEN",
+      "rank": 8,
+      "exact_premise": "Instantiate the SAME op15/fileSync typed algebra for the actual borrowed fd and native pre/post-world. Bind fsync (Linux, not Apple F_FULLFSYNC), cvt of -1, immediate errno/Error capture, unbounded Interrupted retry, other errors and successful unit return, with the owner preserved during the borrow. The surrounding caller closes the directory File on ordinary return, and the reservation File after its later directory-sync prefix or ordinary error; panic=abort does not unwind. Retain per-attempt resources, failures, blocking/divergence and ordered native observation. No success/fuel premise or new T field."
+    },
+    "V268": {
+      "status": "OPEN",
+      "rank": 9,
+      "exact_premise": "Supply the SAME ExternalTypes.op3 native interpretation for all four Error representations, preserving OS code, valid Simple discriminant, static SimpleMessage and entire Custom {kind, Box<dyn Error+Send+Sync>} with its allocation/payload/vtable ownership. Bind constructors, moves, into_data ManuallyDrop, decoding, shared/mutable access, observations and Custom destruction/deallocation exactly once, in the actual world and caller frame. Error::new allocation/abort and errno-based construction remain included. The borrowed reference and a Kind-only quotient do not supply this ownership/type law; no getter reattempt is made. V176 remains the separately recorded pure getter obligation, and neither row is discharged by assigning its missing work to the other. Dynamic payload/drop/formatting associations and reached domains remain explicit."
+    },
+    "V271": {
+      "status": "OPEN",
+      "rank": 10,
+      "exact_premise": "Bind std File -> sys File -> FileDesc -> OwnedFd/ValidRawFd to the existing nonnegative I32 value view with a live ownership invariant in the SAME world. A subtype or descriptor roundtrip supplies no live fd authority. Prove successful open transfers the returned live fd once; borrowed I/O never duplicates/releases it; each ordinary scope exit destroys the owner once. Linux Drop issues one close, ignores its result and does NOT retry EINTR. Bind the check_library_ub/debug fcntl/abort gate at the adopted configuration, fd reuse/provenance and all native returned/post-world observations. Abort paths retain their actually performed prefixes without invented stack cleanup. No availability or exactly-once physical-close success assumed."
+    }
+  },
+  "attempts": {
+    "V171": {
+      "source_inspection_passes": 1,
+      "lean": 0,
+      "native": 0
+    },
+    "V175": {
+      "source_inspection_passes": 1,
+      "lean": 0,
+      "native": 0
+    },
+    "V172": {
+      "source_inspection_passes": 1,
+      "lean": 0,
+      "native": 0
+    },
+    "V268": {
+      "source_inspection_passes": 1,
+      "lean": 0,
+      "native": 0
+    },
+    "V271": {
+      "source_inspection_passes": 1,
+      "lean": 0,
+      "native": 0
+    }
+  },
+  "next_rank": 11,
+  "next_row": "V239",
+  "restored": 0,
+  "source_bodies": {
+    "open_c": "{\n        let flags = libc::O_CLOEXEC\n            | opts.get_access_mode()?\n            | opts.get_creation_mode()?\n            | (opts.custom_flags as c_int & !libc::O_ACCMODE);\n        // The third argument of `open64` is documented to have type `mode_t`. On\n        // some platforms (like macOS, where `open64` is actually `open`), `mode_t` is `u16`.\n        // However, since this is a variadic function, C integer promotion rules mean that on\n        // the ABI level, this still gets passed as `c_int` (aka `u32` on Unix platforms).\n        let fd = cvt_r(|| unsafe { open64(path.as_ptr(), flags, opts.mode as c_int) })?;\n        Ok(File(unsafe { FileDesc::from_raw_fd(fd) }))\n    }",
+    "cvt_r": "{\n    loop {\n        match cvt(f()) {\n            Err(ref e) if e.is_interrupted() => {}\n            other => return other,\n        }\n    }\n}",
+    "fsync": "{\n        cvt_r(|| unsafe { os_fsync(self.as_raw_fd()) })?;\n        return Ok(());\n\n        #[cfg(target_vendor = \"apple\")]\n        unsafe fn os_fsync(fd: c_int) -> c_int {\n            libc::fcntl(fd, libc::F_FULLFSYNC)\n        }\n        #[cfg(not(target_vendor = \"apple\"))]\n        unsafe fn os_fsync(fd: c_int) -> c_int {\n            libc::fsync(fd)\n        }\n    }",
+    "long_path": "{\n            // We cannot have such large slice that we would overflow here\n            // but using `checked_add` allows LLVM to assume that capacity never overflows\n            // and generate twice shorter code.\n            // `saturating_add` doesn't help for some reason.\n            let capacity = bytes.len().checked_add(1).unwrap();\n\n            // Allocate before validation to avoid duplication of allocation code.\n            // We still need to allocate and copy memory even if we get an error.\n            let mut buffer = Vec::with_capacity(capacity);\n            buffer.extend(bytes);\n\n            // Check memory of self instead of new buffer.\n            // This allows better optimizations if lto enabled.\n            match memchr::memchr(0, bytes) {\n                Some(i) => Err(NulError(i, buffer)),\n                None => Ok(unsafe { CString::_from_vec_unchecked(buffer) }),\n            }\n        }"
+  },
+  "inputs": {
+    "inputs/io/pal-unix.rs": "c71c1298c20cdfa96b9831cd2b51f75b0333a50e49188ab5fddd1945e82df312",
+    "inputs/io/c_string.rs": "a32fba26220b7349c5fc2b60464721729bf1b01285f90dbfe3f159abc6709789",
+    "inputs/io/small_c_string.rs": "6f8b59e7841fcd20e24809e2f182b7120e4c2edff2917877e6de2a5cf5436a73",
+    "inputs/io/PV_W_TypedEffects.lean.txt": "a3919006eb0f9043eea4e7f743a9408617e0e5472978246c06094f4a52746e5c",
+    "inputs/io/fd-unix.rs": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+    "inputs/io/PV_W_R_SyncDirectory.lean.txt": "c02568a1d571a28305b206d507dd5e15159dcd8ea84d59d33fdc60aa69be0394",
+    "inputs/io/fs-unix.rs": "bdd7dbe59f56df067504141fd6c04f46601f8eb7af39c672921eb2c7e4bc12df",
+    "inputs/io/owned-fd.rs": "7dfc471fedb90c0ac426845f2fe584216b5d1af27bc846d05fc5631d93f8319d",
+    "inputs/io/mod.rs": "6dc2214a87c8f1b1b90c99f1a447ce76e7dfcf0c762fc46b9432343525491fdf",
+    "inputs/io/ProverRwFullExternalFuns.lean.txt": "ba71e3be7eab2c4c59fe09d6f859ab323e74ca207b66fdf44b770382bfb8faf1",
+    "inputs/io/fs.rs": "b5737fd7f7733ba33166bb9a5cdb373778763acc633d50960ad01b447e57a647",
+    "inputs/io/PDict_FileCarrier.lean.txt": "bfb873aeb832e5e634951cafc44b871c27db6ab0aabdc3f76235a06534b24ccc",
+    "inputs/io/PV_DIAG12_WriteAll.lean.txt": "7a1afccdffad3955aa1ec6b9d0636f421812eef0fcbfe16fba7e47a64edbdb5f",
+    "inputs/io/PV_DIAG12_Open.lean.txt": "9b9ba339489e1d05436c70f36dbc3aac84cf569a441a7e566628cd3229c13b18",
+    "inputs/std-error.rs": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+    "inputs/std-repr-bitpacked.rs": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034"
+  },
+  "retained": [
+    "V370 compiler/runtime preservation",
+    "V268 native Error/value and payload ownership",
+    "E1/E2",
+    "full native joint observer",
+    "coherent dependent replay"
+  ],
+  "premises_removed": 0,
+  "premises_added": 0,
+  "premises_weakened": 0
+}
