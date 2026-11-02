@@ -15,7 +15,7 @@ theorem views_range (n : Nat) (input : List U8) :
     have hn : i < n := by simpa only [PV_DL_UpdateViews.count] using hi
     have h := PV_DL_UpdateViews.coordinate n i input hn
     simp only [List.getElem?_eq_getElem hi,Option.some.injEq,Nat.mul_comm] at h
-    simpa only [List.getElem_map,List.getElem_range] using h
+    simpa only [List.getElem_map,List.getElem_range,Nat.mul_comm] using h
 
 /-- StorageBuild and BlockCodec recover the same typed storage, for every
 64-byte block. Injectivity is used, rather than assuming byte equality suffices. -/
