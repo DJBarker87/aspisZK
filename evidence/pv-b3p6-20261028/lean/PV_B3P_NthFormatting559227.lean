@@ -1,6 +1,6 @@
 import PV_B3P_NthSource559227
 namespace PV_B3P_NthFormatting559227
-open Aeneas Aeneas.Std core.ops.range PV_B3P_NthGuard559227 PV_B3P_NthSource559227
+open Aeneas Aeneas.Std core.ops.range PV_B3P_NthKernelGuard559227 PV_B3P_NthSource559227
 set_option autoImplicit false
 /-- Checked increment's entire success value, for an arbitrary handler. -/
 theorem increment_value (handler : Str → Result Never) (item end_ : Usize)
