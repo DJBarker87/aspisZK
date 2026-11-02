@@ -12,6 +12,16 @@ for v in checks:
  if 'source' in v:
   s=v['source'];raw=subprocess.check_output(['git','show',s['revision']+':'+s['path']]);assert sha(raw)==s['source_sha256']
   current=subprocess.check_output(['git','show',rev+':'+s['path']]);assert current==raw,('source changed',v['module'])
+# Same recorded runjoin61 project cohort; no library authority extension.
+extension=E/'source-binding-extension.json'
+if extension.exists():
+ ext=json.loads(extension.read_text())
+ assert ext['LEAN_PATH']==base['LEAN_PATH']
+ changed=set(subprocess.check_output(['git','diff','--name-only',ext['verified_source_revision'],rev],text=True).splitlines())
+ assert not changed.intersection(v['source']['path'] for v in ext['project_checks']), 'extended source changed'
+ for v in ext['project_checks']:
+  if v['module'] not in known:
+   checks.append(v);known.add(v['module'])
 for p in sorted(OLD.glob('receipt-*.json'))+sorted(Path('evidence/pv-evh5-20261029').glob('receipt-*.json'))+sorted(E.glob('receipt-*.json')):
  r=json.loads(p.read_text())
  if not r.get('accepted'):continue
