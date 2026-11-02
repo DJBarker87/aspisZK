@@ -30,7 +30,9 @@ theorem source_cone_reference557 (base : ExternalTypes)
       (source_continuation base (composed_ports557 base) p claims point challenges) =
       transported_reference base p claims point challenges := by
   rw [composed_ports_eq557]
-  exact continuation_composes base _ (semantic_source_binding13 base)
+  exact continuation_composes base
+    (source_ports13 base local_bodies557.body6 local_bodies557.body7)
+    (semantic_source_binding13 base)
     source_selection_binding13
     (parts_link13 _ _ local_links557.link6 local_links557.link7) p claims point challenges
 
