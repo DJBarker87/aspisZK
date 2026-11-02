@@ -12,7 +12,9 @@ theorem pack4_copy_guard {α : Type} (dest : Array α 4#usize) (values : Slice �
         (RangeTo.mk values.len) dest.to_slice = .ok (segment,back) ∧
       copy_source segment values = .ok values := by
   apply copy_prefix_no_panic dest.to_slice values values.len
-  · simpa only [Slice.len_val,Array.to_slice,Array.length_val] using shape
+  · change values.val.length ≤ dest.val.length
+    rw [dest.property]
+    exact shape
   · rfl
 
 #print axioms pack4_copy_guard
