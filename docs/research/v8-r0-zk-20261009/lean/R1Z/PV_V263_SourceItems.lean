@@ -47,7 +47,7 @@ theorem push_fault {S A : Type} (runtime : Runtime S) (layouts : Layouts)
       (runtime.vector (.push 0 k (i-PV_RunJoin_WorkRange35.start n k) layouts.item)
         (callback i w).state).state := by
   simp only [step,PV_V263_World.bind,hc,hp]
-  constructor <;> rfl
+  constructor <;> trivial
 
 /-- Fault-free methods do not erase source callback failure or divergence. -/
 theorem callback_failure {S A : Type} (runtime : Runtime S) (layouts : Layouts)
