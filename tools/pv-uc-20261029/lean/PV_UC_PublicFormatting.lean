@@ -1,5 +1,5 @@
 import Aeneas
-import PVUCBoundEntry.Funs
+import PVUCStringEntry.Funs
 
 /- Privacy needs congruence of a deterministic renderer, not a model of text.
    These renderers are explicit parameters, not global axioms or installed
@@ -38,9 +38,20 @@ theorem pubkey_recomputable {Json Key : Type} (r : Renderers Json Key)
 -- checks establish that this operand is parsed only from public q, before
 -- the first private record read. No text semantics or Unit fmt carrier used.
 theorem extracted_fd_formatter_public
-    [PV_UC_BoundEntry.ExternalTypes] [PV_UC_BoundEntry.ExternalFuns]
+    [PV_UC_StringEntry.ExternalTypes] [PV_UC_StringEntry.ExternalFuns]
     (fd₁ fd₂ : Aeneas.Std.I32) (h : fd₁ = fd₂) :
-    PV_UC_BoundEntry.wallet_fd_path fd₁ = PV_UC_BoundEntry.wallet_fd_path fd₂ := by
+    PV_UC_StringEntry.wallet_fd_path fd₁ = PV_UC_StringEntry.wallet_fd_path fd₂ := by
+  cases h
+  rfl
+
+-- This is the actual String-rendering operation, with its Value retained.
+-- Public/simulated equality is an explicit hypothesis; the clock field's
+-- missing native witness-independence proof is not hidden in the renderer.
+theorem extracted_json_formatter_recomputable
+    [PV_UC_StringEntry.ExternalTypes] [PV_UC_StringEntry.ExternalFuns]
+    (actual simulated : PV_UC_StringEntry.serde_json.value.Value)
+    (h : actual = simulated) :
+    PV_UC_StringEntry.render_json actual = PV_UC_StringEntry.render_json simulated := by
   cases h
   rfl
 
@@ -48,4 +59,5 @@ theorem extracted_fd_formatter_public
 #print axioms stdout_recomputable
 #print axioms pubkey_recomputable
 #print axioms extracted_fd_formatter_public
+#print axioms extracted_json_formatter_recomputable
 end PV_UC_PublicFormatting
