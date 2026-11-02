@@ -7,8 +7,9 @@ sys.path.insert(0,str(R/'evidence/slice-s-compose4-20261101'))
 import NEL_validate as predecessor
 read=predecessor.read
 
-def native_pair(positive,negative):
+def native_pair(positive,negative,folder=None,prefix="NEM_"):
  """Additional support checks; a valid pair alone NEVER closes a ledger row."""
+ E=folder or globals()["E"]
  try:
   for a,want in [(positive,True),(negative,False)]:
    receipt=read(E/a/'receipt.json');cfg=read(E/(a+'.json'));log=(E/a/'stdout.log').read_text()
@@ -26,7 +27,7 @@ def native_pair(positive,negative):
    assert cfg['copy_patch_sha256']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
    assert not read(E/(a+'-source-check.json'))['errors']
    assert read(E/(a+'-rule16-check.json'))['no_writable_static']
-   for n in ['NEM_native_contracts.patch','NEM_oracle.patch']:
+   for n in [prefix+'native_contracts.patch',prefix+'oracle.patch']:
     source=(E/(a+'-'+n)).read_bytes()
     assert receipt['source_hashes'][n]==hashlib.sha256(source).hexdigest()
     assert b'static mut' not in source and b'stub_verified' not in source
@@ -71,16 +72,25 @@ def digest(c,expected,ledger):
   allowed={DIGEST}|{DIGEST+'::'+h['name'] for r in rs for h in r['named_hypotheses']}|{DIGEST+' -> crates/aspis-core/src/field.rs::M31::to_le_bytes'}|{o['id'] for o in obs if 'callee' not in o}
   assert expected in allowed
   if c['kind']=='external-domain':
-   assert next(o for o in obs if o['id']==expected)['call'].get('expression') in {'digest.iter().enumerate','digest.iter','bytes[index * 4..index * 4 + 4].copy_from_slice'}
+   call=next(o for o in obs if o['id']==expected)['call']
+   assert call.get('expression',call.get('syntax')) in {'digest.iter().enumerate','digest.iter','bytes[index * 4..index * 4 + 4].copy_from_slice'}
   return True
  except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
+def common(c,expected,ledger):
+ import NEM_common_checks
+ return NEM_common_checks.validate(c,expected,ledger,sys.modules[__name__])
 
 def certificate(c,expected,ledger,reviewed):
  if not c or not c.get('id','').startswith('NEM_'):return BASE_CERTIFICATE(c,expected,ledger,reviewed)
  if predecessor.predecessor.predecessor.suspended_reference(c):return False
  if not predecessor.predecessor.predecessor.BASE_CERTIFICATE(c,expected,ledger,reviewed):return False
  if not predecessor.predecessor.call_domain(c,expected,ledger):return False
- return digest(c,expected,ledger)
+ if 'digest_composition' in c:return digest(c,expected,ledger)
+ if 'payment_encode_composition' in c:
+  import NEM_payment_checks
+  return NEM_payment_checks.validate(c,expected,ledger,sys.modules[__name__])
+ return common(c,expected,ledger)
 
 def compose(base,packet,reviewed):
  previous=predecessor.certificate

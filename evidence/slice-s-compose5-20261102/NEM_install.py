@@ -4,7 +4,7 @@ import json,hashlib,copy
 from NEM_artifacts import ref
 E=Path(__file__).resolve().parent;R=E.parent.parent
 
-def install(f,field,q,theorems,native,domain,physical,derivation,skip=()):
+def install(f,field,q,theorems,native,domain,physical,derivation,skip=(),alternatives=()):
  b=json.loads((R/'evidence/native-ledger3-20261029/NDT_LEDGER.json').read_text());p=json.loads((E/'NEM_LEDGER_DELTA.json').read_text());review=json.loads((E/'NEM_REVIEWED_CERTIFICATES.json').read_text())
  rows=[r for r in b['rows'] if r['function']==f];assert rows
  base=dict(frozen_revision=b['frozen_revision'],theorems=theorems,native_association=native,same_inputs=True,same_carrier=True,same_state=True,same_result=True,ordered_effects=True,inner_hypotheses_remaining=[],physical_interpretation_derivation=derivation,callee_domain_established=True,canonical_carrier_established=True,hypotheses=['CompositionTrustOptionA'],**{field:q})
@@ -18,7 +18,7 @@ def install(f,field,q,theorems,native,domain,physical,derivation,skip=()):
  for callee in sorted({g for r in rows for g in r['canonical_callees']}):
   if callee in skip:continue
   obs=[o for r in rows for o in r['caller_domain_obligations'] if o.get('callee')==callee]
-  add('edges',f+' -> '+callee,'call-domain',sorted({v for o in obs for v in o['required_named_hypotheses']}),sorted({v for o in obs for v in o['callee_claims']}))
+  add('edges',f+' -> '+callee,'alternative-resolution' if callee in alternatives else 'call-domain',sorted({v for o in obs for v in o['required_named_hypotheses']}),sorted({v for o in obs for v in o['callee_claims']}))
  for r in rows:
   for o in r['caller_domain_obligations']:
    if 'callee' not in o:add('externals',o['id'],'external-domain',[],claims)

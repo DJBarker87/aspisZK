@@ -20,4 +20,14 @@ class Certificates(unittest.TestCase):
  def test_inner_domain(self):self.check_mutation(lambda c:c.update(inner_hypotheses_remaining=['Child.PacketDomain']))
  def test_wrong_arguments(self):self.check_mutation(lambda c:c['call_domain_certificate'].update(same_arguments=False))
  def test_extra_trust(self):self.check_mutation(lambda c:c['call_domain_certificate'].update(new_trust_rows=['NewTrust']))
+class Common(Certificates):
+ def common_mutation(self,field,value):
+  f='crates/aspis-statement/src/pool_v1/payment_relation.rs::encode_common';c=copy.deepcopy(self.p['members'][f]);c['common_composition'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[f]=h
+  self.assertFalse(v.certificate(c,f,self.b,r))
+ def test_no_common_windows(self):self.common_mutation('inherited_windows',[])
+ def test_wrong_order(self):self.common_mutation('ordered_children',['common.nullifier','common.anchor_root','common.asset_id'])
+ def test_wrong_frame(self):self.common_mutation('frame','all bytes may change')
+ def test_wrong_width(self):self.common_mutation('reply_widths',[32,32,32])
+ def test_missing_same_call(self):self.common_mutation('native_pairs',[])
 if __name__=='__main__':unittest.main()

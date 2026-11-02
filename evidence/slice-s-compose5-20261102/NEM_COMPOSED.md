@@ -21,3 +21,5 @@ manifest or new release claim. Privacy, two transactions, RuntimePersistence,
 L154, narrowed D188, and 100-bit PER-ATTEMPT target remain unchanged.
 
 Digest descendant stage: **23/97 composed rows CLOSED; 0/7 roots**. NEM_L001 instantiates the accepted next-row/suffix induction on the same raw digest and arbitrary external frame; both printed axiom sets are [propext, Classical.choice, Quot.sound]. Native NEM_K002/003 and K004/005 pass/fail under the frozen dependency/feature/source gates. K001 was an excluded missing frozen include input error; fixed by restoring the pinned includes, with no changed property. Ten new mutation tests pass, including mutations with refreshed review hashes. Payment/common and all roots remain OPEN.
+
+Common stage: **26/97 composed rows CLOSED; 0/7 roots**. The earlier digest-only receipt had 23 rows because TX2 inventory uses syntax rather than expression; NEM_validate now checks either exact inventory representation. Common source windows, untouched byte 7/reserved suffix, total child domains and same-call native instances are checked together. No root closure is claimed.

@@ -1,0 +1,26 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_common_call.rs"]
++mod NEM_common_call;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_common_call.rs
+@@ -0,0 +1,13 @@
++use super::*;
++struct Frame{reply:[u8;32],called:bool}
++fn child(v:&Digest,expected:&Digest,f:&mut Frame)->[u8;32]{assert!(!f.called && core::ptr::eq(v,expected),"same child field and one call");f.called=true;f.reply}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn common_call(){
++ let c=CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any())};
++ let mut output:[u8;216]=kani::any();let j:usize=kani::any();kani::assume(j<216);let old=output[j];let offset:usize=kani::any();kani::assume(offset<32);let mut f=Frame{reply:kani::any(),called:false};
++ let reply=child(&c.nullifier,&c.anchor_root,&mut f);
++ let dst=&mut output[112..112+32];let src=&reply;let mut i=offset;dst[i]=src[i];i+=1;
++ assert!(f.called && i==offset+1,"one native reply, one KMX iteration");
++ assert!(output[j]==if j==112+offset{f.reply[offset]}else{old},"same reply byte and complete frame");
++}
