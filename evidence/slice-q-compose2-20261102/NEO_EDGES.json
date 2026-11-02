@@ -12995,7 +12995,7 @@
    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
    "callee": "crates/aspis-r1-cost-probe/src/candidate.rs::opening",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/candidate.rs::query_values->crates/aspis-r1-cost-probe/src/candidate.rs::opening",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
    "static_resolution": null,
@@ -13003,7 +13003,62 @@
    "model_domain_theorems": [
     "NEB_InstalledOpening.accepted_query"
    ],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-tail-call:crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/candidate.rs::opening",
+    "caller": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values",
+    "callee": "crates/aspis-r1-cost-probe/src/candidate.rs::opening",
+    "source_body_sha256": "ab4b8881aeeec9bf90292d284bbe0db76e3be77f8f8f9473720af6188dafa680",
+    "domain": "Same immutable proof allocation of57607 arbitrary bytes and actual current query ordinal i<22",
+    "native": {
+     "positive": "NEO_K071",
+     "negative": "NEO_K072",
+     "controls": [
+      "NEO_K069",
+      "NEO_K070"
+     ],
+     "extraction": "NEO_E010",
+     "contracts": [],
+     "historical_credit_restored": [],
+     "k2_quarantined": false,
+     "k3_status": "UNAFFECTED"
+    },
+    "parts": [
+     "packet_domain",
+     "canonical_carrier",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+      "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+      "theorems": [
+       "NEO_TailReference.checked",
+       "NEO_TailReference.opening"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+      "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+      "theorems": [
+       "NEO_TailPackets.admitted",
+       "NEO_TailPackets.accepted",
+       "NEO_TailPackets.opening"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+      "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+      "theorems": [
+       "NEO_GeometryGather.accepted"
+      ]
+     }
+    ],
+    "residual_inner_hypotheses": [],
+    "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
+   },
    "required_named_hypotheses": [
     "NDF::refresh::00.PacketDomain",
     "NDF::refresh::00.PhysicalInterpretation"
@@ -13027,7 +13082,7 @@
      ]
     }
    ],
-   "obstacle": "Actual Observer=Option<fn> is carried by the native root/call/mark interface. Rule14 bars native credit; approved composition trust does not lift this quarantine. query_loop also needs same-state repeated query_values rejection/Result and ordered effects. EXACT EDGE: crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/candidate.rs::opening. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/candidate.rs::query_values -> crates/aspis-r1-cost-probe/src/fast_dots.rs::four_dots",
@@ -20195,13 +20250,68 @@
    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
    "callee": "crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
    "obligation_id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range->crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "UNRESOLVED_CALL_SITE",
    "source_body_sha256": "cecda71c277c78a80c9dedd96c0148a2907410736135eeef24f3c1c0ffeaf154",
    "static_resolution": null,
    "selected_target": null,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEO-tail-call:crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range -> crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
+    "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range",
+    "callee": "crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
+    "source_body_sha256": "cecda71c277c78a80c9dedd96c0148a2907410736135eeef24f3c1c0ffeaf154",
+    "domain": "Every native usize; checked Ok exact input below262144 or precisely IndexOutOfRange",
+    "native": {
+     "positive": "NEO_K067",
+     "negative": "NEO_K068",
+     "controls": [
+      "NEO_K069",
+      "NEO_K070"
+     ],
+     "extraction": "NEO_E010",
+     "contracts": [],
+     "historical_credit_restored": [],
+     "k2_quarantined": false,
+     "k3_status": "UNAFFECTED"
+    },
+    "parts": [
+     "packet_domain",
+     "canonical_carrier",
+     "same_inputs_result",
+     "state_ordered_effects",
+     "physical_interpretation",
+     "native_callsite_association"
+    ],
+    "lean_evidence": [
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+      "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+      "theorems": [
+       "NEO_TailReference.checked",
+       "NEO_TailReference.opening"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+      "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+      "theorems": [
+       "NEO_TailPackets.admitted",
+       "NEO_TailPackets.accepted",
+       "NEO_TailPackets.opening"
+      ]
+     },
+     {
+      "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+      "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+      "theorems": [
+       "NEO_GeometryGather.accepted"
+      ]
+     }
+    ],
+    "residual_inner_hypotheses": [],
+    "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
+   },
    "required_named_hypotheses": [],
    "callee_packet_domains": [],
    "actual_inventory_calls": [
@@ -20239,7 +20349,7 @@
      ]
     }
    ],
-   "obstacle": "Need actual gather append/read/product/index/zero-test KMX windows and frames, prefix append/product iteration, same nonzero product/inverse, backward traversal, resized allocation and ordered five-cell regroup/collect association. Peer prefix/fold whole shapes timed out; split to one window, never rerun unchanged. for_range also needs real op12 constructor/error association. EXACT EDGE: crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range -> crates/aspis-core/src/r0/domain.rs::FibreIndex::new. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-r1-cost-probe/src/verifier.rs::QueryGeometry::for_range -> crates/aspis-r1-cost-probe/src/fast_domain.rs::fibre_point",
@@ -36091,6 +36201,224 @@
    ],
    "frozen_body_sha256": "486bc40aa1bda4eb6488bea22dff0d7d5b3d474eeab3c8c9054af3d1d47bd998",
    "association_sha256": "aaa73827847aee1d7174eb75ef997438acd5846307b81e178811c7a01478c1bf"
+  }
+ },
+ "NEO_tail_row_certificates": {
+  "TX1:063": {
+   "id": "NEO-tail-root:TX1:063",
+   "row": "TX1:063",
+   "function": "crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
+   "domain": "Every native usize; checked Ok exact input below262144 or precisely IndexOutOfRange",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+     "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+     "theorems": [
+      "NEO_TailReference.checked",
+      "NEO_TailReference.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+     "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+     "theorems": [
+      "NEO_TailPackets.admitted",
+      "NEO_TailPackets.accepted",
+      "NEO_TailPackets.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+     "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+     "theorems": [
+      "NEO_GeometryGather.accepted"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K067",
+    "NEO_K068"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K067/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "0e79aae457fa92e9cc89046d3d495608c1152f524d3fa895bcebf72ecfc45c4f",
+   "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
+  },
+  "TX1:085": {
+   "id": "NEO-tail-root:TX1:085",
+   "row": "TX1:085",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::opening",
+   "domain": "Same immutable proof allocation of57607 arbitrary bytes and actual current query ordinal i<22",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+     "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+     "theorems": [
+      "NEO_TailReference.checked",
+      "NEO_TailReference.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+     "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+     "theorems": [
+      "NEO_TailPackets.admitted",
+      "NEO_TailPackets.accepted",
+      "NEO_TailPackets.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+     "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+     "theorems": [
+      "NEO_GeometryGather.accepted"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K071",
+    "NEO_K072"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K071/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "028b69f947f492303bf8a3c39d6173b877833d4f19f7e3fcd7cade0a287a364a",
+   "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
+  },
+  "TX2:044": {
+   "id": "NEO-tail-root:TX2:044",
+   "row": "TX2:044",
+   "function": "crates/aspis-core/src/r0/domain.rs::FibreIndex::new",
+   "domain": "Every native usize; checked Ok exact input below262144 or precisely IndexOutOfRange",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+     "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+     "theorems": [
+      "NEO_TailReference.checked",
+      "NEO_TailReference.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+     "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+     "theorems": [
+      "NEO_TailPackets.admitted",
+      "NEO_TailPackets.accepted",
+      "NEO_TailPackets.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+     "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+     "theorems": [
+      "NEO_GeometryGather.accepted"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K067",
+    "NEO_K068"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K067/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "0e79aae457fa92e9cc89046d3d495608c1152f524d3fa895bcebf72ecfc45c4f",
+   "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
+  },
+  "TX2:056": {
+   "id": "NEO-tail-root:TX2:056",
+   "row": "TX2:056",
+   "function": "crates/aspis-r1-cost-probe/src/candidate.rs::opening",
+   "domain": "Same immutable proof allocation of57607 arbitrary bytes and actual current query ordinal i<22",
+   "parts": [
+    "result",
+    "state",
+    "ordered_effects",
+    "native_association"
+   ],
+   "lean_evidence": [
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L052/receipt.json",
+     "receipt_sha256": "aa09ad64505fd21ff67d2078fb7554722e77eb920f32f002b07dfd9c98d4177c",
+     "theorems": [
+      "NEO_TailReference.checked",
+      "NEO_TailReference.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L059/receipt.json",
+     "receipt_sha256": "19885ec9f994b4b193f44f7c7e9b72b2d00f86f7913da01082a6b275a71f0739",
+     "theorems": [
+      "NEO_TailPackets.admitted",
+      "NEO_TailPackets.accepted",
+      "NEO_TailPackets.opening"
+     ]
+    },
+    {
+     "receipt": "evidence/slice-q-compose2-20261102/NEO_L034/receipt.json",
+     "receipt_sha256": "f9faf04aeb45a72f7ee18e4c22384100b546216a2a56e5cb00f0a04307a9bbb7",
+     "theorems": [
+      "NEO_GeometryGather.accepted"
+     ]
+    }
+   ],
+   "native_pair": [
+    "NEO_K071",
+    "NEO_K072"
+   ],
+   "active_support_receipts": [
+    "evidence/slice-q-compose2-20261102/NEO_K071/receipt.json"
+   ],
+   "historical_support_restored": [],
+   "remaining_inner_hypotheses": [],
+   "top_hypotheses": [
+    "RootPacketDomain",
+    "RootPhysicalInterpretation",
+    "NativeContractSemanticTransport"
+   ],
+   "frozen_body_sha256": "028b69f947f492303bf8a3c39d6173b877833d4f19f7e3fcd7cade0a287a364a",
+   "association_sha256": "283b24c14bc5a5a2af0af0b4344b918aabb9c01a937d12bbb7812f17f8dcb0d5"
   }
  }
 }

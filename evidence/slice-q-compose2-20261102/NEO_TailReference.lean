@@ -26,7 +26,10 @@ theorem checked {C : Type} (error : C) (u : Usize) :
  NEB_GeometryIndices.indexPort error u =
  (do let r ← NEO_TailRef.checked u
      ok (match r with | .Ok x => .Ok x | .Err _ => .Err error)) := by
- simp only [NEB_GeometryIndices.indexPort,NEA_Reference.fibre_new_ref,NEO_TailRef.checked]
+ unfold NEB_GeometryIndices.indexPort
+ rw [NEA_Index.all_inputs]
+ unfold NEO_TailRef.checked
+ split <;> simp_all [bind_tc_ok]
 
 #print axioms inverse
 #print axioms opening

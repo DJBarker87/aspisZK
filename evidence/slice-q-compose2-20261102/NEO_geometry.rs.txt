@@ -99,3 +99,44 @@ fn accumulated_cell(){
  #[cfg(not(NEO_wrong_cell))] assert!(same);
  #[cfg(NEO_wrong_cell)] assert!(!same);
 }
+
+mod NEO_tail {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_tail_reference.rs"));}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn index_new(){
+ let i:usize=kani::any();let actual=FibreIndex::new(i);let expected=NEO_tail::checked(i);
+ let same=match actual {Ok(x)=>expected==Ok(x.get()),Err(aspis_core::r0::Error::IndexOutOfRange)=>expected==Err(0),Err(_)=>false};
+ #[cfg(not(NEO_wrong_index))] assert!(same);
+ #[cfg(NEO_wrong_index)] assert!(!same);
+}
+
+mod NEO_wire_reference {include!(concat!(env!("CARGO_MANIFEST_DIR"),"/src/NEO_window_reference.rs"));}
+#[kani::proof] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn field_ok(){
+ let bytes:[u8;128]=kani::any();let i:usize=kani::any();kani::assume(i<4);
+ let expected=NEO_wire_reference::wide(&bytes[32*i..32*i+32]);
+ if let Some(expected)=expected {
+  let actual=crate::weights::field(&bytes,i).to_limbs();let j:usize=kani::any();kani::assume(j<8);
+  #[cfg(not(NEO_wrong_field))] assert_eq!(actual[j],expected[j]);
+  #[cfg(NEO_wrong_field)] assert_ne!(actual[j],expected[j]);
+ }
+}
+#[kani::proof] #[kani::should_panic] #[kani::unwind(130)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+fn field_bad(){
+ let mut bytes=[0u8;128];bytes[0]=255;bytes[1]=255;bytes[2]=255;bytes[3]=127;
+ #[cfg(not(NEO_wrong_badfield))] let _=crate::weights::field(&bytes,0);
+ #[cfg(NEO_wrong_badfield)] let _=NEO_wire_reference::wide(&bytes[0..32]);
+}
+#[kani::proof] #[kani::unwind(3)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn geometry_empty(){
+ let queries:[u32;22]=kani::any();let start:usize=kani::any();kani::assume(start<=22);
+ let result=super::QueryGeometry::for_range(&queries,start,start).unwrap();
+ let same=result.start==start&&result.inverses.is_empty()&&result.line_z.is_empty();
+ #[cfg(not(NEO_wrong_empty))] assert!(same);
+ #[cfg(NEO_wrong_empty)] assert!(!same);
+}

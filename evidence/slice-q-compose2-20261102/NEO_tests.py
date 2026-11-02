@@ -10,7 +10,7 @@ class Gates(unittest.TestCase):
   with patch.object(v,'peer_inputs',return_value=self.data):
    return v.compose(self.base if base is None else base,self.peer if peer is None else peer,self.edges if edges is None else edges)
  def test_positive(self):
-  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(126,104,122));self.assertEqual(set(d['roots'].values()),{'OPEN'})
+  d=self.run_case();self.assertEqual((d['total_closed'],d['q_closed'],d['edge_closed']),(130,108,124));self.assertEqual(set(d['roots'].values()),{'OPEN'})
  def test_baseline_suspension_cannot_be_cleared(self):
   b=copy.deepcopy(self.base);next(c for c in b['NEN_credits'] if c['k3_status']=='SUSPENDED')['k3_status']='UNAFFECTED'
   with self.assertRaises(ValueError):self.run_case(base=b)
@@ -74,6 +74,18 @@ class Gates(unittest.TestCase):
   with self.assertRaises(ValueError):self.run_case(edges=e)
  def test_cell_missing_carrier(self):
   e=copy.deepcopy(self.edges);next(iter(e['NEO_cell_row_certificates'].values()))['lean_evidence'].pop()
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_tail_all_input_constructor_domain(self):
+  e=copy.deepcopy(self.edges);e['NEO_tail_row_certificates']['TX1:063']['domain']='Only canonical inputs'
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_tail_opening_complete_allocation(self):
+  e=copy.deepcopy(self.edges);e['NEO_tail_row_certificates']['TX1:085']['domain']='A smaller unrelated buffer'
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_tail_missing_result(self):
+  e=copy.deepcopy(self.edges);e['NEO_tail_row_certificates']['TX2:044']['parts'].remove('result')
+  with self.assertRaises(ValueError):self.run_case(edges=e)
+ def test_tail_missing_callsite(self):
+  e=copy.deepcopy(self.edges);next(x for x in e['edges'] if x['edge'].endswith(' -> crates/aspis-r1-cost-probe/src/candidate.rs::opening'))['certificate']['parts'].remove('native_callsite_association')
   with self.assertRaises(ValueError):self.run_case(edges=e)
  def mutate_parser(self,change):
   e=copy.deepcopy(self.edges);p=e['NEO_parser_row_certificates']['TX1:015'];change(p)

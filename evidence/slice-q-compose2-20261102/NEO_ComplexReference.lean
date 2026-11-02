@@ -1,8 +1,8 @@
-import NEO_WindowV2.Funs
-import NEO_PrefixSlices
+import NEO_ComplexCells
 set_option autoImplicit false
 namespace NEO_ComplexReference
 open Aeneas Aeneas.Std Result
+attribute [local irreducible] core.num.U32.from_le_bytes
 
 def observe (c : AspisR1CandidateParser.field.CM31) : Array U32 2#usize :=
  Array.make 2#usize [c.a,c.b]
@@ -12,22 +12,20 @@ def cohort (bytes : Slice U8) : Result (Option (Array U32 2#usize)) := do
   AspisR1CandidateParser.field.CM31.from_le_bytes bytes
  ok (Option.map observe parsed)
 
-def bytes8 (a b c d e f g h : U8) : Slice U8 :=
- (Array.make 8#usize [a,b,c,d,e,f,g,h]).to_slice
-
+/-- Complete comparison factors through four-byte reads and a symbolic two-word
+parser law. No concrete LE arithmetic or large numeral is normalized here. -/
 theorem eight (a b c d e f g h : U8) :
- NEO_WindowV2.complex (bytes8 a b c d e f g h) = cohort (bytes8 a b c d e f g h) := by
- unfold cohort bytes8
- simp [NEO_WindowV2.complex,NEO_WindowV2.word,NEO_WindowV2.P,
-  AspisR1CandidateParser.field.CM31.from_le_bytes,AspisR1CandidateParser.field.M31.from_le_bytes,
-  AspisR1CandidateParser.field.P,AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
-  AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
-  core.slice.index.Slice.index,core.slice.index.SliceIndexRangeUsizeSlice,
-  core.slice.index.SliceIndexRangeUsizeSlice.index,core.array.TryFromArrayCopySlice.try_from,
-  Array.to_slice,Array.make,Slice.index_usize,Slice.len,Slice.length,List.slice,
-  observe,lift,bind_tc_ok]
+ NEO_WindowV2.complex (NEO_ComplexCells.bytes a b c d e f g h) =
+ cohort (NEO_ComplexCells.bytes a b c d e f g h) := by
+ have cut := NEO_ByteCuts.complex (NEO_ComplexCells.bytes a b c d e f g h)
+  (Array.make 4#usize [a,b,c,d]) (Array.make 4#usize [e,f,g,h])
+  (NEO_ComplexCells.first a b c d e f g h) (NEO_ComplexCells.second a b c d e f g h)
+ unfold cohort
+ rw [cut,bind_tc_ok]
+ simp only [NEO_WindowV2.complex,NEO_ComplexCells.word0,NEO_ComplexCells.word4,
+  NEO_WindowV2.P,AspisR1CandidateParser.field.P,bind_tc_ok]
  repeat' split
- all_goals simp_all
+ all_goals simp_all [observe]
 
 #print axioms eight
 end NEO_ComplexReference
