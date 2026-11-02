@@ -8,12 +8,13 @@ open PV_RJ4IDB (Bytes NativeEvent)
 error while still inside the stderr/RefCell guards. This is not suppression of
 its syscall prefix or of partial writes. -/
 def handleBadFd {E : Type} (work : Q (Except E Unit))
-    (dropError : E → Q Unit) (isBadFd : E → Bool) : Q (Except E Unit) := do
+    (dropError : E → Q Unit) (isBadFd : E → Q Bool) : Q (Except E Unit) := do
   let r ← work
   match r with
   | .ok _ => pure (.ok ())
   | .error e =>
-    if isBadFd e then do
+    let bad ← isBadFd e
+    if bad then do
       let _ ← dropError e
       pure (.ok ())
     else pure (.error e)
@@ -28,22 +29,24 @@ def scoped {E : Type} (acquire release : Q Unit) (work : Q (Except E Unit)) :
   let _ ← release
   pure r
 
-def writer (E : Type) (write : Bytes → Q (Except E Nat)) (dropError : E → Q Unit)
-    (interrupted isBadFd : E → Bool) (writeZero : E) (oversize : Q (Except E Unit))
-    (acquire release : Q Unit) (fuel : Nat) : PV_EVH_LiteralDiagnostics.Writer where
-  Error := E
+def writer (driver : PV_EVH_WriteAll.Driver) (dropError : driver.Error → Q Unit)
+    (isBadFd : driver.Error → Q Bool) (acquire release : Q Unit) (fuel : Nat) :
+    PV_EVH_LiteralDiagnostics.Writer where
+  Error := driver.Error
   writeAll := fun buf => scoped acquire release
-    (handleBadFd (PV_EVH_LiteralWriteAll.run write dropError interrupted writeZero oversize fuel buf)
-      dropError isBadFd)
+    (handleBadFd (PV_EVH_WriteAll.loop driver fuel buf) dropError isBadFd)
   dropError := dropError
 
-theorem badfd_drop {E : Type} (work : Q (Except E Unit))
-    (dropError : E → Q Unit) (isBadFd : E → Bool) (w : State) (e : E)
-    (hw : (work w).outcome = .returned (.ok (.error e))) (he : isBadFd e = true) :
+theorem badfd_dispatch {E : Type} (work : Q (Except E Unit))
+    (dropError : E → Q Unit) (isBadFd : E → Q Bool) (w : State) (e : E)
+    (hw : (work w).outcome = .returned (.ok (.error e))) :
     handleBadFd work dropError isBadFd w =
-      let tail := (do let _ ← dropError e; pure (.ok ())) (work w).state
+      let tail := (do
+        let bad ← isBadFd e
+        if bad then do let _ ← dropError e; pure (.ok ())
+        else pure (.error e)) (work w).state
       ⟨tail.outcome,tail.state,(work w).events ++ tail.events⟩ := by
-  simp only [handleBadFd,Bind.bind,PV_EVH_Runtime.bind,hw,he,if_true]
+  simp only [handleBadFd,Bind.bind,PV_EVH_Runtime.bind,hw]
 
 /-- Returned io::Error is released to the report caller only after guard
 release. Its later destructor is LiteralDiagnostics.ignoreWrite's obligation. -/
@@ -57,6 +60,6 @@ theorem scoped_error {E : Type} (acquire release : Q Unit) (work : Q (Except E U
         ((work (acquire w).state).events ++ tail.events)⟩ := by
   simp only [scoped,Bind.bind,PV_EVH_Runtime.bind,ha,hw]
 
-#print axioms badfd_drop
+#print axioms badfd_dispatch
 #print axioms scoped_error
 end PV_EVH_StderrWrite
