@@ -49,3 +49,23 @@ NER_historical_Adapter_source_pin.json (extracted from
 XSf_DEPENDENCY_CLOSURE.json) links object 599c5663… to source e09bfc69…
 at revision d346dc7cb7232f12c4ff930d1e2db320bdc101d9, path
 `docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/AdapterRwModel.lean`.
+
+
+## Continuation source manifest
+
+NER_UPSTREAM_SOURCE_PINS.jsonl inventories source hashes for every original
+closure module. 7,046 entries additionally match a successful historical
+compilation receipt, its surviving source snapshot and the exact selected
+cohort object hash. Other entries explicitly retain their weaker inventory
+basis; they do not claim a newly replayed upstream library. The original
+headline/NDR object cohort is reused outside the complete affected downstream
+set. Lake.Util.Casing is pinned to the installed Lean 4.32 source. The
+GammaCandidateTotalityV14 hash is the source in the headline replay workspace;
+its original compile receipt was not recovered, and this qualification remains
+in the manifest. No missing source hash is replaced with an object hash.
+
+The read-only receipt resolver initially stopped on empty historical
+sound-int2/FIt_007/receipt.json. The corrected resolver reports this unreadable
+input explicitly and never uses it as a successful source pin. No Lean job
+was affected by that inventory-script error. All intermediate inventories are
+preserved as compressed JSONL plus uncompressed SHA-256 files.
