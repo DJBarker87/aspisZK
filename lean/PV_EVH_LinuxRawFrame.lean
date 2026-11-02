@@ -48,14 +48,16 @@ theorem consumed_prefix (syscall : Nat → Nat → Array U8 64#usize → World �
               split
               next hend => exact hlocal
               next hmore =>
-                have htail := ih (offset+ret.toNat) _ _ (by omega)
+                have htail := ih (offset+ret.toNat) (syscall (address+offset) (64-offset) a w).buffer
+                  (syscall (address+offset) (64-offset) a w).world (by omega)
                 intro i hi
                 exact (htail i (by omega)).trans (hlocal i hi)
             next hlarge => exact hlocal
         next hneg =>
           split
           next hintr =>
-            have htail := ih offset _ _ ho
+            have htail := ih offset (syscall (address+offset) (64-offset) a w).buffer
+              (syscall (address+offset) (64-offset) a w).world ho
             intro i hi
             exact (htail i hi).trans (hlocal i hi)
           next hother => split <;> exact hlocal
