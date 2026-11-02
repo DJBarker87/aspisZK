@@ -19,6 +19,7 @@ rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 sources=[mod+'.lean']; paths=D+':'+D+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'
 if agg:paths=D+':'+D+'/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'
 cfg=dict(kind='lean',module=mod,attempt=a,sources=sources,env={'LEAN_PATH':paths},timeout=600,command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M15000' if agg else '-M7000','-DElab.async=false','-o',mod+'.olean',mod+'.lean'],source_revision=rev,source_tree_dirty=True,deps_fingerprint={'scope':'NEP task private cache; final objects copied and hash verified from read-only NDR cohort'},expected_time='module import and raw dependency traversal; no arithmetic reduction',reservation_retries=retry)
+if mod=='NEP_Driver':cfg['command']=cfg['command'][:6]+['--run',mod+'.lean','final' if agg else 'fixtures' if '--fixtures' in sys.argv else 'small']
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
 subprocess.run(['scp','-q',str(E/(a+'.json')),*[str(E/s) for s in sources],H+':'+D+'/'],check=True)
 runner='S2W_lean_host_agg16.py' if agg else 'S2W_lean_host.py'

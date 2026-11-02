@@ -11,7 +11,12 @@ def audit (root : Name) (stem : String) : CommandElabM Unit := do
   while !pending.isEmpty do
     let (n, parent) := pending.back!
     pending := pending.pop
-    let some c := env.checked.get.find? n |
+    let some c := env.checked.get.find? n | do
+      logInfo m!"NEP_FAILURE {(Json.mkObj [("root", toJson root.toString),
+        ("missing", toJson n.toString), ("parent", toJson parent.toString),
+        ("discovered_constants_before_failure", toJson seen.size),
+        ("edges_scanned_before_failure", toJson edges),
+        ("complete", toJson false)]).compress}"
       throwError "missing reachable constant {n}; parent {parent}; visited {seen.size}"
     if c.isAxiom then axioms := axioms.push n.toString
     let mut refs := c.type.getUsedConstants ++
@@ -32,12 +37,6 @@ def audit (root : Name) (stem : String) : CommandElabM Unit := do
     ("walked_axioms", toJson walked), ("collect_axioms", toJson reported),
     ("equal", toJson (walked == reported))]).compress}"
   unless walked == reported do throwError "raw graph disagrees with collectAxioms"
-/-- Reimport the requested closure with all private kernel data loaded.
-Do not trust the caller's exported view or imported axiom summaries for traversal. -/
-def auditModules (modules : Array Name) (roots : Array Name) (stem : String) : CommandElabM Unit := do
-  let imports := modules.map fun n => ({ module := n, importAll := true } : Import)
-  let full ← liftIO <| importModules imports (← getOptions) (loadExts := true) (level := .private)
-  withEnv full do
-    for root in roots do
-      audit root (stem ++ "_" ++ root.toString)
+-- Private-data loading belongs in the standalone NEP_Driver runtime. Dynamic
+-- initializer execution must not be nested in an existing elaborator environment.
 end NEP
