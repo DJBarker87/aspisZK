@@ -41,7 +41,7 @@ for r in rows:
   accepted.append(r)
 # Reproducible read-only source pin checks, no native/extraction execution.
 subprocess.run(['python3','tools/pv-evh10-20261102/source_inventory.py','--check'],check=True,capture_output=True)
-for script in ['zero_law.py','zero_binding.py','zero_wrappers.py','entropy_iteration.py','callback_inventory.py','raw_source.py','raw_binding.py','raw_history.py','adopted_backend.py','raw_frame.py','frame_source.py','diagnostic_writer.py','entropy_copy.py','diagnostic_primitive.py']:
+for script in ['zero_law.py','zero_binding.py','zero_wrappers.py','entropy_iteration.py','callback_inventory.py','raw_source.py','raw_binding.py','raw_history.py','adopted_backend.py','raw_frame.py','frame_source.py','diagnostic_writer.py','entropy_copy.py','diagnostic_primitive.py','physical_binding.py']:
  subprocess.run(['python3','tools/pv-evh10-20261102/'+script,'--check'],check=True,capture_output=True)
 closure=subprocess.run(['python3','tools/pv-evh8-20261101/native_preflight.py','--check','--require-native-closure'],capture_output=True,text=True)
 assert closure.returncode==1
@@ -62,5 +62,5 @@ for v in rows:
 (E/'host-final.json').write_text(json.dumps(host,indent=2)+'\n')
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
-summary=dict(status='PASS focused evidence only; native task incomplete',baseline='efc985602e',attempts=len(rows),accepted=len(accepted),failed=len(rows)-len(accepted),resume_attempts=len(resume),remaining=100-len(resume),inherited_remaining=max(0,82-len(new)),next_fresh=79500+len(new) if len(new)<82 else 90200+len(late),audits_untouched=[79397,79398,79399,79597,79598,79599,90297,90298,90299],axioms_mode='SUMMARY-BASED cached module lists; full-data NEP audit/coherence not established',rows_removed=[],native=0,kani=0,release_replay=False,live_scopes=False,guard_sha256=sha(Path('tools/pv-evh10-20261102/compile.py').read_bytes()))
+summary=dict(status='PASS focused evidence only; native task incomplete',baseline='fa394f3858',attempts=len(rows),accepted=len(accepted),failed=len(rows)-len(accepted),resume_attempts=len(resume),remaining=100-len(resume),inherited_remaining=max(0,82-len(new)),next_fresh=79500+len(new) if len(new)<82 else 90200+len(late),audits_untouched=[79397,79398,79399,79597,79598,79599,90297,90298,90299],axioms_mode='SUMMARY-BASED cached module lists; full-data NEP audit/coherence not established',rows_removed=[],native=0,kani=0,release_replay=False,live_scopes=False,guard_sha256=sha(Path('tools/pv-evh10-20261102/compile.py').read_bytes()))
 (E/'validation.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))

@@ -22,8 +22,8 @@ theorem array_read {n : Usize} (a : Array U8 n) (i : Usize)
 theorem first_encoding (a : Array U8 64#usize) (i : Nat) (hi : i < 32) :
     (PV_EVH_StackEntropyFill.encode (PV_EVH_EntropyHalves.field a))[i]? =
       (PV_EVH_StackEntropyFill.encode a)[i]? := by
-  simp [PV_EVH_StackEntropyFill.encode,PV_EVH_EntropyHalves.field,
-    List.getElem?_take,hi]
+  simp only [PV_EVH_StackEntropyFill.encode,PV_EVH_EntropyHalves.field,
+    List.getElem?_map,List.getElem?_take,hi,if_true]
 
 theorem second_encoding (a : Array U8 64#usize) (i : Nat) :
     (PV_EVH_StackEntropyFill.encode (PV_EVH_EntropyHalves.seed a))[i]? =
@@ -37,7 +37,7 @@ theorem first_read (a : Array U8 64#usize) (i : Usize)
     ∃ x, Array.index_usize (PV_EVH_EntropyHalves.field a) i = .ok x ∧
       w.memory (address+i.val) = x.val := by
   apply array_read (PV_EVH_EntropyHalves.field a) i w address
-    (by simpa only [(PV_EVH_EntropyHalves.field a).property] using hi)
+    (by rw [(PV_EVH_EntropyHalves.field a).property]; change i.val < 32; exact hi)
   rw [first_encoding a i.val hi]
   exact hb
 
@@ -48,7 +48,7 @@ theorem second_read (a : Array U8 64#usize) (i : Usize)
     ∃ x, Array.index_usize (PV_EVH_EntropyHalves.seed a) i = .ok x ∧
       w.memory (address+i.val) = x.val := by
   apply array_read (PV_EVH_EntropyHalves.seed a) i w address
-    (by simpa only [(PV_EVH_EntropyHalves.seed a).property] using hi)
+    (by rw [(PV_EVH_EntropyHalves.seed a).property]; change i.val < 32; exact hi)
   rw [second_encoding a i.val]
   exact hb
 

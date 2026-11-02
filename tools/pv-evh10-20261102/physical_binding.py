@@ -5,7 +5,7 @@ import hashlib,json,re,sys
 E=Path('evidence/pv-evh10-20261102')
 sha=lambda b:hashlib.sha256(b).hexdigest()
 names=['StackCopy','EntropyPhysicalCopy','NativeEntropyPhysical','StackMove',
-       'LinuxRawABI','LinuxRawMachine','StackByteCodec','EntropyInnerFrame','EntropyCopiedRead']
+       'LinuxRawABI','LinuxRawMachine','StackByteCodec','EntropyInnerFrame','EntropyCopiedRead','EntropyMoveBacking','EntropyPhysicalReads']
 modules=[]
 for name in names:
     module='PV_EVH_'+name
