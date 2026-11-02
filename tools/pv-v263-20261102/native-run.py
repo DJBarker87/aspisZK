@@ -1,6 +1,7 @@
 from pathlib import Path
 import subprocess,json,shlex,time,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-v263-20261102';P='/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native';H='dombarker@100.108.41.90';a='N90121'
+assert not (E/(a+'-transport.json')).exists(), 'submitted ID: recover original evidence, never rerun'
 files=list((E/'inputs').rglob('*'))+[R/'tools/pv-v263-20261102/native.rs',R/'tools/pv-v263-20261102/native-host.py'];payload={str(p.relative_to(R)):p.read_text() for p in files if p.is_file()}
 code="import pathlib,json,sys;p=pathlib.Path("+repr(P)+");p.mkdir(exist_ok=True);x=json.load(sys.stdin)\nfor f,s in x.items():\n q=p/f;q.parent.mkdir(parents=True,exist_ok=True);q.write_text(s)"
 subprocess.run(['ssh',H,'python3 -c '+shlex.quote(code)],input=json.dumps(payload),text=True,check=True)
