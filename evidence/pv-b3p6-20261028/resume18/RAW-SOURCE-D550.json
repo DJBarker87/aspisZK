@@ -1,0 +1,78 @@
+{
+  "function": "external_local_packed_raw",
+  "source": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "external_local_packed_raw",
+      "start": 217,
+      "end": 262,
+      "signature": "fn external_local_packed_raw(input: [QM31; 4]) -> [u64; 4] ",
+      "body": "{\n    let input = input.map(extension_limbs);\n    let local: [[u64; 4]; 4] = core::array::from_fn(|output| {\n        core::array::from_fn(|limb| {\n            let a = u64::from(input[0][limb]);\n            let b = u64::from(input[1][limb]);\n            let c = u64::from(input[2][limb]);\n            let d = u64::from(input[3][limb]);\n            match output {\n                0 => 2 * a + 3 * b + c + d,\n                1 => a + 2 * b + 3 * c + d,\n                2 => a + b + 2 * c + 3 * d,\n                3 => 3 * a + b + c + 2 * d,\n                _ => unreachable!(),\n            }\n        })\n    });\n    let mut all_local_limbs_bounded = true;\n    let mut output = 0usize;\n    while output < 4 {\n        let mut limb = 0usize;\n        while limb < 4 {\n            all_local_limbs_bounded &= local[output][limb] < EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;\n            limb += 1;\n        }\n        output += 1;\n    }\n    debug_assert!(all_local_limbs_bounded);\n\n    let bound = EXTERNAL_LOCAL_LIMB_MODULUS_BOUND;\n    let packed = [\n        local[0][0] + 5 * bound - local[1][1] + 2 * local[2][2]\n            - local[2][3]\n            - local[3][2]\n            - 2 * local[3][3],\n        local[0][1] + local[1][0] + local[2][2] + 2 * local[2][3] + 2 * local[3][2] + bound\n            - local[3][3],\n        local[0][2] + 2 * bound - local[1][3] + local[2][0] - local[3][1],\n        local[0][3] + local[1][2] + local[2][1] + local[3][0],\n    ];\n    debug_assert!(packed[0] < 8 * bound);\n    debug_assert!(packed[1] < 8 * bound);\n    debug_assert!(packed[2] < 4 * bound);\n    debug_assert!(packed[3] < 4 * bound);\n    packed\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "helper": {
+    "path": "tools/pv-b3p6-20261028/v244/reference_poseidon.rs",
+    "sha256": "b1c375ce58fb025e26b3c3427e150ebd27020466394168e17addf5075b136638",
+    "item": {
+      "name": "raw_limb227",
+      "start": 884,
+      "end": 886,
+      "signature": "fn raw_limb227(output:usize,a:u64,b:u64,c:u64,d:u64)->u64 ",
+      "body": "{\n    match output {0=>2*a+3*b+c+d,1=>a+2*b+3*c+d,2=>a+b+2*c+3*d,3=>3*a+b+c+2*d,_=>unreachable!()}\n}",
+      "context": [],
+      "macros": []
+    }
+  },
+  "interpreter": "raw_source550",
+  "theorem": "PV_B3P_Association550227.raw_source_link550",
+  "source_steps": [
+    {
+      "source": "input.map(extension_limbs)",
+      "model": "raw_input550 / raw_input_continuation550",
+      "argument": "Four source inputs consumed in ascending order, same four raw u32 field projections, same owned fixed array. Each copy/move/FnMut/drop has ordinary core array mapping from ARRAY-INTERFACE-D543 / STD-STRUCTURAL-D542. No heap allocation or writable static. Nominal carriers retain every raw field."
+    },
+    {
+      "source": "local=from_fn(output=>from_fn(limb=>...))",
+      "model": "raw_source550 r0..r3 / raw_row550 / from_fn_four550",
+      "argument": "Exactly output-major, limb-minor0..3. All four row-array reads are total by four_index_zero/one/two/three550; hoisting immutable input rows and packing rows changes no call, failure, store or value. Calls remain16 raw cells, each reads a,b,c,d then widens in the same order. All arrays are owned and no write aliases input."
+    },
+    {
+      "source": "raw-limb match0..3",
+      "model": "raw_cell550 and raw_limb_zero/one/two/three550",
+      "argument": "Whole source closure match token-checked against raw_limb227. Four small named laws preserve exact wrapping expression trees for arbitrary u64 operands; raw arithmetic stays irreducible in the bridge. Default unreachable arm is excluded by the four-cell construction itself, without narrowing raw input values."
+    },
+    {
+      "source": "nested while debug accumulator",
+      "model": "source_debug_matrix550/source_debug_row550",
+      "argument": "Both actual0..4 loops retained with range_loop13, including all16 bounded reads even when flag is false. Scalar comparison and Boolean conjunction are total and effect-free; no mutation escapes the local Bool. range_four_total550 proves termination/success. ignored_source_debug_loops550 discharges removal of the ignored result. Release debug_asserts are absent; no claim that all comparisons are true is required."
+    },
+    {
+      "source": "bound=7*P; packed four expressions",
+      "model": "raw_pack0..3_550 and raw_pack0..3_value550",
+      "argument": "Independent shipped Rust expression parser matches every operator tree to the frozen SSA outputs. Every plus, multiply, minus remains release u64 wrapping and in the original order. No field reassociation, reduction or caller canonicality premise. Four independent output laws, never one big numerical evaluation."
+    },
+    {
+      "source": "reference debug-read/pack suffix",
+      "model": "raw_suffix550",
+      "argument": "Exact pinned-emission suffix copied mechanically into a theorem statement with16 raw cell parameters; only named four-index and output laws simplify it. It remains reference syntax, not native authority. raw_source550 is independently built from source maps, callbacks, loops and output interpreters."
+    },
+    {
+      "source": "whole source composition",
+      "model": "raw_source_reference550 / raw_source_link550",
+      "argument": "Named prefix, per-row continuation, ignored-total-debug and isolated suffix laws compose a complete Result equality against N79161. All primitive field/wrapping functions remain opaque; no all-input bit blasting, broad numeric tactic, input narrowing or new T item."
+    }
+  ],
+  "domain": "every raw QM31[4], including noncanonical u32 fields; no restricted caller premise",
+  "reference": "N79161 / POSEIDON-REFERENCE-D543.json, exact same source and unchanged ae1-2 translator",
+  "pack_comparison_sha256": "8062a51b19e15dd670d277229d4010e3aa690501672439c2cbbdb75d89121526",
+  "D188": "only local Bool writes in this body; no borrowed array writes or dropped restoration. Constructed arrays preserve all cells. Full matrix/native differential gate remains separate.",
+  "features_profile": "deployed ct-host-prover/release, overflow checks and debug assertions off; same source-pinned graph recorded by N79161 and N79167",
+  "route": "own-1 structural argument + complete-Result Lean equality",
+  "Kani": "ALL raw gates remain failed/no credit; no new Kani run or credit, no tool modification",
+  "retained": "whole std/D188/matrix/callback and V370/D381/D386; target not established",
+  "status": "pending focused raw stages and complete Result bridge; no raw local association yet"
+}
