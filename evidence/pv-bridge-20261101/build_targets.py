@@ -14,6 +14,7 @@ def deps(m,seen=None):
 lp=root+'/objects:/home/dombarker/project-offloads/codex-pv-evhc2-20261029/objects:/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean'
 for token in sys.argv[1:]:
  a,m=token.split(':',1);a=int(a);assert 78100<=a<=78199 and a!=78196
+ assert len(list(B.glob('lean-*/receipt.json')))<80,'Lean attempt budget exhausted'
  src=m+'.lean';assert sha(B/src)==freeze[src]['sha256'],('source changed',m)
  selected={}
  for n in sorted(deps(m)):
@@ -23,6 +24,7 @@ for token in sys.argv[1:]:
    if p.exists():selected[n+suffix]={'path':str(p),'sha256':sha(p)}
  cfg={'kind':'lean','module':m,'attempt':f'lean-{a}','sources':[src],'env':{'LEAN_PATH':lp},'timeout':600,'command':['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o','objects/'+m+'.olean',src],'source_revision':(B/'CODE-REVISION.txt').read_text().strip(),'source_freeze':freeze[src],'deps_fingerprint':{'cohort_manifest_sha256':'f8ff7cfcc649f1b99a01b0703353d4856a472ac198884cb80b706863b9d07d65','native_verification':'native-78196','selected_objects':selected,'resolver':'own flat PV_BR_* root; unchanged original namespace resolution'},'expected_time':'focused Lean elaboration against verified cached objects; no dependency build'}
  p=B/f'attempt-{a}.json';assert not p.exists(),('config exists',a);p.write_text(json.dumps(cfg,indent=2)+'\n')
+ print('TARGET_START',a,m,flush=True)
  r=subprocess.run([sys.executable,'launch.py',str(a),'lean'],cwd=B,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
  (B/f'launch-{a}.log').write_bytes(r.stdout)
  if r.returncode:
