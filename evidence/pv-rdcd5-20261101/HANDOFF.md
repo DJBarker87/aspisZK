@@ -12,8 +12,8 @@ prompt-rdcd4, prompt-rdcd5, common/r1p/local rules and user/handoff scope read.
 
 ## Running work — recover before submitting
 
-A local serial driver is RUNNING in unified exec session **42334**:
-`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V197`.
+A local serial driver is RUNNING in unified exec session **33955**:
+`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_ParserErrors`.
 It compiles missing dependencies, then ParserWindows and V197, and exits
 immediately on a proof failure. Do NOT submit a second scope or duplicate ID.
 Poll that session, or inspect/recover its exact receipts if the session is lost.
@@ -22,9 +22,9 @@ adapted from rdcd4 with caps6G/8G/swap0/Tasks64/-M7000, admission allowed:true
 AND exit0 before upload and again at launch, failed-source guard, ID census.
 lean.py now uses FIRST namespace root when snapshotting dependencies.
 
-Actual completed work at this checkpoint: **78200–78204 all PASS**:
+Actual completed work: **78200–78205 PASS;78206 FAIL (rewrite under match)**:
 SliceRange194, TryArray194, Endian194, FieldSource, BytesSource.
-No rdcd5 draft yet compiled; next 78205 ParserWindows after cooldown.
+ParserWindows passed78205. V197 failed78206 only because match some was unreduced; explicit dsimp added, committed39470aa15d. ParserFlat preemptively gets same reduction. Driver now retries changed V197 as78207, then ParserFlat and three existing parser dependencies and ParserErrors.
 One capped native scope (external-preflight) PASS: all5673 h4 objects verified,
 21 pv-dlib project objects reused with original source/object/import records,
 namespace-complete PLAIN COPIES, no Stream A objects. All completed runs swap0.

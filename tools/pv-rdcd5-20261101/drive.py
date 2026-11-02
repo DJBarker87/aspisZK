@@ -1,13 +1,13 @@
 """Serial focused dependency compilation; stop immediately on proof failure."""
 from pathlib import Path
-import json,subprocess,sys,time
+import json,subprocess,sys,time,hashlib
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd5-20261101'
 through=sys.argv[1];plan=json.load(open(E/'source-resolution.json'))
 pre=json.load(open(E/'preflight-result.json'));passed=set(pre['reused'])
 used=[]
 for p in E.glob('lean-*/receipt.json'):
  j=json.load(open(p));used.append(j['attempt'])
- if j['exit']==0:passed.add(j['module'])
+ if j['exit']==0 and hashlib.sha256((R/j['source_path']).read_bytes()).hexdigest()==j['source_sha256']:passed.add(j['module'])
 n=max(used+[78199])+1
 for m in plan['compile_order']:
  key=m.replace('.','/')
