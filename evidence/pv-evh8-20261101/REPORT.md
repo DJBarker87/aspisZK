@@ -104,3 +104,12 @@ field was removed, added or weakened. All accepted axioms are standard or empty;
 all receipt/source/object hashes reconcile read-only, no owned scope is live,
 no swaps/memory kills/limit increases occurred, and no full manifest/native/Kani
 regression ran. HANDOFF.md gives the next concrete native work and live budget.
+
+## D550 resume: operator and runtime work
+
+Read-only receipt/source/cache reconciliation passed before new launches at
+6a8a212480: 32 charged, next 79332, 48 left, no live owned scope. New operator
+spines use fresh PV_EVH_Op names and expose op11/op12 as computations before
+source Result evaluation; all accepted old module bytes stay unchanged. Their
+compatibility laws remain conditional until actual native callbacks, drops and
+operator selection are installed. No new trust field or endpoint credit.
