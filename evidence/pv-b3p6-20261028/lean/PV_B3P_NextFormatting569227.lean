@@ -13,9 +13,11 @@ def source (handler : Str → Result Never) (r : Range Usize) :
 theorem binding (handler : Str → Result Never) (r : Range Usize) :
     source handler r = PV_B3Q_RangeActual.source r := by
   by_cases guard : r.start.val < r.end.val
-  · simp only [source,PV_B3Q_RangeActual.source,guard,if_true,
+  · have order : r.start < r.end := by scalar_tac
+    simp only [source,PV_B3Q_RangeActual.source,guard,order,if_true,
       increment_value handler r.start r.end guard,bind_tc_ok]
-  · simp only [source,PV_B3Q_RangeActual.source,guard,if_false]
+  · have order : ¬r.start < r.end := by scalar_tac
+    simp only [source,PV_B3Q_RangeActual.source,guard,order,if_false]
 
 theorem handler_independent (first second : Str → Result Never) (r : Range Usize) :
     source first r = source second r :=
