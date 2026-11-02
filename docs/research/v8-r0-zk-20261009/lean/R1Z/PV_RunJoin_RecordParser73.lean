@@ -51,6 +51,7 @@ def parse
 theorem source (row : U8) (s : Slice U8) :
     host_wire.parse_record row s=parse row s := by
   simp only [host_wire.parse_record,parse,PV_RunJoin_FourReader73.read,bind_assoc_eq,bind_tc_ok,lift]
+  rfl
 
 attribute [irreducible] parse
 #print axioms parse
