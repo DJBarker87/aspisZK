@@ -1,15 +1,39 @@
 import Lean
 open Lean
-/-- Read every private table using Lean's own multi-part reader. Never elaborate proofs. -/
-unsafe def tables (p : System.FilePath) : IO (Array (ModuleData × CompactedRegion)) := do
+def put (j : Json) (key : String) (v : Json) : Json :=
+ match j with
+ | .obj o => .obj (o.insert key v)
+ | _ => j
+/-- The function boundary drops every ModuleData reference before the caller frees regions. -/
+unsafe def inspect (p : System.FilePath) (known : Option (Std.HashSet String)) :
+    IO (String × Array CompactedRegion) := do
  let mut files := #[p]
  for suffix in ["server", "private"] do
   let q := p.addExtension suffix
   if ← q.pathExists then files := files.push q
- if files.size == 1 then
-  let part ← readModuleData p
-  return #[part]
- else readModuleDataParts files
+ let parts ← readModuleDataParts files
+ let mut names : Array String := #[]
+ let mut imports : Array String := #[]
+ let mut dangling : Array Json := #[]
+ let mut count := 0
+ let mut edges := 0
+ for (data, _) in parts do
+  for i in data.imports do
+   if !imports.contains i.module.toString then imports := imports.push i.module.toString
+  for c in data.constants do
+   count := count + 1
+   if known.isNone then names := names.push c.name.toString
+   if let some set := known then
+    let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
+    if let .inductInfo v := c then refs := refs ++ v.ctors.toArray
+    for dep in refs do
+     edges := edges + 1
+     if !set.contains dep.toString then
+      dangling := dangling.push (Json.mkObj [("parent", toJson c.name.toString), ("missing", toJson dep.toString)])
+ let encoded := (Json.mkObj [("path", toJson p.toString), ("imports", toJson imports),
+   ("names", toJson names), ("declarations", toJson count), ("edges", toJson edges),
+   ("dangling", toJson dangling)]).compress
+ return (encoded, parts.map Prod.snd)
 unsafe def main (args : List String) : IO UInt32 := do
  let mode := args[0]!
  let dirs := (args[1]!.splitOn ":").map System.FilePath.mk
@@ -26,28 +50,14 @@ unsafe def main (args : List String) : IO UInt32 := do
    let n := pending.back!; pending := pending.pop
    if seen.contains n then continue
    seen := seen.insert n
-   IO.eprintln s!"NER_READING {n}"
    let p ← locate n
-   IO.eprintln s!"NER_PATH {p}"
-   let (data, region) ← readModuleData p
-   let parts := #[(data, region)]
-   IO.eprintln s!"NER_LOADED {n}"
-   let mut names : Array String := #[]
-   let mut imports : Array String := #[]
-   for (data, _) in parts do
-    IO.eprintln s!"NER_PART constants={data.constants.size} imports={data.imports.size}"
-    for c in data.constants do names := names.push c.name.toString.toList.asString
-    IO.eprintln "NER_NAMES_DONE"
-    for i in data.imports do
-     if !imports.contains i.module.toString then imports := imports.push i.module.toString.toList.asString
-   IO.eprintln "NER_IMPORTS_DONE"
-   let row := Json.mkObj [("module", toJson n), ("path", toJson p.toString),
-     ("imports", toJson imports), ("names", toJson names)]
-   IO.eprintln "NER_JSON_DONE"
-   out.putStrLn row.compress
+   let (encoded, regions) ← inspect p none
+   for region in regions.reverse do region.free
+   let row ← IO.ofExcept (Json.parse encoded)
+   let imports ← IO.ofExcept (row.getObjValAs? (Array String) "imports")
+   out.putStrLn (put row "module" (toJson n)).compress
    out.flush
    for i in imports do pending := pending.push i
-   for (_, region) in parts.reverse do region.free
  else
   let knownText ← IO.FS.readFile (System.FilePath.mk args[3]!)
   let known : Std.HashSet String := (knownText.splitOn "\n").foldl (fun s n => s.insert n) {}
@@ -57,25 +67,12 @@ unsafe def main (args : List String) : IO UInt32 := do
    let n ← IO.ofExcept (row.getObjValAs? String "module")
    let expected ← IO.ofExcept (row.getObjValAs? (Array String) "imports")
    let p ← locate n
-   let (data, region) ← readModuleData p
-   let parts := #[(data, region)]
-   let mut imports : Array String := #[]
-   let mut dangling : Array Json := #[]
-   let mut count := 0
-   let mut edges := 0
-   for (data, _) in parts do
-    for i in data.imports do
-     if !imports.contains i.module.toString then imports := imports.push i.module.toString.toList.asString
-    for c in data.constants do
-     count := count + 1
-     let mut refs := c.type.getUsedConstants ++ ((c.value? true).map Expr.getUsedConstants).getD #[]
-     if let .inductInfo v := c then refs := refs ++ v.ctors.toArray
-     for dep in refs do
-      edges := edges + 1
-      if !known.contains dep.toString then
-       dangling := dangling.push (Json.mkObj [("parent", toJson c.name.toString), ("missing", toJson dep.toString)])
-   out.putStrLn (Json.mkObj [("module", toJson n), ("path", toJson p.toString),
-    ("declarations", toJson count), ("edges", toJson edges),
-    ("imports_match", toJson (imports == expected)), ("dangling", toJson dangling)]).compress
-   for (_, region) in parts.reverse do region.free
+   let (encoded, regions) ← inspect p (some known)
+   for region in regions.reverse do region.free
+   let result ← IO.ofExcept (Json.parse encoded)
+   let imports ← IO.ofExcept (result.getObjValAs? (Array String) "imports")
+   let result := put result "module" (toJson n)
+   let result := put result "imports_match" (toJson (imports == expected))
+   out.putStrLn result.compress
+   out.flush
  return 0

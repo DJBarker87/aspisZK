@@ -43,3 +43,9 @@ match_2/match_1. Its receipt records exact target, revision, limits, exit,
 wall time, RSS and swaps. It is a table inspection, so #print axioms is N/A.
 The cause of the generated-name difference is not yet established. No source,
 protocol parameter, theorem contract or frozen proved module was edited.
+
+A stronger independent source pin was recovered after stage A:
+NER_historical_Adapter_source_pin.json (extracted from
+XSf_DEPENDENCY_CLOSURE.json) links object 599c5663… to source e09bfc69…
+at revision d346dc7cb7232f12c4ff930d1e2db320bdc101d9, path
+`docs/research/100bit-spend-path-20261013/lean-candidates/s126-caller-boundary-20261021/AdapterRwModel.lean`.
