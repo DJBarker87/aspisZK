@@ -80,13 +80,13 @@ theorem reached {H F : Type} (digest : aspis_core.digest.Digest32 H) (oracleInst
     (transcript : host_wire.SemanticTranscript H) (output : alloc.vec.Vec U8)
     (point : Array Q 10#usize) (running : Q) (round : Usize) (oracle : F) :
     host_sumcheck.prove_sumcheck_round digest oracleInst transcript output point running round oracle=
-      let assignments := Usize.wrapping_shl 1#usize (UScalar.cast .U32 (Usize.wrapping_sub 9#usize round))
+      (let assignments := Usize.wrapping_shl 1#usize (UScalar.cast .U32 (Usize.wrapping_sub 9#usize round))
       do let _ ← aspis_core.field.QM31.ZERO
          let evaluations ← host_work.map
            (host_sumcheck.prove_sumcheck_round.closure.Insts.CoreOpsFunctionFnTupleUsizeResultQM31Error digest oracleInst)
            (Usize.wrapping_add 100#usize round) (Usize.wrapping_mul 28#usize assignments)
            (oracle,point,round,assignments)
-         tail digest transcript output point running round assignments evaluations := by
+         tail digest transcript output point running round assignments evaluations) := by
   simp only [host_sumcheck.prove_sumcheck_round,lift,bind_tc_ok]
   rfl
 
