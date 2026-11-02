@@ -63,3 +63,17 @@ complete dependency-order source rebuild, run the final aggregation and
 hardened private walker on both specified roots, plus NER.loadedScan. Both
 walks must complete, equal collectAxioms, and the final loaded scan must
 have zero dangling references. That gate has **not run**.
+
+## Authorized continuation, 2026-11-02
+
+Lead superseded the one-module-per-scope limit for this continuation: up to
+120 batch scopes, each MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0,
+TasksMax 64, -M7000 and at most two concurrent Lean processes. This driver
+uses one sequential Lean process in one admitted scope at a time. The two
+agg16 allowances remain reserved for final whole-closure aggregation/audit.
+Batches contain at most 40 modules in the pinned dependency order. Existing
+proved sources are copied byte-for-byte and hash-checked before compilation.
+The unchanged lead S2W_run_host runner records each batch's limits, process
+peak RSS, swap, exit and wall time. The payload records per-module commands,
+source/object hashes, selected import object hashes, time, RSS, swap and any
+#print axioms output. The final loaded scan runs in the aggregation environment.
