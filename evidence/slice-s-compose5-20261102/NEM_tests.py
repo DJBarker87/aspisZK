@@ -68,4 +68,28 @@ class Encoder(Fixtures):
  def test_wrong_encoder_count(self):self.mutate_encoder('frontier',dict(base=160,count=19,width=32,destination_length=800))
  def test_missing_encoder_result(self):self.mutate_encoder('full_Result_state_effects',False)
  def test_missing_encoder_fill(self):self.mutate_encoder('std_fill_pin',{})
+class Late(Fixtures):
+ def mutate_late(self,field,value):
+  from NEM_late_checks import F
+  c=copy.deepcopy(self.p['members'][F]);c['late_composition'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[F]=h
+  self.assertFalse(v.certificate(c,F,self.b,r))
+ def test_missing_late_fidelity(self):self.mutate_late('fidelity',{})
+ def test_wrong_late_window(self):self.mutate_late('mutation','single byte only')
+ def test_missing_late_tail(self):self.mutate_late('tail',[])
+class Root(Fixtures):
+ def mutate_root(self,field,value):
+  from NEM_root_checks import F
+  c=copy.deepcopy(self.p['roots'][F]);c['validator_root'][field]=value
+  c.pop('semantic_review_sha256');h=hashlib.sha256(json.dumps(c,sort_keys=True).encode()).hexdigest();c['semantic_review_sha256']=h;r=copy.deepcopy(self.r);r[F]=h
+  self.assertFalse(v.certificate(c,F,self.b,r))
+ def test_root_accepted(self):
+  from NEM_root_checks import F
+  self.assertTrue(v.certificate(self.p['roots'][F],F,self.b,self.r))
+ def test_missing_root_child(self):self.mutate_root('child_functions',[])
+ def test_inner_root_hypothesis(self):self.mutate_root('inner_hypotheses_remaining',['Child.PacketDomain'])
+ def test_wrong_native_root(self):self.mutate_root('frozen_body','')
+ def test_wrong_root_state(self):self.mutate_root('empty_external_modifies',False)
+ def test_wrong_root_order(self):self.mutate_root('ordered_effects',False)
+ def test_missing_root_theorem(self):self.mutate_root('theorems',[])
 if __name__=='__main__':unittest.main()

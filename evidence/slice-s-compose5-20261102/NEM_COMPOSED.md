@@ -31,3 +31,37 @@ Output-lane child stage: **34/97 composed rows CLOSED; 0/7 roots**. First-byte a
 Late validator descendants: **38/97 composed rows CLOSED; 0/7 roots**. NEM_K026..031 and K033/034 combine exact scalar prefixes with one arbitrary frontier iteration; NEM_L006 reuses NBH induction and emitted association with standard axioms. K032 is an excluded nested-module qualification error repaired in K033. K035..038 separately establish actual std u8 fill value and complete frame for both output widths; their controls fill with the wrong value and fail. NEM_STD_FILL.json pins the compiler specialization to write_bytes (no protocol-loop unwinding). Encoder and parent late instances remain OPEN.
 
 Late encoder descendants: **42/97 composed rows CLOSED; 0/7 roots**. Each of 15 header/root windows has a native value/frame pair; extra wrong-root controls establish actual child places. Native count, typed destination geometry and small byte updates are separate, replacing the excluded NEL_K054 shape. NEM_L009 supplies instantiated same-cursor/full-frame laws and imported induction with standard axioms. L007/L008 (slice carrier simplification errors) and K059 (misspelled own constant) are excluded. Fixed initialization, all-length rejection prefixes and actual std fill are checked separately. Named legacy decode qualifications are replaced by a direct encoder proof reaching no decoder; no decoder row gets credit.
+
+## Validator root closed
+
+46/97 composed rows CLOSED; first root 2/2 rows CLOSED. NEM_L018 compiled the concrete same-call model G theorem below. The hybrid native corollary follows from the frozen caller association, CLOSED child certificates and approved composition-trust option A, with only the root own typed PacketDomain/PhysicalInterpretation ambient qualifications. This is P6/D188 trust reclassification, not removal. No inner bridge/domain/interpretation hypothesis remains. External state is unchanged; the local mutable late buffer does not escape.
+
+```lean
+import NEM_LateOracle
+set_option autoImplicit false
+noncomputable section
+namespace NEM_ValidatorComposed
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+
+/-- Concrete model G for the three SAME calls certified natively. The hybrid
+native correspondence is checked separately by NEM_validate; this theorem
+introduces no inner callee domain, interpretation, or bridge hypothesis. -/
+theorem result_state_effects {State : Type} (s : Statement) (state : State) :
+    let observed := NEE_ValidatorOracle.run NEM_PaymentReached.pay NEM_LaneReached.lane
+      NEM_LateOracle.late s
+    (observed.1,state,observed.2) =
+      (pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s,
+       state,(NED_ValidatorTrace.run s).2) := by
+  have same := NEE_ReachedRootModel.result_and_effects NEM_PaymentReached.pay
+    NEM_LaneReached.lane NEM_LateOracle.late s
+    (fun a reached => NEM_PaymentReached.payment_reached NEM_LaneReached.lane
+      NEM_LateOracle.late s a reached)
+    (fun d reached => NEM_LaneReached.lane_reached NEM_LateOracle.late s d reached)
+    (fun a out reached => NEM_LateOracle.late_reached s a out reached)
+  rw [same]
+
+#print axioms result_state_effects
+end NEM_ValidatorComposed
+```
+
+Axioms: propext, Classical.choice, Quot.sound. Native caller source erasure, complete Results, ordered effects and same child places are checked by NEM_root_checks.py against NEE_K052/053 and NEL_K006/007. Original NEM native_pair remains unchanged; a separate inherited-pair adapter checks the original differently named positive/negative harnesses, identical patches and all frozen/cap/feature/lock gates. 42 mutation tests passed.

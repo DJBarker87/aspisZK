@@ -12,7 +12,7 @@ def validate(c,expected,ledger,v):
   assert q['trust_classification']=='P6/D188 option A reclassification'
   assert q['native_pairs']==[['NEE_K052','NEE_K053'],['NEL_K006','NEL_K007']]
   P=v.R/'evidence/slice-s-compose2-20261029';L=v.R/'evidence/slice-s-compose4-20261101'
-  assert v.native_pair('NEE_K052','NEE_K053',folder=P,prefix='NEE_')
+  assert inherited_root_pair(v)
   assert v.native_pair('NEL_K006','NEL_K007',folder=L,prefix='NEL_')
   from NEM_artifacts import ref
   required=[]
@@ -41,3 +41,35 @@ def validate(c,expected,ledger,v):
   assert expected in allowed
   return True
  except (AssertionError,KeyError,ValueError,TypeError,OSError):return False
+
+def inherited_root_pair(v):
+ positive,negative="NEE_K052","NEE_K053";folder=v.R/"evidence/slice-s-compose2-20261029";prefix="NEE_";read=v.read
+ """Additional support checks; a valid pair alone NEVER closes a ledger row."""
+ E=folder
+ try:
+  for a,want in [(positive,True),(negative,False)]:
+   receipt=read(E/a/'receipt.json');cfg=read(E/(a+'.json'));log=(E/a/'stdout.log').read_text()
+   assert receipt['limits']=={'memory.high':'6442450944','memory.max':'8589934592','memory.swap.max':'0','pids.max':'64'}
+   assert receipt['kind']=='kani' and (receipt['exit_status']==0)==want
+   assert float(receipt['wall_seconds'])>0 and int(receipt['peak_rss_kib'])>0 and int(receipt['swaps'])==0
+   assert ('VERIFICATION:- SUCCESSFUL' if want else 'VERIFICATION:- FAILED') in log
+   assert 'timed out' not in log.lower()
+   if not want:assert 'Failed Checks:' in log
+   ad=read(E/(a+'-admission.json'));assert ad['exit']==0 and ad['reservation']['allowed'] is True
+   graph=read(E/(a+'-graph-check.json'));assert graph['graph_matches_frozen'] and graph['exact_LPm_graph']
+   lock=read(E/(a+'-lock-check.json'));assert lock['unchanged'] and lock['before']==lock['after']=='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
+   features=read(E/(a+'-metadata-pin.json'));assert features['features_all_crates']
+   assert cfg['env']['CARGO_NET_OFFLINE']=='true' and cfg['env']['CARGO_PROFILE_DEV_OPT_LEVEL']=='3'
+   assert cfg['copy_patch_sha256']=='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67'
+   assert not read(E/(a+'-source-check.json'))['errors']
+   assert read(E/(a+'-rule16-check.json'))['no_writable_static']
+   for n in [prefix+'native_contracts.patch',prefix+'oracle.patch']:
+    source=(E/(a+'-'+n)).read_bytes()
+    assert receipt['source_hashes'][n]==hashlib.sha256(source).hexdigest()
+    assert b'static mut' not in source and b'stub_verified' not in source
+  assert read(E/(positive+'.json'))['module']=='pool_v1::pair_forest_terminal::NEE_oracle::oracle_domain_positive'
+  assert read(E/(negative+'.json'))['module']=='pool_v1::pair_forest_terminal::NEE_oracle::oracle_domain_negative'
+  assert (E/(positive+'-NEE_native_contracts.patch')).read_bytes()==(E/(negative+'-NEE_native_contracts.patch')).read_bytes()
+  assert (E/(positive+'-NEE_oracle.patch')).read_bytes()==(E/(negative+'-NEE_oracle.patch')).read_bytes()
+  return True
+ except (AssertionError,KeyError,TypeError,ValueError,OSError):return False
