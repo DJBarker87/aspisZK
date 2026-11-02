@@ -39,7 +39,7 @@ theorem complete (point : Array Q 10#usize) :
     bound.val 0#usize (Array.repeat 1024#usize (0#usize,aspis_core.field.QM31.ZERO))
     (by simp) (by intro pair member;simp only [Array.repeat,List.mem_replicate] at member;rcases member with ⟨_,rfl⟩;decide)
   dsimp only [trailing,bound] at ho
-  exact ⟨⟨out,bound⟩,by simp only [host_multilinear.sparse_eq_weights,hp,hs,ho,lift,bind_tc_ok],
+  exact ⟨⟨out,bound⟩,by simp only [host_multilinear.sparse_eq_weights,hp,hs,ho,lift,bind_tc_ok];rfl,
     by rw [hb];exact powbound,valid⟩
 
 #print axioms complete
