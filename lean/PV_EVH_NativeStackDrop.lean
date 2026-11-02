@@ -35,7 +35,10 @@ theorem native_drop64 (base : ExternalTypes)
   letI : ExternalFuns := opsNative base heap box (PV_EVH_DeployedZeroSelected.selected ops)
   intro key slot a w hs hn
   refine ⟨PV_EVH_NativeZeroInstall.array_value_native base heap box ops 64#usize a,?_⟩
-  simp only [drop64,hs,hn,if_true]
+  have hd : drop64 key w =
+      ⟨.returned (.ok ()),PV_EVH_StackZero.drop slot w,PV_EVH_StackZero.emitted slot⟩ := by
+    simp only [drop64,hs,hn,if_true]
+  rw [hd]
   exact ⟨rfl,PV_EVH_StackZero.dropped_cleared slot w,
     PV_EVH_StackZero.dropped_runtime slot w,PV_EVH_StackZero.retired_after_drop slot w,
     PV_EVH_StackZero.dropped_history slot w,rfl⟩
