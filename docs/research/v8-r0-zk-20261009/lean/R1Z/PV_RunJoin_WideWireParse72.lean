@@ -32,8 +32,25 @@ theorem complete (x : aspis_core.field.wide_exact.WideExact)
   have d5 := decode x.c1.c0.b
   have d6 := decode x.c1.c1.a
   have d7 := decode x.c1.c1.b
-  rw [d0,d1,d2,d3,d4,d5,d6,d7]
-  exact PV_RunJoin_WideLimbsParse72.complete x canonical
+  refine (congrArg ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_limbs ?_).trans
+    (PV_RunJoin_WideLimbsParse72.complete x canonical)
+  apply Subtype.ext
+  simp only [PV_RunJoin_WideLimbsParse72.limbs,Array.make]
+  apply List.ext_getElem
+  · rfl
+  · intro i hi hi'
+    have cases : i=0 ∨ i=1 ∨ i=2 ∨ i=3 ∨ i=4 ∨ i=5 ∨ i=6 ∨ i=7 := by
+      simp only [List.length_cons,List.length_nil] at hi
+      omega
+    rcases cases with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl
+    · exact d0
+    · exact d1
+    · exact d2
+    · exact d3
+    · exact d4
+    · exact d5
+    · exact d6
+    · exact d7
 
 #print axioms complete
 end R1Z.PV_RunJoin_WideWireParse72
