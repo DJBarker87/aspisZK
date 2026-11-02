@@ -17,7 +17,9 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
     (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
     (audit : prover.MaskedFixtureAudit) (store : T)
     (built : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn)
-    (success : @host_semantic.build_with_material (types base) (selected base heap box ops)
+    (success : letI : ExternalTypes := types base
+      letI : ExternalFuns := selected base heap box ops
+      @host_semantic.build_with_material (types base) (selected base heap box ops)
       _ _ aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
       prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments
       public1 compiled noised maskOnly d g padding initial hash variant=ok (.Ok built,backend)) :
@@ -27,6 +29,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
       ok (.Ok (⟨public1,variant,hash,backend,built,(reserved,context)⟩,
         {audit with h1_total_balanced:=true}),store) := by
   letI : ExternalTypes := types base
+  letI : ExternalFuns := selected base heap box ops
   have balanced := PV_RunJoin_BuiltHelper72.complete base heap box ops
     aspis_core.digest.LegacyHashFn.Insts.Aspis_coreDigestDigest32
     prover.Backend.Insts.Aspis_r1_cost_probeHost_semanticCommitments public1 compiled noised
