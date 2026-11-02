@@ -33,7 +33,7 @@ theorem debug_row_total550 (bound : U64) (row : Limbs64_550) :
 theorem debug_matrix_total550 (bound : U64) (rows : Array Limbs64_550 4#usize) :
     Success (debug_matrix550 bound rows) := by
   unfold debug_matrix550
-  apply bind
+  apply PV_B3P_Success227.bind
   · apply from_fn_four_total550
     intro i hi
     apply bind _ _ (index rows i hi)
