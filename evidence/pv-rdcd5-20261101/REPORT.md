@@ -1,46 +1,79 @@
-# PV_RDCD5 — D555 active compilation
+# PV_RDCD5 — V233 and V236 restored; V197 finding
 
-Branch `codex/pv-rdcd5-20261101`, exact worktree
-`/Users/dominic/ZK/.worktrees/pv-rdcd3`, base ba1fa07d9e; reporting head 7b2f883a67b62b9912a37637ebf0b1c17bc13110.
-The lead-recreated flag exists and was read. Gate satisfied; the D541 absent-flag
-stop and24 polls are historical, retained in GATE-POLLS.jsonl and git history.
+Branch `codex/pv-rdcd5-20261101`, exact worktree `/Users/dominic/ZK/.worktrees/pv-rdcd3`, base **ba1fa07d9e**.
+Resumed D555 head **af37279448**. Reporting source revision `27c08444d2259e00727babde8bdc3cbfc0bfd4e4`;
+[commit log](COMMITS.txt). No merge or push. The lead-recreated host flag was
+read and satisfied; historical D541 gate polls were not repeated.
 
-| Row | Current disposition |
+| Row | Final result at the existing qualified boundary |
 |---|---|
-| V197 | **FINDING** — kernel-confirmed empty-input mismatch: EXISTING success parser returns fail.panic; owned qm returns fail.arrayOutOfBounds. See [finding](V197-FINDING.md) and [receipt](lean-78213/receipt.json). Local Windows/V197/Flat drafts pass but cannot establish that false whole-Result identification. |
-| V233 | **SUSPENDED / active** — typed inverse passes78214; exact typed roundtrip/consumed instance awaits current dependency closure and coherence. |
-| V236 | **SUSPENDED / pending** — full source branch/cursor/ordered-callback and exact UpdateSplit/typed op216 drafts await focused compile after V233. |
+| V197 | **FINDING** — [kernel-checked counterexample](V197-FINDING.md): existing `ProverRwSuccessParserSource…QM31.from_le_bytes` on empty Slice returns `fail.panic`; owned `BytesSource.qm []` returns `fail.arrayOutOfBounds`. `PV_RDCD5_ParserErrors.carrier_mismatch` passes78213. Literal arbitrary-slice whole-Result identification is false. No eager16-byte guard, success-only equality, error erasure or restoration is substituted. |
+| V233 | **RESTORED / B** — `PV_RDCD5_V233.consumed_instance` discharges existing `PV_AL_SplitSelected.consumed` for the original Eager64 typed family and every valid input Slice. Generic storage inverse, wrapper roundtrip/injectivity, pointer/count/tail and exact typed Result association pass. [Before/after and evidence](V233-ASSOCIATION.json). |
+| V236 | **RESTORED / B** — `PV_RDCD5_V236.op216_instance` discharges existing `UpdateCarrier.value` / `UpdateSelected.selected_native` at original safe Eager64 `length64/pos<64` domain. Every branch, cursor, dead byte, ordered Result callback and typed batch is retained; only the original core callback stays parametric. No singleton-fold premise. [Before/after and evidence](V236-ASSOCIATION.json). |
 
-Actual use: **21/100 Lean (19 pass,2 fail),
-2/30 capped native,0 Kani**. Actual receipts and exact target, source
-revision, exit, wall, peakRSS, swap and printed axioms: [RUNS.json](RUNS.json).
-Failed78206/78207 sources were changed before retry; their sorryAx diagnostics
-are uncredited failed elaborations, never admitted source axioms. Completed
-runs have zero swap. Pre-upload78216 cgroup ENOENT race refused admission, ran
-no compiler and consumed no extra ID; compliant same-ID retry passed.
+All seven committed drafts compile, plus ParserErrors and UpdateSplit. The
+three local parser drafts are valid owned-model proofs; they do not restore the
+false V197 callback identification. Its counterexample was independently
+replayed in the final release targets. V233 typed association uses
+`BlockCarrier.encode_flatten/flatten_injective`, `V233.typed_roundtrip` and
+`UpdateSplit.typed_batches/compression_instance`, rather than byte equality alone.
 
-All5673 external objects match unchanged h4 authority d9187c80…;
-[preflight](preflight-result.json) accepts33 coherent pv-dlib project objects
-(21 initial+12 extension), with full original source/import receipts, identical
-toolchain/shared prefix and namespace-complete plain copies. Stream A objects
-are never loaded. Missing objects are rebuilt privately one per capped scope.
-Caps6G/8G/swap0/Tasks64, Lean-M7000, admission allowed:true AND exit0 before
-transport and again at launch, ≥180s cooldown; source-hash failure guard enabled.
+[Coherence](final-coherence/receipt.json) passes:70 project objects, all5673
+unchanged h4 external hashes,37 successful actual-launch fingerprints and26
+native source pins; exit0, wall0:01.76, peak45684KiB, swap0. [Detailed result](coherence-result.json).
+33 project objects were reused only after original source/import/toolchain/
+prefix checks, in namespace-complete plain-copy overlays;37 were built fresh.
+No Stream A object or shared-source overwrite. [Release-object addendum](release-object-addendum.json)
+records the3 new audit objects and verifies the final launch fingerprint,
+completing the73-project-object cohort without a second manifest replay.
 
-Source scripts parser-source.py/buffer-source.py/split-source.py pass as
-preparation only. Historical native differentials remain finite validation;
-no unchanged differential suite, extractor or Kani run was repeated. New
-UpdateSplit drafts exact typed batch/carrier equality; no singleton-fold or
-extra callback premise. Source/shape checks alone earn no row restoration.
+The required sequence ran once and passed:
 
-Endpoint premises removed/added/changed: zero. T remains exactly
-entropy_law/entropy_kernel/observation. V370/D381/D386, E1/E2, real RunJoin,
-physical observer, client route and L1/L2/L3 remain. No Aeneas.Std fmt credit,
-privacy closure or machine-code correspondence is claimed. No production
-source, dictionary, observer, simulator, soundness file or key was modified.
+| Target/receipt | Exit | Wall | PeakRSS KiB | Swap |
+|---|---:|---:|---:|---:|
+| [Combined statement/axioms 78297](lean-78297/receipt.json) | 0 | 0:01.51 | 2572600 | 0 |
+| [Focused typed replay 78298](lean-78298/receipt.json) | 0 | 0:01.22 | 2576448 | 0 |
+| [Single frozen manifest 78299](lean-78299/receipt.json) | 0 | 0:01.22 | 2569476 | 0 |
 
-Next: recover the active V233 serial driver78183 before submitting any scope;
-finish its exact consumed-instance proof, then BufferSource/UpdateSplit/V236,
-coherence, per-restored-row commits and reserved78297–78299 audit/replays.
-[HANDOFF.md](HANDOFF.md) records current ownership and recovery instructions.
-No combined audit, focused replay or final frozen manifest has run.
+The combined audit checks123 full declaration types/axioms; focused and final
+replays each query3 exact interfaces, including the finding. Only
+propext/Classical.choice/Quot.sound occur. [RUNS.json](RUNS.json) records every
+exact command, source revision/hash/blob, import fingerprint, exit, wall,
+peakRSS, swap and complete printed-axiom lines, including retained failures.
+
+Actual budget: **44/100 Lean (40 pass,4 fail),
+4/30 capped native (all pass),0 Kani**. Uncredited failures78206,
+78207,78233,78237 were elaboration errors; source changed before each retry.
+Their sorryAx diagnostics are failed elaborations, not admitted source axioms.
+[Protocol audit](release-protocol-check.json):48 actual scopes, minimum launch
+gap186.054967s, zero void launches,
+three uncharged refusals (two cgroup ENOENT races, one aggregate reservation).
+Each waited the full cooldown and retried the same unlaunched target/ID.
+Caps6G/8G/swap0/Tasks64, Lean-M7000 throughout; no scope raised its cap.
+Quiet-window markers were read-only; the final recorded marker is expired.
+
+Source bindings use own-1/k-prime structural arguments at the existing
+compiler/runtime boundary, plus complete kernel-checked carrier/Result laws.
+[Deployed configuration reuse](deployed-config-reuse.json) preserves the
+unchanged1.94.1 release recipe and487-package resolved feature graph.
+Historical native differentials remain finite validation and were not rerun.
+No Rust build, Kani verification/re-credit, extraction or new translator was
+used. No Aeneas.Std fmt credit or new generated-declaration unification is
+claimed; ae1,fmt-1,k3 and dup-1-prime boundaries remain.
+
+Endpoint premises removed/added/changed: **zero**. Before/after exact row
+statements and qualifications are in the two association files. T stays
+exactly entropy_law/entropy_kernel/observation. V370/D381/D386, E1/E2, real
+RunJoin, world/physical observer, client route and L1/L2/L3 remain obligations.
+No production source, dictionary, simulator, observer, soundness file or key
+was modified. The privacy target is not established.
+
+[Cleanup](cleanup-result.json) removed only this task's verified compiler
+caches (4,625,912,152 bytes), after all gates;
+sources, receipts and all evidence inputs remain. Object hashes describe the
+measured pre-cleanup files; those private caches are no longer available.
+No task process remains running. Stop basis: V197's checked counterexample;
+the other two assigned links and final release checks are complete.56 ordinary
+IDs remain unused. Next deliverable is an explicitly faithful V197 error model
+and complete arbitrary-slice transport to the existing parser, preserving panic,
+None, late checks and the physical-observer obligation.
