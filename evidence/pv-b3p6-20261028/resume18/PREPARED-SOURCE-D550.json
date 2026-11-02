@@ -1,0 +1,101 @@
+{
+  "function": "qm31_sum_products3_prepared",
+  "source": {
+    "path": "crates/aspis-core/src/field.rs",
+    "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+    "item": {
+      "name": "qm31_sum_products3_prepared",
+      "start": 678,
+      "end": 703,
+      "signature": "fn qm31_sum_products3_prepared(left: &[PreparedQm31Multiplier; 3], right: &[QM31; 3]) -> QM31 ",
+      "body": "{\n    let mut sums = [[0u64; 3]; 3];\n    for index in 0..3 {\n        let right_sum = right[index].c0.add(right[index].c1);\n        let right_components = [\n            [\n                right[index].c0.a,\n                right[index].c0.b,\n                right[index].c0.a.add(right[index].c0.b),\n            ],\n            [\n                right[index].c1.a,\n                right[index].c1.b,\n                right[index].c1.a.add(right[index].c1.b),\n            ],\n            [right_sum.a, right_sum.b, right_sum.a.add(right_sum.b)],\n        ];\n        for component in 0..3 {\n            for channel in 0..3 {\n                sums[component][channel] += left[index].components[component][channel].0 as u64\n                    * right_components[component][channel].0 as u64;\n            }\n        }\n    }\n    qm31_from_karatsuba_channel_sums(sums)\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "support": [
+    {
+      "name": "qm31_from_karatsuba_channel_sums",
+      "start": 481,
+      "end": 498,
+      "signature": "fn qm31_from_karatsuba_channel_sums(sums: [[u64; 3]; 3]) -> QM31 ",
+      "body": "{\n    let reconstruct = |channels: [u64; 3]| {\n        let m0 = M31::reduce_u64(channels[0]);\n        let m1 = M31::reduce_u64(channels[1]);\n        let m2 = M31::reduce_u64(channels[2]);\n        CM31 {\n            a: m0.sub(m1),\n            b: m2.sub(m0).sub(m1),\n        }\n    };\n    let m0 = reconstruct(sums[0]);\n    let m1 = reconstruct(sums[1]);\n    let m2 = reconstruct(sums[2]);\n    QM31 {\n        c0: m0.add(mul_by_r(m1)),\n        c1: m2.sub(m0).sub(m1),\n    }\n}",
+      "context": [],
+      "macros": []
+    },
+    {
+      "name": "mul_by_r",
+      "start": 860,
+      "end": 866,
+      "signature": "fn mul_by_r(x: CM31) -> CM31 ",
+      "body": "{\n    // (2 + i)(a + bi) = (2a - b) + (a + 2b) i\n    CM31 {\n        a: x.a.double().sub(x.b),\n        b: x.a.add(x.b.double()),\n    }\n}",
+      "context": [],
+      "macros": []
+    }
+  ],
+  "reference": {
+    "path": "tools/pv-b3p6-20261028/v244/reference_field.rs",
+    "sha256": "2bf972ab45df675a00bb63a1d9563e38df82e8526862c3898649c8d485448e2d",
+    "accumulator": {
+      "name": "accumulate_prepared227",
+      "start": 156,
+      "end": 172,
+      "signature": "fn accumulate_prepared227(mut sums:[[u64;3];3],right:QM31,left:PreparedQm31Multiplier)->[[u64;3];3] ",
+      "body": "{\n    let right_sum=right.c0.add(right.c1);\n    let right_components=[\n        [right.c0.a,right.c0.b,right.c0.a.add(right.c0.b)],\n        [right.c1.a,right.c1.b,right.c1.a.add(right.c1.b)],\n        [right_sum.a,right_sum.b,right_sum.a.add(right_sum.b)]];\n    sums[0][0]+=left.components[0][0].0 as u64 * right_components[0][0].0 as u64;\n    sums[0][1]+=left.components[0][1].0 as u64 * right_components[0][1].0 as u64;\n    sums[0][2]+=left.components[0][2].0 as u64 * right_components[0][2].0 as u64;\n    sums[1][0]+=left.components[1][0].0 as u64 * right_components[1][0].0 as u64;\n    sums[1][1]+=left.components[1][1].0 as u64 * right_components[1][1].0 as u64;\n    sums[1][2]+=left.components[1][2].0 as u64 * right_components[1][2].0 as u64;\n    sums[2][0]+=left.components[2][0].0 as u64 * right_components[2][0].0 as u64;\n    sums[2][1]+=left.components[2][1].0 as u64 * right_components[2][1].0 as u64;\n    sums[2][2]+=left.components[2][2].0 as u64 * right_components[2][2].0 as u64;\n    sums\n}",
+      "context": [],
+      "macros": []
+    },
+    "all_nine_cells_checked": true
+  },
+  "source_steps": [
+    {
+      "source": "sums=[[0u64;3];3]",
+      "model": "native_prepared14 initial",
+      "argument": "Exact 3x3 zero matrix, no canonicality condition."
+    },
+    {
+      "source": "for index in0..3",
+      "model": "range_loop13 native_product_term14",
+      "argument": "range_loop_binding13/three_loop12 enumerate0,1,2 in order. All source input reads in3. Hoisted immutable left[index] read is total on precisely these indices and cannot affect the preceding right field operations."
+    },
+    {
+      "source": "right_sum and right_components",
+      "model": "source_accumulate13",
+      "argument": "All four field calls and three row constructors have identical order and operands, checked against complete source tokens. Repeated immutable right[index] reads are pure bounded reads; no borrowed write aliases inputs."
+    },
+    {
+      "source": "for component0..3,channel0..3",
+      "model": "source_nested13/source_component13/source_channel12",
+      "argument": "Ordered lexicographic nine cells. Complete reference accumulator tokens equal the generated unrolling. Every u32 widens to u64, multiply wraps, then add wraps exactly as release. No algebraic reassociation or canonicality premise."
+    },
+    {
+      "source": "sums[component][channel] += product",
+      "model": "matrix_cell/matrix_cell_result",
+      "argument": "Read original row and old cell; borrow row, update selected channel, apply back(updated) to the full outer matrix. Each result feeds the next cell, row, and product. Every nested write is retained; no discarded backward continuation."
+    },
+    {
+      "source": "qm31_from_karatsuba_channel_sums",
+      "model": "source_channel_reconstruct13",
+      "argument": "Read rows0,1,2; invoke reconstruct_call_once13 in order, with exact reduce_u64 calls0,1,2 and same two CM31 fields. Closure immutable captures empty; FnOnce/drop lowering stays V370. Then mul_by_r, add, sub, sub in order, all return complete Result."
+    },
+    {
+      "source": "PreparedQm31Multiplier payload",
+      "model": "NativePrepared14/from_reference14/to_reference14",
+      "argument": "Single components:[[M31;3];3] field checked; M31 public raw u32. Conversion preserves all nine raw limbs. prepared_array_roundtrip550 establishes lossless nominal array transport; no constructor invariant assumed."
+    },
+    {
+      "source": "mul_by_r vs cm31_mul_r",
+      "model": "same field-level expression tree",
+      "argument": "Exact doubled/subtracted/added coordinates checked above. CM31::new(a,b) is the unchanged two-field constructor; no additional arithmetic or restriction."
+    }
+  ],
+  "interpreter": "prepared_source550 / native_prepared14",
+  "theorem": "PV_B3P_Association550227.prepared_source_link550",
+  "domain": "all raw nine-u32 prepared payloads and three raw QM31 values; no canonicality narrowing",
+  "route": "own-1 structural argument + complete-Result Lean equality",
+  "D188": "all27 cell writes retain inner row and outer matrix restoration; local indexed mutation only",
+  "feature_profile": "ct-host-prover resolved reference graph recorded by N79168; deployed field items have no cfg/cfg!; release wrapping and debug assertions off",
+  "retained": "whole std source catalogue, D188 differential/matrix and callback, V370/D381/D386; no endpoint premise or T change",
+  "status": "pending new proof and exact reference replay; no credit yet"
+}
