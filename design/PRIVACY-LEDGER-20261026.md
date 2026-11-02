@@ -2015,3 +2015,141 @@ Env-J68000–68099 unused, no new proofs, host scopes or unchanged release repla
 No Stream A/soundness file, implementation, observer, simulator, wallet or key
 is edited. Coherent final dependency replay, native/deployment bindings and full
 D159 observation composition remain. **Target not yet established.**
+
+
+## Recount 10 2026-11-02 (B)
+
+All407 rows are re-derived at the [immutable pins](../evidence/privacy-recount-20261026/recount10/pins.json):
+research base a6138b93b9, fixed prover candidate ba1fa07d9e, and nine live heads
+captured at03:40:16 UTC. These are point-in-time snapshots; pv-v263 was absent
+then and later work earns no credit. LOG D480–D565 is read at the base; D566
+is retained at supplemental LOG revision5128519ff8. Full same-column row table:
+[ROWS10.md](../evidence/privacy-recount-20261026/ROWS10.md). Machine-readable
+[rows](../evidence/privacy-recount-20261026/recount10/rows10.json),
+[totals](../evidence/privacy-recount-20261026/recount10/totals.json),
+[method](../evidence/privacy-recount-20261026/recount10/METHOD10.md),
+[independent checks](../evidence/privacy-recount-20261026/recount10/independent-audit10.json).
+
+| Inventory / status | Recount 1 | Recount 2 | Recount 3 | Recount 4 | Recount 5 | Recount 6 | Recount 7 | Recount 8 | Recount 9 | Recount 10 |
+|---|---:|---:|---:|---:|---:|---:|---:| ---: | ---: | ---: |
+| Rows | 400 | 403 | 407 | 407 | 407 | 407 | 407 | 407 | 407 | 407 |
+| T | 26 | 26 | 26 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
+| P | 370 | 372 | 376 | 400 | 400 | 400 | 400 | 400 | 400 | 400 |
+| C | 4 | 5 | 5 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
+| OPEN | 138 | 110 | 103 | 95 | 93 | 86 | 77 | 81 | 73 | 69 |
+| REDUCED | 152 | 154 | 176 | 176 | 176 | 176 | 176 | 176 | 176 | 176 |
+| EVIDENCED | 10 | 12 | 14 | 14 | 14 | 14 | 14 | 14 | 14 | 14 |
+| CLOSED-ON-RESEARCH | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 | 87 |
+| CLOSED-ON-CANDIDATE | 13 | 40 | 27 | 35 | 37 | 44 | 53 | 49 | 57 | 61 |
+
+Status changes, all OPEN → CLOSED-ON-CANDIDATE at a qualified source boundary:
+
+- **V201:** rdcd4 complete original generic CodeField/q1024/Point Result law;
+  145 records dispositioned, concrete iterator/memory/writeback bindings.
+  Native producer and full physical observation remain separate.
+- **V220:** complete original28-coefficient radix-four source equals the
+  loop-free reference for every typed input/challenge, retaining errors and
+  divergence. Structural binding earns the credit; the unrecovered historical
+  checker is not called passing. No new polynomial-meaning theorem.
+- **V237:** complete generic Core::default Result and original moved-core
+  reference. ONLY the fixed64-byte default subcall is input-free, with the
+  45-node influence census, named zero literal, exact native bytes and deployed
+  configuration harness. No arbitrary new default callback or Core singleton.
+- **V242:** D502 explicitly adopts lowering-only compiler-cohort credit under
+  V370. The whole-row class-A audit identifies four unchanged pure project
+  bodies; the existing all-Public Result theorem is retained. Compiler
+  preservation remains a boundary, not a discharged endpoint premise.
+
+Thus OPEN73→69 and candidate closures57→61. REDUCED176, EVIDENCED14,
+research closures87 and P400/C4/T3 are unchanged. Tool-semantic transport is
+reclassification within existing trust, never endpoint premise removal.
+
+OPEN bucket changes and reasons (exclusive d/c/b/a precedence):
+
+- **V197 d→a:** live rdcd5 proves an empty-input whole-Result mismatch:
+  existing parser fail.panic versus owned parser fail.arrayOutOfBounds.
+  This checked equality failure supersedes escaping-reference extraction as
+  the immediate blocker. V197 remains OPEN; no privacy leak is inferred.
+- **V373 c→a:** owner recipe/timing choices are resolved; compiled-kernel audit
+  must be refreshed on adopted da36d6aa. Prior audit did not identify every
+  inlined copy. **V374 c→a:** actual-binary statistical leakage evidence remains;
+  throughput medians and decoder traces are not whole-client dudect.
+- **V396 c→b:** D524 resolves user-client scope; concrete native integration,
+  faithful external operations, timing and full-entry checking remain.
+
+Buckets are **a5/b60/c3/d1**. Remaining owner bucket is V231,V232 (SHA backend)
+and V371 (CPU/DOITM operational boundary). V233/V236 remain OPEN on exact typed
+carrier/buffer transport; rdcd5's partial work does not restore them.
+
+**K-3:** independently recomputed final totals are **22 RESTORED,81 UNAFFECTED,
+199 SUSPENDED,3 WITHDRAWN** over305 observations. The
+[per-credit/row check](../evidence/privacy-recount-20261026/recount10/k3-audit10.json)
+checks controlled rerun receipts and all34 current support lists. No CURRENT
+qualified credited scope depends on a still-SUSPENDED credit. V183's historical
+flag is cleared only for its independent world-indexed structural family;
+C018/C019 remain suspended. C051 (native Drop log), C053 (Core default log),
+C156/C163/C164 (shared memo) remain SUSPENDED. No local mock, missing original
+input or passing rerun overrides inherited K-1/K-2 restrictions. UNAFFECTED is
+only K-3 on recorded inputs; std parity/k''' structural arguments, compiler,
+native/world/domain conditions remain. These credit counts are not row totals.
+
+**Measured headline D540:** statement inspection confirms the same full
+Signal×Observation carrier, adaptive observer, simE/completion, bad event,
+PV_EVH_Core.bound, strict threshold and capped T (entropy_law,entropy_kernel,
+observation). The measured runtime permits arbitrary probability laws with
+measurability/exact joint ConditionalLaw as ordinary P; the adapter forwards
+all22 former runtime fields unchanged. Its finite-uniform corollary recovers
+the entire old rational inequality and numerical envelope from the measured
+endpoint. This removes finite representability, not a native row obligation.
+The Result-only headline is historical; the D159 observer is not weakened.
+
+**Publication consumers D541/D548:** QueryAppend and FinishContext are
+constructed internally. Required links fall9→8→7, with the exact same actual
+RUNJOIN_PUBLISH_COMPACT conclusion and runtime/world/store binders. These are
+CONSUMER improvements, not counted row closures or endpoint removals. Remaining
+links are R24Sampler,CommonSample,BackendInput,QueryContext,QueryRange,
+NodeAppend,PublishOrder. Skeleton consistency: reduced to non-emptiness;
+actual Nonempty P is unproved, including the independent op257 obligation.
+Model witnesses for V239/DIAG/L1 are not deployed-run witnesses. L1/L2/older
+binary L3 lines remain parked pending their named native/binary work.
+
+**V244 D559:**36/36 local associations (4 direct extraction,2 Kani,30
+Lean/structural) compose jointly, but the exact original runjoin callback
+consumer still requires **PV_B3P_Closure557227.DeployedWrapper557 base ops**.
+Formatting unreachability,16 opaque helper instances and pointer/drop/
+initializer/caller associations are missing. The live pin retains this binder.
+**V244/op227 remains OPEN**, and selected ports or a model installation cannot
+be substituted for that deployed residual.
+
+**D565 correction:** the joint non-vacuity witness is **NOT established on a
+coherent build**.90000's successful elaboration used the incoherent NDR cohort;
+90001 and NEP_R900 fail at undeclared stage2_owned.match_3. The NDR authority,
+evhc overlay/bridge joint-coherence claim and D562 witness credit are excluded.
+Source-level privacy unification is unaffected. Every #print axioms output is
+labelled **SUMMARY-BASED**; standard summaries do not cure a missing constant.
+NEP_Driver uses importAll/private loading and hard errors; its planted-case
+coverage and actual failure are retained, never filtered. No new raw release
+audit or repaired NER cohort is claimed.
+
+**Client D537/D561:** combined bundle da36d6aa is ADOPTED pending the user
+client, with unchanged three ELFs and D359(A) paired throttled timing
+(transfer14.834947s,+3.3167%; withdrawal14.310064s,−1.3159%). V346 manifest and
+V373 binary audit must be refreshed. The user-client scope is approved, but
+candidate9310ca5e is not an all-gates-pass adopted executable:1000/1000 pairs
+(2000 real calls) and31/31 checksums are finite positive evidence; N75149 has
+zero accepted timing pairs. Full-entry emission is not full-entry Lean
+compilation: faithful25-type/119-op externals, operand-losing formatting and
+the decoder I32/U32 shift mismatch remain blockers at the captured pin. The
+three-root audit covers only those compiled roots. The adopted linux_raw
+getrandom backend removes the old dlsym path; native error/cleanup/event and
+witness-independent-failure laws remain obligations, never extra T fields.
+
+Validation is inspection-only: **0/40 Lean,0 Kani**, Env-J90300–90399 unused,
+no proofs or new Lean modules. Historical exact targets, exits, wall/RSS/swap,
+revisions, admission records and summary axiom lines are retained in
+[receipt-audit10.json](../evidence/privacy-recount-20261026/recount10/receipt-audit10.json)
+and the content-addressed manifest. No whole replay or unchanged suite rerun,
+Stream A edit, key action, merge or push. Endpoint premises removed/added/
+weakened0/0/0. Remaining work includes deployed op227/op257 and Nonempty P,
+actual event acquisition/joint D163/D166/V400, client gates, E1/E2 and the
+coherent final replay with complete NEP audit. **Target not yet established.**
