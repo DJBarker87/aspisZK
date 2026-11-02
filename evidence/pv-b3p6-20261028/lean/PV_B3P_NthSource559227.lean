@@ -1,4 +1,5 @@
 import PV_B3P_NthGuard559227
+import PV_B3P_Std559KernelFuns227
 namespace PV_B3P_NthSource559227
 open Aeneas Aeneas.Std core.ops.range PV_B3P_NthGuard559227
 set_option autoImplicit false
@@ -35,20 +36,20 @@ theorem increment_wrap (item end_ : Usize) (guard : item.val < end_.val) :
 external expect_failed call is eliminated by a proved branch guard. -/
 theorem source_binding (r : Range Usize) (n : Usize) :
     source r n =
-      PV_B3P_Std559Nth227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
+      PV_B3P_Std559Kernel227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
         core.iter.range.StepUsize r n := by
-  unfold source PV_B3P_Std559Nth227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
+  unfold source PV_B3P_Std559Kernel227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
   rw [clone_value,bind_tc_ok]
   apply congrArg (Aeneas.Std.bind _)
   funext candidate
   cases candidate with
   | none => rw [clone_value,bind_tc_ok]
   | some item =>
-      rw [less_value,bind_tc_ok]
+      simp only [less_value,bind_tc_ok]
       by_cases guard : item.val < r.end.val
-      · simp only [guard,decide_true,if_true]
+      · simp only [guard,decide_true,↓reduceIte]
         rw [clone_value,bind_tc_ok,increment_wrap item r.end guard,bind_tc_ok]
-      · simp only [guard,decide_false,if_false]
+      · simp only [guard,decide_false,↓reduceIte]
         rw [clone_value,bind_tc_ok]
 
 #print axioms clone_value
