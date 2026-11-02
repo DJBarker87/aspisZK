@@ -85,8 +85,24 @@ assert key not in t.get('sent_inputs',[]),'unchanged source/dependencies refused
 for prior_path in H.glob('lean-*/receipt/receipt.json'):
  prior=json.loads(prior_path.read_text())
  if prior.get('exit_status') != 0 and prior.get('source_sha256') == srcsha:
-  # Conservative: no environment exception is used without an explicit record.
-  raise SystemExit(('unchanged FAILED source refused',str(prior_path),module,srcsha))
+  # u-prime: an explicitly pinned missing-object failure is pre-elaboration.
+  # Source/elaboration failures still have no exception.
+  exceptions_path=H/'resume18/environment-exceptions-D557.json'
+  exceptions=json.loads(exceptions_path.read_text()) if exceptions_path.exists() else []
+  exception=next((e for e in exceptions if e['module']==module and e['source_sha256']==srcsha
+    and e['failed_receipt_sha256']==hashlib.sha256(prior_path.read_bytes()).hexdigest()),None)
+  if exception is None:
+   raise SystemExit(('unchanged FAILED source refused',str(prior_path),module,srcsha))
+  failed_log=(prior_path.parent/'stdout.log').read_text()
+  assert failed_log.count('error:')==1 and ":1:0: error: object file '" in failed_log and 'does not exist' in failed_log
+  assert prior['deps_fingerprint']!=fp, 'environment exception needs a changed dependency fingerprint'
+  corrected=exception['corrected_dependency']
+  assert deps[corrected['module']]['sha256']==corrected['object_sha256']
+  assert deps[corrected['module']]['path']==corrected['path']
+  replacement=json.loads(Path(exception['corrected_receipt']).read_text())
+  assert replacement['exit_status']==0 and replacement['module']==corrected['module']
+  assert replacement['source_sha256']==exception['corrected_source_sha256']
+  assert hashlib.sha256(Path(corrected['path']).read_bytes()).hexdigest()==corrected['object_sha256']
 
 if a not in t['used_ids']:t['used_ids'].append(a)
 if is_audit:t.setdefault('audit_ids_used',[]).append(a)
