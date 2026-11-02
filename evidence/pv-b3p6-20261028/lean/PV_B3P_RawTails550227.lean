@@ -291,20 +291,6 @@ def raw_native_tail0_550 (a b c d : Limbs32_550) : Result Limbs64_550 := do
   let r0 ← raw_row550 a b c d 0#usize
   raw_native_tail1_550 a b c d r0
 
-/-- Pure delta refactoring of the exact emission, with every primitive opaque.
-No recurrence, raw arithmetic or numerical cell is evaluated here. -/
-theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
-    reference_poseidon.external_local_packed_raw input = (do
-  let q ← Array.index_usize input 0#usize
-  let a ← reference_poseidon.extension_limbs q
-  let q1 ← Array.index_usize input 1#usize
-  let a1 ← reference_poseidon.extension_limbs q1
-  let q2 ← Array.index_usize input 2#usize
-  let a2 ← reference_poseidon.extension_limbs q2
-  let q3 ← Array.index_usize input 3#usize
-  let a3 ← reference_poseidon.extension_limbs q3
-  raw_reference_tail0_550 a a1 a2 a3) := by
-  rfl
-
-#print axioms raw_reference_factor550
+#print axioms raw_reference_tail0_550
+#print axioms raw_native_tail0_550
 end PV_B3P_Association550227
