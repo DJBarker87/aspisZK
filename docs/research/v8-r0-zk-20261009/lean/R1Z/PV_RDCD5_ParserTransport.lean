@@ -24,6 +24,10 @@ theorem scalar (bytes : Array U8 4#usize) :
     ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes bytes =
       ok (PV_RDCD4_BytesSource.scalar bytes) := by
   rw [scalar_binding]
+  unfold ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes
+    ProverRwSuccessParserSource.aspis_core.field.P
+    ProverRwDictionaryBytesSource.aspis_core.field.P
+    PV_RDCD4_FieldSource.aspis_core.field.P
   rfl
 
 /-- One source component, retaining its range panic, conversion Err and None. -/
