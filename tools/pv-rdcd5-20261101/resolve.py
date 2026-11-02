@@ -24,7 +24,7 @@ def go(m):
     order.append(m)
 roots=['R1Z.PV_RDCD5_ParserWindows','R1Z.PV_RDCD5_V197',
        'R1Z.PV_RDCD5_ParserFlat','R1Z.PV_RDCD5_ParserErrors',
-       'R1Z.PV_RDCD5_V233','R1Z.PV_RDCD5_BufferSource',
+       'R1Z.PV_RDCD5_BlockCarrier','R1Z.PV_RDCD5_V233','R1Z.PV_RDCD5_BufferSource',
        'R1Z.PV_RDCD5_V236']
 for m in roots:go(m)
 checks={};conflicts=[]

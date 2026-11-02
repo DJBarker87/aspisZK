@@ -12,38 +12,36 @@ prompt-rdcd4, prompt-rdcd5, common/r1p/local rules and user/handoff scope read.
 
 ## Running work — recover before submitting
 
-A local serial driver is RUNNING in unified exec session **43971**:
-`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_ParserErrors`.
-It compiles missing dependencies, then ParserWindows and V197, and exits
-immediately on a proof failure. Do NOT submit a second scope or duplicate ID.
-Poll that session, or inspect/recover its exact receipts if the session is lost.
-The driver enforces 182s after completion; launches use own scope.py and lean.py
-adapted from rdcd4 with caps6G/8G/swap0/Tasks64/-M7000, admission allowed:true
-AND exit0 before upload and again at launch, failed-source guard, ID census.
-lean.py now uses FIRST namespace root when snapshotting dependencies.
+The focused parser driver has FINISHED. IDs78200–78213 are consumed:
+12 passes,2 elaboration failures (78206,78207) repaired before passing78208.
+All three original parser drafts pass (Windows78205,V19778208,Flat78209).
+Existing parser dependencies78210–78212 pass; ParserErrors78213 passes.
 
-Actual completed work: **78200–78205 PASS;78206 FAIL (rewrite under match)**:
-SliceRange194, TryArray194, Endian194, FieldSource, BytesSource.
-ParserWindows passed78205. V197 failed78206 (unreduced match) and78207 (remaining reflexive equality), changed proofs passed78208; ParserFlat passed78209. All three parser drafts are now compiled. Driver next78210 DictionaryBytesSource,78211 DictionaryOptionSource,78212 SuccessParserSource,78213 ParserErrors, with normal cooldowns.
-One capped native scope (external-preflight) PASS: all5673 h4 objects verified,
-21 pv-dlib project objects reused with original source/object/import records,
-namespace-complete PLAIN COPIES, no Stream A objects. All completed runs swap0.
-`progress.py` regenerates RUNS/SESSION/draft statuses from actual receipts.
-IDs ONLY78200–78299; audits ONLY78297–78299. Budget100 Lean/30 native/0 Kani.
-No row restored, no endpoint premises changed, T unchanged.
+Unified exec session **55135** is RUNNING a local cooldown/stage/native-reuse
+queue. It waits182s after78213, uploads committed reuse inputs under recorded
+admission, then runs capped `more-cache` and fetches preflight-result.json and
+more-cache-result.json. Do NOT start another scope until it finishes. The task's
+own scripts are under tools/pv-rdcd5-20261101. Recover any submitted scope
+read-only rather than resubmit. All completed runs swap0.
 
-## Newly found V197 issue — kernel check still pending
+Current actual use14/100 Lean (12pass,2fail),1/30 native (preflight pass),0 Kani;
+more-cache will be native2 if launched. Next ordinary ID78214, audits78297–78299.
+Source plan70 modules; updated root order explicitly compiles BlockCarrier
+FIRST in V233 before the larger SplitSelected dependency closure. Native reuse
+inputs can recover up to12 additional same-cohort objects beyond the21 already
+accepted. Run `progress.py` to regenerate all actual counts/draft statuses.
+
+## V197 FINDING — kernel-confirmed counterexample
 
 The retained exact Aeneas SliceIndexRangeUsizeSlice.index source returns
 `fail .panic`, whereas the rdcd4 owned SliceRange194/BytesSource returns
 `fail .arrayOutOfBounds`. Literal whole-Result transport to EXISTING
-ProverRwSuccessParserSource is apparently FALSE on empty input.
+ProverRwSuccessParserSource is FALSE on empty input.
 New committed `PV_RDCD5_ParserErrors` states existing_empty, owned_empty,
 carrier_mismatch. Compile it after V197 plus the three existing dictionary/
 success parser modules. If confirmed, record V197 FINDING and stop that false
 identification; never hide it under success-only equality, eager guards,
-error-constructor erasure, or a claimed restoration. The counterexample has
-NOT yet compiled. `std-model-sources.json` is read-only retained source evidence.
+error-constructor erasure, or a claimed restoration. The counterexample PASSED78213 (exit0,wall0:01.12,peak2592852KiB,swap0,standard axioms). See V197-FINDING.md; V197 is FINDING, not restored. `std-model-sources.json` is read-only retained source evidence.
 
 ParserWindows/ParserFlat/V197 preserve arbitrary slices, None short circuits,
 late second-half check; no extractor run or modified Rust. Source scripts pass
@@ -51,17 +49,16 @@ but confer no restoration. ae1/fmt-1/k3/dup-1-prime boundaries retained.
 
 ## Continue exact order
 
-1. Let current driver finish V197 or fix its genuinely failed source first.
+1. Let current native reuse queue finish; fetch and commit its receipts/updated preflight result. Never duplicate its scope.
 2. `resolve.py` now includes ParserFlat, ParserErrors early, then V233,
    BufferSource, V236 (70 project modules, no higher-priority EJR/freeze hits).
-   Run drive.py through ParserErrors after resolving failures; it skips accepted
-   receipts/reused objects and assigns the next unused ID.
+   ParserErrors is DONE. Run drive.py through V233 next; it skips current-hash accepted receipts/reused objects and assigns the next unused ID.
 3. Before rebuilding update cone, run the prepared `reuse-more.py` in ONE capped
    native scope, under normal cooldown/admission, with uploaded
    more-cache-records.json and current source-resolution.json. It recovers up to
    twelve more pv-dlib objects using committed original successful launch
    receipts and the resume final fingerprint. Inputs/scripts are committed.
-   This pass has NOT run. Fetch preflight-result.json AND more-cache-result.json
+   This pass is QUEUED in session55135; inspect completion before taking action. Fetch preflight-result.json AND more-cache-result.json
    afterwards. Every source transport still needs recorded admission first.
 4. Compile V233 through smallest BlockCarrier inverse before root; root now adds
    typed_roundtrip/typed_projection_injective and exact consumed_instance.
