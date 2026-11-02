@@ -27,7 +27,6 @@ class ExternalTypes where
   op20
   : Type
   op21 : Type
-  op22 (K : Type) (V : Type) : Type
   op23 : Type
   op24 : Type
 
@@ -53,7 +52,7 @@ abbrev aspis_statement.pool_v1.incremental_merkle.PoolV1TreeError [ext : Externa
 abbrev aspis_statement.pool_v1.payment_relation.PoolV1PaymentStatementFormatError [ext : ExternalTypes] := @ExternalTypes.op19 ext
 abbrev aspis_statement.pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1 [ext : ExternalTypes] := @ExternalTypes.op20 ext
 abbrev serde_json.error.Error [ext : ExternalTypes] := @ExternalTypes.op21 ext
-abbrev serde_json.map.Map [ext : ExternalTypes] := @ExternalTypes.op22 ext
+abbrev serde_json.map.Map (K V : Type) := List (K × V)
 abbrev serde_json.number.Number [ext : ExternalTypes] := @ExternalTypes.op23 ext
 abbrev solana_pubkey.ParsePubkeyError [ext : ExternalTypes] := @ExternalTypes.op24 ext
 
