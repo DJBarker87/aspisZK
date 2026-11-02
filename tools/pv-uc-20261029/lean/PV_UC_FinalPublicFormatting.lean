@@ -40,7 +40,7 @@ theorem pubkey_recomputable {Json Key : Type} (r : Renderers Json Key)
 theorem extracted_fd_formatter_public
     [types : PV_UC_ReadyEntry.ExternalTypes]
     (left right : PV_UC_ReadyEntry.ExternalFuns)
-    (format : Aeneas.Std.I32 → Aeneas.Result Aeneas.Std.String)
+    (format : Aeneas.Std.I32 → Aeneas.Std.Result Aeneas.Std.String)
     (bindLeft : ∀ x, @PV_UC_ReadyEntry.wallet_fd_path types left x = format x)
     (bindRight : ∀ x, @PV_UC_ReadyEntry.wallet_fd_path types right x = format x)
     (fd₁ fd₂ : Aeneas.Std.I32) (h : fd₁ = fd₂) :
@@ -51,7 +51,7 @@ theorem extracted_fd_formatter_public
 theorem extracted_json_formatter_recomputable
     [types : PV_UC_ReadyEntry.ExternalTypes]
     (left right : PV_UC_ReadyEntry.ExternalFuns)
-    (format : PV_UC_ReadyEntry.serde_json.value.Value → Aeneas.Result Aeneas.Std.String)
+    (format : PV_UC_ReadyEntry.serde_json.value.Value → Aeneas.Std.Result Aeneas.Std.String)
     (bindLeft : ∀ x, @PV_UC_ReadyEntry.render_json types left x = format x)
     (bindRight : ∀ x, @PV_UC_ReadyEntry.render_json types right x = format x)
     (actual simulated : PV_UC_ReadyEntry.serde_json.value.Value)
@@ -63,7 +63,7 @@ theorem extracted_json_formatter_recomputable
 theorem extracted_pubkey_formatter_recomputable
     [types : PV_UC_ReadyEntry.ExternalTypes]
     (left right : PV_UC_ReadyEntry.ExternalFuns)
-    (format : PV_UC_ReadyEntry.solana_pubkey.Pubkey → Aeneas.Result Aeneas.Std.String)
+    (format : PV_UC_ReadyEntry.solana_pubkey.Pubkey → Aeneas.Std.Result Aeneas.Std.String)
     (bindLeft : ∀ x, @PV_UC_ReadyEntry.pubkey_text types left x = format x)
     (bindRight : ∀ x, @PV_UC_ReadyEntry.pubkey_text types right x = format x)
     (actual simulated : PV_UC_ReadyEntry.solana_pubkey.Pubkey)
