@@ -20,7 +20,7 @@ else:
  assert not json.loads(llbc.read_text()).get('has_errors',False)
  gen=O/'generated';gen.mkdir(exist_ok=True)
  cmd=['timeout','300',str(a),'-sequential','-no-progress-bar','-abort-on-error','-strict-joins','-backend','lean','-namespace','PV_B3P_Std569Next227','-dest',str(gen),'-split-files','-emit-json',str(llbc)]
-inputs=dict(stage=stage,command=cmd,charon_sha256=sha(c),aeneas_sha256=sha(a),translator_identity='functionally identical rebuild (ae1-2)',source_revision=(R/'std559-source-revision').read_text().strip(),entry_source_sha256=sha(P/'std569.rs'),manifest_sha256=sha(P/'Cargo.toml'),lock_sha256=sha(P/'Cargo.lock'),expected_time='optimized cached compilation and translation of one isolated standard helper paths; no arithmetic elimination',limitation='entry adapters are new; exact std item identity/instantiation and caller association must be checked before transfer')
+inputs=dict(stage=stage,command=cmd,charon_sha256=sha(c),aeneas_sha256=sha(a),translator_identity='functionally identical rebuild (ae1-2)',source_revision=(R/'std559-source-revision').read_text().strip(),adapter_revision=(R/'std569-source-revision').read_text().strip(),entry_source_sha256=sha(P/'std569.rs'),manifest_sha256=sha(P/'Cargo.toml'),lock_sha256=sha(P/'Cargo.lock'),expected_time='optimized cached compilation and translation of one isolated standard helper paths; no arithmetic elimination',limitation='entry adapters are new; exact std item identity/instantiation and caller association must be checked before transfer')
 (O/(stage+'-inputs.json')).write_text(json.dumps(inputs,indent=2)+'\n')
 if '--inside' in sys.argv:
  if stage=='charon':
