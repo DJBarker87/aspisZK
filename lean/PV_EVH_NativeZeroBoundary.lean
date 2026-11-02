@@ -11,12 +11,14 @@ Selection alone does not supply either the byte value law or physical effects. -
 theorem array_residual (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    (opsNative base heap box ops).op122 = ops.op122 := rfl
+    @ExternalFuns.op122 (types base) (opsNative base heap box ops) =
+      @ExternalFuns.op122 (types base) ops := rfl
 
 theorem scalar_residual (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
-    (opsNative base heap box ops).op123 = ops.op123 := rfl
+    @ExternalFuns.op123 (types base) (opsNative base heap box ops) =
+      @ExternalFuns.op123 (types base) ops := rfl
 
 /-- The extracted source dictionary is precisely Array -> scalar -> op123.
 This equation exposes the residual operation at the actual native selection;
