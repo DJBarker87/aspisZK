@@ -3,6 +3,8 @@ set_option autoImplicit false
 namespace R1Z.PV_RunJoin_PolyPayloadWindow72
 open Aeneas Aeneas.Std ProverRwFull PV_RunJoin_PolyCell38 PV_RunJoin_PolyLoop38
 
+variable [ExternalTypes]
+
 theorem complete (p : Nat → Q) (start n i : Nat) (bound : i<n) :
     ((payload p start n).drop (32*i)).take 32=cell (p (start+i)) := by
   induction n generalizing start i with
