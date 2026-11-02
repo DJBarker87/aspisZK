@@ -29,6 +29,19 @@ for j in range(4,-1,-1):
  params=(' ('+' '.join(arrays)+' : Limbs32_550)')if arrays else''
  if j:params+=' ('+' '.join(vals[:4*j])+' : U64)'
  raw=''.join(chunks[j:])
+ if j==0:
+  typed=[]
+  for line in raw.splitlines():
+   m=re.match(r'  let (\w+|_) ← (.*)',line)
+   if m:
+    name,rhs=m.groups()
+    if name in ['a4','a6','a7','a8']:typ='Limbs32_550'
+    elif name in ['a24','a25','a26','a27']:typ='Limbs64_550'
+    elif rhs.startswith('Array.index_usize a') and re.match(r'Array.index_usize (a4|a6|a7|a8) ',rhs):typ='U32'
+    else:typ='U64'
+    line=line.replace('let '+name+' ←','let '+name+' : '+typ+' ←',1)
+   typed.append(line)
+  raw='\n'.join(typed)+'\n'
  code=f'import {predecessor}\nimport PV_B3P_DigestCpsEq9227\n'+head
  code+=f'\ntheorem raw_reference_tail{j}_factor550'+params+' :\n    '+('(show Result Limbs64_550 from do\n'if j==0 else'(do\n')+raw+'\n    ) = raw_reference_tail'+str(j)+'_550 '+' '.join(arrays+vals[:4*j])+f' := by\n  unfold raw_reference_tail{j}_550\n'
  if j==4:code+='  rfl\n'
