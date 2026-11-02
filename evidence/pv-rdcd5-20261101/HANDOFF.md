@@ -22,11 +22,9 @@ rejections in the extension, zero swap. New preflight-result.json is committed.
 
 Unified exec session **78183** is RUNNING:
 `python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V233`.
-It waits182s after native2, compiles smallest BlockCarrier as78214 FIRST, then
-BlockLayout194,Memory194 and missing16 SplitSelected dependency objects, then
-V233. It stops immediately on failure. Do NOT launch a second scope. The same
+It compiled BlockCarrier FIRST and is now compiling the missing SplitSelected dependency objects, then V233. It stops immediately on failure. Do NOT launch a second scope. The same
 native/Lean admission/caps/failed-source guard/cooldown rules apply.
-Actual use14/100 Lean (12pass,2fail),2/30 native,0 Kani. Ordinary next78214;
+Checkpoint actual use21/100 Lean (19pass,2fail),2/30 native,0 Kani. BlockCarrier passed78214, Layout78215, Memory78216 (one uncharged race refusal then pass), SplitBounds/Model/BlockPrefix/SplitCarrier78217–78220 pass. Ordinary next78221;
 audits78297–78299. Run progress.py to recover exact current counts.
 
 ## V197 FINDING — kernel-confirmed counterexample
