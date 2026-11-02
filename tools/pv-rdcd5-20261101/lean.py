@@ -56,7 +56,9 @@ D=Path('/home/dombarker/project-offloads/codex-pv-rdcd5-20261101')
 env=json.load(open(D/'env-J.json'));roots=[Path(x) for x in env['LEAN_PATH'].split(':')];seen={}
 def go(module):
  if module in seen:return
- obj=next((r/(module+'.olean') for r in roots if (r/(module+'.olean')).exists()),None)
+ root=next((r for r in roots if (r/module.split('/')[0]).is_dir()),None)
+ obj=root/(module+'.olean') if root else None
+ assert obj and obj.exists(), ('missing effective first-namespace dependency',module,str(obj))
  source=D/'lean-sources'/(module+'.lean')
  seen[module]=dict(object_path=str(obj),object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest() if obj else None)
  if source.exists() and module.startswith('R1Z/'):
