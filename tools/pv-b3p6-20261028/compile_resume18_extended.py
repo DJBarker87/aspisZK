@@ -25,7 +25,15 @@ assert t['lean_attempts']<180,t
 is_audit=len(sys.argv)>2 and sys.argv[2]=='audit'
 audits=range(79097,79100) if t['lean_attempts']<80 else range(79797,79800)
 a=next((i for i in audits if i not in t['used_ids']),None) if is_audit else t['next_unused_id']
-assert a is not None and (79000<=a<=79099 or 79700<=a<=79799) and a not in t['used_ids']
+retry_args=[x for x in sys.argv[2:] if x.startswith('--retry-admission=')]
+retry_id=int(retry_args[0].split('=',1)[1]) if retry_args else None
+if retry_id is not None:
+ assert not is_audit and retry_id in [r['attempt'] for r in t.get('refusals',[])], 'retry requires an existing uncharged refusal'
+ assert not any(r['attempt']==retry_id for r in t.get('receipts',[])), 'charged ID cannot be retried'
+ assert retry_id not in [79010,79011,79029,79074], 'historically observed IDs stay retired'
+ a=retry_id
+
+assert a is not None and (79000<=a<=79099 or 79700<=a<=79799) and (a not in t['used_ids'] or a==retry_id)
 if not is_audit:assert a in normal_range
 # Check other jobs' receipt directory names as well as shared sent ledgers.
 root=H.parent
@@ -80,7 +88,7 @@ for prior_path in H.glob('lean-*/receipt/receipt.json'):
   # Conservative: no environment exception is used without an explicit record.
   raise SystemExit(('unchanged FAILED source refused',str(prior_path),module,srcsha))
 
-t['used_ids'].append(a)
+if a not in t['used_ids']:t['used_ids'].append(a)
 if is_audit:t.setdefault('audit_ids_used',[]).append(a)
 else:t['next_unused_id']=next((i for i in (range(79000,79097) if t['lean_attempts']<80 else range(79700,79797)) if i not in t['used_ids']),None)
 state.write_text(json.dumps(t,indent=2)+'\n')
