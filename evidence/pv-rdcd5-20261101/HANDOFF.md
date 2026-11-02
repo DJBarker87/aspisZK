@@ -12,20 +12,41 @@ prompt-rdcd4, prompt-rdcd5, common/r1p/local rules and user/handoff scope read.
 
 ## Running work — recover before submitting
 
-The parser driver and native reuse queue have FINISHED. IDs78200–78213 consumed:
-12 passes,2 elaboration failures (78206,78207), repaired before passing78208.
-All original parser drafts pass (Windows78205,V19778208,Flat78209).
-Existing parser dependencies78210–78212 and ParserErrors78213 pass.
-Native scopes external-preflight and more-cache PASS: all5673 h4 externals,
-33 SAME pv-dlib-cohort project objects accepted (21 initial+12 more), zero
-rejections in the extension, zero swap. New preflight-result.json is committed.
+ALL focused modules have passed. Actual41 Lean (37pass,4fail),2 native,0 Kani;
+IDs78200–78240 consumed. Failed78206/78207(parser),78233(split),78237(buffer)
+were changed before retry. Latest roots: V23378234, BufferSource78238,
+UpdateSplit78239, V23678240. All original seven drafts + two additions compile;
+all accepted printed axioms standard, all completed runs swap0.
 
-Unified exec session **25454** is RUNNING:
-`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V236`.
-V233 focused root PASSED78234 (all six theorems standard axioms), after78233 elaboration repair. Copy194/CopyWindow194 PASSED78235/78236. BufferSource FAILED78237 only on leftover if True in zero-cursor branch; changed source replaces the guard simplifier with if_true and is committed. Driver next retries BufferSource78238, then UpdateSplit and V236. Parser finding remains retained. It stops immediately on failure. Do NOT launch a second scope. The same
-native/Lean admission/caps/failed-source guard/cooldown rules apply.
-Checkpoint actual use21/100 Lean (19pass,2fail),2/30 native,0 Kani. BlockCarrier passed78214, Layout78215, Memory78216 (one uncharged race refusal then pass), SplitBounds/Model/BlockPrefix/SplitCarrier78217–78220 pass. Ordinary next78238; current actual38 Lean (34pass,4fail),2native,0Kani;
-audits78297–78299. Run progress.py to recover exact current counts.
+Unified exec session **87365** is RUNNING final-coherence queue. It waits182s
+after78240, transports committed coherence-inputs.json/coherence.py under
+admission, then runs one capped final-coherence and fetches coherence-result.
+Inputs freeze70 project modules,37 accepted launch snapshots,26 native sources;
+33 remaining project objects are verified same-cohort pv-dlib copies. Do NOT
+launch another scope until this session finishes. Recover any submitted scope
+read-only, never resubmit it.
+
+If final-coherence PASSES: commit its receipt/result, run restore-row.py V233
+and path-limited commit ROWS.json+V233-ASSOCIATION.json; then restore-row.py V236
+and path-limited commit ROWS.json+V236-ASSOCIATION.json. These exact rows are
+focused-green but still SUSPENDED until this coherence gate. Then run
+prepare-audits.py (guarded on both RESTORED), commit its three new Lean targets
+and final-source-freeze, compile ONLY reserved audit IDs:
+78297 R1Z/PV_RDCD5_FinalAudit;
+78298 R1Z/PV_RDCD5_FocusedReplay;
+78299 R1Z/PV_RDCD5_FrozenManifest.
+Wait>=180s, admission etc normally per target, no unchanged reruns. The audit
+sources are PREPARED BY SCRIPT but the script has NOT yet run; no audit/replay
+has run. Native final-coherence will be scope3 if submitted; cleanup scope4 is
+prepared in cleanup.py, gated on successful97/98/99 and coherence. Stage it
+under admission after final checks, then remove only own compiled caches per
+local-lean9, preserving all source/receipts and keys; fetch cleanup-result.
+Do not clean before audits. No Rust/Kani/extractor run occurred.
+
+After release checks, refresh progress, write final REPORT/HANDOFF/COMMITS,
+record cooldown/admission audit and standard-axiom query count; commit. Final
+answer<400 words, expected restored V233/V236 plus V197 FINDING (only if the
+remaining gates actually pass). No endpoint premise removed/added/changed.
 
 ## V197 FINDING — kernel-confirmed counterexample
 
