@@ -1,0 +1,186 @@
+{
+  "evidence_class": "own-1 structural actual extracted proof-account entry-to-entropy call chain; not full entry/runtime adequacy",
+  "source": [
+    {
+      "path": "crates/aspis-r1-cost-probe/src/RealR1_client.rs",
+      "anchor": "pub fn prove_for_proof_accounts(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "adopted_file_sha256": "55ceff433f3370c5bb1bce69baabbfc7e1277e6e11d86de77eed066211e500f1",
+      "whole_file_identical": true,
+      "body_sha256": "732883952b4286061b541393f7232e9f1517ab265a9e248f58c52d9c382c0695",
+      "body": "pub fn prove_for_proof_accounts(\n    public: Public<'_>,\n    compiled: &PoolV1PairForestMergedC1CompilationV1,\n    hash: HashFn,\n    nonce_store: &mut DurableStateOnlyMaskNonceStore,\n    mut proof_account: impl FnMut(usize) -> [u8; 32],\n) -> Result<RetriedProof, Error> {\n    prover::prove_masked_retrying_with(public, compiled, Variant::S2, hash, nonce_store, |k| {\n        StateOnlyAttemptSecrets::generate_for_mask_nonce(proof_account(k)).map_err(|_| Error::Entropy)\n    })\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "fn retry_attempt(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "whole_file_identical": false,
+      "body_sha256": "9aafd5cbfe454bef410cf4379c3dcdb41d2ee5cdc1523a0870628c3ef216669e",
+      "body": "fn retry_attempt(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    mut next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n    k:usize,\n)->Result<RetriedProof,Error> {\n    if k>=ATTEMPT_CAP { return Err(Error::AttemptsExhausted); }\n    let attempt=next_attempt(k)?;\n    match prove_masked_attempt(public,compiled,variant,hash,attempt,nonce_store) {\n        Ok((proof,audit))=>Ok(RetriedProof{proof,audit,attempts:k+1}),\n        Err(Error::Rejected)=>retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,k+1),\n        Err(e)=>Err(e),\n    }\n}"
+    },
+    {
+      "path": "crates/aspis-r1-cost-probe/src/prover.rs",
+      "anchor": "pub fn prove_masked_retrying_with(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "979fe40da8c799688ce8c8283ff56c5f51dd8a5a3130dbd337af107aabf73c8e",
+      "adopted_file_sha256": "a67e714166d213b5b583bc026e23eba5dd7dd79b88210b1075266e87ee655c1c",
+      "whole_file_identical": false,
+      "body_sha256": "c80665457307e828e3346e771d51f4e73d38e179402933100c7fa1ea9ab0b4fe",
+      "body": "pub fn prove_masked_retrying_with(\n    public:Public<'_>,\n    compiled:&PoolV1PairForestMergedC1CompilationV1,\n    variant:Variant,\n    hash:HashFn,\n    nonce_store:&mut DurableStateOnlyMaskNonceStore,\n    next_attempt:impl FnMut(usize)->Result<StateOnlyAttemptSecrets,Error>,\n)->Result<RetriedProof,Error> {\n    if variant!=Variant::S2 { return Err(Error::Semantic); }\n    retry_attempt(public,compiled,variant,hash,nonce_store,next_attempt,0)\n}"
+    },
+    {
+      "path": "crates/aspis-prover/src/state_only_entropy.rs",
+      "anchor": "pub fn generate_for_mask_nonce(",
+      "adopted_revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+      "adopted_file_sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+      "whole_file_identical": true,
+      "body_sha256": "d02d2fc90f7fb097e7ad87d73478870ee8beda65dee98b9b7c7e4354ba21528f",
+      "body": "pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }"
+    }
+  ],
+  "nonbody_diff": "diff --git a/crates/aspis-r1-cost-probe/src/prover.rs b/crates/aspis-r1-cost-probe/src/prover.rs\nindex ffe5b8a1ba..dd3eb01f46 100644\n--- a/crates/aspis-r1-cost-probe/src/prover.rs\n+++ b/crates/aspis-r1-cost-probe/src/prover.rs\n@@ -88,5 +88,4 @@ pub fn encoded(values:impl IntoIterator<Item=E>)->Vec<u8> {values.into_iter().fl\n /// Deterministic fixture-only rejection sampling of K limbs. No distribution\n /// property is inferred from these fixed test samples.\n-#[cfg(feature=\"insecure-spend-fixture\")]\n fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {\n     let mut counter=0u64;\n@@ -100,5 +99,4 @@ fn tail_samples(hash:HashFn,seed:&[u8;32])->[K;56] {\n /// Convenience API, deliberately fixture-only: it always emits a fully masked\n /// P3 proof in the adopted compact binary-multiproof format.\n-#[cfg(feature=\"insecure-spend-fixture\")]\n pub fn prove(public:Public<'_>,compiled:&PoolV1PairForestMergedC1CompilationV1,variant:Variant,hash:HashFn,seed:&[u8;32])->Result<Vec<u8>,Error> {\n     prove_masked_fixture(public,compiled,variant,hash,seed).map(|(proof,_)|proof)\n@@ -116,5 +114,4 @@ pub struct MaskedFixtureAudit {\n }\n \n-#[cfg(feature=\"insecure-spend-fixture\")]\n fn fixture_secret(hash:HashFn,domain:&[u8],seed:&[u8;32],public:&[u8],variant:Variant)->Result<[u8;32],Error> {\n     let mut value=hash(&[domain,seed,public,&[variant.tag()]]);\n@@ -145,5 +142,4 @@ fn inactive_sum_k(values:&[K],masks:&[u16;64])->K {\n /// Deterministic, insecure masked fixture path. Its derivations exist only for\n /// reproducible local cost experiments and are not production entropy.\n-#[cfg(feature=\"insecure-spend-fixture\")]\n pub fn prove_masked_fixture(\n     public:Public<'_>,\n",
+  "source_scope": "Selected call-chain function bodies are byte-identical. The whole prover.rs differs by four insecure-spend-fixture cfg removals outside these bodies; no whole-file identity or full-entry adequacy is claimed.",
+  "emitted": [
+    {
+      "name": "RealR1_client.prove_for_proof_accounts",
+      "body": "def RealR1_client.prove_for_proof_accounts\n  {T0 : Type} (coreopsfunctionFnMutT0TupleUsizeArrayU832Inst :\n  core.ops.function.FnMut T0 Std.Usize (Array Std.U8 32#usize))\n  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (compiled :\n  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n  (hash : Slice (Slice Std.U8) \u2192 Result (Array Std.U8 32#usize))\n  (nonce_store :\n  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (proof_account : T0) :\n  Result ((core.result.Result prover.RetriedProof verifier.Error) \u00d7\n    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  := do\n  let (r, nonce_store1) \u2190\n    prover.prove_masked_retrying_with\n      (RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError\n      coreopsfunctionFnMutT0TupleUsizeArrayU832Inst) public1 compiled\n      transport.Variant.S2 hash nonce_store proof_account\n  ok (r, nonce_store1)\n\nend ProverRwFull\n",
+      "sha256": "0edc729468375217643752c0d5e2bf8af0ab1b6c56fe9c1b02a79283bea03e00"
+    },
+    {
+      "name": "prover.prove_masked_retrying_with",
+      "body": "def prover.prove_masked_retrying_with\n  {T0 : Type}\n  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :\n  core.ops.function.FnMut T0 Std.Usize (core.result.Result\n  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))\n  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (compiled :\n  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n  (variant : transport.Variant)\n  (hash : Slice (Slice Std.U8) \u2192 Result (Array Std.U8 32#usize))\n  (nonce_store :\n  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (next_attempt : T0) :\n  Result ((core.result.Result prover.RetriedProof verifier.Error) \u00d7\n    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  := do\n  let b \u2190\n    core.cmp.PartialEq.ne.trait_default\n      transport.Variant.Insts.CoreCmpPartialEqVariant variant\n      transport.Variant.S2\n  if b\n  then ok (core.result.Result.Err verifier.Error.Semantic, nonce_store)\n  else\n    prover.retry_attempt\n      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst\n      public1 compiled variant hash nonce_store next_attempt 0#usize\n\n",
+      "sha256": "ef0f3088503e4bbaaf06dfaded53f6266ba33d8b64569edcd6dc36ac294ba735"
+    },
+    {
+      "name": "prover.retry_attempt",
+      "body": "def prover.retry_attempt\n  {T0 : Type}\n  (coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst :\n  core.ops.function.FnMut T0 Std.Usize (core.result.Result\n  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error))\n  (public1 : aspis_statement.pool_v1.pair_forest_semantic_terminal.r0.Public)\n  (compiled :\n  aspis_statement.pool_v1.pair_forest_trace.PoolV1PairForestMergedC1CompilationV1)\n  (variant : transport.Variant)\n  (hash : Slice (Slice Std.U8) \u2192 Result (Array Std.U8 32#usize))\n  (nonce_store :\n  aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  (next_attempt : T0) (k : Std.Usize) :\n  Result ((core.result.Result prover.RetriedProof verifier.Error) \u00d7\n    aspis_prover.state_only_entropy.DurableStateOnlyMaskNonceStore)\n  := do\n  if k >= prover.ATTEMPT_CAP\n  then\n    ok (core.result.Result.Err verifier.Error.AttemptsExhausted, nonce_store)\n  else\n    let (r, next_attempt1) \u2190\n      coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst.call_mut\n        next_attempt k\n    let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r\n    match cf with\n    | core.ops.control_flow.ControlFlow.Continue val =>\n      let (r1, nonce_store1) \u2190\n        prover.prove_masked_attempt public1 compiled variant hash val\n          nonce_store\n      match r1 with\n      | core.result.Result.Ok p =>\n        let (proof, audit) := p\n        let i \u2190 Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)\n        ok (core.result.Result.Ok { proof, audit, attempts := i },\n          nonce_store1)\n      | core.result.Result.Err e =>\n        match e with\n        | verifier.Error.Parse =>\n          ok (core.result.Result.Err verifier.Error.Parse, nonce_store1)\n        | verifier.Error.Semantic =>\n          ok (core.result.Result.Err verifier.Error.Semantic, nonce_store1)\n        | verifier.Error.Transcript =>\n          ok (core.result.Result.Err verifier.Error.Transcript, nonce_store1)\n        | verifier.Error.Relation =>\n          ok (core.result.Result.Err verifier.Error.Relation, nonce_store1)\n        | verifier.Error.Merkle =>\n          ok (core.result.Result.Err verifier.Error.Merkle, nonce_store1)\n        | verifier.Error.Query =>\n          ok (core.result.Result.Err verifier.Error.Query, nonce_store1)\n        | verifier.Error.Checkpoint =>\n          ok (core.result.Result.Err verifier.Error.Checkpoint, nonce_store1)\n        | verifier.Error.Allocation =>\n          ok (core.result.Result.Err verifier.Error.Allocation, nonce_store1)\n        | verifier.Error.Rejected =>\n          let i \u2190 Aeneas.Std.lift (Std.Usize.wrapping_add k 1#usize)\n          prover.retry_attempt\n            coreopsfunctionFnMutT0TupleUsizeResultStateOnlyAttemptSecretsErrorInst\n            public1 compiled variant hash nonce_store1 next_attempt1 i\n        | verifier.Error.AttemptsExhausted =>\n          ok (core.result.Result.Err verifier.Error.AttemptsExhausted,\n            nonce_store1)\n        | verifier.Error.Entropy =>\n          ok (core.result.Result.Err verifier.Error.Entropy, nonce_store1)\n    | core.ops.control_flow.ControlFlow.Break residual =>\n      let r1 \u2190\n        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n          prover.RetriedProof (core.convert.FromSame verifier.Error) residual\n      ok (r1, nonce_store)\npartial_fixpoint\n\n",
+      "sha256": "8605d3b061a6d537eeba6ae6ebde05b3a6f69cf32af537f3b1abc9ab5e5e913c"
+    },
+    {
+      "name": "RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut",
+      "body": "def\n  RealR1_client.prove_for_proof_accounts.closure.Insts.CoreOpsFunctionFnMutTupleUsizeResultStateOnlyAttemptSecretsError.call_mut\n  {T0 : Type} (coreopsfunctionFnMutT0TupleUsizeArrayU832Inst :\n  core.ops.function.FnMut T0 Std.Usize (Array Std.U8 32#usize))\n  (c : RealR1_client.prove_for_proof_accounts.closure T0)\n  (tupled_args : Std.Usize) :\n  Result ((core.result.Result\n    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets verifier.Error) \u00d7\n    (RealR1_client.prove_for_proof_accounts.closure T0) \u00d7\n    (RealR1_client.prove_for_proof_accounts.closure T0 \u2192\n    RealR1_client.prove_for_proof_accounts.closure T0))\n  := do\n  let (a, t) \u2190\n    coreopsfunctionFnMutT0TupleUsizeArrayU832Inst.call_mut c tupled_args\n  let r \u2190\n    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce\n      a\n  let r1 \u2190\n    core.result.Result.map_err\n      (RealR1_client.prove_for_proof_accounts.closure.closure.Insts.CoreOpsFunctionFnOnceTupleStateOnlyAttemptEntropyErrorError\n      coreopsfunctionFnMutT0TupleUsizeArrayU832Inst) r ()\n  let back := fun c1 => c1\n  ok (r1, t, back)\n\n",
+      "sha256": "ff57fbf6993c19c6f339d83f63cf1157564fc24e817accd51e3a8ca16f322386"
+    },
+    {
+      "name": "aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce",
+      "body": "def\n  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce\n  (mask_nonce : Array Std.U8 32#usize) :\n  Result (core.result.Result\n    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets\n    aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)\n  := do\n  let b \u2190 aspis_prover.state_only_entropy.entropy_nonzero32 mask_nonce\n  if b\n  then\n    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop\n      mask_nonce aspis_prover.state_only_entropy.ENTROPY_RETRY_LIMIT 0#usize\n  else\n    ok (core.result.Result.Err\n      aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock)\n\n",
+      "sha256": "ea58fbe348313367efae96fc0156edd4d167f7dd322c79c1867db03599193f35"
+    },
+    {
+      "name": "aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body",
+      "body": "def\n  aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body\n  (mask_nonce : Array Std.U8 32#usize) (limit : Std.Usize) (retry : Std.Usize)\n  :\n  Result (ControlFlow Std.Usize (core.result.Result\n    aspis_prover.state_only_entropy.StateOnlyAttemptSecrets\n    aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError))\n  := do\n  if retry < limit\n  then\n    let a := Array.repeat 64#usize 0#u8\n    let bytes \u2190\n      zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 64#usize\n        (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a\n    let (s, as_mut_back) \u2190\n      zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut\n        (Array.Insts.CoreConvertAsMutSlice Std.U8 64#usize)\n        (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket\n        U8.Insts.ZeroizeDefaultIsZeroes)) bytes\n    let (r, s1) \u2190 getrandom.fill s\n    let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r\n    match cf with\n    | core.ops.control_flow.ControlFlow.Continue _ =>\n      let bytes1 := as_mut_back s1\n      let a1 := Array.repeat 32#usize 0#u8\n      let field_mask_entropy \u2190\n        zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 32#usize\n          (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a1\n      let a2 := Array.repeat 32#usize 0#u8\n      let leaf_salt_seed \u2190\n        zeroize.Zeroizing.new (Array.Insts.ZeroizeZeroize 32#usize\n          (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a2\n      let (a3, deref_mut_back) \u2190\n        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut\n          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket\n          U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy\n      let (s2, to_slice_mut_back) \u2190 Aeneas.Std.lift (Array.to_slice_mut a3)\n      let a4 \u2190\n        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref\n          (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket\n          U8.Insts.ZeroizeDefaultIsZeroes)) bytes1\n      let s3 \u2190\n        core.array.Array.index (core.ops.index.IndexSlice\n          (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) a4\n          { \u00abend\u00bb := 32#usize }\n      let s4 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3\n      let a5 := to_slice_mut_back s4\n      let field_mask_entropy1 := deref_mut_back a5\n      let (a6, deref_mut_back1) \u2190\n        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut\n          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket\n          U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed\n      let (s5, to_slice_mut_back1) \u2190 Aeneas.Std.lift (Array.to_slice_mut a6)\n      let s6 \u2190\n        core.array.Array.index (core.ops.index.IndexSlice\n          (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) a4\n          { start := 32#usize }\n      let s7 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6\n      let a7 := to_slice_mut_back1 s7\n      let leaf_salt_seed1 := deref_mut_back1 a7\n      let a8 \u2190\n        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref\n          (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket\n          U8.Insts.ZeroizeDefaultIsZeroes)) field_mask_entropy1\n      let b \u2190 aspis_prover.state_only_entropy.entropy_nonzero32 a8\n      if b\n      then\n        let a9 \u2190\n          zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref\n            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket\n            U8.Insts.ZeroizeDefaultIsZeroes)) leaf_salt_seed1\n        let b1 \u2190 aspis_prover.state_only_entropy.entropy_nonzero32 a9\n        if b1\n        then\n          ok (done (core.result.Result.Ok\n            {\n              mask_nonce,\n              field_mask_entropy := field_mask_entropy1,\n              leaf_salt_seed := leaf_salt_seed1\n            }))\n        else\n          let retry1 \u2190 Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)\n          ok (cont retry1)\n      else\n        let retry1 \u2190 Aeneas.Std.lift (Std.Usize.wrapping_add retry 1#usize)\n        ok (cont retry1)\n    | core.ops.control_flow.ControlFlow.Break residual =>\n      let r1 \u2190\n        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n          aspis_prover.state_only_entropy.StateOnlyAttemptSecrets\n          aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError\n          residual\n      ok (done r1)\n  else\n    ok (done (core.result.Result.Err\n      aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.RepeatedZeroBlock))\n\n",
+      "sha256": "216a696fd5482da0dc9180d5a34d7b41541e4430f79fe05bf0bdaf063a43044b"
+    }
+  ],
+  "emission": {
+    "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+    "sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+    "authority": {
+      "module": "R1Z.ProverRwFullFuns",
+      "path": "/home/dombarker/project-offloads/codex-pv-evh-20261029/objects/R1Z/ProverRwFullFuns.olean",
+      "sha256": "fe160e3b876cd081174ef9892c20c2e8d3f3b354f9d7c3dcc5b28ac6c8ebe1cb",
+      "source": {
+        "module": "R1Z.ProverRwFullFuns",
+        "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+        "revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+        "authority": "h5 HEAD",
+        "git_blob": "43a49073e14747f1bc231d5b55fcd8b22e184098",
+        "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+        "object_sha256": "fe160e3b876cd081174ef9892c20c2e8d3f3b354f9d7c3dcc5b28ac6c8ebe1cb",
+        "imports": [
+          "Aeneas",
+          "R1Z.ProverRwFullTypes",
+          "R1Z.ProverRwFullExternalFuns"
+        ],
+        "cache": "runjoin32",
+        "object_path": "/home/dombarker/project-offloads/codex-pv-rjdec-20261028/objects/R1Z/ProverRwFullFuns.olean"
+      }
+    }
+  },
+  "deployed": {
+    "binary_sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+    "unit_graph": {
+      "revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+      "path": "evidence/pv-c474b-20261029/client-unit-graph.json",
+      "sha256": "3c49a5b59cced553ebfbe87edb066162ba7345bfe7418048b4bf35134bf879b6"
+    },
+    "units": [
+      {
+        "pkg_id": "path+file:///home/dombarker/project-offloads/codex-pv-c474-20261029/src/crates/aspis-prover#0.1.0",
+        "features": [
+          "ct-host-prover",
+          "prover",
+          "r0"
+        ],
+        "profile": {
+          "name": "client",
+          "opt_level": "3",
+          "lto": "false",
+          "codegen_backend": null,
+          "codegen_units": null,
+          "debuginfo": 0,
+          "split_debuginfo": null,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "rpath": false,
+          "incremental": false,
+          "panic": "abort",
+          "strip": {
+            "resolved": {
+              "Named": "debuginfo"
+            }
+          }
+        },
+        "mode": "build"
+      },
+      {
+        "pkg_id": "path+file:///home/dombarker/project-offloads/codex-pv-c474-20261029/src/crates/aspis-r1-cost-probe#0.1.0",
+        "features": [
+          "ct-host-prover",
+          "default",
+          "private-leaf-salts",
+          "prover",
+          "r1p-check"
+        ],
+        "profile": {
+          "name": "client",
+          "opt_level": "3",
+          "lto": "false",
+          "codegen_backend": null,
+          "codegen_units": null,
+          "debuginfo": 0,
+          "split_debuginfo": null,
+          "debug_assertions": false,
+          "overflow_checks": false,
+          "rpath": false,
+          "incremental": false,
+          "panic": "abort",
+          "strip": {
+            "resolved": {
+              "Named": "debuginfo"
+            }
+          }
+        },
+        "mode": "build"
+      }
+    ]
+  },
+  "established": [
+    "Existing RealR1_client.prove_for_proof_accounts supplies the actual entropy callback to prove_masked_retrying_with, which selects retry_attempt on S2.",
+    "The emitted retry invokes next_attempt with k and recurses with next_attempt1 and nonce_store1. The callback invokes the actual proof_account(k), passes that mask to generate_for_mask_nonce, maps its source error to Error.Entropy, and returns updated capture t plus its identity backward continuation.",
+    "generate_for_mask_nonce checks the public mask then reaches the original loop body and getrandom.fill; frame/layout binding applies at that reached source call, not to an unrelated entropy model."
+  ],
+  "retained": [
+    "Actual advancing residual/native family and proof-account callback WORLD association, mutable source failure prefixes, allocator and nonce-store adequacy; no actual successful run supplied.",
+    "FRAME-CALL V370, FRAME-ENTRY runtime call/stack/heap validity, HEAP-ENTRY rdea-1, KERNEL-WRITE and RAW-ABI runtime/compiler obligations in frame-source-binding-D572.json.",
+    "This is the existing prover extraction, not the client main extraction or a substitute client; D520/U/D524 and all client inputs remain."
+  ],
+  "rows_removed": [],
+  "trust_fields_added": [],
+  "native_runs": 0,
+  "kani_runs": 0
+}
