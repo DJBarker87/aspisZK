@@ -7,7 +7,7 @@ namespace PV_EVH_NativeEntropyValues
 open Aeneas Aeneas.Std ProverRwFull ControlFlow
 open R1Z.PV_RunJoin_NativeResidual62
 open PV_EVH_EntropyHalves (field seed)
-abbrev Answer := ControlFlow Usize (core.result.Result
+abbrev Answer [ExternalTypes] := ControlFlow Usize (core.result.Result
   aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
   aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)
 
