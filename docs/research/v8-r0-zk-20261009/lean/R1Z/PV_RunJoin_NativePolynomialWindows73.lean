@@ -12,13 +12,14 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (ops : @ExternalFuns (types base))
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F) (p : Nat → Q) (bytes : Slice U8)
-    (value : bytes.val=@PV_RunJoin_PolyLoop38.payload (types base) p 0 28) :
+    (value : bytes.val=PV_RunJoin_PolyLoop38.payload p 0 28) :
     letI : ExternalTypes := types base
     letI : ExternalFuns := opsNative base heap box ops runtime world
     PV_RunJoin_FieldValidation73.Cells bytes 28#usize := by
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops runtime world
   intro i hi
+  change i.val<28 at hi
   have hlen : bytes.length=896 := by
     change bytes.val.length=896
     rw [value,PV_RunJoin_PolyLoop38.payload_length]
