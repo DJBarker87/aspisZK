@@ -19,7 +19,13 @@ for n in names:
  records.append(dict(name=n,path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest()))
  for label in x['lifted_calls']:
   if label in aliases:hits.append(dict(spine=n,source_function=x['function'],lifted_callee=label,external_op=aliases[label],status='OPEN native operator/callback/drop association'))
-x=dict(status='OPEN; static inventory only',external_source_path=p,external_source_revision=rev,
+operator_spines=[]
+for n in ['MaterialFromEntropy','ApplyMaterial','PrivateSalts','PrepareOpening','PublishCompact','PrivateSaltStep']:
+ q=E/('Op'+n+'-generation.json');v=json.loads(q.read_text())
+ assert not [label for label in v['lifted_calls'] if label in aliases], ('latent operator in revised spine',n)
+ operator_spines.append(dict(spine='Op'+n,path=str(q),sha256=hashlib.sha256(q.read_bytes()).hexdigest(),explicit_operators=[k for k in v['open_callees'] if k in ['core.result.Result.map','core.result.Result.map_err']]))
+open_boundaries=['native callback and consumed argument/capture drop association','unused closure drop and unwinding','runtime heap ownership, initialized regions, address/handle identity and borrow restoration','runtime fault diagnostics and every reached fmt-1 path','remaining hash/oracle, path/digest/options and source primitive native associations','full stateful native entry and actual allocator world']
+x=dict(status='OPEN; static inventory only',operator_spines=operator_spines,open_native_boundaries=open_boundaries,external_source_path=p,external_source_revision=rev,
  external_source_sha256=hashlib.sha256(raw.encode()).hexdigest(),records=records,
  latent_external_lifts=hits,external_ops=sorted({v['external_op'] for v in hits}),
  message='Callee FinishedView hypotheses alone do not establish complete native event coverage. Bind these operators and their reached callbacks/drops, in addition to named Callees and runtime effects.',rows_removed=[])
@@ -27,4 +33,4 @@ out=json.dumps(x,indent=2)+'\n';q=E/'native-preflight.json'
 if '--check' in sys.argv:assert q.read_text()==out
 else:q.write_text(out)
 print('Source inventory consistent; native coverage OPEN:',len(hits),'lift sites,',','.join(x['external_ops']))
-if '--require-native-closure' in sys.argv and hits:sys.exit(1)
+if '--require-native-closure' in sys.argv and (hits or open_boundaries):sys.exit(1)

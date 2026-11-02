@@ -36,6 +36,14 @@ subprocess.run(['python3','tools/pv-evh8-20261101/nonzero_install.py','--check']
 subprocess.run(['python3','tools/pv-evh5-20261029/open_spine.py','PrepareOpening','--check'],check=True,capture_output=True)
 for script in ['native_preflight.py','callback_frontier.py','callback_ctor.py']:
  subprocess.run(['python3','tools/pv-evh8-20261101/'+script,'--check'],check=True,capture_output=True)
+for short in ['MaterialFromEntropy','ApplyMaterial','PrivateSalts','PrepareOpening','PublishCompact','PrivateSaltStep']:
+ subprocess.run(['python3','tools/pv-evh8-20261101/operator_spine.py',short,'--check'],check=True,capture_output=True)
+subprocess.run(['python3','tools/pv-evh8-20261101/runtime_spine.py','PublishCompact','--check'],check=True,capture_output=True)
+for script in ['operator_install.py','operator_entry.py','operator_prover.py','native_operator_prover.py','runtime_callback_ctor.py','runtime_publish_install.py']:
+ subprocess.run(['python3','tools/pv-evh8-20261101/'+script,'--check'],check=True,capture_output=True)
+# Native closure must continue to refuse while the explicit native frontier is open.
+closure=subprocess.run(['python3','tools/pv-evh8-20261101/native_preflight.py','--check','--require-native-closure'],capture_output=True,text=True)
+assert closure.returncode==1
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
 code='''import pathlib,hashlib,json,subprocess,time
@@ -50,6 +58,19 @@ for v in receipts:
   assert host['files'][f]==sha((E/f).read_bytes()),('host receipt',f)
  if v['accepted']:assert host['objects'][v['target']]==v['object_sha256']
 (E/'host-final.json').write_text(json.dumps(host,indent=2)+'\n')
+extension=json.load(open(E/'source-binding-extension.json'))
+changed=set(subprocess.check_output(['git','diff','--name-only',extension['verified_source_revision'],'HEAD'],text=True).splitlines())
+assert not changed.intersection(v['source']['path'] for v in extension['project_checks'])
+code='''import json,sys,pathlib,hashlib
+x=json.load(sys.stdin)
+for v in x['project_checks']:
+ p=pathlib.Path(v['path']);assert p.is_file() and hashlib.sha256(p.read_bytes()).hexdigest()==v['sha256'],('extended object mismatch',v['module'])
+ if str(p).startswith('/home/dombarker/project-offloads/codex-pv-evh-20261029/objects/'):
+  assert not p.is_symlink(),('nonplain overlay',v['module'])
+print(json.dumps(dict(status='PASS',projects=len(x['project_checks']),edges=len(x['edges']),same_cohort=True,shared_written=False)))
+'''
+r=subprocess.run(['ssh','dombarker@100.108.41.90','python3 -c '+shlex.quote(code)],input=json.dumps(extension),text=True,capture_output=True);assert r.returncode==0,r.stderr
+(E/'extended-cohort-validation.json').write_text(r.stdout)
 used=set(attempts);fresh=sorted(set(range(79300,79397))-used)
 summary=dict(status='PASS focused receipt/source/cache audit; target incomplete',baseline='0da088f6f87a20db01518eb53c95e2343f7b47bf',attempts=len(receipts),passed=len(accepted),failed=len(receipts)-len(accepted),remaining=80-len(receipts),next_fresh_id=fresh[0] if fresh else None,audit_remaining=sorted(set(range(79397,79400))-used),accepted=[dict(target=v['target'],attempt=v['attempt'],wall=v['wall'],peak_rss_kbytes=v['peak_rss_kbytes'],axioms=v['axioms']) for v in accepted],compiler_guard_sha256=sha(Path('tools/pv-evh8-20261101/compile.py').read_bytes()),rows_removed=[],release_replay=False,native=0,kani=0,live_scopes=False)
 (E/'validation.json').write_text(json.dumps(summary,indent=2)+'\n')
