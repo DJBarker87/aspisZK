@@ -11,12 +11,14 @@ theorem value (i : Usize) (hi : i.val ≤ 10) : (row i).val=15+i.val := by
     change i.val%256=i.val
     exact Nat.mod_eq_of_lt (by omega)
   rw [row,U8.wrapping_add_val_eq,cast]
+  simp only [UScalar.ofNatCore_val_eq,UScalar.size_def]
   change (15+i.val)%256=15+i.val
   exact Nat.mod_eq_of_lt (by omega)
 
 theorem next (i : Usize) (hi : i.val ≤ 10) :
     (U8.wrapping_add (row i) 1#u8).val=16+i.val := by
   rw [U8.wrapping_add_val_eq,value i hi]
+  simp only [UScalar.ofNatCore_val_eq,UScalar.size_def]
   change (15+i.val+1)%256=16+i.val
   rw [Nat.mod_eq_of_lt (by omega)]
   omega
