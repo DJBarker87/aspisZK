@@ -1,0 +1,23 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_result_shape.rs"]
++mod NEL_result_shape;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_result_shape.rs
+@@ -0,0 +1,10 @@
++use super::*;
++struct State{x:usize,y:usize}
++#[kani::modifies(f)]
++#[kani::ensures(|r| *r==if b{Ok(())}else{Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)})]
++fn weak(f:&mut State,b:bool)->Result<(),PoolV1PaymentStatementFormatError>{f.x=42;if b{Ok(())}else{Err(PoolV1PaymentStatementFormatError::NonCanonicalDigest)}}
++#[kani::proof_for_contract(weak)]
++fn support(){let mut f=State{x:kani::any(),y:kani::any()};let _=weak(&mut f,kani::any());}
++#[kani::proof]
++#[kani::stub_verified(weak)]
++fn shape_control(){let mut f=State{x:kani::any(),y:kani::any()};let old=f.y;let _=weak(&mut f,kani::any());assert!(f.y==old,"unimplied external frame");}

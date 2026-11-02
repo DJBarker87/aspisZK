@@ -1,0 +1,17 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_frontier_step.rs"]
++mod NEL_frontier_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_frontier_step.rs
+@@ -0,0 +1,4 @@
++use super::*;
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn frontier_step(){let nodes=[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()];let level:usize=kani::any();kani::assume(level<=20);let mut iter=nodes[level..].iter();let next=iter.next();if level<20{let observed=&nodes[(level+1)%20];assert!(core::ptr::eq(observed,&nodes[level]),"same frontier iterator place");assert!(iter.as_slice().len()==19-level && iter.as_slice().as_ptr()==nodes[level+1..].as_ptr());assert!(level+1<=20);}else{assert!(next.is_none()&&iter.as_slice().is_empty());}}

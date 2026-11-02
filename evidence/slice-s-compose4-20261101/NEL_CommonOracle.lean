@@ -1,0 +1,42 @@
+import NED_CommonValidation
+set_option autoImplicit false
+noncomputable section
+namespace NEL_CommonOracle
+open Aeneas Aeneas.Std Result NBG_PaymentChecks
+
+def value (c : C) (anchor nullifier : Bool) : core.result.Result Unit E :=
+  if zero c.pool || zero c.deployment_domain then .Err .ZeroRequiredBinding
+  else if c.anchor_sequence.val > 1048576 then .Err .InvalidAnchorSequence
+  else if !anchor || !nullifier then .Err .NonCanonicalDigest
+  else if c.asset_id.val >= 2147483647 then .Err .NonCanonicalAssetId
+  else .Ok ()
+
+def calls (c : C) (anchor : Bool) : List (Array U32 8#usize) :=
+  if zero c.pool || zero c.deployment_domain then []
+  else if c.anchor_sequence.val > 1048576 then []
+  else if !anchor then [c.anchor_root]
+  else [c.anchor_root,c.nullifier]
+
+/-- Ruling y part (3): substitute the already closed pure canonicality child.
+The native caller's counter records exactly this ordered argument list. -/
+theorem substitution (c : C) :
+    value c (canonical c.anchor_root) (canonical c.nullifier) = common c := by rfl
+
+theorem reached_argument (c : C) (anchor : Bool) (d : _)
+    (reached : d ∈ calls c anchor) : d = c.anchor_root ∨ d = c.nullifier := by
+  unfold calls at reached
+  repeat' split at reached
+  all_goals simp_all
+
+theorem call_count (c : C) (anchor : Bool) : (calls c anchor).length =
+    if zero c.pool || zero c.deployment_domain then 0
+    else if c.anchor_sequence.val > 1048576 then 0
+    else if !anchor then 1 else 2 := by
+  unfold calls
+  repeat' split
+  all_goals rfl
+
+#print axioms substitution
+#print axioms reached_argument
+#print axioms call_count
+end NEL_CommonOracle

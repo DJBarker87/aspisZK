@@ -1,0 +1,20 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEL_buffer_step.rs"]
++mod NEL_buffer_step;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEL_buffer_step.rs
+@@ -0,0 +1,7 @@
++#![allow(non_snake_case)]
++#[kani::requires(offset<688 && j<1520 && old==output[j])]
++#[kani::modifies(output)]
++#[kani::ensures(|r| *r==offset+1 && output[j]==(if j==832+offset{src[offset]}else{old})^1)]
++fn step(output:&mut[u8;1520],offset:usize,j:usize,old:u8,src:&[u8;688])->usize{let dst=&mut output[832..1520];let mut i=offset;dst[i]=src[i];i+=1;offset+1}
++#[kani::proof_for_contract(step)]
++fn buffer_step(){let mut output:[u8;1520]=kani::any();let offset:usize=kani::any();kani::assume(offset<688);let j:usize=kani::any();kani::assume(j<1520);let old=output[j];let src:[u8;688]=kani::any();step(&mut output,offset,j,old,&src);}

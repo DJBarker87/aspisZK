@@ -1,0 +1,126 @@
+'NEL_CommonOracle.substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_CommonOracle.reached_argument' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_CommonOracle.call_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_CopyArrayLaw.list_inside' depends on axioms: [propext, Quot.sound]
+'NEL_CopyArrayLaw.array_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_CopyArrayLaw.loop_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_DigestGeometry.window_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_DigestGeometry.distinct_words' depends on axioms: [propext, Quot.sound]
+'NEL_DigestGeometry.coordinate_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_DigestLoopFrame.step_and_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_FrontierGeometry.bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_FrontierGeometry.coordinate_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_FrontierGeometry.header_disjoint' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_LateDomains.child_window_lengths' depends on axioms: [propext]
+'NEL_LateDomains.child_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_LateDomains.header_frame' depends on axioms: [propext, Quot.sound]
+'NEL_OrderedWrites.two_windows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentDomains.common_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentDomains.transfer_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentDomains.withdrawal_accepted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentFieldCarriers.transfer_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentFieldCarriers.withdrawal_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentOracle.transfer_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentOracle.withdrawal_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_PaymentOracle.transfer_call_count' does not depend on any axioms
+'NEL_PaymentOracle.withdrawal_call_count' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEL_SliceCopyLaw.loop_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEE_ReachedRootModel.result_and_effects' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NEL_CommonOracle.reached_argument : ∀ (c : NBG_PaymentChecks.C) (anchor : Bool),
+  ∀ d ∈ NEL_CommonOracle.calls c anchor, d = c.anchor_root ∨ d = c.nullifier :=
+fun c anchor d reached =>
+  Decidable.casesOn
+    (instDecidableEqBool (NBG_PaymentChecks.zero c.pool || NBG_PaymentChecks.zero c.deployment_domain) true)
+    (fun h =>
+      Decidable.casesOn (Nat.decLt 1048576 ↑c.anchor_sequence)
+        (fun h_1 =>
+          Decidable.casesOn (instDecidableEqBool (!anchor) true)
+            (fun h_2 =>
+              id
+                (Eq.mp
+                  (Eq.trans List.mem_cons._simp_1
+                    (congrArg (Or (d = c.anchor_root))
+                      (Eq.trans List.mem_cons._simp_1
+                        (Eq.trans (congrArg (Or (d = c.nullifier)) List.not_mem_nil._simp_1)
+                          (or_false (d = c.nullifier))))))
+                  (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h_2)) d)
+                    (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h_1)) d)
+                      (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h)) d) reached)))))
+            fun h_2 =>
+            of_eq_true
+              (Eq.trans
+                (congr
+                  (congrArg Or
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (id
+                            (Eq.mp
+                              (Eq.trans List.mem_cons._simp_1
+                                (Eq.trans (congrArg (Or (d = c.anchor_root)) List.not_mem_nil._simp_1)
+                                  (or_false (d = c.anchor_root))))
+                              (Eq.mp (congrFun' (congrArg Membership.mem (if_pos h_2)) d)
+                                (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h_1)) d)
+                                  (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h)) d) reached))))))
+                        c.anchor_root)
+                      (eq_self c.anchor_root)))
+                  (congrFun'
+                    (congrArg Eq
+                      (id
+                        (Eq.mp
+                          (Eq.trans List.mem_cons._simp_1
+                            (Eq.trans (congrArg (Or (d = c.anchor_root)) List.not_mem_nil._simp_1)
+                              (or_false (d = c.anchor_root))))
+                          (Eq.mp (congrFun' (congrArg Membership.mem (if_pos h_2)) d)
+                            (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h_1)) d)
+                              (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h)) d) reached))))))
+                    c.nullifier))
+                (true_or (c.anchor_root = c.nullifier))))
+        fun h_1 =>
+        False.elim
+          (Eq.mp List.not_mem_nil._simp_1
+            (Eq.mp (congrFun' (congrArg Membership.mem (if_pos h_1)) d)
+              (Eq.mp (congrFun' (congrArg Membership.mem (if_neg h)) d) reached))))
+    fun h =>
+    False.elim (Eq.mp List.not_mem_nil._simp_1 (Eq.mp (congrFun' (congrArg Membership.mem (if_pos h)) d) reached))
+theorem NEE_ReachedRootModel.result_and_effects : ∀ (pay : NEE_ValidatorMutation.Pay)
+  (lane : NEE_ValidatorMutation.Lane) (late : NEE_ValidatorMutation.Late) (s : NBN_StatementResult.Statement),
+  (∀ (a : NBN_StatementResult.Statement),
+      NED_ValidatorTrace.Call.payment a ∈ (NEE_ValidatorOracle.run pay lane late s).2 →
+        pay a = NED_ValidatorTrace.payment a) →
+    (∀ (d : Aeneas.Std.Array Aeneas.Std.U32 8#usize),
+        NED_ValidatorTrace.Call.lane d ∈ (NEE_ValidatorOracle.run pay lane late s).2 →
+          lane d = NBN_FirstByteDependency.lane NED_ValidatorTrace.enc d) →
+      (∀ (a : NBN_LateSummary.Statement) (out : Aeneas.Std.Slice Aeneas.Std.U8),
+          NED_ValidatorTrace.Call.late a out ∈ (NEE_ValidatorOracle.run pay lane late s).2 →
+            NEE_ValidatorMutation.ignore (late a out) =
+              NEE_ValidatorMutation.ignore (NBN_LateSummary.run NED_ValidatorTrace.enc a out)) →
+        NEE_ValidatorOracle.run pay lane late s =
+          (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s,
+            (NED_ValidatorTrace.run s).2) :=
+fun pay lane late s payment_bridge output_lane_bridge late_bridge =>
+  have joined :=
+    NEE_ReachedSubstitution.result_and_effects pay lane late s fun c reached =>
+      NED_ValidatorTrace.Call.casesOn (motive := fun t => c = t → NEE_ReachedSubstitution.ReplyLaw pay lane late c) c
+        (fun a h =>
+          Eq.ndrec (motive := fun c =>
+            c ∈ (NEE_ValidatorOracle.run pay lane late s).2 → NEE_ReachedSubstitution.ReplyLaw pay lane late c)
+            (fun reached => payment_bridge a reached) (Eq.symm h) reached)
+        (fun d h =>
+          Eq.ndrec (motive := fun c =>
+            c ∈ (NEE_ValidatorOracle.run pay lane late s).2 → NEE_ReachedSubstitution.ReplyLaw pay lane late c)
+            (fun reached => output_lane_bridge d reached) (Eq.symm h) reached)
+        (fun a out h =>
+          Eq.ndrec (motive := fun c =>
+            c ∈ (NEE_ValidatorOracle.run pay lane late s).2 → NEE_ReachedSubstitution.ReplyLaw pay lane late c)
+            (fun reached => late_bridge a out reached) (Eq.symm h) reached)
+        (Eq.refl c);
+  Eq.mpr
+    (id
+      (congrArg
+        (fun _a =>
+          _a =
+            (AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s,
+              (NED_ValidatorTrace.run s).2))
+        joined))
+    (Prod.ext (NED_ValidatorTrace.erases s) rfl)

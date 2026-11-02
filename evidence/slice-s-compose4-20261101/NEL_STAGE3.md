@@ -1,0 +1,7 @@
+# Native windows and full-array back-write law
+
+K008/009 and K010/011: both remaining late-header lengths PASS with matched failing controls. K012/013: one digest copy iteration, arbitrary outer limb, byte offset and complete destination prestate, exact local serialization argument and arbitrary fixed4 reply, PASS/FAIL. K014/015: one fill scalar assignment PASS/FAIL (native std fill association remains separate). K016/017: late afterstate copy step PASS/FAIL. K018..027: five payment-tail copy steps PASS/FAIL. No whole buffer is unwound and no changed copy stub exists.
+
+NEL_CopyArrayLaw.list_inside, array_spec and loop_binding establish the missing touched-byte as well as external-frame correspondence between the pinned KMX loop and the emitted Array.setSlice! on the same arbitrary prestate. L002 passes, 5.644258325 seconds, 5,234,456 KiB, swaps 0; axioms only subsets of propext, Classical.choice, Quot.sound. L003 audits ten reused digest/loop/frame results without reproof; passes, 7.050376205 seconds, 5,228,308 KiB, swap 0, standard axioms only.
+
+These windows are composition inputs; they do not by themselves identify a full native child execution or discharge all root call-site instances. Composed baseline remains 16/97, roots 0/7. The getter validator now hashes every supporting native log, graph, feature, lock, admission, source and configuration artifact in addition to the immutable receipt/source pins.
