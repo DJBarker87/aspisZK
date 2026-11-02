@@ -1,0 +1,19 @@
+"""Stage only job-owned new sources with their committed h5 authority."""
+from pathlib import Path
+import subprocess,json,hashlib,re,sys
+H='/home/dombarker/project-offloads/codex-pv-b3p6-20261028';D=Path('evidence/pv-b3p6-20261028')
+revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip();sources={};authority={}
+for name in sys.argv[1:]:
+ p=D/'lean'/(name+'.lean');raw=subprocess.check_output(['git','show',revision+':'+str(p)]);assert raw==p.read_bytes()
+ sources[name]=raw.decode();authority[name]=dict(module=name,path=str(p),blob=subprocess.check_output(['git','rev-parse',revision+':'+str(p)],text=True).strip(),sha256=hashlib.sha256(raw).hexdigest(),authority='h5 HEAD',imports=re.findall(r'^import (\S+)',raw.decode(),re.M),tracked_conflicts=[])
+scripts={n:Path('tools/pv-b3p6-20261028/'+n).read_text()for n in []}
+code='''from pathlib import Path
+import json,hashlib
+H=Path(HOST); sources=SOURCES;authority=AUTHORITY;scripts=SCRIPTS
+for n,s in sources.items():
+ p=H/'lean'/(n+'.lean');assert n.startswith('PV_B3P_') and '554227' in n;p.write_text(s)
+p=H/'project-resolution-resume18.json';x=json.loads(p.read_text());x['revision']=REVISION;x['modules'].update(authority);p.write_text(json.dumps(x,indent=2)+'\\n')
+for n,s in scripts.items():(H/n).write_text(s)
+print(json.dumps(dict(staged=list(sources),authority_revision=REVISION)))
+'''.replace('HOST',repr(H)).replace('SOURCES',repr(sources)).replace('AUTHORITY',repr(authority)).replace('SCRIPTS',repr(scripts)).replace('REVISION',repr(revision))
+print(subprocess.check_output(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True),end='')
