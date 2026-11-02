@@ -3,8 +3,6 @@ import PV_B3P_Std559KernelFuns227
 namespace PV_B3P_NthSource559227
 open Aeneas Aeneas.Std core.ops.range PV_B3P_NthKernelGuard559227
 set_option autoImplicit false
-set_option pp.fullNames true
-set_option pp.explicit true
 /-- Source default spec_nth over Usize, with the guarded successor represented
 by wrapping_add. The safety proof below shows it cannot wrap. Exhaustion sets
 start=end even for an initially reversed range. -/
@@ -44,6 +42,13 @@ theorem increment_wrap_one (item end_ : Usize) (guard : item.val < end_.val)
   subst count
   exact increment_wrap item end_ guard
 
+/-- Normalize the actual trait-field call to the tagged scalar helper.
+The structure definition is semireducible, so rewriting needs this named
+projection rather than relying on the unifier to unfold it. -/
+theorem forward_projection (item count : Usize) :
+    core.iter.range.Step.forward_checked core.iter.range.StepUsize item count =
+      core.iter.range.StepUsize.forward_checked item count := rfl
+
 /-- Complete Result equality to the unchanged extracted control. The only
 external expect_failed call is eliminated by a proved branch guard. -/
 theorem source_binding (r : Range Usize) (n : Usize) :
@@ -51,7 +56,7 @@ theorem source_binding (r : Range Usize) (n : Usize) :
       PV_B3P_Std559Kernel227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
         core.iter.range.StepUsize r n := by
   unfold source PV_B3P_Std559Kernel227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth
-  rw [clone_value,bind_tc_ok]
+  simp only [clone_value,forward_projection,bind_tc_ok]
   apply congrArg (Aeneas.Std.bind _)
   funext candidate
   cases candidate with
@@ -70,5 +75,6 @@ theorem source_binding (r : Range Usize) (n : Usize) :
 #print axioms less_value
 #print axioms increment_wrap
 #print axioms increment_wrap_one
+#print axioms forward_projection
 #print axioms source_binding
 end PV_B3P_NthSource559227
