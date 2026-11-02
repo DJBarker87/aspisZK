@@ -7,7 +7,7 @@ for ident in sys.argv[1:]:
   raw=subprocess.check_output(['ssh',H,'cat '+R+'/last-launch.json']);not_before=json.loads(raw)['epoch']+180
   while time.time()<not_before:time.sleep(min(30,not_before-time.time()))
   cmd=f'PV_SOURCE_REVISION={rev} python3 {R}/resume_symbols.py {ident} config-{ident}.json'
-  r=subprocess.run(['ssh',H,cmd],capture_output=True,text=True);v={'id':ident,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdout':r.stdout,'stderr':r.stderr};records.append(v);(E/'SYMBOLS-QUEUE.json').write_text(json.dumps(records,indent=2)+'\n');print(ident,r.returncode,flush=True)
+  r=subprocess.run(['ssh',H,cmd],capture_output=True,text=True);v={'id':ident,'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'exit':r.returncode,'stdout':r.stdout,'stderr':r.stderr};records.append(v);(E/('D549-QUEUE-'+sys.argv[1]+'.json')).write_text(json.dumps(records,indent=2)+'\n');print(ident,r.returncode,flush=True)
   subprocess.run(['scp','-r',H+':'+R+'/'+ident,str(E/'host')],check=True)
   if r.returncode==78:
    print('Refused; queue stops for next-unused-ID rescheduling after cooldown',flush=True);raise SystemExit(78)
