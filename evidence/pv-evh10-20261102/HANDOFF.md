@@ -1,119 +1,109 @@
-# D556 context handoff — native entropy error iteration connected
+# D558 resume context checkpoint — native raw entropy/error history connected
 
 Continue ONLY /Users/dominic/ZK/.worktrees/pv-evh, branch
-codex/pv-evh-20261029. Resume base8fdedd89e763194e907dd349404994937a95de5d.
-Read RESUME-D556.md for exact claims, limits, source associations and failures.
-Inherited D554 handoff remains at8fdedd89e7:evidence/pv-evh10-20261102/HANDOFF.md.
+codex/pv-evh-20261029. Resume base8f98812a20a6c37eea10497566ef50288f219050.
+Read RESUME-D558.md for exact claims, limitations, corrections and failures.
+Inherited D556 handoff is at8f98812a20:evidence/pv-evh10-20261102/HANDOFF.md.
 Same prompt chain/rules. This is a CONTEXT checkpoint, not completion, budget
-exhaustion, an external blocker or a shipped counterexample. Rows removed NONE.
+exhaustion, an external blocker or a shipped-source counterexample.
+**Target not established. Rows removed NONE.**
 
 ## Exact restart
 
-D556 used15 charged attempts79514–79528:9 accepted/6 failed.
-EVH10 cumulative47/100:31 accepted/16 failed.
-**53 remain; NEXT FRESH79529.** Both audit triplets79397–79399 and79597–79599
-untouched. No live owned scope or pending refused/submitted compile. No WIP Lean.
-No final compiler audit/closure/frozen-manifest replay ran.
+This resume charged16 attempts79529–79544:12 accepted/4 failed.
+EVH10 cumulative63/100:43 accepted/20 failed. **37 REMAIN; NEXT FRESH79545.**
+Both audit triplets79397–79399 and79597–79599 untouched. No WIP Lean source,
+no pending refused/submitted compile and no live owned scope. 79543 first had
+an uncharged quiet-window refusal, then passed on SAME ID after full180s.
+No final compiler audit/closure/frozen manifest replay ran.
 
 Commit source first; use ONLY:
 
     python3 tools/pv-evh10-20261102/stage.py PV_EVH_NewModule
-    python3 tools/pv-evh10-20261102/compile.py 79529 PV_EVH_NewModule
+    python3 tools/pv-evh10-20261102/compile.py 79545 PV_EVH_NewModule
 
 Reuse retained /home/dombarker/project-offloads/codex-pv-evh-20261029 workspace,
 runjoin32 project/external cohort and caches. Same-shell admission exit0 AND
 allowed:true; one6G/8G/swap0/tasks64 scope, Lean-M7000. Refusals full180s/same
 unlaunched ID/up to10 retries; retain pre/post-submit transport rules. No
-provisioning/extension/LEAN_PATH/J.json/library/cap changes. Guard unchanged,
-SHA in validation.json. Accepted source bytes are immutable; new consumers only.
-Use git add --sparse for new evidence paths. Do not drop or exclude evidence.
+provisioning/library/LEAN_PATH/J.json/cap changes. Guard unchanged; validation
+records its SHA. Accepted source bytes immutable; NEW consumers only. Do not
+restage accepted modules. Use git add --sparse for evidence; never exclude it.
 
-## New checked native frontier
+## New checked frontier, with exact limits
 
-Nine accepted modules; all printed axioms standard, exact receipts retained:
+Strongest new branch:79544
+`PV_EVH_NativeRawHistoryError.error_from_history`.
+Private syscall execution history -> checked erasure to source-bound raw driver
+-> reached-world op129 installation -> ORIGINAL extracted entropy loop.body Err
+at opsNative -> deployed zeroize1.9.0 physical cleanup, heap coherence, retained
+old live owners and complete driver-prefix/zero-write/barrier events. Errors
+are proved nonzero signed32 OS codes or UNEXPECTED65538. All axioms standard.
 
--79514 ZeroWrappers: deployed1.9.0 transparent wrapper values and mutable
- backward functions; selected extends recorded DeployedZeroSelected.selected.
--79517 StackAdmission: original key/address-based physical initialization,
- inside/outside, heap coherence/separation, old live regions and lookup.
--79519 NativeZeroWrappers: six polymorphic wrapper fields actually installed
- through opsNative, plus deployed1.9.0 array law.
--79521 NativeEntropyBorrow: emitted array AsMut and arbitrary equal-extent
- mutable buffer restoration. No discarded backward write on success.
--79522 StackEntropyFill: full typed post-buffer, native outcome/runtime/events
- retained on partial-fill error/fault/exhaustion; original lookup survives fill.
--79523 NativeEntropyIteration: actual ORIGINAL extracted entropy loop.body
- source_error at opsNative; native prelude admits original slot and fills it.
- Success remains an explicit UNIMPLEMENTED continuation.
--79526 NativeEntropyIterationError.error_native: FULL iteration ordinary error
- result joined with admission, deployed1.9.0 physical cleanup, retained runtime/
- allocator/errno, retired memory, write/barrier history and all emitted events.
--79527 StackEntropyCoherence: fresh admitted lifetime alone is retired; every
- prior live owner remains. Heap coherence survives under driver heap equality.
--79528 NativeEntropyAdmission.error_coherent: those owner/heap invariants are
- installed through NativeEntropyIteration.run at the actual native selector.
+79541 NativeRawError.error_connected no longer assumes a separate source-fill
+equality, driver heap equality, initialized extent or fresh ghost key. It fixes
+op7 to its source integer representation and uses the source's fresh64 local;
+79544 connects PRIVATE intermediate before/after buffers to that same branch.
+Those private receipts are NOT published as new NativeEvent payloads.
 
-This extends79513 past its afterDraw-only boundary. It is NOT the complete
-native entropy/prover entry. The complete actual residual family and machine
-frame/address/key provenance remain open. Admission is a P invariant, not a
-proof of the real frame. Delivery.runtime is arbitrary explicit post-state,
-not proved native getrandom behavior. Driver heap equality remains a P input.
-Only the REACHED source getrandom call is fixed; no uniform successful view or
-actual successful run is inferred. Source plain Err does not justify silence.
-Zeroize1.9.0 laws still feed L3; V370 and register/spill/copy/retired-memory/joint
-observation remain. Never substitute the old1.8.1 effect or single-fence law.
+**NOT full native adequacy.** Original machine-frame address and heap/live
+spatial separation, initial coherent heap, actual raw syscall ABI/kernel memory
+footprint and complete provenance-fixed residual family/entry remain P. The
+model's driver heap theorem is not proof of arbitrary real kernel preservation.
+Do not move these gaps into T; entropy_kernel is the JOINT DENSITY field only.
+Per-world op129 source selection is not a uniform FinishedView for advancing
+entropy. No successful actual run/nonemptiness is inferred. Zeroize1.9.0 laws
+continue to feed L3; V370/registers/spills/copies/retired-memory/joint observation
+remain. Never replace them with the old1.8.1 or single-fence law.
 
-## Source inspection and exact next work
+Accepted source/control modules:79529 LinuxRawControl,79531 LinuxRawBranches,
+79534 LinuxRawCodes,79535 LinuxRawObserve,79536 EntropySourceSlot,
+79539 NativeRawSelection,79540 NativeLinuxError,79541 NativeRawError,
+79543 LinuxRawHistory,79544 NativeRawHistoryError.
 
-zero_wrappers.py --check checks seven COMPLETE deployed wrapper bodies against
-the pinned1.9.0 source. entropy_iteration.py --check associates frozen Rust,
-authoritative unchanged extraction and the new branch theorems. Both in audit.
+79532 LinuxRawSyscall and79533 NativeLinuxEntropy are SUPERSEDED for native
+credit: the first response serializer invented a public disclosure of private
+buffer bytes. 79535/40 correct this. Accepted source remains unchanged as
+failure/correction evidence. See observation-correction.json. No deployed
+observer was changed/weakened and no privacy row was removed.
 
-callback_inventory.py --check checks ALL seven RuntimeCallbackCtor frames
-0,1,2,4,5,6,7: source lambdas have no captures (confirmed Unit in actual emitted
-Types); six argument types are Copy enums. TryReserveError is not Copy, but
-its deployed1.94.1 complete struct/kind has only scalar Layout/unit fields and
-no custom Drop. Full std sources are committed in callback-stdlib-source.json.
-**Inspection only: no native callback theorem/installation claimed.** Next bind
-these EXACT argument/capture/unused drops through RuntimeOperators at the
-proved NativeOperators.selection. Keep unwinding and L3 explicit. No generic
-always-ok handler. Writer/syscall/io::Error destruction is a separate open cone.
+## Exact next work
 
-Ordered remaining work:
-1. Actual full residual family and real stack frame association; native
- getrandom driver including all prefixes/partial writes/errno/restoration;
- success/inner32/retry/later secret disposal through the complete entry.
-2. Actual native metadata/padding/RawVec/Global/System ValidAnswer, owned Vec
- propagation through actual consumers and allocator world. RuntimePublishInstall
- still uses old unowned CapacityWorld; no pure-value allocator workaround.
-3. Seven callback installations; D474(C) literal diagnostic writer/syscall/
- returned io::Error drops, hook/backtrace/profile. No core::fmt Unit assumption.
-4. All remaining path/digest/options/hash/oracle-byte/primitive/restoration leaves
- and COMPLETE Q/stack proof-account entry. Old entry_fixed remains P/source
- transport, not native heap/observation adequacy.
-5. ONLY THEN unchanged oraclePrefix/countTrace/nonce-store fileTrace on actual
- provenance-fixed families with D520/U/D524 client inputs.
+1. DISCHARGE actual frame spatial provenance and kernel memory/ABI association
+ at the fixed source/native family. EntropySourceSlot proves ghost freshness
+ and initialized64, but not actual numeric address separation. Do not fabricate
+ a convenient disjoint address or infer provenance from source Slice equality.
+ Preserve private intermediate receipts into full native/L3 work; the checked
+ erasure theorem is not itself a joint-observation law.
+2. Complete entropy inner32/success/retry/later disposal and full residual/entry
+ coverage. The successful continuation remains explicit in the present run.
+3. Native allocator metadata/padding/RawVec/Global/System ValidAnswer and owned
+ Vec consumers. Allocator failure stays in WORLD, never a pure-value view.
+ Then literal D474(C) diagnostics, writer/syscalls/io::Error destruction,
+ hook/backtrace/profile; install all seven callbacks using inherited inventory.
+4. Remaining path/digest/options/hash/oracle-byte/primitive/restoration leaves
+ and COMPLETE proof-account entry. Older entry_fixed is P/source transport.
+5. ONLY THEN unchanged oraclePrefix/countTrace/nonce-store fileTrace on ACTUAL
+ provenance-fixed families, retaining D520/U/D524 client/account inputs.
 6. ONLY THEN (v-prime) reduction to successful ACTUAL worldRun nonemptiness at
- opsNative AND allocator world. NativeObstruction62/op132 remain; no MODEL
+ opsNative AND allocator world. NativeObstruction62/op132 remain. No MODEL
  witness, hidden success domain or new trust item.
 
-## Evidence and recovery notes
+## Evidence and recovery
 
-Read-only audit.py reconciles all47 receipts/current accepted source/object
-hashes and all source checkers. Native closure preflight must still FAIL.
-validation.json/host-final.json current: no live scopes, no swap/kill/cap rise.
-New peak4,470,068KiB, slowest7.00s; cumulative max4,616,200KiB. Standard axioms.
-Failures79515/16/18/20/24/25 and changed replacements in RESUME-D556.md.
-No unchanged failed retry. No new native/Kani or final release replay.
+raw_source.py --check checks complete deployed getrandom0.3.4 files.
+raw_binding.py --check binds the COMPLETE linux_raw fill_inner source, selected
+x86_64 raw ABI and sanitizer/error steps, with missing associations explicit.
+raw_history.py --check checks control branch identity and accepted private
+history/consumer provenance. All are in read-only audit.py alongside inherited
+checkers. Audit reconciles63 receipts/current accepted source/object hashes;
+native closure preflight must still FAIL. validation.json/host-final.json current.
 
-First staging was rejected locally, before launch: inherited optional79513
-restage had replaced its preparation with a self-predecessor entry. Restored
-EXACT receipt-bound archived prep, archived displaced bytes, recorded
-resume-stage-recovery.json. No script/guard/shared object/environment change;
-79514 was unlaunched and uncharged. Do not repeat the optional accepted-module
-restage. Final callback checker prefix-match bug was fixed before passing audit;
-no compiler attempt involved. Source/stage commits in commits-D556.txt.
+New peak4,469,492KiB, slowest2.75s; cumulative max4,616,200KiB. Swap0; no
+kill/timeout/cap rise. Failures79530/37/38/42 and changed replacements are in
+RESUME-D558.md. No unchanged failed retry. No native/Kani/final release replay.
 
-No delegation/push/frozen Rust/extraction/soundness edits/other-worktree writes/
-keys/accounts/funds action. T unchanged; ALL endpoint/deployment/privacy rows
-remain, including V370/V371, rdea-1/V400, D159/D166, L1/L2/L3 and client inputs.
+T unchanged; ALL endpoint/deployment/privacy rows retained, including V370/V371,
+rdea-1/V400, D159/D166, L1/L2/L3 and client inputs. No delegation/push/frozen
+Rust/extraction/soundness edits, other-worktree writes or keys/accounts/funds
+action. commits-D558.txt records source stages before the evidence checkpoint.

@@ -71,30 +71,35 @@ payload containing the private output buffer. 79535/40 correct this. Accepted
 source bytes remain immutable. See observation-correction.json. No deployed
 observer was redefined/ weakened; actual L3 observation still must be proved.
 
-## Private history WIP and exact pending attempt
+## Checked private history and native consumer
 
 `PV_EVH_LinuxRawHistory` retains ordered PRIVATE syscall receipts: address,
 remaining length, full before/after buffers, worlds, raw outcomes and events.
 It does NOT publish those receipts as NativeEvent. Intended `erases` proves its
 Delivery equals LinuxRawControl.loop, allowing later intermediate-write/L3 work
 without exposing invented public bytes. `first_call` retains each begun call.
-`raw_history.py --check` verifies identical control branch spines and explicitly
-marks the current proof PENDING, not checked. Full entry/L3 association is open.
+`raw_history.py --check` verifies identical control branch spines and records
+compiler acceptance. 79543 accepted the revised erasure theorem; 79544
+`PV_EVH_NativeRawHistoryError.error_from_history` consumes it at the ACTUAL
+extracted error iteration and opsNative selection. Its error hypothesis is
+now stated on the private raw execution; erasure derives the driver's status
+and source fill equality. Native events equal the history Delivery's events
+followed by deployed zeroize1.9.0 cleanup. Private buffers are not published.
+The complete source/native/kernel association and L3 observer law remain open.
 
-79542 failed: after cases on syscall outcome, the matches still required an
-explicit rewrite before `split`; splitting the unreduced matches introduced
-contradictory branches. Changed proof rewrites hr, then split_ifs and the small
-induction hypothesis. Current source committed at ada5f5a14f, staged against
-same cached objects. **79543 has NOT launched a compiler**: quiet-window
-reservation refusal, no charge. SAME ID must be retried after full180s from
-latest refusal epoch, up to10 retries. Never advance to79544 before79543 is
-actually consumed; never bypass/edit the marker or change caps. Preparation
-for History is current; no accepted-module restage is needed.
+79542 failed: cases on syscall outcomes left a match needing explicit rewriting
+before `split`; splitting the unreduced matches introduced contradictory
+branches. Revised proof rewrites hr, then split_ifs and a small induction
+hypothesis. 79543 first received an UNCHARGED quiet-window refusal. After the
+full180s cooldown, the SAME ID was admitted and passed; no cap/marker change
+was made by this job. refusal-history-79543-1793588079.json retains the original
+refusal. There is NO pending refused/submitted compile and no WIP Lean source.
+NEXT FRESH79545,37 remain. Never restage accepted modules just for a new consumer.
 
 ## Failures, resources, validation
 
-Charged this resume:14 (79529–79542),10 accepted/4 failed. Cumulative61/100:
-41 accepted/20 failed;39 remain. NEXT UNLAUNCHED79543. Both audit triplets
+Charged this resume:16 (79529–79544),12 accepted/4 failed. Cumulative63/100:
+43 accepted/20 failed;37 remain. NEXT FRESH79545. Both audit triplets
 79397–79399 and79597–79599 untouched.
 Failures:79530 ambiguous loop and reserved theorem name, corrected79531;
 79537/38 concrete usize literal under class/instance-level simplification,
@@ -104,7 +109,7 @@ Two History precompile stages added an explicit Execution carrier annotation;
 no compiler/ID was involved in those preflight edits.
 
 Every actual run retained one6G/8G/swap0/tasks64 scope, Lean-M7000, same-shell
-admission exit0 AND allowed:true. New maxRSS4,469,492KiB, maxwall2.29s;
+admission exit0 AND allowed:true. New maxRSS4,469,492KiB, maxwall2.75s;
 cumulative maxRSS4,616,200KiB. No swap/kill/timeout/cap rise, native or Kani run.
 Exact targets/revisions/source+object/dependency SHA/exits/wall/RSS/axioms are
 receipt-ID.json/out-ID.log/time-ID.log. Validation is read-only audit.py;
@@ -112,10 +117,9 @@ closure preflight must still FAIL. No final compiler audit or manifest replay.
 
 ## Next ordered work
 
-1. Finish the SAME unlaunched79543 History check after quiet-window cooldown;
- on refusal retain ID and receipts. After acceptance rerun raw_history.py to
- update compiler_status. Preserve its internal receipts through full native
- driver/entry; do not call private instrumentation an L3 proof.
+1. Use the checked 79544 native history/error frontier; do not rerun it or its
+ predecessors. Preserve private intermediate receipts through the full native
+ driver/entry; the existing erasure/source branch laws alone do not prove L3.
 2. Establish actual frame spatial provenance and kernel syscall memory contract
  on the provenance-fixed source/native family; remaining HeapSeparate and
  LiveSeparate cannot be discharged from arbitrary numeric addresses or plain
