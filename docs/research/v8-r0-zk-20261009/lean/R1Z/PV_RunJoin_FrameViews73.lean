@@ -17,7 +17,7 @@ theorem tag (s payload : Slice U8) (t : U8) (w : U32)
     rw [value,List.length_append,List.length_cons]
     omega
   rw [read s 0#usize bound]
-  simp only [value,List.cons_append,List.getElem_cons_zero]
+  simp only [UScalar.ofNatCore_val_eq,value,List.cons_append,List.getElem_cons_zero]
 
 theorem word (s payload : Slice U8) (t : U8) (w : U32)
     (value : s.val=t::(core.num.U32.to_le_bytes w).val++payload.val) :
