@@ -18,7 +18,7 @@ theorem error_dispatch (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Byt
           loop driver fuel (head :: tail)
         else pure (.error e)) (driver.write (head :: tail) w).state
       ⟨next.outcome,next.state,(driver.write (head :: tail) w).events ++ next.events⟩ := by
-  simp only [loop,Bind.bind,PV_EVH_Runtime.bind,h]
+  simp only [PV_EVH_WriteAll.loop,Bind.bind,PV_EVH_Runtime.bind,h]
 
 /-- WriteZero construction is retained as a runtime operation. This does not
 assert a silent constructor or erase allocation/destructor behaviour. -/
@@ -29,7 +29,7 @@ theorem zero_dispatch (driver : Driver) (fuel : Nat) (head : UInt8) (tail : Byte
       let next := (do let e ← driver.writeZero; pure (.error e))
         (driver.write (head :: tail) w).state
       ⟨next.outcome,next.state,(driver.write (head :: tail) w).events ++ next.events⟩ := by
-  simp only [loop,Bind.bind,PV_EVH_Runtime.bind,h]
+  simp only [PV_EVH_WriteAll.loop,Bind.bind,PV_EVH_Runtime.bind,h]
 
 #print axioms error_dispatch
 #print axioms zero_dispatch
