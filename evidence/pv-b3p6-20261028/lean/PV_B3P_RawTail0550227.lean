@@ -14,7 +14,7 @@ theorem raw_tail0_binding550 (a4 a6 a7 a8 : Limbs32_550) :
   rw [raw_row_continuation550]
   simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
   simp only [raw_tail1_binding550]
-  rfl
+  try rfl
 
 #print axioms raw_tail0_binding550
 end PV_B3P_Association550227

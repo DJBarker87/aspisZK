@@ -61,7 +61,7 @@ for j in range(4,-1,-1):
  else:
   code+=f'  unfold raw_native_tail{j}_550 raw_reference_tail{j}_550\n  rw [raw_row_continuation550]\n'
   code+='  simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]\n'if j==0 else''
-  code+=f'  simp only [raw_tail{j+1}_binding550]\n  rfl\n'
+  code+=f'  simp only [raw_tail{j+1}_binding550]\n  try rfl\n'
  code+=f'\n#print axioms raw_tail{j}_binding550\nend PV_B3P_Association550227\n'
  emit(L/f'PV_B3P_RawTail{j}550227.lean',code)
 emit(R/'RAW-TAILS-GENERATOR-D550.json',json.dumps(dict(exact_reference_syntax_roundtrip=True,original_emission_sha256=hashlib.sha256(old.encode()).hexdigest(),fragments=len(chunks),source_is_reference=False,source='native tails use raw_row550, source_debug_matrix550 and raw_pack0..3_550',proof_shape='one row per native bridge and one continuation per reference factor; no raised limits, no monolithic delta equality'),indent=2)+'\n')
@@ -77,7 +77,7 @@ s=s[:a]+'''  rw [raw_reference_factor550]
   rw [raw_input_continuation550]
   simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
   simp only [raw_tail0_binding550]
-  rfl
+  try rfl
 '''+s[b:]
 emit(p,s)
 print('exact reference view, five one-row bridges, and source composition generated')

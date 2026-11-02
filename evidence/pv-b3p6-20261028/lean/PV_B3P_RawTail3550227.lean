@@ -13,7 +13,7 @@ theorem raw_tail3_binding550 (a4 a6 a7 a8 : Limbs32_550) (i4 i9 i14 i19 i24 i29 
   unfold raw_native_tail3_550 raw_reference_tail3_550
   rw [raw_row_continuation550]
   simp only [raw_tail4_binding550]
-  rfl
+  try rfl
 
 #print axioms raw_tail3_binding550
 end PV_B3P_Association550227

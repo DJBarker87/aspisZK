@@ -46,7 +46,7 @@ theorem raw_source_reference550 (input : Array aspis_core.field.QM31 4#usize) :
   rw [raw_input_continuation550]
   simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
   simp only [raw_tail0_binding550]
-  rfl
+  try rfl
 
 theorem raw_source_link550 :
     PV_B3P_Links13227.PV_B3P_Link_poseidon_external_local_packed_raw raw_source550 :=
