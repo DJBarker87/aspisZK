@@ -60,7 +60,7 @@ assert 'getrandom_msan' in s['build.rs'] and 'if #[cfg(getrandom_msan)]' in s['s
 assert 'let _ = buf;' in s['src/backends/sanitizer.rs']
 assert 'getrandom_backend = "linux_raw"' in s['src/backends.rs']
 for t in ['INTERNAL_START: RawOsError = 1 << 16','UNEXPECTED: Error = Self::new_internal(2)','if code < 0','Self(code)']:assert t in s['src/error.rs']
-for mod in ['LinuxRawControl','LinuxRawBranches','LinuxRawObserve']:
+for mod in ['LinuxRawControl','LinuxRawBranches','LinuxRawObserve','LinuxRawCodes','EntropySourceSlot','NativeRawSelection','NativeLinuxError','NativeRawError']:
  text=Path('lean/PV_EVH_'+mod+'.lean').read_text();assert 'sorry' not in text
 out=dict(evidence_class='structural argument (own-1), deployed dependency body to source control model',
  recipe=recipe,lockfile_sha256=sha(lock.encode()),dependency='getrandom0.3.4',
@@ -70,7 +70,10 @@ out=dict(evidence_class='structural argument (own-1), deployed dependency body t
  observation='LinuxRawObserve replaces LinuxRawSyscall; syscall response carries return metadata only, buffer remains in physical/mutable state; L3 joint observation remains P',
  runtime_frame='No allocation, deallocation, handles or libc errno calls in fill/fill_uninit/fill_inner/raw syscall source cone. Model updates only output buffer and OS world.',
  source_buffer='Only the reached fresh zero-initialized64 array. Driver is not an arbitrary-length getrandom law.',
- retained=['complete source/carrier association; all_codes proves reached nonzero i32 representation','actual op129 dictionary installation at each reached world','raw syscall ABI and kernel memory footprint under existing P/compiler and entropy obligations','non-MSAN deployed artifact/config provenance','original source stack key/address provenance','full entropy success/retry and entry','L3 joint observation and V370'],
+ reached_installation='NativeRawSelection.error_fill installs op129 at opsNative for the current primitive delivery. NativeRawError.error_connected joins the actual extracted error iteration, deployed zeroize1.9.0 cleanup, heap/live invariants and retained events; no uniform advancing-world dictionary view.',
+ admission='EntropySourceSlot proves initialized64 extent and fresh ghost identity from all live/retired lifetimes. Physical address is an input, never synthesized; heap/live address separation remains P.',
+ trust_boundary='entropy_kernel remains the existing JOINT DENSITY field only. Raw syscall ABI, memory footprint, source-frame validity and full native/extracted simulation remain P; no missing proof is added to or folded into T.',
+ retained=['complete source/carrier association; all_codes proves reached nonzero i32 representation','complete provenance-fixed residual family; local reached-world op129 installation alone is not full-entry installation','raw syscall ABI, kernel memory footprint and intermediate memory/L3 history remain P; not a consequence of entropy_kernel density','non-MSAN deployed artifact/config provenance','original source stack key/address provenance','full entropy success/retry and entry','L3 joint observation and V370'],
  trust_fields_added=[],rows_removed=[])
 p=E/'getrandom-linux-raw-binding.json'
 if '--check' in sys.argv:assert json.load(open(p))==out
