@@ -31,8 +31,10 @@ theorem native {S F : Type} (base : ExternalTypes)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (PV_RunJoin_NativeResidual63.types base) S F)
     (world : PV_FXM_ReserveWorld.World S F)
     (p : PV_RunJoin_NativeActual63.P base heap box ops runtime world) :
-    PV_RunJoin_NativePointClaims72.Rows p.val.sem.columns :=
-  selected (PV_RunJoin_NativeResidual62.baseTypes base) heap box
+    letI : ExternalTypes := PV_RunJoin_NativeResidual63.types base
+    PV_RunJoin_NativePointClaims72.Rows p.val.sem.columns := by
+  letI : ExternalTypes := PV_RunJoin_NativeResidual63.types base
+  exact selected (PV_RunJoin_NativeResidual62.baseTypes base) heap box
     (PV_RunJoin_NativeResidual63.residual base ops runtime world) p.val p.property
 
 #print axioms selected
