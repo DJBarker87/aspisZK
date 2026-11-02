@@ -1,0 +1,167 @@
+{
+  "evidence_class": "checked local physical-state/value laws with structural source-step correspondence; actual native association incomplete",
+  "baseline": "fa394f3858",
+  "modules": [
+    {
+      "module": "PV_EVH_StackCopy",
+      "source_sha256": "30c42a911f567a019423af0a6aac2fa722263d6413fc39f34c6d1b58eaa87674",
+      "attempt": 90211,
+      "laws": [
+        "inside",
+        "outside",
+        "source_preserved",
+        "heap_coherent",
+        "live_preserved",
+        "frame_history"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyPhysicalCopy",
+      "source_sha256": "79f3ed09308274a1a88a6a3ccba8d99ebef7357e1471faf03b6511e4344ebdca",
+      "attempt": 90214,
+      "laws": [
+        "admit_pair_original",
+        "original_preserved",
+        "delivered_halves",
+        "heap_coherent"
+      ]
+    },
+    {
+      "module": "PV_EVH_NativeEntropyPhysical",
+      "source_sha256": "fbbed9572a6141f9dc5f842124952d17750be979f6a4a4b5b260e108cda2acc2",
+      "attempt": 90215,
+      "laws": [
+        "source_and_backing"
+      ]
+    },
+    {
+      "module": "PV_EVH_StackMove",
+      "source_sha256": "0847893c5c6b21d6121ac9ec43e5e30d36968f52563be671f470419e0ed81c9c",
+      "attempt": 90216,
+      "laws": [
+        "destination",
+        "no_destructor",
+        "residue_outside",
+        "runtime",
+        "find_filter_keep",
+        "original_lookup"
+      ]
+    },
+    {
+      "module": "PV_EVH_LinuxRawABI",
+      "source_sha256": "927b194204972214c62ede82765980aa843aa09d157e6cce88d5267bbe503563",
+      "attempt": 90218,
+      "laws": [
+        "signed_range",
+        "signed_word",
+        "word_range",
+        "suffix_inputs",
+        "negative_errno"
+      ]
+    },
+    {
+      "module": "PV_EVH_LinuxRawMachine",
+      "source_sha256": "ca9c9c95c7e3f54dc9a69eafadb97f2361c8bd80444a5f63ee772651e38342e2",
+      "attempt": 90219,
+      "laws": [
+        "retained",
+        "returned",
+        "fault",
+        "exhausted",
+        "kernel_frame"
+      ]
+    },
+    {
+      "module": "PV_EVH_StackByteCodec",
+      "source_sha256": "a5f7971acbfa4b0d6dbe28ec8c10b44bf6a64d3b327b389d6f84facabdfb8b38",
+      "attempt": 90221,
+      "laws": [
+        "lossless",
+        "encode_read",
+        "post_read",
+        "copied_read"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyInnerFrame",
+      "source_sha256": "ef315d5f754daeb192e3df09142c03585d830410ac435a28e8047f0774f26143",
+      "attempt": 90223,
+      "laws": [
+        "fresh_live_and_retired",
+        "field_seed_distinct",
+        "old_distinct",
+        "live_order",
+        "extents"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyCopiedRead",
+      "source_sha256": "455217ed3cf7178bcc20a643a6765debbb735ff3dcd2239dd0e5c6e327b3427e",
+      "attempt": 90225,
+      "laws": [
+        "array_read",
+        "first_encoding",
+        "second_encoding",
+        "first_read",
+        "second_read"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyMoveBacking",
+      "source_sha256": "b54f1ab1d12075cc0874ac5f7c7cab309c17bcfb3c0ea8405cadd9da3aae5c35",
+      "attempt": 90226,
+      "laws": [
+        "original_lookup",
+        "returned_backing",
+        "no_field_destructors"
+      ]
+    },
+    {
+      "module": "PV_EVH_EntropyPhysicalReads",
+      "source_sha256": "8f68cb11a639a818a5339aa6ad87a3555d9de348c61500e201eaaf623f1c9a00",
+      "attempt": 90227,
+      "laws": [
+        "from_delivery"
+      ]
+    }
+  ],
+  "source_inputs": [
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-frame-source.json",
+      "sha256": "efba6a5c3b00cdfb78fec2b220a28a4a4718d7c1d1aab6abfaddb597caee6234"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-copy-restoration.json",
+      "sha256": "528fb4b39a1c68c639b06fe37d1129e12be93aa508d5db9849c1c2ce099bb3f8"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/getrandom-034-linux-raw-source.json",
+      "sha256": "d51ba6374083c315dd0c05a904df10e9dd403a285cdb0a5ab44ad9b51845d2f3"
+    }
+  ],
+  "raw_asm": "} else if #[cfg(target_arch = \"x86_64\")] {\n            // TODO(MSRV-1.78): Add `any(target_abi = \"\", target_abi = \"x32\")` above.\n            const __X32_SYSCALL_BIT: u32 = 0x40000000;\n            const OFFSET: u32 = if cfg!(target_pointer_width = \"32\") { __X32_SYSCALL_BIT } else { 0 };\n            const __NR_getrandom: u32 = OFFSET + 318;\n\n            core::arch::asm!(\n                \"syscall\",\n                in(\"rax\") __NR_getrandom,\n                in(\"rdi\") buf,\n                in(\"rsi\") buflen,\n                in(\"rdx\") flags,\n                lateout(\"rax\") r0,\n                lateout(\"rcx\") _,\n                lateout(\"r11\") _,\n                options(nostack, preserves_flags)\n            );\n        ",
+  "correspondence": [
+    "Both32 source initializers precede both copies; their derived ghost keys are distinct from each other and every prior live/retired lifetime",
+    "copy_from_slice checks equal lengths then copy_nonoverlapping; source laws establish both exact32 lengths; StackCopy is byte-snapshot memory semantics, not an installed native primitive",
+    "NativeEntropyPhysical consumes the SAME delivered raw history in the original extracted body and both destination backing laws, without per-half answer premises",
+    "StackByteCodec proves U8 encoding lossless symbolically; it does not choose physical addresses",
+    "StackMove relocates bytes and ghost ownership without inserting destructor/zeroize; residue is preserved only outside the destination footprint; it is not an actual native move instance",
+    "LinuxRawABI matches the pinned x86_64/pointer64 register selection and signed64 conversion; LinuxRawMachine retains buffer/world/events on every outcome",
+    "KernelFrame is transported from the machine interface footprint; the footprint is an explicitly RETAINED P, never inferred from joint density"
+  ],
+  "retained": [
+    "ACTUAL original/inner/returned source-frame physical address, valid64-bit extents, separation/coherent heap interpretation",
+    "actual source-pointer/inline-asm ABI/kernel interface and memory footprint association; no real kernel instance is supplied",
+    "actual copy/read/move installation and returned structure including mask_nonce, compiler spills/residues, retry/drop and advancing family",
+    "allocator metadata/padding/RawVec/Global/System ValidAnswer, owned Vec/native Heap/Box; resource failures remain WORLD answers",
+    "complete libc/TLS/io::Error/EBADF/guards/hooks/backtrace diagnostics; seven callbacks and full entry",
+    "L3/V370/V371/V400, D159/D166, V221/V222 deployed zeroize1.9.0, all endpoint/deployment conditions",
+    "actual-family oraclePrefix/countTrace/nonce-store fileTrace links, D520/U/D524 inputs and actual success nonemptiness under v-prime"
+  ],
+  "axioms_mode": "SUMMARY-BASED cached module lists (ax1-prime); no full-data NEP/coherence audit",
+  "native_runs": 0,
+  "kani_runs": 0,
+  "release_replay": false,
+  "rows_removed": [],
+  "trust_fields_added": []
+}
