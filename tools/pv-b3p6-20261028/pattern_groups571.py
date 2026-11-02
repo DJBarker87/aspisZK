@@ -36,11 +36,11 @@ assert counts==dict(index_out_of_bounds=468,slice_range=0,arithmetic_overflow=19
 # Family carrier and arity are fixed by the pattern. State, actual reachability
 # and guard validity are deliberately *not* synthesized from inventory metadata.
 shape={
- 'index_out_of_bounds':('IndexState','indexGuard','state site'),
- 'slice_range':('SliceState','sliceGuard','state site'),
- 'arithmetic_overflow':('ArithmeticState','arithmeticGuard','state site'),
- 'unwrap_expect':('Option Unit','optionGuard','state site'),
- 'explicit_panic':('Bool','fun b => b = true','state site'),
+ 'index_out_of_bounds':('IndexState','indexGuard','(state site)'),
+ 'slice_range':('SliceState','sliceGuard','(state site)'),
+ 'arithmetic_overflow':('ArithmeticState','arithmeticGuard','(state site)'),
+ 'unwrap_expect':('Option Unit','optionGuard','(state site)'),
+ 'explicit_panic':('Bool','fun b => b = true','(state site)'),
  'assertion':('Bool × Bool','fun b : Bool × Bool => b.1 = b.2','(state site).1 (state site).2')}
 s='import PV_B3P_PanicPatterns571227\nnamespace PV_B3P_PatternFamilies571227\nopen Aeneas Aeneas.Std PV_B3P_PanicPatterns571227\nset_option autoImplicit false\n'
 for pattern in patterns:

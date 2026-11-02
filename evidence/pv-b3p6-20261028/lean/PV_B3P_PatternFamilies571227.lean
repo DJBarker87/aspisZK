@@ -12,7 +12,7 @@ theorem index_out_of_bounds_family {α State : Type} (state : Fin 468 → State 
       branch ((indexGuard) (state site s)) normal first =
         branch ((indexGuard) (state site s)) normal second := by
   intro site s reached
-  exact (index_out_of_bounds state site s normal first second).2 (guards site s reached)
+  exact (index_out_of_bounds (state site s) normal first second).2 (guards site s reached)
 #print axioms index_out_of_bounds_family
 /-- 19 inventoried sites. CONDITIONAL: source-state and guard links OPEN. -/
 theorem arithmetic_overflow_family {α State : Type} (state : Fin 19 → State → ArithmeticState)
@@ -24,7 +24,7 @@ theorem arithmetic_overflow_family {α State : Type} (state : Fin 19 → State �
       branch ((arithmeticGuard) (state site s)) normal first =
         branch ((arithmeticGuard) (state site s)) normal second := by
   intro site s reached
-  exact (arithmetic_overflow state site s normal first second).2 (guards site s reached)
+  exact (arithmetic_overflow (state site s) normal first second).2 (guards site s reached)
 #print axioms arithmetic_overflow_family
 /-- 3 inventoried sites. CONDITIONAL: source-state and guard links OPEN. -/
 theorem unwrap_expect_family {α State : Type} (state : Fin 3 → State → Option Unit)
@@ -36,7 +36,7 @@ theorem unwrap_expect_family {α State : Type} (state : Fin 3 → State → Opti
       branch ((optionGuard) (state site s)) normal first =
         branch ((optionGuard) (state site s)) normal second := by
   intro site s reached
-  exact (unwrap_expect state site s normal first second).2 (guards site s reached)
+  exact (unwrap_expect (state site s) normal first second).2 (guards site s reached)
 #print axioms unwrap_expect_family
 /-- 7 inventoried sites. CONDITIONAL: source-state and guard links OPEN. -/
 theorem explicit_panic_family {α State : Type} (state : Fin 7 → State → Bool)
@@ -48,7 +48,7 @@ theorem explicit_panic_family {α State : Type} (state : Fin 7 → State → Boo
       branch ((fun b => b = true) (state site s)) normal first =
         branch ((fun b => b = true) (state site s)) normal second := by
   intro site s reached
-  exact (explicit_panic state site s normal first second).2 (guards site s reached)
+  exact (explicit_panic (state site s) normal first second).2 (guards site s reached)
 #print axioms explicit_panic_family
 /-- 31 inventoried sites. CONDITIONAL: source-state and guard links OPEN. -/
 theorem assertion_family {α State : Type} (state : Fin 31 → State → Bool × Bool)
