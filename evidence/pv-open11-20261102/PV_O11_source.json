@@ -1,0 +1,177 @@
+{
+  "row": "V176",
+  "toolchain": "1.94.1",
+  "checks": {
+    "complete_kind_body": true,
+    "shared_data_borrow": true,
+    "no_custom_payload_call": true,
+    "negative_dispatch_rejected": true,
+    "unix_default_retained": true,
+    "errno_not_read": true
+  },
+  "ok": true,
+  "kind_body": "{\n        match self.repr.data() {\n            ErrorData::Os(code) => sys::io::decode_error_kind(code),\n            ErrorData::Custom(c) => c.kind,\n            ErrorData::Simple(kind) => kind,\n            ErrorData::SimpleMessage(m) => m.kind,\n        }\n    }",
+  "data_body": "{\n        \n        unsafe { decode_repr(self.0, |c| &*c) }\n    }",
+  "decode_repr_body": "{\n    let bits = ptr.as_ptr().addr();\n    match bits & TAG_MASK {\n        TAG_OS => {\n            let code = ((bits as i64) >> 32) as RawOsError;\n            ErrorData::Os(code)\n        }\n        TAG_SIMPLE => {\n            let kind_bits = (bits >> 32) as u32;\n            let kind = kind_from_prim(kind_bits).unwrap_or_else(|| {\n                debug_assert!(false, \"Invalid io::error::Repr bits: `Repr({:#018x})`\", bits);\n                \n                \n                \n                \n                \n                \n                unsafe { core::hint::unreachable_unchecked() };\n            });\n            ErrorData::Simple(kind)\n        }\n        TAG_SIMPLE_MESSAGE => {\n            \n            unsafe { ErrorData::SimpleMessage(&*ptr.cast::<SimpleMessage>().as_ptr()) }\n        }\n        TAG_CUSTOM => {\n            \n            \n            \n            let custom = ptr.as_ptr().wrapping_byte_sub(TAG_CUSTOM).cast::<Custom>();\n            ErrorData::Custom(make_custom(custom))\n        }\n        _ => {\n            \n            unreachable!();\n        }\n    }\n}",
+  "unix_decoder_body": "{\n    use io::ErrorKind::*;\n    match errno as libc::c_int {\n        libc::E2BIG => ArgumentListTooLong,\n        libc::EADDRINUSE => AddrInUse,\n        libc::EADDRNOTAVAIL => AddrNotAvailable,\n        libc::EBUSY => ResourceBusy,\n        libc::ECONNABORTED => ConnectionAborted,\n        libc::ECONNREFUSED => ConnectionRefused,\n        libc::ECONNRESET => ConnectionReset,\n        libc::EDEADLK => Deadlock,\n        libc::EDQUOT => QuotaExceeded,\n        libc::EEXIST => AlreadyExists,\n        libc::EFBIG => FileTooLarge,\n        libc::EHOSTUNREACH => HostUnreachable,\n        libc::EINTR => Interrupted,\n        libc::EINVAL => InvalidInput,\n        libc::EISDIR => IsADirectory,\n        libc::ELOOP => FilesystemLoop,\n        libc::ENOENT => NotFound,\n        libc::ENOMEM => OutOfMemory,\n        libc::ENOSPC => StorageFull,\n        libc::ENOSYS => Unsupported,\n        libc::EMLINK => TooManyLinks,\n        libc::ENAMETOOLONG => InvalidFilename,\n        libc::ENETDOWN => NetworkDown,\n        libc::ENETUNREACH => NetworkUnreachable,\n        libc::ENOTCONN => NotConnected,\n        libc::ENOTDIR => NotADirectory,\n        #[cfg(not(target_os = \"aix\"))]\n        libc::ENOTEMPTY => DirectoryNotEmpty,\n        libc::EPIPE => BrokenPipe,\n        libc::EROFS => ReadOnlyFilesystem,\n        libc::ESPIPE => NotSeekable,\n        libc::ESTALE => StaleNetworkFileHandle,\n        libc::ETIMEDOUT => TimedOut,\n        libc::ETXTBSY => ExecutableFileBusy,\n        libc::EXDEV => CrossesDevices,\n        libc::EINPROGRESS => InProgress,\n        libc::EOPNOTSUPP => Unsupported,\n\n        libc::EACCES | libc::EPERM => PermissionDenied,\n\n        \n        \n        \n        x if x == libc::EAGAIN || x == libc::EWOULDBLOCK => WouldBlock,\n\n        _ => Uncategorized,\n    }\n}",
+  "simple_arms": [
+    [
+      "E2BIG",
+      "ArgumentListTooLong"
+    ],
+    [
+      "EADDRINUSE",
+      "AddrInUse"
+    ],
+    [
+      "EADDRNOTAVAIL",
+      "AddrNotAvailable"
+    ],
+    [
+      "EBUSY",
+      "ResourceBusy"
+    ],
+    [
+      "ECONNABORTED",
+      "ConnectionAborted"
+    ],
+    [
+      "ECONNREFUSED",
+      "ConnectionRefused"
+    ],
+    [
+      "ECONNRESET",
+      "ConnectionReset"
+    ],
+    [
+      "EDEADLK",
+      "Deadlock"
+    ],
+    [
+      "EDQUOT",
+      "QuotaExceeded"
+    ],
+    [
+      "EEXIST",
+      "AlreadyExists"
+    ],
+    [
+      "EFBIG",
+      "FileTooLarge"
+    ],
+    [
+      "EHOSTUNREACH",
+      "HostUnreachable"
+    ],
+    [
+      "EINTR",
+      "Interrupted"
+    ],
+    [
+      "EINVAL",
+      "InvalidInput"
+    ],
+    [
+      "EISDIR",
+      "IsADirectory"
+    ],
+    [
+      "ELOOP",
+      "FilesystemLoop"
+    ],
+    [
+      "ENOENT",
+      "NotFound"
+    ],
+    [
+      "ENOMEM",
+      "OutOfMemory"
+    ],
+    [
+      "ENOSPC",
+      "StorageFull"
+    ],
+    [
+      "ENOSYS",
+      "Unsupported"
+    ],
+    [
+      "EMLINK",
+      "TooManyLinks"
+    ],
+    [
+      "ENAMETOOLONG",
+      "InvalidFilename"
+    ],
+    [
+      "ENETDOWN",
+      "NetworkDown"
+    ],
+    [
+      "ENETUNREACH",
+      "NetworkUnreachable"
+    ],
+    [
+      "ENOTCONN",
+      "NotConnected"
+    ],
+    [
+      "ENOTDIR",
+      "NotADirectory"
+    ],
+    [
+      "ENOTEMPTY",
+      "DirectoryNotEmpty"
+    ],
+    [
+      "EPIPE",
+      "BrokenPipe"
+    ],
+    [
+      "EROFS",
+      "ReadOnlyFilesystem"
+    ],
+    [
+      "ESPIPE",
+      "NotSeekable"
+    ],
+    [
+      "ESTALE",
+      "StaleNetworkFileHandle"
+    ],
+    [
+      "ETIMEDOUT",
+      "TimedOut"
+    ],
+    [
+      "ETXTBSY",
+      "ExecutableFileBusy"
+    ],
+    [
+      "EXDEV",
+      "CrossesDevices"
+    ],
+    [
+      "EINPROGRESS",
+      "InProgress"
+    ],
+    [
+      "EOPNOTSUPP",
+      "Unsupported"
+    ],
+    [
+      "EPERM",
+      "PermissionDenied"
+    ],
+    [
+      "EWOULDBLOCK",
+      "WouldBlock"
+    ]
+  ],
+  "inputs": {
+    "std-repr-bitpacked.rs": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+    "std-unix-error.rs": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+    "std-error.rs": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82"
+  },
+  "classification": "source dispatch census only; packed pointer/load, enum decoding, errno constants and native-to-model carrier installation remain separate until bound"
+}
