@@ -1,0 +1,68 @@
+{
+  "evidence_class": "structural source association (own-1) plus actual extracted body branch equality",
+  "source": {
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+    "method_body": "{\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }",
+    "method_body_sha256": "1cd877319f835ccd3151b2e6a1b8fc1c3ca298629779d2b089e8ba83105be45a"
+  },
+  "extraction": {
+    "module": "R1Z.ProverRwFullFuns",
+    "path": "docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023/ProverRwFullFuns.lean",
+    "revision": "8b3dc105f492f3a38f1bc9307e5adaf24ad4e5c7",
+    "authority": "h5 HEAD",
+    "git_blob": "43a49073e14747f1bc231d5b55fcd8b22e184098",
+    "source_sha256": "4b2e191421ae5572b665ec5cbef531709ed593f909256a57066f1234e411893f",
+    "object_sha256": "fe160e3b876cd081174ef9892c20c2e8d3f3b354f9d7c3dcc5b28ac6c8ebe1cb",
+    "imports": [
+      "Aeneas",
+      "R1Z.ProverRwFullTypes",
+      "R1Z.ProverRwFullExternalFuns"
+    ],
+    "cache": "runjoin32",
+    "object_path": "/home/dombarker/project-offloads/codex-pv-rjdec-20261028/objects/R1Z/ProverRwFullFuns.olean"
+  },
+  "steps": [
+    {
+      "source": "let mut bytes = Zeroizing::new([0u8; 64]);",
+      "law": "PV_EVH_NativeZeroWrappers.constructor_native; PV_EVH_StackAdmission.enter",
+      "status": "source initializer; original stack region remains a machine-frame association obligation"
+    },
+    {
+      "source": "getrandom::fill(bytes.as_mut())?;",
+      "law": "PV_EVH_NativeEntropyBorrow.array_borrow; PV_EVH_NativeEntropyIterationError.error_native",
+      "status": "original mutable array borrow, full post-buffer, ordinary error drop"
+    },
+    {
+      "source": "let mut field_mask_entropy = Zeroizing::new([0u8; 32]);",
+      "law": "OPEN success continuation",
+      "status": "not reached on the proved error branch"
+    },
+    {
+      "source": "let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);",
+      "law": "OPEN success continuation",
+      "status": "not reached on the proved error branch"
+    },
+    {
+      "source": "retry+=1;",
+      "law": "OPEN retry continuation",
+      "status": "not reached on the proved error branch"
+    }
+  ],
+  "selection": "opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)",
+  "borrowed_restoration": "PV_EVH_NativeEntropyBorrow.restore_array retains arbitrary supplied equal-extent buffer",
+  "actual_body": "ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body",
+  "scope": "ordinary entropy-error iteration only; not the complete entropy loop or proof-account entry",
+  "retained": [
+    "actual full residual family provenance",
+    "native getrandom driver association, including every partial-fill outcome",
+    "actual stack-frame key/address provenance, exclusivity and heap separation",
+    "success, retry, inner32 and later secret disposal",
+    "allocator and diagnostic fidelity",
+    "callback integration",
+    "full native entry, trace links and (v-prime) nonemptiness",
+    "V370 and L3 joint observation"
+  ],
+  "rows_removed": [],
+  "trust_fields_added": []
+}

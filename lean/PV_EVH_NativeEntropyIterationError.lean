@@ -45,10 +45,11 @@ theorem error_native (base : ExternalTypes)
   let d := driver buffer wi
   have hout : (PV_EVH_StackEntropyFill.fill slot driver buffer wi).outcome =
       .returned (.ok (.Err e,(Array.to_slice_mut d.buffer).1)) := by
-    simp only [PV_EVH_StackEntropyFill.fill,PV_EVH_StackEntropyFill.reply,hd]
+    change PV_EVH_StackEntropyFill.reply d = _
+    have hstatus : d.status = .returned (.ok (.Err e)) := hd
+    simp only [PV_EVH_StackEntropyFill.reply,hstatus]
   have hlookup := PV_EVH_StackEntropyFill.admitted_lookup slot
     (PV_EVH_StackEntropyFill.encode initial) driver buffer w
-  dsimp only
   rw [PV_EVH_NativeEntropyIteration.run_step base heap box ops mask limit retry
     slot driver success w hr]
   rw [PV_EVH_NativeEntropyError.error_world slot.key

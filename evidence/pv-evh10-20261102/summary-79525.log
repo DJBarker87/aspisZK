@@ -1,0 +1,73 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:47:66: error: unsolved goals
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+limit retry : Usize
+slot : Slot
+driver : Slice U8 → State → PV_EVH_StackEntropyFill.Delivery
+success : (Slice U8 → zeroize.Zeroizing (Std.Array U8 64#usize)) → Slice U8 → Q Answer
+w : State
+e : getrandom.error.Error
+hr : retry < limit
+hn : slot.initialized = 64
+hd :
+  (driver buffer (PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w)).status =
+    PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e))
+hf :
+  getrandom.fill buffer =
+    Result.ok
+      (core.result.Result.Err e,
+        (driver buffer
+                (PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w)).buffer.to_slice_mut.1)
+wi : State := PV_EVH_StackAdmission.enter slot (PV_EVH_StackEntropyFill.encode initial) w
+d : PV_EVH_StackEntropyFill.Delivery := driver buffer wi
+⊢ (match (driver buffer wi).status with
+    | PV_EVH_Runtime.Outcome.returned (Result.ok r) =>
+      PV_EVH_Runtime.Outcome.returned (Result.ok (r, (driver buffer wi).buffer.to_slice_mut.1))
+    | PV_EVH_Runtime.Outcome.returned (Result.fail e) => PV_EVH_Runtime.Outcome.returned (Result.fail e)
+    | PV_EVH_Runtime.Outcome.returned Result.div => PV_EVH_Runtime.Outcome.returned Result.div
+    | PV_EVH_Runtime.Outcome.fault e => PV_EVH_Runtime.Outcome.fault e
+    | PV_EVH_Runtime.Outcome.exhausted => PV_EVH_Runtime.Outcome.exhausted) =
+    PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err e, d.buffer.to_slice_mut.1))
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:51:2: error: `dsimp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyIterationError.lean:48:74: warning: This simp argument is unused:
+  hd
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_EVH_StackEntropyFill.fill, ̲PV_EVH_StackEntropyFill.reply,̵h̵d̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_NativeEntropyIterationError.error_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{
+  "attempt": 79525,
+  "target": "PV_EVH_NativeEntropyIterationError",
+  "source_revision": "ce09fcc09be60240390b3e612d9cba11e672c5ca",
+  "source_path": "lean/PV_EVH_NativeEntropyIterationError.lean",
+  "source_git_blob": "bd0bfc13f35c6fdc0fd1ab22dfd628de4f62d9ed",
+  "source_sha256": "62489b7a26562e76bad5b69d4ba1e7ca79169ad0ff55eed4f721de5f6c13c7c8",
+  "exit": "1",
+  "peak_rss_kbytes": "4439356",
+  "swaps": "0",
+  "wall": "0:04.68",
+  "axioms": [
+    "'PV_EVH_NativeEntropyIterationError.error_native' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "deps_fingerprint": "b702907c91aaf7b3509be995b7a09ff126049bd8b45403040c357809cbfa4a54",
+  "accepted": false
+}
