@@ -59,6 +59,7 @@ fn parent_capacity(len:usize)->usize{len.div_ceil(2).max(1)}
 fn wallet_open_channel(path:String)->Result<std::fs::File>{std::fs::File::open(path).map_err(err)}
 fn wallet_read_record(channel:&mut std::fs::File)->Result<[u8;wallet::WIDTH]>{
  use std::io::Read;
+ use crate::diagnostics::{anyhow,ensure};
  let mut record=[0u8;wallet::WIDTH];channel.read_exact(&mut record).map_err(err)?;
- let mut tail=[0u8;1];diagnostics::ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");Ok(record)
+ let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");Ok(record)
 }
