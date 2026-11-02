@@ -3,6 +3,19 @@ from pathlib import Path
 import json,hashlib,subprocess
 from run import H
 R=H/'resume18';paths=[]
+latest={}
+for receipt in H.glob('lean-790*/receipt/receipt.json'):
+ row=json.loads(receipt.read_text())
+ if row.get('exit_status')==0 and 79028<=row.get('attempt',0)<=79096:
+  if row['module']not in latest or row['attempt']>latest[row['module']]['attempt']:latest[row['module']]=row
+objects=[]
+for module,row in latest.items():
+ src=H/'lean'/(module+'.lean');obj=H/'lean-objects'/(module+'.olean')
+ assert hashlib.sha256(src.read_bytes()).hexdigest()==row['source_sha256'],module
+ assert obj.is_file(),module
+ for dep,rec in row['dependency_objects'].items():assert hashlib.sha256(Path(rec['path']).read_bytes()).hexdigest()==rec['sha256'],(module,dep)
+ objects.append(dict(module=module,attempt=row['attempt'],source_sha256=row['source_sha256'],object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest(),dependency_fingerprint=row['deps_fingerprint']))
+(R/'D550-accepted-object-inventory.json').write_text(json.dumps(dict(objects=objects,dependency_mismatches=[]),indent=2)+'\n')
 for root in [*H.glob('lean-790*'),R]:
  if root==R:
   paths.extend(p for p in R.rglob('*')if p.is_file()and not any(part.endswith('-tmp')for part in p.parts)and p.name not in ['D550-final-host-inventory.json','D550-collect-paths.txt'])

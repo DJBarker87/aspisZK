@@ -37,6 +37,8 @@ if raw_pass:
  passed('PV_B3P_RawSource550227')
  for i in range(5):passed(f'PV_B3P_RawTail{i}550227')
  passed('PV_B3P_RawTails550227')
+ passed('PV_B3P_RawReferenceFactor550227')
+ for i in range(5):passed(f'PV_B3P_RawRefTail{i}550227')
  updates['external_local_packed_raw']=('PV_B3P_RawSource550227','PV_B3P_Association550227.raw_source_link550','RAW-SOURCE-D550.json')
 # Existing exact reference replays are reused, never rerun for budget use.
 for file,names in [('REFERENCE-PROJECTED-D547.json',['reference_field.qm31_sum_products3_prepared','reference_poseidon.interpolated_internal_pair']),('POSEIDON-REFERENCE-D543.json',[])]:
