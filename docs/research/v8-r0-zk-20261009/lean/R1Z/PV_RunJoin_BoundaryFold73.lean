@@ -1,5 +1,4 @@
-import R1Z.ProverRwP6BoundaryMath
-import R1Z.ProverCommitBoundarySum49
+import R1Z.PV_RunJoin_BoundaryWords73
 set_option autoImplicit false
 noncomputable section
 namespace R1Z.PV_RunJoin_BoundaryFold73
@@ -37,7 +36,7 @@ theorem initial_values (q : Q) :
     (initial q).c.val=2*q.c1.a.val ∧ (initial q).d.val=2*q.c1.b.val :=
   ⟨double _,double _,double _,double _⟩
 
-theorem initial_bound (q : Q) : ProverRwP6BoundaryMath.bounded 2 (initial q) := by
+theorem initial_bound (q : Q) : PV_RunJoin_BoundaryWords73.bounded 2 (initial q) := by
   obtain ⟨a,b,c,d⟩ := initial_values q
   have ha := q.c0.a.bv.isLt
   have hb := q.c0.b.bv.isLt
@@ -47,28 +46,28 @@ theorem initial_bound (q : Q) : ProverRwP6BoundaryMath.bounded 2 (initial q) := 
   change q.c0.b.val<2^32 at hb
   change q.c1.a.val<2^32 at hc
   change q.c1.b.val<2^32 at hd
-  unfold ProverRwP6BoundaryMath.bounded
+  unfold PV_RunJoin_BoundaryWords73.bounded
   rw [a,b,c,d]
   omega
 
 theorem values (p : Nat → Q) (n i used : Nat) (s : Acc)
-    (bound : used+n ≤ 29) (safe : ProverRwP6BoundaryMath.bounded used s) :
+    (bound : used+n ≤ 29) (safe : PV_RunJoin_BoundaryWords73.bounded used s) :
     let final := fold p n i s
-    final.a.val=s.a.val+ProverCommitBoundarySum49.sum (fun k => (p k).c0.a) n i ∧
-    final.b.val=s.b.val+ProverCommitBoundarySum49.sum (fun k => (p k).c0.b) n i ∧
-    final.c.val=s.c.val+ProverCommitBoundarySum49.sum (fun k => (p k).c1.a) n i ∧
-    final.d.val=s.d.val+ProverCommitBoundarySum49.sum (fun k => (p k).c1.b) n i := by
+    final.a.val=s.a.val+PV_RunJoin_BoundaryWords73.sum (fun k => (p k).c0.a) n i ∧
+    final.b.val=s.b.val+PV_RunJoin_BoundaryWords73.sum (fun k => (p k).c0.b) n i ∧
+    final.c.val=s.c.val+PV_RunJoin_BoundaryWords73.sum (fun k => (p k).c1.a) n i ∧
+    final.d.val=s.d.val+PV_RunJoin_BoundaryWords73.sum (fun k => (p k).c1.b) n i := by
   induction n generalizing used i s with
-  | zero => simp only [fold,ProverCommitBoundarySum49.sum,Nat.add_zero,and_self]
+  | zero => simp only [fold,PV_RunJoin_BoundaryWords73.sum,Nat.add_zero,and_self]
   | succ n ih =>
-    have step := ProverRwP6BoundaryMath.step_values (p i) s used (by omega) safe
-    have next := ProverRwP6BoundaryMath.step_bound (p i) s used (by omega) safe
+    have step := PV_RunJoin_BoundaryWords73.step_values (p i) s used (by omega) safe
+    have next := PV_RunJoin_BoundaryWords73.step_bound (p i) s used (by omega) safe
     have tail := ih (i+1) (used+1) (advance (p i) s) (by omega) next
     dsimp only [fold]
     rcases step with ⟨a,b,c,d⟩
     rcases tail with ⟨ta,tb,tc,td⟩
     rw [ta,tb,tc,td,a,b,c,d]
-    simp only [ProverCommitBoundarySum49.sum,Nat.add_assoc,and_self]
+    simp only [PV_RunJoin_BoundaryWords73.sum,Nat.add_assoc,and_self]
 
 #print axioms initial
 #print axioms fold
