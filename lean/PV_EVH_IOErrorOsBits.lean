@@ -7,7 +7,7 @@ source cast/shift/or and pointer-provenance association are recorded separately;
 these arithmetic facts alone are not a native io::Error representation proof. -/
 def encode (code : Int) : Nat := (code % (2^32 : Int)).toNat * 2^32 + 2
 def decode (bits : Nat) : Int :=
-  let word := bits / 2^32
+  let word : Nat := bits / 2^32
   if word < 2^31 then (word : Int) else (word : Int) - 2^32
 
 theorem os_tag (code : Int) : encode code % 4 = 2 := by
