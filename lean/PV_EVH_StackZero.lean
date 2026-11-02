@@ -21,10 +21,9 @@ abbrev State := PV_EVH_DeployedZeroWorld.World Frame
 /-- Ending a lifetime retains its post-cleanup physical memory and its slot.
 It does not assert allocator clearing or erase retired memory from L3. -/
 def retire (slot : Slot) (w : State) : State :=
-  {w with frame := {w.frame with
-    live := w.frame.live.filter (fun s => s.key != slot.key)
-    retired := slot :: w.frame.retired},
-    drops := w.drops+1}
+  let f : Frame := ⟨w.frame.runtime,
+    w.frame.live.filter (fun s => s.key != slot.key),slot :: w.frame.retired⟩
+  {w with frame := f, drops := w.drops+1}
 
 def drop (slot : Slot) (w : State) : State :=
   retire slot (PV_EVH_DeployedZeroCursor.run
