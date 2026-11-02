@@ -1,0 +1,24 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -982,3 +982,7 @@
+         ));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_encode_prefix.rs"]
++mod NEM_encode_prefix;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEM_encode_prefix.rs
+@@ -0,0 +1,11 @@
++use super::*;
++use crate::pool_v1::*;
++use aspis_core::field::M31;
++use crate::Digest;
++struct Frame<'a>{expected:&'a PoolV1PairLiveSnapshotV1,reply:Result<(),PoolV1PairLiveSnapshotErrorV1>,called:bool,reached:bool}
++fn child(s:&PoolV1PairLiveSnapshotV1,f:&mut Frame)->Result<(),PoolV1PairLiveSnapshotErrorV1>{assert!(!f.called&&core::ptr::eq(s,f.expected),"same exact encoder validator input");f.called=true;f.reply}
++fn prefix(s:&PoolV1PairLiveSnapshotV1,length:usize,f:&mut Frame)->Result<(),PoolV1PairLiveSnapshotErrorV1>{if length!=800{return Err(PoolV1PairLiveSnapshotErrorV1::WrongLength);}child(s,f)?;f.reached=true;Ok(())}
++fn any_error()->crate::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++#[kani::proof]
++fn encode_prefix(){let s=PoolV1PairLiveSnapshotV1{pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:digest(),frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]};let length:usize=kani::any();let mut f=Frame{expected:&s,reply:if kani::any(){Ok(())}else{Err(any_error())},called:false,reached:false};let actual=prefix(&s,length,&mut f);let expected=if length!=800{Err(PoolV1PairLiveSnapshotErrorV1::WrongLength)}else{f.reply};assert!(actual==expected && f.called==(length==800) && f.reached==actual.is_ok(),"exact encoder rejection prefix and untouched-output continuation");}

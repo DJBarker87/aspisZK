@@ -1,0 +1,17 @@
+{
+ "case": "after",
+ "slot": 5,
+ "mode": "positive",
+ "start": 8,
+ "width": 8,
+ "expression": "s.next_pair_index.to_le_bytes()",
+ "destination_width": 688,
+ "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+ "frozen_body": "pub fn encode_pool_v1_pair_verified_afterstate_v1(\n    afterstate: &PoolV1PairVerifiedAfterstateV1,\n) -> Result<[u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES], PoolV1PairVerifierTransportErrorV1> {\n    validate_verified_afterstate(afterstate)?;\n    let mut output = [0u8; POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_VERIFIED_AFTERSTATE_MAGIC);\n    output[4] = POOL_V1_PAIR_VERIFIER_TRANSPORT_VERSION;\n    output[5] = super::POOL_V1_PAIR_TREE_STORAGE_FORMAT_VERSION;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = 1;\n    output[8..16].copy_from_slice(&afterstate.next_pair_index.to_le_bytes());\n    output[16..48].copy_from_slice(&encode_digest_canonical(&afterstate.next_root));\n    for (level, node) in afterstate.next_frontier.iter().enumerate() {\n        let start = 48 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    }\n    Ok(output)\n}",
+ "frozen_body_sha256": "b46aac1c1a8bd8c3afea8f7322b3af54dcd3da03386e41a1734e37629308e578",
+ "all_typed_inputs": true,
+ "arbitrary_prestate": true,
+ "full_frame": true,
+ "one_KMX_iteration": true,
+ "classification": "source field/scalar window; exact native child argument and arbitrary full digest reply for root; no whole-buffer loop"
+}

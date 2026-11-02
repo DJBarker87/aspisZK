@@ -1,0 +1,17 @@
+{
+ "case": "live",
+ "slot": 4,
+ "mode": "positive",
+ "start": 80,
+ "width": 32,
+ "expression": "s.deployment_domain",
+ "destination_width": 800,
+ "source": "crates/aspis-statement/src/pool_v1/pair_tree_profile.rs",
+ "frozen_body": "pub fn encode_pool_v1_pair_live_snapshot_v1(\n    snapshot: &PoolV1PairLiveSnapshotV1,\n    output: &mut [u8],\n) -> Result<(), PoolV1PairLiveSnapshotErrorV1> {\n    if output.len() != POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES {\n        return Err(PoolV1PairLiveSnapshotErrorV1::WrongLength);\n    }\n    validate_pool_v1_pair_live_snapshot_v1(snapshot)?;\n\n    output.fill(0);\n    output[..8].copy_from_slice(&POOL_V1_PAIR_LIVE_SNAPSHOT_MAGIC);\n    output[8] = POOL_V1_PAIR_LIVE_SNAPSHOT_VERSION;\n    output[16..48].copy_from_slice(&POOL_V1_PAIR_TREE_FORMAT_BINDING);\n    output[48..80].copy_from_slice(&snapshot.pool);\n    output[80..112].copy_from_slice(&snapshot.deployment_domain);\n    output[112..120].copy_from_slice(&snapshot.sequence.to_le_bytes());\n    output[120..128].copy_from_slice(&snapshot.next_pair_index.to_le_bytes());\n    output[128..160].copy_from_slice(&encode_digest_canonical(&snapshot.current_root));\n    for (level, node) in snapshot.frontier.iter().enumerate() {\n        let start = 160 + 32 * level;\n        output[start..start + 32].copy_from_slice(&encode_digest_canonical(node));\n    }\n    Ok(())\n}",
+ "frozen_body_sha256": "becc1af3a47c133cc74b3c10cbf968a63731a3ce8a79aecec353cb38606de400",
+ "all_typed_inputs": true,
+ "arbitrary_prestate": true,
+ "full_frame": true,
+ "one_KMX_iteration": true,
+ "classification": "source field/scalar window; exact native child argument and arbitrary full digest reply for root; no whole-buffer loop"
+}

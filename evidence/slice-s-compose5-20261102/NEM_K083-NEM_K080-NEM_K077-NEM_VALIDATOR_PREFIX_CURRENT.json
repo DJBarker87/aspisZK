@@ -1,0 +1,13 @@
+{
+ "case": "after",
+ "negative": true,
+ "source": "crates/aspis-statement/src/pool_v1/pair_terminal.rs",
+ "frozen_body": "fn validate_verified_afterstate(\n    afterstate: &PoolV1PairVerifiedAfterstateV1,\n) -> Result<(), PoolV1PairVerifierTransportErrorV1> {\n    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > super::POOL_V1_PAIR_CAPACITY\n    {\n        return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);\n    }\n    if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_root) {\n        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n    }\n    let mut level = 0;\n    while level < afterstate.next_frontier.len() {\n        if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_frontier[level]) {\n            return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n        }\n        level += 1;\n    }\n    Ok(())\n}",
+ "frozen_body_sha256": "3dd0917c15a911f3ff6158f9923a1850008d62d6964fe9b375a865858170cc05",
+ "prefix_source": "fn validate_verified_afterstate(\n    afterstate: &PoolV1PairVerifiedAfterstateV1,\n) -> Result<(), PoolV1PairVerifierTransportErrorV1> {\n    if afterstate.next_pair_index == 0 || afterstate.next_pair_index > super::POOL_V1_PAIR_CAPACITY\n    {\n        return Err(PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex);\n    }\n    if !super::pair_tree_profile::digest_is_canonical(&afterstate.next_root) {\n        return Err(PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate);\n    }\n",
+ "exact_projection": true,
+ "arbitrary_root_reply": true,
+ "all_typed_inputs": true,
+ "empty_external_modifies": true,
+ "classification": "scalar rejection prefix ending at explicit frontier-loop continuation, not a whole-buffer run"
+}
