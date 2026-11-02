@@ -11632,3 +11632,22 @@ with standard axioms only. Exact receipts, V183 K-3 citation, unchanged
 NodeAppend before/after and next steps: evidence/pv-runjoin72-20261102/
 REPORT-D552.md, HANDOFF.md and SESSION-D552.json. No compiler budget remains.
 Privacy target not yet established.
+
+### D564 — Runjoin exact bridge / independent worker interface finding
+
+Runjoin73 continuation checked that exact op227 callback equality, even at
+every input and consumed by the original OracleBridge38.selected_callback,
+cannot imply Nonempty P uniformly over the current residual dictionary
+family: BridgeObstruction73 and ExactBridgeObstruction73 retain that equality
+while denying the reached cost200 op257 request, making P empty. This is a
+diagnostic INTERFACE counterexample, not a deployed execution counterexample.
+No DeployedWrapper557 witness is assumed or disproved for the actual deployed
+dictionary. Full capture remains open; NodeAppend and the same seven links
+remain. Need the fixed deployed op257 source binding independently of op227.
+Six continuation attempts:five accepted,one binder failure corrected by changed
+source. All reserved final audits79897–79899 passed.64/97 cumulative attempts;
+33 remain,next79861. Accepted axiom lists are summary-based per ax1,standard
+only; no raw-walk completion claimed. V183 remains SUSPENDED(K-3),D549.
+No rows removed, no endpoint hypothesis added. Evidence and next steps:
+evidence/pv-runjoin73-20261102/REPORT-D564.md and HANDOFF.md.
+Privacy target not yet established.

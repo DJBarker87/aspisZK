@@ -1,3 +1,47 @@
+# Runjoin73 — LOG D564 checkpoint: exact bridge is insufficient for generic ops
+
+Read REPORT-D564.md and SESSION-D564.json first. Same branch/worktree;
+continuation entry956f66a796. Full capture/Nonempty P still OPEN; NodeAppend
+retained. This is not budget exhaustion. No deployed failure is claimed.
+
+64/97 attempts spent:42 accepted,22 rejected. Consumed79800–79860 and
+final audits79897–79899. **33 attempts remain; next79861.** Do not reuse IDs.
+All three final audit IDs are now SPENT; later source changes need a fresh
+applicable audit target/ID from remaining authorized normal IDs.
+No live own scope or reservation. No refusal in this continuation.
+
+NEW CHECKED OBSTRUCTION: BridgeObstruction73 (79858) constructs a diagnostic
+preserving arbitrary supplied terminal EXACTLY at op227 but denying the
+actual cost200 commitment worker. It proves complete native callback equality
+AND empty P, and refutes a uniform bridge-only sufficiency theorem for the
+current arbitrary residual dictionary family. ExactBridgeObstruction73
+(79860) applies the ORIGINAL OracleBridge38.selected_callback with exactly its
+forall-claims hypothesis and gets its evaluation equality alongside empty P.
+FinalInterfaceAudit73.witness (79899) exhibits the dictionary existentially.
+This is an interface counterexample, NOT a deployed op257 counterexample,
+and does not assert/refute DeployedWrapper557 at the deployed dictionary.
+
+The user's requested exact-bridge alternative cannot supply the independent
+op257 obligation. Need fixed deployed residual dictionary/source pin or V263
+binding. Asked user asynchronously; no answer yet. Do not restate the desired
+capture as a hypothesis, invent a worker binding, or assert the deployed
+bridge. The original round proof and every D558 open obligation below remain.
+
+79859 failed from a missing explicit ExternalTypes binder in the statement;
+changed source adds `letI : ExternalTypes := types base`, passing79860.
+Only standard axioms in accepted summary-based lists (ax1); no raw-walk audit
+claim. FinalBridgeAudit73(79897),FinalFrontierAudit73(79898),
+FinalInterfaceAudit73(79899) all passed.64 host receipts reconciled,192 shared
+files matched,no collisions/live own scopes. Fresh preflight4265 project
+objects/9603 fingerprints/5673 external/5438 IR and9938 namespace resolutions
+all match. Sources/receipts/logs fully retained. No full manifest replay.
+V183 remains SUSPENDED(K-3),D549; no link or ledger removal.
+
+The earlier D558 checkpoint is preserved below for all existing proof
+frontier details and independent next steps.
+
+---
+
 # Runjoin73 — LOG D558 context checkpoint
 
 Same worktree `/Users/dominic/ZK/.worktrees/pv-runjoin`, branch
