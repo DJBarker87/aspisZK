@@ -70,6 +70,7 @@ theorem reached {H : Type} (digest : aspis_core.digest.Digest32 H)
       run digest transcript output point running round polynomial := by
   simp only [PV_RunJoin_RoundWorkerReached69.tail,merged,interpolated,
     core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,run]
+  rfl
 
 #print axioms run
 #print axioms reached
