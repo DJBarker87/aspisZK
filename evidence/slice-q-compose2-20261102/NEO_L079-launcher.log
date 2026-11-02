@@ -1,0 +1,46 @@
+{"attempt": "NEO_L079", "exit_status": 1, "wall_seconds": 1.6083595880772918, "peak_rss_kib": "2593784", "swaps": "0", "print_axioms": ["'NEO_ParserFailures.complex_short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEO_ParserFailures.quadratic_short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEO_ParserFailures.complex_bad_first' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEO_ParserFailures.quadratic_bad_first' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NEO_ParserFailures.lean:8:78: error: unsolved goals
+bytes : Slice U8
+short : (↑bytes).length < 4
+fit : ¬↑4#usize ≤ (↑bytes).length
+⊢ ∃ error,
+    (do
+        let s ← if 4 ≤ (↑bytes).length then ok ⟨List.take 4 ↑bytes, ⋯⟩ else fail Error.panic
+        let r ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 s
+        match r with
+          | core.result.Result.Ok value => do
+            let o ← AspisR1CandidateParser.field.M31.from_le_bytes value
+            let cf ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let s1 ← if 8 ≤ (↑byt
+...
+Try_traitTry.branch o
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let s1 ← if 16 ≤ (↑bytes).length then ok ⟨List.slice 8 16 ↑bytes, ⋯⟩ else fail Error.panic
+            let o1 ← AspisR1CandidateParser.field.CM31.from_le_bytes s1
+            let cf1 ← AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitTry.branch o1
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+                  AspisR1CandidateParser.field.QM31 residual
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            AspisR1CandidateParser.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual
+              AspisR1CandidateParser.field.QM31 residual) =
+      fail error
+NEO_ParserFailures.lean:17:64: warning: This simp argument is unused:
+  fit
+
+Hint: Omit it from the simp argument list.
+  simp [AspisR1CandidateParser.field.QM31.from_le_bytes, ̲core.slice.index.Slice.index,
+     ̲core.slice.index.SliceIndexRangeUsizeSlice.index, ̲Slice.length,̵f̵i̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEO_ParserFailures.complex_short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEO_ParserFailures.quadratic_short' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEO_ParserFailures.complex_bad_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEO_ParserFailures.quadratic_bad_first' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r55ecba2638a348c69c50be56a2644d72.scope; invocation ID: 2d3770cd46c44264880fac7e2d7de51b

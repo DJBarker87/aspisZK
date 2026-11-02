@@ -30,13 +30,13 @@ theorem nonzero (x : U32) (nonzero : x != 0#u32) :
  refine ⟨m,t2,m1,t4,m2,t8,m3,t16,m4,t24,m5,t28,m6,t29,t30,m7,out,?_,?_,?_,cout⟩
  · rfl
  · intro call member
-   simp only [chain,List.mem_cons,List.mem_singleton] at member
+   simp only [chain,List.mem_cons,List.not_mem_nil,or_false] at member
    rcases member with rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl|rfl
-   all_goals simp_all only [legal]
+   all_goals simp_all [legal]
  · rw [NEO_TailReference.inverse]
    exact run
 
-theorem zero : NEO_TailRef.inverse NEO_TailReference.inverseOps 0#u32=fail .panic := by
+theorem zero : NEO_TailRef.inverse NEO_TailReference.inverseOps 0#u32=fail .assertionFailure := by
  simp [NEO_TailRef.inverse,massert]
 
 #print axioms nonzero
