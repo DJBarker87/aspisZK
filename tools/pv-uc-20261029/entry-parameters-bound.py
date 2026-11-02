@@ -16,7 +16,7 @@ for kind in ['Types','Funs']:
  counts[kind]=len(declarations);assert declarations
  # Every abstract operation retains its exact original type and binders.
  fields=['  op'+str(i)+rest for i,(name,rest) in enumerate(declarations)]
- header='import Aeneas\n'+('import PVUCBoundEntry.Types\n' if kind=='Funs' else '')+'open Aeneas Aeneas.Std Result ControlFlow Error\nnamespace '+ns+'\n\n'
+ header='import Aeneas\n'+('import PVUCBoundEntry.Types\nimport PVUCBoundEntry.FloatCarrier\n' if kind=='Funs' else '')+'open Aeneas Aeneas.Std Result ControlFlow Error\nnamespace '+ns+'\n\n'
  cls='External'+kind
  text=header+'class '+cls+(' [ExternalTypes]' if kind=='Funs' else '')+' where\n'+'\n'.join(fields)+'\n\n'
  for i,(name,rest) in enumerate(declarations):

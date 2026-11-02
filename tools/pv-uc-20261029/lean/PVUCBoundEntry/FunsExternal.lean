@@ -1,5 +1,6 @@
 import Aeneas
 import PVUCBoundEntry.Types
+import PVUCBoundEntry.FloatCarrier
 open Aeneas Aeneas.Std Result ControlFlow Error
 namespace PV_UC_BoundEntry
 
