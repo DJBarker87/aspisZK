@@ -11,7 +11,8 @@ open PV_RunJoin_LiftColumnsValue66 (tails vec)
 theorem row_length (columns : Columns)
     (hlen : ∀ l,l<26 → (column columns l).length=1024) (lane : Nat) :
     (PV_RunJoin_LiftRowValue66.row columns hlen lane).length=1024 := by
-  simp only [PV_RunJoin_LiftRowValue66.row,PV_RunJoin_LiftPayload66.payload,List.length_ofFn]
+  change (PV_RunJoin_LiftPayload66.payload columns hlen lane 0 1024).length=1024
+  simp only [PV_RunJoin_LiftPayload66.payload,List.length_ofFn]
 
 theorem vec_length (a : Array aspis_core.field.QM31 1024#usize) :
     (vec a).length=1024 := a.property
@@ -58,7 +59,7 @@ theorem helper (base : ExternalTypes) (heap : Heap) (box : Box)
     Array.index_usize out 26#usize=ok h := by
   obtain ⟨p,hp⟩ := PV_RunJoin_LiftColumnsValue66.source base heap box ops columns hlen h g d out success
   rw [hp,PV_RunJoin_LiftArray66.read _ 26#usize (by decide)]
-  simp only [tails,Function.update_of_ne (by decide : (26:Nat)≠28),
+  simp only [show (26#usize).val=26 from rfl,tails,Function.update_of_ne (by decide : (26:Nat)≠28),
     Function.update_of_ne (by decide : (26:Nat)≠27),Function.update_self]
 
 #print axioms helper
