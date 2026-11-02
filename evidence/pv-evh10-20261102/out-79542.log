@@ -1,0 +1,826 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:71:21: error: Tactic `rfl` failed: The left-hand side
+  {
+      delivery :=
+        { status := PV_EVH_Runtime.Outcome.fault e✝¹, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+          world := (syscall (address + offset) (64 - offset) a w).world,
+          events := (syscall (address + offset) (64 - offset) a w).events },
+      calls := [] }.delivery
+is not definitionally equal to the right-hand side
+  { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+    world := (syscall (address + offset) (64 - offset) a w).world,
+    events := (syscall (address + offset) (64 - offset) a w).events }
+
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+e✝¹ : PV_EVH_Runtime.Fault
+hpos : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝¹
+x✝ : PV_EVH_Runtime.Outcome ℤ
+e✝ : PV_EVH_Runtime.Fault
+hz : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.fault e✝¹, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:73:12: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+e✝ : PV_EVH_Runtime.Fault
+hpos : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝
+x✝ : PV_EVH_Runtime.Outcome ℤ
+hnz : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:69:18: error: unsolved goals
+case h_3
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+e✝¹ : PV_EVH_Runtime.Fault
+hpos : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝¹
+x✝ : PV_EVH_Runtime.Outcome ℤ
+e✝ : Error
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.fail e✝)
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.fault e✝¹, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.returned (Result.fail e✝),
+      buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_4
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+e✝ : PV_EVH_Runtime.Fault
+hpos : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝
+x✝ : PV_EVH_Runtime.Outcome ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned Result.div
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.returned Result.div,
+      buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_5
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+e✝ : PV_EVH_Runtime.Fault
+hpos : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝
+x✝ : PV_EVH_Runtime.Outcome ℤ
+ret✝ : ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.ok ret✝)
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    if 0 ≤ ret✝ then
+      if ret✝ = 0 then
+        { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+          buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+          world := (syscall (address + offset) (64 - offset) a w).world,
+          events := (syscall (address + offset) (64 - offset) a w).events }
+      else
+        if ret✝.toNat ≤ 64 - offset then
+          if offset + ret✝.toNat = 64 then
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+          else
+            {
+              status :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).status,
+              buffer :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).buffer,
+              world :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).world,
+              events :=
+                (syscall (address + offset) (64 - offset) a w).events ++
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).events }
+        else
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+    else
+      if ret✝ = -4 then
+        {
+          status :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).status,
+          buffer :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).buffer,
+          world :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).world,
+          events :=
+            (syscall (address + offset) (64 - offset) a w).events ++
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).events }
+      else
+        if -2147483648 ≤ ret✝ then
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret✝)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+        else
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:81:21: error: unsolved goals
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+hneg : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+x✝ : PV_EVH_Runtime.Outcome ℤ
+e✝ : PV_EVH_Runtime.Fault
+hintr : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.fault e✝
+⊢ { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events } =
+    { status := PV_EVH_Runtime.Outcome.fault e✝, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:82:25: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+hneg : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+x✝ : PV_EVH_Runtime.Outcome ℤ
+hother : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:79:18: error: unsolved goals
+case h_3
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+hneg : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+x✝ : PV_EVH_Runtime.Outcome ℤ
+e✝ : Error
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.fail e✝)
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.returned (Result.fail e✝),
+      buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_4
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+hneg : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+x✝ : PV_EVH_Runtime.Outcome ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned Result.div
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    { status := PV_EVH_Runtime.Outcome.returned Result.div,
+      buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+      world := (syscall (address + offset) (64 - offset) a w).world,
+      events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_5
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝¹ : PV_EVH_Runtime.Outcome ℤ
+hneg : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.exhausted
+x✝ : PV_EVH_Runtime.Outcome ℤ
+ret✝ : ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.ok ret✝)
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    if 0 ≤ ret✝ then
+      if ret✝ = 0 then
+        { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+          buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+          world := (syscall (address + offset) (64 - offset) a w).world,
+          events := (syscall (address + offset) (64 - offset) a w).events }
+      else
+        if ret✝.toNat ≤ 64 - offset then
+          if offset + ret✝.toNat = 64 then
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+          else
+            {
+              status :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).status,
+              buffer :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).buffer,
+              world :=
+                (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).world,
+              events :=
+                (syscall (address + offset) (64 - offset) a w).events ++
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret✝.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).events }
+        else
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+    else
+      if ret✝ = -4 then
+        {
+          status :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).status,
+          buffer :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).buffer,
+          world :=
+            (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                (syscall (address + offset) (64 - offset) a w).buffer
+                (syscall (address + offset) (64 - offset) a w).world).world,
+          events :=
+            (syscall (address + offset) (64 - offset) a w).events ++
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).events }
+      else
+        if -2147483648 ≤ ret✝ then
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret✝)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+        else
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:67:15: error: unsolved goals
+case h_3
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝ : PV_EVH_Runtime.Outcome ℤ
+e✝ : Error
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.fail e✝)
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.returned (Result.fail e✝),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    match PV_EVH_Runtime.Outcome.returned (Result.ok ret) with
+    | PV_EVH_Runtime.Outcome.fault e =>
+      { status := PV_EVH_Runtime.Outcome.fault e, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.exhausted =>
+      { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.fail e) =>
+      { status := PV_EVH_Runtime.Outcome.returned (Result.fail e),
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned Result.div =>
+      { status := PV_EVH_Runtime.Outcome.returned Result.div,
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.ok ret) =>
+      if 0 ≤ ret then
+        if ret = 0 then
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+        else
+          if ret.toNat ≤ 64 - offset then
+            if offset + ret.toNat = 64 then
+              { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+                buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                world := (syscall (address + offset) (64 - offset) a w).world,
+                events := (syscall (address + offset) (64 - offset) a w).events }
+            else
+              {
+                status :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).status,
+                buffer :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).buffer,
+                world :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).world,
+                events :=
+                  (syscall (address + offset) (64 - offset) a w).events ++
+                    (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                        (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+      else
+        if ret = -4 then
+          {
+            status :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).status,
+            buffer :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).buffer,
+            world :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).world,
+            events :=
+              (syscall (address + offset) (64 - offset) a w).events ++
+                (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).events }
+        else
+          if -2147483648 ≤ ret then
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_4
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝ : PV_EVH_Runtime.Outcome ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned Result.div
+⊢ {
+        delivery :=
+          { status := PV_EVH_Runtime.Outcome.returned Result.div,
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events },
+        calls := [] }.delivery =
+    match PV_EVH_Runtime.Outcome.returned (Result.ok ret) with
+    | PV_EVH_Runtime.Outcome.fault e =>
+      { status := PV_EVH_Runtime.Outcome.fault e, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.exhausted =>
+      { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.fail e) =>
+      { status := PV_EVH_Runtime.Outcome.returned (Result.fail e),
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned Result.div =>
+      { status := PV_EVH_Runtime.Outcome.returned Result.div,
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.ok ret) =>
+      if 0 ≤ ret then
+        if ret = 0 then
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+        else
+          if ret.toNat ≤ 64 - offset then
+            if offset + ret.toNat = 64 then
+              { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+                buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                world := (syscall (address + offset) (64 - offset) a w).world,
+                events := (syscall (address + offset) (64 - offset) a w).events }
+            else
+              {
+                status :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).status,
+                buffer :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).buffer,
+                world :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).world,
+                events :=
+                  (syscall (address + offset) (64 - offset) a w).events ++
+                    (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                        (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+      else
+        if ret = -4 then
+          {
+            status :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).status,
+            buffer :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).buffer,
+            world :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).world,
+            events :=
+              (syscall (address + offset) (64 - offset) a w).events ++
+                (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).events }
+        else
+          if -2147483648 ≤ ret then
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+
+case h_5
+syscall : ℕ → ℕ → Std.Array U8 64#usize → World → Reply
+address fuel : ℕ
+ih :
+  ∀ (offset : ℕ) (a : Std.Array U8 64#usize) (w : World),
+    (execute syscall address fuel offset a w).delivery = PV_EVH_LinuxRawControl.loop syscall address fuel offset a w
+offset : ℕ
+a : Std.Array U8 64#usize
+w : World
+ret : ℤ
+hr : (syscall (address + offset) (64 - offset) a w).result = PV_EVH_Runtime.Outcome.returned (Result.ok ret)
+x✝ : PV_EVH_Runtime.Outcome ℤ
+ret✝ : ℤ
+heq✝ : PV_EVH_Runtime.Outcome.returned (Result.ok ret) = PV_EVH_Runtime.Outcome.returned (Result.ok ret✝)
+⊢ (if 0 ≤ ret✝ then
+        if ret✝ = 0 then
+          {
+            delivery :=
+              { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+                buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                world := (syscall (address + offset) (64 - offset) a w).world,
+                events := (syscall (address + offset) (64 - offset) a w).events },
+            calls := [] }
+        else
+          if ret✝.toNat ≤ 64 - offset then
+            if offset + ret✝.toNat = 64 then
+              {
+                delivery :=
+                  { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+                    buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                    world := (syscall (address + offset) (64 - offset) a w).world,
+                    events := (syscall (address + offset) (64 - offset) a w).events },
+                calls := [] }
+            else
+              {
+                delivery :=
+                  {
+                    status :=
+                      (execute syscall address fuel (offset + ret✝.toNat)
+                            (syscall (address + offset) (64 - offset) a w).buffer
+                            (syscall (address + offset) (64 - offset) a w).world).delivery.status,
+                    buffer :=
+                      (execute syscall address fuel (offset + ret✝.toNat)
+                            (syscall (address + offset) (64 - offset) a w).buffer
+                            (syscall (address + offset) (64 - offset) a w).world).delivery.buffer,
+                    world :=
+                      (execute syscall address fuel (offset + ret✝.toNat)
+                            (syscall (address + offset) (64 - offset) a w).buffer
+                            (syscall (address + offset) (64 - offset) a w).world).delivery.world,
+                    events :=
+                      (syscall (address + offset) (64 - offset) a w).events ++
+                        (execute syscall address fuel (offset + ret✝.toNat)
+                              (syscall (address + offset) (64 - offset) a w).buffer
+                              (syscall (address + offset) (64 - offset) a w).world).delivery.events },
+                calls :=
+                  (execute syscall address fuel (offset + ret✝.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).calls }
+          else
+            {
+              delivery :=
+                { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+                  buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                  world := (syscall (address + offset) (64 - offset) a w).world,
+                  events := (syscall (address + offset) (64 - offset) a w).events },
+              calls := [] }
+      else
+        if ret✝ = -4 then
+          {
+            delivery :=
+              {
+                status :=
+                  (execute syscall address fuel offset (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).delivery.status,
+                buffer :=
+                  (execute syscall address fuel offset (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).delivery.buffer,
+                world :=
+                  (execute syscall address fuel offset (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).delivery.world,
+                events :=
+                  (syscall (address + offset) (64 - offset) a w).events ++
+                    (execute syscall address fuel offset (syscall (address + offset) (64 - offset) a w).buffer
+                          (syscall (address + offset) (64 - offset) a w).world).delivery.events },
+            calls :=
+              (execute syscall address fuel offset (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).calls }
+        else
+          if -2147483648 ≤ ret✝ then
+            {
+              delivery :=
+                { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret✝)),
+                  buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                  world := (syscall (address + offset) (64 - offset) a w).world,
+                  events := (syscall (address + offset) (64 - offset) a w).events },
+              calls := [] }
+          else
+            {
+              delivery :=
+                { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+                  buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                  world := (syscall (address + offset) (64 - offset) a w).world,
+                  events := (syscall (address + offset) (64 - offset) a w).events },
+              calls := [] }).delivery =
+    match PV_EVH_Runtime.Outcome.returned (Result.ok ret) with
+    | PV_EVH_Runtime.Outcome.fault e =>
+      { status := PV_EVH_Runtime.Outcome.fault e, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.exhausted =>
+      { status := PV_EVH_Runtime.Outcome.exhausted, buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.fail e) =>
+      { status := PV_EVH_Runtime.Outcome.returned (Result.fail e),
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned Result.div =>
+      { status := PV_EVH_Runtime.Outcome.returned Result.div,
+        buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+        world := (syscall (address + offset) (64 - offset) a w).world,
+        events := (syscall (address + offset) (64 - offset) a w).events }
+    | PV_EVH_Runtime.Outcome.returned (Result.ok ret) =>
+      if 0 ≤ ret then
+        if ret = 0 then
+          { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+            buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+            world := (syscall (address + offset) (64 - offset) a w).world,
+            events := (syscall (address + offset) (64 - offset) a w).events }
+        else
+          if ret.toNat ≤ 64 - offset then
+            if offset + ret.toNat = 64 then
+              { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Ok ())),
+                buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+                world := (syscall (address + offset) (64 - offset) a w).world,
+                events := (syscall (address + offset) (64 - offset) a w).events }
+            else
+              {
+                status :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).status,
+                buffer :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).buffer,
+                world :=
+                  (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                      (syscall (address + offset) (64 - offset) a w).buffer
+                      (syscall (address + offset) (64 - offset) a w).world).world,
+                events :=
+                  (syscall (address + offset) (64 - offset) a w).events ++
+                    (PV_EVH_LinuxRawControl.loop syscall address fuel (offset + ret.toNat)
+                        (syscall (address + offset) (64 - offset) a w).buffer
+                        (syscall (address + offset) (64 - offset) a w).world).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+      else
+        if ret = -4 then
+          {
+            status :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).status,
+            buffer :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).buffer,
+            world :=
+              (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                  (syscall (address + offset) (64 - offset) a w).buffer
+                  (syscall (address + offset) (64 - offset) a w).world).world,
+            events :=
+              (syscall (address + offset) (64 - offset) a w).events ++
+                (PV_EVH_LinuxRawControl.loop syscall address fuel offset
+                    (syscall (address + offset) (64 - offset) a w).buffer
+                    (syscall (address + offset) (64 - offset) a w).world).events }
+        else
+          if -2147483648 ≤ ret then
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err ret)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+          else
+            { status := PV_EVH_Runtime.Outcome.returned (Result.ok (core.result.Result.Err unexpected)),
+              buffer := (syscall (address + offset) (64 - offset) a w).buffer,
+              world := (syscall (address + offset) (64 - offset) a w).world,
+              events := (syscall (address + offset) (64 - offset) a w).events }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_LinuxRawHistory.lean:81:35: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵i̵h̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_LinuxRawHistory.erases' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_EVH_LinuxRawHistory.first_call' depends on axioms: [propext, Classical.choice, Quot.sound]

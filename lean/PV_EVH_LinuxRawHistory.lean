@@ -58,28 +58,15 @@ theorem erases (syscall : Nat → Nat → Array U8 64#usize → World → Reply)
   | succ fuel ih =>
     simp only [execute,PV_EVH_LinuxRawControl.loop]
     cases hr : (syscall (address+offset) (64-offset) a w).result with
-    | fault e => rfl
-    | exhausted => rfl
+    | fault e => simp only [hr]
+    | exhausted => simp only [hr]
     | returned r =>
       cases r with
-      | fail e => rfl
-      | div => rfl
+      | fail e => simp only [hr]
+      | div => simp only [hr]
       | ok ret =>
-        split
-        next hpos =>
-          split
-          next hz => rfl
-          next hnz =>
-            split
-            next hfit =>
-              split
-              next hend => rfl
-              next hmore => simp only [ih]
-            next hlarge => rfl
-        next hneg =>
-          split
-          next hintr => simp only [ih]
-          next hother => split <;> rfl
+        simp only [hr]
+        split_ifs <;> simp only [ih]
 
 theorem first_call (syscall : Nat → Nat → Array U8 64#usize → World → Reply)
     (address fuel offset : Nat) (a : Array U8 64#usize) (w : World) :
