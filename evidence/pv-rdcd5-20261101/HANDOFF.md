@@ -1,82 +1,92 @@
-# D541 rdcd5 handoff — gated after 24 polls
+# D555 rdcd5 active handoff
 
 Exact worktree `/Users/dominic/ZK/.worktrees/pv-rdcd3`, branch
-`codex/pv-rdcd5-20261101`, base **ba1fa07d9e** (explicit user authority).
-Do not switch to the local candidate branch ref: it pointed elsewhere.
-No merge/push; no crates/programs, dictionaries, soundness, observer or simulator edits.
+`codex/pv-rdcd5-20261101`, original base **ba1fa07d9e**, resumed head
+**af3727944839324748794cfcb1ecc65d8b8ec5be**. No merge/push, production,
+dictionary, soundness, simulator, observer or key edits.
 
-Read `SESSION.json`, `REPORT.md`, `ROWS.json`, `UNCOMPILED-DRAFTS.json`, and
-`GATE-POLLS.jsonl`. All rows V197/V233/V236 are still SUSPENDED. Nothing
-compiled. Budget unspent: 100 Lean, up to 30 capped native scopes, 0 Kani.
-IDs ONLY 78200–78299; audits ONLY 78297–78299. No ID consumed/reserved yet.
-Take V197, V233, V236 in that cheapest-first order.
+The re-created host flag EXISTS and was read. Gate satisfied (D555).
+The previous 24-poll stop no longer applies. See SESSION.json for flag text/hash.
+The referenced ancestor `prompt-pv-rdcd3.txt` is missing from the scratchpad;
+prompt-rdcd4, prompt-rdcd5, common/r1p/local rules and user/handoff scope read.
 
-## Gate — required wait exhausted
+## Running work — recover before submitting
 
-The flag path from common rulings (f)/(g) is still absent:
-`/private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/pv-host-restored.flag`.
-The asynchronous clarification received no response. All **24 actual polls**
-are recorded, minimum spacing 600.026s and elapsed 15754.122s.
-The local monitoring process exited 0 after poll24; no work remains running.
-Stop basis is common ruling (g): **gated: budget unspent**. A later resume
-still needs the flag or an explicit replacement/override; elapsed time is not
-authorization. Read the final REPORT and SESSION before launching anything.
+A local serial driver is RUNNING in unified exec session **42334**:
+`python3 tools/pv-rdcd5-20261101/drive.py R1Z.PV_RDCD5_V197`.
+It compiles missing dependencies, then ParserWindows and V197, and exits
+immediately on a proof failure. Do NOT submit a second scope or duplicate ID.
+Poll that session, or inspect/recover its exact receipts if the session is lost.
+The driver enforces 182s after completion; launches use own scope.py and lean.py
+adapted from rdcd4 with caps6G/8G/swap0/Tasks64/-M7000, admission allowed:true
+AND exit0 before upload and again at launch, failed-source guard, ID census.
+lean.py now uses FIRST namespace root when snapshotting dependencies.
 
-## Exact preparation and remaining proof work
+Actual completed work at this checkpoint: **78200–78204 all PASS**:
+SliceRange194, TryArray194, Endian194, FieldSource, BytesSource.
+No rdcd5 draft yet compiled; next 78205 ParserWindows after cooldown.
+One capped native scope (external-preflight) PASS: all5673 h4 objects verified,
+21 pv-dlib project objects reused with original source/object/import records,
+namespace-complete PLAIN COPIES, no Stream A objects. All completed runs swap0.
+`progress.py` regenerates RUNS/SESSION/draft statuses from actual receipts.
+IDs ONLY78200–78299; audits ONLY78297–78299. Budget100 Lean/30 native/0 Kani.
+No row restored, no endpoint premises changed, T unchanged.
 
-- V197: new ParserWindows/ParserFlat/V197 drafts preserve arbitrary byte lists, Option,
-  failure and late second-half check. The root draft changes the prior proof
-  to congruence of bind continuations; no unchanged failed source is retried.
-  It is still only owned qm/reference equality; prove transport to the existing
-  ProverRwSuccessParserSource/op71 law before claiming restoration. Never add
-  an eager sixteen-byte guard. `parser-source.py` checks three exact source
-  bodies and records nine library steps. No extraction; ae1 still applies.
-- V233: new BlockCarrier inverse and injectivity draft supports exact typed
-  GenericArray storage. V233.consumed_instance targets existing
-  PV_AL_SplitSelected.consumed; not a new assumed link. Compile smallest generic
-  inverse first, then root. Retain V370 layout boundary. Source-only geometry
-  and byte equality alone do not establish this typed association.
-- V236: BufferSource defines every branch with checked window copies, cursor
-  truncation, first-block/bulk Result callbacks in source order, and suffix
-  write. source_instance targets existing PV_DL_UpdatePlan.model under original
-  safe Eager64 buffer length64/pos<64 domain. Still prove typed
-  PV_DL_UpdateCarrier and op216 association. buffer-source.py checks wrapper,
-  digest_blocks, get_pos, size, set_pos_unchecked, Eager.invariant exactly.
-  Only original compression callback is parametric. No singleton-fold premise.
-  New PV_RDCD5_V236.carrier_instance/op216_instance drafts typed composition
-  against the existing selected_native law; both remain uncompiled.
+## Newly found V197 issue — kernel check still pending
 
-## Host/cache preparation
+The retained exact Aeneas SliceIndexRangeUsizeSlice.index source returns
+`fail .panic`, whereas the rdcd4 owned SliceRange194/BytesSource returns
+`fail .arrayOutOfBounds`. Literal whole-Result transport to EXISTING
+ProverRwSuccessParserSource is apparently FALSE on empty input.
+New committed `PV_RDCD5_ParserErrors` states existing_empty, owned_empty,
+carrier_mismatch. Compile it after V197 plus the three existing dictionary/
+success parser modules. If confirmed, record V197 FINDING and stop that false
+identification; never hide it under success-only equality, eager guards,
+error-constructor erasure, or a claimed restoration. The counterexample has
+NOT yet compiled. `std-model-sources.json` is read-only retained source evidence.
 
-Host SSH is readable. env/J.json exists. rdcd4 lean-sources retained; its
-lean-objects were deleted in its documented cleanup. pv-dlib's old selected
-object was also absent at the checked location. Do not assume a reusable object.
-Read-only `external-authority-readonly.json` verifies ALL 5,673 h4 external
-objects against the unchanged d9187c80… authority manifest, zero bad hashes.
-This was a source/object inspection, not a capped native or Lean release gate.
-No host directory was created or changed by rdcd5.
+ParserWindows/ParserFlat/V197 preserve arbitrary slices, None short circuits,
+late second-half check; no extractor run or modified Rust. Source scripts pass
+but confer no restoration. ae1/fmt-1/k3/dup-1-prime boundaries retained.
 
-`resolve.py` produced a 68-project-module tracked source plan, exact blobs and
-sha256s, with no EJR/freeze hits. Resolve/reuse through h5/h6/h6'/h6'' and verify
-first-namespace resolution before first compile. Never load Stream A objects.
-Choose one coherent cohort; namespace-complete plain-copy overlays, no mixed
-objects. Native guard/admission must be allowed:true AND exit0 in the launch
-shell; before scp record admission; ≥180s cooldown, caps6G/8G/swap0/Tasks64,
-Lean -M7000, failed-source guard. Adapt own rdcd4 wrapper inputs only; do not
-repair shared infrastructure. One module/scope at a time. No Kani; if needed
-stop and ask, with K3 controls/static ban applying.
+## Continue exact order
 
-## Trust/reporting
+1. Let current driver finish V197 or fix its genuinely failed source first.
+2. `resolve.py` now includes ParserFlat, ParserErrors early, then V233,
+   BufferSource, V236 (70 project modules, no higher-priority EJR/freeze hits).
+   Run drive.py through ParserErrors after resolving failures; it skips accepted
+   receipts/reused objects and assigns the next unused ID.
+3. Before rebuilding update cone, run the prepared `reuse-more.py` in ONE capped
+   native scope, under normal cooldown/admission, with uploaded
+   more-cache-records.json and current source-resolution.json. It recovers up to
+   twelve more pv-dlib objects using committed original successful launch
+   receipts and the resume final fingerprint. Inputs/scripts are committed.
+   This pass has NOT run. Fetch preflight-result.json AND more-cache-result.json
+   afterwards. Every source transport still needs recorded admission first.
+4. Compile V233 through smallest BlockCarrier inverse before root; root now adds
+   typed_roundtrip/typed_projection_injective and exact consumed_instance.
+   `split-source.py` checks all61 dispositions and actual Eager source/layout;
+   it reads retained rdcd4 source snapshots, not another checker under a new name.
+5. Compile BufferSource, new UpdateSplit, then V236. UpdateSplit is an additional
+   UNCOMPILED draft tying UpdateCarrier.blockList to SplitCarrier.values exactly,
+   using storage injectivity and views coordinate theorem. V236 imports it.
+   Original compression Result callback alone stays parametric. No fold premise.
+6. `prepare-coherence.py`/`coherence.py` are PREPARED, unexecuted. They freeze
+   source plans, check every first-namespace source/object hash, actual launch
+   snapshot, reused import and native source pin. Restrict a per-row coherence
+   input to its actual completed closure if doing row233 before row236.
+7. Per restored-row path-limited commit, then one combined statement/axioms audit,
+   focused restored-row replay, final frozen manifest at reserved78297–78299.
+   Do not run manifest before focused targets. No audits/replays yet prepared.
 
-Source-shape checks and draft source laws earn no restoration. Keep before/
-after quantifiers, full Result carriers, source error order, actual existing
-links, original safe-domain qualifications. No Aeneas.Std fmt credit; panic
-formatting/physical observer remains unproved. No new generated declaration
-unification; classify any actual duplicate by crate/path/FEATURE SET under
-dup-1'. No endpoint premises removed/added/changed; T stays exactly the original
-three fields. No keys created, deleted, moved or modified.
+## Receipts and reporting
 
-After focused proofs and each restored row's path-limited commit: one combined
-statement/axioms audit, one focused restored-row replay, one final frozen
-manifest. Record target, exit, wall, peakRSS, swap, source revision and printed
-axioms for each formal release run. No final manifest before focused targets.
+`preflight-result.json` records accepted21 objects and47 initial fresh builds
+(the closure grew to70 after two new association/counterexample modules).
+`dlib-resume-fingerprint.json`, `dlib-receipts-index.json`, `more-cache-records.json`
+record the additional same-cohort candidates; not accepted until scoped checks.
+All scripts, source snapshots, evidence inputs must stay committed; no binaries.
+Before commit check evidence has no file>20MB. No cleanup until task is finished;
+never touch keys. Native historical differentials remain finite evidence and
+have not been rerun. No privacy target or source-to-machine-code claim.
+Final answer<400 words, name rows actually restored and exact remaining blocker.
