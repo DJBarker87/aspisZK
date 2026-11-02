@@ -19,3 +19,5 @@ support result is counted as a composed row before the complete certificate.
 Shipped crates/programs are unchanged; no ELF rebuild trigger. No release
 manifest or new release claim. Privacy, two transactions, RuntimePersistence,
 L154, narrowed D188, and 100-bit PER-ATTEMPT target remain unchanged.
+
+Digest descendant stage: **23/97 composed rows CLOSED; 0/7 roots**. NEM_L001 instantiates the accepted next-row/suffix induction on the same raw digest and arbitrary external frame; both printed axiom sets are [propext, Classical.choice, Quot.sound]. Native NEM_K002/003 and K004/005 pass/fail under the frozen dependency/feature/source gates. K001 was an excluded missing frozen include input error; fixed by restoring the pinned includes, with no changed property. Ten new mutation tests pass, including mutations with refreshed review hashes. Payment/common and all roots remain OPEN.

@@ -1,0 +1,25 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEM_enumerate.rs"]
++mod NEM_enumerate;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEM_enumerate.rs
+@@ -0,0 +1,12 @@
++use super::*;
++#[kani::proof]
++fn enumerate_step(){
++ let d=[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())];
++ let index:usize=kani::any();kani::assume(index<=8);
++ let mut iter=d.iter().enumerate();
++ // nth is constant-time on the native slice iterator: no whole-buffer loop.
++ if index>0 {let _=iter.nth(index-1);}
++ let before=iter.len();let next=iter.next();
++ if index<8{let (count,value)=next.unwrap();assert!(count==index+1,"exact native Enumerate count");assert!(core::ptr::eq(value,&d[index]),"same actual M31 place");assert!(before==8-index && iter.len()==7-index,"exact remaining suffix lengths");}
++ else{assert!(before==0 && next.is_none() && iter.len()==0,"exhausted iterator");}
++}
