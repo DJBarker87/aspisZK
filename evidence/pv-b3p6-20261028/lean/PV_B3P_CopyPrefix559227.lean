@@ -15,7 +15,6 @@ theorem prefix_copy_guard {α : Type} (dest : Slice α) (end_ : Usize)
   rw [if_pos h]
   refine ⟨_,_,rfl,?_⟩
   simp [List.slice, guard]
-  omega
 
 /-- A successful segment borrow and the existing equal-length guard exclude the
 copy mismatch branch, including its panic formatting. Complete source/caller
@@ -28,8 +27,8 @@ theorem copy_prefix_no_panic {α : Type} (dest src : Slice α) (end_ : Usize)
       copy_source segment src = .ok src := by
   obtain ⟨segment,back,borrow,length⟩ := prefix_copy_guard dest end_ guard
   refine ⟨segment,back,borrow,copy_no_panic segment src ?_⟩
-  change segment.val.length = src.val.length
-  exact length.trans source_length.symm
+  have equal_length : segment.length = src.length := length.trans source_length.symm
+  scalar_tac
 
 #print axioms prefix_copy_guard
 #print axioms copy_prefix_no_panic
