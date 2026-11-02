@@ -36,7 +36,7 @@ for i in range(10):
    q=dict(q0);q['proof_dir']=str(O/f'{i}-{f}-{side}-proof')
    # Fresh fixture-only public nonce labels per pair, same in both experiments.
    # No private key/account exists for these labels; all ledgers are retained.
-   q['proof_accounts']=[public_key(f'PV-C474 pair {i} {f} attempt {j}') for j in range(8)]
+   q['proof_accounts']=[public_key(f'PV-UC D543 pair {i} {f} attempt {j}') for j in range(8)]
    rfd=None
    if side=='draft':
     q.pop('note');q.update(lane_leaf_sets=fixtures['lane_leaf_sets'],withdrawal_amount=250)
