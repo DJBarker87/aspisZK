@@ -17,7 +17,7 @@ steps=[('let mut bytes = Zeroizing::new([0u8; 64]);','admit original64 zeroed li
  ('return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });','move both32 owners into returned Self; drop original64; do not fabricate zeroization of moved-from stack copies'),
  ('retry+=1;','increment then scope drops leaf32, field32, original64 before next condition'),
  ('Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)','retry limit error after completed iteration scopes')]
-positions=[body.index(x) for x,_ in steps];assert positions==sorted(positions)
+positions=[body.index(x) for x,_ in steps[:-1]]+[body.rindex(steps[-1][0])];assert positions==sorted(positions)
 out=dict(evidence_class='structural source statement inventory; actual frame interpretation not supplied',
  source=dict(path=p,blob=subprocess.check_output(['git','rev-parse','HEAD:'+p],text=True).strip(),sha256=hashlib.sha256(raw).hexdigest(),body=body,body_sha256=hashlib.sha256(body.encode()).hexdigest()),
  steps=[dict(source=x,obligation=y) for x,y in steps],

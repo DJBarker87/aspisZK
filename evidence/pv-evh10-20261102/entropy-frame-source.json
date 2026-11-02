@@ -1,0 +1,63 @@
+{
+  "evidence_class": "structural source statement inventory; actual frame interpretation not supplied",
+  "source": {
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "blob": "90208f7616a7e2aefeb085cfe951b38bbc5286b8",
+    "sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+    "body": "    pub fn generate_for_mask_nonce(\n        mask_nonce: [u8; 32],\n    ) -> Result<Self, StateOnlyAttemptEntropyError> {\n        let limit=ENTROPY_RETRY_LIMIT;\n\n        if !entropy_nonzero32(&mask_nonce) {\n            return Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock);\n        }\n        let mut retry=0;\n        while retry<limit {\n            let mut bytes = Zeroizing::new([0u8; 64]);\n            getrandom::fill(bytes.as_mut())?;\n\n            let mut field_mask_entropy = Zeroizing::new([0u8; 32]);\n            let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);\n            field_mask_entropy.copy_from_slice(&bytes[..32]);\n            leaf_salt_seed.copy_from_slice(&bytes[32..]);\n            if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed) {\n                return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });\n            }\n            retry+=1;\n        }\n        Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)\n    }",
+    "body_sha256": "faee0f00129430f60c05575b42be7fd10f443bdb492e3d62de5e6516608c0722"
+  },
+  "steps": [
+    {
+      "source": "let mut bytes = Zeroizing::new([0u8; 64]);",
+      "obligation": "admit original64 zeroed lifetime, owner and machine address from actual source frame"
+    },
+    {
+      "source": "getrandom::fill(bytes.as_mut())?;",
+      "obligation": "borrow original64; OS error exits through its zeroize1.9.0 Drop; fill success restores borrow"
+    },
+    {
+      "source": "let mut field_mask_entropy = Zeroizing::new([0u8; 32]);",
+      "obligation": "admit first inner32 zeroed lifetime"
+    },
+    {
+      "source": "let mut leaf_salt_seed = Zeroizing::new([0u8; 32]);",
+      "obligation": "admit second inner32 zeroed lifetime"
+    },
+    {
+      "source": "field_mask_entropy.copy_from_slice(&bytes[..32]);",
+      "obligation": "copy first32; preserve mutable-borrow restoration"
+    },
+    {
+      "source": "leaf_salt_seed.copy_from_slice(&bytes[32..]);",
+      "obligation": "copy second32; preserve mutable-borrow restoration"
+    },
+    {
+      "source": "if entropy_nonzero32(&field_mask_entropy) && entropy_nonzero32(&leaf_salt_seed)",
+      "obligation": "short-circuit field test then seed test"
+    },
+    {
+      "source": "return Ok(Self {\n                    mask_nonce,\n                    field_mask_entropy,\n                    leaf_salt_seed,\n                });",
+      "obligation": "move both32 owners into returned Self; drop original64; do not fabricate zeroization of moved-from stack copies"
+    },
+    {
+      "source": "retry+=1;",
+      "obligation": "increment then scope drops leaf32, field32, original64 before next condition"
+    },
+    {
+      "source": "Err(StateOnlyAttemptEntropyError::RepeatedZeroBlock)",
+      "obligation": "retry limit error after completed iteration scopes"
+    }
+  ],
+  "established": "Source creates one original64 and two success-only inner32 lifetimes. Error before inner32 initialization cleans only original64. Successful move is distinct from a destructor call on both32.",
+  "missing": [
+    "No numeric original/inner source-frame address association is present in the extensional extracted Slice/Array values",
+    "No proof that arbitrary StackZero.State is an interpretation of a reached Rust machine frame",
+    "Original heap/live separation and coherent physical heap must be derived on that actual interpretation",
+    "Successful move/copy, returned owner backing and retired stack residues remain L3/V370 work",
+    "Actual raw syscall footprint/ABI association remains P"
+  ],
+  "zeroize": "deployed1.9.0 law retained for V221/V222 and L3; do not substitute old1.8.1/single-fence law",
+  "trust_fields_added": [],
+  "rows_removed": []
+}
