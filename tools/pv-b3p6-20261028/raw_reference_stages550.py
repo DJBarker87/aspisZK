@@ -52,29 +52,30 @@ for j in range(4,0,-1):
   code+=f'  exact raw_reference_tail{j+1}_factor550 '+' '.join((inputs if j+1<4 else[])+vals[:4*(j+1)])+'\n'
  code+=f'\n#print axioms raw_reference_tail{j}_factor550\nend PV_B3P_Association550227\n'
  emit(L/f'PV_B3P_RawRefTail{j}550227.lean',code)
-code='import PV_B3P_RawRefTail1550227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head+'attribute [local irreducible] Aeneas.Std.bind raw_reference_tail1_550\n'+'''
+code='import PV_B3P_RawRefTail1550227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head+'attribute [local irreducible] Aeneas.Std.bind raw_reference_tail1_550 raw_reference_tail2_550 raw_reference_tail3_550 raw_reference_tail4_550\n'+'''
 theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
     reference_poseidon.external_local_packed_raw input = (do
 '''+prefix+'''  raw_reference_tail0_550 a a1 a2 a3) := by
   unfold reference_poseidon.external_local_packed_raw
 '''
+context=['input']
 for line in prefix.splitlines():
  m=re.match(r'  let (\w+) ←',line)
- if m:code+='  apply bind_equal9\n  intro '+m[1]+'\n'
-code+='  as_aux_lemma =>\n    unfold raw_reference_tail0_550\n'
-common=[re.match(r'  let (\w+) ←',line)[1]for line in chunks[0].splitlines()if re.match(r'  let (\w+) ←',line)]
-for k,name in enumerate(common):
- if k==20:code+='    as_aux_lemma =>\n'
- indent='    'if k<20 else'      '
- code+=indent+'apply bind_equal9\n'+indent+'intro '+name+'\n'
-keep={'a4','a6','a7','a8','i4','i9','i14','i19'}
-clear_names=['input']+[re.match(r'  let (\w+) ←',line)[1]for line in prefix.splitlines()if re.match(r'  let (\w+) ←',line)]+[n for n in common if n not in keep]
-code+='      clear '+' '.join(clear_names)+'\n'
-code+='''      exact raw_reference_tail1_factor550 a4 a6 a7 a8 i4 i9 i14 i19
-
-#print axioms raw_reference_factor550
-end PV_B3P_Association550227
-'''
+ if m:code+='  apply bind_equal9\n  intro '+m[1]+'\n';context.append(m[1])
+indent='  '
+for j in range(4):
+ code+=indent+'as_aux_lemma =>\n';indent+='  '
+ code+=indent+f'unfold raw_reference_tail{j}_550\n'
+ names=[re.match(r'  let (\w+) ←',line)[1]for line in chunks[j].splitlines()if re.match(r'  let (\w+) ←',line)]
+ for k,name in enumerate(names):
+  if k==20:code+=indent+'as_aux_lemma =>\n';indent+='  '
+  code+=indent+'apply bind_equal9\n'+indent+'intro '+name+'\n';context.append(name)
+ keep=set((inputs if j<3 else[])+vals[:4*(j+1)])
+ clear_names=[n for n in context if n not in keep]
+ if clear_names:code+=indent+'clear '+' '.join(clear_names)+'\n'
+ context=[n for n in context if n in keep]
+code+=indent+'exact raw_reference_tail4_factor550 '+' '.join(vals)+'\n'
+code+='\n#print axioms raw_reference_factor550\nend PV_B3P_Association550227\n'
 emit(L/'PV_B3P_RawReferenceFactor550227.lean',code)
 p=L/'PV_B3P_RawSource550227.lean';s=p.read_text()
 if 'import PV_B3P_RawReferenceFactor550227'not in s:s=s.replace('import PV_B3P_RawTail0550227','import PV_B3P_RawTail0550227\nimport PV_B3P_RawReferenceFactor550227')

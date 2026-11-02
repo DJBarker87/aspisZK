@@ -67,5 +67,5 @@ set_option autoImplicit false
  text+='  rfl\n'+f'\n#print axioms raw_pack{j}_value550\nend PV_B3P_Association550227\n'
  (L/(mod+'.lean')).write_text(text)
  notes.append(dict(module=mod,ssa_output=out,indexed_reads=len(reads),source_suffix_sha256=hashlib.sha256(raw.encode()).hexdigest()))
-(R/'RAW-PACK-GENERATOR-D550.json').write_text(json.dumps(dict(emission=str(p),emission_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs=notes,deployed_source=str(dep),deployed_source_sha256=hashlib.sha256(dep.read_bytes()).hexdigest(),source_expressions=expressions,all_operator_trees_identical=True,status='isolated output laws with independently checked shipped expression trees; full raw Link remains open'),indent=2)+'\n')
+(R/'RAW-PACK-GENERATOR-D550.json').write_text(json.dumps(dict(emission=str(p),emission_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs=notes,deployed_source=str(dep),deployed_source_sha256=hashlib.sha256(dep.read_bytes()).hexdigest(),source_expressions=expressions,all_operator_trees_identical=True,status='isolated output laws with independently checked shipped expression trees; whole-function status is in PER-FUNCTION-D550.json'),indent=2)+'\n')
 print(json.dumps(dict(outputs=4,indexed_reads=sum(x['indexed_reads']for x in notes))))
