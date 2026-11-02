@@ -57,7 +57,7 @@ theorem phase_execute {H F S E : Type} (runtime : PV_RunJoin_AllocatorWorld63.Ru
     | Err e =>
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,
         core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,
-        core.convert.FromSame,execute,Aeneas.Std.uncurry]
+        core.convert.FromSame.from,execute,Aeneas.Std.uncurry]
     | Ok pair =>
       rcases pair with ⟨p',q'⟩
       simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift,Aeneas.Std.uncurry]
