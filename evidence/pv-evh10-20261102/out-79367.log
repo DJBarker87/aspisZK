@@ -1,0 +1,43 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:19:53: error: unexpected token '('; expected '}'
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:25:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:28:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:33:79: error: unsolved goals
+encode : Event → Bytes
+key : Key
+n : ℕ
+w : State
+b : Block
+hb : List.find? (sameKey key) w.heap = some b
+h : ¬n ≤ List.length b.bytes
+⊢ sorry = { outcome := Outcome.fault (Fault.invalidMemory key.identity), state := w, events := [] }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:44:61: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fence` could not be determined
+
+Hint: Using `Event.fence would be unambiguous:
+  [apply] `Event.fence`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:45:67: error: unsolved goals
+encode : Event → Bytes
+key : Key
+n : ℕ
+w : State
+b : Block
+hb : List.find? (sameKey key) w.heap = some b
+h : n ≤ List.length b.bytes
+⊢ True ∧
+    sorry = List.map (fun old => if sameKey key old = true then clearBlock b n else old) w.heap ∧
+      True ∧
+        True ∧
+          sorry =
+            List.map (fun e => NativeEvent.side [122, 101, 114, 111, 105, 122, 101] (encode e))
+              (stores key 0 n ++ [sorry])
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:46:37: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵l̵e̵a̵r̵O̵w̵n̵e̵d̵,̵h̵b̵,̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵]̵[̲c̲l̲e̲a̲r̲O̲w̲n̲e̲d̲,̲ ̲h̲b̲,̲ ̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_HeapClear.missing_owner_fault' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.invalid_prefix_fault' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.successful_clear' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.other_allocation_unchanged' depends on axioms: [propext]
+'PV_EVH_HeapClear.cleared_owner_view' depends on axioms: [propext]

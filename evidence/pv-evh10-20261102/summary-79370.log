@@ -1,0 +1,168 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_EntropyCleanup.lean:30:75: error: unsolved goals
+E B : Type
+fill : Q (core.result.Result Unit E)
+consume : Q (core.result.Result B E)
+dropBuffer : Q Unit
+w : State
+e : E
+h : (fill w).outcome = Outcome.returned (Result.ok (core.result.Result.Err e))
+⊢ {
+      outcome :=
+        (match (dropBuffer (fill w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).outcome,
+              state := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).state,
+              events :=
+                (dropBuffer (fill w).state).events ++
+                  (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).events }).outcome,
+      state :=
+        (match (dropBuffer (fill w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            { outcome := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).outcome,
+              state := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).state,
+              events :=
+                (dropBuffer (fill w).state).events ++
+                  (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).events }).state,
+      events :=
+        (fill w).events ++
+          (match (dropBuffer (fill w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              { outcome := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).outcome,
+                state := (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).state,
+                events :=
+                  (dropBuffer (fill w).state).events ++
+                    (pure (core.result.Result.Err e) (dropBuffer (fill w).state).state).events }).events } =
+    {
+      outcome :=
+        (match (dropBuffer (fill w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e)) (dropBuffer (fill w).state).state).outcome,
+              state :=
+                (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e)) (dropBuffer (fill w).state).state).state,
+              events :=
+                (dropBuffer (fill w).state).events ++
+                  (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e))
+                      (dropBuffer (fill w).state).state).events }).outcome,
+      state :=
+        (match (dropBuffer (fill w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+              events := (dropBuffer (fill w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e)) (dropBuffer (fill w).state).state).outcome,
+              state :=
+                (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e)) (dropBuffer (fill w).state).state).state,
+              events :=
+                (dropBuffer (fill w).state).events ++
+                  (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e))
+                      (dropBuffer (fill w).state).state).events }).state,
+      events :=
+        (fill w).events ++
+          (match (dropBuffer (fill w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e), state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div, state := (dropBuffer (fill w).state).state,
+                events := (dropBuffer (fill w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              {
+                outcome :=
+                  (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e))
+                      (dropBuffer (fill w).state).state).outcome,
+                state :=
+                  (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e)) (dropBuffer (fill w).state).state).state,
+                events :=
+                  (dropBuffer (fill w).state).events ++
+                    (PV_EVH_Runtime.lift (Result.ok (core.result.Result.Err e))
+                        (dropBuffer (fill w).state).state).events }).events }
+'PV_EVH_EntropyCleanup.error_cleanup_world' depends on axioms: [sorryAx]
+'PV_EVH_EntropyCleanup.cleanup_fault_prefix' depends on axioms: [propext]
+'PV_EVH_EntropyCleanup.abort_skips_cleanup' depends on axioms: [propext]
+
+{
+  "attempt": 79370,
+  "target": "PV_EVH_EntropyCleanup",
+  "source_revision": "1080900c9e2610b7c4366195f2c600163d0a9a29",
+  "source_path": "lean/PV_EVH_EntropyCleanup.lean",
+  "source_git_blob": "4b1ee1f0097894c7c1981fd5568983cd1ea15c71",
+  "source_sha256": "536334e7f7e145e180015333fd9e438d8168c46e02492062a01df9b81d79493e",
+  "exit": "1",
+  "peak_rss_kbytes": "2590568",
+  "swaps": "0",
+  "wall": "0:03.26",
+  "axioms": [
+    "'PV_EVH_EntropyCleanup.error_cleanup_world' depends on axioms: [sorryAx]",
+    "'PV_EVH_EntropyCleanup.cleanup_fault_prefix' depends on axioms: [propext]",
+    "'PV_EVH_EntropyCleanup.abort_skips_cleanup' depends on axioms: [propext]"
+  ],
+  "deps_fingerprint": "1679f75256aec91dd0925c3d10c0daa8944e65ca7d5e8dce5d325881e8ab8c40",
+  "accepted": false
+}

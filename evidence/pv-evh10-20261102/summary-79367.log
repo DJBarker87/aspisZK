@@ -1,0 +1,65 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:19:53: error: unexpected token '('; expected '}'
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:25:8: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:28:13: warning: declaration uses `sorry`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:33:79: error: unsolved goals
+encode : Event → Bytes
+key : Key
+n : ℕ
+w : State
+b : Block
+hb : List.find? (sameKey key) w.heap = some b
+h : ¬n ≤ List.length b.bytes
+⊢ sorry = { outcome := Outcome.fault (Fault.invalidMemory key.identity), state := w, events := [] }
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:44:61: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.fence` could not be determined
+
+Hint: Using `Event.fence would be unambiguous:
+  [apply] `Event.fence`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:45:67: error: unsolved goals
+encode : Event → Bytes
+key : Key
+n : ℕ
+w : State
+b : Block
+hb : List.find? (sameKey key) w.heap = some b
+h : n ≤ List.length b.bytes
+⊢ True ∧
+    sorry = List.map (fun old => if sameKey key old = true then clearBlock b n else old) w.heap ∧
+      True ∧
+        True ∧
+          sorry =
+            List.map (fun e => NativeEvent.side [122, 101, 114, 111, 105, 122, 101] (encode e))
+              (stores key 0 n ++ [sorry])
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_HeapClear.lean:46:37: warning: This simp argument is unused:
+  and_self
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵l̵e̵a̵r̵O̵w̵n̵e̵d̵,̵h̵b̵,̵h̵,̵i̵f̵_̵t̵r̵u̵e̵,̵a̵n̵d̵_̵s̵e̵l̵f̵]̵[̲c̲l̲e̲a̲r̲O̲w̲n̲e̲d̲,̲ ̲h̲b̲,̲ ̲h̲,̲ ̲i̲f̲_̲t̲r̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_HeapClear.missing_owner_fault' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.invalid_prefix_fault' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.successful_clear' depends on axioms: [propext, sorryAx]
+'PV_EVH_HeapClear.other_allocation_unchanged' depends on axioms: [propext]
+'PV_EVH_HeapClear.cleared_owner_view' depends on axioms: [propext]
+
+{
+  "attempt": 79367,
+  "target": "PV_EVH_HeapClear",
+  "source_revision": "b56b9f9ed1d824cbe5160ee745a88474b827dc15",
+  "source_path": "lean/PV_EVH_HeapClear.lean",
+  "source_git_blob": "0c29676c79871273f952854260865e60d65f671e",
+  "source_sha256": "243b4eec8a3cf71a6554e4b29dd7a34b7d9fb6d2ed0181f96f617fb9073cfcb8",
+  "exit": "1",
+  "peak_rss_kbytes": "2590864",
+  "swaps": "0",
+  "wall": "0:02.73",
+  "axioms": [
+    "'PV_EVH_HeapClear.missing_owner_fault' depends on axioms: [propext, sorryAx]",
+    "'PV_EVH_HeapClear.invalid_prefix_fault' depends on axioms: [propext, sorryAx]",
+    "'PV_EVH_HeapClear.successful_clear' depends on axioms: [propext, sorryAx]",
+    "'PV_EVH_HeapClear.other_allocation_unchanged' depends on axioms: [propext]",
+    "'PV_EVH_HeapClear.cleared_owner_view' depends on axioms: [propext]"
+  ],
+  "deps_fingerprint": "3f20111c586ee72e40608635ec13c9a470c03c289562b1e3648d7cf526d50e5c",
+  "accepted": false
+}
