@@ -1,3 +1,21 @@
+# Current NEM result
+
+**50/97 composed rows CLOSED; 1/7 roots CLOSED.** Added 28 rows to NEL baseline22. 110/110 Kani and21/80 Lean used. This is incomplete; no headline soundness or release claim. Native semantic transport remains P6/D188 option A reclassification; RuntimePersistence and all approved trust rows remain.
+
+| Root | Rows CLOSED | Theorem/status |
+|---|---:|---|
+| decode_public_statement_box | 0/1 | OPEN: no composed root theorem claimed |
+| validate_pool_v1_pair_forest_terminal_statement_v1 | 2/2 | `NEM_ValidatorComposed.result_state_effects` |
+| encode_pool_v1_pair_forest_terminal_statement_v1 | 0/1 | OPEN: no composed root theorem claimed |
+| reconstruct_asq8_statement | 0/1 | OPEN: no composed root theorem claimed |
+| decode_pool_v1_pair_forest_terminal_request_v1 | 0/1 | OPEN: no composed root theorem claimed |
+| scan_proof_buffer | 0/1 | OPEN: no composed root theorem claimed |
+| emit_result | 0/1 | OPEN: no composed root theorem claimed |
+
+The sole closed root has no inner callee hypotheses. Its full concrete same-call model G theorem appears below; the native corollary additionally retains only the root own typed PacketDomain/PhysicalInterpretation and approved tool/runtime trust. Six unproved native root associations are not hidden as named leaf hypotheses. Exact obstacles for every remaining member and edge are in NEM_STOP_AUDIT.json and NEM_EDGES.json. All 33 new theorem audits use only propext, Classical.choice, Quot.sound.
+
+The following stage notes retain the evidence history. NEM_VALIDATION_FINAL.json is the final row result, not intermediate counts.
+
 # NEM slice S composition
 
 Target not yet established. Baseline: **22/97 composed rows CLOSED, 0/7 roots**.
