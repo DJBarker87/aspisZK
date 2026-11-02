@@ -1,0 +1,93 @@
+{
+  "attempt": "NEK_K098",
+  "kind": "kani",
+  "module": "r1_pool_adapter::NDM_native::common_contract",
+  "sources": [
+    "NEK_src/programs/r1-cost-probe/src/lib.rs",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NEK_src/programs/r1-cost-probe/src/NDM_native.rs",
+    "NEK_src/programs/r1-cost-probe/src/NDM_reference.rs",
+    "NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K098.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts,NEK_clause_29,NEK_invert",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "r1_pool_adapter::NDM_native::common_contract",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 240,
+  "source_revision": "6779677f1854b15456758d0a84df527c7ffb631f",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front4b-20261028/NDM_K033/receipt.json",
+    "original_sha256": "858dfbfae19a7fd61237f1a2c1b418b431380e69ebf8c46d1f8da17cf3e3a06a",
+    "immutable_bundle_sha256": "c269950828f4084bc7db1f9c61b529876faab501e6e56cc1cafa94c4a427a6da",
+    "split_conjunct": 0,
+    "selected_cfg": "NEK_clause_29"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "optimized cached compile, one independent original postcondition conjunct, no native field multiplication",
+  "print_axioms": "N/A: kani",
+  "concurrency_policy": "at most three 8GiB scopes, immutable source/manifest/pins; independent cfg targets and disjoint evidence paths",
+  "reservation_retries": 0,
+  "exit_status": 1,
+  "wall_seconds": 47.05602763290517,
+  "peak_rss_kib": "1789176",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r083d2be12305448d8a7d22fbb4467421.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "2000187392",
+  "source_hashes": {
+    "NEK_src/programs/r1-cost-probe/src/lib.rs": "811da6a3e5c46c7142647ee712b2623d8ef4fa20821543ff2abba7c35a2796f7",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs": "eebd0d5bbc35a47a3857e6b1a34e0f4c1f4b1f0eea7b444e258f42867ecafcad",
+    "NEK_src/programs/r1-cost-probe/src/NDM_native.rs": "e8ecda1b518e20c6e1ca2b076fe0989781a3577b4649a2fab0f8fa44ceed943f",
+    "NEK_src/programs/r1-cost-probe/src/NDM_reference.rs": "b3b17b403f038f1b6aee9a5834e131821d4691d1a1d279dabbc0f5aef20a0161",
+    "NEK_src/programs/r1-cost-probe/Cargo.toml": "7f702d3d756e321545c1209a50623d97545a98ea384479079218a02eb9631923",
+    "NEK_gate.py": "51f1266c02ca3e4766d21a831f543d58d9e8727a84c613d2bffc37f1c457fe91",
+    "NEK_graph.py": "518544a3919ca526a3dcc2fe532dc773cd1bddab8a0dd77005729227d88c4403",
+    "NEK_src/Cargo.lock": "5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef"
+  }
+}

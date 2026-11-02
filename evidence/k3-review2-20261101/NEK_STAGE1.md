@@ -1,0 +1,7 @@
+# First priority migrations
+
+Ten native invocations: five properties PASS and five matched original-name controls FAIL. NDE matrix/scan use an explicit local mutable context; NEK_LOCAL_CONTEXT_ASSOCIATION.json checks exact inverse projection of the historical instrumented native bodies and one-for-one retention of all log reads/writes. Selected-binary proof_for_contract retains its actual frozen body and specification; unrelated static-writing modules are omitted. Trace-value retains its original no-panic/reachability scope, not output equivalence. Square iteration uses the exact all-raw-u32 LPf_BaseMultiply.source domain, one arbitrary Range iteration, and a local multiplication log; multiplication is not executed in Kani.
+
+No new Lean theorem or assumption, axiom audit N/A. Existing native-step/model association, induction and P6/D188 transport remain. Each receipt records target, exit, wall, peak RSS, swaps and source/dependency pins. Native results are in NEK_RESULTS.jsonl; no transitive row restored yet. Source audit and content-addressed native-review closure work continue.
+
+The starting branch was codex/cx-k3-review2-20261101; renamed to the requested codex/cx-k3-review2-20261029 after confirming that destination did not exist. Sparse checkout remains enabled. Own script input correction: actual packed-raw return type is [u64;4], not [QM31;4]; corrected before launch. The exact-source recovery helper now reads excluded sparse paths with git show and keeps recovered artifacts under NEK_. No shared runner changed.

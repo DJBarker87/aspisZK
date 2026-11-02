@@ -1,0 +1,68 @@
+{
+  "attempt": "NEK_K331",
+  "kind": "kani",
+  "module": "NEK_kmx::KMX_checks::KMX_ptr_correct",
+  "sources": [
+    "NEK_src/programs/r1-cost-probe/src/lib.rs",
+    "NEK_src/programs/r1-cost-probe/src/r1_pool_adapter.rs",
+    "NEK_src/programs/r1-cost-probe/src/NDM_native.rs",
+    "NEK_src/programs/r1-cost-probe/src/NDM_reference.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K331.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/programs/r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--lib",
+    "--features",
+    "pool-adapter,private-leaf-salts",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "NEK_kmx::KMX_checks::KMX_ptr_correct",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 240,
+  "source_revision": "b27327ed8239277939d6efdb2796452320e5c298",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/native-front4b-20261028/NDM_K009/receipt.json",
+    "original_sha256": "f42f1022f070306e47dc2c766106811fb46dc2f9e8a97d56a2b34a8c160080be",
+    "patch": "evidence/k3-review2-20261101/NEK_K331_harness.patch",
+    "patch_sha256": "c37d748da0480a057882800c1b7792a38a94c25270a882e5b1dac2f58c14ea19"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0
+}

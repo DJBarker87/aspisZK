@@ -1,0 +1,185 @@
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Aspis SpendV0 statement layer, built evaluator-first.
+ //!
+ //! This crate deliberately contains no proof system. It defines the exact
+@@ -207,3 +208,7 @@
+ 
+ #[cfg(feature = "r0")]
+ pub mod r0;
++
++#[cfg(kani)] mod NEK_kmx {
++extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++}
+--- a/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_tree_profile.rs
+@@ -659,21 +659,29 @@
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::requires(bytes.len()==800))]
++#[cfg_attr(kani,kani::ensures(|r| ctx.live_post(r)))]
++#[cfg_attr(kani,kani::modifies())]
+ fn decode_pair_live_snapshot_boxed_v1(
++    ctx:&mut NEC_static_decode::NEK_Context,
+     bytes: &[u8],
+ ) -> Result<Box<PoolV1PairLiveSnapshotV1>, PoolV1PairLatePublicStatementErrorV1> {
+     Ok(Box::new(
+-        decode_pool_v1_pair_live_snapshot_v1(bytes)
++        ctx.live_child(bytes)
+             .map_err(PoolV1PairLatePublicStatementErrorV1::Snapshot)?,
+     ))
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::requires(bytes.len()==688))]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| r.is_ok()))]
+ fn decode_pair_afterstate_boxed_v1(
++    ctx:&mut NEC_static_decode::NEK_Context,
+     bytes: &[u8],
+ ) -> Result<Box<PoolV1PairVerifiedAfterstateV1>, PoolV1PairLatePublicStatementErrorV1> {
+     Ok(Box::new(
+-        decode_pool_v1_pair_verified_afterstate_v1(bytes)
++        ctx.after_child(bytes)
+             .map_err(PoolV1PairLatePublicStatementErrorV1::Afterstate)?,
+     ))
+ }
+@@ -733,9 +741,9 @@
+         return Err(PoolV1PairLatePublicStatementErrorV1::NonZeroReserved);
+     }
+     let live_snapshot =
+-        decode_pair_live_snapshot_boxed_v1(&bytes[32..32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES])?;
++        decode_pair_live_snapshot_boxed_v1(&mut NEC_static_decode::NEK_Context::new(),&bytes[32..32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES])?;
+     let candidate_afterstate =
+-        decode_pair_afterstate_boxed_v1(&bytes[32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES..])?;
++        decode_pair_afterstate_boxed_v1(&mut NEC_static_decode::NEK_Context::new(),&bytes[32 + POOL_V1_PAIR_LIVE_SNAPSHOT_BYTES..])?;
+     if live_snapshot.next_pair_index.checked_add(1) != Some(candidate_afterstate.next_pair_index) {
+         return Err(PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch);
+     }
+@@ -982,3 +990,17 @@
+         ));
+     }
+ }
++
++
++#[cfg(kani)] #[path="NEC_static_decode.rs"] mod NEC_static_decode;
++
++#[cfg(kani)] #[kani::requires(bytes.len()==688)] #[kani::ensures(|r| r.is_ok())] #[kani::modifies()]
++fn NEK_bad_modifies(
++    ctx:&mut NEC_static_decode::NEK_Context,
++    bytes: &[u8],
++) -> Result<Box<PoolV1PairVerifiedAfterstateV1>, PoolV1PairLatePublicStatementErrorV1> {ctx.ROW=ctx.ROW.wrapping_add(1);
++    Ok(Box::new(
++        ctx.after_child(bytes)
++            .map_err(PoolV1PairLatePublicStatementErrorV1::Afterstate)?,
++    ))
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEC_static_decode.rs
+@@ -0,0 +1,48 @@
++use super::*;
++use crate::pool_v1::{PoolV1PairVerifiedAfterstateV1 as After,PoolV1PairLiveSnapshotV1 as Live,PoolV1PairVerifierTransportErrorV1 as AfterError,PoolV1PairLiveSnapshotErrorV1 as LiveError};
++use alloc::boxed::Box;
++use aspis_core::field::M31;
++#[path="NEC_static_reference.rs"]mod reference;
++
++
++
++const GROUP:u8=0;
++pub(super) struct NEK_Context{pub(super) AFTER:After,pub(super) LIVE:Live,pub(super) INPUT:usize,pub(super) INDEX:usize,pub(super) ROW:usize}
++impl NEK_Context{pub(super) fn new()->Self{Self{AFTER:After{next_pair_index:0,next_root:[M31(0);8],next_frontier:[[M31(0);8];20]},LIVE:Live{pool:[0;32],deployment_domain:[0;32],sequence:0,next_pair_index:0,current_root:[M31(0);8],frontier:[[M31(0);8];20]},INPUT:0,INDEX:0,ROW:0}}
++pub(super) fn after_word(&self,x:&After)->u64{let(i,r)=unsafe{(self.INDEX,self.ROW)};match GROUP{0=>x.next_pair_index,1=>x.next_root[i].0 as u64,_=>x.next_frontier[r][i].0 as u64}}
++pub(super) fn live_word(&self,x:&Live)->u64{let(i,r)=unsafe{(self.INDEX,self.ROW)};match GROUP{0=>x.sequence,1=>x.next_pair_index,2=>x.pool[i] as u64,3=>x.deployment_domain[i] as u64,4=>x.current_root[i].0 as u64,_=>x.frontier[r][i].0 as u64}}
++pub(super) fn after_child(&mut self,bytes:&[u8])->Result<After,AfterError>{assert_eq!(bytes.as_ptr() as usize,unsafe{self.INPUT},"NEC_static_same_pointer");assert_eq!(bytes.len(),688,"NEC_static_same_length");Ok(unsafe{self.AFTER})}
++pub(super) fn live_child(&mut self,bytes:&[u8])->Result<Live,LiveError>{assert_eq!(bytes.as_ptr() as usize,unsafe{self.INPUT},"NEC_static_same_pointer");assert_eq!(bytes.len(),800,"NEC_static_same_length");Ok(unsafe{self.LIVE})}
++pub(super) fn after_post(&self,r:&Result<Box<After>,PoolV1PairLatePublicStatementErrorV1>)->bool{let expected=reference::reply_ref::<u64,AfterError>(Ok(self.after_word(unsafe{&*(&raw const self.AFTER)})));(match(r,expected){(Ok(x),Ok(y))=>self.after_word(x)==y,_=>false}) != false}
++pub(super) fn live_post(&self,r:&Result<Box<Live>,PoolV1PairLatePublicStatementErrorV1>)->bool{let expected=reference::reply_ref::<u64,LiveError>(Ok(self.live_word(unsafe{&*(&raw const self.LIVE)})));(match(r,expected){(Ok(x),Ok(y))=>self.live_word(x)==y,_=>false}) != false}
++pub(super) fn prepare(&mut self){let i:usize=kani::any();let r:usize=kani::any();kani::assume(i<if GROUP==2||GROUP==3{32}else{8});kani::assume(r<20);unsafe{self.INDEX=i;self.ROW=r;}}
++}
++#[kani::proof_for_contract(super::decode_pair_afterstate_boxed_v1)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn after_contract(){let mut ctx=NEK_Context::new();ctx.prepare();let bytes:[u8;688]=kani::any();unsafe{ctx.AFTER=core::mem::transmute(kani::any::<[u8;core::mem::size_of::<After>()]>());ctx.INPUT=bytes.as_ptr() as usize;}let _=super::decode_pair_afterstate_boxed_v1(&mut ctx,&bytes);}
++#[kani::proof_for_contract(super::decode_pair_live_snapshot_boxed_v1)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::unwind(34)]
++fn live_contract(){let mut ctx=NEK_Context::new();ctx.prepare();let bytes:[u8;800]=kani::any();unsafe{ctx.LIVE=core::mem::transmute(kani::any::<[u8;core::mem::size_of::<Live>()]>());ctx.INPUT=bytes.as_ptr() as usize;}let _=super::decode_pair_live_snapshot_boxed_v1(&mut ctx,&bytes);}
++
++#[kani::proof_for_contract(super::decode_pair_afterstate_boxed_v1)]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++fn NEK_shape_contract(){let mut ctx=NEK_Context::new();let bytes:[u8;688]=kani::any();ctx.AFTER=kani::any::<After>();ctx.INPUT=bytes.as_ptr() as usize;let r=super::decode_pair_afterstate_boxed_v1(&mut ctx,&bytes);}
++
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++fn NEK_shape_real(){let mut ctx=NEK_Context::new();let bytes:[u8;688]=kani::any();ctx.AFTER=kani::any::<After>();ctx.INPUT=bytes.as_ptr() as usize;let r=super::decode_pair_afterstate_boxed_v1(&mut ctx,&bytes);assert!(matches!(r,Ok(x) if x.next_pair_index==ctx.AFTER.next_pair_index),"NEK_unimplied_decoder_index");}
++
++#[kani::proof]
++#[kani::stub_verified(super::decode_pair_afterstate_boxed_v1)]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++fn NEK_shape_client(){let mut ctx=NEK_Context::new();let bytes:[u8;688]=kani::any();ctx.AFTER=kani::any::<After>();ctx.INPUT=bytes.as_ptr() as usize;let r=super::decode_pair_afterstate_boxed_v1(&mut ctx,&bytes);assert!(matches!(r,Ok(x) if x.next_pair_index==ctx.AFTER.next_pair_index),"NEK_unimplied_decoder_index");}
++
++#[kani::proof_for_contract(super::NEK_bad_modifies)]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++fn NEK_shape_frame(){let mut ctx=NEK_Context::new();let bytes:[u8;688]=kani::any();ctx.AFTER=kani::any::<After>();ctx.INPUT=bytes.as_ptr() as usize;let r=super::NEK_bad_modifies(&mut ctx,&bytes);}
+--- /dev/null
++++ b/crates/aspis-core/src/NEC_arbitrary.rs
+@@ -0,0 +1 @@
++impl kani::Arbitrary for crate::field::M31 {fn any()->Self {Self(kani::any())}}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEC_arbitrary.rs
+@@ -0,0 +1,7 @@
++impl kani::Arbitrary for super::pair_forest_terminal::PoolV1PairForestTerminalCommonV1 { fn any()->Self {Self {master_account:kani::any(),checkpoint_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),checkpoint_sequence:kani::any(),historical_global_anchor:kani::any(),lane_transition:kani::any()}}}
++impl kani::Arbitrary for super::pair_tree_profile::PoolV1PairLatePublicStatementV1 { fn any()->Self {Self {live_snapshot:kani::any(),candidate_afterstate:kani::any()}}}
++impl kani::Arbitrary for super::pair_tree_profile::PoolV1PairLiveSnapshotV1 { fn any()->Self {Self {pool:kani::any(),deployment_domain:kani::any(),sequence:kani::any(),next_pair_index:kani::any(),current_root:kani::any(),frontier:kani::any()}}}
++impl kani::Arbitrary for super::pair_terminal::PoolV1PairVerifiedAfterstateV1 { fn any()->Self {Self {next_pair_index:kani::any(),next_root:kani::any(),next_frontier:kani::any()}}}
++impl kani::Arbitrary for super::pair_tree_profile::PoolV1PairLatePublicStatementErrorV1 {fn any()->Self {match kani::any::<u8>() % 12 {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::WrongItemCount,4=>Self::WrongHeaderLength,5=>Self::WrongSnapshotLength,6=>Self::WrongAfterstateLength,7=>Self::WrongTotalLength,8=>Self::NonZeroReserved,9=>Self::Snapshot(kani::any()),10=>Self::Afterstate(kani::any()),_=>Self::AfterstateIndexMismatch}}}
++impl kani::Arbitrary for super::pair_tree_profile::PoolV1PairLiveSnapshotErrorV1 {fn any()->Self {match kani::any::<u8>() % 9 {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::WrongFormatBinding,4=>Self::NonZeroReserved,5=>Self::ZeroRequiredBinding,6=>Self::SequenceIndexMismatch,7=>Self::TreeFull,_=>Self::NonCanonicalDigest}}}
++impl kani::Arbitrary for super::pair_terminal::PoolV1PairVerifierTransportErrorV1 {fn any()->Self {match kani::any::<u8>() % 15 {0=>Self::WrongLength,1=>Self::WrongMagic,2=>Self::WrongVersion,3=>Self::WrongStatementVersion,4=>Self::WrongDigestEncoding,5=>Self::InvalidTransitionKind,6=>Self::WrongSuccessCode,7=>Self::WrongPairFormat,8=>Self::ZeroRequiredBinding,9=>Self::InvalidProofBodyLength,10=>Self::InvalidStatementPayloadLength,11=>Self::InvalidLiveSnapshotPayloadLength,12=>Self::NonCanonicalOutputPair,13=>Self::InvalidAfterstateIndex,_=>Self::NonCanonicalAfterstate}}}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEC_reference.rs
+@@ -0,0 +1,10 @@
++extern crate alloc;
++use alloc::boxed::Box;
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++pub enum ChildError<E> { Child(E) }
++pub fn boxed_ref<T,E>(reply:Result<T,E>)->Result<Box<T>,ChildError<E>> {
++ match reply { Ok(v)=>Ok(Box::new(v)), Err(e)=>Err(ChildError::Child(e)) }
++}
++pub fn relay_ref<T,E>(reply:Result<Box<T>,E>)->Result<Box<T>,ChildError<E>> {
++ match reply { Ok(v)=>Ok(v), Err(e)=>Err(ChildError::Child(e)) }
++}
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEC_static_reference.rs
+@@ -0,0 +1,5 @@
++#[derive(Clone,Copy,Debug,PartialEq,Eq)]
++pub enum ChildError<E> { Child(E) }
++pub fn reply_ref<T,E>(reply:Result<T,E>)->Result<T,ChildError<E>> {
++ match reply { Ok(value)=>Ok(value),Err(error)=>Err(ChildError::Child(error)) }
++}
+--- a/crates/aspis-core/src/lib.rs
++++ b/crates/aspis-core/src/lib.rs
+@@ -97,3 +97,7 @@
+ 
+ #[cfg(feature = "r0-op-count")]
+ pub mod r0_op_count;
++
++#[cfg(kani)]
++#[path="NEC_arbitrary.rs"]
++mod NEC_arbitrary;
+--- a/crates/aspis-statement/src/pool_v1/mod.rs
++++ b/crates/aspis-statement/src/pool_v1/mod.rs
+@@ -425,3 +425,7 @@
+     POOL_V1_VERIFIER_REGISTRY_V2_MAGIC, POOL_V1_VERIFIER_REGISTRY_V2_VERSION,
+     POOL_V1_VERIFIER_REGISTRY_VERSION,
+ };
++
++#[cfg(kani)]
++#[path="NEC_arbitrary.rs"]
++mod NEC_arbitrary;

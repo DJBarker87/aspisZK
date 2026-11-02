@@ -1,0 +1,90 @@
+--- a/crates/aspis-r1-cost-probe/src/lib.rs
++++ b/crates/aspis-r1-cost-probe/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! UNPROVED R1 COST PROBE. P2 only; no production entrypoint.
+ #![no_std]
+ extern crate alloc;
+@@ -44,3 +45,7 @@
+ compile_error!("`audit-eight-way` is audit-only: it is never combined with the prover (PREREG-PROOF-SIZE-2 item 4)");
+ #[cfg(all(feature="audit-eight-way",any(target_os="solana",feature="program-build")))]
+ compile_error!("`audit-eight-way` is audit-only: it is never built for a program (PREREG-PROOF-SIZE-2 item 4)");
++
++#[cfg(kani)] mod NEK_kmx {
++extern crate alloc;include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++}
+--- a/crates/aspis-r1-cost-probe/src/verifier.rs
++++ b/crates/aspis-r1-cost-probe/src/verifier.rs
+@@ -220,7 +220,8 @@
+     }
+ 
+     fn value(&self,index:usize)->K {
+-        let [a,b,c,d]=self.raw[index].map(M31::reduce_u64);
++        let row=NCN_vec::row(&self.raw,index);
++        let [a,b,c,d]=row.map(M31::reduce_u64);
+         K{c0:aspis_core::field::CM31{a,b},c1:aspis_core::field::CM31{a:c,b:d}}
+     }
+     fn finish(&self,weights:&mut[K]) {for (i,w) in weights.iter_mut().enumerate(){*w=self.value(i);}}
+@@ -526,3 +527,62 @@
+ #[cfg(feature="audit-eight-way")]
+ #[path="eight_way.rs"]
+ pub mod eight_way;
++
++#[cfg(kani)] mod NCN_vec {
++use super::*;
++#[kani::requires(raw.len()==64&&index<64)]
++#[kani::ensures(|out:&[u64;4]| *out==raw[index])]
++pub(super) fn row(raw:&Vec<[u64;4]>,index:usize)->[u64;4]{raw[index]}
++#[kani::requires(raw.len()==64&&index<64)]
++#[kani::ensures(|out:&[u64;4]| *out!=raw[index])]
++fn inverted(raw:&Vec<[u64;4]>,index:usize)->[u64;4]{raw[index]}
++#[kani::proof_for_contract(row)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NEK_kmx::KMX_copy_from_slice)]
++fn row_contract(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let raw=Vec::from(rows);let index:usize=kani::any();let _=row(&raw,index);}
++#[kani::proof_for_contract(inverted)] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NEK_kmx::KMX_copy_from_slice)]
++fn inverted_contract(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let raw=Vec::from(rows);let index:usize=kani::any();let _=inverted(&raw,index);}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NEK_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(row)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn caller_ok(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let state=BatchedWeights{raw:Vec::from(rows),terms:kani::any()};let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<4);let source=state.raw[index][j];let value=state.value(index);let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];assert!((limbs[j] as u64)==source%2147483647);}
++#[kani::proof] #[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,NEK_kmx::KMX_copy_from_slice)]
++#[kani::stub_verified(row)]
++#[kani::stub(aspis_core::field::M31::reduce_u64,reduce)]
++fn caller_wrong(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let state=BatchedWeights{raw:Vec::from(rows),terms:kani::any()};let index:usize=kani::any();let j:usize=kani::any();kani::assume(index<64&&j<4);let source=state.raw[index][j];let value=state.value(index);let limbs=[value.c0.a.0,value.c0.b.0,value.c1.a.0,value.c1.b.0];assert!((limbs[j] as u64)!=source%2147483647);}
++fn reduce(x:u64)->M31{let z:u32=kani::any();kani::assume(z as u64==x%2147483647);M31(z)}
++
++#[kani::requires(raw.len()==64&&index<64)]
++#[kani::ensures(|out:&[u64;4]| out[0]==raw[index][0])]
++fn NEK_weak(raw:&Vec<[u64;4]>,index:usize)->[u64;4]{raw[index]}
++#[kani::requires(raw.len()==64&&index<64)]
++#[kani::ensures(|out:&[u64;4]| out[0]==raw[index][0])]
++fn NEK_bad_modifies(raw:&mut Vec<[u64;4]>,index:usize)->[u64;4]{let out=raw[index];raw[index][1]=raw[index][1].wrapping_add(1);out}
++#[kani::proof_for_contract(NEK_weak)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NEK_kmx::KMX_copy_from_slice)]
++fn NEK_weak_contract(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let mut raw=Vec::from(rows);let index:usize=kani::any();kani::assume(index<64);let _=NEK_weak(&raw,index);}
++#[kani::proof]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NEK_kmx::KMX_copy_from_slice)]
++fn NEK_real(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let mut raw=Vec::from(rows);let index:usize=kani::any();kani::assume(index<64);let out=NEK_weak(&raw,index);assert!(out[1]==raw[index][1]);}
++#[kani::proof]
++#[kani::stub_verified(NEK_weak)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NEK_kmx::KMX_copy_from_slice)]
++fn NEK_unimplied(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let mut raw=Vec::from(rows);let index:usize=kani::any();kani::assume(index<64);let out=NEK_weak(&raw,index);assert!(out[1]==raw[index][1]);}
++#[kani::proof_for_contract(NEK_bad_modifies)]
++#[kani::unwind(40)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEK_kmx::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NEK_kmx::KMX_copy_from_slice)]
++fn NEK_modifies(){let rows:[[u64;4];64]=[kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any(),kani::any()];let mut raw=Vec::from(rows);let index:usize=kani::any();kani::assume(index<64);let _=NEK_bad_modifies(&mut raw,index);}
++}

@@ -1,0 +1,72 @@
+{
+  "attempt": "NEK_K207",
+  "kind": "kani",
+  "module": "fast_domain::NEA_point::point",
+  "sources": [
+    "NEK_src/crates/aspis-r1-cost-probe/src/lib.rs",
+    "NEK_src/crates/aspis-r1-cost-probe/src/fast_domain.rs",
+    "NEK_src/crates/aspis-r1-cost-probe/src/NEA_point.rs",
+    "NEK_src/crates/aspis-r1-cost-probe/src/NEA_line.rs",
+    "NEK_src/crates/aspis-r1-cost-probe/src/NEA_point_reference.rs",
+    "NEK_src/crates/aspis-r1-cost-probe/src/verifier.rs",
+    "NEK_src/crates/aspis-core/src/lib.rs",
+    "NEK_src/crates/aspis-core/src/NEK_nea_arbitrary.rs",
+    "NEK_gate.py",
+    "NEK_graph.py",
+    "NEK_src/Cargo.lock"
+  ],
+  "command": [
+    "python3",
+    "NEK_gate.py",
+    "NEK_K207.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_src/crates/aspis-r1-cost-probe/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_target",
+    "--lib",
+    "--features",
+    "private-leaf-salts,optimized-terminal,program-build",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "fast_domain::NEA_point::point",
+    "--output-format",
+    "terse"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-k3-review2-20261029/NEK_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "f98fecb9213fa5dad537f68957ec1b890fba99ef",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "original_receipt": "evidence/slice-q-compose-20261029/NEB_IMPORTED_POINT/NEA_K017/receipt.json",
+    "original_sha256": "82ae20a877c2df3169d1ca4b307fa764090b8c3a9ed23e3c155c5dff88e61ddf",
+    "patch": "evidence/k3-review2-20261101/NEK_K207_harness.patch",
+    "patch_sha256": "0583d3b5228f766b6ca323e720031e0ab6a232f6ca10bf7d576e7ce054f01727"
+  },
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "expected_time": "Optimized cached compilation then original native harness, static-free local/owned records; no multiplication",
+  "print_axioms": "N/A: kani",
+  "reservation_retries": 0
+}
