@@ -60,16 +60,13 @@ theorem source_binding (r : Range Usize) (n : Usize) :
   apply congrArg (Aeneas.Std.bind _)
   funext candidate
   cases candidate with
-  | none => rw [clone_value,bind_tc_ok]
+  | none => rfl
   | some item =>
       simp only [less_value,bind_tc_ok]
       by_cases guard : item.val < r.end.val
       · simp only [guard,decide_true,↓reduceIte]
-        simp only [clone_value,bind_tc_ok]
-        rw [increment_wrap_one item r.end guard]
-        · rfl
-        · rfl
-      · simp only [guard,decide_false,Bool.false_eq_true,if_false,clone_value,bind_tc_ok]
+        rw [increment_wrap_one item r.end guard] <;> rfl
+      · simp only [guard,decide_false,Bool.false_eq_true,if_false]
 
 #print axioms clone_value
 #print axioms less_value
