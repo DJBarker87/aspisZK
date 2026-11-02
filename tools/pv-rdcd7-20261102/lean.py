@@ -2,6 +2,9 @@ from pathlib import Path
 import subprocess,json,hashlib,sys,re
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';D='/home/dombarker/project-offloads/codex-pv-rdcd7-20261102';H='dombarker@100.108.41.90'
 n=int(sys.argv[1]);m=sys.argv[2];assert 90700<=n<=90799
+run_audit=len(sys.argv)==4 and sys.argv[3]=='--audit-runtime'
+assert len(sys.argv)==3 or run_audit
+if run_audit:assert n==90797 and m=='R1Z/PV_RDCD5_NEPDriver'
 p=R/'docs/research/v8-r0-zk-20261009/lean'/(m+'.lean')
 if not p.exists():p=R/'docs/research/100bit-spend-path-20261013/lean/prover-rw-20261023'/(m.split('/')[-1]+'.lean')
 s=p.read_bytes()
@@ -48,6 +51,12 @@ if a.returncode!=0 or ad.get('allowed') is not True:
   sys.exit(79 if race and consecutive<4 else 70)
  sys.exit(78)
 subprocess.run(['scp','-q',str(p),H+':'+D+'/lean-sources/'+m+'.lean'],check=True)
+if run_audit:
+ helper=R/'tools/pv-rdcd7-20261102/audit-runtime.py'
+ assert helper.read_bytes()==subprocess.check_output(['git','show','HEAD:'+str(helper.relative_to(R))])
+ meta.update(runtime_mode='fixed NEP standalone importAll/private audit',object_emitted=False,runtime_helper_sha256=hashlib.sha256(helper.read_bytes()).hexdigest())
+ subprocess.run(['scp','-q',str(helper),H+':'+D+'/audit-runtime.py'],check=True)
+
 # Capture actual private dependency objects before submission. Earlier receipts
 # retain their original fields; final closure verification is separately labelled.
 code = """from pathlib import Path
@@ -67,6 +76,7 @@ def go(module):
   for dep in seen[module]['imports']:go(dep)
 source=D/'lean-sources'/(MODULE+'.lean')
 imports=re.findall(r'^import\\s+(\\S+)',source.read_text(),re.M)
+if MODULE.endswith('PV_RDCD5_NEPDriver'):imports.append('R1Z.PV_RDCD5_V197ConsumerReplay')
 for dep in imports:go(dep.replace('.','/'))
 print(json.dumps(dict(module=MODULE,environment=env,objects=seen,external_manifest_sha256=hashlib.sha256((D/'external-object-manifest.json').read_bytes()).hexdigest()),sort_keys=True))
 """.replace('MODULE',repr(m))
@@ -78,6 +88,7 @@ meta['dependencies_sha256']=hashlib.sha256((E/f'{n}-dependencies.json').read_byt
 meta['dependencies_snapshot']=f'{n}-dependencies.json'
 (E/f'{n}-source.json').write_text(json.dumps(meta,indent=2)+'\n')
 c=['timeout','900','python3','/home/dombarker/project-offloads/aspis-fs-generic-20261006/evidence/run2.py',D+'/env-J.json',D+'/lean-objects',D+'/lean-sources',D+'/lean-objects/'+m+'.olean',D+'/lean-sources/'+m+'.lean','7000']
+if run_audit:c=['python3',D+'/audit-runtime.py']
 r=subprocess.run([sys.executable,str(R/'tools/pv-rdcd7-20261102/scope.py'),'lean-'+str(n),'Lean',*c])
 p=E/('lean-'+str(n))/'receipt.json'
 if p.exists():j=json.loads(p.read_text());j.update(meta);p.write_text(json.dumps(j,indent=2)+'\n')
