@@ -291,7 +291,7 @@
 +}
 --- a/crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs
 +++ b/crates/aspis-r1-cost-probe/src/NEI_prefix_step.rs
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,129 @@
 +use super::*;
 +#[derive(Clone,Copy)]
 +struct ProductLog { called:bool, lhs:u32, rhs:u32, reply:u32 }
@@ -389,9 +389,41 @@
 +    let expected=if cfg!(NEI_wrong_append){old_cell^1}else{old_cell};
 +    assert_eq!(prefixes[offset].0,expected);
 +}
++
++// New split after K005/K006/K009: no observation or duplicate copy of the
++// existing prefix. Only actual no-growth push geometry and the written cell.
++#[kani::proof] #[kani::unwind(114)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
++#[kani::stub(alloc::alloc::realloc,crate::NEI_copy::KMX_realloc)]
++fn prefix_append_geometry() {
++ let length:usize=kani::any();let index:usize=kani::any();kani::assume(length<=110 && index<length);
++ let mut before:Vec<M31>=Vec::with_capacity(length);
++ assert_eq!(before.capacity(),length);
++ // Valid arbitrary pre-state: initialize EVERY live word before set_len.
++ // index<length=capacity, M31 is a plain u32 wrapper, spare words stay uninit.
++ let initialized=before.as_mut_ptr();
++ for at in 0..index {unsafe {initialized.add(at).write(M31(kani::any()));}}
++ unsafe {before.set_len(index);}
++ assert!(before.len()==index && before.capacity()==length);
++ let pointer=before.as_ptr();let product=M31(kani::any());
++ before.push(product);
++ assert!(before.len()==index+1 && before.capacity()==length && before.as_ptr()==pointer);
++ assert_eq!(before[index].0,if cfg!(NEI_wrong_push_geometry){product.0^1}else{product.0});
++}
++// Primitive write/frame on one actual M31[110] location. No whole-array copy.
++#[kani::proof] #[kani::unwind(114)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
++fn prefix_word_write_frame() {
++ let mut storage=kani::vec::exact_vec::<M31,110>();let index:usize=kani::any();let observed:usize=kani::any();
++ kani::assume(index<110 && observed<110);
++ let before=storage[observed].0;let replacement=M31(kani::any());
++ let pointer=storage.as_mut_ptr();unsafe {pointer.add(index).write(replacement);}
++ let expected=if index==observed{replacement.0}else{before};
++ assert_eq!(storage[observed].0,if cfg!(NEI_wrong_word_frame){expected^1}else{expected});
++}
 --- a/crates/aspis-r1-cost-probe/src/NEI_row_step.rs
 +++ b/crates/aspis-r1-cost-probe/src/NEI_row_step.rs
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,126 @@
 +use super::*;
 +// Native constructor, arbitrary advance, next, write and borrow restoration.
 +// No product or field operation is reached. The row is the actual full array.
@@ -488,6 +520,35 @@
 + assert_eq!(reply,selected);
 + let expected=if index==at && lane==col {replacement}else{before};
 + assert_eq!(rows[at][col],if cfg!(NEI_wrong_slice_window){expected^1}else{expected});
++}
++
++// Fresh actual getter assertions and immutable full-carrier frame; these do
++// not restore or rename the older NCI contract evidence.
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
++fn residue_getter() {
++ let row:[u64;4]=kani::any();let index:usize=kani::any();let observed:usize=kani::any();kani::assume(index<4 && observed<4);
++ let before=row[observed];let expected=row[index];let got=residue_limb_at(&row,index);
++ assert_eq!(got,if cfg!(NEI_wrong_residue_getter){expected^1}else{expected});assert_eq!(row[observed],before);
++}
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
++fn power_getter() {
++ let limbs:[u32;4]=kani::any();let index:usize=kani::any();let observed:usize=kani::any();kani::assume(index<4 && observed<4);
++ let before=limbs[observed];let expected=limbs[index];let got=power_limb_at(&limbs,index);
++ assert_eq!(got,if cfg!(NEI_wrong_power_getter){expected^1}else{expected});assert_eq!(limbs[observed],before);
++}
++
++// Independent real callee needed by the dot finish path. Full Option tag and
++// all eight returned raw coordinates; no function contract or multiplication.
++#[kani::proof] #[kani::unwind(80)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NEI_copy::KMX_copy_nonoverlapping)]
++fn wide_from_limbs() {
++ let words:[u32;8]=kani::any();let got=E::from_limbs(words).map(|v|v.to_limbs());
++ let mut valid=true;for word in words {valid &= word<2147483647;}
++ let mut expected=if valid{Some(words)}else{None};
++ if cfg!(NEI_wrong_wide_ctor){expected=if let Some(mut out)=expected{out[0]^=1;Some(out)}else{Some([0;8])};}
++ assert_eq!(got,expected);
 +}
 --- a/crates/aspis-r1-cost-probe/src/fast_pairing.rs
 +++ b/crates/aspis-r1-cost-probe/src/fast_pairing.rs

@@ -194193,7 +194193,7 @@
    "trust_rows": []
   },
   {
-   "bridge_status": "OPEN",
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [
     {
      "expression": "update_residue_row",
@@ -194210,24 +194210,31 @@
    "caller_domain_obligations": [
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "callee_claims": [],
-     "callee_local_status": "OPEN",
+     "callee_claims": [
+      "NEI::update_residue_row"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:push:update_residue_row",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push->crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push bridge owner",
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-     "required_named_hypotheses": [],
-     "status": "OPEN"
+     "required_named_hypotheses": [
+      "NEI::update_residue_row.PacketDomain",
+      "NEI::update_residue_row.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
     "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
    ],
-   "claim_ids": [],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "claim_ids": [
+    "NEI::push"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -194279,9 +194286,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:177",
      "domain": "64 canonical initial weights; raw rows U64; terms tracks same query count, at group boundary limbs<2^34; each update adds canonical power*basis without overflow; flush when terms&3=3. Finish reduces same raw rows into same64-weight allocation.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "residue"
     }
    ],
@@ -194292,16 +194299,35 @@
    "inventory_id": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push@217",
    "inventory_row": "F177",
    "medium": [],
-   "named_hypotheses": [],
-   "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-   "open_transitive_dependencies": [
-    "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
+   "named_hypotheses": [
+    {
+     "name": "NEI::push.PacketDomain",
+     "statement": "Slice-Q caller allocation: 64 rows; selected index in bounds; selected original row additions fit U64. Generic model proof has no fixed length/capacity restriction.",
+     "discharged_by": "NEI-arithmetic-root:TX1:177"
+    },
+    {
+     "name": "NEI::push.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX1:177"
+    }
    ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
    "receipt_sha256": {},
    "receipts": [],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:177",
-   "selected_claims": [],
+   "selected_claims": [
+    "NEI::push"
+   ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
    "source_line": 217,
@@ -197372,15 +197398,20 @@
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
-     "callee_claims": [],
-     "callee_local_status": "OPEN",
+     "callee_claims": [
+      "NEI::push"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
      "discharged_by": null,
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node->crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node bridge owner",
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-     "required_named_hypotheses": [],
+     "required_named_hypotheses": [
+      "NEI::push.PacketDomain",
+      "NEI::push.PhysicalInterpretation"
+     ],
      "status": "OPEN"
     },
     {
@@ -202695,10 +202726,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NCI::power_limb_at"
+    "NCI::power_limb_at",
+    "NEI::power_limb_at"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -202758,9 +202790,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:192",
      "domain": "64 canonical initial weights; raw rows U64; terms tracks same query count, at group boundary limbs<2^34; each update adds canonical power*basis without overflow; flush when terms&3=3. Finish reduces same raw rows into same64-weight allocation.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "residue"
     }
    ],
@@ -202775,14 +202807,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R178.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::power_limb_at.PacketDomain",
+     "statement": "index<4, any valid typed full carrier; no field canonicality",
+     "discharged_by": "NEI-arithmetic-root:TX1:192"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R178.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::power_limb_at.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX1:192"
     }
    ],
    "no_credit_reason": null,
@@ -202795,10 +202827,18 @@
     "evidence/native-tx2r-20261028/NCI_K001/receipt.json",
     "evidence/native-tx2r-20261028/NCI_K034/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:192",
    "selected_claims": [
-    "NCI::power_limb_at"
+    "NEI::power_limb_at"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
@@ -203610,10 +203650,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NCI::residue_limb_at"
+    "NCI::residue_limb_at",
+    "NEI::residue_limb_at"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -203673,9 +203714,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:194",
      "domain": "64 canonical initial weights; raw rows U64; terms tracks same query count, at group boundary limbs<2^34; each update adds canonical power*basis without overflow; flush when terms&3=3. Finish reduces same raw rows into same64-weight allocation.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "residue"
     }
    ],
@@ -203690,14 +203731,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R179.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::residue_limb_at.PacketDomain",
+     "statement": "index<4, any valid typed full carrier; no field canonicality",
+     "discharged_by": "NEI-arithmetic-root:TX1:194"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R179.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::residue_limb_at.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX1:194"
     }
    ],
    "no_credit_reason": null,
@@ -203710,10 +203751,18 @@
     "evidence/native-tx2r-20261028/NCI_K001/receipt.json",
     "evidence/native-tx2r-20261028/NCI_K032/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX1:194",
    "selected_claims": [
-    "NCI::residue_limb_at"
+    "NEI::residue_limb_at"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
@@ -203722,7 +203771,7 @@
    "trust_rows": []
   },
   {
-   "bridge_status": "OPEN",
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [
     {
      "expression": "residue_limb_at",
@@ -203765,11 +203814,11 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::power_limb_at",
      "callee_claims": [
-      "NCI::power_limb_at"
+      "NEI::power_limb_at"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:update_residue_row:power_limb_at",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row->crates/aspis-r1-cost-probe/src/verifier.rs::power_limb_at",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
@@ -203777,19 +203826,19 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R178.PacketDomain",
-      "NCS_R178.PhysicalInterpretation"
+      "NEI::power_limb_at.PacketDomain",
+      "NEI::power_limb_at.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at",
      "callee_claims": [
-      "NCI::residue_limb_at"
+      "NEI::residue_limb_at"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:update_residue_row:residue_limb_at",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row->crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
@@ -203797,10 +203846,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R179.PacketDomain",
-      "NCS_R179.PhysicalInterpretation"
+      "NEI::residue_limb_at.PacketDomain",
+      "NEI::residue_limb_at.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -203810,14 +203859,14 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:195:lossless-row-u32-u64",
      "id": "external:TX1:195:2",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
       "NDF"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -203827,14 +203876,14 @@
       "resolution": "standard scalar/container operation",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:195:lossless-row-u32-u64",
      "id": "external:TX1:195:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
       "NDF"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
@@ -203842,10 +203891,11 @@
     "crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at"
    ],
    "claim_ids": [
-    "NDF::refresh::02"
+    "NDF::refresh::02",
+    "NEI::update_residue_row"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "exact function ID",
@@ -203978,9 +204028,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX1:195",
      "domain": "64 canonical initial weights; raw rows U64; terms tracks same query count, at group boundary limbs<2^34; each update adds canonical power*basis without overflow; flush when terms&3=3. Finish reduces same raw rows into same64-weight allocation.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "residue"
     }
    ],
@@ -203993,8 +204043,19 @@
    "medium": [
     "Partial/model evidence; no new local bridge"
    ],
-   "named_hypotheses": [],
-   "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
+   "named_hypotheses": [
+    {
+     "name": "NEI::update_residue_row.PacketDomain",
+     "statement": "Every reached raw row word + corresponding raw U32 power limb * raw U32 basis fits U64; arbitrary flush. All-outcome equality is unrestricted.",
+     "discharged_by": "NEI-arithmetic-root:TX1:195"
+    },
+    {
+     "name": "NEI::update_residue_row.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX1:195"
+    }
+   ],
+   "no_credit_reason": null,
    "open_transitive_dependencies": [],
    "receipt_sha256": {
     "evidence/native-front2-20261028/NDE_K050/receipt.json": "9a29191242436134cd85320b1d14f6891034f2f8f2be829f7203ea19826af86e",
@@ -204148,10 +204209,19 @@
       "evidence/native-front3b-20261028/NDI_VALIDATOR_REPAIR.md"
      ],
      "prefix": "NDI"
+    },
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
     }
    ],
    "row": "TX1:195",
-   "selected_claims": [],
+   "selected_claims": [
+    "NEI::update_residue_row"
+   ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
    "source_line": 235,
@@ -298109,7 +298179,7 @@
    "trust_rows": []
   },
   {
-   "bridge_status": "OPEN",
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [
     {
      "cfg": [],
@@ -298125,24 +298195,31 @@
    "caller_domain_obligations": [
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "callee_claims": [],
-     "callee_local_status": "OPEN",
+     "callee_claims": [
+      "NEI::update_residue_row"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:push:update_residue_row",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push->crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push bridge owner",
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-     "required_named_hypotheses": [],
-     "status": "OPEN"
+     "required_named_hypotheses": [
+      "NEI::update_residue_row.PacketDomain",
+      "NEI::update_residue_row.PhysicalInterpretation"
+     ],
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
     "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
    ],
-   "claim_ids": [],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "claim_ids": [
+    "NEI::push"
+   ],
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -298194,9 +298271,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:101",
      "domain": "64 checkpoint weights canonical; rhs/power and folded value canonical; query index10..21; basis widths powers of2 up to64; residues at group boundaries<2^34 and four canonical products fit u64; terms advances once, flush at terms mod4=3, output weights equal source reductions.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U10"
     }
    ],
@@ -298207,16 +298284,35 @@
    "inventory_id": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
    "inventory_row": null,
    "medium": [],
-   "named_hypotheses": [],
-   "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
-   "open_transitive_dependencies": [
-    "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row"
+   "named_hypotheses": [
+    {
+     "name": "NEI::push.PacketDomain",
+     "statement": "Slice-Q caller allocation: 64 rows; selected index in bounds; selected original row additions fit U64. Generic model proof has no fixed length/capacity restriction.",
+     "discharged_by": "NEI-arithmetic-root:TX2:101"
+    },
+    {
+     "name": "NEI::push.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX2:101"
+    }
    ],
+   "no_credit_reason": null,
+   "open_transitive_dependencies": [],
    "receipt_sha256": {},
    "receipts": [],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:101",
-   "selected_claims": [],
+   "selected_claims": [
+    "NEI::push"
+   ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
    "source_line": 217,
@@ -301308,15 +301404,20 @@
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
-     "callee_claims": [],
-     "callee_local_status": "OPEN",
+     "callee_claims": [
+      "NEI::push"
+     ],
+     "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node",
      "discharged_by": null,
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node->crates/aspis-r1-cost-probe/src/verifier.rs::BatchedWeights::push",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::accumulate_batched_with_node bridge owner",
      "owner_packets": [],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
-     "required_named_hypotheses": [],
+     "required_named_hypotheses": [
+      "NEI::push.PacketDomain",
+      "NEI::push.PhysicalInterpretation"
+     ],
      "status": "OPEN"
     },
     {
@@ -306463,10 +306564,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NCI::power_limb_at"
+    "NCI::power_limb_at",
+    "NEI::power_limb_at"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -306526,9 +306628,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:120",
      "domain": "64 checkpoint weights canonical; rhs/power and folded value canonical; query index10..21; basis widths powers of2 up to64; residues at group boundaries<2^34 and four canonical products fit u64; terms advances once, flush at terms mod4=3, output weights equal source reductions.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U10"
     }
    ],
@@ -306543,14 +306645,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R178.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::power_limb_at.PacketDomain",
+     "statement": "index<4, any valid typed full carrier; no field canonicality",
+     "discharged_by": "NEI-arithmetic-root:TX2:120"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R178.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::power_limb_at.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX2:120"
     }
    ],
    "no_credit_reason": null,
@@ -306563,10 +306665,18 @@
     "evidence/native-tx2r-20261028/NCI_K001/receipt.json",
     "evidence/native-tx2r-20261028/NCI_K034/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:120",
    "selected_claims": [
-    "NCI::power_limb_at"
+    "NEI::power_limb_at"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
@@ -307419,10 +307529,11 @@
    "caller_domain_obligations": [],
    "canonical_callees": [],
    "claim_ids": [
-    "NCI::residue_limb_at"
+    "NCI::residue_limb_at",
+    "NEI::residue_limb_at"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "owner token plus source-file context",
@@ -307482,9 +307593,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:123",
      "domain": "64 checkpoint weights canonical; rhs/power and folded value canonical; query index10..21; basis widths powers of2 up to64; residues at group boundaries<2^34 and four canonical products fit u64; terms advances once, flush at terms mod4=3, output weights equal source reductions.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U10"
     }
    ],
@@ -307499,14 +307610,14 @@
    ],
    "named_hypotheses": [
     {
-     "discharged_by": null,
-     "name": "NCS_R179.PacketDomain",
-     "statement": "Exact domain and same-input/Result/carrier qualifications in source_claim_text and cited packet; no caller instance inferred."
+     "name": "NEI::residue_limb_at.PacketDomain",
+     "statement": "index<4, any valid typed full carrier; no field canonicality",
+     "discharged_by": "NEI-arithmetic-root:TX2:123"
     },
     {
-     "discharged_by": null,
-     "name": "NCS_R179.PhysicalInterpretation",
-     "statement": "Retained source/library/allocator/runtime/tool and emitted-definition association qualifications of this packet."
+     "name": "NEI::residue_limb_at.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX2:123"
     }
    ],
    "no_credit_reason": null,
@@ -307519,10 +307630,18 @@
     "evidence/native-tx2r-20261028/NCI_K001/receipt.json",
     "evidence/native-tx2r-20261028/NCI_K032/receipt.json"
    ],
-   "reviewed_packet_updates": [],
+   "reviewed_packet_updates": [
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
+    }
+   ],
    "row": "TX2:123",
    "selected_claims": [
-    "NCI::residue_limb_at"
+    "NEI::residue_limb_at"
    ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
@@ -309346,7 +309465,7 @@
    "trust_rows": []
   },
   {
-   "bridge_status": "OPEN",
+   "bridge_status": "CLOSED-CONDITIONAL",
    "callees": [
     {
      "cfg": [],
@@ -309389,11 +309508,11 @@
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::power_limb_at",
      "callee_claims": [
-      "NCI::power_limb_at"
+      "NEI::power_limb_at"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:update_residue_row:power_limb_at",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row->crates/aspis-r1-cost-probe/src/verifier.rs::power_limb_at",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
@@ -309401,19 +309520,19 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R178.PacketDomain",
-      "NCS_R178.PhysicalInterpretation"
+      "NEI::power_limb_at.PacketDomain",
+      "NEI::power_limb_at.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "callee": "crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at",
      "callee_claims": [
-      "NCI::residue_limb_at"
+      "NEI::residue_limb_at"
      ],
      "callee_local_status": "CLOSED-CONDITIONAL",
      "caller": "crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row",
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-edge:update_residue_row:residue_limb_at",
      "id": "call-domain:crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row->crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
@@ -309421,10 +309540,10 @@
      ],
      "required": "Prove this actual use establishes the selected callee PacketDomain, canonical carrier, same inputs, state, Result and ordered effects; resolve conservative alternative targets before pruning.",
      "required_named_hypotheses": [
-      "NCS_R179.PacketDomain",
-      "NCS_R179.PhysicalInterpretation"
+      "NEI::residue_limb_at.PacketDomain",
+      "NEI::residue_limb_at.PhysicalInterpretation"
      ],
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -309435,14 +309554,14 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:125:lossless-row-u32-u64",
      "id": "external:TX2:125:2",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
       "NDF"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     },
     {
      "call": {
@@ -309453,14 +309572,14 @@
       "syntax": "u64::from",
       "targets": []
      },
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:125:lossless-row-u32-u64",
      "id": "external:TX2:125:3",
      "owner": "Aspis S2 lead / crates/aspis-r1-cost-probe/src/verifier.rs::update_residue_row bridge owner",
      "owner_packets": [
       "NDF"
      ],
      "required": "Classify constructor/scalar operation or bind the exact SDK/std/allocator/runtime/callback law in the same execution. Inventory external does not itself imply trust adoption.",
-     "status": "OPEN"
+     "status": "CLOSED"
     }
    ],
    "canonical_callees": [
@@ -309468,10 +309587,11 @@
     "crates/aspis-r1-cost-probe/src/verifier.rs::residue_limb_at"
    ],
    "claim_ids": [
-    "NDF::refresh::02"
+    "NDF::refresh::02",
+    "NEI::update_residue_row"
    ],
-   "composed_reason": "No per-edge caller-domain/physical interpretation certificate is newly instantiated by this evidence audit; packet-internal proofs retain their original scope. Local fragment and model-only evidence cannot fill it.",
-   "composed_status": "OPEN",
+   "composed_reason": "Original snapshot gates preserved; all added content-addressed root and call-domain gates satisfied bottom-up",
+   "composed_status": "CLOSED",
    "discovery_mentions": [
     {
      "association": "exact function ID",
@@ -309604,9 +309724,9 @@
    ],
    "inventory_domain_obligations": [
     {
-     "discharged_by": null,
+     "discharged_by": "NEI-arithmetic-root:TX2:125",
      "domain": "64 checkpoint weights canonical; rhs/power and folded value canonical; query index10..21; basis widths powers of2 up to64; residues at group boundaries<2^34 and four canonical products fit u64; terms advances once, flush at terms mod4=3, output weights equal source reductions.",
-     "status": "OPEN",
+     "status": "CLOSED",
      "unit": "U10"
     }
    ],
@@ -309619,8 +309739,19 @@
    "medium": [
     "Partial/model evidence; no new local bridge"
    ],
-   "named_hypotheses": [],
-   "no_credit_reason": "No unquarantined whole-body bridge with resolved feature association in the merged audited index; inspect discovery mentions for later partial or unindexed claims.",
+   "named_hypotheses": [
+    {
+     "name": "NEI::update_residue_row.PacketDomain",
+     "statement": "Every reached raw row word + corresponding raw U32 power limb * raw U32 basis fits U64; arbitrary flush. All-outcome equality is unrestricted.",
+     "discharged_by": "NEI-arithmetic-root:TX2:125"
+    },
+    {
+     "name": "NEI::update_residue_row.PhysicalInterpretation",
+     "statement": "Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.",
+     "discharged_by": "NEI-arithmetic-root:TX2:125"
+    }
+   ],
+   "no_credit_reason": null,
    "open_transitive_dependencies": [],
    "receipt_sha256": {
     "evidence/native-front2-20261028/NDE_K050/receipt.json": "9a29191242436134cd85320b1d14f6891034f2f8f2be829f7203ea19826af86e",
@@ -309774,10 +309905,19 @@
       "evidence/native-front3b-20261028/NDI_VALIDATOR_REPAIR.md"
      ],
      "prefix": "NDI"
+    },
+    {
+     "prefix": "NEI",
+     "disposition": "New native evidence replaces no old native credit; composed gates remain necessary",
+     "evidence": [
+      "evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json"
+     ]
     }
    ],
    "row": "TX2:125",
-   "selected_claims": [],
+   "selected_claims": [
+    "NEI::update_residue_row"
+   ],
    "source_file": "crates/aspis-r1-cost-probe/src/verifier.rs",
    "source_file_sha256": "8c872d42bdaa245cc540be6b26d17108a5cb40754b8befb79e147f5843b1f756",
    "source_line": 235,

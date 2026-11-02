@@ -12,6 +12,7 @@ import NEB_validate as neb
 import NEB_leaf_updates as leaves
 import NEB_certificates as certificates
 import NEI_ctor_validate
+import NEI_arithmetic_certificates as arithmetic
 obj=lambda p:json.loads(p.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 # Preserve every original check byte-for-byte, adding one strictly scoped
 # external-occurrence class. The original file remains read-only.
@@ -20,6 +21,9 @@ marker="     else:require(False,'unregistered external obligation kind')"
 addition="""     elif ext['kind']=='NEI_CERTIFIED_CTOR_OCCURRENCE':
       _NEI_check_ctor_occurrence(row,o,ext,index,baseline,approved_edges,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':certified-ctor-occurrence')
+     elif ext['kind']=='NEI_ROW_U32_U64_WIDEN':
+      _NEI_check_row_widen(row,o,ext,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':lossless-row-u32-u64')
 """
 assert original.count(marker)==1
 added=original.replace(marker,addition+marker)
@@ -30,11 +34,13 @@ spec=importlib.util.spec_from_file_location('NEI_NEB_ADDITIVE',E/'NEI_NEB_ADDITI
 extended.E=B;extended.R=R;extended.N=B.parent/'native-ledger3-20261029'
 neb=extended
 old_apply=leaves.apply;old_expected=certificates.expected
-PACKETS=obj(E/'NEI_CTOR_PACKETS.json')
+PACKETS=obj(E/'NEI_CTOR_PACKETS.json')+arithmetic.packets()
 INDEX={p['function']:p for p in PACKETS}
 def apply(base):
  out,changes=old_apply(base)
- for p in PACKETS:NEI_ctor_validate.audit(E,R,p,neb,neb.require)
+ for p in PACKETS:
+  if p['route']=='D188_LITERAL_CTOR_FULL_CONTEXT':NEI_ctor_validate.audit(E,R,p,neb,neb.require)
+  else:arithmetic.audit(p,neb)
  for row in out['rows']:
   p=INDEX.get(row['function'])
   if p is None:continue
@@ -66,12 +72,13 @@ def check_ctor_occurrence(row,o,ext,index,base,approved_edges,rc):
  text=source[source.index('impl EbyKDot {'):source.index('    #[inline(always)]',source.index('impl EbyKDot {'))]
  assert text.count('canonical::Dot::new()')==2,'native source does not have those two calls'
 extended._NEI_check_ctor_occurrence=check_ctor_occurrence
+extended._NEI_check_row_widen=arithmetic.check_widen
 
 def new_certificates(base):
  rows={};edges={}
  for r in base['rows']:
   p=INDEX.get(r['function'])
-  if p is None:continue
+  if p is None or p['route']!='D188_LITERAL_CTOR_FULL_CONTEXT':continue
   review=dict(**p['review'],conclusion_hiding=False,statement_and_native_association_checked=True)
   native=dict(path=str(E.relative_to(R)/'NEI_CTOR_VALIDATE.json'),sha256=sha(E/'NEI_CTOR_VALIDATE.json'))
   externals={}
@@ -85,7 +92,9 @@ def new_certificates(base):
  p=INDEX[caller];proofs=p['lean_evidence'];names=[n for x in proofs for n in x['theorems']];inner=sorted(set(h['name'] for r in children for h in r['named_hypotheses']));edge=caller+' -> '+callee
  review=dict(**p['review'],conclusion_hiding=False,statement_and_native_association_checked=True)
  edges[edge]=dict(id='NEI-ctor-two-calls',edge=edge,status='CLOSED',kind='DIRECT_CALL',frozen_revision=base['frozen_revision'],source_body_sha256=cr['frozen_body_sha256'],selected_callee_claims=sorted(set(c for r in children for c in r['selected_claims'])),inner_hypotheses_discharged=inner,hypothesis_discharge_theorems={n:names for n in inner},parts={part:dict(theorems=names) for part in ['packet_domain','canonical_carrier','same_inputs_result','state_ordered_effects','physical_interpretation','native_callsite_association']},lean_evidence=proofs,theorems=names,residual_hypotheses=[],review=review,native_review=dict(path=str(E.relative_to(R)/'NEI_CTOR_VALIDATE.json'),sha256=sha(E/'NEI_CTOR_VALIDATE.json')),trust='P6/D188 semantic transport retained; no older native credit')
- return edges,rows
+ extra_edges,extra_rows=arithmetic.recipes(base,neb)
+ assert not(set(extra_edges)&set(edges)) and not(set(extra_rows)&set(rows))
+ return {**edges,**extra_edges},{**rows,**extra_rows}
 
 def expected(base):
  old_edges,old_rows=old_expected(base);extra_edges,extra_rows=new_certificates(base)

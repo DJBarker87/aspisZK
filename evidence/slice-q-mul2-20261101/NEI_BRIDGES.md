@@ -33,3 +33,7 @@ E005 successfully extracts the exact frozen body with complete Prepared/Accumula
 ## Independent dot constructors and composition
 
 Literal E006 constructors, L063/L067 whole records and nominal/window transport, K021/K022 and K023/K024 actual full private-state/context controls close canonical::Dot::new and EbyKDot::new. NEB-derived rows TX1:110, TX2:076, TX1:107, TX2:073 are CLOSED, one direct edge certified, no old native credit. NEI_VALIDATOR_SOURCE_DELTA.json proves every original NEB check retained verbatim; the added rule binds both TX2 duplicate external constructor entries to their independently certified real callee edge and exact native calls. Ten mutation/invariant controls pass. This does not close either dot function or any other arithmetic member.
+
+## Composed row/getter/push path
+
+Fresh K025/K026 and K027/K028 complete both actual immutable scalar read helpers. L069 derives their same-input Results and every actual Range index domain, plus the lossless all-U32 conversion law. The additional row-widening gate preserves all original checks and binds exactly the two actual line240 u64::from occurrences; it cannot admit another parent or constructor boundary. The row/getter/push and constructor path now closes twelve TX occurrence rows /six functions, with four direct edges. Fourteen mutation/invariant tests pass, including independent row progress when the unrelated dot constructor child is absent. No old native credit restored or required.

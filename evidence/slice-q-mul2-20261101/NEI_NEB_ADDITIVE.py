@@ -196,6 +196,9 @@ def extend(baseline,edges):
      elif ext['kind']=='NEI_CERTIFIED_CTOR_OCCURRENCE':
       _NEI_check_ctor_occurrence(row,o,ext,index,baseline,approved_edges,rc)
       o.update(status='CLOSED',discharged_by=rc['id']+':certified-ctor-occurrence')
+     elif ext['kind']=='NEI_ROW_U32_U64_WIDEN':
+      _NEI_check_row_widen(row,o,ext,rc)
+      o.update(status='CLOSED',discharged_by=rc['id']+':lossless-row-u32-u64')
      else:require(False,'unregistered external obligation kind')
  # Admit rows bottom-up along actual obligations. Resolved-away alternatives
  # remain CLOSED obligations but are not active call dependencies. No real SCC
