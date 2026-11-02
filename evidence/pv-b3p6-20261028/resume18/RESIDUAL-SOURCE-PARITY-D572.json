@@ -1,0 +1,59 @@
+{
+  "source_files": [
+    {
+      "version": "1.94.1",
+      "name": "array/mod.rs",
+      "sha256": "a8b4c0dd1875f7c0149b308f64f3b5015c9958e8a576abd140413c3d51ec4934",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/1.94.1/array/mod.rs.xz"
+    },
+    {
+      "version": "1.94.1",
+      "name": "ops/control_flow.rs",
+      "sha256": "c4664de1505efb255789e06f3fa4d4119ce28617a666595db48f3ab4036c9a04",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/1.94.1/ops/control_flow.rs.xz"
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "array/mod.rs",
+      "sha256": "fa149bb7f1e856350ccbf94cd402f368ec7f613b8a1d1eeeafffe85b5e75277f",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/nightly-2026-06-01/array/mod.rs.xz"
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "ops/control_flow.rs",
+      "sha256": "b2d68f974be47934ec42cc7a54560165c51a4fcb2ec01c1e602d07f36ac82b24",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/nightly-2026-06-01/ops/control_flow.rs.xz"
+    }
+  ],
+  "items": [
+    {
+      "name": "array/mod.rs",
+      "needle": "fn try_from_fn_erased",
+      "bodies": {
+        "1.94.1": "fn try_from_fn_erased<R: [const] Try<Output: [const] Destruct>>(\n    buffer: &mut [MaybeUninit<R::Output>],\n    mut generator: impl [const] FnMut(usize) -> R + [const] Destruct,\n) -> ControlFlow<R::Residual> {\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}",
+        "nightly-2026-06-01": "fn try_from_fn_erased<R: [const] Try<Output: [const] Destruct>>(\n    buffer: &mut [MaybeUninit<R::Output>],\n    mut generator: impl [const] FnMut(usize) -> R + [const] Destruct,\n) -> ControlFlow<R::Residual> {\n    let mut guard = Guard { array_mut: buffer, initialized: 0 };\n\n    while guard.initialized < guard.array_mut.len() {\n        let item = generator(guard.initialized).branch()?;\n\n        // SAFETY: The loop condition ensures we have space to push the item\n        unsafe { guard.push_unchecked(item) };\n    }\n\n    mem::forget(guard);\n    ControlFlow::Continue(())\n}"
+      },
+      "tokens_identical": true
+    },
+    {
+      "name": "ops/control_flow.rs",
+      "needle": "fn branch(self)",
+      "bodies": {
+        "1.94.1": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            ControlFlow::Continue(c) => ControlFlow::Continue(c),\n            ControlFlow::Break(b) => ControlFlow::Break(ControlFlow::Break(b)),\n        }\n    }",
+        "nightly-2026-06-01": "fn branch(self) -> ControlFlow<Self::Residual, Self::Output> {\n        match self {\n            ControlFlow::Continue(c) => ControlFlow::Continue(c),\n            ControlFlow::Break(b) => ControlFlow::Break(ControlFlow::Break(b)),\n        }\n    }"
+      },
+      "tokens_identical": true
+    },
+    {
+      "name": "ops/control_flow.rs",
+      "needle": "fn from_residual(residual:",
+      "bodies": {
+        "1.94.1": "fn from_residual(residual: ControlFlow<B, convert::Infallible>) -> Self {\n        match residual {\n            ControlFlow::Break(b) => ControlFlow::Break(b),\n        }\n    }",
+        "nightly-2026-06-01": "fn from_residual(residual: ControlFlow<B, convert::Infallible>) -> Self {\n        match residual {\n            ControlFlow::Break(b) => ControlFlow::Break(b),\n        }\n    }"
+      },
+      "tokens_identical": true
+    }
+  ],
+  "evidence_class": "token-identity source parity; compiler-cohort V370 D381/D386 retained",
+  "scope": "Initializer body and ControlFlow branch/from_residual only. No destructor or pointer parity inferred."
+}
