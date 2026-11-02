@@ -34,7 +34,9 @@ def FaithfulEncoding (encode : AllocationEvent → Bytes) : Prop := Function.Inj
 def tryAllocate (allocator : Allocator) (encode : AllocationEvent → Bytes)
     (layout : Layout) (owner : Nat) : Q (Option Block) := fun w =>
   let reply := allocator w layout
-  let post := {w with allocator := reply.allocator, errno := reply.errno,
+  let post : State := {w with
+    allocator := reply.allocator
+    errno := reply.errno
     base := {w.base with allocations := w.base.allocations + 1}}
   match reply.answer with
   | .denied => ⟨.returned (.ok none),post,
@@ -101,7 +103,7 @@ theorem failure_world_prefix (allocator : Allocator) (encode : AllocationEvent �
     run.events = [event encode (.request layout),
       event encode (.denied layout (allocator w layout).errno)] ++ diagnostics ∧
     sourceProjection run.outcome = none := by
-  simp only [allocateOrFault,Bind.bind,bind,tryAllocate,h,allocationFault,sourceProjection]
+  simp only [allocateOrFault,Bind.bind,PV_EVH_Runtime.bind,tryAllocate,h,allocationFault,sourceProjection]
   exact ⟨rfl,rfl,rfl,rfl,rfl,rfl⟩
 
 #print axioms denied_retains_heap
