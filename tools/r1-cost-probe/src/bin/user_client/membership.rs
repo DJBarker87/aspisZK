@@ -23,7 +23,7 @@ fn leaf(v:&Value)->Result<PoolV1PairLeafWitnessV1>{
 }
 fn lane(v:&Value)->Result<Vec<PoolV1PairLeafWitnessV1>>{
  let a=crate::public_array(v)?;
- ensure!(a.len()<=1<<20,"lane exceeds tree capacity");
+ ensure!(a.len()<=1<<20u32,"lane exceeds tree capacity");
  let mut out=Ok(Vec::with_capacity(a.len()));let mut i=0;while i<a.len(){out=push_leaf(out,&a[i]);i+=1;}out
 }
 fn push_leaf(out:Result<Vec<PoolV1PairLeafWitnessV1>>,v:&Value)->Result<Vec<PoolV1PairLeafWitnessV1>>{let mut out=out?;out.push(leaf(v)?);Ok(out)}
@@ -39,7 +39,7 @@ fn parent_level(nodes:&[Digest],empty:Digest)->Vec<Digest>{
 }
 fn path(mut nodes:Vec<Digest>,mut index:usize)->(Digest,[Digest;20]){
  let mut siblings=[POOL_V1_PAIR_EMPTY_ROOTS[0];20];
- for level in 0..20{siblings[level]=if (index^1)<nodes.len(){nodes[index^1]}else{POOL_V1_PAIR_EMPTY_ROOTS[level]};index>>=1;nodes=parent_level(&nodes,POOL_V1_PAIR_EMPTY_ROOTS[level]);}
+ for level in 0..20{siblings[level]=if (index^1)<nodes.len(){nodes[index^1]}else{POOL_V1_PAIR_EMPTY_ROOTS[level]};index>>=1u32;nodes=parent_level(&nodes,POOL_V1_PAIR_EMPTY_ROOTS[level]);}
  (nodes[0],siblings)
 }
 fn locate(leaves:&[PoolV1PairLeafWitnessV1],cm:Digest)->(Option<(usize,bool)>,usize){
@@ -80,7 +80,7 @@ fn collect_selection(prepared:&[Lane])->Result<Selection>{
 }
 fn super_path(mut roots:Vec<Digest>,lane:usize,anchor:Digest)->Result<([Digest;3],[bool;3])>{
  let mut supers=[roots[0];3];let mut directions=[false;3];let mut index=lane;
- for level in 0..3{supers[level]=roots[index^1];directions[level]=index%2==1;index>>=1;roots=parent_level(&roots,POOL_V1_PAIR_EMPTY_ROOTS[0]);}
+ for level in 0..3{supers[level]=roots[index^1];directions[level]=index%2==1;index>>=1u32;roots=parent_level(&roots,POOL_V1_PAIR_EMPTY_ROOTS[0]);}
  ensure!(roots[0]==anchor,"complete public leaves do not reconstruct checkpoint");
  Ok((supers,directions))
 }
