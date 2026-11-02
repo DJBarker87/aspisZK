@@ -10,7 +10,7 @@ def stored {A : Type} (out : Buffer A) (a : A)
     (room : out.values.length+1 ≤ out.capacity) : Buffer A :=
   ⟨⟨out.values.val++[a],by
       simpa only [List.length_append,List.length_singleton] using room.trans out.bounded⟩,
-    out.capacity,by simpa only [List.length_append,List.length_singleton] using room,out.bounded⟩
+    out.capacity,by simpa only [alloc.vec.Vec.length,List.length_append,List.length_singleton] using room,out.bounded⟩
 
 theorem stored_length {A : Type} (out : Buffer A) (a : A)
     (room : out.values.length+1 ≤ out.capacity) :
