@@ -19,7 +19,7 @@ def copies (original field seed : Slot) (w : State) : State :=
 
 theorem admit_pair_original (original field seed : Slot) (w : State)
     (hf : Separate field original) (hs : Separate seed original)
-    (i : Nat) (hi : i < original.admit_paird) :
+    (i : Nat) (hi : i < original.initialized) :
     (admit_pair field seed w).memory (original.address+i) = w.memory (original.address+i) := by
   unfold admit_pair
   change (PV_EVH_StackAdmission.write seed _ _).memory _ = _
@@ -30,7 +30,7 @@ theorem admit_pair_original (original field seed : Slot) (w : State)
 
 theorem original_preserved (original field seed : Slot) (w : State)
     (hf : Separate field original) (hs : Separate seed original)
-    (i : Nat) (hi : i < original.admit_paird) :
+    (i : Nat) (hi : i < original.initialized) :
     (copies original field seed w).memory (original.address+i) = w.memory (original.address+i) := by
   unfold copies
   rw [PV_EVH_StackCopy.source_preserved original seed 32 _ hs i hi,
@@ -42,8 +42,8 @@ Source indexing/restoration is independently bound by NativeEntropyValues.
 Actual frame and memcpy association remain P; no native event is omitted here. -/
 theorem delivered_halves (original field seed : Slot) (w : State)
     (a : Array U8 64#usize)
-    (ho : original.admit_paird = 64) (hf : field.admit_paird = 32)
-    (hs : seed.admit_paird = 32)
+    (ho : original.initialized = 64) (hf : field.initialized = 32)
+    (hs : seed.initialized = 32)
     (hfo : Separate field original) (hso : Separate seed original)
     (hsf : Separate seed field)
     (hb : ∀ i, i < 64 → w.memory (original.address+i) =
