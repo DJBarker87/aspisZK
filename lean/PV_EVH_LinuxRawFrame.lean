@@ -28,7 +28,7 @@ theorem consumed_prefix (syscall : Nat → Nat → Array U8 64#usize → World �
   | zero => intro i hi; rfl
   | succ fuel ih =>
     have hlocal := hk offset ho a w
-    simp only [loop]
+    simp only [PV_EVH_LinuxRawControl.loop]
     cases hr : (syscall (address+offset) (64-offset) a w).result with
     | fault e => simp only [hr]; exact hlocal
     | exhausted => simp only [hr]; exact hlocal
