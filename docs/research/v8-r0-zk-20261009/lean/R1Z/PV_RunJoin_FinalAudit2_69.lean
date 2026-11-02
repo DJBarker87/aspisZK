@@ -1,0 +1,20 @@
+import R1Z.PV_RunJoin_PointClaimsSuff69
+import R1Z.PV_RunJoin_NativeClaimsApi69
+import R1Z.PV_RunJoin_NativeSemanticPlan69
+import R1Z.PV_RunJoin_RoundWorkerPlan69
+import R1Z.PV_RunJoin_CommitWorkerPlan69
+import R1Z.PV_RunJoin_NativeAllocatorSequence69
+#print axioms R1Z.PV_RunJoin_ClaimsLoop69.complete
+#print axioms R1Z.PV_RunJoin_PointClaimsSuff69.claims
+#print axioms R1Z.PV_RunJoin_PointClaimsSuff69.complete
+#print axioms R1Z.PV_RunJoin_NativeClaimsApi69.some_ok
+#print axioms R1Z.PV_RunJoin_NativeClaimsApi69.points
+#print axioms R1Z.PV_RunJoin_NativeClaimsApi69.multilinear
+#print axioms R1Z.PV_RunJoin_NativeSemanticSuff69.tail
+#print axioms R1Z.PV_RunJoin_NativeSemanticSuff69.complete
+#print axioms R1Z.PV_RunJoin_NativeSemanticPlan69.complete
+#print axioms R1Z.PV_RunJoin_RoundWorkerReached69.reached
+#print axioms R1Z.PV_RunJoin_RoundWorkerPlan69.complete
+#print axioms R1Z.PV_RunJoin_RoundWorkerPlan69.native
+#print axioms R1Z.PV_RunJoin_CommitWorkerPlan69.complete
+#print axioms R1Z.PV_RunJoin_NativeAllocatorSequence69.complete
