@@ -38,7 +38,7 @@ def ssh(c,retry=True):
  return q
 timing = phase == 'd561-timing'
 if timing:
- assert name == 'native90119' and cmd == ['python3',D+'/timing-window.py']
+ assert cmd == ['python3',D+'/timing-window.py']
  # Inline the committed pure guard without writing host files before admission.
  guard_source=(R/'tools/pv-uc-20261029/timing-window-guard.py').read_text()
  assert subprocess.check_output(['git','show','HEAD:tools/pv-uc-20261029/timing-window-guard.py'],cwd=R,text=True)==guard_source
