@@ -32,7 +32,7 @@ theorem drain_values {A : Type} (out source : Buffer A)
 theorem drain_length {A : Type} (out source : Buffer A)
     (room : out.values.length + source.values.length ≤ out.capacity) :
     (drain out source room).1.values.length = out.values.length + source.values.length := by
-  exact List.length_append _ _
+  exact List.length_append
 
 theorem drain_source {A : Type} (out source : Buffer A)
     (room : out.values.length + source.values.length ≤ out.capacity) :
