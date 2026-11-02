@@ -39,7 +39,9 @@ theorem after_draw (base : ExternalTypes)
   intro mask retry before a
   unfold PV_EVH_Entropy.afterDraw
   simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
-  rw [PV_EVH_NativeEntropyBorrow.restore_array _ before a]
+  have hrestore : (Array.to_slice_mut before).2 (Array.to_slice a) = a :=
+    PV_EVH_NativeEntropyBorrow.restore_array _ before a
+  rw [hrestore]
   rw [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops]
   simp only [bind_tc_ok]
   rw [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops]
