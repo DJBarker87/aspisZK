@@ -78,7 +78,7 @@ theorem source_instance {S : Type} (compress : S → List U8 → Result S)
     · subst pos
       rw [if_pos rfl,finish_binding compress state buffer input hb]
       simp only [finishReference,PV_DL_UpdatePlan.model,PV_DL_UpdatePlan.value,
-        if_neg hn,PV_DL_UpdatePlan.first,PV_DL_UpdatePlan.start,if_pos rfl,
+        if_neg hn,PV_DL_UpdatePlan.first,PV_DL_UpdatePlan.start,if_true,
         List.drop_zero,List.nil_append,PV_DL_BatchPlan.run]
     · rw [if_neg hz]
       have hrem : 64-pos ≤ input.length := by omega
