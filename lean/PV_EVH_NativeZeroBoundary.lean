@@ -12,13 +12,19 @@ theorem array_residual (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
     @ExternalFuns.op122 (types base) (opsNative base heap box ops) =
-      @ExternalFuns.op122 (types base) ops := rfl
+      @ExternalFuns.op122 (types base) ops := by
+  unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
+  rw [R1Z.PV_B2_F_RawNative.preserved_122]
+  rfl
 
 theorem scalar_residual (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
     (box : R1Z.PV_RunJoin_WeightInstalled46.Box) (ops : @ExternalFuns (types base)) :
     @ExternalFuns.op123 (types base) (opsNative base heap box ops) =
-      @ExternalFuns.op123 (types base) ops := rfl
+      @ExternalFuns.op123 (types base) ops := by
+  unfold opsNative R1Z.PV_RunJoin_WeightInstalled46.selected
+  rw [R1Z.PV_B2_F_RawNative.preserved_123]
+  rfl
 
 /-- The extracted source dictionary is precisely Array -> scalar -> op123.
 This equation exposes the residual operation at the actual native selection;
@@ -35,7 +41,8 @@ theorem emitted_array (base : ExternalTypes)
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops
   intro n a
-  rfl
+  change (opsNative base heap box ops).op122 _ a = _
+  rw [array_residual]
 
 theorem emitted_scalar (base : ExternalTypes)
     (heap : R1Z.PV_RunJoin_WeightInstalled46.Heap)
@@ -48,7 +55,8 @@ theorem emitted_scalar (base : ExternalTypes)
   letI : ExternalTypes := types base
   letI : ExternalFuns := opsNative base heap box ops
   intro x
-  rfl
+  change (opsNative base heap box ops).op123 _ x = _
+  rw [scalar_residual]
 
 #print axioms array_residual
 #print axioms scalar_residual
