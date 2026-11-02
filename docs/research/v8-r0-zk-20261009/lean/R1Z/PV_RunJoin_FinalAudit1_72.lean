@@ -1,0 +1,56 @@
+import R1Z.PV_RunJoin_NativeMultilinear72
+import R1Z.PV_RunJoin_PointsTotal72
+import R1Z.PV_RunJoin_ProducedRows72
+import R1Z.PV_RunJoin_BoolNegation72
+import R1Z.PV_RunJoin_MaterialBackendBalanced72
+import R1Z.PV_RunJoin_CaptureBuilt72
+import R1Z.PV_RunJoin_SemanticPlan72
+import R1Z.PV_RunJoin_NativeSampleFields72
+import R1Z.PV_RunJoin_NativeAssignment72
+import R1Z.PV_RunJoin_InterpolationFields72
+import R1Z.PV_RunJoin_NativeQuarticEq72
+import R1Z.PV_RunJoin_InterpolationSteps72
+import R1Z.PV_RunJoin_NativeInterpolation72
+import R1Z.PV_RunJoin_NativeRoundPolynomial72
+import R1Z.PV_RunJoin_PolyBlockTotal72
+import R1Z.PV_RunJoin_NativeRoundContinuation72
+import R1Z.PV_RunJoin_ByteRoundtripInspect72
+import R1Z.PV_RunJoin_ByteArrayFour72
+import R1Z.PV_RunJoin_PolyPayloadWindow72
+set_option autoImplicit false
+
+#print axioms R1Z.PV_RunJoin_BoolNegation72.complete
+#print axioms R1Z.PV_RunJoin_ByteArrayFour72.complete
+#print axioms R1Z.PV_RunJoin_CaptureBuilt72.complete
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op55
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op56
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op57
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op59
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op64
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op67
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op70
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op73
+#print axioms R1Z.PV_RunJoin_InterpolationFields72.op74
+#print axioms R1Z.PV_RunJoin_InterpolationSteps72.complete
+#print axioms R1Z.PV_RunJoin_InterpolationSteps72.fix_congr
+#print axioms R1Z.PV_RunJoin_MaterialBackendBalanced72.complete
+#print axioms R1Z.PV_RunJoin_NativeAssignment72.complete
+#print axioms R1Z.PV_RunJoin_NativeAssignment72.semantic
+#print axioms R1Z.PV_RunJoin_NativeInterpolation72.complete
+#print axioms R1Z.PV_RunJoin_NativeInterpolation72.dictionary
+#print axioms R1Z.PV_RunJoin_NativeMultilinear72.complete
+#print axioms R1Z.PV_RunJoin_NativeQuarticEq72.eq
+#print axioms R1Z.PV_RunJoin_NativeQuarticEq72.ne_self
+#print axioms R1Z.PV_RunJoin_NativeRoundContinuation72.complete
+#print axioms R1Z.PV_RunJoin_NativeRoundPolynomial72.complete
+#print axioms R1Z.PV_RunJoin_NativeSampleFields72.complex
+#print axioms R1Z.PV_RunJoin_NativeSampleFields72.one
+#print axioms R1Z.PV_RunJoin_NativeSampleFields72.quartic
+#print axioms R1Z.PV_RunJoin_PointsTotal72.complete
+#print axioms R1Z.PV_RunJoin_PointsTotal72.loop
+#print axioms R1Z.PV_RunJoin_PointsTotal72.update
+#print axioms R1Z.PV_RunJoin_PolyBlockTotal72.complete
+#print axioms R1Z.PV_RunJoin_PolyPayloadWindow72.complete
+#print axioms R1Z.PV_RunJoin_ProducedRows72.native
+#print axioms R1Z.PV_RunJoin_ProducedRows72.selected
+#print axioms R1Z.PV_RunJoin_SemanticPlan72.complete

@@ -1,0 +1,62 @@
+import R1Z.PV_RunJoin_PointsReverse72
+import R1Z.PV_RunJoin_LiftRows72
+import R1Z.PV_RunJoin_SemanticSuff72
+import R1Z.PV_RunJoin_BackendBuildBalanced72
+import R1Z.PV_RunJoin_CaptureTail72
+import R1Z.PV_RunJoin_NativeMerge72
+import R1Z.PV_RunJoin_AllocatorCompat72
+import R1Z.PV_RunJoin_PointRepr72
+import R1Z.PV_RunJoin_InterpolationInspect72
+import R1Z.PV_RunJoin_SumcheckPlan72
+import R1Z.PV_RunJoin_InterpolationCongruence72
+import R1Z.PV_RunJoin_InterpolationInput72
+import R1Z.PV_RunJoin_RoundAfterPolynomial72
+import R1Z.PV_RunJoin_PolyChannelsTotal72
+import R1Z.PV_RunJoin_NativeSumcheckArithmetic72
+import R1Z.PV_RunJoin_WideLimbsParse72
+import R1Z.PV_RunJoin_ByteWord72
+import R1Z.PV_RunJoin_PolyCellCanonical72
+set_option autoImplicit false
+
+#print axioms ProverRwFull.host_sumcheck.interpolation_basis_steps
+#print axioms R1Z.PV_RunJoin_AllocatorCompat72.success
+#print axioms R1Z.PV_RunJoin_BackendBuildBalanced72.complete
+#print axioms R1Z.PV_RunJoin_BackendBuildBalanced72.size_of_guard
+#print axioms R1Z.PV_RunJoin_ByteWord72.complete
+#print axioms R1Z.PV_RunJoin_CaptureTail72.complete
+#print axioms R1Z.PV_RunJoin_InterpolationCongruence72.accumulate
+#print axioms R1Z.PV_RunJoin_InterpolationCongruence72.cell
+#print axioms R1Z.PV_RunJoin_InterpolationCongruence72.extend
+#print axioms R1Z.PV_RunJoin_InterpolationCongruence72.extend_loop
+#print axioms R1Z.PV_RunJoin_InterpolationCongruence72.shift
+#print axioms R1Z.PV_RunJoin_InterpolationInput72.cells
+#print axioms R1Z.PV_RunJoin_InterpolationInput72.complete
+#print axioms R1Z.PV_RunJoin_LiftRows72.complete
+#print axioms R1Z.PV_RunJoin_LiftRows72.helper
+#print axioms R1Z.PV_RunJoin_LiftRows72.row_length
+#print axioms R1Z.PV_RunJoin_LiftRows72.shape
+#print axioms R1Z.PV_RunJoin_LiftRows72.vec_length
+#print axioms R1Z.PV_RunJoin_NativeMerge72.complete
+#print axioms R1Z.PV_RunJoin_NativeSumcheckArithmetic72.boundary
+#print axioms R1Z.PV_RunJoin_NativeSumcheckArithmetic72.boundary_source
+#print axioms R1Z.PV_RunJoin_NativeSumcheckArithmetic72.evaluation
+#print axioms R1Z.PV_RunJoin_NativeSumcheckArithmetic72.evaluation_source
+#print axioms R1Z.PV_RunJoin_PointRepr72.cells
+#print axioms R1Z.PV_RunJoin_PointRepr72.complete
+#print axioms R1Z.PV_RunJoin_PointsReverse72.next_pos
+#print axioms R1Z.PV_RunJoin_PointsReverse72.next_zero
+#print axioms R1Z.PV_RunJoin_PointsReverse72.pred_val
+#print axioms R1Z.PV_RunJoin_PolyCellCanonical72.complete
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.accumulate
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.borrow
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.complete
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.component
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.reconstruct
+#print axioms R1Z.PV_RunJoin_PolyChannelsTotal72.store
+#print axioms R1Z.PV_RunJoin_RoundAfterPolynomial72.reached
+#print axioms R1Z.PV_RunJoin_RoundAfterPolynomial72.run
+#print axioms R1Z.PV_RunJoin_SemanticSuff72.complete
+#print axioms R1Z.PV_RunJoin_SumcheckPlan72.complete
+#print axioms R1Z.PV_RunJoin_WideLimbsParse72.Canonical
+#print axioms R1Z.PV_RunJoin_WideLimbsParse72.complete
+#print axioms R1Z.PV_RunJoin_WideLimbsParse72.limbs
