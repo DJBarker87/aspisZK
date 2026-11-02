@@ -108,7 +108,9 @@ tim=(out/'time.log').read_text()
 def field(s):
  m=re.search(s+r':\s*(.+)',tim);return m[1] if m else None
 actual_exit=field('Exit status')
-actual_exit=int(actual_exit) if actual_exit is not None else r.returncode
+# GNU time prints Exit status: 0 for a signal-terminated child. The remote
+# systemd/shell status remains authoritative in that case.
+actual_exit=r.returncode if r.returncode != 0 else int(actual_exit) if actual_exit is not None else 0
 receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=source_revision_at_launch,expected_phase=phase,print_axioms='N/A native/extraction; Lean results separately audited',limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 # Full admission inventories stay on the host; retain decisions and a byte hash.
