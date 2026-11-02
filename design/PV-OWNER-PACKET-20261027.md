@@ -405,3 +405,14 @@ The same code shows that the shipped client is the devnet fixture harness. note(
 ## OWNER DECISION 2026-10-29 (LOG D524): D520 option (U) ADOPTED
 
 Owner's reply: "u". The privacy claim's client is a minimal USER client. It reads the spend witness (note key, salt, value, recipient) from a user wallet file through the N7 raw-fd pipe pattern, replacing the fixture derivation. The prover call, the publication path and the on-chain programs are unchanged. It is written extraction-first and carries the whole approved bundle (D474(C), getrandom, the item-6 recipe with constant-time decoding, and N7). Gates: the three ELFs byte-identical; a differential against the harness on the fixture notes; D359(A) timing; the constant-time check; a new client pin. This also settles item 5 (client scope): the honest-user domain of D338/D342(A) is "spends the shipped user client prepares".
+
+## Decision request D574 (2026-11-02): secrets left in memory when the client aborts
+
+**Finding (LOG D572).** The client bundle you approved (D474(C), adopted in D537) builds the client with panic=abort, so a panic prints nothing. But abort performs no stack cleanup: on a panic, secret values still on the stack (note keys, salts, mask material) are not wiped before the process ends. Normally the operating system reclaims the memory and nothing is visible. The exception is a readable process image left behind, chiefly a core dump, which would contain those secrets. Core dumps fall within the L3 side-channel level of the privacy contract.
+
+**Options.**
+- (A) Keep panic=abort, and have the client make itself non-dumpable at startup: prctl(PR_SET_DUMPABLE, 0) plus setrlimit(RLIMIT_CORE, 0). That removes the core-dump image and also blocks same-user ptrace attach. It is about 5 lines in the user client (D524), checked by the same gates (ELFs byte-identical, the differential, timing) and by a test that a forced panic leaves no core file.
+- (B) Switch the client to panic=unwind, so Drop-based zeroisation runs during unwinding, with the constant panic hook kept so nothing is printed. Not recommended: it reverses part of D474(C), adds unwinding paths and code size, and still leaves the core-dump image unless (A) is added as well.
+- (C) Do nothing, and record core dumps as an L3 residual outside the guarantee. Not recommended: the privacy contract places side channels inside scope.
+
+**Recommendation: (A).** It closes the residual image channel cheaply, without reopening the D474(C) diagnostics decision, and it fits into the user-client work already under way.
