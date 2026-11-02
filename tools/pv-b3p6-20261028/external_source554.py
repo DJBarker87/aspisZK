@@ -109,7 +109,7 @@ theorem external_add_reference554 (value : aspis_core.field.QM31) (sums : Limbs6
 end PV_B3P_Association554227
 '''
 emit(L/'PV_B3P_ExternalAdd554227.lean',s)
-s='import PV_B3P_ExternalGroup554227\nimport PV_B3P_ExternalSums554227\nimport PV_B3P_ExternalAdd554227\nimport PV_B3P_P227_03b\nimport PV_B3P_LinkDefinitions13227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head
+s='import PV_B3P_BindBranch12227\nimport PV_B3P_ExternalGroup554227\nimport PV_B3P_ExternalSums554227\nimport PV_B3P_ExternalAdd554227\nimport PV_B3P_P227_03b\nimport PV_B3P_LinkDefinitions13227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head
 s+='''
 def external_source554 (state : Array aspis_core.field.QM31 16#usize) :
     Result (Array aspis_core.field.QM31 16#usize) := do
@@ -146,7 +146,7 @@ for j,m in enumerate(steps):
  for native,law in [('external_group227','external_group_reference554'),('global_sums227','external_sums_reference554'),('add_global227','external_add_reference554')]:
   if 'reference_poseidon.'+native in expr:s+=indent+'rw ['+law+']\n'
  s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
-s+=indent+'simp only [bind_tc_ok]\n'
+s+=indent+'exact PV_B3P_Binding12227.bind_return12 _\n'
 s+='''
 theorem external_source_link554 :
     PV_B3P_Links13227.PV_B3P_Link_poseidon_external_linear_lazy external_source554 :=

@@ -1,3 +1,4 @@
+import PV_B3P_BindBranch12227
 import PV_B3P_ExternalGroup554227
 import PV_B3P_ExternalSums554227
 import PV_B3P_ExternalAdd554227
@@ -359,7 +360,7 @@ theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usi
                 rw [external_add_reference554]
                 apply bind_equal9
                 intro q63
-                simp only [bind_tc_ok]
+                exact PV_B3P_Binding12227.bind_return12 _
 
 theorem external_source_link554 :
     PV_B3P_Links13227.PV_B3P_Link_poseidon_external_linear_lazy external_source554 :=
