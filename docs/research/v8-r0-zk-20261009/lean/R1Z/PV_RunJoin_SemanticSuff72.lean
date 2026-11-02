@@ -11,7 +11,8 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (runtime : @PV_RunJoin_AllocatorWorld63.Runtime (types base) S F)
     (world : PV_FXM_ReserveWorld.World S F)
     (self : @host_semantic.SemanticOracle (types base)) (point : Array Q 10#usize)
-    (rows : PV_RunJoin_NativePointClaims72.Rows self.columns)
+    (rows : letI : ExternalTypes := types base
+      PV_RunJoin_NativePointClaims72.Rows self.columns)
     (terminal : letI : ExternalTypes := types base
       ∀ claims, @host_semantic.point_claims (types base)
         (opsNative base heap box ops runtime world) self.columns point=ok (.Ok claims) →

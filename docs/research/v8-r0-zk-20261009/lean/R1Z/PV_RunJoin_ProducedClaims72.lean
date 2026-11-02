@@ -13,8 +13,9 @@ theorem complete {S F : Type} (base : ExternalTypes) (heap : Heap) (box : Box)
     (point : Array Q 10#usize) :
     letI : ExternalTypes := types base
     ∃ out,@host_semantic.point_claims (types base)
-      (opsNative base heap box ops runtime world) p.val.sem.columns point=ok (.Ok out) :=
-  PV_RunJoin_NativePointClaims72.complete base heap box ops runtime world p.val.sem.columns point
+      (opsNative base heap box ops runtime world) p.val.sem.columns point=ok (.Ok out) := by
+  letI : ExternalTypes := types base
+  exact PV_RunJoin_NativePointClaims72.complete base heap box ops runtime world p.val.sem.columns point
     (PV_RunJoin_ProducedRows72.native base heap box ops runtime world p)
 
 #print axioms complete
