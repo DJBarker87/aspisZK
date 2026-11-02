@@ -105,6 +105,14 @@ def field(s):
 actual_exit=field('Exit status')
 actual_exit=int(actual_exit) if actual_exit is not None else r.returncode
 receipt=dict(target=run,exit=actual_exit,transport_exit=r.returncode,wall=field(r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\)'),peak_rss_kib=field(r'Maximum resident set size \(kbytes\)'),swap=field('Swaps'),source_revision=source_revision_at_launch,expected_phase=phase,print_axioms='Compilation only; new top theorem axioms must be audited separately',source_sha256=source_sha,module=module,limits=dict(MemoryHigh='6G',MemoryMax='8G',MemorySwapMax=0,TasksMax=64))
+log=(out/'output.log').read_text()
+results=[json.loads(line[len('LEAN_RESULT '):]) for line in log.splitlines() if line.startswith('LEAN_RESULT ')]
+if results:
+ assert len(results)==1
+ receipt['elaboration_result']=results[0]
+receipt['source_git_blob']=subprocess.check_output(['git','rev-parse',source_revision_at_launch+':'+source],cwd=R,text=True).strip()
+receipt['print_axioms_lines']=[' '.join(s.split()) for s in re.findall(r"^('[^']+' (?:depends on axioms: \[[^\]]*\]|does not depend on any axioms))",log,re.M|re.S)]
+if receipt['print_axioms_lines']:receipt['print_axioms']=receipt['print_axioms_lines']
 (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
 # Full admission inventories stay on the host; retain decisions and a byte hash.
 for f in ['admission-before.json','admission-launch.json','admission-barrier.json']:

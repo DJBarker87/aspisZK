@@ -12,6 +12,18 @@ roots=json.loads((H/'lean-roots.json').read_text());objects=H/'lean-objects';obj
 J=json.loads(Path('/home/dombarker/project-offloads/r1-privacy-build-integration-20261019/env/J.json').read_text())
 env=dict(os.environ,PATH=J['PATH'],LEAN_PATH=':'.join([str(objects),*roots]),LEAN_SYSROOT=J['LEAN_SYSROOT'],ELAN_TOOLCHAIN=J['ELAN_TOOLCHAIN'])
 obj=objects/(module.replace('.','/')+'.olean');obj.parent.mkdir(parents=True,exist_ok=True)
+private_objects={}
+for q in objects.rglob('*.olean'):
+ name=str(q.relative_to(objects))[:-6].replace('/','.')
+ candidates=[json.loads(v.read_text()) for v in D.glob('*.json')]
+ candidates=[v for v in candidates if v.get('module')==name and v.get('exit')==0]
+ assert candidates,('own object has no successful source receipt',name)
+ old=sorted(candidates,key=lambda v:int(v['id']))[-1]
+ digest=hashlib.sha256(q.read_bytes()).hexdigest()
+ assert digest==old['object_sha256']
+ own_source=H/'lean'/(name.replace('.','/')+'.lean')
+ assert hashlib.sha256(own_source.read_bytes()).hexdigest()==old['source_sha256']
+ private_objects[name]=dict(object_sha256=digest,source_sha256=old['source_sha256'],attempt=old['id'])
 cmd=[J['LEAN'],'-M7000','-o',str(obj),str(p)]
 start=time.monotonic()
 try:
@@ -25,4 +37,6 @@ print(r.stdout,end='');print(r.stderr,end='',file=sys.stderr)
 record=dict(id=ident,module=module,source_sha256=sha,command=cmd,lean_path=env['LEAN_PATH'],exit=r.returncode,wall=time.monotonic()-start,object_sha256=hashlib.sha256(obj.read_bytes()).hexdigest() if r.returncode==0 else None,failure_class=None if r.returncode==0 else ('proof_or_elaboration_timeout' if timed_out else 'environment' if re.search(r'object file .*does not exist|unknown module prefix|unknown package',r.stdout+r.stderr) else 'elaboration'))
 cg=Path('/sys/fs/cgroup'+Path('/proc/self/cgroup').read_text().split('0::')[1].strip())
 record['cgroup']={n:(cg/n).read_text().strip() for n in ['memory.peak','memory.high','memory.max','memory.swap.current','memory.swap.max','memory.events','pids.max','pids.events']}
+record['verified_private_objects_before_compile']=private_objects
+record['external_resolution_sha256']=hashlib.sha256((H/'lean-authority-check.json').read_bytes()).hexdigest()
 out.write_text(json.dumps(record,indent=2)+'\n');print('LEAN_RESULT',json.dumps(record),flush=True);raise SystemExit(r.returncode)
