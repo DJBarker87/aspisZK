@@ -63,6 +63,8 @@ theorem source_reference (N : Type) (input : Slice U8) (origin : Nat) :
     simp only [interpreted,source,blockValues,PV_AL_SplitCarrier.reference,
       PV_AL_SplitCarrier.blockSlice,PV_AL_SplitCarrier.values,PV_CBL_SplitModel.block,Nat.zero_add]
   · apply Subtype.ext
+    simp only [source,values,sliceRawFromRawParts,ptrSliceFromRawParts,
+      metadataFromRawParts,aggregate,advance,PV_AL_SplitCarrier.tailSlice,Nat.zero_add]
     change (input.val.drop ((input.val.length/64)*64)).take
       (input.val.length-(input.val.length/64)*64)=input.val.drop ((input.val.length/64)*64)
     rw [←List.length_drop]
@@ -95,8 +97,7 @@ theorem consumed_instance (base : ProverRwFull.ExternalTypes)
         (PV_AL_SplitNativeShape.Types base)
         (PV_AL_SplitSelected.selected base ops)).split_blocks
           (PV_AL_SplitNativeShape.nativeTrait base ops 6) input := by
-  rw [source_reference,PV_AL_SplitSelected.consumed]
-  rfl
+  rw [source_reference,PV_AL_SplitSelected.consumed] <;> rfl
 
 #print axioms typed_roundtrip
 #print axioms typed_projection_injective
