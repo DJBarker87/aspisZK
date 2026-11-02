@@ -24,3 +24,12 @@ if '--check' in sys.argv:
 else:
  p.write_text(body);(E/'zero-law-replay.json').write_text(json.dumps(record,indent=2)+'\n')
 print('PASS source-identical deployed zeroize law replay')
+
+v=x['modules']['R1Z/PV_RDCD_ZeroSelected']
+raw=subprocess.check_output(['git','show',rev+':'+v['path']]);assert sha(raw)==v['sha256']
+text=raw.decode().replace('import R1Z.PV_RDCD_ZeroWorld','import PV_EVH_DeployedZeroWorld')
+text=text.replace('R1Z.PV_RDCD_ZeroSelected','PV_EVH_DeployedZeroSelected').replace('PV_RDCD_ZeroWorld','PV_EVH_DeployedZeroWorld')
+p=Path('lean/PV_EVH_DeployedZeroSelected.lean')
+if '--check' in sys.argv:assert p.read_text()==text
+else:p.write_text(text)
+print('PASS source-identical deployed zeroize selected-law replay')
