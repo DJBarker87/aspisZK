@@ -4,11 +4,18 @@ import json,hashlib,re,subprocess,shlex,time
 E=Path('evidence/pv-evh10-20261102');H='/home/dombarker/project-offloads/codex-pv-evh-20261029'
 sha=lambda b:hashlib.sha256(b).hexdigest()
 rows=[json.loads(p.read_text()) for p in sorted(E.glob('receipt-*.json'))]
-ids=[r['attempt'] for r in rows];assert len(ids)==len(set(ids)) and len(ids)<=100
-old=sorted(a for a in ids if a<79500);new=sorted(a for a in ids if a>=79500)
+ids=[r['attempt'] for r in rows];assert len(ids)==len(set(ids)) and len(ids)<=183
+old=sorted(a for a in ids if a<79500)
+new=sorted(a for a in ids if 79500<=a<=79596)
+late=sorted(a for a in ids if 90200<=a<=90296)
+resume=[a for a in ids if a>=79565]
+assert len(resume)<=100
 assert old==list(range(79362,79362+len(old))) and len(old)<=18
 assert not new or len(old)==18
 assert new==list(range(79500,79500+len(new)))
+assert len(new)<=82
+assert not late or len(new)==82
+assert late==list(range(90200,90200+len(late)))
 prep={sha(p.read_bytes()) for p in list(E.glob('prepare-*.json'))+list((E/'prepare-history').glob('*.json'))}
 accepted=[]
 for r in rows:
@@ -55,5 +62,5 @@ for v in rows:
 (E/'host-final.json').write_text(json.dumps(host,indent=2)+'\n')
 for p in E.rglob('*'):
  if p.is_file():assert p.stat().st_size<=20*1024*1024,p
-summary=dict(status='PASS focused evidence only; native task incomplete',baseline='d88f951fd4725367ea93b58fb09f8ddc37856ca4',attempts=len(rows),accepted=len(accepted),failed=len(rows)-len(accepted),remaining=100-len(rows),inherited_remaining=18-len(old),next_fresh=79362+len(old) if len(old)<18 else 79500+len(new),audits_untouched=[79397,79398,79399,79597,79598,79599],rows_removed=[],native=0,kani=0,release_replay=False,live_scopes=False,guard_sha256=sha(Path('tools/pv-evh10-20261102/compile.py').read_bytes()))
+summary=dict(status='PASS focused evidence only; native task incomplete',baseline='efc985602e',attempts=len(rows),accepted=len(accepted),failed=len(rows)-len(accepted),resume_attempts=len(resume),remaining=100-len(resume),inherited_remaining=max(0,82-len(new)),next_fresh=79500+len(new) if len(new)<82 else 90200+len(late),audits_untouched=[79397,79398,79399,79597,79598,79599,90297,90298,90299],axioms_mode='SUMMARY-BASED cached module lists; full-data NEP audit/coherence not established',rows_removed=[],native=0,kani=0,release_replay=False,live_scopes=False,guard_sha256=sha(Path('tools/pv-evh10-20261102/compile.py').read_bytes()))
 (E/'validation.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))
