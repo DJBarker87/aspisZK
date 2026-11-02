@@ -4,6 +4,18 @@ import subprocess,json,shlex,sys,time,hashlib,re
 E=Path('evidence/pv-evh10-20261102'); H='/home/dombarker/project-offloads/codex-pv-evh-20261029';host='dombarker@100.108.41.90'
 a=int(sys.argv[1]);assert 79362<=a<=79399 or 79500<=a<=79599
 assert not (E/f'submission-{a}.json').exists()
+charged=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
+assert len(charged)<100, 'D551 budget exhausted'
+audit_ids={79397,79398,79399,79597,79598,79599}
+old_ids={r['attempt'] for r in charged if 79362<=r['attempt']<=79396}
+if a not in audit_ids:
+ if a<79500:
+  assert len(old_ids)<18 and a==79362+len(old_ids), 'consume 18 inherited attempts in order'
+ else:
+  assert len(old_ids)==18, '18 inherited attempts first'
+  new_ids={r['attempt'] for r in charged if 79500<=r['attempt']<=79596}
+  assert a==79500+len(new_ids), 'fresh new-block order'
+
 module=sys.argv[2] if len(sys.argv)>2 else 'PV_EVH_Interface'
 assert module.startswith('PV_EVH_')
 assert module != 'PV_EVH_FixtureConsumer', 'lead-only 16 GiB consumer; worker launch forbidden'

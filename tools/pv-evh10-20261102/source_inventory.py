@@ -6,7 +6,7 @@ import subprocess,json,hashlib,shlex,sys
 E=Path('evidence/pv-evh10-20261102')
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def git(args):return subprocess.check_output(['git']+args)
-branch='codex/pv-uc-20261029';rev=git(['rev-parse',branch]).decode().strip()
+branch='codex/pv-uc-20261029';rev='9917a5b8df742db3c7ca4c1c080e6a0ef1a8f5b6'
 paths=['tools/r1-cost-probe/src/bin/devnet_spend/diagnostics.rs','tools/r1-cost-probe/build-client.sh','tools/r1-cost-probe/Cargo.toml']
 client=[]
 for p in paths:
