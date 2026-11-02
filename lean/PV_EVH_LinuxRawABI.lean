@@ -28,19 +28,19 @@ def word (ret : Int) : Nat :=
 theorem signed_range (n : Nat) (h : n < modulus) :
     -(half : Int) ≤ signed n ∧ signed n < (half : Int) := by
   unfold signed
-  split <;> unfold half modulus at * <;> omega
+  split <;> simp only [half,modulus] at * <;> omega
 
 theorem signed_word (ret : Int)
     (lo : -(half : Int) ≤ ret) (hi : ret < (half : Int)) :
     signed (word ret) = ret := by
   unfold signed word
-  split <;> split <;> unfold half modulus at * <;> omega
+  split <;> split <;> simp only [half,modulus] at * <;> omega
 
 theorem word_range (ret : Int)
     (lo : -(half : Int) ≤ ret) (hi : ret < (half : Int)) :
     word ret < modulus := by
   unfold word
-  split <;> unfold half modulus at * <;> omega
+  split <;> simp only [half,modulus] at * <;> omega
 
 /-- All suffix arguments fit the actual 64-bit registers without wrapping,
 provided the original64 machine interval is valid. This numeric premise must
