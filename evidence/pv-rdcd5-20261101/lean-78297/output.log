@@ -1,0 +1,503 @@
+PV_AL_SplitFlat.copy_range : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.Usize →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+PV_AL_SplitFlat.copy_range_loop : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+      Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+PV_AL_SplitFlat.copy_range_loop.body : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+      Aeneas.Std.Usize →
+        Aeneas.Std.Result
+          (Aeneas.Std.ControlFlow (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × Aeneas.Std.Usize)
+            (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8))
+PV_AL_SplitFlat.split_flat_reference : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize →
+    Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+      Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 →
+        Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8 × Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+@PV_CBL_PopSlices.pop_slices_reference : {T : Type} →
+  Aeneas.Std.core.marker.Copy T →
+    Aeneas.Std.Slice T → Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Result (Option T × Aeneas.Std.alloc.vec.Vec T)
+@PV_CBL_PopSlices.pop_slices_reference_loop : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.alloc.vec.Vec T → Aeneas.Std.Usize → Aeneas.Std.Usize → Aeneas.Std.Result (Aeneas.Std.alloc.vec.Vec T)
+@PV_CBL_PopSlices.pop_slices_reference_loop.body : {T : Type} →
+  Aeneas.Std.Slice T →
+    Aeneas.Std.Usize →
+      Aeneas.Std.alloc.vec.Vec T →
+        Aeneas.Std.Usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.ControlFlow (Aeneas.Std.alloc.vec.Vec T × Aeneas.Std.Usize) (Aeneas.Std.alloc.vec.Vec T))
+@R1Z.PV_AL_BlockPrefix.blocks : {T : Type} → List T → ℕ → ℕ → List (List T)
+@R1Z.PV_AL_BlockPrefix.concatenation : ∀ {T : Type} (xs : List T) (size count : ℕ),
+  count * size ≤ xs.length → (R1Z.PV_AL_BlockPrefix.blocks xs size count).flatten = List.take (count * size) xs
+@R1Z.PV_AL_BlockPrefix.length : ∀ {T : Type} (xs : List T) (size count : ℕ),
+  (R1Z.PV_AL_BlockPrefix.blocks xs size count).length = count
+@R1Z.PV_AL_BlockPrefix.representation : ∀ {T : Type} (xs : List T) (size count : ℕ),
+  R1Z.PV_AL_BlockPrefix.blocks xs size count = List.map (R1Z.PV_CBL_SplitModel.block xs size) (List.range count)
+R1Z.PV_AL_RangeInvariant.advance : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out next : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (lo : ℕ) (i : Aeneas.Std.Usize),
+  lo ≤ ↑i →
+    ∀ (hi : ↑i < (↑v).length),
+      ↑out = R1Z.PV_AL_RangeLists.segment (↑v) lo ↑i →
+        ↑next = ↑out ++ [(↑v)[↑i]] → ↑next = R1Z.PV_AL_RangeLists.segment (↑v) lo (↑i + 1)
+R1Z.PV_AL_RangeInvariant.capacity : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (lo : ℕ) (i last : Aeneas.Std.Usize),
+  ↑last ≤ (↑v).length →
+    ↑i < ↑last → lo ≤ ↑i → ↑out = R1Z.PV_AL_RangeLists.segment (↑v) lo ↑i → (↑out).length < Aeneas.Std.Usize.max
+@R1Z.PV_AL_RangeLists.advance : ∀ {T : Type} (xs : List T) (lo i : ℕ),
+  lo ≤ i →
+    ∀ (hi : i < xs.length), R1Z.PV_AL_RangeLists.segment xs lo i ++ [xs[i]] = R1Z.PV_AL_RangeLists.segment xs lo (i + 1)
+@R1Z.PV_AL_RangeLists.initial_segment : ∀ {T : Type} (xs : List T) (hiEnd : ℕ),
+  R1Z.PV_AL_RangeLists.segment xs 0 hiEnd = List.take hiEnd xs
+@R1Z.PV_AL_RangeLists.length : ∀ {T : Type} (xs : List T) (lo hiEnd : ℕ),
+  lo ≤ hiEnd → hiEnd ≤ xs.length → (R1Z.PV_AL_RangeLists.segment xs lo hiEnd).length = hiEnd - lo
+@R1Z.PV_AL_RangeLists.segment : {T : Type} → List T → ℕ → ℕ → List T
+@R1Z.PV_AL_RangeLists.suffix : ∀ {T : Type} (xs : List T) (lo : ℕ),
+  R1Z.PV_AL_RangeLists.segment xs lo xs.length = List.drop lo xs
+@R1Z.PV_AL_RangeLists.zero : ∀ {T : Type} (xs : List T) (lo : ℕ), R1Z.PV_AL_RangeLists.segment xs lo lo = []
+R1Z.PV_AL_RangeLoop.source : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (lo : ℕ) (last i : Aeneas.Std.Usize),
+  ↑last ≤ (↑v).length →
+    ↑i ≤ ↑last →
+      lo ≤ ↑i →
+        ↑out = R1Z.PV_AL_RangeLists.segment (↑v) lo ↑i →
+          ∃ a,
+            PV_AL_SplitFlat.copy_range_loop v last out i = Aeneas.Std.Result.ok a ∧
+              ↑a = R1Z.PV_AL_RangeLists.segment (↑v) lo ↑last
+R1Z.PV_AL_RangeSource.empty_initial : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (first last : Aeneas.Std.Usize),
+  ↑last ≤ (↑v).length →
+    ↑first ≤ ↑last →
+      ∃ a,
+        PV_AL_SplitFlat.copy_range v first last (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U8) = Aeneas.Std.Result.ok a ∧
+          ↑a = R1Z.PV_AL_RangeLists.segment ↑v ↑first ↑last
+R1Z.PV_AL_RangeSource.source : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (first last : Aeneas.Std.Usize)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8),
+  ↑last ≤ (↑v).length →
+    ↑first ≤ ↑last →
+      ↑out = [] →
+        ∃ a,
+          PV_AL_SplitFlat.copy_range v first last out = Aeneas.Std.Result.ok a ∧
+            ↑a = R1Z.PV_AL_RangeLists.segment ↑v ↑first ↑last
+R1Z.PV_AL_RangeStep.continuing : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (last i : Aeneas.Std.Usize) (h : ↑i < ↑last) (hv : ↑last ≤ (↑v).length),
+  (↑out).length < Aeneas.Std.Usize.max →
+    ∃ next,
+      PV_AL_SplitFlat.copy_range_loop.body v last out i =
+          Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont (next, i.wrapping_add 1#usize)) ∧
+        ↑next = ↑out ++ [(↑v)[↑i]]
+R1Z.PV_AL_RangeStep.done : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8)
+  (last i : Aeneas.Std.Usize),
+  ↑last ≤ ↑i →
+    PV_AL_SplitFlat.copy_range_loop.body v last out i = Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done out)
+R1Z.PV_AL_RangeUnfold.same_body : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (last : Aeneas.Std.Usize)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  PV_AL_SplitFlat.copy_range_loop.body v last out i = PV_CBL_PopSlices.pop_slices_reference_loop.body v last out i
+R1Z.PV_AL_RangeUnfold.same_loop : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (last : Aeneas.Std.Usize)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  PV_AL_SplitFlat.copy_range_loop v last out i = PV_CBL_PopSlices.pop_slices_reference_loop v out last i
+R1Z.PV_AL_RangeUnfold.unfold_loop : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (last : Aeneas.Std.Usize)
+  (out : Aeneas.Std.alloc.vec.Vec Aeneas.Std.U8) (i : Aeneas.Std.Usize),
+  PV_AL_SplitFlat.copy_range_loop v last out i = do
+    let cf ← PV_AL_SplitFlat.copy_range_loop.body v last out i
+    match cf with
+      | Aeneas.Std.ControlFlow.done a => Aeneas.Std.Result.ok a
+      | Aeneas.Std.ControlFlow.cont (a, j) => PV_AL_SplitFlat.copy_range_loop v last a j
+R1Z.PV_AL_SplitCarrier.blockSlice : (N : Type) →
+  Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice (R1Z.PV_AL_SplitCarrier.Block N)
+R1Z.PV_AL_SplitCarrier.block_bytes : ∀ (N : Type) (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  (List.map R1Z.PV_AL_SplitCarrier.decodeBlock ↑(R1Z.PV_AL_SplitCarrier.blockSlice N v)).flatten =
+    List.take ((↑v).length / 64 * 64) ↑v
+@R1Z.PV_AL_SplitCarrier.decodeBlock : {N : Type} → R1Z.PV_AL_SplitCarrier.Block N → List Aeneas.Std.U8
+R1Z.PV_AL_SplitCarrier.decode_values : ∀ (N : Type) (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  List.map R1Z.PV_AL_SplitCarrier.decodeBlock (R1Z.PV_AL_SplitCarrier.values N v) =
+    List.map (R1Z.PV_CBL_SplitModel.block (↑v) 64) (List.range ((↑v).length / 64))
+R1Z.PV_AL_SplitCarrier.encodeBlock : (N : Type) → List Aeneas.Std.U8 → R1Z.PV_AL_SplitCarrier.Block N
+R1Z.PV_AL_SplitCarrier.reference : (N : Type) →
+  Aeneas.Std.Slice Aeneas.Std.U8 →
+    Aeneas.Std.Result (Aeneas.Std.Slice (R1Z.PV_AL_SplitCarrier.Block N) × Aeneas.Std.Slice Aeneas.Std.U8)
+R1Z.PV_AL_SplitCarrier.tailSlice : Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Slice Aeneas.Std.U8
+R1Z.PV_AL_SplitCarrier.tail_bytes : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑(R1Z.PV_AL_SplitCarrier.tailSlice v) = List.drop ((↑v).length / 64 * 64) ↑v
+R1Z.PV_AL_SplitCarrier.total : ∀ (N : Type) (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ∃ blocks tail, R1Z.PV_AL_SplitCarrier.reference N v = Aeneas.Std.Result.ok (blocks, tail)
+R1Z.PV_AL_SplitCarrier.values : (N : Type) → Aeneas.Std.Slice Aeneas.Std.U8 → List (R1Z.PV_AL_SplitCarrier.Block N)
+R1Z.PV_AL_SplitObservation.complete : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size : Aeneas.Std.Usize),
+  R1Z.PV_AL_SplitObservation.observe v size = R1Z.PV_AL_SplitObservation.specification v size
+R1Z.PV_AL_SplitObservation.observe : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result (List Aeneas.Std.U8 × List Aeneas.Std.U8)
+R1Z.PV_AL_SplitObservation.observe_zero : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_AL_SplitObservation.observe v 0#usize = Aeneas.Std.Result.fail Aeneas.Std.Error.divisionByZero
+R1Z.PV_AL_SplitObservation.positive : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size : Aeneas.Std.Usize),
+  ↑size ≠ 0 →
+    R1Z.PV_AL_SplitObservation.observe v size =
+      Aeneas.Std.Result.ok (List.take ((↑v).length / ↑size * ↑size) ↑v, List.drop ((↑v).length / ↑size * ↑size) ↑v)
+R1Z.PV_AL_SplitObservation.specification : Aeneas.Std.Slice Aeneas.Std.U8 →
+  Aeneas.Std.Usize → Aeneas.Std.Result (List Aeneas.Std.U8 × List Aeneas.Std.U8)
+R1Z.PV_AL_SplitObservation.zero : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  PV_AL_SplitFlat.split_flat_reference v 0#usize (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U8)
+      (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U8) =
+    Aeneas.Std.Result.fail Aeneas.Std.Error.divisionByZero
+R1Z.PV_AL_SplitSelected.callback : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns) (N : Type)
+  (trait :
+    ProverRwFull.generic_array.ArrayLength N Aeneas.Std.U8 (R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 6)),
+  trait.typenummarker_traitsUnsignedInst.USIZE = Aeneas.Std.Result.ok 64#usize →
+    ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8),
+      ProverRwFull.ExternalFuns.op209 trait v = R1Z.PV_AL_SplitCarrier.reference N v
+R1Z.PV_AL_SplitSelected.consumed : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.block_buffer.Eager.Insts.Block_bufferSealedSealed.split_blocks
+      (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    Aeneas.Std.Result.ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v, R1Z.PV_AL_SplitCarrier.tailSlice v)
+@R1Z.PV_AL_SplitSelected.dispatch : {N A : Type} →
+  Aeneas.Std.Result Aeneas.Std.Usize →
+    Aeneas.Std.Slice Aeneas.Std.U8 →
+      (Unit →
+          Aeneas.Std.Result
+            (Aeneas.Std.Slice (R1Z.PV_CBL_LibraryShapes.GenericArray Aeneas.Std.U8 N A) ×
+              Aeneas.Std.Slice Aeneas.Std.U8)) →
+        Aeneas.Std.Result
+          (Aeneas.Std.Slice (R1Z.PV_CBL_LibraryShapes.GenericArray Aeneas.Std.U8 N A) × Aeneas.Std.Slice Aeneas.Std.U8)
+R1Z.PV_AL_SplitSelected.dispatch_source : ∀ (N : Type) (size : Aeneas.Std.Result Aeneas.Std.Usize)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8)
+  (fallback :
+    Unit → Aeneas.Std.Result (Aeneas.Std.Slice (R1Z.PV_AL_SplitCarrier.Block N) × Aeneas.Std.Slice Aeneas.Std.U8)),
+  size = Aeneas.Std.Result.ok 64#usize →
+    R1Z.PV_AL_SplitSelected.dispatch size v fallback = R1Z.PV_AL_SplitCarrier.reference N v
+R1Z.PV_AL_SplitSelected.native_callback : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (v : Aeneas.Std.Slice Aeneas.Std.U8),
+  ProverRwFull.ExternalFuns.op209 (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) v =
+    Aeneas.Std.Result.ok
+      (R1Z.PV_AL_SplitCarrier.blockSlice (R1Z.PV_AL_SplitNativeShape.Size base 6) v, R1Z.PV_AL_SplitCarrier.tailSlice v)
+R1Z.PV_AL_SplitSelected.selected : (base : ProverRwFull.ExternalTypes) →
+  ProverRwFull.ExternalFuns → ProverRwFull.ExternalFuns
+R1Z.PV_AL_SplitSource.source : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size : Aeneas.Std.Usize),
+  ↑size ≠ 0 →
+    ∃ blocks tail,
+      PV_AL_SplitFlat.split_flat_reference v size (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U8)
+            (Aeneas.Std.alloc.vec.Vec.new Aeneas.Std.U8) =
+          Aeneas.Std.Result.ok (blocks, tail) ∧
+        ↑blocks = List.take ((↑v).length / ↑size * ↑size) ↑v ∧ ↑tail = List.drop ((↑v).length / ↑size * ↑size) ↑v
+R1Z.PV_AL_SplitWords.bound : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size q : Aeneas.Std.Usize),
+  ↑q = (↑v).length / ↑size → ↑(q.wrapping_mul size) ≤ (↑v).length
+R1Z.PV_AL_SplitWords.consumed : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size q : Aeneas.Std.Usize),
+  ↑q = (↑v).length / ↑size → ↑(q.wrapping_mul size) = (↑v).length / ↑size * ↑size
+R1Z.PV_AL_SplitWords.quotient : ∀ (v : Aeneas.Std.Slice Aeneas.Std.U8) (size : Aeneas.Std.Usize),
+  ↑size ≠ 0 → ∃ q, v.len / size = Aeneas.Std.Result.ok q ∧ ↑q = (↑v).length / ↑size
+R1Z.PV_CBL_SplitBounds.block_index : ∀ (len size i j : ℕ), i < len / size → j < size → i * size + j < len
+R1Z.PV_CBL_SplitBounds.consumed_and_tail : ∀ (len size : ℕ), len / size * size + len % size = len
+R1Z.PV_CBL_SplitBounds.prefix_bound : ∀ (len size : ℕ), len / size * size ≤ len
+R1Z.PV_CBL_SplitBounds.tail_index : ∀ (len size k : ℕ), k < len % size → len / size * size + k < len
+@R1Z.PV_CBL_SplitModel.block : {T : Type} → List T → ℕ → ℕ → List T
+@R1Z.PV_CBL_SplitModel.block_length : ∀ {T : Type} (src : List T) (size i : ℕ),
+  i < src.length / size → (R1Z.PV_CBL_SplitModel.block src size i).length = size
+@R1Z.PV_CBL_SplitModel.tail : {T : Type} → List T → ℕ → List T
+@R1Z.PV_CBL_SplitModel.tail_length : ∀ {T : Type} (src : List T) (size : ℕ),
+  (R1Z.PV_CBL_SplitModel.tail src size).length = src.length % size
+@R1Z.PV_CBL_SplitModel.zero_size_tail : ∀ {T : Type} (src : List T), R1Z.PV_CBL_SplitModel.tail src 0 = src
+R1Z.PV_RDCD4_BlockLayout194.bounded : ∀ (n : ℕ), R1Z.PV_RDCD4_BlockLayout194.consumed n ≤ n
+R1Z.PV_RDCD4_BlockLayout194.remainder : ∀ (n : ℕ), n - R1Z.PV_RDCD4_BlockLayout194.consumed n = n % 64
+R1Z.PV_RDCD4_BlockLayout194.size64 : R1Z.PV_RDCD4_BlockLayout194.byteSize 6 = 64
+R1Z.PV_RDCD4_BlockLayout194.size_power : ∀ (k : ℕ), R1Z.PV_RDCD4_BlockLayout194.byteSize k = 2 ^ k
+R1Z.PV_RDCD4_BlockLayout194.tail_bound : ∀ (n : ℕ), n - R1Z.PV_RDCD4_BlockLayout194.consumed n < 64
+R1Z.PV_RDCD4_BlockLayout194.word_bounds : ∀ n < 2 ^ 64,
+  R1Z.PV_RDCD4_BlockLayout194.consumed n < 2 ^ 64 ∧
+    n / 64 < 2 ^ 64 ∧ n - R1Z.PV_RDCD4_BlockLayout194.consumed n < 2 ^ 64
+R1Z.PV_RDCD4_BytesSource.scalar_binding : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  R1Z.PV_RDCD4_BytesSource.scalar bytes =
+    have v := Aeneas.Std.core.num.U32.from_le_bytes bytes;
+    if v ≥ R1Z.PV_RDCD4_FieldSource.aspis_core.field.P then none else some v
+@R1Z.PV_RDCD4_Copy194.binding : ∀ {T : Type} (dst src : List T),
+  R1Z.PV_RDCD4_Copy194.wrapper dst src = R1Z.PV_RDCD4_Copy194.model dst src
+@R1Z.PV_RDCD4_Copy194.mismatch : ∀ {T : Type} (dst src : List T),
+  dst.length ≠ src.length → R1Z.PV_RDCD4_Copy194.wrapper dst src = Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+@R1Z.PV_RDCD4_Copy194.source_frame : ∀ {T : Type} (dst src : List T),
+  dst.length = src.length →
+    (do
+        let out ← R1Z.PV_RDCD4_Copy194.wrapper dst src
+        Aeneas.Std.Result.ok (out, src)) =
+      Aeneas.Std.Result.ok (src, src)
+@R1Z.PV_RDCD4_Copy194.success : ∀ {T : Type} (dst src : List T),
+  dst.length = src.length → R1Z.PV_RDCD4_Copy194.wrapper dst src = Aeneas.Std.Result.ok src
+@R1Z.PV_RDCD4_CopyWindow194.binding : ∀ {T : Type} (dst : List T) (base : ℕ) (src : List T),
+  base + src.length ≤ dst.length →
+    R1Z.PV_RDCD4_CopyWindow194.source dst base src =
+      Aeneas.Std.Result.ok (R1Z.PV_RDCD4_CopyWindow194.splice dst base src)
+@R1Z.PV_RDCD4_CopyWindow194.empty : ∀ {T : Type} (dst : List T) (base : ℕ),
+  R1Z.PV_RDCD4_CopyWindow194.splice dst base [] = dst
+@R1Z.PV_RDCD4_CopyWindow194.length : ∀ {T : Type} (dst : List T) (base : ℕ) (src : List T),
+  base + src.length ≤ dst.length → (R1Z.PV_RDCD4_CopyWindow194.splice dst base src).length = dst.length
+R1Z.PV_RDCD4_CopyWindow194.short_position : ∀ (pos n : ℕ), pos < 64 → n < 64 - pos → pos + n < 64 ∧ pos + n < 256
+R1Z.PV_RDCD4_Endian194.binding : ∀ (bytes : Aeneas.Std.Array Aeneas.Std.U8 4#usize),
+  R1Z.PV_RDCD4_Endian194.word bytes = Aeneas.Std.core.num.U32.from_le_bytes bytes
+@R1Z.PV_RDCD4_Memory194.length : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (len : ℕ),
+  R1Z.PV_RDCD4_Memory194.valid p len →
+    (R1Z.PV_RDCD4_Memory194.values (R1Z.PV_RDCD4_Memory194.sliceRawFromRawParts p len)).length = len
+@R1Z.PV_RDCD4_Memory194.metadata_forward : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (len : ℕ),
+  R1Z.PV_RDCD4_Memory194.ptrSliceFromRawParts p len = R1Z.PV_RDCD4_Memory194.metadataFromRawParts p len
+@R1Z.PV_RDCD4_Memory194.raw_parts_fields : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (len : ℕ),
+  (R1Z.PV_RDCD4_Memory194.sliceRawFromRawParts p len).pointer = p ∧
+    (R1Z.PV_RDCD4_Memory194.sliceRawFromRawParts p len).len = len
+@R1Z.PV_RDCD4_Memory194.raw_parts_forward : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (len : ℕ),
+  R1Z.PV_RDCD4_Memory194.sliceRawFromRawParts p len = R1Z.PV_RDCD4_Memory194.ptrSliceFromRawParts p len
+@R1Z.PV_RDCD4_Memory194.read_at : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (h : p.offset < p.data.length),
+  R1Z.PV_RDCD4_Memory194.constPtrRead p = Aeneas.Std.Result.ok p.data[p.offset]
+@R1Z.PV_RDCD4_Memory194.read_forward : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E),
+  R1Z.PV_RDCD4_Memory194.constPtrRead p = R1Z.PV_RDCD4_Memory194.ptrRead p
+@R1Z.PV_RDCD4_Memory194.read_frame : ∀ {E : Type} (p : R1Z.PV_RDCD4_Memory194.Pointer E) (h : p.offset < p.data.length),
+  (do
+      let v ← R1Z.PV_RDCD4_Memory194.constPtrRead p
+      Aeneas.Std.Result.ok (v, p)) =
+    Aeneas.Std.Result.ok (p.data[p.offset], p)
+@R1Z.PV_RDCD4_SliceRange194.empty : ∀ {T : Type} (xs : List T) (n : ℕ), R1Z.PV_RDCD4_SliceRange194.window xs n n = []
+@R1Z.PV_RDCD4_SliceRange194.full : ∀ {T : Type} (xs : List T), R1Z.PV_RDCD4_SliceRange194.window xs 0 xs.length = xs
+@R1Z.PV_RDCD4_SliceRange194.length : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  stop ≤ xs.length → (R1Z.PV_RDCD4_SliceRange194.window xs start stop).length = stop - start
+@R1Z.PV_RDCD4_SliceRange194.oversized : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  xs.length < stop →
+    R1Z.PV_RDCD4_SliceRange194.index xs start stop = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+@R1Z.PV_RDCD4_SliceRange194.reversed : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  stop < start →
+    R1Z.PV_RDCD4_SliceRange194.index xs start stop = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+@R1Z.PV_RDCD4_SliceRange194.success : ∀ {T : Type} (xs : List T) (start stop : ℕ),
+  start ≤ stop →
+    stop ≤ xs.length →
+      R1Z.PV_RDCD4_SliceRange194.index xs start stop =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs start stop)
+@R1Z.PV_RDCD4_TryArray194.backing : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T),
+  Option.map (fun out => ↑out) (R1Z.PV_RDCD4_TryArray194.into n xs) = if xs.length = ↑n then some xs else none
+@R1Z.PV_RDCD4_TryArray194.mismatch : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T),
+  xs.length ≠ ↑n → R1Z.PV_RDCD4_TryArray194.into n xs = none
+@R1Z.PV_RDCD4_TryArray194.roundtrip : ∀ {T : Type} {n : Aeneas.Std.Usize} (xs : Aeneas.Std.Array T n),
+  R1Z.PV_RDCD4_TryArray194.into n ↑xs = some xs
+@R1Z.PV_RDCD4_TryArray194.success : ∀ {T : Type} (n : Aeneas.Std.Usize) (xs : List T) (size : xs.length = ↑n),
+  R1Z.PV_RDCD4_TryArray194.into n xs = some ⟨xs, size⟩
+R1Z.PV_RDCD5_BlockCarrier.encode_flatten : ∀ (k : ℕ) (v : R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 k),
+  R1Z.PV_AL_BlockCodec.encode k (R1Z.PV_CBL_GenericArrayPower.flatten k v) = v
+R1Z.PV_RDCD5_BlockCarrier.flatten_injective : ∀ (k : ℕ), Function.Injective (R1Z.PV_CBL_GenericArrayPower.flatten k)
+R1Z.PV_RDCD5_BufferSource.cursor_transport : ∀ n < 64, R1Z.PV_RDCD5_BufferSource.storedCursor n = n
+@R1Z.PV_RDCD5_BufferSource.finish_binding : ∀ {S : Type} (compress : S → List Aeneas.Std.U8 → Aeneas.Std.Result S)
+  (state : S) (buffer input : List Aeneas.Std.U8),
+  buffer.length = 64 →
+    R1Z.PV_RDCD5_BufferSource.finish compress state buffer input =
+      R1Z.PV_RDCD5_BufferSource.finishReference compress state buffer input
+@R1Z.PV_RDCD5_BufferSource.source_instance : ∀ {S : Type} (compress : S → List Aeneas.Std.U8 → Aeneas.Std.Result S)
+  (state : S) (buffer : List Aeneas.Std.U8) (pos : ℕ) (input : List Aeneas.Std.U8),
+  buffer.length = 64 →
+    pos < 64 →
+      R1Z.PV_RDCD5_BufferSource.source compress state buffer pos input =
+        R1Z.PV_DL_UpdatePlan.model compress state buffer pos input
+R1Z.PV_RDCD5_ParserErrors.carrier_mismatch : R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes
+    ⟨[], ⋯⟩ ≠
+  R1Z.PV_RDCD4_BytesSource.qm []
+R1Z.PV_RDCD5_ParserErrors.existing_empty : R1Z.ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes ⟨[], ⋯⟩ =
+  Aeneas.Std.Result.fail Aeneas.Std.Error.panic
+R1Z.PV_RDCD5_ParserErrors.owned_empty : R1Z.PV_RDCD4_BytesSource.qm [] =
+  Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+R1Z.PV_RDCD5_ParserFlat.cm_window : ∀ (bytes : List Aeneas.Std.U8) (base : ℕ),
+  base + 8 ≤ bytes.length →
+    R1Z.PV_RDCD4_BytesSource.cm (R1Z.PV_RDCD4_SliceRange194.window bytes base (base + 8)) =
+      R1Z.PV_RDCD5_ParserFlat.cmAt bytes base
+R1Z.PV_RDCD5_ParserWindows.component_window : ∀ (xs : List Aeneas.Std.U8) (base i : ℕ),
+  i + 4 ≤ 8 →
+    base + 8 ≤ xs.length →
+      R1Z.PV_RDCD4_BytesSource.component (R1Z.PV_RDCD4_SliceRange194.window xs base (base + 8)) i (i + 4) =
+        R1Z.PV_RDCD4_BytesSource.component xs (base + i) (base + (i + 4))
+@R1Z.PV_RDCD5_ParserWindows.compose : ∀ {T : Type} (xs : List T) (a b c d : ℕ),
+  d ≤ b - a →
+    R1Z.PV_RDCD4_SliceRange194.window (R1Z.PV_RDCD4_SliceRange194.window xs a b) c d =
+      R1Z.PV_RDCD4_SliceRange194.window xs (a + c) (a + d)
+@R1Z.PV_RDCD5_ParserWindows.no_write : ∀ {T : Type} (xs : List T) (a b : ℕ),
+  a ≤ b →
+    b ≤ xs.length →
+      (do
+          let out ← R1Z.PV_RDCD4_SliceRange194.index xs a b
+          Aeneas.Std.Result.ok (out, xs)) =
+        Aeneas.Std.Result.ok (R1Z.PV_RDCD4_SliceRange194.window xs a b, xs)
+@R1Z.PV_RDCD5_UpdateSplit.compression_instance : ∀ {T N : Type}
+  (update : T → R1Z.PV_DL_UpdateCarrier.Blocks N → Aeneas.Std.Result T) (state : T)
+  (input : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_DL_UpdateCarrier.compress update state ↑input = update state (R1Z.PV_AL_SplitCarrier.blockSlice N input)
+R1Z.PV_RDCD5_UpdateSplit.storage_encoding : ∀ (bytes : List Aeneas.Std.U8),
+  bytes.length = 64 → (R1Z.PV_DL_StorageBuild.build 6 fun i => bytes[i]!) = R1Z.PV_AL_BlockCodec.encode 6 bytes
+R1Z.PV_RDCD5_UpdateSplit.typed_batches : ∀ (N : Type) (input : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_DL_UpdateCarrier.blockList N ↑input = R1Z.PV_AL_SplitCarrier.values N input
+R1Z.PV_RDCD5_UpdateSplit.views_range : ∀ (n : ℕ) (input : List Aeneas.Std.U8),
+  R1Z.PV_DL_UpdateViews.views n input = List.map (fun i => List.take 64 (List.drop (i * 64) input)) (List.range n)
+R1Z.PV_RDCD5_V197.frame : ∀ (bytes : List Aeneas.Std.U8),
+  (do
+      let out ← R1Z.PV_RDCD4_BytesSource.qm bytes
+      Aeneas.Std.Result.ok (out, bytes)) =
+    do
+    let out ← R1Z.PV_RDCD5_V197.reference bytes
+    Aeneas.Std.Result.ok (out, bytes)
+R1Z.PV_RDCD5_V197.short_failure : ∀ (bytes : List Aeneas.Std.U8),
+  bytes.length < 8 → R1Z.PV_RDCD4_BytesSource.qm bytes = Aeneas.Std.Result.fail Aeneas.Std.Error.arrayOutOfBounds
+R1Z.PV_RDCD5_V197.slice_instance : ∀ (bytes : Aeneas.Std.Slice Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm ↑bytes = R1Z.PV_RDCD5_V197.reference ↑bytes
+R1Z.PV_RDCD5_V197.source_reference : ∀ (bytes : List Aeneas.Std.U8),
+  R1Z.PV_RDCD4_BytesSource.qm bytes = R1Z.PV_RDCD5_V197.reference bytes
+R1Z.PV_RDCD5_V233.aliases : ∀ (input : Aeneas.Std.Slice Aeneas.Std.U8) (origin : ℕ),
+  (R1Z.PV_RDCD5_V233.source input origin).blocks.pointer.origin = origin ∧
+    (R1Z.PV_RDCD5_V233.source input origin).blocks.pointer.offset = 0 ∧
+      (R1Z.PV_RDCD5_V233.source input origin).tail.pointer.origin = origin ∧
+        (R1Z.PV_RDCD5_V233.source input origin).tail.pointer.data = ↑input ∧
+          (R1Z.PV_RDCD5_V233.source input origin).tail.pointer.offset = (↑input).length / 64 * 64
+R1Z.PV_RDCD5_V233.consumed_instance : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  (input : Aeneas.Std.Slice Aeneas.Std.U8) (origin : ℕ),
+  R1Z.PV_RDCD5_V233.interpreted (R1Z.PV_AL_SplitNativeShape.Size base 6) input origin =
+    ProverRwFull.block_buffer.Eager.Insts.Block_bufferSealedSealed.split_blocks
+      (R1Z.PV_AL_SplitNativeShape.nativeTrait base ops 6) input
+R1Z.PV_RDCD5_V233.source_reference : ∀ (N : Type) (input : Aeneas.Std.Slice Aeneas.Std.U8) (origin : ℕ),
+  R1Z.PV_RDCD5_V233.interpreted N input origin = R1Z.PV_AL_SplitCarrier.reference N input
+R1Z.PV_RDCD5_V233.typed_projection_injective : ∀ (N : Type), Function.Injective R1Z.PV_AL_SplitCarrier.decodeBlock
+R1Z.PV_RDCD5_V233.typed_roundtrip : ∀ (N : Type) (block : R1Z.PV_AL_SplitCarrier.Block N),
+  R1Z.PV_AL_SplitCarrier.encodeBlock N (R1Z.PV_AL_SplitCarrier.decodeBlock block) = block
+R1Z.PV_RDCD5_V233.valid_tail : ∀ (input : Aeneas.Std.Slice Aeneas.Std.U8) (origin : ℕ),
+  R1Z.PV_RDCD4_Memory194.valid (R1Z.PV_RDCD5_V233.source input origin).tail.pointer
+    (R1Z.PV_RDCD5_V233.source input origin).tail.len
+@R1Z.PV_RDCD5_V236.carrier_instance : ∀ {T N : Type}
+  (update : T → R1Z.PV_DL_UpdateCarrier.Blocks N → Aeneas.Std.Result T)
+  (self : R1Z.PV_CBL_LibraryShapes.Wrapper T (R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 6))
+  (input : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑self.buffer.pos < 64 →
+    R1Z.PV_RDCD5_V236.typedSource update self input = R1Z.PV_DL_UpdateCarrier.value update self input
+R1Z.PV_RDCD5_V236.op216_instance : ∀ (base : ProverRwFull.ExternalTypes) (ops : ProverRwFull.ExternalFuns)
+  {T N1 O : Type}
+  (uc : ProverRwFull.digest.core_api.UpdateCore T N1 (R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 6))
+  (less :
+    ProverRwFull.typenum.type_operators.IsLess (R1Z.PV_AL_SplitNativeShape.Size base 6)
+      (R1Z.PV_DL_DefaultCallback.Limit base) O)
+  (nz : ProverRwFull.typenum.marker_traits.NonZero O)
+  (self : R1Z.PV_CBL_LibraryShapes.Wrapper T (R1Z.PV_CBL_GenericArrayPower.Storage Aeneas.Std.U8 6))
+  (input : Aeneas.Std.Slice Aeneas.Std.U8),
+  ↑self.buffer.pos < 64 →
+    ProverRwFull.ExternalFuns.op216 (R1Z.PV_DL_UpdateSelected.bufferKind base ops T) uc less nz self input =
+      R1Z.PV_RDCD5_V236.typedSource (R1Z.PV_DL_UpdateSelected.updater base uc) self input
+'PV_AL_SplitFlat.copy_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_AL_SplitFlat.copy_range_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_AL_SplitFlat.copy_range_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_AL_SplitFlat.split_flat_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_CBL_PopSlices.pop_slices_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_CBL_PopSlices.pop_slices_reference_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_CBL_PopSlices.pop_slices_reference_loop.body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_BlockPrefix.blocks' does not depend on any axioms
+'R1Z.PV_AL_BlockPrefix.concatenation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_BlockPrefix.length' depends on axioms: [propext]
+'R1Z.PV_AL_BlockPrefix.representation' depends on axioms: [propext]
+'R1Z.PV_AL_RangeInvariant.advance' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_AL_RangeInvariant.capacity' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_AL_RangeLists.advance' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_AL_RangeLists.initial_segment' depends on axioms: [propext]
+'R1Z.PV_AL_RangeLists.length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_AL_RangeLists.segment' does not depend on any axioms
+'R1Z.PV_AL_RangeLists.suffix' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeLists.zero' depends on axioms: [propext]
+'R1Z.PV_AL_RangeLoop.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeSource.empty_initial' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeStep.continuing' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeStep.done' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeUnfold.same_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeUnfold.same_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_RangeUnfold.unfold_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.blockSlice' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.block_bytes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.decodeBlock' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.decode_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.encodeBlock' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.tailSlice' depends on axioms: [propext]
+'R1Z.PV_AL_SplitCarrier.tail_bytes' depends on axioms: [propext]
+'R1Z.PV_AL_SplitCarrier.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitCarrier.values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitObservation.complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitObservation.observe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitObservation.observe_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitObservation.positive' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitObservation.specification' depends on axioms: [propext]
+'R1Z.PV_AL_SplitObservation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.dispatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.dispatch_source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.native_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSelected.selected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitSource.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitWords.bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitWords.consumed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_AL_SplitWords.quotient' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_CBL_SplitBounds.block_index' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CBL_SplitBounds.consumed_and_tail' depends on axioms: [propext]
+'R1Z.PV_CBL_SplitBounds.prefix_bound' depends on axioms: [propext]
+'R1Z.PV_CBL_SplitBounds.tail_index' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CBL_SplitModel.block' does not depend on any axioms
+'R1Z.PV_CBL_SplitModel.block_length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CBL_SplitModel.tail' does not depend on any axioms
+'R1Z.PV_CBL_SplitModel.tail_length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_CBL_SplitModel.zero_size_tail' depends on axioms: [propext]
+'R1Z.PV_RDCD4_BlockLayout194.bounded' depends on axioms: [propext]
+'R1Z.PV_RDCD4_BlockLayout194.remainder' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_BlockLayout194.size64' depends on axioms: [propext]
+'R1Z.PV_RDCD4_BlockLayout194.size_power' depends on axioms: [propext]
+'R1Z.PV_RDCD4_BlockLayout194.tail_bound' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_BlockLayout194.word_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_BytesSource.scalar_binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_Copy194.binding' depends on axioms: [propext]
+'R1Z.PV_RDCD4_Copy194.mismatch' depends on axioms: [propext]
+'R1Z.PV_RDCD4_Copy194.source_frame' depends on axioms: [propext]
+'R1Z.PV_RDCD4_Copy194.success' depends on axioms: [propext]
+'R1Z.PV_RDCD4_CopyWindow194.binding' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_CopyWindow194.empty' depends on axioms: [propext]
+'R1Z.PV_RDCD4_CopyWindow194.length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_CopyWindow194.short_position' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_Endian194.binding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD4_Memory194.length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_Memory194.metadata_forward' does not depend on any axioms
+'R1Z.PV_RDCD4_Memory194.raw_parts_fields' does not depend on any axioms
+'R1Z.PV_RDCD4_Memory194.raw_parts_forward' does not depend on any axioms
+'R1Z.PV_RDCD4_Memory194.read_at' depends on axioms: [propext]
+'R1Z.PV_RDCD4_Memory194.read_forward' depends on axioms: [propext]
+'R1Z.PV_RDCD4_Memory194.read_frame' depends on axioms: [propext]
+'R1Z.PV_RDCD4_SliceRange194.empty' depends on axioms: [propext]
+'R1Z.PV_RDCD4_SliceRange194.full' depends on axioms: [propext]
+'R1Z.PV_RDCD4_SliceRange194.length' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_SliceRange194.oversized' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_SliceRange194.reversed' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD4_SliceRange194.success' depends on axioms: [propext]
+'R1Z.PV_RDCD4_TryArray194.backing' does not depend on any axioms
+'R1Z.PV_RDCD4_TryArray194.mismatch' does not depend on any axioms
+'R1Z.PV_RDCD4_TryArray194.roundtrip' does not depend on any axioms
+'R1Z.PV_RDCD4_TryArray194.success' does not depend on any axioms
+'R1Z.PV_RDCD5_BlockCarrier.encode_flatten' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_BlockCarrier.flatten_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_BufferSource.cursor_transport' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_BufferSource.finish_binding' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_BufferSource.source_instance' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_ParserErrors.carrier_mismatch' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserErrors.existing_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserErrors.owned_empty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserFlat.cm_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserWindows.component_window' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserWindows.compose' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserWindows.no_write' depends on axioms: [propext]
+'R1Z.PV_RDCD5_UpdateSplit.compression_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_UpdateSplit.storage_encoding' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_UpdateSplit.typed_batches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_UpdateSplit.views_range' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_V197.frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V197.short_failure' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V197.slice_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V197.source_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V233.aliases' depends on axioms: [propext]
+'R1Z.PV_RDCD5_V233.consumed_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V233.source_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V233.typed_projection_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V233.typed_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V233.valid_tail' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_V236.carrier_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_V236.op216_instance' depends on axioms: [propext, Classical.choice, Quot.sound]
