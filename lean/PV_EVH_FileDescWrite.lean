@@ -39,7 +39,8 @@ theorem error_world {E : Type}
         (libc fd address (count bytes) bytes w).state
       ⟨next.outcome,next.state,
         (libc fd address (count bytes) bytes w).events ++ next.events⟩ := by
-  simp only [write,Bind.bind,PV_EVH_Runtime.bind,h,if_true]
+  simp only [write,Bind.bind,PV_EVH_Runtime.bind,h,if_true,
+    Pure.pure,PV_EVH_Runtime.lift]
 
 theorem nonerror_world {E : Type}
     (libc : Nat → Nat → Nat → Bytes → Q Int) (lastError : Q E)
