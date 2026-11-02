@@ -102,3 +102,50 @@ theorem external_add_reference554 (value : aspis_core.field.QM31) (sums : Limbs6
 end PV_B3P_Association554227
 '''
 emit(L/'PV_B3P_ExternalAdd554227.lean',s)
+s='import PV_B3P_ExternalGroup554227\nimport PV_B3P_ExternalSums554227\nimport PV_B3P_ExternalAdd554227\nimport PV_B3P_P227_03b\nimport PV_B3P_LinkDefinitions13227\nimport Lean.Elab.Tactic.AsAuxLemma\n'+head
+s+='''
+def external_source554 (state : Array aspis_core.field.QM31 16#usize) :
+    Result (Array aspis_core.field.QM31 16#usize) := do
+'''
+old='state';n=0
+for g in range(4):
+ for k in range(4):s+=f'  let q{g}_{k} ← Array.index_usize {old} {g*4+k}#usize\n'
+ s+=f'  let output{g} ← external_group_source554 (Array.make 4#usize ['+','.join(f'q{g}_{k}'for k in range(4))+'] (by simp only [List.length_cons,List.length_nil]; rfl))\n'
+ for k in range(4):
+  s+=f'  let out{g}_{k} ← Array.index_usize output{g} {k}#usize\n'
+  n+=1;s+=f'  let state{n} ← Array.update {old} {g*4+k}#usize out{g}_{k}\n';old=f'state{n}'
+s+=f'  let sums ← external_sums_source554 {old}\n'
+for j in range(16):
+ s+=f'  let value{j} ← Array.index_usize {old} {j}#usize\n'
+ if j<4:s+=f'  let sum{j} ← Array.index_usize sums {j}#usize\n'
+ s+=f'  let result{j} ← external_add_source554 value{j} sum{j%4}\n'
+ n+=1
+ s+=f'  let state{n} ← Array.update {old} {j}#usize result{j}\n';old=f'state{n}'
+s+=f'  .ok {old}\n'
+s+='''
+attribute [local irreducible] Aeneas.Std.bind Array.index_usize Array.update
+  reference_poseidon.external_group227 reference_poseidon.global_sums227 reference_poseidon.add_global227
+
+theorem external_source_reference554 (state : Array aspis_core.field.QM31 16#usize) :
+    external_source554 state = reference_poseidon.external_linear_lazy state := by
+  unfold external_source554 reference_poseidon.external_linear_lazy
+  simp only [external_group_reference554,external_sums_reference554,external_add_reference554]
+'''
+ref=(L/'PV_B3P_P227_03b.lean').read_text().split('def reference_poseidon.external_linear_lazy',1)[1].split('  := do\n',1)[1].split('\n\n')[0]
+bs=[re.match(r'  let (\w+) ←',x)[1]for x in ref.splitlines()if re.match(r'  let (\w+) ←',x)]
+indent='  '
+for j,b in enumerate(bs):
+ if j%16==0:s+=indent+'as_aux_lemma =>\n';indent+='  '
+ s+=indent+'apply bind_equal9\n'+indent+'intro '+b+'\n'
+s+=indent+'simp only [bind_tc_ok]\n'
+s+='''
+theorem external_source_link554 :
+    PV_B3P_Links13227.PV_B3P_Link_poseidon_external_linear_lazy external_source554 :=
+  funext external_source_reference554
+
+#print axioms external_source_reference554
+#print axioms external_source_link554
+end PV_B3P_Association554227
+'''
+emit(L/'PV_B3P_ExternalSource554227.lean',s)
+print('all sixteen output stores and four group stores retained')
