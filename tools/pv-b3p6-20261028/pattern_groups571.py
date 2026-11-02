@@ -30,6 +30,13 @@ for e in inventory['events']:
    pattern='explicit_panic';guard=dict(kind='exclude_incoming_diagnostic_cone',branch_path=e['lexical_branch_path'],note='forwarding helper may have no local avoiding branch; incoming reachability must be proved')
   else:raise AssertionError(n)
  groups[pattern].append(dict(instance=e['instance'],statement=e['statement'],category=c,span=e['span'],guard=guard,local_control_law=e.get('local_control_law'),lemma='PV_B3P_PanicPatterns571227.'+pattern,source_state_binding='OPEN',actual_reachable_guard_proof='OPEN'))
+# Keep local certificates attached without promoting them to whole-cone facts.
+disabled=json.loads((R/'DISABLED-GATES-D571.json').read_text())
+for cert in disabled['certificates']:
+ for event in cert['events']:
+  matches=[row for family in groups.values()for row in family if row['instance']==cert['instance']and row['statement']==event['statement']]
+  assert len(matches)==1
+  matches[0]['local_outer_gate_certificate']=dict(file='DISABLED-GATES-D571.json',gate_statement=cert['gate']['id'],lemma=cert['lemma'],qualification='local source gate only; whole source-state/dictionary composition OPEN')
 patterns=['index_out_of_bounds','slice_range','arithmetic_overflow','unwrap_expect','explicit_panic','assertion']
 counts={k:len(groups[k])for k in patterns};assert sum(counts.values())==528
 assert counts==dict(index_out_of_bounds=468,slice_range=0,arithmetic_overflow=19,unwrap_expect=3,explicit_panic=7,assertion=31),counts
