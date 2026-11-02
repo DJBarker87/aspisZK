@@ -8,7 +8,15 @@ theorem complete (point : Array Q 10#usize) :
       out.len.val≤1024 ∧ PV_RunJoin_MultilinearData69.Valid out.data := by
   obtain ⟨pref,hp,hbound⟩ := PV_RunJoin_MultilinearPrefix69.complete point 10 10#usize rfl (by omega)
   let trailing := Usize.wrapping_sub 10#usize pref
-  have ht : trailing.val=10-pref.val := by dsimp only [trailing];scalar_tac
+  have ht : trailing.val=10-pref.val := by
+    dsimp only [trailing]
+    rw [Usize.wrapping_sub_val_eq]
+    have large : 32≤UScalar.size .Usize := by
+      rw [UScalar.size_def]
+      exact le_trans (by decide : 32≤2^32) (Nat.pow_le_pow_right (by decide) System.Platform.le_numBits)
+    change (10+(UScalar.size .Usize-pref.val))%UScalar.size .Usize=10-pref.val
+    rw [show 10+(UScalar.size .Usize-pref.val)=(10-pref.val)+UScalar.size .Usize by omega,
+      Nat.add_mod_right,Nat.mod_eq_of_lt (by omega)]
   have sum : pref.val+trailing.val=10 := by omega
   obtain ⟨suffix,hs,hsmall⟩ := PV_RunJoin_MultilinearSuffix69.complete point pref.val (10-pref.val)
     pref 0#usize (by omega) (by omega) (by simp)
@@ -30,6 +38,7 @@ theorem complete (point : Array Q 10#usize) :
     (fun i hi => PV_RunJoin_MultilinearRows69.complete i suffix trailing pref.val (by rwa [hb] at hi) sum hs')
     bound.val 0#usize (Array.repeat 1024#usize (0#usize,aspis_core.field.QM31.ZERO))
     (by simp) (by intro pair member;simp only [Array.repeat,List.mem_replicate] at member;rcases member with ⟨_,rfl⟩;decide)
+  dsimp only [trailing,bound] at ho
   exact ⟨⟨out,bound⟩,by simp only [host_multilinear.sparse_eq_weights,hp,hs,ho,lift,bind_tc_ok],
     by rw [hb];exact powbound,valid⟩
 
