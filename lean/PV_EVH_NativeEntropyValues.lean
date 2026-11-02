@@ -48,6 +48,9 @@ theorem after_draw (base : ExternalTypes)
     bind_tc_ok,Aeneas.Std.lift,PV_EVH_EntropyHalves.first_index,
     PV_EVH_EntropyHalves.second_index,PV_EVH_EntropyHalves.copy32,
     PV_EVH_EntropyHalves.restored,id_eq]
+  dsimp only
+  simp only [PV_EVH_EntropyHalves.copy32,bind_tc_ok,
+    PV_EVH_EntropyHalves.restored,id_eq]
   rfl
 
 #print axioms after_draw
