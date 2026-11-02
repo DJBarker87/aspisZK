@@ -1,7 +1,7 @@
 {
   "campaign_in_progress": true,
   "budget_invocations": 60,
-  "charged_invocations": 42,
+  "charged_invocations": 44,
   "initial_spent": 2,
   "Lean": 0,
   "results": [
@@ -1342,6 +1342,74 @@
         ]
       },
       "symbols_available": true
+    },
+    {
+      "id": "K79244",
+      "result": "PASS",
+      "receipt": "host/K79244/receipt.json",
+      "epoch": 1793586773.0742223,
+      "exit_status": 0,
+      "wall_seconds": 1.5212821960449219,
+      "peak_rss_kib": 225108,
+      "swap": 0,
+      "source_revision": "362428e06f653e7732a6ecc33ba67cd122cf19fd",
+      "print_axioms": "N/A: Kani; 0 Lean",
+      "resolved_revision": "362428e06f653e7732a6ecc33ba67cd122cf19fd",
+      "failed_checks": 0,
+      "total_checks": 40,
+      "original_credit": "C151",
+      "config": {
+        "package": "b3-rest-source/tools/pv-b3p6-20261028/v244-leaf16",
+        "source_root": "b3-rest-source",
+        "harness": "equivalence16::selector_mask_statement_6144",
+        "negative": false,
+        "features": "",
+        "original_credit": "C151",
+        "expected_phase": "optimized compilation followed by the named bounded control-flow/index/value equivalence; no dense field elimination",
+        "std_transfer": "Separate reached-item parity/structural arguments required; no blanket deployed transfer",
+        "kani_extra": [
+          "-Z",
+          "stubbing"
+        ],
+        "stubs": [
+          "core::ptr::copy_nonoverlapping => crate::KMX_stubs::KMX_copy_nonoverlapping"
+        ]
+      },
+      "symbols_available": true
+    },
+    {
+      "id": "K79245",
+      "result": "EXPECTED_CONTROL_FAIL",
+      "receipt": "host/K79245/receipt.json",
+      "epoch": 1793586953.553269,
+      "exit_status": 1,
+      "wall_seconds": 1.2516789436340332,
+      "peak_rss_kib": 225216,
+      "swap": 0,
+      "source_revision": "362428e06f653e7732a6ecc33ba67cd122cf19fd",
+      "print_axioms": "N/A: Kani; 0 Lean",
+      "resolved_revision": "362428e06f653e7732a6ecc33ba67cd122cf19fd",
+      "failed_checks": 1,
+      "total_checks": 40,
+      "original_credit": "C151",
+      "config": {
+        "package": "b3-rest-source/tools/pv-b3p6-20261028/v244-leaf16",
+        "source_root": "b3-rest-source",
+        "harness": "equivalence16::selector_mask_statement_6144",
+        "negative": true,
+        "features": "negative-selector_mask_statement_6144",
+        "original_credit": "C151",
+        "expected_phase": "optimized compilation followed by the named bounded control-flow/index/value equivalence; no dense field elimination",
+        "std_transfer": "Separate reached-item parity/structural arguments required; no blanket deployed transfer",
+        "kani_extra": [
+          "-Z",
+          "stubbing"
+        ],
+        "stubs": [
+          "core::ptr::copy_nonoverlapping => crate::KMX_stubs::KMX_copy_nonoverlapping"
+        ]
+      },
+      "symbols_available": true
     }
   ],
   "pairs": [
@@ -1562,17 +1630,28 @@
       "scope": "equivalence16::selector_mask_statement_4097",
       "positive_checks": 40,
       "control_failed_checks": 1
+    },
+    {
+      "credit_ids": [
+        "C151"
+      ],
+      "positive": "K79244",
+      "control": "K79245",
+      "complete": true,
+      "scope": "equivalence16::selector_mask_statement_6144",
+      "positive_checks": 40,
+      "control_failed_checks": 1
     }
   ],
   "counts": {
-    "PASS": 20,
-    "EXPECTED_CONTROL_FAIL": 20,
+    "PASS": 21,
+    "EXPECTED_CONTROL_FAIL": 21,
     "SETUP_FAILURE": 2
   },
   "credit_status": {
-    "SUSPENDED": 206,
+    "SUSPENDED": 205,
     "UNAFFECTED": 81,
-    "RESTORED": 15,
+    "RESTORED": 16,
     "WITHDRAWN": 3
   },
   "endpoint_premises_removed_added_weakened": [

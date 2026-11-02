@@ -19,6 +19,15 @@ for job in jobs:
   denied=[x for x in ['admission.json','barrier.json'] if (folder/x).exists() and not json.loads((folder/x).read_text()).get('allowed',False)]
   if denied:
    assert not(folder/'time.log').exists() and not(folder/'symbols-index.json').exists(),'denied after worker started'
+   for gate in denied:
+    error=json.loads((folder/gate).read_text()).get('error')
+    if error:
+     assert error.startswith('FileNotFoundError:') and 'pv-k3scan-' not in error,('non-transient barrier error',error)
+     previous=[]
+     for older in records[:-1]:
+      oldgate=E/'host'/older['id']/gate
+      if older.get('logical_job')==job and oldgate.exists() and json.loads(oldgate.read_text()).get('error'):previous.append(older['id'])
+     assert not previous,('second transient cgroup failure for same logical job',previous,label)
    rec['uncharged_refusal']=True;rec['denied_gates']=denied;(E/'D549-CONTINUATION-QUEUE.json').write_text(json.dumps(records,indent=2)+'\n')
   if r.returncode==78 or denied:
    not_before=time.time()+180;continue

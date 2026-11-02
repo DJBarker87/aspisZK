@@ -168,7 +168,7 @@ Each row is one PASS observation. Ledger cells name the original row(s), not an 
 | C148 | V244 | `equivalence16::selector_mask_statement_2048` | OPEN | rerun: 1 original memory stub(s); full list in JSON / local state; historical inventory retained in JSON | `evidence/pv-b3p6-20261028/resume16/receipts/K72114/receipt/receipt.json`; `codex/pv-b3p6-20261028` | K79237 PASS / K79238 matched control FAIL; original names/domain/bounds retained; **RESTORED** |
 | C149 | V244 | `equivalence16::selector_mask_statement_2049` | OPEN | rerun: 1 original memory stub(s); full list in JSON / local state; historical inventory retained in JSON | `evidence/pv-b3p6-20261028/resume16/receipts/K72115/receipt/receipt.json`; `codex/pv-b3p6-20261028` | K79239 PASS / K79240 matched control FAIL; original names/domain/bounds retained; **RESTORED** |
 | C150 | V244 | `equivalence16::selector_mask_statement_4097` | OPEN | rerun: 1 original memory stub(s); full list in JSON / local state; historical inventory retained in JSON | `evidence/pv-b3p6-20261028/resume16/receipts/K72116/receipt/receipt.json`; `codex/pv-b3p6-20261028` | K79241 PASS / K79242 matched control FAIL; original names/domain/bounds retained; **RESTORED** |
-| C151 | V244 | `equivalence16::selector_mask_statement_6144` | OPEN | unrecorded (OPEN) / unrecorded (OPEN) | `evidence/pv-b3p6-20261028/resume16/receipts/K72117/receipt/receipt.json`; `codex/pv-b3p6-20261028` | not re-run; unresolved closure or inherited non-credited support; **SUSPENDED** |
+| C151 | V244 | `equivalence16::selector_mask_statement_6144` | OPEN | rerun: 1 original memory stub(s); full list in JSON / local state; historical inventory retained in JSON | `evidence/pv-b3p6-20261028/resume16/receipts/K72117/receipt/receipt.json`; `codex/pv-b3p6-20261028` | K79244 PASS / K79245 matched control FAIL; original names/domain/bounds retained; **RESTORED** |
 | C152 | V244 | `equivalence16::selector_mask_statement_6145` | OPEN | unrecorded (OPEN) / unrecorded (OPEN) | `evidence/pv-b3p6-20261028/resume16/receipts/K72118/receipt/receipt.json`; `codex/pv-b3p6-20261028` | not re-run; unresolved closure or inherited non-credited support; **SUSPENDED** |
 | C153 | V244 | `equivalence16::selector_mask_statement_26214` | OPEN | unrecorded (OPEN) / unrecorded (OPEN) | `evidence/pv-b3p6-20261028/resume16/receipts/K72119/receipt/receipt.json`; `codex/pv-b3p6-20261028` | not re-run; unresolved closure or inherited non-credited support; **SUSPENDED** |
 | C154 | V244 | `equivalence16::selector_domain` | OPEN | none in recovered selected harness / local / no selected global log recovered | `evidence/pv-b3p6-20261028/resume16/receipts/K72120/receipt/receipt.json`; `codex/pv-b3p6-20261028` | not re-run; unresolved closure or inherited non-credited support; **SUSPENDED** |
@@ -338,7 +338,7 @@ Native-step statics still SUSPENDED: C051 empty_gate::empty_noncopy_length_branc
 
 Setup failures are retained: K79206-preflight failed cargo metadata before any compiler/scope, uncharged, then recovered the omitted pinned c3/include directories. K79208 was a charged compiler/setup failure on an omitted frozen tree_reference file; K79209 used the repaired, explicitly recorded module/literal closure. No property was checked in K79208 and no failure was hidden. K79207's one expected assertion panic used Kani's runtime-format placeholder; A direct-spelling control for that same false inequality was prepared but not launched; its slot was consumed by the retained K79219 path setup failure. K79220 corrects only the module path, not any source/native property.
 
-Campaign IN PROGRESS; allowance is not yet exhausted. 20 complete retained property/control pairs.
+Campaign IN PROGRESS; allowance is not yet exhausted. 21 complete retained property/control pairs.
 
 | Pair credit | Positive | Matched control | Scope |
 |---|---|---|---|
@@ -362,3 +362,4 @@ Campaign IN PROGRESS; allowance is not yet exhausted. 20 complete retained prope
 | C148 | K79237 PASS | K79238 FAIL | `equivalence16::selector_mask_statement_2048` |
 | C149 | K79239 PASS | K79240 FAIL | `equivalence16::selector_mask_statement_2049` |
 | C150 | K79241 PASS | K79242 FAIL | `equivalence16::selector_mask_statement_4097` |
+| C151 | K79244 PASS | K79245 FAIL | `equivalence16::selector_mask_statement_6144` |
