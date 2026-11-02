@@ -11,8 +11,8 @@ open PV_RunJoin_LiftColumnsValue66 (tails vec)
 theorem row_length (columns : Columns)
     (hlen : ∀ l,l<26 → (column columns l).length=1024) (lane : Nat) :
     (PV_RunJoin_LiftRowValue66.row columns hlen lane).length=1024 := by
-  change (PV_RunJoin_LiftPayload66.payload columns hlen lane 0 1024).length=1024
-  simp only [PV_RunJoin_LiftPayload66.payload,List.length_ofFn]
+  simp only [alloc.vec.Vec.length,PV_RunJoin_LiftRowValue66.row,
+    PV_RunJoin_LiftPayload66.payload,List.length_ofFn]
 
 theorem vec_length (a : Array aspis_core.field.QM31 1024#usize) :
     (vec a).length=1024 := a.property
