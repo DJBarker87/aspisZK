@@ -42,7 +42,7 @@ theorem empty_initialization_with_identity (system : Allocator) (encode : Alloca
   simp only [withCapacity,hl,hz,if_false,PV_EVH_ClientAllocator.allocate,
     Bind.bind,PV_EVH_Runtime.bind,tryAllocate,ha,Pure.pure,PV_EVH_Runtime.lift,
     PV_EVH_AllocationOwnership.emptyView] at hown ⊢
-  exact ⟨rfl,hown⟩
+  exact ⟨True.intro,hown⟩
 
 theorem zero_size_no_allocator (system : Allocator) (encode : AllocationEvent → Bytes)
     (writer : PV_EVH_LiteralDiagnostics.Writer) (abortEvents : List NativeEvent)
