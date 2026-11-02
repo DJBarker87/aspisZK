@@ -23,6 +23,7 @@ theorem complete (polynomial : Array Q 28#usize) (powers : Array Q 3#usize)
   obtain ⟨q1,hq1⟩ := ProverRwP6ArrayRead.read polynomial (Usize.wrapping_add start 1#usize) (offset _ (by decide))
   obtain ⟨q2,hq2⟩ := ProverRwP6ArrayRead.read polynomial (Usize.wrapping_add start 2#usize) (offset _ (by decide))
   obtain ⟨q3,hq3⟩ := ProverRwP6ArrayRead.read polynomial (Usize.wrapping_add start 3#usize) (offset _ (by decide))
+  dsimp only [start] at hq hq1 hq2 hq3
   obtain ⟨q4,hq4⟩ := PV_RunJoin_PolyChannelsTotal72.complete powers (Array.make 3#usize [q1,q2,q3])
   obtain ⟨out,ho⟩ := qadd q q4
   exact ⟨out,by simp only [host_arithmetic.evaluate_state_only_polynomial.block_value,
