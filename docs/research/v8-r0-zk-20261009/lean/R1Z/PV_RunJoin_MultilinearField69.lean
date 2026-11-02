@@ -74,13 +74,13 @@ theorem qmul (self rhs : Q) : ∃ c,aspis_core.field.QM31.mul self rhs=ok c := b
 theorem qsub (a b : Q) : ∃ c,aspis_core.field.QM31.sub a b=ok c := by
   obtain ⟨c0,h0⟩ := csub a.c0 b.c0
   obtain ⟨c1,h1⟩ := csub a.c1 b.c1
-  exact ⟨_,by simp only [aspis_core.field.QM31.sub,h0,h1,lift,bind_tc_ok]⟩
+  exact ⟨⟨c0,c1⟩,by simp only [aspis_core.field.QM31.sub,h0,h1,lift,bind_tc_ok]⟩
 
 theorem eq (a b : Q) : ∃ c,aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq a b=ok c := by
   simp only [aspis_core.field.QM31.Insts.CoreCmpPartialEqQM31.eq,
     aspis_core.field.CM31.Insts.CoreCmpPartialEqCM31.eq,
     aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,lift,bind_tc_ok]
-  split <;> exact ⟨_,rfl⟩
+  repeat' first | (exact ⟨_,rfl⟩) | (simp only [bind_tc_ok]) | split
 #print axioms cadd
 #print axioms csub
 #print axioms cmul
