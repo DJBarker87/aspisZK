@@ -42,31 +42,13 @@ theorem after_draw (base : ExternalTypes)
   have hrestore : (Array.to_slice_mut before).2 (Array.to_slice a) = a :=
     PV_EVH_NativeEntropyBorrow.restore_array _ before a
   rw [hrestore]
-  rw [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops]
-  simp only [bind_tc_ok]
-  rw [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops]
-  simp only [bind_tc_ok]
-  rw [PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops]
-  simp only [bind_tc_ok,Aeneas.Std.lift]
-  rw [PV_EVH_NativeEntropyAccess.deref_native base heap box ops]
-  simp only [bind_tc_ok]
-  rw [PV_EVH_EntropyHalves.first_index,PV_EVH_EntropyHalves.copy32]
-  simp only [bind_tc_ok,PV_EVH_EntropyHalves.restored,id_eq]
-  rw [PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops]
-  simp only [bind_tc_ok,Aeneas.Std.lift]
-  rw [PV_EVH_EntropyHalves.second_index,PV_EVH_EntropyHalves.copy32]
-  simp only [bind_tc_ok,PV_EVH_EntropyHalves.restored,id_eq]
-  rw [PV_EVH_NativeEntropyAccess.deref_native base heap box ops]
-  simp only [bind_tc_ok]
-  unfold tests
-  congr 1
-  funext b
-  cases b with
-  | false => rfl
-  | true =>
-    simp only [if_true]
-    rw [PV_EVH_NativeEntropyAccess.deref_native base heap box ops]
-    rfl
+  simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
+    PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
+    PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
+    bind_tc_ok,Aeneas.Std.lift,PV_EVH_EntropyHalves.first_index,
+    PV_EVH_EntropyHalves.second_index,PV_EVH_EntropyHalves.copy32,
+    PV_EVH_EntropyHalves.restored,id_eq]
+  rfl
 
 #print axioms after_draw
 end PV_EVH_NativeEntropyValues
