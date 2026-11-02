@@ -27,7 +27,7 @@ theorem binding {T : Type} (s : Slice T) (a b : Usize) :
   simp only [core.slice.index.Slice.index,
     core.slice.index.SliceIndexRangeUsizeSlice,
     core.slice.index.SliceIndexRangeUsizeSlice.index,index,
-    Slice.length,PV_RDCD4_SliceRange194.window,List.slice]
+    UScalar.le_equiv,Slice.length,PV_RDCD4_SliceRange194.window,List.slice]
   split <;> rfl
 #print axioms success
 #print axioms oversized
