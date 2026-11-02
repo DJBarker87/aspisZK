@@ -22,8 +22,13 @@ theorem append_bound (suffix : Usize) (b : Bool) (k : Nat) (small : suffix.val<2
     rw [Nat.pow_succ]
     change (suffix.val*2)%UScalar.size .Usize<2^k*2
     omega
-  · cases b <;> change _<2^(k+1) <;> simp only [Nat.pow_succ] <;>
-      have positive := Nat.two_pow_pos k <;> omega
+  · cases b
+    · change 0<2^(k+1)
+      exact Nat.two_pow_pos _
+    · change 1<2^(k+1)
+      rw [Nat.pow_succ]
+      have positive := Nat.two_pow_pos k
+      omega
 
 #print axioms shift_val
 #print axioms append_bound
