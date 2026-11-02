@@ -12,13 +12,13 @@ const TOKEN:&str="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
 const PROFILE:[u8;32]=[0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3];
 const RELEASE:[u8;32]=[0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a];
 fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(&crate::public_text(q,k)).unwrap()}
-fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(crate::triple(Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)))}
+fn meta(p:Pubkey,s:bool,w:bool)->Value{crate::json_array(crate::triple(crate::json_string(p.to_string()),crate::json_bool(s),crate::json_bool(w)))}
 fn ro(p:Pubkey)->Value{meta(p,false,false)}
 fn rw(p:Pubkey)->Value{meta(p,false,true)}
 fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{
- let mut o=serde_json::Map::new();o.insert("program".to_owned(),Value::String(p.to_string()));o.insert("accounts".to_owned(),Value::Array(a));o.insert("data".to_owned(),Value::String(super::hex(d.as_ref())));Value::Object(o)
+ let mut o=serde_json::Map::new();o.insert("program".to_owned(),crate::json_string(p.to_string()));o.insert("accounts".to_owned(),crate::json_array(a));o.insert("data".to_owned(),crate::json_string(super::hex(d.as_ref())));crate::json_object(o)
 }
-fn number(n:usize)->Value{Value::Number(serde_json::Number::from(n as u64))}
+fn number(n:usize)->Value{crate::json_number(serde_json::Number::from(n as u64))}
 
 fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(&crate::public_text(q,k))}
 pub fn run(q:&Value)->Result<Value>{
@@ -83,20 +83,20 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  if withdrawal{a.push(ro(pk(q,"mint")));a.push(rw(vault));a.push(rw(pk(q,"destination")));a.push(ro(authority));a.push(ro(token));}
  a.push(ro(pk(q,"verifier_checkpoint")));
  let mut out=serde_json::Map::new();
- out.insert("client_route".to_owned(),Value::String("selected64-proof-account-v1".to_owned()));
- out.insert("proof_account".to_owned(),Value::String(proof_account.to_string()));
+ out.insert("client_route".to_owned(),crate::json_string("selected64-proof-account-v1".to_owned()));
+ out.insert("proof_account".to_owned(),crate::json_string(proof_account.to_string()));
  out.insert("attempt_index".to_owned(),number(attempt_index));
- out.insert("prove_wall_seconds".to_owned(),Value::Number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));
+ out.insert("prove_wall_seconds".to_owned(),crate::json_number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));
  out.insert("attempts".to_owned(),number(result.attempts));
- out.insert("p_r1".to_owned(),Value::Bool(true));
+ out.insert("p_r1".to_owned(),crate::json_bool(true));
  out.insert("proof_bytes".to_owned(),number(proof.len()));
  out.insert("proof_upload_count".to_owned(),number(proof.len().div_ceil(3763)));
  out.insert("statement_upload_count".to_owned(),number(1));
- out.insert("marker".to_owned(),Value::String(marker.to_string()));
- out.insert("output_lane".to_owned(),Value::String(lanes[output_lane as usize].to_string()));
- out.insert("page".to_owned(),Value::String(page.to_string()));
- out.insert("needs_zero_page".to_owned(),Value::Bool(lane.tree.next_leaf_index==0));
+ out.insert("marker".to_owned(),crate::json_string(marker.to_string()));
+ out.insert("output_lane".to_owned(),crate::json_string(lanes[output_lane as usize].to_string()));
+ out.insert("page".to_owned(),crate::json_string(page.to_string()));
+ out.insert("needs_zero_page".to_owned(),crate::json_bool(lane.tree.next_leaf_index==0));
  out.insert("settle".to_owned(),ix(pool,a,data));
- out.insert("stage1".to_owned(),ix(pk(q,"verifier"),match stage1_accounts { Value::Array(a)=>a,_=>return Err(anyhow!("publication shape")) },[3,10]));
- Ok(Value::Object(out))
+ out.insert("stage1".to_owned(),ix(pk(q,"verifier"),crate::json_into_array(stage1_accounts)?,[3,10]));
+ Ok(crate::json_object(out))
 }
