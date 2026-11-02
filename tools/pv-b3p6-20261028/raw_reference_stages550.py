@@ -23,7 +23,7 @@ if cut>=0:s=s[:cut]+'''#print axioms raw_reference_tail0_550
 end PV_B3P_Association550227
 '''
 emit(p,s)
-for j in range(4,-1,-1):
+for j in range(4,0,-1):
  predecessor='PV_B3P_RawTails550227'if j==4 else f'PV_B3P_RawRefTail{j+1}550227'
  arrays=['a','a1','a2','a3']if j==0 else inputs if j<4 else[]
  params=(' ('+' '.join(arrays)+' : Limbs32_550)')if arrays else''
@@ -52,7 +52,7 @@ for j in range(4,-1,-1):
   code+=f'  exact raw_reference_tail{j+1}_factor550 '+' '.join((inputs if j+1<4 else[])+vals[:4*(j+1)])+'\n'
  code+=f'\n#print axioms raw_reference_tail{j}_factor550\nend PV_B3P_Association550227\n'
  emit(L/f'PV_B3P_RawRefTail{j}550227.lean',code)
-code='import PV_B3P_RawRefTail0550227\n'+head+'''
+code='import PV_B3P_RawRefTail1550227\n'+head+'''
 theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
     reference_poseidon.external_local_packed_raw input = (do
 '''+prefix+'''  raw_reference_tail0_550 a a1 a2 a3) := by
@@ -61,7 +61,11 @@ theorem raw_reference_factor550 (input : Array aspis_core.field.QM31 4#usize) :
 for line in prefix.splitlines():
  m=re.match(r'  let (\w+) ←',line)
  if m:code+='  apply bind_equal9\n  intro '+m[1]+'\n'
-code+='''  exact raw_reference_tail0_factor550 a a1 a2 a3
+code+='  unfold raw_reference_tail0_550\n'
+for line in chunks[0].splitlines():
+ m=re.match(r'  let (\w+) ←',line)
+ if m:code+='  apply bind_equal9\n  intro '+m[1]+'\n'
+code+='''  exact raw_reference_tail1_factor550 a4 a6 a7 a8 i4 i9 i14 i19
 
 #print axioms raw_reference_factor550
 end PV_B3P_Association550227
@@ -70,4 +74,4 @@ emit(L/'PV_B3P_RawReferenceFactor550227.lean',code)
 p=L/'PV_B3P_RawSource550227.lean';s=p.read_text()
 if 'import PV_B3P_RawReferenceFactor550227'not in s:s=s.replace('import PV_B3P_RawTail0550227','import PV_B3P_RawTail0550227\nimport PV_B3P_RawReferenceFactor550227')
 emit(p,s)
-print('five reference continuation factors and eight-bind root factor generated')
+print('four reference continuation factors and direct original root continuation factor generated; literal RefTail0 retired')
