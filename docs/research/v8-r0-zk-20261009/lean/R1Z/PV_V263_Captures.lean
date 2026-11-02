@@ -32,7 +32,7 @@ theorem pool_range (k : Nat) :
   simp only [PV_RunJoin_WorkRange35.start,PV_RunJoin_WorkRange35.width,
     show 16/16=1 from rfl,show 16%16=0 from rfl,Nat.one_mul,Nat.min_zero,
     Nat.add_zero,Nat.not_lt_zero,if_false]
-  exact ⟨rfl,rfl⟩
+  constructor <;> trivial
 
 theorem pool_indices (k : Nat) : PV_V263_Family.indices 16 k = [k] := by
   unfold PV_V263_Family.indices
