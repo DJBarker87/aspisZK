@@ -49,7 +49,8 @@ theorem complete (add : ∀ a b : Q,∃ c,aspis_core.field.QM31.add a b=ok c)
     ∃ out,host_sumcheck.merge_evaluations evaluations a=ok (.Ok out) := by
   obtain ⟨z,hz⟩ := zero
   obtain ⟨out,ho⟩ := loop add evaluations a positive (Slice.len evaluations) rfl small samples valid
-    (Array.repeat 28#usize z) evaluations.length 0#usize rfl
+    (Array.repeat 28#usize z) evaluations.length 0#usize
+    (by change 0+evaluations.length=evaluations.length;omega)
   exact ⟨out,by simp only [host_sumcheck.merge_evaluations,hz,ho,bind_tc_ok,Aeneas.Std.uncurry]⟩
 
 #print axioms loop
