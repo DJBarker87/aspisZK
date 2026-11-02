@@ -16,9 +16,10 @@ def clearOwned (encode : Event → Bytes) (key : Key) (initialized : Nat) : Q Un
   | some b =>
     if initialized ≤ b.bytes.length then
       let updated := clearBlock b initialized
-      ⟨.returned (.ok ()), {w with heap := w.heap.map
-        (fun old => if sameKey key old then updated else old)},
-        (stores key 0 initialized ++ [.fence]).map
+      let post : State := {w with heap := (w.heap.map
+        (fun old => if sameKey key old then updated else old))}
+      ⟨.returned (.ok ()), post,
+        (stores key 0 initialized ++ [Event.fence]).map
           (fun e => .side [122,101,114,111,105,122,101] (encode e))⟩
     else ⟨.fault (.invalidMemory key.identity),w,[]⟩
 
@@ -41,7 +42,7 @@ theorem successful_clear (encode : Event → Bytes) (key : Key) (n : Nat)
       (fun old => if sameKey key old then clearBlock b n else old) ∧
     (clearOwned encode key n w).state.allocator = w.allocator ∧
     (clearOwned encode key n w).state.errno = w.errno ∧
-    (clearOwned encode key n w).events = (stores key 0 n ++ [.fence]).map
+    (clearOwned encode key n w).events = (stores key 0 n ++ [Event.fence]).map
       (fun e => .side [122,101,114,111,105,122,101] (encode e)) := by
   simp only [clearOwned,hb,h,if_true,and_self]
 
