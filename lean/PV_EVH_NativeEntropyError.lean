@@ -8,6 +8,8 @@ open R1Z.PV_RunJoin_NativeResidual62
 open PV_EVH_HeapOwnership (Key)
 open PV_EVH_StackZero (Slot State Cleared)
 open PV_EVH_StackCleanup (Q Run sameKey drop64)
+variable [ExternalTypes]
+
 abbrev Answer := ControlFlow Usize (core.result.Result
   aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
   aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)
@@ -18,7 +20,7 @@ def returnedError (e : getrandom.error.Error) : Answer :=
 
 /-- The branch is the existing extraction, not a reference client. This is a
 small symbolic error branch; it never reduces the entropy/retry recurrence. -/
-theorem source_error [ExternalTypes] [ExternalFuns]
+theorem source_error [ExternalFuns]
     (mask : Array U8 32#usize) (retry : Usize)
     (back : Slice U8 → zeroize.Zeroizing (Array U8 64#usize))
     (e : getrandom.error.Error) (s : Slice U8) :
