@@ -25,7 +25,7 @@ theorem complete (p : Nat → Q) :
   have init : (⟨U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c0.a),
       U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c0.b),
       U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c1.a),
-      U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c1.b)⟩ : ProverRwP6BoundaryStep.Acc)=initial (p 0) := rfl
+      U64.wrapping_mul 2#u64 (core.convert.num.FromU64U32.from (p 0).c1.b)⟩ : ProverRwP6BoundaryStep.Acc)=initial (p 0) := by unfold initial;rfl
   rw [init]
   repeat' first
     | (rw [PV_RunJoin_MergeArray35.read p _ (by decide)];simp only [lift,bind_tc_ok])
