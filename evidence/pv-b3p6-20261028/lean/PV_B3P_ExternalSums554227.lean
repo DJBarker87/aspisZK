@@ -6,6 +6,7 @@ set_option autoImplicit false
 
 attribute [local irreducible] Aeneas.Std.bind Array.index_usize
   reference_poseidon.extension_limbs U64.wrapping_add core.convert.num.FromU64U32.from
+  external_sums_column0_554 external_sums_column1_554 external_sums_column2_554 external_sums_column3_554
 
 theorem external_sums_reference554 (state : Array aspis_core.field.QM31 16#usize) :
     external_sums_source554 state = reference_poseidon.global_sums227 state := by
