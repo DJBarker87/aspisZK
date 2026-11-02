@@ -24,8 +24,15 @@ theorem complete (x : aspis_core.field.wide_exact.WideExact)
         PV_RunJoin_FlatBytes35.byte w ⟨2,by decide⟩,PV_RunJoin_FlatBytes35.byte w ⟨3,by decide⟩],
         by simp only [List.length_cons,List.length_nil,UScalar.ofNatCore_val_eq]⟩ : Array U8 4#usize)=w :=
     PV_RunJoin_ByteWordGroups72.word w
-  rw [decode]
-  repeat' rw [decode]
+  have d0 := decode x.c0.c0.a
+  have d1 := decode x.c0.c0.b
+  have d2 := decode x.c0.c1.a
+  have d3 := decode x.c0.c1.b
+  have d4 := decode x.c1.c0.a
+  have d5 := decode x.c1.c0.b
+  have d6 := decode x.c1.c1.a
+  have d7 := decode x.c1.c1.b
+  rw [d0,d1,d2,d3,d4,d5,d6,d7]
   exact PV_RunJoin_WideLimbsParse72.complete x canonical
 
 #print axioms complete
