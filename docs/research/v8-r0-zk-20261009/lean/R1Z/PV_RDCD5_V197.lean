@@ -17,13 +17,13 @@ def reference (bytes : List U8) : Result (Option Q) :=
         match c1 with
         | none => ok none
         | some c1 => ok (some ⟨c0,c1⟩)
-      else fail .arrayOutOfBounds
-  else fail .arrayOutOfBounds
+      else fail .panic
+  else fail .panic
 
 theorem source_reference (bytes : List U8) : qm bytes=reference bytes := by
   unfold qm reference
   by_cases h8 : 8 ≤ bytes.length
-  · rw [if_pos h8,PV_RDCD4_SliceRange194.success bytes 0 8 (by omega) h8,bind_tc_ok]
+  · rw [if_pos h8,PV_RDCD5_ParserRange.success bytes 0 8 (by omega) h8,bind_tc_ok]
     apply congrArg (fun f : Option C → Result (Option Q) =>
       cm (PV_RDCD4_SliceRange194.window bytes 0 8) >>= f)
     funext result
@@ -32,15 +32,15 @@ theorem source_reference (bytes : List U8) : qm bytes=reference bytes := by
     | some c0 =>
       dsimp only
       by_cases h16 : 16 ≤ bytes.length
-      · rw [if_pos h16,PV_RDCD4_SliceRange194.success bytes 8 16 (by omega) h16,bind_tc_ok]
+      · rw [if_pos h16,PV_RDCD5_ParserRange.success bytes 8 16 (by omega) h16,bind_tc_ok]
         rfl
-      · rw [if_neg h16,PV_RDCD4_SliceRange194.oversized bytes 8 16 (by omega)]
+      · rw [if_neg h16,PV_RDCD5_ParserRange.oversized bytes 8 16 (by omega)]
         rfl
-  · rw [if_neg h8,PV_RDCD4_SliceRange194.oversized bytes 0 8 (by omega)]
+  · rw [if_neg h8,PV_RDCD5_ParserRange.oversized bytes 0 8 (by omega)]
     rfl
 
 theorem short_failure (bytes : List U8) (h : bytes.length < 8) :
-    qm bytes=fail .arrayOutOfBounds := by
+    qm bytes=fail .panic := by
   rw [source_reference,reference,if_neg (by omega)]
 
 /-- Original arbitrary-slice carrier, including every short-input branch. -/

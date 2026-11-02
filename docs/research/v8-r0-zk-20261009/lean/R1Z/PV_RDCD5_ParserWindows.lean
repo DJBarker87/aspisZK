@@ -17,8 +17,8 @@ theorem component_window (xs : List U8) (base i : Nat)
     have h := length xs base (base+8) hx
     omega
   unfold PV_RDCD4_BytesSource.component
-  rw [success (window xs base (base+8)) i (i+4) (by omega) (by omega),
-    success xs (base+i) (base+(i+4)) (by omega) (by omega),bind_tc_ok,bind_tc_ok,
+  rw [PV_RDCD5_ParserRange.success (window xs base (base+8)) i (i+4) (by omega) (by omega),
+    PV_RDCD5_ParserRange.success xs (base+i) (base+(i+4)) (by omega) (by omega),bind_tc_ok,bind_tc_ok,
     compose xs base (base+8) i (i+4) (by omega)]
 
 /-- Successful checked windows retain exactly the same backing bytes. -/

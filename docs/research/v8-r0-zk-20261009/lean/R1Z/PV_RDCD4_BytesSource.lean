@@ -1,4 +1,4 @@
-import R1Z.PV_RDCD4_SliceRange194
+import R1Z.PV_RDCD5_ParserRange
 import R1Z.PV_RDCD4_TryArray194
 import R1Z.PV_RDCD4_Endian194
 import R1Z.PV_RDCD4_FieldSource
@@ -15,7 +15,7 @@ def scalar (bytes : Array U8 4#usize) : Option M :=
   if v ≥ PV_RDCD4_FieldSource.aspis_core.field.P then none else some v
 
 def component (bytes : List U8) (start stop : Nat) : Result (Option M) := do
-  let part ← PV_RDCD4_SliceRange194.index bytes start stop
+  let part ← PV_RDCD5_ParserRange.index bytes start stop
   let converted : Option (Array U8 4#usize) :=
     PV_RDCD4_TryArray194.into (T := U8) 4#usize part
   match converted with
@@ -37,12 +37,12 @@ def cm (bytes : List U8) : Result (Option C) := do
 /-- QM31 source order: take first half, parse and short circuit, only then take
 second half. This is an owned draft over backing bytes, not edited extraction. -/
 def qm (bytes : List U8) : Result (Option Q) := do
-  let left ← PV_RDCD4_SliceRange194.index bytes 0 8
+  let left ← PV_RDCD5_ParserRange.index bytes 0 8
   let c0 ← cm left
   match c0 with
   | none => .ok none
   | some c0 => do
-    let right ← PV_RDCD4_SliceRange194.index bytes 8 16
+    let right ← PV_RDCD5_ParserRange.index bytes 8 16
     let c1 ← cm right
     match c1 with
     | none => .ok none
