@@ -1,27 +1,32 @@
 import PV_UC_RawAudit
 import PVUCDecoder.Funs
-import PVUCStringEntry.Funs
-import PV_UC_PublicFormatting
+import PVUCReadyEntry.Funs
+import PV_UC_FinalPublicFormatting
 
 open Lean Elab Command
-#print axioms PV_UC_StringEntry.main
+#print axioms PV_UC_ReadyEntry.main
 #print axioms PV_UC_Decoder.wallet.decode_wallet_record
-#print axioms PV_UC_PublicFormatting.walletPath_same_public
-#print axioms PV_UC_PublicFormatting.stdout_recomputable
-#print axioms PV_UC_PublicFormatting.pubkey_recomputable
-#print axioms PV_UC_PublicFormatting.extracted_fd_formatter_public
-#print axioms PV_UC_PublicFormatting.extracted_json_formatter_recomputable
+#print axioms PV_UC_FinalPublicFormatting.walletPath_same_public
+#print axioms PV_UC_FinalPublicFormatting.stdout_recomputable
+#print axioms PV_UC_FinalPublicFormatting.pubkey_recomputable
+#print axioms PV_UC_FinalPublicFormatting.extracted_fd_formatter_public
+#print axioms PV_UC_FinalPublicFormatting.extracted_json_formatter_recomputable
+#print axioms PV_UC_FinalPublicFormatting.extracted_pubkey_formatter_recomputable
 
 run_cmd do
   let dir := "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/d561/axioms"
   liftIO <| IO.FS.createDirAll dir
-  PV_UC_RawAudit.audit ``PV_UC_StringEntry.main (dir ++ "/main")
+  PV_UC_RawAudit.audit ``PV_UC_ReadyEntry.main (dir ++ "/main")
   PV_UC_RawAudit.audit ``PV_UC_Decoder.wallet.decode_wallet_record (dir ++ "/decode_wallet_record")
-  PV_UC_RawAudit.audit ``PV_UC_PublicFormatting.walletPath_same_public (dir ++ "/walletPath_same_public")
-  PV_UC_RawAudit.audit ``PV_UC_PublicFormatting.stdout_recomputable (dir ++ "/stdout_recomputable")
-  PV_UC_RawAudit.audit ``PV_UC_PublicFormatting.pubkey_recomputable (dir ++ "/pubkey_recomputable")
-  PV_UC_RawAudit.audit ``PV_UC_PublicFormatting.extracted_fd_formatter_public (dir ++ "/extracted_fd_formatter_public")
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.walletPath_same_public (dir ++ "/walletPath_same_public")
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.stdout_recomputable (dir ++ "/stdout_recomputable")
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.pubkey_recomputable (dir ++ "/pubkey_recomputable")
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.extracted_fd_formatter_public (dir ++ "/extracted_fd_formatter_public")
 
 run_cmd do
   let dir := "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/d561/axioms"
-  PV_UC_RawAudit.audit ``PV_UC_PublicFormatting.extracted_json_formatter_recomputable (dir ++ "/extracted_json_formatter_recomputable")
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.extracted_json_formatter_recomputable (dir ++ "/extracted_json_formatter_recomputable")
+
+run_cmd do
+  let dir := "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/d561/axioms"
+  PV_UC_RawAudit.audit ``PV_UC_FinalPublicFormatting.extracted_pubkey_formatter_recomputable (dir ++ "/extracted_pubkey_formatter_recomputable")
