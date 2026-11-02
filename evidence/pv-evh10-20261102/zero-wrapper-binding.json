@@ -1,0 +1,67 @@
+{
+  "evidence_class": "structural source association (own-1)",
+  "source": {
+    "path": "/home/dombarker/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/zeroize-1.9.0/src/lib.rs",
+    "sha256": "61012679ef3d0cc4e29b6f9c9d6c572c4ba8110e70a1e1c527da6bfaf77494ef"
+  },
+  "steps": [
+    {
+      "anchor": "pub fn new(value: Z) -> Self",
+      "body": "{\n        Self(value)\n    }",
+      "body_sha256": "2a6fad7d3026e2ed15c2b6973df6ba1d88319932e9a76ff44cc2cf17278ae655",
+      "law": "PV_EVH_ZeroWrappers.new",
+      "meaning": "wrap owned value without changing it"
+    },
+    {
+      "anchor": "fn deref(&self) -> &Z",
+      "body": "{\n        &self.0\n    }",
+      "body_sha256": "c29b83122c26466b5439d964f6b91fba774b2a1f2eebcb58eacb9f1c05a14ed9",
+      "law": "PV_EVH_ZeroWrappers.deref",
+      "meaning": "borrow original inner value"
+    },
+    {
+      "anchor": "fn deref_mut(&mut self) -> &mut Z",
+      "body": "{\n        &mut self.0\n    }",
+      "body_sha256": "6259b4138db7b3a96ecc5ec58d52900fed9272d19144ad11ca557bb9c415ef1f",
+      "law": "PV_EVH_ZeroWrappers.derefMut",
+      "meaning": "borrow inner value and retain identity backward restoration"
+    },
+    {
+      "anchor": "fn as_ref(&self) -> &T",
+      "body": "{\n        self.0.as_ref()\n    }",
+      "body_sha256": "d9caed7710d079c5a8245e41c1b5febff4e5a90f16207dc825a82c54018ccdb4",
+      "law": "PV_EVH_ZeroWrappers.asRef",
+      "meaning": "delegate to supplied AsRef dictionary"
+    },
+    {
+      "anchor": "fn as_mut(&mut self) -> &mut T",
+      "body": "{\n        self.0.as_mut()\n    }",
+      "body_sha256": "4a0dcf6d9d49058c765b453fcdcdbf13434453ca09a8f5aacc7785209486ac3a",
+      "law": "PV_EVH_ZeroWrappers.asMut",
+      "meaning": "delegate to supplied AsMut dictionary, preserving its backward function"
+    },
+    {
+      "anchor": "impl<Z> Zeroize for Zeroizing<Z>",
+      "body": "{\n    fn zeroize(&mut self) {\n        self.0.zeroize();\n    }\n}",
+      "body_sha256": "ceeff6cc8c7464a351d8158f8c22da154d5c609def3575c99f425a11bb73fe89",
+      "law": "PV_EVH_ZeroWrappers.zeroize",
+      "meaning": "delegate to inner Zeroize, with deployed memory/history effects retained separately"
+    },
+    {
+      "anchor": "impl<Z> Drop for Zeroizing<Z>",
+      "body": "{\n    fn drop(&mut self) {\n        self.0.zeroize();\n    }\n}",
+      "body_sha256": "abf4aec0a4ba532d42d7eba0091abedc9bfde902c4f4cf2e7ccabf5d8eeae40b",
+      "law": "PV_EVH_StackZero.drop",
+      "meaning": "delegate to inner Zeroize, with deployed memory/history effects retained separately"
+    }
+  ],
+  "retained": [
+    "V370",
+    "supplied AsMut/AsRef dictionary fidelity",
+    "physical stack admission and source buffer association",
+    "full entry native coverage",
+    "L3 joint observation"
+  ],
+  "trust_fields_added": [],
+  "rows_removed": []
+}
