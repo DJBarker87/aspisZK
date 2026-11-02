@@ -23,9 +23,11 @@ theorem source (s : Slice U8) :
     ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_le_bytes s = parse s := by
   unfold parse ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.from_le_bytes
     ProverRwDictionaryBytesSource.aspis_core.field.wide_exact.WideExact.BYTE_LEN
-  split
-  · rfl
-  · unfold read
+  dsimp only []
+  by_cases h : (Slice.len s != 32#usize)=true
+  · simp only [h,if_true]
+  · simp only [h,if_false]
+    unfold PV_RunJoin_FourReader73.read
     simp only [bind_assoc_eq,bind_tc_ok,lift]
 
 attribute [irreducible] parse
