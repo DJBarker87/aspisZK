@@ -1,0 +1,175 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_FileDescWrite.lean:41:74: error: unsolved goals
+E : Type
+libc : ℕ → ℕ → ℕ → Bytes → Q ℤ
+lastError : Q E
+fd address : ℕ
+bytes : Bytes
+w : State
+h : (libc fd address (count bytes) bytes w).outcome = Outcome.returned (Result.ok (-1))
+⊢ {
+      outcome :=
+        (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+              state := (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).state,
+              events :=
+                (lastError (libc fd address (count bytes) bytes w).state).events ++
+                  (pure (Except.error a)
+                      (lastError (libc fd address (count bytes) bytes w).state).state).events }).outcome,
+      state :=
+        (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+              state := (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).state,
+              events :=
+                (lastError (libc fd address (count bytes) bytes w).state).events ++
+                  (pure (Except.error a)
+                      (lastError (libc fd address (count bytes) bytes w).state).state).events }).state,
+      events :=
+        (libc fd address (count bytes) bytes w).events ++
+          (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e),
+                state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              {
+                outcome :=
+                  (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+                state := (pure (Except.error a) (lastError (libc fd address (count bytes) bytes w).state).state).state,
+                events :=
+                  (lastError (libc fd address (count bytes) bytes w).state).events ++
+                    (pure (Except.error a)
+                        (lastError (libc fd address (count bytes) bytes w).state).state).events }).events } =
+    {
+      outcome :=
+        (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                    (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+              state :=
+                (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                    (lastError (libc fd address (count bytes) bytes w).state).state).state,
+              events :=
+                (lastError (libc fd address (count bytes) bytes w).state).events ++
+                  (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                      (lastError (libc fd address (count bytes) bytes w).state).state).events }).outcome,
+      state :=
+        (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+          | Outcome.fault e =>
+            { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.exhausted =>
+            { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.fail e) =>
+            { outcome := Outcome.returned (Result.fail e),
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned Result.div =>
+            { outcome := Outcome.returned Result.div,
+              state := (lastError (libc fd address (count bytes) bytes w).state).state,
+              events := (lastError (libc fd address (count bytes) bytes w).state).events }
+          | Outcome.returned (Result.ok a) =>
+            {
+              outcome :=
+                (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                    (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+              state :=
+                (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                    (lastError (libc fd address (count bytes) bytes w).state).state).state,
+              events :=
+                (lastError (libc fd address (count bytes) bytes w).state).events ++
+                  (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                      (lastError (libc fd address (count bytes) bytes w).state).state).events }).state,
+      events :=
+        (libc fd address (count bytes) bytes w).events ++
+          (match (lastError (libc fd address (count bytes) bytes w).state).outcome with
+            | Outcome.fault e =>
+              { outcome := Outcome.fault e, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.exhausted =>
+              { outcome := Outcome.exhausted, state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned (Result.fail e) =>
+              { outcome := Outcome.returned (Result.fail e),
+                state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned Result.div =>
+              { outcome := Outcome.returned Result.div,
+                state := (lastError (libc fd address (count bytes) bytes w).state).state,
+                events := (lastError (libc fd address (count bytes) bytes w).state).events }
+            | Outcome.returned (Result.ok a) =>
+              {
+                outcome :=
+                  (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                      (lastError (libc fd address (count bytes) bytes w).state).state).outcome,
+                state :=
+                  (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                      (lastError (libc fd address (count bytes) bytes w).state).state).state,
+                events :=
+                  (lastError (libc fd address (count bytes) bytes w).state).events ++
+                    (PV_EVH_Runtime.lift (Result.ok (Except.error a))
+                        (lastError (libc fd address (count bytes) bytes w).state).state).events }).events }
+'PV_EVH_FileDescWrite.bounded_request' depends on axioms: [propext]
+'PV_EVH_FileDescWrite.error_world' depends on axioms: [propext, sorryAx]
+'PV_EVH_FileDescWrite.nonerror_world' depends on axioms: [propext]
+'PV_EVH_FileDescWrite.fault_prefix' depends on axioms: [propext]

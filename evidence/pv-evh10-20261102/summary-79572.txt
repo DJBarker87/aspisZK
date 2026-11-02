@@ -1,0 +1,116 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:58:2: error: Tactic `rfl` failed: The left-hand side
+  let (a3, deref_mut_back) := (Array.repeat 32#usize 0#u8, id)
+  let (s2, to_slice_mut_back) := (a3.to_slice, a3.from_slice)
+  do
+  let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 (field a).to_slice
+  let (a6, deref_mut_back1) := (Array.repeat 32#usize 0#u8, id)
+    let (s5, to_slice_mut_back1) := (a6.to_slice, a6.from_slice)
+    do
+    let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 (seed a).to_slice
+    let b ← aspis_prover.state_only_entropy.entropy_nonzero32 (deref_mut_back (to_slice_mut_back s4))
+    if b = true then do
+        let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 (deref_mut_back1 (to_slice_mut_back1 s7))
+        if b1 = true then
+            Result.ok
+              (done
+                (core.result.Result.Ok
+                  { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                    leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+          else Result.ok (cont (retry.wrapping_add 1#usize))
+      else Result.ok (cont (retry.wrapping_add 1#usize))
+is not definitionally equal to the right-hand side
+  tests mask retry a
+
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+retry : Usize
+before a : Std.Array U8 64#usize
+hrestore : before.to_slice_mut.2 a.to_slice = a
+hcopy :
+  ∀ (x y : Std.Array U8 32#usize),
+    core.slice.Slice.copy_from_slice core.marker.CopyU8 x.to_slice y.to_slice = Result.ok y.to_slice
+hback : ∀ (x y : Std.Array U8 32#usize), x.from_slice y.to_slice = y
+⊢ (let (a3, deref_mut_back) := (Array.repeat 32#usize 0#u8, id)
+    let (s2, to_slice_mut_back) := (a3.to_slice, a3.from_slice)
+    do
+    let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 (field a).to_slice
+    let (a6, deref_mut_back1) := (Array.repeat 32#usize 0#u8, id)
+      let (s5, to_slice_mut_back1) := (a6.to_slice, a6.from_slice)
+      do
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 (seed a).to_slice
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 (deref_mut_back (to_slice_mut_back s4))
+      if b = true then do
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 (deref_mut_back1 (to_slice_mut_back1 s7))
+          if b1 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                      leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+            else Result.ok (cont (retry.wrapping_add 1#usize))
+        else Result.ok (cont (retry.wrapping_add 1#usize))) =
+    tests mask retry a
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:57:4: warning: This simp argument is unused:
+  hcopy
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
+  ̵  ̵ ̵ ̵bind_tc_ok, ̲Aeneas.Std.lift,
+  ̲ ̲ ̲ ̲ ̲Array.to_slice_mut,
+  ̵  ̵ ̵ ̵PV_EVH_EntropyHalves.first_index, ̲PV_EVH_EntropyHalves.second_index,
+  ̵  ̵ ̵ ̵hc̵o̵p̵y̵,̵h̵back,
+  ̲ ̲ ̲ ̲ ̲id_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:57:10: warning: This simp argument is unused:
+  hback
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
+  ̵  ̵ ̵ ̵bind_tc_ok, ̲Aeneas.Std.lift,
+  ̲ ̲ ̲ ̲ ̲Array.to_slice_mut,
+  ̵  ̵ ̵ ̵PV_EVH_EntropyHalves.first_index, ̲PV_EVH_EntropyHalves.second_index, ̲h̲c̲o̲p̲y̲,̲
+      h̵c̵o̵p̵y̵,̵h̵b̵a̵c̵k̵,̵id_eq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:57:16: warning: This simp argument is unused:
+  id_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
+      PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
+  ̵  ̵ ̵ ̵bind_tc_ok, ̲Aeneas.Std.lift,
+  ̲ ̲ ̲ ̲ ̲Array.to_slice_mut,
+  ̵  ̵ ̵ ̵PV_EVH_EntropyHalves.first_index, ̲PV_EVH_EntropyHalves.second_index, ̲h̲c̲o̲p̲y̲,̲
+      hc̵o̵p̵y̵,̵h̵back,̵i̵d̵_̵e̵q̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_EVH_NativeEntropyValues.after_draw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{
+  "attempt": 79572,
+  "target": "PV_EVH_NativeEntropyValues",
+  "source_revision": "abe54866b450144b21877361636af8c2d29bc49c",
+  "source_path": "lean/PV_EVH_NativeEntropyValues.lean",
+  "source_git_blob": "5a618e389f2e96cfa5bfb8179e53673e86bc7ce3",
+  "source_sha256": "72988e2e0678a264343e20c9d172baef076bdaffaa34179baf7d98e625c5f630",
+  "exit": "1",
+  "peak_rss_kbytes": "4421556",
+  "swaps": "0",
+  "wall": "0:01.84",
+  "axioms": [
+    "'PV_EVH_NativeEntropyValues.after_draw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "deps_fingerprint": "eec9a3651d9f3d9e6f3480c28cdbc5c949cf522457c36b7a7ee4cfa2c5983e7b",
+  "accepted": false
+}

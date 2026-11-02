@@ -1,0 +1,103 @@
+def PV_EVH_Entropy.afterDraw : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Array Aeneas.Std.U8 32#usize →
+      Aeneas.Std.Usize →
+        (Aeneas.Std.Slice Aeneas.Std.U8 → ProverRwFull.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 64#usize)) →
+          Aeneas.Std.core.result.Result Unit ProverRwFull.getrandom.error.Error →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Result
+                (Aeneas.Std.ControlFlow Aeneas.Std.Usize
+                  (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                    ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] mask_nonce retry as_mut_back r s1 => do
+  let cf ← Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r
+  PV_EVH_Entropy.afterDraw.match_1
+      (fun cf =>
+        Aeneas.Std.Result
+          (Aeneas.Std.ControlFlow Aeneas.Std.Usize
+            (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+              ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)))
+      cf
+      (fun a =>
+        have bytes1 := as_mut_back s1;
+        have a1 := Aeneas.Std.Array.repeat 32#usize 0#u8;
+        do
+        let field_mask_entropy ←
+          ProverRwFull.zeroize.Zeroizing.new
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              a1
+        have a2 : Aeneas.Std.Array (Aeneas.Std.UScalar Aeneas.Std.UScalarTy.U8) 32#usize :=
+          Aeneas.Std.Array.repeat 32#usize 0#u8
+        let leaf_salt_seed ←
+          ProverRwFull.zeroize.Zeroizing.new
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              a2
+        let (a3, deref_mut_back) ←
+          ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              field_mask_entropy
+        let (s2, to_slice_mut_back) ← Aeneas.Std.lift a3.to_slice_mut
+        let a4 ←
+          ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 64#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              bytes1
+        let s3 ←
+          Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8))
+              a4 { «end» := 32#usize }
+        let s4 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s2 s3
+        have a5 : Aeneas.Std.Array Aeneas.Std.U8 32#usize := to_slice_mut_back s4
+        have field_mask_entropy1 : ProverRwFull.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 32#usize) :=
+          deref_mut_back a5
+        let (a6, deref_mut_back1) ←
+          ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              leaf_salt_seed
+        let (s5, to_slice_mut_back1) ← Aeneas.Std.lift a6.to_slice_mut
+        let s6 ←
+          Aeneas.Std.core.array.Array.index
+              (Aeneas.Std.core.ops.index.IndexSlice
+                (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8))
+              a4 { start := 32#usize }
+        let s7 ← Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s5 s6
+        have a7 : Aeneas.Std.Array Aeneas.Std.U8 32#usize := to_slice_mut_back1 s7
+        have leaf_salt_seed1 : ProverRwFull.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 32#usize) :=
+          deref_mut_back1 a7
+        let a8 ←
+          ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+              (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              field_mask_entropy1
+        let b ← ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32 a8
+        if b = true then do
+            let a9 ←
+              ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                  (ProverRwFull.Array.Insts.ZeroizeZeroize 32#usize
+                    (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                  leaf_salt_seed1
+            let b1 ← ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32 a9
+            if b1 = true then
+                Aeneas.Std.Result.ok
+                  (Aeneas.Std.ControlFlow.done
+                    (Aeneas.Std.core.result.Result.Ok
+                      { mask_nonce := mask_nonce, field_mask_entropy := field_mask_entropy1,
+                        leaf_salt_seed := leaf_salt_seed1 }))
+              else do
+                let retry1 ← Aeneas.Std.lift (retry.wrapping_add 1#usize)
+                Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont retry1)
+          else do
+            let retry1 ← Aeneas.Std.lift (retry.wrapping_add 1#usize)
+            Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont retry1))
+      fun residual => do
+      let r1 ←
+        Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+            ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+            ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError
+            residual
+      Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done r1)

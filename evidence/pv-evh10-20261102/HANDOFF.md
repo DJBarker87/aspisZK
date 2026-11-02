@@ -1,114 +1,99 @@
-# D562 resume checkpoint — native raw error receipts; closure still open
+# D566 context checkpoint — filled source path and native return leaf
 
 Continue ONLY /Users/dominic/ZK/.worktrees/pv-evh,
-branch codex/pv-evh-20261029. Resume base8791a69cd673ce0429229e606d5356f87876e951.
-Read RESUME-D562.md for exact laws, retained premises, corrections and failures.
-This is a CONTEXT checkpoint, not completion, budget exhaustion, external
-blockage or a shipped-source counterexample. **Rows removed NONE.**
+branch codex/pv-evh-20261029. Resume base efc985602e.
+Read RESUME-D566.md for exact claims, retained premises and failures.
+Target NOT established; rows removed NONE; T unchanged. Context checkpoint,
+not budget exhaustion, external blockage or a shipped-source counterexample.
 
 ## Exact restart
 
-This resume charged20 attempts79545–79564:12 accepted/8 failed.
-Cumulative83/100:55 accepted/28 failed. **17 REMAIN; NEXT FRESH79565.**
-Both audit triplets79397–79399 and79597–79599 untouched. No WIP Lean,
-pending refused/submitted compile or owned live scope. 79552 was refused TWICE
-uncharged, then passed SAME ID after each full180s cooldown. No final compiler
-audit, closure or frozen manifest replay ran.
+Used28/100 attempts:18 accepted/10 failed. 79565–79581 consumed17 inherited;
+90200–90210 consumed11 new. 72 REMAIN; NEXT90211. 79582–79596 unused but
+unavailable after17 inherited attempts.79597–79599 and90297–90299 audits
+untouched; historical79397–79399 untouched. Cumulative111 receipts:73/38.
+No WIP proof, pending submitted/refused compile or owned live scope.79579
+refused once uncharged, passed SAME ID after191.415s cooldown.
 
-Commit source first; use ONLY:
+Commit NEW source first; use ONLY:
 
     python3 tools/pv-evh10-20261102/stage.py PV_EVH_NewModule
-    python3 tools/pv-evh10-20261102/compile.py 79565 PV_EVH_NewModule
+    python3 tools/pv-evh10-20261102/compile.py 90211 PV_EVH_NewModule
 
-Reuse /home/dombarker/project-offloads/codex-pv-evh-20261029 and runjoin32 cohort.
+Reuse /home/dombarker/project-offloads/codex-pv-evh-20261029 and runjoin32.
 Same-shell admission exit0 AND allowed:true; one6G/8G/swap0/tasks64 scope,
-Lean-M7000. Refusals: full180s/same unlaunched ID/up to10 retries. Follow retained
-pre/post-submit transport rules. No infrastructure/library/LEAN_PATH/J.json/cap
-changes. Accepted bytes immutable; NEW consumers only; never restage accepted
-modules. Stage.py verifies ALL inherited accepted source hashes. Check whether a
-module name ALREADY EXISTS before writing it. git add --sparse for evidence.
+Lean-M7000. Refusals full180s/same unlaunched ID/up to10 retries. Retain
+transport rules. No infrastructure/library/LEAN_PATH/J.json/cap changes.
+Accepted source immutable; NEW consumers only; never restage accepted modules.
+Check EVERY module name before writing. Stage verifies all accepted hashes.
+git add --sparse for evidence. Failed diagnostic79575 archived in
+ diagnostics/PV_EVH_EntropyPairInspect.lean.txt; never import it.
 
-## First requested check is complete
+## Strongest new source/native frontier
 
-Exact adopted client binary SHA256 da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0
-build receipt and unit graph confirm getrandom0.3.4 linux_raw, direct x86_64
-syscall, no dlsym, rustc1.94.1/client opt3/panic abort. See
-adopted-backend-confirmation.json and adopted_backend.py --check. This checks
-EXACT adopted devnet_spend separately from inherited later user_client recipe.
-No backend mismatch found. ABI/kernel memory/non-MSAN/compiled association
-remain P; backend selection does not discharge those.
+79577 NativeEntropyValues.after_draw: original filled64 restoration, both32
+index/copy/restorations and short-circuit source tests AT opsNative.
+79580 NativeRawFinished.source_from_history connects ORIGINAL extracted body
+to exact retained raw syscall delivery.90204 NativeEntropyOutcome.source_outcome
+uses inherited SYMBOLIC nonzero termination to classify EVERY completed fill
+as retry or exact accepted source value. No supplied index/copy/helper answer,
+concrete recurrence replay, uniform advancing dictionary or actual successful
+proof/account run inferred.
 
-## Strongest accepted native entropy frontier
+79576/79581 preserve rejection seed32,field32,original64 drop order, retired
+memory/history,128 writes AND128 per-byte1.9.0 barriers.
+90210 NativeEntropyReturnSource.returned_source joins original positive-test
+branch at opsNative to MOVE then original64 cleanup: original64 cleared,
+exact move prefix then cleanup,64 writes/64 barriers. Actual native move is an
+OPEN primitive requiring successful return and post-move original-slot lookup/
+extent. Never assert moved-from32 copies zeroed. Move faults retain prefix.
 
-79556 NativeRawReceipt.error_receipts: original extracted entropy error loop
-iteration at opsNative, per-world op129 installation, source Result, valid error,
-deployed zeroize1.9.0 cleanup, heap coherence, old live owners AND their bytes,
-all raw requests confined to original64/disjoint from prior live heap/stack,
-continuous PRIVATE before/after buffers/worlds and exact ordered event account.
-No invented public buffer disclosure; no old1.8.1/single-fence zeroize law.
+Original physical frame/address, HeapSeparate/LiveSeparate/HeapCoherent and
+actual raw ABI/kernel footprint STILL P. Inner32 physical admission/copy/read/
+returned backing/move/retry/advancing-family binding P. Backend confirmed
+adopted getrandom0.3.4 linux_raw/direct syscall/no dlsym. KernelFrame memory P
+is NEVER entropy_kernel JOINT DENSITY. Ghost freshness proves no address law.
 
-Original HeapSeparate/LiveSeparate/HeapCoherent and physical source/native frame
-association remain EXPLICIT P. Request separation is derived FROM original
-admission, not an unconditional proof that original admission holds. Consumed
-prefix79549 needs explicit KernelFrame: actual kernel footprint still P, never
-part of entropy_kernel's JOINT DENSITY field. No actual successful run or
-uniform advancing-world FinishedView inferred. L3/V370/V371 fully retained.
+## Diagnostic frontier and ax1-prime
 
-New accepted:79545 LinuxRawBounds,79547 LinuxRawSpatial,79549 LinuxRawFrame,
-79550 NativeRawSpatial,79551 LinuxRawHistoryTrace,79552 LinuxRawThreaded,
-79553 StackEntropyFrame,79554 NativeEntropyMemory,79556 NativeRawReceipt.
-Source frame_source.py inventories complete original64/inner32 source lifetimes.
-Success MOVES both32; never assert moved-from stack copies were zeroed. Retired
-slots may reuse addresses; old-byte preservation covers LIVE owners only.
+90202 FileDescWrite: bounded request, precise -1 sentinel, modular signed64
+cast, post-write lastError/fault prefixes.90203 FileDescLiteral: EXISTING
+WriteAll.Driver with proved original-literal suffix pointer advancement.
+90207 IOErrorOsBits: arithmetic tag2/nonnull/i32 roundtrip/not-custom;
+90208 IOErrorOsControl: reached errno, packing, retained write/read prefixes.
+Rust bit-operation/pointer, original literal address, libc/TLS/error Repr/drop/
+kind/EBADF/guard/hook/allocator associations remain P; no complete native stderr.
+Actual source path sys::io::errno(). Source snapshots/checkers:
+entropy_copy.py and diagnostic_primitive.py. Old arbitrary panic-hook source
+failures STILL have source projections: no blanket no_source/PartialView or
+source-failure-to-runtime-fault reclassification.
 
-## Diagnostic frontier and caution
+Every new #print axioms output explicitly SUMMARY-BASED in
+axioms-classification-D566.json. NO full-data NEP audit/coherence claim.
+NEP_Driver source pinned/read, not executed.1951 project/5673 external checks;
+no NDR_,JGx_Sdk or known incoherent reconcile cache references. Hash/path
+agreement is NOT coherence. Actual raw audit must use NEP_Driver importAll/
+private and hard error on EVERY unresolved constant.
 
-79557 ClientOverflow.no_success/source_failure_retained;79562 LiteralWriteAll
-extends EXISTING stateful WriteAll.Driver with error/zero branch laws;79564
-StderrWrite handles actual inspected StderrRaw EBADF suppression and ordinary
-guard-release ordering. Classification/destruction/WriteZero/locks are WORLD
-operations, not pure/silent assumptions. Writer model feeds LiteralDiagnostics.
+## Remaining work, in order
 
-Source failure of an arbitrary panicHook HAS a source projection. Blanket
-no_source/old unconditional capacity PartialView is invalid without actual
-writer fidelity; do not hide this behind a successful domain or reclassify
-source failure as runtime fault. No complete native stderr instance supplied.
-See diagnostic-writer-binding.json and inspected std1.94.1 source snapshot.
-
-A new draft temporarily overwrote existing accepted PV_EVH_WriteAll by NAME.
-Stage refused BEFORE SSH staging/compiler/ID consumption;169cf3617b restored
-EXACT accepted bytes. Final diff for that inherited file is EMPTY. New module
-is LiteralWriteAll. Full incident/correction in writeall-name-correction.json;
-source/object audit reconciles all accepted modules. Never repeat this mistake.
-
-## Exact remaining work, in order
-
-1. DISCHARGE original physical frame/source interpretation and actual raw ABI/
- kernel association; then success inner32/move/retry/drop/advancing entropy and
- full residual family. Preserve private intermediate receipts into native/L3.
- Do not fabricate addresses or infer spatial provenance from Slice equality.
+1. ACTUAL original source-frame/native-memory interpretation and raw syscall
+   ABI/kernel association; actual inner32 physical copy/read/move/retry/drop
+   and advancing family. Preserve private receipts and old live-byte protection.
 2. Actual allocator metadata/padding/RawVec/Global/System ValidAnswer and owned
- Vec/native heap interpretation. Allocation failure stays WORLD. Then complete
- literal diagnostic FileDesc/libc/errno/io::Error/guard/hook/backtrace/profile
- fidelity and install all seven runtime callbacks from inherited inventory.
-3. Remaining path/digest/options/hash/oracle-byte/primitive/restoration leaves
- and complete actual proof-account entry. entry_fixed still source/P transport.
-4. ONLY THEN unchanged oraclePrefix/countTrace/nonce-store fileTrace links on
- ACTUAL provenance-fixed families, retaining D520/U/D524 client/account inputs.
-5. ONLY THEN (v-prime) to successful ACTUAL worldRun at opsNative AND allocator
- world. NativeObstruction62/op132 retained. No MODEL witness/new trust item.
+   Vec/native Heap/Box. Failure stays WORLD. Complete libc/TLS/io::Error/EBADF/
+   guards/hook/backtrace fidelity and seven callbacks (callback-drop-source-
+   inspection.json), then remaining leaves and full proof-account entry.
+3. ONLY THEN unchanged oraclePrefix/countTrace/nonce-store fileTrace on ACTUAL
+   provenance-fixed families; D520/U/D524 inputs retained.
+4. ONLY THEN (v-prime) to successful ACTUAL worldRun at opsNative AND allocator
+   world. NativeObstruction62/op132 retained. No MODEL witness/new trust item.
 
-## Verification and retained rows
-
-Read-only audit.py now includes adopted backend, raw frame/history/lifetime and
-stderr-control checkers alongside inherited checks. validation.json and
-host-final.json reconcile83 receipts/source/object hashes; native closure
-preflight still FAILS as required. New peak4,465,004KiB; slowest12.79s; cumulative
-peak4,616,200KiB. Swap0; no kill/timeout/cap rise. Failures and replacements in
-RESUME-D562.md. No native/Kani/extraction/final manifest/release replay.
-
-ALL endpoint/deployment/privacy rows remain: V221/V222 deployed1.9.0/L3,
-V370/V371,rdea-1/V400,D159/D166,L1/L2/L3 and client inputs. T unchanged.
-No push/delegation/frozen Rust/extraction/soundness/other-worktree writes or
-keys/accounts/funds action. commits-D562.txt lists stage commits; final evidence
-checkpoint commit follows that snapshot.
+Read-only audit-D566.txt/validation.json/host-final.json PASS receipts/source/
+object/source-inspection/no-live-scope checks. Native closure preflight FAILS
+as required. New peak4,456,952KiB/about4.25GiB; slowest3.38s; swap0. Historical
+peak4,616,200KiB. No cap rise/kill/timeout/native/Kani/extraction/final manifest/
+release replay, push/delegation/frozen Rust/soundness/other-worktree write or
+key/account/funds action. All V221/V2221.9.0/L3,V370/V371,rdea-1/V400,
+D159/D166,L1/L2/L3/client rows retained. commits-D566.txt lists stage commits;
+final evidence commit follows that snapshot.

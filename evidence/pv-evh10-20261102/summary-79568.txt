@@ -1,0 +1,153 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:42:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  before.to_slice_mut.2 a.to_slice_mut.1
+in the target expression
+  (do
+      let field_mask_entropy ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let leaf_salt_seed ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (a3, deref_mut_back) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            field_mask_entropy
+      let (s2, to_slice_mut_back) ← lift a3.to_slice_mut
+      let a4 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (before.to_slice_mut.2 a.to_slice)
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+      let (a6, deref_mut_back1) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            leaf_salt_seed
+      let (s5, to_slice_mut_back1) ← lift a6.to_slice_mut
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+      let a8 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (to_slice_mut_back s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back1 s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                      leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+            else do
+              let retry1 ← lift (retry.wrapping_add 1#usize)
+              Result.ok (cont retry1)
+        else do
+          let retry1 ← lift (retry.wrapping_add 1#usize)
+          Result.ok (cont retry1)) =
+    tests mask retry a
+
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+retry : Usize
+before a : Std.Array U8 64#usize
+⊢ (do
+      let field_mask_entropy ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let leaf_salt_seed ←
+        zeroize.Zeroizing.new
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (a3, deref_mut_back) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            field_mask_entropy
+      let (s2, to_slice_mut_back) ← lift a3.to_slice_mut
+      let a4 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (before.to_slice_mut.2 a.to_slice)
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+      let (a6, deref_mut_back1) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            leaf_salt_seed
+      let (s5, to_slice_mut_back1) ← lift a6.to_slice_mut
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+      let a8 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (to_slice_mut_back s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back1 s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                      leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+            else do
+              let retry1 ← lift (retry.wrapping_add 1#usize)
+              Result.ok (cont retry1)
+        else do
+          let retry1 ← lift (retry.wrapping_add 1#usize)
+          Result.ok (cont retry1)) =
+    tests mask retry a
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (64 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'PV_EVH_NativeEntropyValues.after_draw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+{
+  "attempt": 79568,
+  "target": "PV_EVH_NativeEntropyValues",
+  "source_revision": "708d210fba99c527ed74f980d0aa589e019bf9ae",
+  "source_path": "lean/PV_EVH_NativeEntropyValues.lean",
+  "source_git_blob": "90d524dfc03ac2207f0ea0c59d07fb29bd83dcf5",
+  "source_sha256": "4586a9876c6f8bdfe50a2774a378a509456b2183a0666bdf27688a34e5969356",
+  "exit": "1",
+  "peak_rss_kbytes": "4421852",
+  "swaps": "0",
+  "wall": "0:01.86",
+  "axioms": [
+    "'PV_EVH_NativeEntropyValues.after_draw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"
+  ],
+  "deps_fingerprint": "7f868e7b3669ef6940f06c46394b1668b23c8822644c94a94773dc1619d7f761",
+  "accepted": false
+}

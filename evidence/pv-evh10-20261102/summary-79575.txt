@@ -1,0 +1,154 @@
+def PV_EVH_Entropy.afterDraw : [inst : ProverRwFull.ExternalTypes] →
+  [ProverRwFull.ExternalFuns] →
+    Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 32 ⋯) →
+      Aeneas.Std.Usize →
+        (Aeneas.Std.Slice Aeneas.Std.U8 →
+            ProverRwFull.zeroize.Zeroizing (Aeneas.Std.Array Aeneas.Std.U8 (Aeneas.Std.Usize.ofNat 64 ⋯))) →
+          Aeneas.Std.core.result.Result Unit ProverRwFull.getrandom.error.Error →
+            Aeneas.Std.Slice Aeneas.Std.U8 →
+              Aeneas.Std.Result
+                (Aeneas.Std.ControlFlow Aeneas.Std.Usize
+                  (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+                    ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)) :=
+fun [ProverRwFull.ExternalTypes] [ProverRwFull.ExternalFuns] mask_nonce retry as_mut_back r s1 =>
+  bind (Aeneas.Std.core.result.Result.Insts.CoreOpsTry.branch r) fun cf =>
+    PV_EVH_Entropy.afterDraw.match_1
+      (fun cf =>
+        Aeneas.Std.Result
+          (Aeneas.Std.ControlFlow Aeneas.Std.Usize
+            (Aeneas.Std.core.result.Result ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+              ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError)))
+      cf
+      (fun a =>
+        have bytes1 := as_mut_back s1;
+        have a1 :=
+          Aeneas.Std.Array.repeat (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+            (Aeneas.Std.U8.ofNat 0 PV_EVH_Entropy.afterDraw._proof_3);
+        bind
+          (ProverRwFull.zeroize.Zeroizing.new
+            (ProverRwFull.Array.Insts.ZeroizeZeroize (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+              (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+            a1)
+          fun field_mask_entropy =>
+          have a2 :=
+            Aeneas.Std.Array.repeat (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+              (Aeneas.Std.U8.ofNat 0 PV_EVH_Entropy.afterDraw._proof_3);
+          bind
+            (ProverRwFull.zeroize.Zeroizing.new
+              (ProverRwFull.Array.Insts.ZeroizeZeroize (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+              a2)
+            fun leaf_salt_seed =>
+            bind
+              (ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                (ProverRwFull.Array.Insts.ZeroizeZeroize (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+                  (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                field_mask_entropy)
+              (Aeneas.Std.uncurry fun a3 deref_mut_back =>
+                bind (Aeneas.Std.lift a3.to_slice_mut)
+                  (Aeneas.Std.uncurry fun s2 to_slice_mut_back =>
+                    bind
+                      (ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                        (ProverRwFull.Array.Insts.ZeroizeZeroize
+                          (Aeneas.Std.Usize.ofNat 64 PV_EVH_Entropy.afterDraw._proof_2)
+                          (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                        bytes1)
+                      fun a4 =>
+                      bind
+                        (Aeneas.Std.core.array.Array.index
+                          (Aeneas.Std.core.ops.index.IndexSlice
+                            (Aeneas.Std.core.slice.index.SliceIndexRangeToUsizeSlice Aeneas.Std.U8))
+                          a4 { «end» := Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1 })
+                        fun s3 =>
+                        bind (Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s2 s3) fun s4 =>
+                          have a5 := to_slice_mut_back s4;
+                          have field_mask_entropy1 := deref_mut_back a5;
+                          bind
+                            (ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+                              (ProverRwFull.Array.Insts.ZeroizeZeroize
+                                (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+                                (ProverRwFull.zeroize.Zeroize.Blanket ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                              leaf_salt_seed)
+                            (Aeneas.Std.uncurry fun a6 deref_mut_back1 =>
+                              bind (Aeneas.Std.lift a6.to_slice_mut)
+                                (Aeneas.Std.uncurry fun s5 to_slice_mut_back1 =>
+                                  bind
+                                    (Aeneas.Std.core.array.Array.index
+                                      (Aeneas.Std.core.ops.index.IndexSlice
+                                        (Aeneas.Std.core.slice.index.SliceIndexRangeFromUsizeSlice Aeneas.Std.U8))
+                                      a4 { start := Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1 })
+                                    fun s6 =>
+                                    bind
+                                      (Aeneas.Std.core.slice.Slice.copy_from_slice Aeneas.Std.core.marker.CopyU8 s5 s6)
+                                      fun s7 =>
+                                      have a7 := to_slice_mut_back1 s7;
+                                      have leaf_salt_seed1 := deref_mut_back1 a7;
+                                      bind
+                                        (ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                                          (ProverRwFull.Array.Insts.ZeroizeZeroize
+                                            (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+                                            (ProverRwFull.zeroize.Zeroize.Blanket
+                                              ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                                          field_mask_entropy1)
+                                        fun a8 =>
+                                        bind (ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32 a8)
+                                          fun b =>
+                                          ite (Eq b true)
+                                            (bind
+                                              (ProverRwFull.zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                                                (ProverRwFull.Array.Insts.ZeroizeZeroize
+                                                  (Aeneas.Std.Usize.ofNat 32 PV_EVH_Entropy.afterDraw._proof_1)
+                                                  (ProverRwFull.zeroize.Zeroize.Blanket
+                                                    ProverRwFull.U8.Insts.ZeroizeDefaultIsZeroes))
+                                                leaf_salt_seed1)
+                                              fun a9 =>
+                                              bind (ProverRwFull.aspis_prover.state_only_entropy.entropy_nonzero32 a9)
+                                                fun b1 =>
+                                                ite (Eq b1 true)
+                                                  (Aeneas.Std.Result.ok
+                                                    (Aeneas.Std.ControlFlow.done
+                                                      (Aeneas.Std.core.result.Result.Ok
+                                                        { mask_nonce := mask_nonce,
+                                                          field_mask_entropy := field_mask_entropy1,
+                                                          leaf_salt_seed := leaf_salt_seed1 })))
+                                                  (bind
+                                                    (Aeneas.Std.lift
+                                                      (retry.wrapping_add
+                                                        (Aeneas.Std.Usize.ofNat 1 PV_EVH_Entropy.afterDraw._proof_4)))
+                                                    fun retry1 =>
+                                                    Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont retry1)))
+                                            (bind
+                                              (Aeneas.Std.lift
+                                                (retry.wrapping_add
+                                                  (Aeneas.Std.Usize.ofNat 1 PV_EVH_Entropy.afterDraw._proof_4)))
+                                              fun retry1 =>
+                                              Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.cont retry1)))))))
+      fun residual =>
+      bind
+        (Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+          ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptSecrets
+          ProverRwFull.aspis_prover.state_only_entropy.StateOnlyAttemptEntropyError.Insts.CoreConvertFromError residual)
+        fun r1 => Aeneas.Std.Result.ok (Aeneas.Std.ControlFlow.done r1)
+theorem Aeneas.Std.bind_tc_ok.{u_1} : ∀ {α β : Type u_1} (x : α) (f : α → Aeneas.Std.Result β),
+  (do
+      let y ← Aeneas.Std.Result.ok x
+      f y) =
+    f x :=
+fun {α β} x f => of_eq_true (eq_self (f x))
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_EntropyPairInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.Result.bind`
+
+{
+  "attempt": 79575,
+  "target": "PV_EVH_EntropyPairInspect",
+  "source_revision": "26b2980095b8c394ef6c98cf0c1061ee4e57277c",
+  "source_path": "lean/PV_EVH_EntropyPairInspect.lean",
+  "source_git_blob": "8fb09d424f5354a31fcc7d1654287af1cbb3c2eb",
+  "source_sha256": "3f295e653175ea7ccde979890db969459e43c64ca6ba92e11c569aa1fcd40009",
+  "exit": "1",
+  "peak_rss_kbytes": "2618984",
+  "swaps": "0",
+  "wall": "0:01.10",
+  "axioms": [],
+  "deps_fingerprint": "68cc7f545e27e1499e0588b08c8a76f742d904f17ddbc4b0d07e96571d1ca3cd",
+  "accepted": false
+}

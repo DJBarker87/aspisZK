@@ -1,0 +1,99 @@
+{
+  "evidence_class": "structural own-1 source-control association; incomplete primitive/native diagnostic fidelity",
+  "sources": [
+    {
+      "path": "sys/fd/unix.rs",
+      "anchor": "pub fn write(&self, buf: &[u8])",
+      "file_sha256": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+      "text": "pub fn write(&self, buf: &[u8]) -> io::Result<usize> {\n        let ret = cvt(unsafe {\n            libc::write(\n                self.as_raw_fd(),\n                buf.as_ptr() as *const libc::c_void,\n                cmp::min(buf.len(), READ_LIMIT),\n            )\n        })?;\n        Ok(ret as usize)\n    }"
+    },
+    {
+      "path": "sys/fd/unix.rs",
+      "anchor": "const READ_LIMIT: usize",
+      "file_sha256": "2ee7c01303945c9ab29c6d6269b07d7c244f6d6e689e3de2c2acc72cddf3415a",
+      "text": "const READ_LIMIT: usize = if cfg!(target_vendor = \"apple\") {\n    libc::c_int::MAX as usize\n} else {\n    libc::ssize_t::MAX as usize\n};"
+    },
+    {
+      "path": "sys/pal/unix/mod.rs",
+      "anchor": "macro_rules! impl_is_minus_one",
+      "file_sha256": "c71c1298c20cdfa96b9831cd2b51f75b0333a50e49188ab5fddd1945e82df312",
+      "text": "macro_rules! impl_is_minus_one {\n    ($($t:ident)*) => ($(impl IsMinusOne for $t {\n        fn is_minus_one(&self) -> bool {\n            *self == -1\n        }\n    })*)\n}"
+    },
+    {
+      "path": "sys/pal/unix/mod.rs",
+      "anchor": "pub fn cvt<T: IsMinusOne>",
+      "file_sha256": "c71c1298c20cdfa96b9831cd2b51f75b0333a50e49188ab5fddd1945e82df312",
+      "text": "pub fn cvt<T: IsMinusOne>(t: T) -> io::Result<T> {\n    if t.is_minus_one() { Err(io::Error::last_os_error()) } else { Ok(t) }\n}"
+    },
+    {
+      "path": "io/error.rs",
+      "anchor": "pub fn last_os_error()",
+      "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "text": "pub fn last_os_error() -> Error {\n        Error::from_raw_os_error(sys::io::errno())\n    }"
+    },
+    {
+      "path": "io/error.rs",
+      "anchor": "pub fn from_raw_os_error(code: RawOsError)",
+      "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "text": "pub fn from_raw_os_error(code: RawOsError) -> Error {\n        Error { repr: Repr::new_os(code) }\n    }"
+    },
+    {
+      "path": "io/error/repr_bitpacked.rs",
+      "anchor": "pub(super) fn new_os(code: RawOsError)",
+      "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "text": "pub(super) fn new_os(code: RawOsError) -> Self {\n        let utagged = ((code as usize) << 32) | TAG_OS;\n        // Safety: `TAG_OS` is not zero, so the result of the `|` is not 0.\n        let res = Self(\n            NonNull::without_provenance(unsafe { NonZeroUsize::new_unchecked(utagged) }),\n            PhantomData,\n        );\n        // quickly smoke-check we encoded the right thing (This generally will\n        // only run in std's tests, unless the user uses -Zbuild-std)\n        debug_assert!(\n            matches!(res.data(), ErrorData::Os(c) if c == code),\n            \"repr(os) encoding failed for {code}\"\n        );\n        res\n    }"
+    },
+    {
+      "path": "io/error/repr_bitpacked.rs",
+      "anchor": "unsafe fn decode_repr<C, F>",
+      "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "text": "unsafe fn decode_repr<C, F>(ptr: NonNull<()>, make_custom: F) -> ErrorData<C>\nwhere\n    F: FnOnce(*mut Custom) -> C,\n{\n    let bits = ptr.as_ptr().addr();\n    match bits & TAG_MASK {\n        TAG_OS => {\n            let code = ((bits as i64) >> 32) as RawOsError;\n            ErrorData::Os(code)\n        }\n        TAG_SIMPLE => {\n            let kind_bits = (bits >> 32) as u32;\n            let kind = kind_from_prim(kind_bits).unwrap_or_else(|| {\n                debug_assert!(false, \"Invalid io::error::Repr bits: `Repr({:#018x})`\", bits);\n                // This means the `ptr` passed in was not valid, which violates\n                // the unsafe contract of `decode_repr`.\n                //\n                // Using this rather than unwrap meaningfully improves the code\n                // for callers which only care about one variant (usually\n                // `Custom`)\n                unsafe { core::hint::unreachable_unchecked() };\n            });\n            ErrorData::Simple(kind)\n        }\n        TAG_SIMPLE_MESSAGE => {\n            // SAFETY: per tag\n            unsafe { ErrorData::SimpleMessage(&*ptr.cast::<SimpleMessage>().as_ptr()) }\n        }\n        TAG_CUSTOM => {\n            // It would be correct for us to use `ptr::byte_sub` here (see the\n            // comment above the `wrapping_add` call in `new_custom` for why),\n            // but it isn't clear that it makes a difference, so we don't.\n            let custom = ptr.as_ptr().wrapping_byte_sub(TAG_CUSTOM).cast::<Custom>();\n            ErrorData::Custom(make_custom(custom))\n        }\n        _ => {\n            // Can't happen, and compiler can tell\n            unreachable!();\n        }\n    }\n}"
+    },
+    {
+      "path": "io/error/repr_bitpacked.rs",
+      "anchor": "impl Drop for Repr",
+      "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "text": "impl Drop for Repr {\n    #[inline]\n    fn drop(&mut self) {\n        // Safety: We're a Repr, decode_repr is fine. The `Box::from_raw` is\n        // safe because we're being dropped.\n        unsafe {\n            let _ = decode_repr(self.0, |p| Box::<Custom>::from_raw(p));\n        }\n    }\n}"
+    },
+    {
+      "path": "io/error.rs",
+      "anchor": "pub(crate) fn is_interrupted(&self)",
+      "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "text": "pub(crate) fn is_interrupted(&self) -> bool {\n        match self.repr.data() {\n            ErrorData::Os(code) => sys::io::is_interrupted(code),\n            ErrorData::Custom(c) => c.kind == ErrorKind::Interrupted,\n            ErrorData::Simple(kind) => kind == ErrorKind::Interrupted,\n            ErrorData::SimpleMessage(m) => m.kind == ErrorKind::Interrupted,\n        }\n    }"
+    },
+    {
+      "path": "sys/io/error/unix.rs",
+      "anchor": "pub fn is_interrupted(errno: i32)",
+      "file_sha256": "3007a63d24d2730a86de4e811c88d4cfd4dce37d5400057578b642786c5657a2",
+      "text": "pub fn is_interrupted(errno: i32) -> bool {\n    errno == libc::EINTR\n}"
+    },
+    {
+      "path": "io/error/repr_bitpacked.rs",
+      "anchor": "const TAG_MASK: usize",
+      "file_sha256": "3d0e6dbeb9b2b25834dddb99b01e52130371f261093e92227cebfa4d95bbb034",
+      "text": "const TAG_MASK: usize = 0b11;\nconst TAG_SIMPLE_MESSAGE: usize = 0b00;\nconst TAG_CUSTOM: usize = 0b01;\nconst TAG_OS: usize = 0b10;\nconst TAG_SIMPLE: usize = 0b11;\n\n"
+    },
+    {
+      "path": "io/error.rs",
+      "anchor": "#[cfg(all(target_pointer_width = \"64\", not(target_os = \"uefi\")))]",
+      "file_sha256": "2b819a8de1ded4b90133bb8d72e3187b849513fad324ed800e32d1eb831b3c82",
+      "text": "#[cfg(all(target_pointer_width = \"64\", not(target_os = \"uefi\")))]\nmod repr_bitpacked;\n#[cfg(all(target_pointer_width = \"64\", not(target_os = \"uefi\")))]\nuse repr_bitpacked::Repr;\n\n#[cfg(any(not(target_pointer_width = \"64\"), target_os = \"uefi\"))]\nmod repr_unpacked;\n#[cfg(any(not(target_pointer_width = \"64\"), target_os = \"uefi\"))]\nuse repr_unpacked::Repr;"
+    }
+  ],
+  "mapping": [
+    "FileDesc passes original fd, buffer address and min(length,READ_LIMIT) to libc::write",
+    "cvt checks precisely -1; last_os_error executes only in that branch and after the raw write",
+    "nonerror raw return is cast to usize64 by modulo 2^64, not Int.toNat",
+    "existing write_all Driver now carries suffix addresses derived from the original literal pointer; interrupted/drop/WriteZero/bad-count remain WORLD operations"
+  ],
+  "retained": [
+    "actual libc signed64 ABI and write footprint/delivery/errno world association",
+    "original literal address/provenance and valid extent",
+    "TLS errno read and io::Error/Repr representation/from_raw_os_error/drop source association",
+    "EBADF/ErrorKind actual classification, locks/RefCell/guard/hook and all seven callback installations",
+    "allocator metadata/ValidAnswer/Global/System and complete native entry",
+    "L3 joint observation, V370/V371, D520/U/D524 and all endpoint/deployment conditions"
+  ],
+  "trust_fields_added": [],
+  "rows_removed": []
+}

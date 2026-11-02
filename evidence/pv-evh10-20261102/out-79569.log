@@ -1,0 +1,107 @@
+/home/dombarker/project-offloads/codex-pv-evh-20261029/sources/PV_EVH_NativeEntropyValues.lean:47:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  zeroize.Zeroizing.new ?d ?z
+in the target expression
+  (do
+      let (a3, deref_mut_back) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (s2, to_slice_mut_back) ← lift a3.to_slice_mut
+      let a4 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+      let (a6, deref_mut_back1) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (s5, to_slice_mut_back1) ← lift a6.to_slice_mut
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+      let a8 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (to_slice_mut_back s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back1 s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                      leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+            else do
+              let retry1 ← lift (retry.wrapping_add 1#usize)
+              Result.ok (cont retry1)
+        else do
+          let retry1 ← lift (retry.wrapping_add 1#usize)
+          Result.ok (cont retry1)) =
+    tests mask retry a
+
+base : ExternalTypes
+heap : R1Z.PV_RunJoin_WeightInstalled46.Heap
+box : R1Z.PV_RunJoin_WeightInstalled46.Box
+ops : ExternalFuns
+this✝ : ExternalTypes := types base
+this : ExternalFuns := opsNative base heap box (PV_EVH_ZeroWrappers.selected ops)
+mask : Std.Array U8 32#usize
+retry : Usize
+before a : Std.Array U8 64#usize
+hrestore : before.to_slice_mut.2 a.to_slice = a
+⊢ (do
+      let (a3, deref_mut_back) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (s2, to_slice_mut_back) ← lift a3.to_slice_mut
+      let a4 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 64#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes)) a
+      let s3 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeToUsizeSlice U8)) a4
+            { «end» := 32#usize }
+      let s4 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3
+      let (a6, deref_mut_back1) ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (Array.repeat 32#usize 0#u8)
+      let (s5, to_slice_mut_back1) ← lift a6.to_slice_mut
+      let s6 ←
+        core.array.Array.index (core.ops.index.IndexSlice (core.slice.index.SliceIndexRangeFromUsizeSlice U8)) a4
+            { start := 32#usize }
+      let s7 ← core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6
+      let a8 ←
+        zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+            (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+            (deref_mut_back (to_slice_mut_back s4))
+      let b ← aspis_prover.state_only_entropy.entropy_nonzero32 a8
+      if b = true then do
+          let a9 ←
+            zeroize.Zeroizing.Insts.CoreOpsDerefDeref.deref
+                (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket U8.Insts.ZeroizeDefaultIsZeroes))
+                (deref_mut_back1 (to_slice_mut_back1 s7))
+          let b1 ← aspis_prover.state_only_entropy.entropy_nonzero32 a9
+          if b1 = true then
+              Result.ok
+                (done
+                  (core.result.Result.Ok
+                    { mask_nonce := mask, field_mask_entropy := deref_mut_back (to_slice_mut_back s4),
+                      leaf_salt_seed := deref_mut_back1 (to_slice_mut_back1 s7) }))
+            else do
+              let retry1 ← lift (retry.wrapping_add 1#usize)
+              Result.ok (cont retry1)
+        else do
+          let retry1 ← lift (retry.wrapping_add 1#usize)
+          Result.ok (cont retry1)) =
+    tests mask retry a
+'PV_EVH_NativeEntropyValues.after_draw' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
