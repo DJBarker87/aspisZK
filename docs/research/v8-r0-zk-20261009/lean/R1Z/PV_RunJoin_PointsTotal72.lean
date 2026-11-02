@@ -65,6 +65,9 @@ theorem complete (z : Points) : ∃ out,source z=ok out := by
     lift,bind_tc_ok,len,core.iter.traits.iterator.Iterator.rev.trait_default,
     core.iter.traits.iterator.Iterator.rev.default,hs,hq,hq1,ha,hq2,hq3,hf,
     ProverRwSuccessPointsSource.field.QM31.sub]
+  change (do let s ← sourceLoop (before 10#usize) z z ProverRwSuccessPointsSource.field.QM31.ONE
+             ok (Array.make 3#usize [z,s,final]))=ok (Array.make 3#usize [z,successor,final])
+  rw [hs]
   rfl
 
 #print axioms update
