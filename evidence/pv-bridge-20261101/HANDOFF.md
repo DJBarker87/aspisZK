@@ -1,3 +1,5 @@
+D555 UPDATE: restoration was recorded at poll 23 (01:15:21 UTC); the polling monitor has exited 0. Do not restart it. HOST-RESTORED.json records the lead flag and clean 781xx ID scan. The following older waiting description is retained as history; proceed with verification/compilation below.
+
 # D540 continuation — not READY
 
 Work only in /Users/dominic/ZK/.worktrees/pv-evhc, branch codex/pv-evhc-20261029. Read REPORT.md and pv-common first. All task-owned files are here. Pre-existing pv-dup dirty files remain untouched. No host source/object or Stream A edge was modified.
