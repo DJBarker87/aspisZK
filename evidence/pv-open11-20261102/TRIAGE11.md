@@ -776,3 +776,15 @@ Unchanged defining bytes: retain the exact scoped derivation in recount9, subjec
 Remaining: OS entropy failure / D206 model coverage repair (C/T-suspect)
 
 Disposition: EXCLUDED — live owner. Live owner: evh failure/event-world links. Estimated cost: 40–97+ Lean, 10–30+ native; prerequisite blocked.
+
+## D571 continuation — ranks 1–5 inspected
+
+No row restored and no endpoint premise removed/added/weakened (0/0/0). The initial ranking remains a historical cost estimate. Full per-row results are in PROGRESS11.md and the PV_O11_V176-binding-status.json, PV_O11_next-rows.json and PV_O11_write-all.json source gates.
+
+- V176: bounded pass ended; conservatively 15 getter scopes including inherited work. The safe borrowed reference now extracts and its two laws pass full NEP walks without axioms. Native packed carrier, pointer/provenance, shared loads and errno binding are still missing; existing hkind consumer is not instantiated. Do not spend another V176 attempt under this limit.
+- V181: direct std extraction reaches a Charon panic in RawVecInner::try_allocate_in; LLBC has_errors=true despite exit0 and is rejected. Actual call capacity is69. The adopted global allocator aborts on null inside alloc, before std can return AllocError. Native post-world/terminal observation and exhaustive callers/exclusions remain.
+- V178: native Path::_join clones first. Adopted panic=abort performs no stack cleanup; inherited JoinHandlers.finalWorld overflow release/release cannot be installed unchanged. Preserve success owned-name release, abort prefixes and actual frame.
+- V369: eight relevant current source files equal the adopted-bundle source manifest. CHECK_TIMES declaration/read/write are cfg-disabled, but p_r1_check retains four clock pairs and QUIET TLS/hook work. The complete SAME-cp source/observer law remains.
+- V267: exact selected write_all loop is unbounded, with WriteZero, partial progress, Interrupted retry and other errors. Existing DIAG12 fuelled writeAll is a prefix model, not the complete op261. Native fd/errno/offset/world and completion/divergence association remain.
+
+Next uninspected ranked row: V171, then V175 and V172. Keep all live-owned exclusions and qualifications above.
