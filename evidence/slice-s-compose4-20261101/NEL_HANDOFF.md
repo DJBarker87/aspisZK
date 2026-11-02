@@ -59,3 +59,19 @@ Fourteen accepted modules (28 source/object files) were archived with verified
 hash equality to `/home/dombarker/project-offloads/codex-cx-slice-s-compose4-cache-20261029/NEL_final_objects_20261102`. Archive: exit 0, 0.232326042 seconds, 16,368 KiB, swap 0, fresh allowed:true/exit-0 admission and the same scope caps. NEL_CACHE_FINAL.json records hashes, sizes and only-own scratch removed (NEL_target, NEL_objects and NEL_tmp). The permanent own cache and frozen source/lock remain. NEL_run.py now resolves the permanent final objects before the seed cache; that future path-only change caused no compiler replay.
 
 The archive initially inherited the compose3 cache destination. NEL_ARCHIVE_REPAIR moved only the new NEL directory, after checking every file/hash against the archive manifest, into the assigned compose4 cache. The temporary predecessor-cache addition was removed; no original predecessor file was changed. This deviation and repair are explicit in NEL_CACHE_FINAL.json.
+
+## Final validation and commits
+
+39 NEL mutation/engine tests pass (source-pinned NEL_TESTS_FINAL.json/log); all 36 predecessor tests pass unchanged. Missing or wrong domains, field/carrier proofs, native controls, frames and constructor certificates keep rows OPEN, including after review-digest mutation. The earlier shared test log is superseded by this distinct final log.
+
+The cache repair verification checked all 1,160 imported original compose3-cache files: no hash changes, and the accidental NEL directory is absent. NEL_ARCHIVE_REPAIR: exit 0, 0.141955935 seconds, 16,720 KiB, swap 0, normal caps/admission.
+
+Commits before this documentation closeout:
+
+```
+82463d2c28 Complete controlled native probes and payment validator composition
+90cafce055 Compose common validator and audit Result contract controls
+d9e7fe512d Bind native copy windows to emitted array writes
+8a63dbd579 Compose borrowed common getter under approved projection rule
+d3326db780 Validate output lane caller with matched control
+```
