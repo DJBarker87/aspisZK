@@ -5,7 +5,7 @@ from run import H,run
 R=H/'resume18';O=R/'std559';O.mkdir(exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 stage=sys.argv[1];assert stage in ('charon','aeneas')
-ident={'charon':79170,'aeneas':79171}[stage];assert '--inside' in sys.argv or not (R/f'N{ident}').exists()
+ident={'charon':79172,'aeneas':79173}[stage];assert '--inside' in sys.argv or not (R/f'N{ident}').exists()
 c=Path('/home/dombarker/project-offloads/codex-pv-extract-20261027/charon');a=Path('/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1/pinned-tools/aeneas-ae1-2-fda587d2')
 assert sha(c)=='daad69bea1114042a2d2fbd3dfde99922b152d4f57023bf8edb83e5a6f336af8'
 assert sha(a)=='fda587d25a66604a973bbc2947a4416ba373b56dd8c98655991c1b6eaa240b68'
