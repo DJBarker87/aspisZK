@@ -3,7 +3,6 @@ import PV_B3P_Ordered227
 namespace PV_B3P_Association554227
 open Aeneas Aeneas.Std PV_B3P_227 Result PV_B3P_Binding9227
 set_option autoImplicit false
-abbrev DotRaw554 := Array U64 4#usize
 
 theorem dot_cell554_continuation {β : Type} (weights : Array aspis_core.field.QM31 7#usize)
     (values : Array aspis_core.field.M31 7#usize) (index : Usize)

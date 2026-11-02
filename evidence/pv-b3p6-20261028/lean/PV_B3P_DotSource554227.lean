@@ -4,7 +4,6 @@ import Lean.Elab.Tactic.AsAuxLemma
 namespace PV_B3P_Association554227
 open Aeneas Aeneas.Std PV_B3P_227 Result PV_B3P_Binding9227
 set_option autoImplicit false
-abbrev DotRaw554 := Array U64 4#usize
 
 attribute [local irreducible] Aeneas.Std.bind Array.index_usize Array.update
   U64.wrapping_add U64.wrapping_mul aspis_core.field.M31.reduce_u64

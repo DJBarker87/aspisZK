@@ -61,6 +61,7 @@ s+='  let sums2 ← dot_reduce554 rawNext3 sums1\n  dot_finish554 sums2\n\n#prin
 emit(L/'PV_B3P_DotSourceDefs554227.lean',s)
 # Normalize one bounded cell at a time using a named continuation law.
 defs=s
+head=head.replace('abbrev DotRaw554 := Array U64 4#usize\n','')
 cps='import PV_B3P_DotSourceDefs554227\nimport PV_B3P_Ordered227\n'+head
 for helper,args in [('dot_cell554','weights values index raw'),('dot_reduce554','raw sums')]:
  decl=defs.split('def '+helper,1)[1].split('\ndef ',1)[0].split('\n#print',1)[0]
