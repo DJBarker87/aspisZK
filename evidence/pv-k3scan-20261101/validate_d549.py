@@ -36,6 +36,12 @@ rows=json.loads((E/'K3-ROWS.json').read_text());assert not rows['campaign_in_pro
 for row in rows['rows']:
  bad=[cid for cid in row['current_kani_support']if next(x for x in c if x['credit_id']==cid)['final_status']=='SUSPENDED'];assert row['depends_on_still_suspended_credit']==bool(bad)
 assert sum(x['depends_on_still_suspended_credit']for x in rows['rows'])==0
+tools=json.loads((E/'D549-TOOL-PINS.json').read_text());assert tools['core_tools_match_initial_pair']and tools['additional_tools_match_initial_pins']
+refresh=json.loads((E/'CURRENT-SCOPE-REFRESH-D549.json').read_text());assert refresh['research_ledger_unchanged']and all(x['unchanged']for x in refresh['installed_source_checks']);assert len(refresh['current_b3_kani_bodies'])==2
+for x in refresh['copies']:assert hashlib.sha256((E/x['retained_copy']).read_bytes()).hexdigest()==x['sha256']
+storage=json.loads((E/'D549-SYMBOL-STORAGE.json').read_text());assert all(x['name'].endswith('13DECIMAL_PAIRS')for r in storage['runs']for x in r['review_candidates'])
+decimal=json.loads((E/'D549-DECIMAL-STORAGE.json').read_text());assert hashlib.sha256((E/decimal['retained_source']).read_bytes()).hexdigest()==decimal['source_sha256']
+quiet=json.loads((E/'D549-QUIET-WINDOW-AUDIT.json').read_text());assert quiet['marker']['until']<=quiet['epoch'];assert all(x['outer_scanner_sha256']==quiet['scanner_sha256']and x['inner_scanner_sha256']==quiet['scanner_sha256']for x in quiet['launches']);assert hashlib.sha256((E/'shared-reservation.readonly.py').read_bytes()).hexdigest()==quiet['scanner_sha256']
 # The audit's payloads are source/data snapshots, not compiled objects or executables.
 for p in E.glob('*.json.sha256'):
  q=E/(p.name.removesuffix('.sha256')+'.xz')
@@ -43,5 +49,5 @@ for p in E.glob('*.json.sha256'):
 for p in E.rglob('*'):
  if p.is_file() and 'v185-source'not in p.parts:assert p.stat().st_size<=20*1024*1024,str(p)
 changed=subprocess.check_output(['git','diff','--name-only','bad175c553','--'],text=True).splitlines();assert all(n.startswith('evidence/pv-k3scan-20261101/')for n in changed),changed
-out={'status':'PASS','scope':'Final D549 source/receipt/pair/resource/current-row audit; no compiler or solver invocation','charged_invocations':60,'pairs':checks,'setup_failures':['K79208','K79219'],'metadata_preflight_uncharged':'K79206-preflight','all_swaps':0,'max_peak_rss_kib':max(r['peak_rss_kib']for r in rs),'wall_seconds_sum':sum(r['wall_seconds']for r in rs),'minimum_launch_gap_seconds':min(b['epoch']-a['epoch']for a,b in zip(rs,rs[1:])),'credit_status':s['credit_status'],'rows':34,'current_scopes_depending_on_suspended_credit':0,'Lean':0,'axioms':'N/A: Kani; 0 Lean','endpoint_premises_removed_added_weakened':[0,0,0]}
+out={'status':'PASS','scope':'Final D549 source/receipt/pair/resource/current-row artifact audit; no compiler or solver invocation; receipt limitation below is not cleared','receipt_limitations':['Continuation launch-time quiet-marker until values were not retained. Fresh UTC/allowed outer and inner receipts, identical enforcing scanner hashes, and separate checkpoint/end marker observations are retained; no exact per-launch marker history is claimed.'],'charged_invocations':60,'pairs':checks,'setup_failures':['K79208','K79219'],'metadata_preflight_uncharged':'K79206-preflight','all_swaps':0,'max_peak_rss_kib':max(r['peak_rss_kib']for r in rs),'wall_seconds_sum':sum(r['wall_seconds']for r in rs),'minimum_launch_gap_seconds':min(b['epoch']-a['epoch']for a,b in zip(rs,rs[1:])),'credit_status':s['credit_status'],'rows':34,'current_scopes_depending_on_suspended_credit':0,'Lean':0,'axioms':'N/A: Kani; 0 Lean','endpoint_premises_removed_added_weakened':[0,0,0]}
 (E/'D549-VALIDATION.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({k:v for k,v in out.items()if k!='pairs'}))

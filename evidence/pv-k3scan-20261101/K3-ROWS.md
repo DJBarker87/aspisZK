@@ -4,9 +4,9 @@ This answers whether the CURRENT credited scope requires a credit whose final st
 
 Current source pins and copied statements are in CURRENT-SCOPE-PINS.json, CURRENT-SCOPE-ADDENDUM.json + CURRENT-SCOPE-REFRESH-D549.json and current-scope/. Per-credit suspensions and exact fresh pairs are in K3-CREDITS.md / CREDITS.json.xz. K3-ROWS.json lists every historical suspended observation separately, so a NO below never erases it.
 
-The current bounded P6 dependencies that require a controlled K-3 check are C044 (V177/V180), C042 (V185), and C155/C157 (V244's two currently consumed Kani local bodies). All other retained scopes below have an independent source/model route, or explicitly retain the native association as unproved. V233's copied old no-stub P6 description is not clearance of C002 or of the unproved typed-carrier bridge.
+The current bounded P6 dependencies that require a controlled K-3 check are C044 (V177/V180), C042 (V185), and C155/C157 (V244's two currently consumed Kani local bodies). V232 also retains the unchanged UNAFFECTED C176/C178 load/store helper checks. All other retained scopes below have an independent source/model route, or explicitly retain the native association as unproved. V233's copied old no-stub P6 description is not clearance of C002 or of the unproved typed-carrier bridge.
 
-CHECKPOINT: rerun campaign remains in progress.
+Campaign complete: sixty charged invocations.
 
 | Row | Current credited scope | Depends on a still-SUSPENDED credit? | Reason / retained boundary |
 |---|---|---|---|
@@ -28,7 +28,7 @@ CHECKPOINT: rerun campaign remains in progress.
 | V187 | Generic owned Vec-to-array Result, mismatch retains input, explicit finalization effects. | **NO** | Current structural source packet does not consume C051 native Token::drop logging. |
 | V195 | INSTALLED op51 value selection with qualified arbitrary-limb serializer source packet. | **NO** | Structural complete copy/frame and checked ManuallyDrop restoration; old byte-copy Kani is independent. |
 | V219 | INSTALLED op120 boundary value selection and all-raw28 complete ordered source packet. | **NO** | Structural/extraction source qualification; no historical arithmetic diagnostic is a premise. |
-| V232 | OPEN SHA update-block/source callback boundary; retained load/store helpers. | **NO** | C176/C178 are UNAFFECTED; no suspended observation supplies the missing backend law. |
+| V232 | OPEN SHA update-block/source callback boundary; retained bounded load/store helper checks. | **NO** | C176/C178 are UNAFFECTED; no suspended observation supplies the missing backend law. |
 | V233 | Structural layout/size/geometry facts; typed GenericArray64/consumed bridge remains SUSPENDED. | **NO** | rdcd4 explicitly withholds native typed association. C002 no-stub support stays suspended; fresh C088/C089 preserve their separate original stubbed scopes. |
 | V234 | DigestFinal.selected_native: complete Result/carrier with finalizer/compression parameters. | **NO** | Current dlib2 structural wrapper; C052 padding checks do not supply a SHA/native backend law. |
 | V235 | FixedFinal.selected_native: complete Result/carrier with finalizer/compression parameters. | **NO** | Same parameterized structural boundary; SHA-NI and native backend remain open. |
