@@ -27,7 +27,7 @@ theorem complete (columns : Array (alloc.vec.Vec Q) 29#usize)
     have more : lane<29#usize := by change lane.val<29;omega
     obtain ⟨v,hv⟩ := ProverRwP6ArrayRead.read columns lane more
     obtain ⟨q,hq⟩ := evaluates lane v more hv
-    obtain ⟨next,hn⟩ := ProverRwP6ArrayRead.update claims lane q more
+    obtain ⟨next,hn,_⟩ := WP.spec_imp_exists (Array.update_spec claims lane q more)
     have inc := PV_RunJoin_SamplerCounters54.increment lane (by change lane.val<32;omega)
     obtain ⟨out,ho⟩ := ih (Usize.wrapping_add lane 1#usize) next (by rw [inc];omega)
     refine ⟨out,?_⟩
