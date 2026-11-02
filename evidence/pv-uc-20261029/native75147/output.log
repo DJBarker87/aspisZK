@@ -1,0 +1,44 @@
+{
+  "status": "NATIVE DIFFERENCE CONFIRMED; not a D525 wire-format mismatch",
+  "evidence_class": "Finite validation of the exact reached formatting expression with deployed Rust standard library/compiler and release settings; no project function or full-client equivalence claim",
+  "command": [
+    "/home/dombarker/.cargo/bin/rustc",
+    "+1.94.1",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/formatting-obstruction/fd-format.rs",
+    "--edition=2021",
+    "-C",
+    "opt-level=3",
+    "-C",
+    "panic=abort",
+    "-C",
+    "overflow-checks=off",
+    "-C",
+    "debug-assertions=off",
+    "-C",
+    "link-arg=-Wl,--threads=4",
+    "-o",
+    "/home/dombarker/project-offloads/codex-pv-uc-20261029/final-gates/formatting-obstruction/fd-format"
+  ],
+  "rustc": "rustc 1.94.1 (e408947bf 2026-03-25)\nbinary: rustc\ncommit-hash: e408947bfd200af42db322daf0fadfe7e26d3bd1\ncommit-date: 2026-03-25\nhost: x86_64-unknown-linux-gnu\nrelease: 1.94.1\nLLVM version: 21.1.8\n",
+  "wallet_source_sha256": "55c0547da80a5c702b29e6517726a28f1d3251f76c31706912771c376f2dab2b",
+  "expression": "format!(\"/proc/self/fd/{fd}\")",
+  "expression_occurrences": 1,
+  "harness_source_sha256": "a6cdf84f4fb748254887aacac8f2448d4743068d052ee1e306dee45876f7c2aa",
+  "binary_sha256": "ea2e0e6eb6d5e87d98b09b831e8a809a90d03993ff7934f406bc1284ca43ec26",
+  "binary_bytes": 3950552,
+  "inputs": [
+    3,
+    4
+  ],
+  "outputs": [
+    "/proc/self/fd/3",
+    "/proc/self/fd/4"
+  ],
+  "outputs_differ": true,
+  "consequence": "The emitted wallet.read erases the FD in core.fmt.rt.Argument.new_display before alloc.fmt.format. A pure external formatter receiving only erased Arguments cannot reproduce both paths. Retain fmt-1 and the full-entry gate as OPEN.",
+  "limitations": [
+    "This validates formatting, not file opening or FD custody.",
+    "Lean no-go theorem and raw-walk axiom audit are separate.",
+    "No source, generated body, library object, translator or comparator changed."
+  ]
+}
