@@ -68,7 +68,7 @@ theorem both_panics_joined (encode : {B : Type} → Request B → Bytes) (w : St
       PV_V263_WorkerControl.merge w).outcome = .fault (.panic [2]) := by
   simp only [joinAll,join,panicTask,PV_V263_World.bind,grants,PV_V263_World.lift,
     PV_V263_WorkerControl.merge,Nat.add_assoc]
-  exact ⟨rfl,rfl⟩
+  constructor <;> trivial
 
 #print axioms Task
 #print axioms fork
