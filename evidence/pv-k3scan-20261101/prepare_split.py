@@ -12,7 +12,7 @@ assert b==subprocess.check_output(['git','show','ca4a9d3b1c37f921e39154c5b459abf
 files={n:base64.b64decode(d['files'][h]['base64'])for n,h in m.items()if n.startswith('split/')} # exact selected manifest/module closure
 files['KMX_stubs.rs']=base64.b64decode(d['files'][m['KMX_stubs.rs']]['base64']);files['split-flat-reference.rs']=b
 p='split/src/lib.rs';old=b'/home/dombarker/project-offloads/codex-pv-kstub-20261028/KMX_stubs.rs';assert old in files[p];files[p]=files[p].replace(old,b'../../KMX_stubs.rs')
-p='split/src/sealed.rs';t=files[p].decode();old='/home/dombarker/project-offloads/codex-pv-alib-20261027/split-flat-reference.rs';assert old in t;t=t.replace(old,'../../split-flat-reference.rs')
+p='split/src/sealed.rs';t=files[p].decode();old='/home/dombarker/project-offloads/codex-pv-alib-20261027/split-flat-reference.rs';assert old in t;t=t.replace(old,'/home/dombarker/project-offloads/codex-pv-k3scan-20261101/split-source/split-flat-reference.rs')
 for name,feature in [('split64_coordinate_lo','negative-lo'),('split64_coordinate_hi','negative-hi')]:
  a=t.index('fn '+name+'(');b=t.index('{',a);i=b;depth=1
  while depth:i+=1;depth+=(t[i]=='{')-(t[i]=='}')
