@@ -38,7 +38,10 @@ for e in x['edges']:assert auth[e['dependency']]['sha256']==e['sha256'],('edge m
 copies=[]
 for v in x['checks']:
  dest=destination(v['module']);source=input_path(v).resolve()
- assert str(dest).startswith('/home/dombarker/project-offloads/codex-pv-evh-20261029/objects/')
+ if not str(dest).startswith('/home/dombarker/project-offloads/codex-pv-evh-20261029/objects/'):
+  assert dest.is_file() and sha(dest)==v['sha256'],('inherited first-root',v['module'])
+  v['path']=str(dest)
+  continue
  for suffix in ['.olean','.olean.private','.olean.server','.ilean','.ir']:
   p=source.with_suffix(suffix);q=dest.with_suffix(suffix)
   if not p.is_file():continue
