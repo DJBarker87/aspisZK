@@ -1,77 +1,96 @@
-# V263 context checkpoint — task incomplete
+# V263 D567 context checkpoint — target not yet established
 
-Only writer, EXACT sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
-branch codex/pv-runjoin-20261026. Baseline b0b2d9dda8. No push/merge.
-User requires new modules PV_V263_, attempts79900–79996, audits79997–79999,
-nativeN90120–N90139, no Kani. Read shared pv-common.txt through ax1.
+Only writer; exact sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
+branch codex/pv-runjoin-20261026. Resume entry649e98edb7; proof-source head
+6402d84e09df0d9939ded1cd42290cf24c1e9f68. Evidence commit follows. No push/merge.
+New ruling rdea-2 has been read. Thread denial refutes all-world success,
+NOT existential Nonempty P. Resource success is a legitimate existential world
+only after the actual source/callback/capture correspondence is supplied.
 
-## What is established
+## Accepted state
 
-SOURCE.md and frozen-source.json locate and pin the frozen source9c131667ca,
-distinguishing it from current candidate tip8e450dab55 (which lacks host_work).
-Retained host src worker files match the freeze exactly. Source inputs include
-host_work, native_workers, both callers, concrete SemanticOracle, Cargo/lib gates.
-C1/C2 counts27/2; sumcheck stages100..109/counts14336..28, LegacyHashFn and
-SemanticOracle actual instantiations. TWO range layers, TLS, fifteen spawns,
-catch/join/panic-order, allocation, drop/unwind and diagnostics identified.
+Original four modules retained: World79900,Sequential79902,
+NativeBoundary79903,Range79906. Frozen source9c131667ca remains distinct from
+candidate tip8e450dab55, which lacks host_work. Source inputs/feature pins and
+all C1/C2/sumcheck reached instantiations remain in SOURCE.md/frozen-source.json.
 
-NATIVE.md gives isolated frozen-body cfg parity, exact release compiler settings,
-finite ordering/inner-error/panic tests and a real native resource-denial branch.
-N90121 uses C1 stage200,count27, zero callbacks invoked, Scope::spawn panic code11
-when this scope's retained local handles fill TasksMax64. This is a counterexample
-to ALL-world unconditional success, NOT a counterexample to existential Nonempty P.
-N90120 used count28 at stage200 and is diagnostic only; do not mislabel it C1.
-No full deployed-client/crate feature graph or actual honest capture was executed.
+New accepted components (all R1Z.PV_V263_):
+PublicRequests79907,WorkerRequests79908,WorkerControl79910,Team79914,
+Family79915,FamilyWorld79916,DeferredJoin79918,MapSpine79919,OutputShape79922.
+WORKER-MODEL.md states exactly what each proves and the native frontier.
+Grants/denies are stateful primitive resource models, not worker-output
+oracles. Team derives exact15 handle values and counter advance, retains the
+first denied spawn/event, and no callback-success law is needed for that
+prefix. Callback traversal/catches/TLS finalization retain post-worlds and
+full Result/fault/exhaustion. The deferred-join model runs both caught-panic
+actions before merge. MapSpine is a CANDIDATE join-late, panic=abort source
+spine with explicit vector method effects and nested TLS branch. It is NOT
+source-bound or installed. It returns List, not the source Vec.
+OutputShape proves traversal/item lengths and outer-family tuple shape on
+returned-ok outcomes, WITHOUT assuming termination/success/vector values.
 
-Accepted new modules (normal6G/8G/swap0/tasks64,Lean-M7000):
-* PV_V263_World79900: full Result/fault/exhaustion, state/events, associative bind.
-* PV_V263_Sequential79902: exact dependent post-world sequencing, fail/div/fault
-  propagation; model state-reset counterexample; faults have no source Result.
-* PV_V263_NativeBoundary79903: exact retained op257 at actual opsNative; even a
-  world-indexed source dictionary cannot totally project a fault to a source Result.
-* PV_V263_Range79906: all native range intermediates bounded by original n,
-  Usize overflow safety, outer family partition, symbolic coverage for all n.
-  range-binding.py checks the source token shape and source/model pins (own-1
-  structural argument for this helper ONLY, compiler preservation V370 retained).
+N90122 adds exact frozen helper finite checks under rustc1.94.1 opt3,
+panic=abort (N90121 used unwind). Nested TLS/order/inner Err checks pass;
+resource denial at stage200,count27 gives SIGABRT(-6),OS code11,61 occupied
+local handles,NO callback marker. Not a full deployed crate/client run.
+Actual native stderr is retained. The model abort classification's empty
+message is NOT an adequacy claim for native diagnostics/hooks/formatting.
 
-79901 failed ambiguous bind (qualified in79902).79904/79905 failed only Usize
-max/bit-width normalization (defs normalized in79906). Rejected sorryAx output
-is retained as rejection evidence. No unchanged failure rerun. Summary-based
-#print axioms only standard axioms on accepted declarations; NO raw audit/release
-claim (ax1). Reconciliation and original-module logs retained, no live own scopes.
+V400-257-entry/layout/lowering/callback/answer-timing are now precisely named
+in V400-WORKER-RESOURCES.md and V400-worker-resources.json. Shape congruence
+is proved; actual public request-history equality is NOT. Vec capacity sites
+are NOT raw allocation syscall sizes/counts. Nested TLS history, actual
+layouts, std allocation/growth/stack/TLS lowering, callback allocations and
+D159 scheduling/failure timing remain P obligations. No new T field.
 
-## Budget and continuation
+## What is still NOT done / exact next deliverable
 
-7/97 Lean,4 accepted/3 rejected,90 left. Next79907. Audits79997–79999 UNUSED.
-2/20 native, nextN90122;0 Kani. No extractor run or ae1 identity claim. Shared
-runjoin32 compiled cohort reused; fresh preflight4265 projects,9603 direct
-fingerprints,5673 external objects,5438IR;9938 namespace checks all match.
-compile.py guard refuses failed hashes; guard SHA in SUMMARY.json. One scope at
-a time. Original admitted scopes have all finished. Native binaries are caches.
+V263 OPEN→OPEN; actual opsNative op257 still retained from residual ops
+(NativeBoundary.retained still applies). Nonempty P unproved→unproved.
+No endpoint success/vector/callback-totality premise added; no link/row removed.
+T/observer/simulator/frozen source/release pins unchanged. V183 SUSPENDED(K-3)
+stays suspended. Skeleton consistency: reduced to non-emptiness.
 
-## What is NOT done / next concrete deliverable
+1. Complete output invariants: caughtFamily preserves family_shape on its
+   success branch; forks gives source-indexed task graph; joinChunks preserves
+   that order; mergePool/appendItems plus Range.coverage give run length=n.
+   Then convert to exact alloc.vec.Vec with the Usize bound, retaining faults,
+   source fail/div and exhaustion. OutputShape.bind_success carries the exact
+   intermediate state. Do not assume successful vectors to avoid this proof.
+2. Source-bind the candidate spine, including heap stores/item pushes, chosen
+   collect specialisations, all implicit Vec/iterator drops, scope packets,
+   TLS lifetimes and cleanup. DeferredJoin is ONE candidate allowed schedule,
+   not a general scheduler adequacy theorem. Bind an actual EVH event codec;
+   no EVH compiled cohort was mixed here. V370/D381/D386 remain.
+3. Reify the actual commitment/sumcheck closures with exact captured args;
+   prove successful execution at every reached index using op227's exact
+   bridge and the other source laws. The generic FamilyWorld callback law is
+   NOT discharged and must NOT be added at the endpoint as a success premise.
+4. Install the complete stateful worker at actual opsNative and thread its
+   post-world through actual NativeControl capture. Old Sequential64.worker
+   still reuses w. Source projection is partial; never fabricate div for a
+   native fault. Finally build the actual captured witness for Nonempty P.
 
-(1) Source classification is done. (2) Full stateful worker interpreter/native
-association and op257 V263 link installation at opsNative are NOT done. The new
-world algebra is a substrate only, not a worker source model or a completed
-binding. (3) Successful termination on actual captured dependent inputs and
-Nonempty P remain unproved. No premise/row removed, retained links unchanged;
-T, observer, simulator, frozen source and release pins unchanged. Target not yet
-established. Skeleton consistency: reduced to non-emptiness.
+## Budgets, validation and caches
 
-Implement the native worker source spine (including nested TLS, spawn/allocation
-failure, caught callbacks, joins, source-order panic resumption and cleanup) in
-a stateful world with explicit native event encoding, following EVH8 D550.
-Thread its exact post-world through NEW actual capture modules: old Sequential64
-worker reuses w. Preserve full Result on finished runs, runtime fault prefixes
-and finite-fuel exhaustion separately. Then bind all lower native operations
-under own-1 (or direct ae1 extraction if feasible), and build an explicit successful
-reachable runtime world and actual callback laws from op227. Do not assume
-successful vectors, wrap success in a new endpoint hypothesis, use a pure fixed
-callback, or claim native fault as source divergence. Existing EVH allocator/
-diagnostic adequacy is still OPEN; this checkpoint does not restore V183 K-3.
+23/97 Lean charged: 13 accepted,10 rejected;
+74 left. Next79923; audits79997–79999 UNUSED.
+3/20 native charged;17 left;nextN90123.0 Kani. No unchanged failed reruns.
+New failures were namespace ambiguity, proof-state/predicate elaboration or
+simplified truth goals; their sources/revisions/full logs are retained.
+No memory kill, cap increase, barrier refusal, full/frozen replay or raw audit.
 
-Do not burn the remaining budget on a universal success theorem disproved by the
-native denial branch. The existential successful-world obligation remains work,
-not an impossibility result. No complete/frozen manifest replay while capture
-is open. Preserve all receipts/sources and the reusable accepted Lean objects.
+Lean wall48.17s,peak4531744768bytes,swap0.
+All scopes6G/8G/no-swap/tasks64,Lean-M7000,optimized native.
+SUMMARY.json/receipt-*.json/modules-*.json record exact targets/revisions/hashes,
+dependency fingerprints/exits/wall/RSS/swap and summary-based #print axioms.
+Accepted lists only standard axioms; rejected sorryAx is rejection evidence.
+Per ax1/ax1', summary prints are NOT raw or release audits. No NEP audit claimed.
+Compile guard sha1bc93e7f9e67723cc2f410ed3be5453a2faf00f83541ee5945275e39fb73da7d.
+
+Reusable runjoin32-lean objects remain. Reconciliation checked accepted
+source/object hashes and no own live scopes; fresh preflight and namespace
+resolution receipts are refreshed at this checkpoint. Original module logs
+are archived in original-module-logs.json.xz plus uncompressed sha256.
+Native binaries/Lean objects are caches, not committed evidence. No wallet,
+key, fund, SBF or ELF operation. Retain every input/source/receipt.

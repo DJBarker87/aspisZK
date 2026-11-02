@@ -1,0 +1,33 @@
+START 79909 R1Z.PV_V263_WorkerControl
+DONE 79909 R1Z.PV_V263_WorkerControl exit 1 wall 1.99 RSS 4504092672
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_WorkerControl.lean:92:67: error: Ambiguous term
+  lift
+Possible interpretations:
+  PV_V263_World.lift : Result ?m.73 → Q ?m.72 ?m.73
+  
+  Std.lift : ?m.72 → Result ?m.72
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_WorkerControl.lean:92:19: error: unsolved goals
+S A : Type
+f : ℕ → Q S A
+law : ∀ (i : ℕ) (w : State S), ∃ a, (f i w).outcome = Outcome.returned (Result.ok a)
+i : ℕ
+is : List ℕ
+ih : ∀ (w : State S), ∃ values, (traverse f is w).outcome = Outcome.returned (Result.ok values)
+w : State S
+a : A
+ha : (f i w).outcome = Outcome.returned (Result.ok a)
+rest : List A
+hr : (traverse f is (f i w).state).outcome = Outcome.returned (Result.ok rest)
+⊢ (PV_V263_World.lift (Result.ok (a :: rest)) (traverse f is (f i w).state).state).outcome =
+    Outcome.returned (Result.ok (a :: rest))
+'R1Z.PV_V263_WorkerControl.catchPanic' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.finalize' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.withActive' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.traverse' does not depend on any axioms
+'R1Z.PV_V263_WorkerControl.merge' does not depend on any axioms
+'R1Z.PV_V263_WorkerControl.catch_return' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.catch_unwind' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.catch_abort' depends on axioms: [propext]
+'R1Z.PV_V263_WorkerControl.traverse_total' depends on axioms: [sorryAx]
+'R1Z.PV_V263_WorkerControl.merge_first' does not depend on any axioms
+

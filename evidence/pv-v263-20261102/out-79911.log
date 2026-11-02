@@ -1,0 +1,103 @@
+START 79911 R1Z.PV_V263_Team
+DONE 79911 R1Z.PV_V263_Team exit 1 wall 1.91 RSS 4496343040
+               events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(SpawnAnswer), Request.spawn thread =>
+                { outcome := Outcome.returned (Result.ok (SpawnAnswer.granted w.nextHandle)),
+                  state :=
+                    { base := w.base, activeTLS := w.activeTLS, liveHandles := w.nextHandle :: w.liveHandles,
+                      nextHandle := w.nextHandle + 1 },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Option Bytes), Request.join thread h =>
+                { outcome := Outcome.returned (Result.ok none),
+                  state :=
+                    { base := w.base, activeTLS := w.activeTLS,
+                      liveHandles := List.filter (fun x => x != h) w.liveHandles, nextHandle := w.nextHandle },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Unit), Request.cleanup thread =>
+                { outcome := Outcome.returned (Result.ok ()), state := w,
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] } })
+        is w').outcome =
+    Outcome.returned (Result.ok (List.range' w'.nextHandle is.length))
+⊢ (PV_V263_WorkerControl.traverse
+        (spawn
+          {
+            answer := fun {A} request w =>
+              match A, request with
+              | .(Bool), Request.tlsRead t =>
+                { outcome := Outcome.returned (Result.ok ((List.lookup t w.activeTLS).getD false)), state := w,
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Bool), Request.tlsReplace t b =>
+                { outcome := Outcome.returned (Result.ok ((List.lookup t w.activeTLS).getD false)),
+                  state :=
+                    { base := w.base, activeTLS := (t, b) :: List.filter (fun p => p.1 != t) w.activeTLS,
+                      liveHandles := w.liveHandles, nextHandle := w.nextHandle },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Unit), Request.tlsRestore t b =>
+                { outcome := Outcome.returned (Result.ok ()),
+                  state :=
+                    { base := w.base, activeTLS := (t, b) :: List.filter (fun p => p.1 != t) w.activeTLS,
+                      liveHandles := w.liveHandles, nextHandle := w.nextHandle },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Unit), Request.allocate site thread elements elementSize align =>
+                { outcome := Outcome.returned (Result.ok ()), state := w,
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Unit), Request.release site thread =>
+                { outcome := Outcome.returned (Result.ok ()), state := w,
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(SpawnAnswer), Request.spawn thread =>
+                { outcome := Outcome.returned (Result.ok (SpawnAnswer.granted w.nextHandle)),
+                  state :=
+                    { base := w.base, activeTLS := w.activeTLS, liveHandles := w.nextHandle :: w.liveHandles,
+                      nextHandle := w.nextHandle + 1 },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Option Bytes), Request.join thread h =>
+                { outcome := Outcome.returned (Result.ok none),
+                  state :=
+                    { base := w.base, activeTLS := w.activeTLS,
+                      liveHandles := List.filter (fun x => x != h) w.liveHandles, nextHandle := w.nextHandle },
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] }
+              | .(Unit), Request.cleanup thread =>
+                { outcome := Outcome.returned (Result.ok ()), state := w,
+                  events := [PV_RJ4IDB.NativeEvent.side [118, 50, 54, 51] (encode request)] } })
+        (i :: is) w).outcome =
+    Outcome.returned (Result.ok (List.range' w.nextHandle (i :: is).length))
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_Team.lean:38:6: error: 'change' tactic failed, pattern
+  (launch (grants fun {A} => encode) is w').state.nextHandle = ?m.98
+is not definitionally equal to target
+  (launch (grants fun {A} => encode) (i :: is) w).state.nextHandle = w.nextHandle + (i :: is).length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_Team.lean:29:52: warning: This simp argument is unused:
+  PV_V263_World.lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵a̵u̵n̵c̵h̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵P̵V̵_̵V̵2̵6̵3̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵,̵L̵i̵s̵t̵.̵l̵e̵n̵g̵t̵h̵_̵n̵i̵l̵,̵N̵a̵t̵.̵a̵d̵d̵_̵z̵e̵r̵o̵]̵[̲l̲a̲u̲n̲c̲h̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲L̲i̲s̲t̲.̲l̲e̲n̲g̲t̲h̲_̲n̲i̲l̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲z̲e̲r̲o̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_Team.lean:35:33: warning: This simp argument is unused:
+  PV_V263_World.bind
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵a̵u̵n̵c̵h̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵P̵V̵_̵V̵2̵6̵3̵_̵W̵o̵r̵l̵d̵.̵b̵i̵n̵d̵,̵s̵p̵a̵w̵n̵,̵g̵r̵a̵n̵t̵s̵,̵P̵V̵_̵V̵2̵6̵3̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵]̵[̲l̲a̲u̲n̲c̲h̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲s̲p̲a̲w̲n̲,̲ ̲g̲r̲a̲n̲t̲s̲,̲ ̲P̲V̲_̲V̲2̲6̲3̲_̲W̲o̲r̲l̲d̲.̲l̲i̲f̲t̲]̲ at ho ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_Team.lean:35:52: warning: This simp argument is unused:
+  spawn
+
+Hint: Omit it from the simp argument list.
+  simp only [launch, ̲traverse, ̲PV_V263_World.bind,s̵p̵a̵w̵n̵,̵ ̲grants, ̲PV_V263_World.lift] at ho ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_Team.lean:35:65: warning: This simp argument is unused:
+  PV_V263_World.lift
+
+Hint: Omit it from the simp argument list.
+  simp only [̵l̵a̵u̵n̵c̵h̵,̵t̵r̵a̵v̵e̵r̵s̵e̵,̵P̵V̵_̵V̵2̵6̵3̵_̵W̵o̵r̵l̵d̵.̵b̵i̵n̵d̵,̵s̵p̵a̵w̵n̵,̵g̵r̵a̵n̵t̵s̵,̵P̵V̵_̵V̵2̵6̵3̵_̵W̵o̵r̵l̵d̵.̵l̵i̵f̵t̵]̵[̲l̲a̲u̲n̲c̲h̲,̲ ̲t̲r̲a̲v̲e̲r̲s̲e̲,̲ ̲P̲V̲_̲V̲2̲6̲3̲_̲W̲o̲r̲l̲d̲.̲b̲i̲n̲d̲,̲ ̲s̲p̲a̲w̲n̲,̲ ̲g̲r̲a̲n̲t̲s̲]̲ at ho ⊢
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_V263_Team.launch' does not depend on any axioms
+'R1Z.PV_V263_Team.team' does not depend on any axioms
+'R1Z.PV_V263_Team.grant_launch' depends on axioms: [propext]
+'R1Z.PV_V263_Team.grant_exact' depends on axioms: [sorryAx]
+'R1Z.PV_V263_Team.fifteen' depends on axioms: [sorryAx]
+'R1Z.PV_V263_Team.deny_first' depends on axioms: [propext]
+'R1Z.PV_V263_Team.worlds' depends on axioms: [propext]
+

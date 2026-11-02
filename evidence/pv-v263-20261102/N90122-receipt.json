@@ -1,0 +1,82 @@
+{
+  "attempt": "N90122",
+  "target": "exact frozen helper, panic=abort, nested TLS and spawn denial",
+  "source_revision": "79dc46b79b2101ac6a9864a0be44f10ce16d717e",
+  "source_input_hashes": {
+    "evidence/pv-v263-20261102/inputs/std-1.94.1-scoped.rs": "0d0ac37f5e45c7471ac0b454ece80fe7d049e9ef7429804562e9c5968a7dfef6",
+    "evidence/pv-v263-20261102/inputs/tools/r1-cost-probe/Cargo.toml": "9c0dbf8f43676670f325dc3a3fada9bc50c73c02340af9663ea038d11bcbf6e3",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/Cargo.toml": "0b54d0ed5e1ab6a7e74e7eeb39e63f9503c359be7e412ab26e28f86b4d213d23",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/lib.rs": "8d03c134841c22b6de8890d32bcffc26527db2abb9cbeeaa92651c27c291be90",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_semantic.rs": "12cf92baea4d0f664bbd31355dc7f1fbdd39d30b3f997e688009a499ae80d830",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_sumcheck.rs": "d42126b787299781e33849e49ed8a866fc850ee7b6385b8df8aacc374aafa186",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs": "228143f4c77a39207b798e782c7351e63290a678183d75d6884a8f8332835f19",
+    "evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_commitment.rs": "ff5cc5bf6e0232ed7fa92a2a15b0cdb86d2e56a6cb4fda56ef3583a39b79f165",
+    "evidence/pv-v263-20261102/inputs/docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs": "0d45ccdb746d7fd2bbdc9776458df8a657c9d186dadb3745d74ae270a3a3314a",
+    "tools/pv-v263-20261102/native-abort.rs": "f0690dd25ad9379c1f0bb5485be892c8ba19ac3ddce663dded55eb29e91a13de",
+    "tools/pv-v263-20261102/native-abort-host.py": "cbfa32cb2bed80b4f67a1c352208a765c0666456dd8fa9763889cea8db4202f8"
+  },
+  "exit": 0,
+  "wall": "0:01.38",
+  "peak_rss_kib": 154836,
+  "swaps": 0,
+  "print_axioms": "N/A native finite validation",
+  "binary_sha256": "f4083396be3469fca52498bed4a963ef91a6d7e751ecba8bd327f89af50ab5be",
+  "subtargets": [
+    {
+      "target": "compile-abort-profile",
+      "command": [
+        "/home/dombarker/.cargo/bin/rustc",
+        "+1.94.1",
+        "--edition=2021",
+        "-C",
+        "opt-level=3",
+        "-C",
+        "debug-assertions=no",
+        "-C",
+        "overflow-checks=no",
+        "-C",
+        "panic=abort",
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-abort.rs",
+        "-o",
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.2584490100853145,
+      "stdout": "",
+      "stderr": "warning: function `ordered_map` is never used\n  --> /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8\n   |\n24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {\n   |        ^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: 1 warning emitted\n\n",
+      "expected": true
+    },
+    {
+      "target": "nested-tls-and-inner-results-abort-profile",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort",
+        "success"
+      ],
+      "exit": 0,
+      "wall_seconds": 0.0033033740473911166,
+      "stdout": "abort-profile-nested-inner-results count=0\nabort-profile-nested-inner-results count=2\nabort-profile-nested-inner-results count=27\nabort-profile-nested-inner-results count=28\nabort-profile-nested-inner-results count=14336\n",
+      "stderr": "",
+      "expected": true
+    },
+    {
+      "target": "spawn-denial-aborts-before-callback",
+      "command": [
+        "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort",
+        "failure"
+      ],
+      "exit": -6,
+      "wall_seconds": 1.088298393995501,
+      "stdout": "occupied=61\n",
+      "stderr": "\nthread 'main' (796620) panicked at /home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/thread/scoped.rs:203:46:\nfailed to spawn thread: Os { code: 11, kind: WouldBlock, message: \"Resource temporarily unavailable\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+      "expected": true
+    }
+  ],
+  "scope": "6G/8G/swap0/tasks64",
+  "admission_allowed": true,
+  "evidence_class": "finite validation, isolated body cfg parity; not full crate execution or source binding",
+  "expected_time": "compilation, then finite checks",
+  "expected_failure": "SIGABRT -6; no callback stderr marker; frozen stage200,count27",
+  "feature_parity": "same retained frozen body hashes as N90121; public-work-trace off; isolated harness, no full crate graph",
+  "admission_exit": 0,
+  "admission_and_launch_same_shell": true
+}

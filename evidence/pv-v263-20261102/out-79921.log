@@ -1,0 +1,54 @@
+START 79921 R1Z.PV_V263_OutputShape
+DONE 79921 R1Z.PV_V263_OutputShape exit 1 wall 1.99 RSS 4495138816
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OutputShape.lean:53:36: error: Type mismatch: After simplification, term
+  congrArg Nat.succ hr
+ has type
+  rest.length.succ = ids.length.succ
+but is expected to have type
+  ?m.55 (a :: rest)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OutputShape.lean:63:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OutputShape.lean:77:2: error: Tactic `apply` failed: could not unify the conclusion of `bind_post
+  (fun values => values.length = PV_RunJoin_WorkRange35.width n k) ?m.40
+  (PV_V263_MapSpine.items runtime layouts n k callback)
+  (fun values => PV_V263_World.lift (Result.ok [(values, values.length)])) (items_length runtime layouts n k callback)`
+  ?m.40 ?a
+with the goal
+  Post (fun chunks => ∃ values, chunks = [(values, values.length)] ∧ values.length = PV_RunJoin_WorkRange35.width n k)
+    do
+    let values ← PV_V263_MapSpine.items runtime layouts n k callback
+    pure [(values, values.length)]
+
+Note: The full type of `bind_post (fun values => values.length = PV_RunJoin_WorkRange35.width n k) ?m.40
+  (PV_V263_MapSpine.items runtime layouts n k callback)
+  (fun values => PV_V263_World.lift (Result.ok [(values, values.length)]))
+  (items_length runtime layouts n k callback)` is
+  (∀ (a : List A),
+      a.length = PV_RunJoin_WorkRange35.width n k → Post ?m.40 (PV_V263_World.lift (Result.ok [(a, a.length)]))) →
+    Post ?m.40
+      (PV_V263_World.bind (PV_V263_MapSpine.items runtime layouts n k callback) fun values =>
+        PV_V263_World.lift (Result.ok [(values, values.length)]))
+
+S A : Type
+runtime : PV_V263_MapSpine.Runtime S
+layouts : PV_V263_MapSpine.Layouts
+n k : ℕ
+callback : ℕ → Q S A
+unit : Unit
+⊢ Post (fun chunks => ∃ values, chunks = [(values, values.length)] ∧ values.length = PV_RunJoin_WorkRange35.width n k)
+    do
+    let values ← PV_V263_MapSpine.items runtime layouts n k callback
+    pure [(values, values.length)]
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OutputShape.lean:76:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+'R1Z.PV_V263_OutputShape.Post' does not depend on any axioms
+'R1Z.PV_V263_OutputShape.bind_success' does not depend on any axioms
+'R1Z.PV_V263_OutputShape.pure_post' does not depend on any axioms
+'R1Z.PV_V263_OutputShape.bind_post' does not depend on any axioms
+'R1Z.PV_V263_OutputShape.bind_any' does not depend on any axioms
+'R1Z.PV_V263_OutputShape.traversal_length' depends on axioms: [sorryAx]
+'R1Z.PV_V263_OutputShape.items_length' depends on axioms: [sorryAx, Quot.sound]
+'R1Z.PV_V263_OutputShape.family_shape' depends on axioms: [sorryAx]
+

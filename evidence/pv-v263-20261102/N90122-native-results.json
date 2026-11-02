@@ -1,0 +1,50 @@
+[
+  {
+    "target": "compile-abort-profile",
+    "command": [
+      "/home/dombarker/.cargo/bin/rustc",
+      "+1.94.1",
+      "--edition=2021",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-C",
+      "overflow-checks=no",
+      "-C",
+      "panic=abort",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-abort.rs",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.2584490100853145,
+    "stdout": "",
+    "stderr": "warning: function `ordered_map` is never used\n  --> /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:24:8\n   |\n24 | pub fn ordered_map<T: Send, F: Fn(usize) -> T + Sync>(n: usize, f: F) -> Vec<T> {\n   |        ^^^^^^^^^^^\n   |\n   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n\nwarning: 1 warning emitted\n\n",
+    "expected": true
+  },
+  {
+    "target": "nested-tls-and-inner-results-abort-profile",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort",
+      "success"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.0033033740473911166,
+    "stdout": "abort-profile-nested-inner-results count=0\nabort-profile-nested-inner-results count=2\nabort-profile-nested-inner-results count=27\nabort-profile-nested-inner-results count=28\nabort-profile-nested-inner-results count=14336\n",
+    "stderr": "",
+    "expected": true
+  },
+  {
+    "target": "spawn-denial-aborts-before-callback",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/native-abort",
+      "failure"
+    ],
+    "exit": -6,
+    "wall_seconds": 1.088298393995501,
+    "stdout": "occupied=61\n",
+    "stderr": "\nthread 'main' (796620) panicked at /home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/thread/scoped.rs:203:46:\nfailed to spawn thread: Os { code: 11, kind: WouldBlock, message: \"Resource temporarily unavailable\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "expected": true
+  }
+]

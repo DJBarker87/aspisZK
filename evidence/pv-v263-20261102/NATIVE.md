@@ -43,3 +43,23 @@ runtime world or source-to-native adequacy of the Lean world substrate.
 fmt-1: no always-Ok formatting model is used. Actual panic diagnostics are
 retained verbatim in native-results.json stderr. Modeling hooks, formatting,
 allocation and unwind cleanup remains an explicit part of native worker binding.
+
+## N90122 — changed configuration: deployed panic=abort and nested TLS
+
+The exact same frozen helper bodies were compiled with rustc1.94.1,
+opt-level3, debug assertions/overflow checks off, panic=abort. The new harness
+checks nested map calls at counts0,2,27,28,14336, ordered outputs and patterned
+inner Rust Err. Nested ACTIVE avoids new worker teams. Under task-slot
+exhaustion (61 retained local handles, this task's TasksMax64 scope), reached
+stage200,count27 terminates with Linux SIGABRT (-6), OS code11 from
+scoped.rs203:46, with NO callback stderr marker and no normal return.
+The host supervisor treats this exact abort as the expected passing control.
+It disables core dumps; OS process exit reclaims all child threads. No other
+scope or process was killed. The harness has no writable static.
+
+This closes a missing finite configuration check in N90121 (which used
+panic=unwind to inspect the panic), not a full source/native association.
+The artifact is an isolated-body harness with exact helper cfg parity,
+not the complete deployed client/crate feature graph or an actual capture.
+N90122-receipt.json records target, source revision/input hashes, compiler
+flags, expected signal, binary SHA, wall/RSS/swap and no-axioms applicability.
