@@ -11,7 +11,7 @@ unoccupied address or promotes ghost key freshness to physical separation.
 The existing copy/read laws' three extent and three pair-separation premises
 can now be discharged for this recorded layout. The actual reserved frame is
 232 bytes: original64 at0, field32 at64, seed32 at96. The successful return
-also stages mask/field/seed at128/160/192 before writing the97-byte Result.
+also stages mask/field/seed at128/160/192 before writing the97-byte initialized return footprint.
 These staging copies and SIMD registers must remain in L3; the current abstract
 pair relocation does not describe all of them. Source zero initializers for
 both32 are optimized away; source-to-code preservation remains V370.
@@ -36,3 +36,8 @@ successful actual worldRun witness is claimed.
 Then complete moves, allocator fidelity and callbacks, preserving all source
 failure prefixes and runtime resource failures. Endpoint rows removed NONE;
 target not established; T and all L1/L2/L3/deployment conditions unchanged.
+
+Disassembly gives the initialized success-return footprint [0,97), not the
+size/alignment or padding of the whole Result allocation. FRAME-ENTRY retains
+the full ABI object validity; no sizeof=97 claim is made. CallerSeparate uses
+only the initialized97-byte footprint needed by the existing backing law.

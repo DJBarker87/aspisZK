@@ -15,7 +15,7 @@ def returnedField (owner sp result : Nat) (w : State) : Slot :=
 def returnedSeed (owner sp result : Nat) (w : State) : Slot :=
   {seed owner sp w with address := result+65}
 
-/-- Whole caller Result vs callee reservation, the exact remaining invocation
+/-- Initialized caller return footprint vs callee reservation, the exact remaining invocation
 boundary. No convenient numeric return address is chosen. -/
 def CallerSeparate (sp result : Nat) : Prop := result+97 ≤ sp ∨ sp+232 ≤ result
 

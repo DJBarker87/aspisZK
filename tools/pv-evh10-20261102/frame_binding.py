@@ -40,7 +40,10 @@ anchors={
 for name,anchor in anchors.items():assert anchor in asm,(name,anchor)
 frame=json.loads((E/'entropy-frame-source.json').read_text())
 copy=json.loads((E/'entropy-copy-restoration.json').read_text())
-assert frame['source']['sha256']==sha(subprocess.check_output(['git','show','HEAD:'+frame['source']['path']]))
+current_source=subprocess.check_output(['git','show','HEAD:'+frame['source']['path']])
+adopted_revision=adopted['adopted_build_receipt']['revision']
+adopted_source=subprocess.check_output(['git','show',adopted_revision+':'+frame['source']['path']])
+assert adopted_source==current_source and frame['source']['sha256']==sha(current_source)
 assert 'let bytes1 := as_mut_back s1' in copy['body']
 assert 'let field_mask_entropy1 := deref_mut_back a5' in copy['body']
 assert 'let leaf_salt_seed1 := deref_mut_back1 a7' in copy['body']
@@ -52,11 +55,13 @@ out=dict(
  evidence_class='own-1 structural source binding with read-only adopted-binary layout support; V370 retained',
  baseline='e08d80635057554f109651811ea8be512e24b1ff',
  binary=dict(path=binary,sha256=digest.split()[0],executed=False),
+ adopted_source=dict(revision=adopted_revision,path=frame['source']['path'],sha256=sha(adopted_source),byte_equal_current=True),
  disassembly=dict(command=command,path=str(E/'entropy-layout-da36d6aa.txt'),sha256=sha(asm.encode()),anchors=anchors),
  source_inputs=[dict(path=str(E/n),sha256=sha((E/n).read_bytes())) for n in ['entropy-frame-source.json','entropy-copy-restoration.json','getrandom-034-linux-raw-source.json','adopted-backend-confirmation.json']],
  layout=dict(base='rsp after six pushes and sub 232; SYMBOLIC, no chosen numeric stack address',reserved=232,
    original=[0,64],field=[64,96],seed=[96,128],mask_staging=[128,160],field_staging=[160,192],seed_staging=[192,224],
-   returned_base='incoming rdi saved in rbx',result_tag=[0,1],returned_mask=[1,33],returned_field=[33,65],returned_seed=[65,97]),
+   returned_base='incoming rdi saved in rbx',result_tag=[0,1],returned_mask=[1,33],returned_field=[33,65],returned_seed=[65,97],result_initialized_footprint=[0,97],
+   result_allocation_extent='Not inferred from max store offset; full ABI size/alignment/padding remains V370/runtime metadata'),
  binding=[
   'Original Zeroizing([0;64]) initializer maps to four xmm zero stores at rsp offsets0,16,32,48.',
   'AsMut reaches original64; register rdi=rsp,rsi=64,rax=318,rdx=0 at first syscall. EINTR repeats; positive partial return reduces rsi and advances rdi before next syscall.',
@@ -68,7 +73,7 @@ out=dict(
  ],
  remaining_premises=[
   dict(id='FRAME-CALL',classification='V370 compiler-cohort item',statement='At each reached call, StackZero memory/live keys interpret the actual Rust frame; symbolic base is the post-prologue rsp; original/inner addresses equal the recorded offsets. Compiler preserves source initialization/copy/drop and borrow restoration, including elided stores and SIMD reads.'),
-  dict(id='FRAME-ENTRY',classification='runtime obligation with compiler stack preservation under V370',statement='The actual 232-byte writable reserved frame has a valid nonwrapping64-bit extent and is disjoint from each pre-existing live owner and each live heap allocation. The caller-provided 97-byte Result destination and32-byte mask input are valid and obey Rust call aliasing rules. This is required only of reached entry states, never arbitrary State.'),
+  dict(id='FRAME-ENTRY',classification='runtime obligation with compiler stack preservation under V370',statement='The actual 232-byte writable reserved frame has a valid nonwrapping64-bit extent and is disjoint from each pre-existing live owner and each live heap allocation. The caller-provided Result destination (including its actual ABI padding; success initializes97 bytes) and32-byte mask input are valid and obey Rust call aliasing rules. This is required only of reached entry states, never arbitrary State.'),
   dict(id='HEAP-ENTRY',classification='runtime allocator obligation (rdea-1)',statement='Every represented live heap block is an actual live allocation and its initialized bytes equal the physical memory interpretation; malloc/RawVec/System metadata and ownership are faithful.'),
   dict(id='KERNEL-WRITE',classification='runtime obligation',statement='Each actual getrandom syscall writes only within its passed mutable suffix on EVERY terminal or interrupted prefix, preserves other process heap/live bytes and allocator ownership, and returns a buffer/world/event record decoded from that same memory. KernelFrame alone covers only consumed-prefix equality and is weaker than this full obligation.'),
   dict(id='RAW-ABI',classification='V370 compiler-cohort item plus runtime ABI obligation',statement='Actual syscall register and pointer-width/signed-return interpretation matches the pinned x86_64 driver, including compiler memory clobber and preserved state; no nostack/preserves_flags option implies a kernel memory footprint.'),
