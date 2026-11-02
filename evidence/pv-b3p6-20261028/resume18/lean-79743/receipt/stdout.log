@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:47:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.StepUsize.partialOrdInst.lt ?v ?w
+in the target expression
+  (match some item with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some item =>
+      if ↑item < ↑r.end then Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end })
+      else Result.ok (none, { start := r.end, «end» := r.end })) =
+    match some item with
+    | none => do
+      let t1 ← core.iter.range.StepUsize.cloneInst.clone r.end
+      Result.ok (none, { start := t1, «end» := r.end })
+    | some plus_n => do
+      let b ← core.iter.range.StepUsize.partialOrdInst.lt plus_n r.end
+      if b = true then do
+          let t1 ← core.iter.range.StepUsize.cloneInst.clone plus_n
+          let self1 ← core.iter.range.StepUsize.forward_checked t1 1#usize
+          match self1 with
+            | none => do
+              let _ ←
+                PV_B3P_Std559Nth227.core.option.expect_failed
+                    (toStr "`Step` invariants not upheld"
+                      PV_B3P_Std559Nth227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth._proof_2)
+              Result.fail Error.panic
+            | some val => Result.ok (some item, { start := val, «end» := r.end })
+        else do
+          let t1 ← core.iter.range.StepUsize.cloneInst.clone r.end
+          Result.ok (none, { start := t1, «end» := r.end })
+
+case some
+r : Range Usize
+n : Usize
+item : UScalar UScalarTy.Usize
+⊢ (match some item with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some item =>
+      if ↑item < ↑r.end then Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end })
+      else Result.ok (none, { start := r.end, «end» := r.end })) =
+    match some item with
+    | none => do
+      let t1 ← core.iter.range.StepUsize.cloneInst.clone r.end
+      Result.ok (none, { start := t1, «end» := r.end })
+    | some plus_n => do
+      let b ← core.iter.range.StepUsize.partialOrdInst.lt plus_n r.end
+      if b = true then do
+          let t1 ← core.iter.range.StepUsize.cloneInst.clone plus_n
+          let self1 ← core.iter.range.StepUsize.forward_checked t1 1#usize
+          match self1 with
+            | none => do
+              let _ ←
+                PV_B3P_Std559Nth227.core.option.expect_failed
+                    (toStr "`Step` invariants not upheld"
+                      PV_B3P_Std559Nth227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth._proof_2)
+              Result.fail Error.panic
+            | some val => Result.ok (some item, { start := val, «end» := r.end })
+        else do
+          let t1 ← core.iter.range.StepUsize.cloneInst.clone r.end
+          Result.ok (none, { start := t1, «end» := r.end })
+'PV_B3P_NthSource559227.clone_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.less_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.increment_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.source_binding' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound,
+ PV_B3P_Std559Nth227.core.ops.range.Range.Insts.CoreIterRangeRangeIteratorImpl.spec_nth._native.decide.ax_2]

@@ -1,0 +1,24 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthControl559227.lean:71:6: error: unsolved goals
+case neg
+message : Str
+handler : Str → Result Never
+r : Range Usize
+n : Usize
+item : UScalar UScalarTy.Usize
+guard : ¬↑item < ↑r.end
+⊢ Result.ok (none, { start := r.end, «end» := r.end }) =
+    if false = true then do
+      let next ← core.iter.range.StepUsize.forward_checked item 1#usize
+      match next with
+        | none => do
+          let _ ← handler message
+          Result.fail Error.panic
+        | some value => Result.ok (some item, { start := value, «end» := r.end })
+    else do
+      let t1 ← core.iter.range.StepUsize.cloneInst.clone r.end
+      Result.ok (none, { start := t1, «end» := r.end })
+'PV_B3P_NthControl559227.clone_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthControl559227.less_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthControl559227.increment_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthControl559227.source_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'PV_B3P_NthControl559227.formatting_independent' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

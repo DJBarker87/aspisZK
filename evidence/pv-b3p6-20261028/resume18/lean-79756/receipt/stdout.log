@@ -1,0 +1,66 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:63:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.StepUsize.cloneInst.clone ?v
+in the target expression
+  (match none with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some item =>
+      if ↑item < ↑r.end then Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end })
+      else Result.ok (none, { start := r.end, «end» := r.end })) =
+    match none with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some plus_n => do
+      let b ← core.iter.range.StepUsize.partialOrdInst.lt plus_n r.end
+      if b = true then do
+          let self1 ← core.iter.range.StepUsize.forward_checked plus_n 1#usize
+          match self1 with
+            | none => do
+              let _ ←
+                PV_B3P_Std559Nth227.core.option.expect_failed
+                    (toStr "`Step` invariants not upheld" PV_B3P_StringBound559227.step_message_bound)
+              Result.fail Error.panic
+            | some val => Result.ok (none, { start := val, «end» := r.end })
+        else Result.ok (none, { start := r.end, «end» := r.end })
+
+case none
+r : Range Usize
+n : Usize
+⊢ (match none with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some item =>
+      if ↑item < ↑r.end then Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end })
+      else Result.ok (none, { start := r.end, «end» := r.end })) =
+    match none with
+    | none => Result.ok (none, { start := r.end, «end» := r.end })
+    | some plus_n => do
+      let b ← core.iter.range.StepUsize.partialOrdInst.lt plus_n r.end
+      if b = true then do
+          let self1 ← core.iter.range.StepUsize.forward_checked plus_n 1#usize
+          match self1 with
+            | none => do
+              let _ ←
+                PV_B3P_Std559Nth227.core.option.expect_failed
+                    (toStr "`Step` invariants not upheld" PV_B3P_StringBound559227.step_message_bound)
+              Result.fail Error.panic
+            | some val => Result.ok (none, { start := val, «end» := r.end })
+        else Result.ok (none, { start := r.end, «end» := r.end })
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:68:8: error: `simp` made no progress
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:72:66: warning: This simp argument is unused:
+  clone_value
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵c̵l̵o̵n̵e̵_̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:72:78: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵g̵u̵a̵r̵d̵,̵d̵e̵c̵i̵d̵e̵_̵f̵a̵l̵s̵e̵,̵B̵o̵o̵l̵.̵f̵a̵l̵s̵e̵_̵e̵q̵_̵t̵r̵u̵e̵,̵i̵f̵_̵f̵a̵l̵s̵e̵,̵c̵l̵o̵n̵e̵_̵v̵a̵l̵u̵e̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲g̲u̲a̲r̲d̲,̲ ̲d̲e̲c̲i̲d̲e̲_̲f̲a̲l̲s̲e̲,̲ ̲B̲o̲o̲l̲.̲f̲a̲l̲s̲e̲_̲e̲q̲_̲t̲r̲u̲e̲,̲ ̲i̲f̲_̲f̲a̲l̲s̲e̲,̲ ̲c̲l̲o̲n̲e̲_̲v̲a̲l̲u̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'PV_B3P_NthSource559227.clone_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.less_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.increment_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.increment_wrap_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.forward_projection' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.source_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

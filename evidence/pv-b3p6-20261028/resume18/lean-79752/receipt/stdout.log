@@ -1,0 +1,31 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_NthSource559227.lean:51:35: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.range.StepUsize.forward_checked item 1#usize
+in the target expression
+  Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end }) = do
+    let self1 ← core.iter.range.StepUsize.forward_checked item 1#usize
+    match self1 with
+      | none => do
+        let _ ←
+          PV_B3P_Std559Nth227.core.option.expect_failed
+              (toStr "`Step` invariants not upheld" PV_B3P_StringBound559227.step_message_bound)
+        Result.fail Error.panic
+      | some val => Result.ok (some item, { start := val, «end» := r.end })
+
+case pos
+r : Range Usize
+n : Usize
+item : UScalar UScalarTy.Usize
+guard : ↑item < ↑r.end
+⊢ Result.ok (some item, { start := Usize.wrapping_add item 1#usize, «end» := r.end }) = do
+    let self1 ← core.iter.range.StepUsize.forward_checked item 1#usize
+    match self1 with
+      | none => do
+        let _ ←
+          PV_B3P_Std559Nth227.core.option.expect_failed
+              (toStr "`Step` invariants not upheld" PV_B3P_StringBound559227.step_message_bound)
+        Result.fail Error.panic
+      | some val => Result.ok (some item, { start := val, «end» := r.end })
+'PV_B3P_NthSource559227.clone_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.less_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.increment_wrap' depends on axioms: [propext, Classical.choice, Quot.sound]
+'PV_B3P_NthSource559227.source_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

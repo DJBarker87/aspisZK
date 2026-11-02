@@ -1,0 +1,13 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_StringBound559227.lean:9:2: error: Tactic `decide` failed for proposition
+  "`Step` invariants not upheld".utf8ByteSize ≤ U32.max
+because its `Decidable` instance
+  "`Step` invariants not upheld".utf8ByteSize.decLe U32.max
+did not reduce to `isTrue` or `isFalse`.
+
+After unfolding the instances `instDecidableEqBool`, `instDecidableOr`, `Bool.decEq`, `Nat.decLe`, and `Nat.decLt`, reduction got stuck at the `Decidable` instance
+  match "`Step` invariants not upheld".utf8ByteSize.ble U32.max, true with
+  | false, false => isTrue ⋯
+  | false, true => isFalse ⋯
+  | true, false => isFalse ⋯
+  | true, true => isTrue ⋯
+'PV_B3P_StringBound559227.step_message_bound' depends on axioms: [propext, sorryAx]

@@ -21,6 +21,6 @@ print(json.dumps(dict(epoch=now,compared_host_artifacts=len(expected),mismatches
 '''.replace('EXPECTED',repr(inv['hashes']))
 x=json.loads(subprocess.check_output(['ssh','dombarker@100.108.41.90','python3','-'],input=code,text=True))
 assert not x['mismatches'],x['mismatches'];assert '0 loaded units listed' in x['live_scopes'],x['live_scopes']
-x.update(branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip(),entry_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),remaining_budget=dict(lean=68,extraction=22,kani=25),retired='K79102/K79103 unlaunched preparations; all resume17 leftovers',ranges=dict(lean=[79000,79096],audit=[79097,79099],extraction=[79160,79189],kani=[79100,79159]))
+x.update(branch=subprocess.check_output(['git','branch','--show-current'],text=True).strip(),entry_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),remaining_budget=dict(lean=68,extraction=22,kani=25),retired='K79102/K79103 unlaunched preparations; all resume17 leftovers',ranges=dict(lean=[79700,79796],audit=[79797,79799],extraction=[79160,79189],kani=[79100,79159]))
 (D/'RECOVERY-D559.json').write_text(json.dumps(x,indent=2)+'\n')
 print(json.dumps({k:x[k]for k in ['compared_host_artifacts','mismatches','quiet_in_force']}))

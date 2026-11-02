@@ -1,46 +1,62 @@
-# D557 context checkpoint — local closure composed; deployed bridge OPEN
+# D559 context checkpoint — local std controls improved; deployed bridge OPEN
 
-Worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`, branch `codex/pv-b3p6-20261028`, entry `ac6f9f89d1`. **36/36 local associations remain; the unconditional deployed op227 bridge is NOT proved. No endpoint premise removed, added or weakened.** This is a context checkpoint, not budget exhaustion. Prior handoff is HANDOFF-D554.md.
+Worktree `/Users/dominic/ZK/.worktrees/pv-b3p6`, branch `codex/pv-b3p6-20261028`, entry `784bf3c44b`. **36/36 prior changed-function associations remain. `PV_B3P_Closure557227.DeployedWrapper557 base ops` is NOT discharged. No endpoint premise removed, added or weakened.** Context checkpoint, not budget exhaustion. Previous checkpoint: HANDOFF-D557.md.
 
-## Budget and host
+## Budget and IDs
 
-**68 Lean /22 extraction /25 Kani remain. Next normal ID79732..79796; audits79797..79799 remain unspent and count within68.** TALLY-resume18 now112 charged attempts (97 at entry,15 this continuation). All unused790xx and all earlier retired Kani IDs remain retired. No extraction or Kani launched. The Funs cohort reconciliation79728 is conservatively charged within the15. Do not reuse any79717..79731, including failed79720/22/25/26.
+**36 Lean /7 extraction /25 Kani remain; next Lean79766.** TALLY-resume18 is144 charged (112 at entry,32 new). Fresh normal IDs79766..79796 plus audits79797..79799 give34 unused slots.79742 was an uncharged reservation refusal;79749 an unsubmitted own staging-authority failure. Retain both IDs; do not reuse. Thus two numerical budget units lack unused slots. All unused790xx and earlier retired Kani IDs stay retired.
 
-Use `compile_resume18_extended.py`, now with a narrowly pinned u-prime exception for79726 only; its SHA is verification-summary-D557.json.15 new scopes:11 exit0 (including one dependency reconciliation),4 failures retained. Peak3286876KiB; longest19.3s; zero swap; all6G/8G/swap0/Tasks64, Lean-M7000. No caps raised, no admission refusal, no new native scope.174 host artifact hashes verified, no live own scope or transport. No final frozen whole-cone replay; final audit IDs reserved for actual closure.
+15 new extraction scopes: N79168/69/70/72/74/76/77/78/79/80/81/82/83/84/85. N79171/73/75 occurred only in earlier driver preparations, never launched: no directory/receipt. Use N79186..79189 first. No Kani spent or credit released.
 
-Before first compile: RECOVERY-D557 verified325 previous host artifact hashes without mismatch; refreshed external preflight checked5673 objects and836 retained own modules without mismatch. Read the current common/local-lean/r1p rules and root security/proof discipline. Historical prompt-h remains absent. No source edits under crates/programs, other-worktree writes, pushes, merges, key operations, T/observer/simulator changes or cache cleanup.
+32 Lean receipts:20 exit0,12 failed retained. **Quarantined intermediate exit0 scope results:79740,79741,79751,79758,79760**, owing to raw/default `toStr` native proof dependencies. Use the FINAL cohort below. Final79765 prints12 standard-only outputs and the visibly conditional original callback statement. Peak Lean2693972KiB; longest3.962s; zero swap. Every scope6G/8G/swap0/Tasks64; Lean-M7000. No limit increases. Reservation79742 required180s wait before retry. No live own scope/transport at collection. Final frozen manifest and reserved closure audits remain unspent.
 
-## Accepted closure work
+## Credited final cohort
 
--79717 `PV_B3P_LocalClosure557227`: fixed36 local interpreters jointly satisfy CorrectedLinks14, using the previous source laws. Terminal constructor57 stays distinct from statement constructor49. Structural/Kani/source provenance remains external evidence; the conjunction is not a universal native-code theorem.
--79718 `PV_B3P_DependencyClosure557227`: extends b3q2's actual five-entry PARTIAL closure14 instance by direct array store, in-bounds nested matrix store, four-slot slice loop and Vec fields projection:9 typed entries. Reuses b3q's original D188/matrix/slice link statements unchanged. No full-catalogue assertion, no formatter semantics.
--79721/24: `SemanticCallees557227` and `CompositionCallees557227` substitute the named bound source callees into both actual caller interpretations and prove complete Result equality. Generator `callee_closure557.py` permanently emits these small proofs; substitutions recorded in CALLEE-SUBSTITUTIONS-D557.json.
--79723 `FrontierVec557227`: ordered arbitrary-row Vec frontier projection (including Rust Err partial state and outer fail/div), specialized to the20x8 source frontier carrier.
--79727 `SourceCone557227`: composed terminal-parts/wrapper continuation with source callers, complete Result equality to transported_reference for arbitrary public/claims/point/challenges on Types base. This is an interpreter theorem; no dictionary is installed or identified as deployed.
--79719/30: `BridgeResidual557227` and `RunJoinConsumer557227` type-check the exact forall-claims callback conclusion and its application to the ORIGINAL runjoin selected_callback consumer. **Both remain conditional on DeployedWrapper557 base ops.** EXACT-BRIDGE-STATEMENT-D557.json mechanically compares conclusion and runjoin hypothesis after whitespace normalization. Original runjoin source pinned in RUNJOIN-INTERFACE-PIN-D557.json;79729 compiled its unedited copy.
--79731 `Integration557227`: focused joint import and14 theorem axioms outputs, all standard-only. This is not the final frozen full-cone manifest or a release closure audit.
+-79732 `PV_B3P_ArrayHelpers559227`: shared range array Index delegation; mutable four-cell prefix IndexMut retaining its back continuation; slice-copy control equal pinned model roots. **Native cast/pointer/copy realization remains open.**
+-79735/37 `PV_B3P_CopyPrefix559227`, `PV_B3P_PackCopyGuard559227`: destination prefix has source length; existing <=4 pack shape excludes copy mismatch formatting. Local event guards, not whole-source safety.
+-79748 `PV_B3P_StringBound559227`: fixed diagnostic bound by `U32.max_eq` then kernel `decide` on the small string; no native proof.
+-79750 `PV_B3P_Std559KernelFuns227`: separate proof-normalized ae1-2 default std spec_nth emission, standard-only axioms. `normalize_nth559.py` checks exact imports/namespace/explicit Prop-proof transformation. Rust body unchanged. This is own-1 proof normalization, NOT byte-identical emitted text.
+-79761 `PV_B3P_NthFinalGuard559227`: below-end checked increment always Some; arbitrary panic handler irrelevant. Its auxiliary message ALSO supplies the explicit kernel bound.
+-79762 `PV_B3P_NthSourceFinal559227`: complete Result equality, ALL start/end/skip including exhausted/reversed ranges, to normalized extraction. Named `forward_projection` is essential: actual trait field versus tagged StepUsize helper are equal by a small defining equation; rewrite transparency did not unfold the semireducible dictionary automatically.
+-79763 `PV_B3P_NthFormattingFinal559227`: entire nth control independent of arbitrary diagnostic message and handler. No Unit/always-Ok semantics.
+-79764 `PV_B3P_DependencyFinal559227`: `PV_B3P_ClosureFinal559227.partial_closure559`:13 typed source-control entries, previously9. **Not full320-instance native catalogue.**
+-79765 `PV_B3P_IntegrationFinal559227`: focused joint check,12 standard-only outputs. This FINAL cohort does not import this continuation's quarantined raw/auxiliary modules. Original callback remains conditional on DeployedWrapper557.
 
-## Reuse and failures
+## Extraction, source checks and failures
 
-B3Q-SOURCE-PINS-D557.json pins25 exact source modules from b3q branch8d30a4e400; their plain object copies were reused only after recursively checking accepted source hashes and dependency fingerprints. B3Q-COHORT-REUSE-D557.json reports no conflicts. Sources and residual dossiers are committed under imports-b3q/. No foreign directory was written.
+`STD-SOURCE-IDENTITY-D559.json` pins20 compressed core Rust files from deployed1.94.1 and extractor nightly1.98. Reached DEFAULT spec_nth body is token-identical. Not global std parity or deployed specialization selection/caller association. `DRAIN-SOURCE-PARITY-D559.json` resolves all SIX447 instances: element types are non-ZST QM31/Usize; reached non-ZST call_mut source arm token-identical across versions. **STRUCTURAL parity only; pointer/closure/drop/init/unwind association OPEN.** Drain::drop/layout differs and needs constructor/end-pointer invariants.
 
-D188-SOURCE-REUSE-D557.json checks all29 inherited emission source hashes and5 frozen Rust source files against b3q. Reused inspection:41 mutable borrows,343 updates,96+52 finite comparisons. Reused matrix evidence:14 cases/126 intermediate cell comparisons, finite only. Generic universal storage laws and complete caller/native correspondence remain distinct. No new differential is claimed.
+ae1-2 hash fda587d25a66604a973bbc2947a4416ba373b56dd8c98655991c1b6eaa240b68 verified; pinned Charon daad69be... unchanged. Lowering success is not model credit. Refusals preserved:
+- N79169: missing function, fmt/mod.rs815..823 (str macro154), before translation.
+- N79177: unsupported CopyNonOverlapping.
+- N79179: Can't copy a mutable borrow, array/mod.rs403.
+- N79181/83: unimplemented binary operation, uint_macros.rs896.
+- N79170 own lock preflight, N79172/74 own feature preflights. Corrected using existing direct-wrapper lock and comparing ALL dependency features, explicitly excluding new adapter/replaced cost-probe roots. No extraction credit before parity passed.
+- N79184/85: isolated default nth lowers/translates; arithmetic callees stay at pinned Std roots.
 
-79720: polymorphic preweighted rewrite did not match eta-expanded implicit width; fixed79721 by named specializations at8 and2, not by unfolding the full reference.79722: restored composition equation needed a final definitional close;79724 adds it after named callee rewrites.79725: continuation native-port metavariable not inferred;79727 supplies the exact port. No source/elaboration failure retried unchanged.
+Raw emitted Funs AND early auxiliary increment_with literals elaborated through default native_decide. Axioms audits exposed these; do not credit79740/41/51/58/60. Use79748/50/61..65. Raw generated axiom template is archived INPUT only, never compiled. Actual external module is a local fail/panic sentinel, whose call is excluded by arbitrary-handler proofs; no semantics assigned to native formatting.
 
-79726 failed BEFORE elaboration: private R1Z namespace shadowed the shared root and lacked ProverRwFullFuns. Its source is h5-pinned tracked original, byte-identical to shared source; shared Types/ExternalFuns source bytes also match, but object hashes differ. Under h6-prime,79728 rebuilt ONLY Funs against the own cohort; the other cohort object was never loaded. environment-exceptions-D557.json explicitly pins this missing-object failure and corrected dependency.79729 retries the EXACT original interface source under u-prime with changed dependency fingerprint; the guard independently checks one import-time missing-object error and the successful replacement receipt. This is an environment correction, not a proof-failure exception.
+Failures79733/34/36 are parser/scalar proof fixes;79743/52..56 are exact extracted-control/projection proof diagnostics;79744/45 are explicit string-bound preflights. No failed source retried unchanged.79749 pin guard stopped BEFORE any scope after partial own staging; corrected source authority then used79750. No infrastructure repair/shared source overwrite.
 
-## Exact remaining task — do not claim closure from the assembled ports
+Uncompiled older draft `PV_B3P_DependencyClosure559227` targets the raw cohort; do not use it. The authoritative final module is DependencyFinal559227. Earlier Control559/Source559 mathematical results are diagnostic predecessors; prefer FINAL names consistently.
 
-`PV_B3P_Closure557227.DeployedWrapper557 base ops` is STILL OPEN at the actual deployed dictionary. Expanded through composed_ports557:
+## Exact remaining components
 
-`forall p claims point c, ops.op227 p claims point c = PV_B3P_Install227.transport (source_continuation base (composed_ports557 base) p claims point c)`.
+`CLOSURE-COMPONENTS-D559.json` retains FULL original signature/environment/Rust origin for EVERY16 opaque instance, incoming sites, proved local components and exact remaining source obligations. No body silently removed because one control law compiled.
 
-With that unproved association, selected_callback_residual557 yields EXACTLY:
-`forall claims, ops.op227 self.public claims point self.challenges = terminal self.public claims point self.challenges`, terminal=transported_reference base. It does not remove the residual. Never use Install227.actual, source_install15, a model witness, or the compiled conditional consumer as the deployed instance.
+1. fmt-1(a): b3q2 frozen weight/column/endpoint/dot exclusions and new nth/pack-copy exclusions exist. **Complete actual source-event/caller certificate on existing runjoin guarded domain OPEN.** Apply guards at actual sites, including remaining precondition paths; do not infer event exclusion merely from successful Result.
+2. Helper association still needs actual applications: expect_failed at next186/try_fold217/next337; IndexRange207 assert_unchecked; unchecked_add at17 existing incoming instances; panic_nounwind_fmt under unchecked_sub317; shared unchecked-index329; sixteen mutable unchecked-index/try_from_fn sites; six447 pointer/closure/drop paths. Index318, IndexMut422, copy423 have control equalities but native region/cast/copy/restoration OPEN. Default nth294 local law proved; complete deployed specialization/source/caller application remains separate.
+3. Pointer/drop/init/caller: `SOURCE-EVENT-REMAINDERS-D559.json` records540 builtin entries,147 global references,242 drops,821 abort entries. STATIC inventory, not runtime counts/safety results. Bind valid regions/restoration; partial initialized prefixes; tail/closure drop/unwind; globals; all actual caller sites applying existing336 arithmetic prerequisites. Only exhaustive association supplies actual DeployedWrapper557.
 
-CLOSURE-RESIDUALS-D557.json names every16 opaque instance (including full recorded signature/environment/Rust origin), and pins the complete original lowered graph204 declarations/320 instances. Eleven helper names remain: option expect_failed; assert_unchecked and unchecked_add precondition checks; panic_nounwind_fmt; shared/mutable unchecked slice-index preconditions; array drain call_mut SIX specializations; Range spec_nth; array index/index_mut; slice copy_from_slice. Also missing: pre-inline builtin/source bodies; pointer/array-drain/copy, partial initialization/drop and initializer association; whole-caller/source-event certificate applying336 existing arithmetic prerequisites. Formatting always-Ok is not credited: fmt-1(a) source-event unreachability over the existing runjoin domain is OPEN; neither an infallible-writer nor faithful writer-state alternative is supplied. These are remaining source obligations, never extra T fields or new runjoin hypotheses.
+Residual unchanged:
+`forall p claims point c, ops.op227 p claims point c = PV_B3P_Install227.transport (PV_B3P_TopDown13227.source_continuation base (PV_B3P_Closure557227.composed_ports557 base) p claims point c)`.
 
-Qualifications retained: own-1 structural source binding; b3p6-1 and fifth-amendment tool-trust reclassification, never removal; P6 Kani with k-double-prime parity and k-triple-prime STRUCTURAL per-item std arguments, compiler intrinsics/source-to-code V370 with pending D381/D386; K-1/K-2/K-3 restrictions and existing domains. No new Kani credit or suspended-credit release. Actual client features still exclude optimized-terminal (D554 correction unchanged). The seven-mask domain, zero-call skips and distinct49/57 origins remain.
+Must hold for ACTUAL ops. Never choose Install227.actual/source_install15/model dictionary as witness. Only then consume original runjoin callback with no new hypothesis.
 
-Next concrete deliverable: associate each missing actual instantiated std/drop/pointer/formatting path with its model, then use that exhaustive source-cone certificate to prove DeployedWrapper557 for the actual ops; consume the original runjoin consumer with no new hypothesis. Only then spend the reserved closure audit and final whole-cone manifest replay. Keep all keys/caches and receipts.
+## Verification and qualifications
+
+`verify_d559.py` checks537 host artifact hashes, every h5 source blob, caps/swap/admission, quarantines, source capture and final12-output audit. `verification-summary-D559.json` records target/exit/wall/RSS/swap/revisions/axioms for each attempt. Recovery checked174 prior hashes; external preflight5673/private847, no mismatch. `COMMITS-D559.txt` records continuation commits.
+
+No crates/programs edit, ELF rebuild, foreign-worktree write, push/merge, key operation, cache cleanup, T addition or simulator/observer/failure/side-channel weakening. own-1, b3p6-1/fifth-amendment reclassification, P6/k-double-prime/k-triple-prime STRUCTURAL qualifications, K-1/K-2/K-3 and V370/pending D381,D386 retained. Active features exclude optimized-terminal; seven-mask/zero-skip domain and distinct49/57 origins retained. Privacy target NOT established.
+
+Resume requested order: complete actual fmt events; associate remaining actual std helpers using FINAL local laws; pointer/drop/init/caller composition; instantiate unchanged residual at actual ops. Reserved audits/final manifest only for genuine closure.
