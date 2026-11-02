@@ -89,7 +89,7 @@ theorem traverse_total {S A : Type} (f : Nat → Q S A)
   | cons i is ih =>
     obtain ⟨a,ha⟩ := law i w
     obtain ⟨rest,hr⟩ := ih (f i w).state
-    exact ⟨a::rest,by simp only [traverse,PV_V263_World.bind,ha,hr,lift]⟩
+    exact ⟨a::rest,by simp only [traverse,PV_V263_World.bind,ha,hr,PV_V263_World.lift]⟩
 
 theorem merge_first {S A : Type} (p q : Bytes) (rest : List (Except Bytes (List A))) (w : State S) :
     (merge (.error p::.error q::rest) w).outcome = .fault (.panic p) := rfl
