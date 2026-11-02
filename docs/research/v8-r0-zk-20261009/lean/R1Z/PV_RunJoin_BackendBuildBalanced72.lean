@@ -1,4 +1,4 @@
-import R1Z.PV_RunJoin_BoolNegation72
+import R1Z.PV_RunJoin_BoolDefault72
 import R1Z.PV_RunJoin_CircleProduced51
 import R1Z.PV_RunJoin_PostEquation60
 import R1Z.PV_RunJoin_RoundCanonicalComplete51
@@ -226,7 +226,7 @@ theorem complete (base : ExternalTypes) (heap : Heap) (box : Box) (ops : @Extern
                                             | false =>
                                               try simp only [core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,lift,Aeneas.Std.uncurry,bind_assoc_eq]
                                               refine ⟨commit1,root1,root2,_,size_of_guard _ sizeGuard,hcommitted,hcommitted2,hcolumns,helperSum,zero,hhelperSum,hzero,?_⟩
-                                              apply PV_RunJoin_BoolNegation72.complete
+                                              apply PV_RunJoin_BoolDefault72.complete
                                               simpa only [core.cmp.PartialEq.ne.trait_default,core.cmp.PartialEq.ne.default,lift,bind_tc_ok] using hsumDifferent
 #print axioms size_of_guard
 #print axioms complete
