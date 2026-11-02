@@ -1,0 +1,279 @@
+/home/dombarker/project-offloads/codex-pv-b3p6-20261028/lean/PV_B3P_CompositionSource554227.lean:61:2: error: Tactic `apply` failed: could not unify the conclusion of `@PV_B3P_Binding9227.bind_equal9`
+  ?r >>= ?f = ?r >>= ?g
+with the goal
+  (do
+      let (amount, invalid) ←
+        match p.withdrawal_amount with
+          | none => Result.ok (none, false)
+          | some value => do
+            let bad ←
+              if value = 0#u32 then Result.ok true
+                else do
+                  let upper ← lift (U32.wrapping_shl 1#u32 30#u32)
+                  Result.ok (decide (value ≥ upper))
+            Result.ok (p.withdrawal_amount, bad)
+      if invalid = true then
+          Result.ok
+            (core.result.Result.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else do
+          let transition ←
+            reference_terminal.validate_transition
+                { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain, anchor := p.anchor,
+                  nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient, change := p.change,
+                  withdrawal_amount := amount, transition := p.transition }
+          let branch ← core.result.Result.Insts.CoreOpsTry.branch transition
+          match branch with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let z ← reference_terminal.select_c1_227 claims 0#usize
+              let succ ← reference_terminal.select_c1_227 claims 1#usize
+              let xor12 ← reference_terminal.select_c1_227 claims 2#usize
+              let mask ←
+                reference_terminal.composition_parts_loop0 claims (Array.repeat 10#usize aspis_core.field.QM31.ZERO)
+                    0#usize
+              let selectors ← reference_copy_terminal.Selectors.boxed_at_point point
+              let selected ← reference_terminal.poseidon_selectors selectors
+              let poseidon ←
+                reference_poseidon.evaluate_state_only_poseidon_oracle_projected
+                    { z := z, succ_z := succ, xor12_z := xor12 } selected
+              let semantic ←
+                reference_terminal.semantic_packed
+                    { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain,
+                      anchor := p.anchor, nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient,
+                      change := p.change, withdrawal_amount := amount, transition := p.transition }
+                    { z := z, succ_z := succ, xor12_z := xor12 } selectors
+              let h1_column ← reference_terminal.SELECTED_H1_COLUMN
+              let h1 ← reference_terminal.selected_claim claims 0#usize h1_column
+              let variant ← reference_terminal.copy_variant p.variant
+              let copy ←
+                reference_copy_terminal.evaluate_with_selectors z h1 selectors lambda chi
+                    p.transition.live_snapshot.next_pair_index variant
+              let prepared ← host_terminal_field.PreparedQm31Multiplier.new theta
+              let semantic_slice ← lift semantic.to_slice
+              let first ← horner_direct_loop8 semantic prepared copy.residual semantic_slice.len
+              let poseidon_slice ← lift poseidon.to_slice
+              let final ← horner_direct_loop8 poseidon prepared first poseidon_slice.len
+              let g_column ← reference_terminal.SELECTED_G_COLUMN
+              let g ← reference_terminal.selected_claim claims 0#usize g_column
+              Result.ok (core.result.Result.Ok (final, z, mask, g, h1, copy.active))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 ×
+                  Std.Array aspis_core.field.QM31 16#usize ×
+                    Std.Array aspis_core.field.QM31 10#usize ×
+                      aspis_core.field.QM31 × aspis_core.field.QM31 × aspis_core.field.QM31)
+                (core.convert.FromSame reference_terminal.PoolV1PairForestSemanticTerminalErrorV1) residual) =
+    have __do_jp := fun __x =>
+      match __x with
+      | (o, invalid_amount) =>
+        if invalid_amount = true then
+          Result.ok
+            (core.result.Result.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else do
+          let r ←
+            reference_terminal.validate_transition
+                { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain, anchor := p.anchor,
+                  nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient, change := p.change,
+                  withdrawal_amount := o, transition := p.transition }
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let a ← reference_terminal.select_c1_227 claims 0#usize
+              let a1 ← reference_terminal.select_c1_227 claims 1#usize
+              let a2 ← reference_terminal.select_c1_227 claims 2#usize
+              have output : Std.Array aspis_core.field.QM31 10#usize := Array.repeat 10#usize aspis_core.field.QM31.ZERO
+              let mask_only ← reference_terminal.composition_parts_loop0 claims output 0#usize
+              let selectors ← reference_copy_terminal.Selectors.boxed_at_point point
+              let sops ← reference_terminal.poseidon_selectors selectors
+              let poseidon ←
+                reference_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := a1, xor12_z := a2 }
+                    sops
+              let semantic ←
+                reference_terminal.semantic_packed
+                    { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain,
+                      anchor := p.anchor, nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient,
+                      change := p.change, withdrawal_amount := o, transition := p.transition }
+                    { z := a, succ_z := a1, xor12_z := a2 } selectors
+              let i ← reference_terminal.SELECTED_H1_COLUMN
+              let h1_z ← reference_terminal.selected_claim claims 0#usize i
+              let pvpfcvv ← reference_terminal.copy_variant p.variant
+              let copy ←
+                reference_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                    p.transition.live_snapshot.next_pair_index pvpfcvv
+              let prepared_theta ← host_terminal_field.PreparedQm31Multiplier.new theta
+              let s ← lift semantic.to_slice
+              have index : Usize := s.len
+              let composition ← reference_terminal.composition_parts_loop1 semantic prepared_theta copy.residual index
+              let s1 ← lift poseidon.to_slice
+              have index1 : Usize := s1.len
+              let composition1 ← reference_terminal.composition_parts_loop2 poseidon prepared_theta composition index1
+              let i1 ← reference_terminal.SELECTED_G_COLUMN
+              let q ← reference_terminal.selected_claim claims 0#usize i1
+              Result.ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 ×
+                  Std.Array aspis_core.field.QM31 16#usize ×
+                    Std.Array aspis_core.field.QM31 10#usize ×
+                      aspis_core.field.QM31 × aspis_core.field.QM31 × aspis_core.field.QM31)
+                (core.convert.FromSame reference_terminal.PoolV1PairForestSemanticTerminalErrorV1) residual;
+    match p.withdrawal_amount with
+    | none => do
+      let __x ← Result.ok (none, false)
+      __do_jp __x
+    | some amount =>
+      have __do_jp := fun b => do
+        let __x ← Result.ok (p.withdrawal_amount, b)
+        __do_jp __x;
+      if amount = 0#u32 then do
+        let b ← Result.ok true
+        __do_jp b
+      else do
+        let i ← lift (U32.wrapping_shl 1#u32 30#u32)
+        let b ← Result.ok (decide (amount ≥ i))
+        __do_jp b
+
+Note: The full type of `@PV_B3P_Binding9227.bind_equal9` is
+  ∀ {α β : Type} (r : Result α) (f g : α → Result β), (∀ (x : α), f x = g x) → r >>= f = r >>= g
+
+p : reference_terminal.SemanticPublic
+claims : Std.Array aspis_core.field.QM31 84#usize
+point : Std.Array aspis_core.field.QM31 10#usize
+lambda chi theta : aspis_core.field.QM31
+⊢ (do
+      let (amount, invalid) ←
+        match p.withdrawal_amount with
+          | none => Result.ok (none, false)
+          | some value => do
+            let bad ←
+              if value = 0#u32 then Result.ok true
+                else do
+                  let upper ← lift (U32.wrapping_shl 1#u32 30#u32)
+                  Result.ok (decide (value ≥ upper))
+            Result.ok (p.withdrawal_amount, bad)
+      if invalid = true then
+          Result.ok
+            (core.result.Result.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else do
+          let transition ←
+            reference_terminal.validate_transition
+                { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain, anchor := p.anchor,
+                  nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient, change := p.change,
+                  withdrawal_amount := amount, transition := p.transition }
+          let branch ← core.result.Result.Insts.CoreOpsTry.branch transition
+          match branch with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let z ← reference_terminal.select_c1_227 claims 0#usize
+              let succ ← reference_terminal.select_c1_227 claims 1#usize
+              let xor12 ← reference_terminal.select_c1_227 claims 2#usize
+              let mask ←
+                reference_terminal.composition_parts_loop0 claims (Array.repeat 10#usize aspis_core.field.QM31.ZERO)
+                    0#usize
+              let selectors ← reference_copy_terminal.Selectors.boxed_at_point point
+              let selected ← reference_terminal.poseidon_selectors selectors
+              let poseidon ←
+                reference_poseidon.evaluate_state_only_poseidon_oracle_projected
+                    { z := z, succ_z := succ, xor12_z := xor12 } selected
+              let semantic ←
+                reference_terminal.semantic_packed
+                    { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain,
+                      anchor := p.anchor, nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient,
+                      change := p.change, withdrawal_amount := amount, transition := p.transition }
+                    { z := z, succ_z := succ, xor12_z := xor12 } selectors
+              let h1_column ← reference_terminal.SELECTED_H1_COLUMN
+              let h1 ← reference_terminal.selected_claim claims 0#usize h1_column
+              let variant ← reference_terminal.copy_variant p.variant
+              let copy ←
+                reference_copy_terminal.evaluate_with_selectors z h1 selectors lambda chi
+                    p.transition.live_snapshot.next_pair_index variant
+              let prepared ← host_terminal_field.PreparedQm31Multiplier.new theta
+              let semantic_slice ← lift semantic.to_slice
+              let first ← horner_direct_loop8 semantic prepared copy.residual semantic_slice.len
+              let poseidon_slice ← lift poseidon.to_slice
+              let final ← horner_direct_loop8 poseidon prepared first poseidon_slice.len
+              let g_column ← reference_terminal.SELECTED_G_COLUMN
+              let g ← reference_terminal.selected_claim claims 0#usize g_column
+              Result.ok (core.result.Result.Ok (final, z, mask, g, h1, copy.active))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 ×
+                  Std.Array aspis_core.field.QM31 16#usize ×
+                    Std.Array aspis_core.field.QM31 10#usize ×
+                      aspis_core.field.QM31 × aspis_core.field.QM31 × aspis_core.field.QM31)
+                (core.convert.FromSame reference_terminal.PoolV1PairForestSemanticTerminalErrorV1) residual) =
+    have __do_jp := fun __x =>
+      match __x with
+      | (o, invalid_amount) =>
+        if invalid_amount = true then
+          Result.ok
+            (core.result.Result.Err reference_terminal.PoolV1PairForestSemanticTerminalErrorV1.InvalidPublicAmount)
+        else do
+          let r ←
+            reference_terminal.validate_transition
+                { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain, anchor := p.anchor,
+                  nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient, change := p.change,
+                  withdrawal_amount := o, transition := p.transition }
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue a => do
+              let a ← reference_terminal.select_c1_227 claims 0#usize
+              let a1 ← reference_terminal.select_c1_227 claims 1#usize
+              let a2 ← reference_terminal.select_c1_227 claims 2#usize
+              have output : Std.Array aspis_core.field.QM31 10#usize := Array.repeat 10#usize aspis_core.field.QM31.ZERO
+              let mask_only ← reference_terminal.composition_parts_loop0 claims output 0#usize
+              let selectors ← reference_copy_terminal.Selectors.boxed_at_point point
+              let sops ← reference_terminal.poseidon_selectors selectors
+              let poseidon ←
+                reference_poseidon.evaluate_state_only_poseidon_oracle_projected { z := a, succ_z := a1, xor12_z := a2 }
+                    sops
+              let semantic ←
+                reference_terminal.semantic_packed
+                    { variant := p.variant, pool := p.pool, deployment_domain := p.deployment_domain,
+                      anchor := p.anchor, nullifier := p.nullifier, asset_id := p.asset_id, recipient := p.recipient,
+                      change := p.change, withdrawal_amount := o, transition := p.transition }
+                    { z := a, succ_z := a1, xor12_z := a2 } selectors
+              let i ← reference_terminal.SELECTED_H1_COLUMN
+              let h1_z ← reference_terminal.selected_claim claims 0#usize i
+              let pvpfcvv ← reference_terminal.copy_variant p.variant
+              let copy ←
+                reference_copy_terminal.evaluate_with_selectors a h1_z selectors lambda chi
+                    p.transition.live_snapshot.next_pair_index pvpfcvv
+              let prepared_theta ← host_terminal_field.PreparedQm31Multiplier.new theta
+              let s ← lift semantic.to_slice
+              have index : Usize := s.len
+              let composition ← reference_terminal.composition_parts_loop1 semantic prepared_theta copy.residual index
+              let s1 ← lift poseidon.to_slice
+              have index1 : Usize := s1.len
+              let composition1 ← reference_terminal.composition_parts_loop2 poseidon prepared_theta composition index1
+              let i1 ← reference_terminal.SELECTED_G_COLUMN
+              let q ← reference_terminal.selected_claim claims 0#usize i1
+              Result.ok (core.result.Result.Ok (composition1, a, mask_only, q, h1_z, copy.active))
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                (aspis_core.field.QM31 ×
+                  Std.Array aspis_core.field.QM31 16#usize ×
+                    Std.Array aspis_core.field.QM31 10#usize ×
+                      aspis_core.field.QM31 × aspis_core.field.QM31 × aspis_core.field.QM31)
+                (core.convert.FromSame reference_terminal.PoolV1PairForestSemanticTerminalErrorV1) residual;
+    match p.withdrawal_amount with
+    | none => do
+      let __x ← Result.ok (none, false)
+      __do_jp __x
+    | some amount =>
+      have __do_jp := fun b => do
+        let __x ← Result.ok (p.withdrawal_amount, b)
+        __do_jp __x;
+      if amount = 0#u32 then do
+        let b ← Result.ok true
+        __do_jp b
+      else do
+        let i ← lift (U32.wrapping_shl 1#u32 30#u32)
+        let b ← Result.ok (decide (amount ≥ i))
+        __do_jp b
+'PV_B3P_Association554227.composition_source_reference554' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'PV_B3P_Association554227.composition_source_link554' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

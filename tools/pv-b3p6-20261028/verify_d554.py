@@ -50,6 +50,10 @@ old['feature_correction']='Fresh specified client metadata excludes optimized-te
 f=json.loads((R/'DEPLOYED-FEATURE-RECHECK-D554.json').read_text());assert f['exit_status']==0
 assert f['manifest_sha256']==sha(Path('tools/r1-cost-probe/Cargo.toml'))
 node=next(n for n in f['nodes']if n['name']=='aspis-r1-cost-probe');assert 'optimized-terminal'not in node['features']and 'ct-host-prover'in node['features']
+ref_features=json.loads((R/'reference-projected/inputs.json').read_text())['features']
+for name in ['aspis-core','aspis-statement','aspis-r1-cost-probe']:
+ original=next(n for n in ref_features if n['name']==name);fresh=next(n for n in f['nodes']if n['name']==name)
+ assert original['version']==fresh['version'] and original['features']==fresh['features'],name
 for dossier in ['DOT-SOURCE-D554.json','EXTERNAL-SOURCE-D554.json','SELECTOR-SOURCE-D554.json','TERMINAL-SOURCE-D554.json']:
  x=json.loads((R/dossier).read_text());x['status']='BOUND local source associations at recorded features; all consuming focused complete-Result theorems passed. Not whole std/D188/matrix/callback closure.'
  x['accepted_attempts']={name:accepted[m]['attempt']for name,(m,_,d)in updates.items()if d==dossier}

@@ -1,0 +1,365 @@
+import PV_B3P_RawSource550227
+import PV_B3P_P227_03a
+import Lean.Elab.Tactic.AsAuxLemma
+namespace PV_B3P_Association554227
+open Aeneas Aeneas.Std PV_B3P_227 Result PV_B3P_Binding9227 PV_B3P_Association550227
+set_option autoImplicit false
+
+def external_group_source554 (input : Array aspis_core.field.QM31 4#usize) :
+    Result (Array aspis_core.field.QM31 4#usize) := do
+  let limbs ← raw_input550 input
+  let a ← Array.index_usize limbs 0#usize
+  let b ← Array.index_usize limbs 1#usize
+  let c ← Array.index_usize limbs 2#usize
+  let d ← Array.index_usize limbs 3#usize
+  let r0 ← raw_row550 a b c d 0#usize
+  let q0 ← reference_poseidon.extension_from_raw_limbs r0
+  let r1 ← raw_row550 a b c d 1#usize
+  let q1 ← reference_poseidon.extension_from_raw_limbs r1
+  let r2 ← raw_row550 a b c d 2#usize
+  let q2 ← reference_poseidon.extension_from_raw_limbs r2
+  let r3 ← raw_row550 a b c d 3#usize
+  let q3 ← reference_poseidon.extension_from_raw_limbs r3
+  .ok (Array.make 4#usize [q0,q1,q2,q3] (by simp only [List.length_cons,List.length_nil]; rfl))
+
+attribute [local irreducible] Aeneas.Std.bind Array.index_usize reference_poseidon.extension_limbs
+  reference_poseidon.raw_limb227 reference_poseidon.extension_from_raw_limbs
+  U64.wrapping_add U64.wrapping_sub U64.wrapping_mul core.convert.num.FromU64U32.from
+
+theorem external_group_reference554 (input : Array aspis_core.field.QM31 4#usize) :
+    external_group_source554 input = reference_poseidon.external_group227 input := by
+  unfold external_group_source554 reference_poseidon.external_group227
+  rw [raw_input_continuation550]
+  apply bind_equal9
+  intro input0
+  apply bind_equal9
+  intro input1
+  apply bind_equal9
+  intro input2
+  apply bind_equal9
+  intro input3
+  apply bind_equal9
+  intro input4
+  apply bind_equal9
+  intro input5
+  apply bind_equal9
+  intro input6
+  apply bind_equal9
+  intro input7
+  conv_lhs => simp only [four_index_zero550,four_index_one550,four_index_two550,four_index_three550,bind_tc_ok]
+  as_aux_lemma =>
+    rw [raw_row_continuation550]
+    conv_rhs => rw [four_index_zero550,bind_tc_ok]
+    apply bind_equal9
+    intro row0cell0
+    apply bind_equal9
+    intro row0cell1
+    conv_rhs => rw [four_index_one550,bind_tc_ok]
+    apply bind_equal9
+    intro row0cell2
+    apply bind_equal9
+    intro row0cell3
+    conv_rhs => rw [four_index_two550,bind_tc_ok]
+    apply bind_equal9
+    intro row0cell4
+    apply bind_equal9
+    intro row0cell5
+    conv_rhs => rw [four_index_three550,bind_tc_ok]
+    apply bind_equal9
+    intro row0cell6
+    apply bind_equal9
+    intro row0cell7
+    apply bind_equal9
+    intro row0cell8
+    apply bind_equal9
+    intro row0cell9
+    apply bind_equal9
+    intro row0cell10
+    apply bind_equal9
+    intro row0cell11
+    apply bind_equal9
+    intro row0cell12
+    apply bind_equal9
+    intro row0cell13
+    apply bind_equal9
+    intro row0cell14
+    apply bind_equal9
+    intro row0cell15
+    apply bind_equal9
+    intro row0cell16
+    apply bind_equal9
+    intro row0cell17
+    as_aux_lemma =>
+      apply bind_equal9
+      intro row0cell18
+      apply bind_equal9
+      intro row0cell19
+      apply bind_equal9
+      intro row0cell20
+      apply bind_equal9
+      intro row0cell21
+      apply bind_equal9
+      intro row0cell22
+      apply bind_equal9
+      intro row0cell23
+      apply bind_equal9
+      intro row0cell24
+      apply bind_equal9
+      intro row0cell25
+      apply bind_equal9
+      intro row0cell26
+      apply bind_equal9
+      intro row0cell27
+      apply bind_equal9
+      intro row0cell28
+      apply bind_equal9
+      intro row0cell29
+      apply bind_equal9
+      intro row0cell30
+      apply bind_equal9
+      intro row0cell31
+      apply bind_equal9
+      intro row0cell32
+      apply bind_equal9
+      intro row0cell33
+      apply bind_equal9
+      intro row0cell34
+      apply bind_equal9
+      intro row0cell35
+      apply bind_equal9
+      intro output0
+      as_aux_lemma =>
+        rw [raw_row_continuation550]
+        apply bind_equal9
+        intro row1cell0
+        apply bind_equal9
+        intro row1cell1
+        apply bind_equal9
+        intro row1cell2
+        apply bind_equal9
+        intro row1cell3
+        apply bind_equal9
+        intro row1cell4
+        apply bind_equal9
+        intro row1cell5
+        apply bind_equal9
+        intro row1cell6
+        apply bind_equal9
+        intro row1cell7
+        apply bind_equal9
+        intro row1cell8
+        apply bind_equal9
+        intro row1cell9
+        apply bind_equal9
+        intro row1cell10
+        apply bind_equal9
+        intro row1cell11
+        apply bind_equal9
+        intro row1cell12
+        apply bind_equal9
+        intro row1cell13
+        apply bind_equal9
+        intro row1cell14
+        apply bind_equal9
+        intro row1cell15
+        apply bind_equal9
+        intro row1cell16
+        apply bind_equal9
+        intro row1cell17
+        as_aux_lemma =>
+          apply bind_equal9
+          intro row1cell18
+          apply bind_equal9
+          intro row1cell19
+          apply bind_equal9
+          intro row1cell20
+          apply bind_equal9
+          intro row1cell21
+          apply bind_equal9
+          intro row1cell22
+          apply bind_equal9
+          intro row1cell23
+          apply bind_equal9
+          intro row1cell24
+          apply bind_equal9
+          intro row1cell25
+          apply bind_equal9
+          intro row1cell26
+          apply bind_equal9
+          intro row1cell27
+          apply bind_equal9
+          intro row1cell28
+          apply bind_equal9
+          intro row1cell29
+          apply bind_equal9
+          intro row1cell30
+          apply bind_equal9
+          intro row1cell31
+          apply bind_equal9
+          intro row1cell32
+          apply bind_equal9
+          intro row1cell33
+          apply bind_equal9
+          intro row1cell34
+          apply bind_equal9
+          intro row1cell35
+          apply bind_equal9
+          intro output1
+          as_aux_lemma =>
+            rw [raw_row_continuation550]
+            apply bind_equal9
+            intro row2cell0
+            apply bind_equal9
+            intro row2cell1
+            apply bind_equal9
+            intro row2cell2
+            apply bind_equal9
+            intro row2cell3
+            apply bind_equal9
+            intro row2cell4
+            apply bind_equal9
+            intro row2cell5
+            apply bind_equal9
+            intro row2cell6
+            apply bind_equal9
+            intro row2cell7
+            apply bind_equal9
+            intro row2cell8
+            apply bind_equal9
+            intro row2cell9
+            apply bind_equal9
+            intro row2cell10
+            apply bind_equal9
+            intro row2cell11
+            apply bind_equal9
+            intro row2cell12
+            apply bind_equal9
+            intro row2cell13
+            apply bind_equal9
+            intro row2cell14
+            apply bind_equal9
+            intro row2cell15
+            apply bind_equal9
+            intro row2cell16
+            apply bind_equal9
+            intro row2cell17
+            as_aux_lemma =>
+              apply bind_equal9
+              intro row2cell18
+              apply bind_equal9
+              intro row2cell19
+              apply bind_equal9
+              intro row2cell20
+              apply bind_equal9
+              intro row2cell21
+              apply bind_equal9
+              intro row2cell22
+              apply bind_equal9
+              intro row2cell23
+              apply bind_equal9
+              intro row2cell24
+              apply bind_equal9
+              intro row2cell25
+              apply bind_equal9
+              intro row2cell26
+              apply bind_equal9
+              intro row2cell27
+              apply bind_equal9
+              intro row2cell28
+              apply bind_equal9
+              intro row2cell29
+              apply bind_equal9
+              intro row2cell30
+              apply bind_equal9
+              intro row2cell31
+              apply bind_equal9
+              intro row2cell32
+              apply bind_equal9
+              intro row2cell33
+              apply bind_equal9
+              intro row2cell34
+              apply bind_equal9
+              intro row2cell35
+              apply bind_equal9
+              intro output2
+              as_aux_lemma =>
+                rw [raw_row_continuation550]
+                apply bind_equal9
+                intro row3cell0
+                apply bind_equal9
+                intro row3cell1
+                apply bind_equal9
+                intro row3cell2
+                apply bind_equal9
+                intro row3cell3
+                apply bind_equal9
+                intro row3cell4
+                apply bind_equal9
+                intro row3cell5
+                apply bind_equal9
+                intro row3cell6
+                apply bind_equal9
+                intro row3cell7
+                apply bind_equal9
+                intro row3cell8
+                apply bind_equal9
+                intro row3cell9
+                apply bind_equal9
+                intro row3cell10
+                apply bind_equal9
+                intro row3cell11
+                apply bind_equal9
+                intro row3cell12
+                apply bind_equal9
+                intro row3cell13
+                apply bind_equal9
+                intro row3cell14
+                apply bind_equal9
+                intro row3cell15
+                apply bind_equal9
+                intro row3cell16
+                apply bind_equal9
+                intro row3cell17
+                as_aux_lemma =>
+                  apply bind_equal9
+                  intro row3cell18
+                  apply bind_equal9
+                  intro row3cell19
+                  apply bind_equal9
+                  intro row3cell20
+                  apply bind_equal9
+                  intro row3cell21
+                  apply bind_equal9
+                  intro row3cell22
+                  apply bind_equal9
+                  intro row3cell23
+                  apply bind_equal9
+                  intro row3cell24
+                  apply bind_equal9
+                  intro row3cell25
+                  apply bind_equal9
+                  intro row3cell26
+                  apply bind_equal9
+                  intro row3cell27
+                  apply bind_equal9
+                  intro row3cell28
+                  apply bind_equal9
+                  intro row3cell29
+                  apply bind_equal9
+                  intro row3cell30
+                  apply bind_equal9
+                  intro row3cell31
+                  apply bind_equal9
+                  intro row3cell32
+                  apply bind_equal9
+                  intro row3cell33
+                  apply bind_equal9
+                  intro row3cell34
+                  apply bind_equal9
+                  intro row3cell35
+                  apply bind_equal9
+                  intro output3
+                  rfl
+
+#print axioms external_group_reference554
+end PV_B3P_Association554227
