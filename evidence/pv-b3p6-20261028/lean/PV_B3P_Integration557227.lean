@@ -1,0 +1,21 @@
+import PV_B3P_RunJoinConsumer557227
+import PV_B3P_FrontierVec557227
+-- Focused integration/axioms check of the PARTIAL closure only.
+-- This is not the final frozen full-cone manifest or a release result.
+#print axioms PV_B3P_Closure557227.local_links557
+#print axioms PV_B3P_Closure557227.partial_closure557
+#print axioms PV_B3P_Closure557227.store_links557
+#print axioms PV_B3P_Closure557227.selected_callback_residual557
+#print axioms PV_B3P_Closure557227.joint_local_closure557
+#print axioms PV_B3P_Closure557227.semantic_callees_reference557
+#print axioms PV_B3P_Closure557227.composition_callees_reference557
+#print axioms PV_B3P_Closure557227.frontier_vec_projection557
+#print axioms PV_B3P_Closure557227.frontier_twenty_projection557
+#print axioms PV_B3P_Closure557227.composed_ports_eq557
+#print axioms PV_B3P_Closure557227.source_cone_reference557
+#print axioms PV_B3P_Closure557227.deployed_wrapper_iff557
+#print axioms PV_B3P_Closure557227.runjoin_consumer_residual557
+#print axioms R1Z.PV_RunJoin_OracleBridge38.selected_callback
+#print PV_B3P_Closure557227.DeployedWrapper557
+#print PV_B3P_Closure557227.selected_callback_residual557
+#print PV_B3P_Closure557227.runjoin_consumer_residual557
