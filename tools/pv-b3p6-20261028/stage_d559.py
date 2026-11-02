@@ -16,7 +16,7 @@ for m,s in S.items():
  if p.exists():
   assert not (H/'lean-objects'/(m+'.olean')).exists(), 'never overwrite a proved module'
   old=hashlib.sha256(p.read_bytes()).hexdigest()
-  assert any((r:=json.loads(q.read_text())).get('module')==m and r.get('source_sha256')==old and r.get('exit_status')!=0 for q in H.glob('lean-*/receipt/receipt.json')), 'replacement requires a retained failed receipt'
+  assert not any((r:=json.loads(q.read_text())).get('module')==m and r.get('source_sha256')==old and r.get('exit_status')==0 for q in H.glob('lean-*/receipt/receipt.json')), 'never replace an accepted source; failed or unsubmitted staged input only'
  p.write_text(s)
 x['revision']=rev;x['modules'].update(A);(H/'project-resolution-resume18.json').write_text(json.dumps(x,indent=2)+'\\n')
 print('staged',len(S),'new modules')
