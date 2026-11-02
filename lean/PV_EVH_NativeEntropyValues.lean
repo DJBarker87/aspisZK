@@ -42,15 +42,19 @@ theorem after_draw (base : ExternalTypes)
   have hrestore : (Array.to_slice_mut before).2 (Array.to_slice a) = a :=
     PV_EVH_NativeEntropyBorrow.restore_array _ before a
   rw [hrestore]
+  have hcopy (x y : Array U8 32#usize) :
+      core.slice.Slice.copy_from_slice core.marker.CopyU8
+        (Array.to_slice x) (Array.to_slice y) = .ok (Array.to_slice y) :=
+    PV_EVH_EntropyHalves.copy32 x y
+  have hback (x y : Array U8 32#usize) :
+      Array.from_slice x (Array.to_slice y) = y :=
+    PV_EVH_EntropyHalves.restored x y
   simp only [PV_EVH_NativeZeroWrappers.constructor_native base heap box ops,
     PV_EVH_NativeEntropyAccess.deref_mut_native base heap box ops,
     PV_EVH_NativeEntropyAccess.deref_native base heap box ops,
-    bind_tc_ok,Aeneas.Std.lift,PV_EVH_EntropyHalves.first_index,
-    PV_EVH_EntropyHalves.second_index,PV_EVH_EntropyHalves.copy32,
-    PV_EVH_EntropyHalves.restored,id_eq]
-  dsimp only
-  simp only [PV_EVH_EntropyHalves.copy32,bind_tc_ok,
-    PV_EVH_EntropyHalves.restored,id_eq]
+    bind_tc_ok,Aeneas.Std.lift,Array.to_slice_mut,
+    PV_EVH_EntropyHalves.first_index,PV_EVH_EntropyHalves.second_index,
+    hcopy,hback,id_eq]
   rfl
 
 #print axioms after_draw
