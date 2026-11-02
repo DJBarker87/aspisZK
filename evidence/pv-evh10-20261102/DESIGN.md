@@ -22,8 +22,10 @@ Drop/zeroize source inventories must include partial entropy failure cleanup,
 argument/capture and unused closure destruction, unwind/abort separation and
 volatile writes/fence. Zeroization is an L3 obligation, never assumed silent.
 Diagnostics must distinguish D474(C) literal-only application reporting from
-std panic/allocator handlers: the adopted bundle cannot make native OOM's
-numeric formatting disappear. Preserve writer errors and fault prefixes.
+std panic/allocator handlers. The bundle DOES replace null-return allocation
+handling with direct abort, removing the default size formatter on this route.
+Bind that selection explicitly; legacy std handlers cannot be reused for it.
+Preserve writer errors and fault prefixes.
 
 Only after native adequacy, compose full entry and unchanged trace projections;
 only after provenance-fixed links, reduce (v') to successful actual worldRun
