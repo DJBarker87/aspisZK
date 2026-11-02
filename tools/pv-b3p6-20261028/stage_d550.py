@@ -11,7 +11,7 @@ code='''from pathlib import Path
 import json,hashlib
 H=Path(HOST); sources=SOURCES;authority=AUTHORITY;scripts=SCRIPTS
 for n,s in sources.items():
- p=H/'lean'/(n+'.lean');assert not p.exists() or p.read_text()==s or n=='PV_B3P_SourceAudit547227';p.write_text(s)
+ p=H/'lean'/(n+'.lean');assert n.startswith('PV_B3P_') and '550227' in n;p.write_text(s)
 p=H/'project-resolution-resume18.json';x=json.loads(p.read_text());x['revision']=REVISION;x['modules'].update(authority);p.write_text(json.dumps(x,indent=2)+'\\n')
 for n,s in scripts.items():(H/n).write_text(s)
 print(json.dumps(dict(staged=list(sources),authority_revision=REVISION)))

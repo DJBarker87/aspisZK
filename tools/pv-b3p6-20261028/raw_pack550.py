@@ -12,18 +12,43 @@ for line in lines:
   chunks.append(chunk);chunk=[]
 assert len(chunks)==4 and not chunk
 rename={'a24':'a','a25':'b','a26':'c','a27':'d','i80':'bound'}
+# Independently parse the four shipped Rust expressions. Comparison retains
+# every operator, associativity edge and row/limb index, including subtraction.
+dep=Path('crates/aspis-statement/src/state_only_poseidon.rs')
+deps=dep.read_text().split('fn external_local_packed_raw',1)[1]
+pack=deps.split('let packed = [',1)[1].split('];',1)[0]
+expressions=[x.strip()for x in pack.split(',')if x.strip()]
+assert len(expressions)==4
+
+def parse(expr):
+ ts=re.findall(r'local\[\d\]\[\d\]|bound|\d+|[()+*\-]',expr);pos=0
+ assert ''.join(ts)==re.sub(r'\s+','',expr)
+ def term(minimum=0):
+  nonlocal pos
+  t=ts[pos];pos+=1
+  if t=='(':
+   node=term();assert ts[pos]==')';pos+=1
+  elif t.startswith('local'):
+   row,limb=re.findall(r'\d',t);node=('limb','abcd'[int(row)],limb)
+  else:node=('const',t)
+  while pos<len(ts)and ts[pos]in ['+','-','*']and (20 if ts[pos]=='*'else 10)>=minimum:
+   op=ts[pos];pos+=1;right=term((20 if op=='*'else 10)+1)
+   node=({'+':'add','-':'sub','*':'mul'}[op],node,right)
+  return node
+ node=term();assert pos==len(ts);return node
+source_trees=[parse(e)for e in expressions]
 notes=[]
 for j,ls in enumerate(chunks):
  raw='\n'.join(ls)
  for a,b in rename.items():raw=re.sub(r'\b'+a+r'\b',b,raw)
- env={};reads=[]
+ env={};trees={};reads=[]
  for line in raw.splitlines():
   m=re.fullmatch(r'  let (\w+) ← Array.index_usize ([abcd]) (\d)#usize',line)
   if m:
-   var,row,i=m.groups();env[var]=f'(limb_at550 {row} {i}#usize (by decide))';reads.append((row,i));continue
+   var,row,i=m.groups();env[var]=f'(limb_at550 {row} {i}#usize (by decide))';trees[var]=('limb',row,i);reads.append((row,i));continue
   m=re.fullmatch(r'  let (\w+) ← lift \(Std.U64.wrapping_(add|sub|mul) (\w+(?:#u64)?) (\w+(?:#u64)?)\)',line);assert m,line
-  v,op,left,right=m.groups();env[v]='(U64.wrapping_'+op+' '+env.get(left,left)+' '+env.get(right,right)+')'
- out=ends[j];name=f'raw_pack{j}_550';mod=f'PV_B3P_RawPack{j}550227'
+  v,op,left,right=m.groups();trees[v]=(op,trees.get(left,('const',left.removesuffix('#u64'))),trees.get(right,('const',right.removesuffix('#u64'))));env[v]='(U64.wrapping_'+op+' '+env.get(left,left)+' '+env.get(right,right)+')'
+ out=ends[j];assert trees[out]==source_trees[j],(j,trees[out],source_trees[j]);name=f'raw_pack{j}_550';mod=f'PV_B3P_RawPack{j}550227'
  text='''import PV_B3P_RawRows550227
 namespace PV_B3P_Association550227
 open Aeneas Aeneas.Std PV_B3P_227
@@ -42,5 +67,5 @@ set_option autoImplicit false
  text+='  rfl\n'+f'\n#print axioms raw_pack{j}_value550\nend PV_B3P_Association550227\n'
  (L/(mod+'.lean')).write_text(text)
  notes.append(dict(module=mod,ssa_output=out,indexed_reads=len(reads),source_suffix_sha256=hashlib.sha256(raw.encode()).hexdigest()))
-(R/'RAW-PACK-GENERATOR-D550.json').write_text(json.dumps(dict(emission=str(p),emission_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs=notes,status='only isolated output laws; full raw Link remains open; source pack-expression association must still be checked'),indent=2)+'\n')
+(R/'RAW-PACK-GENERATOR-D550.json').write_text(json.dumps(dict(emission=str(p),emission_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs=notes,deployed_source=str(dep),deployed_source_sha256=hashlib.sha256(dep.read_bytes()).hexdigest(),source_expressions=expressions,all_operator_trees_identical=True,status='isolated output laws with independently checked shipped expression trees; full raw Link remains open'),indent=2)+'\n')
 print(json.dumps(dict(outputs=4,indexed_reads=sum(x['indexed_reads']for x in notes))))
