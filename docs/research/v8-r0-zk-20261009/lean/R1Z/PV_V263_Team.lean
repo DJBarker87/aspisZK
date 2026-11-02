@@ -9,7 +9,7 @@ open Aeneas Aeneas.Std PV_V263_World PV_V263_WorkerRequests PV_V263_WorkerContro
 open PV_RJ4IDB (Bytes)
 
 def launch {S : Type} (runtime : Runtime S) : List Nat → Q S (List Nat) :=
-  traverse (spawn runtime)
+  PV_V263_WorkerControl.traverse (spawn runtime)
 
 def team {S : Type} (runtime : Runtime S) : Q S (List Nat) :=
   launch runtime (List.range' 1 15)
@@ -26,16 +26,16 @@ theorem grant_exact {S : Type} (encode : {A : Type} → Request A → Bytes)
     (launch (grants encode) ids w).outcome = .returned (.ok (List.range' w.nextHandle ids.length)) ∧
     (launch (grants encode) ids w).state.nextHandle = w.nextHandle + ids.length := by
   induction ids generalizing w with
-  | nil => exact ⟨rfl,by simp only [launch,traverse,PV_V263_World.lift,List.length_nil,Nat.add_zero]⟩
+  | nil => exact ⟨rfl,by simp only [launch,PV_V263_WorkerControl.traverse,PV_V263_World.lift,List.length_nil,Nat.add_zero]⟩
   | cons i is ih =>
     let w' : State S := {w with liveHandles := w.nextHandle::w.liveHandles,nextHandle := w.nextHandle+1}
     obtain ⟨ho,hs⟩ := ih w'
     change (launch (grants encode) is w').outcome = _ at ho
     constructor
-    · simp only [launch,traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
+    · simp only [launch,PV_V263_WorkerControl.traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
       rw [ho]
       rfl
-    · simp only [launch,traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
+    · simp only [launch,PV_V263_WorkerControl.traverse,PV_V263_World.bind,spawn,grants,PV_V263_World.lift] at ho ⊢
       rw [ho]
       change (launch (grants encode) is w').state.nextHandle = _
       rw [hs]

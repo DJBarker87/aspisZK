@@ -15,7 +15,7 @@ def indices (n k : Nat) : List Nat := List.range' (start n k) (width n k)
 def body {S A : Type} (runtime : Runtime S) (layout : Layout)
     (n k : Nat) (callback : Nat → Q S A) : Q S (List A) :=
   PV_V263_World.bind (runtime.answer (.allocate 0 k (width n k) layout.size layout.align)) fun _ =>
-    traverse callback (indices n k)
+    PV_V263_WorkerControl.traverse callback (indices n k)
 
 def run {S A : Type} (runtime : Runtime S) (profile : Profile) (layout : Layout)
     (n k : Nat) (callback : Nat → Q S A) : Q S (Except Bytes (List A)) :=
@@ -31,13 +31,13 @@ theorem in_range (n k i : Nat) (hk : k < 16) (hi : i ∈ indices n k) : i < n :=
 theorem traverse_total_on {S A : Type} (callback : Nat → Q S A) (is : List Nat)
     (law : ∀ i, i ∈ is → ∀ w, ∃ a, (callback i w).outcome = .returned (.ok a))
     (w : State S) :
-    ∃ values, (traverse callback is w).outcome = .returned (.ok values) := by
+    ∃ values, (PV_V263_WorkerControl.traverse callback is w).outcome = .returned (.ok values) := by
   induction is generalizing w with
   | nil => exact ⟨[],rfl⟩
   | cons i is ih =>
     obtain ⟨a,ha⟩ := law i (by simp) w
     obtain ⟨rest,hr⟩ := ih (fun j hj v => law j (by simp only [List.mem_cons]; exact Or.inr hj) v) (callback i w).state
-    exact ⟨a::rest,by simp only [traverse,PV_V263_World.bind,ha,hr,PV_V263_World.lift]⟩
+    exact ⟨a::rest,by simp only [PV_V263_WorkerControl.traverse,PV_V263_World.bind,ha,hr,PV_V263_World.lift]⟩
 
 /-- Resources are derived from grants; the only hypothesis concerns callback
 execution and must still be proved for actual captured instantiations. This
