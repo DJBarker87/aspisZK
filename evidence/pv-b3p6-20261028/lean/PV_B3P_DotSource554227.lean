@@ -480,7 +480,6 @@ theorem dot_source_reference554 (weights : Array aspis_core.field.QM31 7#usize)
                       intro m18
                       apply bind_equal9
                       intro c1
-                      simp only [bind_tc_ok]
                       rfl
 
 theorem dot_source_link554 :

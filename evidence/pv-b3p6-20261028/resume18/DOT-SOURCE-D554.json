@@ -1,0 +1,75 @@
+{
+  "function": "qm31_m31_dot",
+  "source": {
+    "path": "crates/aspis-core/src/field.rs",
+    "sha256": "7b63f9919d86cf9c14b9af6172e49aa8eacaff9604d7f65fa642864c3b11d7b6",
+    "item": {
+      "name": "qm31_m31_dot",
+      "start": 1447,
+      "end": 1490,
+      "signature": "fn qm31_m31_dot(weights: &[QM31], values: &[M31]) -> QM31 ",
+      "body": "{\n    assert_eq!(weights.len(), values.len());\n    // One block of at most four products fits in each u64 limb.  Return it\n    // directly instead of reducing into a second outer accumulator and then\n    // reducing the same four limbs again.  Poseidon constant interpolation\n    // uses this fixed 3/4-term shape heavily.\n    if weights.len() <= 4 {\n        let mut raw = [0u64; 4];\n        let mut index = 0usize;\n        while index < weights.len() {\n            let weight = weights[index];\n            let value = u64::from(values[index].0);\n            raw[0] += u64::from(weight.c0.a.0) * value;\n            raw[1] += u64::from(weight.c0.b.0) * value;\n            raw[2] += u64::from(weight.c1.a.0) * value;\n            raw[3] += u64::from(weight.c1.b.0) * value;\n            index += 1;\n        }\n        return QM31 {\n            c0: CM31::new(M31::reduce_u64(raw[0]), M31::reduce_u64(raw[1])),\n            c1: CM31::new(M31::reduce_u64(raw[2]), M31::reduce_u64(raw[3])),\n        };\n    }\n    let mut sums = [0u64; 4];\n    for start in (0..weights.len()).step_by(4) {\n        let end = core::cmp::min(start + 4, weights.len());\n        let mut raw = [0u64; 4];\n        for index in start..end {\n            let value = values[index].0 as u64;\n            let weight = weights[index];\n            raw[0] += weight.c0.a.0 as u64 * value;\n            raw[1] += weight.c0.b.0 as u64 * value;\n            raw[2] += weight.c1.a.0 as u64 * value;\n            raw[3] += weight.c1.b.0 as u64 * value;\n        }\n        for index in 0..4 {\n            sums[index] += M31::reduce_u64(raw[index]).0 as u64;\n        }\n    }\n    QM31 {\n        c0: CM31::new(M31::reduce_u64(sums[0]), M31::reduce_u64(sums[1])),\n        c1: CM31::new(M31::reduce_u64(sums[2]), M31::reduce_u64(sums[3])),\n    }\n}",
+      "context": [],
+      "macros": []
+    },
+    "whole_body_tokens_checked": true
+  },
+  "callers": {
+    "path": "crates/aspis-statement/src/state_only_poseidon.rs",
+    "sha256": "4467d15c9d473cbd42caf33f21aa0192bed007b58ccaa4a61cb5691532cab7fe",
+    "item": {
+      "name": "interpolated_internal_pair",
+      "start": 524,
+      "end": 535,
+      "signature": "fn interpolated_internal_pair(\n    state: [QM31; POSEIDON2_WIDTH],\n    local: &[QM31; 16],\n) -> [QM31; POSEIDON2_WIDTH] ",
+      "body": "{\n    const ROWS: [usize; 7] = [2, 3, 4, 5, 6, 7, 8];\n    let weights = ROWS.map(|row| local[row]);\n    let even_constants = ROWS.map(|row| M31(INTERNAL[2 * (row - 2)]));\n    let odd_constants = ROWS.map(|row| M31(INTERNAL[2 * (row - 2) + 1]));\n    let even = qm31_m31_dot(&weights, &even_constants);\n    let odd = qm31_m31_dot(&weights, &odd_constants);\n    internal_round(internal_round(state, even), odd)\n}",
+      "context": [],
+      "macros": []
+    },
+    "reachable_calls": 2,
+    "domain": "seven weights and seven raw M31 constants"
+  },
+  "source_steps": [
+    {
+      "source": "assert lengths and <=4 branch",
+      "model": "dot7_source_entry15",
+      "argument": "Both only reached op227 calls have weights and constants of length7. Assertion true, fast branch unreachable. No claim about other lengths."
+    },
+    {
+      "source": "step_by(4), min, inner ranges",
+      "model": "dot7_ordered_partition15, dot7_block_indices15",
+      "argument": "Starts0,4, ends4,7. Exact range enumeration0,1,2,3 then4,5,6. Each index in7; each chunk resets raw to zero. Iterator cloning/Step/next and bounds follow the reached Range/StepBy source catalogue; compiler lowering V370 retained."
+    },
+    {
+      "source": "four component updates",
+      "model": "dot_cell554",
+      "argument": "Value read/cast first, weight second, then c0.a,c0.b,c1.a,c1.b in order. Unsigned casts zero extend, multiplies/additions wrap at64 under release. Never replace with canonical field reassociation; full raw32 payloads accepted."
+    },
+    {
+      "source": "four block reductions",
+      "model": "dot_reduce554",
+      "argument": "For each block, reduce raw[0..3] separately, cast each reduced result to64, add into corresponding sums, retain each array write. Two reduction levels stay distinct."
+    },
+    {
+      "source": "final two CM31 constructors",
+      "model": "dot_finish554",
+      "argument": "Reduce sums0,1, construct c0, reduce sums2,3, construct c1, then QM31 record. Complete Result equality includes error and divergence tags."
+    },
+    {
+      "source": "borrow/drop paths",
+      "model": "owned arrays in interpreter",
+      "argument": "Slice reads immutable; raw and sums indexed writes direct. No iterator-provided mutable loan/restoration is discarded. Copy QM31/M31/u64 has no user drop; wrapper erasure and primitive memory semantics remain V370/D381/D386."
+    }
+  ],
+  "reference": {
+    "receipt": "N79167",
+    "comparison": "REFERENCE-PROJECTED-D547.json",
+    "comparison_sha256": "6890bb5ae7122ce0ddaa1b028d115c07e3ac17726ba6881474c9381937a2d522"
+  },
+  "interpreter": "PV_B3P_Association554227.dot_source554",
+  "theorem": "PV_B3P_Association554227.dot_source_link554",
+  "feature_profile": "ct-host-prover/release; unchanged deployed graph and source pins reused from N79167",
+  "route": "Lean equality + own-1 structural",
+  "retained": "whole std catalogue, D188 differentials, matrix, callback, V370/D381/D386",
+  "status": "pending focused equality; no credit yet"
+}

@@ -92,7 +92,7 @@ for j,count in enumerate(counts):
  for k in range(count):
   i,name=binders[n];n+=1
   s+=indent+'apply bind_equal9\n'+indent+'intro '+name+'\n'
- s+=indent+'simp only [bind_tc_ok]\n'
+ if j != 9:s+=indent+'simp only [bind_tc_ok]\n'
 assert n==len(binders)
 s+=indent+'rfl\n\ntheorem dot_source_link554 :\n    PV_B3P_Links13227.PV_B3P_Link_field_qm31_m31_dot dot_source554 :=\n  funext fun weights => funext (dot_source_reference554 weights)\n\n#print axioms dot_source_reference554\n#print axioms dot_source_link554\nend PV_B3P_Association554227\n'
 emit(L/'PV_B3P_DotSource554227.lean',s)
