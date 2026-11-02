@@ -49,6 +49,7 @@ theorem composition_callees_reference557 :
     unfold composition_callees557 PV_B3P_Association554227.composition_source554
     rw [local_links557.link16,local_links557.link10,local_links557.link23,
       semantic_callees_reference557]
+    rfl
   exact Eq.trans restored PV_B3P_Association554227.composition_source_link554
 
 #print axioms composition_callees_reference557
