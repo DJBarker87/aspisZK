@@ -19,7 +19,9 @@ for m in ['R1Z.PV_RDCD5_V197Audit','R1Z.PV_RDCD5_NEPAudit','R1Z.PV_RDCD5_NEPDriv
 r=subprocess.run(['ssh',H,f'python3 {G}/reservation.py {D}/stage-admission.json > {D}/stage-admission.log 2>&1'],capture_output=True,text=True)
 for n in ['stage-admission.json','stage-admission.log']:
  q=subprocess.run(['ssh',H,f'cat {D}/{n}'],capture_output=True,text=True);assert q.returncode==0,q.stderr;(E/n).write_text(q.stdout)
-a=json.load(open(E/'stage-admission.json'));assert r.returncode==0 and a.get('allowed') is True,(r.returncode,a.get('allowed'),a.get('error'),'stage admission refusal; no upload')
+a=json.load(open(E/'stage-admission.json'));(E/'stage').mkdir(exist_ok=True)
+with (E/'stage/admission-history.jsonl').open('a') as log:log.write(json.dumps(dict(exit=r.returncode,admission=a))+'\n')
+assert r.returncode==0 and a.get('allowed') is True,(r.returncode,a.get('allowed'),a.get('error'),'stage admission refusal; no upload')
 for m,x in plan.items():subprocess.run(['scp','-q',str(R/x['path']),H+':'+D+'/lean-sources/'+m.replace('.','/')+'.lean'],check=True)
 subprocess.run(['scp','-q',str(E/'source-resolution.json'),H+':'+D+'/source-resolution.json'],check=True)
 q=subprocess.run(['ssh',H,f'cat {D}/preflight-result.json'],text=True,capture_output=True);assert q.returncode==0;qpath=E/'preflight-result.json';qpath.write_text(q.stdout)
