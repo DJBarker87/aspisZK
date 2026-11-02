@@ -18,7 +18,7 @@ for root in R.glob('N791*'):
 for name in ['opaque559','std559','std559-nocopy','std559-readrange','std559-range','std559-nth']:
  paths.extend(p for p in (R/name).rglob('*')if p.is_file())
 paths.extend(R/n for n in ['opaque559-upstream-command.json','std559-source-revision'])
-paths.extend(H/n for n in ['TALLY-resume18.json','project-resolution-resume18.json','external-verification-resume18.json','cache-verification-resume18.json','compile_resume18_extended.py','opaque559_host.py','std559_host.py','std559_nocopy_host.py','std559_readrange_host.py','std559_range_host.py','std559_nth_host.py','queue_d559_host.py'])
+paths.extend(H/n for n in ['TALLY-resume18.json','project-resolution-resume18.json','external-verification-resume18.json','cache-verification-resume18.json','compile_resume18_extended.py','opaque559_host.py','std559_host.py','std559_nocopy_host.py','std559_readrange_host.py','std559_range_host.py','std559_nth_host.py','queue_d559_host.py','queue_final_d559_host.py'])
 latest={}
 for r in sorted(lean,key=lambda r:r['attempt']):
  if r['exit_status']==0:latest[r['module']]=r
@@ -27,7 +27,7 @@ for m,r in latest.items():
  p=H/'lean-objects'/(m.replace('.','/')+'.olean');s=H/'lean'/(m.replace('.','/')+'.lean')
  assert sha(s)==r['source_sha256'],m
  for dep,d in r['dependency_objects'].items():assert sha(Path(d['path']))==d['sha256'],(m,dep)
- objects.append(dict(module=m,attempt=r['attempt'],source_sha256=r['source_sha256'],object_sha256=sha(p),dependency_objects=r['dependency_objects'],quarantined=m=='PV_B3P_Std559Funs227'))
+ objects.append(dict(module=m,attempt=r['attempt'],source_sha256=r['source_sha256'],object_sha256=sha(p),dependency_objects=r['dependency_objects'],quarantined=m in ['PV_B3P_Std559Funs227','PV_B3P_NthGuard559227','PV_B3P_NthKernelGuard559227','PV_B3P_NthFormatting559227','PV_B3P_Integration559227']))
 (R/'D559-accepted-object-inventory.json').write_text(json.dumps(dict(objects=objects,dependency_mismatches=[]),indent=2)+'\n');paths.append(R/'D559-accepted-object-inventory.json')
 scopes=subprocess.check_output(['systemctl','--user','list-units','pv-b3p6-*','--no-pager'],text=True);assert '0 loaded units listed'in scopes,scopes
 paths=list(dict.fromkeys(paths));assert all(p.is_file()for p in paths)
