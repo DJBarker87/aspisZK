@@ -1,159 +1,79 @@
-# Stage C: focused rebuild; complete replay pending
+# NER coherent replay completed, 2026-11-03
 
-The three stale proved modules all compile **without source edits** against
-the headline cohort. No theorem failure against the current AdapterRwModel
-was observed. In particular JGx_SdkAfterValidationEq.source compiles against
-Adapter object 010bcafd… . The recovered stage2_owned source diff is empty;
-the whole Adapter source diff is limited to a trailing #print command.
+All **1,387 required model modules compile unchanged** against the headline
+cohort. The three stale modules and two intermediate modules were already
+rebuilt in R020-R024; this continuation rebuilt 1,381 ordinary modules in
+37 batches and NDR_CombinedAudit once in A900. No theorem failed against the
+current definitions. No model, protocol source or theorem statement was edited.
 
-| Attempt | Module | Exit | Wall seconds | Peak RSS KiB | Swaps |
-|---|---|---:|---:|---:|---:|
-| NER_R020 | JFw_Validator | 0 | 1.284517 | 2640976 | 0 |
-| NER_R021 | JGx_SdkAfterValidationEq | 0 | 2.038789 | 4398940 | 0 |
-| NER_R022 | JFw_Chunks | 0 | 1.933081 | 4297564 | 0 |
-| NER_R023 | JFw_BlockValidation | 0 | 1.996257 | 4295208 | 0 |
-| NER_R024 | JFw_Record | 0 | 2.530795 | 4318944 | 0 |
+NER_REBUILD_ROWS.jsonl contains every rebuilt source/object hash, selected
+direct-import hashes and receipt reference. NER_rebuild_checks.py validates all
+1,387 pairs, requires each affected import to equal its final rebuilt object,
+and rejects a planted stale-import hash. The unchanged upstream cohort is
+reused with its original object/private pins. Per-batch module lists, exits,
+wall time, RSS, swap, source revision and caps are in NER_BATCH_SUMMARY.json;
+per-module commands, measurements and actual #print output are in each
+NER_Bxxx-details/modules.jsonl and its logs. Sources without a print command
+are not claimed to have a separate print query; both release roots are queried
+and independently raw-walked in the final audit.
 
-Each source is byte-identical to its repository input. The dependency order
-is respected: Validator precedes Chunks, which precedes Record; the SDK
-module has no stale ancestor and was independent. BlockValidation also uses
-the rebuilt Chunks. The own-cache overlay precedes the read-only NDR cohort;
-runner receipts pin each actual selected direct object. Original objects
-were neither overwritten nor removed. The five output hashes and source
-hashes are in NER_REBUILT_OBJECT_PINS.json. Every theorem printed only
-propext, Classical.choice and Quot.sound. Source revision for these attempts
-is 948420a8b2 (full hash and exact commands in each receipt).
+The maximum batch process RSS was 7,214,216 KiB;
+every batch exited 0 and reported zero swaps. All used MemoryHigh 6G,
+MemoryMax 8G, MemorySwapMax 0, TasksMax 64, -M7000, -j1 and async elaboration
+disabled. At most two scopes and one Lean process per scope ran concurrently.
+Five refused quiet-window admissions were retried; none was launched.
 
-NER_R025 compiles the unchanged hardened NEP walker as NER_Walker.lean
-(byte-identical to evidence/axaudit2-20261102/NEP_WALKER.lean). The standalone
-focused driver uses explicit private importAll loading and initialized
-extensions, then the exact NEP.audit implementation.
+## Final aggregation and audit
 
-| Attempt/root | Raw constants | Edges | Complete | Equal collectAxioms |
-|---|---:|---:|---|---|
-| R026 / JGx_SdkAfterValidationEq.source | 3529 | 50951 | yes | yes |
-| R027 / JFw_Validator.loop_valid | 2914 | 41484 | yes | yes |
-| R028 / JFw_Record.success | 4266 | 63001 | yes | yes |
+A900 compiled NDR_CombinedAudit unchanged: exit 0, 6.376899 s. Its enclosing
+scope exited 3 because the own scanner compared merged duplicate-bearing
+loader imports against the original index's stable-unique projection. It found
+zero dangling edges. A900 took 85.086928 s, peaked at 12,214,488 KiB RSS,
+swaps 0. The failure, source snapshots and diagnosis are retained, not erased.
 
-All three raw axiom sets are exactly Classical.choice, Quot.sound, propext.
-The exact #print lines, wall time, peak RSS, zero swaps, source revision,
-source hashes, dependency fingerprints and caps are in R026-R028 receipts
-and NER_ATTEMPTS.jsonl. Reachable-name lists and NER_AXIOMS.json are retained.
-These are focused results; they do not certify the combined release closure.
+V2 applies the identical stable first-occurrence projection used by
+NER_ModuleTables.inspect and preserves raw loader lists. R031 tests dangling
+recursor/body-removal behavior and rejects missing, extra and reordered import
+mutations. R032 compiles the exact V2 driver. The scanner reads each own
+declaration from the checked private kernel map. No model object was rebuilt
+again for A901.
 
-## Outstanding replay
+A901 loaded both roots together with importAll, private visibility and
+initialized extensions, scanned the entire cohort, then used the unchanged
+NEP hardened walker. Exit **0**; wall **103.193750 s**; peak RSS
+**12,385,428 KiB**; swaps **0**. Caps: MemoryHigh 14G,
+MemoryMax 16G, MemorySwapMax 0, TasksMax 64; Lean -M15000 -j1.
+Source revision: `80cb4ac8876e51feeb9e7dc0ca620dcec50c0c1e`. Exact commands, source hashes,
+limits, cgroup peak and both actual #print results are in NER_A901/receipt.json.
+Process RSS and cgroup memory.peak are retained as different measurements.
 
-The module import graph requires **1,387** modules to be rebuilt after the
-three stale objects. Five have been rebuilt; **1,382 remain**. The original
-budget is 200 focused module scopes. At one module per attempt, that budget
-cannot cover this graph even before scanner/audit helper scopes. The fully
-ordered plan, all 1,387 unchanged repository source hashes and old object
-hashes are in NER_REBUILD_PLAN.json. All sources were located; none needs
-editing to make the observed frontier compile.
+| Root | Constants | Edges | Complete / equal collectAxioms |
+|---|---:|---:|---|
+| RPx_Deployed.deployed | 115,256 | 5,743,676 | yes / yes |
+| NDR_CombinedAudit.sourceOnHeadline | 885,736 | 15,048,019 | yes / yes |
 
-A budget expansion to 1,450 focused scopes was requested. No expansion had
-been received when this handoff was prepared. No full replay was launched
-with an impossible remaining budget. This is a budget constraint, not a
-reported theorem failure. No source repair was substituted for the requested
-rebuild. The current mixed overlay is not claimed to be a coherent rebuild.
+Both raw and summary sets are exactly Classical.choice, Quot.sound, propext.
+The loaded scan covers 16,058 modules, 1,520,745 active declarations and
+38,049,122 references: zero dangling edges and all canonical import lists match.
+The 2,316,265 original serialized entries contain duplicates; their unique-name
+count matches the loaded count module by module. This is not a missing-body gap.
 
-Both agg16 allowances remain unused. Do not use them to re-audit the mixed
-overlay as though the 1,382 outstanding rebuilds had happened. After the
-complete dependency-order source rebuild, run the final aggregation and
-hardened private walker on both specified roots, plus NER.loadedScan. Both
-walks must complete, equal collectAxioms, and the final loaded scan must
-have zero dangling references. That gate has **not run**.
+All 34,043 selected/retained input files, including the Lean binary and walker,
+were checked before and after A901. Original read-only objects remained intact.
+The Stream B manifest is NER_STREAM_B_COHORT.jsonl.xz with its uncompressed
+SHA-256 and metadata file. It includes available server/private/IR companions.
+Source-basis qualifications for reused upstream objects remain explicit; all
+1,387 rebuilt objects have exact source and selected-import compilation pins.
 
-## Authorized continuation, 2026-11-02
+Usage: 37 batch scopes plus four focused scanner/driver controls in this
+continuation (41/120 capped scopes), plus 28 historical focused scopes retained
+from the earlier run; both agg16 allowances used. No uncapped Lean or cap raise.
+NER_tests.py, NER_rebuild_checks.py and NER_final_checks.py validate the saved
+evidence and matched mutations. Historical stage notes are in
+NER_REBUILD_HISTORY.md; no unchanged successful Lean regression was repeated.
 
-Lead superseded the one-module-per-scope limit for this continuation: up to
-120 batch scopes, each MemoryHigh 6G, MemoryMax 8G, MemorySwapMax 0,
-TasksMax 64, -M7000 and at most two concurrent Lean processes. This driver
-uses one sequential Lean process in one admitted scope at a time. The two
-agg16 allowances remain reserved for final whole-closure aggregation/audit.
-Batches contain at most 40 modules in the pinned dependency order. Existing
-proved sources are copied byte-for-byte and hash-checked before compilation.
-The unchanged lead S2W_run_host runner records each batch's limits, process
-peak RSS, swap, exit and wall time. The payload records per-module commands,
-source/object hashes, selected import object hashes, time, RSS, swap and any
-#print axioms output. The final loaded scan runs in the aggregation environment.
-
-
-After B005, the local serial submission controller was paused while its
-already-submitted B006 scope completed normally. The continuation uses
-NER_parallel_batches.py: at most two independently admitted scopes, one Lean
-process per scope. Its ready-set rule excludes in-flight imports; every
-required direct import must have completed successfully or occur earlier in
-the same batch. The pinned dependency graph and source bytes are unchanged.
-No submitted compilation is cancelled or resubmitted for this scheduling change.
-
-
-Preflight for the aggregation boundary: the original NDR_A001 receipt uses
--M15000 for NDR_CombinedAudit. The batch controller was paused after B013;
-B011 and B013 both completed and their receipts were recovered without
-resubmission. NDR_CombinedAudit is excluded from 8 GiB scheduling and will
-compile unchanged inside the one final agg16 scope before the audit driver.
-NER_R029 tests the exact new final scanner definitions on a deliberately
-malformed recursor rule and a body-removal control: exit 0, 3.314852 s,
-2,338,728 KiB peak RSS, zero swaps. It detects exactly NER_RecursorMissing.
-This adds recursor rules and declaration name metadata to type/value and
-constructor-reference coverage. The unchanged NEP hardened raw walker is
-retained separately. No new logical theorem is introduced by this control;
-#print axioms is N/A for the inspection program.
-
-
-## Pre-aggregation checkpoint, 2026-11-03
-
-All 1,386 ordinary targets pass in 37 batches (34 batches of 40, then
-6, 14 and 1 modules). The only pending source compilation is NDR_CombinedAudit,
-reserved for agg16. NER_rebuild_checks.py --partial validates every selected
-affected import against its rebuilt output and rejects a planted stale hash.
-The shared quiet window caused five refused admissions (exit 78); the barrier
-then admitted both waiting batches before the stated window end. No marker
-was changed and no refused scope was launched.
-
-NER_R030 compile-only checks the actual standalone final driver: exit 0,
-0.727410 s, 1,586,408 KiB peak RSS, zero swaps; an unused-argument warning only.
-No target closure is loaded by this syntax check. R029/R030 are conservatively
-charged as two additional capped control scopes. No new logical theorem is
-introduced by either program, so #print axioms is N/A for these controls.
-
-NER_preaggregate.py verifies all original object/private pins, every rebuilt
-output and 34,042 selected/retained kernel or IR files. It also checks the
-Lean binary and hardened walker against their prior recorded hashes.
-NER_PREAGG_OBJECTS.jsonl is input to the final scope; its selected files are
-checked before compilation and again after the audit. The original cohort is
-retained read-only. No final coherent/raw-root claim is made at this checkpoint.
-
-
-## A900 scanner representation failure and correction
-
-NER_A900 compiled the unchanged NDR_CombinedAudit successfully in 6.376899 s.
-The combined scope exited 3 after 85.086928 s, peak RSS 12,214,488 KiB,
-swaps 0. It verified every pinned input before/after. No raw root walk began.
-Its loaded scan found zero missing references across all 16,058 modules,
-1,520,745 active declarations and 38,049,122 reference occurrences.
-
-The checker compared duplicate-bearing merged loader imports to the original
-manifest's stable-unique projection. Exactly 13,935 lists failed that raw
-comparison; stable first-occurrence projection matches all 16,058 exactly,
-including order. NER_ModuleTables.inspect already defines that projection by
-de-duplicating across public/server/private parts. This is an own checker
-error, not a theorem failure or discovered import drift. The loaded declaration
-count equals the original serialized unique-name count module by module;
-2,316,265 serialized entries include duplicates, rather than missing bodies.
-NER_A900_DIAGNOSIS.json and NER_LOADED_A900.jsonl preserve the failure.
-
-NER_FinalDriverV2 uses that same stable projection, preserves raw loader lists,
-and reads each own declaration from the checked private kernel map before
-following its types, values, recursor rules and name metadata. It attempts both
-raw walks even after a scan failure, while final exit remains nonzero on any
-failure. R031 passes dangling/body-removal and stable-projection controls,
-rejecting missing, extra and reordered import mutations (3.600806 s,
-2,340,476 KiB RSS, swaps 0). R032 compile-only checks V2 (0.760297 s,
-1,584,952 KiB RSS, swaps 0). All 1,387 rebuilt outputs and import hashes pass.
-
-A901 is the remaining, changed-shape audit allowance. It reuses the successful
-A900 model object, with no unchanged model recompilation. Its 34,043 pinned
-files include that new object and the retained original read-only cohort.
-Both raw roots and the corrected loaded scan must still pass before success.
+No cryptographic/refinement assumption was discharged, added or changed.
+sourceOnHeadline remains quantified over base/stage/slot and conditional on
+FixturePdaRuntime base. It retains the same 1,768-byte saved vector, both TX1
+results and TX2 success, with distinct heaps explicit. This audit closes the
+requested object-coherence gate; it does not establish the wider security target.

@@ -19,7 +19,7 @@ def validate(scan, rows, manifest):
  assert [r for r in rows if r['dangling']]==scan['dangling_modules']
  return True
 
-scan=json.loads((E/'NER_SCAN.json').read_text())
+scan=json.loads((E/('NER_SCAN_PRE_REBUILD.json' if (E/'NER_SCAN_PRE_REBUILD.json').exists() else 'NER_SCAN.json')).read_text())
 rows=[json.loads(l) for l in archive('NER_SCAN_ROWS.jsonl').splitlines()]
 manifest=[json.loads(l) for l in archive('NER_MANIFEST.jsonl').splitlines()]
 assert validate(scan,rows,manifest)
@@ -74,7 +74,7 @@ for a in ['NER_R020','NER_R021','NER_R022','NER_R023','NER_R024']:
  for item in r['deps_fingerprint']['selected_objects'].values():
   for output in outputs:
    if item['path']==output['path']:assert item['sha256']==output['sha256']
-axioms=json.loads((E/'NER_AXIOMS.json').read_text())
+axioms=json.loads((E/('NER_AXIOMS_FOCUSED.json' if (E/'NER_AXIOMS_FOCUSED.json').exists() else 'NER_AXIOMS.json')).read_text())
 assert axioms['final_agg16_runs']==0
 assert all(r['raw_complete'] is None and r['equal'] is None for r in axioms['roots'])
 assert len(axioms['focused'])==3
@@ -84,6 +84,6 @@ for row in axioms['focused']:
  r=json.loads((E/row['receipt']).read_text());assert r['exit_status']==0
  assert len((E/('NER_focused_'+{'AspisR1.JGx_SdkAfterValidationEq.source':'sdk','AspisR1.JFw_Validator.loop_valid':'validator','AspisR1.JFw_Record.success':'record'}[row['root']]+'_REACHABLE.txt')).read_text().splitlines())==row['reachable_constants']
 assert (E/'NER_Walker.lean').read_bytes()==(REPO/'evidence/axaudit2-20261102/NEP_WALKER.lean').read_bytes()
-result=dict(valid=True,modules=len(rows),standard_table_mutation=True,body_removal_control=True,import_drift_detected=True,negative_validator_controls=3,ndr_object_pins=len(expected),dangling_modules=[r['module'] for r in rows if r['dangling']])
+result=dict(valid=True,scope='historical original serialized cohort and focused receipts',modules=len(rows),standard_table_mutation=True,body_removal_control=True,import_drift_detected=True,negative_validator_controls=3,ndr_object_pins=len(expected),dangling_modules=[r['module'] for r in rows if r['dangling']])
 (E/'NER_TEST_RESULTS.json').write_text(json.dumps(result,indent=2)+'\n')
 print(json.dumps(result))
