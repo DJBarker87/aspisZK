@@ -36,7 +36,7 @@ theorem stageFieldHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem stageFieldLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -46,7 +46,7 @@ theorem stageFieldLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem stageSeedLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -56,7 +56,7 @@ theorem stageSeedLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem stageSeedHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -66,7 +66,7 @@ theorem stageSeedHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem stageMaskHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -76,7 +76,7 @@ theorem stageMaskHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem stageMaskLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -86,7 +86,7 @@ theorem stageMaskLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnSeedHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -96,7 +96,7 @@ theorem returnSeedHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnMaskHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -106,7 +106,7 @@ theorem returnMaskHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnMaskLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -116,7 +116,7 @@ theorem returnMaskLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnSeedLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -126,7 +126,7 @@ theorem returnSeedLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl
   all_goals
-    simp only [Outside,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnFieldHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -136,7 +136,7 @@ theorem returnFieldHigh_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl
   all_goals
-    simp only [Outside,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem returnFieldLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
@@ -146,7 +146,7 @@ theorem returnFieldLow_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 16) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   subst t
   all_goals
-    simp only [Outside,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem tag_byte (sp : Nat) (w : State) (i : Nat) (hi : i < 1) :
@@ -163,7 +163,7 @@ theorem inner_residue (sp : Nat) (w : State) (i : Nat) (hi : i < 128) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem mask_residue (sp : Nat) (w : State) (i : Nat) (hi : i < 32) :
@@ -174,7 +174,7 @@ theorem mask_residue (sp : Nat) (w : State) (i : Nat) (hi : i < 32) :
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 theorem outside_writes (sp p : Nat) (w : State)
@@ -187,7 +187,7 @@ theorem outside_writes (sp p : Nat) (w : State)
   simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
   rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
   all_goals
-    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller] at *
     omega
 
 #print axioms stageFieldHigh_byte

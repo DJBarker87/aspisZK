@@ -38,7 +38,7 @@ def outside_tactic(later):
  txt='  simp only [List.mem_cons,List.not_mem_nil,or_false] at ht\n'
  if len(later)>1:txt+='  rcases ht with '+' | '.join(['rfl']*len(later))+'\n'
  else:txt+='  subst t\n'
- txt+='  all_goals\n    simp only [Outside,'+','.join(later)+',result,mask,caller]\n    omega\n'
+ txt+='  all_goals\n    simp only [Outside,'+','.join(names)+',result,mask,caller] at *\n    omega\n'
  return txt
 for k,(n,d,s,z) in enumerate(rows):
  value='w.memory ('+s+'+i)' if s else '0'

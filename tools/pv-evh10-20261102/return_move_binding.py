@@ -26,7 +26,7 @@ rust=next(x['body'] for x in entry['source'] if 'generate_for_mask_nonce(' in x[
 for token in ['return Ok(Self {','mask_nonce,','field_mask_entropy,','leaf_salt_seed,']:assert token in rust,token
 out=dict(evidence_class='own-1 structural complete successful Self return binding with adopted ordered-store support; V370 retained',
  inputs=[dict(path=str(E/n),sha256=sha(E/n)) for n in ['entropy-layout-da36d6aa.txt','entry-frame-binding-D572.json','caller-source-binding-session2.json']],
- compiler_support=dict(register_loads=loads,stores=stores,executed=False),
+ compiler_support=dict(register_loads=[list(x) for x in loads],stores=stores,executed=False),
  source_steps=[
  'Both source 32-byte inner copies are restored from the SAME original64 before the two nonzero checks.',
  'Only after both nonzero checks succeed does the source construct Self with the original mask_nonce, copied field_mask_entropy1 and leaf_salt_seed1.',
