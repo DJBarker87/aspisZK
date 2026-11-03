@@ -1,5 +1,5 @@
 from pathlib import Path
-import json,hashlib,re
+import json,hashlib,re,lzma
 E=Path(__file__).resolve().parent;R=E.parent.parent
 obj=lambda p:json.loads(Path(p).read_text())
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
@@ -18,14 +18,16 @@ def check(a,want):
  assert graph['resolved_features_all_crates']
  lock=obj(E/(a+'-lock-check.json'));assert lock['unchanged'] and lock['before']==lock['after']==LOCK
  assert not obj(E/(a+'-source-check.json'))['errors']
- for p,h in rc['source_hashes'].items():assert sha(E/a/'sources'/p)==h,(a,p)
+ plain=lzma.decompress((E/(a+'_INPUTS.json.xz')).read_bytes());assert hashlib.sha256(plain).hexdigest()==(E/(a+'_INPUTS.json.sha256')).read_text().split()[0]
+ inputs=json.loads(plain);assert set(inputs)==set(rc['source_hashes'])
+ for p,h in rc['source_hashes'].items():assert hashlib.sha256(inputs[p].encode()).hexdigest()==h,(a,p)
  return rc
 
 def cm():
  records=[check(f'NET_K{i:03}',int(i in [2,3,4,6])) for i in range(1,7)]
  assert all(r['source_hashes']==records[0]['source_hashes'] for r in records)
  assert all(obj(E/f'NET_K{i:03}-graph-check.json')['resolved_features_all_crates']==obj(E/'NET_K001-graph-check.json')['resolved_features_all_crates'] for i in range(1,7))
- code=(E/'NET_K001/sources/NET_src/crates/aspis-core/src/field/NET_inverse.rs').read_text()
+ code=json.loads(lzma.decompress((E/'NET_K001_INPUTS.json.xz').read_bytes()))['NET_src/crates/aspis-core/src/field/NET_inverse.rs']
  assert code==(E/'NET_inverse.rs.txt').read_text()
  assert not any(t in code for t in ['static mut','UnsafeCell','RefCell','Atomic','Option<fn','stub_verified','proof_for_contract'])
  assert 'KMX_copy_nonoverlapping' in code

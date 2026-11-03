@@ -5,7 +5,7 @@ import hashlib,json,subprocess,sys,time,shlex
 E=Path(__file__).resolve().parent;R=E.parent.parent
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-slice-q-compose3-20261102';COHERENT='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
 a,harness,*flag=sys.argv[1:];assert a.startswith('NET_K') and 1<=int(a[-3:])<=100
-assert harness.startswith(('field::NET_inverse::','field::NET_windows::','verifier::NET_geometry::','verifier::candidate::NET_query::'))
+assert harness.startswith(('field::NET_qinverse::','field::NET_inverse::','field::NET_windows::','verifier::NET_geometry::','verifier::candidate::NET_query::'))
 assert all(c.isalnum() or c in '_:' for c in harness)
 target=harness
 assert not (E/a).exists();active=E/'NET_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,target=harness)))
@@ -38,6 +38,7 @@ if flag:
  assert len(flag)==1 and flag[0] in ['NET_bad_reply','NET_bad_argument','NET_bad_frame','NET_bad_order','NET_bad_option']+['NET_wrong_field','NET_wrong_badfield','NET_wrong_empty','NET_wrong_index','NET_wrong_opening','NET_wrong_inverse','NET_wrong_zero','NET_wrong_cell','NET_wrong_window','NET_wrong_getter','NET_wrong_q','NET_wrong_geometry','NET_wrong_reduce','NET_wrong_wrapper']+['NET_wrong_'+p+'_'+o for p in ['m','c','q','e'] for o in ['add','sub','double']]+['NET_wrong_limbs','NET_wrong_canonical','NET_wrong_embed'];env['RUSTFLAGS']+=' --cfg '+flag[0]
 sources=['NET_TOOL_PINS.json','NET_gate.py','NET_graph.py','NET_SOURCE_PINS.json','NET_src/Cargo.lock','NET_src/Cargo.toml','NET_src/KMX_stubs.rs','NET_src/KMX_native.rs','NET_src/KMX_CopyMeaning.lean','NET_src/crates/aspis-core/src/field.rs','NET_src/crates/aspis-core/src/lib.rs','NET_src/crates/aspis-core/src/field/NET_inverse.rs']
 
+sources += ['NET_src/'+p for p in json.loads((E/'NET_SOURCE_PINS.json').read_text()) if '/NET_' in p and 'NET_src/'+p not in sources]
 cfg=dict(attempt=a,kind='kani',target=target,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=sources,command=['python3','NET_gate.py',a+'.json'],native_command=ni,timeout=180,env=env,deps_fingerprint=dict(source_pinset='NET_SOURCE_PINS.json',frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'),expected_time='Optimized compilation then '+target+' native cut; field multiplication bodies never execute in the gate, only the documented Lean-discharged oracle specification',copy_patch_sha256=hashlib.sha256((E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_bytes()).hexdigest(),feature_scope=('deployed verifier default/private-leaf-salts/optimized-terminal/program-build; statement r0/pool-v1-kernel and resolved optimized features recorded per crate' if verifier else 'core r0 helper, feature-independent frozen method bodies; cfg(kani) instrumentation only'),copy_dependency='KMX-approved copy implementation applied; scalar-only reducer has no copy dependence, record/array lanes require matched KMX positive/negative controls')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 files={'NET_TOOL_PINS.json':(E/'NET_TOOL_PINS.json').read_text(),'NET_gate.py':(E/'NET_gate.py').read_text(),'NET_graph.py':(E/'NET_graph.py').read_text(),a+'.json':json.dumps(cfg)}
@@ -58,6 +59,7 @@ for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_
 assert a+'/receipt.json' in out,'submitted attempt unresolved; recover read-only, never resubmit'
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NET_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
+subprocess.run([sys.executable,str(E/'NET_recover_sources.py'),a],check=True)
 active.unlink()
 print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}),flush=True);print('\n'.join(line for line in out[a+'/stdout.log'].splitlines() if any(t in line for t in ['Checking harness','VERIFICATION','failed (','Failed Checks:','error:','Verification Time:'])),flush=True)
 if rc['exit_status'] in [124,137] or 'timed out' in out[a+'/stdout.log'].lower():raise SystemExit('STOP timed-out shape; isolate and split, never rerun unchanged')
