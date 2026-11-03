@@ -124,3 +124,36 @@ Lean binary and hardened walker against their prior recorded hashes.
 NER_PREAGG_OBJECTS.jsonl is input to the final scope; its selected files are
 checked before compilation and again after the audit. The original cohort is
 retained read-only. No final coherent/raw-root claim is made at this checkpoint.
+
+
+## A900 scanner representation failure and correction
+
+NER_A900 compiled the unchanged NDR_CombinedAudit successfully in 6.376899 s.
+The combined scope exited 3 after 85.086928 s, peak RSS 12,214,488 KiB,
+swaps 0. It verified every pinned input before/after. No raw root walk began.
+Its loaded scan found zero missing references across all 16,058 modules,
+1,520,745 active declarations and 38,049,122 reference occurrences.
+
+The checker compared duplicate-bearing merged loader imports to the original
+manifest's stable-unique projection. Exactly 13,935 lists failed that raw
+comparison; stable first-occurrence projection matches all 16,058 exactly,
+including order. NER_ModuleTables.inspect already defines that projection by
+de-duplicating across public/server/private parts. This is an own checker
+error, not a theorem failure or discovered import drift. The loaded declaration
+count equals the original serialized unique-name count module by module;
+2,316,265 serialized entries include duplicates, rather than missing bodies.
+NER_A900_DIAGNOSIS.json and NER_LOADED_A900.jsonl preserve the failure.
+
+NER_FinalDriverV2 uses that same stable projection, preserves raw loader lists,
+and reads each own declaration from the checked private kernel map before
+following its types, values, recursor rules and name metadata. It attempts both
+raw walks even after a scan failure, while final exit remains nonzero on any
+failure. R031 passes dangling/body-removal and stable-projection controls,
+rejecting missing, extra and reordered import mutations (3.600806 s,
+2,340,476 KiB RSS, swaps 0). R032 compile-only checks V2 (0.760297 s,
+1,584,952 KiB RSS, swaps 0). All 1,387 rebuilt outputs and import hashes pass.
+
+A901 is the remaining, changed-shape audit allowance. It reuses the successful
+A900 model object, with no unchanged model recompilation. Its 34,043 pinned
+files include that new object and the retained original read-only cohort.
+Both raw roots and the corrected loaded scan must still pass before success.
