@@ -11,7 +11,8 @@ import argparse,copy,hashlib,json,lzma
 from fixed_indices572 import literal
 from frame_indices578 import root,dicts
 D=Path('evidence/pv-b3p6-20261028');R=D/'resume18';I=R/'imports-b3q/pv-b3q2-20261031';sha=lambda b:hashlib.sha256(b).hexdigest()
-def collect(body):
+def collect(body,range_seeds=None):
+ range_seeds=range_seeds or {}
  exposed={root(x[tag]['place'])for x in dicts(body)for tag in ('Ref','RawPtr')if tag in x and isinstance(x[tag],dict)and 'place'in x[tag]}
  rows=[]
  def block(b,values,bounds,scope):
@@ -20,6 +21,10 @@ def collect(body):
    if 'Const'in o:
     n=literal(o['Const']);return ('literal',n)if n is not None else None
    for tag in ('Copy','Move'):
+    if tag in o and 'Projection'in o[tag]['kind']:
+     base,projection=o[tag]['kind']['Projection'];mark=values.get(base.get('kind',{}).get('Local'))
+     if projection=={'Field':[{'Adt':[16,1]},0]} and mark is not None and mark[0]=='rangeOption':
+      value=('rangeItem',mark[1]);bounds[value]=(mark[2],mark[1],mark[3]);return value
     if tag in o and 'Local'in o[tag]['kind']:
      slot=o[tag]['kind']['Local']
      if slot not in values:values[slot]=('snapshot',scope,sid,slot)
@@ -68,6 +73,9 @@ def collect(body):
      exits.append(block(child,values,child_bounds,scope))
     values={slot:value for slot,value in exits[0][0].items()if all(e[0].get(slot)==value for e in exits[1:])}if exits else{}
     # Only the entry facts survive a join; refinements stay inside branches.
+    if sid in range_seeds:
+     slot,limit,next_statement=range_seeds[sid]
+     values[slot]=('rangeOption',next_statement,limit,sid)
    elif 'Loop'in k:block(k['Loop'],{},{},sid);values.clear();bounds.clear()
    else:values.clear();bounds.clear()
   return values,bounds
