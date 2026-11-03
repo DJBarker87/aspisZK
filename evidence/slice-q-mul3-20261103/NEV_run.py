@@ -58,6 +58,7 @@ if kind=='lean':
 elif kind=='kani':
     payload=json.loads((E/'NEV_PAYLOAD.json').read_text())
     files={ 'NEV_src/'+n:t for n,t in payload.items() }
+    files['NEV_FROZEN.json']=(E/'NEV_FROZEN.json').read_text()
     for n in ['gate','graph']: files['NEV_'+n+'.py']=(E/('NEV_'+n+'.py')).read_text()
     sources=list(files)+['NEV_src/Cargo.lock','NEV_SOURCE_PINS.json']
     (E/a).mkdir(exist_ok=True)
@@ -96,6 +97,15 @@ files[a+'.json']=json.dumps(cfg)
 code=f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});files=json.loads({json.dumps(files)!r})
+# Restore the private scaffold to frozen bytes before applying cfg-only payload.
+if {kind!r}=='kani':
+ frozen=json.loads(files['NEV_FROZEN.json'])
+ for n,t in frozen.items():
+  q=b/'NEV_src'/n
+  if q.is_file():
+   assert not q.is_symlink(),str(q)
+   if n=='Cargo.lock':assert q.read_text()==t,'STOP existing lock drift'
+   else:q.write_text(t)
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 pins=json.loads((b/'NEV_SOURCE_PINS.json').read_text()) if (b/'NEV_SOURCE_PINS.json').exists() else {{}}

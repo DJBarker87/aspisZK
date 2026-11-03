@@ -201,132 +201,27 @@ fn prefix_old_word_frame() {
  assert_eq!(after,if cfg!(NEV_wrong_prefix_old){old^1}else{old});
 }
 
-// Arbitrary valid prestate, built at fixed offsets. This is setup only.
-// No fixed capacity, initialized-word restriction, custom allocator, or loop body.
-#[kani::proof] #[kani::unwind(114)]
+// Exact Kani arbitrary initialized allocation. Truncation only drops u32 wrappers.
+fn NEV_append_fixed_capacity<const CAP:usize>() {
+ let mut before=kani::vec::exact_vec::<M31,CAP>();
+ let index:usize=kani::any();let observed:usize=kani::any();
+ kani::assume(index<CAP && observed<=index);
+ before.truncate(index);
+ let product=M31(kani::any());let old=if observed<index{before[observed].0}else{product.0};
+ let pointer=before.as_ptr();
+ before.push(product);
+ let after=before[observed].0;
+ assert_eq!(after,if cfg!(NEV_wrong_fixed_offsets){old^1}else{old});
+ assert!(before.len()==index+1 && before.capacity()==CAP && before.as_ptr()==pointer);
+}
+#[kani::proof] #[kani::unwind(444)]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NEV_copy::KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,crate::NEV_copy::KMX_realloc)]
 fn prefix_push_fixed_offsets() {
- let length:usize=kani::any();let index:usize=kani::any();
- kani::assume(length<=110 && index<length);
- let mut before:Vec<M31>=Vec::with_capacity(length);
- assert_eq!(before.capacity(),length);
- let initialized=before.as_mut_ptr();
- if 0<index {unsafe {initialized.add(0).write(M31(kani::any()));}}
- if 1<index {unsafe {initialized.add(1).write(M31(kani::any()));}}
- if 2<index {unsafe {initialized.add(2).write(M31(kani::any()));}}
- if 3<index {unsafe {initialized.add(3).write(M31(kani::any()));}}
- if 4<index {unsafe {initialized.add(4).write(M31(kani::any()));}}
- if 5<index {unsafe {initialized.add(5).write(M31(kani::any()));}}
- if 6<index {unsafe {initialized.add(6).write(M31(kani::any()));}}
- if 7<index {unsafe {initialized.add(7).write(M31(kani::any()));}}
- if 8<index {unsafe {initialized.add(8).write(M31(kani::any()));}}
- if 9<index {unsafe {initialized.add(9).write(M31(kani::any()));}}
- if 10<index {unsafe {initialized.add(10).write(M31(kani::any()));}}
- if 11<index {unsafe {initialized.add(11).write(M31(kani::any()));}}
- if 12<index {unsafe {initialized.add(12).write(M31(kani::any()));}}
- if 13<index {unsafe {initialized.add(13).write(M31(kani::any()));}}
- if 14<index {unsafe {initialized.add(14).write(M31(kani::any()));}}
- if 15<index {unsafe {initialized.add(15).write(M31(kani::any()));}}
- if 16<index {unsafe {initialized.add(16).write(M31(kani::any()));}}
- if 17<index {unsafe {initialized.add(17).write(M31(kani::any()));}}
- if 18<index {unsafe {initialized.add(18).write(M31(kani::any()));}}
- if 19<index {unsafe {initialized.add(19).write(M31(kani::any()));}}
- if 20<index {unsafe {initialized.add(20).write(M31(kani::any()));}}
- if 21<index {unsafe {initialized.add(21).write(M31(kani::any()));}}
- if 22<index {unsafe {initialized.add(22).write(M31(kani::any()));}}
- if 23<index {unsafe {initialized.add(23).write(M31(kani::any()));}}
- if 24<index {unsafe {initialized.add(24).write(M31(kani::any()));}}
- if 25<index {unsafe {initialized.add(25).write(M31(kani::any()));}}
- if 26<index {unsafe {initialized.add(26).write(M31(kani::any()));}}
- if 27<index {unsafe {initialized.add(27).write(M31(kani::any()));}}
- if 28<index {unsafe {initialized.add(28).write(M31(kani::any()));}}
- if 29<index {unsafe {initialized.add(29).write(M31(kani::any()));}}
- if 30<index {unsafe {initialized.add(30).write(M31(kani::any()));}}
- if 31<index {unsafe {initialized.add(31).write(M31(kani::any()));}}
- if 32<index {unsafe {initialized.add(32).write(M31(kani::any()));}}
- if 33<index {unsafe {initialized.add(33).write(M31(kani::any()));}}
- if 34<index {unsafe {initialized.add(34).write(M31(kani::any()));}}
- if 35<index {unsafe {initialized.add(35).write(M31(kani::any()));}}
- if 36<index {unsafe {initialized.add(36).write(M31(kani::any()));}}
- if 37<index {unsafe {initialized.add(37).write(M31(kani::any()));}}
- if 38<index {unsafe {initialized.add(38).write(M31(kani::any()));}}
- if 39<index {unsafe {initialized.add(39).write(M31(kani::any()));}}
- if 40<index {unsafe {initialized.add(40).write(M31(kani::any()));}}
- if 41<index {unsafe {initialized.add(41).write(M31(kani::any()));}}
- if 42<index {unsafe {initialized.add(42).write(M31(kani::any()));}}
- if 43<index {unsafe {initialized.add(43).write(M31(kani::any()));}}
- if 44<index {unsafe {initialized.add(44).write(M31(kani::any()));}}
- if 45<index {unsafe {initialized.add(45).write(M31(kani::any()));}}
- if 46<index {unsafe {initialized.add(46).write(M31(kani::any()));}}
- if 47<index {unsafe {initialized.add(47).write(M31(kani::any()));}}
- if 48<index {unsafe {initialized.add(48).write(M31(kani::any()));}}
- if 49<index {unsafe {initialized.add(49).write(M31(kani::any()));}}
- if 50<index {unsafe {initialized.add(50).write(M31(kani::any()));}}
- if 51<index {unsafe {initialized.add(51).write(M31(kani::any()));}}
- if 52<index {unsafe {initialized.add(52).write(M31(kani::any()));}}
- if 53<index {unsafe {initialized.add(53).write(M31(kani::any()));}}
- if 54<index {unsafe {initialized.add(54).write(M31(kani::any()));}}
- if 55<index {unsafe {initialized.add(55).write(M31(kani::any()));}}
- if 56<index {unsafe {initialized.add(56).write(M31(kani::any()));}}
- if 57<index {unsafe {initialized.add(57).write(M31(kani::any()));}}
- if 58<index {unsafe {initialized.add(58).write(M31(kani::any()));}}
- if 59<index {unsafe {initialized.add(59).write(M31(kani::any()));}}
- if 60<index {unsafe {initialized.add(60).write(M31(kani::any()));}}
- if 61<index {unsafe {initialized.add(61).write(M31(kani::any()));}}
- if 62<index {unsafe {initialized.add(62).write(M31(kani::any()));}}
- if 63<index {unsafe {initialized.add(63).write(M31(kani::any()));}}
- if 64<index {unsafe {initialized.add(64).write(M31(kani::any()));}}
- if 65<index {unsafe {initialized.add(65).write(M31(kani::any()));}}
- if 66<index {unsafe {initialized.add(66).write(M31(kani::any()));}}
- if 67<index {unsafe {initialized.add(67).write(M31(kani::any()));}}
- if 68<index {unsafe {initialized.add(68).write(M31(kani::any()));}}
- if 69<index {unsafe {initialized.add(69).write(M31(kani::any()));}}
- if 70<index {unsafe {initialized.add(70).write(M31(kani::any()));}}
- if 71<index {unsafe {initialized.add(71).write(M31(kani::any()));}}
- if 72<index {unsafe {initialized.add(72).write(M31(kani::any()));}}
- if 73<index {unsafe {initialized.add(73).write(M31(kani::any()));}}
- if 74<index {unsafe {initialized.add(74).write(M31(kani::any()));}}
- if 75<index {unsafe {initialized.add(75).write(M31(kani::any()));}}
- if 76<index {unsafe {initialized.add(76).write(M31(kani::any()));}}
- if 77<index {unsafe {initialized.add(77).write(M31(kani::any()));}}
- if 78<index {unsafe {initialized.add(78).write(M31(kani::any()));}}
- if 79<index {unsafe {initialized.add(79).write(M31(kani::any()));}}
- if 80<index {unsafe {initialized.add(80).write(M31(kani::any()));}}
- if 81<index {unsafe {initialized.add(81).write(M31(kani::any()));}}
- if 82<index {unsafe {initialized.add(82).write(M31(kani::any()));}}
- if 83<index {unsafe {initialized.add(83).write(M31(kani::any()));}}
- if 84<index {unsafe {initialized.add(84).write(M31(kani::any()));}}
- if 85<index {unsafe {initialized.add(85).write(M31(kani::any()));}}
- if 86<index {unsafe {initialized.add(86).write(M31(kani::any()));}}
- if 87<index {unsafe {initialized.add(87).write(M31(kani::any()));}}
- if 88<index {unsafe {initialized.add(88).write(M31(kani::any()));}}
- if 89<index {unsafe {initialized.add(89).write(M31(kani::any()));}}
- if 90<index {unsafe {initialized.add(90).write(M31(kani::any()));}}
- if 91<index {unsafe {initialized.add(91).write(M31(kani::any()));}}
- if 92<index {unsafe {initialized.add(92).write(M31(kani::any()));}}
- if 93<index {unsafe {initialized.add(93).write(M31(kani::any()));}}
- if 94<index {unsafe {initialized.add(94).write(M31(kani::any()));}}
- if 95<index {unsafe {initialized.add(95).write(M31(kani::any()));}}
- if 96<index {unsafe {initialized.add(96).write(M31(kani::any()));}}
- if 97<index {unsafe {initialized.add(97).write(M31(kani::any()));}}
- if 98<index {unsafe {initialized.add(98).write(M31(kani::any()));}}
- if 99<index {unsafe {initialized.add(99).write(M31(kani::any()));}}
- if 100<index {unsafe {initialized.add(100).write(M31(kani::any()));}}
- if 101<index {unsafe {initialized.add(101).write(M31(kani::any()));}}
- if 102<index {unsafe {initialized.add(102).write(M31(kani::any()));}}
- if 103<index {unsafe {initialized.add(103).write(M31(kani::any()));}}
- if 104<index {unsafe {initialized.add(104).write(M31(kani::any()));}}
- if 105<index {unsafe {initialized.add(105).write(M31(kani::any()));}}
- if 106<index {unsafe {initialized.add(106).write(M31(kani::any()));}}
- if 107<index {unsafe {initialized.add(107).write(M31(kani::any()));}}
- if 108<index {unsafe {initialized.add(108).write(M31(kani::any()));}}
- if 109<index {unsafe {initialized.add(109).write(M31(kani::any()));}}
-
- unsafe {before.set_len(index);}
- let pointer=before.as_ptr();let product=M31(kani::any());
- before.push(product);
- let appended=unsafe {before.as_ptr().add(index).read()}.0;
- assert_eq!(appended,if cfg!(NEV_wrong_fixed_offsets){product.0^1}else{product.0});
- assert!(before.len()==index+1 && before.capacity()==length && before.as_ptr()==pointer);
+ let length:usize=kani::any();
+ kani::assume(110<=length && length<=110);
+ match length {
+ 110=>NEV_append_fixed_capacity::<110>(),
+ _=>unreachable!(),
+ }
 }

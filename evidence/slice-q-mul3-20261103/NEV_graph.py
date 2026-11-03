@@ -22,7 +22,7 @@ def exact_graph(m,frozen):
    assert len(targets)==1,(label,targets)
    if targets[0] in expected:lock_edges.add((k,targets[0]))
  # These are exactly the prover/r1p-check optional edges in the FROZEN manifest.
- cargo=tomllib.loads((__import__('pathlib').Path(__file__).parent/'NEI_src/crates/aspis-r1-cost-probe/Cargo.toml').read_text())
+ cargo=tomllib.loads((__import__('pathlib').Path(__file__).parent/'NEV_src/crates/aspis-r1-cost-probe/Cargo.toml').read_text())
  disabled={'aspis-prover','sha2','serde_json','getrandom'}
  assert all(cargo['dependencies'][n]['optional'] is True for n in disabled)
  omitted={(a,b) for a,b in lock_edges if a[0]=='aspis-r1-cost-probe' and b[0] in disabled}
