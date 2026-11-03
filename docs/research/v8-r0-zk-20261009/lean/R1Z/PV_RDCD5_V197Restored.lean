@@ -26,7 +26,7 @@ theorem native_window (bytes : Slice U8) (a b : Usize)
         ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes part) =
       PV_RDCD5_ParserFlat.cmAt bytes.val a.val := by
   simp_rw [PV_RDCD5_ParserTransport.complex]
-  rw [PV_RDCD5_ParserTransport.range_bind,
+  rw [PV_RDCD5_ParserComponent.range_bind,
     PV_RDCD5_ParserRange.success bytes.val a.val b.val (by omega) bounded,bind_tc_ok]
   simpa only [width] using PV_RDCD5_ParserFlat.cm_window bytes.val a.val (by omega)
 

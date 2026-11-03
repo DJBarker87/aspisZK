@@ -5,7 +5,7 @@ R=Path(__file__).resolve().parents[2];L=R/'docs/research/v8-r0-zk-20261009/lean/
 s=(L/'PV_RDCD5_FocusedReplay.lean').read_text();a=s.index('theorem v197_corrected');b=s.index('#print axioms v197_corrected',a)+len('#print axioms v197_corrected');snippet=s[a:b]
 p=L/'PV_RDCD5_V197ConsumerReplay.lean'
 p.write_text('import R1Z.PV_RDCD5_V197Restored\nset_option autoImplicit false\nnamespace R1Z.PV_RDCD5_V197ConsumerReplay\nopen Aeneas Aeneas.Std Result\n'+snippet+'\nend R1Z.PV_RDCD5_V197ConsumerReplay\n')
-mods=['PV_RDCD4_SliceRange194','PV_RDCD5_ParserRange','PV_RDCD4_TryArray194','PV_RDCD4_Endian194','PV_RDCD4_BytesSource','PV_RDCD4_ParserWindows','PV_RDCD4_V197','PV_RDCD5_ParserWindows','PV_RDCD5_V197','PV_RDCD5_ParserFlat','PV_RDCD5_ParserTransport','PV_RDCD5_ParserErrors','PV_RDCD5_V197Restored','PV_RDCD5_V197ConsumerReplay']
+mods=['PV_RDCD4_SliceRange194','PV_RDCD5_ParserRange','PV_RDCD4_TryArray194','PV_RDCD4_Endian194','PV_RDCD4_BytesSource','PV_RDCD4_ParserWindows','PV_RDCD4_V197','PV_RDCD5_ParserWindows','PV_RDCD5_V197','PV_RDCD5_ParserFlat','PV_RDCD5_ParserComponent','PV_RDCD5_ParserTransport','PV_RDCD5_ParserErrors','PV_RDCD5_V197Restored','PV_RDCD5_V197ConsumerReplay']
 queries=[]
 for m in mods:
  for n in re.findall(r'^#print axioms (\S+)',(L/(m+'.lean')).read_text(),re.M):
