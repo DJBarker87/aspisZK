@@ -32,11 +32,11 @@ theorem source_prefix [ExternalFuns]
     (reserved : aspis_prover.state_only_entropy.ReservedStateOnlyAttemptSecrets)
     (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
     (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize)) (tag : Std.U8) :
-    prover.derive_private_salts reserved context hash tag = do
+    prover.derive_private_salts reserved context hash tag = (do
       let count ← aspis_core.r0.FIBRE_COUNT
       let (r,salts) ← alloc.vec.Vec.try_reserve_exact Global
         (alloc.vec.Vec.new (Array Std.U8 32#usize)) count
-      afterReserve reserved context hash tag count r salts := rfl
+      afterReserve reserved context hash tag count r salts) := rfl
 
 /-- V183 is substituted into the extracted prover body itself. The count is
 public FIBRE_COUNT and the original empty vector is retained on allocation Err.
@@ -48,12 +48,12 @@ theorem selected_prefix {S F : Type}
     (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
     (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize)) (tag : Std.U8) :
     letI : ExternalFuns := R1Z.PV_RunJoin_AllocatorWorld63.selectedAt runtime ops w
-    prover.derive_private_salts reserved context hash tag = do
+    prover.derive_private_salts reserved context hash tag = (do
       let count ← aspis_core.r0.FIBRE_COUNT
       let v := alloc.vec.Vec.new (Array Std.U8 32#usize)
       let e := R1Z.PV_RunJoin_AllocatorWorld63.execute runtime w v count
       afterReserve reserved context hash tag count
-        (R1Z.PV_FXM_ReserveSelected.returned runtime.encode e.returned) v := by
+        (R1Z.PV_FXM_ReserveSelected.returned runtime.encode e.returned) v) := by
   letI : ExternalFuns := R1Z.PV_RunJoin_AllocatorWorld63.selectedAt runtime ops w
   rw [source_prefix]
   simp only [R1Z.PV_RunJoin_AllocatorWorld63.complete,bind_tc_ok,Aeneas.Std.uncurry]
