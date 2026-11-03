@@ -110,7 +110,7 @@ body('alloc/src/vec/mod.rs','''fn drop(&mut self) {
 if '--bodies-only' in sys.argv:
  print('Pinned complete std bodies:',len(rows),'token checks passed; proof correspondence NOT checked')
  raise SystemExit(0)
-modules=['RetainedMethods','RetainedSpine','RetainedFacts','TrustedStores','OwnedDrain','OwnedPush']
+modules=['RetainedMethods','RetainedSpine','RetainedFacts','TrustedStores','OwnedDrain','OwnedPush','RetainedErase','CounterBounds']
 accepted={v['module']:v for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
 models={}
 for m in modules:

@@ -1,0 +1,173 @@
+{
+  "source_revision": "304f4c6ff2ea63595f0b19ef0f697809741c24be",
+  "evidence_class": "structural reserved-store/drop argument; not a complete native worker association",
+  "std_toolchain": "1.94.1",
+  "profile": {
+    "release": true,
+    "panic": "abort",
+    "debug_assertions": false,
+    "overflow_checks": false
+  },
+  "bodies": [
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "full_body": "pub fn push(&mut self, value: T) { let _ = self.push_mut(value); }",
+      "token_sha256": "9a1f5c6fe81e4c209b8821b6373715165ad2c2f0f0b581b09ef6b456ab1d51df",
+      "complete_body_checked": true,
+      "correspondence": [
+        "delegate push_mut; returned reference unused"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "full_body": "pub fn push_mut(&mut self, value: T) -> &mut T {\n let len = self.len;\n if len == self.buf.capacity() { self.buf.grow_one(); }\n unsafe { let end = self.as_mut_ptr().add(len); ptr::write(end, value);\n self.len = len + 1; &mut *end }\n}",
+      "token_sha256": "352a328eac59e73409de6012bf0f0baefde487def255e851b3bd000d606f5138",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedPush.no_growth proves guard false ONLY on reserved domain",
+        "OwnedPush.stores writes value, increments initialized length, retains allocation/reservation",
+        "returned borrow discarded by Vec.push; no mutable restoration is discarded by an extraction"
+      ],
+      "remaining": [
+        "grow_one for handles remains unbound; memory primitive/codegen boundary V370"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "full_body": "fn extend_trusted(&mut self, iterator: impl iter::TrustedLen<Item = T>) {\n let (low, high) = iterator.size_hint();\n if let Some(additional) = high {\n debug_assert_eq!(low, additional, \"TrustedLen iterator's size hint is not exact: {:?}\", (low, high));\n self.reserve(additional);\n unsafe { let ptr = self.as_mut_ptr(); let mut local_len = SetLenOnDrop::new(&mut self.len);\n iterator.for_each(move |element| {\n ptr::write(ptr.add(local_len.current_len()), element); local_len.increment_len(1);\n }); }\n } else { panic!(\"capacity overflow\"); }\n}",
+      "token_sha256": "9144a6fc02b1384a7a74f723d2a58a027d5a66b09e34bae6565c5327c768082c",
+      "complete_body_checked": true,
+      "correspondence": [
+        "Range/Map TrustedLen selection and exact upper bound checked by D572 gate",
+        "release debug_assertions=false: debug formatting not reached",
+        "initial from_iter capacity covers reserve(additional); no second allocation",
+        "TrustedStores.beginCollect/write: local initialized prefix and unchanged borrowed published length",
+        "TrustedStores.drop_publishes: guard publishes initialized length on normal exit",
+        "TrustedStores.erasure preserves full outcomes/events/post-world to retained collector"
+      ],
+      "remaining": [
+        "iterator/closure native lifecycle; runtime fault diagnostics and allocator binding; None branch unreachable for reached ranges"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/set_len_on_drop.rs",
+      "full_body": "pub(super) fn new(len: &'a mut usize) -> Self {\n SetLenOnDrop { local_len: *len, len }\n}",
+      "token_sha256": "3fce76d2985b190c35df8084b2785fc741d2f2399c0544a21a7eddc8397bcc27",
+      "complete_body_checked": true,
+      "correspondence": [
+        "TrustedStores.beginCollect copies initial length and retains borrowed field"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/set_len_on_drop.rs",
+      "full_body": "pub(super) fn increment_len(&mut self, increment: usize) {\n self.local_len += increment;\n}",
+      "token_sha256": "8bdfcd5cf4e169b4b24a91ef1238e9a3df681451c7bfb9aa96b56ccd2fbec1f1",
+      "complete_body_checked": true,
+      "correspondence": [
+        "TrustedStores.write_order specializes increment=1; room bounds arithmetic by Usize.max"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/set_len_on_drop.rs",
+      "full_body": "pub(super) fn current_len(&self) -> usize { self.local_len }",
+      "token_sha256": "90dfee3d87bcf8c5dff8bdcb1f57542205eee98598dcb40505f5579c8651b2da",
+      "complete_body_checked": true,
+      "correspondence": [
+        "TrustedStores.Frame.initialized.values.length is local_len"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/set_len_on_drop.rs",
+      "full_body": "fn drop(&mut self) { *self.len = self.local_len; }",
+      "token_sha256": "58807f6e9caef47d76b5eb01a34bac558d4a1871f843ad491b816ab927026566",
+      "complete_body_checked": true,
+      "correspondence": [
+        "TrustedStores.publish/drop_publishes; panic=abort does not run an unwind destructor"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "const fn capacity(&self, elem_size: usize) -> usize {\n if elem_size == 0 { usize::MAX } else { self.cap.as_inner() }\n}",
+      "token_sha256": "ebb9e1b537c4763cad4dd991376aee4ff3e2a03eb42e74bb2db7498d9dfa2aa8",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedDrain.capacity: exact capacity derived from raw metadata including ZST"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "unsafe fn deallocate(&mut self, elem_layout: Layout) {\n if let Some((ptr, layout)) = unsafe { self.current_memory(elem_layout) } {\n unsafe { self.alloc.deallocate(ptr, layout); }\n }\n}",
+      "token_sha256": "8f230d7cf8f6bfba75a5dc1e8ec8973da77bdcfb2f1e5d4b0be453541c72c51d",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedDrain.release: no request on None; exact retained allocation on Some"
+      ],
+      "remaining": [
+        "Global/System deallocation and native heap/event interpretation"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "const unsafe fn current_memory(&self, elem_layout: Layout) -> Option<(NonNull<u8>, Layout)> {\n if elem_layout.size() == 0 || self.cap.as_inner() == 0 { None } else {\n unsafe { let alloc_size = elem_layout.size().unchecked_mul(self.cap.as_inner());\n let layout = Layout::from_size_align_unchecked(alloc_size, elem_layout.align());\n Some((self.ptr.into(), layout)) }\n }\n}",
+      "token_sha256": "0ae17d0219e0e112656c17604edf20186642b2060e07ce8ed8605bae53f8e3eb",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedDrain.release: None on ZST/raw capacity zero; otherwise ORIGINAL pointer, size*rawCapacity, alignment",
+        "OwnedDrain.ownership/empty_donor_release: draining to zero preserves the original allocation and release layout"
+      ],
+      "remaining": [
+        "native allocation validity/disjointness and size*rawCapacity<=isize::MAX; release event codec"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "fn drop(&mut self) { unsafe { self.inner.deallocate(T::LAYOUT) } }",
+      "token_sha256": "7951a25d4f14c7e318ff5917fb54952b87b27d0fe2e4cea162010a868ce8e669",
+      "complete_body_checked": true,
+      "correspondence": [
+        "RawVec drop deallocates the retained allocation, independent of initialized length"
+      ],
+      "remaining": [
+        "deallocate/Global implementation and native release event codec"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "full_body": "fn drop(&mut self) {\n unsafe { ptr::drop_in_place(ptr::slice_from_raw_parts_mut(self.as_mut_ptr(), self.len)) }\n}",
+      "token_sha256": "1c8633b8bf321b123bf4589e07ccf1555e727a136517f48b63a6ae9b8dbbc37a",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedDrain.ownership: donor has zero initialized elements, hence no element destructor",
+        "implicit field drop then calls RawVec drop with retained allocation"
+      ],
+      "remaining": [
+        "drop-glue/compiler boundary V370; IntoIter and nonempty failure cleanup remain separate"
+      ]
+    }
+  ],
+  "models": {
+    "RetainedMethods": "8c6e95acd44138a5aedd291dfafd527c9e88ffeae7a46a281b8c11167ebfc389",
+    "RetainedSpine": "0352f673919e5c1a6e965ff11bf844a76a42fbe09b037a801b2b3c25c0b9e59c",
+    "RetainedFacts": "a9e52fbe83cd1446ac85e8831ee22fc8fdc7e00f824c118f08dc3e8a9b9eb438",
+    "TrustedStores": "73099b8123572588dfd26271a1e6881b0b750a0d537a1cffd70e6ffca1a17b8d",
+    "OwnedDrain": "645ece19b609fe4e64e7cad2c9830f9fa000e8bfcdba63e29514b5c27d525e34",
+    "OwnedPush": "4598238bc20c0935fa065be471ba643b38a4264dbd49a376a8e5ae8fdee7d663",
+    "RetainedErase": "6e1c3b495d7f8d7018e0e56fbb2a808aca3799eb4dd98fbe2e3fdc9e5bdbee6c",
+    "CounterBounds": "312bbc4fdaf577f3606a53a061d74eae4acfe367e72547ad081f034097dd3148"
+  },
+  "source_binding_complete": false,
+  "op257_installed": false,
+  "reached_success": false,
+  "remaining": [
+    "Native allocation ownership/lifetimes and concrete layouts in actual world",
+    "Growing handle push, thread/TLS/scope/join/native schedule/EVH codec",
+    "Actual opsNative and NativeControl stateful installation",
+    "Discharge actual callback success then actual capture and Nonempty P"
+  ]
+}

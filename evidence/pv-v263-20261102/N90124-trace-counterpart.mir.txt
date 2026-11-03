@@ -1,0 +1,2775 @@
+// WARNING: This output format is intended for human consumers only
+// and is subject to change without notice. Knock yourself out.
+// HINT: See also -Z dump-mir for MIR at specific points during compilation.
+const ACTIVE: LocalKey<Cell<bool>> = {
+    let mut _0: std::thread::LocalKey<std::cell::Cell<bool>>;
+
+    bb0: {
+        ConstEvalCounter;
+        _0 = LocalKey::<Cell<bool>>::new(const host_work::pool::ACTIVE::{constant#0}) -> [return: bb1, unwind: bb2];
+    }
+
+    bb1: {
+        return;
+    }
+
+    bb2 (cleanup): {
+        resume;
+    }
+}
+
+const __RUST_STD_INTERNAL_INIT: Cell<bool> = {
+    let mut _0: std::cell::Cell<bool>;
+
+    bb0: {
+        ConstEvalCounter;
+        _0 = Cell::<bool>::new(const false) -> [return: bb1, unwind: bb2];
+    }
+
+    bb1: {
+        return;
+    }
+
+    bb2 (cleanup): {
+        resume;
+    }
+}
+
+ACTIVE::{constant#0}: for<'a> fn(Option<&'a mut Option<Cell<bool>>>) -> *const Cell<bool> = {
+    let mut _0: for<'a> fn(std::option::Option<&'a mut std::option::Option<std::cell::Cell<bool>>>) -> *const std::cell::Cell<bool>;
+    let mut _1: bool;
+    let mut _2: {closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:63:21: 63:24};
+    let mut _3: {closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:71:21: 71:24};
+
+    bb0: {
+        StorageLive(_1);
+        ConstEvalCounter;
+        _1 = std::mem::needs_drop::<Cell<bool>>() -> [return: bb1, unwind: bb5];
+    }
+
+    bb1: {
+        switchInt(move _1) -> [0: bb3, otherwise: bb2];
+    }
+
+    bb2: {
+        StorageLive(_2);
+        _2 = {closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:63:21: 63:24};
+        _0 = move _2 as for<'a> fn(std::option::Option<&'a mut std::option::Option<std::cell::Cell<bool>>>) -> *const std::cell::Cell<bool> (PointerCoercion(ClosureFnPointer(Safe), Implicit));
+        StorageDead(_2);
+        goto -> bb4;
+    }
+
+    bb3: {
+        StorageLive(_3);
+        _3 = {closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:71:21: 71:24};
+        _0 = move _3 as for<'a> fn(std::option::Option<&'a mut std::option::Option<std::cell::Cell<bool>>>) -> *const std::cell::Cell<bool> (PointerCoercion(ClosureFnPointer(Safe), Implicit));
+        StorageDead(_3);
+        goto -> bb4;
+    }
+
+    bb4: {
+        StorageDead(_1);
+        return;
+    }
+
+    bb5 (cleanup): {
+        resume;
+    }
+}
+
+fn ACTIVE::{constant#0}::{closure#0}(_1: &{closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:63:21: 63:24}, _2: Option<&mut Option<Cell<bool>>>) -> *const Cell<bool> {
+    let mut _0: *const std::cell::Cell<bool>;
+    let _3: &std::thread::local_impl::EagerStorage<std::cell::Cell<bool>>;
+    scope 1 (inlined EagerStorage::<Cell<bool>>::get) {
+        let mut _4: std::sys::thread_local::native::eager::State;
+        let mut _5: isize;
+        scope 2 (inlined Cell::<std::sys::thread_local::native::eager::State>::get) {
+            let mut _6: *mut std::sys::thread_local::native::eager::State;
+            scope 3 (inlined UnsafeCell::<std::sys::thread_local::native::eager::State>::get) {
+                let mut _7: *const std::cell::UnsafeCell<std::sys::thread_local::native::eager::State>;
+            }
+        }
+        scope 4 (inlined null::<Cell<bool>>) {
+            scope 5 (inlined std::ptr::without_provenance::<()>) {
+                scope 6 (inlined without_provenance_mut::<()>) {
+                }
+            }
+            scope 7 (inlined std::ptr::from_raw_parts::<Cell<bool>, ()>) {
+            }
+        }
+        scope 8 (inlined UnsafeCell::<Cell<bool>>::get) {
+            let mut _8: *const std::cell::UnsafeCell<std::cell::Cell<bool>>;
+        }
+    }
+
+    bb0: {
+        _3 = &/*tls*/ ACTIVE::{constant#0}::{closure#0}::__RUST_STD_INTERNAL_VAL;
+        StorageLive(_5);
+        StorageLive(_8);
+        StorageLive(_4);
+        StorageLive(_6);
+        StorageLive(_7);
+        _7 = &raw const (((*_3).1: std::cell::Cell<std::sys::thread_local::native::eager::State>).0: std::cell::UnsafeCell<std::sys::thread_local::native::eager::State>);
+        _6 = copy _7 as *mut std::sys::thread_local::native::eager::State (PtrToPtr);
+        StorageDead(_7);
+        _4 = copy (*_6);
+        StorageDead(_6);
+        _5 = discriminant(_4);
+        switchInt(move _5) -> [0: bb2, 1: bb4, 2: bb3, otherwise: bb1];
+    }
+
+    bb1: {
+        unreachable;
+    }
+
+    bb2: {
+        _0 = EagerStorage::<Cell<bool>>::initialize(move _3) -> [return: bb5, unwind unreachable];
+    }
+
+    bb3: {
+        _0 = const {0x0 as *const Cell<bool>};
+        goto -> bb5;
+    }
+
+    bb4: {
+        _8 = &raw const ((*_3).0: std::cell::UnsafeCell<std::cell::Cell<bool>>);
+        _0 = copy _8 as *const std::cell::Cell<bool> (PtrToPtr);
+        goto -> bb5;
+    }
+
+    bb5: {
+        StorageDead(_4);
+        StorageDead(_8);
+        StorageDead(_5);
+        return;
+    }
+}
+
+static ACTIVE::{constant#0}::{closure#0}::__RUST_STD_INTERNAL_VAL: EagerStorage<Cell<bool>> = {
+    let mut _0: std::thread::local_impl::EagerStorage<std::cell::Cell<bool>>;
+
+    bb0: {
+        ConstEvalCounter;
+        _0 = EagerStorage::<Cell<bool>>::new(const host_work::pool::ACTIVE::__RUST_STD_INTERNAL_INIT) -> [return: bb1, unwind: bb2];
+    }
+
+    bb1: {
+        return;
+    }
+
+    bb2 (cleanup): {
+        resume;
+    }
+}
+
+fn ACTIVE::{constant#0}::{closure#1}(_1: &{closure@/home/dombarker/.rustup/toolchains/1.94.1-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/std/src/sys/thread_local/native/mod.rs:71:21: 71:24}, _2: Option<&mut Option<Cell<bool>>>) -> *const Cell<bool> {
+    let mut _0: *const std::cell::Cell<bool>;
+    let _3: &std::cell::Cell<bool>;
+
+    bb0: {
+        _3 = &/*tls*/ ACTIVE::{constant#0}::{closure#1}::__RUST_STD_INTERNAL_VAL;
+        _0 = &raw const (*_3);
+        return;
+    }
+}
+
+static ACTIVE::{constant#0}::{closure#1}::__RUST_STD_INTERNAL_VAL: Cell<bool> = {
+    let mut _0: std::cell::Cell<bool>;
+
+    bb0: {
+        _0 = const host_work::pool::ACTIVE::__RUST_STD_INTERNAL_INIT;
+        return;
+    }
+}
+
+const THREADS: usize = const 16_usize;
+
+fn pool::range(_1: usize, _2: usize) -> (usize, usize) {
+    debug n => _1;
+    debug k => _2;
+    let mut _0: (usize, usize);
+    let mut _3: bool;
+    let mut _4: !;
+    let _5: usize;
+    let mut _8: usize;
+    let mut _9: usize;
+    let mut _10: usize;
+    let mut _11: usize;
+    let mut _12: usize;
+    let mut _13: bool;
+    scope 1 {
+        debug q => _5;
+        let _6: usize;
+        scope 2 {
+            debug r => _6;
+            let _7: usize;
+            scope 3 {
+                debug start => _7;
+            }
+            scope 4 (inlined std::cmp::min::<usize>) {
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_3);
+        _3 = Lt(copy _2, const host_work::pool::THREADS);
+        switchInt(move _3) -> [0: bb2, otherwise: bb1];
+    }
+
+    bb1: {
+        StorageDead(_3);
+        _5 = Div(copy _1, const host_work::pool::THREADS);
+        _6 = Rem(copy _1, const host_work::pool::THREADS);
+        StorageLive(_8);
+        _8 = Mul(copy _5, copy _2);
+        StorageLive(_9);
+        _9 = <usize as Ord>::min(copy _2, copy _6) -> [return: bb3, unwind unreachable];
+    }
+
+    bb2: {
+        _4 = panic(const "assertion failed: k < THREADS") -> unwind unreachable;
+    }
+
+    bb3: {
+        _7 = Add(move _8, move _9);
+        StorageDead(_9);
+        StorageDead(_8);
+        StorageLive(_10);
+        StorageLive(_11);
+        _11 = Add(copy _7, copy _5);
+        StorageLive(_12);
+        StorageLive(_13);
+        _13 = Lt(copy _2, copy _6);
+        _12 = move _13 as usize (IntToInt);
+        StorageDead(_13);
+        _10 = Add(move _11, move _12);
+        StorageDead(_12);
+        StorageDead(_11);
+        _0 = (copy _7, move _10);
+        StorageDead(_10);
+        return;
+    }
+}
+
+alloc129 (size: 29, align: 1) {
+    0x00 │ 61 73 73 65 72 74 69 6f 6e 20 66 61 69 6c 65 64 │ assertion failed
+    0x10 │ 3a 20 6b 20 3c 20 54 48 52 45 41 44 53          │ : k < THREADS
+}
+
+fn is_worker() -> bool {
+    let mut _0: bool;
+
+    bb0: {
+        _0 = LocalKey::<Cell<bool>>::with::<for<'a> fn(&'a Cell<bool>) -> bool {Cell::<bool>::get}, bool>(const host_work::pool::is_worker::promoted[0], Cell::<bool>::get) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        return;
+    }
+}
+
+const is_worker::promoted[0]: &LocalKey<Cell<bool>> = {
+    let mut _0: &std::thread::LocalKey<std::cell::Cell<bool>>;
+    let mut _1: std::thread::LocalKey<std::cell::Cell<bool>>;
+
+    bb0: {
+        _1 = const host_work::pool::ACTIVE;
+        _0 = &_1;
+        return;
+    }
+}
+
+fn pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:17:1: 17:12>::enter() -> Active {
+    let mut _0: host_work::pool::Active;
+    let mut _1: bool;
+
+    bb0: {
+        StorageLive(_1);
+        _1 = LocalKey::<Cell<bool>>::with::<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:43: 18:46}, bool>(const host_work::pool::Active::enter::promoted[0], const ZeroSized: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:43: 18:46}) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        _0 = Active(move _1);
+        StorageDead(_1);
+        return;
+    }
+}
+
+const pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:17:1: 17:12>::enter::promoted[0]: &LocalKey<Cell<bool>> = {
+    let mut _0: &std::thread::LocalKey<std::cell::Cell<bool>>;
+    let mut _1: std::thread::LocalKey<std::cell::Cell<bool>>;
+
+    bb0: {
+        _1 = const host_work::pool::ACTIVE;
+        _0 = &_1;
+        return;
+    }
+}
+
+fn pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:17:1: 17:12>::enter::{closure#0}(_1: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:18:43: 18:46}, _2: &Cell<bool>) -> bool {
+    debug a => _2;
+    let mut _0: bool;
+    scope 1 (inlined Cell::<bool>::replace) {
+        let mut _3: *mut bool;
+        scope 2 (inlined UnsafeCell::<bool>::get) {
+            let mut _4: *const std::cell::UnsafeCell<bool>;
+        }
+        scope 3 (inlined std::mem::replace::<bool>) {
+            scope 4 {
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_3);
+        StorageLive(_4);
+        _4 = &raw const ((*_2).0: std::cell::UnsafeCell<bool>);
+        _3 = copy _4 as *mut bool (PtrToPtr);
+        StorageDead(_4);
+        _0 = copy (*_3);
+        (*_3) = const true;
+        StorageDead(_3);
+        return;
+    }
+}
+
+fn pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:1: 20:21>::drop(_1: &mut Active) -> () {
+    debug self => _1;
+    let mut _0: ();
+    let _2: ();
+    let mut _3: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:54: 20:57};
+    let mut _4: &bool;
+
+    bb0: {
+        StorageLive(_3);
+        StorageLive(_4);
+        _4 = &((*_1).0: bool);
+        _3 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:54: 20:57} { self: copy _4 };
+        StorageDead(_4);
+        _2 = LocalKey::<Cell<bool>>::with::<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:54: 20:57}, ()>(const <host_work::pool::Active as std::ops::Drop>::drop::promoted[0], move _3) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        StorageDead(_3);
+        return;
+    }
+}
+
+const pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:1: 20:21>::drop::promoted[0]: &LocalKey<Cell<bool>> = {
+    let mut _0: &std::thread::LocalKey<std::cell::Cell<bool>>;
+    let mut _1: std::thread::LocalKey<std::cell::Cell<bool>>;
+
+    bb0: {
+        _1 = const host_work::pool::ACTIVE;
+        _0 = &_1;
+        return;
+    }
+}
+
+fn pool::<impl at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:1: 20:21>::drop::{closure#0}(_1: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:20:54: 20:57}, _2: &Cell<bool>) -> () {
+    debug a => _2;
+    debug self__0 => (*(_1.0: &bool));
+    let mut _0: ();
+    let mut _3: bool;
+    let mut _4: &bool;
+    scope 1 (inlined Cell::<bool>::set) {
+        scope 2 (inlined Cell::<bool>::replace) {
+            let mut _5: *mut bool;
+            scope 3 (inlined UnsafeCell::<bool>::get) {
+                let mut _6: *const std::cell::UnsafeCell<bool>;
+            }
+            scope 4 (inlined std::mem::replace::<bool>) {
+                scope 5 {
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_3);
+        _4 = copy (_1.0: &bool);
+        _3 = copy (*_4);
+        StorageLive(_5);
+        StorageLive(_6);
+        _6 = &raw const ((*_2).0: std::cell::UnsafeCell<bool>);
+        _5 = copy _6 as *mut bool (PtrToPtr);
+        StorageDead(_6);
+        (*_5) = copy _3;
+        StorageDead(_5);
+        StorageDead(_3);
+        return;
+    }
+}
+
+fn ordered_map(_1: usize, _2: F) -> Vec<T> {
+    debug n => _1;
+    debug f => _2;
+    let mut _0: std::vec::Vec<T>;
+
+    bb0: {
+        _0 = ordered_map_inner::<T, F>(move _1, move _2, const false) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        return;
+    }
+}
+
+fn ordered_families(_1: usize, _2: F) -> Vec<T> {
+    debug n => _1;
+    debug f => _2;
+    let mut _0: std::vec::Vec<T>;
+
+    bb0: {
+        _0 = ordered_map_inner::<T, F>(move _1, move _2, const true) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        return;
+    }
+}
+
+fn ordered_map_inner(_1: usize, _2: F, _3: bool) -> Vec<T> {
+    debug n => _1;
+    debug f => _2;
+    debug force => _3;
+    let mut _0: std::vec::Vec<T>;
+    let mut _4: bool;
+    let mut _5: bool;
+    let mut _6: std::iter::Map<std::ops::Range<usize>, F>;
+    let mut _7: std::ops::Range<usize>;
+    let mut _8: F;
+    let _9: host_work::pool::Active;
+    let mut _11: &usize;
+    let mut _12: &F;
+    let mut _14: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:40:37: 40:44};
+    let mut _15: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18};
+    let mut _17: std::vec::IntoIter<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _19: std::option::Option<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _20: &mut std::vec::IntoIter<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _21: isize;
+    let mut _23: isize;
+    let mut _25: &mut std::vec::Vec<T>;
+    let mut _27: !;
+    let mut _30: std::alloc::Layout;
+    let mut _57: usize;
+    let mut _58: core::num::niche_types::UsizeNoHighBit;
+    let mut _59: std::ptr::NonNull<u8>;
+    scope 1 {
+        debug _active => _9;
+        let _10: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18};
+        scope 2 {
+            debug run => _10;
+            let _13: std::vec::Vec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+            scope 3 {
+                debug chunks => _13;
+                let mut _16: std::vec::Vec<T>;
+                scope 4 {
+                    debug out => _16;
+                    let mut _18: std::vec::IntoIter<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                    scope 5 {
+                        debug iter => _18;
+                        let _22: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                        scope 6 {
+                            debug chunk => _22;
+                            let mut _24: std::vec::Vec<T>;
+                            let _26: std::boxed::Box<dyn std::any::Any + std::marker::Send>;
+                            scope 7 {
+                                debug v => _24;
+                                scope 88 (inlined Vec::<T>::append) {
+                                    scope 89 (inlined Vec::<T>::as_slice) {
+                                        let mut _48: *const T;
+                                        let mut _49: usize;
+                                        scope 90 (inlined Vec::<T>::as_ptr) {
+                                            scope 91 (inlined alloc::raw_vec::RawVec::<T>::ptr) {
+                                                scope 92 (inlined alloc::raw_vec::RawVecInner::ptr::<T>) {
+                                                    scope 93 (inlined alloc::raw_vec::RawVecInner::non_null::<T>) {
+                                                        let mut _50: std::ptr::NonNull<u8>;
+                                                        scope 94 (inlined Unique::<u8>::cast::<T>) {
+                                                            scope 95 (inlined NonNull::<u8>::cast::<T>) {
+                                                                scope 96 (inlined NonNull::<u8>::as_ptr) {
+                                                                }
+                                                            }
+                                                        }
+                                                        scope 97 (inlined Unique::<T>::as_non_null_ptr) {
+                                                        }
+                                                    }
+                                                    scope 98 (inlined NonNull::<T>::as_ptr) {
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    scope 99 (inlined Vec::<T>::set_len) {
+                                        scope 100 (inlined Vec::<T>::capacity) {
+                                            scope 101 (inlined alloc::raw_vec::RawVec::<T>::capacity) {
+                                                scope 102 (inlined std::mem::size_of::<T>) {
+                                                }
+                                                scope 103 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                                    scope 104 (inlined UsizeNoHighBit::as_inner) {
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    scope 105 (inlined Vec::<T>::append_elements) {
+                                        let _51: ();
+                                        let mut _53: *mut T;
+                                        let mut _54: *mut T;
+                                        scope 106 {
+                                            let _52: usize;
+                                            scope 107 {
+                                                scope 112 (inlined Vec::<T>::as_mut_ptr) {
+                                                    scope 113 (inlined alloc::raw_vec::RawVec::<T>::ptr) {
+                                                        scope 114 (inlined alloc::raw_vec::RawVecInner::ptr::<T>) {
+                                                            scope 115 (inlined alloc::raw_vec::RawVecInner::non_null::<T>) {
+                                                                let mut _56: std::ptr::NonNull<u8>;
+                                                                scope 116 (inlined Unique::<u8>::cast::<T>) {
+                                                                    scope 117 (inlined NonNull::<u8>::cast::<T>) {
+                                                                        scope 118 (inlined NonNull::<u8>::as_ptr) {
+                                                                        }
+                                                                    }
+                                                                }
+                                                                scope 119 (inlined Unique::<T>::as_non_null_ptr) {
+                                                                }
+                                                            }
+                                                            scope 120 (inlined NonNull::<T>::as_ptr) {
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                scope 121 (inlined #[track_caller] std::ptr::mut_ptr::<impl *mut T>::add) {
+                                                }
+                                                scope 122 (inlined std::ptr::copy_nonoverlapping::<T>) {
+                                                    scope 123 (inlined ub_checks::check_language_ub) {
+                                                        scope 124 (inlined ub_checks::check_language_ub::runtime) {
+                                                        }
+                                                    }
+                                                    scope 125 (inlined std::mem::size_of::<T>) {
+                                                    }
+                                                    scope 126 (inlined std::mem::align_of::<T>) {
+                                                    }
+                                                }
+                                            }
+                                            scope 110 (inlined Vec::<T>::len) {
+                                                let mut _55: bool;
+                                                scope 111 {
+                                                }
+                                            }
+                                        }
+                                        scope 108 (inlined std::ptr::const_ptr::<impl *const [T]>::len) {
+                                            scope 109 (inlined std::ptr::metadata::<[T]>) {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            scope 8 {
+                                debug p => _26;
+                            }
+                        }
+                    }
+                    scope 40 (inlined <Vec<Result<Vec<T>, Box<dyn Any + Send>>> as IntoIterator>::into_iter) {
+                        let mut _43: *const std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                        let mut _44: *mut std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                        scope 41 {
+                            scope 42 {
+                                let _41: std::ptr::NonNull<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                                scope 43 {
+                                    let _42: *mut std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                                    scope 44 {
+                                        scope 45 {
+                                            let _45: usize;
+                                            scope 46 {
+                                            }
+                                            scope 82 (inlined <ManuallyDrop<Vec<Result<Vec<T>, Box<dyn Any + Send>>>> as Deref>::deref) {
+                                                scope 83 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::as_ref) {
+                                                }
+                                            }
+                                            scope 84 (inlined alloc::raw_vec::RawVec::<Result<Vec<T>, Box<dyn Any + Send>>>::capacity) {
+                                                scope 85 (inlined std::mem::size_of::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                                }
+                                                scope 86 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                                    scope 87 (inlined UsizeNoHighBit::as_inner) {
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        scope 66 (inlined <ManuallyDrop<Vec<Result<Vec<T>, Box<dyn Any + Send>>>> as Deref>::deref) {
+                                            scope 67 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::as_ref) {
+                                            }
+                                        }
+                                        scope 68 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::len) {
+                                            scope 69 {
+                                            }
+                                        }
+                                        scope 70 (inlined std::ptr::mut_ptr::<impl *mut Result<Vec<T>, Box<dyn Any + Send>>>::wrapping_byte_add) {
+                                            scope 71 (inlined std::ptr::mut_ptr::<impl *mut Result<Vec<T>, Box<dyn Any + Send>>>::cast::<u8>) {
+                                            }
+                                            scope 72 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_add) {
+                                                scope 73 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_offset) {
+                                                }
+                                            }
+                                            scope 74 (inlined std::ptr::mut_ptr::<impl *mut u8>::with_metadata_of::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                                scope 75 (inlined std::ptr::metadata::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                                }
+                                                scope 76 (inlined std::ptr::from_raw_parts_mut::<Result<Vec<T>, Box<dyn Any + Send>>, ()>) {
+                                                }
+                                            }
+                                        }
+                                        scope 77 (inlined <ManuallyDrop<Vec<Result<Vec<T>, Box<dyn Any + Send>>>> as Deref>::deref) {
+                                            scope 78 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::as_ref) {
+                                            }
+                                        }
+                                        scope 79 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::len) {
+                                            let mut _47: bool;
+                                            scope 80 {
+                                            }
+                                        }
+                                        scope 81 (inlined #[track_caller] std::ptr::mut_ptr::<impl *mut Result<Vec<T>, Box<dyn Any + Send>>>::add) {
+                                        }
+                                    }
+                                    scope 65 (inlined NonNull::<Result<Vec<T>, Box<dyn Any + Send>>>::as_ptr) {
+                                    }
+                                }
+                                scope 57 (inlined <ManuallyDrop<Vec<Result<Vec<T>, Box<dyn Any + Send>>>> as Deref>::deref) {
+                                    scope 58 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::as_ref) {
+                                    }
+                                }
+                                scope 59 (inlined alloc::raw_vec::RawVec::<Result<Vec<T>, Box<dyn Any + Send>>>::non_null) {
+                                    scope 60 (inlined alloc::raw_vec::RawVecInner::non_null::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                        scope 61 (inlined Unique::<u8>::cast::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                            scope 62 (inlined NonNull::<u8>::cast::<Result<Vec<T>, Box<dyn Any + Send>>>) {
+                                                let mut _46: *const std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                                                scope 63 (inlined NonNull::<u8>::as_ptr) {
+                                                }
+                                            }
+                                        }
+                                        scope 64 (inlined Unique::<Result<Vec<T>, Box<dyn Any + Send>>>::as_non_null_ptr) {
+                                        }
+                                    }
+                                }
+                            }
+                            scope 49 (inlined <ManuallyDrop<Vec<Result<Vec<T>, Box<dyn Any + Send>>>> as Deref>::deref) {
+                                scope 50 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::as_ref) {
+                                }
+                            }
+                            scope 51 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::allocator) {
+                                scope 52 (inlined alloc::raw_vec::RawVec::<Result<Vec<T>, Box<dyn Any + Send>>>::allocator) {
+                                    scope 53 (inlined alloc::raw_vec::RawVecInner::allocator) {
+                                    }
+                                }
+                            }
+                            scope 54 (inlined #[track_caller] std::ptr::read::<std::alloc::Global>) {
+                            }
+                            scope 55 (inlined ManuallyDrop::<std::alloc::Global>::new) {
+                                scope 56 (inlined MaybeDangling::<std::alloc::Global>::new) {
+                                }
+                            }
+                        }
+                        scope 47 (inlined ManuallyDrop::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::new) {
+                            scope 48 (inlined MaybeDangling::<Vec<Result<Vec<T>, Box<dyn Any + Send>>>>::new) {
+                            }
+                        }
+                    }
+                }
+                scope 26 (inlined Vec::<T>::with_capacity) {
+                    scope 27 (inlined Vec::<T>::with_capacity_in) {
+                        let mut _28: alloc::raw_vec::RawVec<T>;
+                        scope 28 (inlined alloc::raw_vec::RawVec::<T>::with_capacity_in) {
+                            let mut _29: alloc::raw_vec::RawVecInner;
+                            scope 29 (inlined alloc::raw_vec::RawVecInner::with_capacity_in) {
+                                let mut _31: std::result::Result<alloc::raw_vec::RawVecInner, std::collections::TryReserveError>;
+                                let mut _32: isize;
+                                let mut _33: bool;
+                                let mut _34: bool;
+                                let _35: std::collections::TryReserveError;
+                                let mut _36: !;
+                                scope 30 {
+                                    scope 32 (inlined alloc::raw_vec::RawVecInner::needs_to_grow) {
+                                        let mut _37: usize;
+                                        let mut _38: usize;
+                                        let mut _39: usize;
+                                        scope 33 (inlined Layout::size) {
+                                        }
+                                        scope 34 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                            let mut _40: core::num::niche_types::UsizeNoHighBit;
+                                            scope 35 (inlined UsizeNoHighBit::as_inner) {
+                                            }
+                                        }
+                                        scope 36 (inlined core::num::<impl usize>::wrapping_sub) {
+                                        }
+                                    }
+                                    scope 37 (inlined #[track_caller] assert_unchecked) {
+                                        scope 38 (inlined ub_checks::check_language_ub) {
+                                            scope 39 (inlined ub_checks::check_language_ub::runtime) {
+                                            }
+                                        }
+                                    }
+                                }
+                                scope 31 {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    scope 9 (inlined <std::ops::Range<usize> as Iterator>::map::<T, F>) {
+        scope 10 (inlined Map::<std::ops::Range<usize>, F>::new) {
+        }
+    }
+    scope 11 (inlined <Map<std::ops::Range<usize>, F> as Iterator>::collect::<Vec<T>>) {
+        scope 12 {
+            scope 13 {
+                scope 14 {
+                    scope 23 (inlined Arguments::<'_>::new::<23, 1>) {
+                    }
+                }
+                scope 18 (inlined core::fmt::rt::Argument::<'_>::new_debug::<(usize, Option<usize>)>) {
+                    scope 19 {
+                    }
+                    scope 20 (inlined NonNull::<(usize, Option<usize>)>::from_ref) {
+                    }
+                    scope 21 (inlined NonNull::<(usize, Option<usize>)>::cast::<()>) {
+                        scope 22 (inlined NonNull::<(usize, Option<usize>)>::as_ptr) {
+                        }
+                    }
+                }
+            }
+            scope 15 (inlined Option::<usize>::is_none_or::<{closure@<Map<std::ops::Range<usize>, F> as Iterator>::collect<Vec<T>>::{closure#0}}>) {
+                scope 16 {
+                    scope 17 (inlined <Map<std::ops::Range<usize>, F> as Iterator>::collect::<Vec<T>>::{closure#0}) {
+                    }
+                }
+            }
+        }
+        scope 24 (inlined <Vec<T> as FromIterator<T>>::from_iter::<Map<std::ops::Range<usize>, F>>) {
+            scope 25 (inlined <Map<std::ops::Range<usize>, F> as IntoIterator>::into_iter) {
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_4);
+        _4 = Lt(copy _1, const 32_usize);
+        switchInt(move _4) -> [0: bb2, otherwise: bb1];
+    }
+
+    bb1: {
+        switchInt(copy _3) -> [0: bb4, otherwise: bb2];
+    }
+
+    bb2: {
+        StorageLive(_5);
+        _5 = is_worker() -> [return: bb3, unwind unreachable];
+    }
+
+    bb3: {
+        switchInt(move _5) -> [0: bb5, otherwise: bb4];
+    }
+
+    bb4: {
+        StorageLive(_7);
+        _7 = std::ops::Range::<usize> { start: const 0_usize, end: copy _1 };
+        StorageLive(_8);
+        _8 = move _2;
+        _6 = Map::<std::ops::Range<usize>, F> { iter: copy _7, f: copy _8 };
+        StorageDead(_8);
+        StorageDead(_7);
+        _0 = <Vec<T> as vec::spec_from_iter::SpecFromIter<T, Map<std::ops::Range<usize>, F>>>::from_iter(move _6) -> [return: bb19, unwind unreachable];
+    }
+
+    bb5: {
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageLive(_9);
+        _9 = Active::enter() -> [return: bb6, unwind unreachable];
+    }
+
+    bb6: {
+        StorageLive(_10);
+        StorageLive(_11);
+        _11 = &_1;
+        StorageLive(_12);
+        _12 = &_2;
+        _10 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18} { n: copy _11, f: copy _12 };
+        StorageDead(_12);
+        StorageDead(_11);
+        StorageLive(_13);
+        StorageLive(_14);
+        StorageLive(_15);
+        _15 = &_10;
+        _14 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:40:37: 40:44} { run: copy _15 };
+        StorageDead(_15);
+        _13 = scope::<'_, {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:40:37: 40:44}, Vec<Result<Vec<T>, Box<dyn Any + Send>>>>(move _14) -> [return: bb7, unwind unreachable];
+    }
+
+    bb7: {
+        StorageDead(_14);
+        StorageLive(_16);
+        StorageLive(_28);
+        StorageLive(_29);
+        StorageLive(_30);
+        _30 = const <T as std::mem::SizedTypeProperties>::LAYOUT;
+        StorageLive(_32);
+        StorageLive(_35);
+        StorageLive(_31);
+        _31 = alloc::raw_vec::RawVecInner::try_allocate_in(copy _1, const alloc::raw_vec::AllocInit::Uninitialized, const std::alloc::Global, copy _30) -> [return: bb20, unwind unreachable];
+    }
+
+    bb8: {
+        StorageLive(_19);
+        _20 = &mut _18;
+        _19 = <std::vec::IntoIter<Result<Vec<T>, Box<dyn Any + Send>>> as Iterator>::next(move _20) -> [return: bb9, unwind unreachable];
+    }
+
+    bb9: {
+        _21 = discriminant(_19);
+        switchInt(move _21) -> [0: bb12, 1: bb11, otherwise: bb10];
+    }
+
+    bb10: {
+        unreachable;
+    }
+
+    bb11: {
+        StorageLive(_22);
+        _22 = move ((_19 as Some).0: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>);
+        _23 = discriminant(_22);
+        switchInt(move _23) -> [0: bb14, 1: bb13, otherwise: bb10];
+    }
+
+    bb12: {
+        StorageDead(_19);
+        drop(_18) -> [return: bb16, unwind unreachable];
+    }
+
+    bb13: {
+        _26 = move ((_22 as Err).0: std::boxed::Box<dyn std::any::Any + std::marker::Send>);
+        _27 = resume_unwind(move _26) -> unwind unreachable;
+    }
+
+    bb14: {
+        StorageLive(_24);
+        _24 = move ((_22 as Ok).0: std::vec::Vec<T>);
+        StorageLive(_25);
+        _25 = &mut _16;
+        StorageLive(_50);
+        _50 = copy ((((_24.0: alloc::raw_vec::RawVec<T>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _48 = copy _50 as *const T (Transmute);
+        StorageDead(_50);
+        _49 = copy (_24.1: usize);
+        StorageLive(_52);
+        _51 = Vec::<T>::reserve(copy _25, copy _49) -> [return: bb26, unwind unreachable];
+    }
+
+    bb15: {
+        StorageDead(_24);
+        StorageDead(_22);
+        StorageDead(_19);
+        goto -> bb8;
+    }
+
+    bb16: {
+        StorageDead(_18);
+        StorageDead(_17);
+        _0 = move _16;
+        StorageDead(_16);
+        StorageDead(_13);
+        StorageDead(_10);
+        drop(_9) -> [return: bb17, unwind unreachable];
+    }
+
+    bb17: {
+        StorageDead(_9);
+        drop(_2) -> [return: bb18, unwind unreachable];
+    }
+
+    bb18: {
+        return;
+    }
+
+    bb19: {
+        StorageDead(_5);
+        StorageDead(_4);
+        goto -> bb18;
+    }
+
+    bb20: {
+        _32 = discriminant(_31);
+        switchInt(move _32) -> [0: bb22, 1: bb21, otherwise: bb10];
+    }
+
+    bb21: {
+        _35 = move ((_31 as Err).0: std::collections::TryReserveError);
+        _36 = alloc::raw_vec::handle_error(move _35) -> unwind unreachable;
+    }
+
+    bb22: {
+        _29 = move ((_31 as Ok).0: alloc::raw_vec::RawVecInner);
+        StorageLive(_33);
+        StorageLive(_34);
+        StorageLive(_37);
+        StorageLive(_38);
+        StorageLive(_39);
+        _39 = copy (_30.0: usize);
+        switchInt(copy _39) -> [0: bb24, otherwise: bb25];
+    }
+
+    bb23: {
+        StorageDead(_39);
+        _37 = Sub(copy _38, const 0_usize);
+        StorageDead(_38);
+        _34 = Gt(copy _1, move _37);
+        StorageDead(_37);
+        _33 = Not(move _34);
+        StorageDead(_34);
+        assume(copy _33);
+        StorageDead(_33);
+        StorageDead(_31);
+        StorageDead(_35);
+        StorageDead(_32);
+        StorageDead(_30);
+        _28 = alloc::raw_vec::RawVec::<T> { inner: move _29, _marker: const ZeroSized: PhantomData<T> };
+        StorageDead(_29);
+        _16 = Vec::<T> { buf: move _28, len: const 0_usize };
+        StorageDead(_28);
+        StorageLive(_17);
+        _59 = move ((((_13.0: alloc::raw_vec::RawVec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _58 = move (((_13.0: alloc::raw_vec::RawVec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>).0: alloc::raw_vec::RawVecInner).1: core::num::niche_types::UsizeNoHighBit);
+        _57 = move (_13.1: usize);
+        StorageLive(_41);
+        StorageLive(_42);
+        StorageLive(_43);
+        StorageLive(_45);
+        StorageLive(_46);
+        _46 = copy _59 as *const std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>> (Transmute);
+        _41 = NonNull::<Result<Vec<T>, Box<dyn Any + Send>>> { pointer: copy _46 };
+        _42 = copy _59 as *mut std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>> (Transmute);
+        StorageLive(_44);
+        StorageLive(_47);
+        _47 = Le(copy _57, const <std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>> as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _47);
+        StorageDead(_47);
+        _44 = Offset(copy _42, copy _57);
+        _43 = copy _44 as *const std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>> (PtrToPtr);
+        StorageDead(_44);
+        _45 = copy _58 as usize (Transmute);
+        _17 = std::vec::IntoIter::<Result<Vec<T>, Box<dyn Any + Send>>> { buf: copy _41, phantom: const ZeroSized: PhantomData<Result<Vec<T>, Box<dyn Any + Send>>>, cap: move _45, alloc: const ManuallyDrop::<std::alloc::Global> {{ value: MaybeDangling::<std::alloc::Global>(std::alloc::Global) }}, ptr: copy _41, end: copy _43 };
+        StorageDead(_46);
+        StorageDead(_45);
+        StorageDead(_43);
+        StorageDead(_42);
+        StorageDead(_41);
+        StorageLive(_18);
+        _18 = move _17;
+        goto -> bb8;
+    }
+
+    bb24: {
+        _38 = const usize::MAX;
+        goto -> bb23;
+    }
+
+    bb25: {
+        StorageLive(_40);
+        _40 = copy (_29.1: core::num::niche_types::UsizeNoHighBit);
+        _38 = copy _40 as usize (Transmute);
+        StorageDead(_40);
+        goto -> bb23;
+    }
+
+    bb26: {
+        _52 = copy ((*_25).1: usize);
+        StorageLive(_55);
+        _55 = Le(copy _52, const <T as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _55);
+        StorageDead(_55);
+        StorageLive(_53);
+        StorageLive(_54);
+        StorageLive(_56);
+        _56 = copy (((((*_25).0: alloc::raw_vec::RawVec<T>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _54 = copy _56 as *mut T (Transmute);
+        StorageDead(_56);
+        _53 = Offset(copy _54, copy _52);
+        StorageDead(_54);
+        copy_nonoverlapping(dst = copy _53, src = copy _48, count = copy _49);
+        StorageDead(_53);
+        ((*_25).1: usize) = Add(copy ((*_25).1: usize), copy _49);
+        StorageDead(_52);
+        (_24.1: usize) = const 0_usize;
+        StorageDead(_25);
+        drop(_24) -> [return: bb15, unwind unreachable];
+    }
+}
+
+fn ordered_map_inner::{closure#0}(_1: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18}, _2: usize) -> Result<Vec<T>, Box<dyn Any + Send>> {
+    debug k => _2;
+    debug n => (*((*_1).0: &usize));
+    debug f => (*((*_1).1: &F));
+    let mut _0: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+    let _3: host_work::pool::Active;
+    let mut _4: std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>;
+    let mut _5: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69};
+    let mut _6: &usize;
+    let mut _7: &usize;
+    let mut _8: &F;
+    scope 1 {
+        debug _active => _3;
+        scope 2 (inlined std::panic::catch_unwind::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, Vec<T>>) {
+            scope 3 (inlined std::panicking::catch_unwind::<Vec<T>, AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>) {
+                let mut _9: std::panicking::catch_unwind::Data<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, std::vec::Vec<T>>;
+                let mut _10: std::mem::ManuallyDrop<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>;
+                let mut _12: *mut std::panicking::catch_unwind::Data<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, std::vec::Vec<T>>;
+                let mut _13: i32;
+                let mut _14: fn(*mut u8);
+                let mut _15: fn(*mut u8, *mut u8);
+                let mut _16: std::vec::Vec<T>;
+                let mut _17: std::mem::ManuallyDrop<std::vec::Vec<T>>;
+                let mut _18: std::boxed::Box<dyn std::any::Any + std::marker::Send>;
+                let mut _19: std::mem::ManuallyDrop<std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                scope 4 {
+                    let _11: *mut u8;
+                    scope 5 {
+                        scope 8 (inlined ManuallyDrop::<Vec<T>>::into_inner) {
+                            let mut _21: *const std::vec::Vec<T>;
+                            let mut _22: *const std::mem::ManuallyDrop<std::vec::Vec<T>>;
+                            scope 9 (inlined std::ptr::const_ptr::<impl *const ManuallyDrop<Vec<T>>>::cast::<Vec<T>>) {
+                            }
+                            scope 10 (inlined #[track_caller] std::ptr::const_ptr::<impl *const Vec<T>>::read) {
+                                scope 11 (inlined #[track_caller] std::ptr::read::<Vec<T>>) {
+                                }
+                            }
+                        }
+                        scope 12 (inlined ManuallyDrop::<Box<dyn Any + Send>>::into_inner) {
+                            let mut _23: *const std::boxed::Box<dyn std::any::Any + std::marker::Send>;
+                            let mut _24: *const std::mem::ManuallyDrop<std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                            scope 13 (inlined std::ptr::const_ptr::<impl *const ManuallyDrop<Box<dyn Any + Send>>>::cast::<Box<dyn Any + Send>>) {
+                            }
+                            scope 14 (inlined #[track_caller] std::ptr::const_ptr::<impl *const Box<dyn Any + Send>>::read) {
+                                scope 15 (inlined #[track_caller] std::ptr::read::<Box<dyn Any + Send>>) {
+                                }
+                            }
+                        }
+                    }
+                }
+                scope 6 (inlined ManuallyDrop::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>::new) {
+                    let mut _20: std::mem::MaybeDangling<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>;
+                    scope 7 (inlined MaybeDangling::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>::new) {
+                    }
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_3);
+        _3 = Active::enter() -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        StorageLive(_4);
+        StorageLive(_5);
+        _7 = copy ((*_1).0: &usize);
+        StorageLive(_6);
+        _6 = &_2;
+        _8 = copy ((*_1).1: &F);
+        _5 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69} { n: copy _7, k: copy _6, f: copy _8 };
+        StorageDead(_6);
+        _4 = AssertUnwindSafe::<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>(move _5);
+        StorageDead(_5);
+        StorageLive(_11);
+        StorageLive(_18);
+        StorageLive(_9);
+        StorageLive(_10);
+        StorageLive(_20);
+        _20 = MaybeDangling::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>>(copy _4);
+        _10 = ManuallyDrop::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>> { value: move _20 };
+        StorageDead(_20);
+        _9 = std::panicking::catch_unwind::Data::<AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, Vec<T>> { f: move _10 };
+        StorageDead(_10);
+        StorageLive(_12);
+        _12 = &raw mut _9;
+        _11 = copy _12 as *mut u8 (PtrToPtr);
+        StorageDead(_12);
+        StorageLive(_13);
+        StorageLive(_14);
+        _14 = std::panicking::catch_unwind::do_call::<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, std::vec::Vec<T>> as fn(*mut u8) (PointerCoercion(ReifyFnPointer(Safe), Implicit));
+        StorageLive(_15);
+        _15 = std::panicking::catch_unwind::do_catch::<std::panic::AssertUnwindSafe<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}>, std::vec::Vec<T>> as fn(*mut u8, *mut u8) (PointerCoercion(ReifyFnPointer(Safe), Implicit));
+        _13 = std::intrinsics::catch_unwind(move _14, move _11, move _15) -> [return: bb3, unwind unreachable];
+    }
+
+    bb2: {
+        StorageDead(_3);
+        return;
+    }
+
+    bb3: {
+        StorageDead(_15);
+        StorageDead(_14);
+        switchInt(copy _13) -> [0: bb4, otherwise: bb5];
+    }
+
+    bb4: {
+        StorageDead(_13);
+        StorageLive(_16);
+        StorageLive(_17);
+        _17 = move (_9.1: std::mem::ManuallyDrop<std::vec::Vec<T>>);
+        StorageLive(_21);
+        StorageLive(_22);
+        _22 = &raw const _17;
+        _21 = copy _22 as *const std::vec::Vec<T> (PtrToPtr);
+        StorageDead(_22);
+        _16 = copy (*_21);
+        StorageDead(_21);
+        StorageDead(_17);
+        _0 = Result::<Vec<T>, Box<dyn Any + Send>>::Ok(move _16);
+        StorageDead(_16);
+        goto -> bb6;
+    }
+
+    bb5: {
+        StorageDead(_13);
+        StorageLive(_19);
+        _19 = move (_9.2: std::mem::ManuallyDrop<std::boxed::Box<dyn std::any::Any + std::marker::Send>>);
+        StorageLive(_23);
+        StorageLive(_24);
+        _24 = &raw const _19;
+        _23 = copy _24 as *const std::boxed::Box<dyn std::any::Any + std::marker::Send> (PtrToPtr);
+        StorageDead(_24);
+        _18 = copy (*_23);
+        StorageDead(_23);
+        StorageDead(_19);
+        _0 = Result::<Vec<T>, Box<dyn Any + Send>>::Err(copy _18);
+        goto -> bb6;
+    }
+
+    bb6: {
+        StorageDead(_9);
+        StorageDead(_18);
+        StorageDead(_11);
+        StorageDead(_4);
+        drop(_3) -> [return: bb2, unwind unreachable];
+    }
+}
+
+fn ordered_map_inner::{closure#0}::{closure#0}(_1: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:35:67: 35:69}) -> Vec<T> {
+    debug n => (*((*_1).0: &usize));
+    debug k => (*((*_1).1: &usize));
+    debug f => (*((*_1).2: &F));
+    let mut _0: std::vec::Vec<T>;
+    let _2: usize;
+    let _3: usize;
+    let mut _4: (usize, usize);
+    let mut _5: usize;
+    let mut _6: usize;
+    let mut _7: std::iter::Map<std::ops::Range<usize>, &F>;
+    let mut _8: std::ops::Range<usize>;
+    let mut _9: &usize;
+    let mut _10: &usize;
+    let mut _11: &F;
+    scope 1 {
+        debug a => _2;
+        debug b => _3;
+        scope 2 (inlined <std::ops::Range<usize> as Iterator>::map::<T, &F>) {
+            scope 3 (inlined Map::<std::ops::Range<usize>, &F>::new) {
+            }
+        }
+        scope 4 (inlined <Map<std::ops::Range<usize>, &F> as Iterator>::collect::<Vec<T>>) {
+            scope 5 {
+                scope 6 {
+                    scope 7 {
+                        scope 16 (inlined Arguments::<'_>::new::<23, 1>) {
+                        }
+                    }
+                    scope 11 (inlined core::fmt::rt::Argument::<'_>::new_debug::<(usize, Option<usize>)>) {
+                        scope 12 {
+                        }
+                        scope 13 (inlined NonNull::<(usize, Option<usize>)>::from_ref) {
+                        }
+                        scope 14 (inlined NonNull::<(usize, Option<usize>)>::cast::<()>) {
+                            scope 15 (inlined NonNull::<(usize, Option<usize>)>::as_ptr) {
+                            }
+                        }
+                    }
+                }
+                scope 8 (inlined Option::<usize>::is_none_or::<{closure@<Map<std::ops::Range<usize>, &F> as Iterator>::collect<Vec<T>>::{closure#0}}>) {
+                    scope 9 {
+                        scope 10 (inlined <Map<std::ops::Range<usize>, &F> as Iterator>::collect::<Vec<T>>::{closure#0}) {
+                        }
+                    }
+                }
+            }
+            scope 17 (inlined <Vec<T> as FromIterator<T>>::from_iter::<Map<std::ops::Range<usize>, &F>>) {
+                scope 18 (inlined <Map<std::ops::Range<usize>, &F> as IntoIterator>::into_iter) {
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_4);
+        StorageLive(_5);
+        _9 = copy ((*_1).0: &usize);
+        _5 = copy (*_9);
+        StorageLive(_6);
+        _10 = copy ((*_1).1: &usize);
+        _6 = copy (*_10);
+        _4 = pool::range(move _5, move _6) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        StorageDead(_6);
+        StorageDead(_5);
+        _2 = copy (_4.0: usize);
+        _3 = copy (_4.1: usize);
+        StorageDead(_4);
+        StorageLive(_8);
+        _8 = std::ops::Range::<usize> { start: copy _2, end: copy _3 };
+        _11 = copy ((*_1).2: &F);
+        _7 = Map::<std::ops::Range<usize>, &F> { iter: copy _8, f: copy _11 };
+        StorageDead(_8);
+        _0 = <Vec<T> as vec::spec_from_iter::SpecFromIter<T, Map<std::ops::Range<usize>, &F>>>::from_iter(move _7) -> [return: bb2, unwind unreachable];
+    }
+
+    bb2: {
+        return;
+    }
+}
+
+fn ordered_map_inner::{closure#1}(_1: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:40:37: 40:44}, _2: &Scope<'_, '_>) -> Vec<Result<Vec<T>, Box<dyn Any + Send>>> {
+    debug scope => _2;
+    debug run => (*(_1.0: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18}));
+    let mut _0: std::vec::Vec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _3: std::vec::Vec<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+    let mut _4: std::option::Option<usize>;
+    let mut _6: &mut std::vec::Vec<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+    let mut _7: std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _8: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:42:72: 42:79};
+    let mut _11: &mut std::vec::Vec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _12: std::vec::IntoIter<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+    let mut _14: std::option::Option<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+    let mut _15: &mut std::vec::IntoIter<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+    let mut _16: isize;
+    let mut _17: &mut std::vec::Vec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+    let mut _18: std::result::Result<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+    let mut _19: isize;
+    let mut _22: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18};
+    let mut _23: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18};
+    let mut _53: usize;
+    let mut _54: core::num::niche_types::UsizeNoHighBit;
+    let mut _55: std::ptr::NonNull<u8>;
+    scope 1 {
+        debug handles => _3;
+        let _9: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+        scope 2 {
+            debug ((iter: std::ops::Range<usize>).0: usize) => _26;
+            debug ((iter: std::ops::Range<usize>).1: usize) => const 16_usize;
+            let _5: usize;
+            scope 3 {
+                debug k => _5;
+                scope 4 {
+                    debug run => _22;
+                    scope 33 (inlined Scope::<'_, '_>::spawn::<{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:42:72: 42:79}, Result<Vec<T>, Box<dyn Any + Send>>>) {
+                        let mut _28: std::result::Result<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>, std::io::Error>;
+                        let mut _29: std::thread::Builder;
+                        scope 34 (inlined Builder::new) {
+                            let mut _30: std::option::Option<std::string::String>;
+                        }
+                    }
+                    scope 35 (inlined Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::push) {
+                        let mut _31: &mut std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                        scope 36 {
+                        }
+                    }
+                }
+            }
+            scope 25 (inlined iter::range::<impl Iterator for std::ops::Range<usize>>::next) {
+                scope 26 (inlined <std::ops::Range<usize> as iter::range::RangeIteratorImpl>::spec_next) {
+                    let mut _24: bool;
+                    let _25: usize;
+                    let mut _26: usize;
+                    scope 27 {
+                        scope 29 (inlined <usize as Step>::forward_unchecked) {
+                            scope 30 (inlined #[track_caller] core::num::<impl usize>::unchecked_add) {
+                                scope 31 (inlined ub_checks::check_language_ub) {
+                                    scope 32 (inlined ub_checks::check_language_ub::runtime) {
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    scope 28 (inlined std::cmp::impls::<impl PartialOrd for usize>::lt) {
+                        let mut _27: usize;
+                    }
+                }
+            }
+        }
+        scope 5 {
+            debug first => _9;
+            let mut _10: std::vec::Vec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+            scope 6 {
+                debug chunks => _10;
+                let mut _13: std::vec::IntoIter<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+                scope 7 {
+                    debug iter => _13;
+                    let _52: std::thread::lifecycle::JoinInner<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                    scope 8 {
+                        debug ((handle: ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>).0: std::thread::lifecycle::JoinInner<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>) => _52;
+                        let _20: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                        let _21: std::boxed::Box<dyn std::any::Any + std::marker::Send>;
+                        scope 9 {
+                            debug v => _20;
+                        }
+                        scope 10 {
+                            debug p => _21;
+                        }
+                        scope 101 (inlined ScopedJoinHandle::<'_, Result<Vec<T>, Box<dyn Any + Send>>>::join) {
+                        }
+                        scope 102 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::push) {
+                            let mut _51: &mut std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                            scope 103 {
+                            }
+                        }
+                    }
+                }
+                scope 51 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::push) {
+                    let mut _43: &mut std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+                    scope 52 {
+                    }
+                }
+                scope 53 (inlined <Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>> as IntoIterator>::into_iter) {
+                    let mut _46: *const std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                    let mut _47: *mut std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                    scope 54 {
+                        scope 55 {
+                            let _44: std::ptr::NonNull<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>;
+                            scope 56 {
+                                let _45: *mut std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                                scope 57 {
+                                    scope 58 {
+                                        let _48: usize;
+                                        scope 59 {
+                                        }
+                                        scope 95 (inlined <ManuallyDrop<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>> as Deref>::deref) {
+                                            scope 96 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::as_ref) {
+                                            }
+                                        }
+                                        scope 97 (inlined alloc::raw_vec::RawVec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::capacity) {
+                                            scope 98 (inlined std::mem::size_of::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                            }
+                                            scope 99 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                                scope 100 (inlined UsizeNoHighBit::as_inner) {
+                                                }
+                                            }
+                                        }
+                                    }
+                                    scope 79 (inlined <ManuallyDrop<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>> as Deref>::deref) {
+                                        scope 80 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::as_ref) {
+                                        }
+                                    }
+                                    scope 81 (inlined Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::len) {
+                                        scope 82 {
+                                        }
+                                    }
+                                    scope 83 (inlined std::ptr::mut_ptr::<impl *mut ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::wrapping_byte_add) {
+                                        scope 84 (inlined std::ptr::mut_ptr::<impl *mut ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::cast::<u8>) {
+                                        }
+                                        scope 85 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_add) {
+                                            scope 86 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_offset) {
+                                            }
+                                        }
+                                        scope 87 (inlined std::ptr::mut_ptr::<impl *mut u8>::with_metadata_of::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                            scope 88 (inlined std::ptr::metadata::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                            }
+                                            scope 89 (inlined std::ptr::from_raw_parts_mut::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>, ()>) {
+                                            }
+                                        }
+                                    }
+                                    scope 90 (inlined <ManuallyDrop<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>> as Deref>::deref) {
+                                        scope 91 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::as_ref) {
+                                        }
+                                    }
+                                    scope 92 (inlined Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::len) {
+                                        let mut _50: bool;
+                                        scope 93 {
+                                        }
+                                    }
+                                    scope 94 (inlined #[track_caller] std::ptr::mut_ptr::<impl *mut ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::add) {
+                                    }
+                                }
+                                scope 78 (inlined NonNull::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::as_ptr) {
+                                }
+                            }
+                            scope 70 (inlined <ManuallyDrop<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>> as Deref>::deref) {
+                                scope 71 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::as_ref) {
+                                }
+                            }
+                            scope 72 (inlined alloc::raw_vec::RawVec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::non_null) {
+                                scope 73 (inlined alloc::raw_vec::RawVecInner::non_null::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                    scope 74 (inlined Unique::<u8>::cast::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                        scope 75 (inlined NonNull::<u8>::cast::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                                            let mut _49: *const std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                                            scope 76 (inlined NonNull::<u8>::as_ptr) {
+                                            }
+                                        }
+                                    }
+                                    scope 77 (inlined Unique::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::as_non_null_ptr) {
+                                    }
+                                }
+                            }
+                        }
+                        scope 62 (inlined <ManuallyDrop<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>> as Deref>::deref) {
+                            scope 63 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::as_ref) {
+                            }
+                        }
+                        scope 64 (inlined Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::allocator) {
+                            scope 65 (inlined alloc::raw_vec::RawVec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::allocator) {
+                                scope 66 (inlined alloc::raw_vec::RawVecInner::allocator) {
+                                }
+                            }
+                        }
+                        scope 67 (inlined #[track_caller] std::ptr::read::<std::alloc::Global>) {
+                        }
+                        scope 68 (inlined ManuallyDrop::<std::alloc::Global>::new) {
+                            scope 69 (inlined MaybeDangling::<std::alloc::Global>::new) {
+                            }
+                        }
+                    }
+                    scope 60 (inlined ManuallyDrop::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::new) {
+                        scope 61 (inlined MaybeDangling::<Vec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>>::new) {
+                        }
+                    }
+                }
+            }
+            scope 37 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::with_capacity) {
+                scope 38 (inlined Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::with_capacity_in) {
+                    let mut _32: alloc::raw_vec::RawVec<std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>;
+                    scope 39 (inlined alloc::raw_vec::RawVec::<Result<Vec<T>, Box<dyn Any + Send>>>::with_capacity_in) {
+                        let mut _33: alloc::raw_vec::RawVecInner;
+                        scope 40 (inlined alloc::raw_vec::RawVecInner::with_capacity_in) {
+                            let mut _34: std::result::Result<alloc::raw_vec::RawVecInner, std::collections::TryReserveError>;
+                            let mut _35: isize;
+                            let mut _36: bool;
+                            let mut _37: bool;
+                            let _38: std::collections::TryReserveError;
+                            let mut _39: !;
+                            scope 41 {
+                                scope 43 (inlined alloc::raw_vec::RawVecInner::needs_to_grow) {
+                                    let mut _40: usize;
+                                    let mut _41: usize;
+                                    scope 44 (inlined Layout::size) {
+                                    }
+                                    scope 45 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                        let mut _42: core::num::niche_types::UsizeNoHighBit;
+                                        scope 46 (inlined UsizeNoHighBit::as_inner) {
+                                        }
+                                    }
+                                    scope 47 (inlined core::num::<impl usize>::wrapping_sub) {
+                                    }
+                                }
+                                scope 48 (inlined #[track_caller] assert_unchecked) {
+                                    scope 49 (inlined ub_checks::check_language_ub) {
+                                        scope 50 (inlined ub_checks::check_language_ub::runtime) {
+                                        }
+                                    }
+                                }
+                            }
+                            scope 42 {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        scope 24 (inlined <std::ops::Range<usize> as IntoIterator>::into_iter) {
+        }
+    }
+    scope 11 (inlined Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::new) {
+        scope 12 (inlined alloc::raw_vec::RawVec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::new) {
+            scope 13 (inlined alloc::raw_vec::RawVec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::new_in) {
+                scope 14 (inlined std::ptr::Alignment::of::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>) {
+                }
+                scope 15 (inlined alloc::raw_vec::RawVecInner::new_in) {
+                    scope 16 {
+                    }
+                    scope 17 (inlined std::ptr::Alignment::as_nonzero) {
+                    }
+                    scope 18 (inlined NonNull::<u8>::without_provenance) {
+                        scope 19 {
+                        }
+                        scope 20 (inlined NonZero::<usize>::get) {
+                        }
+                        scope 21 (inlined std::ptr::without_provenance::<u8>) {
+                            scope 22 (inlined without_provenance_mut::<u8>) {
+                            }
+                        }
+                    }
+                    scope 23 (inlined Unique::<u8>::from_non_null) {
+                    }
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_3);
+        _3 = Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>> { buf: const Indirect { alloc_id: alloc197, offset: Size(0 bytes) }: alloc::raw_vec::RawVec<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>, len: const 0_usize };
+        _26 = const 1_usize;
+        goto -> bb1;
+    }
+
+    bb1: {
+        StorageLive(_4);
+        StorageLive(_24);
+        StorageLive(_27);
+        _27 = copy _26;
+        _24 = Lt(move _27, const 16_usize);
+        StorageDead(_27);
+        switchInt(move _24) -> [0: bb12, otherwise: bb11];
+    }
+
+    bb2: {
+        unreachable;
+    }
+
+    bb3: {
+        StorageLive(_10);
+        StorageLive(_32);
+        StorageLive(_33);
+        StorageLive(_35);
+        StorageLive(_38);
+        StorageLive(_34);
+        _34 = alloc::raw_vec::RawVecInner::try_allocate_in(const 16_usize, const alloc::raw_vec::AllocInit::Uninitialized, const std::alloc::Global, const Layout {{ size: 24_usize, align: std::ptr::Alignment(std::ptr::alignment::AlignmentEnum::_Align1Shl3) }}) -> [return: bb16, unwind unreachable];
+    }
+
+    bb4: {
+        StorageLive(_14);
+        _15 = &mut _13;
+        _14 = <std::vec::IntoIter<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>> as Iterator>::next(move _15) -> [return: bb5, unwind unreachable];
+    }
+
+    bb5: {
+        _16 = discriminant(_14);
+        switchInt(move _16) -> [0: bb7, 1: bb6, otherwise: bb2];
+    }
+
+    bb6: {
+        _52 = move (((_14 as Some).0: std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>).0: std::thread::lifecycle::JoinInner<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>);
+        StorageLive(_17);
+        _17 = &mut _10;
+        StorageLive(_18);
+        _18 = std::thread::lifecycle::JoinInner::<'_, Result<Vec<T>, Box<dyn Any + Send>>>::join(move _52) -> [return: bb20, unwind unreachable];
+    }
+
+    bb7: {
+        StorageDead(_14);
+        drop(_13) -> [return: bb10, unwind unreachable];
+    }
+
+    bb8: {
+        _21 = move ((_18 as Err).0: std::boxed::Box<dyn std::any::Any + std::marker::Send>);
+        _20 = Result::<Vec<T>, Box<dyn Any + Send>>::Err(copy _21);
+        goto -> bb21;
+    }
+
+    bb9: {
+        _20 = move ((_18 as Ok).0: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>);
+        goto -> bb21;
+    }
+
+    bb10: {
+        StorageDead(_13);
+        StorageDead(_12);
+        _0 = move _10;
+        StorageDead(_10);
+        StorageDead(_3);
+        return;
+    }
+
+    bb11: {
+        _25 = copy _26;
+        _26 = AddUnchecked(copy _25, const 1_usize);
+        _4 = Option::<usize>::Some(copy _25);
+        StorageDead(_24);
+        StorageLive(_5);
+        _5 = copy ((_4 as Some).0: usize);
+        _22 = copy (_1.0: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18});
+        StorageLive(_6);
+        _6 = &mut _3;
+        StorageLive(_7);
+        StorageLive(_8);
+        _8 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:42:72: 42:79} { run: copy _22, k: copy _5 };
+        StorageLive(_28);
+        StorageLive(_29);
+        StorageLive(_30);
+        _30 = Option::<String>::None;
+        _29 = Builder { name: move _30, stack_size: const Option::<usize>::None, no_hooks: const false };
+        StorageDead(_30);
+        _28 = std::thread::scoped::<impl Builder>::spawn_scoped::<'_, {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:42:72: 42:79}, Result<Vec<T>, Box<dyn Any + Send>>>(move _29, copy _2, move _8) -> [return: bb13, unwind unreachable];
+    }
+
+    bb12: {
+        StorageDead(_24);
+        StorageDead(_4);
+        _23 = copy (_1.0: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18});
+        _9 = <{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18} as Fn<(usize,)>>::call(move _23, const (0_usize,)) -> [return: bb3, unwind unreachable];
+    }
+
+    bb13: {
+        StorageDead(_29);
+        _7 = Result::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>, std::io::Error>::expect(move _28, const "failed to spawn thread") -> [return: bb14, unwind unreachable];
+    }
+
+    bb14: {
+        StorageDead(_28);
+        StorageDead(_8);
+        StorageLive(_31);
+        _31 = Vec::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>::push_mut(move _6, move _7) -> [return: bb15, unwind unreachable];
+    }
+
+    bb15: {
+        StorageDead(_31);
+        StorageDead(_7);
+        StorageDead(_6);
+        StorageDead(_5);
+        StorageDead(_4);
+        goto -> bb1;
+    }
+
+    bb16: {
+        _35 = discriminant(_34);
+        switchInt(move _35) -> [0: bb18, 1: bb17, otherwise: bb2];
+    }
+
+    bb17: {
+        _38 = move ((_34 as Err).0: std::collections::TryReserveError);
+        _39 = alloc::raw_vec::handle_error(move _38) -> unwind unreachable;
+    }
+
+    bb18: {
+        _33 = move ((_34 as Ok).0: alloc::raw_vec::RawVecInner);
+        StorageLive(_36);
+        StorageLive(_37);
+        StorageLive(_40);
+        StorageLive(_41);
+        StorageLive(_42);
+        _42 = copy (_33.1: core::num::niche_types::UsizeNoHighBit);
+        _41 = copy _42 as usize (Transmute);
+        StorageDead(_42);
+        _40 = Sub(copy _41, const 0_usize);
+        StorageDead(_41);
+        _37 = Gt(const 16_usize, move _40);
+        StorageDead(_40);
+        _36 = Not(move _37);
+        StorageDead(_37);
+        assume(copy _36);
+        StorageDead(_36);
+        StorageDead(_34);
+        StorageDead(_38);
+        StorageDead(_35);
+        _32 = alloc::raw_vec::RawVec::<Result<Vec<T>, Box<dyn Any + Send>>> { inner: move _33, _marker: const ZeroSized: PhantomData<Result<Vec<T>, Box<dyn Any + Send>>> };
+        StorageDead(_33);
+        _10 = Vec::<Result<Vec<T>, Box<dyn Any + Send>>> { buf: move _32, len: const 0_usize };
+        StorageDead(_32);
+        StorageLive(_11);
+        _11 = &mut _10;
+        StorageLive(_43);
+        _43 = Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::push_mut(move _11, move _9) -> [return: bb19, unwind unreachable];
+    }
+
+    bb19: {
+        StorageDead(_43);
+        StorageDead(_11);
+        StorageLive(_12);
+        _55 = move ((((_3.0: alloc::raw_vec::RawVec<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _54 = move (((_3.0: alloc::raw_vec::RawVec<std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>>>).0: alloc::raw_vec::RawVecInner).1: core::num::niche_types::UsizeNoHighBit);
+        _53 = move (_3.1: usize);
+        StorageLive(_44);
+        StorageLive(_45);
+        StorageLive(_46);
+        StorageLive(_48);
+        StorageLive(_49);
+        _49 = copy _55 as *const std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>> (Transmute);
+        _44 = NonNull::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>> { pointer: copy _49 };
+        _45 = copy _55 as *mut std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>> (Transmute);
+        StorageLive(_47);
+        StorageLive(_50);
+        _50 = Le(copy _53, const <std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>> as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _50);
+        StorageDead(_50);
+        _47 = Offset(copy _45, copy _53);
+        _46 = copy _47 as *const std::thread::ScopedJoinHandle<'_, std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>> (PtrToPtr);
+        StorageDead(_47);
+        _48 = copy _54 as usize (Transmute);
+        _12 = std::vec::IntoIter::<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>> { buf: copy _44, phantom: const ZeroSized: PhantomData<ScopedJoinHandle<'_, Result<Vec<T>, Box<dyn Any + Send>>>>, cap: move _48, alloc: const ManuallyDrop::<std::alloc::Global> {{ value: MaybeDangling::<std::alloc::Global>(std::alloc::Global) }}, ptr: copy _44, end: copy _46 };
+        StorageDead(_49);
+        StorageDead(_48);
+        StorageDead(_46);
+        StorageDead(_45);
+        StorageDead(_44);
+        StorageLive(_13);
+        _13 = move _12;
+        goto -> bb4;
+    }
+
+    bb20: {
+        _19 = discriminant(_18);
+        switchInt(move _19) -> [0: bb9, 1: bb8, otherwise: bb2];
+    }
+
+    bb21: {
+        StorageLive(_51);
+        _51 = Vec::<Result<Vec<T>, Box<dyn Any + Send>>>::push_mut(move _17, move _20) -> [return: bb22, unwind unreachable];
+    }
+
+    bb22: {
+        StorageDead(_51);
+        StorageDead(_17);
+        StorageDead(_18);
+        StorageDead(_14);
+        goto -> bb4;
+    }
+}
+
+alloc200 (size: 16, align: 8) {
+    08 00 00 00 00 00 00 00 18 00 00 00 00 00 00 00 │ ................
+}
+
+alloc197 (size: 16, align: 8) {
+    00 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 │ ................
+}
+
+alloc169 (size: 22, align: 1) {
+    0x00 │ 66 61 69 6c 65 64 20 74 6f 20 73 70 61 77 6e 20 │ failed to spawn 
+    0x10 │ 74 68 72 65 61 64                               │ thread
+}
+
+alloc168 (size: 16, align: 8) {
+    00 00 00 00 00 00 00 00 __ __ __ __ __ __ __ __ │ ........░░░░░░░░
+}
+
+fn ordered_map_inner::{closure#1}::{closure#0}(_1: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:42:72: 42:79}) -> Result<Vec<T>, Box<dyn Any + Send>> {
+    debug run => (_1.0: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18});
+    debug k => (_1.1: usize);
+    let mut _0: std::result::Result<std::vec::Vec<T>, std::boxed::Box<dyn std::any::Any + std::marker::Send>>;
+    let mut _2: (usize,);
+    let mut _3: usize;
+    let mut _4: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18};
+
+    bb0: {
+        _4 = copy (_1.0: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18});
+        StorageLive(_2);
+        StorageLive(_3);
+        _3 = copy (_1.1: usize);
+        _2 = (move _3,);
+        _0 = <{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/../../../docs/research/v8-r0-zk-20261009/c3/check/src/native_workers.rs:33:15: 33:18} as Fn<(usize,)>>::call(move _4, move _2) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        StorageDead(_3);
+        StorageDead(_2);
+        return;
+    }
+}
+
+static TRACE: std::sync::Mutex<Vec<[usize; 6]>> = {
+    let mut _0: std::sync::Mutex<std::vec::Vec<[usize; 6]>>;
+    let mut _1: std::vec::Vec<[usize; 6]>;
+
+    bb0: {
+        StorageLive(_1);
+        ConstEvalCounter;
+        _1 = Vec::<[usize; 6]>::new() -> [return: bb1, unwind: bb3];
+    }
+
+    bb1: {
+        ConstEvalCounter;
+        _0 = std::sync::Mutex::<Vec<[usize; 6]>>::new(move _1) -> [return: bb2, unwind: bb3];
+    }
+
+    bb2: {
+        StorageDead(_1);
+        return;
+    }
+
+    bb3 (cleanup): {
+        resume;
+    }
+}
+
+const TRACE::{constant#0}: usize = const 6_usize;
+
+fn take_trace() -> Vec<[usize; 6]> {
+    let mut _0: std::vec::Vec<[usize; 6]>;
+    let mut _1: std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>;
+    let mut _2: std::result::Result<std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>, std::sync::PoisonError<std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>>>;
+    scope 1 (inlined <std::sync::MutexGuard<'_, Vec<[usize; 6]>> as DerefMut>::deref_mut) {
+        let mut _3: *mut std::vec::Vec<[usize; 6]>;
+        let mut _4: &std::sync::Mutex<std::vec::Vec<[usize; 6]>>;
+        scope 2 (inlined UnsafeCell::<Vec<[usize; 6]>>::get) {
+            let mut _5: *const std::cell::UnsafeCell<std::vec::Vec<[usize; 6]>>;
+        }
+    }
+    scope 3 (inlined std::mem::take::<Vec<[usize; 6]>>) {
+        let mut _6: std::vec::Vec<[usize; 6]>;
+        scope 4 (inlined std::mem::replace::<Vec<[usize; 6]>>) {
+            scope 5 {
+            }
+        }
+        scope 6 (inlined <Vec<[usize; 6]> as Default>::default) {
+            scope 7 (inlined Vec::<[usize; 6]>::new) {
+                scope 8 (inlined alloc::raw_vec::RawVec::<[usize; 6]>::new) {
+                    scope 9 (inlined alloc::raw_vec::RawVec::<[usize; 6]>::new_in) {
+                        scope 10 (inlined std::ptr::Alignment::of::<[usize; 6]>) {
+                        }
+                        scope 11 (inlined alloc::raw_vec::RawVecInner::new_in) {
+                            scope 12 {
+                            }
+                            scope 13 (inlined std::ptr::Alignment::as_nonzero) {
+                            }
+                            scope 14 (inlined NonNull::<u8>::without_provenance) {
+                                scope 15 {
+                                }
+                                scope 16 (inlined NonZero::<usize>::get) {
+                                }
+                                scope 17 (inlined std::ptr::without_provenance::<u8>) {
+                                    scope 18 (inlined without_provenance_mut::<u8>) {
+                                    }
+                                }
+                            }
+                            scope 19 (inlined Unique::<u8>::from_non_null) {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_1);
+        StorageLive(_2);
+        _2 = std::sync::Mutex::<Vec<[usize; 6]>>::lock(const {alloc16: &std::sync::Mutex<Vec<[usize; 6]>>}) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        _1 = Result::<std::sync::MutexGuard<'_, Vec<[usize; 6]>>, PoisonError<std::sync::MutexGuard<'_, Vec<[usize; 6]>>>>::unwrap(move _2) -> [return: bb2, unwind unreachable];
+    }
+
+    bb2: {
+        StorageDead(_2);
+        StorageLive(_4);
+        _4 = copy (_1.0: &std::sync::Mutex<std::vec::Vec<[usize; 6]>>);
+        StorageLive(_5);
+        _5 = &raw const ((*_4).2: std::cell::UnsafeCell<std::vec::Vec<[usize; 6]>>);
+        _3 = copy _5 as *mut std::vec::Vec<[usize; 6]> (PtrToPtr);
+        StorageDead(_5);
+        StorageDead(_4);
+        StorageLive(_6);
+        _6 = Vec::<[usize; 6]> { buf: const alloc::raw_vec::RawVec::<[usize; 6]> {{ inner: alloc::raw_vec::RawVecInner {{ ptr: Unique::<u8> {{ pointer: NonNull::<u8> {{ pointer: {0x8 as *const u8} }}, _marker: PhantomData::<u8> }}, cap: UsizeNoHighBit(0_usize), alloc: std::alloc::Global }}, _marker: PhantomData::<[usize; 6]> }}, len: const 0_usize };
+        _0 = copy (*_3);
+        (*_3) = copy _6;
+        StorageDead(_6);
+        drop(_1) -> [return: bb3, unwind unreachable];
+    }
+
+    bb3: {
+        StorageDead(_1);
+        return;
+    }
+}
+
+alloc211 (size: 16, align: 8) {
+    00 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 │ ................
+}
+
+alloc16 (static: TRACE, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 __ __ __ 00 00 00 00 00 00 00 00 │ .....░░░........
+    0x10 │ 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 │ ................
+}
+
+const take_trace::{constant#0}: usize = const 6_usize;
+
+fn host_work::map(_1: usize, _2: usize, _3: F) -> Vec<T> {
+    debug _stage => _1;
+    debug n => _2;
+    debug f => _3;
+    let mut _0: std::vec::Vec<T>;
+    let _4: std::vec::Vec<(std::vec::Vec<T>, usize)>;
+    let mut _5: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs:11:53: 11:56};
+    let mut _6: &usize;
+    let mut _7: &F;
+    let mut _9: std::iter::Enumerate<std::vec::IntoIter<(std::vec::Vec<T>, usize)>>;
+    let mut _10: std::vec::IntoIter<(std::vec::Vec<T>, usize)>;
+    let mut _12: std::option::Option<(usize, (std::vec::Vec<T>, usize))>;
+    let mut _13: &mut std::iter::Enumerate<std::vec::IntoIter<(std::vec::Vec<T>, usize)>>;
+    let mut _14: isize;
+    let mut _20: (usize, usize);
+    let mut _21: &mut std::vec::Vec<[usize; 6]>;
+    let mut _22: std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>;
+    let mut _23: std::result::Result<std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>, std::sync::PoisonError<std::sync::MutexGuard<'_, std::vec::Vec<[usize; 6]>>>>;
+    let mut _24: [usize; 6];
+    let mut _25: &mut std::vec::Vec<T>;
+    let mut _28: std::alloc::Layout;
+    let mut _59: usize;
+    let mut _60: core::num::niche_types::UsizeNoHighBit;
+    let mut _61: std::ptr::NonNull<u8>;
+    scope 1 {
+        debug chunks => _4;
+        let mut _8: std::vec::Vec<T>;
+        scope 2 {
+            debug out => _8;
+            let mut _11: std::iter::Enumerate<std::vec::IntoIter<(std::vec::Vec<T>, usize)>>;
+            scope 3 {
+                debug iter => _11;
+                let _15: usize;
+                let mut _16: std::vec::Vec<T>;
+                let _17: usize;
+                scope 4 {
+                    debug k => _15;
+                    debug chunk => _16;
+                    debug completed => _17;
+                    let _18: usize;
+                    let _19: usize;
+                    scope 5 {
+                        debug a => _18;
+                        debug b => _19;
+                        scope 72 (inlined <std::sync::MutexGuard<'_, Vec<[usize; 6]>> as DerefMut>::deref_mut) {
+                            let mut _46: *mut std::vec::Vec<[usize; 6]>;
+                            let mut _47: &std::sync::Mutex<std::vec::Vec<[usize; 6]>>;
+                            scope 73 (inlined UnsafeCell::<Vec<[usize; 6]>>::get) {
+                                let mut _48: *const std::cell::UnsafeCell<std::vec::Vec<[usize; 6]>>;
+                            }
+                        }
+                        scope 74 (inlined Vec::<[usize; 6]>::push) {
+                            let mut _49: &mut [usize; 6];
+                            scope 75 {
+                            }
+                        }
+                    }
+                    scope 76 (inlined Vec::<T>::append) {
+                        scope 77 (inlined Vec::<T>::as_slice) {
+                            let mut _50: *const T;
+                            let mut _51: usize;
+                            scope 78 (inlined Vec::<T>::as_ptr) {
+                                scope 79 (inlined alloc::raw_vec::RawVec::<T>::ptr) {
+                                    scope 80 (inlined alloc::raw_vec::RawVecInner::ptr::<T>) {
+                                        scope 81 (inlined alloc::raw_vec::RawVecInner::non_null::<T>) {
+                                            let mut _52: std::ptr::NonNull<u8>;
+                                            scope 82 (inlined Unique::<u8>::cast::<T>) {
+                                                scope 83 (inlined NonNull::<u8>::cast::<T>) {
+                                                    scope 84 (inlined NonNull::<u8>::as_ptr) {
+                                                    }
+                                                }
+                                            }
+                                            scope 85 (inlined Unique::<T>::as_non_null_ptr) {
+                                            }
+                                        }
+                                        scope 86 (inlined NonNull::<T>::as_ptr) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        scope 87 (inlined Vec::<T>::set_len) {
+                            scope 88 (inlined Vec::<T>::capacity) {
+                                scope 89 (inlined alloc::raw_vec::RawVec::<T>::capacity) {
+                                    scope 90 (inlined std::mem::size_of::<T>) {
+                                    }
+                                    scope 91 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                        scope 92 (inlined UsizeNoHighBit::as_inner) {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        scope 93 (inlined Vec::<T>::append_elements) {
+                            let _53: ();
+                            let mut _55: *mut T;
+                            let mut _56: *mut T;
+                            scope 94 {
+                                let _54: usize;
+                                scope 95 {
+                                    scope 100 (inlined Vec::<T>::as_mut_ptr) {
+                                        scope 101 (inlined alloc::raw_vec::RawVec::<T>::ptr) {
+                                            scope 102 (inlined alloc::raw_vec::RawVecInner::ptr::<T>) {
+                                                scope 103 (inlined alloc::raw_vec::RawVecInner::non_null::<T>) {
+                                                    let mut _58: std::ptr::NonNull<u8>;
+                                                    scope 104 (inlined Unique::<u8>::cast::<T>) {
+                                                        scope 105 (inlined NonNull::<u8>::cast::<T>) {
+                                                            scope 106 (inlined NonNull::<u8>::as_ptr) {
+                                                            }
+                                                        }
+                                                    }
+                                                    scope 107 (inlined Unique::<T>::as_non_null_ptr) {
+                                                    }
+                                                }
+                                                scope 108 (inlined NonNull::<T>::as_ptr) {
+                                                }
+                                            }
+                                        }
+                                    }
+                                    scope 109 (inlined #[track_caller] std::ptr::mut_ptr::<impl *mut T>::add) {
+                                    }
+                                    scope 110 (inlined std::ptr::copy_nonoverlapping::<T>) {
+                                        scope 111 (inlined ub_checks::check_language_ub) {
+                                            scope 112 (inlined ub_checks::check_language_ub::runtime) {
+                                            }
+                                        }
+                                        scope 113 (inlined std::mem::size_of::<T>) {
+                                        }
+                                        scope 114 (inlined std::mem::align_of::<T>) {
+                                        }
+                                    }
+                                }
+                                scope 98 (inlined Vec::<T>::len) {
+                                    let mut _57: bool;
+                                    scope 99 {
+                                    }
+                                }
+                            }
+                            scope 96 (inlined std::ptr::const_ptr::<impl *const [T]>::len) {
+                                scope 97 (inlined std::ptr::metadata::<[T]>) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            scope 21 (inlined <Vec<(Vec<T>, usize)> as IntoIterator>::into_iter) {
+                let mut _41: *const (std::vec::Vec<T>, usize);
+                let mut _42: *mut (std::vec::Vec<T>, usize);
+                scope 22 {
+                    scope 23 {
+                        let _39: std::ptr::NonNull<(std::vec::Vec<T>, usize)>;
+                        scope 24 {
+                            let _40: *mut (std::vec::Vec<T>, usize);
+                            scope 25 {
+                                scope 26 {
+                                    let _43: usize;
+                                    scope 27 {
+                                    }
+                                    scope 63 (inlined <ManuallyDrop<Vec<(Vec<T>, usize)>> as Deref>::deref) {
+                                        scope 64 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::as_ref) {
+                                        }
+                                    }
+                                    scope 65 (inlined alloc::raw_vec::RawVec::<(Vec<T>, usize)>::capacity) {
+                                        scope 66 (inlined std::mem::size_of::<(Vec<T>, usize)>) {
+                                        }
+                                        scope 67 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                            scope 68 (inlined UsizeNoHighBit::as_inner) {
+                                            }
+                                        }
+                                    }
+                                }
+                                scope 47 (inlined <ManuallyDrop<Vec<(Vec<T>, usize)>> as Deref>::deref) {
+                                    scope 48 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::as_ref) {
+                                    }
+                                }
+                                scope 49 (inlined Vec::<(Vec<T>, usize)>::len) {
+                                    scope 50 {
+                                    }
+                                }
+                                scope 51 (inlined std::ptr::mut_ptr::<impl *mut (Vec<T>, usize)>::wrapping_byte_add) {
+                                    scope 52 (inlined std::ptr::mut_ptr::<impl *mut (Vec<T>, usize)>::cast::<u8>) {
+                                    }
+                                    scope 53 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_add) {
+                                        scope 54 (inlined std::ptr::mut_ptr::<impl *mut u8>::wrapping_offset) {
+                                        }
+                                    }
+                                    scope 55 (inlined std::ptr::mut_ptr::<impl *mut u8>::with_metadata_of::<(Vec<T>, usize)>) {
+                                        scope 56 (inlined std::ptr::metadata::<(Vec<T>, usize)>) {
+                                        }
+                                        scope 57 (inlined std::ptr::from_raw_parts_mut::<(Vec<T>, usize), ()>) {
+                                        }
+                                    }
+                                }
+                                scope 58 (inlined <ManuallyDrop<Vec<(Vec<T>, usize)>> as Deref>::deref) {
+                                    scope 59 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::as_ref) {
+                                    }
+                                }
+                                scope 60 (inlined Vec::<(Vec<T>, usize)>::len) {
+                                    let mut _45: bool;
+                                    scope 61 {
+                                    }
+                                }
+                                scope 62 (inlined #[track_caller] std::ptr::mut_ptr::<impl *mut (Vec<T>, usize)>::add) {
+                                }
+                            }
+                            scope 46 (inlined NonNull::<(Vec<T>, usize)>::as_ptr) {
+                            }
+                        }
+                        scope 38 (inlined <ManuallyDrop<Vec<(Vec<T>, usize)>> as Deref>::deref) {
+                            scope 39 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::as_ref) {
+                            }
+                        }
+                        scope 40 (inlined alloc::raw_vec::RawVec::<(Vec<T>, usize)>::non_null) {
+                            scope 41 (inlined alloc::raw_vec::RawVecInner::non_null::<(Vec<T>, usize)>) {
+                                scope 42 (inlined Unique::<u8>::cast::<(Vec<T>, usize)>) {
+                                    scope 43 (inlined NonNull::<u8>::cast::<(Vec<T>, usize)>) {
+                                        let mut _44: *const (std::vec::Vec<T>, usize);
+                                        scope 44 (inlined NonNull::<u8>::as_ptr) {
+                                        }
+                                    }
+                                }
+                                scope 45 (inlined Unique::<(Vec<T>, usize)>::as_non_null_ptr) {
+                                }
+                            }
+                        }
+                    }
+                    scope 30 (inlined <ManuallyDrop<Vec<(Vec<T>, usize)>> as Deref>::deref) {
+                        scope 31 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::as_ref) {
+                        }
+                    }
+                    scope 32 (inlined Vec::<(Vec<T>, usize)>::allocator) {
+                        scope 33 (inlined alloc::raw_vec::RawVec::<(Vec<T>, usize)>::allocator) {
+                            scope 34 (inlined alloc::raw_vec::RawVecInner::allocator) {
+                            }
+                        }
+                    }
+                    scope 35 (inlined #[track_caller] std::ptr::read::<std::alloc::Global>) {
+                    }
+                    scope 36 (inlined ManuallyDrop::<std::alloc::Global>::new) {
+                        scope 37 (inlined MaybeDangling::<std::alloc::Global>::new) {
+                        }
+                    }
+                }
+                scope 28 (inlined ManuallyDrop::<Vec<(Vec<T>, usize)>>::new) {
+                    scope 29 (inlined MaybeDangling::<Vec<(Vec<T>, usize)>>::new) {
+                    }
+                }
+            }
+            scope 69 (inlined <std::vec::IntoIter<(Vec<T>, usize)> as Iterator>::enumerate) {
+                scope 70 (inlined Enumerate::<std::vec::IntoIter<(Vec<T>, usize)>>::new) {
+                }
+            }
+            scope 71 (inlined <Enumerate<std::vec::IntoIter<(Vec<T>, usize)>> as IntoIterator>::into_iter) {
+            }
+        }
+        scope 7 (inlined Vec::<T>::with_capacity) {
+            scope 8 (inlined Vec::<T>::with_capacity_in) {
+                let mut _26: alloc::raw_vec::RawVec<T>;
+                scope 9 (inlined alloc::raw_vec::RawVec::<T>::with_capacity_in) {
+                    let mut _27: alloc::raw_vec::RawVecInner;
+                    scope 10 (inlined alloc::raw_vec::RawVecInner::with_capacity_in) {
+                        let mut _29: std::result::Result<alloc::raw_vec::RawVecInner, std::collections::TryReserveError>;
+                        let mut _30: isize;
+                        let mut _31: bool;
+                        let mut _32: bool;
+                        let _33: std::collections::TryReserveError;
+                        let mut _34: !;
+                        scope 11 {
+                            scope 13 (inlined alloc::raw_vec::RawVecInner::needs_to_grow) {
+                                let mut _35: usize;
+                                let mut _36: usize;
+                                let mut _37: usize;
+                                scope 14 (inlined Layout::size) {
+                                }
+                                scope 15 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                    let mut _38: core::num::niche_types::UsizeNoHighBit;
+                                    scope 16 (inlined UsizeNoHighBit::as_inner) {
+                                    }
+                                }
+                                scope 17 (inlined core::num::<impl usize>::wrapping_sub) {
+                                }
+                            }
+                            scope 18 (inlined #[track_caller] assert_unchecked) {
+                                scope 19 (inlined ub_checks::check_language_ub) {
+                                    scope 20 (inlined ub_checks::check_language_ub::runtime) {
+                                    }
+                                }
+                            }
+                        }
+                        scope 12 {
+                        }
+                    }
+                }
+            }
+        }
+    }
+    scope 6 (inlined ordered_families::<(Vec<T>, usize), {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs:11:53: 11:56}>) {
+    }
+
+    bb0: {
+        StorageLive(_4);
+        StorageLive(_5);
+        StorageLive(_6);
+        _6 = &_2;
+        StorageLive(_7);
+        _7 = &_3;
+        _5 = {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs:11:53: 11:56} { n: copy _6, f: copy _7 };
+        StorageDead(_7);
+        StorageDead(_6);
+        _4 = ordered_map_inner::<(Vec<T>, usize), {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs:11:53: 11:56}>(const 16_usize, move _5, const true) -> [return: bb13, unwind unreachable];
+    }
+
+    bb1: {
+        StorageLive(_12);
+        _13 = &mut _11;
+        _12 = <Enumerate<std::vec::IntoIter<(Vec<T>, usize)>> as Iterator>::next(move _13) -> [return: bb2, unwind unreachable];
+    }
+
+    bb2: {
+        _14 = discriminant(_12);
+        switchInt(move _14) -> [0: bb5, 1: bb4, otherwise: bb3];
+    }
+
+    bb3: {
+        unreachable;
+    }
+
+    bb4: {
+        _15 = copy (((_12 as Some).0: (usize, (std::vec::Vec<T>, usize))).0: usize);
+        StorageLive(_16);
+        _16 = move ((((_12 as Some).0: (usize, (std::vec::Vec<T>, usize))).1: (std::vec::Vec<T>, usize)).0: std::vec::Vec<T>);
+        _17 = copy ((((_12 as Some).0: (usize, (std::vec::Vec<T>, usize))).1: (std::vec::Vec<T>, usize)).1: usize);
+        StorageLive(_20);
+        _20 = pool::range(copy _2, copy _15) -> [return: bb6, unwind unreachable];
+    }
+
+    bb5: {
+        StorageDead(_12);
+        drop(_11) -> [return: bb11, unwind unreachable];
+    }
+
+    bb6: {
+        _18 = copy (_20.0: usize);
+        _19 = copy (_20.1: usize);
+        StorageDead(_20);
+        StorageLive(_22);
+        StorageLive(_23);
+        _23 = std::sync::Mutex::<Vec<[usize; 6]>>::lock(const {alloc16: &std::sync::Mutex<Vec<[usize; 6]>>}) -> [return: bb7, unwind unreachable];
+    }
+
+    bb7: {
+        _22 = Result::<std::sync::MutexGuard<'_, Vec<[usize; 6]>>, PoisonError<std::sync::MutexGuard<'_, Vec<[usize; 6]>>>>::unwrap(move _23) -> [return: bb8, unwind unreachable];
+    }
+
+    bb8: {
+        StorageLive(_47);
+        StorageLive(_46);
+        _47 = copy (_22.0: &std::sync::Mutex<std::vec::Vec<[usize; 6]>>);
+        StorageLive(_48);
+        _48 = &raw const ((*_47).2: std::cell::UnsafeCell<std::vec::Vec<[usize; 6]>>);
+        _46 = copy _48 as *mut std::vec::Vec<[usize; 6]> (PtrToPtr);
+        StorageDead(_48);
+        _21 = &mut (*_46);
+        StorageDead(_46);
+        StorageDead(_47);
+        StorageDead(_23);
+        StorageLive(_24);
+        _24 = [copy _1, copy _2, copy _15, copy _18, copy _19, copy _17];
+        StorageLive(_49);
+        _49 = Vec::<[usize; 6]>::push_mut(move _21, move _24) -> [return: bb20, unwind unreachable];
+    }
+
+    bb9: {
+        StorageDead(_22);
+        StorageLive(_25);
+        _25 = &mut _8;
+        StorageLive(_52);
+        _52 = copy ((((_16.0: alloc::raw_vec::RawVec<T>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _50 = copy _52 as *const T (Transmute);
+        StorageDead(_52);
+        _51 = copy (_16.1: usize);
+        StorageLive(_54);
+        _53 = Vec::<T>::reserve(copy _25, copy _51) -> [return: bb21, unwind unreachable];
+    }
+
+    bb10: {
+        StorageDead(_16);
+        StorageDead(_12);
+        goto -> bb1;
+    }
+
+    bb11: {
+        StorageDead(_11);
+        _0 = move _8;
+        StorageDead(_8);
+        StorageDead(_4);
+        drop(_3) -> [return: bb12, unwind unreachable];
+    }
+
+    bb12: {
+        return;
+    }
+
+    bb13: {
+        StorageDead(_5);
+        StorageLive(_8);
+        StorageLive(_26);
+        StorageLive(_27);
+        StorageLive(_28);
+        _28 = const <T as std::mem::SizedTypeProperties>::LAYOUT;
+        StorageLive(_30);
+        StorageLive(_33);
+        StorageLive(_29);
+        _29 = alloc::raw_vec::RawVecInner::try_allocate_in(copy _2, const alloc::raw_vec::AllocInit::Uninitialized, const std::alloc::Global, copy _28) -> [return: bb14, unwind unreachable];
+    }
+
+    bb14: {
+        _30 = discriminant(_29);
+        switchInt(move _30) -> [0: bb16, 1: bb15, otherwise: bb3];
+    }
+
+    bb15: {
+        _33 = move ((_29 as Err).0: std::collections::TryReserveError);
+        _34 = alloc::raw_vec::handle_error(move _33) -> unwind unreachable;
+    }
+
+    bb16: {
+        _27 = move ((_29 as Ok).0: alloc::raw_vec::RawVecInner);
+        StorageLive(_31);
+        StorageLive(_32);
+        StorageLive(_35);
+        StorageLive(_36);
+        StorageLive(_37);
+        _37 = copy (_28.0: usize);
+        switchInt(copy _37) -> [0: bb18, otherwise: bb19];
+    }
+
+    bb17: {
+        StorageDead(_37);
+        _35 = Sub(copy _36, const 0_usize);
+        StorageDead(_36);
+        _32 = Gt(copy _2, move _35);
+        StorageDead(_35);
+        _31 = Not(move _32);
+        StorageDead(_32);
+        assume(copy _31);
+        StorageDead(_31);
+        StorageDead(_29);
+        StorageDead(_33);
+        StorageDead(_30);
+        StorageDead(_28);
+        _26 = alloc::raw_vec::RawVec::<T> { inner: move _27, _marker: const ZeroSized: PhantomData<T> };
+        StorageDead(_27);
+        _8 = Vec::<T> { buf: move _26, len: const 0_usize };
+        StorageDead(_26);
+        StorageLive(_10);
+        _61 = move ((((_4.0: alloc::raw_vec::RawVec<(std::vec::Vec<T>, usize)>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _60 = move (((_4.0: alloc::raw_vec::RawVec<(std::vec::Vec<T>, usize)>).0: alloc::raw_vec::RawVecInner).1: core::num::niche_types::UsizeNoHighBit);
+        _59 = move (_4.1: usize);
+        StorageLive(_39);
+        StorageLive(_40);
+        StorageLive(_41);
+        StorageLive(_43);
+        StorageLive(_44);
+        _44 = copy _61 as *const (std::vec::Vec<T>, usize) (Transmute);
+        _39 = NonNull::<(Vec<T>, usize)> { pointer: copy _44 };
+        _40 = copy _61 as *mut (std::vec::Vec<T>, usize) (Transmute);
+        StorageLive(_42);
+        StorageLive(_45);
+        _45 = Le(copy _59, const <(std::vec::Vec<T>, usize) as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _45);
+        StorageDead(_45);
+        _42 = Offset(copy _40, copy _59);
+        _41 = copy _42 as *const (std::vec::Vec<T>, usize) (PtrToPtr);
+        StorageDead(_42);
+        _43 = copy _60 as usize (Transmute);
+        _10 = std::vec::IntoIter::<(Vec<T>, usize)> { buf: copy _39, phantom: const ZeroSized: PhantomData<(Vec<T>, usize)>, cap: move _43, alloc: const ManuallyDrop::<std::alloc::Global> {{ value: MaybeDangling::<std::alloc::Global>(std::alloc::Global) }}, ptr: copy _39, end: copy _41 };
+        StorageDead(_44);
+        StorageDead(_43);
+        StorageDead(_41);
+        StorageDead(_40);
+        StorageDead(_39);
+        _9 = Enumerate::<std::vec::IntoIter<(Vec<T>, usize)>> { iter: copy _10, count: const 0_usize };
+        StorageDead(_10);
+        StorageLive(_11);
+        _11 = copy _9;
+        goto -> bb1;
+    }
+
+    bb18: {
+        _36 = const usize::MAX;
+        goto -> bb17;
+    }
+
+    bb19: {
+        StorageLive(_38);
+        _38 = copy (_27.1: core::num::niche_types::UsizeNoHighBit);
+        _36 = copy _38 as usize (Transmute);
+        StorageDead(_38);
+        goto -> bb17;
+    }
+
+    bb20: {
+        StorageDead(_49);
+        StorageDead(_24);
+        drop(_22) -> [return: bb9, unwind unreachable];
+    }
+
+    bb21: {
+        _54 = copy ((*_25).1: usize);
+        StorageLive(_57);
+        _57 = Le(copy _54, const <T as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _57);
+        StorageDead(_57);
+        StorageLive(_55);
+        StorageLive(_56);
+        StorageLive(_58);
+        _58 = copy (((((*_25).0: alloc::raw_vec::RawVec<T>).0: alloc::raw_vec::RawVecInner).0: std::ptr::Unique<u8>).0: std::ptr::NonNull<u8>);
+        _56 = copy _58 as *mut T (Transmute);
+        StorageDead(_58);
+        _55 = Offset(copy _56, copy _54);
+        StorageDead(_56);
+        copy_nonoverlapping(dst = copy _55, src = copy _50, count = copy _51);
+        StorageDead(_55);
+        ((*_25).1: usize) = Add(copy ((*_25).1: usize), copy _51);
+        StorageDead(_54);
+        (_16.1: usize) = const 0_usize;
+        StorageDead(_25);
+        drop(_16) -> [return: bb10, unwind unreachable];
+    }
+}
+
+alloc16 (static: TRACE, size: 32, align: 8) {
+    0x00 │ 00 00 00 00 00 __ __ __ 00 00 00 00 00 00 00 00 │ .....░░░........
+    0x10 │ 08 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 │ ................
+}
+
+fn host_work::map::{closure#0}(_1: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/../../evidence/pv-v263-20261102/inputs/crates/aspis-r1-cost-probe/src/host_work.rs:11:53: 11:56}, _2: usize) -> (Vec<T>, usize) {
+    debug k => _2;
+    debug n => (*((*_1).0: &usize));
+    debug f => (*((*_1).1: &F));
+    let mut _0: (std::vec::Vec<T>, usize);
+    let _3: usize;
+    let mut _4: (usize, usize);
+    let mut _5: usize;
+    let mut _7: usize;
+    let mut _9: std::option::Option<usize>;
+    let mut _11: &mut std::vec::Vec<T>;
+    let mut _12: T;
+    let mut _13: (usize,);
+    let mut _14: std::vec::Vec<T>;
+    let mut _15: &usize;
+    let mut _16: &F;
+    let mut _19: std::alloc::Layout;
+    scope 1 {
+        debug a => _32;
+        debug b => _3;
+        let mut _6: std::vec::Vec<T>;
+        scope 2 {
+            debug out => _6;
+            let mut _8: usize;
+            scope 3 {
+                debug completed => _8;
+                scope 4 {
+                    debug ((iter: std::ops::Range<usize>).0: usize) => _32;
+                    debug ((iter: std::ops::Range<usize>).1: usize) => _3;
+                    let _10: usize;
+                    scope 5 {
+                        debug i => _10;
+                        scope 29 (inlined Vec::<T>::push) {
+                            let mut _34: &mut T;
+                            scope 30 {
+                            }
+                        }
+                    }
+                    scope 21 (inlined iter::range::<impl Iterator for std::ops::Range<usize>>::next) {
+                        scope 22 (inlined <std::ops::Range<usize> as iter::range::RangeIteratorImpl>::spec_next) {
+                            let mut _30: bool;
+                            let _31: usize;
+                            let mut _32: usize;
+                            scope 23 {
+                                scope 25 (inlined <usize as Step>::forward_unchecked) {
+                                    scope 26 (inlined #[track_caller] core::num::<impl usize>::unchecked_add) {
+                                        scope 27 (inlined ub_checks::check_language_ub) {
+                                            scope 28 (inlined ub_checks::check_language_ub::runtime) {
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            scope 24 (inlined std::cmp::impls::<impl PartialOrd for usize>::lt) {
+                                let mut _33: usize;
+                            }
+                        }
+                    }
+                }
+                scope 20 (inlined <std::ops::Range<usize> as IntoIterator>::into_iter) {
+                }
+            }
+        }
+        scope 6 (inlined Vec::<T>::with_capacity) {
+            scope 7 (inlined Vec::<T>::with_capacity_in) {
+                let mut _17: alloc::raw_vec::RawVec<T>;
+                scope 8 (inlined alloc::raw_vec::RawVec::<T>::with_capacity_in) {
+                    let mut _18: alloc::raw_vec::RawVecInner;
+                    scope 9 (inlined alloc::raw_vec::RawVecInner::with_capacity_in) {
+                        let mut _20: std::result::Result<alloc::raw_vec::RawVecInner, std::collections::TryReserveError>;
+                        let mut _21: isize;
+                        let mut _22: bool;
+                        let mut _23: bool;
+                        let _24: std::collections::TryReserveError;
+                        let mut _25: !;
+                        scope 10 {
+                            scope 12 (inlined alloc::raw_vec::RawVecInner::needs_to_grow) {
+                                let mut _26: usize;
+                                let mut _27: usize;
+                                let mut _28: usize;
+                                scope 13 (inlined Layout::size) {
+                                }
+                                scope 14 (inlined alloc::raw_vec::RawVecInner::capacity) {
+                                    let mut _29: core::num::niche_types::UsizeNoHighBit;
+                                    scope 15 (inlined UsizeNoHighBit::as_inner) {
+                                    }
+                                }
+                                scope 16 (inlined core::num::<impl usize>::wrapping_sub) {
+                                }
+                            }
+                            scope 17 (inlined #[track_caller] assert_unchecked) {
+                                scope 18 (inlined ub_checks::check_language_ub) {
+                                    scope 19 (inlined ub_checks::check_language_ub::runtime) {
+                                    }
+                                }
+                            }
+                        }
+                        scope 11 {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_4);
+        StorageLive(_5);
+        _15 = copy ((*_1).0: &usize);
+        _5 = copy (*_15);
+        _4 = pool::range(move _5, move _2) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        StorageDead(_5);
+        _32 = copy (_4.0: usize);
+        _3 = copy (_4.1: usize);
+        StorageDead(_4);
+        StorageLive(_6);
+        StorageLive(_7);
+        _7 = Sub(copy _3, copy _32);
+        StorageLive(_17);
+        StorageLive(_18);
+        StorageLive(_19);
+        _19 = const <T as std::mem::SizedTypeProperties>::LAYOUT;
+        StorageLive(_21);
+        StorageLive(_24);
+        StorageLive(_20);
+        _20 = alloc::raw_vec::RawVecInner::try_allocate_in(copy _7, const alloc::raw_vec::AllocInit::Uninitialized, const std::alloc::Global, copy _19) -> [return: bb5, unwind unreachable];
+    }
+
+    bb2: {
+        StorageLive(_9);
+        StorageLive(_30);
+        StorageLive(_33);
+        _33 = copy _32;
+        _30 = Lt(move _33, copy _3);
+        StorageDead(_33);
+        switchInt(move _30) -> [0: bb12, otherwise: bb11];
+    }
+
+    bb3: {
+        unreachable;
+    }
+
+    bb4: {
+        StorageDead(_13);
+        StorageLive(_34);
+        _34 = Vec::<T>::push_mut(move _11, move _12) -> [return: bb13, unwind unreachable];
+    }
+
+    bb5: {
+        _21 = discriminant(_20);
+        switchInt(move _21) -> [0: bb7, 1: bb6, otherwise: bb3];
+    }
+
+    bb6: {
+        _24 = move ((_20 as Err).0: std::collections::TryReserveError);
+        _25 = alloc::raw_vec::handle_error(move _24) -> unwind unreachable;
+    }
+
+    bb7: {
+        _18 = move ((_20 as Ok).0: alloc::raw_vec::RawVecInner);
+        StorageLive(_22);
+        StorageLive(_23);
+        StorageLive(_26);
+        StorageLive(_27);
+        StorageLive(_28);
+        _28 = copy (_19.0: usize);
+        switchInt(copy _28) -> [0: bb9, otherwise: bb10];
+    }
+
+    bb8: {
+        StorageDead(_28);
+        _26 = Sub(copy _27, const 0_usize);
+        StorageDead(_27);
+        _23 = Gt(copy _7, move _26);
+        StorageDead(_26);
+        _22 = Not(move _23);
+        StorageDead(_23);
+        assume(copy _22);
+        StorageDead(_22);
+        StorageDead(_20);
+        StorageDead(_24);
+        StorageDead(_21);
+        StorageDead(_19);
+        _17 = alloc::raw_vec::RawVec::<T> { inner: move _18, _marker: const ZeroSized: PhantomData<T> };
+        StorageDead(_18);
+        _6 = Vec::<T> { buf: move _17, len: const 0_usize };
+        StorageDead(_17);
+        StorageDead(_7);
+        _8 = const 0_usize;
+        goto -> bb2;
+    }
+
+    bb9: {
+        _27 = const usize::MAX;
+        goto -> bb8;
+    }
+
+    bb10: {
+        StorageLive(_29);
+        _29 = copy (_18.1: core::num::niche_types::UsizeNoHighBit);
+        _27 = copy _29 as usize (Transmute);
+        StorageDead(_29);
+        goto -> bb8;
+    }
+
+    bb11: {
+        _31 = copy _32;
+        _32 = AddUnchecked(copy _31, const 1_usize);
+        _9 = Option::<usize>::Some(copy _31);
+        StorageDead(_30);
+        _10 = copy ((_9 as Some).0: usize);
+        StorageLive(_11);
+        _11 = &mut _6;
+        StorageLive(_12);
+        _16 = copy ((*_1).1: &F);
+        StorageLive(_13);
+        _13 = (copy _10,);
+        _12 = <F as Fn<(usize,)>>::call(move _16, move _13) -> [return: bb4, unwind unreachable];
+    }
+
+    bb12: {
+        StorageDead(_30);
+        StorageDead(_9);
+        StorageLive(_14);
+        _14 = move _6;
+        _0 = (move _14, move _8);
+        StorageDead(_14);
+        StorageDead(_6);
+        return;
+    }
+
+    bb13: {
+        StorageDead(_34);
+        StorageDead(_12);
+        StorageDead(_11);
+        _8 = Add(copy _8, const 1_usize);
+        StorageDead(_9);
+        goto -> bb2;
+    }
+}
+
+fn main() -> () {
+    let mut _0: ();
+    let _1: std::vec::Vec<usize>;
+    let mut _2: &usize;
+    let _3: usize;
+    let _4: !;
+    scope 1 {
+        debug output => _1;
+        let mut _5: &usize;
+        scope 2 {
+            debug left_val => _2;
+            debug right_val => _5;
+            scope 3 {
+                debug kind => const core::panicking::AssertKind::Eq;
+            }
+        }
+        scope 4 (inlined Vec::<usize>::len) {
+            let mut _6: bool;
+            scope 5 {
+            }
+        }
+    }
+
+    bb0: {
+        StorageLive(_1);
+        _1 = host_work::map::<usize, {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-counter.rs:7:42: 7:45}>(const 200_usize, const 27_usize, const ZeroSized: {closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-counter.rs:7:42: 7:45}) -> [return: bb1, unwind unreachable];
+    }
+
+    bb1: {
+        _3 = copy (_1.1: usize);
+        StorageLive(_6);
+        _6 = Le(copy _3, const <usize as std::mem::SizedTypeProperties>::MAX_SLICE_LEN);
+        assume(move _6);
+        StorageDead(_6);
+        _2 = &_3;
+        _5 = const main::promoted[0];
+        switchInt(copy _3) -> [27: bb2, otherwise: bb3];
+    }
+
+    bb2: {
+        drop(_1) -> [return: bb4, unwind unreachable];
+    }
+
+    bb3: {
+        _4 = assert_failed::<usize, usize>(const core::panicking::AssertKind::Eq, move _2, move _5, const Option::<Arguments<'_>>::None) -> unwind unreachable;
+    }
+
+    bb4: {
+        StorageDead(_1);
+        return;
+    }
+}
+
+alloc223 (size: 16, align: 8) {
+    00 00 00 00 00 00 00 00 __ __ __ __ __ __ __ __ │ ........░░░░░░░░
+}
+
+const main::promoted[0]: &usize = {
+    let mut _0: &usize;
+    let mut _1: usize;
+
+    bb0: {
+        _1 = const 27_usize;
+        _0 = &_1;
+        return;
+    }
+}
+
+fn main::{closure#0}(_1: &{closure@/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-counter.rs:7:42: 7:45}, _2: usize) -> usize {
+    debug i => _2;
+    let mut _0: usize;
+
+    bb0: {
+        _0 = copy _2;
+        return;
+    }
+}
+
+fn Active(_1: bool) -> Active {
+    let mut _0: host_work::pool::Active;
+
+    bb0: {
+        _0 = Active(move _1);
+        return;
+    }
+}
+
+// MIR FOR CTFE
+fn Active(_1: bool) -> Active {
+    let mut _0: host_work::pool::Active;
+
+    bb0: {
+        _0 = Active(move _1);
+        return;
+    }
+}
