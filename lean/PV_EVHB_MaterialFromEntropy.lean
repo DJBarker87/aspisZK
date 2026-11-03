@@ -1,5 +1,5 @@
 import PV_EVH_Runtime
-import PV_EVHB_CallbackEffects
+import PV_EVHB_CallbackSelection
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVHB_MaterialFromEntropy
@@ -97,7 +97,8 @@ theorem run_fixed
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (precommit_binding : Array Std.U8 32#usize)
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
-  (private_entropy : Array Std.U8 32#usize) (nonce_store : T0) (c : Callees) (compatible : Compatible c) :
+  (private_entropy : Array Std.U8 32#usize) (nonce_store : T0) (c : Callees) (compatible : Compatible c)
+    (selected : PV_EVH_OperatorFrames.Selection (inferInstance : ExternalFuns)) :
     PartialView (run StateOnlyMaskNonceStoreInst hash precommit_binding context private_entropy nonce_store c) (aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref StateOnlyMaskNonceStoreInst hash precommit_binding context private_entropy nonce_store) := by
   unfold run aspis_prover.state_only_hiding.build_pool_v1_pair_forest_mask_material_v1_from_entropy_ref
   try dsimp only
@@ -126,7 +127,8 @@ theorem run_fixed
             try dsimp only
             apply PV_EVH_Runtime.bind_view
             ·
-              exact PV_EVHB_CallbackEffects.mapErr_view c.drop_OPEN c.drop_OPEN aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout () _
+              change PartialView _ ((inferInstance : ExternalFuns).op12 _ _ _)
+              exact PV_EVHB_CallbackSelection.constructor_mapErr_view _ selected _ c.drop_OPEN c.drop_OPEN aspis_prover.state_only_hiding.StateOnlyMaskBuildError.Layout () _ (fun _ => rfl)
                 (fun e => compatible.drop_fixed e) (compatible.drop_fixed ())
             · intro r1
               try dsimp only

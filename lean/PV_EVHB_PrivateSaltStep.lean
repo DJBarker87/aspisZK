@@ -1,5 +1,5 @@
 import PV_EVH_Runtime
-import PV_EVHB_CallbackEffects
+import PV_EVHB_CallbackSelection
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVHB_PrivateSaltStep
@@ -53,7 +53,8 @@ theorem run_fixed
   (context : aspis_core.state_only_hiding.StateOnlyHidingContext)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (tag : Std.U8) (index : Std.U32)
-  (salts : alloc.vec.Vec (Array Std.U8 32#usize)) (c : Callees) (compatible : Compatible c) :
+  (salts : alloc.vec.Vec (Array Std.U8 32#usize)) (c : Callees) (compatible : Compatible c)
+    (selected : PV_EVH_OperatorFrames.Selection (inferInstance : ExternalFuns)) :
     PartialView (run reserved context hash tag index salts c) (prover.derive_private_salt_step reserved context hash tag index salts) := by
   unfold run prover.derive_private_salt_step
   try dsimp only
@@ -64,7 +65,8 @@ theorem run_fixed
     try dsimp only
     apply PV_EVH_Runtime.bind_view
     ·
-      exact PV_EVHB_CallbackEffects.mapErr_view c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _
+      change PartialView _ ((inferInstance : ExternalFuns).op12 _ _ _)
+      exact PV_EVHB_CallbackSelection.constructor_mapErr_view _ selected _ c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _ (fun _ => rfl)
         (fun e => compatible.drop_fixed e) (compatible.drop_fixed ())
     · intro r1
       try dsimp only

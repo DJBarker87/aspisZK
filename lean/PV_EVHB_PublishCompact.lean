@@ -1,6 +1,6 @@
 import PV_EVH_RuntimeValueBind
 import PV_EVH_Runtime
-import PV_EVHB_CallbackEffects
+import PV_EVHB_CallbackSelection
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVHB_PublishCompact
@@ -123,7 +123,8 @@ def run
       (alloc.vec.Vec Std.U8) (core.convert.FromSame verifier.Error) residual)
 
 theorem run_fixed
-  (variant : transport.Variant) (p : prover.Publication) (c : Callees) (compatible : Compatible c) :
+  (variant : transport.Variant) (p : prover.Publication) (c : Callees) (compatible : Compatible c)
+    (selected : PV_EVH_OperatorFrames.Selection (inferInstance : ExternalFuns)) :
     PartialView (run variant p c) (prover.publish_compact variant p) := by
   unfold run prover.publish_compact
   try dsimp only
@@ -174,7 +175,8 @@ theorem run_fixed
                     try dsimp only
                     apply PV_EVH_Runtime.bind_view
                     ·
-                      exact PV_EVHB_CallbackEffects.mapErr_view c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _
+                      change PartialView _ ((inferInstance : ExternalFuns).op12 _ _ _)
+                      exact PV_EVHB_CallbackSelection.constructor_mapErr_view _ selected _ c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _ (fun _ => rfl)
                         (fun e => compatible.drop_fixed e) (compatible.drop_fixed ())
                     · intro r1
                       try dsimp only
@@ -195,7 +197,8 @@ theorem run_fixed
                             try dsimp only
                             apply PV_EVH_Runtime.bind_view
                             ·
-                              exact PV_EVHB_CallbackEffects.mapErr_view c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _
+                              change PartialView _ ((inferInstance : ExternalFuns).op12 _ _ _)
+                              exact PV_EVHB_CallbackSelection.constructor_mapErr_view _ selected _ c.drop_OPEN c.drop_OPEN verifier.Error.Semantic () _ (fun _ => rfl)
                                 (fun e => compatible.drop_fixed e) (compatible.drop_fixed ())
                             · intro r3
                               try dsimp only

@@ -1,5 +1,5 @@
 import PV_EVH_Runtime
-import PV_EVHB_CallbackEffects
+import PV_EVHB_CallbackSelection
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVHB_PrepareOpening
@@ -174,7 +174,8 @@ theorem run_fixed
   (variant : transport.Variant)
   (hash : Slice (Slice Std.U8) → Result (Array Std.U8 32#usize))
   (backend : prover.Backend)
-  (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) (c : Callees) (compatible : Compatible c) :
+  (sem : host_semantic.BuiltSemantics aspis_core.digest.LegacyHashFn) (c : Callees) (compatible : Compatible c)
+    (selected : PV_EVH_OperatorFrames.Selection (inferInstance : ExternalFuns)) :
     PartialView (run variant hash backend sem c) (prover.prepare_opening variant hash backend sem) := by
   unfold run prover.prepare_opening
   try dsimp only
@@ -337,7 +338,8 @@ theorem run_fixed
                                                           try dsimp only
                                                           apply PV_EVH_Runtime.bind_view
                                                           ·
-                                                            exact PV_EVHB_CallbackEffects.mapErr_view c.drop_OPEN c.drop_OPEN verifier.Error.Allocation () _
+                                                            change PartialView _ ((inferInstance : ExternalFuns).op12 _ _ _)
+                                                            exact PV_EVHB_CallbackSelection.constructor_mapErr_view _ selected _ c.drop_OPEN c.drop_OPEN verifier.Error.Allocation () _ (fun _ => rfl)
                                                               (fun e => compatible.drop_fixed e) (compatible.drop_fixed ())
                                                           · intro r3
                                                             try dsimp only
