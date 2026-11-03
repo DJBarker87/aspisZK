@@ -6,6 +6,7 @@ No callback success, source type inference or complete worker binding is assumed
 set_option autoImplicit false
 namespace R1Z.PV_V263_CounterBounds
 open PV_RunJoin_WorkRange35
+open Aeneas.Std
 
 theorem width_bound (n k : Nat) (bound : n≤14336) : width n k≤896 := by
   unfold width
@@ -28,6 +29,19 @@ theorem commitment_width (k : Nat) : width 27 k≤2 ∧ width 2 k≤1 := by
   simp only [width]
   constructor <;> split <;> omega
 
+theorem actual_count_bound (round : Usize) (valid : round.val<10) :
+    (PV_RunJoin_SampleDomain34.count round).val≤14336 := by
+  rw [PV_RunJoin_SampleDomain34.count_value round valid,
+    PV_RunJoin_SampleDomain34.assignments_value round valid]
+  exact sumcheck_count round.val
+
+theorem actual_counter_bound (round : Usize) (valid : round.val<10) (k completed : Nat)
+    (more : completed<width (PV_RunJoin_SampleDomain34.count round).val k) :
+    completed+1≤896 ∧ (completed : Int)+1≤2^31-1 :=
+  increment_safe _ k completed (actual_count_bound round valid) more
+
+#print axioms actual_count_bound
+#print axioms actual_counter_bound
 #print axioms width_bound
 #print axioms increment_safe
 #print axioms sumcheck_count
