@@ -4,7 +4,8 @@ The owner restarted the Mac. Every Codex job died mid-run; each worktree has a W
 
 ## Jobs to resume (one per line: worktree, branch, prompt, out, last commit)
 - NER_ coherent rebuild: .worktrees/cx-coherent, codex/cx-coherent-20261102, prompt-coherent-r2.txt, out/codex-coherent.out, c08dfcf3be. It had batch-built the first ~13+ batches. Goal: a coherent cohort, zero dangling refs, the hardened walker on RPx_Deployed plus sourceOnHeadline, and a cohort manifest for Stream B (D565 is waiting on it). L188 obligations 1 and 4 stay REOPENED until then.
-- NEQ_ slice S roots: .worktrees/cx-slice-s-compose6, codex/cx-slice-s-compose6-20261102, prompt-slice-s-compose6.txt, out/codex-slice-s-compose6.out, 5ef45dcc19. Slice S was 50/97, 1/7 roots (validator CLOSED). Next: encoder, emit_result, ...
+- (DONE before restart, merged) NEQ_ slice S: 68/97, 2/7 roots (validator + encoder). NEXT: launch a slice-S continuation for emit_result, request decoder, reconstruct_asq8, decode_public_statement_box, scan_proof_buffer, built from prompt-slice-s-compose6.txt the same way.
+- (old line) NEQ_ slice S roots: .worktrees/cx-slice-s-compose6, codex/cx-slice-s-compose6-20261102, prompt-slice-s-compose6.txt, out/codex-slice-s-compose6.out, 5ef45dcc19. Slice S was 50/97, 1/7 roots (validator CLOSED). Next: encoder, emit_result, ...
 - NEI_ slice Q arithmetic: .worktrees/cx-slice-q-mul2, BRANCH codex/cx-slice-q-mul2-20261029 (note the date), prompt-slice-q-mul2.txt, out/codex-slice-q-mul2.out, 35f682158d.
 - NET_ slice Q composition: .worktrees/cx-slice-q-compose3, codex/cx-slice-q-compose3-20261102, prompt-slice-q-compose3.txt, out/codex-slice-q-compose3.out, 32f6398bdb. (z)(2) is adopted.
 
