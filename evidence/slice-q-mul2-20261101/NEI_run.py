@@ -43,6 +43,7 @@ sys.exit(r.returncode)
 files={}
 sources=[]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEI_tmp',LEAN_PATH=B+'/NEI_objects:'+C+'/NEG_results_20261101:'+C+'/NEG_exports_20261029:'+C+'/NEB_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
+if os.environ.get('NEI_ARCHIVE_IMPORT')=='1':env['LEAN_PATH']=env['LEAN_PATH'].replace(B+'/NEI_objects',C+'/NEI_exports_20261102',1)
 deps={}
 native=[]
 if kind=='lean':
@@ -69,7 +70,9 @@ elif kind=='kani':
     command=['python3','NEI_gate.py',a+'.json']
 elif kind=='native':
     family=os.environ.get('NEI_NATIVE_FAMILY','line');assert family in ['line','circle','prefix','push','row','accumulate','dots','field']
-    for name in [f'NEI_{family}_native.py',f'NEI_{family}_native.rs','NEI_FROZEN.json']:files[name]=(E/name).read_text()
+    for name in [f'NEI_{family}_native.py',f'NEI_{family}_native.rs','NEI_FROZEN.json']:
+        files[name]=(json.loads((E/'NEI_FIELD_NATIVE_INPUT.json').read_text())['rust_source'] if family=='field' and name=='NEI_field_native.rs' else (E/name).read_text())
+    if family=='field':files['NEI_FIELD_TEST_INPUTS.json']=(E/'NEI_FIELD_TEST_INPUTS.json').read_text()
     if os.environ.get('NEI_WRONG'):env['NEI_WRONG']=os.environ['NEI_WRONG']
     sources=list(files);command=['python3',f'NEI_{family}_native.py']
 elif kind=='inspect':

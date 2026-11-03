@@ -1,79 +1,84 @@
-# NEI continuation status
+# NEI arithmetic continuation handoff
 
-Work remains active. Branch codex/cx-slice-q-mul2-20261029. No push.
+Branch: codex/cx-slice-q-mul2-20261029. No push. Frozen source:
+4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Only this evidence directory changed;
+no repository crates/programs, deployed artifacts, session A files or keys changed.
+The headline remains AspisR1.RPx_Deployed.deployed; S2/root soundness is OPEN.
+L154 remains a statement parameter; D188 and option A tool trust are retained.
 
-Completed stages: line, circle, residue-row and push local CLOSED-CONDITIONAL D188 packets. Zero composed rows closed. Two local row iterator/copy checks have matched controls; no suspended Kani credit restored. All caller-to-fold edges remain OPEN, including the query_values Option<fn> quarantine.
+Authoritative local result: NEI_CLOSED.json / NEI_LEDGER_DELTA.json and the exact
+NEB-derived NEI_DERIVED_LEDGER.json. 66 occurrence rows /33 functions CLOSED,
+113/257 slice edges certified. Local four-part packets remain CLOSED-CONDITIONAL
+with their stated source/tool/physical qualifications. No suspended NEB Kani
+credit is restored or used by ANY closure. Static receiver resolutions reuse
+only unchanged source/type classification, with fresh NEI proofs/certificates.
+Original NDT/NEB checks remain byte-identical; extra certificate classes and
+same-body fresh replacements are narrowly guarded and content-addressed.
 
-Current use: 58/140 Lean, 2/25 extraction, 20/50 Kani; nine native-runner attempts (eight fixture/control executions; one preflight error). Each prover/compiler ran serially under admitted 6G/8G/swap0/tasks64 scopes. Failed drafts are excluded and replacements changed source or split the proof.
+Principal requested members:
 
-Prefix stage remains OPEN on actual native Vec append/frame after three changed/split timeouts. Its successful kernel/native components and exact missing domain are in NEI_PREFIX_OBLIGATIONS.md. Continue with push and its real row child, then accumulate, four_dots_one, four_dots, followed by exact caller-edge certification. Existing model objects remain in the own cache; it must not be deleted.
+| Member | Result | Exact remaining obligation |
+| --- | --- | --- |
+| line_fold_with_inverses | Composed CLOSED, TX1:190 / TX2:117 | Incoming caller edges still need their native same-call context/domain certificates. Domain is canonical alpha/four rows; inverse words unrestricted. |
+| circle_fold_with_inverses | Composed CLOSED, TX1:188 / TX2:113 | Incoming caller edges still OPEN; canonical alpha/rows, unrestricted inverses. |
+| batch_prefix_products | OPEN | Actual Vec::push appended-cell and old-word frame binding on arbitrary valid prestate up to110. K039/K040 qualify metadata only. K041/K042 timed out, no credit. Kernel field reply, windows, step and finite induction are done. More Lean value algebra cannot supply the missing native binding. |
+| BatchedWeights::push | Composed CLOSED, TX1:177 / TX2:101 | No remaining local obligation. Slice-Q caller allocation64 rows, valid index and safe selected-row additions. Actual push does NOT increment terms. Incoming accumulator edge is separate. |
+| update_residue_row | Composed CLOSED, TX1:195 / TX2:125 | No remaining local obligation. Each checked U64 addition fits; arbitrary flush. |
+| accumulate_batched_with_node | OPEN | Actual evaluated CodeField::from_m31 at trace13 is outside Q; record NEI_ACCUMULATE_BOUNDARY.json, do not prove outside scope. Native basis/row iteration association still needed. L117 fixes the model shell to independent global/local counters <22; no next=terms assumption and no <10 restriction. This does not create the native bridge. |
+| four_dots_one | OPEN | Real canonical::Q::raw callee is omitted from Q; NEI_DOTS_BOUNDARY.json. Need allowed callee adoption plus one actual loop iteration/log/copy context, then existing NEG induction/product laws. Constructor, reducer, Q::limbs, both finishers and wide constructor are now freshly composed. |
+| four_dots | OPEN | E007 and L086 give exact full-Result wrapper association and same q/g, slots0..3. Needs CLOSED child, exact native prefix/borrow/call context and copy qualification where reached. A model wrapper equality cannot replace these. |
 
-No repository crates/programs or release artifacts changed. ELF hashes are inherited, not newly rebuilt. Deployed per-attempt soundness target remains not established.
+Kani budget exhausted:50/50. Actual Lean126/140 (numbered through L129;
+L054/L079/L087 were prelaunch-only gaps). Extraction10/25. Native differential
+runner14 attempts: these are fidelity tests, NOT universal native arithmetic
+proofs. Remaining principal obligations need native evidence or an outside-Q
+callee; no outstanding admissible Lean-only arithmetic result is hidden by the
+Kani stop. All relevant actual bodies are extracted already (or imported NEG),
+so extra unchanged extraction replays would not discharge these frontiers.
 
-Row stage complete locally; next return to push using NEG_PushAssociation and the row packet. Native N005 was a preflight error, not a test credit.
+Method/evidence:
+- NEG proofs are imported, not reproved. Exact problematic NEG_PrefixStep source
+  was privately recompiled; own cache imports/hashes are recorded.
+- E001 actual full field forest, E002 circle; L014-L016/L020-L023 prove same cuts,
+  complete Result/carrier/state/effects and canonical caller domains.
+- Row/push: exact iterator, KMX window/frame induction and raw nominal carriers;
+  K010-K028 relevant pairs, L035-L069, native/model fixtures and controls.
+- E008 wide constructor: actual eight guards/record, all raw U32s including
+  rejection; L075/L085 and K031/K032, no old native credit.
+- E009/E010 reducers/finishers/reference: actual checked and safe wrapping bodies,
+  L090/L100-L102/L118-L122 and K043-K050. Existing modulo/value proofs replayed
+  with only coherent imports/private namespaces, with provenance.
+- Field D188: existing actual E001 / all-Result NEI_FieldScalar/CM/QM/Wide
+  associations, inverse record maps, L124 emitted100 fixtures, L127 frames/widen,
+  N013/N014 twenty direct-field native tests/controls. No multiplication in Kani,
+  no field stub, no native universal proof inferred from fixtures. N010 failed
+  only on missing frozen KAT build inputs; N011/N012 helper-based observations
+  are superseded by direct-record N013/N014. Inputs copied from frozen revision.
+- L128 combined co-import/axioms audit PASS, standard axioms only. Every accepted
+  top theorem has a printed audit; failed drafts and timeouts are excluded.
+- All host compiler/prover jobs used admitted serial6G/8G/swap0/tasks64 scopes,
+  Lean -M7000, optimized Rust, offline frozen lock/graph per Kani run. Scope and
+  all section6 metrics/revisions/source hashes are in NEI_ATTEMPTS.jsonl.
+- Metadata runner repairs preserve or strengthen checks: stdout diagnostics and
+  interleaved native failure summaries handled explicitly; recipe sets reused
+  only within one validator invocation. No host/lead launcher modified.
 
-Push local packet complete, including literal raw Types and full-Result carrier transport. Next accumulate (actual-body extraction), four_dots_one, four_dots; return to prefix with a genuinely split native geometry/write/frame decomposition; then strict NEB edge/root certificates. One scope at a time is enforced by awaiting each prior receipt (own flock removed). Gap L054 is prelaunch-only and not a Lean invocation. Native Vec-to-row physical transport uses passed geometry/disjoint byte checks plus four-word write context and exact KMX frame induction; bulk timeouts remain uncredited.
+Cache: /home/dombarker/project-offloads/codex-cx-slice-q-mul2-cache-20261029.
+Never delete it. Final object archive and own-target cleanup receipts are linked
+by NEI_FINAL_INTEGRITY.json when completed. Aeneas/AeneasMeta objects are pinned.
+The frozen ELF hashes are inherited, NOT newly rebuilt: default f8c0ec72...,
+devnet63ad3e9c..., Pool121f3e29...; no shipped source changed.
 
-Accumulation stage recorded OPEN: actual-body E005 PASS, full input records retained, L060 Types and L061 counter bounds PASS. Real CodeField::from_m31 in r0/scalar.rs is outside slice Q, and no separately CLOSED constructor bridge has been adopted. The old NBO shell's next<10/sync condition fails to cover TX2. Work continues with independent dot members, then prefix/edge composition. Current actual counts: 60 Lean (L054 prelaunch only),20 Kani,5 extraction; no native/Kani multiplication.
+Archive-only import audit L129 PASS with standard axioms, using retained
+NEI_exports_20261102 (88 compiled artifacts). NEI_CACHE_EXPORTS.json records
+all hashes. NEI_FINAL_CLEANUP.json confirms own Rust/Kani targets and solver tmp
+removed; cache and source scratch retained, no keys created or touched.
 
-Constructor substage: local packets NEI_CTOR_PACKETS.json plus actual E006 raw source and L063/L067, four new native runs K021–K024. Four composed rows CLOSED (two constructors across TX1/TX2), one callee edge. Original NEB file unchanged; NEI_composition uses registration hooks and a byte-identical derived validator with only a narrowly guarded additional external-occurrence branch for TX2's two duplicate constructor entries. Ten negative/invariant controls PASS; old native certificates forbidden. Current counts66/140 Lean (L054 prelaunch-only),24/50 Kani,6/25 extraction. Main dot products/tails remain OPEN; next inspect exact private-Q raw call boundary and remaining independent children, then four_dots, prefix decomposition and row/getter/parent edges. No final stop is authorized by these intermediate findings.
-
-Row/getter/push composition complete: twelve CLOSED occurrence rows /six functions with four edges, only fresh NEI native credit. L069 and K025–K028 supply actual read/domain/immutable-frame evidence; additional exact row-widening class checked; fourteen mutation tests PASS. K029/K030 prefix append shapes timed out, no credit; K033 primitive110-word write/frame PASS, K034 control pending. Wide constructor K031 PASS/K032 FAIL intended, not yet packaged with a coherent model law. Current68 Lean (L054 gap),34 Kani submitted,6 extraction. Main dot functions remain OPEN on product/tail/native-loop obligations plus explicit omitted Q::raw slice dependency. Work remains active; do not stop solely because some units are blocked.
-
-Continuation update: K034's intended control FAIL and strict pair PASS qualify only
-the primitive prefix word-write frame (not Vec::push). L075 wide constructor law
-PASS/standard axioms, K031/K032 pair PASS. E007 actual wrapper extraction PASS;
-L082 exact four-call wrapper theorem PASS. No new composed rows in this update.
-L079 prelaunch-only, as L054 was. K035 running a distinct metadata-only
-postcondition for the valid arbitrary Vec prestate; no old timeout is rerun.
-
-Wide constructor stage complete: E008 actual field guard/record extraction has
-no external holes; L083/L084 literal modules and L085 nominal Result association
-PASS. L075 full Option/eight-field observation and K031/K032 fresh controls are
-paired. NEB additive composition now closes fourteen rows /seven functions,
-four edges. All original validator checks retained; exact Option source-site
-branch added. Further tests/validation pending before this stage's commit.
-Prefix K036 and K038 negative controls timed out, so K035/K037 uncredited.
-K039 universal positive PASS; K040 isolates valid n=1,index=0 wrong-length
-counterexample, pending. Positive domain never strengthened. Continue whole
-budget: current83 actual Lean runs (L054,L079 prelaunch gaps),40 Kani submitted,
-8 extraction. No stop; finish prefix native append/frame and independent dot
-children, then accumulator Lean-only broader TX2 shell as feasible.
-
-Wide constructor stage validation finished: seventeen mutation/invariant tests
-PASS and NEI_validate exit0, fourteen composed rows. K039/K040 strict pair PASS:
-full positive metadata domain, valid single-witness negative (n=1,index=0).
-K041 actual appended-cell cut TIMEOUT, no credit or unchanged retry. K042 separate
-old-word observation cut submitted, then continue independent dot finish leaves.
-
-Dot finish work: E009 actual reducer/Q getter/Dot finish/Eby finish extraction
-PASS. L088/L091/L092 raw modules PASS, wide constructor external is an explicit
-nominal transport to actual E008, not an axiom. Original LPf_ReductionWord import
-collides with a coherent RPz7 S1 decoder (L089 excluded); NEI_ReductionWord L090
-replays identical proof bodies with coherent import and private namespace.
-L097 actual checked reducer equals coherent wrapping reducer, unconditional U64
-value/modulo/canonical law PASS. L093-L096 failed drafts excluded. E010 extracts
-the safe wrapping reference, L098/L099 compile it, L100 reference equality and
-pure-state frame PASS. K043/K044 native actual/reference + control strict pair
-PASS. L101 adds exact constant cast, required by new native root certificate.
-L086 wrapper all-Result equality PASS. L087 prelaunch-only missing NBO module,
-not a Lean run. Read-only prerequisite plan found14 missing unchanged NBO
-modules with no absent source, to build serially before the independent-counter
-shell. No accumulator/native closure is thereby claimed.
-Own extractor now has a dedicated frozen NEI_extract_src scratch to avoid Kani
-cfg edits invalidating unchanged extraction objects. Same frozen graph/source,
-lock checks and NCO pins remain; E010 records this. No shared workspace modified.
-K041 and K042 value/frame cuts TIMEOUT; no credit or unchanged retry. Native
-metadata K039/K040 is qualified only, complete prefix still OPEN.
-
-Dot stage complete:22 composed rows /11 functions,8 edges,24 mutation tests PASS,
-NEI_validate exit0. Coherent combined forest L123 PASS, standard axioms. Field
-primitive bodies were already included in E001; continuing their direct D188
-native/emitted fidelity checks using existing generic Lean associations (no new
-Kani, no field multiplication in Kani). L124 evaluates100 tiny actual-emitted
-fixtures across20 reached field methods; N010 Rust differential running. This
-is not universal native proof: generic universal facts are the existing
-NEI_FieldScalar/CM/QM/Wide all-Result associations, and P6/D188 stays explicit.
-Current actual use120 Lean (L054,L079,L087 prelaunch gaps),50 Kani exhausted,
-10 extraction. Continue field callee audit/composition only if it passes the
-same actual-body D188 criteria; otherwise record exact missing obligation.
+Final metadata campaign: the 29-case suite stopped after 25 completed cases
+because a static-edge metadata mutation returned a demoted ledger rather than
+raising. The original NEB certificate gate already rejected that certificate;
+no invalid CLOSED promotion was demonstrated. NEI_COMPOSE_TESTS_FAILED.json
+retains the exact failure and completed-prefix provenance. An added early
+static/direct contradiction assertion strengthens the wrapper; the four
+remaining cases run separately via NEI_COMPOSE_TESTS_TAIL.py. No original check
+is removed or weakened, and no formal timeout is repeated.

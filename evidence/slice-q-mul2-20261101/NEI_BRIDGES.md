@@ -1,3 +1,18 @@
+# Current NEI result
+
+66 composed occurrence rows /33 functions CLOSED;113/257 slice edges certified.
+The two folds now compose through fresh actual-field D188 packets, alongside
+residue-row/push, getters, constructors and both finishers. No closure depends
+on suspended NEB Kani credit. Root query_loop and QueryGeometry::for_range stay
+OPEN. Prefix, accumulation and both dot entry points remain OPEN for the exact
+member-by-member reasons in NEI_HANDOFF.md. Native fixture checks never stand
+in for universal arithmetic proofs; complete emitted-body associations and
+explicit P6/D188 trust are retained. See NEI_FIELD_ASSOCIATION.md and the
+content-addressed packets/edge certificates.
+
+The entries below record stage history; the current ledger JSON and handoff
+supersede their intermediate counts.
+
 # NEI arithmetic closure
 
 Status: OPEN. No new composed row is claimed.

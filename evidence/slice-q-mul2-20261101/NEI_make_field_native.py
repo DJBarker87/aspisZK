@@ -1,13 +1,13 @@
 from pathlib import Path
-import json
+import json,hashlib,difflib
 E=Path(__file__).resolve().parent;data=json.loads((E/'NEI_FIELD_FIXTURES.json').read_text());lines=(E/'NEI_L124/stdout.log').read_text().splitlines();printed=next(json.loads(s) for s in lines if s.startswith('"{'));expected=json.loads(printed);assert len(expected)==100 and all(isinstance(x,list) for x in expected.values());(E/'NEI_FIELD_EXPECTED.json').write_text(json.dumps(expected,indent=2)+'\n')
 def arr(v):return '['+','.join(str(x)+'u32' for x in v)+']'
 def ctor(kind,v):
  if kind=='word':return 'M31('+str(v[0])+'u32)'
  if kind=='cm':return 'CM31{a:M31('+str(v[0])+'),b:M31('+str(v[1])+')}'
  if kind=='qm':return 'QM31{c0:'+ctor('cm',v[:2])+',c1:'+ctor('cm',v[2:4])+'}'
- return 'WideExact::from_limbs('+arr(v)+').unwrap()'
-project={'word':'vec![got.0]','cm':'vec![got.a.0,got.b.0]','qm':'vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0]','wide':'got.to_limbs().to_vec()'}
+ return 'WideExact{c0:'+ctor('qm',v[:4])+',c1:'+ctor('qm',v[4:8])+'}'
+project={'word':'vec![got.0]','cm':'vec![got.a.0,got.b.0]','qm':'vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0]','wide':'vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0]'}
 text='''#[cfg(test)]
 mod NEI_field_fidelity {
  extern crate std;
@@ -31,4 +31,7 @@ for name,fn,kind,args in data['ops']:
   observe='vec![got]' if name=='reduce' else project[kind]
   text+=' {let got='+expr+';check('+observe+',vec!'+arr(expected[name+'/'+str(i)])+');}\n'
  text+=' }\n'
-text+='}\n';(E/'NEI_field_native.rs').write_text(text)
+text+='}\n'
+(E/'NEI_FIELD_NATIVE_INPUT.json').write_text(json.dumps(dict(rust_source=text,sha256=hashlib.sha256(text.encode()).hexdigest()),indent=2)+'\n')
+frozen=json.loads((E/'NEI_FROZEN.json').read_text());name='crates/aspis-core/src/field/wide_exact.rs';before=frozen[name];after=before+'\n'+text
+(E/'NEI_FIELD_NATIVE.patch').write_text(''.join(difflib.unified_diff(before.splitlines(True),after.splitlines(True),fromfile='a/'+name,tofile='b/'+name)))

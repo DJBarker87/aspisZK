@@ -11,7 +11,7 @@ def reject(name,mutate):
  except (AssertionError,ValueError,KeyError):results.append(dict(test=name,status='PASS',outcome='rejected'))
  else:raise AssertionError('mutation accepted: '+name)
 def root(data,row):return next(r for r in data['row_certificates'] if r['row']==row)
-def edge(data):return next(e for e in data['edges'] if e.get('certificate'))
+def edge(data):return next(e for e in data['edges'] if e['edge']=='crates/aspis-r1-cost-probe/src/fast_pairing.rs::EbyKDot::new -> crates/aspis-r1-cost-probe/src/fast_pairing.rs::canonical::Dot::new')
 reject('wrong caller body',lambda d:root(d,'TX1:107').update(frozen_body_sha256='0'*64))
 reject('wrong edge selected packet',lambda d:edge(d)['certificate'].update(selected_callee_claims=[]))
 reject('missing native call edge',lambda d:edge(d).update(certificate=None,status='OPEN'))
@@ -28,7 +28,7 @@ except AssertionError:results.append(dict(test='constructor occurrence rule cann
 else:raise AssertionError('constructor scope guard missing')
 reject('wrong row widening source',lambda d:root(d,'TX1:195')['external_obligations']['external:TX1:195:2'].update(source_body_sha256='0'*64))
 reject('wrong row widening syntax',lambda d:root(d,'TX2:125')['external_obligations']['external:TX2:125:2'].update(syntax='u32::from'))
-independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new') and r['function']!=c.arithmetic.WIDE and r['function'] not in c.dots.gate.FUNCTIONS]
+independent=copy.deepcopy(edges);independent['row_certificates']=[r for r in independent['row_certificates'] if not r['function'].endswith('::canonical::Dot::new') and r['function']!=c.arithmetic.WIDE and r['function'] not in c.dots.gate.FUNCTIONS and r['function'] not in c.fields.gate.FUNCTIONS and r['function'] not in {p['function'] for p in c.folds.packets()}]
 _,independent_delta=c.validate(base,independent)
 assert len(independent_delta['composed_rows_closed'])==8 and not any(x in independent_delta['composed_rows_closed'] for x in ['TX1:107','TX2:073','TX1:110','TX2:076'])
 results.append(dict(test='independent row/getter/push members proceed while dot constructor is open',status='PASS',outcome='eight independent rows close'))
@@ -59,6 +59,24 @@ p=copy.deepcopy(c.dots.packets()[-1]);p['lean_evidence']=[e for e in p['lean_evi
 try:c.dots.audit(p,c.neb)
 except (AssertionError,ValueError):results.append(dict(test='unrelated reducer/frame proofs cannot replace outer Result association',status='PASS'))
 else:raise AssertionError('missing outer association admitted')
+field_packet=copy.deepcopy(c.fields.packets()[0]);field_packet['lean_evidence']=[p for p in field_packet['lean_evidence'] if not any(t.startswith('NEI_FieldScalar.') for t in p['theorems'])]
+try:c.fields.audit(field_packet,c.neb)
+except (AssertionError,ValueError):results.append(dict(test='field frame cannot replace exact emitted operator association',status='PASS'))
+else:raise AssertionError('missing field result association admitted')
+private_inactive=next(o['id'] for o in next(r for r in base['rows'] if r['row']=='TX2:009')['caller_domain_obligations'] if o.get('call',{}).get('resolution')=='disabled release cfg')
+reject('inactive counter cannot be activated',lambda d:root(d,'TX2:009')['external_obligations'][private_inactive].update(selected_core_features=['r0','r0-op-count']))
+static_edge=next(e['edge'] for e in edges['edges'] if (e.get('certificate') or {}).get('kind')=='STATIC_UNREACHABLE')
+reject('static receiver resolution cannot become a direct call',lambda d:next(e for e in d['edges'] if e['edge']==static_edge).update(selected_target=True))
+no_self=copy.deepcopy(edges);no_self['inventory_edges']=[]
+_,no_self_delta=c.validate(base,no_self)
+assert not {'TX1:001','TX2:001','TX1:047','TX2:028','TX1:190','TX2:117'}&set(no_self_delta['composed_rows_closed'])
+assert {'TX1:013','TX2:009','TX1:195','TX2:125'}<=set(no_self_delta['composed_rows_closed'])
+results.append(dict(test='original conservative self obligations cannot be erased; unrelated rows proceed',status='PASS'))
+no_add=copy.deepcopy(edges);no_add['row_certificates']=[r for r in no_add['row_certificates'] if r['function']!='crates/aspis-core/src/field.rs::M31::add']
+_,no_add_delta=c.validate(base,no_add)
+assert not {'TX1:047','TX2:028','TX1:188','TX1:190','TX2:113','TX2:117'}&set(no_add_delta['composed_rows_closed'])
+assert {'TX1:195','TX2:125','TX1:017','TX2:013'}<=set(no_add_delta['composed_rows_closed'])
+results.append(dict(test='missing scalar child blocks dependent field/fold rows only',status='PASS'))
 source=c.obj(E/'NEI_VALIDATOR_SOURCE_DELTA.json');original=Path(source['original']).read_text();derived=Path(source['derived']).read_text();assert derived.replace(source['only_added_branch'],'')==original
 results.append(dict(test='every original validator check retained verbatim',status='PASS'))
 (E/'NEI_COMPOSE_TESTS_receipt.json').write_text(json.dumps(dict(tests=results,passed=len(results),failed=0,baseline_unchanged=True,original_neb_file_unchanged=True),indent=2)+'\n')

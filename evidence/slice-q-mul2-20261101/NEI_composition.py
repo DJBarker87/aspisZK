@@ -13,6 +13,8 @@ import NEB_leaf_updates as leaves
 import NEB_certificates as certificates
 import NEI_ctor_validate
 import NEI_dot_finish_certificates as dots
+import NEI_field_certificates as fields
+import NEI_fold_certificates as folds
 import NEI_arithmetic_certificates as arithmetic
 obj=lambda p:json.loads(p.read_text());sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 # Preserve every original check byte-for-byte, adding one strictly scoped
@@ -44,12 +46,14 @@ spec=importlib.util.spec_from_file_location('NEI_NEB_ADDITIVE',E/'NEI_NEB_ADDITI
 extended.E=B;extended.R=R;extended.N=B.parent/'native-ledger3-20261029'
 neb=extended
 old_apply=leaves.apply;old_expected=certificates.expected
-PACKETS=obj(E/'NEI_CTOR_PACKETS.json')+arithmetic.packets()+dots.packets()
+PACKETS=obj(E/'NEI_CTOR_PACKETS.json')+arithmetic.packets()+dots.packets()+fields.packets()+folds.packets()
 INDEX={p['function']:p for p in PACKETS}
 def apply(base):
  out,changes=old_apply(base)
  for p in PACKETS:
   if p['route']=='D188_LITERAL_CTOR_FULL_CONTEXT':NEI_ctor_validate.audit(E,R,p,neb,neb.require)
+  elif p['route'] in ['D188_ACTUAL_BODY_FULL_CALLEES','D188_ACTUAL_BODY_SHARED_CALLEES']:folds.audit(p,neb)
+  elif p['route']=='D188_ACTUAL_IMMUTABLE_FIELD':fields.audit(p,neb)
   elif p['route']=='D188_ACTUAL_DOT_FINISH':dots.audit(p,neb)
   else:arithmetic.audit(p,neb)
  for row in out['rows']:
@@ -111,7 +115,11 @@ def new_certificates(base):
  all_edges={**edges,**extra_edges};all_rows={**rows,**extra_rows}
  dot_edges,dot_rows=dots.recipes(base,neb)
  assert not(set(dot_edges)&set(all_edges)) and not(set(dot_rows)&set(all_rows))
- return {**all_edges,**dot_edges},{**all_rows,**dot_rows}
+ field_edges,field_rows=fields.recipes(base,neb)
+ assert not(set(field_edges)&(set(all_edges)|set(dot_edges))) and not(set(field_rows)&(set(all_rows)|set(dot_rows)))
+ fold_edges,fold_rows=folds.recipes(base,neb)
+ assert not(set(fold_edges)&(set(all_edges)|set(dot_edges)|set(field_edges))) and not(set(fold_rows)&(set(all_rows)|set(dot_rows)|set(field_rows)))
+ return {**all_edges,**dot_edges,**field_edges,**fold_edges},{**all_rows,**dot_rows,**field_rows,**fold_rows}
 
 def expected(base):
  old_edges,old_rows=old_expected(base);extra_edges,extra_rows=new_certificates(base)
@@ -121,15 +129,22 @@ def expected(base):
  replaced=[]
  for key in set(extra_rows)&set(old_rows):
   a,b=old_rows[key],extra_rows[key]
-  assert b['id'].startswith('NEI-dot-root:') and b['function'] in dots.gate.FUNCTIONS
+  assert ((b['id'].startswith('NEI-dot-root:') and b['function'] in dots.gate.FUNCTIONS) or (b['id'].startswith('NEI-field-root:') and b['function'] in fields.gate.FUNCTIONS) or (b['id'].startswith('NEI-fold-root:') and b['function'] in {p['function'] for p in folds.packets()}))
   assert a['function']==b['function'] and a['row']==b['row'] and a['frozen_body_sha256']==b['frozen_body_sha256']
-  assert b['function'] in INDEX and INDEX[b['function']]['native_pair']==dots.gate.PAIRS[b['function']]
-  dots.audit(INDEX[b['function']],neb)
+  assert b['function'] in INDEX
+  if b['function'] in dots.gate.FUNCTIONS:
+   assert INDEX[b['function']]['native_pair']==dots.gate.PAIRS[b['function']]
+   dots.audit(INDEX[b['function']],neb)
+  elif b['function'] in fields.gate.FUNCTIONS:fields.audit(INDEX[b['function']],neb)
+  else:folds.audit(INDEX[b['function']],neb)
   replaced.append(dict(kind='root',key=key,old=a['id'],new=b['id'],old_native_credit_used=False));del old_rows[key]
+ overlap_recipes={}
  for key in set(extra_edges)&set(old_edges):
   a,b=old_edges[key],extra_edges[key]
-  assert b['id'].startswith('NEI-dot-edge:') and a['edge']==b['edge'] and a['source_body_sha256']==b['source_body_sha256']
-  assert key in dots.recipes(base,neb)[0]
+  assert (b['id'].startswith('NEI-dot-edge:') or b['id'].startswith('NEI-field-edge:') or b['id'].startswith('NEI-fold-edge:')) and a['edge']==b['edge'] and a['source_body_sha256']==b['source_body_sha256']
+  group='dot' if b['id'].startswith('NEI-dot-edge:') else 'field' if b['id'].startswith('NEI-field-edge:') else 'fold'
+  if group not in overlap_recipes:overlap_recipes[group]={'dot':dots,'field':fields,'fold':folds}[group].recipes(base,neb)[0]
+  assert key in overlap_recipes[group]
   replaced.append(dict(kind='edge',key=key,old=a['id'],new=b['id'],old_native_credit_used=False));del old_edges[key]
  assert not(set(extra_edges)&set(old_edges)) and not(set(extra_rows)&set(old_rows)),'unreviewed registration overlap'
  (E/'NEI_REPLACED_OLD_REGISTRATIONS.json').write_text(json.dumps(sorted(replaced,key=lambda x:(x['kind'],x['key'])),indent=2)+'\n')
@@ -145,7 +160,7 @@ def prepare(base):
  approved,rows=new_certificates(refreshed)
  for edge in edges['edges']:
   if edge['edge'] in approved:edge.update(certificate=approved[edge['edge']],status='CLOSED',obstacle=None)
- edges['inventory_edges']=[];edges['row_certificates']=list(rows.values())
+ edges['inventory_edges']=fields.inventory(refreshed,neb,approved);edges['row_certificates']=list(rows.values())
  return edges
 
 def validate(base,edges):
@@ -153,7 +168,12 @@ def validate(base,edges):
   assert cert['id'].startswith('NEI-'),'older native root credit supplied'
   assert all(x['receipt'].startswith(str(E.relative_to(R))+'/') for x in cert['lean_evidence']),'older proof/native recipe supplied'
  for edge in edges['edges']:
-  if edge.get('certificate'):assert edge['certificate']['id'].startswith('NEI-'),'older native edge credit supplied'
+  if edge.get('certificate'):
+   assert edge['certificate']['id'].startswith('NEI-'),'older native edge credit supplied'
+   if edge['certificate']['kind']=='STATIC_UNREACHABLE':
+    assert edge['classification']=='CONSERVATIVE_ALTERNATIVE' and edge['selected_target'] is False,'static target resolution contradicted'
+   else:
+    assert edge['selected_target'] is not False,'direct target resolution contradicted'
  return neb.extend(base,edges)
 
 def main():
