@@ -22,6 +22,7 @@ theorem within_public_count (n k : Nat) (worker : k<16) :
   have small : n%16<16 := Nat.mod_lt n (by omega)
   have mulbound : n/16*(k+1) ≤ n/16*16 :=
     Nat.mul_le_mul_left (n/16) (by omega)
+  simp only [Nat.mul_add,Nat.mul_one] at mulbound
   unfold range
   dsimp only
   by_cases h : k<n%16
@@ -40,6 +41,7 @@ theorem public_byte_requests (n width : Nat) :
     (explicitCapacities n).map (fun cap => cap*width) =
       ((List.range 16).map (fun k => (n/16+(if k<n%16 then 1 else 0))*width)) ++ [n*width] := by
   simp only [explicitCapacities,List.map_append,List.map_map,length,List.map_cons,List.map_nil]
+  rfl
 
 #print axioms length
 #print axioms within_public_count
