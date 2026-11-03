@@ -13,6 +13,7 @@ def ExternalByte (sp p : Nat) : Prop :=
 
 theorem outside (owner sp p : Nat) (w : State) (hp : ExternalByte sp p) :
     (finish owner sp w).memory p = w.memory p := by
+  unfold finish
   rw [PV_EVH_StackZero.outside_preserved _ _ p (by
     change p < sp ∨ sp+64 ≤ p
     rcases hp.1 with h | h
