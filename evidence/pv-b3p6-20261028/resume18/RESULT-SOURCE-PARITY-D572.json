@@ -1,0 +1,50 @@
+{
+  "source_files": [
+    {
+      "version": "1.94.1",
+      "name": "result.rs",
+      "sha256": "4b8826db56f83239d45b3c510969f1f20a425447a2f678f37aa0d0bf83851acc",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/1.94.1/result.rs.xz"
+    },
+    {
+      "version": "1.94.1",
+      "name": "convert/mod.rs",
+      "sha256": "603b64e1beb380e4e138782358b07443b3416b1906c38647d2177480a8688d27",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/1.94.1/convert/mod.rs.xz"
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "result.rs",
+      "sha256": "09a569f9ed39e2ec809fa28701e64652887a94e0814996b13dc24f370c8f1933",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/nightly-2026-06-01/result.rs.xz"
+    },
+    {
+      "version": "nightly-2026-06-01",
+      "name": "convert/mod.rs",
+      "sha256": "5cefe864bf8ca5e9f06ae6906c3d6c8a3d58c3ea1d6fbebf265b1c6845e01641",
+      "path": "evidence/pv-b3p6-20261028/resume18/std572-source/nightly-2026-06-01/convert/mod.rs.xz"
+    }
+  ],
+  "items": [
+    {
+      "name": "result.rs",
+      "needle": "fn from_residual(residual:",
+      "bodies": {
+        "1.94.1": "fn from_residual(residual: Result<convert::Infallible, E>) -> Self {\n        match residual {\n            Err(e) => Err(From::from(e)),\n        }\n    }",
+        "nightly-2026-06-01": "fn from_residual(residual: Result<convert::Infallible, E>) -> Self {\n        match residual {\n            Err(e) => Err(From::from(e)),\n        }\n    }"
+      },
+      "tokens_identical": true
+    },
+    {
+      "name": "convert/mod.rs",
+      "needle": "pub enum Infallible",
+      "bodies": {
+        "1.94.1": "pub enum Infallible {}",
+        "nightly-2026-06-01": "pub enum Infallible {}"
+      },
+      "tokens_identical": true
+    }
+  ],
+  "evidence_class": "token-identity source parity; compiler-cohort V370 D381/D386 retained",
+  "scope": "Result::from_residual and the uninhabited Infallible definition only. Compiler-cohort boundary retained."
+}
