@@ -70,7 +70,8 @@ theorem enough (size raw : Nat) : raw+1≤requestedCap size raw :=
 theorem reserved_no_request (allocation : Allocation) (length : Nat)
     (room : length+1≤capacity allocation) : plan allocation length=.reserved := by
   have ne : length≠capacity allocation := by omega
-  simp only [plan,ne,if_true]
+  unfold plan
+  exact if_pos ne
 
 theorem zero_overflow (allocation : Allocation) (zero : allocation.layout.size=0) :
     plan allocation Usize.max=.overflow := by
