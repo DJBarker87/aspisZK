@@ -79,7 +79,7 @@ theorem public_metadata {T U S F : Type}
   split <;> try exact ⟨rfl,rfl⟩
   split <;> try exact ⟨rfl,rfl⟩
   split <;> try exact ⟨rfl,rfl⟩
-  dsimp only
+  try dsimp only
   cases step ⟨c.address,c.capacity,c.values.length+n,shape⟩ w.allocator with
   | mk p s => cases p <;> exact ⟨rfl,rfl⟩
 
