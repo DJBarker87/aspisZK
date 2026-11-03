@@ -1,0 +1,219 @@
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:31:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let v ← lift (core.num.U32.from_le_bytes bytes)
+    if v ≥ 2147483647#u32 then ok none else ok (some v)
+is not definitionally equal to the right-hand side
+  ok
+    (have v := core.num.U32.from_le_bytes bytes;
+    if v ≥ 2147483647#u32 then none else some v)
+
+bytes : Std.Array U8 4#usize
+⊢ (do
+      let v ← lift (core.num.U32.from_le_bytes bytes)
+      if v ≥ 2147483647#u32 then ok none else ok (some v)) =
+    ok
+      (have v := core.num.U32.from_le_bytes bytes;
+      if v ≥ 2147483647#u32 then none else some v)
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:45:10: error: Invalid match expression: This pattern contains metavariables:
+  core.result.Result.Err a✝
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:51:2: error: No goals to be solved
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:50:13: warning: This simp argument is unused:
+  core.array.TryFromArrayCopySlice.try_from
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵T̵r̵y̵F̵r̵o̵m̵A̵r̵r̵a̵y̵C̵o̵p̵y̵S̵l̵i̵c̵e̵.̵t̵r̵y̵_̵f̵r̵o̵m̵,̵P̵V̵_̵R̵D̵C̵D̵4̵_̵T̵r̵y̵A̵r̵r̵a̵y̵1̵9̵4̵.̵i̵n̵t̵o̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵]̵[̲P̲V̲_̲R̲D̲C̲D̲4̲_̲T̲r̲y̲A̲r̲r̲a̲y̲1̲9̲4̲.̲i̲n̲t̲o̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:50:55: warning: This simp argument is unused:
+  PV_RDCD4_TryArray194.into
+
+Hint: Omit it from the simp argument list.
+  simp only [̵c̵o̵r̵e̵.̵a̵r̵r̵a̵y̵.̵T̵r̵y̵F̵r̵o̵m̵A̵r̵r̵a̵y̵C̵o̵p̵y̵S̵l̵i̵c̵e̵.̵t̵r̵y̵_̵f̵r̵o̵m̵,̵P̵V̵_̵R̵D̵C̵D̵4̵_̵T̵r̵y̵A̵r̵r̵a̵y̵1̵9̵4̵.̵i̵n̵t̵o̵,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵]̵[̲c̲o̲r̲e̲.̲a̲r̲r̲a̲y̲.̲T̲r̲y̲F̲r̲o̲m̲A̲r̲r̲a̲y̲C̲o̲p̲y̲S̲l̲i̲c̲e̲.̲t̲r̲y̲_̲f̲r̲o̲m̲,̲ ̲S̲l̲i̲c̲e̲.̲l̲e̲n̲g̲t̲h̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:50:81: warning: This simp argument is unused:
+  Slice.length
+
+Hint: Omit it from the simp argument list.
+  simp only [core.array.TryFromArrayCopySlice.try_from, ̲PV_RDCD4_TryArray194.into,̵S̵l̵i̵c̵e̵.̵l̵e̵n̵g̵t̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:56:11: error: `simp` made no progress
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    bytes
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑bytes
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:82:11: error: unsolved goals
+case Ok.none
+bytes firstSlice : Slice U8
+firstWord : Std.Array U8 4#usize
+⊢ (do
+      if read_discriminant none = 0#isize then ok () else fail Error.assertionFailure
+      ok none) =
+    ok none
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:92:22: error: unsolved goals
+case Ok.some.Ok.none
+bytes firstSlice : Slice U8
+firstWord : Std.Array U8 4#usize
+a : ProverRwFull.aspis_core.field.M31
+secondSlice : Slice U8
+secondWord : Std.Array U8 4#usize
+⊢ (do
+      if read_discriminant none = 0#isize then ok () else fail Error.assertionFailure
+      ok none) =
+    ok none
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:70:27: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:78:15: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:93:19: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only ̵[̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵]̵
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:96:37: warning: This simp argument is unused:
+  ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch
+
+Hint: Omit it from the simp argument list.
+  simp [̵P̵r̵o̵v̵e̵r̵R̵w̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵O̵p̵t̵i̵o̵n̵S̵o̵u̵r̵c̵e̵.̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵_̵t̵r̵a̵i̵t̵T̵r̵y̵.̵b̵r̵a̵n̵c̵h̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵ ̵P̵r̵o̵v̵e̵r̵R̵w̵D̵i̵c̵t̵i̵o̵n̵a̵r̵y̵O̵p̵t̵i̵o̵n̵S̵o̵u̵r̵c̵e̵.̵c̵o̵r̵e̵.̵o̵p̵t̵i̵o̵n̵.̵O̵p̵t̵i̵o̵n̵.̵I̵n̵s̵t̵s̵.̵C̵o̵r̵e̵O̵p̵s̵T̵r̵y̵_̵t̵r̵a̵i̵t̵F̵r̵o̵m̵R̵e̵s̵i̵d̵u̵a̵l̵O̵p̵t̵i̵o̵n̵I̵n̵f̵a̵l̵l̵i̵b̵l̵e̵.̵f̵r̵o̵m̵_̵r̵e̵s̵i̵d̵u̵a̵l̵,̵m̵a̵s̵s̵e̵r̵t̵]̵[̲P̲r̲o̲v̲e̲r̲R̲w̲D̲i̲c̲t̲i̲o̲n̲a̲r̲y̲O̲p̲t̲i̲o̲n̲S̲o̲u̲r̲c̲e̲.̲c̲o̲r̲e̲.̲o̲p̲t̲i̲o̲n̲.̲O̲p̲t̲i̲o̲n̲.̲I̲n̲s̲t̲s̲.̲C̲o̲r̲e̲O̲p̲s̲T̲r̲y̲_̲t̲r̲a̲i̲t̲F̲r̲o̲m̲R̲e̲s̲i̲d̲u̲a̲l̲O̲p̲t̲i̲o̲n̲I̲n̲f̲a̲l̲l̲i̲b̲l̲e̲.̲f̲r̲o̲m̲_̲r̲e̲s̲i̲d̲u̲a̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲ ̲m̲a̲s̲s̲e̲r̲t̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:112:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  PV_RDCD5_ParserRange.index ↑bytes ↑0#usize ↑8#usize >>= ?g
+in the target expression
+  (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 0#usize, «end» := 8#usize }
+      let o ← cm ↑s
+      let cf ←
+        match o with
+          | none => ok (core.ops.control_flow.ControlFlow.Break none)
+          | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 8#usize, «end» := 16#usize }
+          let o1 ← cm ↑s1
+          let cf1 ←
+            match o1 with
+              | none => ok (core.ops.control_flow.ControlFlow.Break none)
+              | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              massert (read_discriminant residual = 0#isize)
+              ok none
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          massert (read_discriminant residual = 0#isize)
+          ok none) =
+    do
+    let left ← PV_RDCD5_ParserRange.index (↑bytes) 0 8
+    let c0 ← cm left
+    match c0 with
+      | none => ok none
+      | some c0 => do
+        let right ← PV_RDCD5_ParserRange.index (↑bytes) 8 16
+        let c1 ← cm right
+        match c1 with
+          | none => ok none
+          | some c1 => ok (some { c0 := c0, c1 := c1 })
+
+bytes : Slice U8
+⊢ (do
+      let s ←
+        core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+            { start := 0#usize, «end» := 8#usize }
+      let o ← cm ↑s
+      let cf ←
+        match o with
+          | none => ok (core.ops.control_flow.ControlFlow.Break none)
+          | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val => do
+          let s1 ←
+            core.slice.index.Slice.index (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes
+                { start := 8#usize, «end» := 16#usize }
+          let o1 ← cm ↑s1
+          let cf1 ←
+            match o1 with
+              | none => ok (core.ops.control_flow.ControlFlow.Break none)
+              | some v => ok (core.ops.control_flow.ControlFlow.Continue v)
+          match cf1 with
+            | core.ops.control_flow.ControlFlow.Continue val1 => ok (some { c0 := val, c1 := val1 })
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              massert (read_discriminant residual = 0#isize)
+              ok none
+        | core.ops.control_flow.ControlFlow.Break residual => do
+          massert (read_discriminant residual = 0#isize)
+          ok none) =
+    do
+    let left ← PV_RDCD5_ParserRange.index (↑bytes) 0 8
+    let c0 ← cm left
+    match c0 with
+      | none => ok none
+      | some c0 => do
+        let right ← PV_RDCD5_ParserRange.index (↑bytes) 8 16
+        let c1 ← cm right
+        match c1 with
+          | none => ok none
+          | some c1 => ok (some { c0 := c0, c1 := c1 })
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    s
+  has type
+    Slice U8
+  but is expected to have type
+    { l // l.length ≤ Usize.max }
+  in the application
+    ↑s
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:111:4: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+      ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+      bind_a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵tc_ok]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-rdcd7-20261102/lean-sources/R1Z/PV_RDCD5_ParserTransport.lean:111:18: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+      ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+      bind_assoc_eq,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_RDCD5_ParserTransport.bind_congr' does not depend on any axioms
+'R1Z.PV_RDCD5_ParserTransport.range_bind' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_RDCD5_ParserTransport.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserTransport.convert_component' depends on axioms: [propext, sorryAx]
+'R1Z.PV_RDCD5_ParserTransport.component_binding' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserTransport.complex_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserTransport.complex' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'R1Z.PV_RDCD5_ParserTransport.quartic' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

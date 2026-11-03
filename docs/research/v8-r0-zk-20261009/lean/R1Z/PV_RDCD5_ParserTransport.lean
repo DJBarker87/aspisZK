@@ -28,7 +28,8 @@ theorem scalar (bytes : Array U8 4#usize) :
     ProverRwSuccessParserSource.aspis_core.field.P
     ProverRwDictionaryBytesSource.aspis_core.field.P
     PV_RDCD4_FieldSource.aspis_core.field.P
-  rfl
+  simp only [lift,bind_tc_ok]
+  split <;> rfl
 
 /-- One source component, retaining its range panic, conversion Err and None. -/
 def nativeComponent (bytes : Slice U8) (a b : Usize) : Result (Option M) := do
@@ -40,10 +41,10 @@ def nativeComponent (bytes : Slice U8) (a b : Usize) : Result (Option M) := do
   | .Ok value => ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value
 
 theorem convert_component (part : Slice U8) :
-    (do let converted ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 part
-        match converted with
-        | .Err _ => ok none
-        | .Ok value => ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value) =
+    ((do let converted ← core.array.TryFromArrayCopySlice.try_from 4#usize core.marker.CopyU8 part
+         match converted with
+         | .Err _ => ok none
+         | .Ok value => ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value) : Result (Option M)) =
       (match PV_RDCD4_TryArray194.into 4#usize part.val with
        | none => ok none
        | some value => ok (PV_RDCD4_BytesSource.scalar value)) := by
@@ -80,7 +81,8 @@ theorem complex_shape (bytes : Slice U8) :
     intro firstOption
     cases firstOption with
     | none => simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
-        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,massert]
+        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,massert,read_discriminant,
+        ProverRwDictionaryOptionSource.optionDiscriminant]
     | some a =>
       simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,bind_tc_ok]
       apply bind_congr
@@ -94,7 +96,8 @@ theorem complex_shape (bytes : Slice U8) :
         apply bind_congr
         intro secondOption
         cases secondOption <;> simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
-          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,massert]
+          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,massert,read_discriminant,
+        ProverRwDictionaryOptionSource.optionDiscriminant]
 
 theorem complex (bytes : Slice U8) :
     ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes bytes = cm bytes.val := by
@@ -109,21 +112,21 @@ theorem quartic (bytes : Slice U8) :
   simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
     ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
     bind_assoc_eq,bind_tc_ok]
-  rw [← range_bind bytes 0#usize 8#usize]
+  rw [range_bind]
   apply bind_congr
   intro firstSlice
   apply bind_congr
   intro firstOption
   cases firstOption with
-  | none => simp [massert]
+  | none => simp [massert,read_discriminant,ProverRwDictionaryOptionSource.optionDiscriminant]
   | some c0 =>
     simp only [bind_tc_ok]
-    rw [← range_bind bytes 8#usize 16#usize]
+    rw [range_bind]
     apply bind_congr
     intro secondSlice
     apply bind_congr
     intro secondOption
-    cases secondOption <;> simp [massert]
+    cases secondOption <;> simp [massert,read_discriminant,ProverRwDictionaryOptionSource.optionDiscriminant]
 
 #print axioms bind_congr
 #print axioms range_bind
