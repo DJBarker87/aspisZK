@@ -27,6 +27,8 @@ for kind in ['Types','Funs']:
  raw=(I/(kind+'.lean')).read_text();s=raw.replace('PVUCEntryUc5.','PVUC5Entry.').replace('namespace PV_UC_Entry\n','namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n').replace('end PV_UC_Entry\n','end '+ns+'\n')
  # Aeneas determines imports from file stem; keep exact inverse check below.
  original=s
+ restored=original.replace('PVUC5Entry.','PVUCEntryUc5.').replace('namespace '+ns+'\nvariable [ExternalTypes]'+(' [ExternalFuns]' if kind=='Funs' else '')+'\n','namespace PV_UC_Entry\n').replace('end '+ns+'\n','end PV_UC_Entry\n')
+ assert restored==raw
  replacements=[]
  if kind=='Funs':
   def repl(m):
