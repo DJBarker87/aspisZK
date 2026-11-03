@@ -16,7 +16,7 @@ inductive Site where
 
 structure Effects (α β γ : Type) where
   generate : Usize → Result α
-  tryBranch : α → Result (ControlFlow β γ)
+  tryBranch : α → Result (ControlFlow γ β)
   indexCheck : Result Unit
   indexAccess : Result Unit
   write : γ → Result Unit
@@ -45,8 +45,8 @@ def sourceEvent {α β γ : Type} (site : Site) (count length : Usize)
     let generated ← effects.generate count
     let branched ← effects.tryBranch generated
     match branched with
-    | .Break _ => .ok none
-    | .Continue value => afterBranch site count length effects value
+    | .done _ => .ok none
+    | .cont value => afterBranch site count length effects value
   else .ok none
 
 /-- Prefixes built from a private-field observation cannot forge a different
@@ -97,8 +97,8 @@ theorem event_guard {α β γ : Type} (site : Site) (count length : Usize)
       apply bind_observation _ _ _ _ _ next
       intro branched last
       cases branched with
-      | Break residual => cases last
-      | Continue value => exact afterBranch_frame site count length effects value observed last
+      | done residual => cases last
+      | cont value => exact afterBranch_frame site count length effects value observed last
     rw [frame]
     exact active
   · simp only [sourceEvent, if_neg active] at ran
@@ -125,8 +125,8 @@ theorem event_add_guard {α β γ : Type} (count length : Usize)
       apply bind_observation _ _ _ _ _ next
       intro branched last
       cases branched with
-      | Break residual => cases last
-      | Continue value => exact afterBranch_frame .addPrecondition count length effects value observed last
+      | done residual => cases last
+      | cont value => exact afterBranch_frame .addPrecondition count length effects value observed last
     · simp only [sourceEvent, if_neg active] at ran
       cases ran
   rw [frame] at inside ⊢
