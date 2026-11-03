@@ -6,9 +6,12 @@ open Aeneas Aeneas.Std ProverRwFull
 open PV_EVH_KernelMemory (Memory Backed Step ValidAnswer)
 
 theorem byte_ext (x y : U8) (h : x.val = y.val) : x = y := by
-  cases x
-  cases y
-  simp_all
+  cases x with
+  | mk x =>
+    cases y with
+    | mk y =>
+      congr 1
+      exact BitVec.eq_of_toNat_eq h
 
 /-- The weaker source-prefix law follows from the SAME physical syscall
 memory, rather than being a second independently supplied kernel premise. -/
