@@ -20,7 +20,7 @@ noncomputable section
 
 namespace PV_UC5_Entry
 variable [ExternalTypes] [ExternalFuns]
-attribute [local irreducible] U32.max U64.max Usize.max
+attribute [local irreducible] toStr
 
 /-- Trait implementation: [core::convert::{impl core::convert::AsRef<U> for &'_0 T}]
     Source: '/rustc/library/core/src/convert/mod.rs', lines 712:0-714:24

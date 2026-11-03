@@ -33,8 +33,8 @@ for kind in ['Types','Funs']:
    lit=json.loads(m[1]);replacement=m[0]+' PV_UC5_Literals.bound_'+str(literals.index(lit));replacements.append((replacement,m[0]));return replacement
   s=re.sub(pattern,repl,s)
   s=s.replace('import Aeneas\n','import Aeneas\nimport PVUC5Entry.LiteralBounds\n')
-  s=s.replace('variable [ExternalTypes] [ExternalFuns]\n','variable [ExternalTypes] [ExternalFuns]\nattribute [local irreducible] U32.max U64.max Usize.max\n')
-  inverse=s.replace('import PVUC5Entry.LiteralBounds\n','').replace('attribute [local irreducible] U32.max U64.max Usize.max\n','')
+  s=s.replace('variable [ExternalTypes] [ExternalFuns]\n','variable [ExternalTypes] [ExternalFuns]\nattribute [local irreducible] toStr\n')
+  inverse=s.replace('import PVUC5Entry.LiteralBounds\n','').replace('attribute [local irreducible] toStr\n','')
   for a,z in replacements:inverse=inverse.replace(a,z)
   assert inverse==original
  (O/(kind+'.lean')).write_text(s)
