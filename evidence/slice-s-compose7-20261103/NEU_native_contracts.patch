@@ -10,12 +10,16 @@
 +mod NEU_request;
 --- /dev/null
 +++ b/crates/aspis-statement/src/pool_v1/NEU_request.rs
-@@ -0,0 +1,8 @@
+@@ -0,0 +1,12 @@
 +use super::*;
-+fn window(bytes:&[u8;320])->Result<[u8;32],PoolV1PairForestTerminalFormatErrorV1>{Ok(bytes[REQUEST_PROFILE_OFFSET..REQUEST_RELEASE_OFFSET]
-+            .try_into()
-+            .map_err(|_| PoolV1PairForestTerminalFormatErrorV1::WrongLength)?)}
++fn guard(profile_zero:bool,release_zero:bool,pool_zero:bool)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{
++    if profile_zero
++        || release_zero
++        && pool_zero
++    {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
++    }
++    Ok(())
++}
 +#[kani::proof]
-+#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
-+#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
-+fn request_slice(){let bytes:[u8;320]=kani::any();let j:usize=kani::any();kani::assume(j<32);let out=window(&bytes).unwrap();assert!(out[j]==bytes[8+j] );}
++fn request_slice(){let p:bool=kani::any();let r:bool=kani::any();let q:bool=kani::any();let actual=guard(p,r,q);let good=!(p||r||q);assert!(actual==if good{Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)});}

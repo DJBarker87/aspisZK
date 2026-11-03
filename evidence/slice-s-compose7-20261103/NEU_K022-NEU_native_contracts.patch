@@ -1,0 +1,25 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEU_request.rs"]
++mod NEU_request;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEU_request.rs
+@@ -0,0 +1,12 @@
++use super::*;
++fn guard(profile_zero:bool,release_zero:bool,pool_zero:bool)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{
++    if profile_zero
++        || release_zero
++        && pool_zero
++    {
++        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);
++    }
++    Ok(())
++}
++#[kani::proof]
++fn request_slice(){let p:bool=kani::any();let r:bool=kani::any();let q:bool=kani::any();let actual=guard(p,r,q);let good=!(p||r||q);assert!(actual==if good{Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding)});}

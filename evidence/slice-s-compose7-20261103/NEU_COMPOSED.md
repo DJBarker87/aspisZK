@@ -76,3 +76,19 @@ The request campaign treats the timed-out native magic comparison and the
 three unproved zero-comparison replies as explicit arbitrary Boolean leaves.
 It claims only the remaining scalar control, exact suffix borrow and individual
 copy cuts. No model equality, arbitrary oracle or support pair closes a root.
+
+## Request cuts
+
+K011/012: scalar request prefix with an explicit arbitrary magic-comparison
+reply, all usize lengths/header bytes, actual transition byte5, all errors and
+priority. K013/014: exact216-byte suffix slice pointer, length and arbitrary
+observed byte. K015/016,K017/018,K019/020: actual32-byte profile, release and
+pool-program conversions, arbitrary output index, exact KMX patch. K021/022:
+post-payment scalar zero-binding branch under three arbitrary comparison
+replies. Every positive passes and every matched changed-input/value/guard
+control fails. The full Request return, payment/parent join, magic and binding
+comparison semantics remain OPEN. Existing Lean NED_RequestReadWindows and
+NEQ_PaymentDomains facts are reused without reproof. No new composed row is
+claimed. The next independent member is the boxed constructor subtree needed
+by reconstruct_asq8_statement; the request's exact comparison/parent gaps remain
+visible rather than being supplied as a whole-root bridge hypothesis.
