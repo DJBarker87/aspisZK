@@ -10,7 +10,7 @@ assert binding['layout']['original']==[0,64]
 assert binding['layout']['field']==[64,96]
 assert binding['layout']['seed']==[96,128]
 names=['EntropyDeployedLayout','NativeEntropyLayout','EntropyLayoutReads',
- 'NativeRawLayout','EntropyLayoutCleanup','EntropyReturnLayout','EntropyMoveKeys','LinuxRawLayout']
+ 'NativeRawLayout','EntropyLayoutCleanup','EntropyReturnLayout','EntropyMoveKeys','LinuxRawLayout','NativeEntropyAdmittedLayout']
 receipts=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
 rows=[]
 for name in names:
@@ -36,6 +36,7 @@ comparisons=[
  dict(before='PV_EVH_EntropyMoveBacking.returned_backing',after='PV_EVH_EntropyReturnLayout.returned_backing',removed=['four independent source/returned-field region relations','three independent32-byte read bounds'],retained='CallerSeparate for actual caller97-byte initialized return footprint vs callee232-byte frame; pair relocation only, no complete installed Self/staging/observations'),
  dict(before='PV_EVH_EntropyMoveBacking.original_lookup',after='PV_EVH_EntropyMoveKeys.original_lookup/moved_ready_lookup',removed=['original key differs from each moved source key','returned keys do not shadow original','pre-move lookup for the admitted source-shaped ready state'],retained='existing pair relocation representation; full native move remains open'),
  dict(before='PV_EVH_LinuxRawABI.suffix_inputs',after='PV_EVH_LinuxRawLayout.suffix_inputs',removed=['independent original64 pointer-fit bound'],retained='runtime valid nonwrapping232-byte reservation; syscall footprint is not proved')]
+comparisons.append(dict(before='PV_EVH_NativeEntropyPhysical.source_and_backing plus supplied original lookup',after='PV_EVH_NativeEntropyAdmittedLayout.source_and_backing',removed=['all six local extent/separation inputs','supplied pre-move original-slot lookup'],retained='one admitted source-shaped state with SAME raw history and original source; actual invocation/kernel association remains named P'))
 out=dict(evidence_class='checked consumers of existing laws using own-1 adopted-layout binding; no new primitive implementation',
  source_binding_sha256=sha((E/'frame-source-binding-D572.json').read_bytes()),modules=rows,before_after=comparisons,
  caveat='Specialization to the mechanically recorded layout discharges local mathematical premises, not the relation of arbitrary State to an actual reached native invocation. Whole-frame and caller-frame boundaries remain named P, not claimed discharged by repackaging.',

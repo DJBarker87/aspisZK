@@ -6,6 +6,12 @@
     "sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
     "executed": false
   },
+  "adopted_source": {
+    "revision": "4ea2abfcc3a50f1b6e766ed41ff07cf815085a87",
+    "path": "crates/aspis-prover/src/state_only_entropy.rs",
+    "sha256": "4f6967771c5b7aaaebbd2967c6db1561e2d69de6c4c0f06f8d48a90f6d7ac2f7",
+    "byte_equal_current": true
+  },
   "disassembly": {
     "command": [
       "objdump",
@@ -104,7 +110,12 @@
     "returned_seed": [
       65,
       97
-    ]
+    ],
+    "result_initialized_footprint": [
+      0,
+      97
+    ],
+    "result_allocation_extent": "Not inferred from max store offset; full ABI size/alignment/padding remains V370/runtime metadata"
   },
   "binding": [
     "Original Zeroizing([0;64]) initializer maps to four xmm zero stores at rsp offsets0,16,32,48.",
@@ -123,8 +134,8 @@
     },
     {
       "id": "FRAME-ENTRY",
-      "classification": "runtime obligation with compiler stack preservation under V370",
-      "statement": "The actual 232-byte writable reserved frame has a valid nonwrapping64-bit extent and is disjoint from each pre-existing live owner and each live heap allocation. The caller-provided 97-byte Result destination and32-byte mask input are valid and obey Rust call aliasing rules. This is required only of reached entry states, never arbitrary State."
+      "classification": "runtime obligation",
+      "statement": "The actual 232-byte writable reserved frame has a16-byte-aligned base and a valid nonwrapping64-bit extent and is disjoint from each pre-existing live owner and each live heap allocation. The caller-provided Result destination (including its actual ABI padding; success initializes97 bytes) and32-byte mask input are valid and obey Rust call aliasing rules. This is required only of reached entry states, never arbitrary State."
     },
     {
       "id": "HEAP-ENTRY",
@@ -138,13 +149,18 @@
     },
     {
       "id": "RAW-ABI",
-      "classification": "V370 compiler-cohort item plus runtime ABI obligation",
+      "classification": "V370 compiler-cohort item",
       "statement": "Actual syscall register and pointer-width/signed-return interpretation matches the pinned x86_64 driver, including compiler memory clobber and preserved state; no nostack/preserves_flags option implies a kernel memory footprint."
     },
     {
+      "id": "MOVE-COMPILER",
+      "classification": "V370 compiler-cohort item",
+      "statement": "The complete Self return and Result tag preserve the source semantics at the recorded destination and staging offsets, including SIMD register/spill copies and ABI layout/padding; the existing abstract pair relocation is not that complete implementation."
+    },
+    {
       "id": "MOVE-L3",
-      "classification": "V370 compiler-cohort item and runtime observation obligation",
-      "statement": "Return destination backing, all staging slots/registers/spills and old inner32 residues participate in the existing L3 observer and advancing native world family; copying returned values is not erasure of those other locations."
+      "classification": "runtime obligation",
+      "statement": "All staging slots/registers/spills and old inner32 residues participate in the existing L3 observer and advancing native world family; copying returned values is not erasure of those other locations."
     }
   ],
   "discharged_at_layout_level": [
