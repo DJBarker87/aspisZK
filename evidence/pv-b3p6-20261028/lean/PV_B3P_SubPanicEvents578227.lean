@@ -10,7 +10,11 @@ def overflowFlag (left right : Usize) : Bool :=
 theorem cast_sub_safe (left right : Usize) (ordered : right.val ≤ left.val) :
     overflowFlag left right = false := by
   have castOrder : ¬(UScalar.cast .U64 left).val < (UScalar.cast .U64 right).val := by
-    scalar_tac
+    have leftBound : left.val < UScalar.size .U64 := by scalar_tac
+    have rightBound : right.val < UScalar.size .U64 := by scalar_tac
+    rw [UScalar.cast_val_eq,UScalar.cast_val_eq,
+      Nat.mod_eq_of_lt leftBound,Nat.mod_eq_of_lt rightBound]
+    omega
   have spec := UScalar.overflowing_sub_eq (UScalar.cast .U64 left) (UScalar.cast .U64 right)
   simp only [castOrder,if_false] at spec
   exact spec.2
