@@ -3,12 +3,12 @@ from pathlib import Path
 import json,subprocess,re,hashlib,shlex
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-uc5-20261103';H='dombarker@100.108.41.90';D='/home/dombarker/project-offloads/codex-pv-uc-20261029'
 # Read-only, no process submission, no witness/proof/recovery/private input copies.
-done=subprocess.check_output(['ssh',H,'cat '+D+'/native91104/done-status.txt'],text=True).strip();assert done=='0',done
+done=subprocess.check_output(['ssh',H,'cat '+D+'/native91108/done-status.txt'],text=True).strip();assert done=='0',done
 O=E/'differential';O.mkdir(exist_ok=True)
-names=subprocess.check_output(['ssh',H,'ls '+D+'/final-gates/uc5/differential/'],text=True).splitlines()
+names=subprocess.check_output(['ssh',H,'ls '+D+'/final-gates/uc5/differential-final/'],text=True).splitlines()
 selected=[n for n in names if re.fullmatch(r'(comparison-\d+|secret-scan-\d+|summary|secret-scan-summary)\.json',n)]
 assert len(selected)==202,len(selected)
-code="from pathlib import Path; import json; p=Path("+repr(D+'/final-gates/uc5/differential')+"); names="+repr(selected)+"; print(json.dumps({n:(p/n).read_text() for n in names}))"
+code="from pathlib import Path; import json; p=Path("+repr(D+'/final-gates/uc5/differential-final')+"); names="+repr(selected)+"; print(json.dumps({n:(p/n).read_text() for n in names}))"
 payload=json.loads(subprocess.check_output(['ssh',H,'python3 -c '+shlex.quote(code)],text=True))
 assert set(payload)==set(selected)
 for name,raw in payload.items():(O/name).write_text(raw)

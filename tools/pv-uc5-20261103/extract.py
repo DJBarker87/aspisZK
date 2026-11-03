@@ -15,7 +15,7 @@ p=H/'PV_UC_Entry_uc5.llbc';c[c.index('--dest-file')+1]=str(p)
 r=subprocess.run(c,cwd=x['cwd']);assert r.returncode==0
 assert json.loads(p.read_text())['has_errors'] is False
 B=Path('/home/dombarker/project-offloads/codex-pv-cx-20261029/resume-ae1/pinned-tools/aeneas-ae1-2-fda587d2')
-O=H/'entry-extraction-uc5';O.mkdir(exist_ok=False)
+O=H/'entry-extraction-uc5-final';O.mkdir(exist_ok=False)
 a=[str(B),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','PV_UC_Entry','-dest',str(O),'-split-files','-emit-json',str(p)]
 r=subprocess.run(a)
 (O/'receipt.json').write_text(json.dumps(dict(charon_command=c,aeneas_command=a,llbc_sha256=hashlib.sha256(p.read_bytes()).hexdigest(),outputs={q.name:hashlib.sha256(q.read_bytes()).hexdigest() for q in O.glob('*.lean')},exit=r.returncode),indent=2)+'\n');sys.exit(r.returncode)

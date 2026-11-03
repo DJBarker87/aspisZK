@@ -1,12 +1,12 @@
 """100 actual fixture-secret pairs through audit copies; complete prover calls, no stubs."""
 from pathlib import Path
 import asyncio,os,json,hashlib,time
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/differential';O.mkdir(exist_ok=False)
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/differential-final';O.mkdir(exist_ok=False)
 F=json.loads((H/'fixture-inputs.json').read_text());control=H.parent/'codex-pv-c474-20261029/runtime-private-final/default'
 requests={f:json.loads((control/f/'request.json').read_text()) for f in ['transfer','withdrawal']}
 B={'user':H/'native-target/client/user_client','fixture':H/'native-target/client/devnet_spend'}
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
-pins=json.loads((H/'final-gates/uc5/build.json').read_text());assert pins['fixture_unchanged']
+pins=json.loads((H/'final-gates/uc5-final/build.json').read_text());assert pins['fixture_unchanged']
 assert all(sha(p)==pins['binaries'][p.name]['sha256'] for p in B.values())
 print('EXPECTED WORK: optimized proof generation in 200 final-production/fixture prover calls; no compilation or timing experiment',flush=True)
 slots=asyncio.Semaphore(3);active=set();rows={};start=time.monotonic()
@@ -16,7 +16,7 @@ def key(label):
  return '1'*(len(raw)-len(raw.lstrip(b'\0')))+out
 async def side(i,side):
  f='transfer' if i%2==0 else 'withdrawal';q=dict(requests[f]);dest=O/f'{i}-{side}';q['proof_dir']=str(dest)
- q['proof_accounts']=[key(f'PV-UC D577 final production differential {i} {j}') for j in range(8)]
+ q['proof_accounts']=[key(f'PV-UC D577 alias-safe final production differential {i} {j}') for j in range(8)]
  async with slots:
   rfd=None; output_read=None; output_write=None
   if side=='user':

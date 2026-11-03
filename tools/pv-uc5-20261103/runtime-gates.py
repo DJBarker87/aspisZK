@@ -1,7 +1,7 @@
 """Finite native startup/FD gates; no prover call and no timing experiment."""
 from pathlib import Path
 import json,os,subprocess,time,hashlib,signal,re
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/runtime';O.mkdir(exist_ok=True)
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/runtime-final';O.mkdir(exist_ok=True)
 client=H/'native-target/client/user_client'
 helper=H/'uc5-startup.rs'
 helper.write_text('''#[path="src/tools/r1-cost-probe/src/bin/user_client/diagnostics.rs"] mod diagnostics;
@@ -38,19 +38,25 @@ F=json.loads((H/'fixture-inputs.json').read_text())
 control=H.parent/'codex-pv-c474-20261029/runtime-private-final/default/transfer/request.json'
 base=json.loads(control.read_text());base.pop('note');base.update(lane_leaf_sets=F['lane_leaf_sets'],withdrawal_amount=250,proof_dir=str(O/'never-created'))
 controls=[]
-for case in ['stdio','same-input','regular-file','read-only','after-secret-panic']:
- q=dict(base);rfd,wfd=os.pipe();record=bytes.fromhex(F['records'][0]);os.write(wfd,record);os.close(wfd);q['wallet_bytes_fd']=rfd
+for case in ['stdio','same-input','regular-file','read-only','stdout-alias','stderr-alias','input-alias','after-secret-panic']:
+ q=dict(base);rfd,wfd=os.pipe();record=bytes.fromhex(F['records'][0]);os.write(wfd,record);input_alias=os.dup(wfd) if case=='input-alias' else None;os.close(wfd);q['wallet_bytes_fd']=rfd
  outread,outwrite=os.pipe();extra=None
  if case=='stdio':fd=1
  elif case=='same-input':fd=rfd
  elif case=='regular-file':extra=os.open(O/'empty-control-file',os.O_CREAT|os.O_WRONLY,0o600);fd=extra
  elif case=='read-only':fd=outread
+ elif case in ['stdout-alias','stderr-alias']:fd=outwrite
+ elif case=='input-alias':extra=input_alias;fd=extra
  else:fd=outwrite;q['lane_bytes']='0'
  q['wallet_output_fd']=fd
  inherited=tuple(set([rfd,outwrite,outread]+([] if extra is None else [extra])))
- result=subprocess.run([str(client)],input=json.dumps(q).encode(),capture_output=True,pass_fds=inherited,cwd=O)
- for channel in inherited:os.close(channel)
- assert result.stdout==b'' and result.stderr==(b'client panic\n' if case=='after-secret-panic' else b'client error\n')
+ result=subprocess.run([str(client)],input=json.dumps(q).encode(),stdout=outwrite if case=='stdout-alias' else subprocess.PIPE,stderr=outwrite if case=='stderr-alias' else subprocess.PIPE,pass_fds=inherited,cwd=O,timeout=10)
+ for channel in inherited:
+  if channel!=outread:os.close(channel)
+ pipe_bytes=os.read(outread,213);os.close(outread)
+ stdout=pipe_bytes if case=='stdout-alias' else result.stdout
+ stderr=pipe_bytes if case=='stderr-alias' else result.stderr
+ assert stdout==b'' and stderr==(b'client panic\n' if case=='after-secret-panic' else b'client error\n')
  assert result.returncode==(-signal.SIGABRT if case=='after-secret-panic' else 1)
  controls.append(dict(case=case,exit=result.returncode,stdout_bytes=0,stderr_literal=True))
 assert not (O/'never-created').exists() and (O/'empty-control-file').stat().st_size==0

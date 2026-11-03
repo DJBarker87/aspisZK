@@ -1,7 +1,7 @@
 """Rebuild the changed client/audit copy; verify retained fixture and ELF identities."""
 from pathlib import Path
 import hashlib,json,subprocess,os,re
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');C=H/'src/tools/r1-cost-probe';O=H/'final-gates/uc5';O.mkdir(exist_ok=False)
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');C=H/'src/tools/r1-cost-probe';O=H/'final-gates/uc5-final';O.mkdir(exist_ok=False)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pins=json.loads((H/'final-audit-expected.json').read_text())
 e=dict(os.environ,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_TARGET_DIR=str(H/'native-target'),RUSTFLAGS='--cfg getrandom_backend="linux_raw" --check-cfg=cfg(getrandom_backend,values("linux_raw")) -C link-arg=-Wl,--threads=4')
