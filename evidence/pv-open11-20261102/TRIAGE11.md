@@ -800,3 +800,7 @@ V239/V249/V269/V403 remain OPEN with exact existing-link premises in `PROGRESS11
 ## D573 relaunch — ranks15–17
 
 V374/V373/V380-inversion remain OPEN. Exact premises are in PROGRESS11.md and PV_O11_l3-review.json. Adopted-image scanner refreshed (N90508/N90509); corrected filter covers17 sized symbol bodies, with10 heuristic CLEAN and7 UNRESOLVED.16 inversion transfers/two zero branches do not supply native operand/joint observer or inline coverage. V374 has no adopted whole-client witness-class measurement. N90509 pre-scan sequencing correction is explicit. Remaining87 Lean/20 native;next90408/N90510,reserved90499. Next rank18 V346.
+
+## D573 relaunch — ranks18–19
+
+V346/V340 remain OPEN with exact premises in PROGRESS11.md and PV_O11_release-review.json.1269/1284 listed source paths equal their adopted hashes;15 baseline/comparison or generated validation-harness paths are absent, not silently reproduced. No present production mismatch or row restoration is established. Retain31 provenance/consumer cases, coherent final replay/NEP and same current release association. No new scopes. Next rank20 V347.

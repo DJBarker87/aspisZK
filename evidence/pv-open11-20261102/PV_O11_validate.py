@@ -92,4 +92,11 @@ assert json.loads((D/'id-prescan-N90508.txt').read_text())['unused']
 assert json.loads((D/'id-supplement-N90509.txt').read_text())['no_collision']
 # N90509's failed broad-regex prescan is retained, explicitly not credited as cleared.
 assert not json.loads((D/'id-prescan-N90509.txt').read_text())['unused']
-print(json.dumps(dict(ok=True,rows=69,excluded=14,restored=0,lean_invocations=10,native_invocations=10,kani=0,nep_roots=5,new_source_inspections=len(inspected),endpoint_premises_removed=0)))
+release=json.loads((D/'PV_O11_release-review.json').read_text())
+assert release['source_count']==1284 and release['equal_count']==1269 and len(release['different'])==15
+assert set(release['rows'])=={'V346','V340'}
+assert release['restored']==release['premises_removed']==release['premises_added']==release['premises_weakened']==0
+assert all(x.get('missing') for x in release['different'])
+for p in release['pins'].values():
+ b=subprocess.check_output(['git','show',p['blob']]);assert sha(b)==p['sha256'] and (D/p['snapshot']).read_bytes()==b
+print(json.dumps(dict(ok=True,rows=69,excluded=14,restored=0,lean_invocations=10,native_invocations=10,kani=0,nep_roots=5,new_source_inspections=len(inspected)+len(l3['rows'])+len(release['rows']),endpoint_premises_removed=0)))

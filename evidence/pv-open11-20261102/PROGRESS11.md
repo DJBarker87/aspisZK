@@ -121,3 +121,23 @@ N90509 runs the changed scanner: broaden inherited-method symbol spelling and no
 `PV_O11_l3_review.py` regenerates the report and retained16 call contexts from immutable raw disassembly; source statements for interpolation/pivot/norm/sentinel/circle/pole laws are retained as inspection inputs, not newly compiled/proved. Native-source binding of every actual operand and all inline instances is absent. No native privacy counterexample is established.
 
 Cumulative10/97 Lean,10/30 native,0 Kani. Remaining87/20;next90408/N90510;90499 reserved. Next uninspected rank18 V346, thenV340.
+
+## D573 relaunch — ranks18–19
+
+No row restored; endpoint premises removed/added/weakened=0/0/0. Each row received one bounded source/retained-evidence inspection with zero Lean/native launches.
+
+### V346 — OPEN
+
+Produce a current proved=shipped manifest joining the adopted da36d6aa client, exact toolchain/profile/resolved features, three retained ELFs, protocol/wire parameters, every actually reached native source/extraction/reference binding and decoder, endpoint declarations and all accepted proof/effect/trace certificates. Retain the 31 unresolved provenance/audit-consumer cases, K-3 suspensions, V370, E1/E2 and current source/cohort qualifications. Finish one coherent dependency replay plus NEP importAll/private HARD-ERROR audit at the same adopted release. Equality of 1284 listed source inputs is identity evidence only: it neither certifies complete reachability nor installs missing native links, and the old fa888460 manifest/replay or successful cached imports do not transfer by name.
+
+### V340 — OPEN
+
+Bind final candidate/research adoption to the SAME current event-retaining deployed headline, adopted da36d6aa artifact and effective features/profile, actual proof-account caller/upload route and all release conditions. D502 timing/recipe decisions and D537 bundle adoption settle those historical decisions only; current user-client adoption, E1/E2, coherent theorem/native-instance/source/artifact association and full L1/L2/L3 joint observation remain. The old empty shipped-source diff supports only its pinned evidence reuse. Do not merge/rebase another line or declare the research target adopted from source equality; preserve the endpoint, simulator, observer, bound and capped three-field T.
+
+`PV_O11_release_review.py` checks all1284 listed adopted-manifest paths at pinned45336b1249:1269 existing files match their SHA-256 exactly;15 paths are absent, all under tools/r1-cost-probe-base or tools/pv-c474-validation. There is no changed present file or established production-source mismatch. All listed crates/programs/current-client inputs match. The retained audit-manifest correction and builder show the separate validation manifest is generated. No absent comparison/audit input was substituted, reconstructed, credited as reproduced, or required as a new endpoint premise. Retained gates using those paths must retain their original provenance or supply a reproduction chain before being reused.
+
+The old V346 manifest and D501 review explicitly retain31 C provenance/consumer cases. Source identity, adopted binary hash equality and successful historical components do not resolve those31 or supply the current event headline/native instances and coherent final audit. The known NDR cohort is not imported or credited. No full replay, unchanged runtime suite or ELF rebuild was launched.
+
+Counters unchanged:10/97 Lean,10/30 native,0 Kani;remaining87/20,next90408/N90510,reserved90499. Next uninspected rank20 V347, then V348 down the retained L1/L2 list. The shared native world/caller/observer association is still substantive, not an extra T field.
+
+Supplementary nested ID-name scan after both launches: 1248544 directories/3796995 files, no other-job exact-token90508/90509 collision. Cache roots skipped as recorded. This does not repair or replace the limited/failed prelaunch checks; all future ID scans must clear recursively before a separate launch tool call.
