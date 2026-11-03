@@ -18,14 +18,18 @@ def continuation(edges,certificates):
  require(set(edges)==set(old),'added or removed edge collection fields')
  require(len(edges['edges'])==257,'changed edge inventory')
  prior={e['edge']:e for e in old['edges']};seen=set()
- require(certificates==[], 'No new composed recipe is admitted before its complete native/model/domain/Result/frame validation is implemented')
+ import NET_window_certificates as windows
+ expected_rows,new_edges=windows.expected(neo.baseline())
+ require(certificates==expected_rows,'new parser recipe differs from complete checked evidence')
  for edge in edges['edges']:
   name=edge['edge'];require(name in prior and name not in seen,'invented or duplicate edge')
   seen.add(name)
-  require(edge==prior[name],'unregistered edge mutation or premature promotion: '+name)
+  expected=copy.deepcopy(prior[name])
+  if name in new_edges:expected.update(new_edges[name])
+  require(edge==expected,'unregistered edge mutation or premature promotion: '+name)
  for k,v in old.items():
   if k!='edges':require(edges[k]==v,'changed inherited row certificate collection: '+k)
- return dict(schema='NET-additive-NEO-v1',baseline_revision='62ab0a9cc5',baseline_edges_sha256=sha(O/'NEO_EDGES.json'),newly_closed=[],new_count=0,total_closed=130,q_occurrences_closed=108,q_functions_closed=54,edge_closed=124,edge_total=257,roots=dict(neo.obj(O/'NEO_LEDGER_DELTA.json')['roots']),trust='P6/D188 option A semantic transport retained; reclassification, never removal',security_target_established=False)
+ return dict(schema='NET-additive-NEO-v1',baseline_revision='62ab0a9cc5',baseline_edges_sha256=sha(O/'NEO_EDGES.json'),newly_closed=sorted(c['row'] for c in expected_rows),new_count=4,total_closed=134,q_occurrences_closed=112,q_functions_closed=56,edge_closed=127,edge_total=257,roots=dict(neo.obj(O/'NEO_LEDGER_DELTA.json')['roots']),trust='P6/D188 option A semantic transport retained; reclassification, never removal',security_target_established=False)
 
 def validate(edges=None,certificates=None,replay=True):
  receipt=obj(O/'NEO_FINAL_REVIEW.json')

@@ -30,7 +30,7 @@ theorem quadratic (bytes : Slice U8) (size : bytes.val.length=608)
  refine ⟨bound,rfl,?_⟩
  apply NEO_QuadraticTotal.result
  change 16≤(NEO_FixedWindow.window bytes (offset slot tail first) 16#usize bound).val.length
- rw [(NEO_FixedWindow.window bytes (offset slot tail first) 16#usize bound).hSize]
+ rw [(NEO_FixedWindow.window bytes (offset slot tail first) 16#usize bound).property]
  decide
 
 /-- Both CM halves remain subwindows of the very same q allocation. -/
@@ -45,7 +45,7 @@ theorem complex (bytes : Slice U8) (size : bytes.val.length=608)
  refine ⟨bound,rfl,?_⟩
  apply NEO_ComplexTotal.result
  change 8≤(NEO_FixedWindow.window bytes (offset slot tail first+half*8) 8#usize bound).val.length
- rw [(NEO_FixedWindow.window bytes (offset slot tail first+half*8) 8#usize bound).hSize]
+ rw [(NEO_FixedWindow.window bytes (offset slot tail first+half*8) 8#usize bound).property]
  decide
 
 #print axioms window_bound

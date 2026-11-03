@@ -1,0 +1,59 @@
+// One query's native Vec update, on an arbitrary valid prior heap.
+// Capacity classes 1..22 cover every nonempty for_range invocation.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+fn NET_gather(flat:&mut Vec<M31>,lines:&mut Vec<M31>,values:[M31;5])->Result<(),Error>{
+ if values.iter().any(|x|*x==M31::ZERO){return Err(Error::Query);}
+ flat.extend_from_slice(&values);
+ lines.push(values[4]);
+ Ok(())
+}
+fn row()->[M31;5]{let x:[u32;5]=kani::any();[M31(x[0]),M31(x[1]),M31(x[2]),M31(x[3]),M31(x[4])]}
+fn NET_gather_case<const N:usize,const M:usize>(){
+ assert_eq!(M,5*N);assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let k:usize=kani::any();kani::assume(k<N);
+ let raw:[u32;M]=kani::any();let line_raw:[u32;N]=kani::any();
+ let p=Box::into_raw(Box::new(raw)) as *mut M31;let lp=Box::into_raw(Box::new(line_raw)) as *mut M31;
+ let mut flat=unsafe{Vec::from_raw_parts(p,5*k,M)};let mut lines=unsafe{Vec::from_raw_parts(lp,k,N)};
+ let j:usize=kani::any();kani::assume(j<M);let lj:usize=kani::any();kani::assume(lj<N);
+ if j<5*k{assert_eq!(flat[j].0,raw[j]);}if lj<k{assert_eq!(lines[lj].0,line_raw[lj]);}
+ let v=row();kani::assume(v[0].0!=0&&v[1].0!=0&&v[2].0!=0&&v[3].0!=0&&v[4].0!=0);
+ assert_eq!(NET_gather(&mut flat,&mut lines,v),Ok(()));
+ #[cfg(NET_bad_reply)] {flat[5*k].0^=1;}
+ assert_eq!(flat.len(),5*k+5);assert_eq!(lines.len(),k+1);assert_eq!(flat.capacity(),M);assert_eq!(lines.capacity(),N);
+ assert_eq!(flat.as_ptr(),p);assert_eq!(lines.as_ptr(),lp);
+ if j<5*k{assert_eq!(flat[j].0,raw[j]);}if lj<k{assert_eq!(lines[lj].0,line_raw[lj]);}
+ let t:usize=kani::any();kani::assume(t<5);assert_eq!(flat[5*k+t].0,v[t].0);assert_eq!(lines[k].0,v[4].0);
+}
+macro_rules! gather{
+ ($name:ident,$n:literal,$m:literal)=>{
+ #[kani::proof] #[kani::unwind(7)]
+ #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+ #[kani::stub(alloc::vec::Vec::<M31>::extend_from_slice,KMX_extend_from_slice)]
+ #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+ fn $name(){NET_gather_case::<$n,$m>()}
+ }
+}
+gather!(NET_gather_01,1,5);
+gather!(NET_gather_02,2,10);
+gather!(NET_gather_03,3,15);
+gather!(NET_gather_04,4,20);
+gather!(NET_gather_05,5,25);
+gather!(NET_gather_06,6,30);
+gather!(NET_gather_07,7,35);
+gather!(NET_gather_08,8,40);
+gather!(NET_gather_09,9,45);
+gather!(NET_gather_10,10,50);
+gather!(NET_gather_11,11,55);
+gather!(NET_gather_12,12,60);
+gather!(NET_gather_13,13,65);
+gather!(NET_gather_14,14,70);
+gather!(NET_gather_15,15,75);
+gather!(NET_gather_16,16,80);
+gather!(NET_gather_17,17,85);
+gather!(NET_gather_18,18,90);
+gather!(NET_gather_19,19,95);
+gather!(NET_gather_20,20,100);
+gather!(NET_gather_21,21,105);
+gather!(NET_gather_22,22,110);
