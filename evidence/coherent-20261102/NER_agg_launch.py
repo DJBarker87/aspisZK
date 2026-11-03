@@ -24,9 +24,9 @@ assert len(batch)==1
 (E/(a+'-modules.json')).write_text(json.dumps(batch,indent=2)+'\n')
 # Pin the complete expected cohort before submitting the sole aggregate run.
 cmd=['python3','NER_aggregate.py',a+'-modules.json',a+'-details']
-cfg=dict(kind='lean',module=mod,attempt=a,sources=['NER_aggregate.py','NER_FinalDriver.lean',mod+'.lean',a+'-modules.json'],env={'LEAN_PATH':paths},timeout=1200,command=cmd,source_revision=rev,source_tree_dirty=True,deps_fingerprint={'scope':'Complete coherent affected rebuild overlay plus unchanged pinned NDR cohort; aggregate module selected imports recorded in details'},expected_time='Final unchanged NDR_CombinedAudit compilation, loaded whole-cohort existence/import scan, then hardened walks of both requested roots',reservation_retries=retry)
+cfg=dict(kind='lean',module=mod,attempt=a,sources=['NER_aggregate.py','NER_FinalDriver.lean',mod+'.lean',a+'-modules.json','NER_PREAGG_OBJECTS.jsonl'],env={'LEAN_PATH':paths},timeout=1200,command=cmd,source_revision=rev,source_tree_dirty=True,deps_fingerprint={'scope':'Complete coherent affected rebuild overlay plus unchanged pinned NDR cohort; aggregate module selected imports recorded in details'},expected_time='Final unchanged NDR_CombinedAudit compilation, loaded whole-cohort existence/import scan, then hardened walks of both requested roots',reservation_retries=retry)
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=2)+'\n')
-subprocess.run(['scp','-q',str(E/(a+'.json')),str(E/'NER_aggregate.py'),str(E/'NER_FinalDriver.lean'),str(E/(mod+'.lean')),str(E/(a+'-modules.json')),H+':'+D+'/'],check=True)
+subprocess.run(['scp','-q',str(E/(a+'.json')),str(E/'NER_aggregate.py'),str(E/'NER_FinalDriver.lean'),str(E/(mod+'.lean')),str(E/(a+'-modules.json')),str(E/'NER_PREAGG_OBJECTS.jsonl'),H+':'+D+'/'],check=True)
 runner='S2W_run_host_agg16.py'
 r=subprocess.run(['ssh',H,f'cd {D} && systemd-run --user --scope -p MemoryHigh={"14G" if agg else "6G"} -p MemoryMax={"16G" if agg else "8G"} -p MemorySwapMax=0 -p TasksMax=64 python3 {runner} {a}.json'],capture_output=True,text=True)
 (E/f'{a}-launcher.log').write_text(r.stdout+r.stderr)

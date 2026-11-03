@@ -1,5 +1,5 @@
 """Validate complete affected rebuild, selected import identity and matched mutations."""
-import copy,hashlib,json,lzma
+import copy,hashlib,json,lzma,sys
 from pathlib import Path
 E=Path(__file__).resolve().parent
 plan={r['module']:r for r in json.loads((E/'NER_REBUILD_PLAN.json').read_text())['modules']}
@@ -21,8 +21,10 @@ for r in json.loads((E/'NER_REBUILT_OBJECT_PINS.json').read_text()):
 for p in sorted([*E.glob('NER_B*-details/modules.jsonl'),*E.glob('NER_A900-details/modules.jsonl')]):
  for line in p.read_text().splitlines():rows.append({**json.loads(line),'scope':p.parent.name.removesuffix('-details')})
 
+partial="--partial" in sys.argv
 def validate(rows):
- assert len(rows)==len(plan)==1387
+ if partial:assert len(rows)<=len(plan)==1387
+ else:assert len(rows)==len(plan)==1387
  assert len({r['module'] for r in rows})==len(rows)
  final={r['module']:r['object_sha256'] for r in rows}
  for r in rows:
@@ -30,6 +32,7 @@ def validate(rows):
   assert r['source_sha256']==plan[n]['source_sha256'],n
   assert set(r['selected_imports'])==set(plan[n]['cohort_imports']),n
   for dep,pin in r['selected_imports'].items():
+   if dep in plan:assert dep in final,(n,dep,'affected import not rebuilt')
    expected=final.get(dep,original[dep]['artifacts'][0]['sha256'])
    assert pin['sha256']==expected,(n,dep,pin['sha256'],expected)
  return final
@@ -48,7 +51,7 @@ for p in sorted(E.glob('NER_B*/receipt.json')):
  for name,digest in r['source_hashes'].items():assert hashlib.sha256((p.parent/'sources'/name).read_bytes()).hexdigest()==digest
  a=r['attempt'];admissions=[json.loads(l) for l in (E/'NER_ATTEMPTS.jsonl').read_text().splitlines()]
  assert any(x['attempt']==a and x['event']=='admission' and x['exit']==0 and json.loads((E/x['receipt']).read_text())['allowed'] is True for x in admissions)
-result={'complete':True,'modules':len(rows),'selected_affected_imports_match_final':True,'stale_import_mutation_rejected':True,'batch_scopes':len(list(E.glob('NER_B*/receipt.json')))}
-(E/'NER_REBUILD_CHECKS.json').write_text(json.dumps(result,indent=2)+'\n')
-(E/'NER_REBUILD_ROWS.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows))
+result={'complete':not partial,'modules':len(rows),'selected_affected_imports_match_final':True,'stale_import_mutation_rejected':True,'batch_scopes':len(list(E.glob('NER_B*/receipt.json')))}
+(E/('NER_PARTIAL_CHECKS.json' if partial else 'NER_REBUILD_CHECKS.json')).write_text(json.dumps(result,indent=2)+'\n')
+(E/('NER_PARTIAL_ROWS.jsonl' if partial else 'NER_REBUILD_ROWS.jsonl')).write_text(''.join(json.dumps(r)+'\n' for r in rows))
 print(json.dumps(result))

@@ -6,6 +6,13 @@ rows=json.loads((B/sys.argv[1]).read_text())
 out=B/sys.argv[2];out.mkdir(exist_ok=False)
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 paths=os.environ['LEAN_PATH'].split(':')
+pins=[json.loads(line) for line in (B/'NER_PREAGG_OBJECTS.jsonl').read_text().splitlines()]
+def verify_pins():
+ for module in pins:
+  for artifact in module['artifacts']:
+   assert sha(Path(artifact['path']))==artifact['sha256'],artifact['path']
+verify_pins()
+print('NER_PREAGG_PINS_VERIFIED',flush=True)
 for row in rows:
  m=row['module']; src=B/(m.replace('.','/')+'.lean');obj=src.with_suffix('.olean')
  assert sha(src)==row['source_sha256'],m
@@ -28,4 +35,6 @@ for row in rows:
 # The standalone driver now loads that exact object cohort in one private view.
 cmd=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M15000','-DElab.async=false','--run','NER_FinalDriver.lean','final']
 r=subprocess.run(cmd)
+verify_pins()
+print('NER_POSTAGG_INPUTS_UNCHANGED',flush=True)
 sys.exit(r.returncode)
