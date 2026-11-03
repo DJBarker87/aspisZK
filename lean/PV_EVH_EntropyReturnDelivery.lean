@@ -9,6 +9,32 @@ open PV_EVH_EntropyDeployedLayout (original field seed entered)
 open PV_EVH_EntropyMoveKeys (ready)
 open PV_EVH_EntropyCallerLayout (mask result)
 
+/-- Cleanup uses the original admitted lifetime from the entry state, not
+a fresh key recomputed from the post-fill state. The complete-return helper
+is used below only for its key-independent physical memory projection. -/
+def completed [ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) : State :=
+  PV_EVH_StackZero.drop (original owner sp w)
+    (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w))
+
+theorem original_lookup [ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
+    (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)).frame.live.find?
+      (PV_EVH_StackCleanup.sameKey (original owner sp w).key) = some (original owner sp w) := by
+  have hf := (PV_EVH_StackStores.frame
+    (PV_EVH_EntropyReturnFootprint.stores sp (ready owner sp d w)) (ready owner sp d w)).1
+  change (PV_EVH_StackStores.run _ _).frame.live.find? _ = _
+  rw [hf]
+  exact PV_EVH_EntropyMoveKeys.ready_lookup owner sp d w
+
+theorem original_drop [ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
+    PV_EVH_StackCleanup.drop64 (original owner sp w).key
+      (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)) =
+    ⟨.returned (.ok ()),completed owner sp d w,PV_EVH_StackZero.emitted (original owner sp w)⟩ := by
+  simp only [PV_EVH_StackCleanup.drop64,original_lookup]
+  rfl
+
 /-- Every initializer/fill/copy in this physical interpretation preserves
 the actual caller mask region. Native kernel correspondence is still the
 retained KERNEL-WRITE obligation, not inferred from this modeled footprint. -/
@@ -62,7 +88,7 @@ source mask and installing ownership/L3 events remain explicit P. -/
 theorem returned_delivery [ExternalTypes] (owner sp : Nat)
     (d : PV_EVH_StackEntropyFill.Delivery) (w : State) (i : Nat) (hi : i < 32) :
     let v := ready owner sp d w
-    let out := PV_EVH_EntropyReturnComplete.finish owner sp v
+    let out := completed owner sp d w
     out.memory (result sp) = 0 ∧
     out.memory (result sp+1+i) = w.memory (mask sp+i) ∧
     out.memory (result sp+33+i) =
@@ -79,6 +105,8 @@ theorem returned_delivery [ExternalTypes] (owner sp : Nat)
   exact h.2.2.2.trans (by
     simpa only [Nat.add_assoc] using original_ready owner sp d w (32+i) (by omega))
 
+#print axioms original_lookup
+#print axioms original_drop
 #print axioms outside_ready
 #print axioms original_ready
 #print axioms returned_delivery
