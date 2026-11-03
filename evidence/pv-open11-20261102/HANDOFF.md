@@ -1,3 +1,13 @@
+# D577 authoritative continuation — dependency task completed
+
+Read `DEPENDENCY11.md` and the D577 section of `PROGRESS11.md` before the historical handoff below. The user's change of task supersedes continuing from rank20. All55 ranked OPEN rows are mapped; overlapping a–h counts are **50/9/34/35/34/5/11/1**. Only V371 is h-only; it still needs the existing pinned-CPU latency/DOITM owner boundary. No available extraction/equality/structural route closes it. No row restored; endpoint premises removed/added/weakened=0/0/0. Target not yet established.
+
+No new scopes; remaining87 Lean/20 native, next90408/N90510,90499 reserved. Same worktree/branch, exclusions, pins, receipts and capped-run rules. `PV_O11_dependency.py --check` and existing `PV_O11_validate.py` pass. The detailed mapping is a review of retained evidence, not newly established owner-line results or a formal call graph. Do not return to commissioning wrappers around the same missing native world. Next useful evidence is the actual shared interface instance, then a bounded restoration reassessment. No keys or frozen implementation changed.
+
+---
+
+## Historical D573 handoff (superseded task ordering)
+
 # PV_O11 context handoff — D573 automatic relaunch1
 
 **Unfinished. No row restored. Endpoint premises removed/added/weakened=0/0/0. Target not yet established.** This is a context checkpoint with budget remaining, not exhaustion, an infrastructure stop or a checked privacy counterexample. Read PROGRESS11.md for every exact premise.
