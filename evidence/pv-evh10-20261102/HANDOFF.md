@@ -1,117 +1,155 @@
-# D569 context checkpoint — physical copy/read and raw ABI laws
+# D572 session2 context checkpoint — complete entropy return footprint
 
 Continue ONLY /Users/dominic/ZK/.worktrees/pv-evh,
-branch codex/pv-evh-20261029. Resume base fa394f3858.
-Read RESUME-D569.md and inherited RESUME-D566.md for precise claims/failures.
+branch codex/pv-evh-20261029. Session2 started at a5e973e378 after a model-service
+stall. Recovery commit83e5c75070 verified and committed the stopped session's
+nine uncommitted accepted receipts90228–90236 BEFORE new proof work.
+Read RESUME-D572.md and return-integration-session2.json for exact scope.
 Target NOT established; endpoint/deployment rows removed NONE; T unchanged.
-Context checkpoint, not budget exhaustion, external blockage or a checked
-counterexample against shipped source. Do not mistake local state
-representations for installed actual native operations.
+This is a context checkpoint, not budget exhaustion, a persistent host blocker,
+or a checked counterexample against shipped source.
 
-## Exact restart
+## Exact restart and resource state
 
-Used45/100 attempts:29 accepted/16 failed. 79565–79581 consumed17 inherited;
-90200–90227 consumed28 new. **55 REMAIN; NEXT90228.** This checkpoint added
-17 attempts (90211–90227):11 accepted/6 failed. Cumulative128 receipts:84/44.
-79582–79596 unused but unavailable after17 inherited attempts.79597–79599 and
-90297–90299 audits untouched; historical79397–79399 untouched. Reserve audit
-budget. No WIP proof, pending submitted/refused compile or owned live scope.
-No new refusal, transport failure, cap rise, kill, timeout or swap.
+**65/100 attempts consumed:45 accepted/20 failed.35 REMAIN; NEXT90248.**
+79565–79581 consumed17;90200–90247 consumed48. Session2 consumed11:
+90237–90247,7 accepted/4 failed. Recovery additionally collected9 earlier
+accepted attempts90228–90236; they were already spent, not new session2 runs.
+Cumulative148 receipts:100 accepted/48 failed.79582–79596 are unavailable after
+17 inherited attempts.79597–79599/90297–90299 audits untouched; historical
+79397–79399 untouched. Reserve audit budget. No WIP Lean proof, unresolved
+submitted compile, missing receipt, or owned live scope remains.
+
+Final read-only audit.py PASS: exact source revisions/blobs, dependency pins,
+source/object/log hashes, caps, exits, walls, peak RSS, swap and all theorem
+axiom prints. host-final.json reports zero pv-evh scopes. source-checks-session2
+records all five caller/return/frame/entry checks. New peak4,469,580KiB, swap0;
+new slowest3.58s. Historical peak4,616,200KiB remains. No cap rise, kill, timeout,
+transport failure, native/Kani/extractor/full manifest/release replay.
+
+90240 had TWO uncharged quiet-window refusals. The full180s cooldown was
+observed before each subsequent HOST admission; three too-early local wrapper
+calls were rejected before submission, documented in cooldown-local-guards-
+session2.json. Third HOST admission was allowed:true and exit0, then90240
+compiled ONCE. Both refusal-history files are committed. Quiet window was
+released early; do not wait on its old until23:16:24 value without inspecting
+the CURRENT marker/admission. No bypass or marker edit occurred.
 
 Commit NEW source first; use ONLY:
 
     python3 tools/pv-evh10-20261102/stage.py PV_EVH_NewModule
-    python3 tools/pv-evh10-20261102/compile.py 90228 PV_EVH_NewModule
+    python3 tools/pv-evh10-20261102/compile.py 90248 PV_EVH_NewModule
 
-Reuse /home/dombarker/project-offloads/codex-pv-evh-20261029 and runjoin32.
-Same-shell admission exit0 AND allowed:true; one6G/8G/swap0/tasks64 scope,
-Lean-M7000. Refusals full180s/same unlaunched ID/up to10 retries; retain all
-transport rules. No infrastructure/library/LEAN_PATH/J.json/cap changes.
-Accepted source immutable; NEW consumers only; never restage accepted modules.
-Check EVERY new module name before writing. Stage verifies all accepted hashes.
-git add --sparse for evidence. Failed diagnostic79575 remains archived in
- diagnostics/PV_EVH_EntropyPairInspect.lean.txt; never import it.
+Reuse pinned workspace /home/dombarker/project-offloads/codex-pv-evh-20261029
+and runjoin32 cohort. Same-shell admission exit0 AND allowed:true; ONE6G/8G/
+swap0/tasks64 scope, Lean-M7000. For refusals inspect exact last refusal epoch,
+wait at least180s, SAME unlaunched ID, up to10 retries. Never reuse a submitted
+ID. Preserve transport-recovery rules. No infra/library/LEAN_PATH/J.json/cap
+changes. Accepted sources immutable: new consumers ONLY; never restage accepted
+modules. Check EVERY new module name before writing. stage verifies every
+accepted source/object pin. git add --sparse for evidence. Every evidence file
+must remain at most20MiB uncompressed.
 
-## New checked frontier, and exactly what is NOT installed
+## Newly checked laws, with limits
 
-90211 StackCopy: initialized destination byte-snapshot copy; source/heap/old
-live bytes preserved under explicit separation; ownership/history unchanged.
-90214 EntropyPhysicalCopy: source order TWO32 initializers THEN TWO32 copies;
-physical halves from the SAME original delivered64; preserves original/heap.
-90215 NativeEntropyPhysical.source_and_backing: original extracted SOURCE body
-at reached opsNative AND physical both32 backing consume SAME raw history.
-Completed raw-fill guard retained; no per-half copy/helper answers supplied.
-90221 StackByteCodec: U8 encoding lossless via symbolic source scalar bound;
-post-fill physical bytes agree with source scalar values.
-90223 EntropyInnerFrame: both32 ghost keys derived from live+retired frontier
-in initializer order, distinct from each other/old owners. NO address law.
-90225 EntropyCopiedRead: actual checked Array.index_usize result matches the
-physical copied scalar; no source-read answer premise.90227 PhysicalReads
-consumes those laws for both halves in the source-shaped post-fill copy state;
-source reachability is guarded separately by NativeEntropyPhysical.
+90238 EntropyCallerLayout: at the identified adopted retry_attempt call, call
+push8 + six saved registers48 + callee reservation232 gives caller_rsp=sp+288.
+Mask input=sp+304, result=sp+352. Derives CallerSeparate rather than accepting
+it independently;97-byte initialized result fits caller264-byte reservation.
+Valid writable aligned nonwrapping memory remains runtime FRAME-ENTRY, actual
+invocation/register/source interpretation V370. No full Result ABI size or
+padding inferred. caller-source-binding-session2.json ties the exact call/GOT
+relocation to adopted da36d6aa and existing source entry binding.
 
-90216 StackMove is a byte-relocation STATE REPRESENTATION with ghost transfer.
-No inserted destructor/zeroization; residue preserved only outside destination.
-Original lookup derived from explicit key provenance for this representation.
-90226 EntropyMoveBacking: both returned entropy-field backing regions survive
-original64 cleanup under explicit separation; no moved-field destructors.
-NOT a complete actual Self move: mask_nonce/return layout, actual primitive,
-compiler spills/residue/observations and native installation remain P.90210's
-actual `move` parameter/success/post-move lookup premises are NOT discharged
-by a supplied native instance. Do not invent moved-from32 zeroing or silence.
+90240 StackStores: generic captured-register store footprints and ordered
+composition. Memory ONLY; no native event silence or ownership inference.
+90242 EntropyReturnFootprint:13 stores in EXACT adopted order, including all
+96 staging bytes, interleaved96 returned bytes and Ok tag. Explicit register
+sources are original64 and actual caller mask input. Symbolic byte laws,
+inner128/mask preservation and external-write footprint, no concrete recurrence
+normalization. Generator return_footprint.py --check PASS and permanently emits
+named selected-store/outside lemmas. Accepted source is now immutable.
+return_move_binding.py matches EVERY generator source/destination/extent to
+adopted registers/stores, checks generated Lean bytes and pins hashes. It binds
+the actual source's successful Self construction; it does NOT install a full
+native world or prove compiler preservation.
 
-90218 LinuxRawABI: adopted pointer64 x86_64 register selection318/rdi/rsi/rdx0,
-signed64 word roundtrip/range, negative errno and bounded suffix arguments.
-90219 LinuxRawMachine: bounded-word answer adapter preserves ALL buffer/world/
-event prefixes and faults/exhaustion. KernelFrame is TRANSPORTED from a machine
-footprint premise, NEVER inferred. Actual raw ABI/kernel relation remains P,
-not entropy_kernel JOINT DENSITY. Backend remains confirmed adopted getrandom
-0.3.4 linux_raw/direct syscall/no dlsym. No real kernel instance is supplied.
+90243 EntropyReturnComplete: all96 payload bytes/tag survive original64-only
+cleanup; all96 staging bytes remain; moved-from inner64 remain; original64
+is cleared. This utility's finish is a PHYSICAL MEMORY helper, not invocation-
+key provenance. Use90247's anchored completed for actual source ghost keys.
+90245 EntropyReturnSpatial: external old live bytes and heap coherence survive
+under explicit exclusion of callee reservation AND initialized return footprint.
+Mask input can remain live in caller memory. Runtime/heap fidelity NOT inferred.
 
-ACTUAL original/inner/returned source-frame/native-memory interpretation,
-valid64-bit extents, HeapSeparate/LiveSeparate/HeapCoherent remain OPEN.
-No numeric address was invented; freshness/byte equality prove no address law.
-No actual successful proof/account run or full native advancing family exists.
+90246 StackTransfer: ghost ownership transfer, same frame as existing relocation,
+no additional physical stores, no destructor/zeroization. Not an actual
+primitive/event-silence theorem.90247 EntropyReturnDelivery combines EXACT13
+physical stores, both logical field transfers, ORIGINAL admitted owner/key
+from ENTRY, and original64 cleanup. Derives original lookup after transfers
+from initializer/fill/copy state; original_drop selects checked drop64 and
+retains its emitted zeroize events. Both returned entropy fields come from the
+SAME delivered original64; mask bytes equal ENTRY memory (outside_ready proves
+initializer/fill/copy preservation). No per-lane/helper answer is supplied.
+No64-step kernel normalization: preservation/outside lemmas are symbolic.
 
-## Diagnostic/allocator/entry frontier remains inherited
+These are source-shaped physical/ghost laws for the reached successful branch,
+NOT a complete successful actual entropy/proof/account execution. Source fill-
+completion and nonzero-success guards, source mask/physical-memory association,
+actual move/load/store/register/spill observation installation and advancing
+native family remain OPEN. No discarded source failure or implicit success
+assumption has been introduced.
 
-90202/90203 FileDesc write/write_all literal suffix laws and90207/90208 OS-word/
-errno control laws retained. Actual libc signed-return/errno/TLS, pointer bit
-operations, complete Repr/drop/kind/EBADF, guard/borrow/hook/backtrace and actual
-allocator/Vec/Heap/Box fidelity remain P. Old arbitrary panic-hook SOURCE
-failures retain source projections: never restore unconditional no_source or
-PartialView, or rename source failure as runtime fault.
+## Exact retained FRAME/kernel obligations and continuation
 
-## Evidence and next work
+FRAME-CALL, RAW-ABI, MOVE-COMPILER remain V370 compiler-cohort P.
+FRAME-ENTRY (actual call memory), HEAP-ENTRY (actual allocator/coherent physical
+memory), full KERNEL-WRITE (same-memory answer and outside-suffix preservation
+on EVERY prefix/outcome), MOVE-L3 (all registers/spills/inner/staging residue
+observations) remain runtime P. KernelFrame is weaker than KERNEL-WRITE;
+syscall register REQUEST selection never proves what the kernel writes.
+These are NEVER T fields or entropy_kernel joint density.
 
-physical-source-binding-D569.json (physical_binding.py) records exact source
-steps and incomplete actual association. axioms-classification-D569.json labels
-EVERY new #print axioms output SUMMARY-BASED (ax1-prime); failed output has no
-proof credit. NO full-data NEP audit/coherence claim. Inherited NEP_Driver pin
-retained, not executed; actual raw audit must importAll/private and HARD ERROR
-on EVERY unresolved constant. Hash/path agreement is not coherence; no NDR or
-known incoherent reconcile cache was introduced.
+Next concrete deliverable: replace the actual entropy iteration's still-open
+success continuation with the checked copy/read/decision/complete-return/
+original-key cleanup substeps; retain all native read/store/register/spill
+observations and guarded source results. Bind mask ENTRY bytes to the actual
+source input under FRAME-CALL. Use EntropyReturnDelivery.completed/original_drop,
+not the unanchored memory utility, for lifetime-sensitive consumers. Thread
+rejected-iteration cleanup/retry states and source error/fault/exhaustion prefixes
+into an advancing native family. Do NOT define execution from a supplied
+whole-helper Result or claim the physical model alone supplies that family.
 
-Read-only audit-D569.txt/validation.json/host-final.json reconcile receipts,
-source/object pins, source inspections and no-live-scope state. Native closure
-preflight still FAILS as required. summary-D569.json has exact targets/receipts;
-new peak4,463,688KiB (about4.26GiB), slowest2.66s, swap0. Historical peak remains
-4,616,200KiB. No native/Kani/extraction/final manifest/release replay.
-commits-D569.txt lists stage commits; final evidence commit follows snapshot.
+Then actual allocator metadata/padding/RawVec/Global/System ValidAnswer and owned
+Vec/Heap/Box, full libc/TLS/io::Error/EBADF/hook/backtrace diagnostics, seven
+callback installations and full entry. Resource failure stays WORLD; witness-
+independent allocation/thread/TLS failure occurrence/timing stays V400-class P.
+Arbitrary panic-hook SOURCE failures retain source projections.
 
-Next, in order:
-1. ACTUAL frame/address/native interpretation and kernel ABI/memory association;
-   install physical copy/read/complete returned Self move/retry/drop and native
-   advancing family. Retain private syscall receipts and old live-byte/L3 laws.
-2. Actual allocator metadata/padding/RawVec/Global/System ValidAnswer and owned
-   Vec/native Heap/Box. Failure stays WORLD. Complete actual diagnostics and
-   seven callbacks (callback-drop-source-inspection.json), remaining leaves and
-   full proof-account entry; thread/TLS resource timing remains V400-class P.
-3. ONLY THEN unchanged actual-family oraclePrefix/countTrace/nonce-store
-   fileTrace, D520/U/D524 inputs retained. ONLY THEN(v-prime) to successful
-   ACTUAL worldRun at opsNative AND allocator world. NativeObstruction62/op132
-   stay. No unrelated MODEL witness, empty-domain shortcut or new T item.
+ONLY THEN unchanged actual-family oraclePrefix/countTrace/nonce-store fileTrace
+with D520/U/D524; ONLY THEN(v-prime) non-emptiness of successful ACTUAL worldRun
+at opsNative AND allocator world. NativeObstruction62/op132 remain. No unrelated
+MODEL witness, empty-domain shortcut, new T item, or endpoint weakening.
 
-All V221/V222 deployed1.9.0/L3,V370/V371,rdea-1/V400,D159/D166,L1/L2/L3/client
-rows retained. No push/delegation/frozen Rust/soundness/other-worktree write,
-or key/account/funds action. Nothing was deleted or refunded.
+All V221/V222 deployedzeroize1.9.0/L3,V370/V371,rdea-1/V400,D159/D166 and all
+L1/L2/L3/client/endpoint/deployment conditions retained. No push, delegation,
+frozen Rust/program/soundness edits, key/account/funds action, deletion/refund.
+
+## Failed attempts and axioms
+
+90237 nested caller definition left folded: changed to targeted simp-only.
+90239 Covers Prop was opaque to Decidable search: exposed arithmetic condition
+in store's if.90241 selected store's own address and external hypothesis remained
+folded: generator now normalizes all13 named descriptors and arithmetic bounds.
+90244 finish remained folded at rewrite: explicitly unfold this small wrapper.
+Each changed before retry; failed summaries including sorryAx have NO credit.
+Local JSON check compared tuples with decoded arrays: normalized register/source
+records to lists, rechecked successfully; no compiler/attempt consumed by that.
+
+ALL #print axioms are SUMMARY-BASED (ax1-prime), accepted subsets only of
+propext/Classical.choice/Quot.sound. summary-session2.json has exact per-run
+receipts. axioms-classification-session2.json preserves inherited NEP_Driver
+source pin, but NO full-data NEP walk/coherence claim. Raw release audit must
+importAll/private and HARD ERROR on every unresolved constant. Never use NDR/
+codex-cx-reconcile-cache. Hash/path agreement and passing imports are not coherence.
+commits-session2.txt lists staged commits; final checkpoint commit follows it.
