@@ -23,3 +23,10 @@ The owner restarted the Mac. Every Codex job died mid-run; each worktree has a W
 - Walker: evidence/axaudit2-20261102/NEP_Driver.lean is the audit standard. RPx_Deployed walks completely.
 - Devnet: verifier CSnhzGdH, fresh Pool 4GQ9Gnmi; L188 obligation 5 is closed (devnet).
 - Stream B: their handover is at ~/aspis-streamb-infra/HANDOVER-20261103.md. They want a quiet window later for uc5 timing, which must name "for": "pv-uc-timing".
+
+## Update 2026-11-03 ~23:40 UTC (the restart had not happened yet)
+Running now. On restart, resume these with the standard preamble:
+- NET_ slice Q composition: .worktrees/cx-slice-q-compose3, codex/cx-slice-q-compose3-20261102, prompt-slice-q-compose3.txt, out/codex-slice-q-compose3.out
+- NEU_ slice S remaining roots: .worktrees/cx-slice-s-compose7, codex/cx-slice-s-compose7-20261103, prompt-slice-s-compose7.txt, out/codex-slice-s-compose7.out
+- NEV_ slice Q arithmetic: .worktrees/cx-slice-q-mul3, codex/cx-slice-q-mul3-20261103, prompt-slice-q-mul3.txt, out/codex-slice-q-mul3.out
+Check each worktree's actual branch with rev-parse before merging.
