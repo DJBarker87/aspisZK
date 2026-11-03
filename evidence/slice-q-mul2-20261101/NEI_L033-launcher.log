@@ -1,0 +1,41 @@
+{"attempt": "NEI_L033", "exit_status": 1, "wall_seconds": 1.8547831509495154, "peak_rss_kib": "2556276", "swaps": "0", "print_axioms": ["'NEI_IteratorMeaning.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_IteratorMeaning.active' depends on axioms: [propext, sorryAx, Quot.sound]", "'NEI_IteratorMeaning.stopped' depends on axioms: [propext, Quot.sound]"]}
+NEI_generated/NEI_IteratorMeaning.lean:19:68: error: unsolved goals
+it : Iter
+h : it.i < ↑it.slice.len
+⊢ (have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)) =
+    ok
+      (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun tail value =>
+        match value with
+        | none => tail
+        | some v => { slice := tail.slice.setAtNat it.i v, i := tail.i })
+'NEI_IteratorMeaning.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_IteratorMeaning.active
+...
+NEI_generated/NEI_IteratorMeaning.lean:19:68: error: unsolved goals
+it : Iter
+h : it.i < ↑it.slice.len
+⊢ (have x := it.slice[it.i];
+    have i := it.i;
+    have it := { slice := it.slice, i := i + 1 };
+    have back := fun it' x =>
+      match x with
+      | none => it'
+      | some x => { slice := it'.slice.setAtNat i x, i := it'.i };
+    ok (some x, it, back)) =
+    ok
+      (some it.slice[it.i], { slice := it.slice, i := it.i + 1 }, fun tail value =>
+        match value with
+        | none => tail
+        | some v => { slice := tail.slice.setAtNat it.i v, i := tail.i })
+'NEI_IteratorMeaning.constructor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_IteratorMeaning.active' depends on axioms: [propext, sorryAx, Quot.sound]
+'NEI_IteratorMeaning.stopped' depends on axioms: [propext, Quot.sound]
+
+Running as unit: run-rb2f9449c8eee40a5a419063296ff4984.scope; invocation ID: 50d91ec7cf74437eaa37577c5d8de936

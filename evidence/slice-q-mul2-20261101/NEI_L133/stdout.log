@@ -1,0 +1,160 @@
+NEI_generated/NEI_ProfileDomain.lean:85:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  AspisR1CurrentWide.field.M31.sub m2 m0
+in the target expression
+  ok { a := a, b := c } = do
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← i1 + i3
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← i6 + i8
+    let i10 ← i4 * i9
+    let m2 ← FIo_Native.aspis_core.field.M31.reduce_u64 i10
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := a, b := m4 }
+
+x y : NC
+hx : canonC x
+hy : canonC y
+m0 m1 m2 a b c : U32
+h0 : x.a.mul y.a = ok m0
+c0 : ↑m0 < 2147483647
+h1 : x.b.mul y.b = ok m1
+c1 : ↑m1 < 2147483647
+h2 : FIo_Native.aspis_core.field.M31.reduce_u64 (NEI_LPi_CMProduct.cross x y) = ok m2
+c2 : ↑m2 < 2147483647
+v2 : ↑(NEI_LPi_CMProduct.cross x y) = (↑x.a + ↑x.b) * (↑y.a + ↑y.b)
+ha : FIo_Native.aspis_core.field.M31.sub m0 m1 = ok a
+ca : ↑a < 2147483647
+hb : FIo_Native.aspis_core.field.M31.sub m2 m0 = ok b
+cb : ↑b < 2147483647
+hc : FIo_Native.aspis_core.field.M31.sub b m1 = ok c
+cc : ↑c < 2147483647
+hz : FIo_Native.aspis_core.field.CM31.mul x y = ok { a := a, b := c }
+hp : NEI_LPi_CMProduct.sum x * NEI_LPi_CMProduct.sum y = ok (NEI_LPi_CMProduct.cross x y)
+⊢ ok { a := a, b := c } = do
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← i1 + i3
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← i6 + i8
+    let i10 ← i4 * i9
+    let m2 ← FIo_Native.aspis_core.field.M31.reduce_u64 i10
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := a, b := m4 }
+NEI_generated/NEI_ProfileDomain.lean:82:4: warning: This simp argument is unused:
+  NEI_NEB_NativeFieldScalars.sum_checked
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵,̵c̵m̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵W̵i̵d̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵m̵u̵l̵,̵←̵ ̵m̵_̵m̵u̵l̵,̵h̵0̵,̵h̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵I̵_̵N̵E̵B̵_̵N̵a̵t̵i̵v̵e̵F̵i̵e̵l̵d̵S̵c̵a̵l̵a̵r̵s̵.̵s̵u̵m̵_̵c̵h̵e̵c̵k̵e̵d̵,̵h̵p̵,̵←̵ ̵m̵_̵r̵e̵d̵u̵c̵e̵,̵h̵2̵]̵[̲m̲a̲p̲,̲ ̲c̲m̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲W̲i̲d̲e̲.̲f̲i̲e̲l̲d̲.̲C̲M̲3̲1̲.̲m̲u̲l̲,̲ ̲←̲ ̲m̲_̲m̲u̲l̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲h̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲←̲ ̲m̲_̲r̲e̲d̲u̲c̲e̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEI_generated/NEI_ProfileDomain.lean:82:43: warning: This simp argument is unused:
+  hp
+
+Hint: Omit it from the simp argument list.
+  simp only [̵m̵a̵p̵,̵c̵m̵,̵A̵s̵p̵i̵s̵R̵1̵C̵u̵r̵r̵e̵n̵t̵W̵i̵d̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵m̵u̵l̵,̵←̵ ̵m̵_̵m̵u̵l̵,̵h̵0̵,̵h̵1̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵I̵_̵N̵E̵B̵_̵N̵a̵t̵i̵v̵e̵F̵i̵e̵l̵d̵S̵c̵a̵l̵a̵r̵s̵.̵s̵u̵m̵_̵c̵h̵e̵c̵k̵e̵d̵,̵h̵p̵,̵←̵ ̵m̵_̵r̵e̵d̵u̵c̵e̵,̵h̵2̵]̵[̲m̲a̲p̲,̲ ̲c̲m̲,̲ ̲A̲s̲p̲i̲s̲R̲1̲C̲u̲r̲r̲e̲n̲t̲W̲i̲d̲e̲.̲f̲i̲e̲l̲d̲.̲C̲M̲3̲1̲.̲m̲u̲l̲,̲ ̲←̲ ̲m̲_̲m̲u̲l̲,̲ ̲h̲0̲,̲ ̲h̲1̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲E̲I̲_̲N̲E̲B̲_̲N̲a̲t̲i̲v̲e̲F̲i̲e̲l̲d̲S̲c̲a̲l̲a̲r̲s̲.̲s̲u̲m̲_̲c̲h̲e̲c̲k̲e̲d̲,̲ ̲←̲ ̲m̲_̲r̲e̲d̲u̲c̲e̲,̲ ̲h̲2̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEI_generated/NEI_ProfileDomain.lean:82:57: warning: This simp argument is unused:
+  h2
+
+Hint: Omit it from the simp argument list.
+  simp only [map, ̲cm, ̲AspisR1CurrentWide.field.CM31.mul, ̲← m̵_̵m̵u̵l̵,̵m̲_̲m̲u̲l̲,̲ ̲h0, ̲h1, ̲bind_tc_ok,
+      NEI_NEB_NativeFieldScalars.sum_checked, ̲hp, ̲← m_reduce,̵h̵2̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEI_generated/NEI_ProfileDomain.lean:166:14: error(lean.unknownIdentifier): Unknown constant `FIo_Native.aspis_core.field.wide_exact.WideExact.sub`
+NEI_generated/NEI_ProfileDomain.lean:172:13: error(lean.unknownIdentifier): Unknown constant `FIo_Native.aspis_core.field.wide_exact.WideExact.sub`
+NEI_generated/NEI_ProfileDomain.lean:172:66: warning: This simp argument is unused:
+  ha
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.sub, ̲ha̵,̵h̵b, ̲bind_tc_ok, ̲map, ̲wide,
+      AspisR1CurrentWide.field.wide_exact.WideExact.sub, ̲aa, ̲bb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEI_generated/NEI_ProfileDomain.lean:172:69: warning: This simp argument is unused:
+  hb
+
+Hint: Omit it from the simp argument list.
+  simp only [FIo_Native.aspis_core.field.wide_exact.WideExact.sub, ̲ha,h̵ ̲b,̵b̵ind_tc_ok, ̲map, ̲wide,
+      AspisR1CurrentWide.field.wide_exact.WideExact.sub, ̲aa, ̲bb]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEI_generated/NEI_ProfileDomain.lean:321:16: error(lean.unknownIdentifier): Unknown constant `FIo_Native.aspis_core.field.wide_exact.WideExact.sub`
+'NEI_ReleaseField.nativeC_same' does not depend on any axioms
+'NEI_ReleaseField.nativeQ_same' does not depend on any axioms
+'NEI_ReleaseField.nativeE_same' does not depend on any axioms
+'NEI_ReleaseField.actual_m_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_m_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_m_double' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_m_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_m_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_cm_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_cm_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_cm_mul_m31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_by_r' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_qm_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_qm_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_qm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_qm_mul_m31' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_mul_u' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_wide_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_wide_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_wide_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.actual_wide_mul_m31' depends on axioms: [propext, Classical.choice, Quot.sound]
+NEI_generated/NEI_ProfileDomain.lean:369:2: error: failed to synthesize
+  Decidable
+    (AspisR1CurrentWide.field.M31.add 4294967295#u32 1#u32 ≠ FIo_Native.aspis_core.field.M31.add 4294967295#u32 1#u32)
+
+Hint: Additional diagnostic information may be available using the `set_option diagnostics true` command.
+'NEI_ReleaseField.raw_add_profile_counterexample' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.transport' does not depend on any axioms
+'NEI_ReleaseField.m_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.m_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.m_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.m_reduce' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.m_double' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.cm_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.cm_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.cm_scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.cm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.by_r' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.qm_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.qm_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.qm_scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.qm_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.mul_u' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.wide_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_ReleaseField.wide_sub' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.wide_mul' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_ReleaseField.wide_scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_FieldDomains.qm_arguments' does not depend on any axioms
+'NEI_NEB_FieldDomains.wide_arguments' does not depend on any axioms
+'NEI_NEB_FieldDomains.cm_arguments' does not depend on any axioms
+'NEI_NEB_FieldDomains.cm_add_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_FieldDomains.cm_sub_calls' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_CMCalls.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_CMCalls.scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_QMCalls.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_QMCalls.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_QMCalls.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_ByRCalls.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_ByRCalls.mul_u' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_WideCalls.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_WideCalls.scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_AdditiveCalls.wide_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_AdditiveCalls.qm_scale' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_NEB_AdditiveCalls.base_double_arguments' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NEI_LPi_TowerValues.qm_sub' depends on axioms: [propext, Classical.choice, Quot.sound]

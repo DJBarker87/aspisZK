@@ -1,0 +1,80 @@
+NEI_generated/NEI_DotReduction.lean:25:3: error: Tactic `rfl` failed: The left-hand side
+  do
+    let i8 ← ok (UScalar.wrapping_sub (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) 2147483647#u64)
+    ok (UScalar.cast UScalarTy.U32 i8)
+is not definitionally equal to the right-hand side
+  if
+      U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+        2147483647#u64 then
+    ok
+      (UScalar.cast UScalarTy.U32
+        ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+              ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+          2147483647#u64))
+  else
+    ok
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+
+case isTrue
+x : U64
+castP : core.convert.num.FromU64U32.from 2147483647#u32 = 2147483647#u64
+h : FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x) ≥ 2147483647#u64
+⊢ (do
+      let i8 ← ok (UScalar.wrapping_sub (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)) 2147483647#u64)
+      ok (UScalar.cast UScalarTy.U32 i8)) =
+    if
+        U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+          2147483647#u64 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+                ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+            2147483647#u64))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+NEI_generated/NEI_DotReduction.lean:26:3: error: Tactic `rfl` failed: The left-hand side
+  ok (UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x)))
+is not definitionally equal to the right-hand side
+  if
+      U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+        2147483647#u64 then
+    ok
+      (UScalar.cast UScalarTy.U32
+        ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+              ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+          2147483647#u64))
+  else
+    ok
+      (UScalar.cast UScalarTy.U32
+        (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+          ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+
+case isFalse
+x : U64
+castP : core.convert.num.FromU64U32.from 2147483647#u32 = 2147483647#u64
+h✝ : ¬FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x) ≥ 2147483647#u64
+⊢ ok (UScalar.cast UScalarTy.U32 (FIo_ReduceBounds.fold (FIo_ReduceBounds.fold x))) =
+    if
+        U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32) ≥
+          2147483647#u64 then
+      ok
+        (UScalar.cast UScalarTy.U32
+          ((U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+                ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)).wrapping_sub
+            2147483647#u64))
+    else
+      ok
+        (UScalar.cast UScalarTy.U32
+          (U64.wrapping_add (U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32) &&& 2147483647#u64)
+            ((U64.wrapping_add (x &&& 2147483647#u64) (x.wrapping_shr 31#u32)).wrapping_shr 31#u32)))
+'NEI_DotReduction.same' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEI_DotReduction.value' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

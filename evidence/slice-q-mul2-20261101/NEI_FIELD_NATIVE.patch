@@ -1,0 +1,158 @@
+--- a/crates/aspis-core/src/field/wide_exact.rs
++++ b/crates/aspis-core/src/field/wide_exact.rs
+@@ -626,3 +626,155 @@
+         assert_canonical(x.sub(x.neg()));
+     }
+ }
++
++#[cfg(test)]
++mod NEI_field_fidelity {
++ extern crate std;
++ use self::std::{vec,vec::Vec};
++ use super::{WideExact,mul_u};
++ use super::super::{M31,CM31,QM31,reduce_u64,mul_by_r};
++ fn check(got:Vec<u32>,mut expected:Vec<u32>){
++  if std::env::var("NEI_WRONG").is_ok(){expected[0]^=1;}
++  assert_eq!(got,expected);
++ }
++ #[test] fn NEI_field_m_add(){
++ {let got=(M31(0u32)).add(M31(1u32));check(vec![got.0],vec![1u32]);}
++ {let got=(M31(2147483646u32)).add(M31(2147483646u32));check(vec![got.0],vec![2147483645u32]);}
++ {let got=(M31(0u32)).add(M31(8u32));check(vec![got.0],vec![8u32]);}
++ {let got=(M31(2102197273u32)).add(M31(169827383u32));check(vec![got.0],vec![124541009u32]);}
++ {let got=(M31(1284381129u32)).add(M31(321067492u32));check(vec![got.0],vec![1605448621u32]);}
++ }
++ #[test] fn NEI_field_m_sub(){
++ {let got=(M31(0u32)).sub(M31(1u32));check(vec![got.0],vec![2147483646u32]);}
++ {let got=(M31(2147483646u32)).sub(M31(2147483646u32));check(vec![got.0],vec![0u32]);}
++ {let got=(M31(0u32)).sub(M31(8u32));check(vec![got.0],vec![2147483639u32]);}
++ {let got=(M31(2102197273u32)).sub(M31(169827383u32));check(vec![got.0],vec![1932369890u32]);}
++ {let got=(M31(1284381129u32)).sub(M31(321067492u32));check(vec![got.0],vec![963313637u32]);}
++ }
++ #[test] fn NEI_field_m_double(){
++ {let got=(M31(0u32)).double();check(vec![got.0],vec![0u32]);}
++ {let got=(M31(2147483646u32)).double();check(vec![got.0],vec![2147483645u32]);}
++ {let got=(M31(0u32)).double();check(vec![got.0],vec![0u32]);}
++ {let got=(M31(2102197273u32)).double();check(vec![got.0],vec![2056910899u32]);}
++ {let got=(M31(1284381129u32)).double();check(vec![got.0],vec![421278611u32]);}
++ }
++ #[test] fn NEI_field_reduce(){
++ {let got=reduce_u64(0u64);check(vec![got],vec![0u32]);}
++ {let got=reduce_u64(18446744073709551615u64);check(vec![got],vec![3u32]);}
++ {let got=reduce_u64(2147483647u64);check(vec![got],vec![0u32]);}
++ {let got=reduce_u64(4611686014132420609u64);check(vec![got],vec![0u32]);}
++ {let got=reduce_u64(9223372036854775826u64);check(vec![got],vec![20u32]);}
++ }
++ #[test] fn NEI_field_m_reduce(){
++ {let got=M31::reduce_u64(0u64);check(vec![got.0],vec![0u32]);}
++ {let got=M31::reduce_u64(18446744073709551615u64);check(vec![got.0],vec![3u32]);}
++ {let got=M31::reduce_u64(2147483647u64);check(vec![got.0],vec![0u32]);}
++ {let got=M31::reduce_u64(4611686014132420609u64);check(vec![got.0],vec![0u32]);}
++ {let got=M31::reduce_u64(9223372036854775826u64);check(vec![got.0],vec![20u32]);}
++ }
++ #[test] fn NEI_field_m_mul(){
++ {let got=(M31(0u32)).mul(M31(1u32));check(vec![got.0],vec![0u32]);}
++ {let got=(M31(2147483646u32)).mul(M31(2147483646u32));check(vec![got.0],vec![1u32]);}
++ {let got=(M31(0u32)).mul(M31(8u32));check(vec![got.0],vec![0u32]);}
++ {let got=(M31(2102197273u32)).mul(M31(169827383u32));check(vec![got.0],vec![554884091u32]);}
++ {let got=(M31(1284381129u32)).mul(M31(321067492u32));check(vec![got.0],vec![201371183u32]);}
++ }
++ #[test] fn NEI_field_cm_add(){
++ {let got=(CM31{a:M31(0),b:M31(0)}).add(CM31{a:M31(1),b:M31(1)});check(vec![got.a.0,got.b.0],vec![1u32,1u32]);}
++ {let got=(CM31{a:M31(2147483646),b:M31(2147483646)}).add(CM31{a:M31(2147483646),b:M31(2147483646)});check(vec![got.a.0,got.b.0],vec![2147483645u32,2147483645u32]);}
++ {let got=(CM31{a:M31(0),b:M31(1)}).add(CM31{a:M31(8),b:M31(9)});check(vec![got.a.0,got.b.0],vec![8u32,10u32]);}
++ {let got=(CM31{a:M31(2102197273),b:M31(1567646805)}).add(CM31{a:M31(169827383),b:M31(982447952)});check(vec![got.a.0,got.b.0],vec![124541009u32,402611110u32]);}
++ {let got=(CM31{a:M31(1284381129),b:M31(1898872813)}).add(CM31{a:M31(321067492),b:M31(1934880373)});check(vec![got.a.0,got.b.0],vec![1605448621u32,1686269539u32]);}
++ }
++ #[test] fn NEI_field_cm_sub(){
++ {let got=(CM31{a:M31(0),b:M31(0)}).sub(CM31{a:M31(1),b:M31(1)});check(vec![got.a.0,got.b.0],vec![2147483646u32,2147483646u32]);}
++ {let got=(CM31{a:M31(2147483646),b:M31(2147483646)}).sub(CM31{a:M31(2147483646),b:M31(2147483646)});check(vec![got.a.0,got.b.0],vec![0u32,0u32]);}
++ {let got=(CM31{a:M31(0),b:M31(1)}).sub(CM31{a:M31(8),b:M31(9)});check(vec![got.a.0,got.b.0],vec![2147483639u32,2147483639u32]);}
++ {let got=(CM31{a:M31(2102197273),b:M31(1567646805)}).sub(CM31{a:M31(169827383),b:M31(982447952)});check(vec![got.a.0,got.b.0],vec![1932369890u32,585198853u32]);}
++ {let got=(CM31{a:M31(1284381129),b:M31(1898872813)}).sub(CM31{a:M31(321067492),b:M31(1934880373)});check(vec![got.a.0,got.b.0],vec![963313637u32,2111476087u32]);}
++ }
++ #[test] fn NEI_field_cm_mul(){
++ {let got=(CM31{a:M31(0),b:M31(0)}).mul(CM31{a:M31(1),b:M31(1)});check(vec![got.a.0,got.b.0],vec![0u32,0u32]);}
++ {let got=(CM31{a:M31(2147483646),b:M31(2147483646)}).mul(CM31{a:M31(2147483646),b:M31(2147483646)});check(vec![got.a.0,got.b.0],vec![0u32,2u32]);}
++ {let got=(CM31{a:M31(0),b:M31(1)}).mul(CM31{a:M31(8),b:M31(9)});check(vec![got.a.0,got.b.0],vec![2147483638u32,8u32]);}
++ {let got=(CM31{a:M31(2102197273),b:M31(1567646805)}).mul(CM31{a:M31(169827383),b:M31(982447952)});check(vec![got.a.0,got.b.0],vec![1765815227u32,526287663u32]);}
++ {let got=(CM31{a:M31(1284381129),b:M31(1898872813)}).mul(CM31{a:M31(321067492),b:M31(1934880373)});check(vec![got.a.0,got.b.0],vec![1073799917u32,38439288u32]);}
++ }
++ #[test] fn NEI_field_cm_mul_m31(){
++ {let got=(CM31{a:M31(0),b:M31(0)}).mul_m31(M31(0));check(vec![got.a.0,got.b.0],vec![0u32,0u32]);}
++ {let got=(CM31{a:M31(2147483646),b:M31(2147483646)}).mul_m31(M31(2147483646));check(vec![got.a.0,got.b.0],vec![1u32,1u32]);}
++ {let got=(CM31{a:M31(0),b:M31(1)}).mul_m31(M31(17));check(vec![got.a.0,got.b.0],vec![0u32,17u32]);}
++ {let got=(CM31{a:M31(2102197273),b:M31(1567646805)}).mul_m31(M31(743));check(vec![got.a.0,got.b.0],vec![711962470u32,825439441u32]);}
++ {let got=(CM31{a:M31(1284381129),b:M31(1898872813)}).mul_m31(M31(123456789));check(vec![got.a.0,got.b.0],vec![1076346772u32,130774u32]);}
++ }
++ #[test] fn NEI_field_by_r(){
++ {let got=mul_by_r(CM31{a:M31(0),b:M31(0)});check(vec![got.a.0,got.b.0],vec![0u32,0u32]);}
++ {let got=mul_by_r(CM31{a:M31(2147483646),b:M31(2147483646)});check(vec![got.a.0,got.b.0],vec![2147483646u32,2147483644u32]);}
++ {let got=mul_by_r(CM31{a:M31(0),b:M31(1)});check(vec![got.a.0,got.b.0],vec![2147483646u32,2u32]);}
++ {let got=mul_by_r(CM31{a:M31(2102197273),b:M31(1567646805)});check(vec![got.a.0,got.b.0],vec![489264094u32,942523589u32]);}
++ {let got=mul_by_r(CM31{a:M31(1284381129),b:M31(1898872813)});check(vec![got.a.0,got.b.0],vec![669889445u32,787159461u32]);}
++ }
++ #[test] fn NEI_field_qm_add(){
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}).add(QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1u32,1u32,1u32,1u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}).add(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483645u32,2147483645u32,2147483645u32,2147483645u32]);}
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}}).add(QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![8u32,10u32,12u32,14u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}}).add(QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![124541009u32,402611110u32,22380298u32,1759929997u32]);}
++ {let got=(QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}}).add(QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1605448621u32,1686269539u32,736963635u32,1674592672u32]);}
++ }
++ #[test] fn NEI_field_qm_sub(){
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}).sub(QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483646u32,2147483646u32,2147483646u32,2147483646u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}).sub(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![0u32,0u32,0u32,0u32]);}
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}}).sub(QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483639u32,2147483639u32,2147483639u32,2147483639u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}}).sub(QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1932369890u32,585198853u32,670973243u32,434996207u32]);}
++ {let got=(QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}}).sub(QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![963313637u32,2111476087u32,1660627678u32,1795990336u32]);}
++ }
++ #[test] fn NEI_field_qm_mul(){
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}).mul(QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![0u32,0u32,0u32,0u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}).mul(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483645u32,6u32,0u32,4u32]);}
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}}).mul(QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483560u32,99u32,2147483625u32,52u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}}).mul(QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1618723072u32,1458817431u32,227765897u32,971159397u32]);}
++ {let got=(QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}}).mul(QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1830361360u32,695090654u32,748405764u32,2024314160u32]);}
++ }
++ #[test] fn NEI_field_qm_mul_m31(){
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}).mul_m31(M31(0));check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![0u32,0u32,0u32,0u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}).mul_m31(M31(2147483646));check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1u32,1u32,1u32,1u32]);}
++ {let got=(QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}}).mul_m31(M31(17));check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![0u32,17u32,34u32,51u32]);}
++ {let got=(QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}}).mul_m31(M31(743));check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![711962470u32,825439441u32,956544665u32,1518782573u32]);}
++ {let got=(QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}}).mul_m31(M31(123456789));check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1076346772u32,130774u32,1552218662u32,829770671u32]);}
++ }
++ #[test] fn NEI_field_mul_u(){
++ {let got=mul_u(QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![0u32,0u32,0u32,0u32]);}
++ {let got=mul_u(QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![2147483646u32,2147483644u32,2147483646u32,2147483646u32]);}
++ {let got=mul_u(QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1u32,8u32,0u32,1u32]);}
++ {let got=mul_u(QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![1743374086u32,1467861151u32,2102197273u32,1567646805u32]);}
++ {let got=mul_u(QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}});check(vec![got.c0.a.0,got.c0.b.0,got.c1.a.0,got.c1.b.0],vec![662299809u32,1448153194u32,1284381129u32,1898872813u32]);}
++ }
++ #[test] fn NEI_field_wide_add(){
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}},c1:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}}).add(WideExact{c0:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}},c1:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1u32,1u32,1u32,1u32,1u32,1u32,1u32,1u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}}).add(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![2147483645u32,2147483645u32,2147483645u32,2147483645u32,2147483645u32,2147483645u32,2147483645u32,2147483645u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}},c1:QM31{c0:CM31{a:M31(4),b:M31(5)},c1:CM31{a:M31(6),b:M31(7)}}}).add(WideExact{c0:QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}},c1:QM31{c0:CM31{a:M31(12),b:M31(13)},c1:CM31{a:M31(14),b:M31(15)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![8u32,10u32,12u32,14u32,16u32,18u32,20u32,22u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}},c1:QM31{c0:CM31{a:M31(1273194713),b:M31(1398106437)},c1:CM31{a:M31(435774440),b:M31(1395581254)}}}).add(WideExact{c0:QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}},c1:QM31{c0:CM31{a:M31(271656347),b:M31(2095002181)},c1:CM31{a:M31(1609539358),b:M31(61018840)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![124541009u32,402611110u32,22380298u32,1759929997u32,1544851060u32,1345624971u32,2045313798u32,1456600094u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}},c1:QM31{c0:CM31{a:M31(1658166608),b:M31(1771852445)},c1:CM31{a:M31(7385393),b:M31(1330176572)}}}).add(WideExact{c0:QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}},c1:QM31{c0:CM31{a:M31(256899185),b:M31(2139079601)},c1:CM31{a:M31(368595227),b:M31(1408572146)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1605448621u32,1686269539u32,736963635u32,1674592672u32,1915065793u32,1763448399u32,375980620u32,591265071u32]);}
++ }
++ #[test] fn NEI_field_wide_sub(){
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}},c1:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}}).sub(WideExact{c0:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}},c1:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![2147483646u32,2147483646u32,2147483646u32,2147483646u32,2147483646u32,2147483646u32,2147483646u32,2147483646u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}}).sub(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![0u32,0u32,0u32,0u32,0u32,0u32,0u32,0u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}},c1:QM31{c0:CM31{a:M31(4),b:M31(5)},c1:CM31{a:M31(6),b:M31(7)}}}).sub(WideExact{c0:QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}},c1:QM31{c0:CM31{a:M31(12),b:M31(13)},c1:CM31{a:M31(14),b:M31(15)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![2147483639u32,2147483639u32,2147483639u32,2147483639u32,2147483639u32,2147483639u32,2147483639u32,2147483639u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}},c1:QM31{c0:CM31{a:M31(1273194713),b:M31(1398106437)},c1:CM31{a:M31(435774440),b:M31(1395581254)}}}).sub(WideExact{c0:QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}},c1:QM31{c0:CM31{a:M31(271656347),b:M31(2095002181)},c1:CM31{a:M31(1609539358),b:M31(61018840)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1932369890u32,585198853u32,670973243u32,434996207u32,1001538366u32,1450587903u32,973718729u32,1334562414u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}},c1:QM31{c0:CM31{a:M31(1658166608),b:M31(1771852445)},c1:CM31{a:M31(7385393),b:M31(1330176572)}}}).sub(WideExact{c0:QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}},c1:QM31{c0:CM31{a:M31(256899185),b:M31(2139079601)},c1:CM31{a:M31(368595227),b:M31(1408572146)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![963313637u32,2111476087u32,1660627678u32,1795990336u32,1401267423u32,1780256491u32,1786273813u32,2069088073u32]);}
++ }
++ #[test] fn NEI_field_wide_mul(){
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}},c1:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}}).mul(WideExact{c0:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}},c1:QM31{c0:CM31{a:M31(1),b:M31(1)},c1:CM31{a:M31(1),b:M31(1)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![0u32,0u32,0u32,0u32,0u32,0u32,0u32,0u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}}).mul(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![2147483641u32,14u32,2147483645u32,10u32,2147483643u32,12u32,0u32,8u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}},c1:QM31{c0:CM31{a:M31(4),b:M31(5)},c1:CM31{a:M31(6),b:M31(7)}}}).mul(WideExact{c0:QM31{c0:CM31{a:M31(8),b:M31(9)},c1:CM31{a:M31(10),b:M31(11)}},c1:QM31{c0:CM31{a:M31(12),b:M31(13)},c1:CM31{a:M31(14),b:M31(15)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![2147483192u32,645u32,2147483378u32,519u32,2147483345u32,470u32,2147483587u32,280u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}},c1:QM31{c0:CM31{a:M31(1273194713),b:M31(1398106437)},c1:CM31{a:M31(435774440),b:M31(1395581254)}}}).mul(WideExact{c0:QM31{c0:CM31{a:M31(169827383),b:M31(982447952)},c1:CM31{a:M31(749445351),b:M31(662466895)}},c1:QM31{c0:CM31{a:M31(271656347),b:M31(2095002181)},c1:CM31{a:M31(1609539358),b:M31(61018840)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![759808424u32,596095680u32,160687725u32,560837181u32,1778940939u32,1210735543u32,1443461252u32,1629972144u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}},c1:QM31{c0:CM31{a:M31(1658166608),b:M31(1771852445)},c1:CM31{a:M31(7385393),b:M31(1330176572)}}}).mul(WideExact{c0:QM31{c0:CM31{a:M31(321067492),b:M31(1934880373)},c1:CM31{a:M31(611909802),b:M31(2086784815)}},c1:QM31{c0:CM31{a:M31(256899185),b:M31(2139079601)},c1:CM31{a:M31(368595227),b:M31(1408572146)}}});check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1616687638u32,349845765u32,2002992879u32,286016036u32,139791167u32,968424513u32,798997050u32,1372560947u32]);}
++ }
++ #[test] fn NEI_field_wide_mul_m31(){
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}},c1:QM31{c0:CM31{a:M31(0),b:M31(0)},c1:CM31{a:M31(0),b:M31(0)}}}).mul_m31(M31(0));check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![0u32,0u32,0u32,0u32,0u32,0u32,0u32,0u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}},c1:QM31{c0:CM31{a:M31(2147483646),b:M31(2147483646)},c1:CM31{a:M31(2147483646),b:M31(2147483646)}}}).mul_m31(M31(2147483646));check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1u32,1u32,1u32,1u32,1u32,1u32,1u32,1u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(0),b:M31(1)},c1:CM31{a:M31(2),b:M31(3)}},c1:QM31{c0:CM31{a:M31(4),b:M31(5)},c1:CM31{a:M31(6),b:M31(7)}}}).mul_m31(M31(17));check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![0u32,17u32,34u32,51u32,68u32,85u32,102u32,119u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(2102197273),b:M31(1567646805)},c1:CM31{a:M31(1420418594),b:M31(1097463102)}},c1:QM31{c0:CM31{a:M31(1273194713),b:M31(1398106437)},c1:CM31{a:M31(435774440),b:M31(1395581254)}}}).mul_m31(M31(743));check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![711962470u32,825439441u32,956544665u32,1518782573u32,1090867079u32,1558481190u32,1657861870u32,1829753868u32]);}
++ {let got=(WideExact{c0:QM31{c0:CM31{a:M31(1284381129),b:M31(1898872813)},c1:CM31{a:M31(125053833),b:M31(1735291504)}},c1:QM31{c0:CM31{a:M31(1658166608),b:M31(1771852445)},c1:CM31{a:M31(7385393),b:M31(1330176572)}}}).mul_m31(M31(123456789));check(vec![got.c0.c0.a.0,got.c0.c0.b.0,got.c0.c1.a.0,got.c0.c1.b.0,got.c1.c0.a.0,got.c1.c0.b.0,got.c1.c1.a.0,got.c1.c1.b.0],vec![1076346772u32,130774u32,1552218662u32,829770671u32,1268615266u32,115067582u32,445923464u32,1913091107u32]);}
++ }
++}

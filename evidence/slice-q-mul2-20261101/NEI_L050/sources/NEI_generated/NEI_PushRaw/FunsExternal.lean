@@ -1,0 +1,6 @@
+import NEI_PushRaw.Types
+import NEG_RowIsolated.FunsExternal
+namespace NEI_PushRaw
+abbrev MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter :=
+ @NEG_RowIsolated.MutAArray.Insts.CoreIterTraitsCollectIntoIteratorMutATIterMut.into_iter
+end NEI_PushRaw

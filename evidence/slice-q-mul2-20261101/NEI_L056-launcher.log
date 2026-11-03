@@ -1,0 +1,57 @@
+{"attempt": "NEI_L056", "exit_status": 1, "wall_seconds": 1.8086086539551616, "peak_rss_kib": "2566944", "swaps": "0", "print_axioms": ["'NEI_PushRawAssociation.power_roundtrip' does not depend on any axioms", "'NEI_PushRawAssociation.power_reverse' does not depend on any axioms", "'NEI_PushRawAssociation.bw_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_PushRawAssociation.bw_reverse' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_PushRawAssociation.row' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEI_PushRawAssociation.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEI_generated/NEI_PushRawAssociation.lean:36:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  NEI_PushRaw.update_residue_row ?r ?p ?basis ?flush
+in the target expression
+  (do
+      let out ←
+        let (a, index_mut_back) := (a, back)
+          do
+          let a1 ← NEI_PushRaw.update_residue_row a p basis (decide (b.terms &&& 3#usize = 3#usize))
+          ok { raw := index_mut_back a1, terms := b.terms }
+      ok { raw := out.raw, terms := out.terms }) =
+    let (a, index_mut_back) := (a, back)
+    do
+    let a1 ← NEG_PushActual.update_residue_row a (toPower p) basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms 
+...
+ed: Did not find an occurrence of the pattern
+  NEI_PushRaw.update_residue_row ?r ?p ?basis ?flush
+in the target expression
+  (do
+      let out ←
+        let (a, index_mut_back) := (a, back)
+          do
+          let a1 ← NEI_PushRaw.update_residue_row a p basis (decide (b.terms &&& 3#usize = 3#usize))
+          ok { raw := index_mut_back a1, terms := b.terms }
+      ok { raw := out.raw, terms := out.terms }) =
+    let (a, index_mut_back) := (a, back)
+    do
+    let a1 ← NEG_PushActual.update_residue_row a (toPower p) basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms }
+
+case e_a
+b : RawBW
+index : Usize
+p : RawPower
+basis : U32
+a : Std.Array U64 4#usize
+back : Std.Array U64 4#usize → alloc.vec.Vec (Std.Array U64 4#usize)
+⊢ (do
+      let out ←
+        let (a, index_mut_back) := (a, back)
+          do
+          let a1 ← NEI_PushRaw.update_residue_row a p basis (decide (b.terms &&& 3#usize = 3#usize))
+          ok { raw := index_mut_back a1, terms := b.terms }
+      ok { raw := out.raw, terms := out.terms }) =
+    let (a, index_mut_back) := (a, back)
+    do
+    let a1 ← NEG_PushActual.update_residue_row a (toPower p) basis (decide (b.terms &&& 3#usize = 3#usize))
+    ok { raw := index_mut_back a1, terms := b.terms }
+'NEI_PushRawAssociation.power_roundtrip' does not depend on any axioms
+'NEI_PushRawAssociation.power_reverse' does not depend on any axioms
+'NEI_PushRawAssociation.bw_roundtrip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_PushRawAssociation.bw_reverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_PushRawAssociation.row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEI_PushRawAssociation.push' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r65b33688889f479c8f77bedfc98df304.scope; invocation ID: fbcc4c83fcbb4b248bc58abb4ec2f9dd

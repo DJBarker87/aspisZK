@@ -1,0 +1,44 @@
+def FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs : Aeneas.Std.Array Aeneas.Std.U32 8#usize →
+  Aeneas.Std.Result (Option FIo_Native.aspis_core.field.wide_exact.WideExact) :=
+fun limbs => do
+  let i ← limbs.index_usize 0#usize
+  if i ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+    else do
+      let i1 ← limbs.index_usize 1#usize
+      if i1 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+        else do
+          let i2 ← limbs.index_usize 2#usize
+          if i2 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+            else do
+              let i3 ← limbs.index_usize 3#usize
+              if i3 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+                else do
+                  let i4 ← limbs.index_usize 4#usize
+                  if i4 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+                    else do
+                      let i5 ← limbs.index_usize 5#usize
+                      if i5 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+                        else do
+                          let i6 ← limbs.index_usize 6#usize
+                          if i6 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+                            else do
+                              let i7 ← limbs.index_usize 7#usize
+                              if i7 ≥ FIo_Native.aspis_core.field.P then Aeneas.Std.Result.ok none
+                                else
+                                  Aeneas.Std.Result.ok
+                                    (some
+                                      { c0 := { c0 := { a := i, b := i1 }, c1 := { a := i2, b := i3 } },
+                                        c1 := { c0 := { a := i4, b := i5 }, c1 := { a := i6, b := i7 } } })
+def FIo_Native.aspis_core.field.wide_exact.WideExact.to_limbs : FIo_Native.aspis_core.field.wide_exact.WideExact →
+  Aeneas.Std.Result (Aeneas.Std.Array Aeneas.Std.U32 8#usize) :=
+fun self =>
+  let i := self.c0.c0.a;
+  let i1 := self.c0.c0.b;
+  let i2 := self.c0.c1.a;
+  let i3 := self.c0.c1.b;
+  let i4 := self.c1.c0.a;
+  let i5 := self.c1.c0.b;
+  let i6 := self.c1.c1.a;
+  let i7 := self.c1.c1.b;
+  Aeneas.Std.Result.ok (Aeneas.Std.Array.make 8#usize [i, i1, i2, i3, i4, i5, i6, i7] ⋯)
+NEI_generated/NEI_WideCtorInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `FIo_Native.aspis_core.field.M31.from_le_bytes`

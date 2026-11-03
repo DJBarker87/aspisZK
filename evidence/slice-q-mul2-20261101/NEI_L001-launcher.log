@@ -1,0 +1,64 @@
+{"attempt": "NEI_L001", "exit_status": 1, "wall_seconds": 10.5183925840538, "peak_rss_kib": "4803072", "swaps": "0", "print_axioms": []}
+info: s2w: no previous manifest, creating one from scratch
+info: toolchain not updated; already up-to-date
+theorem AspisR1CurrentWide.Proof.wide_add_success : ∀ (x y z : AspisR1CurrentWide.Proof.E),
+  AspisR1CurrentWide.Proof.CanonicalWide x →
+    AspisR1CurrentWide.Proof.CanonicalWide y →
+      AspisR1CurrentWide.field.wide_exact.WideExact.add x y = ok z →
+        AspisR1CurrentWide.Proof.CanonicalWide z ∧
+          AspisR1CurrentWide.Proof.decodeWide z =
+            AspisR1CurrentWide.Proof.decodeWide x + AspisR1CurrentWide.Proof.decodeWide y :=
+fun x y z hx hy h =>
+  let ⟨q0, h✝⟩ := AspisR1CurrentWide.Proof.bind_ok_inv✝ h
+  let ⟨h0, h⟩ := h✝
+  let ⟨q1, h✝¹⟩ := AspisR1CurrentWide.Proof.bin
+...
+ield.wide_exact.WideExact → Result AspisR1CurrentWide.field.wide_exact.WideExact :=
+fun self rhs => do
+  let q ← self.c0.add rhs.c0
+  let q1 ← self.c1.add rhs.c1
+  ok { c0 := q, c1 := q1 }
+def AspisR1CurrentWide.field.wide_exact.WideExact.mul : AspisR1CurrentWide.field.wide_exact.WideExact →
+  AspisR1CurrentWide.field.wide_exact.WideExact → Result AspisR1CurrentWide.field.wide_exact.WideExact :=
+fun self rhs => do
+  let ac ← self.c0.mul rhs.c0
+  let bd ← self.c1.mul rhs.c1
+  let q ← self.c0.add self.c1
+  let q1 ← rhs.c0.add rhs.c1
+  let cross ← q.mul q1
+  let q2 ← AspisR1CurrentWide.field.wide_exact.mul_u bd
+  let q3 ← ac.add q2
+  let q4 ← cross.sub ac
+  let q5 ← q4.sub bd
+  ok { c0 := q3, c1 := q5 }
+theorem AspisR1CurrentWide.Proof.m31_mul_same : AspisR1CurrentWide.field.M31.mul =
+  AspisR1Qm31ArithmeticProbe.field.M31.mul :=
+funext fun x =>
+  funext fun y =>
+    id
+      (id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                (do
+                    let i ← lift (UScalar.cast UScalarTy.U64 x)
+                    let i1 ← lift (UScalar.cast UScalarTy.U64 y)
+                    let i2 ← i * i1
+                    let i3 ← _a i2
+                    ok i3) =
+                  do
+                  let i ← lift (UScalar.cast UScalarTy.U64 x)
+                  let i1 ← lift (UScalar.cast UScalarTy.U64 y)
+                  let i2 ← i * i1
+                  let i3 ← AspisR1Qm31ArithmeticProbe.field.reduce_u64 i2
+                  ok i3)
+              AspisR1CurrentWide.Proof.reduce_same))
+          (Eq.refl do
+            let i ← lift (UScalar.cast UScalarTy.U64 x)
+            let i1 ← lift (UScalar.cast UScalarTy.U64 y)
+            let i2 ← i * i1
+            let i3 ← AspisR1Qm31ArithmeticProbe.field.reduce_u64 i2
+            ok i3)))
+
+Running as unit: run-r826b0087df2743c09937ad010231beea.scope; invocation ID: 0b9ec77c1ef0485b894a55229941f4b4

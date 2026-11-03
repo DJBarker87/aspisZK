@@ -1,0 +1,36 @@
+def Aeneas.Std.alloc.vec.Vec.index_mut : {T I Output : Type} →
+  Aeneas.Std.core.slice.index.SliceIndex I (Aeneas.Std.Slice T) Output →
+    Aeneas.Std.alloc.vec.Vec T → I → Aeneas.Std.Result (Output × (Output → Aeneas.Std.alloc.vec.Vec T)) :=
+fun {T I Output} inst self i => inst.index_mut i self
+@[reducible] def Aeneas.Std.core.slice.index.SliceIndexUsizeSlice : (T : Type) →
+  Aeneas.Std.core.slice.index.SliceIndex Aeneas.Std.Usize (Aeneas.Std.Slice T) T :=
+fun T =>
+  { sealedInst := Aeneas.Std.core.slice.index.private_slice_index.SealedUsize,
+    get := Aeneas.Std.core.slice.index.Usize.get, get_mut := Aeneas.Std.core.slice.index.Usize.get_mut,
+    get_unchecked := Aeneas.Std.core.slice.index.Usize.get_unchecked,
+    get_unchecked_mut := Aeneas.Std.core.slice.index.Usize.get_unchecked_mut,
+    index := Aeneas.Std.core.slice.index.Usize.index, index_mut := Aeneas.Std.core.slice.index.Usize.index_mut }
+NEI_generated/NEI_PushInspect.lean:4:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.alloc.vec.Vec.to_slice_mut`
+def Aeneas.Std.Slice.index_mut_usize.{u} : {α : Type u} →
+  Aeneas.Std.Slice α → Aeneas.Std.Usize → Aeneas.Std.Result (α × (α → Aeneas.Std.Slice α)) :=
+fun {α} v i => do
+  let x ← v.index_usize i
+  Aeneas.Std.Result.ok (x, v.set i)
+NEI_generated/NEI_PushInspect.lean:6:7: error(lean.unknownIdentifier): Unknown constant `Aeneas.Std.UScalar.and_eq`
+S7Kani2OwnedPush.push_owned (weights : S7Kani2AccumulatorLoop.BatchedWeights) (index : Aeneas.Std.Usize)
+  (power : S7Kani2AccumulatorLoop.K) (basis : Aeneas.Std.U32) : Aeneas.Std.Result S7Kani2AccumulatorLoop.BatchedWeights
+def S7Kani2OwnedPush.push_owned : S7Kani2AccumulatorLoop.BatchedWeights →
+  Aeneas.Std.Usize →
+    S7Kani2AccumulatorLoop.K → Aeneas.Std.U32 → Aeneas.Std.Result S7Kani2AccumulatorLoop.BatchedWeights :=
+fun weights index power basis => do
+  let row ←
+    Aeneas.Std.alloc.vec.Vec.index
+        (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice (Aeneas.Std.Array Aeneas.Std.U64 4#usize)) weights.raw index
+  let i ← Aeneas.Std.lift (weights.terms &&& 3#usize)
+  let updated ← S7Kani2OwnedRow.residue_owned row power basis (decide (i = 3#usize))
+  let (_, index_mut_back) ←
+    Aeneas.Std.alloc.vec.Vec.index_mut
+        (Aeneas.Std.core.slice.index.SliceIndexUsizeSlice (Aeneas.Std.Array Aeneas.Std.U64 4#usize)) weights.raw index
+  have v : Aeneas.Std.alloc.vec.Vec (Aeneas.Std.Array Aeneas.Std.U64 4#usize) := index_mut_back updated
+  Aeneas.Std.Result.ok { raw := v, terms := weights.terms }
+NEI_generated/NEI_PushInspect.lean:9:7: error(lean.unknownIdentifier): Unknown identifier `S7Kani2OwnedPush.push_total`

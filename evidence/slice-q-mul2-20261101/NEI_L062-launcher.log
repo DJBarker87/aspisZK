@@ -1,0 +1,57 @@
+{"attempt": "NEI_L062", "exit_status": 0, "wall_seconds": 6.51711646199692, "peak_rss_kib": "5222256", "swaps": "0", "print_axioms": []}
+structure FIo_Native.fast_pairing.EbyKDot : Type
+number of parameters: 0
+fields:
+  FIo_Native.fast_pairing.EbyKDot.c0 : FIo_Native.fast_pairing.canonical.Dot
+  FIo_Native.fast_pairing.EbyKDot.c1 : FIo_Native.fast_pairing.canonical.Dot
+  FIo_Native.fast_pairing.EbyKDot.count : Aeneas.Std.Usize
+constructor:
+  FIo_Native.fast_pairing.EbyKDot.mk (c0 c1 : FIo_Native.fast_pairing.canonical.Dot) (count : Aeneas.Std.Usize) :
+    FIo_Native.fast_pairing.EbyKDot
+def FIo_Native.fast_pairing.EbyKDot.new : Aeneas.Std.Result FIo_Native.fast_pairing.EbyKDot :=
+do
+  let d ← FIo_Native.fast_pairing.canonical.Dot.new
+  Aeneas.Std.Result.ok { c0 := d, c1 := d, count := 0#usize }
+def FIo_Native.fast_pairing.Eby
+...
+ControlFlow.Continue val => do
+        let d ← self.c0.push value_c0 val
+        let d1 ← self.c1.push value_c1 val
+        let i ← Aeneas.Std.lift (self.count.wrapping_add 1#usize)
+        Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok (), { c0 := d, c1 := d1, count := i })
+      | Aeneas.Std.core.ops.control_flow.ControlFlow.Break residual => do
+        let r1 ←
+          Aeneas.Std.core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+              (Aeneas.Std.core.convert.FromSame Unit) residual
+        Aeneas.Std.Result.ok (r1, self)
+def FIo_Native.fast_pairing.EbyKDot.finish : FIo_Native.fast_pairing.EbyKDot →
+  Aeneas.Std.Result FIo_Native.aspis_core.field.wide_exact.WideExact :=
+fun self => do
+  let q ← self.c0.finish
+  let a ← q.limbs
+  let a1 ← a.index_usize 0#usize
+  let b ← a.index_usize 1#usize
+  let c ← a.index_usize 2#usize
+  let d ← a.index_usize 3#usize
+  let q1 ← self.c1.finish
+  let a2 ← q1.limbs
+  let e ← a2.index_usize 0#usize
+  let f ← a2.index_usize 1#usize
+  let g ← a2.index_usize 2#usize
+  let h ← a2.index_usize 3#usize
+  let o ←
+    FIo_Native.aspis_core.field.wide_exact.WideExact.from_limbs
+        (Aeneas.Std.Array.make 8#usize [a1, b, c, d, e, f, g, h] ⋯)
+  Aeneas.Std.core.option.Option.unwrap o
+structure FIo_Native.fast_pairing.canonical.Dot : Type
+number of parameters: 0
+fields:
+  FIo_Native.fast_pairing.canonical.Dot.sums : Aeneas.Std.Array Aeneas.Std.U64 4#usize
+constructor:
+  FIo_Native.fast_pairing.canonical.Dot.mk (sums : Aeneas.Std.Array Aeneas.Std.U64 4#usize) :
+    FIo_Native.fast_pairing.canonical.Dot
+def FIo_Native.fast_pairing.canonical.Dot.new : Aeneas.Std.Result FIo_Native.fast_pairing.canonical.Dot :=
+have a := Aeneas.Std.Array.repeat 4#usize 0#u64;
+Aeneas.Std.Result.ok { sums := a }
+
+Running as unit: run-r6cd555b6d5e64530a6d39bbd4917be7c.scope; invocation ID: 5b3caefe2aca4849afdb57a441ec5570
