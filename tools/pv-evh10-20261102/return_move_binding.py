@@ -1,6 +1,6 @@
 """Own-1 source return binding with ordered adopted machine-store support."""
 from pathlib import Path
-import hashlib,json,re,sys
+import ast,hashlib,json,re,subprocess,sys
 E=Path('evidence/pv-evh10-20261102');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 s=(E/'entropy-layout-da36d6aa.txt').read_text()
 a=s.index('  14595d:');accepted=s[a:]
@@ -18,6 +18,15 @@ expected=[('xmm1',176,'rsp',16),('xmm0',160,'rsp',16),('xmm2',192,'rsp',16),('xm
  ('xmm5',144,'rsp',16),('xmm4',128,'rsp',16),('xmm3',81,'rbx',16),('xmm5',17,'rbx',16),
  ('xmm4',1,'rbx',16),('xmm2',65,'rbx',16),('xmm1',49,'rbx',16),('xmm0',33,'rbx',16),('zero',0,'rbx',1)]
 assert [(x['register'],x['offset'],x['base'],x['size']) for x in stores]==expected
+generator=Path('tools/pv-evh10-20261102/return_footprint.py')
+rows=next(ast.literal_eval(n.value) for n in ast.parse(generator.read_text()).body
+ if isinstance(n,ast.Assign) and any(isinstance(t,ast.Name) and t.id=='rows' for t in n.targets))
+reads=dict(xmm0='sp',xmm1='sp+16',xmm2='sp+32',xmm3='sp+48',xmm4='mask sp',xmm5='mask sp+16',zero=None)
+for row,store in zip(rows,stores,strict=True):
+ dst=('sp' if store['base']=='rsp' else 'result sp')
+ if store['offset']:dst+='+'+str(store['offset'])
+ assert list(row[1:])==[dst,reads[store['register']],store['size']],(row,store)
+subprocess.run([sys.executable,str(generator),'--check'],check=True,capture_output=True)
 entry=json.loads((E/'entry-frame-binding-D572.json').read_text())
 body=next(x['body'] for x in entry['emitted'] if x['name'].endswith('generate_for_mask_nonce_loop.body'))
 for token in ['mask_nonce,','field_mask_entropy := field_mask_entropy1','leaf_salt_seed := leaf_salt_seed1']:
@@ -27,6 +36,9 @@ for token in ['return Ok(Self {','mask_nonce,','field_mask_entropy,','leaf_salt_
 out=dict(evidence_class='own-1 structural complete successful Self return binding with adopted ordered-store support; V370 retained',
  inputs=[dict(path=str(E/n),sha256=sha(E/n)) for n in ['entropy-layout-da36d6aa.txt','entry-frame-binding-D572.json','caller-source-binding-session2.json']],
  compiler_support=dict(register_loads=[list(x) for x in loads],stores=stores,executed=False),
+ model=dict(module='PV_EVH_EntropyReturnFootprint',
+   source_sha256=sha(Path('lean/PV_EVH_EntropyReturnFootprint.lean')),
+   generator_sha256=sha(generator),store_bindings=[list(x) for x in rows]),
  source_steps=[
  'Both source 32-byte inner copies are restored from the SAME original64 before the two nonzero checks.',
  'Only after both nonzero checks succeed does the source construct Self with the original mask_nonce, copied field_mask_entropy1 and leaf_salt_seed1.',

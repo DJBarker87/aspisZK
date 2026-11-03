@@ -1,5 +1,6 @@
 import PV_EVH_EntropyReturnComplete
 import PV_EVH_EntropyMoveKeys
+import PV_EVH_StackTransfer
 set_option autoImplicit false
 noncomputable section
 namespace PV_EVH_EntropyReturnDelivery
@@ -9,20 +10,29 @@ open PV_EVH_EntropyDeployedLayout (original field seed entered)
 open PV_EVH_EntropyMoveKeys (ready)
 open PV_EVH_EntropyCallerLayout (mask result)
 
+def transferred [ExternalTypes] (owner sp : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) : State :=
+  PV_EVH_StackTransfer.transfer (seed owner sp w)
+    (PV_EVH_EntropyReturnLayout.returnedSeed owner sp (result sp) w)
+    (PV_EVH_StackTransfer.transfer (field owner sp w)
+      (PV_EVH_EntropyReturnLayout.returnedField owner sp (result sp) w)
+      (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)))
+
 /-- Cleanup uses the original admitted lifetime from the entry state, not
 a fresh key recomputed from the post-fill state. The complete-return helper
 is used below only for its key-independent physical memory projection. -/
 def completed [ExternalTypes] (owner sp : Nat)
     (d : PV_EVH_StackEntropyFill.Delivery) (w : State) : State :=
-  PV_EVH_StackZero.drop (original owner sp w)
-    (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w))
+  PV_EVH_StackZero.drop (original owner sp w) (transferred owner sp d w)
 
 theorem original_lookup [ExternalTypes] (owner sp : Nat)
     (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
-    (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)).frame.live.find?
+    (transferred owner sp d w).frame.live.find?
       (PV_EVH_StackCleanup.sameKey (original owner sp w).key) = some (original owner sp w) := by
   have hf := (PV_EVH_StackStores.frame
     (PV_EVH_EntropyReturnFootprint.stores sp (ready owner sp d w)) (ready owner sp d w)).1
+  apply PV_EVH_EntropyMoveKeys.original_lookup owner sp (result sp)
+    (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)) w
   change (PV_EVH_StackStores.run _ _).frame.live.find? _ = _
   rw [hf]
   exact PV_EVH_EntropyMoveKeys.ready_lookup owner sp d w
@@ -30,10 +40,16 @@ theorem original_lookup [ExternalTypes] (owner sp : Nat)
 theorem original_drop [ExternalTypes] (owner sp : Nat)
     (d : PV_EVH_StackEntropyFill.Delivery) (w : State) :
     PV_EVH_StackCleanup.drop64 (original owner sp w).key
-      (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)) =
+      (transferred owner sp d w) =
     ⟨.returned (.ok ()),completed owner sp d w,PV_EVH_StackZero.emitted (original owner sp w)⟩ := by
   simp only [PV_EVH_StackCleanup.drop64,original_lookup]
   rfl
+
+theorem completed_byte [ExternalTypes] (owner sp p : Nat)
+    (d : PV_EVH_StackEntropyFill.Delivery) (w : State) (hp : sp+64 ≤ p) :
+    (completed owner sp d w).memory p =
+      (PV_EVH_EntropyReturnFootprint.moved sp (ready owner sp d w)).memory p :=
+  PV_EVH_StackZero.outside_preserved _ _ p (Or.inr hp)
 
 /-- Every initializer/fill/copy in this physical interpretation preserves
 the actual caller mask region. Native kernel correspondence is still the
@@ -96,17 +112,26 @@ theorem returned_delivery [ExternalTypes] (owner sp : Nat)
     out.memory (result sp+65+i) =
       ((PV_EVH_StackEntropyFill.encode d.buffer)[32+i]?.getD 0).toNat := by
   dsimp only
-  have h := PV_EVH_EntropyReturnComplete.returned owner sp (ready owner sp d w) i hi
+  have hp (n : Nat) : sp+64 ≤ result sp+n := by
+    unfold result PV_EVH_EntropyCallerLayout.caller
+    omega
+  rw [completed_byte owner sp _ d w (by simpa using hp 0),
+    completed_byte owner sp _ d w (by have := hp (1+i); omega),
+    completed_byte owner sp _ d w (by have := hp (33+i); omega),
+    completed_byte owner sp _ d w (by have := hp (65+i); omega)]
+  have h := PV_EVH_EntropyReturnComplete.payload sp (ready owner sp d w) i hi
   have hm : (ready owner sp d w).memory (mask sp+i) = w.memory (mask sp+i) :=
     outside_ready owner sp _ d w (by
       unfold mask PV_EVH_EntropyCallerLayout.caller
       omega)
-  refine ⟨h.1,h.2.1.trans hm,h.2.2.1.trans (original_ready owner sp d w i (by omega)),?_⟩
-  exact h.2.2.2.trans (by
+  refine ⟨by simpa using PV_EVH_EntropyReturnFootprint.tag_byte sp (ready owner sp d w) 0 (by omega),
+    h.1.trans hm,h.2.1.trans (original_ready owner sp d w i (by omega)),?_⟩
+  exact h.2.2.trans (by
     simpa only [Nat.add_assoc] using original_ready owner sp d w (32+i) (by omega))
 
 #print axioms original_lookup
 #print axioms original_drop
+#print axioms completed_byte
 #print axioms outside_ready
 #print axioms original_ready
 #print axioms returned_delivery
