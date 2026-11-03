@@ -16,7 +16,8 @@ structure Iter (A : Type) where
 
 def intoIter {A : Type} (owner : Owner A) : Iter A :=
   ⟨owner.allocation,0,owner.initialized.values.val,
-    owner.initialized.fits.trans owner.reserved⟩
+    by simpa only [Nat.zero_add,alloc.vec.Vec.length] using
+      owner.initialized.fits.trans owner.reserved⟩
 
 def pointer {A : Type} (iter : Iter A) : Nat :=
   iter.allocation.pointer+iter.consumed*iter.allocation.layout.size
@@ -53,8 +54,11 @@ theorem moves {A : Type} (iter : Iter A) (a : A) (rest : List A)
     (next iter).1=some a ∧ (next iter).2.remaining=rest ∧
     (next iter).2.allocation=iter.allocation ∧
     (next iter).2.consumed=iter.consumed+1 := by
-  simp only [next,h]
-  exact ⟨rfl,rfl,rfl,rfl⟩
+  cases iter with
+  | mk allocation consumed remaining fits =>
+    dsimp only at h
+    subst remaining
+    exact ⟨rfl,rfl,rfl,rfl⟩
 
 theorem cursor {A : Type} (iter : Iter A) (a : A) (rest : List A)
     (h : iter.remaining=a::rest) :
