@@ -1,7 +1,7 @@
 """Finite native startup/FD gates; no prover call and no timing experiment."""
 from pathlib import Path
-import json,os,subprocess,time,hashlib,signal
-H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/runtime';O.mkdir()
+import json,os,subprocess,time,hashlib,signal,re
+H=Path('/home/dombarker/project-offloads/codex-pv-uc-20261029');O=H/'final-gates/uc5/runtime';O.mkdir(exist_ok=True)
 client=H/'native-target/client/user_client'
 helper=H/'uc5-startup.rs'
 helper.write_text('''#[path="src/tools/r1-cost-probe/src/bin/user_client/diagnostics.rs"] mod diagnostics;
@@ -24,14 +24,14 @@ for _ in range(100):
   candidate=int(children[0]);status=Path(f'/proc/{candidate}/status').read_text()
   if 'user_client' in status:
    trace=(O/'startup-syscalls.txt').read_text()
-   if 'PR_SET_DUMPABLE, SUID_DUMP_DISABLE) = 0' in trace or 'PR_SET_DUMPABLE, 0) = 0' in trace:child=candidate;break
+   if ('PR_SET_DUMPABLE, SUID_DUMP_DISABLE) = 0' in trace or 'PR_SET_DUMPABLE, 0) = 0' in trace) and 'RLIMIT_CORE' in trace:child=candidate;break
  time.sleep(.02)
 assert child is not None
 status=Path(f'/proc/{child}/status').read_text();limits=Path(f'/proc/{child}/limits').read_text();(O/'client-status.txt').write_text(status);(O/'client-limits.txt').write_text(limits)
 out,err=p.communicate(b'{"action":"prove"}',timeout=10)
 (O/'client-stdout.txt').write_bytes(out);(O/'client-stderr.txt').write_bytes(err)
 assert err==b'client panic\n' and p.returncode!=0 and not out
-trace=(O/'startup-syscalls.txt').read_text();assert 'RLIMIT_CORE' in trace and 'rlim_cur=0, rlim_max=0' in trace
+trace=(O/'startup-syscalls.txt').read_text();assert 'RLIMIT_CORE' in trace and re.search(r'^Max core file size\s+0\s+0\s+bytes',limits,re.M)
 assert not list(O.glob('core*'))
 # Native rejection controls and a forced panic after the fixture wallet was read.
 F=json.loads((H/'fixture-inputs.json').read_text())
