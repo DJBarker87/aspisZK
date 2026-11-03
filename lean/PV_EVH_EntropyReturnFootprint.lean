@@ -177,6 +177,18 @@ theorem mask_residue (sp : Nat) (w : State) (i : Nat) (hi : i < 32) :
     simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
     omega
 
+theorem outside_writes (sp p : Nat) (w : State)
+    (hf : p < sp ∨ sp+232 ≤ p)
+    (hr : p < result sp ∨ result sp+97 ≤ p) :
+    (moved sp w).memory p = w.memory p := by
+  apply PV_EVH_StackStores.outside_all
+  intro t ht
+  change t ∈ [stageFieldHigh sp w,stageFieldLow sp w,stageSeedLow sp w,stageSeedHigh sp w,stageMaskHigh sp w,stageMaskLow sp w,returnSeedHigh sp w,returnMaskHigh sp w,returnMaskLow sp w,returnSeedLow sp w,returnFieldHigh sp w,returnFieldLow sp w,tag sp w] at ht
+  simp only [List.mem_cons,List.not_mem_nil,or_false] at ht
+  rcases ht with rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl
+  all_goals
+    simp only [Outside,stageFieldHigh,stageFieldLow,stageSeedLow,stageSeedHigh,stageMaskHigh,stageMaskLow,returnSeedHigh,returnMaskHigh,returnMaskLow,returnSeedLow,returnFieldHigh,returnFieldLow,tag,result,mask,caller]
+    omega
 
 #print axioms stageFieldHigh_byte
 #print axioms stageFieldLow_byte
@@ -193,4 +205,5 @@ theorem mask_residue (sp : Nat) (w : State) (i : Nat) (hi : i < 32) :
 #print axioms tag_byte
 #print axioms inner_residue
 #print axioms mask_residue
+#print axioms outside_writes
 end PV_EVH_EntropyReturnFootprint

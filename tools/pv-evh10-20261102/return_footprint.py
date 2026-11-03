@@ -49,7 +49,16 @@ for name,p,hi in [('inner_residue','sp+i',128),('mask_residue','mask sp+i',32)]:
  text+=f'theorem {name} (sp : Nat) (w : State) (i : Nat) (hi : i < {hi}) :\n    (moved sp w).memory ({p}) = w.memory ({p}) := by\n'
  text+='  apply PV_EVH_StackStores.outside_all\n  intro t ht\n  change t ∈ '+args(names)+' at ht\n'
  text+=outside_tactic(names)+'\n' # fix indentation below
-text+='\n'+'\n'.join('#print axioms '+n+'_byte' for n in names)+'\n#print axioms inner_residue\n#print axioms mask_residue\nend PV_EVH_EntropyReturnFootprint\n'
+text+='''theorem outside_writes (sp p : Nat) (w : State)
+    (hf : p < sp ∨ sp+232 ≤ p)
+    (hr : p < result sp ∨ result sp+97 ≤ p) :
+    (moved sp w).memory p = w.memory p := by
+  apply PV_EVH_StackStores.outside_all
+  intro t ht
+  change t ∈ '''+args(names)+''' at ht
+'''
+text+=outside_tactic(names)
+text+='\n'+'\n'.join('#print axioms '+n+'_byte' for n in names)+'\n#print axioms inner_residue\n#print axioms mask_residue\n#print axioms outside_writes\nend PV_EVH_EntropyReturnFootprint\n'
 if '--check' in sys.argv:assert P.read_text()==text
 else:
  import json
