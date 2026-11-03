@@ -2,7 +2,7 @@
 // this does not execute runjoin's actual encoder or SemanticOracle closures.
 use std::mem::{size_of,align_of};
 use std::thread::ScopedJoinHandle;
-fn check<T:Send+'static>(label:&str) {
+fn check<T:Send+'static>(label:&str, corrupt:bool) {
     std::thread::scope(|scope| {
         let mut handles=Vec::new();
         let mut observed=[0usize;15];
@@ -27,6 +27,7 @@ fn check<T:Send+'static>(label:&str) {
         for length in 0..15 {
             if length==cap {
                 let min=if size==1 {8} else if size<=1024 {4} else {1};
+                let min=if corrupt {min+1} else {min};
                 cap=min.max((cap*2).max(cap+1));expected.push(cap);
             }
             assert_eq!(observed[length],cap);
@@ -37,7 +38,8 @@ fn check<T:Send+'static>(label:&str) {
     });
 }
 fn main() {
-    check::<u8>("u8");
-    check::<Result<[u32;4],u8>>("representative-field-result");
-    check::<[u8;4096]>("large-payload");
+    let corrupt=std::env::args().any(|a| a=="--bad-growth");
+    check::<u8>("u8",corrupt);
+    check::<Result<[u32;4],u8>>("representative-field-result",corrupt);
+    check::<[u8;4096]>("large-payload",corrupt);
 }

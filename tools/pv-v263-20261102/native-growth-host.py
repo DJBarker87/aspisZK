@@ -20,5 +20,8 @@ results.append(dict(target='fifteen actual scoped-handle pushes for three repres
  expected=q.returncode==0 and len(rows)==3 and all(r['growth_requests']==[4,8,16] and 1<r['handle_size']<=1024 for r in rows),
  credit='finite native validation of std Vec growth, not actual callback success or whole worker binding'))
 (p/(tag+'-native-results.json')).write_text(json.dumps(results,indent=2)+'\n')
+cmd=[str(exe),'--bad-growth'];start=time.monotonic();q=subprocess.run(cmd,text=True,capture_output=True,timeout=60)
+results.append(dict(target='matched changed-minimum growth control must fail',command=cmd,exit=q.returncode,wall_seconds=time.monotonic()-start,stdout=q.stdout,stderr=q.stderr,expected=q.returncode!=0))
+(p/(tag+'-native-results.json')).write_text(json.dumps(results,indent=2)+'\n')
 print('three representative handle payloads:',[(r['handle_size'],r['growth_requests']) for r in rows],flush=True)
 sys.exit(0 if all(r['expected'] for r in results) else 1)
