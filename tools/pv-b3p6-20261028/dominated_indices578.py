@@ -11,7 +11,7 @@ import argparse,copy,hashlib,json,lzma
 from fixed_indices572 import literal
 from frame_indices578 import root,dicts
 D=Path('evidence/pv-b3p6-20261028');R=D/'resume18';I=R/'imports-b3q/pv-b3q2-20261031';sha=lambda b:hashlib.sha256(b).hexdigest()
-def collect(body,range_seeds=None):
+def collect(body,range_seeds=None,windows=False):
  range_seeds=range_seeds or {}
  exposed={root(x[tag]['place'])for x in dicts(body)for tag in ('Ref','RawPtr')if tag in x and isinstance(x[tag],dict)and 'place'in x[tag]}
  rows=[]
@@ -43,6 +43,12 @@ def collect(body,range_seeds=None):
     if 'BinaryOp'in rhs:
      operator,left,right=rhs['BinaryOp'];a,c=op(left,sid),op(right,sid)
      if operator=='Lt' and a is not None and c is not None and c[0]=='literal':v=('less',a,c[1],sid)
+     if windows and a is not None and c is not None:
+      if operator=={'Add':'Wrap'}:v=('wrapadd',a,c)
+      elif operator=={'Sub':'Wrap'}:v=('wrapsub',a,c)
+      elif operator=='Ge':v=('ge',a,c,sid)
+      elif operator=='Le':v=('ge',c,a,sid)
+      elif operator=='Lt'and c[0]=='wrapadd'and c[2][0]=='literal':v=('windowLess',a,c[1],c[2][1],sid)
     moves(rhs);values.pop(slot,None)
     if 'Local'in dest['kind']:values[slot]=v if v is not None else('snapshot',scope,sid,slot)
     else:effect()
@@ -54,6 +60,12 @@ def collect(body,range_seeds=None):
      if index in bounds and length is not None:
       limit,predicate,branch=bounds[index]
       if limit<=length:rows.append(dict(statement=sid,index_snapshot=index,limit=limit,length=length,slack=length-limit,predicate_statement=predicate,dominating_branch=branch,source_call=st))
+    if windows and idx.get('is_array')is True and idx.get('is_range')is False and length is not None and index is not None and index[0]=='wrapsub':
+     value,base=index[1:];lower=bounds.get(('lower',value,base))
+     if lower is not None:
+      for key,upper in bounds.items():
+       if key[:3]==('upper',value,base)and key[3]<=length:
+        width=key[3];rows.append(dict(statement=sid,kind='window',value_snapshot=value,base_snapshot=base,limit=width,length=length,slack=length-width,lower_test=lower,upper_test=upper,source_call=st));break
     moves(call['args']);values.pop(root(call.get('dest',{})),None);effect()
     if k['Call'].get('on_unwind'):block(k['Call']['on_unwind'],values,bounds,scope)
    elif 'Drop'in k:
@@ -70,6 +82,9 @@ def collect(body,range_seeds=None):
     for i,child in enumerate(branches):
      child_bounds=dict(bounds)
      if tag=='If'and i==0 and cond is not None and cond[0]=='less':child_bounds[cond[1]]=(cond[2],cond[3],sid)
+     if windows and tag=='If'and i==0 and cond is not None:
+      if cond[0]=='ge':child_bounds[('lower',cond[1],cond[2])]=(cond[3],sid)
+      elif cond[0]=='windowLess':child_bounds[('upper',cond[1],cond[2],cond[3])]=(cond[4],sid)
      exits.append(block(child,values,child_bounds,scope))
     values={slot:value for slot,value in exits[0][0].items()if all(e[0].get(slot)==value for e in exits[1:])}if exits else{}
     # Only the entry facts survive a join; refinements stay inside branches.
