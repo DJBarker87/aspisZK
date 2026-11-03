@@ -1,0 +1,61 @@
+START 79961 R1Z.PV_V263_RetainedErase
+DONE 79961 R1Z.PV_V263_RetainedErase exit 1 wall 2.36 RSS 4482138112
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedErase.lean:18:9: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedErase.lean:42:27: error: Application type mismatch: The argument
+  a
+has type
+  State S
+but is expected to have type
+  A
+in the application
+  stored out a
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedErase.lean:49:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  mapAction (fun b => b.values) (PV_V263_RetainedSpine.collectLoop callback ids next remaining)
+in the target expression
+  mapAction (fun b => b.values)
+      (do
+        let a ← callback i
+        PV_V263_RetainedSpine.collectLoop callback ids (stored out a ⋯) ⋯)
+      a =
+    (callback i >>= fun a => do
+        let out' ← PV_V263_VecSpine.value runtime (out.values.push a)
+        PV_V263_VecSpine.collectLoop runtime callback ids out')
+      a
+
+case cons
+S A : Type
+runtime : PV_V263_VecSpine.Runtime S
+callback : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : Buffer A) (room : out.values.length + ids.length ≤ out.capacity),
+    mapAction (fun b => b.values) (PV_V263_RetainedSpine.collectLoop callback ids out room) =
+      PV_V263_VecSpine.collectLoop runtime callback ids out.values
+out : Buffer A
+room : out.values.length + (i :: ids).length ≤ out.capacity
+a : State S
+next : Buffer A := stored out sorry ⋯
+remaining : next.values.length + ids.length ≤ next.capacity
+⊢ mapAction (fun b => b.values)
+      (do
+        let a ← callback i
+        PV_V263_RetainedSpine.collectLoop callback ids (stored out a ⋯) ⋯)
+      a =
+    (callback i >>= fun a => do
+        let out' ← PV_V263_VecSpine.value runtime (out.values.push a)
+        PV_V263_VecSpine.collectLoop runtime callback ids out')
+      a
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedErase.lean:38:49: warning: This simp argument is unused:
+  map_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [PV_V263_RetainedSpine.collectLoop,m̵a̵p̵_̵b̵i̵n̵d̵,̵
+  ̵  ̵ ̵ ̵ ̵ ̵PV_V263_VecSpine.collectLoop]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_V263_RetainedErase.push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'R1Z.PV_V263_RetainedErase.collect' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

@@ -35,8 +35,9 @@ theorem collect {S A : Type} (runtime : PV_V263_VecSpine.Runtime S)
   induction ids generalizing out with
   | nil => funext w; rfl
   | cons i ids ih =>
-    simp only [PV_V263_RetainedSpine.collectLoop,map_bind,
-      PV_V263_VecSpine.collectLoop]
+    change mapAction (fun b : Buffer A => b.values)
+      (PV_V263_World.bind (callback i) _) = PV_V263_World.bind (callback i) _
+    rw [map_bind]
     congr 1
     funext a
     let next := stored out a (by simp only [List.length_cons] at room; omega)

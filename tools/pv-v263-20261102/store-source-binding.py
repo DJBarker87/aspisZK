@@ -79,6 +79,15 @@ body('alloc/src/vec/set_len_on_drop.rs','''pub(super) fn current_len(&self) -> u
  ['TrustedStores.Frame.initialized.values.length is local_len'],[])
 body('alloc/src/vec/set_len_on_drop.rs','''fn drop(&mut self) { *self.len = self.local_len; }''',
  ['TrustedStores.publish/drop_publishes; panic=abort does not run an unwind destructor'],[])
+body('alloc/src/raw_vec/mod.rs','''const fn capacity(&self, elem_size: usize) -> usize {
+ if elem_size == 0 { usize::MAX } else { self.cap.as_inner() }
+}''', ['OwnedDrain.capacity: exact capacity derived from raw metadata including ZST'],[])
+body('alloc/src/raw_vec/mod.rs','''unsafe fn deallocate(&mut self, elem_layout: Layout) {
+ if let Some((ptr, layout)) = unsafe { self.current_memory(elem_layout) } {
+ unsafe { self.alloc.deallocate(ptr, layout); }
+ }
+}''', ['OwnedDrain.release: no request on None; exact retained allocation on Some'],
+ ['Global/System deallocation and native heap/event interpretation'])
 body('alloc/src/raw_vec/mod.rs','''const unsafe fn current_memory(&self, elem_layout: Layout) -> Option<(NonNull<u8>, Layout)> {
  if elem_layout.size() == 0 || self.cap.as_inner() == 0 { None } else {
  unsafe { let alloc_size = elem_layout.size().unchecked_mul(self.cap.as_inner());
