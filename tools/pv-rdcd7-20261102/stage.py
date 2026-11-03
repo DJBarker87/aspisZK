@@ -15,7 +15,7 @@ def go(m):
   if dep.startswith('R1Z.'):go(dep)
  order.append(m)
 for m in ['R1Z.PV_RDCD5_V197Audit','R1Z.PV_RDCD5_NEPAudit','R1Z.PV_RDCD5_NEPDriver','R1Z.PV_RDCD5_V197Focused','R1Z.PV_RDCD5_V197FrozenManifest']:go(m)
-kinds={m:('query-specification-only' if m=='R1Z.PV_RDCD5_V197Audit' else 'reserved-release' if m in ['R1Z.PV_RDCD5_V197Focused','R1Z.PV_RDCD5_V197FrozenManifest'] else 'ordinary-focused') for m in plan}
+kinds={m:('runtime-only' if m=='R1Z.PV_RDCD5_NEPDriver' else 'query-specification-only' if m=='R1Z.PV_RDCD5_V197Audit' else 'reserved-release' if m in ['R1Z.PV_RDCD5_V197Focused','R1Z.PV_RDCD5_V197FrozenManifest'] else 'ordinary-focused') for m in plan}
 (E/'source-resolution.json').write_text(json.dumps(dict(modules=plan,compile_order=order,module_kinds=kinds),indent=2)+'\n')
 r=subprocess.run(['ssh',H,f'python3 {G}/reservation.py {D}/stage-admission.json > {D}/stage-admission.log 2>&1'],capture_output=True,text=True)
 for n in ['stage-admission.json','stage-admission.log']:
