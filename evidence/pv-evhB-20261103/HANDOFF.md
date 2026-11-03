@@ -6,17 +6,27 @@ never edit/restage accepted PV_EVH or PV_EVHB sources. No push/delegation,
 Rust/program/soundness edits, native run, Kani run or key/funds action occurred.
 No endpoint/deployment row removed; T unchanged; target NOT established.
 
-## Pending final checks (update after they finish)
+## Final checked state
 
-Normal 91200–91220 consumed: 21 charged, 15 accepted, 6 rejected. 76/97 remain.
-91221 PrivateSaltsNew has NOT launched: two uncharged reservation refusals.
-Its source is committed and staged; never count these as Lean attempts.
-A local queue is observing the latest full 180s cooldown and will retry the
-SAME 91221 up to ten times, then stage/compile the NEW audit target at 91297.
-Do not submit a second copy while that queue lives. Inspect actual receipts
-and current host scopes before resuming; never resubmit a submitted ID.
-Next normal ID is 91221 until a receipt exists, then 91222. Audit91298–91299
-are untouched. Audit91297 is unused until submission/receipt appears.
+23/97 attempts charged: **17 accepted / 6 rejected; 74 REMAIN**.
+Normal91200–91221 are consumed. **NEXT NORMAL ID91222**.
+Final scoped Audit91297 passed; Audit91298–91299 are untouched and consume the
+same remaining74 budget if used. Do not reuse any submitted ID. Three uncharged
+reservation refusals at91221 observed the full180s cooldown from each latest
+refusal before retrying the SAME unlaunched ID. Fourth admission compiled once,
+exit0. No other refusal, transport failure, timeout, kill or cap rise occurred.
+No WIP proof or pending compile remains. host-final.json confirms no own active
+scope. Receipt audit and adopted source-binding --check PASS. Peak RSS is
+4,435,388KiB; swap0. Exact targets/exits/walls/source revisions/object/dependency
+hashes and all axiom prints are in the per-run receipts and logs.
+
+All17 new modules (including Audit) are accepted and immutable. The final Audit
+was one scoped import/summary-axioms check of the16 proof modules, not a raw NEP
+walk, full endpoint/frozen package replay, runtime test or release certification.
+Source-level six caller transports, PrivateSaltsNew and all public-size laws
+are now green. `summary.json` is the machine-checked accounting authority.
+This is a CONTEXT CHECKPOINT, not budget exhaustion or a target-completion
+claim. Final evidence/checkpoint commits follow the saved commits.txt list.
 
 ## Checked deliverables and exact limitations
 
@@ -95,7 +105,7 @@ launcher/environment/infrastructure are unchanged. Failed-source SHA guard
 and wrapper hashes are recorded. Keep every evidence input committed and every
 file ≤20MiB. Do not rebuild imports or run an unchanged full regression.
 
-Run source-binding.py --check and audit.py after all current modules are green.
+Both source-binding.py --check and audit.py passed after all current modules became green.
 Audit.py hard-checks receipts, immutable sources, caps, swaps, hashes and accepted
 summary axioms. All #print axioms results are SUMMARY-BASED (ax1-prime), accepted
 subsets only of propext/Classical.choice/Quot.sound. Raw NEP importAll/private/
