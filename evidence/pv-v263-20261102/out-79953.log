@@ -1,0 +1,138 @@
+START 79953 R1Z.PV_V263_RetainedFacts
+DONE 79953 R1Z.PV_V263_RetainedFacts exit 1 wall 1.83 RSS 4492996608
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:19:49: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  b ≥ 0
+  b + c - d ≥ 1
+  a ≥ 0
+  a - b - c ≥ 0
+where
+ a := ↑out.capacity
+ b := ↑out.values.length
+ c := ↑[].length
+ d := ↑(out, completed).1.values.length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:19:62: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  d ≥ 0
+  c ≥ 0
+  c ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 0
+where
+ a := ↑out.capacity
+ b := ↑out.values.length
+ c := ↑[].length
+ d := ↑completed
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:20:18: error: unsolved goals
+case rec
+S A : Type
+runtime : PV_V263_MapSpine.Runtime S
+layouts : PV_V263_MapSpine.Layouts
+thread : ℕ
+callback : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : Buffer A) (completed : ℕ) (room : out.values.length + ids.length ≤ out.capacity),
+    Post
+      (fun p =>
+        p.1.values.length = out.values.length + ids.length ∧ p.1.capacity = out.capacity ∧ p.2 = completed + ids.length)
+      (PV_V263_BufferLoop.loop runtime layouts thread callback ids out completed room)
+out : Buffer A
+completed : ℕ
+room : out.values.length + (i :: ids).length ≤ out.capacity
+a : A
+unit : Unit
+next : Buffer A := PV_V263_BufferLoop.stored out a ⋯
+remaining : next.values.length + ids.length ≤ next.capacity
+⊢ ?m.140
+
+case cons
+S A : Type
+runtime : PV_V263_MapSpine.Runtime S
+layouts : PV_V263_MapSpine.Layouts
+thread : ℕ
+callback : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : Buffer A) (completed : ℕ) (room : out.values.length + ids.length ≤ out.capacity),
+    Post
+      (fun p =>
+        p.1.values.length = out.values.length + ids.length ∧ p.1.capacity = out.capacity ∧ p.2 = completed + ids.length)
+      (PV_V263_BufferLoop.loop runtime layouts thread callback ids out completed room)
+out : Buffer A
+completed : ℕ
+room : out.values.length + (i :: ids).length ≤ out.capacity
+a : A
+unit : Unit
+next : Buffer A := PV_V263_BufferLoop.stored out a ⋯
+remaining : next.values.length + ids.length ≤ next.capacity
+rec : ?m.140
+⊢ Post
+    (fun p =>
+      p.1.values.length = out.values.length + (i :: ids).length ∧
+        p.1.capacity = out.capacity ∧ p.2 = completed + (i :: ids).length)
+    (let next := PV_V263_BufferLoop.stored out a ⋯;
+    PV_V263_BufferLoop.loop runtime layouts thread callback ids next (completed + 1) ⋯)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:24:10: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:33:13: error: unexpected token ':='; expected command
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:50:8: warning: Local variable 'unit' resembles constructor 'PUnit.unit' - write '.unit' (with a dot) or 'PUnit.unit' to use the constructor.
+
+Note: This linter can be disabled with `set_option linter.constructorNameAsVariable false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:64:37: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  c ≥ 1
+  b ≥ 0
+  a ≥ 0
+  a - b - c ≥ 0
+where
+ a := ↑out.capacity
+ b := ↑out.values.length
+ c := ↑[].length
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:65:18: error: unsolved goals
+case rec
+S A : Type
+callback : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : Buffer A) (room : out.values.length + ids.length ≤ out.capacity),
+    Post (fun p => p.values.length = out.values.length + ids.length ∧ p.capacity = out.capacity)
+      (PV_V263_RetainedSpine.collectLoop callback ids out room)
+out : Buffer A
+room : out.values.length + (i :: ids).length ≤ out.capacity
+a : A
+next : Buffer A := PV_V263_BufferLoop.stored out a ⋯
+remaining : next.values.length + ids.length ≤ next.capacity
+⊢ ?m.108
+
+case cons
+S A : Type
+callback : ℕ → Q S A
+i : ℕ
+ids : List ℕ
+ih :
+  ∀ (out : Buffer A) (room : out.values.length + ids.length ≤ out.capacity),
+    Post (fun p => p.values.length = out.values.length + ids.length ∧ p.capacity = out.capacity)
+      (PV_V263_RetainedSpine.collectLoop callback ids out room)
+out : Buffer A
+room : out.values.length + (i :: ids).length ≤ out.capacity
+a : A
+next : Buffer A := PV_V263_BufferLoop.stored out a ⋯
+remaining : next.values.length + ids.length ≤ next.capacity
+rec : ?m.108
+⊢ Post (fun p => p.values.length = out.values.length + (i :: ids).length ∧ p.capacity = out.capacity)
+    (let next := PV_V263_BufferLoop.stored out a ⋯;
+    PV_V263_RetainedSpine.collectLoop callback ids next ⋯)
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RetainedFacts.lean:76:13: error: unexpected token ':='; expected command
+'R1Z.PV_V263_RetainedFacts.loop_shape' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_RetainedFacts.items_shape' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_RetainedFacts.collect_shape' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_RetainedFacts.reserved_capacity' depends on axioms: [propext]
+
