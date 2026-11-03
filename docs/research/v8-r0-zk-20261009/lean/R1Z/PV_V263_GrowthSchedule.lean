@@ -31,7 +31,7 @@ theorem large (size : Nat) (largeSize : 1024<size) :
   simp only [requests,nextCap,requestedCap,minCap,if_neg notOne,if_neg notSmall]
   decide
 
-theorem public (size size' : Nat) (same : size=size') (count length cap : Nat) :
+theorem same_size (size size' : Nat) (same : size=size') (count length cap : Nat) :
     requests size count length cap=requests size' count length cap := by rw [same]
 
 #print axioms nextCap
@@ -39,5 +39,5 @@ theorem public (size size' : Nat) (same : size=size') (count length cap : Nat) :
 #print axioms moderate
 #print axioms singleByte
 #print axioms large
-#print axioms public
+#print axioms same_size
 end R1Z.PV_V263_GrowthSchedule
