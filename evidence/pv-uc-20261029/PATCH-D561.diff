@@ -1,0 +1,220 @@
+diff --git a/tools/r1-cost-probe/src/bin/user_client.rs b/tools/r1-cost-probe/src/bin/user_client.rs
+index de45fc3c95..5bd4cd6cf9 100644
+--- a/tools/r1-cost-probe/src/bin/user_client.rs
++++ b/tools/r1-cost-probe/src/bin/user_client.rs
+@@ -19,11 +19,11 @@ fn main(){
+ }
+ fn run()->Result<()>{
+  let mut s=String::new();io::stdin().read_to_string(&mut s).map_err(err)?;
+- let q:Value=serde_json::from_str(&s).map_err(err)?;
+- println!("{}",plan::run(&q)?);Ok(())
++ let q:Value=parse_request(&s)?;
++ let rendered=render_json(&plan::run(&q)?);print_json(rendered);Ok(())
+ }
+ fn unhex(s:&str)->Vec<u8>{let mut out=Vec::new();let mut i=0;while i<s.len(){out.push(u8::from_str_radix(&s[i..i+2],16).unwrap());i+=2;}out}
+-fn hex(b:&[u8])->String{let digits=b"0123456789abcdef";let mut out=Vec::with_capacity(2*b.len());let mut i=0;while i<b.len(){out.push(digits[(b[i]>>4) as usize]);out.push(digits[(b[i]&15) as usize]);i+=1;}String::from_utf8(out).unwrap()}
++fn hex(b:&[u8])->String{let digits=b"0123456789abcdef";let mut out=Vec::with_capacity(2*b.len());let mut i=0;while i<b.len(){out.push(digits[(b[i]>>4u32) as usize]);out.push(digits[(b[i]&15) as usize]);i+=1;}String::from_utf8(out).unwrap()}
+ 
+ // Owned projection keeps JSON indexing lifetimes at the public input boundary.
+ fn public_field(q:&Value,k:&str)->Value{q[k].clone()}
+@@ -40,3 +40,34 @@ fn triple(a:Value,b:Value,c:Value)->Vec<Value>{let mut out=Vec::with_capacity(3)
+ 
+ fn public_array(v:&Value)->Result<Vec<Value>>{match v.as_array(){Some(a)=>Ok(a.clone()),None=>Err(diagnostics::Error::new())}}
+ fn value_text(v:&Value)->Result<String>{match v.as_str(){Some(s)=>Ok(s.to_owned()),None=>Err(diagnostics::Error::new())}}
++
++// Extraction boundaries retain actual operands rather than erased fmt Arguments.
++fn wallet_fd_path(fd:i32)->String{format!("/proc/self/fd/{fd}")}
++fn render_json(value:&Value)->String{format!("{}",value)}
++fn print_json(mut text:String){
++ use std::io::Write;
++ text.push('\n');let mut output=std::io::stdout().lock();
++ if output.write_all(text.as_bytes()).is_err(){panic!("client output failed");}
++}
++fn json_string(value:String)->Value{Value::String(value)}
++fn json_array(value:Vec<Value>)->Value{Value::Array(value)}
++fn json_bool(value:bool)->Value{Value::Bool(value)}
++fn json_number(value:serde_json::Number)->Value{Value::Number(value)}
++fn json_object(value:serde_json::Map<String,Value>)->Value{Value::Object(value)}
++fn json_into_array(value:Value)->Result<Vec<Value>>{match value{Value::Array(a)=>Ok(a),_=>Err(diagnostics::Error::new())}}
++
++fn public_lanes(pool:solana_program::pubkey::Pubkey,master:solana_program::pubkey::Pubkey)->Vec<solana_program::pubkey::Pubkey>{
++ use aspis_pool::pool_v1_pair_forest_lane_address;
++ (0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect()
++}
++fn parent_capacity(len:usize)->usize{len.div_ceil(2).max(1)}
++fn wallet_open_channel(path:String)->Result<std::fs::File>{std::fs::File::open(path).map_err(err)}
++fn wallet_read_record(channel:&mut std::fs::File)->Result<[u8;wallet::WIDTH]>{
++ use std::io::Read;
++ use crate::diagnostics::{anyhow,ensure};
++ let mut record=[0u8;wallet::WIDTH];channel.read_exact(&mut record).map_err(err)?;
++ let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");Ok(record)
++}
++
++fn parse_request(text:&str)->Result<Value>{serde_json::from_str(text).map_err(err)}
++fn pubkey_text(value:solana_program::pubkey::Pubkey)->String{value.to_string()}
+diff --git a/tools/r1-cost-probe/src/bin/user_client/accounts.rs b/tools/r1-cost-probe/src/bin/user_client/accounts.rs
+index e4e6b55dfc..bd16d72530 100644
+--- a/tools/r1-cost-probe/src/bin/user_client/accounts.rs
++++ b/tools/r1-cost-probe/src/bin/user_client/accounts.rs
+@@ -18,7 +18,7 @@ impl Accounts {
+         for (i, value) in list.iter().enumerate() {
+             let text = value.as_str().ok_or_else(|| anyhow!("proof account must be a string"))?;
+             let key = Pubkey::from_str(text).map_err(err)?;
+-            ensure!(key.to_string() == text && key != Pubkey::default(), "noncanonical/zero proof account");
++            ensure!(crate::pubkey_text(key) == text && key != Pubkey::default(), "noncanonical/zero proof account");
+             ensure!(!keys[..i].contains(&key), "duplicate proof account");
+             keys[i] = key;
+         }
+@@ -33,9 +33,9 @@ impl Accounts {
+                        public: Pubkey, checkpoint: Pubkey) -> Result<Value> {
+         ensure!(settlement.len() == 10, "unexpected settlement proof-account position");
+         let (_, key) = self.selected(attempts)?;
+-        let proof = Value::Array(crate::triple(Value::String(key.to_string()),Value::Bool(false),Value::Bool(false)));
++        let proof = crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(key)),crate::json_bool(false),crate::json_bool(false)));
+         settlement.push(proof.clone());
+-        Ok(Value::Array(crate::triple(proof,Value::Array(crate::triple(Value::String(public.to_string()),Value::Bool(false),Value::Bool(false))),Value::Array(crate::triple(Value::String(checkpoint.to_string()),Value::Bool(false),Value::Bool(true))))))
++        Ok(crate::json_array(crate::triple(proof,crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(public)),crate::json_bool(false),crate::json_bool(false))),crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(checkpoint)),crate::json_bool(false),crate::json_bool(true))))))
+     }
+     pub fn selected(&self, attempts: usize) -> Result<(usize, Pubkey)> {
+         ensure!((1..=CAP).contains(&attempts), "invalid successful attempt count");
+diff --git a/tools/r1-cost-probe/src/bin/user_client/membership.rs b/tools/r1-cost-probe/src/bin/user_client/membership.rs
+index 350d263209..3a916fcc82 100644
+--- a/tools/r1-cost-probe/src/bin/user_client/membership.rs
++++ b/tools/r1-cost-probe/src/bin/user_client/membership.rs
+@@ -23,7 +23,7 @@ fn leaf(v:&Value)->Result<PoolV1PairLeafWitnessV1>{
+ }
+ fn lane(v:&Value)->Result<Vec<PoolV1PairLeafWitnessV1>>{
+  let a=crate::public_array(v)?;
+- ensure!(a.len()<=1<<20,"lane exceeds tree capacity");
++ ensure!(a.len()<=1<<20u32,"lane exceeds tree capacity");
+  let mut out=Ok(Vec::with_capacity(a.len()));let mut i=0;while i<a.len(){out=push_leaf(out,&a[i]);i+=1;}out
+ }
+ fn push_leaf(out:Result<Vec<PoolV1PairLeafWitnessV1>>,v:&Value)->Result<Vec<PoolV1PairLeafWitnessV1>>{let mut out=out?;out.push(leaf(v)?);Ok(out)}
+@@ -32,14 +32,14 @@ fn hashes(leaves:&[PoolV1PairLeafWitnessV1])->Result<Vec<Digest>>{
+ }
+ fn push_hash(out:Result<Vec<Digest>>,v:&PoolV1PairLeafWitnessV1)->Result<Vec<Digest>>{let mut out=out?;out.push(v.leaf_digest().map_err(err)?);Ok(out)}
+ fn parent_level(nodes:&[Digest],empty:Digest)->Vec<Digest>{
+- let mut out=Vec::with_capacity(nodes.len().div_ceil(2).max(1));
++ let mut out=Vec::with_capacity(crate::parent_capacity(nodes.len()));
+  if nodes.is_empty(){out.push(pool_v1_tree_parent(&empty,&empty));}else{
+  let mut i=0;while i<nodes.len(){let right=if i+1<nodes.len(){nodes[i+1]}else{empty};out.push(pool_v1_tree_parent(&nodes[i],&right));i+=2;}}
+  out
+ }
+ fn path(mut nodes:Vec<Digest>,mut index:usize)->(Digest,[Digest;20]){
+  let mut siblings=[POOL_V1_PAIR_EMPTY_ROOTS[0];20];
+- for level in 0..20{siblings[level]=if (index^1)<nodes.len(){nodes[index^1]}else{POOL_V1_PAIR_EMPTY_ROOTS[level]};index>>=1;nodes=parent_level(&nodes,POOL_V1_PAIR_EMPTY_ROOTS[level]);}
++ for level in 0..20{siblings[level]=if (index^1)<nodes.len(){nodes[index^1]}else{POOL_V1_PAIR_EMPTY_ROOTS[level]};index>>=1u32;nodes=parent_level(&nodes,POOL_V1_PAIR_EMPTY_ROOTS[level]);}
+  (nodes[0],siblings)
+ }
+ fn locate(leaves:&[PoolV1PairLeafWitnessV1],cm:Digest)->(Option<(usize,bool)>,usize){
+@@ -70,17 +70,17 @@ fn lane_selection(lane:usize,p:&Lane)->Option<Selection>{
+  match p.selected{Some((pair,index,second,siblings))=>Some(Selection{lane,pair,index,second,siblings}),None=>None}
+ }
+ fn collect_selection(prepared:&[Lane])->Result<Selection>{
+- let mut selected=None;let mut matches=0;let mut l=0;
++ let mut selected=None;let mut match_count=0;let mut l=0;
+  while l<prepared.len(){
+-  match lane_selection(l,&prepared[l]){Some(s)=>{matches+=1;selected=Some(s);},None=>{}}
++  match lane_selection(l,&prepared[l]){Some(s)=>{match_count+=1;selected=Some(s);},None=>{}}
+   l+=1;
+  }
+- ensure!(matches==1,"input commitment must occur in one lane");
++ ensure!(match_count==1,"input commitment must occur in one lane");
+  selected.ok_or_else(||anyhow!("input absent"))
+ }
+ fn super_path(mut roots:Vec<Digest>,lane:usize,anchor:Digest)->Result<([Digest;3],[bool;3])>{
+  let mut supers=[roots[0];3];let mut directions=[false;3];let mut index=lane;
+- for level in 0..3{supers[level]=roots[index^1];directions[level]=index%2==1;index>>=1;roots=parent_level(&roots,POOL_V1_PAIR_EMPTY_ROOTS[0]);}
++ for level in 0..3{supers[level]=roots[index^1];directions[level]=index%2==1;index>>=1u32;roots=parent_level(&roots,POOL_V1_PAIR_EMPTY_ROOTS[0]);}
+  ensure!(roots[0]==anchor,"complete public leaves do not reconstruct checkpoint");
+  Ok((supers,directions))
+ }
+diff --git a/tools/r1-cost-probe/src/bin/user_client/plan.rs b/tools/r1-cost-probe/src/bin/user_client/plan.rs
+index b5f51ea4cd..4dae32800d 100644
+--- a/tools/r1-cost-probe/src/bin/user_client/plan.rs
++++ b/tools/r1-cost-probe/src/bin/user_client/plan.rs
+@@ -12,20 +12,20 @@ const TOKEN:&str="TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA";
+ const PROFILE:[u8;32]=[0x57,0x94,0x73,0x13,0xd2,0x32,0x64,0x1a,0xd8,0x15,0x7d,0x66,0xbf,0xaf,0xfa,0xb1,0x1e,0x4c,0x3a,0x99,0x33,0x1d,0x18,0xf4,0x4b,0xfa,0xca,0xb6,0x89,0x97,0x37,0xd3];
+ const RELEASE:[u8;32]=[0xe2,0x94,0xaf,0xbc,0x14,0xef,0x6a,0xfe,0x76,0xb8,0x47,0xde,0xf4,0x44,0x52,0xf8,0x4c,0xc3,0x72,0x80,0x64,0x65,0x76,0x07,0xb5,0x44,0xa5,0x39,0xca,0x9b,0x32,0x3a];
+ fn pk(q:&Value,k:&str)->Pubkey{Pubkey::from_str(&crate::public_text(q,k)).unwrap()}
+-fn meta(p:Pubkey,s:bool,w:bool)->Value{Value::Array(crate::triple(Value::String(p.to_string()),Value::Bool(s),Value::Bool(w)))}
++fn meta(p:Pubkey,s:bool,w:bool)->Value{crate::json_array(crate::triple(crate::json_string(crate::pubkey_text(p)),crate::json_bool(s),crate::json_bool(w)))}
+ fn ro(p:Pubkey)->Value{meta(p,false,false)}
+ fn rw(p:Pubkey)->Value{meta(p,false,true)}
+ fn ix(p:Pubkey,a:Vec<Value>,d:impl AsRef<[u8]>)->Value{
+- let mut o=serde_json::Map::new();o.insert("program".to_owned(),Value::String(p.to_string()));o.insert("accounts".to_owned(),Value::Array(a));o.insert("data".to_owned(),Value::String(super::hex(d.as_ref())));Value::Object(o)
++ let mut o=serde_json::Map::new();o.insert("program".to_owned(),crate::json_string(crate::pubkey_text(p)));o.insert("accounts".to_owned(),crate::json_array(a));o.insert("data".to_owned(),crate::json_string(super::hex(d.as_ref())));crate::json_object(o)
+ }
+-fn number(n:usize)->Value{Value::Number(serde_json::Number::from(n as u64))}
++fn number(n:usize)->Value{crate::json_number(serde_json::Number::from(n as u64))}
+ 
+ fn bytes(q:&Value,k:&str)->Vec<u8>{super::unhex(&crate::public_text(q,k))}
+ pub fn run(q:&Value)->Result<Value>{
+  ensure!(crate::public_field(q,"action").as_str()==Some("prove"),"user client supports prove only");
+  let pool=pk(q,"pool");let mint=pk(q,"mint");let registry=pk(q,"registry");
+  let master=pool_v1_pair_forest_master_address(&pool,&mint).0;
+- let lanes:Vec<Pubkey>=(0..8).map(|i|pool_v1_pair_forest_lane_address(&pool,&master,i).unwrap().0).collect();
++ let lanes:Vec<Pubkey>=crate::public_lanes(pool,master);
+  let vault=pool_v1_vault_token_account_address(&pool,&master).0;
+  let authority=pool_v1_vault_authority_address(&pool,&master).0;
+  let reg=aspis_registry::pool_v1_verifier_registry_v2_address(&registry,&master).0;
+@@ -83,20 +83,20 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
+  if withdrawal{a.push(ro(pk(q,"mint")));a.push(rw(vault));a.push(rw(pk(q,"destination")));a.push(ro(authority));a.push(ro(token));}
+  a.push(ro(pk(q,"verifier_checkpoint")));
+  let mut out=serde_json::Map::new();
+- out.insert("client_route".to_owned(),Value::String("selected64-proof-account-v1".to_owned()));
+- out.insert("proof_account".to_owned(),Value::String(proof_account.to_string()));
++ out.insert("client_route".to_owned(),crate::json_string("selected64-proof-account-v1".to_owned()));
++ out.insert("proof_account".to_owned(),crate::json_string(crate::pubkey_text(proof_account)));
+  out.insert("attempt_index".to_owned(),number(attempt_index));
+- out.insert("prove_wall_seconds".to_owned(),Value::Number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));
++ out.insert("prove_wall_seconds".to_owned(),crate::json_number(serde_json::Number::from_f64(started.elapsed().as_secs_f64()).unwrap()));
+  out.insert("attempts".to_owned(),number(result.attempts));
+- out.insert("p_r1".to_owned(),Value::Bool(true));
++ out.insert("p_r1".to_owned(),crate::json_bool(true));
+  out.insert("proof_bytes".to_owned(),number(proof.len()));
+  out.insert("proof_upload_count".to_owned(),number(proof.len().div_ceil(3763)));
+  out.insert("statement_upload_count".to_owned(),number(1));
+- out.insert("marker".to_owned(),Value::String(marker.to_string()));
+- out.insert("output_lane".to_owned(),Value::String(lanes[output_lane as usize].to_string()));
+- out.insert("page".to_owned(),Value::String(page.to_string()));
+- out.insert("needs_zero_page".to_owned(),Value::Bool(lane.tree.next_leaf_index==0));
++ out.insert("marker".to_owned(),crate::json_string(crate::pubkey_text(marker)));
++ out.insert("output_lane".to_owned(),crate::json_string(crate::pubkey_text(lanes[output_lane as usize])));
++ out.insert("page".to_owned(),crate::json_string(crate::pubkey_text(page)));
++ out.insert("needs_zero_page".to_owned(),crate::json_bool(lane.tree.next_leaf_index==0));
+  out.insert("settle".to_owned(),ix(pool,a,data));
+- out.insert("stage1".to_owned(),ix(pk(q,"verifier"),match stage1_accounts { Value::Array(a)=>a,_=>return Err(anyhow!("publication shape")) },[3,10]));
+- Ok(Value::Object(out))
++ out.insert("stage1".to_owned(),ix(pk(q,"verifier"),crate::json_into_array(stage1_accounts)?,[3,10]));
++ Ok(crate::json_object(out))
+ }
+diff --git a/tools/r1-cost-probe/src/bin/user_client/wallet.rs b/tools/r1-cost-probe/src/bin/user_client/wallet.rs
+index d117f6b6ae..d5b5a3fc0a 100644
+--- a/tools/r1-cost-probe/src/bin/user_client/wallet.rs
++++ b/tools/r1-cost-probe/src/bin/user_client/wallet.rs
+@@ -15,7 +15,7 @@ fn digest(r:&[u8;WIDTH],start:usize)->Digest{
+  let mut out=[M31(0);8];let mut i=0;
+  while i<8{out[i]=M31(word(r,start+4*i));i+=1;}out
+ }
+-fn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32)}
++fn long(r:&[u8;WIDTH],i:usize)->u64{word(r,i) as u64 | ((word(r,i+4) as u64)<<32u32)}
+ // Fixed offsets and fixed trip counts; content validity is checked separately.
+ #[inline(never)]
+ pub fn decode_wallet_record(r:&[u8;WIDTH])->Wallet{
+@@ -39,11 +39,10 @@ fn canonical(w:&Wallet)->bool{
+ pub fn read(q:&Value)->Result<Wallet>{
+  let fd=i32::try_from(crate::public_field(q,"wallet_bytes_fd").as_u64().ok_or_else(||anyhow!("missing wallet FD"))?).map_err(err)?;
+  ensure!(fd>2,"wallet FD must be inherited separately from stdio");
+- let mut channel=std::fs::File::open(format!("/proc/self/fd/{fd}")).map_err(err)?;
+- let mut record=[0u8;WIDTH];channel.read_exact(&mut record).map_err(err)?;
+- let mut tail=[0u8;1];ensure!(channel.read(&mut tail).map_err(err)?==0,"extra wallet bytes");
+- let wallet=decode_wallet_record(&record);
+- ensure!(canonical(&wallet),"noncanonical wallet field");Ok(wallet)
++ let mut channel=crate::wallet_open_channel(crate::wallet_fd_path(fd))?;
++ let record=crate::wallet_read_record(&mut channel)?;
++ let decoded=decode_wallet_record(&record);
++ ensure!(canonical(&decoded),"noncanonical wallet field");Ok(decoded)
+ }
+ pub fn retain(dir:&Path,record:&[u8;WIDTH])->Result<()>{
+  use std::os::unix::fs::OpenOptionsExt;

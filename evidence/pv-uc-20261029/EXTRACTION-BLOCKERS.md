@@ -1,31 +1,11 @@
-# D543 checked extraction blockers
+# D561 extraction status and remaining blockers
 
-The 1,000-pair native differential passes. The full-entry Lean gate remains open. No production Rust, generated semantic body, extractor, library object or comparator was changed in this continuation.
+The actual client U32 shift-literal repairs resolve the decoder mismatch: Lean75006 PASS. Typed actual-source helpers preserve operands for opaque deterministic pure String/JSON boundaries. Recursive serde Value positivity and generic Formatter axiom exposure were removed from the final interface. See REPORT.md, RESUME-D561.md and PATCH-D561.diff; D543 blockers are archived separately.
 
-## Emitted decoder shift does not type-check
+The final full entry COMPILES (75028–75033) with explicit 22 carrier and 104 operation parameters, not native instances. Computational body inverse-checks exclude namespace/import/binder-only adaptation. No library objects or emitted computational bodies were edited.
 
-`lean75000` compiles verbatim `PVUCDecoder.Types`. `lean75001` rejects verbatim `PVUCDecoder.Funs` at line 80:
+**Standard-axioms gate FAIL:** raw audit75039 reaches 42 compiler-created `_native.decide` axioms in main. They arise from Aeneas toStr's default literal UTF8-size bound proofs. Full inventory is FORMAL-FAILURE-D561.json; validated graph, serialized/kernel inventory, collectAxioms and printed axioms agree. Seven component roots pass standard-only.75040's attempted explicit kernel bounds fail because literal utf8ByteSize does not kernel-reduce. No object/credit; zero Lean attempts remain. A symbolic UTF8/ASCII lemma or typed public selectors requires a new budget. Never accept these axioms or add T.
 
-```text
-The argument 32#i32 has type IScalar IScalarTy.I32
-but is expected to have type U32
-in the application U64.wrapping_shl i5 32#i32
-```
+Formatting requires no faithful TEXT contents under the current user's fmt-1(b). Six conditional congruence theorems show recomputation given shared pure String bindings and public argument equality; actual native associations remain obligations. The FD operand is public by source data flow before private reads. The elapsed-clock argument spans witness work (FMT-ELAPSED-ARG); selected retry/transcript outputs require existing laws (FMT-TRANSCRIPT-ARGS). wallet::retain directly writes the secret 212-byte record (FILE-RECOVERY-SECRET). The observer/private-sink boundary remains unproved, and the file is retained securely. No successful privacy statement follows from entry compilation or these local laws.
 
-This is the emitted `wallet.long` operation for the final Rust decoder's `<<32`. The accepted ae1-2 translator produced this body; all 5,673 h4 external objects were verified before compilation. It is an elaboration failure, not an environment refusal, timeout or memory kill. The failed source hash is retained and guarded against unchanged resubmission. No replacement literal, shadowing function or alternate library was installed. Consequently the prepared emitted/native executable decoder comparison is **not run**, and no new D188 fidelity credit follows from these compiles. The existing N75140 native instruction-trace check retains its original limited scope.
-
-## Full-entry external carriers and operations remain unbound
-
-`lean75002` stops at the absent `PVUCEntry.TypesExternal.olean`. This is the explicit missing faithful-model dependency, classified as pre-elaboration environment failure. The 25 type and 119 operation declarations remain only in their original generated **uninstalled axiom templates** (`external-boundaries.json`). No full-entry Types/Funs object or standard-axioms result exists. Compiling the decoder's type file does not satisfy this gate.
-
-## An external formatter alone cannot repair erased arguments
-
-Final source `wallet.rs:42` opens `format!("/proc/self/fd/{fd}")` after the public `fd > 2` guard. Emitted full-entry `Funs.lean:1827`–1839 calls builtin `core.fmt.rt.Argument.new_display` and `core.fmt.Arguments.new` before the opaque `alloc.fmt.format`. The authoritative formatting profile maps both argument carriers to Unit and discards their operands. Observable JSON printing at lines 3886–3892 reaches the same erasure mechanism.
-
-`lean75003` compiles `PV_UC_FormattingObstruction.fdArguments_equal` and `no_faithful_fd_formatter`. These show that the emitted argument construction is identical for any two values, and no pure external formatter receiving only those arguments can return both distinct required FD paths. Printed axioms are exactly `propext`, `Classical.choice`, `Quot.sound`; the final raw-walk audit is separate. These are diagnostic negative results about the existing model, **not credited formatter source laws or privacy-premise removals**. No rejecting-writer instance or unreachability assumption is invented.
-
-N75147 validates the exact reached Rust formatting expression under optimized Rust 1.94.1: input 3 gives `/proc/self/fd/3`, input 4 gives `/proc/self/fd/4`. It is finite expression validation, not whole-function equivalence, FD custody validation or a D525 wire-format mismatch. N75146 had stopped before compilation because the own diagnostic wrapper omitted rustc's PATH; N75147 records the corrected absolute tool path and reuses the exact retained partial directory. Both receipts remain.
-
-The no-go result rules out filling just `alloc.fmt.format` with a faithful definition under this erased interface. `(fmt-1)` still requires faithful writer/error-state semantics on observable formatting, or approved source removal. Neither the standard-axioms diagnostic nor native output equality discharges native I/O, JSON, hashing, prover, observer or whole-client side-channel associations.
-
-The next formal deliverable is a source-faithful resolution of the shift/library typing mismatch and the formatting information loss, followed by faithful external bindings and a new full-entry compile. Any client/source or artifact change must reassess the covered frozen native gates. Existing native successes are not replayed unchanged, and no T field or endpoint hypothesis is added to bypass these gaps.
+Native I/O, failure/allocator behavior, real RunJoin, E1/E2, V370/V371 and whole-client L1/L2/L3 remain P obligations. No premise removed/added/weakened; T stays entropy_law, entropy_kernel, observation. Timing preparation is complete; execution is exclusively deferred to the lead in the named window.
