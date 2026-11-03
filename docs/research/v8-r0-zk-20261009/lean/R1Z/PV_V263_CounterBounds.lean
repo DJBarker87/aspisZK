@@ -40,6 +40,11 @@ theorem actual_counter_bound (round : Usize) (valid : round.val<10) (k completed
     completed+1≤896 ∧ (completed : Int)+1≤2^31-1 :=
   increment_safe _ k completed (actual_count_bound round valid) more
 
+theorem progress (n k i completed : Nat)
+    (lower : start n k≤i) (remaining : i<start n k+width n k)
+    (counted : completed=i-start n k) : completed<width n k := by omega
+
+#print axioms progress
 #print axioms actual_count_bound
 #print axioms actual_counter_bound
 #print axioms width_bound
