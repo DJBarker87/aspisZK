@@ -1,0 +1,56 @@
+{"attempt": "NEU_K006", "exit_status": 1, "wall_seconds": 2.0703314510174096, "peak_rss_kib": "358496", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `log::sol_log_compute_units`
+ --> programs/r1-cost-probe/src/lib.rs:5:133
+  |
+5 | ...:Pubkey,program_error::ProgramError,hash::hashv,msg,log::sol_log_compute_units};
+  |                                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `hash::hashv` and `msg`
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:46:5
+   |
+46 |     hash::hashv, msg, program, program_error::ProgramError, pubkey::Pubkey, sysvar::Sysvar,
+   |     ^^^^^^^^^^^  ^^^
+
+warning: use of deprecated module `solana_program::bpf_loader_upgradeable`: Use solana-loader-v3-interface instead
+  --> programs/r1-cost-probe/src/r1_pool_adapter.rs:45:32
+   |
+45 |     account_info::AccountInfo, bpf_loader_upgradeable, clock::Clock, entrypoint::ProgramResult,
+   |                                ^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(deprecated)]` on by default
+
+error[E0308]: mismatched types
+  --> programs/r1-cost-probe/src/NEU_emit.rs:10:12
+   |
+10 |     output(&encoded,f);
+   |     ------ ^^^^^^^^ expected `&[u8]`, found `&&[u8; 792]`
+   |     |
+   |     arguments to this function are incorrect
+   |
+   = note: expected reference `&[u8]`
+              found reference `&&[u8; 792]`
+note: function defined here
+  --> programs/r1-cost-probe/src/NEU_emit.rs:3:4
+   |
+ 3 | fn output(bytes:&[u8],f:&mut Frame){assert!(bytes.len()==792);assert!(core::ptr::eq(bytes.as_ptr(),f.ptr));f.calls+=1;}
+   |    ^^^^^^ -----------
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `aspis-r1-cost-probe-program` (lib) due to 1 previous error; 7 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-re422062cbfde45d8adee44cfa4398814.scope; invocation ID: 85a635bff39b42e48be7efaf52a624bf

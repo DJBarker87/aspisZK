@@ -47,3 +47,32 @@ value observation timed out at90s (receipt records93.432636s wall,
 on a borrowed792-byte carrier and proves exact pointer/length of the syscall
 argument; arbitrary byte-value transport follows from the same immutable slice,
 not a second owned copy. Its matched changed-pointer control is required.
+
+## Emission suffix and explicit effect obstruction
+
+K007's borrowed combined suffix also timed out (93.295992s,425028KiB,swap0).
+K006 was an excluded own double-reference type error. K008 isolated only the
+four-byte magic/length guard and timed out (92.584791s,512112KiB,swap0).
+No shape is retried unchanged, and no timeout increases. K009/K010 separately
+prove/falsify exact original borrowed792-byte pointer/length passed to the
+runtime output oracle and exactly one call/Ok return. This is the actual send
+cut; no runtime value or coherent op53 interpretation is inferred.
+
+`NEU_EmitModel.result_state_effects` (L004) preserves full Result, explicit
+return-data state and ordered events by substituting the actual two children
+at precisely the constructed record. Its only non-root premises are the
+EXPLICIT `BindingBridge` and `EncoderBridge`, each universally quantified only
+at `derived s`; these are still-open leaf bridges, not discharged facts. This
+is a conditional MODEL theorem, not native root closure. Full statement is in
+NEU_EmitModel.lean and the successful receipt snapshot. Axioms are propext,
+Classical.choice,Quot.sound. Failed elaborations L002/L003 earn no credit.
+
+`NEU_EmitFrame.event_frame_changed` (L006) proves that every returning syscall
+adds an event and hence cannot have an empty event frame. This formally records
+the op53 obstruction without silently erasing the return-data effect. Axioms:
+propext,Quot.sound. L005's own simplifier-name failure is excluded.
+
+The request campaign treats the timed-out native magic comparison and the
+three unproved zero-comparison replies as explicit arbitrary Boolean leaves.
+It claims only the remaining scalar control, exact suffix borrow and individual
+copy cuts. No model equality, arbitrary oracle or support pair closes a root.

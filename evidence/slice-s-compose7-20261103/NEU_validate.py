@@ -5,7 +5,7 @@ sys.dont_write_bytecode=True
 E=Path(__file__).resolve().parent;R=E.parent.parent
 sys.path.insert(0,str(E.parent/'slice-s-compose6-20261102'))
 import NEQ_validate as predecessor
-from NEQ_inputs import read
+from NEU_inputs import read
 BASE_CERTIFICATE=predecessor.certificate
 inherited=predecessor.inherited
 
@@ -32,8 +32,8 @@ def summary(out):
 
 def main():
  a=argparse.ArgumentParser();a.add_argument('--write',type=Path);args=a.parse_args()
- packet=read(E.parent/'slice-s-compose6-20261102/NEQ_LEDGER_DELTA.json')
- reviewed=read(E.parent/'slice-s-compose6-20261102/NEQ_REVIEWED_CERTIFICATES.json')
+ packet=read(E/'NEU_LEDGER_DELTA.json')
+ reviewed=read(E/'NEU_REVIEWED_CERTIFICATES.json')
  out=compose(read(R/'evidence/native-ledger3-20261029/NDT_LEDGER.json'),packet,reviewed)
  result=summary(out)
  if args.write:args.write.write_text(json.dumps(result,indent=1)+'\n')

@@ -6,8 +6,8 @@ class Certificates(unittest.TestCase):
  @classmethod
  def setUpClass(cls):
   cls.base=v.read(v.R/'evidence/native-ledger3-20261029/NDT_LEDGER.json')
-  cls.packet=v.read(v.E.parent/'slice-s-compose6-20261102/NEQ_LEDGER_DELTA.json')
-  cls.reviewed=v.read(v.E.parent/'slice-s-compose6-20261102/NEQ_REVIEWED_CERTIFICATES.json')
+  cls.packet=v.read(v.E/'NEU_LEDGER_DELTA.json')
+  cls.reviewed=v.read(v.E/'NEU_REVIEWED_CERTIFICATES.json')
   cls.function='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs::encode_pool_v1_pair_forest_terminal_statement_v1'
   cls.edge=next(e for e,c in cls.packet['edges'].items() if e.startswith(cls.function+' -> ') and c.get('id','').startswith('NEQ_') and c['kind']=='call-domain')
  def test_missing_certificate(self):

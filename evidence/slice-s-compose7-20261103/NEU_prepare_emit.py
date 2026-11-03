@@ -28,7 +28,7 @@ else:
 fn suffix_slice(){let encoded:[u8;792]=kani::any();let j:usize=kani::any();kani::assume(j<792);let before:u8=kani::any();let mut f=Frame{ptr:core::ptr::null(),j,before,out:before,calls:0};let valid=encoded[0]==b'P'&&encoded[1]==b'F'&&encoded[2]==b'R'&&encoded[3]==b'1';let r=suffix(encoded,&mut f);assert!(r==if valid{Ok(())}else{Err(ProgramError::InvalidInstructionData)});assert!(f.calls==if valid{1}else{0});assert!(f.out==if valid{encoded[j] @BAD@}else{before});}
 '''.replace('@BAD@','^1' if mode=='negative' else '')
 if shape=='suffix_borrow':
- native=native.replace('encoded:[u8;792]','encoded:&[u8;792]')
+ native=native.replace('encoded:[u8;792]','encoded:&[u8;792]').replace('output(&encoded,f)','output(encoded,f)')
  body='use super::*;\nstruct Frame{ptr:*const u8,calls:u8}\nfn output(bytes:&[u8],f:&mut Frame){assert!(bytes.len()==792);assert!(core::ptr::eq(bytes.as_ptr(),f.ptr));f.calls+=1;}\n'+native+'''
 #[kani::proof]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NEU_KMX::KMX_copy_nonoverlapping)]

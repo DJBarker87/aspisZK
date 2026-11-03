@@ -1,0 +1,7 @@
+{
+ "shape": "send",
+ "mode": "negative",
+ "frozen_body": "fn emit_result(statement: &PoolV1PairForestTerminalStatementV1) -> ProgramResult {\n    let result = PoolV1PairForestTerminalResultV1 {\n        transition_kind: statement.transition_kind(),\n        master_account: statement.common().master_account,\n        selected_lane_account: statement.common().selected_lane_account,\n        output_lane: statement.common().output_lane,\n        nullifier: *statement.nullifier(),\n        verified_afterstate: statement.common().lane_transition.candidate_afterstate,\n    };\n    validate_pool_v1_pair_forest_terminal_result_against_statement_v1(statement, &result)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    let encoded = encode_pool_v1_pair_forest_terminal_result_v1(&result)\n        .map_err(|_| ProgramError::InvalidInstructionData)?;\n    if encoded.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES\n        || encoded[..4] != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC\n    {\n        return Err(ProgramError::InvalidInstructionData);\n    }\n    program::set_return_data(&encoded);\n    Ok(())\n}",
+ "domain": "every typed borrowed792-byte encoded buffer",
+ "classification": "separate actual suffix guard and runtime argument carrier; no runtime syscall value or op53 instance"
+}
