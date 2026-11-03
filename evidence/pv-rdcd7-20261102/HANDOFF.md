@@ -144,3 +144,14 @@ including dynamic consumer-root dependency fingerprint and helper source pin.
 NEPDriver remains runtime-only, exclude it from object-required coherence.
 Focused90798 now queries actual native_window rather than only owned cm_window.
 Supplemental textual reference scan97733 is5/9 complete.
+
+## Session 2 recovery
+
+Resumed after lead stopped the stalled session. First command was git status.
+RESUME-SESSION2.json reconciles every local receipt with all host attempt
+directories and exact host time/output/barrier files: identical, no live scope
+or task process. 90700–90713 and N90800–N90801 spent; 14/60 Lean (13 pass,
+1 elaboration failure),2/10 native (1 pass,1 preflight failure). Next90714;
+46 Lean/8 native remain. All previously untracked evidence committed b90bdbdb4a.
+Driver now resuming90714 through ParserTransport; do not duplicate it.
+The inherited prompt-pv-rdcd3.txt remains missing; no new scope/rule inferred.
