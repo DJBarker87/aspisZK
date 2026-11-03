@@ -5,8 +5,14 @@ open Lean Elab Command
 unsafe def main (args : List String) : IO UInt32 := do
   enableInitializersExecution
   let mode := "uc5"
-  let modules := #[`PVUC5Entry.Funs]
-  let roots := #[`PV_UC5_Entry.main, `PV_UC5_Entry.wallet.decode_wallet_record]
+  let modules := #[`PVUC5Entry.Funs, `PV_UC5_PublicFormatting]
+  let roots := #[`PV_UC5_Entry.main, `PV_UC5_Entry.wallet.decode_wallet_record,
+    `PV_UC5_PublicFormatting.walletPath_same_public,
+    `PV_UC5_PublicFormatting.stdout_recomputable,
+    `PV_UC5_PublicFormatting.pubkey_recomputable,
+    `PV_UC5_PublicFormatting.extracted_fd_formatter_public,
+    `PV_UC5_PublicFormatting.extracted_json_formatter_recomputable,
+    `PV_UC5_PublicFormatting.extracted_pubkey_formatter_recomputable]
   let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
     {} (loadExts := true) (level := .private)
   let ctx : Command.Context := {
