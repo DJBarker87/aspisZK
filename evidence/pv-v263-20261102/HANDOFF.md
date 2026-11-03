@@ -1,123 +1,91 @@
-# V263 D572 context checkpoint — target not yet established
+# V263 D575 checkpoint — target not yet established
 
-Only writer; same sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
-branch codex/pv-runjoin-20261026. Resume entry8ecf771f50; latest proof-source
-headce0c2b814a. Evidence checkpoint commit follows; no push/merge.
-Read SOURCE-BINDING-D572.md and continuation-summary-D572.json first.
-The user's three priorities remain:(1) COMPLETE deployed source binding;
-(2) INSTALL stateful op257 at ACTUAL opsNative;(3) actual reached success in
-resource-granting world, then Nonempty P. NONE of these three is complete.
-Never report generic candidate success, capture equations or finite native
-checks as actual reached success. Do not add callback-totality to P/privacy.
+Same sparse worktree /Users/dominic/ZK/.worktrees/pv-runjoin,
+branch codex/pv-runjoin-20261026; only writer. Entry e51b510e58;
+latest proof-source revision304f4c6ff2. Evidence checkpoint commit follows.
+No push/merge. Read SOURCE-BINDING-D575.md and continuation-summary-D575.json.
+All three priorities STILL OPEN: complete native binding, actual opsNative
+installation, actual reached success. Nonempty P is UNPROVED. Never promote
+store refinements, resource grants or MIR checks to actual capture success.
 
-## New accepted source work
+## New accepted work
 
-Seven new PV_V263_ modules (accepted IDs):
-VectorDrain79935,VecSpine79938,AppendBinding79939,CollectBinding79942,
-Captures79944,BufferLoop79946,BufferFamily79947. Old proved modules unchanged.
+Eight NEW modules; all previously accepted modules unchanged:
+RetainedMethods79948,RetainedSpine79952,RetainedFacts79954,
+TrustedStores79956,OwnedDrain79957,OwnedPush79958,CounterBounds79960,
+RetainedErase79962. Receipts retain original rejected sources/logs as well.
 
-VecSpine is a separate Vec-valued source port: item/handle/caught/pool/output
-stores, draining appends and explicit IntoIter/next/iteratorDrop/closureDrop/
-scopeDrop hooks. It executes real Task and callback computations, not an OS
-worker-output oracle. Its arbitrary method/lifetime runtime is NOT a native
-codec. In particular append's empty Vec.new donor still forgets capacity.
-Do not promote this port to complete native association.
+RetainedSpine now carries Buffer in EVERY outer store and delayed Task body,
+and uses BufferFamily internally. Both append owners retain reservation lower
+bounds; no donor reservation is discarded with an empty Vec.new replacement.
+RetainedMethods/RetainedErase prove COMPLETE Q erasure for append/push/collector
+stores on their length domains: every outcome, post-world and events. This is
+not whole-spine erasure or native association. Runtime method/lifecycle hooks
+are still unbound; reserved push/append cannot arbitrarily fail natively.
 
-VectorDrain.Buffer carries an ACTUAL Vec plus a retained reservation LOWER
-BOUND. drain returns both owners, preserving both reservations and emptying
-the donor. AppendBinding proves native wrapped subtraction has no wrap,
-reserve guard is false on sufficient room, length addition safe and all stores.
-Actual physical allocation capacity/heap/deallocation correspondence remains.
+TrustedStores separates initialized local_len from borrowed published Vec len;
+only SetLenOnDrop publishes it on normal return. Abort does not run invented
+unwind cleanup. OwnedDrain/OwnedPush retain pointer/raw capacity/layout through
+reserved moves/stores, prove no physical growth despite lower-bound capacity,
+and retain the ORIGINAL donor release descriptor after length becomes0.
+Actual byte heap, allocation validity/disjointness/type layouts and release
+codec are still required. Owner records are not themselves native heap proofs.
 
-CollectBinding.stores proves COMPLETE RUN equality (every outcome,post-world,
-events) between Vec initialized stores and stateful list traversal, with only
-an initial room bound. It assumes no successful callback or output vector.
-BufferLoop constructs reserved accumulated stores and proves erasure equality
-to VectorLoop for COMPLETE Q computations; BufferFamily.run/erasure connect
-the actual inner width/capacity/range site. This capacity-carrying inner loop
-is NOT yet substituted into the outer VecSpine. These are source-store
-refinements, not further generic granting-success wrappers.
+Twelve complete pinned std bodies checked by store-source-binding.py supplement
+D572's six append bodies. LOCAL structural store/drop argument only; complete
+worker binding=false, actual op257 installed=false, reached success=false.
 
-Captures.commitment reifies (domain,messages,variant,lanes), then source lane
-indexing and encode_commitment_lane with FULL Result. Captures.sumcheck reifies
-(oracle,point,round,assignments), then evaluate_assignment with FULL Result.
-pool_range/pool_indices prove the OUTER n=16 gives exactly one host family[k].
-These equations do not supply totality, native callback lifting or point claims.
+N90124 confirms the frozen no-trace helper infers completed:i32; trace-enabled
+counterpart infers usize. Optimized rustc1.94.1 MIR, frozen helpers verbatim,
+no native callback execution/full-crate credit. Original MIR and receipts kept.
+CounterBounds proves from ACTUAL valid-round count equations:count≤14336,
+width≤896, every reached increment fits signed32. Commitment widths≤2/1.
+This corrects proposed source fidelity, not a shipped failure or a proof of
+unbounded source equivalence. V370 remains at D381/D386.
 
-Nine Rust1.94.1 std source files and hashes are committed. vec-source-binding.py
-checks six COMPLETE reserved append/reserve/needs_to_grow bodies by token
-identity against expected source controls; scalar/store models are named.
-It checks exact usize TrustedStep macro, Range/Map TrustedLen and selected
-from_iter capacity-before-callback branch. This is a local STRUCTURAL argument,
-not b3p6-1 extraction identity or machine-code proof. Its JSON deliberately
-says complete_worker_binding=false,op257_installed=false,reached_success=false.
-Old source-binding-audit.py still checks8 frozen files/29 old source/control
-rows and fails closed as INCOMPLETE; that evidence is not superseded credit.
+## Exact next deliverable
 
-N90123: optimized rustc1.94.1,panic=abort,overflow/debug off,isolated harness
-including frozen helpers verbatim.221 finite checks over every recorded count
-confirm append order, donor-emptying/reservation/pointer retention,destination
-reservation/pointer retention,inner Err and ZST behaviour. Not actual captured
-commitment/sumcheck execution,not full-crate feature execution,not universal
-native refinement. Cross-job ID scan was recovered AFTER launch (ordering
-lapse retained); no collision found. Admission itself allowed:true+exit0 in
-same shell as launch. No unchanged rerun; original stdout/stderr/results kept.
+1. Complete deployed worker association: actual heap/layout/lifetime lowering,
+   growing handles, IntoIter/closure/handle/scope drops, TLS, join-late native
+   schedule, EVH request/answer/event codec. Do not mark local store facts as
+   complete source binding or give reserved stores arbitrary allocation faults.
+2. Install at ACTUAL opsNative and thread post-world through ACTUAL capture.
+   NativeBoundary.retained still holds:op257 residual; Sequential64.worker
+   reuses w. Result(Vec T) has no fault/post-world channel. Use native stateful
+   reification with PARTIAL source projection; never fabricate .fail/.div or
+   fallback source answers for native faults/exhaustion.
+3. Discharge exact captured C1/C2 encoder and actual SemanticOracle callback
+   laws, then granting actual execution and Nonempty P. Rows and actual reached
+   terminal success remain needed; op227 equality/capture equations are not
+   totality. No constant oracle, zero claims, arbitrary vectors or endpoint
+   callback-success premise. Existing Captures and NativeAssignment72 reusable.
 
-## Exact next work — binding before installation credit
+V400-257-entry/layout/lowering/callback/answer-timing,V370,D381/D386 retained P
+obligations. V183 SUSPENDED(K-3). N90122 exhaustion SIGABRT evidence unchanged,
+not rerun. Three TrustItems,seven links,observer,simulator,source/release pins
+unchanged. V263 OPEN→OPEN;Nonempty P unproved→unproved;zero premises added or
+removed. Skeleton consistency:reduced to non-emptiness. No key/fund/SBF/ELF work.
 
-1. In NEW modules (accepted modules must remain unchanged), substitute
-   BufferFamily plus reservation-preserving drains into OUTER pool/host stores.
-   Bind source capacity/allocation ownership and physical metadata; do not use
-   Vec.new to represent a donor that still owns a reservation before drop.
-   Buffer's capacity is a lower bound, not an invented physical exact capacity.
-2. Finish pinned collect SetLenOnDrop/raw stores and every native iterator,
-   handle,closure,scope/drop hook. Bind TLS lifetimes, EVH codec and a realizable
-   join-late schedule. Reserved push/append cannot gain arbitrary allocation
-   failure branches after adequate reservation; lower method events faithfully.
-3. Install the COMPLETE source-bound worker at ACTUAL opsNative and thread its
-   post-world through NativeControl. NativeBoundary.retained still applies:
-   op257 is residual. Sequential64.worker still reuses w. Native faults and
-   finite exhaustion have NO source Result projection; never fabricate one.
-4. Discharge bounded callback laws from actual capture provenance/source laws.
-   Commitment C1 count27(lanes0..25,28),C2 count2(lanes26,27). Sumcheck captures
-   actual SemanticOracle and round0..9/count28*2^(9-round),not a constant oracle.
-   NativeAssignment72.semantic remains reusable but needs actual Rows and exact
-   reached terminal success from op227/provenance. OracleBridge38 equality is
-   not terminal success. No zero claims or arbitrary successful vectors.
-5. Reify complete actual successful capture in granting world,then Nonempty P.
+## Budgets and validation
 
-Rdea-2 retains exhaustion/panic=abort: original N90122 SIGABRT/stderr unchanged
-and not rerun. V400-257-entry/layout/lowering/callback/answer-timing,V370 and
-D381/D386 remain named P obligations,not new T fields. V183 SUSPENDED(K-3).
-Three TrustItems,all seven links,observer,simulator,frozen source/release pins
-and earlier removals unchanged. V263 OPEN→OPEN;Nonempty P unproved→unproved;
-zero rows/premises removed or added. Skeleton consistency:reduced to non-emptiness.
+63/97 Lean charged:35 accepted/28 rejected;34 LEFT;NEXT79963.
+Audits79997–79999 UNUSED. This continuation15 charged:8 accepted/7 rejected.
+Rejected49,50,51,53,55,59,61 replaced by changed sources; no unchanged reruns.
+5/20 native charged;15 LEFT;NEXT N90125;0 Kani.
 
-## Budgets, evidence, cache
+Lean cumulative wall150.12s,peak4,561,240,064bytes,swap0. N90124 wall0.66s,
+peak138,969,088bytes,swap0. One6G/8G/no-swap/tasks64 scope,Lean-M7000;
+Rust optimized. Three uncharged quiet-window refusals before79952; same ID
+retried after full180s; lead released marker early. This job never edited it.
+Each admission allowed:true AND exit0 in launch shell. Cross-job ID scans
+BEFORE all new launches. No cap increase/memory kill/full frozen replay.
 
-48/97 Lean charged:27 accepted,21 rejected;49 left. NEXT79948;
-audits79997–79999 UNUSED. This continuation14 charged:7 accepted,7 rejected.
-Rejected34,36,37,40,41,43,45 had source/elaboration errors; changed-source
-replacements retained. No unchanged failed source rerun. Original logs and
-source hashes/revisions retained by receipts and git commits.
-4/20 native charged;16 left;NEXT N90124.0 Kani. No SBF/ELF/key/fund work.
-
-Cumulative Lean wall115.41s,peak4,561,240,064bytes,swap0. Each attempt own
-6G/8G/no-swap/tasks64 scope,Lean-M7000;one scope at a time,no memory kills,
-cap increases,barrier refusals or full manifest replay. Accepted #print axioms
-are SUMMARY-BASED and standard only;not raw/NEP/coherence/release audit.
-SUMMARY.json,continuation-summary-D572.json,receipt-*.json,modules-*.json,
-original-module-logs.json.xz and native receipts record exact targets/exits/
-wall/RSS/swap/revisions/hashes/fingerprints and original axioms/errors.
-Failed-source guard unchanged sha1bc93e7f9e67723cc2f410ed3be5453a2faf00f83541ee5945275e39fb73da7d.
-
-Reuse runjoin32-lean objects. Final changed-source preflight:4292 project
-objects,9639 direct dependency fingerprints,5673 external objects,5438 IR
-companions all match.9965 namespace resolutions match,no links. Accepted
-source/object and no-live-own-scope reconciliation passed. No EVH/NDR cohort
-mixing. Seven new Lean sources passed nested-comment-aware forbidden-token /
-large-evaluation scan. All validation inputs committed;no file over20MB.
-
-This is an INCOMPLETE CONTEXT CHECKPOINT,not budget exhaustion or a proof of
-impossibility. Next deliverable is the complete source binding and actual
-installation/capture; no new premise may conceal what remains unproved.
+4300 project objects,9649 dependency fingerprints,5673 external objects,
+5438 IR companions match;9973 namespace resolutions match,zero links/copies.
+Accepted source/object/no-live-scope reconciliation passed. Eight-source scan
+passed; all inputs committed, no file>20MB. Original logs archive and receipts
+record target/status/wall/RSS/swap/revisions/hashes/axioms/errors.
+#print axioms is SUMMARY-BASED and standard only; no NEP/raw/coherence/release
+audit claimed. Failed-source guard unchanged. Reuse runjoin32-lean objects;
+no EVH/NDR cohort mixing. This is an INCOMPLETE CONTEXT CHECKPOINT, not a
+completion, budget-exhaustion or impossibility report.
