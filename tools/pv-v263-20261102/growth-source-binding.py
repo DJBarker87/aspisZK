@@ -3,8 +3,9 @@ from pathlib import Path
 import hashlib,json,re,subprocess,sys
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-v263-20261102';STD=E/'inputs/std-1.94.1'
 sha=lambda b:hashlib.sha256(b).hexdigest()
-for pin in json.loads((E/'std-vec-source-pins-D572.json').read_text())['files']:
- assert sha((R/pin['path']).read_bytes())==pin['sha256'],pin['path']
+for manifest in ['std-vec-source-pins-D572.json','handle-std-source-pins.json']:
+ for pin in json.loads((E/manifest).read_text())['files']:
+  assert sha((R/pin['path']).read_bytes())==pin['sha256'],pin['path']
 def tokens(s):
  out=[];i=0
  while i<len(s):
@@ -96,12 +97,45 @@ body('''const fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout,
 }''',['RawGrowth.plan checks byte isize bound and retains overflow',
  'RawGrowth.byte_bound_implies_cap: explicit usize cap check redundant for nonzero element size'],
  ['Layout::repeat body/stride law and native validity/alignment remain required before whole binding'])
+def layout_body(expected,correspondence,remaining):
+ path=STD/'core/src/alloc/layout.rs';ts=tokens(path.read_text());want=tokens(expected)
+ hits=[i for i in range(len(ts)) if ts[i:i+len(want)]==want]
+ assert len(hits)==1,(len(hits),expected[:80])
+ rows.append(dict(path=str(path.relative_to(R)),full_body=expected,token_sha256=sha('\0'.join(want).encode()),complete_body_checked=True,correspondence=correspondence,remaining=remaining))
+layout_body('''pub const fn repeat(&self, n: usize) -> Result<(Self, usize), LayoutError> {
+ let padded = self.pad_to_align();
+ if let Ok(repeated) = padded.repeat_packed(n) {Ok((repeated, padded.size()))}
+ else {Err(LayoutError)}
+}''',['repeat uses padded type stride before multiplication'],['type-size padding/bit-rounding association'])
+layout_body('''pub const fn repeat_packed(&self, n: usize) -> Result<Self, LayoutError> {
+ if let Some(size) = self.size.checked_mul(n) {
+ Layout::from_size_alignment(size, self.align)
+ } else {Err(LayoutError)}
+}''',['checked multiplication retains overflow; raw growth checks product before request'],['bitvector/checked arithmetic under compiler boundary V370'])
+layout_body('''const fn from_size_alignment(size: usize, align: Alignment) -> Result<Self, LayoutError> {
+ if size > Self::max_size_for_align(align) {return Err(LayoutError);}
+ Ok(Layout {size, align})
+}''',['LayoutBounds.array_limit relates exact alignment bound to RawGrowth byte bound under explicit valid-type premises'],['actual reached type size/alignment and alignment-divides-word-size facts'])
+layout_body('''const fn max_size_for_align(align: Alignment) -> usize {
+ unsafe {unchecked_sub(isize::MAX as usize + 1, align.as_usize())}
+}''',['exact bound is isize::MAX+1-align, not simply isize::MAX on arbitrary layouts',
+ 'LayoutBounds.aligned_limit supplies guarded arithmetic equivalence for aligned type strides'],['native alignment invariants'])
+layout_body('''pub const fn pad_to_align(&self) -> Layout {
+ let new_size = self.size_rounded_up_to_custom_align(self.align);
+ unsafe {Layout::from_size_align_unchecked(new_size, self.align())}
+}''',['native type size is a multiple of native type alignment; otherwise padding must be retained'],['native type-layout/padding law; no arbitrary Layout equivalence claimed'])
+layout_body('''const fn size_rounded_up_to_custom_align(&self, align: Alignment) -> usize {
+ unsafe {
+ let align_m1 = unchecked_sub(align.as_usize(), 1);
+ unchecked_add(self.size, align_m1) & !align_m1
+ }
+}''',['retains exact pinned bit-rounding body as required source boundary'],['bit-rounding semantics and actual valid type-layout premises remain; no completed native byte-heap binding'])
 if '--bodies-only' in sys.argv:
- print('seven complete pinned growth bodies checked; proof/native association not checked')
+ print('thirteen complete pinned growth/layout bodies checked; proof/native association not checked')
  raise SystemExit(0)
 accepted={v['module']:v for p in E.glob('modules-*.json') for v in json.loads(p.read_text()) if v['accepted']}
 models={}
-for m in ['RawGrowth','GrowingPush','GrowingFacts','GrowthSchedule']:
+for m in ['RawGrowth','GrowingPush','GrowingFacts','GrowthSchedule','LayoutBounds']:
  q=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_V263_'+m+'.lean')
  h=sha(q.read_bytes());assert accepted['R1Z.PV_V263_'+m]['source_sha256']==h,m
  models[m]=h
@@ -119,4 +153,4 @@ out=dict(script_sha256=sha(Path(__file__).read_bytes()),
  'native schedule, thread/TLS/scope, EVH codec',
  'actual opsNative/stateful capture and actual callback laws'])
 (E/'growth-source-binding-continuation.json').write_text(json.dumps(out,indent=2)+'\n')
-print('seven complete growth bodies; four accepted model sources; finite native differential/control checked; whole binding OPEN')
+print('thirteen complete growth/layout bodies; five accepted model sources; finite native differential/control checked; whole binding OPEN')
