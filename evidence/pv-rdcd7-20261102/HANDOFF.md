@@ -155,3 +155,15 @@ or task process. 90700–90713 and N90800–N90801 spent; 14/60 Lean (13 pass,
 46 Lean/8 native remain. All previously untracked evidence committed b90bdbdb4a.
 Driver now resuming90714 through ParserTransport; do not duplicate it.
 The inherited prompt-pv-rdcd3.txt remains missing; no new scope/rule inferred.
+
+## Session 2 final checkpoint — writer confirmation required
+
+Read SESSION2-HANDOFF.md first. Unexpected overlapping commita520a3515c appeared
+at22:47:40 during the resumed session; user clarification is pending. Driver
+PID72404 was stopped before90716 retry. No live host scope;90716 is UNSPENT
+(pre-upload reservation refusal only). Spent90700–90715:16/60 Lean (13pass,
+3elaboration failures);2/10 native;0Kani. Remaining44 Lean/8 native. Receipts,
+refreshed live-ref census and complete checkpoint committed2ec7e0e75c.
+The source-resolution plan is stale after unexpected ParserComponent import
+changes. Refresh and stage it only after writer coordination, then compile
+ParserComponent before ParserTransport. No V197 restoration/release claim yet.
