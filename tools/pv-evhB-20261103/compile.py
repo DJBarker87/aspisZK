@@ -5,7 +5,7 @@ E=Path('evidence/pv-evhB-20261103'); H='/home/dombarker/project-offloads/codex-p
 a=int(sys.argv[1]);assert 91200<=a<=91299
 assert not (E/f'submission-{a}.json').exists()
 charged=[json.loads(p.read_text()) for p in E.glob('receipt-*.json')]
-assert len([r for r in charged if r['attempt']<=91296])<97
+assert len(charged)<97
 module=sys.argv[2];assert module.startswith('PV_EVHB_')
 if a>=91297: assert module in ['PV_EVHB_Audit','PV_EVHB_Replay']
 else: assert a==91200+len([r for r in charged if r['attempt']<=91296])
