@@ -14,7 +14,8 @@ def Covers (s : Store) (p : Nat) : Prop := s.address ≤ p ∧ p < s.address+s.s
 def Outside (s : Store) (p : Nat) : Prop := p < s.address ∨ s.address+s.size ≤ p
 
 def put (s : Store) (w : State) : State :=
-  {w with memory := fun p => if Covers s p then s.value (p-s.address) else w.memory p}
+  {w with memory := fun p => if s.address ≤ p ∧ p < s.address+s.size
+    then s.value (p-s.address) else w.memory p}
 
 def run : List Store → State → State
   | [], w => w
@@ -23,12 +24,12 @@ def run : List Store → State → State
 theorem inside (s : Store) (w : State) (i : Nat) (h : i < s.size) :
     (put s w).memory (s.address+i) = s.value i := by
   simp only [put]
-  rw [if_pos (by unfold Covers; omega),Nat.add_sub_cancel_left]
+  rw [if_pos (by omega),Nat.add_sub_cancel_left]
 
 theorem outside (s : Store) (w : State) (p : Nat) (h : Outside s p) :
     (put s w).memory p = w.memory p := by
   simp only [put]
-  rw [if_neg (by unfold Covers Outside at *; omega)]
+  rw [if_neg (by unfold Outside at h; omega)]
 
 theorem run_append (a b : List Store) (w : State) :
     run (a++b) w = run b (run a w) := by
