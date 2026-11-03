@@ -1,0 +1,72 @@
+{
+  "evidence_class": "Read-only actual installation frontier; no projection instance supplied",
+  "inputs": [
+    {
+      "path": "lean/PV_EVH_RuntimeBinding.lean",
+      "sha256": "612faaf72fd4e95811ae73e59ba4ab6da653d1debff9e7f3690884aef3392037"
+    },
+    {
+      "path": "lean/PV_EVH_Deployed.lean",
+      "sha256": "19b6662b5e501f8a07a2e439e88b805179ebf23708febc0783e8c18b481192f8"
+    },
+    {
+      "path": "lean/PV_RJ4IDB_NativeTrace.lean",
+      "sha256": "82186c6b4f371a0e0447e98d0878195e9c894dbc42696b1d92e6219e2f36ef36"
+    },
+    {
+      "path": "lean/PV_EVH_NativeOperatorProver.lean",
+      "sha256": "0825125c2ebdf0b38893067b7c2bc15c0bf62e6c43e45da3f1ef1f44a91f5994"
+    },
+    {
+      "path": "lean/PV_EVH_NativeEntropyIteration.lean",
+      "sha256": "4a9f46eaa3684c04f4621ae018d01f6d28ffe14837981a3648910b989ed38495"
+    }
+  ],
+  "fields": [
+    {
+      "field": "native",
+      "current_open_input": "native_OPEN",
+      "required_projection": "NativeTrace containing actualWorldRun.events and a proved faithful native-terminal conversion of actualWorldRun.outcome",
+      "required_source_evidence": "Full NativeTrace events and native terminal must come from the reached full source/world run on the proof-account entry; keep all failure/fault/exhaustion prefixes and D520 client parts.",
+      "installed": false
+    },
+    {
+      "field": "fileTrace",
+      "current_open_input": "fileTrace_OPEN",
+      "required_projection": "PV_RJ4IDB.nativeFiles run.events",
+      "required_source_evidence": "First prove the unchanged nonce-store source interpretation is installed in the same full run, then retain client proof/statement/other file operations and all partial deliveries/sync/failure prefixes, in order.",
+      "installed": false
+    },
+    {
+      "field": "countTrace",
+      "current_open_input": "countTrace_OPEN",
+      "required_projection": "(PV_RJ4IDB.nativeCounts run.events, PV_RJ4IDB.nativeRejections run.events)",
+      "required_source_evidence": "Use the same advancing attempt/retry states as the source run; include aborted/rejected attempts and client events. No Result-decoded count or per-branch reset.",
+      "installed": false
+    },
+    {
+      "field": "timeTrace",
+      "current_open_input": "timeTrace_OPEN",
+      "required_projection": "PV_RJ4IDB.nativeTimes run.events",
+      "required_source_evidence": "Install actual reached clock and timing serialization/error events, with D159/D166 L1 and resource-failure timing obligations retained. No zero/empty replacement or inferred witness-independence.",
+      "installed": false
+    },
+    {
+      "field": "oraclePrefix",
+      "current_open_input": "oraclePrefix_OPEN",
+      "required_projection": "PV_RJ4IDB.nativeOracle run.events",
+      "required_source_evidence": "Keep exact query order, duplicate addresses, adaptive answers and every failure/retry prefix from the SAME full run, including D520/U/D524 client-side inputs.",
+      "installed": false
+    }
+  ],
+  "preconditions": [
+    "Actual complete primitive observation and runtime/allocator interpretation at opsNative, including register/spill/residue channels.",
+    "Concrete advancing native proof-account entry, with all source errors and native resource failures.",
+    "Allocator/callback slice consumed ONLY after lead merge; no cross-branch object mixing.",
+    "No final manifest/coherence or privacy release claim from summary axiom prints or object-path agreement."
+  ],
+  "nonemptiness": "Only after actual-family links are discharged: successful ACTUAL worldRun at opsNative AND allocator world; no unrelated model witness.",
+  "endpoint_rows_removed": [],
+  "deployment_rows_removed": [],
+  "trust_fields_added": []
+}
