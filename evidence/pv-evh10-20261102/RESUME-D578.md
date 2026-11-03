@@ -12,8 +12,8 @@ the lead merges them. No delegation, merge or push was performed here.
 
 ## Exact progress and retained boundary
 
-`KernelMemory.ValidAnswer` finally STATES the full runtime KERNEL-WRITE
-obligation in terms of one actual physical memory answer. On every suffix call
+`KernelMemory.ValidAnswer` STATES the physical-memory component of runtime KERNEL-WRITE
+ in terms of one actual physical memory answer. On every suffix call
 and every raw status, the returned buffer is backed by that SAME post-memory;
 every byte outside the supplied suffix is unchanged. No entropy density or
 syscall register fact proves this OS instance. `KernelPrefix.kernel_frame`
@@ -30,6 +30,11 @@ proves agreement with the existing materialized `StackEntropyFill.post` memory.
 The latter is now justified by per-step physical answers rather than a supplied
 final post-buffer premise. Initial backing follows from the source initializer.
 This is NOT a proof that the actual Linux kernel satisfies ValidAnswer.
+ValidAnswer itself constrains MEMORY ONLY: raw reply/world/event association
+and actual runtime ownership/handle/allocator preservation remain additional
+parts of the already-retained full kernel/runtime interpretation. The accepted
+source comment saying exact KERNEL-WRITE is read with this explicit scope; no
+full kernel instance or native metadata correspondence is claimed.
 
 `NativeEntropyDelivered.physical_fill` applies this at the deployed original64
 slot with the exact source zero initializer. `successful_source_and_bytes`
