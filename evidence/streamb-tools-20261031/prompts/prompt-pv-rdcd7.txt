@@ -1,0 +1,8 @@
+Read /private/tmp/claude-501/-Users-dominic-ZK/4dec4925-8c43-447e-9333-6147c1c7863b/scratchpad/prompt-pv-rdcd6.txt and obey it in full (same worktree, branch, rules) EXCEPT the IDs, budget and scope below. First read evidence/pv-rdcd5-20261101/REPORT.md and HANDOFF.md.
+RESUME (LOG D570). IDs: Lean 90700-90796 (audits 90797-90799); native N90800-N90809. Budget: 60 Lean, 10 native, 0 Kani. Receipts under evidence/pv-rdcd7-20261102/.
+SCOPE: V197 only. FINDING (Lean-checked): on empty input the deployed parser returns fail.panic, while the OWNED model returns fail.arrayOutOfBounds.
+(1) List EVERY consumer of that owned model (credited or not, on the candidate and on live branches, via git grep), and for each state whether it depends on the failure KIND or only on success versus failure.
+(2) CORRECT the owned model so that it returns exactly the source's failure kind on every input; this is a correction to match the source, never a weakening. Record the before/after.
+(3) Re-check each consumer against the corrected model. A credited consumer whose result depended on the wrong failure kind is a finding: report it to the lead immediately, with the row.
+(4) Then restore V197 against the corrected model (parser window plus whole-Result transport), with its qualification.
+If you are near the end of your context, commit HANDOFF.md. Final answer under 400 words.
