@@ -47,7 +47,7 @@ pub fn read(q:&Value)->Result<Wallet>{
 // The calling wallet owns persistence. This endpoint accepts a distinct inherited
 // writable pipe only; regular files, sockets and stdio are rejected before a write.
 pub fn output_channel(q:&Value)->Result<std::fs::File>{
- use std::os::{fd::{BorrowedFd},unix::fs::FileTypeExt};
+ use std::os::{fd::{BorrowedFd},unix::fs::{FileTypeExt,MetadataExt}};
  unsafe extern "C" { fn fcntl(fd:i32,cmd:i32,...) -> i32; }
  let fd=i32::try_from(crate::public_field(q,"wallet_output_fd").as_u64().ok_or_else(||anyhow!("missing wallet output FD"))?).map_err(err)?;
  let input=crate::public_field(q,"wallet_bytes_fd").as_u64().ok_or_else(||anyhow!("missing wallet FD"))?;
@@ -57,7 +57,17 @@ pub fn output_channel(q:&Value)->Result<std::fs::File>{
  ensure!(flags>=0 && flags & 3==1,"wallet output must be write-only");
  let owned=unsafe{BorrowedFd::borrow_raw(fd)}.try_clone_to_owned().map_err(err)?;
  let file=std::fs::File::from(owned);
- ensure!(file.metadata().map_err(err)?.file_type().is_fifo(),"wallet output must be a pipe");
+ let target=file.metadata().map_err(err)?;
+ ensure!(target.file_type().is_fifo(),"wallet output must be a pipe");
+ // Different descriptor numbers can still name one pipe. Reject aliases of
+ // stdio and the private input channel before reading any witness bytes.
+ for other in [0,1,2,i32::try_from(input).map_err(err)?]{
+  if unsafe{fcntl(other,3)}>=0{
+   let borrowed=unsafe{BorrowedFd::borrow_raw(other)}.try_clone_to_owned().map_err(err)?;
+   let metadata=std::fs::File::from(borrowed).metadata().map_err(err)?;
+   ensure!(target.dev()!=metadata.dev() || target.ino()!=metadata.ino(),"wallet output must be a separate pipe");
+  }
+ }
  Ok(file)
 }
 pub fn return_record(channel:&mut std::fs::File,record:&[u8;WIDTH])->Result<()>{
