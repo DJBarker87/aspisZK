@@ -7,7 +7,7 @@ for path,x in pins.items():
  b=subprocess.check_output(['git','show',x['blob']]);assert sha(b)==x['sha256'],path
 rows=json.loads((D/'PV_O11_triage.json').read_text());assert len(rows)==69 and len({r['id'] for r in rows})==69
 assert sum(x['live_owner'] is not None for x in rows)==14
-rec={p.parent.name:json.loads(p.read_text()) for p in (D/'receipts').glob('*/receipt.json')};assert set(rec)=={'90400','90401','90402','90403','90404','90405','90406','90407','90497','90498','N90500','N90501','N90502','N90503','N90504','N90505','N90506','N90507'}
+rec={p.parent.name:json.loads(p.read_text()) for p in (D/'receipts').glob('*/receipt.json')};assert set(rec)=={'90400','90401','90402','90403','90404','90405','90406','90407','90497','90498','N90500','N90501','N90502','N90503','N90504','N90505','N90506','N90507','N90508','N90509'}
 for label,r in rec.items():
  assert r['admission_allowed'] is True and r['admission_exit']==0 and int(r['swaps'])==0
  assert int(r['peak_rss_kib'])>0 and r['wall_seconds']>0 and r['revision']
@@ -28,6 +28,8 @@ for label,r in rec.items():
  elif label=='N90505':p=D/'capacity/lib.rs'
  elif label=='N90506':p=D/'failed/PV_O11_abort_native-N90506.rs.txt'
  elif label=='N90507':p=D/'PV_O11_abort_native.rs'
+ elif label=='N90508':p=D/'PV_O11_l3_native.py'
+ elif label=='N90509':p=D/'PV_O11_l3_native_v2.py'
  else:raise AssertionError(label)
  assert sha(p.read_bytes())==r['source_sha256'],label
  expected=1 if label in ['90400','N90506'] else 2 if label=='N90502' else 0
@@ -55,7 +57,7 @@ for label in ['90404','90405','90406','90407','90498']:
  assert all(x['ok'] for x in json.loads((D/('receipts/'+label+'/external-check.json')).read_text()))
  assert len(json.loads((D/('receipts/'+label+'/effective-external-resolution.json')).read_text()))==5673
 runners={sha(p.read_bytes()) for p in (D/'inputs/runners').glob('*') if p.is_file()}
-for label in ['90404','90405','90406','90407','90498','N90503','N90504','N90505','N90506','N90507']:
+for label in ['90404','90405','90406','90407','90498','N90503','N90504','N90505','N90506','N90507','N90508','N90509']:
  assert rec[label]['failed_source_guard_sha256'] in runners,label
 for file in ['lean/PV_O11_BorrowedLaw.lean']:
  assert not re.search(r'\b(sorry|admit|axiom|native_decide)\b',(D/file).read_text())
@@ -80,4 +82,14 @@ provenance=json.loads((D/'PV_O11_io-provenance.json').read_text())
 assert provenance['exit']==0 and len(provenance['inputs'])==9
 for path,pin in provenance['inputs'].items():
  assert pin['equal'] and sha((D/path).read_bytes())==pin['sha256']==pin['snapshot_sha256']
-print(json.dumps(dict(ok=True,rows=69,excluded=14,restored=0,lean_invocations=10,native_invocations=8,kani=0,nep_roots=5,new_source_inspections=len(inspected),endpoint_premises_removed=0)))
+l3=json.loads((D/'PV_O11_l3-review.json').read_text())
+assert l3['restored']==l3['premises_removed']==l3['premises_added']==l3['premises_weakened']==0
+assert set(l3['rows'])=={'V374','V373','V380-inversion'} and l3['controls']==9
+for path,h in l3['hashes'].items():assert sha((D/path).read_bytes())==h,path
+for p in json.loads((D/'PV_O11_l3-review-input-pins.json').read_text()).values():
+ b=subprocess.check_output(['git','show',p['blob']]);assert sha(b)==p['sha256'] and (D/p['snapshot']).read_bytes()==b
+assert json.loads((D/'id-prescan-N90508.txt').read_text())['unused']
+assert json.loads((D/'id-supplement-N90509.txt').read_text())['no_collision']
+# N90509's failed broad-regex prescan is retained, explicitly not credited as cleared.
+assert not json.loads((D/'id-prescan-N90509.txt').read_text())['unused']
+print(json.dumps(dict(ok=True,rows=69,excluded=14,restored=0,lean_invocations=10,native_invocations=10,kani=0,nep_roots=5,new_source_inspections=len(inspected),endpoint_premises_removed=0)))

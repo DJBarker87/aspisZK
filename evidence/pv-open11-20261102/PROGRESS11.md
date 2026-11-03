@@ -101,3 +101,23 @@ V374 remains **OPEN**, one bounded retained-evidence inspection, zero Lean/nativ
 N90508 refreshed the historical scanner verbatim against the exact retained adopted image, SHA da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0. Seven scanner controls passed. Exit0,18.357s,peak323276KiB,swap0; admission allowed:true/exit0 and required caps. It found1732 sized symbol addresses,9015 resolved transfers,3048 unresolved indirect transfers and28098 review candidates. **Its12 selected bodies (7 heuristic CLEAN/5 UNRESOLVED) are an incomplete selection**: the legacy prefix filter excludes new plain inherent-method symbol names, including M31::inv. No whole-image or row closure follows. The unchanged bytes/outputs are retained under l3-audit/. The corrected name-filter/seed audit is a changed-input follow-up, not an unchanged regression. Inputs and the initial snapshot-name collision (caught before launching any scope) are retained; unique prefixed names resolve the collision. No prior row or evidence was overwritten.
 
 Cumulative10/97 Lean,9/30 native; remaining87/21. Next90408/N90509;90499 reserved. V373 corrected audit is prepared, not yet run.
+
+## D573 relaunch — ranks 16–17 adopted-image results
+
+No row restored; endpoint premises removed/added/weakened=0/0/0.
+
+### V373 — OPEN
+
+Complete the adopted da36d6aa compiled-kernel audit: resolve seven selected bodies, actual operand/public-address/exponent/length ABIs, every indirect callee, every reached inlined copy and caller association. The corrected finite scanner covers 17 sized symbol bodies with 10 conditional heuristic CLEAN and 7 UNRESOLVED, 3048 unresolved indirect transfers and no DWARF/inline completeness. The old fa888460 debug guide has different text and cannot certify this image; its 345 incomplete origins are not resolved by relocation. Retain V370, V371, all failure/rejection prefixes and the full joint observer; no scanner label proves noninterference.
+
+### V380-inversion — OPEN
+
+Bind every actually reached inversion, including all inlined copies, to the SAME adopted native operands, canonical representations, caller state and full observer. The 16 resolved transfers and zero branches at 0x16fe02/0x171168 are finite symbol evidence only. Instantiate existing interpolation i<28/denominator law, pivot find/swap/nonzero law, norm canonical-nonzero transports, sentinel zero rejection and joint retry law, actual constant-4 sites, normalize_d alpha[9]-1/2 zero failure law, circle sampler/subfield exclusion, and producer/consumer row/tag/slot/noPole equations jointly at their actual runs. Preserve earlier failure/pole events and their existing same-coupling charge/simulation obligations; do not invent a new charged event or dismiss zero branches as hardware trust. C056 remains suspended; old 17-call/debug-guide addresses do not establish new-image or inline coverage.
+
+N90509 runs the changed scanner: broaden inherited-method symbol spelling and normalize M31/CM31/QM31 taint-seed names. Exact diff is retained;9 controls pass. Exit0,7.338s,peak324180KiB,swap0; same-shell admission allowed:true/exit0,6G/8G/swap0/Tasks64. It audits the exact adopted2281512-byte binary, with17 selected symbol bodies (10 heuristic CLEAN,7 UNRESOLVED),16 inversion transfers and two explicit zero tests. All9,015 resolved transfers,3,048 unresolved indirect transfers and28,098 candidate instructions are retained. No debug rebuild, client execution, ELF rebuild, new theorem or axioms audit occurred. V373 used2 native attempts; V380 reused those artifacts in1 bounded inspection without a separate launch. No Kani credit, including C056, was revived.
+
+**Procedure correction:** the N90509 prelaunch regex falsely matched decimal digits inside an old SHA. Its assertion failed but shell sequencing still launched. Exact-token supplementary checks found no real ID collision in all3 sent indexes or other-job receipt directories; this is after-launch evidence, not a cleared prelaunch check. Admission itself remained compliant. Never claim the broad-regex scan cleared. Future scans must use whole alphanumeric token boundaries and be a separate successful tool step before launching. No unchanged rerun was made.
+
+`PV_O11_l3_review.py` regenerates the report and retained16 call contexts from immutable raw disassembly; source statements for interpolation/pivot/norm/sentinel/circle/pole laws are retained as inspection inputs, not newly compiled/proved. Native-source binding of every actual operand and all inline instances is absent. No native privacy counterexample is established.
+
+Cumulative10/97 Lean,10/30 native,0 Kani. Remaining87/20;next90408/N90510;90499 reserved. Next uninspected rank18 V346, thenV340.

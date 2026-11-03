@@ -796,3 +796,7 @@ V171/V175/V172/V268/V271 remain OPEN; each has its exact source/world premise in
 ## D573 bounded pass — ranks 11–14
 
 V239/V249/V269/V403 remain OPEN with exact existing-link premises in `PROGRESS11.md` and `PV_O11_ranked-links.json`. SourceDense/model satisfiability remain inherited, not deployed instances. P_R1 panic=abort and the adopted ct-host-prover prefix are explicitly retained. Next uninspected rank:15 V374. No new scopes; remaining87 Lean/22 native.
+
+## D573 relaunch — ranks15–17
+
+V374/V373/V380-inversion remain OPEN. Exact premises are in PROGRESS11.md and PV_O11_l3-review.json. Adopted-image scanner refreshed (N90508/N90509); corrected filter covers17 sized symbol bodies, with10 heuristic CLEAN and7 UNRESOLVED.16 inversion transfers/two zero branches do not supply native operand/joint observer or inline coverage. V374 has no adopted whole-client witness-class measurement. N90509 pre-scan sequencing correction is explicit. Remaining87 Lean/20 native;next90408/N90510,reserved90499. Next rank18 V346.
