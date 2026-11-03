@@ -25,6 +25,7 @@ for q in objects.rglob('*.olean'):
  assert hashlib.sha256(own_source.read_bytes()).hexdigest()==old['source_sha256']
  private_objects[name]=dict(object_sha256=digest,source_sha256=old['source_sha256'],attempt=old['id'])
 cmd=[J['LEAN'],'-M7000','-o',str(obj),str(p)]
+if module=='PV_UC5_NEPDriver':cmd.insert(-1,'--run')
 start=time.monotonic()
 try:
  r=subprocess.run(cmd,cwd=H/'lean',env=env,text=True,capture_output=True,timeout=900)
