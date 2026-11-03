@@ -58,7 +58,7 @@ theorem family_certificate {E α : Type} (_site : Fin 2)
 #print axioms family_certificate
 end PV_B3P_ResultSource572227
 '''
- x=dict(llbc_sha256=sha(raw),input_signature=f['signature'],resolved_residual_type=sig,uninhabited_type=empty,prefix=prefix,instances=instances,source_state_projection='input Result<Infallible,E> discriminant, compare against Err tag 1',generic_module_sha256=sha(s.encode()),evidence_class='script-checked LLBC typed local-state binding and Lean uninhabited-carrier guard',deployed_std_source_parity='OPEN until result.rs parity is recorded',whole_source_cone_complete=False,premises_removed=[])
+ x=dict(llbc_sha256=sha(raw),input_signature=f['signature'],resolved_residual_type=sig,uninhabited_type=empty,prefix=prefix,instances=instances,source_state_projection='input Result<Infallible,E> discriminant, compare against Err tag 1',generic_module_sha256=sha(s.encode()),evidence_class='script-checked LLBC typed local-state binding and Lean uninhabited-carrier guard',deployed_std_source_parity=dict(status='token identity checked',record='RESULT-SOURCE-PARITY-D572.json',sha256=sha((R/'RESULT-SOURCE-PARITY-D572.json').read_bytes()))if (R/'RESULT-SOURCE-PARITY-D572.json').exists()else 'OPEN until result.rs parity is recorded',whole_source_cone_complete=False,premises_removed=[])
  for p,t in {D/'lean/PV_B3P_ResultSource572227.lean':s,R/'RESULT-SOURCE-GUARDS-D572.json':json.dumps(x,indent=2)+'\n'}.items():
   if args.check:assert p.read_text()==t,p
   else:p.write_text(t)
