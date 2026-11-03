@@ -23,7 +23,7 @@ theorem stores {A : Type} (out : Owner A) (a : A)
     (store out a room).allocation=out.allocation ∧
     (store out a room).initialized.capacity=out.initialized.capacity ∧
     out.initialized.values.length+1 ≤ Usize.max :=
-  ⟨rfl,PV_V263_BufferLoop.stored_length _ _ _,rfl,rfl,room.trans out.initialized.bounded⟩
+  ⟨rfl,PV_V263_BufferLoop.stored_length out.initialized a room,rfl,rfl,room.trans out.initialized.bounded⟩
 
 #print axioms store
 #print axioms no_growth

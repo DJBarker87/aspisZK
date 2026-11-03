@@ -30,7 +30,7 @@ theorem write_order {A : Type} (frame : Frame A) (a : A)
     (write frame a room).initialized.values.length=frame.initialized.values.length+1 ∧
     (write frame a room).initialized.capacity=frame.initialized.capacity ∧
     frame.initialized.values.length+1 ≤ Usize.max :=
-  ⟨rfl,stored_length _ _ _,rfl,room.trans frame.initialized.bounded⟩
+  ⟨rfl,stored_length frame.initialized a room,rfl,room.trans frame.initialized.bounded⟩
 
 theorem drop_publishes {A : Type} (frame : Frame A) :
     (publish frame).published=frame.initialized.values.length ∧
