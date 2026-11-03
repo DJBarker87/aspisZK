@@ -16,7 +16,7 @@ theorem sixteen_bound : 16 ≤ Usize.max := by
   have bits := System.Platform.le_numBits
   have hp : 2^5 ≤ 2^System.Platform.numBits :=
     Nat.pow_le_pow_right (by decide) (by omega)
-  change 16 ≤ 2^System.Platform.numBits-1
+  simp only [Usize.max,UScalarTy.numBits,Usize.numBits]
   exact (by decide : 16 ≤ 2^5-1).trans (Nat.sub_le_sub_right hp 1)
 
 def unitBuffer {A : Type} : Buffer A := empty 0 (Nat.zero_le _)
