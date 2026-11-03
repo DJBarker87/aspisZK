@@ -33,6 +33,14 @@ for p in sorted(OLD.glob('receipt-*.json'))+sorted(Path('evidence/pv-evh5-202610
  if m not in known:
   checks.append(dict(module=m,path=H+'/objects/'+m+'.olean',sha256=r['object_sha256'],source=dict(path=path,revision=rev,source_sha256=r['source_sha256'])))
   known.add(m)
+# Three immutable additions resolved by allocator-pins.py from runjoin32.
+addition=E/'allocator-extension.json'
+if addition.exists():
+ for v in json.loads(addition.read_text())['project_checks']:
+  pin=v['source'];raw=subprocess.check_output(['git','show',pin['revision']+':'+pin['path']])
+  assert sha(raw)==pin['source_sha256']
+  if v['module'] not in known:
+   checks.append(v);known.add(v['module'])
 source=Path('lean/'+module+'.lean').read_bytes();assert source==subprocess.check_output(['git','show',rev+':lean/'+module+'.lean'])
 imports=re.findall(r'^import (\S+)',source.decode(),re.M);assert set(imports)<=known,('new import needs full prepare',set(imports)-known)
 payload=dict(checks=checks,external=base['external_checks'],roots=base['LEAN_PATH'].split(':'),H=H,module=module,source=source.decode(),sha256=sha(source),revision=rev,toolchain=base['toolchain'])
