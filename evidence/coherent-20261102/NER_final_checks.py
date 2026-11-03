@@ -57,6 +57,8 @@ fixtures=lines('NER_RECURSOR_TEST_ROWS.jsonl')
 assert [(x['module'],d['missing']) for x in fixtures for d in x['dangling']]==[('NER_RecursorPlant','NER_RecursorMissing')]
 assert all(x['imports_match'] for x in fixtures)
 assert read('NER_R029/receipt.json')['exit_status']==0
+assert read('NER_R030/receipt.json')['exit_status']==0
+assert hashlib.sha256((E/'NER_FinalDriver.lean').read_bytes()).hexdigest()==read('NER_R030/receipt.json')['source_hashes']['NER_FinalDriver.lean']
 prefix=(E/'NER_FinalDriver.lean').read_text().split('open Lean Elab Command\nunsafe def main')[0]
 assert prefix==(E/'NER_ReferenceTests.lean').read_text().split('unsafe def main')[0]
 assert read('NER_REBUILD_CHECKS.json')['selected_affected_imports_match_final'] is True

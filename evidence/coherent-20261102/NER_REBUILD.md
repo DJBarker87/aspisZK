@@ -100,3 +100,27 @@ This adds recursor rules and declaration name metadata to type/value and
 constructor-reference coverage. The unchanged NEP hardened raw walker is
 retained separately. No new logical theorem is introduced by this control;
 #print axioms is N/A for the inspection program.
+
+
+## Pre-aggregation checkpoint, 2026-11-03
+
+All 1,386 ordinary targets pass in 37 batches (34 batches of 40, then
+6, 14 and 1 modules). The only pending source compilation is NDR_CombinedAudit,
+reserved for agg16. NER_rebuild_checks.py --partial validates every selected
+affected import against its rebuilt output and rejects a planted stale hash.
+The shared quiet window caused five refused admissions (exit 78); the barrier
+then admitted both waiting batches before the stated window end. No marker
+was changed and no refused scope was launched.
+
+NER_R030 compile-only checks the actual standalone final driver: exit 0,
+0.727410 s, 1,586,408 KiB peak RSS, zero swaps; an unused-argument warning only.
+No target closure is loaded by this syntax check. R029/R030 are conservatively
+charged as two additional capped control scopes. No new logical theorem is
+introduced by either program, so #print axioms is N/A for these controls.
+
+NER_preaggregate.py verifies all original object/private pins, every rebuilt
+output and 34,042 selected/retained kernel or IR files. It also checks the
+Lean binary and hardened walker against their prior recorded hashes.
+NER_PREAGG_OBJECTS.jsonl is input to the final scope; its selected files are
+checked before compilation and again after the audit. The original cohort is
+retained read-only. No final coherent/raw-root claim is made at this checkpoint.
