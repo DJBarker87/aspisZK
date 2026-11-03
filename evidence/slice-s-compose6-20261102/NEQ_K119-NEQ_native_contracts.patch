@@ -1,0 +1,23 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEQ_final_native.rs"]
++mod NEQ_final_native;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEQ_final_native.rs
+@@ -0,0 +1,10 @@
++use super::*;
++#[kani::proof]
++fn final_native(){let backing=[();1];let length:usize=kani::any();
++ // Unit has size zero: every usize length covers zero bytes, so the live,
++ // aligned, nonnull backing pointer supplies a valid borrowed Unit slice.
++ let slice=unsafe{core::slice::from_raw_parts(backing.as_ptr(),length)};
++ let actual:Result<&[();216],core::array::TryFromSliceError>=slice.try_into();
++ assert!(actual.is_ok()==(length==217),"all-usize native borrowed conversion length guard");
++ // Zero-sized pointer identity is not claimed: K117 refuted that extra assertion.
++}

@@ -1,0 +1,59 @@
+import NEQ_EncoderOracle
+import NEQ_LateBorrow
+import NEQ_RootFrame
+import NEQ_EncoderDomains
+import NEQ_ResultValidator
+import NEQ_NullifierDomains
+import NEQ_DecodeScalar
+import NEQ_ParserCanonical
+import NEQ_UnwrapDomains
+import NEQ_CommonDecode
+import NEQ_PaymentDecode
+import NEQ_BorrowWidth
+import NEQ_PaymentDomains
+import NEM_ValidatorComposed
+#print axioms NEQ_EncoderOracle.pay_substitution
+#print axioms NEQ_EncoderOracle.late_substitution
+#print axioms NEQ_EncoderOracle.anchor_substitution
+#print axioms NEQ_EncoderOracle.substitution
+#print axioms NEQ_EncoderOracle.result_state_effects
+#print axioms NEQ_LateBorrow.rejoin
+#print axioms NEQ_LateBorrow.poststate
+#print axioms NEQ_LateBorrow.after_preserves_child
+#print axioms NEQ_RootFrame.cover
+#print axioms NEQ_RootFrame.header_frame
+#print axioms NEQ_RootFrame.scalar_frame
+#print axioms NEQ_RootFrame.finish
+#print axioms NEQ_RootFrame.assembled
+#print axioms NEQ_RootFrame.array_ext
+#print axioms NEQ_EncoderDomains.reached_domains
+#print axioms NEQ_EncoderDomains.header_length
+#print axioms NEQ_ResultValidator.result
+#print axioms NEQ_ResultValidator.call_shape
+#print axioms NEQ_ResultValidator.lane_domain
+#print axioms NEQ_ResultValidator.after_domain
+#print axioms NEQ_ResultValidator.ordered_effects
+#print axioms NEQ_ResultValidator.result_state_effects
+#print axioms NEQ_NullifierDomains.statement_result_frame
+#print axioms NEQ_NullifierDomains.payment_result_frame
+#print axioms NEQ_NullifierDomains.common_independent
+#print axioms NEQ_DecodeScalar.header_result_state_effects
+#print axioms NEQ_DecodeScalar.m31_result_state_effects
+#print axioms NEQ_DecodeScalar.digest_result_state_effects
+#print axioms NEQ_DecodeScalar.digest_word_domain
+#print axioms NEQ_ParserCanonical.some_canonical
+#print axioms NEQ_UnwrapDomains.ok_result_state_effects
+#print axioms NEQ_UnwrapDomains.err_result_state_effects
+#print axioms NEQ_UnwrapDomains.fixed_read_packet
+#print axioms NEQ_CommonDecode.substitution
+#print axioms NEQ_CommonDecode.result_state_effects
+#print axioms NEQ_PaymentDecode.transfer_substitution
+#print axioms NEQ_PaymentDecode.withdrawal_substitution
+#print axioms NEQ_PaymentDecode.transfer_result_state_effects
+#print axioms NEQ_PaymentDecode.withdrawal_result_state_effects
+#print axioms NEQ_BorrowWidth.status
+#print axioms NEQ_BorrowWidth.fixed216
+#print axioms NEQ_PaymentDomains.fee_primitive_width
+#print axioms NEQ_PaymentDomains.fee_zero
+#print axioms NEQ_PaymentDomains.window_bounds
+#print axioms NEM_ValidatorComposed.result_state_effects

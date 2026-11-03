@@ -1,0 +1,8 @@
+def Aeneas.Std.core.array.TryFromSharedArraySlice.try_from : {T : Type} →
+  (N : Aeneas.Std.Usize) →
+    Aeneas.Std.Slice T →
+      Aeneas.Std.Result
+        (Aeneas.Std.core.result.Result (Aeneas.Std.Array T N) Aeneas.Std.core.array.TryFromSliceError) :=
+fun {T} N s =>
+  if h : s.len = N then Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Ok ⟨↑s, ⋯⟩)
+  else Aeneas.Std.Result.ok (Aeneas.Std.core.result.Result.Err ())

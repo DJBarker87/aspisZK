@@ -1,0 +1,66 @@
+import NED_EncoderCallDomains
+import NEM_ValidatorComposed
+set_option autoImplicit false
+noncomputable section
+namespace NEQ_EncoderOracle
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+open NED_EncoderTrace (Call R)
+abbrev Validate := Statement → Result (core.result.Result Unit NBN_StatementResult.Error)
+abbrev Pay := Statement → Result (core.result.Result (Array U8 216#usize) PaymentError)
+abbrev Late := NEE_ValidatorMutation.Late
+abbrev Digest := Array U32 8#usize → Result (Array U8 32#usize)
+def payStep (pay : Pay) (s : Statement) (anchor : Array U8 32#usize) (late : Slice U8) : R × List Call :=
+  let r : R := do
+    let pay ← pay s
+    match pay with
+    | .Err e => ok (.Err (.Payment e))
+    | .Ok a => ok (.Ok ((NBN_StatementEncoderSummary.prefixBytes s anchor ++ late.val) ++ a.val))
+  (r,[.payment s])
+
+def lateStep (pay : Pay) (late : Late) (s : Statement) (anchor : Array U8 32#usize) : R × List Call :=
+  let arg := (common s).lane_transition
+  let out := NBN_LateResult.zero
+  match late arg out with
+  | .fail e => (.fail e,[.late arg out])
+  | .div => (.div,[.late arg out])
+  | .ok (.Err e,_) => (ok (.Err (.LaneTransition e)),[.late arg out])
+  | .ok (.Ok _,late) => ((payStep pay s anchor late).1,.late arg out :: (payStep pay s anchor late).2)
+
+def anchorStep (pay : Pay) (late : Late) (digest : Digest) (s : Statement) : R × List Call :=
+  let d := (common s).historical_global_anchor
+  match digest d with
+  | .fail e => (.fail e,[.digest d])
+  | .div => (.div,[.digest d])
+  | .ok anchor => ((lateStep pay late s anchor).1,.digest d :: (lateStep pay late s anchor).2)
+
+def run (validate : Validate) (pay : Pay) (late : Late) (digest : Digest) (s : Statement) : R × List Call :=
+  let validation := validate s
+  match validation with
+  | .fail e => (.fail e,[.validate s])
+  | .div => (.div,[.validate s])
+  | .ok (.Err e) => (ok (.Err e),[.validate s])
+  | .ok (.Ok _) => ((anchorStep pay late digest s).1,.validate s :: (anchorStep pay late digest s).2)
+
+theorem substitution (s : Statement) :
+    run pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      NEM_PaymentReached.pay NEM_LateOracle.late atomic_statement.encode_digest_canonical s =
+      NED_EncoderTrace.run s := by
+  have v := funext NED_CodecComposition.validator
+  have p := funext NEM_PaymentReached.payment_instance
+  have l := funext (fun s => funext (NED_SubtreeComposition.late_encode s))
+  unfold run anchorStep lateStep payStep
+  rw [← v,p,← l]
+  rfl
+
+theorem result_state_effects {State : Type} (s : Statement) (state : State) :
+    let observed := run pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      NEM_PaymentReached.pay NEM_LateOracle.late atomic_statement.encode_digest_canonical s
+    (observed.1,state,observed.2) =
+      (NBN_StatementEncoderSummary.observe (AspisS6OuterNativeInstalled.encode s),
+       state,(NED_EncoderTrace.run s).2) := by
+  dsimp only
+  rw [substitution,NED_EncoderTrace.erases]
+
+#print axioms substitution
+#print axioms result_state_effects
+end NEQ_EncoderOracle

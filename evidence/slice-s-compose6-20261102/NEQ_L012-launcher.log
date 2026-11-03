@@ -1,0 +1,48 @@
+{"attempt": "NEQ_L012", "exit_status": 1, "wall_seconds": 2.1710479529574513, "peak_rss_kib": "5284144", "swaps": "0", "print_axioms": ["'NEQ_ResultValidator.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_ResultValidator.call_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_ResultValidator.lane_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_ResultValidator.after_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEQ_generated/NEQ_ResultValidator.lean:52:8: error: Tactic `rfl` failed: The left-hand side
+  (fail e✝, [Call.lane r.nullifier]).1
+is not definitionally equal to the right-hand side
+  ok
+    (match core.result.Result.Ok l with
+    | core.result.Result.Err e =>
+      core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account e)
+    | core.result.Result.Ok lane =>
+      if r.output_lane ≠ lane then
+        core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+      else
+        match NBH_Validators.afterResult r.verified_afterstate with
+        | core.result.Result.Err e =>
+          core.result.Resu
+...
+1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+            [Call.lane r.nullifier])
+        else ((afterStep after r).1, Call.lane r.nullifier :: (afterStep after r).2)).2 =
+      [] ∨
+    (if r.output_lane ≠ l✝ then
+            (ok
+                (core.result.Result.Err
+                  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+              [Call.lane r.nullifier])
+          else ((afterStep after r).1, Call.lane r.nullifier :: (afterStep after r).2)).2 =
+        [Call.lane r.nullifier] ∨
+      (if r.output_lane ≠ l✝ then
+            (ok
+                (core.result.Result.Err
+                  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+              [Call.lane r.nullifier])
+          else ((afterStep after r).1, Call.lane r.nullifier :: (afterStep after r).2)).2 =
+        [Call.lane r.nullifier, Call.after r.verified_afterstate]
+NEQ_generated/NEQ_ResultValidator.lean:68:8: error: unexpected token '·'; expected command
+NEQ_generated/NEQ_ResultValidator.lean:74:63: warning: This simp argument is unused:
+  false_or
+
+Hint: Omit it from the simp argument list.
+  simp_all only [List.mem_cons, ̲List.not_mem_nil, ̲reduceCtorEq,f̵a̵l̵s̵e̵_̵ ̲or,̵o̵r̵_false, ̲Call.lane.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEQ_ResultValidator.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.call_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.lane_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.after_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rfc351ba6f55b48f08150d7959d910f94.scope; invocation ID: 9ab60219a61745268a25aca7b909e8ff

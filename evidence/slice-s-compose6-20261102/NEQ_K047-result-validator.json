@@ -1,0 +1,10 @@
+{
+ "mode": "wrong_reply",
+ "frozen_body": "fn validate_result(\n    result: &PoolV1PairForestTerminalResultV1,\n) -> Result<(), PoolV1PairForestTerminalFormatErrorV1> {\n    if result.master_account == [0u8; 32] || result.selected_lane_account == [0u8; 32] {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    let expected = pool_v1_pair_forest_output_lane_v1(&result.nullifier)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if result.output_lane != expected {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n    encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?;\n    Ok(())\n}",
+ "frozen_body_sha256": "d81ba2a4ea73f6df6e118819b0e88533b621bc8b6e7b3f3ce2740d66a0c8efbe",
+ "instrumented_body": "fn native(\n    result: &PoolV1PairForestTerminalResultV1,\n    frame: &mut Frame,\n) -> Result<(), PoolV1PairForestTerminalFormatErrorV1> {\n    if result.master_account == [0u8; 32] || result.selected_lane_account == [0u8; 32] {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding);\n    }\n    let expected = lane(&result.nullifier,frame)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Account(error))?;\n    if result.output_lane != expected {\n        return Err(PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch);\n    }\n    after(&result.verified_afterstate,frame)\n        .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?;\n    Ok(())\n}",
+ "full_lane_and_after_Results": true,
+ "all_typed_inputs": true,
+ "modifies": "local call log only; immutable input",
+ "classification": "ruling y exact frozen caller with local oracle records; no inner acceptance assumption"
+}
