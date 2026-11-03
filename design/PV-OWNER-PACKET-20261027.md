@@ -431,3 +431,7 @@ Owner's reply: "A". The client keeps panic=abort, and at startup marks itself no
 - (C) Encrypt the recovery file under a user-supplied key. Not recommended: it still needs a key-storage answer, and it adds cryptographic code to verify.
 
 **Recommendation: (B).** It keeps the observer boundary exactly where N7 already placed it, adds no trust item, removes a durable secret file and its L3 remanence from the client, and is a small change to code already being written (about 30 lines, under the existing client gates plus a check that no secret bytes reach any file).
+
+## OWNER DECISION 2026-11-03 (LOG D577): D576 option (B) ADOPTED
+
+Owner's reply: "B". The user client writes NO secret bytes to disk. The change note's secrets (and any other wallet secrets the user needs to keep) are returned over a caller-provided raw output pipe, a fixed-width record with nothing formatted, mirroring the N7 input pipe. The calling wallet owns all secret storage. The client's durable outputs are public data only (proof, statement, instruction). The observer boundary stays where N7 placed it (the user's own pipes); no trust item is added. Gate: in addition to the existing client gates, a check that no secret byte reaches any file, stdout or stderr across the fixture runs.
