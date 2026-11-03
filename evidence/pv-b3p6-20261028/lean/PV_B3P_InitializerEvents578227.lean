@@ -20,19 +20,24 @@ structure Effects (α β γ : Type) where
   indexCheck : Result Unit
   indexAccess : Result Unit
   write : γ → Result Unit
-  forget : Result Unit
+  inhabited : Result Unit
   ubChecks : Bool
 
+def through : List (Result Unit) → Option IndexState → Result (Option IndexState)
+  | [], answer => .ok answer
+  | effect :: rest, answer => do
+    let _ ← effect
+    through rest answer
+
 def afterBranch {α β γ : Type} (site : Site) (count length : Usize)
-    (effects : Effects α β γ) (value : γ) : Result (Option IndexState) := do
-  if site = .indexPrecondition then
-    return if effects.ubChecks then some ⟨count.val,length.val⟩ else none
-  if effects.ubChecks then let _ ← effects.indexCheck
-  if site = .index then return some ⟨count.val,length.val⟩
-  let _ ← effects.indexAccess
-  let _ ← effects.write value
-  let _ ← effects.forget
-  return if effects.ubChecks then some ⟨count.val,length.val⟩ else none
+    (effects : Effects α β γ) (value : γ) : Result (Option IndexState) :=
+  let state := some ⟨count.val,length.val⟩
+  let check := if effects.ubChecks then effects.indexCheck else .ok ()
+  match site with
+  | .indexPrecondition => through [] (if effects.ubChecks then state else none)
+  | .index => through [check] state
+  | .addPrecondition => through [check,effects.indexAccess,effects.write value,effects.inhabited]
+      (if effects.ubChecks then state else none)
 
 def sourceEvent {α β γ : Type} (site : Site) (count length : Usize)
     (effects : Effects α β γ) : Result (Option IndexState) := do
@@ -40,9 +45,9 @@ def sourceEvent {α β γ : Type} (site : Site) (count length : Usize)
     let generated ← effects.generate count
     let branched ← effects.tryBranch generated
     match branched with
-    | .Break _ => return none
+    | .Break _ => .ok none
     | .Continue value => afterBranch site count length effects value
-  else return none
+  else .ok none
 
 /-- Prefixes built from a private-field observation cannot forge a different
 state. This is proved for all effect answers, including fail and div. -/
@@ -51,20 +56,31 @@ theorem bind_observation {α : Type} (effect : Result α)
     (preserved : ∀ value, next value = .ok (some observed) → observed = expected)
     (ran : (do let value ← effect; next value) = .ok (some observed)) :
     observed = expected := by
-  cases effect <;> simp only [bind_tc_ok, bind_tc_fail, bind_tc_div] at ran
-  exact preserved _ ran
+  cases effect with
+  | ok value => exact preserved value ran
+  | fail error => cases ran
+  | div => cases ran
+
+theorem through_value (effects : List (Result Unit)) (answer : Option IndexState)
+    (observed : IndexState) (ran : through effects answer = .ok (some observed)) :
+    answer = some observed := by
+  induction effects with
+  | nil => cases ran; rfl
+  | cons effect rest ih =>
+    cases effect with
+    | ok value => exact ih ran
+    | fail error => cases ran
+    | div => cases ran
 
 theorem afterBranch_frame {α β γ : Type} (site : Site) (count length : Usize)
     (effects : Effects α β γ) (value : γ) (observed : IndexState)
     (ran : afterBranch site count length effects value = .ok (some observed)) :
     observed = ⟨count.val,length.val⟩ := by
   cases site <;> cases h : effects.ubChecks <;>
-    simp only [afterBranch, h, ite_true, ite_false, reduceCtorEq] at ran
-  all_goals try { cases ran; rfl }
-  all_goals
-    repeat' apply bind_observation _ _ _ _ _ ran
-    intro _ next
-    try { cases next; rfl }
+    simp only [afterBranch, h, Bool.false_eq_true, if_false, if_true] at ran
+  all_goals have equal := through_value _ _ _ ran
+  all_goals cases equal
+  all_goals rfl
 
 /-- The observed guard follows from the EXECUTED loop test and the checked
 private frame, not from an assumed guard or a whole-function success. Each
@@ -126,6 +142,7 @@ theorem event_add_certificate {α β γ δ : Type} (count length : Usize)
   (arithmetic_overflow _ normal first second).2 (event_add_guard count length effects observed ran)
 
 #print axioms bind_observation
+#print axioms through_value
 #print axioms afterBranch_frame
 #print axioms event_guard
 #print axioms event_index_certificate
