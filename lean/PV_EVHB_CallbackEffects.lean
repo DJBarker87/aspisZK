@@ -57,7 +57,7 @@ theorem construct_run {E C F : Type} (da : E → Q Unit) (dc : C → Q Unit)
       | fault f => simp only [Bind.bind,PV_EVH_Runtime.bind,h,hc,List.append_nil]
       | exhausted => simp only [Bind.bind,PV_EVH_Runtime.bind,h,hc,List.append_nil]
       | returned s => cases s <;>
-          simp only [Bind.bind,PV_EVH_Runtime.bind,h,hc,Pure.pure,lift,List.append_nil]
+          simp only [Bind.bind,PV_EVH_Runtime.bind,h,hc,Pure.pure,PV_EVH_Runtime.lift,List.append_nil]
 
 theorem construct_view {E C F : Type} (da : E → Q Unit) (dc : C → Q Unit)
     (value : F) (closure : C) (error : E)
@@ -74,8 +74,10 @@ theorem mapErr_view {T E C F : Type} (da : E → Q Unit) (dc : C → Q Unit)
     PartialView (mapErr da dc value result closure)
       (.ok (match result with | .Ok x => .Ok x | .Err _ => .Err value)) := by
   cases result with
-  | Ok x => exact bind_view _ _ (.ok ()) (fun _ => .ok (.Ok x)) hc (fun _ => lift_view _)
-  | Err e => exact bind_view _ _ (.ok value) (fun out => .ok (.Err out))
+  | Ok x =>
+    exact bind_view _ _ (.ok ()) (fun _ => .ok (core.result.Result.Ok (E := F) x)) hc (fun _ => lift_view _)
+  | Err e =>
+    exact bind_view _ _ (.ok value) (fun out => .ok (core.result.Result.Err (T := T) out))
       (construct_view da dc value closure e (ha e) hc) (fun _ => lift_view _)
 
 #print axioms construct_run
