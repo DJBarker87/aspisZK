@@ -41,8 +41,10 @@ theorem actual_counter_bound (round : Usize) (valid : round.val<10) (k completed
   increment_safe _ k completed (actual_count_bound round valid) more
 
 theorem progress (n k i completed : Nat)
-    (lower : start n k≤i) (remaining : i<start n k+width n k)
-    (counted : completed=i-start n k) : completed<width n k := by omega
+    (hbegin : PV_RunJoin_WorkRange35.start n k ≤ i)
+    (hend : i < PV_RunJoin_WorkRange35.start n k + width n k)
+    (hcount : completed = i - PV_RunJoin_WorkRange35.start n k) :
+    completed < width n k := by omega
 
 #print axioms progress
 #print axioms actual_count_bound
