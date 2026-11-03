@@ -1,0 +1,24 @@
+# Stream A lead handover, 2026-11-03 ~22:55 UTC (Mac restart)
+
+The owner restarted the Mac. Every Codex job died mid-run; each worktree has a WIP snapshot.
+
+## Jobs to resume (one per line: worktree, branch, prompt, out, last commit)
+- NER_ coherent rebuild: .worktrees/cx-coherent, codex/cx-coherent-20261102, prompt-coherent-r2.txt, out/codex-coherent.out, c08dfcf3be. It had batch-built the first ~13+ batches. Goal: a coherent cohort, zero dangling refs, the hardened walker on RPx_Deployed plus sourceOnHeadline, and a cohort manifest for Stream B (D565 is waiting on it). L188 obligations 1 and 4 stay REOPENED until then.
+- NEQ_ slice S roots: .worktrees/cx-slice-s-compose6, codex/cx-slice-s-compose6-20261102, prompt-slice-s-compose6.txt, out/codex-slice-s-compose6.out, 5ef45dcc19. Slice S was 50/97, 1/7 roots (validator CLOSED). Next: encoder, emit_result, ...
+- NEI_ slice Q arithmetic: .worktrees/cx-slice-q-mul2, BRANCH codex/cx-slice-q-mul2-20261029 (note the date), prompt-slice-q-mul2.txt, out/codex-slice-q-mul2.out, 35f682158d.
+- NET_ slice Q composition: .worktrees/cx-slice-q-compose3, codex/cx-slice-q-compose3-20261102, prompt-slice-q-compose3.txt, out/codex-slice-q-compose3.out, 32f6398bdb. (z)(2) is adopted.
+
+## How to resume each
+1. Move the old out files aside (out/codex-X.out*, renamed to .preRestart.*).
+2. Prepend this to the prompt: "RESUME AFTER MAC RESTART (lead, <date>): continue your own run in this worktree; all work is committed (WIP snapshot). Read your own handoff, receipts and ATTEMPTS, count the used budget, and continue. Host scopes that were live at the restart may have finished; collect their receipts read-only and never resubmit them."
+3. Launch with explicit quoted args (zsh!): (nohup "$I/codex-retry2.sh" "<worktree>" "<prompt>" "$I/out/codex-X.out" >/dev/null 2>&1 &)
+4. Verify: ps -axo command | grep 'codex exec' | grep -c 'worktrees/<wt> ' is 2, and the out file grows. Then attach ~/aspis-lead-infra/waitjob.sh X with run_in_background.
+5. Restart `caffeinate -i -s -m` (run_in_background). The lid must stay open.
+
+## State
+- Authoritative ledger: evidence/ledger4-20261102 (NEN_): 88/587. Slice gains since then: Q NEO_ (54/78 fn) and S NEM_ (50/97, validator root CLOSED). A refresh is needed after the jobs finish.
+- Rulings in force: (y) assume-guarantee, (y') borrowed returns, (z)(1)+(2) observer and CM31 backend; rules 14-17 in local-lean.txt (backup in evidence/lead-tools-20261031).
+- K-3: the slice rows are cleared (NEK_). 511 credits are still SUSPENDED ledger-wide.
+- Walker: evidence/axaudit2-20261102/NEP_Driver.lean is the audit standard. RPx_Deployed walks completely.
+- Devnet: verifier CSnhzGdH, fresh Pool 4GQ9Gnmi; L188 obligation 5 is closed (devnet).
+- Stream B: their handover is at ~/aspis-streamb-infra/HANDOVER-20261103.md. They want a quiet window later for uc5 timing, which must name "for": "pv-uc-timing".
