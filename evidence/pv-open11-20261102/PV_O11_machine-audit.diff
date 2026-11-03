@@ -1,0 +1,20 @@
+--- inherited/PV_L3A_audit.py
++++ PV_O11_machine_audit.py
+@@ -41,7 +41,7 @@
+             if t in func and t!=a: edges.append(dict(caller=hex(a),site=i['address'],target=hex(t),instruction=i['text'],resolution='R_X86_64_RELATIVE/GOT' if i['args'].startswith('*') else 'direct'))
+             elif i['args'].startswith('*'):unresolved.append(dict(caller=hex(a),**i))
+ # Selection deliberately broad, not an inference that all selected functions run.
+-selected={a:f for a,f in func.items() if any((n.startswith('<aspis_core::field::') and 'Debug' not in n and 'from_le_bytes' not in n and 'write_le_bytes' not in n) or n.startswith('aspis_core::field::qm31_m31_dot') or ('aspis_r1_cost_probe::host_semantic::' in n and any(x in n for x in ['build_with_material','copy_endpoint_values','copy_tuple_limb'])) for n in f['names'])}
++selected={a:f for a,f in func.items() if any((n.startswith(('<aspis_core::field::','aspis_core::field::')) and 'Debug' not in n and 'from_le_bytes' not in n and 'write_le_bytes' not in n) or n.startswith('aspis_core::field::qm31_m31_dot') or ('aspis_r1_cost_probe::host_semantic::' in n and any(x in n for x in ['build_with_material','copy_endpoint_values','copy_tuple_limb'])) for n in f['names'])}
+ # Aliases: track a full physical register, including subregisters conservatively.
+ def reg(s):
+     s=s.lstrip('%')
+@@ -54,6 +54,8 @@
+ def regs(x):return {reg(r) for r in R.findall(x)}
+ def analyze(f):
+     ins=f['instructions'];name=f['names'][0]
++    # Rust v0 demangling can omit angle brackets for inherent methods.
++    name=re.sub(r'^aspis_core::field::(M31|CM31|QM31)::',r'<aspis_core::field::\1>::',name)
+     # All incoming field data are secret; argument addresses, lengths, exponents
+     # and public layout start public. Every non-stack non-RIP load is tainted.
+     initial=({'rdi'} if name=='<aspis_core::field::M31>::inv' else {'rdi','rsi'} if name=='<aspis_core::field::CM31>::pow' else {'rsi'} if '::from_m31' in name else set())
