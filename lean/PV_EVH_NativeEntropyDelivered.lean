@@ -22,20 +22,20 @@ theorem initial_encoding :
 /-- Full raw-history memory reification at the actual source-shaped entry,
 with no independent pre-buffer or post-buffer premise. The actual OS instance
 of ValidAnswer and the runtime/compiler FRAME association remain P. -/
-theorem physical_fill [ExternalTypes]
+theorem physical_fill [ExternalTypes] (decode : Int → getrandom.error.Error)
     (kernel : Nat → Nat → Array U8 64#usize → PV_EVH_World.World → PV_EVH_LinuxRawControl.Reply)
     (memory : PV_EVH_RawMemoryHistory.MemoryAnswer) (owner sp fuel : Nat) (w : State)
     (hk : PV_EVH_KernelMemory.ValidAnswer (PV_EVH_LinuxRawObserve.call kernel) memory sp) :
     let history := PV_EVH_LinuxRawHistory.execute (PV_EVH_LinuxRawObserve.call kernel)
       sp fuel 0 initial w.frame.runtime.base
-    let d := PV_EVH_LinuxRawControl.driver (fun code => code)
+    let d := PV_EVH_LinuxRawControl.driver decode
       (PV_EVH_LinuxRawObserve.call kernel) sp fuel buffer w
     PV_EVH_RawMemoryHistory.replay memory history.calls (entered owner sp w).memory =
       (PV_EVH_StackEntropyFill.post (original owner sp w) d (entered owner sp w)).memory := by
   dsimp only
   have hb := PV_EVH_RawMemoryReification.admitted (original owner sp w) initial w rfl
   rw [initial_encoding] at hb
-  exact PV_EVH_RawMemoryReification.driver_memory (fun code => code)
+  exact PV_EVH_RawMemoryReification.driver_memory decode
     (PV_EVH_LinuxRawObserve.call kernel) memory (original owner sp w) fuel buffer
     (entered owner sp w) rfl hk hb
 
@@ -92,7 +92,7 @@ theorem successful_source_and_bytes (base : ExternalTypes)
     sourceMask limit retry kernel sp fuel w hr hd
   have hbuffer := (PV_EVH_NativeRawFinished.driver_delivery (fun code => code)
     kernel sp fuel w).2.1
-  refine ⟨?_,physical_fill kernel memory owner sp fuel w hk,?_⟩
+  refine ⟨?_,physical_fill (fun code => code) kernel memory owner sp fuel w hk,?_⟩
   · rw [hsource]
     simp only [PV_EVH_NativeEntropyValues.tests,hf,hs,bind_tc_ok,if_true,
       PV_EVH_EntropyDecision.Accepted,Pure.pure]
