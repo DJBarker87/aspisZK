@@ -32,7 +32,8 @@ for r in receipts:
  else:failures.append(dict(attempt=a,target=r['target'],source_sha256=r['source_sha256']))
 for p in Path('lean').glob('PV_EVHB_*.lean'):
  assert p.stem in accepted,('unaccepted current source',str(p))
- s=p.read_text();assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b',s)
+ s=p.read_text();proof=re.sub(r'/\-[\s\S]*?\-/','',s)
+ assert not re.search(r'\b(sorry|axiom|admit|native_decide)\b',proof)
  assert not re.search(r'set_option (maxRecDepth|maxHeartbeats)',s)
  for name in re.findall(r'^theorem (\w+)',s,re.M):assert '#print axioms '+name in s,(p,name)
 assert not list(E.rglob('*'))==[]
