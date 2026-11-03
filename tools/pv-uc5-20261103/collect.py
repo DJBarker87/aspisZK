@@ -1,6 +1,6 @@
 """Collect safe metadata only after the already submitted differential completes."""
 from pathlib import Path
-import json,subprocess,re,hashlib
+import json,subprocess,re,hashlib,shlex
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-uc5-20261103';H='dombarker@100.108.41.90';D='/home/dombarker/project-offloads/codex-pv-uc-20261029'
 # Read-only, no process submission, no witness/proof/recovery/private input copies.
 done=subprocess.check_output(['ssh',H,'cat '+D+'/native91104/done-status.txt'],text=True).strip();assert done=='0',done
@@ -8,8 +8,10 @@ O=E/'differential';O.mkdir(exist_ok=True)
 names=subprocess.check_output(['ssh',H,'ls '+D+'/final-gates/uc5/differential/'],text=True).splitlines()
 selected=[n for n in names if re.fullmatch(r'(comparison-\d+|secret-scan-\d+|summary|secret-scan-summary)\.json',n)]
 assert len(selected)==202,len(selected)
-for name in selected:
- subprocess.run(['scp',H+':'+D+'/final-gates/uc5/differential/'+name,str(O/name)],check=True,stdout=subprocess.DEVNULL)
+code="from pathlib import Path; import json; p=Path("+repr(D+'/final-gates/uc5/differential')+"); names="+repr(selected)+"; print(json.dumps({n:(p/n).read_text() for n in names}))"
+payload=json.loads(subprocess.check_output(['ssh',H,'python3 -c '+shlex.quote(code)],text=True))
+assert set(payload)==set(selected)
+for name,raw in payload.items():(O/name).write_text(raw)
 summary=json.loads((O/'summary.json').read_text());assert summary['passed'] and summary['pairs']==100 and summary['fully_executed_prover_calls']==200
 scans=[json.loads((O/f'secret-scan-{i}.json').read_text()) for i in range(100)]
 hits=[dict(pair=i,**h) for i,s in enumerate(scans) for h in s['hits']]
