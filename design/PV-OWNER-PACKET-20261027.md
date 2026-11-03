@@ -420,3 +420,14 @@ Owner's reply: "u". The privacy claim's client is a minimal USER client. It read
 ## OWNER DECISION 2026-11-03 (LOG D575): D574 option (A) ADOPTED
 
 Owner's reply: "A". The client keeps panic=abort, and at startup marks itself non-dumpable: prctl(PR_SET_DUMPABLE, 0) plus setrlimit(RLIMIT_CORE, 0). This removes the core-dump image that would otherwise hold unwiped secrets after an abort (L3), and blocks same-user ptrace attach. It is implemented in the user client (D524) under the existing client gates (ELFs byte-identical, differential, D359(A) timing, constant-time check) plus a new gate: a forced panic leaves no core file and the process reports non-dumpable.
+
+## Decision request D576 (2026-11-03): the user client writes the change note's secrets to a file
+
+**Finding (pv-uc4, FILE-RECOVERY-SECRET).** The user client (D524) saves a recovery record so the user can later spend their change note: wallet::retain writes all 212 secret wallet bytes (input, change and recipient keys, salts and values) to a file (mode 0600, inside a 0700 directory, next to the public proof artifacts). That is necessary for a wallet, because without the change note's secrets the funds cannot be spent again. But the privacy contract (D159) puts durable file and environment effects inside the observer's reach, and the proof needs a rule for where secrets may rest. Your choice sets the observer boundary.
+
+**Options.**
+- (A) Keep the file, and declare user-private storage (the wallet input and this recovery record, both 0600 in a private directory kept separate from public artifacts) to be inside the user's own trust boundary, outside the observer. This adds a named boundary to the trust inventory, and disk remanence of those files becomes an explicit L3 residual.
+- (B) The client writes NO secrets to disk. It returns the change note's secrets over a caller-provided raw output pipe, the mirror image of the N7 input pipe (a fixed-width record, with nothing formatted). The calling wallet owns storage, exactly as it already owns the input secrets. The client's durable footprint becomes public data only (proof, statement, instruction), and the proof's boundary stays where N7 already put it: the user's own pipes.
+- (C) Encrypt the recovery file under a user-supplied key. Not recommended: it still needs a key-storage answer, and it adds cryptographic code to verify.
+
+**Recommendation: (B).** It keeps the observer boundary exactly where N7 already placed it, adds no trust item, removes a durable secret file and its L3 remanence from the client, and is a small change to code already being written (about 30 lines, under the existing client gates plus a check that no secret bytes reach any file).
