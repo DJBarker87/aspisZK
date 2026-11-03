@@ -45,9 +45,10 @@ theorem convert_component (part : Slice U8) :
          match converted with
          | .Err _ => ok none
          | .Ok value => ProverRwSuccessParserSource.aspis_core.field.M31.from_le_bytes value) : Result (Option M)) =
-      (match PV_RDCD4_TryArray194.into 4#usize part.val with
-       | none => ok none
-       | some value => ok (PV_RDCD4_BytesSource.scalar value)) := by
+      (show Result (Option M) from
+        match PV_RDCD4_TryArray194.into (T := U8) 4#usize part.val with
+        | none => ok none
+        | some value => ok (PV_RDCD4_BytesSource.scalar value)) := by
   simp only [core.array.TryFromArrayCopySlice.try_from,PV_RDCD4_TryArray194.into,Slice.length]
   split <;> simp only [↓reduceDIte,bind_tc_ok,scalar]
 
@@ -109,24 +110,30 @@ theorem quartic (bytes : Slice U8) :
     ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes bytes = qm bytes.val := by
   unfold ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes qm
   simp_rw [complex]
-  simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
-    ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
-    bind_assoc_eq,bind_tc_ok]
-  rw [range_bind]
-  apply bind_congr
-  intro firstSlice
-  apply bind_congr
-  intro firstOption
-  cases firstOption with
-  | none => simp [massert,read_discriminant,ProverRwDictionaryOptionSource.optionDiscriminant]
-  | some c0 =>
-    simp only [bind_tc_ok]
-    rw [range_bind]
+  simp only [core.slice.index.Slice.index,
+    core.slice.index.SliceIndexRangeUsizeSlice,
+    core.slice.index.SliceIndexRangeUsizeSlice.index,
+    PV_RDCD5_ParserRange.index,UScalar.le_equiv,Slice.length,
+    PV_RDCD4_SliceRange194.window,List.slice]
+  split
+  · simp only [bind_tc_ok]
     apply bind_congr
-    intro secondSlice
-    apply bind_congr
-    intro secondOption
-    cases secondOption <;> simp [massert,read_discriminant,ProverRwDictionaryOptionSource.optionDiscriminant]
+    intro firstOption
+    cases firstOption with
+    | none => simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+        ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+        massert,read_discriminant]
+    | some c0 =>
+      simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,bind_tc_ok]
+      split
+      · simp only [bind_tc_ok]
+        apply bind_congr
+        intro secondOption
+        cases secondOption <;> simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
+          ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,
+          massert,read_discriminant]
+      · rfl
+  · rfl
 
 #print axioms bind_congr
 #print axioms range_bind
