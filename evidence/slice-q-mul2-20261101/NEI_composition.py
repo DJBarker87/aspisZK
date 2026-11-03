@@ -62,7 +62,7 @@ def apply(base):
   assert row['frozen_body_verified'] and row['frozen_body_sha256']==p['source_body_sha256']
   row.update(bridge_status='CLOSED-CONDITIONAL',selected_claims=[p['claim_id']],no_credit_reason=None)
   if p['claim_id'] not in row['claim_ids']:row['claim_ids'].append(p['claim_id'])
-  row['named_hypotheses']=[dict(name=p['claim_id']+'.PacketDomain',statement=p['domain'],discharged_by=None),dict(name=p['claim_id']+'.PhysicalInterpretation',statement='Retain frozen source/ABI/native tool/std-array semantic interpretation; exact constructor result and whole receiver frame separately checked.',discharged_by=None)]
+  row['named_hypotheses']=[dict(name=p['claim_id']+'.PacketDomain',statement=p['domain'],discharged_by=None),dict(name=p['claim_id']+'.PhysicalInterpretation',statement='Retain frozen source/ABI and P6/D188 tool semantic transport; actual body, release domain/profile, full Result, state and ordered effects separately audited.',discharged_by=None)]
   row['reviewed_packet_updates'].append(dict(prefix='NEI',disposition='New native evidence replaces no old native credit; composed gates remain necessary',evidence=['evidence/slice-q-mul2-20261101/NEI_CTOR_PACKETS.json']))
  for row in out['rows']:
   for o in row['caller_domain_obligations']:
@@ -180,7 +180,7 @@ def main():
  base=obj(E.parent/'native-ledger3-20261029/NDT_LEDGER.json')
  edges=prepare(base);out,delta=validate(base,edges)
  (E/'NEI_COMPOSE_EDGES.json').write_text(json.dumps(edges,indent=1)+'\n')
- (E/'NEI_DERIVED_LEDGER.json').write_text(json.dumps(out,indent=1)+'\n')
+ (E/'NEI_DERIVED_LEDGER.json').write_text(json.dumps(out,separators=(',',':'))+'\n')
  (E/'NEI_COMPOSE_DELTA.json').write_text(json.dumps(delta,indent=2)+'\n')
  print(json.dumps(dict(composed_rows_closed=delta['composed_rows_closed'],edge_closed=delta['edge_closed'],original_neb_validator_sha256=sha(B/'NEB_validate.py'),old_native_credit_used=[]),indent=2))
 if __name__=='__main__':main()

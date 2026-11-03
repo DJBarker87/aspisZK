@@ -1,3 +1,4 @@
+import NEI_ProfileDomain
 import NEI_FieldFrames
 import NEI_LineBridge
 import NEI_CircleBridge
@@ -20,3 +21,7 @@ import NEI_PublicDotFinishValues
 #print axioms NEI_FieldFrames.widen
 #print axioms NEI_LineBridge.complete
 #print axioms NEI_CircleBridge.complete
+
+#print axioms NEI_ReleaseField.actual_wide_mul
+#print axioms NEI_ReleaseField.actual_wide_sub
+#print axioms NEI_ReleaseField.raw_add_profile_counterexample

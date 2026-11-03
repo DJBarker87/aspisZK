@@ -129,6 +129,8 @@ def main():
  require(derived==obj(E/'NEI_DERIVED_LEDGER.json'),'derived ledger differs from checked certificates')
  tests=obj(E/'NEI_COMPOSE_TESTS_receipt.json')
  require(tests['failed']==0 and tests['passed']==29 and len(tests['tests'])==29 and all(t['status']=='PASS' for t in tests['tests']),'new composition checks missing or failed')
+ profiles=obj(E/'NEI_PROFILE_TESTS.json')
+ require(profiles['failed']==0 and profiles['passed']==5 and profiles['model_packets']==20 and profiles['checked_and_wrapping_profiles_audited'],'release profile checks missing or failed')
  require(delta['added_local_bridges']==[r['function'] for r in results],'wrong local delta')
  edges=obj(E/'NEI_EDGES.json')['edges']
  require(all((e['status']=='OPEN' and e['certificate'] is None) or (e['status']=='CLOSED' and e['certificate']['id'].startswith('NEI-')) for e in edges),'edge credit without a new NEI certificate')

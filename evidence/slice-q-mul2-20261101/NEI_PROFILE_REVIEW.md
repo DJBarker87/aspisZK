@@ -8,8 +8,8 @@ All-typed equality of two checked definitions does not prove all-typed native
 wrapping fidelity. M31.add(U32::MAX,1) is a concrete distinction. No accepted
 protocol counterexample is inferred from this noncanonical input.
 
-The previously generated 66-row candidate is provisional while the release
-profile repair is validated. No new trust item is adopted. The repair uses the
+The previously generated 66-row candidate was held provisional until the
+release profile repair passed. No new trust item is adopted. The repair uses the
 existing wrapping FIo_Native definitions and the original canonical call/value
 proofs as mathematical lemmas only. No suspended NEB Kani credit is restored.
 NEI_ProfileDomain.lean proves the checked/wrapping operator association with
@@ -17,7 +17,7 @@ canonical domains where needed, unrestricted raw domains for widened scalar
 multiplication/reduction and mixed scalar products, and explicit nominal maps
 from the actual E001 carriers. It imports rather than reproves arithmetic.
 Every new theorem prints its axioms. Native fixture checks under both profiles
-are planned with the same actual frozen bodies, controls and inputs.
+passed with the same actual frozen bodies, controls and inputs.
 
 Caller domains must follow real expressions and sequential returns: the
 NEB_FieldDomains/CMCalls/QMCalls/ByRCalls/WideCalls/AdditiveCalls mathematical
@@ -27,8 +27,8 @@ and intermediate values, with raw inverse words allowed only at unrestricted
 scalar multiplication sites. Canonicality is not assumed for arbitrary inverse
 words or all field carriers. Incoming unproved caller edges remain OPEN.
 
-The profile repair is subject to the same capped admission gates. L130 is
-queued at exit78/allowed:false; no job may start before admission succeeds.
+The profile repair is subject to the same capped admission gates. L130 initially waited at exit78/allowed:false; its eventual launch and every
+later launch have exit0/allowed:true admission receipts.
 
 L132 replay PASS; L135 symbolic two-child Result/record lemma PASS; L136 all
 operator/actual-carrier profile associations PASS, standard axioms only.
@@ -41,3 +41,8 @@ wall time 2.604 seconds, zero swap. Failed drafts carry no proof credit.
 The wrapping WideExact.sub model is the literal two-QM31.sub record wrapper,
 needed because that wrapper is not exported by FIo_Native. Its precise body
 is visible in NEI_ProfileDomain.lean and associated to actual E001 source.
+
+N015/N016: wrapping-profile native fidelity PASS (20/20 tests), matched
+wrong-result controls FAIL as required (20/20). Same source and input hashes
+as the checked-profile pair. NEI_PROFILE_TESTS.json passes five additional
+domain/profile/association rejection controls; no old native credit used.

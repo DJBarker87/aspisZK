@@ -6,8 +6,8 @@ coherent CurrentWide dictionary under explicit field-by-field nominal maps.
 Those maps have proved inverses. No theorem assumes the operator result,
 successful final execution, or an equality supplied by a caller. The relation
 also preserves checked failures; mathematical field laws remain conditional on
-the model's canonical domains as before. Fidelity itself has no stronger input
-precondition. The same CurrentWide dictionary is used in the accepted fold
+the model's canonical domains as before. The checked-model association itself has no stronger input
+precondition. Native wrapping fidelity has the release domains below. The same CurrentWide dictionary is used in the accepted fold
 bridges and the JFv probe associations. No NEG arithmetic proof is reproved.
 
 Restoration preflight: these frozen methods take only owned fixed field records,
@@ -34,9 +34,9 @@ credit. Only the twenty selected tests execute.
 
 Within-field edges use the exact same emitted parent bodies and nominal
 bind-transport laws, not arbitrary result hypotheses. Parent association proofs
-compose the named child associations at the actual argument fields. Child
-fidelity domains contain all typed inputs, so no intermediate stronger domain
-is assumed. Pure typed receiver resolutions from the unchanged NEB gate classify
+compose the named child associations at the actual argument fields. Child release domains are established at the real argument fields and
+sequential returns by the named canonical call witnesses; the unrestricted
+scalar/mixed-product domains remain unrestricted. Pure typed receiver resolutions from the unchanged NEB gate classify
 conservative alternatives as STATIC_UNREACHABLE: e.g. x.a.double in mul_by_r has
 M31 receiver, never CM31. The original obligation is retained and discharged;
 no false alternative is called a real call. M31 constructors and U32-to-U64
@@ -52,3 +52,31 @@ Native inputs and observations use direct named field records/coordinates; no
 constructor or to_limbs observer is needed to interpret the field fixtures.
 N011/N012 passed with constructor/projection helpers, and are superseded by the
 stricter direct-field pair, never credited as universal native proofs.
+
+Release profile repair: NEI_ReleaseField.actual_* (L136), using the private
+mathematical replay L132 and symbolic Result/record transport L135, connects
+all twenty actual checked definitions to the wrapping interpretation. Native
+add/sub/double, full record products, mul_by_r and mul_u require canonical
+input coordinates. Scalar reductions/multiplication and all mixed scalar
+products admit every typed input. NEI_release_gate.py fixes these domains and
+operator-specific cut theorem requirements; the validator rejects an all-typed
+native claim for a canonical-only operator. The stronger all-typed CHECKED
+model equality is retained separately. The noncanonical raw-add distinction
+is formally proved; it is not a protocol counterexample or an accepted premise.
+
+N015/N016 repeat the same 100 fixtures and twenty controls in the deployed
+wrapping overflow profile: all twenty positive tests pass, all twenty controls
+fail at the intended wrong-result assertion. They share exactly the source
+and input hashes of N013/N014. No universal native arithmetic claim comes
+from fixtures. The wrapping WideExact.sub interpretation is a literal owned
+two-QM31.sub record wrapper because FIo_Native omits that wrapper; its explicit
+body and complete Result transport are in NEI_ProfileDomain/NEI_ProfilePair.
+No new trust item or failed-input semantic equality is assumed.
+
+L130's legacy RawTx1 import was rejected. Needed mathematical declarations
+were privately replayed with pinned primitive imports and NEI namespaces;
+NEI_PROFILE_REPLAY_INPUTS.json records original revisions/hashes, unchanged
+retained declarations, import changes and namespace renames. Unused declarations
+were pruned explicitly, and NEG proofs were imported. L134's wide-wrapper
+kernel memory failure was replaced by a symbolic two-child lemma; no cap was
+raised or failed draft credited. See NEI_PROFILE_REVIEW.md.

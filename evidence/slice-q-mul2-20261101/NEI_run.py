@@ -43,7 +43,10 @@ sys.exit(r.returncode)
 files={}
 sources=[]
 env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_NET_OFFLINE='true',CARGO_BUILD_JOBS='1',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEI_tmp',LEAN_PATH=B+'/NEI_objects:'+C+'/NEG_results_20261101:'+C+'/NEG_exports_20261029:'+C+'/NEB_exports_20261029:'+C+':/home/dombarker/project-offloads/codex-cx-reconcile-cache-20261028/objects:'+W+':'+W+'/objects')
-if os.environ.get('NEI_ARCHIVE_IMPORT')=='1':env['LEAN_PATH']=env['LEAN_PATH'].replace(B+'/NEI_objects',C+'/NEI_exports_20261102',1)
+if os.environ.get('NEI_ARCHIVE_IMPORT')=='1':
+    archive_set=os.environ.get('NEI_ARCHIVE_SET','NEI_exports_20261102')
+    assert archive_set.startswith('NEI_exports_') and archive_set.replace('_','').isalnum()
+    env['LEAN_PATH']=env['LEAN_PATH'].replace(B+'/NEI_objects',C+'/'+archive_set,1)
 deps={}
 native=[]
 if kind=='lean':
@@ -69,6 +72,7 @@ elif kind=='kani':
     if os.environ.get('NEI_CODEGEN_ONLY')=='1':native+=['--only-codegen']
     command=['python3','NEI_gate.py',a+'.json']
 elif kind=='native':
+    if os.environ.get('NEI_NATIVE_OVERFLOW_CHECKS')=='false':env['CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS']='false'
     family=os.environ.get('NEI_NATIVE_FAMILY','line');assert family in ['line','circle','prefix','push','row','accumulate','dots','field']
     for name in [f'NEI_{family}_native.py',f'NEI_{family}_native.rs','NEI_FROZEN.json']:
         files[name]=(json.loads((E/'NEI_FIELD_NATIVE_INPUT.json').read_text())['rust_source'] if family=='field' and name=='NEI_field_native.rs' else (E/name).read_text())
@@ -89,7 +93,7 @@ else:
     if (E/'NEI_row_reference.rs').exists():files['NEI_row_reference.rs']=(E/'NEI_row_reference.rs').read_text()
     if os.environ.get('NEI_EXTRACT_CONFIG'):env['NEI_EXTRACT_CONFIG']=os.environ['NEI_EXTRACT_CONFIG']
     sources=list(files);command=['python3','NEI_extract.py']
-cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized reference compilation and Charon/Aeneas IR generation; no arithmetic execution' if kind=='extract' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
+cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,native_command=native,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=deps,expected_time='Focused elaboration' if kind=='lean' else 'Optimized reference compilation and Charon/Aeneas IR generation; no arithmetic execution' if kind=='extract' else 'Optimized frozen-body fidelity fixtures with matched controls; no universal arithmetic gate' if kind=='native' else 'Optimized compile then named native check; multiplication excluded',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
 files[a+'.json']=json.dumps(cfg)
 code=f'''from pathlib import Path
 import json,hashlib

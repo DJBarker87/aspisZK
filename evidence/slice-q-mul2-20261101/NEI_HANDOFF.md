@@ -28,9 +28,9 @@ Principal requested members:
 | four_dots_one | OPEN | Real canonical::Q::raw callee is omitted from Q; NEI_DOTS_BOUNDARY.json. Need allowed callee adoption plus one actual loop iteration/log/copy context, then existing NEG induction/product laws. Constructor, reducer, Q::limbs, both finishers and wide constructor are now freshly composed. |
 | four_dots | OPEN | E007 and L086 give exact full-Result wrapper association and same q/g, slots0..3. Needs CLOSED child, exact native prefix/borrow/call context and copy qualification where reached. A model wrapper equality cannot replace these. |
 
-Kani budget exhausted:50/50. Actual Lean126/140 (numbered through L129;
+Kani budget exhausted:50/50. Actual Lean135/140 (numbered through L138;
 L054/L079/L087 were prelaunch-only gaps). Extraction10/25. Native differential
-runner14 attempts: these are fidelity tests, NOT universal native arithmetic
+runner16 attempts: these are fidelity tests, NOT universal native arithmetic
 proofs. Remaining principal obligations need native evidence or an outside-Q
 callee; no outstanding admissible Lean-only arithmetic result is hidden by the
 Kani stop. All relevant actual bodies are extracted already (or imported NEG),
@@ -50,11 +50,15 @@ Method/evidence:
   with only coherent imports/private namespaces, with provenance.
 - Field D188: existing actual E001 / all-Result NEI_FieldScalar/CM/QM/Wide
   associations, inverse record maps, L124 emitted100 fixtures, L127 frames/widen,
-  N013/N014 twenty direct-field native tests/controls. No multiplication in Kani,
+  N013/N014 twenty direct-field checked-profile native tests/controls and
+  N015/N016 the identical-source wrapping-profile pair. L132/L135/L136 prove
+  explicit canonical checked/wrapping correspondence and same-site domains;
+  raw scalar/mixed-product domains remain unrestricted. No all-typed native
+  add/sub/product claim is inferred from an all-typed checked-model equality. No multiplication in Kani,
   no field stub, no native universal proof inferred from fixtures. N010 failed
   only on missing frozen KAT build inputs; N011/N012 helper-based observations
   are superseded by direct-record N013/N014. Inputs copied from frozen revision.
-- L128 combined co-import/axioms audit PASS, standard axioms only. Every accepted
+- L137 combined co-import/axioms audit PASS, standard axioms only. Every accepted
   top theorem has a printed audit; failed drafts and timeouts are excluded.
 - All host compiler/prover jobs used admitted serial6G/8G/swap0/tasks64 scopes,
   Lean -M7000, optimized Rust, offline frozen lock/graph per Kani run. Scope and
@@ -69,8 +73,8 @@ by NEI_FINAL_INTEGRITY.json when completed. Aeneas/AeneasMeta objects are pinned
 The frozen ELF hashes are inherited, NOT newly rebuilt: default f8c0ec72...,
 devnet63ad3e9c..., Pool121f3e29...; no shipped source changed.
 
-Archive-only import audit L129 PASS with standard axioms, using retained
-NEI_exports_20261102 (88 compiled artifacts). NEI_CACHE_EXPORTS.json records
+Archive-only import audit L138 PASS with standard axioms, using retained
+NEI_exports_20261103 (91 compiled artifacts; prior archive retained). NEI_CACHE_EXPORTS.json records
 all hashes. NEI_FINAL_CLEANUP.json confirms own Rust/Kani targets and solver tmp
 removed; cache and source scratch retained, no keys created or touched.
 
@@ -82,3 +86,22 @@ retains the exact failure and completed-prefix provenance. An added early
 static/direct contradiction assertion strengthens the wrapper; the four
 remaining cases run separately via NEI_COMPOSE_TESTS_TAIL.py. No original check
 is removed or weakened, and no formal timeout is repeated.
+
+Final acceptance: NEI_VALIDATION_RUN.json exit0, 66 composed occurrence rows,
+33 functions, 113/257 slice edges. NEI_VALIDATED.json audits all local packets
+and the exact derived ledger. 29 composition cases pass (25 completed prefix
+plus four isolated remaining cases after a monotone rejection guard); five
+additional release-domain/profile rejection cases pass. NEI_PROFILE_TESTS.json
+requires both checked/wrapping native pairs and exact operator/cut proofs.
+No original NEB check was edited. NEI_FINAL_INTEGRITY.json binds deliverables,
+validators, receipts and cache manifests. The derived ledger uses compact JSON
+to remain below 20 MB. No unchanged full frozen manifest or ELF rebuild was run.
+
+The final release-domain repair is in commit 5d12713bd3, followed by the final
+packet/ledger commit. L134's kernel memory failure is retained; L135's symbolic
+record lemma and L136 replace that shape below the original cap. The five
+unused Lean and fifteen unused extraction slots cannot discharge the listed
+native Vec/call/context gaps or authorize the outside-slice callees. All
+admissible remaining mathematical obligations of these members were attempted;
+more unchanged extraction or import replay would not establish those native
+bindings. Incoming caller-to-fold/push/row edges remain separate obligations.

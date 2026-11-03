@@ -74,3 +74,12 @@ eight edges; twenty-four mutation checks and NEI_validate pass. L123 co-imports
 the accepted arithmetic/fold/push/counter/wrapper proofs and audits their axioms:
 standard only. Fresh same-body certificates replace suspended older registry
 entries only after an allowlisted native/model audit; none is used as credit.
+
+Final release qualification: field packets separate all-typed checked-model
+fidelity from their native wrapping domains. L132/L135/L136 establish exact
+canonical checked/wrapping transport with same-site field argument witnesses;
+scalar reductions/multiplication and mixed scalar products retain unrestricted
+typed domains. N015/N016 validate identical fixtures and controls with overflow
+checks disabled. L137/L138 co-import and retained-cache audits pass with standard
+axioms. The 66-row result and 113 edges pass the final original-check-preserving
+validator. No provisional profile claim or old suspended native credit remains.
