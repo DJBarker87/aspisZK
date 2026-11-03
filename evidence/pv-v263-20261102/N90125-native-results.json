@@ -1,0 +1,55 @@
+[
+  {
+    "target": "compile scoped-handle Vec growth finite gate",
+    "command": [
+      "/home/dombarker/.cargo/bin/rustc",
+      "+1.94.1",
+      "--edition=2021",
+      "--cfg",
+      "feature=\"r1p-check\"",
+      "--cfg",
+      "feature=\"ct-host-prover\"",
+      "-C",
+      "opt-level=3",
+      "-C",
+      "debug-assertions=no",
+      "-C",
+      "overflow-checks=no",
+      "-C",
+      "panic=abort",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-growth.rs",
+      "-o",
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/N90125-growth"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.2317952469456941,
+    "stdout": "",
+    "stderr": "",
+    "expected": true,
+    "source_sha256": "347b631e37fddd1b25590c8a8704365fc4d3f23ff53a87f7a25e0f67c50df0f5"
+  },
+  {
+    "target": "fifteen actual scoped-handle pushes for three representative payloads",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/N90125-growth"
+    ],
+    "exit": 0,
+    "wall_seconds": 0.002357986057177186,
+    "stdout": "{\"label\":\"u8\",\"handle_size\":24,\"handle_align\":8,\"capacities\":[4, 4, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16],\"growth_requests\":[4, 8, 16]}\n{\"label\":\"representative-field-result\",\"handle_size\":24,\"handle_align\":8,\"capacities\":[4, 4, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16],\"growth_requests\":[4, 8, 16]}\n{\"label\":\"large-payload\",\"handle_size\":24,\"handle_align\":8,\"capacities\":[4, 4, 4, 4, 8, 8, 8, 8, 16, 16, 16, 16, 16, 16, 16],\"growth_requests\":[4, 8, 16]}\n",
+    "stderr": "",
+    "expected": true,
+    "credit": "finite native validation of std Vec growth, not actual callback success or whole worker binding"
+  },
+  {
+    "target": "matched changed-minimum growth control must fail",
+    "command": [
+      "/home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/N90125-growth",
+      "--bad-growth"
+    ],
+    "exit": -6,
+    "wall_seconds": 1.0840164918918163,
+    "stdout": "",
+    "stderr": "\nthread 'main' (3887542) panicked at /home/dombarker/project-offloads/codex-pv-runjoin-20261026/v263-native/tools/pv-v263-20261102/native-growth.rs:33:13:\nassertion `left == right` failed\n  left: 4\n right: 5\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+    "expected": true
+  }
+]

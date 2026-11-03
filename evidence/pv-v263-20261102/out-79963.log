@@ -1,0 +1,51 @@
+START 79963 R1Z.PV_V263_RawGrowth
+DONE 79963 R1Z.PV_V263_RawGrowth exit 1 wall 2.19 RSS 4494565376
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RawGrowth.lean:53:5: warning: Variable name `zero` is not explicitly referenced.
+
+The binding can be removed (if unused) or named `_` (if used implicitly).
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RawGrowth.lean:71:80: error: unsolved goals
+allocation : Allocation
+length : ℕ
+room : length + 1 ≤ capacity allocation
+ne : length ≠ capacity allocation
+⊢ (if length ≠ capacity allocation then Decision.reserved
+    else
+      if allocation.layout.size = 0 then Decision.overflow
+      else
+        if
+            requestedCap allocation.layout.size allocation.rawCapacity ≤ Usize.max ∧
+              requestedCap allocation.layout.size allocation.rawCapacity * allocation.layout.size ≤ Usize.max / 2 then
+          Decision.grow (requestedCap allocation.layout.size allocation.rawCapacity)
+            { old := release allocation,
+              bytes := requestedCap allocation.layout.size allocation.rawCapacity * allocation.layout.size,
+              align := allocation.layout.align }
+        else Decision.overflow) =
+    Decision.reserved
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RawGrowth.lean:73:18: warning: This simp argument is unused:
+  ne
+
+Hint: Omit it from the simp argument list.
+  simp only [plan,n̵e̵,̵ ̲if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_RawGrowth.lean:73:21: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  simp only [̵p̵l̵a̵n̵,̵n̵e̵,̵i̵f̵_̵t̵r̵u̵e̵]̵[̲p̲l̲a̲n̲,̲ ̲n̲e̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_V263_RawGrowth.minCap' does not depend on any axioms
+'R1Z.PV_V263_RawGrowth.requestedCap' does not depend on any axioms
+'R1Z.PV_V263_RawGrowth.plan' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.store' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.grow' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.byte_bound_implies_cap' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.enough' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.reserved_no_request' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_RawGrowth.zero_overflow' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.store_values' depends on axioms: [propext]
+'R1Z.PV_V263_RawGrowth.grow_fault' depends on axioms: [propext]
+

@@ -1,0 +1,135 @@
+{
+  "script_sha256": "daf0944a79f73aae8ec82f0ad364ce06513a883689a889c4c4a6f7907a1056f8",
+  "source_revision": "b2515cd2eae2c45c1b841f94186fda0fa3377cc6",
+  "evidence_class": "local structural iterator/handle indirection argument; not machine proof or complete worker binding",
+  "rows": [
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/mod.rs",
+      "full_body": "fn into_iter(self) -> Self::IntoIter {\n unsafe {\n let me = ManuallyDrop::new(self);\n let alloc = ManuallyDrop::new(ptr::read(me.allocator()));\n let buf = me.buf.non_null(); let begin = buf.as_ptr();\n let end = if T::IS_ZST {begin.wrapping_byte_add(me.len())}\n else {begin.add(me.len()) as *const T};\n let cap = me.buf.capacity();\n IntoIter { buf, phantom: PhantomData, cap, alloc, ptr: buf, end }\n }\n}",
+      "token_sha256": "19863b58b91c16988c91b901621bd9ddeb9e4e97c2bfce3d0ee6597d0701df29",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedIterator.intoIter transfers remaining values and original allocation without a Vec destructor",
+        "pointer begins at original base; endPointer uses byte wrapping for ZST and element stride for non-ZST"
+      ],
+      "remaining": [
+        "native allocator ownership/provenance and non-ZST address validity; phantom and Global/System allocator lowering"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/into_iter.rs",
+      "full_body": "fn next(&mut self) -> Option<T> {\n let ptr = if T::IS_ZST {\n if self.ptr.as_ptr() == self.end as *mut T {return None;}\n self.end = self.end.wrapping_byte_sub(1); self.ptr\n } else {\n if self.ptr == non_null!(self.end, T) {return None;}\n let old = self.ptr; self.ptr = unsafe {old.add(1)}; old\n };\n Some(unsafe {ptr.read()})\n}",
+      "token_sha256": "c05aba570bb31ce805132fd82a6c03daef21f62f5f4ce8c7f62403ccbf1389c1",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedIterator.next/moves: return exactly next value, shorten remaining initialized sequence, advance consumed count",
+        "cursor advances by element size; ZST cursor stays aligned and remaining count decreases",
+        "exhausted retains original allocation and returns None without any resource/runtime method request"
+      ],
+      "remaining": [
+        "typed native read and pointer/end encoding, including modulo ZST encoding and non-ZST allocation validity"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/vec/into_iter.rs",
+      "full_body": "fn drop(&mut self) {\n struct DropGuard<'a, T, A: Allocator>(&'a mut IntoIter<T, A>);\n impl<T, A: Allocator> Drop for DropGuard<'_, T, A> {\n fn drop(&mut self) {\n unsafe {\n let alloc = ManuallyDrop::take(&mut self.0.alloc);\n let _ = RawVec::from_nonnull_in(self.0.buf, self.0.cap, alloc);\n }\n }\n }\n let guard = DropGuard(self);\n unsafe {ptr::drop_in_place(guard.0.as_raw_mut_slice());}\n}",
+      "token_sha256": "a65fa8d4f26f2c4d3795e41f117ca72e6ccc21a19aaf7aa1e647b78805d66238",
+      "complete_body_checked": true,
+      "correspondence": [
+        "OwnedIterator.drop: drop remaining initialized elements, then guard deallocates original buf/cap",
+        "exhausted_drop: no element destructor; exact deallocator post-state/events; panic mapped to abort under profile",
+        "finalize .abort does not run an invented unwind guard after an element panic/abort"
+      ],
+      "remaining": [
+        "actual handle/caught-result/closure element drop glue and Global/System release codec; memory provenance"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "pub(crate) unsafe fn from_nonnull_in(ptr: NonNull<T>, capacity: usize, alloc: A) -> Self {\n unsafe {\n let ptr = ptr.cast(); let capacity = new_cap::<T>(capacity);\n Self {inner: RawVecInner::from_nonnull_in(ptr, capacity, alloc), _marker: PhantomData}\n }\n}",
+      "token_sha256": "e008676fe5b91ba459d94337c696c341b5b5cfdc2080c6c71b3e4e6a59a29de4",
+      "complete_body_checked": true,
+      "correspondence": [
+        "original buf, not current cursor, is reconstructed for drop",
+        "ZST capacity ignored by new_cap and never deallocated; non-ZST original raw capacity retained"
+      ],
+      "remaining": [
+        "new_cap, RawVec constructor and native drop glue/codegen boundary"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/std/src/thread/lifecycle.rs",
+      "full_body": "pub(super) struct JoinInner<'scope, T> {\n native: imp::Thread, thread: Thread, packet: Arc<Packet<'scope, T>>,\n}",
+      "token_sha256": "4aecdf39d17df16336ef2f3418ff73283e32a06e12234fdd7e25f77784cde94a",
+      "complete_body_checked": true,
+      "correspondence": [
+        "returned payload T occurs only behind Arc<Packet<T>> in the handle"
+      ],
+      "remaining": [
+        "compiler layout law V370; complete join lifecycle remains open"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/std/src/thread/lifecycle.rs",
+      "full_body": "struct Packet<'scope, T> {\n scope: Option<Arc<ScopeData>>, result: UnsafeCell<Option<Result<T>>>,\n _marker: PhantomData<Option<&'scope ScopeData>>,\n}",
+      "token_sha256": "0628297ae38b2eaf8e4cfbf577d0a4cc87a03c222715e90ed7c64b5ed132c9dd",
+      "complete_body_checked": true,
+      "correspondence": [
+        "Packet is sized for every reached T; its payload-dependent layout affects the separate Arc allocation, not inline handle storage"
+      ],
+      "remaining": [
+        "Packet allocation, result transport and Arc drop are still V400-257-lowering obligations"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1-scoped.rs",
+      "full_body": "pub struct ScopedJoinHandle<'scope, T>(JoinInner<'scope, T>);",
+      "token_sha256": "36c5c78027df87f79eb62b01e0f65817f96f82eb73ea2dd36eeda5900d9d4980",
+      "complete_body_checked": true,
+      "correspondence": [
+        "scoped handle wraps JoinInner directly"
+      ],
+      "remaining": [
+        "native layout/monomorphisation boundary V370"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/std/src/thread/thread.rs",
+      "full_body": "pub struct Thread {inner: Pin<Arc<Inner, System>>,}",
+      "token_sha256": "cac4001ded71c8db76016b3fffbbc995f2e722e03c5f83f983149f2dd0182d6b",
+      "complete_body_checked": true,
+      "correspondence": [
+        "Thread uses System-allocated Arc, distinct from the Global handle Vec allocation"
+      ],
+      "remaining": [
+        "System allocator and Thread/Inner lifecycle; cannot count all thread allocations from Vec capacities"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/std/src/sys/thread/unix.rs",
+      "full_body": "pub struct Thread {id: libc::pthread_t,}",
+      "token_sha256": "44d56b2a7e816eacb12151149c8b58cc9f79e428a4809a45fe16d2b21ef092ba",
+      "complete_body_checked": true,
+      "correspondence": [
+        "Unix native handle holds pthread_t"
+      ],
+      "remaining": [
+        "target/libc ABI and compiler layout boundary V370"
+      ]
+    }
+  ],
+  "models": {
+    "OwnedIterator": "9869570b6d5be64209874b6282215b142da201447759cea5cec95e0ba00e8d41",
+    "OwnedForks": "a247d99ced1c71ad2ae5fd4a4dfa024cdac497b0f501c37326bd535c7f741bef"
+  },
+  "payload_indirection": "Source establishes separate Packet allocation; representative handle size24/align8 measured by N90125. This is not an actual callback execution or a standalone machine proof of arbitrary monomorphisation layout.",
+  "source_binding_complete": false,
+  "actual_op257_installed": false,
+  "actual_reached_success": false,
+  "remaining": [
+    "native byte heap/provenance, typed moves, allocation validity/disjointness",
+    "actual element/closure/packet/Arc/Thread drop and join/scope/TLS effects",
+    "replace abstract lifecycle/method hooks in whole spine with these owned components",
+    "EVH lowering, native schedule, actual opsNative stateful capture, actual callbacks and Nonempty P"
+  ]
+}

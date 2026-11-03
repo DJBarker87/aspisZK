@@ -1,0 +1,195 @@
+{
+  "script_sha256": "bc20165b6d52648904fca64f092df9e13250db3926a5173061e083e3afbd88cd",
+  "source_revision": "ab9345a5a891e8baab5a3b537f0ee6a5cd731455",
+  "evidence_class": "local structural growth argument plus same-input finite native validation; not machine source proof",
+  "bodies": [
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "const fn min_non_zero_cap(size: usize) -> usize {\n if size == 1 { 8 } else if size <= 1024 { 4 } else { 1 }\n}",
+      "token_sha256": "cc88145279d86d78b4fe2410a7789d32d289875c43495b43c0904a3035d96b4b",
+      "complete_body_checked": true,
+      "correspondence": [
+        "RawGrowth.minCap matches all three branches"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "pub(crate) fn grow_one(&mut self) {\n unsafe { self.inner.grow_one(T::LAYOUT) }\n}",
+      "token_sha256": "a1effbe20edc1f1359e65f19a2b2370b70d9219dab56818e4c7c489209fd38c4",
+      "complete_body_checked": true,
+      "correspondence": [
+        "delegate with actual monomorphised element layout"
+      ],
+      "remaining": [
+        "actual T layout association V400-257-layout"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "unsafe fn grow_one(&mut self, elem_layout: Layout) {\n if let Err(err) = unsafe { self.grow_amortized(self.cap.as_inner(), 1, elem_layout) } {\n handle_error(err);\n }\n}",
+      "token_sha256": "985f500891de5e6b8ba3354fba9d18a786ab3adfa5879c7a9e675496dbd0bf46",
+      "complete_body_checked": true,
+      "correspondence": [
+        "RawGrowth.requestedCap uses RAW capacity as len and additional=1",
+        "GrowingPush.push routes overflow to runtime.overflow; no invented source Result"
+      ],
+      "remaining": [
+        "handle_error/diagnostics abort observation remains runtime binding"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "unsafe fn grow_amortized(&mut self, len: usize, additional: usize, elem_layout: Layout,)\n -> Result<(), TryReserveError> {\n debug_assert!(additional > 0);\n if elem_layout.size() == 0 { return Err(CapacityOverflow.into()); }\n let required_cap = len.checked_add(additional).ok_or(CapacityOverflow)?;\n let cap = cmp::max(self.cap.as_inner() * 2, required_cap);\n let cap = cmp::max(min_non_zero_cap(elem_layout.size()), cap);\n let ptr = unsafe { self.finish_grow(cap, elem_layout)? };\n unsafe { self.set_ptr_and_cap(ptr, cap) };\n Ok(())\n}",
+      "token_sha256": "26b320d592c748ce1f76351d83dea4b82b96a1f6230eb1c9c3a349f498cb525c",
+      "complete_body_checked": true,
+      "correspondence": [
+        "release profile eliminates debug assertion",
+        "RawGrowth.plan/grow retain ZST overflow and cap/byte overflow",
+        "raw+1 checked overflow implies selected cap>=raw+1 exceeds Usize.max and is rejected",
+        "raw*2 cannot overflow for a valid nonzero allocation (raw<=isize::MAX)",
+        "GrowingFacts.grows_fault retains complete allocator fault prefix before descriptor commit",
+        "GrowingFacts.grows_success commits pointer and exact requested cap, preserves type layout"
+      ],
+      "remaining": [
+        "native allocation validity/isize bounds/byte preservation required; formal model uses Nat arithmetic under these source bounds"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "unsafe fn finish_grow(&self, cap: usize, elem_layout: Layout,)\n -> Result<NonNull<[u8]>, TryReserveError> {\n let new_layout = layout_array(cap, elem_layout)?;\n let memory = if let Some((ptr, old_layout)) = unsafe { self.current_memory(elem_layout) } {\n debug_assert!(old_layout.align() == new_layout.align());\n unsafe {\n hint::assert_unchecked(old_layout.align() == new_layout.align());\n self.alloc.grow(ptr, old_layout, new_layout)\n }\n } else { self.alloc.allocate(new_layout) };\n match memory {\n Ok(memory) => Ok(memory),\n Err(_) => Err(AllocError { layout: new_layout, non_exhaustive: () }.into()),\n }\n}",
+      "token_sha256": "e8149d5bc42ffb40210e034eee8939c4f803a89e0707bce10cb141383061890b",
+      "complete_body_checked": true,
+      "correspondence": [
+        "RawGrowth.Resize.old=None is allocate; Some retains pointer,old bytes,alignment for grow",
+        "new byte size=cap*element size for valid Rust element layouts (size multiple of alignment)",
+        "release current_memory correspondence retained from D575"
+      ],
+      "remaining": [
+        "Global::grow/allocate and actual byte heap are unbound; resize is an explicit runtime operation, not fabricated callback values"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "const unsafe fn set_ptr_and_cap(&mut self, ptr: NonNull<[u8]>, cap: usize) {\n self.ptr = Unique::from(ptr.cast());\n self.cap = unsafe { Cap::new_unchecked(cap) };\n}",
+      "token_sha256": "088bc91b910faf83265070fb68132136028e792399e0af8a16ed6b19b0d6dc90",
+      "complete_body_checked": true,
+      "correspondence": [
+        "GrowingFacts.grows_success uses requested cap, not allocator returned slice length"
+      ],
+      "remaining": []
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/alloc/src/raw_vec/mod.rs",
+      "full_body": "const fn layout_array(cap: usize, elem_layout: Layout) -> Result<Layout, TryReserveError> {\n match elem_layout.repeat(cap) {\n Ok((layout, _pad)) => Ok(layout),\n Err(_) => Err(CapacityOverflow.into()),\n }\n}",
+      "token_sha256": "2c313a25767e717dac0e21eb18df06e1d080873c92ede6d82300118f7a73c4f8",
+      "complete_body_checked": true,
+      "correspondence": [
+        "RawGrowth.plan checks byte isize bound and retains overflow",
+        "RawGrowth.byte_bound_implies_cap: explicit usize cap check redundant for nonzero element size"
+      ],
+      "remaining": [
+        "Layout::repeat body/stride law and native validity/alignment remain required before whole binding"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "pub const fn repeat(&self, n: usize) -> Result<(Self, usize), LayoutError> {\n let padded = self.pad_to_align();\n if let Ok(repeated) = padded.repeat_packed(n) {Ok((repeated, padded.size()))}\n else {Err(LayoutError)}\n}",
+      "token_sha256": "cbee5c5a1be76ff38ded64fa096b92337f51eee625aafe1755e6a2c685d093b5",
+      "complete_body_checked": true,
+      "correspondence": [
+        "repeat uses padded type stride before multiplication"
+      ],
+      "remaining": [
+        "type-size padding/bit-rounding association"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "pub const fn repeat_packed(&self, n: usize) -> Result<Self, LayoutError> {\n if let Some(size) = self.size.checked_mul(n) {\n Layout::from_size_alignment(size, self.align)\n } else {Err(LayoutError)}\n}",
+      "token_sha256": "d5982ff855aad38bbde340b89b499cbe0c5cd874daf26e345041289cf07d2c04",
+      "complete_body_checked": true,
+      "correspondence": [
+        "checked multiplication retains overflow; raw growth checks product before request"
+      ],
+      "remaining": [
+        "bitvector/checked arithmetic under compiler boundary V370"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "const fn from_size_alignment(size: usize, align: Alignment) -> Result<Self, LayoutError> {\n if size > Self::max_size_for_align(align) {return Err(LayoutError);}\n Ok(Layout {size, align})\n}",
+      "token_sha256": "08bb92052e01fa64149c3d4c98c94ea55fba872dff64e9e610a506ff7e8402d6",
+      "complete_body_checked": true,
+      "correspondence": [
+        "LayoutBounds.array_limit relates exact alignment bound to RawGrowth byte bound under explicit valid-type premises"
+      ],
+      "remaining": [
+        "actual reached type size/alignment and alignment-divides-word-size facts"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "const fn max_size_for_align(align: Alignment) -> usize {\n unsafe {unchecked_sub(isize::MAX as usize + 1, align.as_usize())}\n}",
+      "token_sha256": "e3d08ff929c604a9b07c132a5a27d24f34b04575811f18e841372c6317cfdd9d",
+      "complete_body_checked": true,
+      "correspondence": [
+        "exact bound is isize::MAX+1-align, not simply isize::MAX on arbitrary layouts",
+        "LayoutBounds.aligned_limit supplies guarded arithmetic equivalence for aligned type strides"
+      ],
+      "remaining": [
+        "native alignment invariants"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "pub const fn pad_to_align(&self) -> Layout {\n let new_size = self.size_rounded_up_to_custom_align(self.align);\n unsafe {Layout::from_size_align_unchecked(new_size, self.align())}\n}",
+      "token_sha256": "b8622a59c57f3638a8e585475e4ff6139c837985d84602d6260cb2348987c670",
+      "complete_body_checked": true,
+      "correspondence": [
+        "native type size is a multiple of native type alignment; otherwise padding must be retained"
+      ],
+      "remaining": [
+        "native type-layout/padding law; no arbitrary Layout equivalence claimed"
+      ]
+    },
+    {
+      "path": "evidence/pv-v263-20261102/inputs/std-1.94.1/core/src/alloc/layout.rs",
+      "full_body": "const fn size_rounded_up_to_custom_align(&self, align: Alignment) -> usize {\n unsafe {\n let align_m1 = unchecked_sub(align.as_usize(), 1);\n unchecked_add(self.size, align_m1) & !align_m1\n }\n}",
+      "token_sha256": "609a1dc98096fe149bf8ca6b6584740b9a647b6f75510beb49061eb7155f34da",
+      "complete_body_checked": true,
+      "correspondence": [
+        "retains exact pinned bit-rounding body as required source boundary"
+      ],
+      "remaining": [
+        "bit-rounding semantics and actual valid type-layout premises remain; no completed native byte-heap binding"
+      ]
+    }
+  ],
+  "models": {
+    "RawGrowth": "df78280bf0bd03488c2e95bf3fa6f63ca11135ed24d262c9f4063577ca627025",
+    "GrowingPush": "3e9b34a1f3822f72c99e88c61f8674321c240ca299f95ed911e122e49941b7b5",
+    "GrowingFacts": "7135549ead35b15bc96a90406c6d746c40d306f209719ddf5d7352f0a40716f6",
+    "GrowthSchedule": "2946199f07fd2aef01177397a93d12cd9d0bc50ed27d0fec534f1b482ab5ec0c",
+    "LayoutBounds": "38022bad5af58c4e1653ada9f8e59118962ad95c520d7f335532ed14b19fa0ba"
+  },
+  "native_receipt": "N90125-receipt.json",
+  "native_validation": "representative scoped-handle payloads; NOT actual encoder/SemanticOracle execution",
+  "profile": {
+    "rustc": "1.94.1",
+    "release": true,
+    "opt_level": 3,
+    "panic": "abort",
+    "debug_assertions": false,
+    "overflow_checks": false
+  },
+  "source_binding_complete": false,
+  "actual_op257_installed": false,
+  "actual_reached_success": false,
+  "remaining": [
+    "byte heap, valid ownership/layout, Global allocator and Layout::repeat binding",
+    "actual handle layout and integration of OwnedForks/iterator lifecycle into complete source spine",
+    "native schedule, thread/TLS/scope, EVH codec",
+    "actual opsNative/stateful capture and actual callback laws"
+  ]
+}

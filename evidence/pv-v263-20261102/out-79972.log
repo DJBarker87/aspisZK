@@ -1,0 +1,46 @@
+START 79972 R1Z.PV_V263_OwnedIterator
+DONE 79972 R1Z.PV_V263_OwnedIterator exit 1 wall 3.12 RSS 4505075712
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OwnedIterator.lean:19:4: error: Application type mismatch: The argument
+  LE.le.trans owner.initialized.fits owner.reserved
+has type
+  owner.initialized.values.length ≤ capacity owner.allocation
+but is expected to have type
+  0 + (↑owner.initialized.values).length ≤ capacity owner.allocation
+in the application
+  { allocation := owner.allocation, consumed := 0, remaining := ↑owner.initialized.values, fits := ⋯ }
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OwnedIterator.lean:57:21: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.50 = ?m.50
+but is expected to have type
+  (match h : iter.remaining with
+        | [] => (none, iter)
+        | a :: rest =>
+          (some a,
+            { allocation := iter.allocation, consumed := iter.consumed + 1, remaining := rest,
+              fits := ⋯ })).2.consumed =
+    iter.consumed + 1
+in the application
+  ⟨?m.48, rfl⟩
+/home/dombarker/project-offloads/codex-pv-runjoin-20261026/runjoin32-lean/sources/R1Z/PV_V263_OwnedIterator.lean:56:18: warning: This simp argument is unused:
+  h
+
+Hint: Omit it from the simp argument list.
+  simp only [next,̵h̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'R1Z.PV_V263_OwnedIterator.Iter' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.intoIter' depends on axioms: [propext, sorryAx]
+'R1Z.PV_V263_OwnedIterator.pointer' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.endPointer' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.next' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_V263_OwnedIterator.deallocate' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.dropValues' does not depend on any axioms
+'R1Z.PV_V263_OwnedIterator.drop' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.moves' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_OwnedIterator.cursor' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_OwnedIterator.zst_cursor' depends on axioms: [propext, sorryAx, Quot.sound]
+'R1Z.PV_V263_OwnedIterator.exhausted' depends on axioms: [propext, Quot.sound]
+'R1Z.PV_V263_OwnedIterator.destructorOutcome' depends on axioms: [propext]
+'R1Z.PV_V263_OwnedIterator.exhausted_drop' depends on axioms: [propext, Quot.sound]
+
