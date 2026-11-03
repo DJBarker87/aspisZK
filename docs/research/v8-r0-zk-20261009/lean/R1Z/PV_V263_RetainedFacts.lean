@@ -16,7 +16,7 @@ theorem loop_shape {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
       p.1.capacity=out.capacity ∧ p.2=completed+ids.length)
       (PV_V263_BufferLoop.loop runtime layouts thread callback ids out completed room) := by
   induction ids generalizing out completed with
-  | nil => exact pure_post _ (out,completed) ⟨by omega,rfl,by omega⟩
+  | nil => exact pure_post _ (out,completed) ⟨by simp only [List.length_nil,Nat.add_zero],rfl,by simp only [List.length_nil,Nat.add_zero]⟩
   | cons i ids ih =>
     apply bind_any
     intro a
@@ -30,9 +30,9 @@ theorem loop_shape {S A : Type} (runtime : PV_V263_MapSpine.Runtime S)
       simp only [PV_V263_BufferLoop.stored]
       simp only [List.length_cons] at room
       omega
-    have rec := ih next (completed+1) remaining
+    have recurse :=  ih next (completed+1) remaining
     intro w p hp
-    obtain ⟨hlen,hcap,hcount⟩ := rec w p hp
+    obtain ⟨hlen,hcap,hcount⟩ := recurse w p hp
     have step : next.values.length=out.values.length+1 := PV_V263_BufferLoop.stored_length _ _ _
     have cap : next.capacity=out.capacity := rfl
     simp only [List.length_cons]
@@ -61,7 +61,7 @@ theorem collect_shape {S A : Type} (callback : Nat → Q S A)
       p.values.length=out.values.length+ids.length ∧ p.capacity=out.capacity)
       (PV_V263_RetainedSpine.collectLoop callback ids out room) := by
   induction ids generalizing out with
-  | nil => exact pure_post _ out ⟨by omega,rfl⟩
+  | nil => exact pure_post _ out ⟨by simp only [List.length_nil,Nat.add_zero],rfl⟩
   | cons i ids ih =>
     apply bind_any
     intro a
@@ -73,9 +73,9 @@ theorem collect_shape {S A : Type} (callback : Nat → Q S A)
       simp only [PV_V263_BufferLoop.stored]
       simp only [List.length_cons] at room
       omega
-    have rec := ih next remaining
+    have recurse :=  ih next remaining
     intro w p hp
-    obtain ⟨hlen,hcap⟩ := rec w p hp
+    obtain ⟨hlen,hcap⟩ := recurse w p hp
     have step : next.values.length=out.values.length+1 := PV_V263_BufferLoop.stored_length _ _ _
     have cap : next.capacity=out.capacity := rfl
     simp only [List.length_cons]
