@@ -65,12 +65,10 @@ theorem push_erasure {S B : Type}
       (PV_V263_RetainedMethods.push (runtime base resize stop descriptor)
         {layouts with item := layouts.handle} 2 0 handles.initialized task) w := by
   unfold PV_V263_RetainedMethods.push
-  simp only [runtime,view]
+  simp only [runtime,mapAction,PV_V263_World.bind,view]
   by_cases full : handles.initialized.values.length=capacity handles.allocation
   · by_cases zero : handles.allocation.layout.size=0
-    · have overflow : mapAction (fun o : Owner (PV_V263_RetainedSpine.Task S B) =>
-          o.initialized.values) (stopAs stop) w = stopAs stop w := stop_map _ _ _
-      simp only [PV_V263_GrowingPush.push,dif_pos full,dif_pos zero,
+    · simp only [PV_V263_GrowingPush.push,dif_pos full,dif_pos zero,
         method,if_pos full,PV_V263_RawGrowth.grow,growth, mapAction,
         PV_V263_World.bind,stopAs]
       cases h : (stop w).outcome with
