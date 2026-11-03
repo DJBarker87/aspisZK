@@ -38,6 +38,7 @@ fn NET_try_result_log_frame(){
  let out=NET_try_inv(x,&mut log);
  #[cfg(NET_bad_frame)] {after^=1;}
  assert_eq!(external,after);
+ assert_eq!(log.events[0].tag,0);same(log.events[0].a,x.c0);same(log.events[0].b,x.c1);
  if zero{assert!(out.is_none());assert_eq!(log.next,1);}
  else{
   let out=out.unwrap();same(out.c0,cm(reply[6]));same(out.c1,cm(reply[8]));assert_eq!(log.next,9);

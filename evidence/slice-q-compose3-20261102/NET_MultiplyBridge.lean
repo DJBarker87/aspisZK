@@ -13,9 +13,14 @@ theorem reducer (x : U64) :
   rw [LPf_ReductionWord.twice_value]
   apply LPe_MersenneReduction.fold_twice_lt
   scalar_tac
+ have mask : UScalar.cast .U64 (2147483647#u32) = 2147483647#u64 := by scalar_tac
  unfold NEF_FrozenInvRef.field.reduce_u64 FIo_Native.aspis_core.field.reduce_u64
  simp only [NEF_FrozenInvRef.field.P,FIo_Native.aspis_core.field.P,lift,bind_tc_ok,
-  FIo_ReduceFacts.shr31,FIo_ReduceBounds.checked]
+  mask,FIo_ReduceFacts.shr31]
+ rw [FIo_ReduceBounds.checked x]
+ simp only [bind_tc_ok]
+ rw [FIo_ReduceBounds.checked (FIo_ReduceBounds.fold x)]
+ simp only [bind_tc_ok]
  change (if UScalar.cast .U32 m >= 2147483647#u32
    then UScalar.cast .U32 m - 2147483647#u32 else ok (UScalar.cast .U32 m)) =
   (if UScalar.cast .U32 m >= 2147483647#u32
@@ -32,10 +37,13 @@ theorem product (x y : U32) :
   have h := LPf_BaseMultiply.product_bound x y
   have cx : (UScalar.cast .U64 x).val=x.val := by scalar_tac
   have cy : (UScalar.cast .U64 y).val=y.val := by scalar_tac
-  simpa only [cx,cy] using h
+  rw [cx,cy]
+  norm_num [UScalar.size,UScalarTy.numBits,U64.size,U64.numBits]
+  exact h
  have native := FIo_ScalarBridge.mul (UScalar.cast .U64 x) (UScalar.cast .U64 y) bound
  simp only [NEF_FrozenInvRef.field.M31.mul,FIo_Native.aspis_core.field.M31.mul,
   lift,bind_tc_ok,native,reducer]
+ rfl
 
 /-- Paired meaning for each of the four product replies in the adopted CM
 seven-call log; the caller must still establish its other child domains. -/

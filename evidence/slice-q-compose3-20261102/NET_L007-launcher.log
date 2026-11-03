@@ -1,0 +1,49 @@
+{"attempt": "NET_L007", "exit_status": 1, "wall_seconds": 2.143604055047035, "peak_rss_kib": "4459236", "swaps": "0", "print_axioms": ["'NET_MultiplyBridge.reducer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NET_MultiplyBridge.product' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NET_MultiplyBridge.product_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NET_MultiplyBridge.lean:19:1: error: 'change' tactic failed, pattern
+  (if UScalar.cast UScalarTy.U32 m ≥ 2147483647#u32 then UScalar.cast UScalarTy.U32 m - 2147483647#u32
+    else ok (UScalar.cast UScalarTy.U32 m)) =
+    if UScalar.cast UScalarTy.U32 m ≥ 2147483647#u32 then
+      ok (U32.wrapping_sub (UScalar.cast UScalarTy.U32 m) 2147483647#u32)
+    else ok (UScalar.cast UScalarTy.U32 m)
+is not definitionally equal to target
+  (do
+      let x1 ← (x &&& UScalar.cast UScalarTy.U64 2147483647#u32) + x.wrapping_shr 31#u32
+      let x2 ← (x1 &&& UScalar.cast UScalarTy.U64 2147483647#u32) + U64.wrapping_shr x1 31#u32
+      if UScalar.cast UScalarTy.U32 x2 ≥ 2147483647#u32 then UScalar.cast UScal
+...
+g: This simp argument is unused:
+  FIo_ReduceBounds.checked
+
+Hint: Omit it from the simp argument list.
+  simp only [̵N̵E̵F̵_̵F̵r̵o̵z̵e̵n̵I̵n̵v̵R̵e̵f̵.̵f̵i̵e̵l̵d̵.̵P̵,̵F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵P̵,̵l̵i̵f̵t̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵
+  ̵ ̵ ̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵F̵a̵c̵t̵s̵.̵s̵h̵r̵3̵1̵,̵F̵I̵o̵_̵R̵e̵d̵u̵c̵e̵B̵o̵u̵n̵d̵s̵.̵c̵h̵e̵c̵k̵e̵d̵]̵[̲N̲E̲F̲_̲F̲r̲o̲z̲e̲n̲I̲n̲v̲R̲e̲f̲.̲f̲i̲e̲l̲d̲.̲P̲,̲ ̲F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲P̲,̲ ̲l̲i̲f̲t̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲
+  ̲ ̲ ̲ ̲F̲I̲o̲_̲R̲e̲d̲u̲c̲e̲F̲a̲c̲t̲s̲.̲s̲h̲r̲3̲1̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NET_MultiplyBridge.lean:35:2: error: Type mismatch: After simplification, term
+  h
+ has type
+  ↑x * ↑y < 18446744073709551616
+but is expected to have type
+  ↑x * ↑y < UScalar.size UScalarTy.U64
+NET_MultiplyBridge.lean:30:81: error: unsolved goals
+x y : U32
+bound : ↑(UScalar.cast UScalarTy.U64 x) * ↑(UScalar.cast UScalarTy.U64 y) < UScalar.size UScalarTy.U64
+native :
+  UScalar.cast UScalarTy.U64 x * UScalar.cast UScalarTy.U64 y =
+    ok ((UScalar.cast UScalarTy.U64 x).wrapping_mul (UScalar.cast UScalarTy.U64 y))
+⊢ (do
+      let i3 ←
+        FIo_Native.aspis_core.field.reduce_u64
+            ((UScalar.cast UScalarTy.U64 x).wrapping_mul (UScalar.cast UScalarTy.U64 y))
+      ok i3) =
+    do
+    let i3 ←
+      FIo_Native.aspis_core.field.reduce_u64
+          (U64.wrapping_mul (UScalar.cast UScalarTy.U64 x) (UScalar.cast UScalarTy.U64 y))
+    ok i3
+'NET_MultiplyBridge.reducer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NET_MultiplyBridge.product' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NET_MultiplyBridge.product_reply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r8c8d1bd265da46469ea503f7fb08315a.scope; invocation ID: 828dd235ee874815a66414c88df90cfa
