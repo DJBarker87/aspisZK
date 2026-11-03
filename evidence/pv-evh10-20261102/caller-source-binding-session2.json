@@ -1,0 +1,45 @@
+{
+  "evidence_class": "own-1 structural binding with adopted call-site support; V370 retained",
+  "binary": {
+    "path": "/home/dombarker/project-offloads/codex-pv-c474-20261029/native-target/client/devnet_spend",
+    "sha256": "da36d6aa36f8566ffa2ce7276546941c745bcd6325613c5a98c5517328b7def0",
+    "bytes": 2281512
+  },
+  "inputs": [
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-callers-da36d6aa.json",
+      "sha256": "a921b11450147b4882b138f4779b3a6e0916caae0e154f3d96b42eae69d40628"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-layout-da36d6aa.txt",
+      "sha256": "6ec97892c7fb04ca02df8ebd2cc6680035fbeeac33d9959cfcb7a07ecae4c3c1"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/entry-frame-binding-D572.json",
+      "sha256": "820e0ef7969b357ce3e43c7a9ab053f0ab9b452647a8578129df2eac9b3bc518"
+    }
+  ],
+  "relation": {
+    "caller_rsp": "callee_sp + 8 return-address bytes + 48 saved-register bytes + 232 reserved bytes",
+    "caller_offset": 288,
+    "mask_offset": 304,
+    "result_offset": 352,
+    "caller_reserved": 264,
+    "initialized_result_bytes": 97,
+    "full_result_ABI_size": "not inferred"
+  },
+  "discharged": [
+    "CallerSeparate at this identified retry_attempt call site",
+    "mask input outside callee frame and disjoint from initialized return footprint",
+    "initialized return footprint contained in caller reservation"
+  ],
+  "retained": [
+    "FRAME-CALL and MOVE-COMPILER: actual reached invocation and source-memory interpretation are V370 compiler-cohort obligations; a single static call-site inventory is not a full address-escape/control-flow proof.",
+    "FRAME-ENTRY: caller reservation must actually be writable, aligned, nonwrapping, externally disjoint and mapped to the same memory; no arbitrary numeric address is invented.",
+    "HEAP-ENTRY and KERNEL-WRITE runtime obligations unchanged; register selection and disjoint stack offsets do not prove a kernel footprint.",
+    "Full Result ABI layout/padding, complete actual Self move and all L3 observations, advancing native family and successful actual run remain open."
+  ],
+  "theorem": "PV_EVH_EntropyCallerLayout.returned_backing",
+  "rows_removed": [],
+  "trust_fields_added": []
+}

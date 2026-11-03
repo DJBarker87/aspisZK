@@ -32,7 +32,7 @@ theorem mask_outside (sp i : Nat) :
 and initialized return byte bound. It is not inferred from assembly alone. -/
 theorem bounds (sp : Nat) (h : caller sp+264 ≤ 2^64) :
     sp+232 ≤ 2^64 ∧ result sp+97 ≤ 2^64 ∧ mask sp+32 ≤ 2^64 := by
-  unfold caller result mask at *
+  simp only [result,mask,caller] at *
   omega
 
 theorem returned_backing (owner sp : Nat) (w : State) (i : Nat) (hi : i < 32) :
