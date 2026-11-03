@@ -54,10 +54,31 @@ print(json.dumps(out))
   try:certify(changed,template)
   except(AssertionError,KeyError):controls[label]='rejected'
   else:raise AssertionError(label)
- row=dict(instance=next(k for k,v in graph['instances'].items()if v['id']==317),statement=21954,lemma='PV_B3P_SubPanicEvents578227.panic_certificate',incoming_edges=incoming,source_argument_certificates=callers,source=source)
+ row=dict(instance=next(k for k,v in graph['instances'].items()if v['id']==317),statement=21954,lemma='PV_B3P_SubPanicFamily578227.family_certificate',incoming_edges=incoming,source_argument_certificates=callers,source=source)
  meta=dict(rows=[row],count=1,llbc_sha256=sha(raw),template_sha256=sha((R/'SUB-PANIC-TEMPLATE-D578.json').read_bytes()),source_parity=comparisons,negative_controls=controls,evidence_class='script-checked own-1 helper317 source test and ALL captured incoming guards, composed with Lean overflow/panic exclusion',native_pointer_validity=False,opaque_panic_interior_assumed=False,whole_caller_association=False,premises_removed=[])
- out=R/'SUB-PANIC-SOURCE-D578.json';s=json.dumps(meta,indent=2)+'\n'
- if a.check:assert out.read_text()==s
- else:out.write_text(s)
+ family='''import PV_B3P_SubPanicEvents578227
+namespace PV_B3P_SubPanicFamily578227
+open Aeneas Aeneas.Std PV_B3P_PanicPatterns571227 PV_B3P_SubPanicEvents578227
+set_option autoImplicit false
+/-- All two captured incoming source-event families; no guard input. -/
+def sourceState (_caller : Fin 2) (zeroSized checks : Bool) (encodedEnd : Usize) : Bool :=
+  !panicEvent zeroSized checks encodedEnd
+
+theorem family_guard (caller : Fin 2) (zeroSized checks : Bool) (encodedEnd : Usize) :
+    sourceState caller zeroSized checks encodedEnd = true := panic_guard zeroSized checks encodedEnd
+
+theorem family_certificate {α : Type} (caller : Fin 2) (zeroSized checks : Bool) (encodedEnd : Usize)
+    (normal first second : Result α) :
+    ¬ diagnostic (sourceState caller zeroSized checks encodedEnd = true) ∧
+      branch (sourceState caller zeroSized checks encodedEnd = true) normal first =
+        branch (sourceState caller zeroSized checks encodedEnd = true) normal second :=
+  panic_certificate zeroSized checks encodedEnd normal first second
+#print axioms family_guard
+#print axioms family_certificate
+end PV_B3P_SubPanicFamily578227
+'''
+ for out,s in {R/'SUB-PANIC-SOURCE-D578.json':json.dumps(meta,indent=2)+'\n',D/'lean/PV_B3P_SubPanicFamily578227.lean':family}.items():
+  if a.check:assert out.read_text()==s
+  else:out.write_text(s)
  print(json.dumps(dict(local_panic_certificate=1,incoming_source_edges=len(incoming),source_parity_items=len(comparisons),check=a.check)))
 if __name__=='__main__':main()
