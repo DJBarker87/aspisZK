@@ -23,3 +23,27 @@ Order: emit_result, request decoder, reconstruct_asq8_statement,
 decode_public_statement_box, scan_proof_buffer. A blocked member's exact
 obligation is retained while independent descendants continue. Kani budget
 130, Lean budget80; no other budget applies.
+
+## Emission construction stage
+
+NEU_K003 passes the extracted frozen record-construction prefix on every typed
+Statement. NEU_K004 fails the matched wrong-nullifier control, under the same
+program features, frozen graph, KMX patch and local-record configuration.
+Arbitrary indices quantify every key byte, digest limb, afterstate root and
+frontier element. This is support for same-argument child calls, not a composed
+row. The omitted cfg(kani) reference files caused K001/K002 compile failures;
+the complete supplemental frozen inputs and hashes are retained. No timeout was
+rerun and no property was weakened.
+
+NEU_BASELINE_VALIDATION confirms the inherited 68 rows and two roots with the
+original NDT/NED/NEE/NEJ/NEL/NEM/NEQ gates. Sparse materialization added only
+validator dependencies; no original checker changed. New checker gates are
+additive. The op53 effect mismatch remains OPEN, as does the result-encoder
+baseline's missing selected claim; no extra trust or Unit-frame bypass is used.
+
+K005 excluded: suffix with owned arbitrary792-byte carrier and arbitrary-index
+value observation timed out at90s (receipt records93.432636s wall,
+510996KiB,swap0). Never rerun unchanged. Replacement uses the unchanged suffix
+on a borrowed792-byte carrier and proves exact pointer/length of the syscall
+argument; arbitrary byte-value transport follows from the same immutable slice,
+not a second owned copy. Its matched changed-pointer control is required.
