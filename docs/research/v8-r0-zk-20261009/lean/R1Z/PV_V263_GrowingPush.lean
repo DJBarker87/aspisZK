@@ -39,7 +39,7 @@ theorem reserved {S A : Type} (runtime : Runtime S) (out : Owner A) (a : A)
     (room : out.initialized.values.length+1≤capacity out.allocation) (w : State S) :
     push runtime out a w=⟨.returned (.ok (store out a room)),w,[]⟩ := by
   have notFull : out.initialized.values.length≠capacity out.allocation := by omega
-  simp only [push,dif_neg notFull,lift]
+  simp only [push,dif_neg notFull,PV_V263_World.lift]
 
 /-- Contents, physical capacity and pointer remain intact when no growth is
 needed, even if the original reservation was only a strict lower bound. -/
