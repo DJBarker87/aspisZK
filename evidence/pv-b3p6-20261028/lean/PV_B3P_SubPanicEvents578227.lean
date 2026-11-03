@@ -10,8 +10,12 @@ def overflowFlag (left right : Usize) : Bool :=
 theorem cast_sub_safe (left right : Usize) (ordered : right.val ≤ left.val) :
     overflowFlag left right = false := by
   have castOrder : ¬(UScalar.cast .U64 left).val < (UScalar.cast .U64 right).val := by
-    have leftBound : left.val < UScalar.size .U64 := by scalar_tac
-    have rightBound : right.val < UScalar.size .U64 := by scalar_tac
+    have bits : UScalarTy.Usize.numBits ≤ UScalarTy.U64.numBits := by
+      change System.Platform.numBits ≤ 64
+      rcases System.Platform.numBits_eq with bits32 | bits64 <;> omega
+    have powers := @Nat.pow_le_pow_right 2 (by omega) UScalarTy.Usize.numBits UScalarTy.U64.numBits bits
+    have leftBound := lt_of_lt_of_le left.hBounds powers
+    have rightBound := lt_of_lt_of_le right.hBounds powers
     rw [UScalar.cast_val_eq,UScalar.cast_val_eq,
       Nat.mod_eq_of_lt leftBound,Nat.mod_eq_of_lt rightBound]
     omega
