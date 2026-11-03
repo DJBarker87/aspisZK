@@ -12,6 +12,11 @@ local instance {S : Type} : Monad (Q S) where
   pure a := lift (.ok a)
   bind := PV_V263_World.bind
 
+theorem sixteen_bound : 16 ≤ Usize.max := by
+  have hn := (16#usize).hmax
+  simp only [Usize.max,UScalarTy.numBits,Usize.numBits] at *
+  omega
+
 def unitBuffer {A : Type} : Buffer A := empty 0 (Nat.zero_le _)
 abbrev Family (A : Type) := Buffer A × Nat
 abbrev Families (A : Type) := Buffer (Family A)
@@ -110,14 +115,14 @@ def pool {S A : Type} (runtime : Runtime S) (layouts : Layouts) (n : Usize)
       let first ← caughtFamily runtime layouts n 0 callback
       runtime.methods.vector (.capacity 3 0 16 layouts.caught)
       let chunks ← PV_V263_RetainedMethods.push runtime
-        {layouts with item := layouts.caught} 3 0 (empty 16 (by decide)) first
+        {layouts with item := layouts.caught} 3 0 (empty 16 sixteen_bound) first
       runtime.life (.intoIter 2 0 handles.values.length)
       let caught ← joins runtime layouts handles.values.val chunks
       runtime.methods.os.answer (.cleanup 0)
       runtime.life .scopeDrop
       runtime.methods.vector (.capacity 4 0 16 layouts.family)
       runtime.life (.intoIter 3 0 caught.values.length)
-      let out ← merge runtime layouts caught.values.val (empty 16 (by decide))
+      let out ← merge runtime layouts caught.values.val (empty 16 sixteen_bound)
       runtime.life (.closureDrop 0)
       pure out)
 
@@ -145,6 +150,7 @@ def run {S A : Type} (runtime : Runtime S) (layouts : Layouts)
     pure out
   else runtime.capacityOverflow
 
+#print axioms sixteen_bound
 #print axioms unitBuffer
 #print axioms collectLoop
 #print axioms collect
