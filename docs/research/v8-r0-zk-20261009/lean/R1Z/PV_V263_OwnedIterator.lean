@@ -59,20 +59,28 @@ theorem moves {A : Type} (iter : Iter A) (a : A) (rest : List A)
 theorem cursor {A : Type} (iter : Iter A) (a : A) (rest : List A)
     (h : iter.remaining=a::rest) :
     pointer (next iter).2=pointer iter+iter.allocation.layout.size := by
-  simp only [next,h,pointer,Nat.add_mul,Nat.one_mul,Nat.add_assoc]
+  unfold pointer
+  rw [(moves iter a rest h).2.2.1,(moves iter a rest h).2.2.2]
+  simp only [Nat.add_mul,Nat.one_mul,Nat.add_assoc]
 
 theorem zst_cursor {A : Type} (iter : Iter A) (a : A) (rest : List A)
     (h : iter.remaining=a::rest) (zero : iter.allocation.layout.size=0) :
     pointer (next iter).2=pointer iter ∧
       (next iter).2.remaining.length+1=iter.remaining.length := by
-  simp only [next,h,pointer,endPointer,zero,if_true,Nat.mul_zero,Nat.add_zero,
-    List.length_cons,Nat.add_assoc]
-  exact ⟨rfl,rfl⟩
+  constructor
+  · rw [cursor iter a rest h,zero,Nat.add_zero]
+  · rw [(moves iter a rest h).2.1,h]
+    rfl
 
 theorem exhausted {A : Type} (iter : Iter A) (h : iter.remaining=[]) :
     next iter=(none,iter) ∧ release (next iter).2.allocation=release iter.allocation := by
-  simp only [next,h]
-  exact ⟨rfl,rfl⟩
+  have hn : next iter=(none,iter) := by
+    cases iter with
+    | mk allocation consumed remaining fits =>
+      dsimp only at h
+      subst remaining
+      rfl
+  exact ⟨hn,by rw [hn]⟩
 
 /-- On normal exhausted drop there is no element destructor and free uses the
 ORIGINAL base, raw capacity and layout, even when the cursor is one-past-end. -/
