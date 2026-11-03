@@ -24,7 +24,8 @@ theorem source_view (ops : ExternalFuns) (selected : PV_EVH_OperatorFrames.Selec
   rw [selected.map]
   cases r with
   | Ok x => exact bind_view _ _ _ _ (hi x) (fun _ => lift_view _)
-  | Err e => exact bind_view _ _ (.ok ())
+  | Err e =>
+    exact bind_view _ _ (.ok ())
       (fun _ => .ok (core.result.Result.Err (T := U) e)) hd (fun _ => lift_view _)
 
 /-- All outcomes and observations of the move/new callback survive unchanged
