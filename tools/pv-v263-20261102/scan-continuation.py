@@ -1,6 +1,6 @@
 """Nested-comment-aware source discipline scan for this continuation only."""
 from pathlib import Path
-import hashlib,json,re
+import hashlib,json,re,subprocess
 R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-v263-20261102'
 names=['RetainedMethods','RetainedSpine','RetainedFacts','TrustedStores','OwnedDrain','OwnedPush','RetainedErase','CounterBounds']
 def strip(s):
@@ -24,5 +24,5 @@ for n in names:
  assert not bad,(n,bad)
  rows.append(dict(path=str(p.relative_to(R)),sha256=hashlib.sha256(p.read_bytes()).hexdigest(),forbidden_tokens=bad,
  symbolic='list induction, scalar inequalities, small fixed platform/count bounds; no large recurrence or vector evaluation'))
-(E/'source-scan-D575.json').write_text(json.dumps(dict(comment_stripping='nested Lean block and line comments',files=rows),indent=2)+'\n')
+(E/'source-scan-D575.json').write_text(json.dumps(dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),comment_stripping='nested Lean block and line comments',files=rows),indent=2)+'\n')
 print('Source discipline:',len(rows),'new modules passed')

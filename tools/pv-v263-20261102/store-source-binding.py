@@ -117,7 +117,7 @@ for m in modules:
  p=R/'docs/research/v8-r0-zk-20261009/lean/R1Z'/('PV_V263_'+m+'.lean')
  h=sha(p.read_bytes());assert accepted['R1Z.PV_V263_'+m]['source_sha256']==h,m
  models[m]=h
-out=dict(source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+out=dict(script_sha256=sha(Path(__file__).read_bytes()),source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
  evidence_class='structural reserved-store/drop argument; not a complete native worker association',
  std_toolchain='1.94.1',profile=dict(release=True,panic='abort',debug_assertions=False,overflow_checks=False),
  bodies=rows,models=models,source_binding_complete=False,op257_installed=False,reached_success=False,
