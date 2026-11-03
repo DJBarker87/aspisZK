@@ -8,6 +8,7 @@ B={'user':H/'native-target/client/user_client','fixture':H/'native-target/client
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pins=json.loads((H/'final-gates/uc5/build.json').read_text());assert pins['fixture_unchanged']
 assert all(sha(p)==pins['binaries'][p.name]['sha256'] for p in B.values())
+print('EXPECTED WORK: optimized proof generation in 200 final-production/fixture prover calls; no compilation or timing experiment',flush=True)
 slots=asyncio.Semaphore(3);active=set();rows={};start=time.monotonic()
 def key(label):
  raw=hashlib.sha256(label.encode()).digest();n=int.from_bytes(raw,'big');out='';alpha='123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
