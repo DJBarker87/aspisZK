@@ -52,6 +52,8 @@ for name,p,hi in [('inner_residue','sp+i',128),('mask_residue','mask sp+i',32)]:
 text+='\n'+'\n'.join('#print axioms '+n+'_byte' for n in names)+'\n#print axioms inner_residue\n#print axioms mask_residue\nend PV_EVH_EntropyReturnFootprint\n'
 if '--check' in sys.argv:assert P.read_text()==text
 else:
+ import json
+ assert not any(json.loads(r.read_text()).get('accepted') and json.loads(r.read_text())['target']==P.stem for r in Path('evidence/pv-evh10-20261102').glob('receipt-*.json')),'accepted source immutable'
  assert not P.exists() or '--update-unaccepted' in sys.argv,'new module only'
  P.write_text(text)
 print('PASS ordered return store generator',len(rows),'symbolic stores')

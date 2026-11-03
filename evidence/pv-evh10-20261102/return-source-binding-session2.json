@@ -1,0 +1,156 @@
+{
+  "evidence_class": "own-1 structural complete successful Self return binding with adopted ordered-store support; V370 retained",
+  "inputs": [
+    {
+      "path": "evidence/pv-evh10-20261102/entropy-layout-da36d6aa.txt",
+      "sha256": "6ec97892c7fb04ca02df8ebd2cc6680035fbeeac33d9959cfcb7a07ecae4c3c1"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/entry-frame-binding-D572.json",
+      "sha256": "820e0ef7969b357ce3e43c7a9ab053f0ab9b452647a8578129df2eac9b3bc518"
+    },
+    {
+      "path": "evidence/pv-evh10-20261102/caller-source-binding-session2.json",
+      "sha256": "021444821f305de03d7671bde2e623b4aedc828ca8bf2e6890f52bcaf18ecb2f"
+    }
+  ],
+  "compiler_support": {
+    "register_loads": [
+      [
+        "xmm0",
+        "(%rsp)"
+      ],
+      [
+        "xmm1",
+        "0x10(%rsp)"
+      ],
+      [
+        "xmm2",
+        "(%r8)"
+      ],
+      [
+        "xmm3",
+        "0x10(%r8)"
+      ],
+      [
+        "xmm4",
+        "(%r14)"
+      ],
+      [
+        "xmm5",
+        "0x10(%r14)"
+      ]
+    ],
+    "stores": [
+      {
+        "register": "xmm1",
+        "offset": 176,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "145968:\t66 0f 7f 8c 24 b0 00 \tmovdqa %xmm1,0xb0(%rsp)"
+      },
+      {
+        "register": "xmm0",
+        "offset": 160,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "145971:\t66 0f 7f 84 24 a0 00 \tmovdqa %xmm0,0xa0(%rsp)"
+      },
+      {
+        "register": "xmm2",
+        "offset": 192,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "145985:\t66 0f 7f 94 24 c0 00 \tmovdqa %xmm2,0xc0(%rsp)"
+      },
+      {
+        "register": "xmm3",
+        "offset": 208,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "14598e:\t66 0f 7f 9c 24 d0 00 \tmovdqa %xmm3,0xd0(%rsp)"
+      },
+      {
+        "register": "xmm5",
+        "offset": 144,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "1459a1:\t0f 29 ac 24 90 00 00 \tmovaps %xmm5,0x90(%rsp)"
+      },
+      {
+        "register": "xmm4",
+        "offset": 128,
+        "base": "rsp",
+        "size": 16,
+        "instruction": "1459a9:\t66 0f 7f a4 24 80 00 \tmovdqa %xmm4,0x80(%rsp)"
+      },
+      {
+        "register": "xmm3",
+        "offset": 81,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459b2:\tf3 0f 7f 5b 51       \tmovdqu %xmm3,0x51(%rbx)"
+      },
+      {
+        "register": "xmm5",
+        "offset": 17,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459b7:\t0f 11 6b 11          \tmovups %xmm5,0x11(%rbx)"
+      },
+      {
+        "register": "xmm4",
+        "offset": 1,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459bb:\tf3 0f 7f 63 01       \tmovdqu %xmm4,0x1(%rbx)"
+      },
+      {
+        "register": "xmm2",
+        "offset": 65,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459c0:\tf3 0f 7f 53 41       \tmovdqu %xmm2,0x41(%rbx)"
+      },
+      {
+        "register": "xmm1",
+        "offset": 49,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459c5:\tf3 0f 7f 4b 31       \tmovdqu %xmm1,0x31(%rbx)"
+      },
+      {
+        "register": "xmm0",
+        "offset": 33,
+        "base": "rbx",
+        "size": 16,
+        "instruction": "1459ca:\tf3 0f 7f 43 21       \tmovdqu %xmm0,0x21(%rbx)"
+      },
+      {
+        "register": "zero",
+        "offset": 0,
+        "base": "rbx",
+        "size": 1,
+        "instruction": "1459cf:\tc6 03 00             \tmovb   $0x0,(%rbx)"
+      }
+    ],
+    "executed": false
+  },
+  "source_steps": [
+    "Both source 32-byte inner copies are restored from the SAME original64 before the two nonzero checks.",
+    "Only after both nonzero checks succeed does the source construct Self with the original mask_nonce, copied field_mask_entropy1 and leaf_salt_seed1.",
+    "Self is moved into Ok. The two inner Zeroizing values are moved; no moved-from32 destructor is inserted. Original64 is dropped after constructing the return value.",
+    "The adopted artifact captures six16-byte register values from original64 and the mask input, stages all96 bytes, stores the interleaved complete96-byte payload and the Ok tag, then jumps to original64 cleanup.",
+    "EntropyReturnFootprint records exactly the13 physical stores in their observed order. It retains inner and staging residues. It is a memory-footprint model, not event-silence or a complete native-family installation."
+  ],
+  "remaining": [
+    "V370: source-to-machine/register/ABI interpretation, elided source initializers, dead-load elimination and correspondence of original64 register reloads with the restored inner arrays.",
+    "Runtime FRAME-ENTRY/HEAP-ENTRY/KERNEL-WRITE: actual valid call memory, allocator ownership/coherence and same-memory kernel replies on every prefix.",
+    "MOVE-L3: actual load/store/register/spill events and lifetime transfer must be installed in the advancing world family, including all stale inner and staging bytes; the StackStores state alone does not establish those events.",
+    "No full Result ABI extent/alignment/padding is inferred from97 initialized bytes. No actual successful worldRun or endpoint premise removal is claimed."
+  ],
+  "rows_removed": [],
+  "trust_fields_added": [],
+  "native_runs": 0,
+  "kani_runs": 0
+}
