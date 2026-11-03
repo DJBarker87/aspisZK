@@ -20,7 +20,26 @@ fn install_literal_panic_hook() {
         let _ = std::io::stderr().write_all(b"client panic\n");
     }));
 }
+// Linux ABI: this binary is built for the pinned x86_64 Linux client target.
+#[cfg(target_os = "linux")]
+fn disable_dumps() {
+    #[repr(C)]
+    struct Limit { current: u64, maximum: u64 }
+    unsafe extern "C" {
+        fn prctl(option: i32, ...) -> i32;
+        fn setrlimit(resource: u32, limit: *const Limit) -> i32;
+    }
+    let zero = Limit { current: 0, maximum: 0 };
+    // No allocation, formatting, request parsing or witness read precedes this.
+    if unsafe { prctl(4, 0usize, 0usize, 0usize, 0usize) } != 0
+        || unsafe { setrlimit(4, &zero) } != 0 {
+        let _ = std::io::stderr().write_all(b"client startup failed\n");
+        std::process::abort();
+    }
+}
 pub fn initialize() {
+    #[cfg(target_os = "linux")]
+    disable_dumps();
     install_literal_panic_hook();
     // First operation before input, errors, workers or witness processing.
     // Rust 1.94.1 caches this disabled state process-wide. Later environment

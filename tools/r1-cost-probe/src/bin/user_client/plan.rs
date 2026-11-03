@@ -40,7 +40,9 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  use aspis_r1_cost_probe::RealR1_client;
  let accounts=client64_accounts::Accounts::parse(q)?;
  use aspis_prover::{state_only_entropy::DurableStateOnlyMaskNonceStore};
- let started=Instant::now();let secrets=super::wallet::read(q)?;
+ let started=Instant::now();
+ let mut wallet_output=super::wallet::output_channel(q)?;
+ let secrets=super::wallet::read(q)?;
  let k=secrets.input_key;let salt=secrets.input_salt;let asset=secrets.asset;
  let input_value=u32::try_from(secrets.input_value).map_err(err)?;
  let recipient_value=u32::try_from(secrets.recipient_value).map_err(err)?;
@@ -65,8 +67,8 @@ fn prove(q:&Value,pool:Pubkey,master:Pubkey,lanes:&[Pubkey],reg:Pubkey,entry:Pub
  let statement=match payment{PoolV1PairForestTerminalPaymentV1::PrivateTransfer(public)=>PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,public},PoolV1PairForestTerminalPaymentV1::Withdrawal(public)=>PoolV1PairForestTerminalStatementV1::Withdrawal{common,public}};
  let public_dir=crate::public_text(q,"proof_dir");let dir=Path::new(&public_dir);
  super::create_private_directory(dir)?;
- // Retain the exact wallet record for recovery with restrictive permissions.
- super::wallet::retain(dir,&secrets.record)?;
+ // Return custody before proving; no wallet bytes enter a filesystem sink.
+ super::wallet::return_record(&mut wallet_output,&secrets.record)?;
  let public=encode_pool_v1_pair_forest_terminal_statement_v1(&statement).map_err(err)?;
  let mut store=DurableStateOnlyMaskNonceStore::open(crate::path_join(dir,"mask-nonce-ledger")).map_err(err)?;
  let result=RealR1_client::prove_for_proof_accounts(statement.semantic_public() ,&compiled,crate::client_hash(),&mut store,move |k| accounts.nonce(k)).map_err(err)?;
