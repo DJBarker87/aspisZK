@@ -14,15 +14,23 @@ def sourceEvent (zeroSized checks : Bool) (encodedEnd : Usize) : Option Arithmet
 theorem event_guard (zeroSized checks : Bool) (encodedEnd : Usize)
     (observed : ArithmeticState) (ran : sourceEvent zeroSized checks encodedEnd = some observed) :
     arithmeticGuard observed := by
-  cases zeroSized <;> cases checks <;>
-    simp only [sourceEvent, Bool.false_eq_true, if_false, if_true] at ran
-  all_goals try { cases ran }
-  by_cases empty : encodedEnd = 0#usize
-  · simp only [if_pos empty] at ran
+  cases zeroSized with
+  | false =>
+    change none = some observed at ran
     cases ran
-  · simp only [if_neg empty] at ran
-    cases ran
-    exact PV_B3P_CounterGuards571227.subtraction_guard encodedEnd empty
+  | true =>
+    by_cases empty : encodedEnd = 0#usize
+    · simp only [sourceEvent,if_true,if_pos empty] at ran
+      cases ran
+    · cases checks with
+      | false =>
+        simp only [sourceEvent,if_true,if_neg empty,Bool.false_eq_true,if_false] at ran
+        cases ran
+      | true =>
+        have equal : some (ArithmeticState.sub encodedEnd.val 1) = some observed := by
+          simpa only [sourceEvent,if_true,if_neg empty] using ran
+        cases equal
+        exact PV_B3P_CounterGuards571227.subtraction_guard encodedEnd empty
 
 theorem event_certificate {α : Type} (zeroSized checks : Bool) (encodedEnd : Usize)
     (observed : ArithmeticState) (ran : sourceEvent zeroSized checks encodedEnd = some observed)
