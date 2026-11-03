@@ -15526,3 +15526,7 @@ D573. pv-b3p6ae (f4dccdeddf; NEP resolved all 23 requested graphs, standard axio
 ## D574 — owner decision requested: client non-dumpable on abort (2026-11-02 04:59 UTC)
 
 Owner packet decision request D574, from the D572 finding: under the adopted panic=abort client, secrets on the stack are not wiped on panic, and a core dump would contain them (L3). Recommendation (A): the user client marks itself non-dumpable at startup (prctl PR_SET_DUMPABLE 0, plus RLIMIT_CORE 0), about 5 lines, under the existing client gates plus a no-core-file test on a forced panic. Not applied until the owner decides. Privacy target not yet established.
+
+## D575 — OWNER DECISION: D574 (A), client non-dumpable at startup (2026-11-03 22:42 UTC)
+
+The owner chose (A): keep panic=abort and make the client non-dumpable at startup (prctl PR_SET_DUMPABLE 0, setrlimit RLIMIT_CORE 0). It is recorded in the owner packet and implemented in the user client after uc4, with an added gate (a forced panic leaves no core file; the process reports non-dumpable). V178's abort branch then has its L3 residual (the core-dump image) closed by construction, still subject to a binding of the abort branch in the model. Privacy target not yet established.

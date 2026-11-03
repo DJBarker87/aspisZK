@@ -416,3 +416,7 @@ Owner's reply: "u". The privacy claim's client is a minimal USER client. It read
 - (C) Do nothing, and record core dumps as an L3 residual outside the guarantee. Not recommended: the privacy contract places side channels inside scope.
 
 **Recommendation: (A).** It closes the residual image channel cheaply, without reopening the D474(C) diagnostics decision, and it fits into the user-client work already under way.
+
+## OWNER DECISION 2026-11-03 (LOG D575): D574 option (A) ADOPTED
+
+Owner's reply: "A". The client keeps panic=abort, and at startup marks itself non-dumpable: prctl(PR_SET_DUMPABLE, 0) plus setrlimit(RLIMIT_CORE, 0). This removes the core-dump image that would otherwise hold unwiped secrets after an abort (L3), and blocks same-user ptrace attach. It is implemented in the user client (D524) under the existing client gates (ELFs byte-identical, differential, D359(A) timing, constant-time check) plus a new gate: a forced panic leaves no core file and the process reports non-dumpable.
