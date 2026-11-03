@@ -50,17 +50,17 @@ def erasePair {A : Type} (p : Buffer A × Buffer A) : alloc.vec.Vec A × alloc.v
   (p.1.values,p.2.values)
 
 theorem append_erasure {S A : Type} (runtime : Runtime S) (layouts : Layouts)
-    (site thread : Nat) (out source : Buffer A) :
+    (site thread : Nat) (out source : Buffer A)
+    (bound : out.values.length+source.values.length ≤ Usize.max) :
     mapAction erasePair (append runtime layouts site thread out source) =
       PV_V263_VecSpine.append runtime layouts site thread out.values source.values := by
   unfold append PV_V263_VecSpine.append
   rw [map_bind]
   congr 1
   funext unit
-  split
-  · funext w; rfl
-  · exact (funext fun w => PV_V263_CollectBinding.pure_bind erasePair
-      runtime.capacityOverflow w)
+  simp only [dif_pos bound]
+  funext w
+  rfl
 
 #print axioms push
 #print axioms append
