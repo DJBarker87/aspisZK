@@ -33,5 +33,27 @@ out,err=p.communicate(b'{"action":"prove"}',timeout=10)
 assert err==b'client panic\n' and p.returncode!=0 and not out
 trace=(O/'startup-syscalls.txt').read_text();assert 'RLIMIT_CORE' in trace and 'rlim_cur=0, rlim_max=0' in trace
 assert not list(O.glob('core*'))
-row=dict(evidence_class='finite native source-bound startup and final-ELF forced-panic gate',client_sha256=hashlib.sha256(client.read_bytes()).hexdigest(),forced_panic=True,no_core_file=True,helper_dumpable=0,helper_core=[0,0],helper_build=cmd,helper_source_sha256=hashlib.sha256(helper.read_bytes()).hexdigest(),proc_status_dumpable_field_present='Dumpable:' in status,proc_status_core_dumping='CoreDumping:\t0' in status,limitation='Linux 6.8 /proc status omits Dumpable; PR_GET_DUMPABLE in source-identical initialize helper and final-ELF successful PR_SET_DUMPABLE trace establish setting; CoreDumping alone does not')
+# Native rejection controls and a forced panic after the fixture wallet was read.
+F=json.loads((H/'fixture-inputs.json').read_text())
+control=H.parent/'codex-pv-c474-20261029/runtime-private-final/default/transfer/request.json'
+base=json.loads(control.read_text());base.pop('note');base.update(lane_leaf_sets=F['lane_leaf_sets'],withdrawal_amount=250,proof_dir=str(O/'never-created'))
+controls=[]
+for case in ['stdio','same-input','regular-file','read-only','after-secret-panic']:
+ q=dict(base);rfd,wfd=os.pipe();record=bytes.fromhex(F['records'][0]);os.write(wfd,record);os.close(wfd);q['wallet_bytes_fd']=rfd
+ outread,outwrite=os.pipe();extra=None
+ if case=='stdio':fd=1
+ elif case=='same-input':fd=rfd
+ elif case=='regular-file':extra=os.open(O/'empty-control-file',os.O_CREAT|os.O_WRONLY,0o600);fd=extra
+ elif case=='read-only':fd=outread
+ else:fd=outwrite;q['lane_bytes']='0'
+ q['wallet_output_fd']=fd
+ inherited=tuple(set([rfd,outwrite,outread]+([] if extra is None else [extra])))
+ result=subprocess.run([str(client)],input=json.dumps(q).encode(),capture_output=True,pass_fds=inherited,cwd=O)
+ for channel in inherited:os.close(channel)
+ assert result.stdout==b'' and result.stderr==(b'client panic\n' if case=='after-secret-panic' else b'client error\n')
+ assert result.returncode==(-signal.SIGABRT if case=='after-secret-panic' else 1)
+ controls.append(dict(case=case,exit=result.returncode,stdout_bytes=0,stderr_literal=True))
+assert not (O/'never-created').exists() and (O/'empty-control-file').stat().st_size==0
+assert not list(O.glob('core*'))
+row=dict(evidence_class='finite native source-bound startup and final-ELF forced-panic gate',client_sha256=hashlib.sha256(client.read_bytes()).hexdigest(),forced_panic=True,no_core_file=True,fd_controls=controls,post_secret_panic_no_core=True,helper_dumpable=0,helper_core=[0,0],helper_build=cmd,helper_source_sha256=hashlib.sha256(helper.read_bytes()).hexdigest(),proc_status_dumpable_field_present='Dumpable:' in status,proc_status_core_dumping='CoreDumping:\t0' in status,limitation='Linux 6.8 /proc status omits Dumpable; PR_GET_DUMPABLE in source-identical initialize helper and final-ELF successful PR_SET_DUMPABLE trace establish setting; CoreDumping alone does not')
 (O/'summary.json').write_text(json.dumps(row,indent=2)+'\n');print(json.dumps(row))
