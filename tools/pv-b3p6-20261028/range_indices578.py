@@ -112,7 +112,7 @@ def main():
  # Bind into_iter identity and next forwarding rather than trusting names.
  identity=compact(fs[37]['body']['Structured']['body']['statements']);assert[(x['id'],x['kind'])for x in identity]==[(3719,{'StorageLive':0}),(3720,{'Assign':[{'kind':{'Local':0}},{'Use':[{'Move':{'kind':{'Local':1}}},'Yes']}]}),(3721,{'StorageDead':1}),(3722,'Return')]
  forwarded=fs[38]['body']['Structured']['body']['statements'];c=forwarded[1]['kind']['Call']['call'];assert c['func']['Regular']['kind']['Fun']=={'Regular':186}and c['args'][0]['Move']['kind']=={'Local':1}and c['dest']['kind']=={'Local':0}
- assert len(forwarded)==4 and forwarded[-1]['kind']=='Return'
+ assert len(forwarded)==4 and compact(forwarded[0]['kind'])=={'StorageLive':0}and compact(forwarded[2]['kind'])=={'StorageDead':1}and forwarded[-1]['kind']=='Return'and len(c['args'])==1
  for v in g['instances'].values():
   if v['id']==38:assert v['environment']['types']==[{'Literal':{'UInt':'Usize'}}]
  rows=[];bindings=[];control_fixture=None
