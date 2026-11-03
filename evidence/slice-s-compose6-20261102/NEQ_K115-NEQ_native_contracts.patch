@@ -1,0 +1,69 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEQ_payment_decode.rs"]
++mod NEQ_payment_decode;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEQ_payment_decode.rs
+@@ -0,0 +1,56 @@
++use super::*;
++use crate::atomic_statement::AtomicStatementError;
++fn NEE_any_PoolV1PaymentStatementFormatError()->crate::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>crate::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>crate::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>crate::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>crate::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>crate::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn NEE_any_PoolV1TreeError()->crate::pool_v1::PoolV1TreeError { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1TreeError::TreeFull,1=>crate::pool_v1::PoolV1TreeError::InsufficientCapacity,2=>crate::pool_v1::PoolV1TreeError::IndexOutOfRange,3=>crate::pool_v1::PoolV1TreeError::RootMismatch,4=>crate::pool_v1::PoolV1TreeError::NonCanonicalFrontier,5=>crate::pool_v1::PoolV1TreeError::WrongLength,6=>crate::pool_v1::PoolV1TreeError::WrongMagic,7=>crate::pool_v1::PoolV1TreeError::WrongVersion,8=>crate::pool_v1::PoolV1TreeError::WrongDepth,9=>crate::pool_v1::PoolV1TreeError::WrongTreeHash,10=>crate::pool_v1::PoolV1TreeError::WrongDigestEncoding,11=>crate::pool_v1::PoolV1TreeError::NonCanonicalDigest,_=>crate::pool_v1::PoolV1TreeError::NonZeroReserved} }
++fn NEE_any_PoolV1PairForestAccountErrorV1()->crate::pool_v1::PoolV1PairForestAccountErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongLaneCount,4=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongDepth,6=>crate::pool_v1::PoolV1PairForestAccountErrorV1::WrongFormatBinding,7=>crate::pool_v1::PoolV1PairForestAccountErrorV1::NonZeroReserved,8=>crate::pool_v1::PoolV1PairForestAccountErrorV1::ZeroRequiredBinding,9=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidBoolean,10=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidMasterState,11=>crate::pool_v1::PoolV1PairForestAccountErrorV1::InvalidLane,12=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneMasterMismatch,13=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneOrderMismatch,14=>crate::pool_v1::PoolV1PairForestAccountErrorV1::LaneSequenceDecreased,15=>crate::pool_v1::PoolV1PairForestAccountErrorV1::DuplicateCheckpoint,16=>crate::pool_v1::PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow,17=>crate::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest,18=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Identity,19=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Policy,_=>crate::pool_v1::PoolV1PairForestAccountErrorV1::Tree(NEE_any_PoolV1TreeError())} }
++fn NEE_any_PoolV1PairLiveSnapshotErrorV1()->crate::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>crate::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++fn NEE_any_PoolV1PairVerifierTransportErrorV1()->crate::pool_v1::PoolV1PairVerifierTransportErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongStatementVersion,4=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding,5=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidTransitionKind,6=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongSuccessCode,7=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongPairFormat,8=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::ZeroRequiredBinding,9=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidProofBodyLength,10=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidStatementPayloadLength,11=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidLiveSnapshotPayloadLength,12=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalOutputPair,13=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex,_=>crate::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate} }
++fn NEE_any_PoolV1PairLatePublicStatementErrorV1()->crate::pool_v1::PoolV1PairLatePublicStatementErrorV1 { match kani::any::<u8>() {0=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongLength,1=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongMagic,2=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongVersion,3=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongItemCount,4=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongHeaderLength,5=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongSnapshotLength,6=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongAfterstateLength,7=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongTotalLength,8=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::NonZeroReserved,9=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::Snapshot(NEE_any_PoolV1PairLiveSnapshotErrorV1()),10=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::Afterstate(NEE_any_PoolV1PairVerifierTransportErrorV1()),_=>crate::pool_v1::PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch} }
++fn any_atomic()->AtomicStatementError{match kani::any::<u8>(){0=>AtomicStatementError::NonCanonicalDigest,1=>AtomicStatementError::NonCanonicalAssetId,2=>AtomicStatementError::FeeOutOfRange,3=>AtomicStatementError::PathDepthMismatch,4=>AtomicStatementError::InsertionIndexOutOfRange,5=>AtomicStatementError::CurrentAnchorMismatch,_=>AtomicStatementError::OutputAnchorMismatch}}
++fn digest()->Digest{[M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any()),M31(kani::any())]}
++
++fn common()->CommonPublicV1{CommonPublicV1{pool:kani::any(),deployment_domain:kani::any(),anchor_sequence:kani::any(),anchor_root:digest(),nullifier:digest(),asset_id:M31(kani::any())}}
++struct Frame<'a>{bytes:&'a[u8;216],other:&'a[u8;216],common:Result<CommonPublicV1,PoolV1PaymentStatementFormatError>,recipient:Result<Digest,AtomicStatementError>,change:Result<Digest,AtomicStatementError>,valid:Result<(),PoolV1PaymentStatementFormatError>,calls:u8,j:usize,limb:usize}
++fn child_common(bytes:&[u8;216],f:&mut Frame)->Result<CommonPublicV1,PoolV1PaymentStatementFormatError>{assert!(f.calls==0&&core::ptr::eq(bytes,f.bytes),"same actual common byte array");f.calls=1;match f.common{Ok(mut c)=>{c.asset_id.0^=1;Ok(c)},Err(e)=>Err(e)}}
++fn child_digest(bytes:&[u8;32],f:&mut Frame)->Result<Digest,AtomicStatementError>{let start=184;assert!(bytes.as_ptr()==f.bytes.as_ptr().wrapping_add(start)&&bytes[f.j]==f.bytes[start+f.j],"same actual borrowed digest window");let reply=if start==152{f.recipient}else{f.change};f.calls+=1;reply}
++fn check_public(p:&PoolV1WithdrawalPublicV1,f:&Frame){let c=match f.common{Ok(c)=>c,Err(_)=>panic!("unreached common rejection")};assert!(p.pool[f.j]==c.pool[f.j]&&p.deployment_domain[f.j]==c.deployment_domain[f.j]&&p.anchor_sequence==c.anchor_sequence&&p.asset_id.0==c.asset_id.0);assert!(p.anchor_root[f.limb].0==c.anchor_root[f.limb].0&&p.nullifier[f.limb].0==c.nullifier[f.limb].0);let z=match f.change{Ok(d)=>d[f.limb].0,_=>0};assert!(p.change_commitment[f.limb].0==z);let amount=u32::from_le_bytes([f.bytes[148],f.bytes[149],f.bytes[150],f.bytes[151]]);assert!(p.amount==amount&&p.destination_token_account[f.j]==f.bytes[152+f.j]);}
++fn child_validate(p:&PoolV1WithdrawalPublicV1,f:&mut Frame)->Result<(),PoolV1PaymentStatementFormatError>{assert!(f.calls==2);check_public(p,f);f.calls+=1;f.valid}
++fn native(
++    bytes: &[u8],
++    f: &mut Frame,
++) -> Result<PoolV1WithdrawalPublicV1, PoolV1PaymentStatementFormatError> {
++    let bytes: &[u8; POOL_V1_PAYMENT_STATEMENT_BYTES] = bytes
++        .try_into()
++        .map_err(|_| PoolV1PaymentStatementFormatError::WrongLength)?;
++    require_header(
++        bytes,
++        POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,
++        PoolV1TransitionKind::Withdrawal,
++    )?;
++    let common = child_common(bytes,f)?;
++    let public = PoolV1WithdrawalPublicV1 {
++        pool: common.pool,
++        deployment_domain: common.deployment_domain,
++        anchor_sequence: common.anchor_sequence,
++        anchor_root: common.anchor_root,
++        nullifier: common.nullifier,
++        asset_id: common.asset_id,
++        amount: u32::from_le_bytes(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[AMOUNT_OR_RESERVED_OFFSET..FIRST_OUTPUT_OR_DESTINATION_OFFSET].try_into(),
++        )),
++        destination_token_account: crate::atomic_statement::unwrap_fixed_slice(
++            bytes[FIRST_OUTPUT_OR_DESTINATION_OFFSET..SECOND_OUTPUT_OFFSET].try_into(),
++        ),
++        change_commitment: child_digest(crate::atomic_statement::unwrap_fixed_slice(
++            bytes[SECOND_OUTPUT_OFFSET..].try_into(),
++        ),f)
++        .map_err(|_| PoolV1PaymentStatementFormatError::NonCanonicalDigest)?,
++    };
++    child_validate(&public,f)?;
++    Ok(public)
++}
++fn reference(f:&Frame)->Result<(),PoolV1PaymentStatementFormatError>{let b=f.bytes;require_header(b,POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,PoolV1TransitionKind::Withdrawal)?; f.common?;f.change.map_err(|_|PoolV1PaymentStatementFormatError::NonCanonicalDigest)?;f.valid}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn payment_decode(){let bytes:[u8;216]=kani::any();let other:[u8;216]=kani::any();let j:usize=kani::any();kani::assume(j<32);let limb:usize=kani::any();kani::assume(limb<8);let mut f=Frame{bytes:&bytes,other:&other,common:if kani::any(){Ok(common())}else{Err(NEE_any_PoolV1PaymentStatementFormatError())},recipient:if kani::any(){Ok(digest())}else{Err(any_atomic())},change:if kani::any(){Ok(digest())}else{Err(any_atomic())},valid:if kani::any(){Ok(())}else{Err(NEE_any_PoolV1PaymentStatementFormatError())},calls:0,j,limb};let expected=reference(&f);let actual=native(&bytes,&mut f);match actual{Ok(p)=>{assert!(expected.is_ok());check_public(&p,&f)},Err(e)=>assert!(expected==Err(e),"full exact payment Error and priority")};let header=require_header(&bytes,POOL_V1_WITHDRAWAL_STATEMENT_MAGIC,PoolV1TransitionKind::Withdrawal);let prefix_bad=header.is_err();let calls=if prefix_bad{0}else if f.common.is_err(){1}else{if f.change.is_err(){2}else{3}};assert!(f.calls==calls,"source stopped child prefix and full validation order");}

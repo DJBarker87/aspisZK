@@ -1,0 +1,150 @@
+NEQ_generated/NEQ_EncoderOracle.lean:64:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  payStep NEM_PaymentReached.pay ?s ?anchor ?out
+in the target expression
+  (match ok (core.result.Result.Ok u, out) with
+    | fail e => (fail e, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | div => (div, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Err e, snd) =>
+      (ok
+          (core.result.Result.Err
+            (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)),
+        [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Ok a, late) =>
+      ((payStep NEM_PaymentReached.pay s anchor late).1,
+        Call.late (common s).lane_transition NBN_LateResult.zero :: (payStep NEM_PaymentReached.pay s anchor late).2)) =
+    match ok (core.result.Result.Ok u, out) with
+    | fail e => (fail e, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | div => (div, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Err e, snd) =>
+      (ok
+          (core.result.Result.Err
+            (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)),
+        [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Ok a, late) =>
+      ((NED_EncoderTrace.payStep s anchor late).1,
+        Call.late (common s).lane_transition NBN_LateResult.zero :: (NED_EncoderTrace.payStep s anchor late).2)
+
+case ok.mk.Ok
+s : Statement
+anchor : Std.Array U8 32#usize
+same :
+  NEM_LateOracle.late (common s).lane_transition NBN_LateResult.zero =
+    NBN_LateSummary.run NED_EncoderTrace.enc (common s).lane_transition NBN_LateResult.zero
+out : Slice U8
+u : Unit
+h :
+  NBN_LateSummary.run NED_EncoderTrace.enc (common s).lane_transition NBN_LateResult.zero =
+    ok (core.result.Result.Ok u, out)
+⊢ (match ok (core.result.Result.Ok u, out) with
+    | fail e => (fail e, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | div => (div, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Err e, snd) =>
+      (ok
+          (core.result.Result.Err
+            (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)),
+        [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Ok a, late) =>
+      ((payStep NEM_PaymentReached.pay s anchor late).1,
+        Call.late (common s).lane_transition NBN_LateResult.zero :: (payStep NEM_PaymentReached.pay s anchor late).2)) =
+    match ok (core.result.Result.Ok u, out) with
+    | fail e => (fail e, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | div => (div, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Err e, snd) =>
+      (ok
+          (core.result.Result.Err
+            (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)),
+        [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Ok a, late) =>
+      ((NED_EncoderTrace.payStep s anchor late).1,
+        Call.late (common s).lane_transition NBN_LateResult.zero :: (NED_EncoderTrace.payStep s anchor late).2)
+NEQ_generated/NEQ_EncoderOracle.lean:72:14: error: Tactic `rfl` failed: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+
+case fail
+s : Statement
+e : Std.Error
+h : atomic_statement.encode_digest_canonical (common s).historical_global_anchor = fail e
+⊢ (match fail e with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).1,
+        Call.digest (common s).historical_global_anchor ::
+          (lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).2)) =
+    match NED_EncoderTrace.enc (common s).historical_global_anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((NED_EncoderTrace.lateStep s anchor).1,
+        Call.digest (common s).historical_global_anchor :: (NED_EncoderTrace.lateStep s anchor).2)
+NEQ_generated/NEQ_EncoderOracle.lean:73:11: error: Tactic `rfl` failed: [Error pretty printing: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information]
+
+case div
+s : Statement
+h : atomic_statement.encode_digest_canonical (common s).historical_global_anchor = div
+⊢ (match div with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).1,
+        Call.digest (common s).historical_global_anchor ::
+          (lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).2)) =
+    match NED_EncoderTrace.enc (common s).historical_global_anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((NED_EncoderTrace.lateStep s anchor).1,
+        Call.digest (common s).historical_global_anchor :: (NED_EncoderTrace.lateStep s anchor).2)
+NEQ_generated/NEQ_EncoderOracle.lean:74:21: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  lateStep NEM_PaymentReached.pay NEM_LateOracle.late ?s ?anchor
+in the target expression
+  (match ok anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).1,
+        Call.digest (common s).historical_global_anchor ::
+          (lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).2)) =
+    match NED_EncoderTrace.enc (common s).historical_global_anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((NED_EncoderTrace.lateStep s anchor).1,
+        Call.digest (common s).historical_global_anchor :: (NED_EncoderTrace.lateStep s anchor).2)
+
+case ok
+s : Statement
+anchor : Std.Array U8 32#usize
+h : atomic_statement.encode_digest_canonical (common s).historical_global_anchor = ok anchor
+⊢ (match ok anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).1,
+        Call.digest (common s).historical_global_anchor ::
+          (lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).2)) =
+    match NED_EncoderTrace.enc (common s).historical_global_anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((NED_EncoderTrace.lateStep s anchor).1,
+        Call.digest (common s).historical_global_anchor :: (NED_EncoderTrace.lateStep s anchor).2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEQ_EncoderOracle.pay_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.late_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.anchor_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

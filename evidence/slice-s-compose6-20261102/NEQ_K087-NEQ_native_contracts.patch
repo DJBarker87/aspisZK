@@ -1,0 +1,19 @@
+--- a/crates/aspis-statement/src/pool_v1/payment_relation.rs
++++ b/crates/aspis-statement/src/pool_v1/payment_relation.rs
+@@ -1158,3 +1158,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEQ_decode_scalar.rs"]
++mod NEQ_decode_scalar;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEQ_decode_scalar.rs
+@@ -0,0 +1,6 @@
++use super::*;
++fn reference(b:&[u8;216],m:[u8;4],k:PoolV1TransitionKind)->Result<(),PoolV1PaymentStatementFormatError>{if b[0]!=m[0]||b[1]!=m[1]||b[2]!=m[2]||b[3]!=m[3]{Err(PoolV1PaymentStatementFormatError::WrongMagic)}else if b[4]!=POOL_V1_PAYMENT_STATEMENT_VERSION{Err(PoolV1PaymentStatementFormatError::WrongVersion)}else if b[5]!=k as u8{Err(PoolV1PaymentStatementFormatError::WrongTransitionKind)}else if b[6]!=POOL_V1_DIGEST_ENCODING_VERSION{Err(PoolV1PaymentStatementFormatError::WrongDigestEncoding)}else if b[7]!=0{Err(PoolV1PaymentStatementFormatError::NonZeroReserved)}else{Ok(())}}
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn decode_scalar(){let bytes:[u8;216]=kani::any();let magic:[u8;4]=kani::any();let kind=if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal};let actual=require_header(&bytes,magic,kind);let expected=reference(&bytes,magic,kind);assert!(actual==expected,"complete header Result, all guards, both variants and arbitrary magic");}

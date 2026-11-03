@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEQ_unwrap.rs"]
++mod NEQ_unwrap;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEQ_unwrap.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn unwrap_payload(){let input:[u8;8]=kani::any();let j:usize=kani::any();kani::assume(j<8);let original=input[j];let actual=unwrap_fixed_slice(Ok(input));assert!(actual[j]==original^1,"same full fixed-width Ok payload and ownership");}

@@ -1,0 +1,44 @@
+{"attempt": "NEQ_L006", "exit_status": 1, "wall_seconds": 2.3657119320705533, "peak_rss_kib": "5295152", "swaps": "0", "print_axioms": ["'NEQ_EncoderOracle.pay_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEQ_EncoderOracle.late_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_EncoderOracle.anchor_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_EncoderOracle.substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEQ_EncoderOracle.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEQ_generated/NEQ_EncoderOracle.lean:64:20: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  payStep NEM_PaymentReached.pay ?s ?anchor ?out
+in the target expression
+  (match ok (core.result.Result.Ok u, out) with
+    | fail e => (fail e, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | div => (div, [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Err e, snd) =>
+      (ok
+          (core.result.Result.Err
+            (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.LaneTransition e)),
+        [Call.late (common s).lane_transition NBN_LateResult.zero])
+    | ok (core.result.Result.Ok a, late)
+...
+ll.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).1,
+        Call.digest (common s).historical_global_anchor ::
+          (lateStep NEM_PaymentReached.pay NEM_LateOracle.late s anchor).2)) =
+    match NED_EncoderTrace.enc (common s).historical_global_anchor with
+    | fail e => (fail e, [Call.digest (common s).historical_global_anchor])
+    | div => (div, [Call.digest (common s).historical_global_anchor])
+    | ok anchor =>
+      ((NED_EncoderTrace.lateStep s anchor).1,
+        Call.digest (common s).historical_global_anchor :: (NED_EncoderTrace.lateStep s anchor).2)
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (32 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEQ_EncoderOracle.pay_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.late_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.anchor_substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.substitution' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_EncoderOracle.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r6e42f3e6124a45aeb82a2c1717208c44.scope; invocation ID: 5b1c78739d374b80abeccce6feae5dd4

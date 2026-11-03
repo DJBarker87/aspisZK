@@ -1,0 +1,17 @@
+--- a/crates/aspis-statement/src/atomic_statement.rs
++++ b/crates/aspis-statement/src/atomic_statement.rs
+@@ -377,3 +377,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEQ_decode_scalar.rs"]
++mod NEQ_decode_scalar;
+--- /dev/null
++++ b/crates/aspis-statement/src/NEQ_decode_scalar.rs
+@@ -0,0 +1,4 @@
++use super::*;
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++fn decode_scalar(){let bytes:[u8;4]=kani::any();let word=u32::from_le_bytes(bytes);let actual=M31::from_le_bytes(bytes).map(|x|x.0);let expected=if word > 2147483647{None}else{Some(word )};assert!(actual==expected,"full Option raw-word parser and exact accepted value");}

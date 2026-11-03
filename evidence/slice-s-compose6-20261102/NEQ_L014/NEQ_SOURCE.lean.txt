@@ -1,0 +1,90 @@
+import NBN_ResultDependency
+import NEM_LaneReached
+import NEM_EncoderFrame
+import NEM_LateOracle
+set_option autoImplicit false
+noncomputable section
+namespace NEQ_ResultValidator
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult
+attribute [local instance] Classical.propDecidable
+abbrev Record := NBN_ResultValidator.Record
+abbrev Lane := NEE_ValidatorMutation.Lane
+abbrev After := NEM_LateOracle.After
+inductive Call where
+  | lane (d : Array U32 8#usize)
+  | after (a : NBH_Validators.Afterstate)
+
+def afterStep (after : After) (r : Record) :
+    Result (core.result.Result Unit NBN_StatementResult.Error) × List Call :=
+  let result := do
+    let a ← after r.verified_afterstate
+    match a with
+    | .Err e => ok (.Err (.Afterstate e))
+    | .Ok _ => ok (.Ok ())
+  (result,[.after r.verified_afterstate])
+
+def run (lane : Lane) (after : After) (r : Record) :
+    Result (core.result.Result Unit NBN_StatementResult.Error) × List Call :=
+  if r.master_account = zero ∨ r.selected_lane_account = zero then (ok (.Err .NonZeroBinding),[])
+  else match lane r.nullifier with
+    | .fail e => (.fail e,[.lane r.nullifier])
+    | .div => (.div,[.lane r.nullifier])
+    | .ok (.Err e) => (ok (.Err (.Account e)),[.lane r.nullifier])
+    | .ok (.Ok l) =>
+      if r.output_lane ≠ l then (ok (.Err .OutputLaneMismatch),[.lane r.nullifier])
+      else ((afterStep after r).1,.lane r.nullifier :: (afterStep after r).2)
+
+def nativeAfter : After := pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1
+
+theorem result (r : Record) :
+    (run NEM_LaneReached.lane nativeAfter r).1 =
+      pool_v1.pair_forest_terminal.validate_result r := by
+  rw [NBN_ResultValidator.source]
+  unfold run afterStep NBN_ResultValidator.status nativeAfter NEM_LaneReached.lane
+  rw [NBN_OutputLane.source]
+  by_cases h : r.master_account = zero ∨ r.selected_lane_account = zero
+  · simp only [h,if_true]
+  · simp only [h,if_false]
+    cases hl : NBN_OutputLane.result r.nullifier with
+    | Err e => rfl
+    | Ok l =>
+      dsimp only
+      by_cases mismatch : r.output_lane ≠ l
+      · simp only [mismatch,if_true]
+      · simp only [mismatch,if_false]
+        rw [NBK_AfterstateResult.source]
+        cases ha : NBH_Validators.afterResult r.verified_afterstate <;> rfl
+
+theorem call_shape (lane : Lane) (after : After) (r : Record) :
+    (run lane after r).2 = [] ∨
+    (run lane after r).2 = [.lane r.nullifier] ∨
+    (run lane after r).2 = [.lane r.nullifier,.after r.verified_afterstate] := by
+  unfold run
+  split
+  · exact Or.inl rfl
+  · cases h : lane r.nullifier with
+    | fail e => exact Or.inr (Or.inl rfl)
+    | div => exact Or.inr (Or.inl rfl)
+    | ok status => cases status with
+      | Err e => exact Or.inr (Or.inl rfl)
+      | Ok l =>
+        dsimp only
+        by_cases mismatch : r.output_lane ≠ l
+        · simp only [mismatch,if_true];exact Or.inr (Or.inl rfl)
+        · simp only [mismatch,if_false];exact Or.inr (Or.inr rfl)
+
+theorem lane_domain (lane : Lane) (after : After) (r : Record) (d : Array U32 8#usize)
+    (reached : Call.lane d ∈ (run lane after r).2) : d=r.nullifier := by
+  rcases call_shape lane after r with a | b | c <;>
+    simp_all only [List.mem_cons,List.not_mem_nil,reduceCtorEq,false_or,or_false,Call.lane.injEq]
+
+theorem after_domain (lane : Lane) (after : After) (r : Record) (a : NBH_Validators.Afterstate)
+    (reached : Call.after a ∈ (run lane after r).2) : a=r.verified_afterstate := by
+  rcases call_shape lane after r with x | y | z <;>
+    simp_all only [List.mem_cons,List.not_mem_nil,reduceCtorEq,false_or,or_false,Call.after.injEq]
+
+#print axioms result
+#print axioms call_shape
+#print axioms lane_domain
+#print axioms after_domain
+end NEQ_ResultValidator

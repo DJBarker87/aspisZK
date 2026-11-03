@@ -1,0 +1,4 @@
+import NEM_ValidatorComposed
+import NEM_EncoderFrame
+import NEM_EncoderReceiver
+#print axioms NEM_ValidatorComposed.result_state_effects

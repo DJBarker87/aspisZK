@@ -1,0 +1,103 @@
+NEQ_generated/NEQ_ResultValidator.lean:54:8: error: Tactic `rfl` failed: The left-hand side
+  (if r.output_lane ≠ l then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [Call.lane r.nullifier])
+    else
+      (do
+        let a ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 r.verified_afterstate
+        match a with
+          | core.result.Result.Err e =>
+            ok
+              (core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate e))
+          | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+        [Call.lane r.nullifier, Call.after r.verified_afterstate])).1
+is not definitionally equal to the right-hand side
+  ok
+    (if r.output_lane ≠ l then
+      core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+    else
+      match NBH_Validators.afterResult r.verified_afterstate with
+      | core.result.Result.Err e =>
+        core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate e)
+      | core.result.Result.Ok a => core.result.Result.Ok ())
+
+case pos
+r : Record
+h : ¬(r.master_account = zero ∨ r.selected_lane_account = zero)
+l : U8
+hl : NBN_OutputLane.result r.nullifier = core.result.Result.Ok l
+mismatch : r.output_lane ≠ l
+⊢ (if r.output_lane ≠ l then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane r.nullifier])
+      else
+        (do
+          let a ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 r.verified_afterstate
+          match a with
+            | core.result.Result.Err e =>
+              ok
+                (core.result.Result.Err
+                  (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate e))
+            | core.result.Result.Ok a => ok (core.result.Result.Ok ()),
+          [Call.lane r.nullifier, Call.after r.verified_afterstate])).1 =
+    ok
+      (if r.output_lane ≠ l then
+        core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch
+      else
+        match NBH_Validators.afterResult r.verified_afterstate with
+        | core.result.Result.Err e =>
+          core.result.Result.Err (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate e)
+        | core.result.Result.Ok a => core.result.Result.Ok ())
+NEQ_generated/NEQ_ResultValidator.lean:75:31: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.162 = ?m.162
+but is expected to have type
+  (if r.output_lane ≠ l then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane r.nullifier])
+      else ((afterStep after r).1, Call.lane r.nullifier :: (afterStep after r).2)).2 =
+    [Call.lane r.nullifier]
+in the application
+  Or.inl rfl
+NEQ_generated/NEQ_ResultValidator.lean:82:63: warning: This simp argument is unused:
+  false_or
+
+Hint: Omit it from the simp argument list.
+  simp_all only [List.mem_cons, ̲List.not_mem_nil, ̲reduceCtorEq,f̵a̵l̵s̵e̵_̵ ̲or,̵o̵r̵_false, ̲Call.lane.injEq]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEQ_generated/NEQ_ResultValidator.lean:109:8: error: Tactic `rfl` failed: The left-hand side
+  (if r.output_lane ≠ l then
+      (ok
+          (core.result.Result.Err
+            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+        [Call.lane r.nullifier])
+    else ((afterStep nativeAfter r).1, Call.lane r.nullifier :: (afterStep nativeAfter r).2)).2
+is not definitionally equal to the right-hand side
+  if r.output_lane ≠ l then [Call.lane r.nullifier] else [Call.lane r.nullifier, Call.after r.verified_afterstate]
+
+case pos
+r : Record
+h : ¬(r.master_account = zero ∨ r.selected_lane_account = zero)
+l : U8
+mismatch : r.output_lane ≠ l
+⊢ (if r.output_lane ≠ l then
+        (ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch),
+          [Call.lane r.nullifier])
+      else ((afterStep nativeAfter r).1, Call.lane r.nullifier :: (afterStep nativeAfter r).2)).2 =
+    if r.output_lane ≠ l then [Call.lane r.nullifier] else [Call.lane r.nullifier, Call.after r.verified_afterstate]
+'NEQ_ResultValidator.result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.call_shape' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.lane_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.after_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.ordered_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEQ_ResultValidator.result_state_effects' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

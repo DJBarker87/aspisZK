@@ -1,0 +1,13 @@
+{
+ "slot": 0,
+ "mode": "positive",
+ "start": 0,
+ "width": 4,
+ "expression": "POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC",
+ "frozen_body": "pub fn encode_pool_v1_pair_forest_terminal_result_v1(\n    result: &PoolV1PairForestTerminalResultV1,\n) -> Result<[u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES], PoolV1PairForestTerminalFormatErrorV1>\n{\n    validate_result(result)?;\n    let mut output = [0u8; POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES];\n    output[..4].copy_from_slice(&POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC);\n    output[4] = POOL_V1_PAIR_FOREST_TERMINAL_VERSION;\n    output[5] = result.transition_kind as u8;\n    output[6] = POOL_V1_DIGEST_ENCODING_VERSION;\n    output[7] = result.output_lane;\n    output[RESULT_MASTER_OFFSET..RESULT_SELECTED_LANE_OFFSET]\n        .copy_from_slice(&result.master_account);\n    output[RESULT_SELECTED_LANE_OFFSET..RESULT_NULLIFIER_OFFSET]\n        .copy_from_slice(&result.selected_lane_account);\n    output[RESULT_NULLIFIER_OFFSET..RESULT_AFTERSTATE_OFFSET]\n        .copy_from_slice(&encode_digest_canonical(&result.nullifier));\n    output[RESULT_AFTERSTATE_OFFSET..].copy_from_slice(\n        &encode_pool_v1_pair_verified_afterstate_v1(&result.verified_afterstate)\n            .map_err(|error| PoolV1PairForestTerminalFormatErrorV1::Afterstate(error))?,\n    );\n    Ok(output)\n}",
+ "frozen_body_sha256": "fd67851990da17680be74d9204d3440ce54374b44f06495039b99eca9c4e3af5",
+ "arbitrary_prestate": true,
+ "all_typed_inputs": true,
+ "one_KMX_step": true,
+ "classification": "result-encoder native scalar/single-copy-step source window; no whole-buffer loop; local support only until selected bridge and full association"
+}

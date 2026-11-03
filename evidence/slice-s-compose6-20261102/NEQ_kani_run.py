@@ -1,0 +1,105 @@
+"""Serial scratch-only Kani/metadata driver using the unchanged host launcher."""
+from pathlib import Path
+import subprocess,json,sys,time,hashlib,shlex,tomllib
+E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose6-20261029';H='dombarker@100.108.41.90'
+a,kind,harness=sys.argv[1:];assert kind in ['metadata','kani'];assert a.startswith('NEQ_M' if kind=='metadata' else 'NEQ_K')
+if kind=='kani':
+ assert 'fn '+harness.rsplit('::',1)[-1]+'(' in ((E/'NEQ_oracle.patch').read_text()+(E/'NEQ_native_contracts.patch').read_text()),'missing requested harness; no launch'
+assert not (E/a).exists();assert len(list(E.glob('NEQ_K*/receipt.json')))<120
+assert 1<=int(a[5:])<=120 if kind=='kani' else True
+active=E/'NEQ_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,kind=kind)))
+def ssh(code,stdin=None,submitted=False):
+ for retry in range(11):
+  r=subprocess.run(['ssh','-o','ControlMaster=no','-o','ConnectTimeout=15','-o','ServerAliveInterval=15','-o','ServerAliveCountMax=2',H,code],input=stdin,text=True,capture_output=True)
+  with (E/'NEQ_TRANSPORT.jsonl').open('a') as f:f.write(json.dumps(dict(attempt=a,retry=retry,exit=r.returncode,submitted=submitted,stderr=r.stderr))+'\n')
+  if r.returncode!=255 or submitted:return r
+  if retry<10:time.sleep(60)
+ raise SystemExit('STOP transport exhausted')
+for retry in range(11):
+ code=f'''from pathlib import Path
+import subprocess,json,sys
+b=Path({B!r});p=b/{(a+'-barrier-'+str(retry)+'.log')!r}
+with p.open('w') as f:r=subprocess.run(['python3','/home/dombarker/project-offloads/codex-cx-s2h-20261023/S2H_reservation.py',str(b/{(a+'-reservation.json')!r})],stdout=f,stderr=subprocess.STDOUT)
+print(p.read_text());sys.exit(r.returncode)
+'''
+ r=ssh('python3',code);(E/(a+f'-barrier-{retry}.log')).write_text(r.stdout+r.stderr)
+ try:ad=next(json.loads(l) for l in r.stdout.splitlines() if l.startswith('{'))
+ except (StopIteration,json.JSONDecodeError):
+  if retry==0:time.sleep(30);continue
+  raise SystemExit('STOP reservation JSON missing')
+ (E/(a+'-admission.json')).write_text(json.dumps(dict(exit=r.returncode,reservation=ad)))
+ if r.returncode==0 and ad.get('allowed') is True:break
+ if (r.returncode==78 or ad.get('allowed') is False) and retry<10:time.sleep(180);continue
+ raise SystemExit('STOP admission')
+rev='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+probe=tomllib.loads(subprocess.check_output(['git','show',rev+':crates/aspis-r1-cost-probe/Cargo.toml'],text=True));stmt=tomllib.loads(subprocess.check_output(['git','show',rev+':crates/aspis-statement/Cargo.toml'],text=True))
+features=['r0','pool-v1-kernel']+[s.split('/',1)[1] for s in probe['features']['optimized-terminal']]
+closure=set()
+def visit(n):
+ if n in closure:return
+ closure.add(n)
+ for v in stmt['features'].get(n,[]):
+  if '/' not in v and not v.startswith('dep:'):visit(v)
+for n in features:visit(n)
+native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEQ_src/crates/aspis-statement/Cargo.toml','--target-dir',B+'/NEQ_target','--lib','--features',','.join(features),'-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',harness,'--output-format','terse']
+if kind=='metadata':native=[]
+env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-C link-arg=-Wl,--threads=1',TMPDIR=B+'/NEQ_tmp')
+files={'NEQ_native_contracts.patch':(E/'NEQ_native_contracts.patch').read_text(),'NEQ_oracle.patch':(E/'NEQ_oracle.patch').read_text(),'NEQ_kani_gate.py':(E/'NEQ_kani_gate.py').read_text(),'NEQ_contract_controls.patch':(E/'NEQ_contract_controls.patch').read_text(),'NEQ_KMX_copy_stubs.patch':subprocess.check_output(['git','show','HEAD:evidence/kani-mitig-20261028/KMX_copy_stubs.patch'],text=True),'NEQ_RUST_SOURCE_PINS.json':(E/'NEQ_RUST_SOURCE_PINS.json').read_text(),'NEQ_FROZEN_GRAPH.json':subprocess.check_output(['git','show','HEAD:evidence/leaf-p6-11-20261027/LPm_frozen_graph.json'],text=True)}
+cfg=dict(attempt=a,kind=kind,module=harness,command=['python3','NEQ_kani_gate.py',a+'.json'],native_command=native,sources=list(files)+['NEQ_RUST_SHA256.json','NEQ_src/Cargo.lock','NEQ_src/crates/aspis-statement/src/lib.rs','NEQ_src/crates/aspis-statement/src/NED_controls.rs'],env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=dict(frozen_revision=rev,frozen_source_pinset='NEQ_RUST_SOURCE_PINS.json'),statement_features=','.join(features),required_statement_features=sorted(closure),expected_time='frozen dependency/feature validation, optimized compilation, then named call-window or interface-fidelity step; no native field arithmetic or protocol loop',copy_patch_sha256='bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67')
+for patchname in ['NEQ_oracle.patch','NEQ_native_contracts.patch']:(E/(a+'-'+patchname)).write_text(files[patchname])
+files[a+'.json']=json.dumps(cfg,indent=1)
+code=f'''from pathlib import Path
+import json,subprocess,hashlib
+b=Path({B!r});s=b/'NEQ_src';files=json.loads({json.dumps(files)!r})
+for n,v in files.items():(b/n).write_text(v)
+(b/'NEQ_tmp').mkdir(exist_ok=True)
+if not (b/'NEQ_RUST_SHA256.json').exists():
+ pins=json.loads((b/'NEQ_RUST_SOURCE_PINS.json').read_text());errors=[]
+ for n,p in pins['files'].items():
+  data=(s/n).read_bytes();h=hashlib.sha1(b'blob '+str(len(data)).encode()+b'\\0'+data).hexdigest()
+  if h!=p['git_blob']:errors.append(n)
+ assert not errors,('frozen upload mismatch',errors)
+ for patch in ['NEQ_KMX_copy_stubs.patch','NEQ_contract_controls.patch']:
+  subprocess.run(['git','apply',str(b/patch)],cwd=s,check=True,capture_output=True)
+ out={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+ (b/'NEQ_RUST_SHA256.json').write_text(json.dumps(out,indent=1)+'\\n')
+if not (s/'crates/aspis-statement/src/pool_v1/NEQ_oracle.rs').exists():
+ before=json.loads((b/'NEQ_RUST_SHA256.json').read_text())
+ assert all(hashlib.sha256((s/n).read_bytes()).hexdigest()==h for n,h in before.items()),'STOP pre-update source drift'
+ subprocess.run(['git','apply',str(b/'NEQ_oracle.patch')],cwd=s,check=True,capture_output=True)
+ out={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+ (b/'NEQ_RUST_SHA256.json').write_text(json.dumps(out,indent=1)+'\\n')
+# Lane-owned patch revision: only our added oracle source may be replaced.
+current=(b/'NEQ_oracle.patch').read_text();lines=current.splitlines();lo=next(i for i,l in enumerate(lines) if l.startswith('@@ -0,0'));hi=next(i for i,l in enumerate(lines[lo+1:],lo+1) if l.startswith('--- a/'))
+body='\\n'.join(l[1:] for l in lines[lo+1:hi] if l.startswith('+'))+'\\n'
+q=s/'crates/aspis-statement/src/pool_v1/NEQ_oracle.rs'
+before=json.loads((b/'NEQ_RUST_SHA256.json').read_text());assert all(hashlib.sha256((s/n).read_bytes()).hexdigest()==h for n,h in before.items()),'STOP own revision source drift'
+q.write_text(body);before[str(q.relative_to(s))]=hashlib.sha256(q.read_bytes()).hexdigest();(b/'NEQ_RUST_SHA256.json').write_text(json.dumps(before,indent=1))
+# Reversible cfg(kani)-only actual-function contract annotations.
+current=(b/'NEQ_native_contracts.patch').read_text();previous=b/'NEQ_contracts_applied.patch'
+if previous.exists() and previous.read_text():subprocess.run(['git','apply','--reverse',str(previous)],cwd=s,check=True,capture_output=True)
+if current:subprocess.run(['git','apply',str(b/'NEQ_native_contracts.patch')],cwd=s,check=True,capture_output=True)
+previous.write_text(current)
+pins={{str(p.relative_to(s)):hashlib.sha256(p.read_bytes()).hexdigest() for p in s.rglob('*') if p.is_file()}}
+(b/'NEQ_RUST_SHA256.json').write_text(json.dumps(pins,indent=1))
+print((b/'NEQ_RUST_SHA256.json').read_text())
+'''
+r=ssh('python3',code);(E/(a+'-upload.log')).write_text(r.stderr);assert r.returncode==0,r.stderr
+(E/'NEQ_RUST_SHA256.json').write_text(r.stdout)
+(E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
+r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p MemoryMax=8G -p MemorySwapMax=0 -p TasksMax=64 python3 S2W_run_host.py '+a+'.json',submitted=True)
+(E/(a+'-launcher.log')).write_text(r.stdout+r.stderr)
+code=f'''from pathlib import Path
+import json
+b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json',a+'-rule16-check.json']!r}
+print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
+'''
+r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
+for n,v in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(v)
+assert a+'/receipt.json' in out,'submitted attempt unresolved; never resubmit'
+rc=json.loads(out[a+'/receipt.json'])
+entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
+entry['full_receipt']=dict(path=str(E/a/'receipt.json'),sha256=hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest())
+with (E/'NEQ_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
+active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print(out[a+'/stdout.log'][-900:])
+sys.exit(rc['exit_status'])
