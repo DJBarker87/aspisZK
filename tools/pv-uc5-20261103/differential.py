@@ -59,8 +59,8 @@ async def pair(i):
  for path in targets:
   if not path.is_file():continue
   raw=path.read_bytes();scanned.append(dict(path=str(path.relative_to(O)),bytes=len(raw),sha256=sha(path)))
-  for label,start,width in widths:
-   needle=record[start:start+width];offset=raw.find(needle)
+  for label,field_offset,width in widths:
+   needle=record[field_offset:field_offset+width];offset=raw.find(needle)
    if offset>=0:hits.append(dict(path=str(path.relative_to(O)),field=label,width=width,offset=offset))
  assert not (O/f'{i}-user/wallet-recovery.bin').exists()
  # Record literal byte matches, including incidental/public-value matches,
