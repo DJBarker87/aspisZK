@@ -26,7 +26,8 @@ async def side(i,side):
   if rfd is not None:os.close(rfd);os.close(output_write)
   active.add(p)
   try:out,err=await asyncio.wait_for(p.communicate(json.dumps(q).encode()),180)
-  finally:active.discard(p)
+  finally:
+   if p.returncode is not None:active.discard(p)
   if output_read is not None:
    custody=os.read(output_read,213);os.close(output_read)
    assert custody==bytes.fromhex(F['records'][i%2]),(i,'custody record mismatch')

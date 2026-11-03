@@ -55,5 +55,7 @@ for case in ['stdio','same-input','regular-file','read-only','after-secret-panic
  controls.append(dict(case=case,exit=result.returncode,stdout_bytes=0,stderr_literal=True))
 assert not (O/'never-created').exists() and (O/'empty-control-file').stat().st_size==0
 assert not list(O.glob('core*'))
+assert 'core dumped' not in trace
+(O/'core-pattern.txt').write_text(Path('/proc/sys/kernel/core_pattern').read_text())
 row=dict(evidence_class='finite native source-bound startup and final-ELF forced-panic gate',client_sha256=hashlib.sha256(client.read_bytes()).hexdigest(),forced_panic=True,no_core_file=True,fd_controls=controls,post_secret_panic_no_core=True,helper_dumpable=0,helper_core=[0,0],helper_build=cmd,helper_source_sha256=hashlib.sha256(helper.read_bytes()).hexdigest(),proc_status_dumpable_field_present='Dumpable:' in status,proc_status_core_dumping='CoreDumping:\t0' in status,limitation='Linux 6.8 /proc status omits Dumpable; PR_GET_DUMPABLE in source-identical initialize helper and final-ELF successful PR_SET_DUMPABLE trace establish setting; CoreDumping alone does not')
 (O/'summary.json').write_text(json.dumps(row,indent=2)+'\n');print(json.dumps(row))
