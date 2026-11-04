@@ -1,3 +1,49 @@
+# D584 checkpoint — conditional construction incomplete; OWNER scope corrected
+
+Resume base `062167fb6868fb08d5dcea8ac442380d2e200fd6`; same worktree and
+branch `codex/pv-evh-20261029`. Read BLOCKER-D584.md and owner-scope-D584.json.
+The latest user instruction overrides waiting for evhB4: proceed conditionally
+on exactly its Vec/RawVec ownership-and-preservation Prop. No wait occurred.
+
+Read SHARED-VEC-D580.md with git show at the revision pinned in
+inputs-D584/branch-revision.txt, plus the evhB4 prompt. Verbatim snapshots are
+committed. No parallel code/object imported, no merge or other-worktree edit.
+
+CORRECTION: D583's attribution of stack/live-slot/machine-frame interpretation
+to shared OWNER was broader than evhB4's specified allocator relation. Its
+claim that actual_frame_entry had been reduced to exactly that dependency is
+withdrawn as unestablished. This does not undo rdea-2′ or reintroduce D582's
+pre-answer VMA demand. The source/physical/kernel associations must be built
+and proved; do not smuggle them into OWNER or add separate hypotheses.
+
+No exact OWNER Lean Prop, conditional actual_frame_entry theorem, complete
+advancing entry, faithful terminal conversion or five-field installation was
+implemented this resume. No impossibility theorem or shipped-source
+counterexample is claimed. Concrete source inventory: four D583 semantic
+placeholder names have no exact declaration in tracked lean/; the entropy
+success continuation is still supplied; entry_fixed still needs compatibility
+hypotheses; all five deployed trace fields still select independent OPEN
+inputs. A projection-only adapter would not meet the requested deliverable.
+
+NEXT: implement the actual source-indexed invocation/prefix and world carrier,
+state the single exact shared OWNER Prop on that carrier, derive frame and
+same-prefix kernel laws from the actual interpretation, implement the advancing
+entry and all primitive boundaries, then replace the five selectors together.
+Use opsNative (rawBase base) heap box ops and corrected offsets304/352.
+Keep every stack/allocator/fault/partial-I/O/retry/divergent prefix and D520/U/D524.
+No successful-prefix filter, finished-helper input, new adequacy assumption or T.
+
+Focused source inspection certificate check_owner_scope_d584.py --check PASS.
+No host job, Lean attempt, new theorem/axiom, native run, full regression or
+release replay/audit. No pending process. Historical axiom summaries remain
+SUMMARY-BASED. Endpoint/deployment rows removed NONE; target not established.
+Next Lean90259; inherited24 attempts, then91500–91596, audits91597–91599.
+Next nativeN91603. No build-infrastructure changes, keys/accounts/funds action.
+The requested construction remains incomplete; the stop records the exact
+unimplemented actual producer/interpretation, not waiting for shared OWNER.
+
+---
+
 # D583 checkpoint — stack world answers; shared OWNER still absent
 
 Same worktree/branch `codex/pv-evh-20261029`; resume base `28b62b77fc`.

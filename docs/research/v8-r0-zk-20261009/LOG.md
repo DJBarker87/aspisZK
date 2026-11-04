@@ -11599,3 +11599,20 @@ undecidable hunks stop), port devnet_spend onto the proof-account route with cal
 pins, the recommended-recipe build and the fixture-byte gate, and the re-validation list of candidate
 proofs touched by the merge. Six slots: op223, op134, route2, cblib4, runjoin15, rebase3. Rows removed
 outright: 0. Privacy target not yet established.
+
+
+## D584 (pv-evh) — OWNER scope correction; conditional execution remains unbuilt
+
+Resume062167fb68, branch codex/pv-evh-20261029. Read the shared Vec contract
+with git show and the evhB4 prompt; retained pinned snapshots in
+evidence/pv-evh10-20261102/inputs-D584/. The exact OWNER concerns source-bound
+Vec/RawVec allocator ownership and operation preservation. D583's proposed
+reduction also attributed stack/live-frame interpretation to that relation;
+that reduction claim is withdrawn as unestablished, without changing rdea-2′.
+
+The requested single Lean Prop, conditional actual_frame_entry, complete
+advancing native run and simultaneous five projections were not implemented.
+BLOCKER-D584.md identifies the unchanged binders/domain and concrete remaining
+source/world/observation constructions. No impossibility or shipped-source
+counterexample claimed. Source-frontier certificate --check PASS; no Lean/native
+attempt or host scope, no new hypotheses/T, no rows removed. Next90259/N91603.
