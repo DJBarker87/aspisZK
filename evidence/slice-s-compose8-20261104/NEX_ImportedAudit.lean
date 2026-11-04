@@ -1,0 +1,4 @@
+import NEU_FinalAuditCore
+#print axioms NEU_BoxDecodeModel.transfer_result_state_effects
+#print axioms NEU_BoxDecodeModel.withdrawal_result_state_effects
+#print axioms NEM_ValidatorComposed.result_state_effects

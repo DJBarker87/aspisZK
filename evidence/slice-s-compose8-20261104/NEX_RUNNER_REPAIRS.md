@@ -1,0 +1,1 @@
+Setup initially requested unused S2W_lean_host.py from predecessor; it does not exist. Removed this own-input mistake. No prover launched; reservation admitted. The existing S2W_run_host.py is the actual unchanged launcher and remains hash-pinned.
