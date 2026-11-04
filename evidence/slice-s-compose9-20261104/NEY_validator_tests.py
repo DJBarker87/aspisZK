@@ -38,6 +38,12 @@ class CompleteCertificate(unittest.TestCase):
  def test_missing_edge_stays_open(self):
   c=self.mutated(lambda c:c['edges'].pop())
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+ def test_other_native_function_cannot_certify_caller(self):
+  c=self.mutated(lambda c:c['native_certificate'].__setitem__('function',b.PUBLIC))
+  self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
+ def test_missing_length_partition(self):
+  c=self.mutated(lambda c:c['native_certificate'].__setitem__('length_partition',[]))
+  self.assertFalse(v.certificate(c,b.TERMINAL,self.base))
  def test_wrong_inventory_obligation(self):
   c=self.mutated(lambda c:c['required_obligations'].__setitem__(0,'external:wrong'))
   self.assertFalse(v.certificate(c,b.TERMINAL,self.base))

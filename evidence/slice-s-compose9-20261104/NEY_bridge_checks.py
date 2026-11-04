@@ -70,12 +70,14 @@ def attempt(a,slot,mode,family):
  patch=snapshots['NEY_native_contracts.patch']
  assert source in ''.join(l[1:]+'\n' for l in patch.splitlines() if l.startswith('+') and not l.startswith('+++'))
  if mode=='value':
-  assert 'Failed Checks: assertion failed: project(&out, slot, i, j, k) == project(&expected, slot, i, j, k) ^ 1' in (E/a/'stdout.log').read_text()
+  assert 'FailedChecks:assertionfailed:project(&out,slot,i,j,k)==project(&expected,slot,i,j,k)^1' in re.sub(r'\s+','',(E/a/'stdout.log').read_text())
  assert f'project(&expected,slot,i,j,k){"^1" if mode=="value" else ""}' in source
  return m
 
 def check(c,base):
  n=c['native_certificate'];f=n['function'];assert f in [TERMINAL,PUBLIC]
+ assert c['subject']==f
+ assert c['kind']==('root-composition' if f==PUBLIC else 'member-composition')
  family='terminal' if f==TERMINAL else 'public'
  assert n['complete'] is True and n['inner_hypotheses_remaining']==[]
  assert n['length_partition']==(['NEX_K130','NEX_K131'] if family=='terminal' else [])
@@ -94,6 +96,7 @@ fn length_gate_all(){let length:usize=kani::any();assert!(length_gate(length)==i
    assert m['source']==expected
    assert expected in ''.join(l[1:]+'\n' for l in snapshots['NEX_native_contracts.patch'].splitlines() if l.startswith('+') and not l.startswith('+++'))
    cfg=v.read(folder/(a+'.json'));assert cfg['module']=='pool_v1::pair_forest_terminal::NEX_length::length_gate_all'
+   assert cfg['native_command'][cfg['native_command'].index('--harness')+1]==cfg['module']
    names=[a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-shape.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-rule16-check.json',a+'-metadata-pin.json',a+'-NEX_native_contracts.patch',a+'-NEX_oracle.patch']
    archive=a+'-inputs.json' if (folder/(a+'-inputs.json.xz')).exists() else 'NEX_SOURCE_HISTORY.json';names += [archive+'.xz',archive+'.sha256']
    inherited_support.update(str((folder/name).relative_to(R)) for name in names)
