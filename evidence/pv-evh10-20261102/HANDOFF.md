@@ -1,3 +1,70 @@
+# D582 checkpoint — Linux permissions and same-prefix payload boundary
+
+Branch `codex/pv-evh-20261029`, same worktree; resume base `f9881c743b`.
+Read OS-BOUNDARY-D582.md, BLOCKER-D582.md and runtime-boundary-D582.json.
+Evidence class: **binary-structural (adopted binary), plus OS-model**;
+source/machine correspondence retains V370 compiler-cohort under l3-1.
+
+Supplied: adopted ELF permission requests (GNU_STACK RW/no X, image R/RX/RW,
+RELRO caveat), Linux stack/brk/private-address-space permission interpretation,
+and per-reached getrandom payload association with actual request, memory,
+post-buffer, status, world and ordered events. The complete reference Linux
+v6.8 sources are hash-pinned to commit e8f897f4afef0031fe618a8e94127a0934896aba.
+That is an explicit reference OS model, NOT an observed deployment kernel pin.
+Kernel RNG/copies stay at the OS boundary with existing entropy_kernel;
+T unchanged. Partial copy/error/fault/interruption branches are retained.
+Signal-handler and other-thread writes are distinct interleaved events, not
+silently covered by the syscall payload's outside-range preservation law.
+No universal ValidAnswer or new Lean runtime instance is claimed.
+
+OWNER_actual_prefix is the single named OWNER interpretation dependency from
+pv-evhB4, to consume only AFTER the lead merges it. No local owner relation,
+parallel-slice import, arbitrary memory/world, empty domain or owner wrapper
+was made. The exact exported theorem name awaits that merge.
+
+**Exact remaining gap in (b):** GNU_STACK RW and Linux's stack policy prove
+permissions inside a VMA, not that every actual pre-initializer [sp,sp+232)
+is already inside it. Domain/machine/mapping carriers are still unimplemented;
+no all-path coverage proof from earlier accesses is supplied. N91602 inspected
+open/Accounts::parse predecessors but their reservations alone do not prove
+coverage. BLOCKER-D582 preserves actual_frame_entry VERBATIM and states the
+missing current-VMA coverage conclusion with the SAME four binders and q.
+An aligned stack-boundary arithmetic example refutes only the shortcut from
+subtraction/alignment, not the shipped source. Coverage is not hidden in
+OWNER or in a successful-only domain. Therefore the requested reduction to
+OWNER as the sole remaining actual_frame_entry input is NOT yet established.
+
+N91602: one admitted 6G/8G/swap0/tasks64 inspection scope, exit0, wall0:00.92,
+peak63932KiB, swaps0; exact source revision/command/tool identities in receipts.
+Two uncharged reservation refusals preceded it; full >=180s cooldowns checked.
+Refusal timestamps/status survive; earlier full cgroup snapshots were overwritten
+on retry (explicitly recorded in cooldown-compliance-D582.json). Final successful
+admission snapshot is retained. Scope is inactive. No client executed.
+
+check_os_boundary_d582.py --check PASS, covering 11 immutable-source snapshots,
+Linux request/copy/permission anchors, adopted syscall anchors, exact unchanged
+frame statement, ELF requests, receipt/source/output hashes and negative claims.
+No new Lean theorem/axiom, compile, Kani/native harness, full regression/release
+replay or axioms audit. Historical axiom summaries remain SUMMARY-BASED.
+Rows removed NONE; target not yet established. Five rtDeployed projections
+remain OPEN; no full advancing execution installed. All D520/U/D524,
+resource/failure, compiler, observation and L1/L2/L3 conditions remain.
+
+NEXT native N91603 through N91619. NEXT Lean90259; 24 inherited attempts,
+then91500–91596, audits91597–91599 untouched. No submitted pending job.
+Stopped on the exact focus-rule coverage/actual-interpretation blocker, not
+budget exhaustion or a host failure. Next: prove the actual current stack
+coverage on all reached prefixes, consume lead-merged shared OWNER, then
+install same-prefix per-copy association in the actual advancing history and
+only then full entry/five projections. No unrelated local laws.
+
+Historical prompt-pv-evh4.txt and prompt-pv-evh3.txt referenced by the old
+recursive chain are absent from the supplied scratchpad; their contents were
+not assumed. Current scope, IDs and operating rules came from the supplied
+latest prompt, pv-common, local-lean, r1p-common and handoffs.
+
+---
+
 # D581 STOP — adopted binary correspondence; runtime instance still absent
 
 Branch `codex/pv-evh-20261029`, same worktree; resume base565b5b5715.
