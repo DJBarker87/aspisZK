@@ -13,3 +13,5 @@ L067 excluded: Lean.Shell resource API is private in the Lean4 module system; re
 Peer replay own-view repairs: materialized missing tracked baseline validator directories using sparse-checkout add. Corrected GIT_WORK_TREE from realR to private validation root S so git ls-tree paths are rooted correctly; strict provenance checks unchanged. Final unchanged NEW_validate replay passes at revision75623b7b43c563b210f2f37d74182382569f7002; no writes to predecessors.
 
 NFA_K009 matched no harness because own selector omitted KMX_checks. Corrected selector K010/K011 gives required pass/fail; original failed selector preserved. No renamed proof or verdict-seeking source rename.
+
+NFA_K018: full selected-tail window strengthening timed out, exit 124, wall 180.15594435017556s, RSS 100380KiB, swaps 0. No credit, no matched negative launched, no unchanged rerun. Split physical source-pointer/one-byte window from opaque receiver context; existing native K005/K006 isolates coefficient value read and inherited NEV_K066/K067 isolates receiver/call context. Full composition remains a Lean obligation.
