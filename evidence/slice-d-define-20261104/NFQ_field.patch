@@ -1,0 +1,58 @@
+--- a/crates/aspis-core/src/field.rs
++++ b/crates/aspis-core/src/field.rs
+@@ -119,7 +119,10 @@
+     }
+ 
+     #[inline(always)]
+-    pub fn neg(self) -> M31 {
++    #[cfg_attr(kani, kani::requires(self.0 < P))]
++#[cfg_attr(kani, kani::modifies())]
++#[cfg_attr(kani, kani::ensures(|r| (r.0 == NFQ_field::neg_ref(self.0)) != cfg!(NFQ_invert)))]
++pub fn neg(self) -> M31 {
+         #[cfg(feature = "r0-op-count")]
+         let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::FNeg);
+         if self.0 == 0 {
+@@ -273,7 +276,9 @@
+     }
+ 
+     #[inline(always)]
+-    pub fn from_m31(a: M31) -> CM31 {
++    #[cfg_attr(kani, kani::modifies())]
++#[cfg_attr(kani, kani::ensures(|r| ((r.a.0,r.b.0) == NFQ_field::cm_ref(a.0)) != cfg!(NFQ_invert)))]
++pub fn from_m31(a: M31) -> CM31 {
+         CM31 { a, b: M31::ZERO }
+     }
+ 
+@@ -888,7 +893,9 @@
+     };
+ 
+     #[inline(always)]
+-    pub fn from_cm31(c0: CM31) -> QM31 {
++    #[cfg_attr(kani, kani::modifies())]
++#[cfg_attr(kani, kani::ensures(|r| ((r.c0.a.0,r.c0.b.0,r.c1.a.0,r.c1.b.0) == NFQ_field::qm_ref(c0.a.0,c0.b.0)) != cfg!(NFQ_invert)))]
++pub fn from_cm31(c0: CM31) -> QM31 {
+         QM31 { c0, c1: CM31::ZERO }
+     }
+ 
+@@ -3266,3 +3273,7 @@
+     let s = a + P - b;
+     M31(if s >= P { s - P } else { s })
+ }
++
++#[cfg(kani)]
++#[path="NFQ_field.rs"]
++mod NFQ_field;
+--- /dev/null
++++ b/crates/aspis-core/src/NFQ_field.rs
+@@ -0,0 +1,11 @@
++use super::*;
++// Natural-number field specs paired with emitted-definition theorems.
++pub(super) fn neg_ref(x:u32)->u32{if x==0{0}else{2147483647-x}}
++pub(super) fn cm_ref(x:u32)->(u32,u32){(x,0)}
++pub(super) fn qm_ref(a:u32,b:u32)->(u32,u32,u32,u32){(a,b,0,0)}
++#[kani::proof_for_contract(M31::neg)]
++fn neg_contract(){let x=M31(kani::any());kani::assume(x.0<P);let _=x.neg();}
++#[kani::proof_for_contract(CM31::from_m31)]
++fn cm_contract(){let _=CM31::from_m31(M31(kani::any()));}
++#[kani::proof_for_contract(QM31::from_cm31)]
++fn qm_contract(){let _=QM31::from_cm31(CM31{a:M31(kani::any()),b:M31(kani::any())});}

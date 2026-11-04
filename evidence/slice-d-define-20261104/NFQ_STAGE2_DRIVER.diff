@@ -1,0 +1,23 @@
+--- a/NFQ_ProofDriver.lean
++++ b/NFQ_Stage2Driver.lean
+@@ -63,10 +63,16 @@
+   enableInitializersExecution
+   let mode := args.headD "small"
+   let (modules, roots) :=
+-    if mode == "proof0" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_RowShape.reference, `NFQ_RowShape.prefix_reference, `NFQ_RowShape.compact_reference])
+-    else if mode == "proof1" then
+-      (#[`NFQ_COMBINED_IMPORT], #[`NFQ_Transport.folds_reference, `NFQ_Transport.final_len_reference, `NFQ_Transport.checkpoint_size_reference])
++    if mode == "stage2proof0" then
++      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_FieldLaws.neg_value, `NFQ_FieldLaws.cm_reference, `NFQ_FieldLaws.qm_reference, `NFQ_FieldPorts.fiq_cm, `NFQ_FieldPorts.fiq_qm, `NFQ_FieldPorts.sampler_neg, `NFQ_Readonly.reference, `NFQ_Reduce.source])
++    else if mode == "stage2proof1" then
++      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_PreparedMultiplier.add_word, `NFQ_PreparedMultiplier.row_source, `NFQ_PreparedMultiplier.source, `NFQ_StatementLaws.expected_reference, `NFQ_StatementLaws.copied_reference, `NFQ_StatementLaws.limbs_reference, `NFQ_WideGetters.native_roundtrip, `NFQ_WideGetters.model_roundtrip])
++    else if mode == "stage2proof2" then
++      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_WideGetters.c0, `NFQ_WideGetters.c1, `NFQ_Linear.source, `NFQ_ZeroPrimitives.index_read, `NFQ_ZeroPrimitives.wrap_add, `NFQ_ZeroGateModel.reject_at, `NFQ_ZeroGateModel.reject_after, `NFQ_ZeroSuccess.loop_zero])
++    else if mode == "stage2proof3" then
++      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_ZeroSuccess.source, `NFQ_ZeroReference.false_loop, `NFQ_ZeroReference.loop_reference, `NFQ_ZeroSource.source, `NFQ_FieldDomains.cm_domain, `NFQ_FieldDomains.qm_domain, `NFQ_PreparedDomain.spec_canonical, `NFQ_PreparedDomain.output_domain])
++    else if mode == "stage2proof4" then
++      (#[`NFQ_STAGE2_IMPORT], #[`NFQ_StatementDomains.output_range, `NFQ_StatementDomains.limb_domains, `NFQ_ZeroStep.zero_step, `NFQ_ZeroStep.reject_step])
+     else if mode == "fixtures" then
+       (#[`NEP_Planted, `NEP_Mutations],
+        #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,

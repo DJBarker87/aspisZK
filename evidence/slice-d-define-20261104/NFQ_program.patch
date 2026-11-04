@@ -1,0 +1,36 @@
+--- a/programs/r1-cost-probe/src/r1_pool_adapter.rs
++++ b/programs/r1-cost-probe/src/r1_pool_adapter.rs
+@@ -188,6 +188,8 @@
+ #[path = "readonly_meta_tests.rs"]
+ mod readonly_meta_tests;
+ 
++#[cfg_attr(kani, kani::modifies())]
++#[cfg_attr(kani, kani::ensures(|r| ((r.is_ok() == NFQ_program::reference::readonly_buffer_ref(is_signer,is_writable,executable)) && (r.is_ok() || matches!(r,Err(ProgramError::InvalidAccountData)))) != cfg!(NFQ_invert)))]
+ fn readonly_buffer_meta_ok(
+     is_signer: bool,
+     is_writable: bool,
+@@ -971,3 +973,7 @@
+ #[cfg(all(test, feature = "private-leaf-salts"))]
+ #[path = "adapter_rw_tests.rs"]
+ mod rw_tests;
++
++#[cfg(kani)]
++#[path="NFQ_program.rs"]
++mod NFQ_program;
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NFQ_program.rs
+@@ -0,0 +1,4 @@
++use super::*;
++#[path="NFQ_scan_reference.rs"] pub(super) mod reference;
++#[kani::proof_for_contract(readonly_buffer_meta_ok)]
++fn readonly_contract(){let _=readonly_buffer_meta_ok(kani::any(),kani::any(),kani::any());}
+--- /dev/null
++++ b/programs/r1-cost-probe/src/NFQ_scan_reference.rs
+@@ -0,0 +1,7 @@
++// Total safe scalar/scan references; the scan is proved by induction.
++pub fn readonly_buffer_ref(signer:bool,writable:bool,executable:bool)->bool{!(signer||writable||executable)}
++pub fn zero_step_ref(byte:u8)->bool{byte==0}
++pub fn zero_ref(bytes:&[u8])->bool{
++ let mut i=0;let mut all=true;
++ while i<bytes.len() && all {all=bytes[i]==0;i+=1;}all
++}

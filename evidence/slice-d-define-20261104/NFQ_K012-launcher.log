@@ -1,0 +1,48 @@
+{"attempt": "NFQ_K012", "exit_status": 1, "wall_seconds": 1.3289165699388832, "peak_rss_kib": "172764", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+
+
+warning: module `NFQ_verifier` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:534:5
+    |
+534 | mod NFQ_verifier;
+    |     ^^^^^^^^^^^^ help: convert the identifier to snake case: `nfq_verifier`
+
+warning: module `NFQ_compact` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/compact.rs:207:5
+    |
+207 | mod NFQ_compact;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nfq_compact`
+
+error: stub verified target `NFQ_fidelity::weak_option` does not have a corresponding `#[proof_for_contract]` harness
+  --> crates/aspis-r1-cost-probe/src/NFQ_fidelity.rs:19:16
+   |
+19 | #[kani::proof] #[kani::stub_verified(weak_option)]
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = help: verified stubs are meant to be sound abstractions for a function's behavior, so Kani enforces that proofs exist for the stub's contract
+   = note: this error originates in the attribute macro `kani::stub_verified` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: stub verified target `NFQ_fidelity::weak_usize` does not have a corresponding `#[proof_for_contract]` harness
+ --> crates/aspis-r1-cost-probe/src/NFQ_fidelity.rs:7:16
+  |
+7 | #[kani::proof] #[kani::stub_verified(weak_usize)]
+  |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  |
+  = help: verified stubs are meant to be sound abstractions for a function's behavior, so Kani enforces that proofs exist for the stub's contract
+  = note: this error originates in the attribute macro `kani::stub_verified` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: could not compile `aspis-r1-cost-probe` (lib) due to 2 previous errors; 40 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-rbecb84488d27421b8f6d8ce207301c7d.scope; invocation ID: 04688d452a04491e9d5560d4f29116b4

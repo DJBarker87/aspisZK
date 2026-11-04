@@ -1,0 +1,126 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_semantic_terminal.rs
+@@ -533,6 +533,8 @@
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| (r.0 == NFQ_stmt::variant_ref(variant)) != cfg!(NFQ_invert)))]
+ fn variant_expected_output(variant: CompiledVariant) -> M31 {
+     match variant {
+         CompiledVariant::PrivateTransfer => M31(1),
+@@ -1205,6 +1207,8 @@
+ }
+ 
+ #[inline(never)]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| (*r == NFQ_stmt::copy_ref(variant)) != cfg!(NFQ_invert)))]
+ fn copy_variant(variant: CompiledVariant) -> PoolV1PairForestCompiledVariantV1 {
+     match variant {
+         CompiledVariant::PrivateTransfer => PoolV1PairForestCompiledVariantV1::PrivateTransfer,
+@@ -2328,3 +2332,7 @@
+         }
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFQ_stmt.rs"]
++mod NFQ_stmt;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NFQ_stmt.rs
+@@ -0,0 +1,19 @@
++use super::*;
++fn any_variant()->CompiledVariant{if kani::any(){CompiledVariant::PrivateTransfer}else{CompiledVariant::Withdrawal}}
++pub(super) fn variant_ref(v:CompiledVariant)->u32{match v{CompiledVariant::PrivateTransfer=>1,CompiledVariant::Withdrawal=>0}}
++pub(super) fn copy_ref(v:CompiledVariant)->PoolV1PairForestCompiledVariantV1{match v{CompiledVariant::PrivateTransfer=>PoolV1PairForestCompiledVariantV1::PrivateTransfer,CompiledVariant::Withdrawal=>PoolV1PairForestCompiledVariantV1::Withdrawal}}
++#[kani::proof_for_contract(variant_expected_output)]
++fn variant_contract(){let _=variant_expected_output(any_variant());}
++#[kani::proof_for_contract(copy_variant)]
++fn copy_contract(){let _=copy_variant(any_variant());}
++impl kani::Arbitrary for PoolV1PairForestCompiledVariantV1{fn any()->Self{if kani::any(){Self::PrivateTransfer}else{Self::Withdrawal}}}
++#[kani::modifies()] #[kani::ensures(|_r| true)]
++fn weak_enum()->PoolV1PairForestCompiledVariantV1{PoolV1PairForestCompiledVariantV1::PrivateTransfer}
++#[kani::proof_for_contract(weak_enum)]
++fn enum_real(){assert!(matches!(weak_enum(),PoolV1PairForestCompiledVariantV1::PrivateTransfer));}
++#[kani::proof] #[kani::stub_verified(weak_enum)]
++fn enum_unimplied(){assert!(matches!(weak_enum(),PoolV1PairForestCompiledVariantV1::PrivateTransfer));}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|_r| true)]
++fn bad_enum_frame(x:&mut[u8;2])->PoolV1PairForestCompiledVariantV1{x[1]=x[1].wrapping_add(1);PoolV1PairForestCompiledVariantV1::PrivateTransfer}
++#[kani::proof_for_contract(bad_enum_frame)]
++fn enum_frame(){let mut x:[u8;2]=kani::any();let _=bad_enum_frame(&mut x);}
+--- a/crates/aspis-statement/src/state_only_poseidon.rs
++++ b/crates/aspis-statement/src/state_only_poseidon.rs
+@@ -127,6 +127,8 @@
+ }
+ 
+ #[inline(always)]
++#[cfg_attr(kani,kani::modifies())]
++#[cfg_attr(kani,kani::ensures(|r| (*r == NFQ_poseidon::limbs_ref(value)) != cfg!(NFQ_invert)))]
+ fn extension_limbs(value: QM31) -> [u32; 4] {
+     [value.c0.a.0, value.c0.b.0, value.c1.a.0, value.c1.b.0]
+ }
+@@ -1239,3 +1241,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NFQ_poseidon.rs"]
++mod NFQ_poseidon;
+--- /dev/null
++++ b/crates/aspis-statement/src/NFQ_poseidon.rs
+@@ -0,0 +1,44 @@
++use super::*;
++include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
++pub(super) fn limbs_ref(v:QM31)->[u32;4]{[v.c0.a.0,v.c0.b.0,v.c1.a.0,v.c1.b.0]}
++fn any_q()->QM31{QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}}
++#[kani::proof_for_contract(extension_limbs)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn limbs_contract(){let _=extension_limbs(any_q());}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn copy_positive(){let src:[u32;4]=kani::any();let mut dst:[u32;4]=kani::any();let k:usize=kani::any();kani::assume(k<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[k]==dst[k]);}
++#[kani::proof]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn copy_negative(){let src:[u32;4]=kani::any();let mut dst:[u32;4]=kani::any();let k:usize=kani::any();kani::assume(k<4);unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};assert!(src[k]!=dst[k]);}
++#[kani::modifies()] #[kani::ensures(|r| r[0]==0)]
++fn weak_array()->[u32;4]{[0,1,2,3]}
++#[kani::proof_for_contract(weak_array)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn array_real(){assert!(weak_array()[1]==1);}
++#[kani::proof] #[kani::stub_verified(weak_array)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn array_unimplied(){assert!(weak_array()[1]==1);}
++#[kani::modifies(&mut x[0])] #[kani::ensures(|r| r[0]==0)]
++fn bad_array_frame(x:&mut[u8;2])->[u32;4]{x[1]=x[1].wrapping_add(1);[0,1,2,3]}
++#[kani::proof_for_contract(bad_array_frame)]
++#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u32]>::copy_from_slice,KMX_copy_from_slice)]
++
++fn array_frame(){let mut x:[u8;2]=kani::any();let _=bad_array_frame(&mut x);}
+--- a/crates/aspis-statement/src/lib.rs
++++ b/crates/aspis-statement/src/lib.rs
+@@ -5,6 +5,7 @@
+ //! constraint-composition kernel that Stage 2 must make correct before any
+ //! statement proof is wired into the PCS.
+ 
++#![cfg_attr(kani,feature(allocator_api))]
+ #![no_std]
+ 
+ extern crate alloc;

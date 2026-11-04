@@ -1,0 +1,72 @@
+{"attempt": "NFQ_L035", "exit_status": 1, "wall_seconds": 1.2374646570533514, "peak_rss_kib": "2607524", "swaps": "0", "print_axioms": ["'NFQ_ZeroReference.false_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NFQ_ZeroReference.loop_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFQ_generated/NFQ_ZeroReference.lean:17:12: error: Tactic `rfl` failed: The left-hand side
+  match r✝ with
+  | cont x =>
+    loop
+      (fun x =>
+        if x.1 < bytes.len then
+          if x.2 = true then do
+            let i2 ← bytes.index_usize x.1
+            let i3 ← lift (x.1.wrapping_add 1#usize)
+            ok (cont (i3, decide (i2 = 0#u8)))
+          else ok (done false)
+        else ok (done x.2))
+      x
+  | done x => ok x
+is not definitionally equal to the right-hand side
+  ok false
+
+case h_1
+bytes : Slice U8
+i : Usize
+x✝ : Result (ControlFlow (Usize × Bool) Bool)
+r✝ : ControlFlow (Usize × Bool) Bool
+heq✝ :
+  (if i < bytes.len then
+      if false = true then do
+        let i2 ← 
+...
+ bytes.len then
+      if false = true then do
+        let i2 ← bytes.index_usize i
+        let i3 ← lift (i.wrapping_add 1#usize)
+        ok (cont (i3, decide (i2 = 0#u8)))
+      else ok (done false)
+    else ok (done false)) =
+    div
+⊢ div = ok false
+NFQ_generated/NFQ_ZeroReference.lean:57:6: error: Type mismatch: After simplification, term
+  rest
+ has type
+  @Eq (Result (Option (core.result.Result Unit solana_program_error.ProgramError)))
+    (do
+      let b ← loop (fun x => NFQ_ScanReference.zero_ref_loop.body bytes x.1 x.2) (i.wrapping_add 1#usize, true)
+      ok (terminal b))
+    (loop (fun index1 => r1_pool_adapter.owned.require_zero_loop.body bytes index1) (i.wrapping_add 1#usize))
+but is expected to have type
+  @Eq (Result (Option (core.result.Result Unit solana_program_error.ProgramError)))
+    (do
+      let b ←
+        loop
+            (fun x =>
+              if x.1 < bytes.len then
+                if x.2 = true then do
+                  let i2 ← bytes.index_usize x.1
+                  ok (cont (x.1.wrapping_add 1#usize, decide (i2 = 0#u8)))
+                else ok (done false)
+              else ok (done x.2))
+            (i.wrapping_add 1#usize, decide True)
+      ok (terminal b))
+    (loop
+      (fun index1 =>
+        if index1 < bytes.len then do
+          let i1 ← bytes.index_usize index1
+          if (i1 != 0#u8) = true then
+              ok (done (some (core.result.Result.Err solana_program_error.ProgramError.AccountAlreadyInitialized)))
+            else ok (cont (index1.wrapping_add 1#usize))
+        else ok (done none))
+      (i.wrapping_add 1#usize))
+'NFQ_ZeroReference.false_loop' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NFQ_ZeroReference.loop_reference' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r0d1e09503354406d9c29aaaa40eec386.scope; invocation ID: 3075de83f1384c7e8318be54ec7c6238

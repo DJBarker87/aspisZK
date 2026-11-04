@@ -1,0 +1,132 @@
+{"attempt": "NFQ_K009", "exit_status": 1, "wall_seconds": 1.3444834270048887, "peak_rss_kib": "193036", "swaps": "0", "print_axioms": "N/A: kani"}
+> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:8:8
+  |
+8 | pub fn compact_row_ref(row:u8)->bool{row>=14}
+  |        ^^^^^^^^^^^^^^^
+
+warning: function `folds_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:9:8
+  |
+9 | pub fn folds_ref(v:u8)->usize{if v==0 {1}else{2}}
+  |        ^^^^^^^^^
+
+warning: function `final_len_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:10:8
+   |
+10 | pub fn final_len_ref(v:u8)->usize{if v==0 {256}else{64}}
+   |        ^^^^^^^^^^^^^
+
+warning: function `checkpoint_size_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:11:8
+   |
+11 | pub fn checkpoint_size_ref(v:u8)->usize{if v==0 {4840}else{1768}}
+   |        ^^^^^^^^^^^^^^^^^^^
+
+warning: function `row_shape_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:2:8
+  |
+2 | pub fn row_shape_ref(row:u8)->Option<(u8,usize)>{
+  |        ^^^^^^^^^^^^^
+
+warning: function `compact_row_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:8:8
+  |
+8 | pub fn compact_row_ref(row:u8)->bool{row>=14}
+  |        ^^^^^^^^^^^^^^^
+
+warning: function `checkpoint_size_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:11:8
+   |
+11 | pub fn checkpoint_size_ref(v:u8)->usize{if v==0 {4840}else{1768}}
+   |        ^^^^^^^^^^^^^^^^^^^
+
+warning: function `row_shape_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:2:8
+  |
+2 | pub fn row_shape_ref(row:u8)->Option<(u8,usize)>{
+  |        ^^^^^^^^^^^^^
+
+warning: function `compact_row_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:8:8
+  |
+8 | pub fn compact_row_ref(row:u8)->bool{row>=14}
+  |        ^^^^^^^^^^^^^^^
+
+warning: function `folds_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:9:8
+  |
+9 | pub fn folds_ref(v:u8)->usize{if v==0 {1}else{2}}
+  |        ^^^^^^^^^
+
+warning: function `final_len_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:10:8
+   |
+10 | pub fn final_len_ref(v:u8)->usize{if v==0 {256}else{64}}
+   |        ^^^^^^^^^^^^^
+
+warning: function `row_shape_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:2:8
+  |
+2 | pub fn row_shape_ref(row:u8)->Option<(u8,usize)>{
+  |        ^^^^^^^^^^^^^
+
+warning: function `folds_ref` is never used
+ --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:9:8
+  |
+9 | pub fn folds_ref(v:u8)->usize{if v==0 {1}else{2}}
+  |        ^^^^^^^^^
+
+warning: function `final_len_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:10:8
+   |
+10 | pub fn final_len_ref(v:u8)->usize{if v==0 {256}else{64}}
+   |        ^^^^^^^^^^^^^
+
+warning: function `checkpoint_size_ref` is never used
+  --> crates/aspis-r1-cost-probe/src/NFQ_reference.rs:11:8
+   |
+11 | pub fn checkpoint_size_ref(v:u8)->usize{if v==0 {4840}else{1768}}
+   |        ^^^^^^^^^^^^^^^^^^^
+
+warning: module `NFQ_wire` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/r1_wire.rs:856:5
+    |
+856 | mod NFQ_wire;
+    |     ^^^^^^^^ help: convert the identifier to snake case: `nfq_wire`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: module `NFQ_transport` should have a snake case name
+  --> crates/aspis-r1-cost-probe/src/transport.rs:32:5
+   |
+32 | mod NFQ_transport;
+   |     ^^^^^^^^^^^^^ help: convert the identifier to snake case: `nfq_transport`
+
+warning: module `NFQ_verifier` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/verifier.rs:534:5
+    |
+534 | mod NFQ_verifier;
+    |     ^^^^^^^^^^^^ help: convert the identifier to snake case: `nfq_verifier`
+
+warning: module `NFQ_compact` should have a snake case name
+   --> crates/aspis-r1-cost-probe/src/compact.rs:207:5
+    |
+207 | mod NFQ_compact;
+    |     ^^^^^^^^^^^ help: convert the identifier to snake case: `nfq_compact`
+
+    Finished `dev` profile [optimized] target(s) in 0.27s
+Checking harness transport::NFQ_transport::final_len_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 88 failed (5 unreachable)
+Failed Checks: |r| (*r == NFQ_transport::reference::folds_ref(NFQ_transport::code(self))) !=
+cfg!(NFQ_invert)
+ File: "crates/aspis-r1-cost-probe/src/transport.rs", line 9, in transport::Variant::folds::{closure#3}
+
+VERIFICATION:- FAILED
+Verification Time: 0.061476063s
+
+Manual Harness Summary:
+Verification failed for - transport::NFQ_transport::final_len_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
