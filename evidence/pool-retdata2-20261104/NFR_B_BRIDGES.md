@@ -46,3 +46,20 @@ No shipped source, existing proof owner, artifact, wallet or key was changed.
 No Kani/extraction run is charged to B; E001 is reused. Native account/context,
 carrier and settlement certificates are separate A/C obligations. The joint
 non-vacuity and cold coherent release gates remain separate.
+
+Continuation B035-B037: the final forward decode proof now compiles.
+B035 replaced elaboration-permissive rewrites with exact rewrites, removing the
+recursion-depth obstruction, and isolated the remaining afterstate encoded-slice
+numeral proof mismatch. B036 uses the named afterstate roundtrip after explicitly
+unfolding only its encoded-slice wrapper: forward/emitted/decoder_association
+all compile with standard axioms. This is a symbolic composition of the closed
+header, field-window, canonical-digest and afterstate laws, not wire-buffer
+normalization. B037 compiles the current NFR_PoolReturnData association, which
+derives accepting decoder/read output for every valid emitted statement; no
+independent accepted-read, inverse or decoder-association premise remains.
+The accepted_association root is retained too. This mathematical result does
+not establish a complete native Pool execution or a reachable two-transaction
+witness; A/C native caller and joint non-vacuity gates remain separate.
+
+B036: exit0, 2.5121 s, 5328848 KiB, swap0.
+B037: exit0, 2.6278 s, 5316304 KiB, swap0.
