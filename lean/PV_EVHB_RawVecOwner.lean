@@ -194,6 +194,7 @@ theorem move_delivery {S F : Type} (w : NativeWorld S F) (source target : Nat)
     lookup (move w source target) target = lookup w source ∧
     lookup (move w source target) source = none := by
   simp only [move,lookup,ite_true,different,ite_false]
+  exact ⟨True.intro,True.intro⟩
 
 #print axioms lookup_store
 #print axioms lookup_other
