@@ -4,7 +4,7 @@ import subprocess,difflib,json,sys
 E=Path(__file__).resolve().parent
 REV='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
 mode=sys.argv[1]
-assert mode in ['positive','left','right','size','slot','reply','branch','frame','copy','copy-negative']
+assert mode in ['positive','left','right','size','slot','reply','branch','frame','copy','copy-negative','header','header-negative','retained','retained-negative']
 source=r'''use super::*;
 struct Frame { left:*const u8,right:*const u8,slot:*mut i32,reply:i32,calls:u8,j:usize,left_byte:u8,right_byte:u8 }
 // Runtime value is opaque here. RuntimeMemcmp(ac) supplies its zero law in Lean.
@@ -48,6 +48,11 @@ if mode.startswith('copy'):
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::NFJ_KMX::KMX_copy_nonoverlapping)]
 #[kani::stub(<[u8]>::copy_from_slice,crate::NFJ_KMX::KMX_copy_from_slice)]
 fn same_buffers(){let b:u8=kani::any();let a=[b];let mut d=[0u8];d.copy_from_slice(&a);assert!(d[0]=='''+('b^1' if mode=='copy-negative' else 'b')+');}\n'
+if mode.startswith('header'):
+ source='use super::*;\n#[kani::proof]\nfn same_buffers(){let bytes:[u8;688]=kani::any();let candidate_start=0;let proof_start=candidate_start+POOL_V1_PAIR_VERIFIED_AFTERSTATE_BYTES;let candidate_bytes=&bytes[candidate_start..proof_start];assert!(candidate_bytes.len()==688&&core::ptr::eq(candidate_bytes.as_ptr(),'+('unsafe{bytes.as_ptr().add(1)}' if mode=='header-negative' else 'bytes.as_ptr()')+'));}\n'
+if mode.startswith('retained'):
+ source='use super::*;\nstruct Frame{calls:u8,reply:i32,left:*const u8,right:*const u8}\nfn compare(a:&[u8],b:&[u8],f:&mut Frame)->bool{assert!(f.calls==0&&a.len()==688&&b.len()==688&&core::ptr::eq(a.as_ptr(),f.left)&&core::ptr::eq(b.as_ptr(),f.right));f.calls=1;f.reply!=0}\n#[kani::proof]\nfn same_buffers(){let encoded:[u8;688]=kani::any();let header:[u8;688]=kani::any();let mut f=Frame{calls:0,reply:kani::any(),left:encoded.as_ptr(),right:header.as_ptr()};let different=compare(encoded.as_ref(),&header,&mut f);assert!(f.calls==1&&different==(f.reply!=0));}\n'
+ if mode=='retained-negative':source=source.replace('compare(encoded.as_ref(),&header','compare(header.as_ref(),&header')
 p='programs/r1-cost-probe/src/r1_pool_adapter.rs';frozen=subprocess.check_output(['git','show',REV+':'+p],text=True)
 hook=frozen+'\n#[cfg(kani)]\n#[path="NFJ_scan.rs"]\nmod NFJ_scan;\n'
 patch=''.join(difflib.unified_diff(frozen.splitlines(True),hook.splitlines(True),fromfile='a/'+p,tofile='b/'+p))+'--- /dev/null\n+++ b/programs/r1-cost-probe/src/NFJ_scan.rs\n@@ -0,0 +1,'+str(len(source.splitlines()))+' @@\n'+''.join('+'+l+'\n' for l in source.splitlines())

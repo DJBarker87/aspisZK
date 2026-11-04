@@ -2,7 +2,7 @@
 from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-slice-s-compose12-20261104';H='dombarker@100.108.41.90'
-a,target=sys.argv[1:];assert a.startswith('NFJ_L') and 1<=int(a[5:])<=50
+a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final'];assert a.startswith('NFJ_L') and 1<=int(a[5:])<=50
 assert len(list(E.glob('NFJ_L*/receipt.json')))<50
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
 moduleRel=target.replace('.','/')
@@ -46,24 +46,39 @@ def visit(n):
  p=next((r/(rel+'.olean') for r in roots if (r/(rel+'.olean')).exists()),None)
  if p is None:missing.append(n);return
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+ for suffix in ['.private','.server']:
+  companion=Path(str(p)+suffix)
+  if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
  q=next((r/(rel+'.lean') for r in [b/'NFJ_generated',*roots] if (r/(rel+'.lean')).exists()),None)
  if q:
-  for dep in re.findall(r'^import\\s+([\\w.]+)',q.read_text(),re.M):visit(dep)
-for n in re.findall(r'^import\\s+([\\w.]+)',{source!r},re.M):visit(n)
-for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+  for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
+for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
+for n in ({['NFD_FinalAudit','NFH_FinalAudit','NFJ_Scanner'] if mode=='final' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
+ selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
+ for suffix in ['.private','.server']:
+  companion=Path(str(p)+suffix)
+  if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
+if {mode in ['fixtures','final']!r}:
+ p=b/'NFJ_native/NFJ_Driver';selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
 print(json.dumps(dict(selected_objects=selected,missing=missing)))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;pins=json.loads(r.stdout)
 (E/(a+'-pins.json')).write_text(json.dumps(pins,indent=1)+'\n')
 if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependencies: '+str(pins['missing']))
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFJ_generated','-o','NFJ_objects/'+moduleRel+'.olean','NFJ_generated/'+moduleRel+'.lean']
-cfg=dict(attempt=a,kind='lean',module=target,sources=['NFJ_generated/'+moduleRel+'.lean'],command=command,env=dict(PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFJ_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NFJ_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+if target in ['NFJ_WALKER','NFJ_MemoryLimit','NFJ_Driver']:
+ command[command.index('-o'):command.index('-o')]=['-c','NFJ_native/'+moduleRel+'.c']
+if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFJ_native/NFJ_Driver','NFJ_native/NFJ_Driver.c','NFJ_native/NFJ_WALKER.c','NFJ_native/NFJ_MemoryLimit.c']
+if mode in ['fixtures','final']:command=['NFJ_native/NFJ_Driver',mode]
+cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFJ_native/NFJ_Driver.c','NFJ_native/NFJ_WALKER.c','NFJ_native/NFJ_MemoryLimit.c'] if mode=='link' else ['NFJ_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFJ_objects:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NFJ_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-slice-s-compose12-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFJ_SOURCE.lean.txt').write_text(source)
 files={'NFJ_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 code=f'''from pathlib import Path
 import json
 b=Path({B!r})
 (b/{('NFJ_objects/'+moduleRel+'.olean')!r}).parent.mkdir(parents=True,exist_ok=True)
+(b/'NFJ_native').mkdir(exist_ok=True)
 for n,s in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 '''
@@ -79,6 +94,11 @@ b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in {[a+'/receipt.json
 r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
+if mode=='link':
+ r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFJ_native/NFJ_Driver.c','NFJ_native/NFJ_WALKER.c','NFJ_native/NFJ_MemoryLimit.c']}}))")
+ assert r.returncode==0,r.stderr
+ for n,s in json.loads(r.stdout).items():
+  p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 rc=json.loads(out[a+'/receipt.json']);
 entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
 entry['full_receipt']=dict(path=str(E/a/'receipt.json'),sha256=hashlib.sha256((E/a/'receipt.json').read_bytes()).hexdigest())

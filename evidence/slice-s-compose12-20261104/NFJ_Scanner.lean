@@ -34,7 +34,7 @@ theorem decode_domain (bytes : List U8) (length : bytes.length = 58295) :
 against2. The native callsite uses the CLOSED Variant::tag packet. -/
 theorem tag_domain (tag : U8) :
     (tag != 2#u8) = false ↔ tag = 2#u8 := by
-  simp only [Bool.not_eq_true, bne_iff_ne, ne_eq, not_not]
+  simp
 
 #print axioms result_state_effects
 #print axioms encode_domain
