@@ -1,0 +1,1 @@
+../../../NGA_inputs/a92a629468a4c1d58628f2c0055e3e1d9990fa5d5b59088e0bcaed3b36aa2781.txt

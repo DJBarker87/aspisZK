@@ -1,0 +1,28 @@
+// Frozen field.rs 507..531: continuation cut after the exact cache prelude.
+// Both caches are the same nine M31 words, represented transparently as u32.
+pub fn step(mut sums: [[u64;3];3], left: [[u32;3];3], right: [[u32;3];3], component: usize, channel: usize) -> [[u64;3];3] {
+    let product=left[component][channel] as u64 * right[component][channel] as u64;
+    let mut row=sums[component];
+    row[channel]+=product;
+    sums[component]=row;
+    sums
+}
+pub fn accumulate(mut sums: [[u64;3];3], left: [[u32;3];3], right: [[u32;3];3]) -> [[u64;3];3] {
+    for component in 0..3 {
+        for channel in 0..3 {
+            sums=step(sums,left,right,component,channel);
+        }
+    }
+    sums
+}
+// Frozen field.rs 534..545: continuation cut before the already bridged converter.
+pub fn small<const N: usize>(left: [[[u32;3];3];N], right: [[[u32;3];3];N]) -> [[u64;3];3] {
+    debug_assert!(N >= 2 && N <= 4);
+    let mut sums = [[0u64;3];3];
+    let mut index=0usize;
+    while index<N {
+        sums=accumulate(sums,left[index],right[index]);
+        index+=1;
+    }
+    sums
+}

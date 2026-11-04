@@ -1,0 +1,31 @@
+{
+  "status": "OPEN",
+  "finding": "Actual same-receiver QM31::square callee is OPEN and absent from Slice D function set; inventory union instead contains WideExact::square self edge. No automatic closure from a value law.",
+  "caller_row": "TX1:056",
+  "actual_callee": "crates/aspis-core/src/field.rs::QM31::square",
+  "callee_rows": [
+    {
+      "row": "TX1:032",
+      "function": "crates/aspis-core/src/field.rs::QM31::square",
+      "status": "OPEN",
+      "body_sha256": "d753e1472146cfa17f501d737426b4dd5342436ad7af400e8da2a853037f1cac"
+    },
+    {
+      "row": "TX2:022",
+      "function": "crates/aspis-core/src/field.rs::QM31::square",
+      "status": "OPEN",
+      "body_sha256": "d753e1472146cfa17f501d737426b4dd5342436ad7af400e8da2a853037f1cac"
+    }
+  ],
+  "callee_in_slice_D": false,
+  "source_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "wide_file_sha256": "6260fa9d179328714e7df59640abb7a76a326e98900993ce7d3da98c6411d10b",
+  "wide_square_source": "    pub fn square(self) -> Self {\n        #[cfg(feature = \"r0-op-count\")]\n        let _count = crate::r0_op_count::enter(crate::r0_op_count::Op::ESquare);\n        let cross = self.c0.mul(self.c1);\n        Self {\n            c0: self.c0.square().add(mul_u(self.c1.square())),\n            c1: cross.add(cross),\n        }\n    }\n",
+  "new_local_laws": [
+    "NGA_NativeOps.square",
+    "NGA_WideSquare.value",
+    "NGA_WideSquare.source"
+  ],
+  "next_required": "An admitted CLOSED native/cohort bridge for actual QM31::square in its owning slice, then same-input callee substitution and combined audit. No Kani multiplication; source-specialized square uses CM square/mul cuts.",
+  "scope_decision": "Record slice-boundary finding; do not expand this job to an out-of-D function or alter authoritative inventory."
+}
