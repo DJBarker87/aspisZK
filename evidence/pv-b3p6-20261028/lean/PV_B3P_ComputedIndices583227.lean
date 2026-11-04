@@ -134,9 +134,9 @@ theorem certificate_12 {α : Type} (input0 : Nat) (effects : List (Result Unit))
   PV_B3P_ArithmeticEvents583227.event_certificate (.add (.mul (.literal 4) (.bounded input0 4) (UScalar.size .Usize)) (.literal 3) (UScalar.size .Usize)) 0 effects observed ran normal first second
 #print axioms certificate_12
 /-- Instance 231:95965c546ae80dd61779, scalar event 30295. -/
-def sourceState_13 ( : Nat) (effects : List (Result Unit)) : Result (Option IndexState) :=
+def sourceState_13  (effects : List (Result Unit)) : Result (Option IndexState) :=
   PV_B3P_ArithmeticEvents583227.sourceEvent (.add (.literal 8) (.literal 1) (UScalar.size .Usize)) 6 effects
-theorem certificate_13 {α : Type} ( : Nat) (effects : List (Result Unit))
+theorem certificate_13 {α : Type}  (effects : List (Result Unit))
     (observed : IndexState) (ran : PV_B3P_ArithmeticEvents583227.sourceEvent (.add (.literal 8) (.literal 1) (UScalar.size .Usize)) 6 effects = .ok (some observed))
     (normal first second : Result α) :
     ¬ diagnostic (indexGuard observed) ∧
@@ -144,9 +144,9 @@ theorem certificate_13 {α : Type} ( : Nat) (effects : List (Result Unit))
   PV_B3P_ArithmeticEvents583227.event_certificate (.add (.literal 8) (.literal 1) (UScalar.size .Usize)) 6 effects observed ran normal first second
 #print axioms certificate_13
 /-- Instance 231:95965c546ae80dd61779, scalar event 30305. -/
-def sourceState_14 ( : Nat) (effects : List (Result Unit)) : Result (Option IndexState) :=
+def sourceState_14  (effects : List (Result Unit)) : Result (Option IndexState) :=
   PV_B3P_ArithmeticEvents583227.sourceEvent (.add (.literal 8) (.literal 1) (UScalar.size .Usize)) 6 effects
-theorem certificate_14 {α : Type} ( : Nat) (effects : List (Result Unit))
+theorem certificate_14 {α : Type}  (effects : List (Result Unit))
     (observed : IndexState) (ran : PV_B3P_ArithmeticEvents583227.sourceEvent (.add (.literal 8) (.literal 1) (UScalar.size .Usize)) 6 effects = .ok (some observed))
     (normal first second : Result α) :
     ¬ diagnostic (indexGuard observed) ∧

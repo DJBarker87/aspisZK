@@ -58,7 +58,7 @@ def main():
  for j,r in enumerate(rows):
   r['lemma']=name+f'.certificate_{j}';route=r['route'];limit,slack=r['limit'],r['slack']
   if route=='arithmetic':
-   ns='PV_B3P_ArithmeticEvents583227';inputs=[];expression=render(r['expression'],inputs);params='('+' '.join('input'+str(k)for k in range(len(inputs)))+' : Nat)';args=f"{expression} {slack} effects"
+   ns='PV_B3P_ArithmeticEvents583227';inputs=[];expression=render(r['expression'],inputs);params=('('+' '.join('input'+str(k)for k in range(len(inputs)))+' : Nat)')if inputs else'';args=f"{expression} {slack} effects"
   elif route=='range':ns='PV_B3P_RangeEvents578227';params='(handler : Str → Result Never) (start : Usize)';args=f'handler ⟨start,{limit}#usize⟩ {slack} effects'
   else:ns='PV_B3P_DominatedEvents578227';params='(index : Nat)';args=f'{limit} {slack} index effects'
   s+=f'''/-- Instance {r['instance']}, scalar event {r['statement']}. -/
