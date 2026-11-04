@@ -127,3 +127,27 @@ fn native_outer_cursor_step() {
  let expected=if cursor+4<26{Some(cursor+4)}else{None};
  assert_eq!(next,if cfg!(NFF_wrong_outer_cursor){Some(99)}else{expected});
 }
+
+fn NFF_head(limbs:[u64;8])->WideExact {
+        let value = WideExact::from_limbs([
+            M31::reduce_u64(limbs[0]).0,
+            M31::reduce_u64(limbs[1]).0,
+            M31::reduce_u64(limbs[2]).0,
+            M31::reduce_u64(limbs[3]).0,
+            M31::reduce_u64(limbs[4]).0,
+            M31::reduce_u64(limbs[5]).0,
+            M31::reduce_u64(limbs[6]).0,
+            M31::reduce_u64(limbs[7]).0
+        ]).unwrap();
+
+ value
+
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFF_copy::KMX_copy_nonoverlapping)]
+fn native_head_window() {
+ let limbs:[u64;8]=kani::any();let lane:usize=kani::any();kani::assume(lane<8);
+ let out=NFF_head(limbs);let expected=M31::reduce_u64(limbs[lane]).0;
+ assert_eq!(out.to_limbs()[lane],if cfg!(NFF_wrong_head){expected^1}else{expected});
+ assert!(out.to_limbs()[lane]<2147483647);
+}

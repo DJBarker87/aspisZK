@@ -134,6 +134,10 @@ if {kind!r}=='kani':
 for n,t in files.items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
 pins=json.loads((b/'NFF_SOURCE_PINS.json').read_text()) if (b/'NFF_SOURCE_PINS.json').exists() else {{}}
+if {kind!r}=='kani':
+ for n in frozen:
+  q=b/'NFF_src'/n
+  if q.is_file():pins[n]=hashlib.sha256(q.read_bytes()).hexdigest()
 for n in files:
  if n.startswith('NFF_src/'):pins[n[8:]]=hashlib.sha256((b/n).read_bytes()).hexdigest()
 (b/'NFF_SOURCE_PINS.json').write_text(json.dumps(pins))
