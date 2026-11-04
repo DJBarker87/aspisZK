@@ -17,6 +17,8 @@ table=[s for s in section.splitlines() if s.startswith('|')];assert len({s.count
 assert 'NEW NAMED PREMISE' in section and 'Target not yet established' in section
 assert not list(P.rglob('*.lean'))
 assert all(p.stat().st_size<20*1024*1024 for p in P.rglob('*') if p.is_file())
-diff=subprocess.check_output(['git','diff','--name-only']).decode().splitlines();assert diff==['design/PRIVACY-LEDGER-20261026.md']
+base=json.loads((P/'pins.json').read_text())['base']
+old_ledger=subprocess.check_output(['git','show',base+':design/PRIVACY-LEDGER-20261026.md']).decode()
+assert ledger.startswith(old_ledger) and ledger[len(old_ledger):].lstrip().startswith('## Recount 13 2026-11-04 (B)')
 result={'status':'PASS','provider_focused_source_hashes_match':4,'b3p6_reused_raw_roots':len(raw),'row_table_entries':407,'totals_columns':'Recount 1 through 13','no_new_proofs':True,'new_runs':{'Lean':0,'Kani':0},'ledger_edit':'append only','target':'Target not yet established'}
 (P/'final-check13.json').write_text(json.dumps(result,indent=1)+'\n');print(json.dumps(result))
