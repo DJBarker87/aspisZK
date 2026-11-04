@@ -1,0 +1,48 @@
+{"attempt": "NFX_L039", "exit_status": 0, "wall_seconds": 2.4243784591089934, "peak_rss_kib": "5824268", "swaps": "0", "print_axioms": ["'NFQ_RowShape.reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_RowShape.compact_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_Transport.folds_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_Transport.final_len_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_Transport.checkpoint_size_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_Readonly.reference' does not depend on any axioms", "'NFQ_StatementLaws.expected_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_StatementLaws.copied_reference' does not depend on any axioms", "'NFQ_StatementLaws.limbs_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_WideGetters.c0' does not depend on any axioms", "'NFQ_WideGetters.c1' does not depend on any axioms"]}
+theorem NFQ_RowShape.reference : ∀ (row : Aeneas.Std.U8),
+  NFQ_Reference.row_shape_ref row = AspisS1NativeCompact.r1_wire.row_shape row :=
+fun row => id (NCO_ScalarBridge.row_shape row)
+'NFQ_RowShape.reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_RowShape.compact_reference : ∀ (row : Aeneas.Std.U8),
+  NFQ_Reference.compact_row_ref row = AspisS1NativeCompact.compact.compact_row row :=
+fun row => id (NCO_ScalarBridge.compact_row row)
+'NFQ_RowShape.compact_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Transport.folds_reference : ∀ (v : NFQ_Transport.V),
+  NFQ_Reference.folds_ref (NFQ_Transport.code v) = AspisR1PublicPrepara
+...
+expected_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_StatementLaws.copied_reference : ∀ (v : FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant),
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant v = Aeneas.Std.Result.ok (NFQ_StatementLaws.copied v) :=
+fun v =>
+  FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.casesOn (motive := fun t =>
+    v = t →
+      FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant v =
+        Aeneas.Std.Result.ok (NFQ_StatementLaws.copied v))
+    v
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.PrivateTransfer))
+    (fun h =>
+      Eq.symm h ▸
+        Eq.refl
+          (FIq_Native.pool_v1.pair_forest_semantic_terminal.copy_variant
+            FIq_Native.pool_v1.pair_forest_semantic_terminal.CompiledVariant.Withdrawal))
+    (Eq.refl v)
+'NFQ_StatementLaws.copied_reference' does not depend on any axioms
+@[defeq] theorem NFQ_StatementLaws.limbs_reference : ∀ (v : FIq_Native.field.QM31),
+  FIq_Native.state_only_poseidon.extension_limbs v =
+    Aeneas.Std.Result.ok (Aeneas.Std.Array.make 4#usize [v.c0.a, v.c0.b, v.c1.a, v.c1.b] ⋯) :=
+fun v => rfl
+'NFQ_StatementLaws.limbs_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+@[defeq] theorem NFQ_WideGetters.c0 : ∀ (x : NFQ_WideGetters.NE),
+  (NFQ_WideGetters.toE x).c0 = NFQ_WideGetters.toQ x.c0 :=
+fun x => rfl
+'NFQ_WideGetters.c0' does not depend on any axioms
+@[defeq] theorem NFQ_WideGetters.c1 : ∀ (x : NFQ_WideGetters.NE),
+  (NFQ_WideGetters.toE x).c1 = NFQ_WideGetters.toQ x.c1 :=
+fun x => rfl
+'NFQ_WideGetters.c1' does not depend on any axioms
+
+Running as unit: run-rc71ca652cb8e40dc819222caedc5eff6.scope; invocation ID: e8cc6564588d4f668f397a179ef9ad89

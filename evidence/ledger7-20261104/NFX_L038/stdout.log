@@ -1,0 +1,250 @@
+theorem NFQ_FieldLaws.neg_value : ∀ (x : Aeneas.Std.U32),
+  ↑x < 2147483647 →
+    ∃ z,
+      AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+        (↑z = if ↑x = 0 then 0 else 2147483647 - ↑x) ∧ ↑z < 2147483647 :=
+fun x canonical =>
+  if zero : x = 0#u32 then
+    Eq.ndrec (motive := fun x =>
+      ↑x < 2147483647 →
+        ∃ z,
+          AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+            (↑z = if ↑x = 0 then 0 else 2147483647 - ↑x) ∧ ↑z < 2147483647)
+      (fun canonical => Exists.intro 0#u32 ⟨rfl, ⟨rfl, of_decide_eq_true (id (Eq.refl true))⟩⟩) (Eq.symm zero) canonical
+  else
+    have nz := fun h => zero (Aeneas.Std.UScalar.eq_of_val_eq h);
+    have spec :=
+      Aeneas.Std.UScalar.sub_spec
+        (id (Decidable.byContradiction fun a => NFQ_FieldLaws.neg_value._proof_1 x canonical a));
+    let ⟨z, h✝⟩ := Aeneas.Std.WP.spec_imp_exists spec
+    let ⟨run, right✝⟩ := h✝
+    let ⟨value, right✝¹⟩ := right✝
+    have pv := NFQ_FieldLaws.neg_value._proof_2;
+    Exists.intro z
+      ⟨of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (Eq.trans
+                  (ite_congr (Eq.refl (x = 0#u32)) (fun a => Eq.refl (Aeneas.Std.Result.ok 0#u32)) fun a =>
+                    Eq.trans
+                      (congrFun'
+                        (congrArg bind
+                          (Eq.trans (congrFun' (congrArg HSub.hSub AspisR1SelectedMaskProbe.field.P.eq_1) x) run))
+                        fun i => Aeneas.Std.Result.ok i)
+                      (Aeneas.Std.bind_tc_ok z Aeneas.Std.Result.ok))
+                  ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg zero) x_0 x_1 x_2 x_3)
+                    (Aeneas.Std.instDecidableEqUScalar_1 Aeneas.Std.UScalarTy.U32 x 0#u32)
+                    (Aeneas.Std.Result AspisR1SelectedMaskProbe.field.M31) (Aeneas.Std.Result.ok 0#u32)
+                    (Aeneas.Std.Result.ok z))))
+              (Aeneas.Std.Result.ok z))
+            (eq_self (Aeneas.Std.Result.ok z))),
+        ⟨Eq.mpr
+            (id
+              (congrArg (Eq ↑z)
+                ((fun x_0 x_1 x_2 x_3 => (fun x_0 x_1 x_2 x_3 => if_neg nz) x_0 x_1 x_2 x_3) (instDecidableEqNat (↑x) 0)
+                  ℕ 0 (2147483647 - ↑x))))
+            (Eq.mp (congrArg (fun _a => ↑z = _a - ↑x) pv) value),
+          Eq.mpr (id (congrArg (fun _a => _a < 2147483647) (Eq.mp (congrArg (fun _a => ↑z = _a - ↑x) pv) value)))
+            (Decidable.byContradiction fun a => NFQ_FieldLaws.neg_value._proof_3 x canonical nz z a)⟩⟩
+'NFQ_FieldLaws.neg_value' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_FieldLaws.cm_reference : ∀ (x : Aeneas.Std.U32),
+  AspisS1M31Embedding.aspis_core.field.CM31.from_m31 x = Aeneas.Std.Result.ok { a := x, b := 0#u32 } :=
+fun x =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg Aeneas.Std.Result.ok
+            (congrArg (AspisS1M31Embedding.aspis_core.field.CM31.mk x)
+              AspisS1M31Embedding.aspis_core.field.M31.ZERO.eq_1)))
+        (Aeneas.Std.Result.ok { a := x, b := 0#u32 }))
+      (eq_self (Aeneas.Std.Result.ok { a := x, b := 0#u32 })))
+'NFQ_FieldLaws.cm_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_FieldLaws.qm_reference : ∀ (x : AspisS1M31Embedding.aspis_core.field.CM31),
+  AspisS1M31Embedding.aspis_core.field.QM31.from_cm31 x =
+    Aeneas.Std.Result.ok { c0 := x, c1 := { a := 0#u32, b := 0#u32 } } :=
+fun x =>
+  of_eq_true
+    (Eq.trans
+      (congrFun'
+        (congrArg Eq
+          (congrArg Aeneas.Std.Result.ok
+            (congrArg (AspisS1M31Embedding.aspis_core.field.QM31.mk x)
+              AspisS1M31Embedding.aspis_core.field.CM31.ZERO.eq_1)))
+        (Aeneas.Std.Result.ok { c0 := x, c1 := { a := 0#u32, b := 0#u32 } }))
+      (eq_self (Aeneas.Std.Result.ok { c0 := x, c1 := { a := 0#u32, b := 0#u32 } })))
+'NFQ_FieldLaws.qm_reference' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_Reduce.source : ∀ (x : Aeneas.Std.U64),
+  ∃ z,
+    AspisR1SelectedMaskProbe.field.M31.reduce_u62 x = Aeneas.Std.Result.ok z ∧ ↑z = ↑x % 2147483647 ∧ ↑z < 2147483647 :=
+fun x =>
+  let ⟨z, h✝⟩ := AspisR1.ExtractedMaskReducer.current_reduce_mod x
+  let ⟨run, right✝⟩ := h✝
+  let ⟨value, canonical⟩ := right✝
+  Exists.intro z
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans (congrFun' (congrArg bind run) fun i => Aeneas.Std.Result.ok i)
+                (Aeneas.Std.bind_tc_ok z Aeneas.Std.Result.ok)))
+            (Aeneas.Std.Result.ok z))
+          (eq_self (Aeneas.Std.Result.ok z))),
+      ⟨value, canonical⟩⟩
+'NFQ_Reduce.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem NFQ_PreparedMultiplier.source : ∀ (x : NFQ_PreparedMultiplier.Q),
+  AspisR1.ExtractedMaskTowerAdd.CanonicalQM x →
+    ∃ out,
+      AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new x = Aeneas.Std.Result.ok out ∧
+        NFQ_PreparedMultiplier.words out = NFQ_PreparedMultiplier.spec x :=
+fun x canonical =>
+  let ⟨c, h✝⟩ := AspisR1.ExtractedMaskTowerAdd.current_cm_add_mod x.c0 x.c1 canonical.left canonical.right
+  let ⟨run, right✝⟩ := h✝
+  let ⟨c_canonical, right✝¹⟩ := right✝
+  let ⟨ca, cb⟩ := right✝¹
+  let ⟨r0, h✝¹⟩ := NFQ_PreparedMultiplier.row_source x.c0 canonical.left
+  let ⟨run0, words0⟩ := h✝¹
+  let ⟨r1, h✝²⟩ := NFQ_PreparedMultiplier.row_source x.c1 canonical.right
+  let ⟨run1, words1⟩ := h✝²
+  let ⟨r2, h✝³⟩ := NFQ_PreparedMultiplier.row_source c c_canonical
+  let ⟨run2, words2⟩ := h✝³
+  Exists.intro
+    {
+      components :=
+        Aeneas.Std.Array.make 3#usize [r0, r1, r2]
+          (of_eq_true
+            (Eq.trans
+              (congr (congrArg Eq (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                (Aeneas.Std.UScalar.ofNatCore_val_eq
+                  (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 3
+                    (of_decide_eq_true (id (Eq.refl true))))))
+              (eq_self 3))) }
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (Eq.trans
+                (congr (congrArg bind run0)
+                  (funext fun a =>
+                    Eq.trans
+                      (congr (congrArg bind run1)
+                        (funext fun a1 =>
+                          Eq.trans
+                            (Eq.trans
+                              (congrFun' (congrArg bind run) fun c => do
+                                let a2 ←
+                                  AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call
+                                      () c
+                                Aeneas.Std.Result.ok
+                                    {
+                                      components :=
+                                        Aeneas.Std.Array.make 3#usize [a, a1, a2]
+                                          (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 a a1
+                                            a2) })
+                              (Aeneas.Std.bind_tc_ok c fun y => do
+                                let a2 ←
+                                  AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new.closure.Insts.CoreOpsFunctionFnTupleCM31ArrayM313.call
+                                      () y
+                                Aeneas.Std.Result.ok
+                                    {
+                                      components :=
+                                        Aeneas.Std.Array.make 3#usize [a, a1, a2]
+                                          (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 a a1
+                                            a2) }))
+                            (Eq.trans
+                              (congrFun' (congrArg bind run2) fun a2 =>
+                                Aeneas.Std.Result.ok
+                                  {
+                                    components :=
+                                      Aeneas.Std.Array.make 3#usize [a, a1, a2]
+                                        (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 a a1 a2) })
+                              (Aeneas.Std.bind_tc_ok r2 fun y =>
+                                Aeneas.Std.Result.ok
+                                  {
+                                    components :=
+                                      Aeneas.Std.Array.make 3#usize [a, a1, y]
+                                        (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 a a1
+                                          y) }))))
+                      (Aeneas.Std.bind_tc_ok r1 fun y =>
+                        Aeneas.Std.Result.ok
+                          {
+                            components :=
+                              Aeneas.Std.Array.make 3#usize [a, y, r2]
+                                (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 a y r2) })))
+                (Aeneas.Std.bind_tc_ok r0 fun y =>
+                  Aeneas.Std.Result.ok
+                    {
+                      components :=
+                        Aeneas.Std.Array.make 3#usize [y, r1, r2]
+                          (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 y r1 r2) })))
+            (Aeneas.Std.Result.ok
+              {
+                components :=
+                  Aeneas.Std.Array.make 3#usize [r0, r1, r2]
+                    (of_eq_true
+                      (Eq.trans
+                        (congr
+                          (congrArg Eq
+                            (congrFun' (congrArg HAdd.hAdd (congrFun' (congrArg HAdd.hAdd (zero_add 1)) 1)) 1))
+                          (Aeneas.Std.UScalar.ofNatCore_val_eq
+                            (Aeneas.Std.UScalar.bound_suffices Aeneas.Std.UScalarTy.Usize 3
+                              (of_decide_eq_true (id (Eq.refl true))))))
+                        (eq_self 3))) }))
+          (eq_self
+            (Aeneas.Std.Result.ok
+              {
+                components :=
+                  Aeneas.Std.Array.make 3#usize [r0, r1, r2]
+                    (AspisR1SelectedMaskProbe.field.PreparedQm31Multiplier.new._proof_1 r0 r1 r2) }))),
+      id
+        (Eq.mpr
+          (id
+            (congrArg
+              (fun _a =>
+                [_a, NFQ_PreparedMultiplier.rowWords r1, NFQ_PreparedMultiplier.rowWords r2] =
+                  NFQ_PreparedMultiplier.spec x)
+              words0))
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647], _a, NFQ_PreparedMultiplier.rowWords r2] =
+                    NFQ_PreparedMultiplier.spec x)
+                words1))
+            (Eq.mpr
+              (id
+                (congrArg
+                  (fun _a =>
+                    [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647],
+                        [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647], _a] =
+                      NFQ_PreparedMultiplier.spec x)
+                  words2))
+              (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg (List.cons [↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647])
+                        (congrArg (List.cons [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647])
+                          (congrFun'
+                            (congrArg List.cons
+                              (congr (congrArg List.cons ca)
+                                (congr (congrArg List.cons cb)
+                                  (congrFun'
+                                    (congrArg List.cons
+                                      (congrFun' (congrArg HMod.hMod (congr (congrArg HAdd.hAdd ca) cb)) 2147483647))
+                                    []))))
+                            []))))
+                    [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647],
+                      [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647],
+                      [(↑x.c0.a + ↑x.c1.a) % 2147483647, (↑x.c0.b + ↑x.c1.b) % 2147483647,
+                        ((↑x.c0.a + ↑x.c1.a) % 2147483647 + (↑x.c0.b + ↑x.c1.b) % 2147483647) % 2147483647]])
+                  (eq_self
+                    [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647],
+                      [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647],
+                      [(↑x.c0.a + ↑x.c1.a) % AspisR1.ExtractedMaskTowerAdd.P,
+                        (↑x.c0.b + ↑x.c1.b) % AspisR1.ExtractedMaskTowerAdd.P,
+                        ((↑x.c0.a + ↑x.c1.a) % AspisR1.ExtractedMaskTowerAdd.P +
+                            (↑x.c0.b + ↑x.c1.b) % AspisR1.ExtractedMaskTowerAdd.P) %
+                          2147483647]]))))))⟩
+'NFQ_PreparedMultiplier.source' depends on axioms: [propext, Classical.choice, Quot.sound]

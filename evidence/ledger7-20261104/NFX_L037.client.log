@@ -1,0 +1,65 @@
+{"attempt": "NFX_L037", "exit_status": 0, "wall_seconds": 2.2731416299939156, "peak_rss_kib": "5828844", "swaps": "0", "print_axioms": ["'NFN_NFB_GeometryComposed.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFN_NFB_GeometryComposed.accepted_physical' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_ProductInstance.installed' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_ProductInstance.wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+    Eq.mpr (id (congrArg (fun _a => _a ≤ 22) lineLength))
+      (Eq.mpr (id (congrArg (fun _a => _a ≤ 22) nrows))
+        (Decidable.byContradiction fun a =>
+          NFN_NFB_GeometryComposed.accepted_physical._proof_1 start finish order bound rows it lines flat prefixes nrows
+            lineLength a));
+  have positive :=
+    Or.casesOn n
+      (fun h =>
+        Decidable.byContradiction fun a =>
+          NFN_NFB_GeometryComposed.accepted_physical._proof_2 start finish rows it lines flat prefixes nrows size
+            lineLength h a)
+      fun h =>
+      Decidable.byContradiction fun a =>
+        NFN_NFB_GeometryComposed.accepted_physical._proof_3 start finish rows it lines flat prefixes nrows size
+          lineLength h a;
+  have nonempty := fun h =>
+    Nat.le.casesOn (motive := fun a t =>
+      [].length = a → Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive ≍ t → False)
+      (Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive)
+      (fun h_1 => False.elim (noConfusion_of_Nat Nat.ctorIdx h_1))
+      (fun {m} a h_1 => False.elim (noConfusion_of_Nat Nat.ctorIdx h_1)) (Eq.refl [].length)
+      (HEq.refl (Eq.mp (congrArg (fun _a => 0 < _a.length) h) positive));
+  let ⟨ps, h✝⁸⟩ :=
+    NFN_NFB_TerminalAssociation.complete start it lines flat out ending nonempty count
+      (Decidable.byContradiction fun a =>
+        NFN_NFB_GeometryComposed.accepted_physical._proof_4 start finish rows it lines flat prefixes nrows size
+          lineLength a)
+      last
+  let ⟨prod, h✝⁹⟩ := h✝⁸
+  let ⟨suff, h✝¹⁰⟩ := h✝⁹
+  let ⟨resized, h✝¹¹⟩ := h✝¹⁰
+  let ⟨inverse, h✝¹²⟩ := h✝¹¹
+  let ⟨hp1, right✝¹⁴⟩ := h✝¹²
+  let ⟨len1, right✝¹⁵⟩ := right✝¹⁴
+  let ⟨hs1, right✝¹⁶⟩ := right✝¹⁵
+  let ⟨resizeValue, right✝¹⁷⟩ := right✝¹⁶
+  let ⟨back, right✝¹⁸⟩ := right✝¹⁷
+  let ⟨inverseLength, right✝¹⁹⟩ := right✝¹⁸
+  let ⟨trace, right✝²⁰⟩ := right✝¹⁹
+  let ⟨contents, publication⟩ := right✝²⁰
+  have same := Aeneas.Std.Result.ok.inj (Eq.trans (Eq.symm hp1) hp);
+  let ⟨⟩ := (prefixes, product)
+  same
+'NFN_NFB_GeometryComposed.accepted_physical' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NFM_ProductInstance.installed : ∀ (input : AspisR1.NFI_InnerCut.Input),
+  NEV_DotInputs.Canonical input.g →
+    (AspisR1.NFM_Single.run AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.tailProduct
+          input).result =
+      AspisR1.FIp_NativeDots.fast_dots.four_dots_one input.q input.g input.slot :=
+fun input canonical =>
+  AspisR1.NFM_Single.emitted AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.main_law
+    AspisR1.NFM_ProductInstance.tailProduct AspisR1.NFM_ProductInstance.tail_law input canonical
+'AspisR1.NFM_ProductInstance.installed' depends on axioms: [propext, Classical.choice, Quot.sound]
+theorem AspisR1.NFM_ProductInstance.wrapper : ∀ (q : Aeneas.Std.Slice Aeneas.Std.U8) (g : NEV_DotInputs.Coefficients)
+  (qPlace gPlace : ℕ),
+  NEV_DotInputs.Canonical g →
+    (AspisR1.NFI_WrapperTrace.run AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.tailProduct q g
+          qPlace gPlace).result =
+      NEI_FourWrapper.fast_dots.four_dots q g :=
+fun q g qPlace gPlace canonical =>
+  AspisR1.NFI_WrapperTrace.headline AspisR1.NFM_ProductInstance.mainProduct AspisR1.NFM_ProductInstance.main_law
+    AspisR1.NFM_ProductInstance.tailProduct AspisR1.NFM_ProductInstance.tail_law q g qPlace gPlace canonical
+'AspisR1.NFM_ProductInstance.wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]
+

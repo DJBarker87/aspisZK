@@ -1,0 +1,48 @@
+{"attempt": "NFX_L038", "exit_status": 0, "wall_seconds": 2.886625461978838, "peak_rss_kib": "5804144", "swaps": "0", "print_axioms": ["'NFQ_FieldLaws.neg_value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_FieldLaws.cm_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_FieldLaws.qm_reference' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_Reduce.source' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFQ_PreparedMultiplier.source' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+theorem NFQ_FieldLaws.neg_value : ∀ (x : Aeneas.Std.U32),
+  ↑x < 2147483647 →
+    ∃ z,
+      AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+        (↑z = if ↑x = 0 then 0 else 2147483647 - ↑x) ∧ ↑z < 2147483647 :=
+fun x canonical =>
+  if zero : x = 0#u32 then
+    Eq.ndrec (motive := fun x =>
+      ↑x < 2147483647 →
+        ∃ z,
+          AspisR1SelectedMaskProbe.field.M31.neg x = Aeneas.Std.Result.ok z ∧
+            (↑z = if ↑x = 0 then 0 else 2147483647 - ↑x) ∧ ↑z < 2147483647)
+      (fun canonical => Exists.intro 0#u32 ⟨rfl, ⟨rfl, of_decide_eq_true (id (Eq.refl true))⟩⟩) (Eq.symm zero) canonical
+  else
+    have nz := fun h => zero (Aeneas.Std.UScalar.eq_of_val_eq h);
+ 
+...
+        (of_eq_true
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg (List.cons [↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647])
+                        (congrArg (List.cons [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647])
+                          (congrFun'
+                            (congrArg List.cons
+                              (congr (congrArg List.cons ca)
+                                (congr (congrArg List.cons cb)
+                                  (congrFun'
+                                    (congrArg List.cons
+                                      (congrFun' (congrArg HMod.hMod (congr (congrArg HAdd.hAdd ca) cb)) 2147483647))
+                                    []))))
+                            []))))
+                    [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647],
+                      [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647],
+                      [(↑x.c0.a + ↑x.c1.a) % 2147483647, (↑x.c0.b + ↑x.c1.b) % 2147483647,
+                        ((↑x.c0.a + ↑x.c1.a) % 2147483647 + (↑x.c0.b + ↑x.c1.b) % 2147483647) % 2147483647]])
+                  (eq_self
+                    [[↑x.c0.a, ↑x.c0.b, (↑x.c0.a + ↑x.c0.b) % 2147483647],
+                      [↑x.c1.a, ↑x.c1.b, (↑x.c1.a + ↑x.c1.b) % 2147483647],
+                      [(↑x.c0.a + ↑x.c1.a) % AspisR1.ExtractedMaskTowerAdd.P,
+                        (↑x.c0.b + ↑x.c1.b) % AspisR1.ExtractedMaskTowerAdd.P,
+                        ((↑x.c0.a + ↑x.c1.a) % AspisR1.ExtractedMaskTowerAdd.P +
+                            (↑x.c0.b + ↑x.c1.b) % AspisR1.ExtractedMaskTowerAdd.P) %
+                          2147483647]]))))))⟩
+'NFQ_PreparedMultiplier.source' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r1a008c9744a14e99a1b9914beb2da1fe.scope; invocation ID: 6abf932d596a4098a6e80b01331c9345
