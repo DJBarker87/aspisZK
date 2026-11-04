@@ -1,0 +1,43 @@
+{"attempt": "NFM_L001", "exit_status": 1, "wall_seconds": 6.197517498163506, "peak_rss_kib": "5279108", "swaps": "0", "print_axioms": ["'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms", "'AspisR1.NFM_Control.term_count' does not depend on any axioms", "'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.next_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.body_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NFM_generated/NFM_Control.lean:30:75: error: Tactic `rfl` failed: The left-hand side
+  skeleton 8 (NFA_Iterator.value 0)
+is not definitionally equal to the right-hand side
+  ok [0#usize, 4#usize, 8#usize, 12#usize, 16#usize, 20#usize, 24#usize]
+
+⊢ skeleton 8 (NFA_Iterator.value 0) = ok [0#usize, 4#usize, 8#usize, 12#usize, 16#usize, 20#usize, 24#usize]
+NFM_generated/NFM_Control.lean:45:18: error: Tactic `rfl` failed: The left-hand side
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+    (NFA_Iterator.value ⟨↑((fun i => i) ⟨0, ⋯⟩), ⋯⟩)
+is not definitionally equal to the right-hand side
+  ok (some (NFA_Iterator.cursor ⟨↑((fun
+...
+gedLoop.run oracle input.q input.g input.slot
+          (↑(NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩) - ↑(NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩), ⋯⟩))
+          { start := NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩), ⋯⟩,
+            «end» := NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩ }
+          (Array.repeat 8#usize 0#u64)
+    let out ← NFE_NFA_FoldEight.eight sums limbs
+    ok (cont (NFA_Iterator.value ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩, out))
+
+case «6»
+oracle : NFF_LoggedEight.Oracle
+input : NFI_InnerCut.Input
+limbs : Std.Array U64 8#usize
+⊢ NFF_LoggedOuterStep.step oracle input.q input.g input.slot (NFA_Iterator.value ⟨↑((fun i => i) ⟨6, ⋯⟩), ⋯⟩) limbs = do
+    let sums ←
+      NFF_LoggedLoop.run oracle input.q input.g input.slot
+          (↑(NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩) - ↑(NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩), ⋯⟩))
+          { start := NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩), ⋯⟩,
+            «end» := NFA_Iterator.cursor ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩ }
+          (Array.repeat 8#usize 0#u64)
+    let out ← NFE_NFA_FoldEight.eight sums limbs
+    ok (cont (NFA_Iterator.value ⟨↑((fun i => i) ⟨6, ⋯⟩) + 1, ⋯⟩, out))
+'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms
+'AspisR1.NFM_Control.term_count' does not depend on any axioms
+'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.next_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.body_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r08a9c4ec6dbd4b95aa131a67aff6d5c9.scope; invocation ID: fd12f8562b944f49a2c8817b79e5241a

@@ -1,0 +1,7 @@
+# Stage 1 — fixed extraction control
+
+NFM_L006 checks NFM_Control: exit 0, 3.473612978 s, peak RSS 5357044 KiB, swap 0, source revision 0978f9114ab (dirty source hash and dependency/Aeneas pins in receipt). fixed_outer, fixed_terms, term_count, state_sequence, next_at, next0–next6, body_at and stopped have printed standard-only axioms. The exact finite list has 26 entries, not ruling (ad)'s prose count 28; see F1.
+
+The body_at equation threads only the fixed borrowed input, limbs, fresh zero sums, and position. It preserves the inner Result bind (including rejected reads), and delegates the arithmetic body and folds to the existing emitted models. This is extraction control/value-state support, not a native certificate or row closure. NFM_L001–L005 are excluded failed drafts (direct opaque reduction and tactic transparency/normal-form repairs); no timeout or memory kill occurred. Caps remained 6G/8G/swap0/tasks64, -M7000. No shipped source changed; no artifact rebuild triggered.
+
+Imported objects were copied, never linked or modified in seed caches; NFM_CACHE_IMPORTS.json records each hash. The private runner is adapted from NFI_run.py only for job names, budget60 and the pinned NFI export search path. Shared launcher and reservation infrastructure are unchanged. P6/D188 transport, SDK/std/runtime/physical/artifact assumptions are retained. Next: native exact control sequence and matched failing control, then seven body windows.

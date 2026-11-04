@@ -1,0 +1,45 @@
+{"attempt": "NFM_L003", "exit_status": 1, "wall_seconds": 3.2718832050450146, "peak_rss_kib": "5318224", "swaps": "0", "print_axioms": ["'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms", "'AspisR1.NFM_Control.term_count' does not depend on any axioms", "'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.next_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.body_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NFM_generated/NFM_Control.lean:63:16: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+    (NFA_Iterator.value ⟨↑0, ⋯⟩)
+in the target expression
+  (do
+      let (item, next) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) (NFA_Iterator.value 0)
+      match item with
+        | none => ok []
+        | some start => do
+          let rest ← skeleton 7 next
+          ok (start :: rest)) =
+    ok [0#usize, 4#usize, 8#usize, 12#usize, 16#usize, 20#usize, 24#usize]
+
+⊢ (do
+      let (item, next) ←
+        core.iter.adapters.step_by.IteratorStepBy.next
+            (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) (NFA_Iterator.value 0)
+      match item with
+        | none => ok []
+        | some start => do
+          let rest ← skeleton 7 next
+          ok (start :: rest)) =
+    ok [0#usize, 4#usize, 8#usize, 12#usize, 16#usize, 20#usize, 24#usize]
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (0 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms
+'AspisR1.NFM_Control.term_count' does not depend on any axioms
+'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.next_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.body_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]
+

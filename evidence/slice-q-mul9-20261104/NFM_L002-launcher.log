@@ -1,0 +1,56 @@
+{"attempt": "NFM_L002", "exit_status": 1, "wall_seconds": 3.7691601528786123, "peak_rss_kib": "5322008", "swaps": "0", "print_axioms": ["'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms", "'AspisR1.NFM_Control.term_count' does not depend on any axioms", "'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.next_at' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.body_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NFM_generated/NFM_Control.lean:67:2: error: Tactic `rfl` failed: The left-hand side
+  do
+    let (item, next) ←
+      core.iter.adapters.step_by.IteratorStepBy.next (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+          (NFA_Iterator.value 0)
+    match item with
+      | none => ok []
+      | some start => do
+        let rest ←
+          do
+            let (item, next) ←
+              core.iter.adapters.step_by.IteratorStepBy.next
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize) next
+            match item with
+              | none => ok []
+              | some start => do
+                let rest ←
+                  do
+             
+...
+̵b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NFM_generated/NFM_Control.lean:90:2: error: Tactic `subst` failed: did not find equation for eliminating 'stop'
+
+oracle : NFF_LoggedEight.Oracle
+input : NFI_InnerCut.Input
+limbs : Std.Array U64 8#usize
+k : Fin 7
+end4 : UScalar UScalarTy.Usize
+stop : Usize
+add : NFA_Iterator.cursor ⟨↑k, ⋯⟩ + 4#usize = ok end4
+minimum : core.cmp.min core.cmp.OrdUsize end4 26#usize = ok stop
+ordered : ↑(NFA_Iterator.cursor ⟨↑k, ⋯⟩) ≤ ↑stop
+stopBound : ↑stop ≤ 26
+width : ↑stop - ↑(NFA_Iterator.cursor ⟨↑k, ⋯⟩) ≤ 4
+meaning : ↑stop = min (↑(NFA_Iterator.cursor ⟨↑k, ⋯⟩) + 4) 26
+same : stop = NFA_Iterator.cursor ⟨↑k + 1, ⋯⟩
+⊢ NFF_LoggedOuterStep.step oracle input.q input.g input.slot (NFA_Iterator.value ⟨↑k, ⋯⟩) limbs = do
+    let sums ←
+      NFF_LoggedLoop.run oracle input.q input.g input.slot
+          (↑(NFA_Iterator.cursor ⟨↑k + 1, ⋯⟩) - ↑(NFA_Iterator.cursor ⟨↑k, ⋯⟩))
+          { start := NFA_Iterator.cursor ⟨↑k, ⋯⟩, «end» := NFA_Iterator.cursor ⟨↑k + 1, ⋯⟩ }
+          (Array.repeat 8#usize 0#u64)
+    let out ← NFE_NFA_FoldEight.eight sums limbs
+    ok (cont (NFA_Iterator.value ⟨↑k + 1, ⋯⟩, out))
+'AspisR1.NFM_Control.fixed_outer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.fixed_terms' does not depend on any axioms
+'AspisR1.NFM_Control.term_count' does not depend on any axioms
+'AspisR1.NFM_Control.state_sequence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.next_at' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.body_at' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'AspisR1.NFM_Control.stopped' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r004e226868a14cd584b847333ab97b8f.scope; invocation ID: 172913bed40e4cff8edba534ca646c6b
