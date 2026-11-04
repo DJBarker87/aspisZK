@@ -11,3 +11,7 @@ Host work/cache are private NGA paths. One capped scope at a time; admission req
 ## Stage 1 checked support
 
 NGA_L003: NGA_Cache.prelude_source equates the exact cache prelude to the coherent prepared constructor. NGA_L006: full setter/frame and same-index read laws. NGA_L012: prepared-domain and nine cache canonical bounds. NGA_L016: actual checked row update, exact scalar product and sum with fourth-product pre-budget, arbitrary complementary-cell frame. NGA_L017: nine unique updates compose on the same full 3x3 array; each cell is unmodified before its turn. Every printed axiom list is standard. These are local support only; E001/E002 extraction failures still prevent claiming an emitted whole helper. All six rows remain OPEN.
+
+## Stage 2 checked support
+
+NGA_L019 proves the small-channel fold from an all-zero array for lengths≤4 with invariant accumulated≤n*(P-1)^2 and n+remaining≤4. NGA_L022 associates the exact same input QM31 pairs to both canonical caches with Forall₂ and proves current-pair cache/update chronology equals the prepared fold. NGA_L023 composes the real emitted final converter, full nine-channel sums, successful Result and canonical output. NGA_L024 supplies actual left/right fixed-array zip length/domain and exact two/three/four wrapper associations. This is checked support on explicitly handwritten source cuts, not emitted-helper closure. The five generic-helper/wrapper rows stay OPEN while the failed extraction/source-emission obligation remains.

@@ -43,12 +43,20 @@ theorem loop (xs : List Pair) (s : Sums) (n : Nat)
    have nextbudget : ∀ d, (get next d).val≤(n+1)*bound := by
      intro d;rw [vnext d,Nat.add_mul,one_mul]
      exact Nat.add_le_add (budget d) (product_bound p.1 p.2 hl hr d)
-   obtain ⟨out,hout,vout,bout⟩ := ih next (n+1) (by simpa [Nat.add_assoc] using arity)
+   obtain ⟨out,hout,vout,bout⟩ := ih next (n+1) (by simp only [List.length_cons] at arity;omega)
      (by intro q hq;exact canonical q (by simp [hq])) nextbudget
    refine ⟨out,?_,?_,?_⟩
    · simp only [run,hnext,bind_tc_ok];exact hout
-   · intro d;rw [vout d,vnext d];simp [terms,Nat.add_assoc]
-   · simpa [Nat.add_assoc] using bout
+   · intro d
+     rw [vout d,vnext d]
+     change (get s d).val + NGA_Nine.product p.1 p.2 d + terms ps d =
+       (get s d).val + (NGA_Nine.product p.1 p.2 d + terms ps d)
+     exact Nat.add_assoc _ _ _
+   · intro d
+     have h := bout d
+     have lengths : n+1+ps.length=n+(p::ps).length := by simp only [List.length_cons];omega
+     rw [lengths] at h
+     exact h
 
 abbrev zero : Sums := Array.repeat 3#usize (Array.repeat 3#usize 0#u64)
 
