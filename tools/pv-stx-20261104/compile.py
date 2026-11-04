@@ -8,7 +8,8 @@ if a >= 91797:
 else:
  assert not m.startswith('PV_STX_Audit'), 'audit uses reserved IDs'
 assert len(list(E.glob('receipt-917*.json')))<100
-assert not (E/f'submission-{a}.json').exists()
+if (E/f'submission-{a}.json').exists():
+ assert (E/f'refusal-{a}.json').exists() and not json.loads((E/f'refusal-{a}.json').read_text())['compiler_started'], 'attempt already launched'
 raw=Path('lean/'+m+'.lean').read_bytes();digest=hashlib.sha256(raw).hexdigest()
 assert subprocess.check_output(['git','show','HEAD:lean/'+m+'.lean'])==raw
 prep=E/('prepare-'+m+'.json');assert json.loads(prep.read_text())['result']['source_sha256']==digest
@@ -35,7 +36,12 @@ lines=[l for l in sent.read_text().splitlines() if len(l.split())>2 and l.split(
 print(json.dumps(dict(hits=hits,sent=lines)))
 '''.replace('ATTEMPT',str(a))
 r=ssh('python3 -c '+shlex.quote(code));assert r.returncode==0,r.stderr
-(E/f'id-audit-{a}.json').write_text(r.stdout);x=json.loads(r.stdout);assert not x['hits'] and not x['sent'],x
+x=json.loads(r.stdout)
+if (E/f'refusal-{a}.json').exists():
+ own={H+f'/evidence/admission-{a}.json',H+f'/evidence/admission-{a}.log'}
+ x['uncharged_own_admission']=[q for q in x['hits'] if q in own]
+ x['hits']=[q for q in x['hits'] if q not in own]
+(E/f'id-audit-{a}.json').write_text(json.dumps(x,indent=2)+'\n');assert not x['hits'] and not x['sent'],x
 admit=f'python3 /home/dombarker/project-offloads/codex-pv-runjoin-20261026/reservation-existing.py {H}/evidence/admission-{a}.json > {H}/evidence/admission-{a}.log 2>&1'
 check='python3 -c '+shlex.quote('import json;assert json.load(open('+repr(H+f'/evidence/admission-{a}.json')+'))["allowed"] is True')
 r=ssh(admit+' && '+check+' && '+shlex.join(cmd)+f' > {H}/evidence/out-{a}.log 2>&1')
@@ -44,7 +50,9 @@ for name,suffix in [('admission','json'),('out','log'),('time','log')]:
  q=ssh(f'cat {H}/evidence/{name}-{a}.{suffix}');(E/f'{name}-{a}.{suffix}').write_text(q.stdout+q.stderr)
 admission=json.loads((E/f'admission-{a}.json').read_text())
 if not admission.get('allowed'):
- (E/f'refusal-{a}.json').write_text(json.dumps(dict(epoch=time.time(),exit=r.returncode,admission=admission,compiler_started=False)))
+ refusal=dict(epoch=time.time(),exit=r.returncode,admission=admission,compiler_started=False)
+ (E/f'refusal-{a}.json').write_text(json.dumps(refusal))
+ (E/f'refusal-history-{a}-{int(refusal['epoch'])}.json').write_text(json.dumps(refusal))
  print('REFUSED uncharged');sys.exit(78)
 out=(E/f'out-{a}.log').read_text();tim=(E/f'time-{a}.log').read_text()
 for key,pat in dict(exit=r'Exit status: (\d+)',peak_rss_kib=r'Maximum resident set size \(kbytes\): (\d+)',swaps=r'Swaps: (\d+)',wall=r'Elapsed \(wall clock\) time \(h:mm:ss or m:ss\): ([0-9:.]+)').items():
