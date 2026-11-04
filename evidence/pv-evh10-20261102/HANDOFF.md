@@ -1,3 +1,43 @@
+# D580 STOP — actual entry frame/kernel interpretation missing
+
+Base `2c4e247055098415f0005992a0bb49e28b82e082`; same worktree and branch
+`codex/pv-evh-20261029`. Read **BLOCKER-D580.md** before resuming.
+The latest focus rule overrides the historical local-law continuation below.
+
+Stopped at step (1), as explicitly instructed: there is no supplied physical
+interpretation of actual reached proof-account entropy prefixes. The blocker
+specifies the missing `actual_frame_entry` lemma, all binders and the exact
+required actual-prefix domain, distinguishing that absent domain from existing
+Lean declarations. It also expands the kernel-memory premise and records the
+missing same-world/memory/event association. No new local law was written.
+
+Step (2) remains OPEN: native/fileTrace/countTrace/timeTrace/oraclePrefix still
+select five named OPEN inputs. No actual complete advancing worldRun at
+opsNative, projection installation, or actual-domain non-emptiness supplied.
+Endpoint/deployment rows removed NONE; T unchanged; target not established.
+No allocator/callback parallel-slice result imported. D520/U/D524 and all
+runtime/compiler/L1/L2/L3 conditions retained.
+
+**D580 consumed 0 attempts. NEXT 90259; 24 inherited attempts remain, THEN NEW
+91500-91596, audits 91597-91599.** Existing audit reserves untouched. No host
+scope launched, source staged, pending compile, native/Kani run, full regression
+or axioms/release replay. Historical receipts and SUMMARY-BASED axiom labels
+unchanged. No compile-wrapper or infrastructure changes were needed.
+
+Focused read-only `frame_binding.py --check`, `entry_frame_binding.py --check`
+and `raw_frame.py --check` all exit 0; these retain the explicit missing
+runtime/compiler premises. `blocker-review-D580.json` pins the inspected inputs.
+`BLOCKER-D579.md` was absent from this checkout, not assumed read.
+
+Next deliverable: construct and bind the actual reached-prefix physical
+interpretation and prove the blocker lemma; then the same-prefix kernel instance
+and complete advancing entry, then the five projections of ONE run. Do not
+continue the historical local-law sequence while that first step is blocked.
+
+---
+
+The following D578 checkpoint is retained as historical source/receipt context.
+
 # D578 context checkpoint — one physical raw history and both source decisions
 
 Continue ONLY `/Users/dominic/ZK/.worktrees/pv-evh`, branch
