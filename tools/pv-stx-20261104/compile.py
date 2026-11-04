@@ -3,6 +3,11 @@ from pathlib import Path
 import subprocess,json,hashlib,re,shlex,sys,time
 E=Path('evidence/pv-stx-20261104');H='/home/dombarker/project-offloads/codex-pv-stx-20261104'
 a=int(sys.argv[1]);m=sys.argv[2];assert 91700<=a<=91799 and m.startswith('PV_STX_')
+if a >= 91797:
+ assert m in {'PV_STX_AuditWalker','PV_STX_AuditDriver'}, 'reserved audit IDs'
+else:
+ assert not m.startswith('PV_STX_Audit'), 'audit uses reserved IDs'
+assert len(list(E.glob('receipt-917*.json')))<100
 assert not (E/f'submission-{a}.json').exists()
 raw=Path('lean/'+m+'.lean').read_bytes();digest=hashlib.sha256(raw).hexdigest()
 assert subprocess.check_output(['git','show','HEAD:lean/'+m+'.lean'])==raw

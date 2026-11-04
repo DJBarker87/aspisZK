@@ -3,6 +3,8 @@ from pathlib import Path
 import hashlib,json,subprocess,shlex,sys,re
 E=Path('evidence/pv-stx-20261104'); H='/home/dombarker/project-offloads/codex-pv-stx-20261104'
 base=json.loads(Path('evidence/pv-evh4-20261029/prepare-PV_EVH_World.json').read_text())['result']
+authority=json.loads((E/'external-authority.json').read_text())
+assert {v['module']:v['sha256'] for v in base['external_checks']}=={v['module'].replace('/','.'):v['object_sha256'] for v in authority}
 m=sys.argv[1];assert m.startswith('PV_STX_'); raw=Path('lean/'+m+'.lean').read_bytes()
 rev=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
 assert subprocess.check_output(['git','show',rev+':lean/'+m+'.lean'])==raw
