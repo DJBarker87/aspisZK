@@ -5,7 +5,7 @@ B=Path.cwd();mode=sys.argv[1];E=B/'NFY_audit'/mode;E.mkdir(parents=True,exist_ok
 if mode.startswith('inventory-'):jobs=[(mode,['NFY_native/NFY_InventoryDriver',mode.split('-')[1]])]
 elif mode in ['fixtures','scan']:jobs=[(mode,['NFY_native/'+('NFY_Driver' if mode=='scan' else 'NFY_ProofDriver'),mode])]
 else:
- batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NFY_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NFY_native/NFY_ProofDriver','proof'+str(i)]) for i in range(batch*10,min((batch+1)*10,len(groups)))];assert jobs
+ batch=int(mode.removeprefix('batch'));groups=json.loads((B/'NFY_AUDIT_ROOTS.json').read_text())['groups'];jobs=[('proof'+str(i),['NFY_native/NFY_ProofDriver','proof'+str(i)]) for i in range(batch*15,min((batch+1)*15,len(groups)))];assert jobs
 for name,command in jobs:
  start=time.monotonic()
  with (E/(name+'.log')).open('w') as out:r=subprocess.run(['/usr/bin/time','-v','-o',str(E/(name+'.time')),*command],stdout=out,stderr=subprocess.STDOUT)

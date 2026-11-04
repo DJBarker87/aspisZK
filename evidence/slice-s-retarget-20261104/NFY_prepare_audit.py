@@ -6,7 +6,7 @@ p=json.loads((E/'NFY_PROVENANCE.json').read_text());ren=p['namespace_map']
 pat=re.compile(r'(?<![A-Za-z0-9_])('+'|'.join(map(re.escape,sorted(ren,key=len,reverse=True)))+r')(?![A-Za-z0-9_])')
 old=json.loads((E.parent/'slice-s-compose12-20261104/NFJ_AUDIT.json').read_text());sr=[pat.sub(lambda m:ren[m.group()],r['root']) for r in old['results']]
 sr+=['NFY_NEE_M31SerializerDomain.'+n for n in ['primitive','width','widths_distinct']]
-sr+=['NFY_NFD_WideSerialization.result_state_effects','NFY_NCA_SerializerWindow.frame','NFY_NCA_SerializerWindow.induction']
+sr+=['NFY_NFD_WideSerialization.result_state_effects','AspisR1.NFY_NCA_SerializerWindow.frame','AspisR1.NFY_NCA_SerializerWindow.induction']
 base=json.loads((P/'NFX_AUDIT_ROOTS.json').read_text());extra=json.loads((E/'NFY_TOP_ROOTS.json').read_text())['roots'] if (E/'NFY_TOP_ROOTS.json').exists() else []
 primary=set(base['roots']+sr+['NFY_OwnerTransport.map_err_transport','NFY_RequestTransport.map_err_transport','NFY_RequestTransport.adapter_map_err_transport'])
 roots=sorted(primary)+sorted(set(extra)-primary);mods=['NFX_COMBINED_IMPORT','NFY_OwnerTransport','NFY_RequestTransport']+[f'NFY_Part{i:03}' for i in range(len(p['groups']))]
@@ -39,6 +39,6 @@ for n,r in G.items():
 for f in E.glob('NFY_*.lean'):tables[f.stem]=list(dict.fromkeys(['Init']+re.findall(r'^import ([\w.]+)',f.read_text(),re.M)))
 (E/'NFY_EXPECTED_IMPORTS.jsonl').write_text(''.join(json.dumps(dict(module=n,imports=im))+'\n' for n,im in sorted(tables.items())))
 walker=(R/'evidence/axaudit2-20261102/NEP_WALKER.lean').read_bytes();other=(R/'evidence/slice-q-accum-20261104/NFS_native/NFA_WALKER.c')
-(E/'NFY_WALKER_PIN.json').write_text(json.dumps(dict(sha256=hashlib.sha256(walker).hexdigest(),path='evidence/axaudit2-20261102/NEP_WALKER.lean',resolved_module='NFA_WALKER',inherited_pin=json.loads((P/'NFX_WALKER_PIN.json').read_text()),driver_pre_runtime_prefix_unchanged=proof[:a]==source[:a] if False else proof[:proof.index('  let (modules, roots) :=')]==(P/'NFX_ProofDriver.lean').read_text().split('  let (modules, roots) :=')[0]),indent=1)+'\n')
-(E/'NFY_batch.py').write_text((P/'NFX_batch.py').read_text().replace('NFX_','NFY_').replace('batch*10,min((batch+1)*10','batch*13,min((batch+1)*13'))
+(E/'NFY_WALKER_PIN.json').write_text(json.dumps(dict(sha256=hashlib.sha256(walker).hexdigest(),path='evidence/axaudit2-20261102/NEP_WALKER.lean',resolved_module='NFA_WALKER',inherited_pin=json.loads((P/'NFX_WALKER_PIN.json').read_text()),driver_pre_runtime_prefix_unchanged=proof[:a]==source[:a] if False else proof[:proof.index('  let (modules, roots)')]==(P/'NFX_ProofDriver.lean').read_text().split('  let (modules, roots) :=')[0]),indent=1)+'\n')
+(E/'NFY_batch.py').write_text((P/'NFX_batch.py').read_text().replace('NFX_','NFY_').replace('batch*10,min((batch+1)*10','batch*15,min((batch+1)*15'))
 print(json.dumps(dict(roots=len(roots),s_roots=len(sr),parts=len(p['groups']),groups=len(groups))))

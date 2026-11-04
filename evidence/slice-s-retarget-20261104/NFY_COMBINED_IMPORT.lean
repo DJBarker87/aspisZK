@@ -327,8 +327,6 @@ import NFY_Part060
 #print axioms NFS_NEV_AccumPacket.result_state_effects
 #print axioms NFS_NEV_AccumulateComplete.native
 #print axioms NFS_NEV_AccumulateComplete.reference
-#print axioms NFY_NCA_SerializerWindow.frame
-#print axioms NFY_NCA_SerializerWindow.induction
 #print axioms NFY_NEE_M31SerializerDomain.primitive
 #print axioms NFY_NEE_M31SerializerDomain.width
 #print axioms NFY_NEE_M31SerializerDomain.widths_distinct

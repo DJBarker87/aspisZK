@@ -15,6 +15,7 @@ source={}
 def get(n):
  if n in source:return source[n]
  ps=lookup.get(n,[])
+ if not ps and '.' in n:ps=sorted([p for p in paths if p.endswith('/'+n.replace('.','/')+'.lean') and '/sources/' not in p],key=len)[:1]
  ps=sorted(ps,key=lambda p:(0 if p.startswith('lean/') else 1, -len(p),p))
  if ps:
   p=ps[0];t=(R/p).read_text() if (R/p).exists() else subprocess.check_output(['git','show','HEAD:'+p],cwd=R,text=True)
@@ -25,7 +26,7 @@ def get(n):
 for n in mods:get(n)
 def family(n):
  if n.startswith(('FIo_','NP6_','LPf_')):return 'FIo / NP6 standard model'
- if 'Prepar' in n or n.startswith('NBA_'):return 'Prepared owner and installation'
+ if n.startswith(('Prepared','CurrentPrepared','CurrentOriginalPrepared','CurrentSampler','SelectedWideView')) or n in ['CurrentCompactInstalledPreparationV1','CurrentCompactCallerConstantsV1']:return 'Prepared owner and installation'
  if n.startswith(('S1','S6','Repin','CurrentCompact','ClaimsUnrolled')):return 'S1 Phase and semantic/codec forest'
  if n.startswith(('OraclePort','Checkpoint','Port','ChildJoin','VTop_')):return 'OraclePort / Checkpoint'
  if n.startswith(('Extracted','R0P.')):return 'Extracted reachability and pinned libraries'
