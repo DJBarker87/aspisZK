@@ -100,156 +100,198 @@ static const lean_ctor_object l_main___redArg___closed__5_value = {.m_header = {
 static const lean_object* l_main___redArg___closed__5 = (const lean_object*)&l_main___redArg___closed__5_value;
 static const lean_ctor_object l_main___redArg___closed__6_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__5_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__6 = (const lean_object*)&l_main___redArg___closed__6_value;
-static const lean_string_object l_main___redArg___closed__7_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFV_PoolReturnData"};
+static const lean_string_object l_main___redArg___closed__7_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 9, .m_capacity = 9, .m_length = 8, .m_data = "NFV_Copy"};
 static const lean_object* l_main___redArg___closed__7 = (const lean_object*)&l_main___redArg___closed__7_value;
-static const lean_ctor_object l_main___redArg___closed__8_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__7_value),LEAN_SCALAR_PTR_LITERAL(213, 190, 254, 127, 158, 3, 109, 55)}};
+static const lean_ctor_object l_main___redArg___closed__8_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__7_value),LEAN_SCALAR_PTR_LITERAL(213, 199, 215, 9, 241, 248, 11, 113)}};
 static const lean_object* l_main___redArg___closed__8 = (const lean_object*)&l_main___redArg___closed__8_value;
 static const lean_ctor_object l_main___redArg___closed__9_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__8_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__9 = (const lean_object*)&l_main___redArg___closed__9_value;
-static const lean_string_object l_main___redArg___closed__10_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 22, .m_capacity = 22, .m_length = 21, .m_data = "NFR_AfterstateForward"};
+static const lean_string_object l_main___redArg___closed__10_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 15, .m_capacity = 15, .m_length = 14, .m_data = "NFV_ListFrames"};
 static const lean_object* l_main___redArg___closed__10 = (const lean_object*)&l_main___redArg___closed__10_value;
-static const lean_ctor_object l_main___redArg___closed__11_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__10_value),LEAN_SCALAR_PTR_LITERAL(224, 107, 170, 101, 222, 163, 90, 186)}};
+static const lean_ctor_object l_main___redArg___closed__11_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__10_value),LEAN_SCALAR_PTR_LITERAL(222, 216, 83, 173, 35, 143, 178, 145)}};
 static const lean_object* l_main___redArg___closed__11 = (const lean_object*)&l_main___redArg___closed__11_value;
 static const lean_ctor_object l_main___redArg___closed__12_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__11_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__12 = (const lean_object*)&l_main___redArg___closed__12_value;
-static const lean_string_object l_main___redArg___closed__13_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward00"};
+static const lean_string_object l_main___redArg___closed__13_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 13, .m_capacity = 13, .m_length = 12, .m_data = "NFV_Envelope"};
 static const lean_object* l_main___redArg___closed__13 = (const lean_object*)&l_main___redArg___closed__13_value;
-static const lean_ctor_object l_main___redArg___closed__14_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__13_value),LEAN_SCALAR_PTR_LITERAL(64, 191, 200, 213, 26, 78, 32, 215)}};
+static const lean_ctor_object l_main___redArg___closed__14_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__13_value),LEAN_SCALAR_PTR_LITERAL(169, 157, 88, 118, 192, 75, 198, 143)}};
 static const lean_object* l_main___redArg___closed__14 = (const lean_object*)&l_main___redArg___closed__14_value;
 static const lean_ctor_object l_main___redArg___closed__15_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__14_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__15 = (const lean_object*)&l_main___redArg___closed__15_value;
-static const lean_string_object l_main___redArg___closed__16_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward04"};
+static const lean_string_object l_main___redArg___closed__16_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFV_RequestWindows"};
 static const lean_object* l_main___redArg___closed__16 = (const lean_object*)&l_main___redArg___closed__16_value;
-static const lean_ctor_object l_main___redArg___closed__17_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__16_value),LEAN_SCALAR_PTR_LITERAL(117, 245, 203, 138, 39, 129, 111, 172)}};
+static const lean_ctor_object l_main___redArg___closed__17_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__16_value),LEAN_SCALAR_PTR_LITERAL(119, 49, 206, 105, 89, 82, 178, 247)}};
 static const lean_object* l_main___redArg___closed__17 = (const lean_object*)&l_main___redArg___closed__17_value;
 static const lean_ctor_object l_main___redArg___closed__18_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__17_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__18 = (const lean_object*)&l_main___redArg___closed__18_value;
-static const lean_string_object l_main___redArg___closed__19_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward08"};
+static const lean_string_object l_main___redArg___closed__19_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFV_RequestOracle"};
 static const lean_object* l_main___redArg___closed__19 = (const lean_object*)&l_main___redArg___closed__19_value;
-static const lean_ctor_object l_main___redArg___closed__20_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__19_value),LEAN_SCALAR_PTR_LITERAL(95, 127, 174, 84, 245, 93, 171, 99)}};
+static const lean_ctor_object l_main___redArg___closed__20_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__19_value),LEAN_SCALAR_PTR_LITERAL(210, 2, 90, 189, 162, 21, 30, 128)}};
 static const lean_object* l_main___redArg___closed__20 = (const lean_object*)&l_main___redArg___closed__20_value;
 static const lean_ctor_object l_main___redArg___closed__21_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__20_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__21 = (const lean_object*)&l_main___redArg___closed__21_value;
-static const lean_string_object l_main___redArg___closed__22_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward12"};
+static const lean_string_object l_main___redArg___closed__22_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFV_RequestIndexes"};
 static const lean_object* l_main___redArg___closed__22 = (const lean_object*)&l_main___redArg___closed__22_value;
-static const lean_ctor_object l_main___redArg___closed__23_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__22_value),LEAN_SCALAR_PTR_LITERAL(87, 194, 172, 198, 191, 109, 159, 123)}};
+static const lean_ctor_object l_main___redArg___closed__23_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__22_value),LEAN_SCALAR_PTR_LITERAL(116, 238, 233, 119, 82, 55, 159, 78)}};
 static const lean_object* l_main___redArg___closed__23 = (const lean_object*)&l_main___redArg___closed__23_value;
 static const lean_ctor_object l_main___redArg___closed__24_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__23_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__24 = (const lean_object*)&l_main___redArg___closed__24_value;
-static const lean_string_object l_main___redArg___closed__25_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward16"};
+static const lean_string_object l_main___redArg___closed__25_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFV_RequestGuards"};
 static const lean_object* l_main___redArg___closed__25 = (const lean_object*)&l_main___redArg___closed__25_value;
-static const lean_ctor_object l_main___redArg___closed__26_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__25_value),LEAN_SCALAR_PTR_LITERAL(213, 197, 172, 244, 219, 97, 251, 215)}};
+static const lean_ctor_object l_main___redArg___closed__26_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__25_value),LEAN_SCALAR_PTR_LITERAL(119, 180, 197, 7, 22, 35, 208, 181)}};
 static const lean_object* l_main___redArg___closed__26 = (const lean_object*)&l_main___redArg___closed__26_value;
 static const lean_ctor_object l_main___redArg___closed__27_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__26_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__27 = (const lean_object*)&l_main___redArg___closed__27_value;
-static const lean_string_object l_main___redArg___closed__28_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 29, .m_capacity = 29, .m_length = 28, .m_data = "NFR_AfterstateForwardHelpers"};
+static const lean_string_object l_main___redArg___closed__28_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFV_PoolReturnData"};
 static const lean_object* l_main___redArg___closed__28 = (const lean_object*)&l_main___redArg___closed__28_value;
-static const lean_ctor_object l_main___redArg___closed__29_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__28_value),LEAN_SCALAR_PTR_LITERAL(169, 35, 95, 139, 102, 163, 39, 225)}};
+static const lean_ctor_object l_main___redArg___closed__29_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__28_value),LEAN_SCALAR_PTR_LITERAL(213, 190, 254, 127, 158, 3, 109, 55)}};
 static const lean_object* l_main___redArg___closed__29 = (const lean_object*)&l_main___redArg___closed__29_value;
 static const lean_ctor_object l_main___redArg___closed__30_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__29_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__30 = (const lean_object*)&l_main___redArg___closed__30_value;
-static const lean_string_object l_main___redArg___closed__31_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 12, .m_capacity = 12, .m_length = 11, .m_data = "NFR_CHelper"};
+static const lean_string_object l_main___redArg___closed__31_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 22, .m_capacity = 22, .m_length = 21, .m_data = "NFR_AfterstateForward"};
 static const lean_object* l_main___redArg___closed__31 = (const lean_object*)&l_main___redArg___closed__31_value;
-static const lean_ctor_object l_main___redArg___closed__32_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__31_value),LEAN_SCALAR_PTR_LITERAL(165, 224, 53, 95, 74, 51, 8, 57)}};
+static const lean_ctor_object l_main___redArg___closed__32_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__31_value),LEAN_SCALAR_PTR_LITERAL(224, 107, 170, 101, 222, 163, 90, 186)}};
 static const lean_object* l_main___redArg___closed__32 = (const lean_object*)&l_main___redArg___closed__32_value;
 static const lean_ctor_object l_main___redArg___closed__33_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__32_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__33 = (const lean_object*)&l_main___redArg___closed__33_value;
-static const lean_string_object l_main___redArg___closed__34_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_CHelperBridge"};
+static const lean_string_object l_main___redArg___closed__34_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward00"};
 static const lean_object* l_main___redArg___closed__34 = (const lean_object*)&l_main___redArg___closed__34_value;
-static const lean_ctor_object l_main___redArg___closed__35_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__34_value),LEAN_SCALAR_PTR_LITERAL(158, 167, 248, 207, 28, 172, 31, 109)}};
+static const lean_ctor_object l_main___redArg___closed__35_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__34_value),LEAN_SCALAR_PTR_LITERAL(64, 191, 200, 213, 26, 78, 32, 215)}};
 static const lean_object* l_main___redArg___closed__35 = (const lean_object*)&l_main___redArg___closed__35_value;
 static const lean_ctor_object l_main___redArg___closed__36_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__35_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__36 = (const lean_object*)&l_main___redArg___closed__36_value;
-static const lean_string_object l_main___redArg___closed__37_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 16, .m_capacity = 16, .m_length = 15, .m_data = "NFR_CSettlement"};
+static const lean_string_object l_main___redArg___closed__37_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward04"};
 static const lean_object* l_main___redArg___closed__37 = (const lean_object*)&l_main___redArg___closed__37_value;
-static const lean_ctor_object l_main___redArg___closed__38_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__37_value),LEAN_SCALAR_PTR_LITERAL(176, 192, 156, 186, 79, 112, 18, 179)}};
+static const lean_ctor_object l_main___redArg___closed__38_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__37_value),LEAN_SCALAR_PTR_LITERAL(117, 245, 203, 138, 39, 129, 111, 172)}};
 static const lean_object* l_main___redArg___closed__38 = (const lean_object*)&l_main___redArg___closed__38_value;
 static const lean_ctor_object l_main___redArg___closed__39_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__38_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__39 = (const lean_object*)&l_main___redArg___closed__39_value;
-static const lean_string_object l_main___redArg___closed__40_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_DigestForward"};
+static const lean_string_object l_main___redArg___closed__40_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward08"};
 static const lean_object* l_main___redArg___closed__40 = (const lean_object*)&l_main___redArg___closed__40_value;
-static const lean_ctor_object l_main___redArg___closed__41_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__40_value),LEAN_SCALAR_PTR_LITERAL(148, 223, 161, 77, 94, 79, 112, 220)}};
+static const lean_ctor_object l_main___redArg___closed__41_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__40_value),LEAN_SCALAR_PTR_LITERAL(95, 127, 174, 84, 245, 93, 171, 99)}};
 static const lean_object* l_main___redArg___closed__41 = (const lean_object*)&l_main___redArg___closed__41_value;
 static const lean_ctor_object l_main___redArg___closed__42_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__41_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__42 = (const lean_object*)&l_main___redArg___closed__42_value;
-static const lean_string_object l_main___redArg___closed__43_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 20, .m_capacity = 20, .m_length = 19, .m_data = "NFR_ExtractedDecode"};
+static const lean_string_object l_main___redArg___closed__43_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward12"};
 static const lean_object* l_main___redArg___closed__43 = (const lean_object*)&l_main___redArg___closed__43_value;
-static const lean_ctor_object l_main___redArg___closed__44_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__43_value),LEAN_SCALAR_PTR_LITERAL(178, 162, 97, 81, 138, 120, 124, 127)}};
+static const lean_ctor_object l_main___redArg___closed__44_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__43_value),LEAN_SCALAR_PTR_LITERAL(87, 194, 172, 198, 191, 109, 159, 123)}};
 static const lean_object* l_main___redArg___closed__44 = (const lean_object*)&l_main___redArg___closed__44_value;
 static const lean_ctor_object l_main___redArg___closed__45_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__44_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__45 = (const lean_object*)&l_main___redArg___closed__45_value;
-static const lean_string_object l_main___redArg___closed__46_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 14, .m_capacity = 14, .m_length = 13, .m_data = "NFR_ModelJoin"};
+static const lean_string_object l_main___redArg___closed__46_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_AfterstateForward16"};
 static const lean_object* l_main___redArg___closed__46 = (const lean_object*)&l_main___redArg___closed__46_value;
-static const lean_ctor_object l_main___redArg___closed__47_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__46_value),LEAN_SCALAR_PTR_LITERAL(116, 216, 64, 123, 238, 226, 19, 255)}};
+static const lean_ctor_object l_main___redArg___closed__47_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__46_value),LEAN_SCALAR_PTR_LITERAL(213, 197, 172, 244, 219, 97, 251, 215)}};
 static const lean_object* l_main___redArg___closed__47 = (const lean_object*)&l_main___redArg___closed__47_value;
 static const lean_ctor_object l_main___redArg___closed__48_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__47_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__48 = (const lean_object*)&l_main___redArg___closed__48_value;
-static const lean_string_object l_main___redArg___closed__49_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFR_PoolReturnData"};
+static const lean_string_object l_main___redArg___closed__49_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 29, .m_capacity = 29, .m_length = 28, .m_data = "NFR_AfterstateForwardHelpers"};
 static const lean_object* l_main___redArg___closed__49 = (const lean_object*)&l_main___redArg___closed__49_value;
-static const lean_ctor_object l_main___redArg___closed__50_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__49_value),LEAN_SCALAR_PTR_LITERAL(202, 77, 83, 17, 123, 187, 23, 51)}};
+static const lean_ctor_object l_main___redArg___closed__50_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__49_value),LEAN_SCALAR_PTR_LITERAL(169, 35, 95, 139, 102, 163, 39, 225)}};
 static const lean_object* l_main___redArg___closed__50 = (const lean_object*)&l_main___redArg___closed__50_value;
 static const lean_ctor_object l_main___redArg___closed__51_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__50_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__51 = (const lean_object*)&l_main___redArg___closed__51_value;
-static const lean_string_object l_main___redArg___closed__52_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 15, .m_capacity = 15, .m_length = 14, .m_data = "NFR_RawInverse"};
+static const lean_string_object l_main___redArg___closed__52_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 12, .m_capacity = 12, .m_length = 11, .m_data = "NFR_CHelper"};
 static const lean_object* l_main___redArg___closed__52 = (const lean_object*)&l_main___redArg___closed__52_value;
-static const lean_ctor_object l_main___redArg___closed__53_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__52_value),LEAN_SCALAR_PTR_LITERAL(167, 150, 189, 4, 14, 15, 211, 68)}};
+static const lean_ctor_object l_main___redArg___closed__53_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__52_value),LEAN_SCALAR_PTR_LITERAL(165, 224, 53, 95, 74, 51, 8, 57)}};
 static const lean_object* l_main___redArg___closed__53 = (const lean_object*)&l_main___redArg___closed__53_value;
 static const lean_ctor_object l_main___redArg___closed__54_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__53_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__54 = (const lean_object*)&l_main___redArg___closed__54_value;
-static const lean_string_object l_main___redArg___closed__55_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 21, .m_capacity = 21, .m_length = 20, .m_data = "NFR_RawInverseFrames"};
+static const lean_string_object l_main___redArg___closed__55_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_CHelperBridge"};
 static const lean_object* l_main___redArg___closed__55 = (const lean_object*)&l_main___redArg___closed__55_value;
-static const lean_ctor_object l_main___redArg___closed__56_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__55_value),LEAN_SCALAR_PTR_LITERAL(104, 240, 116, 18, 10, 200, 239, 195)}};
+static const lean_ctor_object l_main___redArg___closed__56_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__55_value),LEAN_SCALAR_PTR_LITERAL(158, 167, 248, 207, 28, 172, 31, 109)}};
 static const lean_object* l_main___redArg___closed__56 = (const lean_object*)&l_main___redArg___closed__56_value;
 static const lean_ctor_object l_main___redArg___closed__57_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__56_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__57 = (const lean_object*)&l_main___redArg___closed__57_value;
-static const lean_string_object l_main___redArg___closed__58_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 22, .m_capacity = 22, .m_length = 21, .m_data = "NFR_RawInverseHelpers"};
+static const lean_string_object l_main___redArg___closed__58_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 16, .m_capacity = 16, .m_length = 15, .m_data = "NFR_CSettlement"};
 static const lean_object* l_main___redArg___closed__58 = (const lean_object*)&l_main___redArg___closed__58_value;
-static const lean_ctor_object l_main___redArg___closed__59_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__58_value),LEAN_SCALAR_PTR_LITERAL(155, 231, 36, 200, 159, 224, 34, 75)}};
+static const lean_ctor_object l_main___redArg___closed__59_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__58_value),LEAN_SCALAR_PTR_LITERAL(176, 192, 156, 186, 79, 112, 18, 179)}};
 static const lean_object* l_main___redArg___closed__59 = (const lean_object*)&l_main___redArg___closed__59_value;
 static const lean_ctor_object l_main___redArg___closed__60_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__59_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__60 = (const lean_object*)&l_main___redArg___closed__60_value;
-static const lean_string_object l_main___redArg___closed__61_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_RawInverseValidator"};
+static const lean_string_object l_main___redArg___closed__61_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_DigestForward"};
 static const lean_object* l_main___redArg___closed__61 = (const lean_object*)&l_main___redArg___closed__61_value;
-static const lean_ctor_object l_main___redArg___closed__62_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__61_value),LEAN_SCALAR_PTR_LITERAL(152, 141, 35, 108, 113, 11, 250, 42)}};
+static const lean_ctor_object l_main___redArg___closed__62_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__61_value),LEAN_SCALAR_PTR_LITERAL(148, 223, 161, 77, 94, 79, 112, 220)}};
 static const lean_object* l_main___redArg___closed__62 = (const lean_object*)&l_main___redArg___closed__62_value;
 static const lean_ctor_object l_main___redArg___closed__63_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__62_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__63 = (const lean_object*)&l_main___redArg___closed__63_value;
-static const lean_string_object l_main___redArg___closed__64_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_ResultForward"};
+static const lean_string_object l_main___redArg___closed__64_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 20, .m_capacity = 20, .m_length = 19, .m_data = "NFR_ExtractedDecode"};
 static const lean_object* l_main___redArg___closed__64 = (const lean_object*)&l_main___redArg___closed__64_value;
-static const lean_ctor_object l_main___redArg___closed__65_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__64_value),LEAN_SCALAR_PTR_LITERAL(235, 47, 199, 112, 158, 237, 106, 194)}};
+static const lean_ctor_object l_main___redArg___closed__65_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__64_value),LEAN_SCALAR_PTR_LITERAL(178, 162, 97, 81, 138, 120, 124, 127)}};
 static const lean_object* l_main___redArg___closed__65 = (const lean_object*)&l_main___redArg___closed__65_value;
 static const lean_ctor_object l_main___redArg___closed__66_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__65_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__66 = (const lean_object*)&l_main___redArg___closed__66_value;
-static const lean_string_object l_main___redArg___closed__67_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 25, .m_capacity = 25, .m_length = 24, .m_data = "NFR_ResultForwardHelpers"};
+static const lean_string_object l_main___redArg___closed__67_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 14, .m_capacity = 14, .m_length = 13, .m_data = "NFR_ModelJoin"};
 static const lean_object* l_main___redArg___closed__67 = (const lean_object*)&l_main___redArg___closed__67_value;
-static const lean_ctor_object l_main___redArg___closed__68_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__67_value),LEAN_SCALAR_PTR_LITERAL(222, 184, 135, 91, 18, 142, 148, 41)}};
+static const lean_ctor_object l_main___redArg___closed__68_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__67_value),LEAN_SCALAR_PTR_LITERAL(116, 216, 64, 123, 238, 226, 19, 255)}};
 static const lean_object* l_main___redArg___closed__68 = (const lean_object*)&l_main___redArg___closed__68_value;
 static const lean_ctor_object l_main___redArg___closed__69_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__68_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__69 = (const lean_object*)&l_main___redArg___closed__69_value;
-static const lean_array_object l_main___redArg___closed__70_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_array_object) + sizeof(void*)*23, .m_other = 0, .m_tag = 246}, .m_size = 23, .m_capacity = 23, .m_data = {((lean_object*)&l_main___redArg___closed__3_value),((lean_object*)&l_main___redArg___closed__6_value),((lean_object*)&l_main___redArg___closed__9_value),((lean_object*)&l_main___redArg___closed__12_value),((lean_object*)&l_main___redArg___closed__15_value),((lean_object*)&l_main___redArg___closed__18_value),((lean_object*)&l_main___redArg___closed__21_value),((lean_object*)&l_main___redArg___closed__24_value),((lean_object*)&l_main___redArg___closed__27_value),((lean_object*)&l_main___redArg___closed__30_value),((lean_object*)&l_main___redArg___closed__33_value),((lean_object*)&l_main___redArg___closed__36_value),((lean_object*)&l_main___redArg___closed__39_value),((lean_object*)&l_main___redArg___closed__42_value),((lean_object*)&l_main___redArg___closed__45_value),((lean_object*)&l_main___redArg___closed__48_value),((lean_object*)&l_main___redArg___closed__51_value),((lean_object*)&l_main___redArg___closed__54_value),((lean_object*)&l_main___redArg___closed__57_value),((lean_object*)&l_main___redArg___closed__60_value),((lean_object*)&l_main___redArg___closed__63_value),((lean_object*)&l_main___redArg___closed__66_value),((lean_object*)&l_main___redArg___closed__69_value)}};
+static const lean_string_object l_main___redArg___closed__70_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 19, .m_capacity = 19, .m_length = 18, .m_data = "NFR_PoolReturnData"};
 static const lean_object* l_main___redArg___closed__70 = (const lean_object*)&l_main___redArg___closed__70_value;
-static const lean_array_object l_main___redArg___closed__71_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_array_object) + sizeof(void*)*0, .m_other = 0, .m_tag = 246}, .m_size = 0, .m_capacity = 0, .m_data = {}};
+static const lean_ctor_object l_main___redArg___closed__71_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__70_value),LEAN_SCALAR_PTR_LITERAL(202, 77, 83, 17, 123, 187, 23, 51)}};
 static const lean_object* l_main___redArg___closed__71 = (const lean_object*)&l_main___redArg___closed__71_value;
-static const lean_string_object l_main___redArg___closed__72_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 17, .m_capacity = 17, .m_length = 16, .m_data = "NFV_LOADED.jsonl"};
+static const lean_ctor_object l_main___redArg___closed__72_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__71_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__72 = (const lean_object*)&l_main___redArg___closed__72_value;
-static const lean_ctor_object l_main___redArg___closed__73_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)(((size_t)(0) << 1) | 1))}};
+static const lean_string_object l_main___redArg___closed__73_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 15, .m_capacity = 15, .m_length = 14, .m_data = "NFR_RawInverse"};
 static const lean_object* l_main___redArg___closed__73 = (const lean_object*)&l_main___redArg___closed__73_value;
-static const lean_ctor_object l_main___redArg___closed__74_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__73_value)}};
+static const lean_ctor_object l_main___redArg___closed__74_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__73_value),LEAN_SCALAR_PTR_LITERAL(167, 150, 189, 4, 14, 15, 211, 68)}};
 static const lean_object* l_main___redArg___closed__74 = (const lean_object*)&l_main___redArg___closed__74_value;
-static const lean_string_object l_main___redArg___closed__75_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 8, .m_capacity = 8, .m_length = 7, .m_data = "modules"};
+static const lean_ctor_object l_main___redArg___closed__75_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__74_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__75 = (const lean_object*)&l_main___redArg___closed__75_value;
-static const lean_string_object l_main___redArg___closed__76_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 20, .m_capacity = 20, .m_length = 19, .m_data = "dangling_references"};
+static const lean_string_object l_main___redArg___closed__76_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 21, .m_capacity = 21, .m_length = 20, .m_data = "NFR_RawInverseFrames"};
 static const lean_object* l_main___redArg___closed__76 = (const lean_object*)&l_main___redArg___closed__76_value;
-static const lean_string_object l_main___redArg___closed__77_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 6, .m_capacity = 6, .m_length = 5, .m_data = "scope"};
+static const lean_ctor_object l_main___redArg___closed__77_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__76_value),LEAN_SCALAR_PTR_LITERAL(104, 240, 116, 18, 10, 200, 239, 195)}};
 static const lean_object* l_main___redArg___closed__77 = (const lean_object*)&l_main___redArg___closed__77_value;
-static const lean_string_object l_main___redArg___closed__78_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 116, .m_capacity = 116, .m_length = 115, .m_data = "loaded NFV and inherited NFR closure; raw import lists reported, no independent upstream import baseline comparison"};
+static const lean_ctor_object l_main___redArg___closed__78_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__77_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__78 = (const lean_object*)&l_main___redArg___closed__78_value;
-static const lean_ctor_object l_main___redArg___closed__79_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 0, .m_other = 1, .m_tag = 3}, .m_objs = {((lean_object*)&l_main___redArg___closed__78_value)}};
+static const lean_string_object l_main___redArg___closed__79_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 22, .m_capacity = 22, .m_length = 21, .m_data = "NFR_RawInverseHelpers"};
 static const lean_object* l_main___redArg___closed__79 = (const lean_object*)&l_main___redArg___closed__79_value;
-static const lean_ctor_object l_main___redArg___closed__80_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__77_value),((lean_object*)&l_main___redArg___closed__79_value)}};
+static const lean_ctor_object l_main___redArg___closed__80_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__79_value),LEAN_SCALAR_PTR_LITERAL(155, 231, 36, 200, 159, 224, 34, 75)}};
 static const lean_object* l_main___redArg___closed__80 = (const lean_object*)&l_main___redArg___closed__80_value;
-static const lean_ctor_object l_main___redArg___closed__81_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)&l_main___redArg___closed__80_value),((lean_object*)(((size_t)(0) << 1) | 1))}};
+static const lean_ctor_object l_main___redArg___closed__81_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__80_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
 static const lean_object* l_main___redArg___closed__81 = (const lean_object*)&l_main___redArg___closed__81_value;
+static const lean_string_object l_main___redArg___closed__82_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 24, .m_capacity = 24, .m_length = 23, .m_data = "NFR_RawInverseValidator"};
+static const lean_object* l_main___redArg___closed__82 = (const lean_object*)&l_main___redArg___closed__82_value;
+static const lean_ctor_object l_main___redArg___closed__83_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__82_value),LEAN_SCALAR_PTR_LITERAL(152, 141, 35, 108, 113, 11, 250, 42)}};
+static const lean_object* l_main___redArg___closed__83 = (const lean_object*)&l_main___redArg___closed__83_value;
+static const lean_ctor_object l_main___redArg___closed__84_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__83_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
+static const lean_object* l_main___redArg___closed__84 = (const lean_object*)&l_main___redArg___closed__84_value;
+static const lean_string_object l_main___redArg___closed__85_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 18, .m_capacity = 18, .m_length = 17, .m_data = "NFR_ResultForward"};
+static const lean_object* l_main___redArg___closed__85 = (const lean_object*)&l_main___redArg___closed__85_value;
+static const lean_ctor_object l_main___redArg___closed__86_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__85_value),LEAN_SCALAR_PTR_LITERAL(235, 47, 199, 112, 158, 237, 106, 194)}};
+static const lean_object* l_main___redArg___closed__86 = (const lean_object*)&l_main___redArg___closed__86_value;
+static const lean_ctor_object l_main___redArg___closed__87_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__86_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
+static const lean_object* l_main___redArg___closed__87 = (const lean_object*)&l_main___redArg___closed__87_value;
+static const lean_string_object l_main___redArg___closed__88_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 25, .m_capacity = 25, .m_length = 24, .m_data = "NFR_ResultForwardHelpers"};
+static const lean_object* l_main___redArg___closed__88 = (const lean_object*)&l_main___redArg___closed__88_value;
+static const lean_ctor_object l_main___redArg___closed__89_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 8, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__88_value),LEAN_SCALAR_PTR_LITERAL(222, 184, 135, 91, 18, 142, 148, 41)}};
+static const lean_object* l_main___redArg___closed__89 = (const lean_object*)&l_main___redArg___closed__89_value;
+static const lean_ctor_object l_main___redArg___closed__90_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 8, .m_other = 1, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__89_value),LEAN_SCALAR_PTR_LITERAL(1, 1, 0, 0, 0, 0, 0, 0)}};
+static const lean_object* l_main___redArg___closed__90 = (const lean_object*)&l_main___redArg___closed__90_value;
+static const lean_array_object l_main___redArg___closed__91_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_array_object) + sizeof(void*)*30, .m_other = 0, .m_tag = 246}, .m_size = 30, .m_capacity = 30, .m_data = {((lean_object*)&l_main___redArg___closed__3_value),((lean_object*)&l_main___redArg___closed__6_value),((lean_object*)&l_main___redArg___closed__9_value),((lean_object*)&l_main___redArg___closed__12_value),((lean_object*)&l_main___redArg___closed__15_value),((lean_object*)&l_main___redArg___closed__18_value),((lean_object*)&l_main___redArg___closed__21_value),((lean_object*)&l_main___redArg___closed__24_value),((lean_object*)&l_main___redArg___closed__27_value),((lean_object*)&l_main___redArg___closed__30_value),((lean_object*)&l_main___redArg___closed__33_value),((lean_object*)&l_main___redArg___closed__36_value),((lean_object*)&l_main___redArg___closed__39_value),((lean_object*)&l_main___redArg___closed__42_value),((lean_object*)&l_main___redArg___closed__45_value),((lean_object*)&l_main___redArg___closed__48_value),((lean_object*)&l_main___redArg___closed__51_value),((lean_object*)&l_main___redArg___closed__54_value),((lean_object*)&l_main___redArg___closed__57_value),((lean_object*)&l_main___redArg___closed__60_value),((lean_object*)&l_main___redArg___closed__63_value),((lean_object*)&l_main___redArg___closed__66_value),((lean_object*)&l_main___redArg___closed__69_value),((lean_object*)&l_main___redArg___closed__72_value),((lean_object*)&l_main___redArg___closed__75_value),((lean_object*)&l_main___redArg___closed__78_value),((lean_object*)&l_main___redArg___closed__81_value),((lean_object*)&l_main___redArg___closed__84_value),((lean_object*)&l_main___redArg___closed__87_value),((lean_object*)&l_main___redArg___closed__90_value)}};
+static const lean_object* l_main___redArg___closed__91 = (const lean_object*)&l_main___redArg___closed__91_value;
+static const lean_array_object l_main___redArg___closed__92_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_array_object) + sizeof(void*)*0, .m_other = 0, .m_tag = 246}, .m_size = 0, .m_capacity = 0, .m_data = {}};
+static const lean_object* l_main___redArg___closed__92 = (const lean_object*)&l_main___redArg___closed__92_value;
+static const lean_string_object l_main___redArg___closed__93_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 17, .m_capacity = 17, .m_length = 16, .m_data = "NFV_LOADED.jsonl"};
+static const lean_object* l_main___redArg___closed__93 = (const lean_object*)&l_main___redArg___closed__93_value;
+static const lean_ctor_object l_main___redArg___closed__94_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)(((size_t)(0) << 1) | 1))}};
+static const lean_object* l_main___redArg___closed__94 = (const lean_object*)&l_main___redArg___closed__94_value;
+static const lean_ctor_object l_main___redArg___closed__95_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)(((size_t)(0) << 1) | 1)),((lean_object*)&l_main___redArg___closed__94_value)}};
+static const lean_object* l_main___redArg___closed__95 = (const lean_object*)&l_main___redArg___closed__95_value;
+static const lean_string_object l_main___redArg___closed__96_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 8, .m_capacity = 8, .m_length = 7, .m_data = "modules"};
+static const lean_object* l_main___redArg___closed__96 = (const lean_object*)&l_main___redArg___closed__96_value;
+static const lean_string_object l_main___redArg___closed__97_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 20, .m_capacity = 20, .m_length = 19, .m_data = "dangling_references"};
+static const lean_object* l_main___redArg___closed__97 = (const lean_object*)&l_main___redArg___closed__97_value;
+static const lean_string_object l_main___redArg___closed__98_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 6, .m_capacity = 6, .m_length = 5, .m_data = "scope"};
+static const lean_object* l_main___redArg___closed__98 = (const lean_object*)&l_main___redArg___closed__98_value;
+static const lean_string_object l_main___redArg___closed__99_value = {.m_header = {.m_rc = 0, .m_cs_sz = 0, .m_other = 0, .m_tag = 249}, .m_size = 116, .m_capacity = 116, .m_length = 115, .m_data = "loaded NFV and inherited NFR closure; raw import lists reported, no independent upstream import baseline comparison"};
+static const lean_object* l_main___redArg___closed__99 = (const lean_object*)&l_main___redArg___closed__99_value;
+static const lean_ctor_object l_main___redArg___closed__100_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*1 + 0, .m_other = 1, .m_tag = 3}, .m_objs = {((lean_object*)&l_main___redArg___closed__99_value)}};
+static const lean_object* l_main___redArg___closed__100 = (const lean_object*)&l_main___redArg___closed__100_value;
+static const lean_ctor_object l_main___redArg___closed__101_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 0}, .m_objs = {((lean_object*)&l_main___redArg___closed__98_value),((lean_object*)&l_main___redArg___closed__100_value)}};
+static const lean_object* l_main___redArg___closed__101 = (const lean_object*)&l_main___redArg___closed__101_value;
+static const lean_ctor_object l_main___redArg___closed__102_value = {.m_header = {.m_rc = 0, .m_cs_sz = sizeof(lean_ctor_object) + sizeof(void*)*2 + 0, .m_other = 2, .m_tag = 1}, .m_objs = {((lean_object*)&l_main___redArg___closed__101_value),((lean_object*)(((size_t)(0) << 1) | 1))}};
+static const lean_object* l_main___redArg___closed__102 = (const lean_object*)&l_main___redArg___closed__102_value;
 LEAN_EXPORT lean_object* l_main___redArg___boxed__const__1;
 LEAN_EXPORT lean_object* l_main___redArg___boxed__const__2;
 LEAN_EXPORT lean_object* l_main___redArg();
@@ -1325,629 +1367,629 @@ return v_res_357_;
 static lean_object* _init_l_main___redArg___boxed__const__1(void){
 _start:
 {
-uint32_t v___x_588_; lean_object* v___x_589_; 
-v___x_588_ = 1;
-v___x_589_ = lean_box_uint32(v___x_588_);
-return v___x_589_;
+uint32_t v___x_651_; lean_object* v___x_652_; 
+v___x_651_ = 1;
+v___x_652_ = lean_box_uint32(v___x_651_);
+return v___x_652_;
 }
 }
 static lean_object* _init_l_main___redArg___boxed__const__2(void){
 _start:
 {
-uint32_t v___x_590_; lean_object* v___x_591_; 
-v___x_590_ = 0;
-v___x_591_ = lean_box_uint32(v___x_590_);
-return v___x_591_;
+uint32_t v___x_653_; lean_object* v___x_654_; 
+v___x_653_ = 0;
+v___x_654_ = lean_box_uint32(v___x_653_);
+return v___x_654_;
 }
 }
 LEAN_EXPORT lean_object* l_main___redArg(){
 _start:
 {
-lean_object* v___x_593_; lean_object* v___x_594_; lean_object* v___x_595_; 
-v___x_593_ = l_NFO__MemoryLimit_set();
-v___x_594_ = ((lean_object*)(l_main___redArg___closed__0));
-v___x_595_ = l_Lean_findSysroot(v___x_594_);
-if (lean_obj_tag(v___x_595_) == 0)
+lean_object* v___x_656_; lean_object* v___x_657_; lean_object* v___x_658_; 
+v___x_656_ = l_NFO__MemoryLimit_set();
+v___x_657_ = ((lean_object*)(l_main___redArg___closed__0));
+v___x_658_ = l_Lean_findSysroot(v___x_657_);
+if (lean_obj_tag(v___x_658_) == 0)
 {
-lean_object* v_a_596_; lean_object* v___x_597_; lean_object* v___x_598_; 
-v_a_596_ = lean_ctor_get(v___x_595_, 0);
-lean_inc(v_a_596_);
-lean_dec_ref_known(v___x_595_, 1);
-v___x_597_ = lean_box(0);
-v___x_598_ = l_Lean_initSearchPath(v_a_596_, v___x_597_);
-if (lean_obj_tag(v___x_598_) == 0)
+lean_object* v_a_659_; lean_object* v___x_660_; lean_object* v___x_661_; 
+v_a_659_ = lean_ctor_get(v___x_658_, 0);
+lean_inc(v_a_659_);
+lean_dec_ref_known(v___x_658_, 1);
+v___x_660_ = lean_box(0);
+v___x_661_ = l_Lean_initSearchPath(v_a_659_, v___x_660_);
+if (lean_obj_tag(v___x_661_) == 0)
 {
-lean_object* v___x_599_; 
-lean_dec_ref_known(v___x_598_, 1);
-v___x_599_ = lean_enable_initializer_execution();
-if (lean_obj_tag(v___x_599_) == 0)
+lean_object* v___x_662_; 
+lean_dec_ref_known(v___x_661_, 1);
+v___x_662_ = lean_enable_initializer_execution();
+if (lean_obj_tag(v___x_662_) == 0)
 {
-uint8_t v___x_600_; uint8_t v___x_601_; lean_object* v___x_602_; lean_object* v___x_603_; uint32_t v___x_604_; lean_object* v___x_605_; lean_object* v___x_606_; uint8_t v___x_607_; lean_object* v___x_608_; lean_object* v___x_609_; 
-lean_dec_ref_known(v___x_599_, 1);
-v___x_600_ = 1;
-v___x_601_ = 0;
-v___x_602_ = ((lean_object*)(l_main___redArg___closed__70));
-v___x_603_ = l_Lean_Options_empty;
-v___x_604_ = 0;
-v___x_605_ = lean_unsigned_to_nat(0u);
-v___x_606_ = ((lean_object*)(l_main___redArg___closed__71));
-v___x_607_ = 2;
-v___x_608_ = lean_box(1);
-v___x_609_ = l_Lean_importModules(v___x_602_, v___x_603_, v___x_604_, v___x_606_, v___x_601_, v___x_600_, v___x_607_, v___x_608_);
-if (lean_obj_tag(v___x_609_) == 0)
+uint8_t v___x_663_; uint8_t v___x_664_; lean_object* v___x_665_; lean_object* v___x_666_; uint32_t v___x_667_; lean_object* v___x_668_; lean_object* v___x_669_; uint8_t v___x_670_; lean_object* v___x_671_; lean_object* v___x_672_; 
+lean_dec_ref_known(v___x_662_, 1);
+v___x_663_ = 1;
+v___x_664_ = 0;
+v___x_665_ = ((lean_object*)(l_main___redArg___closed__91));
+v___x_666_ = l_Lean_Options_empty;
+v___x_667_ = 0;
+v___x_668_ = lean_unsigned_to_nat(0u);
+v___x_669_ = ((lean_object*)(l_main___redArg___closed__92));
+v___x_670_ = 2;
+v___x_671_ = lean_box(1);
+v___x_672_ = l_Lean_importModules(v___x_665_, v___x_666_, v___x_667_, v___x_669_, v___x_664_, v___x_663_, v___x_670_, v___x_671_);
+if (lean_obj_tag(v___x_672_) == 0)
 {
-lean_object* v_a_610_; lean_object* v___x_611_; uint8_t v___x_612_; lean_object* v___x_613_; 
-v_a_610_ = lean_ctor_get(v___x_609_, 0);
-lean_inc(v_a_610_);
-lean_dec_ref_known(v___x_609_, 1);
-v___x_611_ = ((lean_object*)(l_main___redArg___closed__72));
-v___x_612_ = 1;
-v___x_613_ = lean_io_prim_handle_mk(v___x_611_, v___x_612_);
-if (lean_obj_tag(v___x_613_) == 0)
+lean_object* v_a_673_; lean_object* v___x_674_; uint8_t v___x_675_; lean_object* v___x_676_; 
+v_a_673_ = lean_ctor_get(v___x_672_, 0);
+lean_inc(v_a_673_);
+lean_dec_ref_known(v___x_672_, 1);
+v___x_674_ = ((lean_object*)(l_main___redArg___closed__93));
+v___x_675_ = 1;
+v___x_676_ = lean_io_prim_handle_mk(v___x_674_, v___x_675_);
+if (lean_obj_tag(v___x_676_) == 0)
 {
-lean_object* v_a_614_; lean_object* v___x_615_; lean_object* v___x_616_; lean_object* v___x_617_; lean_object* v___x_618_; lean_object* v___x_619_; lean_object* v___x_620_; lean_object* v___x_621_; lean_object* v___x_622_; 
-v_a_614_ = lean_ctor_get(v___x_613_, 0);
-lean_inc(v_a_614_);
-lean_dec_ref_known(v___x_613_, 1);
-v___x_615_ = l_Lean_Environment_setExporting(v_a_610_, v___x_601_);
-v___x_616_ = l_Lean_Environment_header(v___x_615_);
-lean_inc_ref(v___x_616_);
-v___x_617_ = l_Lean_EnvironmentHeader_moduleNames(v___x_616_);
-v___x_618_ = lean_array_get_size(v___x_617_);
-v___x_619_ = lean_unsigned_to_nat(1u);
-v___x_620_ = lean_alloc_ctor(0, 3, 0);
-lean_ctor_set(v___x_620_, 0, v___x_605_);
-lean_ctor_set(v___x_620_, 1, v___x_618_);
-lean_ctor_set(v___x_620_, 2, v___x_619_);
-v___x_621_ = ((lean_object*)(l_main___redArg___closed__74));
-v___x_622_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg(v___x_616_, v___x_615_, v___x_617_, v_a_614_, v___x_620_, v___x_621_, v___x_605_);
-lean_dec_ref_known(v___x_620_, 3);
-lean_dec(v_a_614_);
-lean_dec_ref(v___x_617_);
-lean_dec_ref(v___x_616_);
-if (lean_obj_tag(v___x_622_) == 0)
+lean_object* v_a_677_; lean_object* v___x_678_; lean_object* v___x_679_; lean_object* v___x_680_; lean_object* v___x_681_; lean_object* v___x_682_; lean_object* v___x_683_; lean_object* v___x_684_; lean_object* v___x_685_; 
+v_a_677_ = lean_ctor_get(v___x_676_, 0);
+lean_inc(v_a_677_);
+lean_dec_ref_known(v___x_676_, 1);
+v___x_678_ = l_Lean_Environment_setExporting(v_a_673_, v___x_664_);
+v___x_679_ = l_Lean_Environment_header(v___x_678_);
+lean_inc_ref(v___x_679_);
+v___x_680_ = l_Lean_EnvironmentHeader_moduleNames(v___x_679_);
+v___x_681_ = lean_array_get_size(v___x_680_);
+v___x_682_ = lean_unsigned_to_nat(1u);
+v___x_683_ = lean_alloc_ctor(0, 3, 0);
+lean_ctor_set(v___x_683_, 0, v___x_668_);
+lean_ctor_set(v___x_683_, 1, v___x_681_);
+lean_ctor_set(v___x_683_, 2, v___x_682_);
+v___x_684_ = ((lean_object*)(l_main___redArg___closed__95));
+v___x_685_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg(v___x_679_, v___x_678_, v___x_680_, v_a_677_, v___x_683_, v___x_684_, v___x_668_);
+lean_dec_ref_known(v___x_683_, 3);
+lean_dec(v_a_677_);
+lean_dec_ref(v___x_680_);
+lean_dec_ref(v___x_679_);
+if (lean_obj_tag(v___x_685_) == 0)
 {
-lean_object* v_a_623_; lean_object* v_snd_624_; lean_object* v_fst_625_; lean_object* v___x_627_; uint8_t v_isShared_628_; uint8_t v_isSharedCheck_685_; 
-v_a_623_ = lean_ctor_get(v___x_622_, 0);
-lean_inc(v_a_623_);
-lean_dec_ref_known(v___x_622_, 1);
-v_snd_624_ = lean_ctor_get(v_a_623_, 1);
-v_fst_625_ = lean_ctor_get(v_a_623_, 0);
-v_isSharedCheck_685_ = !lean_is_exclusive(v_a_623_);
-if (v_isSharedCheck_685_ == 0)
-{
-v___x_627_ = v_a_623_;
-v_isShared_628_ = v_isSharedCheck_685_;
-goto v_resetjp_626_;
-}
-else
-{
-lean_inc(v_snd_624_);
-lean_inc(v_fst_625_);
-lean_dec(v_a_623_);
-v___x_627_ = lean_box(0);
-v_isShared_628_ = v_isSharedCheck_685_;
-goto v_resetjp_626_;
-}
-v_resetjp_626_:
-{
-lean_object* v_fst_629_; lean_object* v_snd_630_; lean_object* v___x_632_; uint8_t v_isShared_633_; uint8_t v_isSharedCheck_684_; 
-v_fst_629_ = lean_ctor_get(v_snd_624_, 0);
-v_snd_630_ = lean_ctor_get(v_snd_624_, 1);
-v_isSharedCheck_684_ = !lean_is_exclusive(v_snd_624_);
-if (v_isSharedCheck_684_ == 0)
-{
-v___x_632_ = v_snd_624_;
-v_isShared_633_ = v_isSharedCheck_684_;
-goto v_resetjp_631_;
-}
-else
-{
-lean_inc(v_snd_630_);
-lean_inc(v_fst_629_);
-lean_dec(v_snd_624_);
-v___x_632_ = lean_box(0);
-v_isShared_633_ = v_isSharedCheck_684_;
-goto v_resetjp_631_;
-}
-v_resetjp_631_:
-{
-lean_object* v___x_634_; lean_object* v___x_635_; lean_object* v___x_636_; lean_object* v___x_638_; 
-v___x_634_ = ((lean_object*)(l_main___redArg___closed__75));
-v___x_635_ = l_Lean_JsonNumber_fromNat(v___x_618_);
-v___x_636_ = lean_alloc_ctor(2, 1, 0);
-lean_ctor_set(v___x_636_, 0, v___x_635_);
-if (v_isShared_633_ == 0)
-{
-lean_ctor_set(v___x_632_, 1, v___x_636_);
-lean_ctor_set(v___x_632_, 0, v___x_634_);
-v___x_638_ = v___x_632_;
-goto v_reusejp_637_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_683_; 
-v_reuseFailAlloc_683_ = lean_alloc_ctor(0, 2, 0);
-lean_ctor_set(v_reuseFailAlloc_683_, 0, v___x_634_);
-lean_ctor_set(v_reuseFailAlloc_683_, 1, v___x_636_);
-v___x_638_ = v_reuseFailAlloc_683_;
-goto v_reusejp_637_;
-}
-v_reusejp_637_:
-{
-lean_object* v___x_639_; lean_object* v___x_640_; lean_object* v___x_641_; lean_object* v___x_643_; 
-v___x_639_ = ((lean_object*)(l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg___closed__4));
-v___x_640_ = l_Lean_JsonNumber_fromNat(v_fst_629_);
-v___x_641_ = lean_alloc_ctor(2, 1, 0);
-lean_ctor_set(v___x_641_, 0, v___x_640_);
-if (v_isShared_628_ == 0)
-{
-lean_ctor_set(v___x_627_, 1, v___x_641_);
-lean_ctor_set(v___x_627_, 0, v___x_639_);
-v___x_643_ = v___x_627_;
-goto v_reusejp_642_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_682_; 
-v_reuseFailAlloc_682_ = lean_alloc_ctor(0, 2, 0);
-lean_ctor_set(v_reuseFailAlloc_682_, 0, v___x_639_);
-lean_ctor_set(v_reuseFailAlloc_682_, 1, v___x_641_);
-v___x_643_ = v_reuseFailAlloc_682_;
-goto v_reusejp_642_;
-}
-v_reusejp_642_:
-{
-lean_object* v___x_644_; lean_object* v___x_645_; lean_object* v___x_646_; lean_object* v___x_647_; lean_object* v___x_648_; lean_object* v___x_649_; lean_object* v___x_650_; lean_object* v___x_651_; lean_object* v___x_652_; lean_object* v___x_653_; lean_object* v___x_654_; lean_object* v___x_655_; lean_object* v___x_656_; lean_object* v___x_657_; lean_object* v___x_658_; lean_object* v___x_659_; 
-v___x_644_ = ((lean_object*)(l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg___closed__5));
-v___x_645_ = l_Lean_JsonNumber_fromNat(v_snd_630_);
-v___x_646_ = lean_alloc_ctor(2, 1, 0);
-lean_ctor_set(v___x_646_, 0, v___x_645_);
-v___x_647_ = lean_alloc_ctor(0, 2, 0);
-lean_ctor_set(v___x_647_, 0, v___x_644_);
-lean_ctor_set(v___x_647_, 1, v___x_646_);
-v___x_648_ = ((lean_object*)(l_main___redArg___closed__76));
-lean_inc(v_fst_625_);
-v___x_649_ = l_Lean_JsonNumber_fromNat(v_fst_625_);
-v___x_650_ = lean_alloc_ctor(2, 1, 0);
-lean_ctor_set(v___x_650_, 0, v___x_649_);
-v___x_651_ = lean_alloc_ctor(0, 2, 0);
-lean_ctor_set(v___x_651_, 0, v___x_648_);
-lean_ctor_set(v___x_651_, 1, v___x_650_);
-v___x_652_ = ((lean_object*)(l_main___redArg___closed__81));
-v___x_653_ = lean_alloc_ctor(1, 2, 0);
-lean_ctor_set(v___x_653_, 0, v___x_651_);
-lean_ctor_set(v___x_653_, 1, v___x_652_);
-v___x_654_ = lean_alloc_ctor(1, 2, 0);
-lean_ctor_set(v___x_654_, 0, v___x_647_);
-lean_ctor_set(v___x_654_, 1, v___x_653_);
-v___x_655_ = lean_alloc_ctor(1, 2, 0);
-lean_ctor_set(v___x_655_, 0, v___x_643_);
-lean_ctor_set(v___x_655_, 1, v___x_654_);
-v___x_656_ = lean_alloc_ctor(1, 2, 0);
-lean_ctor_set(v___x_656_, 0, v___x_638_);
-lean_ctor_set(v___x_656_, 1, v___x_655_);
-v___x_657_ = l_Lean_Json_mkObj(v___x_656_);
-lean_dec_ref_known(v___x_656_, 2);
-v___x_658_ = l_Lean_Json_compress(v___x_657_);
-v___x_659_ = l_IO_println___at___00__private_Lean_Shell_0__Lean_ShellOptions_process_spec__3(v___x_658_);
-if (lean_obj_tag(v___x_659_) == 0)
-{
-lean_object* v___x_661_; uint8_t v_isShared_662_; uint8_t v_isSharedCheck_672_; 
-v_isSharedCheck_672_ = !lean_is_exclusive(v___x_659_);
-if (v_isSharedCheck_672_ == 0)
-{
-lean_object* v_unused_673_; 
-v_unused_673_ = lean_ctor_get(v___x_659_, 0);
-lean_dec(v_unused_673_);
-v___x_661_ = v___x_659_;
-v_isShared_662_ = v_isSharedCheck_672_;
-goto v_resetjp_660_;
-}
-else
-{
-lean_dec(v___x_659_);
-v___x_661_ = lean_box(0);
-v_isShared_662_ = v_isSharedCheck_672_;
-goto v_resetjp_660_;
-}
-v_resetjp_660_:
-{
-uint8_t v___x_663_; 
-v___x_663_ = lean_nat_dec_eq(v_fst_625_, v___x_605_);
-lean_dec(v_fst_625_);
-if (v___x_663_ == 0)
-{
-lean_object* v___x_664_; lean_object* v___x_666_; 
-v___x_664_ = l_main___redArg___boxed__const__1;
-if (v_isShared_662_ == 0)
-{
-lean_ctor_set(v___x_661_, 0, v___x_664_);
-v___x_666_ = v___x_661_;
-goto v_reusejp_665_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_667_; 
-v_reuseFailAlloc_667_ = lean_alloc_ctor(0, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_667_, 0, v___x_664_);
-v___x_666_ = v_reuseFailAlloc_667_;
-goto v_reusejp_665_;
-}
-v_reusejp_665_:
-{
-return v___x_666_;
-}
-}
-else
-{
-lean_object* v___x_668_; lean_object* v___x_670_; 
-v___x_668_ = l_main___redArg___boxed__const__2;
-if (v_isShared_662_ == 0)
-{
-lean_ctor_set(v___x_661_, 0, v___x_668_);
-v___x_670_ = v___x_661_;
-goto v_reusejp_669_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_671_; 
-v_reuseFailAlloc_671_ = lean_alloc_ctor(0, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_671_, 0, v___x_668_);
-v___x_670_ = v_reuseFailAlloc_671_;
-goto v_reusejp_669_;
-}
-v_reusejp_669_:
-{
-return v___x_670_;
-}
-}
-}
-}
-else
-{
-lean_object* v_a_674_; lean_object* v___x_676_; uint8_t v_isShared_677_; uint8_t v_isSharedCheck_681_; 
-lean_dec(v_fst_625_);
-v_a_674_ = lean_ctor_get(v___x_659_, 0);
-v_isSharedCheck_681_ = !lean_is_exclusive(v___x_659_);
-if (v_isSharedCheck_681_ == 0)
-{
-v___x_676_ = v___x_659_;
-v_isShared_677_ = v_isSharedCheck_681_;
-goto v_resetjp_675_;
-}
-else
-{
-lean_inc(v_a_674_);
-lean_dec(v___x_659_);
-v___x_676_ = lean_box(0);
-v_isShared_677_ = v_isSharedCheck_681_;
-goto v_resetjp_675_;
-}
-v_resetjp_675_:
-{
-lean_object* v___x_679_; 
-if (v_isShared_677_ == 0)
-{
-v___x_679_ = v___x_676_;
-goto v_reusejp_678_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_680_; 
-v_reuseFailAlloc_680_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_680_, 0, v_a_674_);
-v___x_679_ = v_reuseFailAlloc_680_;
-goto v_reusejp_678_;
-}
-v_reusejp_678_:
-{
-return v___x_679_;
-}
-}
-}
-}
-}
-}
-}
-}
-else
-{
-lean_object* v_a_686_; lean_object* v___x_688_; uint8_t v_isShared_689_; uint8_t v_isSharedCheck_693_; 
-v_a_686_ = lean_ctor_get(v___x_622_, 0);
-v_isSharedCheck_693_ = !lean_is_exclusive(v___x_622_);
-if (v_isSharedCheck_693_ == 0)
-{
-v___x_688_ = v___x_622_;
-v_isShared_689_ = v_isSharedCheck_693_;
-goto v_resetjp_687_;
-}
-else
-{
+lean_object* v_a_686_; lean_object* v_snd_687_; lean_object* v_fst_688_; lean_object* v___x_690_; uint8_t v_isShared_691_; uint8_t v_isSharedCheck_748_; 
+v_a_686_ = lean_ctor_get(v___x_685_, 0);
 lean_inc(v_a_686_);
-lean_dec(v___x_622_);
-v___x_688_ = lean_box(0);
-v_isShared_689_ = v_isSharedCheck_693_;
-goto v_resetjp_687_;
-}
-v_resetjp_687_:
+lean_dec_ref_known(v___x_685_, 1);
+v_snd_687_ = lean_ctor_get(v_a_686_, 1);
+v_fst_688_ = lean_ctor_get(v_a_686_, 0);
+v_isSharedCheck_748_ = !lean_is_exclusive(v_a_686_);
+if (v_isSharedCheck_748_ == 0)
 {
-lean_object* v___x_691_; 
-if (v_isShared_689_ == 0)
-{
-v___x_691_ = v___x_688_;
-goto v_reusejp_690_;
+v___x_690_ = v_a_686_;
+v_isShared_691_ = v_isSharedCheck_748_;
+goto v_resetjp_689_;
 }
 else
 {
-lean_object* v_reuseFailAlloc_692_; 
-v_reuseFailAlloc_692_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_692_, 0, v_a_686_);
-v___x_691_ = v_reuseFailAlloc_692_;
-goto v_reusejp_690_;
+lean_inc(v_snd_687_);
+lean_inc(v_fst_688_);
+lean_dec(v_a_686_);
+v___x_690_ = lean_box(0);
+v_isShared_691_ = v_isSharedCheck_748_;
+goto v_resetjp_689_;
 }
-v_reusejp_690_:
+v_resetjp_689_:
 {
-return v___x_691_;
+lean_object* v_fst_692_; lean_object* v_snd_693_; lean_object* v___x_695_; uint8_t v_isShared_696_; uint8_t v_isSharedCheck_747_; 
+v_fst_692_ = lean_ctor_get(v_snd_687_, 0);
+v_snd_693_ = lean_ctor_get(v_snd_687_, 1);
+v_isSharedCheck_747_ = !lean_is_exclusive(v_snd_687_);
+if (v_isSharedCheck_747_ == 0)
+{
+v___x_695_ = v_snd_687_;
+v_isShared_696_ = v_isSharedCheck_747_;
+goto v_resetjp_694_;
 }
+else
+{
+lean_inc(v_snd_693_);
+lean_inc(v_fst_692_);
+lean_dec(v_snd_687_);
+v___x_695_ = lean_box(0);
+v_isShared_696_ = v_isSharedCheck_747_;
+goto v_resetjp_694_;
 }
+v_resetjp_694_:
+{
+lean_object* v___x_697_; lean_object* v___x_698_; lean_object* v___x_699_; lean_object* v___x_701_; 
+v___x_697_ = ((lean_object*)(l_main___redArg___closed__96));
+v___x_698_ = l_Lean_JsonNumber_fromNat(v___x_681_);
+v___x_699_ = lean_alloc_ctor(2, 1, 0);
+lean_ctor_set(v___x_699_, 0, v___x_698_);
+if (v_isShared_696_ == 0)
+{
+lean_ctor_set(v___x_695_, 1, v___x_699_);
+lean_ctor_set(v___x_695_, 0, v___x_697_);
+v___x_701_ = v___x_695_;
+goto v_reusejp_700_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_746_; 
+v_reuseFailAlloc_746_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v_reuseFailAlloc_746_, 0, v___x_697_);
+lean_ctor_set(v_reuseFailAlloc_746_, 1, v___x_699_);
+v___x_701_ = v_reuseFailAlloc_746_;
+goto v_reusejp_700_;
+}
+v_reusejp_700_:
+{
+lean_object* v___x_702_; lean_object* v___x_703_; lean_object* v___x_704_; lean_object* v___x_706_; 
+v___x_702_ = ((lean_object*)(l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg___closed__4));
+v___x_703_ = l_Lean_JsonNumber_fromNat(v_fst_692_);
+v___x_704_ = lean_alloc_ctor(2, 1, 0);
+lean_ctor_set(v___x_704_, 0, v___x_703_);
+if (v_isShared_691_ == 0)
+{
+lean_ctor_set(v___x_690_, 1, v___x_704_);
+lean_ctor_set(v___x_690_, 0, v___x_702_);
+v___x_706_ = v___x_690_;
+goto v_reusejp_705_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_745_; 
+v_reuseFailAlloc_745_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v_reuseFailAlloc_745_, 0, v___x_702_);
+lean_ctor_set(v_reuseFailAlloc_745_, 1, v___x_704_);
+v___x_706_ = v_reuseFailAlloc_745_;
+goto v_reusejp_705_;
+}
+v_reusejp_705_:
+{
+lean_object* v___x_707_; lean_object* v___x_708_; lean_object* v___x_709_; lean_object* v___x_710_; lean_object* v___x_711_; lean_object* v___x_712_; lean_object* v___x_713_; lean_object* v___x_714_; lean_object* v___x_715_; lean_object* v___x_716_; lean_object* v___x_717_; lean_object* v___x_718_; lean_object* v___x_719_; lean_object* v___x_720_; lean_object* v___x_721_; lean_object* v___x_722_; 
+v___x_707_ = ((lean_object*)(l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg___closed__5));
+v___x_708_ = l_Lean_JsonNumber_fromNat(v_snd_693_);
+v___x_709_ = lean_alloc_ctor(2, 1, 0);
+lean_ctor_set(v___x_709_, 0, v___x_708_);
+v___x_710_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v___x_710_, 0, v___x_707_);
+lean_ctor_set(v___x_710_, 1, v___x_709_);
+v___x_711_ = ((lean_object*)(l_main___redArg___closed__97));
+lean_inc(v_fst_688_);
+v___x_712_ = l_Lean_JsonNumber_fromNat(v_fst_688_);
+v___x_713_ = lean_alloc_ctor(2, 1, 0);
+lean_ctor_set(v___x_713_, 0, v___x_712_);
+v___x_714_ = lean_alloc_ctor(0, 2, 0);
+lean_ctor_set(v___x_714_, 0, v___x_711_);
+lean_ctor_set(v___x_714_, 1, v___x_713_);
+v___x_715_ = ((lean_object*)(l_main___redArg___closed__102));
+v___x_716_ = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(v___x_716_, 0, v___x_714_);
+lean_ctor_set(v___x_716_, 1, v___x_715_);
+v___x_717_ = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(v___x_717_, 0, v___x_710_);
+lean_ctor_set(v___x_717_, 1, v___x_716_);
+v___x_718_ = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(v___x_718_, 0, v___x_706_);
+lean_ctor_set(v___x_718_, 1, v___x_717_);
+v___x_719_ = lean_alloc_ctor(1, 2, 0);
+lean_ctor_set(v___x_719_, 0, v___x_701_);
+lean_ctor_set(v___x_719_, 1, v___x_718_);
+v___x_720_ = l_Lean_Json_mkObj(v___x_719_);
+lean_dec_ref_known(v___x_719_, 2);
+v___x_721_ = l_Lean_Json_compress(v___x_720_);
+v___x_722_ = l_IO_println___at___00__private_Lean_Shell_0__Lean_ShellOptions_process_spec__3(v___x_721_);
+if (lean_obj_tag(v___x_722_) == 0)
+{
+lean_object* v___x_724_; uint8_t v_isShared_725_; uint8_t v_isSharedCheck_735_; 
+v_isSharedCheck_735_ = !lean_is_exclusive(v___x_722_);
+if (v_isSharedCheck_735_ == 0)
+{
+lean_object* v_unused_736_; 
+v_unused_736_ = lean_ctor_get(v___x_722_, 0);
+lean_dec(v_unused_736_);
+v___x_724_ = v___x_722_;
+v_isShared_725_ = v_isSharedCheck_735_;
+goto v_resetjp_723_;
+}
+else
+{
+lean_dec(v___x_722_);
+v___x_724_ = lean_box(0);
+v_isShared_725_ = v_isSharedCheck_735_;
+goto v_resetjp_723_;
+}
+v_resetjp_723_:
+{
+uint8_t v___x_726_; 
+v___x_726_ = lean_nat_dec_eq(v_fst_688_, v___x_668_);
+lean_dec(v_fst_688_);
+if (v___x_726_ == 0)
+{
+lean_object* v___x_727_; lean_object* v___x_729_; 
+v___x_727_ = l_main___redArg___boxed__const__1;
+if (v_isShared_725_ == 0)
+{
+lean_ctor_set(v___x_724_, 0, v___x_727_);
+v___x_729_ = v___x_724_;
+goto v_reusejp_728_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_730_; 
+v_reuseFailAlloc_730_ = lean_alloc_ctor(0, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_730_, 0, v___x_727_);
+v___x_729_ = v_reuseFailAlloc_730_;
+goto v_reusejp_728_;
+}
+v_reusejp_728_:
+{
+return v___x_729_;
 }
 }
 else
 {
-lean_object* v_a_694_; lean_object* v___x_696_; uint8_t v_isShared_697_; uint8_t v_isSharedCheck_701_; 
-lean_dec(v_a_610_);
-v_a_694_ = lean_ctor_get(v___x_613_, 0);
-v_isSharedCheck_701_ = !lean_is_exclusive(v___x_613_);
-if (v_isSharedCheck_701_ == 0)
+lean_object* v___x_731_; lean_object* v___x_733_; 
+v___x_731_ = l_main___redArg___boxed__const__2;
+if (v_isShared_725_ == 0)
 {
-v___x_696_ = v___x_613_;
-v_isShared_697_ = v_isSharedCheck_701_;
-goto v_resetjp_695_;
+lean_ctor_set(v___x_724_, 0, v___x_731_);
+v___x_733_ = v___x_724_;
+goto v_reusejp_732_;
 }
 else
 {
-lean_inc(v_a_694_);
-lean_dec(v___x_613_);
-v___x_696_ = lean_box(0);
-v_isShared_697_ = v_isSharedCheck_701_;
-goto v_resetjp_695_;
+lean_object* v_reuseFailAlloc_734_; 
+v_reuseFailAlloc_734_ = lean_alloc_ctor(0, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_734_, 0, v___x_731_);
+v___x_733_ = v_reuseFailAlloc_734_;
+goto v_reusejp_732_;
 }
-v_resetjp_695_:
+v_reusejp_732_:
 {
-lean_object* v___x_699_; 
-if (v_isShared_697_ == 0)
-{
-v___x_699_ = v___x_696_;
-goto v_reusejp_698_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_700_; 
-v_reuseFailAlloc_700_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_700_, 0, v_a_694_);
-v___x_699_ = v_reuseFailAlloc_700_;
-goto v_reusejp_698_;
-}
-v_reusejp_698_:
-{
-return v___x_699_;
-}
-}
-}
-}
-else
-{
-lean_object* v_a_702_; lean_object* v___x_704_; uint8_t v_isShared_705_; uint8_t v_isSharedCheck_709_; 
-v_a_702_ = lean_ctor_get(v___x_609_, 0);
-v_isSharedCheck_709_ = !lean_is_exclusive(v___x_609_);
-if (v_isSharedCheck_709_ == 0)
-{
-v___x_704_ = v___x_609_;
-v_isShared_705_ = v_isSharedCheck_709_;
-goto v_resetjp_703_;
-}
-else
-{
-lean_inc(v_a_702_);
-lean_dec(v___x_609_);
-v___x_704_ = lean_box(0);
-v_isShared_705_ = v_isSharedCheck_709_;
-goto v_resetjp_703_;
-}
-v_resetjp_703_:
-{
-lean_object* v___x_707_; 
-if (v_isShared_705_ == 0)
-{
-v___x_707_ = v___x_704_;
-goto v_reusejp_706_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_708_; 
-v_reuseFailAlloc_708_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_708_, 0, v_a_702_);
-v___x_707_ = v_reuseFailAlloc_708_;
-goto v_reusejp_706_;
-}
-v_reusejp_706_:
-{
-return v___x_707_;
-}
-}
-}
-}
-else
-{
-lean_object* v_a_710_; lean_object* v___x_712_; uint8_t v_isShared_713_; uint8_t v_isSharedCheck_717_; 
-v_a_710_ = lean_ctor_get(v___x_599_, 0);
-v_isSharedCheck_717_ = !lean_is_exclusive(v___x_599_);
-if (v_isSharedCheck_717_ == 0)
-{
-v___x_712_ = v___x_599_;
-v_isShared_713_ = v_isSharedCheck_717_;
-goto v_resetjp_711_;
-}
-else
-{
-lean_inc(v_a_710_);
-lean_dec(v___x_599_);
-v___x_712_ = lean_box(0);
-v_isShared_713_ = v_isSharedCheck_717_;
-goto v_resetjp_711_;
-}
-v_resetjp_711_:
-{
-lean_object* v___x_715_; 
-if (v_isShared_713_ == 0)
-{
-v___x_715_ = v___x_712_;
-goto v_reusejp_714_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_716_; 
-v_reuseFailAlloc_716_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_716_, 0, v_a_710_);
-v___x_715_ = v_reuseFailAlloc_716_;
-goto v_reusejp_714_;
-}
-v_reusejp_714_:
-{
-return v___x_715_;
-}
-}
-}
-}
-else
-{
-lean_object* v_a_718_; lean_object* v___x_720_; uint8_t v_isShared_721_; uint8_t v_isSharedCheck_725_; 
-v_a_718_ = lean_ctor_get(v___x_598_, 0);
-v_isSharedCheck_725_ = !lean_is_exclusive(v___x_598_);
-if (v_isSharedCheck_725_ == 0)
-{
-v___x_720_ = v___x_598_;
-v_isShared_721_ = v_isSharedCheck_725_;
-goto v_resetjp_719_;
-}
-else
-{
-lean_inc(v_a_718_);
-lean_dec(v___x_598_);
-v___x_720_ = lean_box(0);
-v_isShared_721_ = v_isSharedCheck_725_;
-goto v_resetjp_719_;
-}
-v_resetjp_719_:
-{
-lean_object* v___x_723_; 
-if (v_isShared_721_ == 0)
-{
-v___x_723_ = v___x_720_;
-goto v_reusejp_722_;
-}
-else
-{
-lean_object* v_reuseFailAlloc_724_; 
-v_reuseFailAlloc_724_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_724_, 0, v_a_718_);
-v___x_723_ = v_reuseFailAlloc_724_;
-goto v_reusejp_722_;
-}
-v_reusejp_722_:
-{
-return v___x_723_;
+return v___x_733_;
 }
 }
 }
 }
 else
 {
-lean_object* v_a_726_; lean_object* v___x_728_; uint8_t v_isShared_729_; uint8_t v_isSharedCheck_733_; 
-v_a_726_ = lean_ctor_get(v___x_595_, 0);
-v_isSharedCheck_733_ = !lean_is_exclusive(v___x_595_);
-if (v_isSharedCheck_733_ == 0)
+lean_object* v_a_737_; lean_object* v___x_739_; uint8_t v_isShared_740_; uint8_t v_isSharedCheck_744_; 
+lean_dec(v_fst_688_);
+v_a_737_ = lean_ctor_get(v___x_722_, 0);
+v_isSharedCheck_744_ = !lean_is_exclusive(v___x_722_);
+if (v_isSharedCheck_744_ == 0)
 {
-v___x_728_ = v___x_595_;
-v_isShared_729_ = v_isSharedCheck_733_;
-goto v_resetjp_727_;
+v___x_739_ = v___x_722_;
+v_isShared_740_ = v_isSharedCheck_744_;
+goto v_resetjp_738_;
 }
 else
 {
-lean_inc(v_a_726_);
-lean_dec(v___x_595_);
-v___x_728_ = lean_box(0);
-v_isShared_729_ = v_isSharedCheck_733_;
-goto v_resetjp_727_;
+lean_inc(v_a_737_);
+lean_dec(v___x_722_);
+v___x_739_ = lean_box(0);
+v_isShared_740_ = v_isSharedCheck_744_;
+goto v_resetjp_738_;
 }
-v_resetjp_727_:
+v_resetjp_738_:
 {
-lean_object* v___x_731_; 
-if (v_isShared_729_ == 0)
+lean_object* v___x_742_; 
+if (v_isShared_740_ == 0)
 {
-v___x_731_ = v___x_728_;
-goto v_reusejp_730_;
+v___x_742_ = v___x_739_;
+goto v_reusejp_741_;
 }
 else
 {
-lean_object* v_reuseFailAlloc_732_; 
-v_reuseFailAlloc_732_ = lean_alloc_ctor(1, 1, 0);
-lean_ctor_set(v_reuseFailAlloc_732_, 0, v_a_726_);
-v___x_731_ = v_reuseFailAlloc_732_;
-goto v_reusejp_730_;
+lean_object* v_reuseFailAlloc_743_; 
+v_reuseFailAlloc_743_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_743_, 0, v_a_737_);
+v___x_742_ = v_reuseFailAlloc_743_;
+goto v_reusejp_741_;
 }
-v_reusejp_730_:
+v_reusejp_741_:
 {
-return v___x_731_;
+return v___x_742_;
 }
 }
 }
 }
 }
-LEAN_EXPORT lean_object* l_main___redArg___boxed(lean_object* v_a_734_){
+}
+}
+}
+else
+{
+lean_object* v_a_749_; lean_object* v___x_751_; uint8_t v_isShared_752_; uint8_t v_isSharedCheck_756_; 
+v_a_749_ = lean_ctor_get(v___x_685_, 0);
+v_isSharedCheck_756_ = !lean_is_exclusive(v___x_685_);
+if (v_isSharedCheck_756_ == 0)
+{
+v___x_751_ = v___x_685_;
+v_isShared_752_ = v_isSharedCheck_756_;
+goto v_resetjp_750_;
+}
+else
+{
+lean_inc(v_a_749_);
+lean_dec(v___x_685_);
+v___x_751_ = lean_box(0);
+v_isShared_752_ = v_isSharedCheck_756_;
+goto v_resetjp_750_;
+}
+v_resetjp_750_:
+{
+lean_object* v___x_754_; 
+if (v_isShared_752_ == 0)
+{
+v___x_754_ = v___x_751_;
+goto v_reusejp_753_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_755_; 
+v_reuseFailAlloc_755_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_755_, 0, v_a_749_);
+v___x_754_ = v_reuseFailAlloc_755_;
+goto v_reusejp_753_;
+}
+v_reusejp_753_:
+{
+return v___x_754_;
+}
+}
+}
+}
+else
+{
+lean_object* v_a_757_; lean_object* v___x_759_; uint8_t v_isShared_760_; uint8_t v_isSharedCheck_764_; 
+lean_dec(v_a_673_);
+v_a_757_ = lean_ctor_get(v___x_676_, 0);
+v_isSharedCheck_764_ = !lean_is_exclusive(v___x_676_);
+if (v_isSharedCheck_764_ == 0)
+{
+v___x_759_ = v___x_676_;
+v_isShared_760_ = v_isSharedCheck_764_;
+goto v_resetjp_758_;
+}
+else
+{
+lean_inc(v_a_757_);
+lean_dec(v___x_676_);
+v___x_759_ = lean_box(0);
+v_isShared_760_ = v_isSharedCheck_764_;
+goto v_resetjp_758_;
+}
+v_resetjp_758_:
+{
+lean_object* v___x_762_; 
+if (v_isShared_760_ == 0)
+{
+v___x_762_ = v___x_759_;
+goto v_reusejp_761_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_763_; 
+v_reuseFailAlloc_763_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_763_, 0, v_a_757_);
+v___x_762_ = v_reuseFailAlloc_763_;
+goto v_reusejp_761_;
+}
+v_reusejp_761_:
+{
+return v___x_762_;
+}
+}
+}
+}
+else
+{
+lean_object* v_a_765_; lean_object* v___x_767_; uint8_t v_isShared_768_; uint8_t v_isSharedCheck_772_; 
+v_a_765_ = lean_ctor_get(v___x_672_, 0);
+v_isSharedCheck_772_ = !lean_is_exclusive(v___x_672_);
+if (v_isSharedCheck_772_ == 0)
+{
+v___x_767_ = v___x_672_;
+v_isShared_768_ = v_isSharedCheck_772_;
+goto v_resetjp_766_;
+}
+else
+{
+lean_inc(v_a_765_);
+lean_dec(v___x_672_);
+v___x_767_ = lean_box(0);
+v_isShared_768_ = v_isSharedCheck_772_;
+goto v_resetjp_766_;
+}
+v_resetjp_766_:
+{
+lean_object* v___x_770_; 
+if (v_isShared_768_ == 0)
+{
+v___x_770_ = v___x_767_;
+goto v_reusejp_769_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_771_; 
+v_reuseFailAlloc_771_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_771_, 0, v_a_765_);
+v___x_770_ = v_reuseFailAlloc_771_;
+goto v_reusejp_769_;
+}
+v_reusejp_769_:
+{
+return v___x_770_;
+}
+}
+}
+}
+else
+{
+lean_object* v_a_773_; lean_object* v___x_775_; uint8_t v_isShared_776_; uint8_t v_isSharedCheck_780_; 
+v_a_773_ = lean_ctor_get(v___x_662_, 0);
+v_isSharedCheck_780_ = !lean_is_exclusive(v___x_662_);
+if (v_isSharedCheck_780_ == 0)
+{
+v___x_775_ = v___x_662_;
+v_isShared_776_ = v_isSharedCheck_780_;
+goto v_resetjp_774_;
+}
+else
+{
+lean_inc(v_a_773_);
+lean_dec(v___x_662_);
+v___x_775_ = lean_box(0);
+v_isShared_776_ = v_isSharedCheck_780_;
+goto v_resetjp_774_;
+}
+v_resetjp_774_:
+{
+lean_object* v___x_778_; 
+if (v_isShared_776_ == 0)
+{
+v___x_778_ = v___x_775_;
+goto v_reusejp_777_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_779_; 
+v_reuseFailAlloc_779_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_779_, 0, v_a_773_);
+v___x_778_ = v_reuseFailAlloc_779_;
+goto v_reusejp_777_;
+}
+v_reusejp_777_:
+{
+return v___x_778_;
+}
+}
+}
+}
+else
+{
+lean_object* v_a_781_; lean_object* v___x_783_; uint8_t v_isShared_784_; uint8_t v_isSharedCheck_788_; 
+v_a_781_ = lean_ctor_get(v___x_661_, 0);
+v_isSharedCheck_788_ = !lean_is_exclusive(v___x_661_);
+if (v_isSharedCheck_788_ == 0)
+{
+v___x_783_ = v___x_661_;
+v_isShared_784_ = v_isSharedCheck_788_;
+goto v_resetjp_782_;
+}
+else
+{
+lean_inc(v_a_781_);
+lean_dec(v___x_661_);
+v___x_783_ = lean_box(0);
+v_isShared_784_ = v_isSharedCheck_788_;
+goto v_resetjp_782_;
+}
+v_resetjp_782_:
+{
+lean_object* v___x_786_; 
+if (v_isShared_784_ == 0)
+{
+v___x_786_ = v___x_783_;
+goto v_reusejp_785_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_787_; 
+v_reuseFailAlloc_787_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_787_, 0, v_a_781_);
+v___x_786_ = v_reuseFailAlloc_787_;
+goto v_reusejp_785_;
+}
+v_reusejp_785_:
+{
+return v___x_786_;
+}
+}
+}
+}
+else
+{
+lean_object* v_a_789_; lean_object* v___x_791_; uint8_t v_isShared_792_; uint8_t v_isSharedCheck_796_; 
+v_a_789_ = lean_ctor_get(v___x_658_, 0);
+v_isSharedCheck_796_ = !lean_is_exclusive(v___x_658_);
+if (v_isSharedCheck_796_ == 0)
+{
+v___x_791_ = v___x_658_;
+v_isShared_792_ = v_isSharedCheck_796_;
+goto v_resetjp_790_;
+}
+else
+{
+lean_inc(v_a_789_);
+lean_dec(v___x_658_);
+v___x_791_ = lean_box(0);
+v_isShared_792_ = v_isSharedCheck_796_;
+goto v_resetjp_790_;
+}
+v_resetjp_790_:
+{
+lean_object* v___x_794_; 
+if (v_isShared_792_ == 0)
+{
+v___x_794_ = v___x_791_;
+goto v_reusejp_793_;
+}
+else
+{
+lean_object* v_reuseFailAlloc_795_; 
+v_reuseFailAlloc_795_ = lean_alloc_ctor(1, 1, 0);
+lean_ctor_set(v_reuseFailAlloc_795_, 0, v_a_789_);
+v___x_794_ = v_reuseFailAlloc_795_;
+goto v_reusejp_793_;
+}
+v_reusejp_793_:
+{
+return v___x_794_;
+}
+}
+}
+}
+}
+LEAN_EXPORT lean_object* l_main___redArg___boxed(lean_object* v_a_797_){
 _start:
 {
-lean_object* v_res_735_; 
-v_res_735_ = l_main___redArg();
-return v_res_735_;
+lean_object* v_res_798_; 
+v_res_798_ = l_main___redArg();
+return v_res_798_;
 }
 }
-LEAN_EXPORT lean_object* _lean_main(lean_object* v___args_736_){
+LEAN_EXPORT lean_object* _lean_main(lean_object* v___args_799_){
 _start:
 {
-lean_object* v___x_738_; 
-lean_dec(v___args_736_);
-v___x_738_ = l_main___redArg();
-return v___x_738_;
+lean_object* v___x_801_; 
+lean_dec(v___args_799_);
+v___x_801_ = l_main___redArg();
+return v___x_801_;
 }
 }
-LEAN_EXPORT lean_object* l_main___boxed(lean_object* v___args_739_, lean_object* v_a_740_){
+LEAN_EXPORT lean_object* l_main___boxed(lean_object* v___args_802_, lean_object* v_a_803_){
 _start:
 {
-lean_object* v_res_741_; 
-v_res_741_ = _lean_main(v___args_739_);
-return v_res_741_;
+lean_object* v_res_804_; 
+v_res_804_ = _lean_main(v___args_802_);
+return v_res_804_;
 }
 }
-LEAN_EXPORT lean_object* l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3(lean_object* v___x_742_, lean_object* v___x_743_, lean_object* v___x_744_, lean_object* v_a_745_, lean_object* v_range_746_, lean_object* v_b_747_, lean_object* v_i_748_, lean_object* v_hs_749_, lean_object* v_hl_750_){
+LEAN_EXPORT lean_object* l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3(lean_object* v___x_805_, lean_object* v___x_806_, lean_object* v___x_807_, lean_object* v_a_808_, lean_object* v_range_809_, lean_object* v_b_810_, lean_object* v_i_811_, lean_object* v_hs_812_, lean_object* v_hl_813_){
 _start:
 {
-lean_object* v___x_752_; 
-v___x_752_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg(v___x_742_, v___x_743_, v___x_744_, v_a_745_, v_range_746_, v_b_747_, v_i_748_);
-return v___x_752_;
+lean_object* v___x_815_; 
+v___x_815_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___redArg(v___x_805_, v___x_806_, v___x_807_, v_a_808_, v_range_809_, v_b_810_, v_i_811_);
+return v___x_815_;
 }
 }
-LEAN_EXPORT lean_object* l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___boxed(lean_object* v___x_753_, lean_object* v___x_754_, lean_object* v___x_755_, lean_object* v_a_756_, lean_object* v_range_757_, lean_object* v_b_758_, lean_object* v_i_759_, lean_object* v_hs_760_, lean_object* v_hl_761_, lean_object* v___y_762_){
+LEAN_EXPORT lean_object* l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3___boxed(lean_object* v___x_816_, lean_object* v___x_817_, lean_object* v___x_818_, lean_object* v_a_819_, lean_object* v_range_820_, lean_object* v_b_821_, lean_object* v_i_822_, lean_object* v_hs_823_, lean_object* v_hl_824_, lean_object* v___y_825_){
 _start:
 {
-lean_object* v_res_763_; 
-v_res_763_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3(v___x_753_, v___x_754_, v___x_755_, v_a_756_, v_range_757_, v_b_758_, v_i_759_, v_hs_760_, v_hl_761_);
-lean_dec_ref(v_range_757_);
-lean_dec(v_a_756_);
-lean_dec_ref(v___x_755_);
-lean_dec_ref(v___x_753_);
-return v_res_763_;
+lean_object* v_res_826_; 
+v_res_826_ = l___private_Init_Data_Range_Basic_0__Std_Legacy_Range_forIn_x27_loop___at___00main_spec__3(v___x_816_, v___x_817_, v___x_818_, v_a_819_, v_range_820_, v_b_821_, v_i_822_, v_hs_823_, v_hl_824_);
+lean_dec_ref(v_range_820_);
+lean_dec(v_a_819_);
+lean_dec_ref(v___x_818_);
+lean_dec_ref(v___x_816_);
+return v_res_826_;
 }
 }
 lean_object* initialize_Init(uint8_t builtin);
