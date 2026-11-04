@@ -33,7 +33,7 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
-paths=[B+'/NFF_objects',C+'/NER_cohort',C+'/NFE_exports_20261104',C+'/NFC_audit_support_20261104',C+'/NFC_exports_20261104',C+'/NFA_exports_20261104',C+'/NEV_exports_20261104',C+'/NEI_exports_20261103',C+'/NEG_results_20261101',C+'/NEG_exports_20261029',C+'/NEB_exports_20261029',C,W,W+'/objects',T+'/lib/lean']
+paths=[B+'/NFF_objects',C+'/NER_cohort',C+'/NFF_NFB_support/NFB_exports_20261104',C+'/NFF_NFB_support/NEW_exports_20261104',C+'/NFF_NFB_support/NET_exports_20261104',C+'/NFF_NFB_support/NFB_standard_view',C+'/NFF_NFB_support',C+'/NFF_NFB_support/NET_peer_exports',C+'/NFF_NFB_support/NFB_reconcile_objects',C+'/NFE_exports_20261104',C+'/NFC_audit_support_20261104',C+'/NFC_exports_20261104',C+'/NFA_exports_20261104',C+'/NEV_exports_20261104',C+'/NEI_exports_20261103',C+'/NEG_results_20261101',C+'/NEG_exports_20261029',C+'/NEB_exports_20261029',C,W,W+'/objects',T+'/lib/lean']
 # Explicit fixture and unchanged support objects, selected only if not in private cache.
 paths+=json.loads((E/'NFF_FIXTURE_PATHS.json').read_text()) if (E/'NFF_FIXTURE_PATHS.json').exists() else []
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NFF_tmp',LEAN_PATH=':'.join(paths))
@@ -90,6 +90,13 @@ print(json.dumps(out))
 ''');assert r.returncode==0,r.stderr
 out=json.loads(r.stdout)
 for n,t in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(t)
+# Archive raw graphs immediately; keep their uncompressed hashes for replay.
+if kind=='auditbin':
+ import lzma
+ for name in out:
+  if name.startswith('NEP_') and name.endswith('_REACHABLE.txt'):
+   p=E/name;data=p.read_bytes();(E/(name+'.sha256')).write_text(hashlib.sha256(data).hexdigest()+'  '+name+'\n')
+   (E/(name+'.xz')).write_bytes(lzma.compress(data,preset=6));p.unlink()
 assert a+'/receipt.json' in out,'Missing receipt; no resubmit'
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NFF_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
