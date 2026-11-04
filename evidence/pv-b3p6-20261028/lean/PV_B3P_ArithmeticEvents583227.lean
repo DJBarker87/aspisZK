@@ -86,7 +86,8 @@ theorem evaluate_bound (expr : Expr) (value : Nat) (observed : evaluate expr = s
       | none => simp only [evaluate,hl,hr,Option.bind_some,Option.bind_none] at observed; cases observed
       | some b =>
         simp only [evaluate,hl,hr,Option.bind_some,Option.some.injEq] at observed
-        subst value
+        change some ((a+b)%modulus) = some value at observed
+        cases observed
         have al := ihLeft a hl
         have bl := ihRight b hr
         have reduced := Nat.mod_le (a+b) modulus
@@ -100,7 +101,8 @@ theorem evaluate_bound (expr : Expr) (value : Nat) (observed : evaluate expr = s
       | none => simp only [evaluate,hl,hr,Option.bind_some,Option.bind_none] at observed; cases observed
       | some b =>
         simp only [evaluate,hl,hr,Option.bind_some,Option.some.injEq] at observed
-        subst value
+        change some ((a*b)%modulus) = some value at observed
+        cases observed
         have al := ihLeft a hl
         have bl := ihRight b hr
         have product := Nat.mul_le_mul (by omega : a ≤ limit left-1) (by omega : b ≤ limit right-1)
