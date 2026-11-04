@@ -1,0 +1,42 @@
+import Lean
+import NGK_NFR_ModelJoin
+
+set_option autoImplicit false
+namespace NGK_NFV_Accounts
+structure Meta (Key : Type) where
+  key : Key
+  signer : Bool
+  writable : Bool
+
+def readonly {Key : Type} (key : Key) : Meta Key := ⟨key,false,false⟩
+def metas {Key : Type} (proof master checkpoint lane registry entry verifierCheckpoint : Key) :=
+  [readonly proof,readonly master,readonly checkpoint,readonly lane,readonly registry,
+   readonly entry] ++ [readonly verifierCheckpoint]
+
+theorem keys {Key : Type} (proof master checkpoint lane registry entry cp : Key) :
+    (metas proof master checkpoint lane registry entry cp).map Meta.key =
+      [proof,master,checkpoint,lane,registry,entry,cp] := by rfl
+#print axioms keys
+
+theorem flags {Key : Type} (proof master checkpoint lane registry entry cp : Key)
+    (m : Meta Key) (present : m ∈ metas proof master checkpoint lane registry entry cp) :
+    m.signer = false ∧ m.writable = false := by
+  simp [metas] at present
+  rcases present with h|h|h|h|h|h|h <;> subst m <;> exact ⟨rfl,rfl⟩
+#print axioms flags
+
+/-- Key order of the source's insertion immediately before the program account.
+This is a list value law; native Vec realization is separately classified. -/
+def infos {Key : Type} (proof master checkpoint lane registry entry cp program : Key) :=
+  [proof,master,checkpoint,lane,registry,entry] ++ [cp,program]
+theorem account_order {Key : Type} (proof master checkpoint lane registry entry cp program : Key) :
+    infos proof master checkpoint lane registry entry cp program =
+      (metas proof master checkpoint lane registry entry cp).map Meta.key ++ [program] := by rfl
+#print axioms account_order
+end NGK_NFV_Accounts
+
+run_cmd do
+ let env ← Lean.getEnv
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))

@@ -1,0 +1,16 @@
+{"attempt": "NGK_L090", "exit_status": 0, "wall_seconds": 2.622187400003895, "peak_rss_kib": "5934548", "swaps": "0", "print_axioms": ["'NGK_NFO_FlatMapInjective.uniform' depends on axioms: [propext, Quot.sound.{u}]", "'NGK_NFR_AfterstateForward.roundtrip' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFR_ResultForward.emitted' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]", "'NGK_NFV_RequestIndexes.header' depends on axioms: [propext, Classical.choice.{u}, Quot.sound.{u}]"]}
+@NGK_NFO_FlatMapInjective.uniform : ∀ {A B : Type} (encode : A → List.{0} B) (width : Nat),
+  @LT.lt.{0} Nat instLTNat (@OfNat.ofNat.{0} Nat (nat_lit 0) (instOfNatNat (nat_lit 0))) width →
+    (∀ (a : A), @Eq.{1} Nat (@List.length.{0} B (encode a)) width) →
+      @Function.Injective.{1, 1} A (List.{0} B) encode →
+        @Function.Injective.{1, 1} (List.{0} A) (List.{0} B) fun xs => @List.flatMap.{0, 0} A B encode xs
+'NGK_NFO_FlatMapInjective.uniform' depends on axioms: [propext, Quot.sound.{u}]
+NGK_NFR_AfterstateForward.roundtrip : ∀ (a : NGK_NFR_AfterstateForwardHelpers.Afterstate),
+  @Eq.{1}
+      (Aeneas.Std.Result.{0}
+        (Aeneas.Std.core.result.Result.{0, 0} Unit
+          AspisR1T
+...
+ (Lean.Expr.const `Nat []))\n                          (Lean.Expr.const `Aeneas.Std.U8 []))\n                        (Lean.Expr.lam\n                          `as\n                          (Lean.Expr.app (Lean.Expr.const `List [Lean.Level.zero]) (Lean.Expr.const `Aeneas.Std.U8 []))\n                          (Lean.Expr.lam\n                            `i\n                            (Lean.Expr.const `Nat [])\n                            (Lean.Expr.app\n                              (Lean.Expr.app\n                                (Lean.Expr.app\n                                  (Lean.Expr.app (Lean.Expr.const `LT.lt [Lean.Level.zero]) (Lean.Expr.const `Nat []))\n                                  (Lean.Expr.const `instLTNat []))\n                                (Lean.Expr.bvar 0))\n                              (Lean.Expr.app\n                                (Lean.Expr.app\n                                  (Lean.Expr.const `List.length [Lean.Level.zero])\n                                  (Lean.Expr.const `Aeneas.Std.U8 []))\n                                (Lean.Expr.bvar 1)))\n                            (Lean.BinderInfo.default))\n                          (Lean.BinderInfo.default)))\n                      (Lean.Expr.app\n                        (Lean.Expr.const `List.instGetElem?NatLtLength [Lean.Level.zero])\n                        (Lean.Expr.const `Aeneas.Std.U8 [])))\n                    (Lean.Expr.app (Lean.Expr.const `NGK_NFV_Envelope.headerBytes []) (Lean.Expr.bvar 3)))\n                  (Lean.Expr.bvar 1)))\n              (Lean.BinderInfo.default))\n            (Lean.BinderInfo.default))\n          (Lean.BinderInfo.default))\n        (Lean.BinderInfo.default))\n      (Lean.BinderInfo.default))\n    (Lean.BinderInfo.default))\n  (Lean.BinderInfo.default)"}
+
+Running as unit: run-rfaf2b6bdf7fe48e3a6b99d05dbd02add.scope; invocation ID: 5e6ad3bdda314975846b575862973165

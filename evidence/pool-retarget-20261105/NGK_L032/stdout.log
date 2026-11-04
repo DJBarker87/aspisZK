@@ -1,0 +1,75 @@
+'NGK_NFR_RawInverseValidator.encoder' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.map' depends on axioms: [propext, Quot.sound]
+'NGK_NFR_RawInverseValidator.map_1' depends on axioms: [propext, Quot.sound]
+NGK_generated/NGK_NFR_RawInverseValidator.lean:30:72: error: unsolved goals
+value : Output
+b : Bool
+_✝¹ :
+  [> let b ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 value.master_account (Array.repeat 32#usize 0#u8) <]
+h✝¹ : ¬b = true
+b1 : Bool
+_✝ :
+  [> let b1 ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 value.selected_lane_account
+      (Array.repeat 32#usize 0#u8) <]
+h✝ : ¬b1 = true
+r : core.result.Result U8 pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1
+_ : [> let r ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 value.nullifier <]
+⊢ (do
+      let r1 ←
+        AspisR1TerminalDecoder.core.result.Result.map_err
+            pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+            r ()
+      let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+      match cf with
+        | core.ops.control_flow.ControlFlow.Continue val =>
+          if (value.output_lane != val) = true then
+            ok
+              (core.result.Result.Err
+                pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+          else do
+            let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 value.verified_afterstate
+            let r3 ←
+              AspisR1TerminalDecoder.core.result.Result.map_err
+                  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+              | core.ops.control_flow.ControlFlow.Break residual =>
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                  (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+        | core.ops.control_flow.ControlFlow.Break residual =>
+          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+            (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual) ⦃
+    x✝ => True ⦄
+'NGK_NFR_RawInverseValidator.validate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate._simp_12' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.map_1.mvcgen_spec' depends on axioms: [propext, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate._simp_13' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_14' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_3' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NGK_NFR_RawInverseValidator.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_result.match_1.eq_2' does not depend on any axioms
+'NGK_NFR_RawInverseValidator.validate._simp_10' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_6' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.NGK_NFR_RawInverseValidator.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_result.match_1.eq_1' does not depend on any axioms
+'NGK_NFR_RawInverseValidator.map_1' depends on axioms: [propext, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate.mvcgen_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate._simp_11' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_5' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate._simp_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.encoder.mvcgen_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NGK_NFR_RawInverseValidator.validate._simp_8' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_9' depends on axioms: [propext]
+'NGK_NFR_RawInverseValidator.validate._simp_7' depends on axioms: [propext]
+'_private.NGK_NFR_RawInverseValidator.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_result.match_2.eq_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NGK_NFR_RawInverseValidator.map' depends on axioms: [propext, Quot.sound]
+'_private.NGK_NFR_RawInverseValidator.0.AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_result.match_2.eq_2' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'NGK_NFR_RawInverseValidator.map.mvcgen_spec' depends on axioms: [propext, Quot.sound]
+'NGK_NFR_RawInverseValidator.encoder' depends on axioms: [propext, Classical.choice, Quot.sound]

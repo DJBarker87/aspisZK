@@ -1,0 +1,117 @@
+import Lean
+import NGK_NFV_RequestWindows
+
+set_option autoImplicit false
+namespace NGK_NFV_RequestOracle
+open Aeneas Aeneas.Std Result AspisR20Request
+def run
+  (transfer : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 → Result (core.result.Result (Array Std.U8 216#usize) pool_v1.payment_relation.PoolV1PaymentStatementFormatError))
+  (withdrawal : pool_v1.payment_relation.PoolV1WithdrawalPublicV1 → Result (core.result.Result (Array Std.U8 216#usize) pool_v1.payment_relation.PoolV1PaymentStatementFormatError))
+  (request : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1) :
+  Result (core.result.Result (Array Std.U8 320#usize)
+    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+  := do
+  let a := Array.repeat 32#usize 0#u8
+  let b ←
+    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+      request.verifier_profile a
+  if b
+  then
+    ok (core.result.Result.Err
+      pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+  else
+    let a1 := Array.repeat 32#usize 0#u8
+    let b1 ←
+      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+        request.verifier_release a1
+    if b1
+    then
+      ok (core.result.Result.Err
+        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      let a2 := Array.repeat 32#usize 0#u8
+      let b2 ←
+        core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8
+          request.pool_program a2
+      if b2
+      then
+        ok (core.result.Result.Err
+          pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+      else
+        match request.«public» with
+        |
+          pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1.PrivateTransfer
+          public1 =>
+          let r ←
+            transfer public1
+          let r1 ←
+            core.result.Result.map_err
+              pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_request_reference_v1.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+              r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let i ← 1#u8 + 0#u8
+            let i1 ← lift (UScalar.cast .U8 i)
+            let a3 ←
+              pool_v1.pair_forest_terminal.asq8_reference_envelope
+                request.verifier_profile request.verifier_release
+                request.pool_program i1 val
+            ok (core.result.Result.Ok a3)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Array Std.U8 320#usize) (core.convert.FromSame
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+              residual
+        |
+          pool_v1.pair_forest_terminal.PoolV1PairForestTerminalPaymentV1.Withdrawal
+          public1 =>
+          let r ←
+            withdrawal public1
+          let r1 ←
+            core.result.Result.map_err
+              pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_request_reference_v1.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PaymentStatementFormatErrorPoolV1PairForestTerminalFormatErrorV1
+              r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+          | core.ops.control_flow.ControlFlow.Continue val =>
+            let i ← 2#u8 + 0#u8
+            let i1 ← lift (UScalar.cast .U8 i)
+            let a3 ←
+              pool_v1.pair_forest_terminal.asq8_reference_envelope
+                request.verifier_profile request.verifier_release
+                request.pool_program i1 val
+            ok (core.result.Result.Ok a3)
+          | core.ops.control_flow.ControlFlow.Break residual =>
+            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+              (Array Std.U8 320#usize) (core.convert.FromSame
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+              residual
+
+/-- Value erasure of the two typed child oracles is the adopted emitted caller.
+Native call-log correctness and child domains are separate obligations. -/
+theorem erase (request : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1) :
+    run pool_v1.pair_forest_terminal.asq8_payment_reference.encode_pool_v1_private_transfer_public_v1
+      pool_v1.pair_forest_terminal.asq8_payment_reference.encode_pool_v1_withdrawal_public_v1 request =
+    pool_v1.pair_forest_terminal.encode_pool_v1_pair_forest_terminal_request_reference_v1 request := by rfl
+#print axioms erase
+
+/-- Rejection precedes both payment calls, for the exact emitted guard. -/
+theorem profile_rejected
+    (transfer : pool_v1.payment_relation.PoolV1PrivateTransferPublicV1 → Result (core.result.Result (Array U8 216#usize) pool_v1.payment_relation.PoolV1PaymentStatementFormatError))
+    (withdrawal : pool_v1.payment_relation.PoolV1WithdrawalPublicV1 → Result (core.result.Result (Array U8 216#usize) pool_v1.payment_relation.PoolV1PaymentStatementFormatError))
+    (request : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalRequestV1)
+    (zero : core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 request.verifier_profile (Array.repeat 32#usize 0#u8) = ok true) :
+    run transfer withdrawal request = ok (.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding) := by
+  unfold run
+  dsimp only
+  erw [zero]
+  rfl
+#print axioms profile_rejected
+end NGK_NFV_RequestOracle
+
+run_cmd do
+ let env ← Lean.getEnv
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))
