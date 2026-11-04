@@ -49,7 +49,7 @@ theorem entry_consistent (q : EntryView) :
     (interpret_shape q.thread q.activation q.sp q.stackLimit q.retry q.iteration
       .beforeInit q.answer)
   refine ⟨h.1,h.2,?_⟩
-  simp only [activeSpine,List.length_cons,List.length_append,List.length_singleton]
+  simp only [activeSpine,List.length_cons,List.length_append,List.length_nil]
   omega
 
 /-- Concrete source slot projection; identity remains the existing source
