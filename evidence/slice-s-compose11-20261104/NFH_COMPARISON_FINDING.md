@@ -65,3 +65,12 @@ to these release calls and retained input allocations. The runtime implementatio
 is outside slice S's function list: it cannot be silently replaced by a new Rust
 reference loop inside scan_proof_buffer. No extra solver budget can make a body
 absent from the ELF visible to a verifier-program Kani harness.
+
+## Universal-interface caution
+
+NFD_s NativeEqualityAssociation quantifies over ALL list lengths. A688-only
+runtime contract must not be passed as that universal law verbatim. The accepted
+NFH_ComparisonDomain.complete688_association provides a mathematical completion
+off-domain, conditional on At688Law;complete688_on_domain proves its local
+agreement. Native use still requires both SAME buffers to have length688.
+This does not discharge At688Law or prove the actual runtime implementation.
