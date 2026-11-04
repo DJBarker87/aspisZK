@@ -1,0 +1,76 @@
+{"attempt": "NGH_K021", "exit_status": 1, "wall_seconds": 4.608312838943675, "peak_rss_kib": "521436", "swaps": "0", "print_axioms": "N/A: kani"}
+_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/r0/onchain.rs:314:48
+    |
+314 |     #[cfg(all(feature = "r0-e4-reference", not(target_os = "solana")))]
+    |                                                ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+             [lints.rust]
+             unexpected_cfgs = { level = "warn", check-cfg = ['cfg(target_os, values("solana"))'] }
+    = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(target_os, values(\"solana\"))");` to the top of the `build.rs`
+    = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unused import: `super::*`
+ --> crates/aspis-core/src/NFT_cmr.rs:1:5
+  |
+1 | use super::*;
+  |     ^^^^^^^^
+
+warning: unexpected `cfg` condition name: `NFT_bad_argument`
+ --> crates/aspis-core/src/NFT_cmr.rs:6:176
+  |
+6 | ...(reply<P);log.calls[log.count]=Call{kind,a:a.0,b:if cfg!(NFT_bad_argument){b.0.wrapping_add(1)}else{b.0},reply};log.count+=1;M31(r...
+  |                                                             ^^^^^^^^^^^^^^^^
+  |
+  = help: consider using a Cargo feature instead
+  = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+           [lints.rust]
+           unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFT_bad_argument)'] }
+  = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFT_bad_argument)");` to the top of the `build.rs`
+  = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `NFT_invert`
+  --> crates/aspis-core/src/NFT_cmr.rs:10:639
+   |
+10 | ....0==log.calls[1].reply&&got.b.0==log.calls[3].reply)!=cfg!(NFT_invert));}
+   |                                                               ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFT_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFT_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+error[E0282]: type annotations needed
+   --> crates/aspis-core/src/field.rs:532:13
+    |
+532 |             sums[component][channel] += left_components[component][channel].0 as u64
+    |             ^^^^^^^^^^^^^^^ cannot infer type
+
+warning: variable does not need to be mutable
+  --> crates/aspis-core/src/NFT_channels.rs:40:23
+   |
+40 | fn channel_step(){let mut sums:[[u64;3];3]=kani::any();for row in 0..3{for col in 0..3{kani::assume(sums[row][col]<3u64*(1u64<<62));}}
+   |                       ----^^^^
+   |                       |
+   |                       help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0282, E0658.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `aspis-core` (lib) due to 5 previous errors; 56 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 5 compilation errors.
+

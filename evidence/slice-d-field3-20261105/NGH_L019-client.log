@@ -1,0 +1,103 @@
+{"attempt": "NGH_L019", "exit_status": 0, "wall_seconds": 0.004675600910559297, "peak_rss_kib": "4400", "swaps": "0", "print_axioms": "N/A: help"}
+ [<RANDOMIZE_LAYOUT>]
+          Randomize the layout of structures. This option can help catching code that relies on a specific layout chosen by the compiler that is not guaranteed to be stable in the future. If a value is given, it will be used as the seed for randomization See the `-Z randomize-layout` and `-Z layout-seed` arguments of the rust compiler
+
+      --run-sanity-checks
+          Execute CBMC's sanity checks to ensure the goto-program we generate is correct
+
+      --solver <SOLVER>
+          Specify the CBMC solver to use. Overrides the harness `solver` attribute. If no solver is specified (with --solver or harness attribute), Kani will use CaDiCaL
+          
+          [possible values: bitwuzla, cadical, cvc5, kissat, minisat, z3, bin=<SAT_SOLVER_BINARY>]
+
+      --synthesize-loop-contracts
+          Synthesize loop contracts for all loops
+
+      --target-dir <TARGET_DIR>
+          Directory for all generated artifacts
+
+      --tests
+          Enable test function verification. Only use this option when the entry point is a test function
+
+      --unwind <UNWIND>
+          Specify the value used for loop unwinding for the specified harness in CBMC
+
+Memory Checks:
+      --no-default-checks
+          Turn off all default checks
+
+      --no-memory-safety-checks
+          Turn off default memory safety checks
+
+      --no-overflow-checks
+          Turn off default overflow checks
+
+      --no-undefined-function-checks
+          Turn off undefined function checks
+
+      --no-unwinding-checks
+          Turn off default unwinding checks
+
+Common Options:
+      --debug
+          Produce full debug information
+
+  -q, --quiet
+          Produces no output, just an exit code and requested artifacts; overrides --verbose
+
+  -v, --verbose
+          Output processing stages and commands, along with minor debug information
+
+  -Z, --unstable <UNSTABLE_FEATURE>
+          Possible values:
+          - async-lib:          Enable Kani's unstable async library
+          - autoharness:        Enable the autoharness subcommand
+          - concrete-playback:  Enable concrete playback flow
+          - c-ffi:              Allow Kani to link against C code
+          - float-lib:          Kani APIs related to floating-point operations (e.g. `float_to_int_in_range`)
+          - function-contracts: Enable function contracts [RFC 9](https://model-checking.github.io/kani/rfc/rfcs/0009-function-contracts.html)
+          - gen-c:              Generate a C-like file equivalent to input program used for debugging purpose
+          - ghost-state:        Ghost state and shadow memory APIs
+          - lean:               Enabled Lean backend (Aeneas/LLBC)
+          - loop-contracts:     Enable loop contracts [RFC 12](https://model-checking.github.io/kani/rfc/rfcs/0012-loop-contracts.html)
+          - mem-predicates:     Memory predicate APIs
+          - restrict-vtable:    Enable vtable restriction
+          - source-coverage:    Enable source-based code coverage workflow. See [RFC-0011](https://model-checking.github.io/kani/rfc/rfcs/0011-source-coverage.html)
+          - stubbing:           Allow replacing certain items with stubs (mocks). See [RFC-0002](https://model-checking.github.io/kani/rfc/rfcs/0002-function-stubbing.html)
+          - quantifiers:        Enable quantifiers [RFC 10](https://model-checking.github.io/kani/rfc/rfcs/0010-quantifiers.html)
+          - uninit-checks:      Automatically check that uninitialized memory is not used
+          - unstable-options:   Enable an unstable option or subcommand
+          - valid-value-checks: Automatically check that no invalid value is produced which is considered UB in Rust. Note that this does not include checking uninitialized value
+
+Cargo Common Options:
+      --all-features
+          Activate all package features
+
+  -e, --exclude <EXCLUDE>...
+          Exclude the specified packages
+
+  -F, --features <FEATURES>
+          Comma separated list of package features to activate
+
+      --manifest-path <PATH>
+          Path to Cargo.toml
+
+      --no-default-features
+          Do not activate the `default` feature
+
+  -p, --package <PACKAGE>...
+          Run Kani on the specified packages (see `cargo help pkgid` for the accepted format)
+
+      --workspace
+          Build all packages in the workspace
+
+Cargo Target Options:
+      --bin <BIN>
+          Check only the specified binary target
+
+      --bins
+          Check all binaries
+
+      --lib
+          Check only the package's library unit tests
+

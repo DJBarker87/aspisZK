@@ -1,0 +1,130 @@
+{
+ "path": "/home/dombarker/.kani/kani-0.67.0/library/kani_macros/src/sysroot/loop_contracts/mod.rs",
+ "sha256": "b9d3ac70d367cbcce7728de4819343c14d2ce610ea90d82f0352a601219d21f9",
+ "lines": [
+  {
+   "line": 550,
+   "text": "                )"
+  },
+  {
+   "line": 551,
+   "text": "                .unwrap();"
+  },
+  {
+   "line": 552,
+   "text": "                *(ew.cond) = Expr::Binary(ExprBinary {"
+  },
+  {
+   "line": 553,
+   "text": "                    attrs: Vec::new(),"
+  },
+  {
+   "line": 554,
+   "text": "                    left: Box::new(new_cond),"
+  },
+  {
+   "line": 555,
+   "text": "                    op: BinOp::And(AndAnd::default()),"
+  },
+  {
+   "line": 556,
+   "text": "                    right: ew.cond.clone(),"
+  },
+  {
+   "line": 557,
+   "text": "                });"
+  },
+  {
+   "line": 558,
+   "text": "            }"
+  },
+  {
+   "line": 559,
+   "text": "            Expr::Loop(ref mut el) => {"
+  },
+  {
+   "line": 560,
+   "text": "                let invstmt: Stmt = syn::parse(quote_spanned!(original_span =>"
+  },
+  {
+   "line": 561,
+   "text": "                    if !(#register_ident(&||->bool{#inv_expr}, 0)) {assert!(false); unreachable!()};)"
+  },
+  {
+   "line": 562,
+   "text": "                    .into()).unwrap();"
+  },
+  {
+   "line": 563,
+   "text": "                let mut new_stmts: Vec<Stmt> = Vec::new();"
+  },
+  {
+   "line": 564,
+   "text": "                new_stmts.push(invstmt);"
+  },
+  {
+   "line": 565,
+   "text": "                new_stmts.extend(el.body.stmts.clone());"
+  },
+  {
+   "line": 566,
+   "text": "                el.body.stmts = new_stmts.clone();"
+  },
+  {
+   "line": 567,
+   "text": "            }"
+  },
+  {
+   "line": 568,
+   "text": "            _ => {"
+  },
+  {
+   "line": 569,
+   "text": "                abort_call_site!(\"`#[kani::loop_invariant]` is now only supported for while-loops.\";"
+  },
+  {
+   "line": 570,
+   "text": "                    note = \"for now, loop contracts is only supported for while-loops.\";"
+  },
+  {
+   "line": 571,
+   "text": "                )"
+  },
+  {
+   "line": 572,
+   "text": "            }"
+  },
+  {
+   "line": 573,
+   "text": "        },"
+  },
+  {
+   "line": 574,
+   "text": "        _ => abort_call_site!(\"`#[kani::loop_invariant]` is now only supported for while-loops.\";"
+  },
+  {
+   "line": 575,
+   "text": "            note = \"for now, loop contracts is only supported for while-loops.\";"
+  },
+  {
+   "line": 576,
+   "text": "        ),"
+  },
+  {
+   "line": 577,
+   "text": "    }"
+  },
+  {
+   "line": 578,
+   "text": "    let ret: TokenStream = if let Some(ForLoopExtraStmts {"
+  },
+  {
+   "line": 579,
+   "text": "        init_iter_stmt,"
+  },
+  {
+   "line": 580,
+   "text": "        init_len_stmt,"
+  }
+ ]
+}

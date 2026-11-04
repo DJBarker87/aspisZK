@@ -1,0 +1,13 @@
+import NGA_NativeOps
+#check AspisR1.FJm_CMSquare.value
+#check AspisR1.FIo_CMMulValues.mul
+#check AspisR1.NFN_LPi_Total.cm_mul
+#check ZMod.val_add
+#check ZMod.val_mul
+#check ZMod.val_sub
+#check ZMod.natCast_zmod_val
+#check ZMod.natCast_self
+#check ZMod.val_natCast
+#check ZMod.val_natCast_of_lt
+#check ZMod.natCast_mod
+#check ZMod.val_injective

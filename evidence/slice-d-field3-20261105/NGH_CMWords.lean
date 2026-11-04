@@ -1,0 +1,58 @@
+import NGH_QSquareOps
+set_option autoImplicit false
+noncomputable section
+namespace NGH_CMWords
+open Aeneas Aeneas.Std Result AspisR1.FIo_FieldBridge
+abbrev M := AspisV8R15.ExactTowerBase.M31Exact
+
+theorem sub_value (a b : M) : (a-b).val=(a.val+2147483647-b.val)%2147483647 := by
+ have hb := b.val_lt
+ change b.val<2147483647 at hb
+ have bound : b.val≤a.val+2147483647 := by omega
+ have eqn : (((a.val+2147483647-b.val : Nat) : M))=a-b := by
+   rw [Nat.cast_sub bound,Nat.cast_add,ZMod.natCast_self,add_zero,
+     ZMod.natCast_zmod_val,ZMod.natCast_zmod_val]
+ simpa only [ZMod.val_natCast] using (congrArg ZMod.val eqn).symm
+
+def real (x y : NC) : Nat :=
+ ((x.a.val*y.a.val)%2147483647+2147483647-(x.b.val*y.b.val)%2147483647)%2147483647
+def imag (x y : NC) : Nat :=
+ ((x.a.val*y.b.val)%2147483647+(x.b.val*y.a.val)%2147483647)%2147483647
+
+theorem coordinates (x y z : NC)
+ (hz : NGH_QSquareOps.Canon z)
+ (hv : NGH_QSquareOps.decode z=NGH_QSquareOps.decode x*NGH_QSquareOps.decode y) :
+ z.a.val=real x y ∧ z.b.val=imag x y := by
+ have ha := congrArg (fun c => c.re) hv
+ have hb := congrArg (fun c => c.im) hv
+ change (z.a.val : M)=(x.a.val : M)*(y.a.val : M)+(-1)*(x.b.val : M)*(y.b.val : M) at ha
+ simp only [NGH_QSquareOps.decode,AspisR1CurrentWide.Proof.decodeC,cm,
+   QuadraticAlgebra.im_mul,zero_mul,add_zero] at hb
+ change (z.b.val : M)=(x.a.val : M)*(y.b.val : M)+(x.b.val : M)*(y.a.val : M) at hb
+ have ha' : (z.a.val : M)=(x.a.val : M)*(y.a.val : M)-(x.b.val : M)*(y.b.val : M) := by
+   rw [ha];ring
+ have ra := congrArg ZMod.val ha'
+ have rb := congrArg ZMod.val hb
+ constructor
+ · simpa only [ZMod.val_natCast_of_lt hz.1,sub_value,ZMod.val_mul,ZMod.val_natCast,
+     AspisV8R15.ExactTowerBase.P,← Nat.mul_mod,real] using ra
+ · simpa only [ZMod.val_natCast_of_lt hz.2,ZMod.val_add,ZMod.val_mul,ZMod.val_natCast,
+     AspisV8R15.ExactTowerBase.P,← Nat.mul_mod,imag] using rb
+
+theorem product (x y : NC) (hx : NGH_QSquareOps.Canon x) (hy : NGH_QSquareOps.Canon y) :
+ ∃ out, FIo_Native.aspis_core.field.CM31.mul x y=ok out ∧ NGH_QSquareOps.Canon out ∧
+ out.a.val=real x y ∧ out.b.val=imag x y := by
+ obtain ⟨out,ho,hc,hv⟩ := NGH_QSquareOps.product x y hx hy
+ exact ⟨out,ho,hc,coordinates x y out hc hv⟩
+
+theorem square (x : NC) (hx : NGH_QSquareOps.Canon x) :
+ ∃ out, FIo_Native.aspis_core.field.CM31.square x=ok out ∧ NGH_QSquareOps.Canon out ∧
+ out.a.val=real x x ∧ out.b.val=imag x x := by
+ obtain ⟨out,ho,hc,hv⟩ := NGH_QSquareOps.square x hx
+ exact ⟨out,ho,hc,coordinates x x out hc hv⟩
+#print axioms sub_value
+#print axioms coordinates
+#print axioms product
+#print axioms square
+end NGH_CMWords
+end

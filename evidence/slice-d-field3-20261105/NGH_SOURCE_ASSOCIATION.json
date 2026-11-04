@@ -1,0 +1,24 @@
+{
+ "status": "PASS",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "frozen_field_sha256": "28df5a1abee13bde4b3aa9eeceb0489bedf00531f298460954a97661f5f1baea",
+ "QM_square": {
+  "frozen_body": "\n        let c0_square = self.c0.square();\n        let c1_square = self.c1.square();\n        QM31 {\n            c0: c0_square.add(mul_by_r(c1_square)),\n            c1: self.c0.mul(self.c1).double(),\n        }\n    ",
+  "local_record_body": "\n let c0_square=op(log,0,value.c0,CM31::ZERO);\n let c1_square=op(log,1,value.c1,CM31::ZERO);\n QM31{c0:c0_square.add(mul_by_r(c1_square)),c1:op(log,2,value.c0,value.c1).double()}\n",
+  "opaque_sites": [
+   "CM31.square(value.c0)",
+   "CM31.square(value.c1)",
+   "CM31.mul(value.c0,value.c1)"
+  ],
+  "real_calls": [
+   "mul_by_r",
+   "CM31.add",
+   "CM31.double"
+  ],
+  "normalised_tokens_equal": true,
+  "op_count_erased_reason": "cfg r0-op-count absent; exact selected core features [r0] in every native graph receipt"
+ },
+ "helper_reference_bodies_equal_modulo_names": true,
+ "helper_native_contract": false,
+ "trust": "handwritten helper reference/Lean transcription under (ah); not silently substituted for a missing native helper contract"
+}

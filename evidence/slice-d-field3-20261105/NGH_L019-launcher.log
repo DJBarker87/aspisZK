@@ -1,0 +1,64 @@
+{"attempt": "NGH_L019", "exit_status": 0, "wall_seconds": 0.004675600910559297, "peak_rss_kib": "4400", "swaps": "0", "print_axioms": "N/A: help"}
+Verify a Rust crate. For more information, see https://github.com/model-checking/kani
+
+Usage: cargo-kani [OPTIONS] [COMMAND]
+
+Commands:
+  autoharness  Create and run harnesses automatically for eligible functions. Implies -Z function-contracts and -Z loop-contracts. See https://model-checking.github.io/kani/reference/experimental/autoharness.html for documentation
+  list         List contracts and harnesses
+  playback     Execute concrete playback testcases of a local package
+  help         Print this message or the help of the given subcommand(s)
+
+Options:
+  -h, --help
+          Print help (see a summary with '-h')
+
+  -V, --version
+          Print version
+
+Verification Options:
+      --cbmc
+...
+   Enable loop contracts [RFC 12](https://model-checking.github.io/kani/rfc/rfcs/0012-loop-contracts.html)
+          - mem-predicates:     Memory predicate APIs
+          - restrict-vtable:    Enable vtable restriction
+          - source-coverage:    Enable source-based code coverage workflow. See [RFC-0011](https://model-checking.github.io/kani/rfc/rfcs/0011-source-coverage.html)
+          - stubbing:           Allow replacing certain items with stubs (mocks). See [RFC-0002](https://model-checking.github.io/kani/rfc/rfcs/0002-function-stubbing.html)
+          - quantifiers:        Enable quantifiers [RFC 10](https://model-checking.github.io/kani/rfc/rfcs/0010-quantifiers.html)
+          - uninit-checks:      Automatically check that uninitialized memory is not used
+          - unstable-options:   Enable an unstable option or subcommand
+          - valid-value-checks: Automatically check that no invalid value is produced which is considered UB in Rust. Note that this does not include checking uninitialized value
+
+Cargo Common Options:
+      --all-features
+          Activate all package features
+
+  -e, --exclude <EXCLUDE>...
+          Exclude the specified packages
+
+  -F, --features <FEATURES>
+          Comma separated list of package features to activate
+
+      --manifest-path <PATH>
+          Path to Cargo.toml
+
+      --no-default-features
+          Do not activate the `default` feature
+
+  -p, --package <PACKAGE>...
+          Run Kani on the specified packages (see `cargo help pkgid` for the accepted format)
+
+      --workspace
+          Build all packages in the workspace
+
+Cargo Target Options:
+      --bin <BIN>
+          Check only the specified binary target
+
+      --bins
+          Check all binaries
+
+      --lib
+          Check only the package's library unit tests
+
+Running as unit: run-r19edc2cc78df484bb786cbfdf6b1af33.scope; invocation ID: e7ff3f6f6d714db7a10c3cc9ef62bffe

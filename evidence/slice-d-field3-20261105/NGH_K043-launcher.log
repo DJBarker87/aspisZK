@@ -1,0 +1,60 @@
+{"attempt": "NGH_K043", "exit_status": 1, "wall_seconds": 1.8711615158244967, "peak_rss_kib": "410180", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field3-20261105/NGH_src/crates/aspis-core)
+error: comparison operators cannot be chained
+   --> crates/aspis-core/src/field.rs:512:74
+    |
+512 | #[cfg_attr(kani,kani::ensures(|r| r[0][0]<=sums[0][0]+4611686009837453316!=cfg!(NGH_invert)))]
+    |                                                                          ^
+
+warning: unexpected `cfg` condition name: `NGH_for_diagnostic`
+ --> crates/aspis-core/src/lib.rs:1:13
+  |
+1 | #![cfg_attr(NGH_for_diagnostic,feature(stmt_expr_attributes,proc_macro_hygiene))]
+  |             ^^^^^^^^^^^^^^^^^^
+  |
+  = help: expected name
+...
+ion
+
+error[E0425]: cannot find function `qm31_accumulate_product_channels` in this scope
+   --> crates/aspis-core/src/field.rs:550:16
+    |
+550 |         sums = qm31_accumulate_product_channels(sums, left[index], right[index]);
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `qm31_accumulate_product_channels` in this scope
+  --> crates/aspis-core/src/NGH_reference.rs:56:2
+   |
+56 |  qm31_accumulate_product_channels(kani::any(),q(),q());}
+   |  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+
+warning: variable does not need to be mutable
+  --> crates/aspis-core/src/NFT_channels.rs:40:23
+   |
+40 | fn channel_step(){let mut sums:[[u64;3];3]=kani::any();for row in 0..3{for col in 0..3{kani::assume(sums[row][col]<3u64*(1u64<<62));}}
+   |                       ----^^^^
+   |                       |
+   |                       help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `component`
+  --> crates/aspis-core/src/NGH_reference.rs:21:9
+   |
+21 |     for component in 0usize..3usize {
+   |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_component`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `channel`
+  --> crates/aspis-core/src/NGH_reference.rs:23:13
+   |
+23 |         for channel in 0usize..3usize {
+   |             ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_channel`
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `aspis-core` (lib) due to 3 previous errors; 73 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 3 compilation errors.
+
+Running as unit: run-re32386edd81e471ba1fa5a4b1e8d1858.scope; invocation ID: ec0a90393c1b4ae1809e23769ac4524d

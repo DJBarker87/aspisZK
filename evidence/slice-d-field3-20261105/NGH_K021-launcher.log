@@ -1,0 +1,50 @@
+{"attempt": "NGH_K021", "exit_status": 1, "wall_seconds": 4.608312838943675, "peak_rss_kib": "521436", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-field3-20261105/NGH_src/crates/aspis-core)
+error[E0658]: custom attributes cannot be applied to expressions
+   --> crates/aspis-core/src/field.rs:529:35
+    |
+529 |     #[cfg_attr(NGH_for_diagnostic,kani::loop_invariant(true))]
+    |                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: see issue #54727 <https://github.com/rust-lang/rust/issues/54727> for more information
+    = help: add `#![feature(proc_macro_hygiene)]` to the crate attributes to enable
+    = note: this compiler was built on 2025-11-20; consider upgrading it if it is out of date
+...
+ more information about checking conditional configuration
+
+warning: unexpected `cfg` condition name: `NFT_invert`
+  --> crates/aspis-core/src/NFT_cmr.rs:10:639
+   |
+10 | ....0==log.calls[1].reply&&got.b.0==log.calls[3].reply)!=cfg!(NFT_invert));}
+   |                                                               ^^^^^^^^^^
+   |
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(NFT_invert)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(NFT_invert)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+
+error[E0282]: type annotations needed
+   --> crates/aspis-core/src/field.rs:532:13
+    |
+532 |             sums[component][channel] += left_components[component][channel].0 as u64
+    |             ^^^^^^^^^^^^^^^ cannot infer type
+
+warning: variable does not need to be mutable
+  --> crates/aspis-core/src/NFT_channels.rs:40:23
+   |
+40 | fn channel_step(){let mut sums:[[u64;3];3]=kani::any();for row in 0..3{for col in 0..3{kani::assume(sums[row][col]<3u64*(1u64<<62));}}
+   |                       ----^^^^
+   |                       |
+   |                       help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+Some errors have detailed explanations: E0282, E0658.
+For more information about an error, try `rustc --explain E0282`.
+error: could not compile `aspis-core` (lib) due to 5 previous errors; 56 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 5 compilation errors.
+
+Running as unit: run-rbe2552ee00684cac89ee40f50785852f.scope; invocation ID: 3324c3d53cbf44bc82af7e104f200c9e

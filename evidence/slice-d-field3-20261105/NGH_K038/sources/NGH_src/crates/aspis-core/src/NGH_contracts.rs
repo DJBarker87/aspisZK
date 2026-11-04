@@ -1,0 +1,80 @@
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[kani::requires(i<3 && j<3)]
+#[kani::ensures(|r| (*r == sums) != cfg!(NGH_invert))]
+fn shape_identity(sums:[[u64;3];3],i:usize,j:usize)->[[u64;3];3]{sums}
+#[kani::proof_for_contract(shape_identity)]
+#[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn shape_contract(){shape_identity(kani::any(),kani::any(),kani::any());}
+#[kani::requires(true)]
+#[kani::ensures(|r| r[0][0] == 0)]
+fn weak_shape()->[[u64;3];3]{[[0;3];3]}
+#[kani::proof]
+#[kani::stub_verified(weak_shape)]
+fn shape_unimplied(){assert!(weak_shape()[2][2]==0);}
+#[kani::proof]
+fn shape_real(){assert!(weak_shape()[2][2]==0);}
+#[kani::modifies(ptr)]
+#[kani::ensures(|_| true)]
+fn shape_bad_frame(ptr:&mut [[u64;3];3],other:&mut u64){ptr[0][0]=0;*other=7;}
+#[kani::proof_for_contract(shape_bad_frame)]
+fn shape_frame(){let mut a=kani::any();let mut other=kani::any();shape_bad_frame(&mut a,&mut other);}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_positive(){let src:[[u64;3];3]=kani::any();let mut dst:[[u64;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!(src[i][j]==dst[i][j]);}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn copy_negative(){let src:[[u64;3];3]=kani::any();let mut dst:[[u64;3];3]=kani::any();unsafe{core::ptr::copy_nonoverlapping(&src,&mut dst,1)};let i:usize=kani::any();let j:usize=kani::any();kani::assume(i<3&&j<3);assert!(src[i][j]!=dst[i][j]);}
+
+#[kani::proof_for_contract(weak_shape)]
+fn shape_weak_contract(){weak_shape();}
+
+const BOUND:u64=4611686009837453316; // (P-1)^2
+struct ProductLog{a:u64,b:u64,reply:u64,count:usize}
+fn opaque(log:&mut ProductLog,a:u64,b:u64)->u64{
+ assert!(a<P as u64&&b<P as u64);let reply:u64=kani::any();kani::assume(reply<=BOUND);
+ log.a=a;log.b=b;log.reply=reply;log.count+=1;reply
+}
+fn cell_ref(sums:[[u64;3];3],i:usize,j:usize,reply:u64)->[[u64;3];3]{let mut out=sums;out[i][j]=sums[i][j]+reply;out}
+#[kani::requires(i<3&&j<3&&log.count==0&&sums[i][j]<=3*BOUND&&left[i][j].0<P&&right[i][j].0<P)]
+#[kani::modifies(log)]
+#[kani::ensures(|r| log.count==1&&log.a==left[i][j].0 as u64&&log.b==right[i][j].0 as u64&&(*r==cell_ref(sums,i,j,log.reply))!=cfg!(NGH_invert))]
+fn cell(sums:[[u64;3];3],left:[[M31;3];3],right:[[M31;3];3],i:usize,j:usize,log:&mut ProductLog)->[[u64;3];3]{
+ let mut out=sums;
+ out[i][j]+=opaque(log,left[i][j].0 as u64,right[i][j].0 as u64);
+ out
+}
+#[kani::proof_for_contract(cell)] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn cell_contract(){
+ let l:[[u32;3];3]=kani::any();let r:[[u32;3];3]=kani::any();
+ let left=[[M31(l[0][0]),M31(l[0][1]),M31(l[0][2])],[M31(l[1][0]),M31(l[1][1]),M31(l[1][2])],[M31(l[2][0]),M31(l[2][1]),M31(l[2][2])]];
+ let right=[[M31(r[0][0]),M31(r[0][1]),M31(r[0][2])],[M31(r[1][0]),M31(r[1][1]),M31(r[1][2])],[M31(r[2][0]),M31(r[2][1]),M31(r[2][2])]];
+ let mut log=ProductLog{a:0,b:0,reply:0,count:0};cell(kani::any(),left,right,kani::any(),kani::any(),&mut log);
+}
+
+#[derive(Clone,Copy)] struct OuterLog{before:[[u64;3];3],left:QM31,right:QM31,reply:[[u64;3];3],count:usize}
+fn outer_op(log:&mut OuterLog,sums:[[u64;3];3],left:QM31,right:QM31)->[[u64;3];3]{log.before=sums;log.left=left;log.right=right;log.count+=1;let reply=kani::any();log.reply=reply;reply}
+fn outer_ref(reply:[[u64;3];3],index:usize)->([[u64;3];3],usize){(reply,index+1)}
+#[kani::requires(index<N&&N<=4&&log.count==0&&i<3&&j<3)]
+#[kani::modifies(log)]
+#[kani::ensures(|r| log.count==1&&log.before[i][j]==sums[i][j]&&log.left==left[index]&&log.right==right[index]&&(r.0[i][j]==outer_ref(log.reply,index).0[i][j]&&r.1==index+1)!=cfg!(NGH_invert))]
+fn outer<const N:usize>(sums:[[u64;3];3],left:[QM31;N],right:[QM31;N],index:usize,i:usize,j:usize,log:&mut OuterLog)->([[u64;3];3],usize){
+ let mut sums=sums;let mut index=index;
+ sums=outer_op(log,sums,left[index],right[index]);
+ index+=1;
+ (sums,index)
+}
+
+#[kani::proof_for_contract(outer)] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn outer2_contract(){let mut log=OuterLog{before:kani::any(),left:QM31::ZERO,right:QM31::ZERO,reply:kani::any(),count:0};outer(kani::any(),[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],kani::any(),kani::any(),kani::any(),&mut log);}
+
+#[kani::proof_for_contract(outer)] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn outer3_contract(){let mut log=OuterLog{before:kani::any(),left:QM31::ZERO,right:QM31::ZERO,reply:kani::any(),count:0};outer(kani::any(),[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],kani::any(),kani::any(),kani::any(),&mut log);}
+
+#[kani::proof_for_contract(outer)] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn outer4_contract(){let mut log=OuterLog{before:kani::any(),left:QM31::ZERO,right:QM31::ZERO,reply:kani::any(),count:0};outer(kani::any(),[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],[QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}},QM31{c0:CM31{a:M31(kani::any()),b:M31(kani::any())},c1:CM31{a:M31(kani::any()),b:M31(kani::any())}}],kani::any(),kani::any(),kani::any(),&mut log);}
