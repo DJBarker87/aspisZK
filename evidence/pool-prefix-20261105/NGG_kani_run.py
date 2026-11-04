@@ -4,6 +4,12 @@ import subprocess,json,sys,time,hashlib,shlex,tomllib
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-prefix-20261104';H='dombarker@100.108.41.90'
 a=sys.argv[1];harness=sys.argv[2] if len(sys.argv)>2 else 'pair_forest_dispatch::NFO_read::association';assert __import__('re').fullmatch(r'[A-Za-z_][A-Za-z_0-9:]++',harness);assert a.startswith('NGG_K') and 1<=int(a[5:])<=120
 assert not (E/a).exists() and not (E/'NGG_LEAN_ACTIVE.json').exists() and not (E/'NGG_B_LEAN_ACTIVE.json').exists()
+# Reject the exact source shape of any earlier timed-out run, before admission.
+for prior_patch in E.glob('NGG_K*-NGG_native.patch'):
+ prior_attempt=prior_patch.name.split('-')[0]
+ log=E/prior_attempt/'stdout.log'
+ if log.exists() and 'CBMC timed out.' in log.read_text() and prior_patch.read_bytes()==(E/'NGG_native.patch').read_bytes():
+  raise SystemExit('STOP unchanged timed-out shape: '+prior_attempt)
 active=E/'NGG_ACTIVE.json';assert not active.exists();active.write_text(a)
 sha=lambda b:hashlib.sha256(b).hexdigest()
 def ssh(code,stdin=None,submitted=False):

@@ -1,0 +1,83 @@
+{
+  "attempt": "NGG_K024",
+  "kind": "kani",
+  "module": "pair_forest::NGG_Layout::association",
+  "command": [
+    "python3",
+    "NGG_kani_gate.py",
+    "NGG_K024.json"
+  ],
+  "native_command": [
+    "/home/dombarker/.cargo/bin/cargo-kani",
+    "kani",
+    "--manifest-path",
+    "/home/dombarker/project-offloads/codex-cx-pool-prefix-20261104/NGG_src/programs/aspis-pool/Cargo.toml",
+    "--target-dir",
+    "/home/dombarker/project-offloads/codex-cx-pool-prefix-20261104/NGG_target",
+    "--lib",
+    "--features",
+    "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+    "-j",
+    "1",
+    "-Z",
+    "unstable-options",
+    "-Z",
+    "function-contracts",
+    "-Z",
+    "stubbing",
+    "--harness-timeout",
+    "90s",
+    "--exact",
+    "--harness",
+    "pair_forest::NGG_Layout::association",
+    "--output-format",
+    "terse"
+  ],
+  "sources": [
+    "NGG_native.patch",
+    "NGG_kani_gate.py",
+    "NGG_RUST_SHA256.json"
+  ],
+  "env": {
+    "PATH": "/home/dombarker/.cargo/bin:/usr/bin:/bin",
+    "CARGO_BUILD_JOBS": "1",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_PROFILE_DEV_OPT_LEVEL": "3",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS": "true",
+    "RUSTFLAGS": "-C link-arg=-Wl,--threads=1",
+    "TMPDIR": "/home/dombarker/project-offloads/codex-cx-pool-prefix-20261104/NGG_tmp"
+  },
+  "timeout": 180,
+  "source_revision": "4cccf5f27e79624c9e61af1ebac533091e5f2046",
+  "source_tree_dirty": true,
+  "deps_fingerprint": {
+    "frozen_input_sha256": "05b7f617777edd0bca70e1a745c08becc3241275cd0d13c7cedee21e9705dbcc",
+    "frozen_manifest_sha256": "7e18d8646fb2c49c457791c5f524ea0a112399c408e472cebcfdff263ae0dea0"
+  },
+  "program_features": "r1-split-checkpoint,pair-forest-source-invariant-audit,pair-forest-source-result-invariant-audit",
+  "program_manifest": "programs/aspis-pool/Cargo.toml",
+  "required_statement_features": [
+    "pool-v1-kernel"
+  ],
+  "expected_time": "optimized dependency compilation then Pool CPI/readback local record forwarding; no field products or hash",
+  "copy_patch_sha256": "bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67",
+  "exit_status": 1,
+  "wall_seconds": 26.209788446081802,
+  "peak_rss_kib": "1508756",
+  "swaps": "0",
+  "cgroup": "/sys/fs/cgroup/user.slice/user-1000.slice/user@1000.service/app.slice/run-r72226d1d974e4e28a5a4264857ffb599.scope",
+  "limits": {
+    "memory.high": "6442450944",
+    "memory.max": "8589934592",
+    "memory.swap.max": "0",
+    "pids.max": "64"
+  },
+  "cgroup_memory_peak_bytes": "1827082240",
+  "source_hashes": {
+    "NGG_native.patch": "e74001d101474845d4dd709ce7b7dba2a2479af027ac95a7ed21e0ce211e344e",
+    "NGG_kani_gate.py": "159bc652e633937eccca100ab8d5c6f0919b5e2388d2fde2230388b3b46c67e4",
+    "NGG_RUST_SHA256.json": "edb5046b27fc190682574c8c18500619a1304e5ea70a34c1f7e41821bf129209"
+  },
+  "print_axioms": "N/A: kani"
+}

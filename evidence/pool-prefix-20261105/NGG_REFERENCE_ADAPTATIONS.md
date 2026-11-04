@@ -1,0 +1,5 @@
+# Reference/extraction scope
+
+E001: safe metadata projection reference, key arrays and flags only. Error constructors map to the named ProgramError values in NGG_leaf.py. The explicit new discriminant instance preserves the emitted order 0..6 and prevents a global name collision. Original extraction outputs and pins are retained separately. No foreign state or caller success is hidden in this reference.
+
+E002 candidate: generic decode cut accepts the FULL typed child Result as a parameter; the native oracle logs the exact decoder argument slice separately. References to the first three accounts are represented by indices [0,1,2]; this is a model cut, not a native account-domain proof. Layout tail transliterates the frozen offsets after the three page branches set cursor=4 or 5; root PacketDomain remains OPEN. The child uniqueness Result stays explicit. No whole-execution equality is assumed. The error type uses a prefix-specific name to prevent the known discriminant collision before compilation.

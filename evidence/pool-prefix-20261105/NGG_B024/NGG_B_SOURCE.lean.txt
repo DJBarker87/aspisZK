@@ -1,0 +1,21 @@
+import Aeneas
+set_option autoImplicit false
+open Aeneas Aeneas.Std Result
+namespace NGG_Scalar
+theorem wrapping_add (x y z : Usize) (h : x.val+y.val=z.val) :
+    Usize.wrapping_add x y = z := by
+  apply UScalar.eq_of_val_eq
+  rw [Usize.wrapping_add_val_eq,h]
+  exact Nat.mod_eq_of_lt z.hmax
+#print axioms wrapping_add
+
+theorem checked_add (x y z : Usize) (h : x.val+y.val=z.val) :
+    Usize.checked_add x y = some z := by
+  obtain ⟨out,run,value⟩ := WP.spec_imp_exists
+    (UScalar.add_spec (x:=x) (y:=y) (by rw [h];scalar_tac))
+  have same : out=z := UScalar.eq_of_val_eq (value.trans h)
+  change Option.ofResult (x+y) = some z
+  rw [run,same]
+  rfl
+#print axioms checked_add
+end NGG_Scalar

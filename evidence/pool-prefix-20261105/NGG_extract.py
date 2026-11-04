@@ -18,7 +18,7 @@ frozen=tomllib.loads(lock.read_text());resolved=tomllib.loads((S/'Cargo.lock').r
 known={key(p) for p in frozen['package']};added=[key(p) for p in resolved['package'] if key(p) not in known]
 pins['reference_added_packages']=added;assert added==[('ngg_prefix_reference','0.1.0',None)],('STOP dependency drift',added)
 if not r.returncode:
- cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NGG_Ref','-dest',str(D),'-subdir','NGG_Ref','-split-files',str(B/'NGG_request.llbc')]
+ cmd=[str(A),'-sequential','-no-progress-bar','-abort-on-error','-backend','lean','-namespace','NGG_SpineRef','-dest',str(D),'-subdir','NGG_SpineRef','-split-files',str(B/'NGG_request.llbc')]
  pins['aeneas_command']=cmd;print(json.dumps(cmd),flush=True);r=subprocess.run(cmd,cwd=B,env=env);pins['aeneas_exit']=r.returncode
  pins['outputs']={str(p.relative_to(B)):dict(sha256=sha(p),size=p.stat().st_size) for p in D.rglob('*') if p.is_file()}
 (B/'NGG_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=1)+'\n');sys.exit(r.returncode)

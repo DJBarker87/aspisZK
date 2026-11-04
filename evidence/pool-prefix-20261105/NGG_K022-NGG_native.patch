@@ -1,0 +1,84 @@
+--- a/programs/aspis-pool/src/pair_forest.rs
++++ b/programs/aspis-pool/src/pair_forest.rs
+@@ -5792,3 +5792,7 @@
+         assert!(accounts[4].data.iter().any(|byte| *byte != 0));
+     }
+ }
++
++#[cfg(kani)]
++#[path="NGG_Layout.rs"]
++mod NGG_Layout;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NGG_Layout.rs
+@@ -0,0 +1,54 @@
++use super::*;
++fn tail<'a,C,U>(accounts:&[AccountInfo<'a>],cursor:usize,withdrawal:bool,page:PairForestSpendPageV1,count:C,unique:U)->Result<PairForestSpendLayoutV1,ProgramError>
++where C:FnOnce(&[AccountInfo<'a>],usize)->ProgramResult,U:FnOnce(&[AccountInfo<'a>])->ProgramResult{
++    let marker_index = cursor;
++    let payer_index = cursor + 1;
++    let system_program_index = cursor + 2;
++    let registry_start = cursor + 3;
++    let verifier_index = cursor + 5;
++    let proof_index = cursor + 6;
++    let token_start: usize = cursor + 7;
++    let expected = token_start
++        .checked_add(if withdrawal { 5 } else { 0 })
++        .ok_or(PoolV1ProgramError::ArithmeticOverflow)?;
++    // Append the R1 verifier checkpoint after the complete legacy layout,
++    // including withdrawal custody accounts. Proof and token indices stay fixed.
++    let verifier_checkpoint_index = cfg!(feature = "r1-split-checkpoint").then_some(expected);
++    let expected = expected + usize::from(verifier_checkpoint_index.is_some());
++    count(accounts, expected)?;
++    unique(accounts)?;
++    Ok(PairForestSpendLayoutV1 {
++        page,
++        marker_index,
++        payer_index,
++        system_program_index,
++        registry_start,
++        verifier_index,
++        proof_index,
++        verifier_checkpoint_index,
++        token_start,
++    })
++}
++#[kani::proof]
++#[kani::unwind(1025)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]
++fn association(){
++ let cursor=if kani::any(){4usize}else{5usize};let withdrawal:bool=kani::any();
++ let expected=cursor+8+if withdrawal{5}else{0};let actual_len:usize=kani::any();kani::assume(actual_len==expected);
++ let key=Pubkey::new_from_array(kani::any());let owner=Pubkey::new_from_array(kani::any());let mut lamports:u64=kani::any();let mut data:[u8;1]=kani::any();let flags:[bool;3]=kani::any();
++ let info=AccountInfo::new(&key,flags[0],flags[1],&mut lamports,&mut data,&owner,flags[2],kani::any());
++ let infos:[AccountInfo<'_>;18]=core::array::from_fn(|_|info.clone());let accounts=&infos[..actual_len];
++ let header=RootPageHeaderV1{pool:Pubkey::new_from_array(kani::any()),page_number:kani::any(),first_sequence:kani::any(),filled:kani::any()};
++ let page=match kani::any::<u8>()%3{0=>PairForestSpendPageV1::Genesis,1=>PairForestSpendPageV1::SamePage(header),_=>PairForestSpendPageV1::Rollover{next_index:kani::any(),page_number:kani::any()}};
++ let child:ProgramResult=Ok(());
++ let mut calls=0u8;
++ let mut actual=tail(accounts,cursor,withdrawal,page,|args,n|{assert!(core::ptr::eq(args,accounts)&&n==expected);require_exact_account_count(args,n)},|args|{calls+=1;assert!(core::ptr::eq(args,accounts));child.clone()});
++ 
++ if actual_len!=expected{assert!(calls==0);assert!(matches!(actual,Err(e) if e==if actual_len<expected{ProgramError::NotEnoughAccountKeys}else{ProgramError::InvalidArgument}));}
++ else{assert!(calls==1);match child{Err(error)=>assert!(matches!(actual,Err(e) if e==error)),Ok(())=>{let l=actual.unwrap();
++ assert!(l.marker_index==cursor&&l.payer_index==cursor+1&&l.system_program_index==cursor+2&&l.registry_start==cursor+3&&l.verifier_index==cursor+5&&l.proof_index==cursor+6&&l.token_start==cursor+7&&l.verifier_checkpoint_index==Some(expected-1));
++ assert!(match(l.page,page){(PairForestSpendPageV1::Genesis,PairForestSpendPageV1::Genesis)=>true,(PairForestSpendPageV1::SamePage(a),PairForestSpendPageV1::SamePage(b))=>a==b,(PairForestSpendPageV1::Rollover{next_index:a,page_number:x},PairForestSpendPageV1::Rollover{next_index:b,page_number:y})=>a==b&&x==y,_=>false});
++ }}}
++}

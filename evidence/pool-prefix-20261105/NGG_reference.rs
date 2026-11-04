@@ -1,15 +1,21 @@
-pub type Key=[u8;32];
-#[derive(Clone,Copy)]
-pub struct Account {pub key:Key,pub owner:Key,pub signer:bool,pub writable:bool,pub executable:bool}
 #[derive(Clone,Copy,PartialEq,Eq)]
-pub enum Error {InvalidVerifierProgram,NotEnoughAccountKeys,InvalidVerifierProof,InvalidPayer,InvalidSystemProgram,InvalidTokenProgram,InvalidArgument}
-pub fn supported_loader(owner:&Key,loaders:&[Key;3])->bool {owner==&loaders[0]||owner==&loaders[1]||owner==&loaders[2]}
-pub fn verifier(account:&Account,selected:&Key,loaders:&[Key;3])->Result<(),Error>{
-if account.key!=*selected||!account.executable||account.signer||account.writable||!supported_loader(&account.owner,loaders){return Err(Error::InvalidVerifierProgram);}Ok(())}
-pub fn transport(program:&Account,proof:&Account,checkpoint:Option<&Account>)->Result<Key,Error>{let checkpoint=checkpoint.ok_or(Error::NotEnoughAccountKeys)?;
-if proof.key==program.key||proof.executable||proof.signer||proof.writable||checkpoint.owner!=program.key||checkpoint.executable||checkpoint.signer||checkpoint.writable||checkpoint.key==proof.key||checkpoint.key==program.key{return Err(Error::InvalidVerifierProof);}Ok(program.key)}
-pub fn payer(payer:&Account,system:&Account,system_id:&Key,native_id:&Key)->Result<(),Error>{
-if !payer.signer||!payer.writable||payer.executable||payer.owner!=*system_id{return Err(Error::InvalidPayer);}
-if system.key!=*system_id||system.owner!=*native_id||!system.executable||system.signer||system.writable{return Err(Error::InvalidSystemProgram);}Ok(())}
-pub fn token(account:&Account,token_id:&Key,loaders:&[Key;3])->Result<(),Error>{if account.key!=*token_id||!account.executable||account.signer||account.writable||!supported_loader(&account.owner,loaders){return Err(Error::InvalidTokenProgram);}Ok(())}
-pub fn count(actual:usize,expected:usize)->Result<(),Error>{if actual!=expected{return Err(if actual<expected{Error::NotEnoughAccountKeys}else{Error::InvalidArgument});}Ok(())}
+pub enum NGGSpineError {InvalidInstructionData,NotEnoughAccountKeys,InvalidArgument,ArithmeticOverflow,Child(u64)}
+#[derive(Clone,Copy)]
+pub struct Hints {pub current_page:u8,pub next_page:u8,pub vault_authority:u8,pub vault_token_account:u8}
+pub fn decode_prefix<R>(instruction_data:&[u8],decoded:Result<R,NGGSpineError>,account_count:usize)->Result<(R,[usize;3],Hints),NGGSpineError>{
+let split=instruction_data.len().checked_sub(4).ok_or(NGGSpineError::InvalidInstructionData)?;
+let (_body,hints)=instruction_data.split_at(split);
+let hints=Hints{current_page:hints[0],next_page:hints[1],vault_authority:hints[2],vault_token_account:hints[3]};
+let request=decoded?;
+if account_count==0{return Err(NGGSpineError::NotEnoughAccountKeys);}
+if account_count<2{return Err(NGGSpineError::NotEnoughAccountKeys);}
+if account_count<3{return Err(NGGSpineError::NotEnoughAccountKeys);}
+Ok((request,[0,1,2],hints))}
+#[derive(Clone,Copy)]
+pub struct Layout {pub marker_index:usize,pub payer_index:usize,pub system_program_index:usize,pub registry_start:usize,pub verifier_index:usize,pub proof_index:usize,pub verifier_checkpoint_index:usize,pub token_start:usize}
+pub fn layout_tail(cursor:usize,withdrawal:bool,accounts_len:usize,unique:Result<(),NGGSpineError>)->Result<Layout,NGGSpineError>{
+let marker_index=cursor;let payer_index=cursor+1;let system_program_index=cursor+2;let registry_start=cursor+3;let verifier_index=cursor+5;let proof_index=cursor+6;let token_start=cursor+7;
+let expected=token_start.checked_add(if withdrawal{5}else{0}).ok_or(NGGSpineError::ArithmeticOverflow)?;
+let verifier_checkpoint_index=expected;let expected=expected+1;
+if accounts_len!=expected{return Err(if accounts_len<expected{NGGSpineError::NotEnoughAccountKeys}else{NGGSpineError::InvalidArgument});}
+unique?;Ok(Layout{marker_index,payer_index,system_program_index,registry_start,verifier_index,proof_index,verifier_checkpoint_index,token_start})}
