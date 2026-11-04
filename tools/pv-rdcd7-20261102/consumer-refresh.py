@@ -1,9 +1,9 @@
 """Read-only differential census for refs advanced since the original inventory."""
 from pathlib import Path
-import subprocess,json,hashlib,re
-R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';out=E/'session2-census';out.mkdir(exist_ok=True)
+import subprocess,json,hashlib,re,sys
+R=Path(__file__).resolve().parents[2];E=R/'evidence/pv-rdcd7-20261102';label=sys.argv[1] if len(sys.argv)>1 else 'session2';assert re.fullmatch(r'session[0-9]+',label);out=E/(label+'-census');out.mkdir(exist_ok=True)
 def git(*a):return subprocess.check_output(['git',*a],cwd=R)
-s=git('for-each-ref','--format=%(refname) %(objectname)','refs/heads','refs/remotes').decode();(E/'REFS-session2.txt').write_text(s)
+s=git('for-each-ref','--format=%(refname) %(objectname)','refs/heads','refs/remotes').decode();(E/('REFS-'+label+'.txt')).write_text(s)
 refs=[l.split() for l in s.splitlines()]+[['HEAD',git('rev-parse','HEAD').decode().strip()]]
 original=json.load(open(E/'CONSUMERS-census.json'));old={x['revision'] for x in original['results']};known={(x['path'],x['sha256']) for x in json.load(open(E/'CONSUMER-variants.json'))};byrev={}
 for ref,rev in refs:
@@ -29,6 +29,6 @@ for rev,names in byrev.items():
    if (path,h) not in known:
     variants.append(dict(path=path,sha256=h,revision=rev,refs=names,blob=git('rev-parse',rev+':'+path).decode().strip()))
  results.append(dict(revision=rev,refs=names,grep_file=str(p.relative_to(E)),grep_sha256=hashlib.sha256(hits.encode()).hexdigest(),files=sorted(paths),reverse_import_cone=sorted(cone)))
-(E/'CONSUMERS-session2-refresh.json').write_text(json.dumps(dict(refs_count=len(refs),original_census='CONSUMERS-census.json',additional_revisions=len(byrev),results=results,new_variants=variants,complete=True),indent=2)+'\n')
+(E/('CONSUMERS-'+label+'-refresh.json')).write_text(json.dumps(dict(refs_count=len(refs),original_census='CONSUMERS-census.json',additional_revisions=len(byrev),results=results,new_variants=variants,complete=True),indent=2)+'\n')
 print('Differential census complete:',len(byrev),'revisions;',len(variants),'new variants')
 for x in variants:print(','.join(x['refs']),x['path'])
