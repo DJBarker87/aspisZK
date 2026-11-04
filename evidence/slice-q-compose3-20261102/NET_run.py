@@ -23,6 +23,7 @@ def ssh(code,stdin=None,submitted=False):
   if r.returncode!=255 or submitted:return r
   if retry<10:time.sleep(60)
  raise SystemExit('transport exhausted')
+vanished_retry=False
 for retry in range(11):
  code=f'''import pathlib,subprocess,json,sys
 b=pathlib.Path({B!r});log=b/{(a+'-barrier-'+str(retry)+'.log')!r}
@@ -36,6 +37,12 @@ print(log.read_text());sys.exit(r.returncode)
   raise SystemExit('STOP infrastructure: missing admission JSON')
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit_status=r.returncode,reservation=ad),indent=1)+'\n')
  if r.returncode==0 and ad.get('allowed') is True:break
+ if 'FileNotFoundError' in str(ad.get('error','')):
+  err=str(ad['error'])
+  own=[json.loads(p.read_text()).get('cgroup','') for p in E.glob('NET_*/receipt.json')]
+  assert '/sys/fs/cgroup/' in err and not any(c and c in err for c in own),'STOP infrastructure: vanished own/non-cgroup path'
+  if vanished_retry:raise SystemExit('STOP infrastructure: repeated vanished-cgroup scan failure')
+  vanished_retry=True;time.sleep(30);continue
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:
   print('reservation refused; wait three minutes',flush=True);time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
@@ -44,7 +51,7 @@ source=source_file.read_text()
 # coherent path; imported-cache hashes are independently recorded at intake.
 code=f'''from pathlib import Path
 import json,hashlib
-roots={[B,CACHE,CACHE+'/NEB_exports_20261029',COHERENT,COHERENT+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean']!r};src={source!r};seen={{}}
+roots={[B,CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NET_peer_exports',COHERENT,COHERENT+'/objects','/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/lib/lean']!r};src={source!r};seen={{}}
 for line in src.splitlines():
  if line.startswith('import '):
   for mod in line[7:].split():
@@ -59,7 +66,7 @@ print(json.dumps(seen))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stdout+r.stderr
 pins=json.loads(r.stdout)
-cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE,CACHE+'/NEB_exports_20261029',COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NET_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
+cfg=dict(attempt=a,kind='lean',module=module,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=[rel],command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-o',module.replace('.','/')+'.olean',rel],timeout=180,env=dict(LEAN_PATH=':'.join([B,CACHE,CACHE+'/NEB_exports_20261029',CACHE+'/NET_peer_exports',COHERENT,COHERENT+'/objects'])),deps_fingerprint=dict(selected_objects=pins,cache_import_manifest_sha256=hashlib.sha256((E/'NET_CACHE_IMPORTS.json').read_bytes()).hexdigest(),peer_cache_import_manifest_sha256=hashlib.sha256((E/'NET_PEER_CACHE_IMPORTS.json').read_bytes()).hexdigest()),expected_time='Focused symbolic call-domain proof; no native multiplication or recurrence evaluation')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
 files={rel:source,a+'.json':json.dumps(cfg)}
 r=ssh('python3',f'''from pathlib import Path

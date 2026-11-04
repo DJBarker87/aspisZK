@@ -33,6 +33,18 @@ class Gates(unittest.TestCase):
  def test_window_missing_proof(self):
   cs=copy.deepcopy(self.certificates);cs[0]['lean_evidence'].pop()
   with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_wide_narrow_length(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('WideExact::from_le_bytes'))['domain']='exact32 only'
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_wide_missing_rejection(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('WideExact::from_le_bytes')).pop('rejection_pair')
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_field_missing_panic_control(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('weights.rs::field'))['rejection_pair']=[]
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_field_unrestricted_slots(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('weights.rs::field'))['domain']='every usize slot'
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
  def test_unknown_recipe(self):
   with self.assertRaises(ValueError):v.validate(self.edges,[{'root':'CM31::inv','status':'CLOSED'}],replay=False)
  def test_new_collection(self):self.reject(lambda x:x.update(unreviewed=[]))

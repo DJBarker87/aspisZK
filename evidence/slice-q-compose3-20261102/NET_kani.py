@@ -4,8 +4,9 @@ from pathlib import Path
 import hashlib,json,subprocess,sys,time,shlex
 E=Path(__file__).resolve().parent;R=E.parent.parent
 H='dombarker@100.108.41.90';B='/home/dombarker/project-offloads/codex-cx-slice-q-compose3-20261102';COHERENT='/home/dombarker/project-offloads/codex-cx-sound-int2-20261025'
-a,harness,*flag=sys.argv[1:];assert a.startswith('NET_K') and 1<=int(a[-3:])<=100
-assert harness.startswith(('field::NET_qinverse::','field::NET_inverse::','field::NET_windows::','verifier::NET_geometry::','verifier::candidate::NET_query::'))
+a,harness,*flag=sys.argv[1:];assert a.startswith('NET_K') and 1<=int(a[-3:])<=102
+assert sum(json.loads(p.read_text()).get('kind')=='kani' for p in E.glob('NET_K*/receipt.json'))<100,'Kani run budget exhausted'
+assert harness.startswith(('field::NET_wide_windows::','field::NET_qinverse::','field::NET_inverse::','field::NET_windows::','verifier::NET_prefix::','verifier::NET_prefix_meta::','verifier::NET_fields::','verifier::NET_geometry::','verifier::candidate::NET_query::'))
 assert all(c.isalnum() or c in '_:' for c in harness)
 target=harness
 assert not (E/a).exists();active=E/'NET_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a,target=harness)))
@@ -16,6 +17,7 @@ def ssh(code,stdin=None,submitted=False):
   if r.returncode!=255 or submitted:return r
   if retry<10:time.sleep(60)
  raise SystemExit('transport exhausted')
+vanished_retry=False
 for retry in range(11):
  code=f'''import pathlib,subprocess,json,sys
 b=pathlib.Path({B!r});log=b/{(a+'-barrier-'+str(retry)+'.log')!r}
@@ -29,6 +31,12 @@ print(log.read_text());sys.exit(r.returncode)
   raise SystemExit('STOP infrastructure: missing admission JSON')
  (E/(a+'-admission.json')).write_text(json.dumps(dict(exit_status=r.returncode,reservation=ad),indent=1)+'\n')
  if r.returncode==0 and ad.get('allowed') is True:break
+ if 'FileNotFoundError' in str(ad.get('error','')):
+  err=str(ad['error'])
+  own=[json.loads(p.read_text()).get('cgroup','') for p in E.glob('NET_*/receipt.json')]
+  assert '/sys/fs/cgroup/' in err and not any(c and c in err for c in own),'STOP infrastructure: vanished own/non-cgroup path'
+  if vanished_retry:raise SystemExit('STOP infrastructure: repeated vanished-cgroup scan failure')
+  vanished_retry=True;time.sleep(30);continue
  if (r.returncode==78 or ad.get('allowed') is False) and retry<10:print('reservation refused; wait three minutes',flush=True);time.sleep(180);continue
  raise SystemExit('STOP infrastructure admission')
 verifier=harness.startswith(('verifier::','fast_pairing::'))
@@ -38,6 +46,7 @@ if flag:
  assert len(flag)==1 and flag[0] in ['NET_bad_reply','NET_bad_argument','NET_bad_frame','NET_bad_order','NET_bad_option']+['NET_wrong_field','NET_wrong_badfield','NET_wrong_empty','NET_wrong_index','NET_wrong_opening','NET_wrong_inverse','NET_wrong_zero','NET_wrong_cell','NET_wrong_window','NET_wrong_getter','NET_wrong_q','NET_wrong_geometry','NET_wrong_reduce','NET_wrong_wrapper']+['NET_wrong_'+p+'_'+o for p in ['m','c','q','e'] for o in ['add','sub','double']]+['NET_wrong_limbs','NET_wrong_canonical','NET_wrong_embed'];env['RUSTFLAGS']+=' --cfg '+flag[0]
 sources=['NET_TOOL_PINS.json','NET_gate.py','NET_graph.py','NET_SOURCE_PINS.json','NET_src/Cargo.lock','NET_src/Cargo.toml','NET_src/KMX_stubs.rs','NET_src/KMX_native.rs','NET_src/KMX_CopyMeaning.lean','NET_src/crates/aspis-core/src/field.rs','NET_src/crates/aspis-core/src/lib.rs','NET_src/crates/aspis-core/src/field/NET_inverse.rs']
 
+if verifier:sources += ['NET_src/crates/aspis-r1-cost-probe/src/'+p for p in ['verifier.rs','lib.rs','weights.rs','candidate.rs','fast_dots.rs']]
 sources += ['NET_src/'+p for p in json.loads((E/'NET_SOURCE_PINS.json').read_text()) if '/NET_' in p and 'NET_src/'+p not in sources]
 cfg=dict(attempt=a,kind='kani',target=target,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=R,text=True).strip(),source_tree_dirty=True,sources=sources,command=['python3','NET_gate.py',a+'.json'],native_command=ni,timeout=180,env=env,deps_fingerprint=dict(source_pinset='NET_SOURCE_PINS.json',frozen_revision='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'),expected_time='Optimized compilation then '+target+' native cut; field multiplication bodies never execute in the gate, only the documented Lean-discharged oracle specification',copy_patch_sha256=hashlib.sha256((E.parent/'kani-mitig-20261028/KMX_copy_stubs.patch').read_bytes()).hexdigest(),feature_scope=('deployed verifier default/private-leaf-salts/optimized-terminal/program-build; statement r0/pool-v1-kernel and resolved optimized features recorded per crate' if verifier else 'core r0 helper, feature-independent frozen method bodies; cfg(kani) instrumentation only'),copy_dependency='KMX-approved copy implementation applied; scalar-only reducer has no copy dependence, record/array lanes require matched KMX positive/negative controls')
 (E/(a+'.json')).write_text(json.dumps(cfg,indent=1)+'\n')
