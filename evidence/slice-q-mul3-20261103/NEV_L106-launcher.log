@@ -1,0 +1,54 @@
+{"attempt": "NEV_L106", "exit_status": 1, "wall_seconds": 2.913495850050822, "peak_rss_kib": "4349764", "swaps": "0", "print_axioms": ["'NEV_EbyDomains.private_canon' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEV_EbyDomains.from_wide' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEV_EbyDomains.from_limbs' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEV_EbyDomains.checked' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEV_EbyDomains.value' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEV_EbyDomains.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]", "'NEV_EbyDomains.total' depends on axioms: [propext, Classical.choice, Quot.sound]"]}
+NEV_generated/NEV_EbyDomains.lean:51:37: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+x : NQ
+actual : FIo_Native.fast_pairing.canonical.Q
+check :
+  FIo_Native.fast_pairing.canonical.Q.from_limbs (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯) =
+    ok
+      (if x.c0.a < 2147483647#u32 ∧ x.c0.b < 2147483647#u32 ∧ x.c1.a < 2147483647#u32 ∧ x.c1.b < 2147483647#u32 then
+        some (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯)
+      else none)
+o✝ : Option FIo_Native.fast_pairing.canonical.Q
+valid :
+  (if x.c0.a < 2147483647#u32 ∧ x.c0.b < 2147483647#u32 ∧ x.c1.a < 2147483647#u32 ∧ x.c1.b
+...
+tion FIo_Native.fast_pairing.canonical.Q
+valid :
+  (if x.c0.a < 2147483647#u32 ∧ x.c0.b < 2147483647#u32 ∧ x.c1.a < 2147483647#u32 ∧ x.c1.b < 2147483647#u32 then
+      some (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯)
+    else none) =
+    none
+run : ok (core.result.Result.Err ()) = ok (core.result.Result.Ok actual)
+⊢ ↑x.c1.b < 2147483647
+NEV_generated/NEV_EbyDomains.lean:52:42: error: No goals to be solved
+NEV_generated/NEV_EbyDomains.lean:54:1: error: unsolved goals
+case h_2.refl
+x : NQ
+actual : FIo_Native.fast_pairing.canonical.Q
+check :
+  FIo_Native.fast_pairing.canonical.Q.from_limbs (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯) =
+    ok
+      (if x.c0.a < 2147483647#u32 ∧ x.c0.b < 2147483647#u32 ∧ x.c1.a < 2147483647#u32 ∧ x.c1.b < 2147483647#u32 then
+        some (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯)
+      else none)
+o✝ : Option FIo_Native.fast_pairing.canonical.Q
+heq✝ :
+  (if x.c0.a < 2147483647#u32 ∧ x.c0.b < 2147483647#u32 ∧ x.c1.a < 2147483647#u32 ∧ x.c1.b < 2147483647#u32 then
+      some (Array.make 4#usize [x.c0.a, x.c0.b, x.c1.a, x.c1.b] ⋯)
+    else none) =
+    some actual
+⊢ canonQ x ∧ actual = q x ∧ LPi_RawValues.Canon actual
+'NEV_EbyDomains.private_canon' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEV_EbyDomains.from_wide' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEV_EbyDomains.from_limbs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEV_EbyDomains.checked' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEV_EbyDomains.value' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEV_EbyDomains.scalar' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_EbyDomains.total' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+Running as unit: run-r604176c785834768b43dc25d657751d5.scope; invocation ID: 037bbf22ad06415bbd36743f6026e3a2

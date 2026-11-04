@@ -1,3 +1,13 @@
+# Final qualified status
+
+Four job-new rows composed CLOSED: prefix TX1:185/TX2:111 and accumulation TX1:182/TX2:108. Component142 rows/179 edges; both roots OPEN. No dot row or incoming caller edge is newly credited. P6/D188 option A remains trust reclassification, never removal. No 100-bit per-attempt, privacy or two-transaction headline claim is made.
+
+Final own audit/manifest gate is INCOMPLETE: L119/L120 exit1 from missing explicit imports, with only standard printed theorem axioms. Repairs are prepared but UNREPLAYED after120/120 Lean and70/70 Kani. No failed audit is a pass. See NEV_FINAL_MANIFEST_RESULT.json.
+
+Dot prerequisites include complete source Results, actual8-cell suffix/zero/domain propagation, SAME scalar-read canonicality, mathematical schedule, wrapper Result/slot domains and matched native cell/fold/window cuts. Standalone source-model auxiliaries are checked only in their pinned contexts; adopted-caller composition remains OPEN. K070 is unpaired, K062/K065 timed out, wrapper native context is unrun. Full loop/physical/cohort edge assembly remains for the next budget. Exact member obligations:NEV_REMAINING.json; provenance and recovery:NEV_HANDOFF.md.
+
+Older stages below are history, not current closure assertions.
+
 # Dot auxiliary checkpoint (continuing Lean)
 
 Component remains142 CLOSED rows/179 edges; only four new composed rows in this job. No dot caller row closes. NEV_DOT_AUX.json checks Q::raw, Dot::push and EbyKDot::push as small outside-Q auxiliaries; actual extraction, caller domains, matched native controls and KMX controls are retained. Native caller review remains OPEN in NEV_DOT_NATIVE_REVIEW.json. K062/K065 timeouts and unpaired K070 are excluded from credit. Five metadata fault controls pass. Kani budget70/70, Lean94/120, extraction5/20. Lean-only eight-cell/sweep/loop/caller facts remain in progress.

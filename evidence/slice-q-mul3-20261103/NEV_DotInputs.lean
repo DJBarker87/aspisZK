@@ -1,8 +1,9 @@
-import NEV_EbyDomains
+import NEV_DotCarrier
+import RPz7_FIo_Install
 set_option autoImplicit false
 noncomputable section
 namespace NEV_DotInputs
-open Aeneas Aeneas.Std Result AspisR1 LPi_FieldValues
+open Aeneas Aeneas.Std Result AspisR1 NEV_DotCarrier
 abbrev Coefficients := Array NE 29#usize
 def Canonical (g : Coefficients) : Prop := ∀ value∈g.val,canonE value
 /-- The selected coefficient is the SAME actual bounded read from g; no

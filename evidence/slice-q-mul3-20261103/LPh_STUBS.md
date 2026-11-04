@@ -47,3 +47,7 @@ OPEN until the accumulation packet validates; a table entry alone is no pass.
 | NEV_TailContextLog.push/finish/add | NEV_EbyPushAssociation.source / NEV_EbyDomains.total; NEI_DotFinishValues and retained finish packet; NBG_WideCarriers.wide_add | Full arbitrary receiver/counter/raw rows, canonical reached field operands. K066/K067 plus K068/K069 only local cut credit. SAME selected g read, complete StepBy and native full caller association remain explicit. |
 
 K062/K065 timeouts excluded. K070 lacks a matched negative and earns no native credit. No log is promoted into a completed dot caller bridge.
+
+## Final qualification
+
+Standalone dot auxiliary source-model proofs are separately pinned and NOT a completed adopted RPz7 caller bridge. Their current status is CHECKED_SOURCE_MODEL_AUXILIARY_COHORT_COMPOSITION_OPEN. Dot caller rows remain OPEN. Actual8-cell caller domains are proved by NEV_DotScalar.product / NEV_DotSweep.native_domain / NEV_DotEightTotal.suffix; SAME scalar canonicality by NEV_DotReadDomain.reached. Source-to-native g-window/StepBy/tail/reduction composition is still required. No stub without its exact caller/domain/callee transport is counted as a caller pass. Final missing-import audit repairs are UNREPLAYED.

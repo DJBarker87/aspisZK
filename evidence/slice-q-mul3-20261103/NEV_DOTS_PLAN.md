@@ -69,3 +69,41 @@ key-order hypothesis was incorrect and is superseded by this exact diagnosis.
 This is a strictly additional frozen-lock assertion in the controls, never
 an exception for a Rust source or executable configuration. NEV_dot_aux.py
 passes after that explicit metadata-only check; it does not weaken old gates.
+
+L099 excluded an import collision: old NEB_CheckedScalar imported NBQ_U06's
+fixture-oriented original S1 decoder beside the adopted RPz7 decoder. L100
+strips the unused Eby domain dependency from DotInputs (no theorem change).
+EbyDomains now imports only NBQ_QChecks and uses the unchanged generic
+NEB_CheckedScalar.accepted/value proof structure directly with retained
+LPi_CheckedInputs laws; no fixture/counter theorem or S1 candidate is edited.
+L101 explicit alias rewrite mismatch excluded; L102 fixes the nominal head
+with change and passes all three standard-only audits. The raw/full Eby body
+association remains unchanged, native sources unchanged.
+
+The L103 coimport still found original S1 through LPi_FieldValues's unused
+legacy dependency graph. Canonical coordinate PREDICATES are now isolated in
+NEV_DotCarrier (FIo_NativeTypes only), identical four/eight u32 bounds. DotInputs
+uses that minimal carrier. EbyDomains replays only the generic constructor/
+accepted-check/public-push proof structure (LPi_CheckedInputs, NBQ_QChecks,
+LPi_PublicPush), with the SAME existing LPi_DotPushTotal arithmetic/induction.
+It no longer imports LPi_FieldValues or NBQ_U06 at all. No field multiplication
+or R22 proof is repeated, no S1 file edited, no Rust/harness source changed.
+L106 excluded a split tactic choosing the Option match before the guard;
+L108 explicitly cases the actual four-coordinate guard first. L107 minimal
+DotInputs passes. This is an import-coherence repair, not a new input bound.
+
+Cohort-selection correction (authoritative root checked directly):
+RPx_Deployed explicitly imports RPz7_FIp_Install. The original NEG forest's
+RPz7 caller imports were correct. L111 unprefixed rematerialization is excluded
+(missing RawTx1DigestLog); exact accepted L089/L091 sources were restored, and
+no failed rematerialization object is relied on. The actual offending helper
+imports were unprefixed FIo_NativeFuns AND FIo_NativeTypes (whose NP6 standard
+model graph reaches the original S1 decoder). L113 DotCarrier now imports the
+headline-selected RPz7_FIo_Install; L114 DotInputs passes with that same owner.
+L115 then passed the real eight-cell proof, exposing only zero-list lookup and
+an opaque29#usize Omega bound. L116 keeps zero symbolic via getElem_replicate
+and explicitly changes the size to Nat29; all three matrix theorems pass with
+standard axioms. No larger cap, source reduction or new model was adopted.
+The independent auxiliary source-model proofs remain separately pinned in the
+legacy domain snapshot; their adopted-caller composition is explicitly OPEN,
+not silently credited as an RPz7 caller bridge. No composed dot row is added.
