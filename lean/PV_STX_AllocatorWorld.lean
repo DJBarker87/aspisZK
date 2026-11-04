@@ -23,7 +23,8 @@ success AND denial. No adequacy promise; no arbitrary effect suffix. -/
 def tryAllocate (allocator : Allocator) (encode : AllocationEvent → Bytes)
     (layout : Layout) (owner : Nat) (w : World) : Reply World NativeEvent (Option Block) :=
   let reply := allocator w layout
-  let post : World := {w with allocator := reply.allocator,errno := reply.errno,
+  let post : World := {w with allocator := reply.allocator
+    errno := reply.errno
     base := {w.base with allocations := w.base.allocations+1}}
   match reply.answer with
   | .denied => ⟨.returned (.ok none),post,
@@ -55,7 +56,8 @@ theorem denied_prefix (allocator : Allocator) (encode : AllocationEvent → Byte
     (h : (allocator w layout).answer = .denied) :
     run (handler allocator encode) 3 (allocate layout owner) w =
       ⟨.fault .abort,
-       {w with allocator := (allocator w layout).allocator,errno := (allocator w layout).errno,
+       {w with allocator := (allocator w layout).allocator
+        errno := (allocator w layout).errno
         base := {w.base with allocations := w.base.allocations+1}},
        [event encode (.request layout),event encode (.denied layout (allocator w layout).errno),
         side "allocator-abort" []]⟩ := by
