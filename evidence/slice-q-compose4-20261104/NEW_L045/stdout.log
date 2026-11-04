@@ -1,0 +1,368 @@
+NEW_GeometryRawBody.lean:20:104: error: unsolved goals
+start : Usize
+iter : core.slice.iter.Iter U32
+lines flat : alloc.vec.Vec U32
+⊢ (do
+      let a ← core.slice.iter.IteratorSliceIter.next iter
+      resultMap (NEW_LoopMap.flowMap answer)
+          (let (o, iter1) := a
+          match o with
+          | none => do
+            let b ← alloc.vec.Vec.is_empty Global flat
+            if b = true then
+                ok
+                  (done
+                    (core.result.Result.Ok
+                      { start := start,
+                        inverses := alloc.vec.Vec.new (Std.Array NEW_GeometryActual.aspis_core.field.M31 5#usize),
+                        line_z := lines }))
+              else do
+                let (prefixes, product) ← NEW_GeometryActual.verifier.batch_prefix_products flat.deref
+                let suffix_inverse ← product.inv
+                let flat_inverse1 ←
+                  alloc.vec.Vec.resize NEW_GeometryActual.aspis_core.field.M31.Insts.CoreCloneClone
+                      (alloc.vec.Vec.with_capacity NEW_GeometryActual.aspis_core.field.M31 flat.len) flat.len
+                      NEW_GeometryActual.aspis_core.field.M31.ZERO
+                let iter2 ←
+                  core.iter.traits.iterator.Iterator.rev.trait_default
+                      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                      (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                      { start := 0#usize, «end» := flat.len }
+                let flat_inverse2 ←
+                  NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0_loop0 iter2 flat prefixes suffix_inverse
+                      flat_inverse1
+                let m ←
+                  core.iter.traits.iterator.Iterator.map.default
+                      (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                      NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      { start := 0#usize, «end» := lines.len } flat_inverse2
+                let inverses ←
+                  core.iter.traits.iterator.Iterator.collect.default
+                      (NEW_GeometryActual.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator
+                        (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                        NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315)
+                      (core.iter.traits.collect.FromIteratorVec
+                        (Std.Array NEW_GeometryActual.aspis_core.field.M31 5#usize))
+                      m
+                ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+          | some query => do
+            let u ← lift (UScalar.cast UScalarTy.Usize query)
+            let r ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new u
+            let r1 ←
+              core.result.Result.map_err
+                  NEW_GeometryActual.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  r ()
+            let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+            match cf with
+              | core.ops.control_flow.ControlFlow.Continue val => do
+                let p ← NEW_GeometryActual.fast_domain.fibre_point val
+                let i ← u / 4#usize
+                let i1 ← lift (Usize.wrapping_mul i 4#usize)
+                let r2 ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new i1
+                let r3 ←
+                  core.result.Result.map_err
+                      NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      r2 ()
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue val1 => do
+                    let line_x ← NEW_GeometryActual.fast_domain.line_node val1
+                    let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                    let i3 ← lift (i2.wrapping_add 3#usize)
+                    let r4 ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new i3
+                    let r5 ←
+                      core.result.Result.map_err
+                          NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          r4 ()
+                    let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                    match cf2 with
+                      | core.ops.control_flow.ControlFlow.Continue val2 => do
+                        let line_y ← NEW_GeometryActual.fast_domain.line_node val2
+                        let m ← line_x.mul line_x
+                        let m1 ← m.double
+                        let line_z ← m1.sub NEW_GeometryActual.aspis_core.field.M31.ONE
+                        let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                        let i4 ← core.slice.Slice.iter s
+                        let (b, _) ←
+                          core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                              NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                              i4 ()
+                        if b = true then ok (done (core.result.Result.Err NEW_GeometryActual.verifier.Error.Query))
+                          else do
+                            let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                            let flat1 ←
+                              alloc.vec.Vec.extend_from_slice
+                                  NEW_GeometryActual.aspis_core.field.M31.Insts.CoreCloneClone flat s1
+                            let line_z_values1 ← lines.push line_z
+                            ok (cont (iter1, line_z_values1, flat1))
+                      | core.ops.control_flow.ControlFlow.Break residual => do
+                        let r6 ←
+                          core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                              NEW_GeometryActual.verifier.QueryGeometry
+                              (core.convert.FromSame NEW_GeometryActual.verifier.Error) residual
+                        ok (done r6)
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          NEW_GeometryActual.verifier.QueryGeometry
+                          (core.convert.FromSame NEW_GeometryActual.verifier.Error) residual
+                    ok (done r6)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      NEW_GeometryActual.verifier.QueryGeometry
+                      (core.convert.FromSame NEW_GeometryActual.verifier.Error) residual
+                ok (done r6))) =
+    do
+    let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+    match o with
+      | none => do
+        let b ← alloc.vec.Vec.is_empty Global flat
+        if b = true then
+            ok
+              (done
+                (core.result.Result.Ok
+                  { start := start,
+                    inverses := alloc.vec.Vec.new (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+                    line_z := lines }))
+          else do
+            let (prefixes, product) ← NEW_GeometryActual.verifier.batch_prefix_products flat.deref
+            let suffix_inverse ← NEW_GeometryActual.aspis_core.field.M31.inv product
+            let flat_inverse1 ←
+              alloc.vec.Vec.resize core.clone.CloneU32
+                  (alloc.vec.Vec.with_capacity AspisR1Stage2.aspis_core.field.M31 flat.len) flat.len
+                  NEW_GeometryActual.aspis_core.field.M31.ZERO
+            let iter2 ←
+              core.iter.traits.iterator.Iterator.rev.trait_default
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                  { start := 0#usize, «end» := flat.len }
+            let flat_inverse2 ←
+              NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0_loop0 iter2 flat prefixes suffix_inverse
+                  flat_inverse1
+            let m1 ←
+              core.iter.traits.iterator.Iterator.map.default
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                  { start := 0#usize, «end» := lines.len } flat_inverse2
+            let inverses ←
+              core.iter.traits.iterator.Iterator.collect.default
+                  (NEW_GeometryActual.core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315)
+                  (core.iter.traits.collect.FromIteratorVec (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)) m1
+            ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+      | some query => do
+        let u ← lift (UScalar.cast UScalarTy.Usize query)
+        let r ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new u
+        let r1 ←
+          core.result.Result.map_err
+              (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                { op0 := fun {T F} => core.array.from_fn,
+                  op1 := fun {Self B F Clause0_Item} => core.iter.traits.iterator.Iterator.map.default,
+                  op2 := fun {T E F O} => core.result.Result.map_err,
+                  op3 := fun {T F} => core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any,
+                  op4 := fun {T} => alloc.vec.Vec.is_empty,
+                  op5 := NEW_GeometryActual.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+                  op6 := ok NEW_GeometryActual.aspis_core.field.M31.ZERO,
+                  op7 := ok NEW_GeometryActual.aspis_core.field.M31.ONE,
+                  op8 := NEW_GeometryActual.aspis_core.field.M31.sub,
+                  op9 := NEW_GeometryActual.aspis_core.field.M31.mul,
+                  op10 := NEW_GeometryActual.aspis_core.field.M31.double,
+                  op11 := NEW_GeometryActual.aspis_core.field.M31.inv,
+                  op12 := NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new,
+                  op13 := NEW_GeometryActual.verifier.batch_prefix_products,
+                  op14 := NEW_GeometryActual.fast_domain.line_node,
+                  op15 := fun u => do
+                    let p ← NEW_GeometryActual.fast_domain.fibre_point u
+                    ok { x := p.x, y := p.y },
+                  mapIterator := fun {B I F Item} it f =>
+                    { next := core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next it f } })
+              r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let x ← NEW_GeometryActual.fast_domain.fibre_point val
+            let i ← u / 4#usize
+            let i1 ← lift (Usize.wrapping_mul i 4#usize)
+            let r2 ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new i1
+            let r3 ←
+              core.result.Result.map_err
+                  (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                    { op0 := fun {T F} => core.array.from_fn,
+                      op1 := fun {Self B F Clause0_Item} => core.iter.traits.iterator.Iterator.map.default,
+                      op2 := fun {T E F O} => core.result.Result.map_err,
+                      op3 := fun {T F} => core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any,
+                      op4 := fun {T} => alloc.vec.Vec.is_empty,
+                      op5 := NEW_GeometryActual.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+                      op6 := ok NEW_GeometryActual.aspis_core.field.M31.ZERO,
+                      op7 := ok NEW_GeometryActual.aspis_core.field.M31.ONE,
+                      op8 := NEW_GeometryActual.aspis_core.field.M31.sub,
+                      op9 := NEW_GeometryActual.aspis_core.field.M31.mul,
+                      op10 := NEW_GeometryActual.aspis_core.field.M31.double,
+                      op11 := NEW_GeometryActual.aspis_core.field.M31.inv,
+                      op12 := NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new,
+                      op13 := NEW_GeometryActual.verifier.batch_prefix_products,
+                      op14 := NEW_GeometryActual.fast_domain.line_node,
+                      op15 := fun u => do
+                        let p ← NEW_GeometryActual.fast_domain.fibre_point u
+                        ok { x := p.x, y := p.y },
+                      mapIterator := fun {B I F Item} it f =>
+                        { next := core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next it f } })
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let line_x ← NEW_GeometryActual.fast_domain.line_node val1
+                let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                let i3 ← lift (i2.wrapping_add 3#usize)
+                let r4 ← NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new i3
+                let r5 ←
+                  core.result.Result.map_err
+                      (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        { op0 := fun {T F} => core.array.from_fn,
+                          op1 := fun {Self B F Clause0_Item} => core.iter.traits.iterator.Iterator.map.default,
+                          op2 := fun {T E F O} => core.result.Result.map_err,
+                          op3 := fun {T F} => core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any,
+                          op4 := fun {T} => alloc.vec.Vec.is_empty,
+                          op5 := NEW_GeometryActual.aspis_core.field.M31.Insts.CoreCmpPartialEqM31.eq,
+                          op6 := ok NEW_GeometryActual.aspis_core.field.M31.ZERO,
+                          op7 := ok NEW_GeometryActual.aspis_core.field.M31.ONE,
+                          op8 := NEW_GeometryActual.aspis_core.field.M31.sub,
+                          op9 := NEW_GeometryActual.aspis_core.field.M31.mul,
+                          op10 := NEW_GeometryActual.aspis_core.field.M31.double,
+                          op11 := NEW_GeometryActual.aspis_core.field.M31.inv,
+                          op12 := NEW_GeometryActual.aspis_core.r0.domain.FibreIndex.new,
+                          op13 := NEW_GeometryActual.verifier.batch_prefix_products,
+                          op14 := NEW_GeometryActual.fast_domain.line_node,
+                          op15 := fun u => do
+                            let p ← NEW_GeometryActual.fast_domain.fibre_point u
+                            ok { x := p.x, y := p.y },
+                          mapIterator := fun {B I F Item} it f =>
+                            { next := core.iter.adapters.map.Map.Insts.CoreIterTraitsIteratorIterator.next it f } })
+                      r4 ()
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let line_y ← NEW_GeometryActual.fast_domain.line_node val2
+                    let m ← NEW_GeometryActual.aspis_core.field.M31.mul line_x line_x
+                    let m1 ← NEW_GeometryActual.aspis_core.field.M31.double m
+                    let line_z ←
+                      NEW_GeometryActual.aspis_core.field.M31.sub m1 NEW_GeometryActual.aspis_core.field.M31.ONE
+                    let s ← lift (Array.make 5#usize [x.x, x.y, line_x, line_y, line_z] ⋯).to_slice
+                    let i4 ← core.slice.Slice.iter s
+                    let (b, _) ←
+                      core.slice.iter.Iter.Insts.CoreIterTraitsIteratorIteratorSharedAT.any
+                          NEW_GeometryActual.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                          i4 ()
+                    if b = true then ok (done (core.result.Result.Err AspisR1Stage2.verifier.Error.Query))
+                      else do
+                        let s1 ← lift (Array.make 5#usize [x.x, x.y, line_x, line_y, line_z] ⋯).to_slice
+                        let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                        let line_z_values1 ← lines.push line_z
+                        ok (cont (iter1, line_z_values1, flat1))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                          residual
+                    ok (done r6)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                ok (done r6)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r6 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            ok (done r6)
+NEW_GeometryRawBody.lean:23:19: warning: This simp argument is unused:
+  NEW_LoopMap.map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body,
+      Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body, r̵e̵s̵u̵l̵t̵M̵a̵p̵_̵b̵i̵n̵d̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵←̵z̵e̵r̵o̵_̵c̵a̵l̵l̵b̵a̵c̵k̵,̵←̵o̵u̵t̵e̵r̵_̵c̵a̵l̵l̵b̵a̵c̵k̵,̵←̵b̵a̵c̵k̵w̵a̵r̵d̵,̵←̵c̵l̵o̵n̵e̵,̵←̵m̵a̵p̵_̵i̵t̵e̵r̵a̵t̵o̵r̵]̵r̲e̲s̲u̲l̲t̲M̲a̲p̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲ ̲←̲ ̲z̲e̲r̲o̲_̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲←̲ ̲o̲u̲t̲e̲r̲_̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲←̲ ̲b̲a̲c̲k̲w̲a̲r̲d̲,̲ ̲←̲ ̲c̲l̲o̲n̲e̲,̲ ̲←̲ ̲m̲a̲p̲_̲i̲t̲e̲r̲a̲t̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:23:38: warning: This simp argument is unused:
+  NEW_LoopMap.flowMap
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body,
+      Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body, r̵e̵s̵u̵l̵t̵M̵a̵p̵_̵b̵i̵n̵d̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵
+  ̵ ̵ ̵ ̵ ̵←̵z̵e̵r̵o̵_̵c̵a̵l̵l̵b̵a̵c̵k̵,̵←̵o̵u̵t̵e̵r̵_̵c̵a̵l̵l̵b̵a̵c̵k̵,̵←̵b̵a̵c̵k̵w̵a̵r̵d̵,̵←̵c̵l̵o̵n̵e̵,̵←̵m̵a̵p̵_̵i̵t̵e̵r̵a̵t̵o̵r̵]̵r̲e̲s̲u̲l̲t̲M̲a̲p̲_̲b̲i̲n̲d̲,̲
+  ̲ ̲ ̲ ̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲←̲ ̲z̲e̲r̲o̲_̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲←̲ ̲o̲u̲t̲e̲r̲_̲c̲a̲l̲l̲b̲a̲c̲k̲,̲ ̲←̲ ̲b̲a̲c̲k̲w̲a̲r̲d̲,̲ ̲←̲ ̲c̲l̲o̲n̲e̲,̲ ̲←̲ ̲m̲a̲p̲_̲i̲t̲e̲r̲a̲t̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:24:45: warning: This simp argument is unused:
+  ← clone
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.verifier.QueryGeometry.for_range_loop0.body,
+      Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0.body,
+  ̵  ̵ ̵ ̵resultMap_bind,
+  ̲ ̲ ̲ ̲ ̲NEW_LoopMap.map_ok, ̲NEW_LoopMap.flowMap,
+  ̵  ̵ ̵ ̵← ̲zero_callback, ̲← ̲outer_callback, ̲← ̲backward,
+  ̲ ̲ ̲ ̲ ̲←c̵l̵o̵n̵e̵,̵←̵ ̲map_iterator]
+
+Note: Simp arguments with `←` have the additional effect of removing the other direction from the simp set, even if the simp argument itself is unused. If the hint above does not work, try replacing `←` with `-` to only get that effect and silence this warning.
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:25:42: warning: This simp argument is unused:
+  apply_ite
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲ ̲a̲n̲s̲w̲e̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲e̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:25:52: warning: This simp argument is unused:
+  NEW_LoopMap.map_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲ ̲a̲n̲s̲w̲e̲r̲,̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲
+  ̲ ̲ ̲ ̲ ̲e̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:26:4: warning: This simp argument is unused:
+  NEW_LoopMap.flowMap
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲a̲n̲s̲w̲e̲r̲,̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲e̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:26:24: warning: This simp argument is unused:
+  answer
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲,̲ ̲e̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:26:31: warning: This simp argument is unused:
+  geometry
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲n̲s̲w̲e̲r̲,̲ ̲e̲r̲r̲o̲r̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryRawBody.lean:26:40: warning: This simp argument is unused:
+  error
+
+Hint: Omit it from the simp argument list.
+  simp only [̵o̵p̵s̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵,̵a̵p̵p̵l̵y̵_̵i̵t̵e̵,̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵m̵a̵p̵_̵o̵k̵,̵
+  ̵ ̵ ̵ ̵ ̵N̵E̵W̵_̵L̵o̵o̵p̵M̵a̵p̵.̵f̵l̵o̵w̵M̵a̵p̵,̵a̵n̵s̵w̵e̵r̵,̵g̵e̵o̵m̵e̵t̵r̵y̵,̵e̵r̵r̵o̵r̵]̵[̲o̲p̲s̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲,̲ ̲a̲p̲p̲l̲y̲_̲i̲t̲e̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲m̲a̲p̲_̲o̲k̲,̲ ̲N̲E̲W̲_̲L̲o̲o̲p̲M̲a̲p̲.̲f̲l̲o̲w̲M̲a̲p̲,̲
+  ̲ ̲ ̲ ̲ ̲a̲n̲s̲w̲e̲r̲,̲ ̲g̲e̲o̲m̲e̲t̲r̲y̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEW_GeometryRawBody.map_iterator' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryRawBody.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,46 @@
+{"attempt": "NEW_L026", "exit_status": 0, "wall_seconds": 1.9662454440258443, "peak_rss_kib": "4926488", "swaps": "0", "print_axioms": []}
+@Aeneas.Std.Usize.ShiftRight_IScalar_spec : ∀ {ty1 : Aeneas.Std.IScalarTy} (x : Aeneas.Std.Usize)
+  (y : Aeneas.Std.IScalar ty1),
+  0 ≤ ↑y →
+    ↑y < ↑System.Platform.numBits → Aeneas.Std.WP.spec (x >>> y) fun z => ↑z = ↑x >>> y.toNat ∧ z.bv = x.bv >>> y.toNat
+Aeneas.Std.Usize.wrapping_shr.step_spec : ∀ (x : Aeneas.Std.Usize) (s : Aeneas.Std.U32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x.wrapping_shr s)) fun x_1 => x_1 = x.wrapping_shr s
+@Aeneas.Std.loop.fixpoint_induct : ∀ {α : Type u_1} {β : Type u_2}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (motive : (α → Aeneas.Std.Result β) → Prop),
+  Lean.Order.admissible motive →
+    (∀ (loop : α → Aeneas.Std.Result β),
+        mo
+...
+≤ ↑y →
+    ↑y < ↑System.Platform.numBits → Aeneas.Std.WP.spec (x >>> y) fun z => ↑z = ↑x >>> y.toNat ∧ z.bv = x.bv >>> y.toNat
+Aeneas.Std.Usize.wrapping_shr.step_spec : ∀ (x : Aeneas.Std.Usize) (s : Aeneas.Std.U32),
+  Aeneas.Std.WP.spec (Aeneas.Std.lift (x.wrapping_shr s)) fun x_1 => x_1 = x.wrapping_shr s
+@Aeneas.Std.loop.fixpoint_induct : ∀ {α : Type u_1} {β : Type u_2}
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (motive : (α → Aeneas.Std.Result β) → Prop),
+  Lean.Order.admissible motive →
+    (∀ (loop : α → Aeneas.Std.Result β),
+        motive loop →
+          motive fun x =>
+            match body x with
+            | Aeneas.Std.Result.ok r =>
+              match r with
+              | Aeneas.Std.ControlFlow.cont x => loop x
+              | Aeneas.Std.ControlFlow.done x => Aeneas.Std.Result.ok x
+            | Aeneas.Std.Result.fail e => Aeneas.Std.Result.fail e
+            | Aeneas.Std.Result.div => Aeneas.Std.Result.div) →
+      motive (Aeneas.Std.loop body)
+@Aeneas.Std.loop.spec_decr_nat : ∀ {α : Type u_1} {β : Type u_2} (measure : α → ℕ) (inv : α → Prop) (post : β → Prop)
+  (body : α → Aeneas.Std.Result (Aeneas.Std.ControlFlow α β)) (x : α),
+  (∀ (x : α),
+      inv x →
+        Aeneas.Std.WP.spec (body x) fun r =>
+          match r with
+          | Aeneas.Std.ControlFlow.done y => post y
+          | Aeneas.Std.ControlFlow.cont x' => inv x' ∧ measure x' < measure x) →
+    inv x → Aeneas.Std.WP.spec (Aeneas.Std.loop body x) post
+@[implicit_reducible] def Aeneas.Std.instHShiftRightUScalarIScalarResult : {ty0 : Aeneas.Std.UScalarTy} →
+  {ty1 : Aeneas.Std.IScalarTy} →
+    HShiftRight (Aeneas.Std.UScalar ty0) (Aeneas.Std.IScalar ty1) (Aeneas.Std.Result (Aeneas.Std.UScalar ty0)) :=
+fun {ty0} {ty1} => { hShiftRight := fun x y => x.shiftRight_IScalar y }
+
+Running as unit: run-r582ebe0b78524b7da03c92ae40a02674.scope; invocation ID: e16a4a8882724eb98e290e18eeb8ecdb

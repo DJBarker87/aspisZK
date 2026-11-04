@@ -1,0 +1,59 @@
+{"attempt": "NEW_L014", "exit_status": 1, "wall_seconds": 2.1840187350753695, "peak_rss_kib": "4929496", "swaps": "0", "print_axioms": ["'NEW_GeometryArithmetic.roundtrip' does not depend on any axioms", "'NEW_GeometryArithmetic.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.reduce_wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.add' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.sub' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.double' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.multiply_probe' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.double_probe' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.sub_probe' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.square' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NEW_GeometryArithmetic.cm_multiply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+ (match do
+      let m0 ← FIo_Native.aspis_core.field.M31.mul x.a y.a
+      let m1 ← FIo_Native.aspis_core.field.M31.mul x.b y.b
+      let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+      let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+      let i4 ← lift (i1.wrapping_add i3)
+      let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+      let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+      let i9 ← lift (i6.wrapping_add i8)
+      let i10 ← lift (i4.wrapping_mul i9)
+      let m2 ← FIo_Native.aspis_core.field.M31.reduce_u64 i10
+      let m ← FIo_Native.aspis_core.field.M31.sub m0 m1
+      let m3 ← FIo_Native.aspis_core.field.M31.sub m2 m0
+      let m4 ← FIo_Native.aspis_core.field.M31.sub m3 m1
+      ok { a := m, b := m4 } with
+    | ok x => ok { a := x.a, b := x.b }
+    | fail e => fail e
+    | div => div) =
+    do
+    let m0 ← FIo_Native.aspis_core.field.M31.mul x.a y.a
+    let m1 ← FIo_Native.aspis_core.field.M31.mul x.b y.b
+    let i1 ← lift (core.convert.num.FromU64U32.from x.a)
+    let i3 ← lift (core.convert.num.FromU64U32.from x.b)
+    let i4 ← lift (i1.wrapping_add i3)
+    let i6 ← lift (core.convert.num.FromU64U32.from y.a)
+    let i8 ← lift (core.convert.num.FromU64U32.from y.b)
+    let i9 ← lift (i6.wrapping_add i8)
+    let i10 ← lift (i4.wrapping_mul i9)
+    let m2 ← FIo_Native.aspis_core.field.M31.reduce_u64 i10
+    let m ← m0.sub m1
+    let m3 ← m2.sub m0
+    let m4 ← m3.sub m1
+    ok { a := m, b := m4 }
+NEW_GeometryArithmetic.lean:95:41: warning: This simp argument is unused:
+  resultMap_bind
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.aspis_core.field.CM31.mul, F̵I̵o̵_̵N̵a̵t̵i̵v̵e̵.̵a̵s̵p̵i̵s̵_̵c̵o̵r̵e̵.̵f̵i̵e̵l̵d̵.̵C̵M̵3̵1̵.̵m̵u̵l̵,̵r̵e̵s̵u̵l̵t̵M̵a̵p̵_̵b̵i̵n̵d̵,̵m̵u̵l̵t̵i̵p̵l̵y̵,̵r̵e̵d̵u̵c̵e̵_̵w̵r̵a̵p̵p̵e̵r̵,̵s̵u̵b̵,̵
+  ̵ ̵ ̵ ̵ ̵t̵o̵C̵,̵r̵e̵s̵u̵l̵t̵M̵a̵p̵]̵F̲I̲o̲_̲N̲a̲t̲i̲v̲e̲.̲a̲s̲p̲i̲s̲_̲c̲o̲r̲e̲.̲f̲i̲e̲l̲d̲.̲C̲M̲3̲1̲.̲m̲u̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲m̲u̲l̲t̲i̲p̲l̲y̲,̲ ̲r̲e̲d̲u̲c̲e̲_̲w̲r̲a̲p̲p̲e̲r̲,̲ ̲s̲u̲b̲,̲ ̲t̲o̲C̲,̲ ̲r̲e̲s̲u̲l̲t̲M̲a̲p̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEW_GeometryArithmetic.roundtrip' does not depend on any axioms
+'NEW_GeometryArithmetic.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.reduce_wrapper' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.double' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.multiply_probe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.double_probe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.sub_probe' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.square' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.inverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryArithmetic.cm_multiply' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+

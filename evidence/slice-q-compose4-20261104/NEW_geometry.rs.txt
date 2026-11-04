@@ -231,3 +231,12 @@ fn NEW_row_push_tx1(){NEW_row_push_case::<10>()}
 #[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
 #[kani::stub(alloc::alloc::realloc,KMX_realloc)]
 fn NEW_row_push_tx2(){NEW_row_push_case::<12>()}
+
+// Exact source index>>9, versus the library's unsigned literal type.
+// This checks translator-literal fidelity, not another Slice-Q function row.
+#[kani::proof]
+fn NEW_shift_literal(){
+ let index:usize=kani::any();let mut actual=index>>9;
+ #[cfg(NET_bad_reply)] {actual^=1;}
+ assert_eq!(actual,index>>9u32);
+}

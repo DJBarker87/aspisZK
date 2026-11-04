@@ -36,3 +36,34 @@ Early read-only host ps/shim/quiet-window SSH inspections overlapped the own
 waiting launch client. This procedural deviation is retained; no second
 prover was launched and no protected infrastructure was changed. Subsequent
 remote work is serial. No other worktree was written.
+
+## Stage 3: actual geometry extraction and component associations
+
+The actual root extraction's external std operations are instantiated by the
+existing named definitions (NEW_L010); no new axioms. The raw output has one
+ill-typed positive shift-count literal. The only derived-source repair is
+9#i32 to 9#u32 in wrapping_shr, audited by NEW_L012/L032 and native K038/K039.
+The raw artifact and exact normalization patch remain recorded. Derived
+Types/Funs compile in L009/L013, with no cap or elaborator option increase.
+
+Standard-axiom component results: raw field/probe and CM31 associations L016;
+prefix L018; lossless geometry/error and concrete raw child dictionary L025;
+point literal tables L030; loop return-map induction L037; callbacks and
+reverse body/loop L040; full point Result L044; Result syntax L046; full
+polynomial Result and continuation L048. Every top statement is audited.
+The literal-table tactic constructs reflexivity for the ORIGINAL goal, which
+the kernel checks; it does not change the statement or introduce an axiom.
+
+L050 evaluates seven whole emitted root fixtures (both deployed ranges, all
+queries, empty range, three rejection cases). This is translator fidelity,
+not a universal root proof. Full root conversion remains OPEN; L042/L045/
+L047/L049/L051 are failed drafts, including sorryAx in their rejected audits,
+and contribute no credit. Other failed introspection/component drafts are
+similarly excluded. No timeout/memory-killed attempt has been rerun.
+
+The next geometry task is the full step Result conversion to the concrete
+raw dictionary, followed by contextual substitution of the closed children
+and loop induction. Generic ops equality alone cannot be used for raw
+noncanonical double/sub inputs; L048 instead discharges the actual
+multiply-double-sub context, with canonical intermediates. Ledger remains
+62/78 functions,124 Q occurrences,169/257 edges; both roots OPEN.
