@@ -54,7 +54,7 @@ def visit(n):
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
-for n in ({['NFO_Final','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NFO_Final'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
+for n in ({['NFV_Accounts','NFV_HelperModel','NFV_PoolReturnData','NFR_CHelperBridge','NEP_Planted','NEP_Mutations'] if mode=='final' else ['NFV_Accounts','NFV_HelperModel','NFV_PoolReturnData','NFR_CHelperBridge'] if mode=='scan' else ['NEP_Planted','NEP_Mutations'] if mode=='fixtures' else []!r}):visit(n)
 for p in [coherent/'objects/Aeneas.olean',*(coherent/'objects/Aeneas').rglob('*.olean')]:
  selected[str(p)]=dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  for suffix in ['.private','.server','.ir']:
@@ -70,17 +70,15 @@ if pins['missing']:active.unlink();raise SystemExit('Missing unchanged dependenc
 command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFV_B_generated','-o','NFV_B_objects/'+moduleRel+'.olean','NFV_B_generated/'+moduleRel+'.lean']
 if target in ['NFO_WALKER','NFO_MemoryLimit','NFO_Driver','NFO_Coherence','NFV_Driver','NFV_Coherence','NFV_WALKER','NFV_MemoryLimit']:
  command[command.index('-o'):command.index('-o')]=['-c','NFO_native/'+moduleRel+'.c']
-if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFV_Driver','NFO_native/NFV_Driver.c','NFO_native/NFV_WALKER.c','NFO_native/NFV_MemoryLimit.c']
+if mode=='link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFV_Driver','NFO_native/NFV_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
 if mode in ['fixtures','final']:command=['NFO_native/NFV_Driver',mode]
-if mode=='final':command=['python3','NFV_audit_both.py']
-if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFV_Coherence','NFO_native/NFV_Coherence.c','NFO_native/NFV_MemoryLimit.c']
+if mode=='final':command=['NFO_native/NFV_Driver','final']
+if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFV_Coherence','NFO_native/NFV_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NFV_Coherence']
 if mode=='extract':command=['python3','NFO_extract.py']
-cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFV_Coherence.c','NFO_native/NFV_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFV_Driver.c','NFO_native/NFV_WALKER.c','NFO_native/NFV_MemoryLimit.c'] if mode=='link' else ['NFV_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFV_B_objects:'+B+'/NFV_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFV_Coherence.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFV_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c'] if mode=='link' else ['NFV_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFV_B_objects:'+B+'/NFV_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFV_B_SOURCE.lean.txt').write_text(source)
 files={'NFV_B_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
-if mode=='final':
- files['NFV_audit_both.py']=(E/'NFV_audit_both.py').read_text();cfg['sources'].append('NFV_audit_both.py');files[a+'.json']=json.dumps(cfg)
 if mode=='extract':
  files.update({'NFO_extract.py':(E/'NFO_extract.py').read_text(),'NFO_ref/Cargo.toml':(E/'NFO_reference_Cargo.toml').read_text(),'NFO_ref/src/lib.rs':(E/'NFO_decode_ref.rs').read_text()})
  cfg['sources']=['NFO_extract.py','NFO_ref/Cargo.toml','NFO_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)
@@ -108,7 +106,7 @@ r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
 if mode in ['link','scan-link']:
- r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFO_native/NFV_Driver.c','NFO_native/NFV_WALKER.c','NFO_native/NFV_MemoryLimit.c','NFO_native/NFV_Coherence.c'] if (b/n).exists()}}))")
+ r=ssh('python3',f"from pathlib import Path;import json;b=Path({B!r});print(json.dumps({{n:(b/n).read_text() for n in ['NFO_native/NFV_Driver.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_WALKER.c','/home/dombarker/project-offloads/codex-cx-pool-retdata3-cache-20261104/NFR_audit_native_20261104/NFR_MemoryLimit.c','NFO_native/NFV_Coherence.c'] if (b/n).exists()}}))")
  assert r.returncode==0,r.stderr
  for n,s in json.loads(r.stdout).items():
   p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)

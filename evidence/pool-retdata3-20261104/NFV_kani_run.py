@@ -63,7 +63,14 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 code=f'''from pathlib import Path
 import json
 b=Path({B!r});names={[a+'/receipt.json',a+'/stdout.log',a+'/time.log',a+'-source-check.json',a+'-tools.json',a+'-metadata-pin.json',a+'-metadata.stderr',a+'-graph-check.json',a+'-lock-check.json',a+'-rule16-check.json']!r}
-print(json.dumps({{n:(b/n).read_text() for n in names if (b/n).exists()}}))
+out={{n:(b/n).read_text() for n in names if (b/n).exists()}}
+cleaned=[]
+if (b/{(a+'/receipt.json')!r}).exists():
+ for pattern in ['external-sat*','smt2_dec_problem*']:
+  for p in (b/'NFV_tmp').rglob(pattern):
+   if p.is_file():cleaned.append(dict(path=str(p),size=p.stat().st_size));p.unlink()
+ out[{(a+'-solver-cleanup.json')!r}]=json.dumps(dict(terminal_attempt={a!r},removed=cleaned))
+print(json.dumps(out))
 '''
 r=ssh('python3',code);assert r.returncode==0,r.stderr;out=json.loads(r.stdout)
 for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)

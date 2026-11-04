@@ -6,6 +6,7 @@ n=start
 for kind in kinds:
  for i in range(6):
   for control in ['positive','negative']:
+   if (E/'NFV_PAUSE').exists():raise SystemExit('Paused between terminal attempts')
    a=f'NFV_K{n:03}';n+=1
    subprocess.run([sys.executable,str(E/'NFV_accounts.py'),kind,str(i),control],check=True)
    current=json.loads((E/'NFV_CURRENT.json').read_text())['source']

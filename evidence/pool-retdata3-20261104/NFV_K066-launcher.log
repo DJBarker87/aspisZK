@@ -1,0 +1,46 @@
+{"attempt": "NFV_K066", "exit_status": 1, "wall_seconds": 2.6180811948142946, "peak_rss_kib": "337684", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+v1`
+  --> programs/aspis-pool/src/pair_forest.rs:21:9
+   |
+21 |         decode_pool_v1_pair_forest_terminal_statement_v1, encode_pool_v1_pair_forest_checkpoint_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+22 |         encode_pool_v1_pair_forest_lane_state_v1, encode_pool_v1_pair_forest_master_v1,
+23 |         encode_pool_v1_pair_forest_terminal_request_v1,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `encode_pool_v1_pair_forest_terminal_result_v1`
+  --> programs/aspis-pool/src/pair_forest_dispatch.rs:14:5
+   |
+14 |     encode_pool_v1_pair_forest_terminal_result_v1, PoolV1PairForestTerminalRequestV1,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `into_vec` found for struct `alloc::boxed::Box<[u8; 320]>` in the current scope
+  --> programs/aspis-pool/src/NFV_Plan.rs:38:167
+   |
+38 | ...nfo7],&info0,&info1,Some(&info2),&request,kani::any(),bytes.into_vec());
+   |                                                                ^^^^^^^^
+   |
+help: there is a method `to_vec` with a similar name
+   |
+38 -  let actual=plan_pair_forest_terminal_dispatch_with_bytes_v1(&owner,&info3,&info4,&info5,&policy,&[info6,info7],&info0,&info1,Some(&info2),&request,kani::any(),bytes.into_vec());
+38 +  let actual=plan_pair_forest_terminal_dispatch_with_bytes_v1(&owner,&info3,&info4,&info5,&policy,&[info6,info7],&info0,&info1,Some(&info2),&request,kani::any(),bytes.to_vec());
+   |
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `aspis-pool` (lib) due to 1 previous error; 2 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-re85dca55bcd34c3fb3290fba1a252ca5.scope; invocation ID: 4caaa7cd7f1844e9854d2610e69f3dd3

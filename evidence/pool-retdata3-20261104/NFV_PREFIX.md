@@ -15,3 +15,17 @@ a reversed source order or an independently selected request does not suffice.
 NFR_E002's missing process body is retained as a tool boundary. No extraction
 rerun has been launched. The remaining work uses emitted child definitions
 and a native full-prefix call log, not a new model named SameExecution.
+
+NFV_K066 was a lane-input compile failure (fixed-array Box must first coerce
+to a slice Box for into_vec). K067 corrects that and generalizes independent
+proof/registry owners. K067 PASSES the actual frozen with-bytes planner's
+accepted-return selected-program / SAME request allocation / arbitrary-byte
+forwarding property. It uses an unconstrained typed registry result oracle;
+no digest body is reached. Matched controls are still required.
+
+IMPORTANT DOMAIN FINDING: these initial probes use empty account-data slices.
+That is not a production registry PacketDomain. It is explicitly restricted
+metadata-forwarding evidence and earns no production-prefix closure. Calling
+this a complete admitted-account certificate would hide a stronger precondition.
+The full prefix still needs all original account data/borrow pre-states at each
+oracle call, request decode/encode association and layout-derived account windows.
