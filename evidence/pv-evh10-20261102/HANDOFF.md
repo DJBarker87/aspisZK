@@ -1,3 +1,71 @@
+# D585 — concrete FRAME interface checked; actual-family instantiation remains
+
+Resume base c1841dddedf6a01ccfdf314a7d06b751fa3cb676, same worktree/branch
+codex/pv-evh-20261029. Read FRAME-D585.md, BLOCKER-D585.md and frame-D585.json.
+Label: binary-structural (adopted da36d6aa), plus V370 compiler-cohort.
+D584 correction retained: FRAME and heap Vec/RawVec OWNER are separate.
+No OWNER definition/import, allocator/callback-value work, or projection edit.
+
+Four new accepted immutable modules:
+- PV_EVH_PhysicalFrame (90260): concrete SlotId/Slot/Lifetime/Frame fields,
+  fixed offsets, active retry stack, request and pending/granted/exhausted
+  resource answer; symbolic all-slot separation, grant bytes and depth.
+- PV_EVH_FrameTransitions (90262): source/binary structural RetryPrefix,
+  frames=k+1; <=8 at entropy, cap-check9; Shape and loop/callback preservation,
+  fresh local iteration lifetimes, displacement and corrected304/352 arithmetic.
+- PV_EVH_FrameSource (90264): same-State.memory EntryView projection,
+  existing source original/field/seed descriptor bridge; concrete Correspondence
+  interface over the UNCHANGED externally supplied ActualEntropyEntryPrefix
+  carrier at the exact four binders/dictionary. No instance/domain fabricated.
+- PV_EVH_FrameWorld (90266): same-prefix resource reply uses after world/events;
+  exhaustion keeps Fault/stopped; nextEntry uses existing rejected cleanup's
+  post-State, preserves stack/addresses and proves source-key freshness.
+
+Exact scope: basic FRAME table/stack consistency and frame projection
+preservation are proved. Correspondence's actual paired-prefix constructor,
+all-existing-source-live binding, heap/old-live exclusion and actual_frame_entry
+on the full actual family are NOT proved. PhysicalFrame.live is a conservative
+phase summary, NOT an exact decoder of old caller Result initialization/lives;
+final interface proofs use all-table geometry, not that summary. Result97 is
+success store footprint, not allocation/padding or every Err's initialized size.
+The named active spine has <=10 including plan+entropy; bound8 counts retry
+frames. Zeroize leaf/signal/older caller/thread activations require their own
+full-history transitions, not a whole-client stack bound from these local laws.
+
+NEXT target is the constructor in BLOCKER-D585.md, derived from the actual
+producer, no successful-only domain or independently chosen source State/memory.
+The exact original sourceBody is indexed at opsNative(rawBase base) heap box ops.
+Do not label its still-uninstantiated selectors as installed actual semantics.
+Do not reintroduce OWNER-only reduction, pre-answer VMA adequacy, or a new T.
+
+D585 used90259..90266:8 attempts,4 accepted/4 failed. Failed sources changed
+before retry; failed sorryAx summaries have NO credit. Cumulative167 receipts,
+113 accepted/54 failed. NEXT90267,16 inherited attempts remain, THEN91500..91596;
+audits91597..91599 plus inherited triplets untouched. Native NEXTN91603.
+No pending source/compile or owned host scope. Source revisions, blobs/hashes,
+caps/exits/wall/RSS/swap/#print axioms and exact failure notes are committed.
+Accepted peak4468280KiB, swaps0, same6G/8G/swap0/tasks64 scope and Lean-M7000.
+No reservation refusal, memory kill, unchanged failed rerun, native/Kani/client
+execution, release/full manifest replay, raw audit or key/account/funds action.
+#print axioms are SUMMARY-BASED, accepted subset standard axioms only.
+Read-only host evidence/object hash check PASS; no live owned scope.
+
+Restored tracked sparse evidence dirs4/5/8 for stage.py. Before ID90259 was
+submitted, compile.py failed on a native receipt's string ID; fixed only own
+Lean accounting to filter int IDs (b0aff06f05), recording the input failure.
+No build host/library/LEAN_PATH/J.json/cap change. Full details validation-D585.json.
+check_frame_d585.py --check PASS; it binds new source/receipts to immutable
+D581 disassembly and D583 corrected source/stack analysis. No unchanged full
+regression. Scripts and evidence inputs committed; each file<=20MiB.
+
+Endpoint/deployment rows removed NONE; target not yet established; T unchanged.
+Actual correspondence/non-emptiness, full advancing entry, kernel/world binding,
+NativeObstruction62/op132, D520/U/D524, V370/V371/V400 and L1/L2/L3 remain.
+Current FRAME-only task delivered interface/local proofs with explicit actual
+instantiation boundary; no full-producer completion claim.
+
+---
+
 # D584 checkpoint — conditional construction incomplete; OWNER scope corrected
 
 Resume base `062167fb6868fb08d5dcea8ac442380d2e200fd6`; same worktree and
