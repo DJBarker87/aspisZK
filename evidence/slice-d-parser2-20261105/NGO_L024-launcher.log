@@ -1,0 +1,44 @@
+{"attempt": "NGO_L024", "exit_status": 1, "wall_seconds": 2.0545934098772705, "peak_rss_kib": "3817268", "swaps": "0", "print_axioms": ["'NGO_BitPack.pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NGO_generated/NGO_BitPack.lean:19:2: error: The prover found a potentially spurious counterexample:
+- It abstracted the following unsupported expressions as opaque variables: [~~~(0#24 ++ a.bv) &&&
+         ~~~(BitVec.extractLsb' 0 24 (0#24 ++ b.bv) ++ 0#8) &&&
+       ~~~(BitVec.extractLsb' 0 16 (0#24 ++ c.bv) ++ 0#16) &&&
+     ~~~(d.bv ++ 0#24) ==
+   ~~~BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length) a.bv &&&
+     ~~~(BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length)
+           (~~~(~~~BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length) b.bv &&&
+               ~~~(BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length)
+                     (~~~(~~~BitVec.setWidth (8 * [c.bv, d.bv].length) c.b
+...
+ctLsb' 0 24 (0#24 ++ b.bv) ++ 0#8) &&&
+       ~~~(BitVec.extractLsb' 0 16 (0#24 ++ c.bv) ++ 0#16) &&&
+     ~~~(d.bv ++ 0#24) ==
+   ~~~BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length) a.bv &&&
+     ~~~(BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length)
+           (~~~(~~~BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length) b.bv &&&
+               ~~~(BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length)
+                     (~~~(~~~BitVec.setWidth (8 * [c.bv, d.bv].length) c.bv &&&
+                         ~~~(BitVec.setWidth (8 * [c.bv, d.bv].length)
+                               (~~~(~~~BitVec.setWidth (8 * [d.bv].length) d.bv &&&
+                                   ~~~(BitVec.setWidth (8 * [d.bv].length) 0#(8 * [].length) <<< 8))) <<<
+                             8))) <<<
+                   8))) <<<
+         8)]
+Consider the following assignment:
+~~~(0#24 ++ a.bv) &&& ~~~(BitVec.extractLsb' 0 24 (0#24 ++ b.bv) ++ 0#8) &&&
+      ~~~(BitVec.extractLsb' 0 16 (0#24 ++ c.bv) ++ 0#16) &&&
+    ~~~(d.bv ++ 0#24) ==
+  ~~~BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length) a.bv &&&
+    ~~~(BitVec.setWidth (8 * [a.bv, b.bv, c.bv, d.bv].length)
+          (~~~(~~~BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length) b.bv &&&
+              ~~~(BitVec.setWidth (8 * [b.bv, c.bv, d.bv].length)
+                    (~~~(~~~BitVec.setWidth (8 * [c.bv, d.bv].length) c.bv &&&
+                        ~~~(BitVec.setWidth (8 * [c.bv, d.bv].length)
+                              (~~~(~~~BitVec.setWidth (8 * [d.bv].length) d.bv &&&
+                                  ~~~(BitVec.setWidth (8 * [d.bv].length) 0#(8 * [].length) <<< 8))) <<<
+                            8))) <<<
+                  8))) <<<
+        8) = false
+'NGO_BitPack.pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd103a14a94084cc1a6363b902e68612b.scope; invocation ID: e8766acc3e9d4701a5b33e9860f69701

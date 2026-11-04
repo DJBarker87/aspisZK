@@ -42,14 +42,15 @@ assert target.startswith('NGO_') or kind in ['auditbin','kani','extract','depend
 
 if kind=='kani':
  files['NGO_gate.py']=(E/'NGO_gate.py').read_text()
- if (E/'NGO_NATIVE_INPUTS.json').exists():
-  for n,t in json.loads((E/'NGO_NATIVE_INPUTS.json').read_text()).items():files['NGO_src/'+n]=t
-  files['NGO_SOURCE_PINS.json']=(E/'NGO_SOURCE_PINS.json').read_text()
+ from NGO_inputs import load
+ for n,t in load().items():files['NGO_src/'+n]=t
+ files['NGO_SOURCE_PINS.json']=(E/'NGO_SOURCE_PINS.json').read_text()
  sources=['NGO_gate.py','NGO_SOURCE_PINS.json','NGO_src/Cargo.lock','NGO_src/Cargo.toml'] + [n for n in files if n.startswith('NGO_src/')]
  command=['python3','NGO_gate.py',a+'.json']
  env.update(CARGO_BUILD_JOBS='1',CARGO_NET_OFFLINE='true',CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG='0',CARGO_PROFILE_RELEASE_OVERFLOW_CHECKS='true',RUSTFLAGS='-Copt-level=3 -C link-arg=-Wl,--threads=1')
  import os
  if os.environ.get('NGO_INVERT'):env['RUSTFLAGS']+=' --cfg NGO_invert'
+ if os.environ.get('NGO_COPY_CONTROL'):env['RUSTFLAGS']+=' --cfg NGO_copy_corrupt'
 elif kind=='extract':
  files['NGO_extract.py']=(E/'NGO_extract.py').read_text()
  files['NGO_references.rs']=(E/'NGO_references.rs.txt').read_text()
@@ -149,4 +150,4 @@ if kind in ['auditbin','auditbatch']:
 assert a+'/receipt.json' in out,'Missing receipt; no resubmit'
 rc=json.loads(out[a+'/receipt.json'])
 with (E/'NGO_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(rc)+'\n')
-print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print(out[a+'/stdout.log'][-4500:]);sys.exit(rc['exit_status'])
+print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps','print_axioms']}));print('Native/extraction output retained in '+str(E/a/'stdout.log') if kind in ['kani','extract'] else out[a+'/stdout.log'][-4500:]);sys.exit(rc['exit_status'])

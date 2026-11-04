@@ -1,0 +1,28 @@
+Aeneas.Std.List.toChunksExact.match_1: {α : Type u_1} →
+  (motive : List (List α) × List α → Sort u_2) →
+    (x : List (List α) × List α) → ((chunks : List (List α)) → (rem : List α) → motive (chunks, rem)) → motive x
+Aeneas.Std.List.toChunksExact_remainder_length: ∀ {α : Type u_1} {n : ℕ} (hn : 0 < n) (l : List α),
+  (List.toChunksExact n hn l).2.length ≤ l.length
+_private.Aeneas.Std.SliceIter.0.Aeneas.Std.List.toChunksExact.match_1.eq_1: ∀ {α : Type u_1}
+  (motive : List (List α) × List α → Sort u_2) (chunks : List (List α)) (rem : List α)
+  (h_1 : (chunks : List (List α)) → (rem : List α) → motive (chunks, rem)),
+  (match (chunks, rem) with
+    | (chunks, rem) => h_1 chunks rem) =
+    h_1 chunks rem
+Aeneas.Std.List.toChunksExact_chunk_length: ∀ {α : Type u_1} {n : ℕ} (hn : 0 < n) (l c : List α),
+  c ∈ (List.toChunksExact n hn l).1 → c.length ≤ n
+Aeneas.Std.List.toChunksExact_chunk_length._simp_1_2: ∀ {α : Type u_1} {b : α} {l : List α} {a : α},
+  (a ∈ b :: l) = (a = b ∨ a ∈ l)
+Aeneas.Std.List.toChunksExact.congr_simp: ∀ {α : Type u_1} (n n_1 : ℕ) (e_n : n = n_1) (hn : 0 < n) (l l_1 : List α),
+  l = l_1 → List.toChunksExact n hn l = List.toChunksExact n_1 ⋯ l_1
+Aeneas.Std.List.toChunksExact._unsafe_rec: {α : Type u_1} → (n : ℕ) → 0 < n → List α → List (List α) × List α
+Aeneas.Std.List.toChunksExact: {α : Type u_1} → (n : ℕ) → 0 < n → List α → List (List α) × List α
+_private.Aeneas.Std.SliceIter.0.Aeneas.Std.List.toChunksExact.match_1.splitter: {α : Type u_1} →
+  (motive : List (List α) × List α → Sort u_2) →
+    (x : List (List α) × List α) → ((chunks : List (List α)) → (rem : List α) → motive (chunks, rem)) → motive x
+Aeneas.Std.List.toChunksExact.eq_def: ∀ {α : Type u_1} (n : ℕ) (hn : 0 < n) (l : List α),
+  List.toChunksExact n hn l =
+    if _h : l.length < n then ([], l)
+    else
+      match List.toChunksExact n hn (List.drop n l) with
+      | (chunks, rem) => (List.take n l :: chunks, rem)

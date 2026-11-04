@@ -1,0 +1,57 @@
+NGO_generated/NGO_IteratorIndex.lean:11:30: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+but is expected to have type
+  Prop
+in the application
+  nextIter.end = iter.end ∧ ↑iter.start
+NGO_generated/NGO_IteratorIndex.lean:11:46: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NGO_generated/NGO_IteratorIndex.lean:12:18: error: Application type mismatch: The argument
+  ↑iter.start
+has type
+  ℕ
+of sort `Type` but is expected to have type
+  Type ?u.34
+of sort `Type (?u.34 + 1)` in the application
+  @PrincipalSeg ↑iter.start
+NGO_generated/NGO_IteratorIndex.lean:12:34: error(lean.unknownIdentifier): Unknown identifier `ter.end.val`
+NGO_generated/NGO_IteratorIndex.lean:13:11: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+case pos
+iter nextIter : Index
+index : Usize
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, nextIter)
+live : sorry
+x✝ :
+  ∃ y,
+    core.iter.range.IteratorRange.next
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+        ok y ∧
+      WP.uncurry' (fun opt range' => opt = some iter.start ∧ ↑range'.start = ↑iter.start + 1 ∧ range'.end = iter.end) y
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+NGO_generated/NGO_IteratorIndex.lean:26:17: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 0
+  a - b ≥ 1
+where
+ a := ↑↑iter.end
+ b := ↑↑iter.start
+NGO_generated/NGO_IteratorIndex.lean:22:11: error(nested.lean.propRecLargeElim): Tactic `cases` failed with a nested error:
+Tactic `induction` failed: recursor `Exists.casesOn` can only eliminate into `Prop`
+
+case neg
+iter nextIter : Index
+index : Usize
+next : core.iter.range.IteratorRange.next core.iter.range.StepUsize iter = ok (some index, nextIter)
+live : ¬sorry
+x✝ :
+  ∃ y,
+    core.iter.range.IteratorRange.next
+          (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+        ok y ∧
+      WP.uncurry' (fun opt range' => opt = none ∧ range' = iter) y
+⊢ PrincipalSeg (fun x1 x2 => sorry) fun x1 x2 => sorry
+NGO_generated/NGO_IteratorIndex.lean:30:14: error(lean.unknownIdentifier): Unknown constant `from_some`

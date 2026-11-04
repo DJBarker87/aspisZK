@@ -1,0 +1,44 @@
+NGO_generated/NGO_WordLaw.lean:17:64: error: unsolved goals
+arr : Std.Array U8 16#usize
+i : Usize
+bound : ↑i ≤ 12
+i1 : U8
+_ : [> let i1 ← arr.to_slice.index_usize i <]
+i1_post : i1 = (↑arr)[↑i]
+⊢ (do
+      let i2 ← lift (BitVec.setWidth 32 (↑arr)[↑i].bv#uscalar)
+      let i3 ← lift (i.wrapping_add 1#usize)
+      let i4 ← arr.to_slice.index_usize i3
+      let i5 ← lift (BitVec.setWidth 32 i4.bv#uscalar)
+      let i6 ← lift (i5.wrapping_shl 8#u32)
+      let i7 ← lift (i2 ||| i6)
+      let i8 ← lift (i.wrapping_add 2#usize)
+      let i9 ← arr.to_slice.index_usize i8
+      let i10 ← lift (BitVec.setWidth 32 i9.bv#uscalar)
+      let i11 ← lift (i10.wrapping_shl 16#u32)
+      let i12 ← lift (i7 ||| i11)
+      let i13 ← lift (i.wrapping_add 3#usize)
+      let i14 ← arr.to_slice.index_usize i13
+      let i15 ← lift (BitVec.setWidth 32 i14.bv#uscalar)
+      let i16 ← lift (i15.wrapping_shl 24#u32)
+      ok (i12 ||| i16)) ⦃
+    out => out = BitVec.fromLEBytes [(↑arr)[↑i].bv, (↑arr)[↑i + 1].bv, (↑arr)[↑i + 2].bv, (↑arr)[↑i + 3].bv]#uscalar ⦄
+NGO_generated/NGO_WordLaw.lean:21:6: warning: This simp argument is unused:
+  UScalar.wrapping_shl
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵s̵e̵g̵m̵e̵n̵t̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵3̵2̵.̵f̵r̵o̵m̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵w̵r̵a̵p̵p̵i̵n̵g̵_̵s̵h̵l̵,̵U̵S̵c̵a̵l̵a̵r̵.̵o̵r̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵n̵u̵m̵.̵F̵r̵o̵m̵U̵3̵2̵U̵8̵.̵f̵r̵o̵m̵]̵[̲s̲e̲g̲m̲e̲n̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲3̲2̲.̲f̲r̲o̲m̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲o̲r̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲n̲u̲m̲.̲F̲r̲o̲m̲U̲3̲2̲U̲8̲.̲f̲r̲o̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_WordLaw.lean:21:27: warning: This simp argument is unused:
+  UScalar.or
+
+Hint: Omit it from the simp argument list.
+  simp_all [̵s̵e̵g̵m̵e̵n̵t̵,̵A̵r̵r̵a̵y̵.̵m̵a̵k̵e̵,̵c̵o̵r̵e̵.̵n̵u̵m̵.̵U̵3̵2̵.̵f̵r̵o̵m̵_̵l̵e̵_̵b̵y̵t̵e̵s̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵U̵S̵c̵a̵l̵a̵r̵.̵w̵r̵a̵p̵p̵i̵n̵g̵_̵s̵h̵l̵,̵U̵S̵c̵a̵l̵a̵r̵.̵o̵r̵,̵c̵o̵r̵e̵.̵c̵o̵n̵v̵e̵r̵t̵.̵n̵u̵m̵.̵F̵r̵o̵m̵U̵3̵2̵U̵8̵.̵f̵r̵o̵m̵]̵[̲s̲e̲g̲m̲e̲n̲t̲,̲ ̲A̲r̲r̲a̲y̲.̲m̲a̲k̲e̲,̲ ̲c̲o̲r̲e̲.̲n̲u̲m̲.̲U̲3̲2̲.̲f̲r̲o̲m̲_̲l̲e̲_̲b̲y̲t̲e̲s̲,̲ ̲U̲S̲c̲a̲l̲a̲r̲.̲w̲r̲a̲p̲p̲i̲n̲g̲_̲s̲h̲l̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲c̲o̲r̲e̲.̲c̲o̲n̲v̲e̲r̲t̲.̲n̲u̲m̲.̲F̲r̲o̲m̲U̲3̲2̲U̲8̲.̲f̲r̲o̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGO_WordLaw.word' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

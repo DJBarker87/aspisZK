@@ -1,0 +1,66 @@
+NGO_generated/NGO_BitPack.lean:12:65: error: unsolved goals
+case pos
+a b c d : U8
+i : ℕ
+hi : i < 32
+h8 : ¬i < 8
+h16 : i < 16
+h24 : i < 24
+h32 : i < 32
+⊢ 8 ≤ i - 8 → c.bv[0] = true → b.bv[i - 8] = true
+
+case pos
+a b c d : U8
+i : ℕ
+hi : i < 32
+h8 : ¬i < 8
+h16 : ¬i < 16
+h24 : i < 24
+h32 : i < 32
+⊢ c.bv[i - 16] = (!decide (i - 8 < 8) && (c.bv[i - 16] || !decide (i - 16 < 8) && d.bv[0]))
+
+case pos
+a b c d : U8
+i : ℕ
+hi : i < 32
+h8 : ¬i < 8
+h16 : ¬i < 16
+h24 : ¬i < 24
+h32 : i < 32
+⊢ d.bv[i - 24] = (!decide (i - 8 < 8) && (!decide (i - 16 < 8) && d.bv[i - 24]))
+NGO_generated/NGO_BitPack.lean:23:38: warning: This simp argument is unused:
+  h32
+
+Hint: Omit it from the simp argument list.
+  simp (disch := omega) [h8, ̲h16, ̲h24,h̵3̵2̵,̵ ̲BitVec.getLsbD_or, ̲BitVec.getLsbD_shiftLeft,
+        BitVec.getLsbD_setWidth, ̲Nat.sub_sub, ̲Nat.add_comm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_BitPack.lean:23:42: warning: This simp argument is unused:
+  BitVec.getLsbD_or
+
+Hint: Omit it from the simp argument list.
+  simp (disch := omega) [̵h̵8̵,̵h̵1̵6̵,̵h̵2̵4̵,̵h̵3̵2̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵o̵r̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵e̵t̵W̵i̵d̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵u̵b̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵]̵[̲h̲8̲,̲ ̲h̲1̲6̲,̲ ̲h̲2̲4̲,̲ ̲h̲3̲2̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲s̲h̲i̲f̲t̲L̲e̲f̲t̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲s̲e̲t̲W̲i̲d̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲u̲b̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_BitPack.lean:23:60: warning: This simp argument is unused:
+  BitVec.getLsbD_shiftLeft
+
+Hint: Omit it from the simp argument list.
+  simp (disch := omega) [̵h̵8̵,̵h̵1̵6̵,̵h̵2̵4̵,̵h̵3̵2̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵o̵r̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵e̵t̵W̵i̵d̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵u̵b̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵]̵[̲h̲8̲,̲ ̲h̲1̲6̲,̲ ̲h̲2̲4̲,̲ ̲h̲3̲2̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲o̲r̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲s̲e̲t̲W̲i̲d̲t̲h̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲u̲b̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGO_generated/NGO_BitPack.lean:24:6: warning: This simp argument is unused:
+  BitVec.getLsbD_setWidth
+
+Hint: Omit it from the simp argument list.
+  simp (disch := omega) [̵h̵8̵,̵h̵1̵6̵,̵h̵2̵4̵,̵h̵3̵2̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵o̵r̵,̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵h̵i̵f̵t̵L̵e̵f̵t̵,̵
+  ̵ ̵ ̵ ̵ ̵ ̵ ̵B̵i̵t̵V̵e̵c̵.̵g̵e̵t̵L̵s̵b̵D̵_̵s̵e̵t̵W̵i̵d̵t̵h̵,̵N̵a̵t̵.̵s̵u̵b̵_̵s̵u̵b̵,̵N̵a̵t̵.̵a̵d̵d̵_̵c̵o̵m̵m̵]̵[̲h̲8̲,̲ ̲h̲1̲6̲,̲ ̲h̲2̲4̲,̲ ̲h̲3̲2̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲o̲r̲,̲ ̲B̲i̲t̲V̲e̲c̲.̲g̲e̲t̲L̲s̲b̲D̲_̲s̲h̲i̲f̲t̲L̲e̲f̲t̲,̲
+  ̲ ̲ ̲ ̲ ̲ ̲ ̲N̲a̲t̲.̲s̲u̲b̲_̲s̲u̲b̲,̲ ̲N̲a̲t̲.̲a̲d̲d̲_̲c̲o̲m̲m̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NGO_BitPack.pack' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
