@@ -11,6 +11,7 @@ variable [ExternalTypes]
 Their arguments, mutable restoration functions, and source errors are retained.
 No world reply is supplied at construction time. -/
 inductive Request : Type → Type 1 where
+  | restore {X Y : Type} (site : Nat) (back : X → Y) (value : X) : Request Y
   | new {Z : Type} (zi : zeroize.Zeroize Z) (value : Z) : Request (zeroize.Zeroizing Z)
   | asMut {T Z : Type} (inst : core.convert.AsMut Z T) (zi : zeroize.Zeroize Z)
       (value : zeroize.Zeroizing Z) : Request (T × (T → zeroize.Zeroizing Z))
@@ -21,6 +22,7 @@ inductive Request : Type → Type 1 where
 
 variable [ExternalFuns]
 def fixed : {X : Type} → Request X → Result X
+  | _, .restore _ back value => .ok (back value)
   | _, .new zi value => zeroize.Zeroizing.new zi value
   | _, .asMut inst zi value => zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut inst zi value
   | _, .derefMut zi value => zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut zi value
@@ -83,7 +85,7 @@ def
       Code.result (core.result.Result.Insts.CoreOpsTry.branch r)
     match cf with
     | core.ops.control_flow.ControlFlow.Continue _ =>
-      let bytes1 := as_mut_back s1
+      let bytes1 ← Code.call (Request.restore 9 as_mut_back s1)
       let a1 := Array.repeat 32#usize 0#u8
       let field_mask_entropy ←
         Code.call (Request.new (Array.Insts.ZeroizeZeroize 32#usize
@@ -108,8 +110,8 @@ def
         { «end» := 32#usize })
       let s4 ←
         Code.result (core.slice.Slice.copy_from_slice core.marker.CopyU8 s2 s3)
-      let a5 := to_slice_mut_back s4
-      let field_mask_entropy1 := deref_mut_back a5
+      let a5 ← Code.call (Request.restore 17 to_slice_mut_back s4)
+      let field_mask_entropy1 ← Code.call (Request.restore 18 deref_mut_back a5)
       let (a6, deref_mut_back1) ←
         Code.call (Request.derefMut
         (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket
@@ -122,8 +124,8 @@ def
         { start := 32#usize })
       let s7 ←
         Code.result (core.slice.Slice.copy_from_slice core.marker.CopyU8 s5 s6)
-      let a7 := to_slice_mut_back1 s7
-      let leaf_salt_seed1 := deref_mut_back1 a7
+      let a7 ← Code.call (Request.restore 23 to_slice_mut_back1 s7)
+      let leaf_salt_seed1 ← Code.call (Request.restore 24 deref_mut_back1 a7)
       let a8 ←
         Code.call (Request.deref
         (Array.Insts.ZeroizeZeroize 32#usize (zeroize.Zeroize.Blanket

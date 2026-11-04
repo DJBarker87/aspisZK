@@ -53,3 +53,13 @@ and result argument. This does not supply op12's native interpretation.
 A mechanical alias check found no direct ExternalFuns alias in the entropy
 lift's 13 finite Result nodes. This is a direct-name check only, not transitive
 effect-freedom; the source/drop/resource qualifications above still apply.
+
+The entropy lift also exposes five emitted backward/restoration applications as
+typed restore requests. Fixed erasure computes the original pure function
+application; the advancing interpretation can perform the associated source
+store at the current post-world. This avoids forcing a native store into a pure
+arrow. Their source-native write association and rejected/error-path destructor
+reconstruction remain obligations. An external fill Err branch in the emitted
+body does not apply as_mut_back; source partial writes and cleanup therefore
+must be reconstructed from the preserved Rust/LLBC, not silently inferred from
+the existing Result output.

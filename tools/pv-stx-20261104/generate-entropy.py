@@ -23,7 +23,14 @@ for old,n in zip(names,new):
  lines=body.splitlines();out=[];i=0
  while i<len(lines):
   line=lines[i];lm=re.match(r'^(\s*)let (.*?) ←(.*)$',line)
-  if not lm:out.append(line);i+=1;continue
+  if not lm:
+   restoration=re.match(r'^(\s*)let (\w+) := ((?:as_mut_back|to_slice_mut_back1?|deref_mut_back1?)) (\w+)$',line)
+   if restoration:
+    ind,var,back,value=restoration.groups();site=len(sites)+1
+    sites.append(dict(definition=old,kind='restoration request',site=site,expression=back+' '+value))
+    out.append(ind+'let '+var+' ← Code.call (Request.restore '+str(site)+' '+back+' '+value+')')
+   else:out.append(line)
+   i+=1;continue
   indent,pat,tail=lm.groups();expr=[tail.strip()];i+=1
   while i<len(lines) and (not lines[i].strip() or len(lines[i])-len(lines[i].lstrip())>len(indent)):
    expr.append(lines[i].strip());i+=1
@@ -59,6 +66,7 @@ variable [ExternalTypes]
 Their arguments, mutable restoration functions, and source errors are retained.
 No world reply is supplied at construction time. -/
 inductive Request : Type → Type 1 where
+  | restore {X Y : Type} (site : Nat) (back : X → Y) (value : X) : Request Y
   | new {Z : Type} (zi : zeroize.Zeroize Z) (value : Z) : Request (zeroize.Zeroizing Z)
   | asMut {T Z : Type} (inst : core.convert.AsMut Z T) (zi : zeroize.Zeroize Z)
       (value : zeroize.Zeroizing Z) : Request (T × (T → zeroize.Zeroizing Z))
@@ -69,6 +77,7 @@ inductive Request : Type → Type 1 where
 
 variable [ExternalFuns]
 def fixed : {X : Type} → Request X → Result X
+  | _, .restore _ back value => .ok (back value)
   | _, .new zi value => zeroize.Zeroizing.new zi value
   | _, .asMut inst zi value => zeroize.Zeroizing.Insts.CoreConvertAsMut.as_mut inst zi value
   | _, .derefMut zi value => zeroize.Zeroizing.Insts.CoreOpsDerefDerefMut.deref_mut zi value
