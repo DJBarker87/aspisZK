@@ -1,0 +1,24 @@
+
+struct NFM_ControlLog { pairs:[(usize,usize);26], starts:[usize;7], terms:usize, cuts:usize }
+fn NFM_record(log:&mut NFM_ControlLog,start:usize,term:usize){
+ log.pairs[log.terms]=(start,term);log.terms+=1;
+}
+fn NFM_control(log:&mut NFM_ControlLog){
+for start in (0..26).step_by(4) {
+ log.starts[log.cuts]=start; log.cuts+=1;
+ for term in start..core::cmp::min(start + 4, 26) {
+ NFM_record(log,start,term);
+ }
+ }
+}
+#[kani::proof] #[kani::unwind(80)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFM_copy::KMX_copy_nonoverlapping)]
+fn control_trace(){
+ let mut log=NFM_ControlLog{pairs:[(99,99);26],starts:[99;7],terms:0,cuts:0};
+ NFM_control(&mut log);
+ let i:usize=kani::any();kani::assume(i<26);
+ let j:usize=kani::any();kani::assume(j<7);
+ assert_eq!(log.terms,26);assert_eq!(log.cuts,7);
+ assert_eq!(log.starts[j],j*4);
+ assert_eq!(log.pairs[i],if cfg!(NFM_wrong_control){((i/4)*4,i+1)}else{((i/4)*4,i)});
+}

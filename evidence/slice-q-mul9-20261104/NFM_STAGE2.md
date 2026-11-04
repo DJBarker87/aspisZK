@@ -1,0 +1,5 @@
+# Stage 2 — native loop-control sequence
+
+NFM_K001: actual frozen loop headers with data-dependent bodies replaced by local recording stubs, SUCCESSFUL (solver 0.5169324s). NFM_K002: same harness/payload/configuration with NFM_wrong_control perturbing one term, FAILED (solver0.5581612s), required assertion failure. Both satisfy the90s limit. Exact commands, source revision/hashes, full frozen dependency/feature graph, tool hashes, caps, wall/RSS/swap and lock-before/after are recorded per attempt. KMX patch sha bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 is applied. This stage claims only control sequence, no arithmetic values, no row closure.
+
+NFM_control uses local records only, no writable static/function pointer/contracts. The source loop headers match frozen bytes; the recorded sequence is 26 terms in seven windows, as in NFM_Control.fixed_terms. The matched negative uses the original harness name. Private scripts are prefix-adapted NFI scripts; no shared infrastructure is changed. Next: exact-copy positive/negative controls then body windows, with no unchanged timeout retries.

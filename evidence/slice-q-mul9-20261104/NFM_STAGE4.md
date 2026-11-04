@@ -1,0 +1,7 @@
+# Stage 4 — exact trace/model composition
+
+NFM_L008/010/011/012/014/015/017 check InnerControl, Thread, Cuts, Single, Domains, Span and Frames respectively. All current top theorems print only standard axioms. NFM_L006 remains the successful Control source. Exact commands, source/dependency/library pins, status, wall, RSS, swaps and printed axioms are in NFM_ATTEMPTS.jsonl. Failed draft attempts are excluded; no timeout/memory kill or cap increase occurred. Budget used38 Kani/17 Lean/0 extraction.
+
+NFM_Single.emitted composes the new same-input state trace by equality to NFI_SingleTrace.run, then reuses its existing emitted theorem. NFM_Cuts.abort_prefix preserves rejecting observations; NFM_Frames retains input and fixed position. Domain/reset/span facts are derived, not supplied as independent successful outputs. The revalidated NFI wrapper groups plus NFM_K037/K038 (832-byte original opening) provide the four actual caller contexts. This is the bridge material for four dot rows; final NDT registration still requires the complete evidence validator, typed terminal pruning check and combined ax2 audit.
+
+Next: finish explicit native frame/fidelity controls and terminal selection, register the four-part certificates/edges topologically, then one combined import and ax2 audit. query_values' incoming edge remains a named producer/state/observer boundary; no wrapper or control theorem alone promotes it. No security target, trust item, shipped file or ELF pin changes.

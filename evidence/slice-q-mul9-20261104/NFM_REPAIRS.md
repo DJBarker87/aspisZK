@@ -1,0 +1,17 @@
+# Excluded drafts and repairs
+
+- L001: direct reduction of the opaque iterator and endpoint operations does not establish their equations. Replaced by NFA_Iterator.next and NFE_NFA_BatchDomain.endpoint laws.
+- L002–005: finite specialization/rewrite elaboration and UScalar literal proof transparency. Named next0–next6 specializations avoid the tactic-instance mismatch; L006 passes. No large numeral/recurrence normalization is used.
+- L007: `<iter` lexes as the `<i` notation followed by `ter`; added spaces. L008 passes.
+- L009: a successful simp already closed body, so the trailing rfl reported no goals. Removed that redundant tactic; L010 passes.
+- L013: omega on the large fixed fold coefficient reached default recursion depth. Replaced by symbolic bound transitivity and monotonicity, h.trans cap. L014 passes; no recursion/heartbeat limit was raised.
+- L016: manually repeated dependent cut syntax failed to elaborate. Unfolded the existing named window definition instead; L017 passes.
+
+All failed attempts and their complete diagnostics/#print lines remain archived, and are excluded from credit. Shared launchers, admission, shims, caches and host infrastructure were not edited. Own scripts are prefix adaptations or proof/evidence validation only. The setup log's duplicate12MB manifest line was replaced with a hash reference to the single NFM_CACHE_IMPORTS.json copy; all imported hashes are retained there.
+
+- L019: opaque U64.size prevented the first hardware-width inequality proof. Exposed the closed width and used norm_num only on that small fixed hardware fact; L020 passes.
+- K041: supplemental whole-window conjoined frame query timed out; excluded. Split to one arbitrary reached iteration and individual negative facets; K044–092 pass/fail as intended. No unchanged timeout retry, cap increase or harness rename.
+- Own queue guard stopped the stale plan before K093 submission (exit76, no launch); the plan was replaced, then unique K093–100 ran. NFM_QUEUE_REPLAN_STOP.log retains the nonlaunch.
+- Own NDT external-call parser initially assumed `expression`; TX2 uses `syntax`. Added exact alternate-key handling and an explicit std/scalar operation whitelist; validation remains stricter than the unchanged baseline.
+- ax2 driver retains only the permitted canonical root/module/runtime adaptations. The inherited NER scan was moved into NFM_Scanner, whose core is byte-identical to NFI; walker/action remain byte-identical to NEP.
+- Peer intake initially parsed printed axiom lines as atom names. Replaced with full-line grammar and an exact three-axiom whitelist; no peer proof or build was rerun.
