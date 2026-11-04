@@ -86,3 +86,25 @@ using a global log would not solve this correctly. The existing extracted
 helper theorem and separately controlled native Box cuts are the bottom-up
 route; an additional full actual-helper contract route would require the
 fixed-array Result interface controls under ruling(t) before stub_verified.
+
+## Additional edge-control generator
+
+`NFR_C_controls.py` prepares nine negative controls without rerunning passed
+packets. The first eight pair to retained K013's byte/context/order/pointer
+positive: `runtime-context` passes an equal instruction from a different place;
+`runtime-order` invokes before clear; `decode-pointer` passes a different live
+792-byte allocation; `decode-length` passes the original pointer with length791;
+`saved-frame` mutates one observed returned byte after decode;
+`validator-place`, `lane-place`, `encoder-place` each pass an equal typed value
+from a different live place to that one child. `decoded-output` pairs to the
+family3 positive K021 and flips output_lane between decoder return and boxing.
+The generator verifies each base mode and pins its retained shape hash. It
+changes call/input/output behaviour with positive assertions intact, rather
+than merely asserting the opposite result. The same original names, exact
+KMX hooks, local records and caller cut domain remain.
+
+`--check` does not write campaign inputs or launch a scope. The actual observed
+Kani verdicts, intended failed checks and matched configurations must be read
+from the coordinating runner's per-attempt receipts; generation alone earns no
+credit. The decoder-length mutation does not test arbitrary-capacity Vec
+behaviour and must not be reported as doing so.

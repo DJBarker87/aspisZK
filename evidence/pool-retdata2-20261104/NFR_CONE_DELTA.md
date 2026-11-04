@@ -56,3 +56,24 @@ settlement continuation. Local read markers are not the entire oracle/CPI or
 transaction history. The frozen source/ELF/runtime realization and the cold
 coherent release replay remain independent release gates. No privacy,
 per-attempt soundness or transaction-design claim is made here.
+
+## Resumed proof/audit result
+
+B036/B037 close forward decode-on-emission. B051 NFR_ModelJoin composes the
+emitter, exact accepted read and settlement model on the SAME authenticated
+record, with validation/lane success explicit and encoder domain derived from
+the original statement. Local runtime consistency excludes empty replies.
+These are model equalities, not new native process or joint witness certificates.
+Final B054 raw audit passes69 roots and8 controls; B057 reports20 clean own
+modules and exactly the inherited650 references in15 legacy modules. No
+collectAxioms disagreement occurs on new roots; inherited NFO disagreement is
+retained as a tooling finding under ruling(ab'). No whole closure pass claimed.
+
+K056 is terminal UNISOLATED after exact KMX positive/control timeouts; no
+copy-credit or bug claim. K013/K014 give controlled SAME-object byte/context
+source-cut evidence; independent typed projection packets are in progress.
+K051 production geometry credit is explicitly excluded. No composed NDT row,
+headline native extraction premise, or trust row has been removed.
+
+<!-- budget checkpoint -->
+Budget checkpoint: {"attempts": 119, "last_attempt": "NFR_K026", "ledger_sha256": "6dca485a4b98e19c2d567bf809888533f8b7eeec43b6ec21e9cf32baf61d1474", "remaining": {"extract": 0, "kani": 13, "lean": 0}, "used": {"extract": 2, "kani": 57, "lean": 60}}

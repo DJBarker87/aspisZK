@@ -30,3 +30,18 @@ retains every child rejection prefix and exact encoder error mapping, and
 reuses the CLOSED encoder bridge after same-value identification derives its
 statement domain. This is a mathematical source-cut component, not a new
 runtime/SDK or enclosing caller premise discharge.
+
+## Resumed native join observations
+
+K013 byte/context/order/pointer split PASSES; K014 matched output-byte
+corruption FAILS at its intended assertion. Both keep the SAME actual returned
+authenticated object, actual getter, all three settlement argument pointers,
+full child Results and original NFR_CJoin::association name. Exact KMX patch
+and frozen offline graph/lock gates recorded per attempt. Typed value equality
+is omitted here and must be supplied by the independent projection packets.
+This earns local native source-cut credit, never whole-process credit.
+
+K051..059 are retained artificial repr(C) Input/local-frame diagnostics; they
+DO NOT establish the production Box carrier. Per-attempt shapes prevail over
+the subsequently edited generator. See NFR_C_REVIEW.md. Helper extraction
+C003 and bottom-up carrier/getter/suffix receipts remain separate evidence.

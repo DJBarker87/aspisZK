@@ -70,4 +70,6 @@ for n,s in out.items():p=E/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_
 assert a+'/receipt.json' in out,'unresolved submitted attempt; never resubmit'
 rc=json.loads(out[a+'/receipt.json']);entry={k:v for k,v in rc.items() if k!='deps_fingerprint'}
 with (E/'NFR_ATTEMPTS.jsonl').open('a') as f:f.write(json.dumps(entry)+'\n')
+from NFR_checkpoint import checkpoint
+checkpoint()
 active.unlink();print(json.dumps({k:rc[k] for k in ['attempt','exit_status','wall_seconds','peak_rss_kib','swaps']}));print(out[a+'/stdout.log'][-1800:]);sys.exit(rc['exit_status'])

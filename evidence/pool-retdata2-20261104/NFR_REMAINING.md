@@ -1,25 +1,26 @@
 # Remaining obligations
 
-OPEN overall; no new composed NDT row. Use exact launch count in ATTEMPTS,
-not the numeric suffix of the attempt ID. Original budget 70 Kani/60 Lean/2
-extractions; both extraction allocations are exhausted.
+OPEN overall; no new composed NDT row. Exact budget use is ATTEMPTS/BUDGET,
+not the attempt numeric suffix. Original70 Kani/60 Lean/2 extraction.
+All60 Lean units and both extraction allocations are exhausted.
 
-* A: finish the one requested on/off exact KMX realloc/copy split, with original
-  names and matched controls. If no flip, retain minimal failing harness and
-  stop A as UNISOLATED. If flip, classify K-1 family fidelity, no shipped bug.
-* B: forward decode and inverse now proved (B036/B037). Run authoritative raw
-  ax2 roots and classify collectAxioms disagreements, then verify own modules
-  have zero unresolved references. Never alter the walker.
-* C: split K060 observation load; derive byte/context and each typed field from
-  SAME returned Authenticated object through getter and settlement cut. Native
-  full process admission/prefix and production helper child transport remain
-  distinct from source-cut and diagnostic local-frame evidence.
-* Joint gate: a reachable adopted-headline two-transaction execution with same
-  selected accounts, program, instruction context and no intervening CPI,
-  successful decoder and settlement continuation, coherent cold release replay
-  and frozen source/ELF/runtime realization. No local model theorem supplies it.
-* Inherited forest: 650 unresolved references in15 modules are listed in
-  NFR_INHERITED_INCOHERENCE.json. Not waived or repaired by this lane.
+| Member | Established | Remaining and method |
+|---|---|---|
+| A CPI keys | Flags and appended key controlled passes; exact requested final KMX split retained | STOPPED UNISOLATED: existing AccountMeta/AccountInfo association failures, KMX positive/control timeouts. Needs a new isolated native method; not a Lean-only proposition or shipped bug. |
+| B raw/forward decoder | Accepted inverse, forward acceptance, extraction adaptation, encoder/settlement MODEL join;69 roots raw-standard | No remaining local Lean-only decoder obligation. Applying this to production needs native same-execution caller/context domains. |
+| C native join | Exact-capacity carrier/getter/suffix controlled cuts; byte and eight field-family observation campaign | Whole process prefix/admission and production helper/native oracle transport remain. K051 artificial geometry is diagnostic; E002 emits LLBC but no process Lean body. Needs native/Kani/source-erasure certificate, not another model wrapper. |
+| Joint non-vacuity | Local runtime consistency witness and same-value mathematical composition | Reachable adopted-headline two-transaction execution, selected accounts/program, SAME instruction context/no intervening CPI, admitted native carrier and successful continuation. Local markers/model witnesses do not establish this. |
+| Imported coherence |20 own modules zero dangling references | Exactly650 references in15 inherited modules; listed, not waived or repaired. Requires upstream coherent replay. |
+| Release | Frozen source and three existing ELF pins retained | Cold coherent release replay and source/ELF/runtime realization remain distinct gates. No rebuild claimed. |
 
-No privacy, per-attempt soundness, transaction-design or new runtime assumption
-claim is made. RuntimeReturnData is exactly nonempty1..1024 (Aspis792).
+A is stopped as expressly instructed after the single KMX comparison. B has
+used its full Lean allocation; Kani exhaustion is never used to stop Lean work.
+C independent native observations and controls continue through the allocated
+Kani budget. Every new pass needs its same-configuration failing control.
+
+RuntimeReturnData remains nonempty1..1024 (Aspis792), only runtime premise in
+the Pool MODEL association; native/caller residuals are not hidden as assumptions.
+No privacy, per-attempt-soundness or transaction-design claim is made here.
+
+<!-- budget checkpoint -->
+Budget checkpoint: {"attempts": 119, "last_attempt": "NFR_K026", "ledger_sha256": "6dca485a4b98e19c2d567bf809888533f8b7eeec43b6ec21e9cf32baf61d1474", "remaining": {"extract": 0, "kani": 13, "lean": 0}, "used": {"extract": 2, "kani": 57, "lean": 60}}
