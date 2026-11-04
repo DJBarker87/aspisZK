@@ -1,0 +1,45 @@
+import Lean
+import NFR_WALKER
+import NFR_MemoryLimit
+open Lean Elab Command
+/-- Standalone runtime avoids restoring a pre-initialization command environment. -/
+unsafe def main (args : List String) : IO UInt32 := do
+  NFO_MemoryLimit.set
+  initSearchPath (← findSysroot)
+  enableInitializersExecution
+  let mode := args.headD "small"
+  let (modules, roots) := if mode == "final" then
+    (#[`NFR_AfterstateForward,`NFR_AfterstateForward00,`NFR_AfterstateForward04,`NFR_AfterstateForward08,`NFR_AfterstateForward12,`NFR_AfterstateForward16,`NFR_AfterstateForwardHelpers,`NFR_CHelper,`NFR_CHelperBridge,`NFR_CSettlement,`NFR_DigestForward,`NFR_ExtractedDecode,`NFR_ModelJoin,`NFR_PoolReturnData,`NFR_RawInverse,`NFR_RawInverseFrames,`NFR_RawInverseHelpers,`NFR_RawInverseValidator,`NFR_ResultForward,`NFR_ResultForwardHelpers],
+     #[`NFR_AfterstateForward.self_ne,`NFR_AfterstateForward.roundtrip,`NFR_AfterstateForward00.result,`NFR_AfterstateForward04.result,`NFR_AfterstateForward08.result,`NFR_AfterstateForward12.result,`NFR_AfterstateForward16.result,`NFR_AfterstateForwardHelpers.domain,`NFR_AfterstateForwardHelpers.range,`NFR_AfterstateForwardHelpers.uniform_window,`NFR_AfterstateForwardHelpers.digest_width,`NFR_AfterstateForwardHelpers.root_window,`NFR_AfterstateForwardHelpers.frontier_window,`NFR_AfterstateForwardHelpers.index_window,`NFR_AfterstateForwardHelpers.twenty_eta,`NFR_CHelper.accepted,`NFR_CHelper.rejected,`NFR_CHelperBridge.semantic,`NFR_CHelperBridge.same_emission,`NFR_CSettlement.success,`NFR_CSettlement.rejected_validation,`NFR_CSettlement.rejected_lane,`NFR_CSettlement.rejected_encoder,`NFR_CSettlement.reencode_same,`NFR_DigestForward.four_eta,`NFR_DigestForward.eight_eta,`NFR_DigestForward.roundtrip,`NFR_ExtractedDecode.sliceArrayNe_eq,`NFR_ExtractedDecode.probe,`NFR_ExtractedDecode.oracle,`NFR_ModelJoin.same_emitted_settlement,`NFR_ModelJoin.local_law,`NFR_ModelJoin.local_empty,`NFR_PoolReturnData.accepted_association,`NFR_PoolReturnData.association,`NFR_RawInverse.accepted_bytes,`NFR_RawInverse.raw_inverse,`NFR_RawInverse.accepted_codec,`NFR_RawInverseFrames.branch_continue,`NFR_RawInverseFrames.kind_discriminant,`NFR_RawInverseFrames.frames,`NFR_RawInverseHelpers.afterstate,`NFR_RawInverseHelpers.digest,`NFR_RawInverseHelpers.master,`NFR_RawInverseHelpers.selected,`NFR_RawInverseHelpers.digest_width,`NFR_RawInverseHelpers.digest_error,`NFR_RawInverseHelpers.afterstate_error,`NFR_RawInverseValidator.encoder,`NFR_RawInverseValidator.map,`NFR_RawInverseValidator.map_1,`NFR_RawInverseValidator.validate,`NFR_ResultForward.forward,`NFR_ResultForward.emitted,`NFR_ResultForward.decoder_association,`NFR_ResultForwardHelpers.layout,`NFR_ResultForwardHelpers.width32,`NFR_ResultForwardHelpers.width688,`NFR_ResultForwardHelpers.nullifier_domain,`NFR_ResultForwardHelpers.head,`NFR_ResultForwardHelpers.get4,`NFR_ResultForwardHelpers.get5,`NFR_ResultForwardHelpers.get6,`NFR_ResultForwardHelpers.get7,`NFR_ResultForwardHelpers.master_range,`NFR_ResultForwardHelpers.selected_range,`NFR_ResultForwardHelpers.digest_range,`NFR_ResultForwardHelpers.afterstate_range,`NFR_ResultForwardHelpers.kind_roundtrip])
+    else if mode == "fixtures" then
+    (#[`NEP_Planted, `NEP_Mutations],
+     #[`NEP_Planted.matcher, `NEP_Planted.viaPrivate, `NEP_Planted.proof,
+       `NEP_Planted.viaAux, `NEP_MutateMatch.matcher, `NEP_MutatePrivate.viaPrivate,
+       `NEP_MutateProof.proof, `NEP_MutateAux.viaAux])
+    else (#[], #[])
+  let env ← importModules (modules.map fun n => ({module := n, importAll := true} : Import))
+    {} (loadExts := true) (level := .private)
+  let ctx : Command.Context := {
+    fileName := "NEP_Driver"
+    fileMap := FileMap.ofString ""
+    snap? := none
+    cancelTk? := none
+  }
+  let action : CommandElabM Bool := do
+    let mut failed := false
+    for root in roots do
+      try
+        elabCommand (← `(command| #print axioms $(mkIdent root)))
+        NEP.audit root ("NEP_" ++ mode ++ "_" ++ root.toString)
+      catch e =>
+        logError e.toMessageData
+        failed := true
+    return failed
+  let result ← ((action.run ctx).run (Command.mkState env)).toBaseIO
+  match result with
+  | .error e =>
+    IO.eprintln (← e.toMessageData.toString)
+    return 2
+  | .ok (failed, state) =>
+    for msg in state.messages.toList do IO.println (← msg.data.toString)
+    return if failed then 1 else 0
