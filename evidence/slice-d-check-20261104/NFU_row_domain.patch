@@ -1,0 +1,10 @@
+--- a/crates/aspis-r1-cost-probe/src/NFU_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/NFU_wire.rs
+@@ -1,6 +1,6 @@
+ use super::*;
+ #[kani::proof_for_contract(ValidatedRecord::row)]
+-fn row_contract(){let row:u8=kani::any();let r=ValidatedRecord{row,framed:&[]};let _=r.row();}
++fn row_contract(){let bytes:[u8;3717]=kani::any();let start:usize=kani::any();let len:usize=kani::any();kani::assume(start<=3717&&len<=3717-start);let r=ValidatedRecord{row:kani::any(),framed:&bytes[start..start+len]};let _=r.row();}
+ // Borrowed-return association: same typed slice, no copy, allocation or mutation.
+ #[kani::proof]
+ fn framed_identity(){let bytes:[u8;3717]=kani::any();let start:usize=kani::any();let len:usize=kani::any();kani::assume(start<=3717&&len<=3717-start);let input=&bytes[start..start+len];let record=ValidatedRecord{row:kani::any(),framed:input};let result=record.framed();assert!((result.as_ptr()==input.as_ptr()&&result.len()==input.len()) != cfg!(NFU_invert));}
