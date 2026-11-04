@@ -7,7 +7,8 @@ from pathlib import Path
 import hashlib,json,lzma,re,copy,difflib
 from functools import lru_cache
 P='programs/r1-cost-probe/src/r1_pool_adapter.rs::'
-FUNCTIONS=[P+n for n in ['asq8_common','transfer_statement_box','withdrawal_statement_box','reconstruct_asq8_statement']]
+from NEU_decoder_checks import FUNCTIONS as DECODER_FUNCTIONS
+FUNCTIONS=[P+n for n in ['asq8_common','transfer_statement_box','withdrawal_statement_box','reconstruct_asq8_statement']]+DECODER_FUNCTIONS
 COMMON=['master_account[j]','checkpoint_account[j]','selected_lane_account[j]','output_lane','checkpoint_sequence','historical_global_anchor[i].0','lane_transition.live_snapshot.pool[j]','lane_transition.live_snapshot.deployment_domain[j]','lane_transition.live_snapshot.sequence','lane_transition.live_snapshot.next_pair_index','lane_transition.live_snapshot.current_root[i].0','lane_transition.live_snapshot.frontier[k][i].0','lane_transition.candidate_afterstate.next_pair_index','lane_transition.candidate_afterstate.next_root[i].0','lane_transition.candidate_afterstate.next_frontier[k][i].0']
 PUBLIC=['pool[j]','deployment_domain[j]','anchor_sequence','anchor_root[i].0','nullifier[i].0','asset_id.0','change_commitment[i].0']
 FIELDS={
@@ -56,6 +57,9 @@ def native_pair(v,pair):
  return True
 
 def addition(b,f,ledger,v,reviewed):
+ if f in DECODER_FUNCTIONS:
+  from NEU_decoder_checks import addition as decoder_addition
+  return decoder_addition(b,f,ledger,v,reviewed)
  try:
   assert f in FUNCTIONS and b['function']==f
   assert b['semantic_review_sha256']==reviewed['native-bridge::'+f]==sha(json.dumps({k:w for k,w in b.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
@@ -145,7 +149,7 @@ is erased merely by composition: a complete new native/model packet is required.
    assert r['frozen_body_verified'] and r['function'] in FUNCTIONS
    r['bridge_status']='CLOSED-CONDITIONAL';r['selected_claims']=['NEU::'+f]
    r['claim_ids']=list(dict.fromkeys(r['claim_ids']+['NEU::'+f]))
-   r['named_hypotheses']=[dict(name=n,statement=('All typed inputs; exact native/semantic carrier law.' if n.endswith('PacketDomain') else b['physical_qualification']),discharged_by=None) for n in qualifiers(f)]
+   r['named_hypotheses']=[dict(name=n,statement=(b['domain']+'; exact native/semantic carrier law.' if n.endswith('PacketDomain') else b['physical_qualification']),discharged_by=None) for n in qualifiers(f)]
    r['NEU_native_admission']=dict(claim='NEU::'+f,review_sha256=b['semantic_review_sha256'],inherited_rejection_retained=True,new_native_evidence_required=True)
  # Bind selected child qualifications at the SAME caller edges, including the
  # newly admitted claims; no conservative target is removed.

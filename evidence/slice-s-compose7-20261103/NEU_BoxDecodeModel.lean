@@ -7,14 +7,14 @@ open pool_v1.pair_forest_terminal
 abbrev Common := PoolV1PairForestTerminalCommonV1
 
 def transferRun (c : Common) (b : Array U8 216#usize) := do
-  let public ← NEQ_PaymentDecode.transferFull b.to_slice
-  match public with
+  let decoded ← NEQ_PaymentDecode.transferFull b.to_slice
+  match decoded with
   | .Err e => ok (.Err (.Payment e) : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1)
   | .Ok p => ok (.Ok (.PrivateTransfer c p))
 
 def withdrawalRun (c : Common) (b : Array U8 216#usize) := do
-  let public ← NEQ_PaymentDecode.withdrawalFull b.to_slice
-  match public with
+  let decoded ← NEQ_PaymentDecode.withdrawalFull b.to_slice
+  match decoded with
   | .Err e => ok (.Err (.Payment e) : core.result.Result PoolV1PairForestTerminalStatementV1 PoolV1PairForestTerminalFormatErrorV1)
   | .Ok p => ok (.Ok (.Withdrawal c p))
 

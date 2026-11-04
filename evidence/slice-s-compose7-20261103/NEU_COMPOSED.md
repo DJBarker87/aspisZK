@@ -246,3 +246,53 @@ the frozen prefix. It covers arbitrary u64 indices, all raw u32 assets and both
 payment variants. Its metadata explicitly leaves the full typed-input/native
 noninterference association OPEN. A source-projection support pair cannot be
 used as a whole-root bridge or a stronger PacketDomain.
+
+## Boxed payment-decoder members closed
+
+Final additional admission is **72/97 rows CLOSED,41/61 functions,2/7 roots**.
+The two additional members are decode_transfer_statement_boxed_v1 and
+ decode_withdrawal_statement_boxed_v1. K122/123 and K124/125 pass/fail under the
+exact KMX patch and frozen graph. Each arbitrary field selector covers every
+common/public byte, digest limb, scalar and frontier position; no unobserved
+field is fixed. The child receives the SAME live216-byte slice, exactly once;
+all typed payment errors map to the SAME Payment payload. Success returns the
+complete matching variant/common/public record through safe Box allocation.
+
+L017's full model statements (L016's reserved-word parse error is excluded):
+
+```lean
+theorem transfer_result_state_effects {State : Type} (c : Common) (b : Array U8 216#usize) (state : State) :
+    (transferRun c b,state,([] : List Unit)) =
+    (decode_transfer_statement_boxed_v1 c b.to_slice,state,[])
+
+theorem withdrawal_result_state_effects {State : Type} (c : Common) (b : Array U8 216#usize) (state : State) :
+    (withdrawalRun c b,state,([] : List Unit)) =
+    (decode_withdrawal_statement_boxed_v1 c b.to_slice,state,[])
+```
+
+The existing NEQ payment-parser compositions discharge the inner child premise,
+with identical bytes and fixed216 geometry. New helper PacketDomain explicitly
+requires the live216-byte payment slice; it is not asserted for other lengths.
+The enclosing terminal decoder must still establish that domain at its own
+actual native call site. No enclosing parser/root is promoted by this result.
+L018 transfers arbitrary-index extensionality through the EXISTING common and
+statement carrier round trips; no imported proof is duplicated. All new top
+laws have only propext,Classical.choice,Quot.sound (or fewer).
+
+NEU_DECODER_TESTS.log: eight passing mutations/acceptance checks. Missing
+control, wrong native branch, narrowed domain, wrong assembly law, missing or
+wrong same-call domain and missing physical certificate all reject or leave the
+row OPEN. Every original historical check still executes on the immutable
+baseline; its successful result is reused only within this mutation suite.
+NEU_DECODER_VALIDATION.json is the successful full additive validation after
+these new certificates. The inherited physical/runtime qualifications and
+P6/D188 option-A reclassification remain explicit.
+
+The scanner's L020 proof is symbolic equality-prefix induction with an
+arbitrary accumulator/state frame, not normalization of688 concrete bytes.
+L019's reserved-word parse failure is excluded. K127/128 prove/falsify one actual
+single-byte native slice comparison under arbitrary previous equality. The
+frozen compiler/library688-byte comparison still needs association to this
+iteration; neither the native window nor the induction alone closes the root.
+K126's reconstruction finish exits124 at180s after9.41s compilation and has no
+verifier verdict; its lock is recovered unchanged and scope is removed.
