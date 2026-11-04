@@ -1,11 +1,16 @@
 import NFQ_STAGE2_IMPORT
 import NFW_PowersDomain
-#print AspisR1LoopPowers.field.WideExact.mul
-#print AspisR1LoopPowers.toOld
-#print AspisR1LoopPowers.fromOld
-#print AspisR1CurrentCaller.BorrowedClaimPrepared.powersPublic
-#print AspisR1ClaimPreparedBridge.InstalledMeaning.powersPublic
-#print AspisR1CurrentWideMul.field.CM31.mul
-#print AspisR1CurrentWideMul.field.M31.mul
-#print AspisR1CurrentWideMul.field.M31.add
-#print AspisR1CurrentWideMul.field.M31.sub
+#print AspisR1ClaimPreparedBridge.powersPublic
+#print AspisR1.FIp_PowersValue.powers
+#print AspisR1.FIp_PowersState.Post
+#print AspisR1CurrentWide.Proof.decodeWide
+#print AspisR1CurrentWide.Proof.decodeQM
+#print AspisR1CurrentWide.Proof.decodeCM
+#print AspisR1CurrentWide.Proof.decodeM31
+open Lean Elab Command
+run_cmd do
+ let env ← getEnv
+ for n in [`AspisR1.FIp_PowersValue.powers,`FIo_Native.weights.powers,`AspisR1LoopPowers.early_powers_total_exact] do
+  match env.getModuleIdxFor? n with
+  | some i => logInfo m!"OWNER {n} := {env.header.moduleNames[i.toNat]!}"
+  | none => logInfo m!"MISSING {n}"

@@ -73,8 +73,9 @@ elif kind=='auditbatch' and target=='NFW_Stage2Driver':
  command=['python3','NFW_stage2_audit_batch.py']
 elif kind=='auditbatch':
  files['NFW_final_audit_batch.py']=(E/'NFW_final_audit_batch.py').read_text()
+ for n in ['NFA_WALKER.c','NFA_MemoryLimit.c']:files['NFW_native/'+n]=(E/'NFW_native'/n).read_text()
  sources=['NFW_generated/NFW_ProofDriver.lean','NFW_final_audit_batch.py','NFW_native/NFW_ProofDriver.c','NFW_native/NFA_WALKER.c','NFW_native/NFA_MemoryLimit.c']
- command=['python3','NFW_final_audit_batch.py']
+ command=['python3','NFW_final_audit_batch.py',a+'.json']
 elif kind=='auditbin':
  sources=['NFW_generated/NFW_Driver.lean'];command=['NFW_native/NFW_Driver',target]
 else:raise ValueError(kind)
