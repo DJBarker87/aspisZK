@@ -1,0 +1,6 @@
+{
+ "mode": "copy",
+ "source": "#[kani::proof]\n#[kani::unwind(34)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\nfn association(){let src:[u8;8]=kani::any();let mut dst=[0u8;8];dst.copy_from_slice(&src);let j:usize=kani::any();kani::assume(j<8);assert!(dst[j]==src[j]);}\n",
+ "source_cut": "    runtime.clear_return_data();\n    runtime.invoke(&instruction, &infos)?;\n    let (returned_program, returned_data) = runtime\n        .get_return_data()\n        .ok_or(PoolV1ProgramError::MissingVerifierReturnData)?;\n    if returned_program != selected {\n        return Err(PoolV1ProgramError::InvalidVerifierReturnProgram.into());\n    }\n    if returned_data.len() != POOL_V1_PAIR_FOREST_TERMINAL_RESULT_BYTES {\n        return Err(PoolV1ProgramError::InvalidVerifierReturnData.into());\n    }\n    let result = decode(&returned_data,frame)\n        .map_err(|_| PoolV1ProgramError::InvalidVerifierReturnData)?;\n    Ok(AuthenticatedPairForestResultV1 {\n        value: Box::new(result),\n        exact_bytes: returned_data.into_boxed_slice(),\n    })",
+ "classification": "post-admission frozen ASR8 cut; local opaque decoder reply; decoder bridge remains separate"
+}

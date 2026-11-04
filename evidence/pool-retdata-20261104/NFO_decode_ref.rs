@@ -1,0 +1,1 @@
+pub fn decode_ref(bytes:&[u8])->Result<aspis_statement::pool_v1::PoolV1PairForestTerminalResultV1,aspis_statement::pool_v1::PoolV1PairForestTerminalFormatErrorV1>{aspis_statement::pool_v1::decode_pool_v1_pair_forest_terminal_result_v1(bytes)}

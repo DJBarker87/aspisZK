@@ -1,0 +1,68 @@
+def AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.validate_result : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1 →
+  Result (core.result.Result Unit pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) :=
+fun result =>
+  have a := Array.repeat 32#usize 0#u8;
+  do
+  let b ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 result.master_account a
+  if b = true then
+      ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+    else
+      have a1 := Array.repeat 32#usize 0#u8;
+      do
+      let b1 ← core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8 result.selected_lane_account a1
+      if b1 = true then
+          ok (core.result.Result.Err pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)
+        else do
+          let r ← pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 result.nullifier
+          let r1 ←
+            core.result.Result.map_err
+                pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1
+                r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val =>
+              if (result.output_lane != val) = true then
+                ok
+                  (core.result.Result.Err
+                    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)
+              else do
+                let r2 ← pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 result.verified_afterstate
+                let r3 ←
+                  core.result.Result.map_err
+                      pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1
+                      r2 ()
+                let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+                match cf1 with
+                  | core.ops.control_flow.ControlFlow.Continue a => ok (core.result.Result.Ok ())
+                  | core.ops.control_flow.ControlFlow.Break residual =>
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                      (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)
+                      residual
+            | core.ops.control_flow.ControlFlow.Break residual =>
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual Unit
+                (core.convert.FromSame pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) residual
+def AspisR1TerminalDecoder.pool_v1.pair_forest_terminal.transition_kind : U8 →
+  Result
+    (core.result.Result pool_v1.historical_anchor.PoolV1TransitionKind
+      pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1) :=
+fun byte => do
+  let i ← 1#u8 + 0#u8
+  let i1 ← lift (UScalar.cast UScalarTy.U8 i)
+  if byte = i1 then ok (core.result.Result.Ok pool_v1.historical_anchor.PoolV1TransitionKind.PrivateTransfer)
+    else do
+      let i2 ← 2#u8 + 0#u8
+      let i3 ← lift (UScalar.cast UScalarTy.U8 i2)
+      if byte = i3 then ok (core.result.Result.Ok pool_v1.historical_anchor.PoolV1TransitionKind.Withdrawal)
+        else
+          ok
+            (core.result.Result.Err
+              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.InvalidTransitionKind)
+AspisR1TerminalDecoder.pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1 (bytes : Slice U8) :
+  Result
+    (core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1
+      pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+AspisR1TerminalDecoder.pool_v1.pair_terminal.exact (N : Usize) (bytes : Slice U8) :
+  Result (core.result.Result (Std.Array U8 N) pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)
+AspisR1TerminalDecoder.atomic_statement.decode_digest_canonical (bytes : Std.Array U8 32#usize) :
+  Result (core.result.Result (Std.Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)
+NFO_generated/NFO_DecodeInventory.lean:8:7: error(lean.unknownIdentifier): Unknown identifier `pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_result_v1`

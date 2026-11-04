@@ -1,0 +1,53 @@
+{
+ "status": "PASS",
+ "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+ "checks": {
+  "unchanged_frozen_source": true,
+  "exact_cut": true,
+  "ordered_runtime_calls": true,
+  "program_before_length_before_decode": true,
+  "same_typed_reply_to_box": true,
+  "same_owned_bytes_to_box": true,
+  "empty_function_pointer_quarantine": true,
+  "runtime_wrapper_invoke": true,
+  "runtime_wrapper_read": true
+ },
+ "mutations": [
+  {
+   "original": "returned_program != plan.selected_verifier",
+   "mutated": "returned_program == plan.selected_verifier",
+   "rejected": true
+  },
+  {
+   "original": "runtime.invoke(&instruction, &infos)?;",
+   "mutated": "runtime.invoke(&instruction, &infos)?;\n    runtime.clear_return_data();",
+   "rejected": true
+  },
+  {
+   "original": "decode_pool_v1_pair_forest_terminal_result_v1(&returned_data)",
+   "mutated": "decode_pool_v1_pair_forest_terminal_result_v1(&returned_data[1..])",
+   "rejected": true
+  },
+  {
+   "original": "value: Box::new(result)",
+   "mutated": "value: Box::new(other)",
+   "rejected": true
+  },
+  {
+   "original": "exact_bytes: returned_data.into_boxed_slice()",
+   "mutated": "exact_bytes: other.into_boxed_slice()",
+   "rejected": true
+  }
+ ],
+ "source_sha256": "95f1d6188c6102ab5724cd9791e96d77c519cb3e88dba09a52532f7882f43ad8",
+ "scope": "source-exact post-admission ASR8 cut; not decoder or settlement correspondence",
+ "elf_post_cpi_sequence": {
+  "0x3eb0": "call 0xb74b",
+  "0x3eb8": "ldxdw r1, [r10 - 0x620]",
+  "0x3ec0": "lddw r2, -0x7fffffffffffffe6",
+  "0x3ed0": "jne r1, r2, +0xb <.text+0x3e10>",
+  "0x3ed8": "mov64 r1, r10",
+  "0x3ee0": "add64 r1, -0x620",
+  "0x3ee8": "call 0xb7b7"
+ }
+}

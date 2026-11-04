@@ -47,3 +47,17 @@ length; decode error; successful same result/bytes allocation. Legacy source
 adds decoded expected-result and full expected-byte equality checks.
 RuntimeReturnData is retained as ACCEPTED added trust; no runtime law is
 claimed discharged. Wallets, keys, shipped source and release artifacts unchanged.
+
+## Completed SDK success-path check
+
+NFO_ELF_FLOW.json conservatively explores all branches and direct callees
+from0x60f60 after sol_invoke_signed_rust, taking its r0=0 success branch,
+through SDK return cleanup (18 instructions; only deallocation calls), and
+from get-wrapper0x61028 through its read syscall0x610a0 (21 instructions;
+only sol_memset_ initializes the output buffer). Zero unresolved/indirect
+calls and zero intervening CPI/set syscalls in these intervals. Two planted
+clearing/CPI relocation mutations are detected. Error-conversion paths are
+excluded from this returning-success statement, since the caller propagates
+CPI Err without reading. An initial over-approximation included formatting
+indirect calls on error paths; narrowing to the actual syscall-success branch
+removes those irrelevant paths rather than inventing their targets.
