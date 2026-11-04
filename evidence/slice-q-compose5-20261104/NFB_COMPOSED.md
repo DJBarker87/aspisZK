@@ -81,3 +81,12 @@ NFA's stronger NEV raw-audit admission is still withheld, with no waiver.
 
 Next: query_loop in actual dependency order, importing committed NFA evidence.
 No incoming parent edge is inferred merely because geometry is now closed.
+
+## Final continuation after restart
+
+Both primary budgets are now exhausted (110 Kani,90 Lean;1 extraction).
+No additional composed row closed. L090 exposed conflicting emitted type
+owners at import and is excluded; its tail WIP cannot enter the geometry
+certificate. See NFB_HANDOFF.md and NFB_REMAINING.md for exact receipts,
+peer provenance, exclusions and every remaining member. Existing successful
+geometry replay/tests are reused unchanged, not rerun.
