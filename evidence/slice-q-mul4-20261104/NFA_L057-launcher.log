@@ -1,0 +1,48 @@
+{"attempt": "NFA_L057", "exit_status": 1, "wall_seconds": 2.4883829581085593, "peak_rss_kib": "5297036", "swaps": "0", "print_axioms": ["'AspisR1.NFA_OuterAccepted.step' depends on axioms: [propext, Classical.choice, Quot.sound]", "'AspisR1.NFA_OuterAccepted.native_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFA_generated/NFA_OuterAccepted.lean:35:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑limbs).length
+in the target expression
+  ↑index < limbs.length
+
+limbs : Std.Array U64 8#usize
+n : ℕ
+active : n < 7
+bound : NFA_FoldEight.Bound limbs n
+index : Usize
+inside : ↑index < 8
+word : U64
+run : limbs.index_usize index = ok word
+⊢ ↑index < limbs.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+...
+NFA_generated/NFA_OuterAccepted.lean:35:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑limbs).length
+in the target expression
+  ↑index < limbs.length
+
+limbs : Std.Array U64 8#usize
+n : ℕ
+active : n < 7
+bound : NFA_FoldEight.Bound limbs n
+index : Usize
+inside : ↑index < 8
+word : U64
+run : limbs.index_usize index = ok word
+⊢ ↑index < limbs.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'AspisR1.NFA_OuterAccepted.step' depends on axioms: [propext, Classical.choice, Quot.sound]
+'AspisR1.NFA_OuterAccepted.native_domain' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rd0bdfc096e334bc8a5b3441f0431842a.scope; invocation ID: 5174db6722a5451fa7703d2da2333f4e
