@@ -48,11 +48,7 @@ theorem step_view (fixed : {X : Type} → Op X → Result X)
     | div => exact congrArg some (kont_div fixed k).symm
   | seq first next => rfl
   | loop body s =>
-    change some (kontDenote fixed k (Aeneas.Std.bind (denote fixed (body s))
-      (fun cf => match cf with
-        | .done a => .ok a
-        | .cont t => Aeneas.Std.loop (fun t => denote fixed (body t)) t))) =
-      some (kontDenote fixed k (Aeneas.Std.loop (fun t => denote fixed (body t)) s))
+    simp only [step,view,configDenote,kontDenote,denote]
     conv => rhs; rw [Aeneas.Std.loop.eq_def]
   | call op =>
     cases h : fixed op with
