@@ -218,7 +218,7 @@ theorem nonzero_erases (bytes : Array U8 32#usize) :
 theorem entropyBody_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyBody nonce limit retry) =
       aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body nonce limit retry := by
-  simp only [entropyBody, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body, if_rule, bind_rule, call_rule, result_rule, pure_rule, cf_rule, pair_rule, fixed, nonzero_erases, Aeneas.Std.bind]
+  simp only [entropyBody, aspis_prover.state_only_entropy.StateOnlyAttemptSecrets.generate_for_mask_nonce_loop.body, if_rule, bind_rule, call_rule, result_rule, pure_rule, cf_rule, pair_rule, fixed, nonzero_erases]
 
 theorem entropyLoop_erases (nonce : Array U8 32#usize) (limit retry : Usize) :
     denote fixed (entropyLoop nonce limit retry) =

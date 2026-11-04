@@ -13,10 +13,15 @@ for v in checks:
  if 'source' in v:
   src=v['source']; old=subprocess.check_output(['git','show',src['revision']+':'+src['path']]);assert hashlib.sha256(old).hexdigest()==src['source_sha256']
   assert subprocess.check_output(['git','show',rev+':'+src['path']])==old,('source changed',v['module'])
-for p in E.glob('receipt-*.json'):
+latest={}
+for p in sorted(E.glob('receipt-*.json')):
  r=json.loads(p.read_text())
  if r.get('accepted'):
-  checks.append(dict(module=r['target'],sha256=r['object_sha256'],path=H+'/objects/'+r['target']+'.olean'))
+  src=Path('lean/'+r['target']+'.lean')
+  if src.exists() and hashlib.sha256(src.read_bytes()).hexdigest()==r['source_sha256']:
+   latest[r['target']]=r
+for r in latest.values():
+ checks.append(dict(module=r['target'],sha256=r['object_sha256'],path=H+'/objects/'+r['target']+'.olean'))
 known={x['module'] for x in checks}|{x['module'] for x in base['external_checks']}
 assert set(re.findall(r'^import (\S+)',raw.decode(),re.M))<=known
 payload=dict(H=H,module=m,source=raw.decode(),sha256=hashlib.sha256(raw).hexdigest(),revision=rev,
