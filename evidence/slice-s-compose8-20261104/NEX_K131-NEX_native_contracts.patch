@@ -1,0 +1,17 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEX_length.rs"]
++mod NEX_length;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEX_length.rs
+@@ -0,0 +1,4 @@
++use super::*;
++fn length_gate(length:usize)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{if length!=POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES{return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);}Ok(())}
++#[kani::proof]
++fn length_gate_all(){let length:usize=kani::any();assert!(length_gate(length)==if length==1881{Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)});}

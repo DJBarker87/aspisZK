@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs
+@@ -1563,3 +1563,7 @@
+     Ok(*bytes)
+ }
+ 
++
++#[cfg(kani)]
++#[path="NEX_result_window.rs"]
++mod NEX_result_window;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEX_result_window.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn result_window(){let mut output:[u8;32]=kani::any();let j:usize=kani::any();kani::assume(j<32);let reply:[u8;32]=kani::any();output.copy_from_slice(&reply);assert!(output[j]==(reply[j])^1);}

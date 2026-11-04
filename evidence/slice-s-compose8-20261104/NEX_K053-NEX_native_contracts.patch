@@ -1,0 +1,18 @@
+--- a/crates/aspis-statement/src/pool_v1/pair_terminal.rs
++++ b/crates/aspis-statement/src/pool_v1/pair_terminal.rs
+@@ -640,3 +640,7 @@
+         );
+     }
+ }
++
++#[cfg(kani)]
++#[path="NEX_exact.rs"]
++mod NEX_exact;
+--- /dev/null
++++ b/crates/aspis-statement/src/pool_v1/NEX_exact.rs
+@@ -0,0 +1,5 @@
++use super::*;
++#[kani::proof]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]
++fn exact_cut(){let bytes:[u8;33]=kani::any();let len:usize=kani::any();let j:usize=kani::any();kani::assume(len<=33&&j<8);let result=exact::<8>(&bytes[..len]);if len==8{let out=result.unwrap();assert!(out[j]==bytes[j]^1);}else{assert!(matches!(result,Err(PoolV1PairVerifierTransportErrorV1::WrongLength)));}}

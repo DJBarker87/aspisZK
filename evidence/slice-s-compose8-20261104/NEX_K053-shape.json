@@ -1,0 +1,7 @@
+{
+ "width": 8,
+ "mode": "negative",
+ "domain": "width in {8,32}; live slice length <=33; all bytes unrestricted",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::KMX_stubs::KMX_copy_from_slice)]\nfn exact_cut(){let bytes:[u8;33]=kani::any();let len:usize=kani::any();let j:usize=kani::any();kani::assume(len<=33&&j<8);let result=exact::<8>(&bytes[..len]);if len==8{let out=result.unwrap();assert!(out[j]==bytes[j]^1);}else{assert!(matches!(result,Err(PoolV1PairVerifierTransportErrorV1::WrongLength)));}}\n",
+ "frozen_body": "fn exact<const N: usize>(bytes: &[u8]) -> Result<[u8; N], PoolV1PairVerifierTransportErrorV1> {\n    bytes\n        .try_into()\n        .map_err(|_| PoolV1PairVerifierTransportErrorV1::WrongLength)\n}"
+}

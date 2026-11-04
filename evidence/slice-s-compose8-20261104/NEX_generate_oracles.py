@@ -1,0 +1,53 @@
+"""Expose same-call emitted continuations, preserving Result/rejection order."""
+from pathlib import Path
+import subprocess,hashlib,json
+E=Path(__file__).resolve().parent
+path='docs/research/100bit-spend-path-20261013/lean/extracted-terminal-decoder-20261016/AspisR1TerminalDecoder/Funs.lean'
+s=subprocess.check_output(['git','show','HEAD:'+path],text=True)
+records=[]
+config=[('CommonOracle','pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1',[('atomic_statement.decode_digest_canonical','digest','Array U8 32#usize → Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)'),('pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1','lane','Slice U8 → Result (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)')]),('LaneOracle','pool_v1.pair_forest_terminal.decode_lane_transition_boxed_v1',[('pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1','late','Slice U8 → Result (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1)')]),('SnapshotBoxOracle','pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1',[('pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1','snapshot','Slice U8 → Result (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)')]),('LateOracle','pool_v1.pair_tree_profile.decode_pool_v1_pair_late_public_statement_boxed_v1',[('pool_v1.pair_tree_profile.decode_pair_live_snapshot_boxed_v1','snapshot','Slice U8 → Result (core.result.Result pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1)'),('pool_v1.pair_tree_profile.decode_pair_afterstate_boxed_v1','afterstate','Slice U8 → Result (core.result.Result pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 pool_v1.pair_tree_profile.PoolV1PairLatePublicStatementErrorV1)')]),('TerminalOracle','pool_v1.pair_forest_terminal.decode_pool_v1_pair_forest_terminal_statement_v1',[('pool_v1.pair_forest_terminal.decode_terminal_common_boxed_v1','common','Slice U8 → Result (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)'),('pool_v1.pair_forest_terminal.decode_transfer_statement_boxed_v1','transfer','pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 → Slice U8 → Result (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)'),('pool_v1.pair_forest_terminal.decode_withdrawal_statement_boxed_v1','withdrawal','pool_v1.pair_forest_terminal.PoolV1PairForestTerminalCommonV1 → Slice U8 → Result (core.result.Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)'),('pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1','validate','pool_v1.pair_forest_terminal.PoolV1PairForestTerminalStatementV1 → Result (core.result.Result Unit pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)')])]
+config.extend([
+ ('AfterDecodeOracle','pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1',[
+ ('atomic_statement.decode_digest_canonical','digest','Array U8 32#usize → Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)'),
+ ('pool_v1.pair_terminal.validate_verified_afterstate','validate','pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1 → Result (core.result.Result Unit pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1)')]),
+ ('SnapshotDecodeOracle','pool_v1.pair_tree_profile.decode_pool_v1_pair_live_snapshot_v1',[
+ ('atomic_statement.decode_digest_canonical','digest','Array U8 32#usize → Result (core.result.Result (Array aspis_core.field.M31 8#usize) atomic_statement.AtomicStatementError)'),
+ ('pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1','validate','pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotV1 → Result (core.result.Result Unit pool_v1.pair_tree_profile.PoolV1PairLiveSnapshotErrorV1)')])])
+for mod,name,children in config:
+ if mod in ['AfterDecodeOracle','SnapshotDecodeOracle']:
+  parent='NED_SubtreeComposition' if mod=='AfterDecodeOracle' else 'S6NativeSnapshotDecoderFactoredV1'
+  reference='NBN_AfterstateDecoderDependency.run (fun b => ok (NBP_DigestDecode.decoded b))' if mod=='AfterDecodeOracle' else 'AspisS6NativeSnapshotDecoderFactored.decode'
+  law='NED_SubtreeComposition.after_decode' if mod=='AfterDecodeOracle' else 'AspisS6NativeSnapshotDecoderFactored.decode_source'
+  out=f"""import {parent}
+set_option autoImplicit false
+noncomputable section
+namespace NEX_{mod}
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+/-- Reuse the existing factored model law; the excluded deep clone is not credit.
+Native oracle cuts, caller domains and physical frames are separate checks. -/
+abbrev run := {reference}
+theorem result_state_effects {{State : Type}} (bytes : Slice U8) (state : State) :
+    (run bytes,state,([] : List Unit)) =
+    ({name} bytes,state,[]) := by
+  exact congrArg (fun r => (r,state,([] : List Unit))) ({law} bytes)
+#print axioms result_state_effects
+#print axioms {law}
+end NEX_{mod}
+"""
+  (E/('NEX_'+mod+'.lean')).write_text(out)
+  records.append(dict(module='NEX_'+mod,reference=reference,reused_law=law,reason='reuse existing factored proof; no deep body normalization or cap change'))
+  continue
+ start=s.index('def '+name+' (');end=s.find('\n/--',start)
+ end_namespace=s.find('\nend ',start)
+ if end<0 or (end_namespace>=0 and end_namespace<end):end=end_namespace
+ original=s[start:end].strip();assert original.count('\ndef ')==0
+ parameters=''.join('('+short+' : '+ty+') ' for full,short,ty in children)
+ definition=original.replace('def '+name+' (','def run '+parameters+'(',1)
+ for full,short,ty in children:definition=definition.replace('← '+full+' ','← '+short+' ')
+ args=' '.join(full for full,short,ty in children)
+ proof='by\n  unfold run '+name+'\n  rfl' if mod in ['AfterDecodeOracle','SnapshotDecodeOracle'] else 'by rfl'
+ theorem=f'''\n/-- Model continuation substitution only. Native certificates and reached\nchild domains are separate checked obligations; no native root is assumed. -/\ntheorem result_state_effects {{State : Type}} (bytes : Slice U8) (state : State) :\n    (run {args} bytes,state,([] : List Unit)) =\n    ({name} bytes,state,[]) := {proof}\n#print axioms result_state_effects\nend NEX_{mod}\n'''
+ out='import AspisR1TerminalDecoder.Funs\nset_option autoImplicit false\nnoncomputable section\nnamespace NEX_'+mod+'\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n'+definition+'\n'+theorem
+ (E/('NEX_'+mod+'.lean')).write_text(out)
+ records.append(dict(module='NEX_'+mod,source=path,source_function=name,original_sha256=hashlib.sha256(original.encode()).hexdigest(),children=children,transformation='exact emitted continuation, replace only reached child call heads with explicit full-Result callbacks; no body or branch order changes'))
+(E/'NEX_ORACLE_GENERATION.json').write_text(json.dumps(records,indent=1))

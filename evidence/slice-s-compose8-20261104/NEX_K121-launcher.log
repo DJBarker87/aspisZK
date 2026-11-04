@@ -1,0 +1,54 @@
+{"attempt": "NEX_K121", "exit_status": 1, "wall_seconds": 20.50400735088624, "peak_rss_kib": "1371516", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+.0
+                    as u64,
+            _ => 0,
+        }) ==
+    ((match slot {
+                    0 => bytes[8 + j] as u64,
+                    1 => bytes[40 + j] as u64,
+                    2 => bytes[72 + j] as u64,
+                    3 => bytes[7] as u64,
+                    4 =>
+                        u64::from_le_bytes(bytes[104..112].try_into().unwrap()),
+                    5 => d.unwrap()[i].0 as u64,
+                    6 => c.lane_transition.live_snapshot.pool[j] as u64,
+                    7 =>
+                        c.lane_transition.live_snapshot.deployment_domain[j] as u64,
+                    8 => c.lane_transition.live_snapshot.sequence as u64,
+                    9 => c.lane_transition.live_snapshot.next_pair_index as u64,
+                    10 =>
+                        c.lane_transition.live_snapshot.current_root[i].0 as u64,
+                    11 =>
+                        c.lane_transition.live_snapshot.frontier[k][i].0 as u64,
+                    12 =>
+                        c.lane_transition.candidate_afterstate.next_pair_index as
+                            u64,
+                    13 =>
+                        c.lane_transition.candidate_afterstate.next_root[i].0 as
+                            u64,
+                    14 =>
+                        c.lane_transition.candidate_afterstate.next_frontier[k][i].0
+                            as u64,
+                    _ => 0,
+                }) ^ 1)
+ File: "crates/aspis-statement/src/pool_v1/NEX_decoder.rs", line 70, in pool_v1::pair_forest_terminal::NEX_decoder::decoder
+
+VERIFICATION:- FAILED
+Verification Time: 17.09119s
+
+Manual Harness Summary:
+Verification failed for - pool_v1::pair_forest_terminal::NEX_decoder::decoder
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r85d48306dbe64a8084b968bfc638b718.scope; invocation ID: f47095a22c904b2cb93a18023220ada8
