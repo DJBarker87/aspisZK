@@ -1,3 +1,54 @@
+# D583 checkpoint — stack world answers; shared OWNER still absent
+
+Same worktree/branch `codex/pv-evh-20261029`; resume base `28b62b77fc`.
+Stack stage committed as `5e2dc0c552`. Read STACK-RESOURCE-D583.md,
+FRAME-ENTRY-D583.md and BLOCKER-D583.md before continuing.
+
+New ruling (rdea-2′) supersedes D582's independent current-VMA coverage
+blocker. Stack residence is a SAME-world grant/exhaustion answer; retain
+fault/abort/timing prefixes. Public control-spine bound structurally proved:
+8 live retry frames at entropy entry, 9 at cap check; entropy's 16 retries
+are a loop. Reservations remain plan0x52a8/retry264/entropy232, with six
+saved registers each. Corrected D581 error: entropy sp = caller c-288,
+mask=sp+304, Result=sp+352 (NOT c-240/mask256/result304). Earlier D572
+caller_binding.py already used the correct values; no accepted Lean source
+was changed. Active initializer spine <=2976 bytes below plan's baseline,
+<=24184 below plan entry rsp. This is not a whole-client stack bound.
+
+FRAME-ENTRY-D583 explicitly specifies a branch-valued actual_frame_entry,
+conditional on EXACTLY shared OWNER_actual_prefix. Grant has the old five
+conjuncts; exhaustion retains the same run's failure. No granted-only q
+filter, adequacy hypothesis, future-success assumption or new T. This is a
+structural conditional interface, NOT a Lean proof/runtime installation.
+Actual source/machine/mapping carrier remains to be implemented through the
+shared relation. No local replacement owner was built.
+
+Step(2) inspected: all five rtDeployed native/fileTrace/countTrace/timeTrace/
+oraclePrefix fields still select *_OPEN. Shared pv-evhB4 OWNER is not merged
+in this branch; the actual complete advancing source/native/allocator/OS run
+is absent. BLOCKER-D583 states the exact producer domain/dictionary and all
+five simultaneous same-run equations. Do not install projections of supplied
+model data. Consume OWNER only after lead merge, use corrected physical
+correspondence, instantiate each reached KernelMemory.Step on that history,
+then build actual full execution/faithful terminal and five projections.
+
+Both new focused Python --check certificates PASS; pins in stack-resource-
+D583.json and projection-frontier-D583.json. No host scope/client run,
+Lean/Kani/native compile, new Lean declaration/axiom, full regression/replay
+or release audit. Historical axioms remain SUMMARY-BASED. No pending job.
+NEXT Lean90259 (24 inherited attempts, then91500..91596, audits91597..91599),
+NEXT nativeN91603 throughN91619, unchanged. No budget consumed this resume.
+
+Endpoint/deployment rows removed NONE; target not established. T unchanged.
+D582 coverage demand retired by the authorized resource model; public entry
+depth now structurally bounded. OWNER, actual advancing run/non-emptiness,
+reserve-header delivery, NativeObstruction62/op132, D520/U/D524,
+V370/V371/V400 and L1/L2/L3 remain. STOP follows exact focus rule on missing
+shared dependency/producer, not resource contention or budget exhaustion.
+No frozen Rust/program/soundness changes, merge/push, key/account/funds action.
+
+---
+
 # D582 checkpoint — Linux permissions and same-prefix payload boundary
 
 Branch `codex/pv-evh-20261029`, same worktree; resume base `f9881c743b`.
