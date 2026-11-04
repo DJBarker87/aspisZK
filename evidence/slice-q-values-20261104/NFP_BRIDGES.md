@@ -16,3 +16,15 @@ Canonical SAME-g provenance remains an incoming producer boundary.
 Budget: 100 Kani, 60 Lean, 3 extraction. Serial scopes, caps 6G/8G/swap0/tasks64.
 Sources and receipt inputs are committed; no shipped source changes or ELF
 rebuilds. Session A and sibling worktrees are untouched. No push.
+
+Stage 2 support: K007/K009 pass with arbitrary full proof bytes, canonical
+SAME g29 and arbitrary canonical dot replies; K008 pointer corruption fails;
+K010 exact-KMX copy control fails. All four use the same payload. L001 proves
+phase erasure without erasing trace operations; L003 factors the adopted body
+at the exact dot-return cut. Standard axioms only. No composed row/edge is
+promoted: this is the native prefix and model continuation, pending callee
+installation and full caller frame/domain/ordered-effect association.
+K001/K002 are excluded module-location setup failures. L002 is an excluded
+incomplete proof draft; L003 adds the final definitional equality step.
+Own runner initially interpreted Python imports as Lean module imports before
+submission; the parser now excludes Kani source files from that check.

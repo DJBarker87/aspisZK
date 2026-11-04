@@ -1,0 +1,50 @@
+{"attempt": "NFP_K002", "exit_status": 1, "wall_seconds": 3.6082547639962286, "peak_rss_kib": "426040", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-q-values-20261104/NFP_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+      ------------------------ any code following this expression is unreachable
+222 |
+223 |     crate::trace::value(9, 4 * i, dots[0]);
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ unreachable statement
+    |
+    = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> crates/aspis-r1-cost-probe/src/fast_dots.rs:46:13
+   |
+46 |         let mut value = WideExact::from_limbs([
+   |             ----^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/aspis-r1-cost-probe/src/r1_semantic.rs:232:71
+    |
+232 | fn verify_finish<H: Digest32>(public: Public<'_>, prefix: Prefix<'_>, mut transcript: SemanticTranscript<H>, challenges: Challenges...
+    |                                                                       ----^^^^^^^^^^
+    |                                                                       |
+    |                                                                       help: remove this `mut`
+
+warning: value assigned to `state` is never read
+  --> crates/aspis-r1-cost-probe/src/transcript.rs:53:54
+   |
+53 |         advances[7]=self.hash.digest(&[&state,&[2]]);state=advances[7];
+   |                                                      ^^^^^^^^^^^^^^^^^
+   |
+   = help: maybe it is overwritten before being read?
+   = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0583`.
+error: could not compile `aspis-r1-cost-probe` (lib) due to 1 previous error; 8 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 1 compilation errors.
+
+Running as unit: run-rbb3f40084b7b42cfa1fe34a9d7f9da1a.scope; invocation ID: 4641e1bee60c40b98b1688af8786ac53
