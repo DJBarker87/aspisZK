@@ -72,3 +72,8 @@ a complete, proved Result binding.
 Session 3: user confirms sole writer and accepts continuation of the committed
 ParserComponent split. RESUME-SESSION3.json verifies all host receipts; no live
 scope or driver remains. 16 Lean and 2 native spent; 90716 unlaunched.
+
+The session-3 live-ref refresh (CONSUMERS-session3-refresh.json) covers 15
+additional revisions against the original census. All new model variants are
+on this task branch or its remote ref; no other advanced live ref adds a
+consumer. The exact grep results are retained in session3-census/.
