@@ -1062,3 +1062,5 @@ before/after names. Unqualified uses are retained in full pinned bodies and
 resolved by the compiler; the full import closure is not shortened to lexical
 uses. NGK_CERTIFICATES.json enumerates all selected predecessor audit records
 and source theorem declarations before consulting a loaded-module graph.
+
+Final gates: all48 copied modules,119 full statement/owner associations,4,714 raw roots, same-binary8 fixtures and the full combined scan PASS. No Pool consumer row is promoted.

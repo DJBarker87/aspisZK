@@ -98,3 +98,5 @@ NGG production-prefix retarget plus B/D same-execution admission/settlement
 association. **Target not yet established.**
 
 Packaging correction: complete type/AST dumps exceeded20MB. The worker shell incorrectly continued after the failed size check and made unpushed commit674b4f4eec3. That local stage commit was amended before handoff: full bytes are retained as xz with raw SHA256, compressed readers verify hashes, and the final retained history contains no oversized blob. No proof/source/outcome changed; NGK_PREFLIGHT_FIXES.json records the correction.
+
+Final retained validator/delta stage commit:1c19dbbad8a. NGK_ARTIFACTS.json verifies4,843 compressed/raw SHA pairs, all requested outputs,50 packed source references, scope, no oversized retained Git blob, and zero active owned provers. NGK_HOST_END.json records4812 hash-verified owned rebuildable removals (784,666,823 bytes); all90 exported files and the9.0GiB owned cache remain. All14 final evidence mutations and five source/provenance mutations pass. Authored Python/Lean/Markdown whitespace checks pass.
