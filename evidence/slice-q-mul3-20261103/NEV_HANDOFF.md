@@ -1,3 +1,13 @@
+## Committed dot-leaf checkpoint
+
+Native budget70/70; Lean94/120; extraction5/20. All native scopes stopped. K070 passed but no matched negative, zero credit. New auxiliary raw/Dot/EbyK packets validate with named caller-domain proofs,5 metadata fault controls, all standard axioms. No new composed dot row. L088 SAME g coefficient/canonical limbs, L089 complete actual Result/state/effects, L090 checked-add prefix induction, L091/L092 coherent generic read/step replay, L094 complete checked cell/domain pass. L093 excluded Array.length wrapper goal, fixed by explicit val.length and transparency option. Next L095 eight-cell association and actual sweep/loop invariants, then wrapper/incoming Lean-only obligations, one final audit/manifest, cache export/cleanup.
+
+## Dot auxiliary checkpoint, 2026-11-04
+
+Kani budget exhausted70/70. No new dot row credit; component remains142 closed rows/179 edges with both roots OPEN. NEV_DOT_AUX.json validates three small outside-Q bridges (actual Q raw, Dot push, EbyK push) and their exact domains, using E003/E005, L078/L079/L084/L087, matched native pairs and matching KMX controls. NEV_DOT_NATIVE_REVIEW.json remains OPEN_CALLER. Main cell/fold/window pairs pass, but K070 outer cursor is unpaired and the full specialized StepBy association is open. Wrapper native context is unrun. K062/K065 timeout shapes excluded, K066 is a smaller selected-coefficient fission, no caps changed.
+
+Lean-only work continues:86/120 used at the budget checkpoint, then selected coefficient L088, complete generated Result L089, checked recurrence L090, pure read L091. Active L092 checks the generic existing DotStep body replay under NEV prefix to avoid an unrelated legacy RawTx1DigestLog dependency. Source provenance in NEV_DOT_REPLAY_ORIGINS.json. Do not rerun native scopes beyond70. No active native scope remains.
+
 ## Accumulation composition checkpoint, 2026-11-04
 
 Prefix and accumulation now composed CLOSED at TX1:185/TX2:111 and TX1:182/TX2:108. Additive union142 rows/179 edges preserves134 NET/NEO rows, imports six fresh NEI/NEV rows and adds two accumulation rows. Both roots remain OPEN. NEV_union.py checks all inherited gates unchanged, exact callee selections and domains, new external/receiver obligations and standard-only receipt audits. NEV_union_tests.py exercises fail-closed metadata controls. NEV_ACCUM_ASSOCIATION.md records exact native/Lean association.

@@ -35,3 +35,15 @@ existence/value theorems specialize those universal context properties to
 the actual emitted field results. No multiplication or arbitrary function
 contract is proved in Kani. Caller domain proofs and full composition remain
 OPEN until the accumulation packet validates; a table entry alone is no pass.
+
+## Dot auxiliary and pending caller logs
+
+| Owned local cut | Paired Lean law | Exact domain/status |
+|---|---|---|
+| NEV_RawLog.call | NEV_QRawAssociation.actual/cohort; LPi_RawValues.source; NEV_DotPush.complete | Canonical private Q inputs; arbitrary u64 reply coordinates cover actual raw return. No multiplication in Kani. Aux validated; whole dot caller remains OPEN. |
+| NEV_DotLog.call | NEV_DotPush.association/complete | SAME canonical private-Q operands and arbitrary owned sums. Full actual receiver/count/order checked by K052/K053; input domains derived by NEV_EbyDomains.value/scalar. |
+| NEV_DotCellLog.call | NEV_DotScalar.product | SAME actual widened u32 operands, both canonical; exact checked product returns natural product<=B. K058/K059 only multiplication-free frame/add/log. |
+| NEV_TailParserLog.call | CLOSED NET parser packet/window certificates (commit96ac88e728), exact same608-byte subwindow | Native window records original buffer pointer/start/length16; reply None or canonical QM31. Whole caller propagation into the actual parser is still OPEN; no standalone arbitrary byte array or independently chosen actual reply credited. |
+| NEV_TailContextLog.push/finish/add | NEV_EbyPushAssociation.source / NEV_EbyDomains.total; NEI_DotFinishValues and retained finish packet; NBG_WideCarriers.wide_add | Full arbitrary receiver/counter/raw rows, canonical reached field operands. K066/K067 plus K068/K069 only local cut credit. SAME selected g read, complete StepBy and native full caller association remain explicit. |
+
+K062/K065 timeouts excluded. K070 lacks a matched negative and earns no native credit. No log is promoted into a completed dot caller bridge.

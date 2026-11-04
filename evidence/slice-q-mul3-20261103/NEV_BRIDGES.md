@@ -1,3 +1,7 @@
+# Dot auxiliary checkpoint (continuing Lean)
+
+Component remains142 CLOSED rows/179 edges; only four new composed rows in this job. No dot caller row closes. NEV_DOT_AUX.json checks Q::raw, Dot::push and EbyKDot::push as small outside-Q auxiliaries; actual extraction, caller domains, matched native controls and KMX controls are retained. Native caller review remains OPEN in NEV_DOT_NATIVE_REVIEW.json. K062/K065 timeouts and unpaired K070 are excluded from credit. Five metadata fault controls pass. Kani budget70/70, Lean94/120, extraction5/20. Lean-only eight-cell/sweep/loop/caller facts remain in progress.
+
 # Current composed checkpoint
 
 New composed Slice-Q rows: prefix TX1:185/TX2:111 and accumulation TX1:182/TX2:108. Unified component142 rows/179 edges; both slice roots OPEN. All134 NET/NEO checked rows are retained byte-identically, six fresh predecessor/prefix rows imported and two accumulation rows added. NEV_ACCUM_PACKET.json / NEV_ACCUM_ASSOCIATION.md / NEV_union.py carry exact qualification and proof/native associations. All new accepted top theorems print standard axioms only. P6/D188 option A remains reclassification, never removal. No headline per-attempt soundness, privacy or two-transaction conclusion is asserted.

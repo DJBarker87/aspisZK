@@ -1,0 +1,40 @@
+NEV_generated/NEV_DotCell.lean:31:48: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑sums).length
+in the target expression
+  ↑index < sums.length
+
+coefficient : Std.Array U32 8#usize
+scalar word : U32
+sums : Std.Array U64 8#usize
+index : Usize
+before : U64
+n : ℕ
+inside : ↑index < 8
+readWord : coefficient.index_usize index = ok word
+readSum : sums.index_usize index = ok before
+hw : ↑word < NEG_DotDomain.P
+hs : ↑scalar < NEG_DotDomain.P
+active : n < 4
+bound : ↑before ≤ n * NEG_DotDomain.B
+product : U64
+multiply : core.convert.num.FromU64U32.from word * core.convert.num.FromU64U32.from scalar = ok product
+value : ↑product = ↑word * ↑scalar
+productBound : ↑product ≤ NEG_DotDomain.B
+right✝ : NEG_ProductAbstraction.Product 64 ↑word ↑scalar ↑product
+safe : ↑before + ↑product < 2 ^ 64
+after : UScalar UScalarTy.U64
+add : before + product = ok after
+afterValue : ↑after = ↑before + ↑product
+⊢ ↑index < sums.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (8 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+'NEV_DotCell.total' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
