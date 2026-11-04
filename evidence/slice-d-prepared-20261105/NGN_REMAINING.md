@@ -1,6 +1,6 @@
 # Remaining obligations and budget disposition
 
-Only assigned function: Prepared::new, TX1:179; its actual prepared_claim call TX1:193 may be booked only if installed. Both remain OPEN. No additional independent function/root is assigned. Budget used is NGN_BUDGET.json (31/80 native,32/70 Lean/support,1/1 extraction).
+Only assigned function: Prepared::new, TX1:179; its actual prepared_claim call TX1:193 may be booked only if installed. Both remain OPEN. No additional independent function/root is assigned. Budget used is NGN_BUDGET.json (31/80 native,33/70 Lean/support,1/1 extraction).
 
 This stops below80% because every independent cut/model/transport/audit item in the one-function recipe has been attempted or reuses an already passing NFW shape; each remaining item below needs an unavailable callee semantic/representation packet on the same native execution. More arbitrary-reply cuts do not prove that missing packet. Passing NFW shapes must not be replayed. No new extraction remains. This is an exact recipe-input/association obstruction, not a claim that the missing mathematics is impossible or that the remaining attempt allowance was consumed.
 

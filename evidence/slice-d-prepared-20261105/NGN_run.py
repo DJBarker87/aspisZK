@@ -32,7 +32,9 @@ p=b/{(a+'-reservation.json')!r}; print(p.read_text() if p.exists() else 'MISSING
   print('reservation wait',flush=True);time.sleep(180);continue
  raise RuntimeError('STOP admission')
 files={};sources=[]
-if kind=='metadata':
+if kind=='export':
+ files['NGN_export.py']=(E/'NGN_export.py').read_text();files['NGN_MODULES.json']=(E/'NGN_MODULES.json').read_text();sources=list(files);command=['python3','NGN_export.py']
+elif kind=='metadata':
  files['NGN_capture_graph.py']=(E/'NGN_capture_graph.py').read_text();files['NGN_EXPECTED_GRAPH_HASHES.json']=(E/'NGN_EXPECTED_GRAPH_HASHES.json').read_text();sources=list(files);command=['python3','NGN_capture_graph.py']
 elif kind=='extract':
  files['NGN_extract.py']=(E/'NGN_extract.py').read_text();sources=['NGN_extract.py'];command=['python3','NGN_extract.py']
@@ -96,6 +98,7 @@ r=ssh('cd '+shlex.quote(B)+' && systemd-run --user --scope -p MemoryHigh=6G -p M
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
+if {kind!r}=='export': names += ['NGN_EXPORT.json','NGN_CLOSURE_PINS.json.sha256']
 if {kind!r}=='metadata': names += ['NGN_FULL_GRAPH.json.sha256','NGN_ALL_CRATE_FEATURES.json']
 if {kind!r}=='extract': names += ['NGN_EXTRACTION_PINS.json']+([str(p.relative_to(b)) for p in (b/'NGN_extracted').rglob('*') if p.is_file()])+(['NGN_actual.llbc'] if (b/'NGN_actual.llbc').exists() else [])
 if {kind!r}=='kani': names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')]
