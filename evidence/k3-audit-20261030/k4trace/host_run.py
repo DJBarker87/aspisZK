@@ -29,6 +29,8 @@ def inside(config,out):
  if not check(config,out):write(out/'STOP.json',{'reason':'source/tool mismatch before compiler'});return 66
  env=os.environ.copy();env.pop('QUIET_WINDOW_OWNER',None)
  env.update(PATH='/home/dombarker/.cargo/bin:/usr/local/bin:/usr/bin:/bin',CARGO_BUILD_JOBS='4',CARGO_NET_OFFLINE='true',CARGO_TARGET_DIR=str(ROOT/'target'),CARGO_PROFILE_DEV_OPT_LEVEL='3',CARGO_PROFILE_DEV_DEBUG_ASSERTIONS='false',CARGO_PROFILE_DEV_OVERFLOW_CHECKS='false',TMPDIR=str(ROOT/'tmp'))
+ if config['credit']=='C084':
+  env.pop('CARGO_PROFILE_DEV_DEBUG_ASSERTIONS',None);env.pop('CARGO_PROFILE_DEV_OVERFLOW_CHECKS',None)
  # Same pinned driver as cargo-kani launches; the PATH tee retains CBMC bytes unchanged.
  cmd=config['command'].copy();cmd.insert(2,'--verbose');cmd+=['--trace']
  cmd=['/home/dombarker/.kani/kani-0.67.0/bin/kani-driver','kani',*cmd[2:]]
@@ -61,7 +63,7 @@ def inside(config,out):
    (out/(p.name+'.xz')).write_bytes(lzma.compress(p.read_bytes()))
  write(out/'symbols-index.json',{'records':records,'inside_same_scope':True})
  txt=(out/'time.log').read_text();metric=lambda k:int(re.search(re.escape(k)+r':\s*(\d+)',txt)[1])
- receipt={'id':config['id'],'credit':config['credit'],'target':cmd,'original':config['original'],'exit_status':r.returncode,'wall_seconds':wall,'peak_rss_kib':metric('Maximum resident set size (kbytes)'),'swap':metric('Swaps'),'source_revision':'670416be996ba5a0e1c5fb6349a7db34f16714d0','source_pin_manifest':'identity.json','limits':limits,'cgroup_peak_bytes':(cg/'memory.peak').read_text().strip(),'cgroup_swap_peak_bytes':(cg/'memory.swap.peak').read_text().strip(),'print_axioms':'N/A: Kani, 0 Lean','profile':{'opt-level':3,'debug-assertions':False,'overflow-checks':False},'symbol_records':len(records),'cwd':config['cwd']}
+ receipt={'id':config['id'],'credit':config['credit'],'target':cmd,'original':config['original'],'exit_status':r.returncode,'wall_seconds':wall,'peak_rss_kib':metric('Maximum resident set size (kbytes)'),'swap':metric('Swaps'),'source_revision':'670416be996ba5a0e1c5fb6349a7db34f16714d0','source_pin_manifest':'identity.json','limits':limits,'cgroup_peak_bytes':(cg/'memory.peak').read_text().strip(),'cgroup_swap_peak_bytes':(cg/'memory.swap.peak').read_text().strip(),'print_axioms':'N/A: Kani, 0 Lean','profile':{'opt-level':3,'debug-assertions':config['credit']=='C084','overflow-checks':config['credit']=='C084'},'symbol_records':len(records),'cwd':config['cwd']}
  write(out/'receipt.json',receipt)
  # Fail closed; a failing positive is returned for immediate human/agent classification.
  return r.returncode
