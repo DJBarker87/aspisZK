@@ -1,8 +1,17 @@
-# Current geometry dependency order
+# Current root-first continuation
 
-1. Typed literal repair: same signed/unsigned count9, then exact checked-to-wrapping shift law. The complete raw geometry file now compiles (L013); the raw file is retained unchanged separately. Its std externals reuse OraclePortStdBuilder/Port3_BatchStd/Port4C_GeometryStd, with no axioms introduced.
-2. Scalar/CM transports (L016) and prefix source helper (L018) are complete. NEW_GeometryPointPrimitives binds literal frozen tables and nominal CM results next. Reuse all NEA/NEB arithmetic/canonical proofs.
-3. Point and line association, then native/cohort terminal callbacks, reverse buffer and full-loop Result mapping, then root association and native fidelity. No newly extracted function or std adapter is itself a composed row.
-4. Only after the geometry root closes, proceed to the query root. Peer b79efe6ea6 has no additional slice row to import; check again within 30–60 minutes.
+Geometry raw full step/loop/root Result conversion: L054/L056. Every raw point
+and line/index child association: L058. Adopted dictionary is being joined in
+NEW_GeometryDictionary/Context; their failed drafts have no credit. Only
+NEW_ modules and this evidence directory are writable. Query root waits for
+the required geometry root closure; no held unrelated leaf is claimed.
 
-L021 is currently waiting at the admission barrier, with refusal recorded and no scope launched. No other own scope runs. No timeout or memory kill has occurred; no limit was raised.
+Own Kani client offline typo through K039 is quarantined. Corrected K041/
+K042 reserve10 pass/fail and K043 reserve12 pass. K044 matched control is
+running serially. After completion compile the smallest pending dictionary
+module (L062), then context, then full adopted root. Re-establish remaining
+geometry native packets using NEW_OFFLINE_REPLAY_PLAN.json under corrected
+environment. Never repeat any failed timeout/memory shape.
+
+Peer 94245fb7496 (checked 02:52 UTC) has no new target closure; check again
+in 30–60 minutes. No root CLOSED yet; ledger remains 62/78,124Q,169/257.

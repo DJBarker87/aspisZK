@@ -126,8 +126,68 @@ fn NET_reserve_case<const N:usize,const M:usize>(){
  assert_eq!(M,5*N);assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
  assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
  let k:usize=kani::any();kani::assume(k<N);let len=5*k;let raw:[u32;M]=kani::any();
- // Isolate reserve from variable-trip heap construction. All live words arbitrary.
- let p=Box::into_raw(Box::new(raw)) as *mut M31;
+ // Fixed setup initializes ONLY live words; spare slots remain MaybeUninit.
+ let p=Box::into_raw(Box::new([core::mem::MaybeUninit::<M31>::uninit();M])) as *mut M31;
+ if 0<M && 0<len {unsafe{p.add(0).write(M31(*raw.as_ptr().add(0)));}}
+ if 1<M && 1<len {unsafe{p.add(1).write(M31(*raw.as_ptr().add(1)));}}
+ if 2<M && 2<len {unsafe{p.add(2).write(M31(*raw.as_ptr().add(2)));}}
+ if 3<M && 3<len {unsafe{p.add(3).write(M31(*raw.as_ptr().add(3)));}}
+ if 4<M && 4<len {unsafe{p.add(4).write(M31(*raw.as_ptr().add(4)));}}
+ if 5<M && 5<len {unsafe{p.add(5).write(M31(*raw.as_ptr().add(5)));}}
+ if 6<M && 6<len {unsafe{p.add(6).write(M31(*raw.as_ptr().add(6)));}}
+ if 7<M && 7<len {unsafe{p.add(7).write(M31(*raw.as_ptr().add(7)));}}
+ if 8<M && 8<len {unsafe{p.add(8).write(M31(*raw.as_ptr().add(8)));}}
+ if 9<M && 9<len {unsafe{p.add(9).write(M31(*raw.as_ptr().add(9)));}}
+ if 10<M && 10<len {unsafe{p.add(10).write(M31(*raw.as_ptr().add(10)));}}
+ if 11<M && 11<len {unsafe{p.add(11).write(M31(*raw.as_ptr().add(11)));}}
+ if 12<M && 12<len {unsafe{p.add(12).write(M31(*raw.as_ptr().add(12)));}}
+ if 13<M && 13<len {unsafe{p.add(13).write(M31(*raw.as_ptr().add(13)));}}
+ if 14<M && 14<len {unsafe{p.add(14).write(M31(*raw.as_ptr().add(14)));}}
+ if 15<M && 15<len {unsafe{p.add(15).write(M31(*raw.as_ptr().add(15)));}}
+ if 16<M && 16<len {unsafe{p.add(16).write(M31(*raw.as_ptr().add(16)));}}
+ if 17<M && 17<len {unsafe{p.add(17).write(M31(*raw.as_ptr().add(17)));}}
+ if 18<M && 18<len {unsafe{p.add(18).write(M31(*raw.as_ptr().add(18)));}}
+ if 19<M && 19<len {unsafe{p.add(19).write(M31(*raw.as_ptr().add(19)));}}
+ if 20<M && 20<len {unsafe{p.add(20).write(M31(*raw.as_ptr().add(20)));}}
+ if 21<M && 21<len {unsafe{p.add(21).write(M31(*raw.as_ptr().add(21)));}}
+ if 22<M && 22<len {unsafe{p.add(22).write(M31(*raw.as_ptr().add(22)));}}
+ if 23<M && 23<len {unsafe{p.add(23).write(M31(*raw.as_ptr().add(23)));}}
+ if 24<M && 24<len {unsafe{p.add(24).write(M31(*raw.as_ptr().add(24)));}}
+ if 25<M && 25<len {unsafe{p.add(25).write(M31(*raw.as_ptr().add(25)));}}
+ if 26<M && 26<len {unsafe{p.add(26).write(M31(*raw.as_ptr().add(26)));}}
+ if 27<M && 27<len {unsafe{p.add(27).write(M31(*raw.as_ptr().add(27)));}}
+ if 28<M && 28<len {unsafe{p.add(28).write(M31(*raw.as_ptr().add(28)));}}
+ if 29<M && 29<len {unsafe{p.add(29).write(M31(*raw.as_ptr().add(29)));}}
+ if 30<M && 30<len {unsafe{p.add(30).write(M31(*raw.as_ptr().add(30)));}}
+ if 31<M && 31<len {unsafe{p.add(31).write(M31(*raw.as_ptr().add(31)));}}
+ if 32<M && 32<len {unsafe{p.add(32).write(M31(*raw.as_ptr().add(32)));}}
+ if 33<M && 33<len {unsafe{p.add(33).write(M31(*raw.as_ptr().add(33)));}}
+ if 34<M && 34<len {unsafe{p.add(34).write(M31(*raw.as_ptr().add(34)));}}
+ if 35<M && 35<len {unsafe{p.add(35).write(M31(*raw.as_ptr().add(35)));}}
+ if 36<M && 36<len {unsafe{p.add(36).write(M31(*raw.as_ptr().add(36)));}}
+ if 37<M && 37<len {unsafe{p.add(37).write(M31(*raw.as_ptr().add(37)));}}
+ if 38<M && 38<len {unsafe{p.add(38).write(M31(*raw.as_ptr().add(38)));}}
+ if 39<M && 39<len {unsafe{p.add(39).write(M31(*raw.as_ptr().add(39)));}}
+ if 40<M && 40<len {unsafe{p.add(40).write(M31(*raw.as_ptr().add(40)));}}
+ if 41<M && 41<len {unsafe{p.add(41).write(M31(*raw.as_ptr().add(41)));}}
+ if 42<M && 42<len {unsafe{p.add(42).write(M31(*raw.as_ptr().add(42)));}}
+ if 43<M && 43<len {unsafe{p.add(43).write(M31(*raw.as_ptr().add(43)));}}
+ if 44<M && 44<len {unsafe{p.add(44).write(M31(*raw.as_ptr().add(44)));}}
+ if 45<M && 45<len {unsafe{p.add(45).write(M31(*raw.as_ptr().add(45)));}}
+ if 46<M && 46<len {unsafe{p.add(46).write(M31(*raw.as_ptr().add(46)));}}
+ if 47<M && 47<len {unsafe{p.add(47).write(M31(*raw.as_ptr().add(47)));}}
+ if 48<M && 48<len {unsafe{p.add(48).write(M31(*raw.as_ptr().add(48)));}}
+ if 49<M && 49<len {unsafe{p.add(49).write(M31(*raw.as_ptr().add(49)));}}
+ if 50<M && 50<len {unsafe{p.add(50).write(M31(*raw.as_ptr().add(50)));}}
+ if 51<M && 51<len {unsafe{p.add(51).write(M31(*raw.as_ptr().add(51)));}}
+ if 52<M && 52<len {unsafe{p.add(52).write(M31(*raw.as_ptr().add(52)));}}
+ if 53<M && 53<len {unsafe{p.add(53).write(M31(*raw.as_ptr().add(53)));}}
+ if 54<M && 54<len {unsafe{p.add(54).write(M31(*raw.as_ptr().add(54)));}}
+ if 55<M && 55<len {unsafe{p.add(55).write(M31(*raw.as_ptr().add(55)));}}
+ if 56<M && 56<len {unsafe{p.add(56).write(M31(*raw.as_ptr().add(56)));}}
+ if 57<M && 57<len {unsafe{p.add(57).write(M31(*raw.as_ptr().add(57)));}}
+ if 58<M && 58<len {unsafe{p.add(58).write(M31(*raw.as_ptr().add(58)));}}
+ if 59<M && 59<len {unsafe{p.add(59).write(M31(*raw.as_ptr().add(59)));}}
  let mut dst=unsafe{Vec::from_raw_parts(p,len,M)};
  let offset:usize=kani::any();kani::assume(offset<M);if offset<len{assert_eq!(dst[offset].0,raw[offset]);}
  dst.reserve(5);

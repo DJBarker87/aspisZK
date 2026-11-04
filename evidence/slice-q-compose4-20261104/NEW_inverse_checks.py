@@ -39,6 +39,7 @@ def audit():
  native=[]
  for a,want in [('NEW_N001',0),('NEW_N002',101)]:
   r=receipt(a,want);native.append(r)
+  assert r['env'].get('CARGO_NET_OFFLINE')=='true'
   graph=obj(E/(a+'-graph-check.json'));assert graph['graph_matches_frozen'] and graph['exact_frozen_selected_graph']
   features=next(p['features'] for p in graph['resolved_features_all_crates'] if p['name']=='aspis-core');assert features==['r0']
   lock=obj(E/(a+'-lock-check.json'));assert lock['unchanged'] and lock['before']==lock['after']==pins['lock_before']

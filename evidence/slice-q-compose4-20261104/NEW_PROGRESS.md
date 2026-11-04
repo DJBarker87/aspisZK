@@ -67,3 +67,33 @@ and loop induction. Generic ops equality alone cannot be used for raw
 noncanonical double/sub inputs; L048 instead discharges the actual
 multiply-double-sub context, with canonical intermediates. Ledger remains
 62/78 functions,124 Q occurrences,169/257 edges; both roots OPEN.
+
+## Offline receipt correction
+
+Own NEW_kani.py misspelled CARGO_NET_OFFLINE as CARGO_NEW_OFFLINE through
+K039. Frozen graph validation used cargo metadata --offline, and every
+post-lock check passed, but the explicit actual-process environment rule
+was not met by the recorded configs. These Kani receipts are quarantined
+until replacement runs, not promoted. Inverse N001/N002 native configs
+used the correct variable and their closure is unchanged. The own client
+is repaired and NEW_gate.py now asserts CARGO_NET_OFFLINE=true before
+launch. Validation becomes stricter; protected host infrastructure unchanged.
+The reserve pre-state is also weakened to initialize ONLY live words using
+fixed guarded offsets; spare capacity remains genuinely uninitialized.
+
+Stage 3 follow-up: full actual-body/loop/root Result conversion to the SAME
+concrete dictionary compiles in L054/L056. Point, line and FibreIndex child
+correspondences compile in L058. These include fail/divergence without any
+child success hypothesis. The contextual adopted-dictionary substitution
+remains OPEN. N003 matches all seven native geometry fixtures; N004's single
+wrong returned lane fails, same input/source hashes and frozen graph/lock.
+Native fixtures do not replace the universal composition obligation.
+
+K040's fixed setup hit Kani's constant-index codegen ICE before verification.
+Guarded pointer reads replace the guarded out-of-range constant array places;
+the runtime guard still proves every read is inside M and live len. K041
+passes the corrected offline reserve10 check (84.944s, RSS2385936KiB, swap0);
+K042's wrong capacity fails (48.357s, RSS2119776KiB, swap0). Twelve strict
+source mutations/invariants pass after this setup repair. No timeout or
+memory kill has occurred as of these receipts. No K-2 function-pointer shape
+is used or renamed. The offline-replay plan stops on any unexpected verdict.

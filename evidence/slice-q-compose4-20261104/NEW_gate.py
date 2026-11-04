@@ -2,6 +2,7 @@
 from pathlib import Path
 import json,subprocess,sys,hashlib,tomllib,os
 B=Path(__file__).resolve().parent;x=json.loads((B/sys.argv[1]).read_text());a=x['attempt'];S=B/'NEW_src'
+assert os.environ.get('CARGO_NET_OFFLINE')=='true','STOP required offline environment absent'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 frozen='5782e6a32026fdd95d252d0db7ea20b16716e6deb4f5a397e744886bb6ba22ef'
 # Additive pin check against the accepted NCO tool binaries.

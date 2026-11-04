@@ -5,6 +5,7 @@ class Geometry(unittest.TestCase):
  def deny(self,a,b):
   source=(s.E/'NEW_geometry.rs.txt').read_text();self.assertIn(a,source)
   with self.assertRaises((AssertionError,ValueError,KeyError)):s.check(source.replace(a,b))
+ def test_live_only(self):self.deny('if 0<M && 0<len','if 0<M && 0<len+1')
  def test_reserve_size(self):self.deny('dst.reserve(5);','dst.reserve(6);')
  def test_logical_length(self):self.deny('let len=5*k;','let len=4*k;')
  def test_old_window(self):self.deny('dst[offset].0,raw[offset]','dst[offset].0,raw[0]')

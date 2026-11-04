@@ -14,7 +14,7 @@ def check(source=None):
  body=fns['NET_reserve_case'][0][1]
  for required in [
   'let k:usize=kani::any();kani::assume(k<N);let len=5*k;let raw:[u32;M]=kani::any();',
-  'let p=Box::into_raw(Box::new(raw)) as *mut M31;',
+  'let p=Box::into_raw(Box::new([core::mem::MaybeUninit::<M31>::uninit();M])) as *mut M31;',
   'let mut dst=unsafe{Vec::from_raw_parts(p,len,M)};',
   'let offset:usize=kani::any();kani::assume(offset<M);if offset<len{assert_eq!(dst[offset].0,raw[offset]);}',
   'dst.reserve(5);',
@@ -24,7 +24,12 @@ def check(source=None):
   tokens=tok(required)
   assert any(body[i:i+len(tokens)]==tokens for i in range(len(body)-len(tokens)+1)),required
  assert body.count('reserve')==1
+ for j in range(60):
+  required=f'if {j}<M && {j}<len {{unsafe{{p.add({j}).write(M31(*raw.as_ptr().add({j})));}}}}'
+  tokens=tok(required)
+  assert any(body[i:i+len(tokens)]==tokens for i in range(len(body)-len(tokens)+1)),required
+ assert not any(t in body for t in ['while','for'])
  assert not any(t in source for t in ['static mut','UnsafeCell','Cell<','Atomic','Option<fn','stub_verified','proof_for_contract'])
- return dict(inherited_source_sites=base,source_sha256=hashlib.sha256(source.encode()).hexdigest(),setup='arbitrary initialized backing array; variable logical length 5*k; spare validity qualification retained',root_status='OPEN',composed_credit=False)
+ return dict(inherited_source_sites=base,source_sha256=hashlib.sha256(source.encode()).hexdigest(),setup='arbitrary live words at variable logical length 5*k; uninitialized spare; fixed guarded setup, no variable-trip setup loop',root_status='OPEN',composed_credit=False)
 
 if __name__=='__main__':print(json.dumps(check(),indent=1))
