@@ -1,1 +1,39 @@
-[]
+{
+  "schema_version": 1,
+  "frozen_revision": "4bb3b3f51e16b4525f1d10336e2b0bcbbd775387",
+  "new_composed_functions": 1,
+  "new_composed_rows": 2,
+  "driver_root_status": "OPEN",
+  "functions": [
+    {
+      "function": "crates/aspis-r1-cost-probe/src/compact.rs::slot_offset",
+      "rows": [
+        "TX1:100",
+        "TX2:066"
+      ],
+      "status": "CLOSED",
+      "form": "small scalar native contract plus emitted reference / cohort equality",
+      "domain": "Every usize slot <= 6, exactly the range used by the installed six-slot caller; emitted failure for every slot > 6 is NGD_SlotPanic.rejected",
+      "native_positive": "NGD_K007",
+      "matched_control": "NGD_K008",
+      "native_auxiliary": [
+        "NGD_K001",
+        "NGD_K002",
+        "NGD_K003",
+        "NGD_K004"
+      ],
+      "lean_root": "NGD_SlotModel.reference",
+      "extraction": "NGD_E001",
+      "modifies": "empty; immutable constant table, scalar argument/result, no allocation, cleanup, callback or protocol/oracle events",
+      "inner_hypotheses_remaining": [],
+      "same_execution": "Actual frozen slot_offset proof_for_contract; reference function body token-identical to the extracted Rust reference; NGD_slot_validate.py checks source equality and two corruptions",
+      "trust_reclassification": "Retained P6/D188 option A, compiler/library/ABI/source-to-ELF; no trust removal or addition",
+      "KMX": "not required for slot scalar arithmetic: no reached copy-dependent property",
+      "audit": [
+        "NGD_L016",
+        "NGD_L019",
+        "NGD_L021"
+      ]
+    }
+  ]
+}

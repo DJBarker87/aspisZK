@@ -1,0 +1,10 @@
+--- a/crates/aspis-r1-cost-probe/src/NGD_compact.rs
++++ b/crates/aspis-r1-cost-probe/src/NGD_compact.rs
+@@ -13,6 +13,6 @@
+  assert!((next==at+match i{0|1=>4672,2=>4096,3|4=>5504,_=>4800}&&j<=6&&next<=63111) != cfg!(NGD_invert));
+ }
+ 
+-fn slot_reference(slot:usize)->usize{let mut at=OFF_NODES;let mut i=0;while i<slot{at+=32*SLOT_NODES[i];i+=1;}at}
++pub(super) fn slot_reference(slot:usize)->usize{let mut at=OFF_NODES;let mut i=0;while i<slot{at+=32*SLOT_NODES[i];i+=1;}at}
+ #[kani::proof_for_contract(slot_offset)] #[kani::unwind(8)]
+ fn slot_contract(){let slot:usize=kani::any();kani::assume(slot<=6);let _=slot_offset(slot);}

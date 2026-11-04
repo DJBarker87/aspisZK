@@ -1,0 +1,8 @@
+def Aeneas.Std.UScalar.wrapping_mul : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => x.bv * y.bv#uscalar
+def Aeneas.Std.UScalar.wrapping_add : {ty : UScalarTy} → UScalar ty → UScalar ty → UScalar ty :=
+fun {ty} x y => (x.bv + y.bv)#uscalar
+def Aeneas.Std.lift.{u} : {α : Type u} → α → Result α :=
+fun {α} x => ok x
+def Aeneas.Std.Usize.wrapping_mul : Usize → Usize → Usize :=
+fun x y => UScalar.wrapping_mul x y

@@ -1,0 +1,32 @@
+--- a/crates/aspis-r1-cost-probe/src/NGD_wire.rs
++++ b/crates/aspis-r1-cost-probe/src/NGD_wire.rs
+@@ -1,6 +1,8 @@
+ use super::*;
+ include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+-#[kani::proof] #[kani::unwind(2)]
++#[kani::proof] #[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
+ fn parse_low_valid(){
+  let mut bytes:[u8;37]=kani::any();let row:u8=kani::any();kani::assume(row<14);
+  let (tag,size)=row_shape(row).unwrap();bytes[0]=tag;bytes[1]=size as u8;bytes[2]=0;bytes[3]=0;bytes[4]=0;
+@@ -37,3 +39,19 @@
+ guard!(decode29_guard1,29,1);
+ guard!(decode29_guard2,29,2);
+ guard!(decode29_guard3,29,3);
++
++fn decode_one<const B:usize>(row:u8){
++ let bytes:[u8;B]=kani::any();let offset:usize=kani::any();kani::assume(offset<(B-5)/32);
++ let record=ValidatedRecord{row,framed:&bytes};let result=record.decode_k::<1>(offset);
++ let part=&bytes[5+32*offset..5+32*offset+16];
++ let a=u32::from_le_bytes([part[0],part[1],part[2],part[3]]);let b=u32::from_le_bytes([part[4],part[5],part[6],part[7]]);
++ let c=u32::from_le_bytes([part[8],part[9],part[10],part[11]]);let d=u32::from_le_bytes([part[12],part[13],part[14],part[15]]);
++ let canonical=a<0x7fffffff&&b<0x7fffffff&&c<0x7fffffff&&d<0x7fffffff;
++ let good=match result{Ok(q)=>canonical&&q[0].c0.a.0==a&&q[0].c0.b.0==b&&q[0].c1.a.0==c&&q[0].c1.b.0==d,Err(Error::NonCanonical{row:r,value:v})=>!canonical&&r==row&&v==offset,_=>false};
++ assert!(good != cfg!(NGD_invert));
++}
++macro_rules! one{($name:ident,$b:expr,$r:expr)=>{#[kani::proof]#[kani::unwind(35)]
++#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,KMX_copy_from_slice)]
++fn $name(){decode_one::<$b>($r)}};}
++one!(decode_one14,37,14);one!(decode_one15,901,15);one!(decode_one25,3717,25);one!(decode_one26,933,26);
