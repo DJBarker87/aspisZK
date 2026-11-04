@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,json,sys,time,hashlib,shlex,re
 E=Path(__file__).resolve().parent;B='/home/dombarker/project-offloads/codex-cx-pool-retdata2-20261104';H='dombarker@100.108.41.90'
 a,target=sys.argv[1:3];mode=sys.argv[3] if len(sys.argv)>3 else 'lean';assert mode in ['lean','link','fixtures','final','scan-link','scan','extract'];assert (a.startswith('NFR_B') and 1<=int(a[5:])<=100) or (a.startswith('NFR_E') and 1<=int(a[5:])<=3)
-assert len(list(E.glob('NFR_B*/receipt.json')))<40 if mode!='extract' else len(list(E.glob('NFR_E*/receipt.json')))<3
+assert len(list(E.glob('NFR_B*/receipt.json')))<49 if mode!='extract' else len(list(E.glob('NFR_E*/receipt.json')))<3
 assert re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*',target)
 moduleRel=target.replace('.','/')
 assert not (E/a).exists();active=E/'NFR_B_LEAN_ACTIVE.json';assert not active.exists();active.write_text(json.dumps(dict(attempt=a)))
@@ -38,7 +38,7 @@ code=f'''from pathlib import Path
 import re,json,hashlib
 b=Path({B!r});coherent=b.parent/'codex-cx-sound-int2-20261025'
 cache=b.parent/'codex-cx-pool-retdata2-cache-20261104'
-roots=[b/'NFR_B_objects',cache/'NFO_final_objects_20261104',cache,*[cache/n for n in ['NEY_final_objects_20261104','NEX_final_objects_20261104','NEQ_final_objects_20261103','NEM_final_objects_20261102']],coherent,coherent/'objects']
+roots=[b/'NFR_B_objects',b/'NFR_C_objects',cache/'NFO_final_objects_20261104',cache,*[cache/n for n in ['NEY_final_objects_20261104','NEX_final_objects_20261104','NEQ_final_objects_20261103','NEM_final_objects_20261102']],coherent,coherent/'objects']
 selected={{}};missing=[];seen=set()
 def visit(n):
  if n in seen:return
@@ -49,7 +49,7 @@ def visit(n):
  for suffix in ['.private','.server','.ir']:
   companion=Path(str(p)+suffix) if suffix!='.ir' else p.with_suffix('.ir')
   if companion.exists():selected[str(companion)]=dict(path=str(companion),sha256=hashlib.sha256(companion.read_bytes()).hexdigest())
- q=next((r/(rel+'.lean') for r in [b/'NFR_B_generated',*roots] if (r/(rel+'.lean')).exists()),None)
+ q=next((r/(rel+'.lean') for r in [b/'NFR_B_generated',b/'NFR_C_generated',*roots] if (r/(rel+'.lean')).exists()),None)
  if q:
   for dep in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',q.read_text(),re.M):visit(dep)
 for n in re.findall(r'^(?:public )?import\\s+(?:all\\s+)?([\\w.]+)',{source!r},re.M):visit(n)
@@ -75,7 +75,7 @@ if mode=='final':command=['python3','NFO_audit_both.py']
 if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Coherence','NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NFO_Coherence']
 if mode=='extract':command=['python3','NFO_extract.py']
-cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c'] if mode=='link' else ['NFR_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFR_B_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
+cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c'] if mode=='link' else ['NFR_B_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFR_B_objects:'+B+'/NFR_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFR_B_SOURCE.lean.txt').write_text(source)
 files={'NFR_B_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 if mode=='final':

@@ -28,7 +28,7 @@ for n in names:
   row=dict(external=n,kind='stdlib comparison',interpretation='NFR_ExtractedDecode.sliceArrayNe',
    association='NFR_ExtractedDecode.sliceArrayNe_eq; canonical slice comparison after Array.to_slice; existing Std interpretation retained; NFO_K054 source cut')
  elif n=='core.result.Result.map_err':
-  row=dict(external=n,kind='stdlib Result map',interpretation='Aeneas.Std.core.result.Result.map_err',
+  row=dict(external=n,kind='stdlib Result map',interpretation='AspisR1TerminalDecoder.core.result.Result.map_err',
    association='NFO_DecodeErrors.{master,selected,digest_width,digest,afterstate}; NFR_RawInverseHelpers map provenance; identical closure return bodies')
  elif key=='from_le_bytes':
   row=dict(external=n,kind='field child',interpretation='AspisR1TerminalDecoder.aspis_core.field.M31.from_le_bytes',

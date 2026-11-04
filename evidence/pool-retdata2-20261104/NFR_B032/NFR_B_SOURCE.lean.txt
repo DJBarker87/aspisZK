@@ -1,0 +1,50 @@
+import NFR_ResultForwardHelpers
+set_option autoImplicit false
+noncomputable section
+namespace NFR_ResultForward
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+open AspisR1.S2K NFR_ResultForwardHelpers
+
+theorem forward (r : Output)
+    (canonical : NBD_DigestInduction.Canonical r.nullifier)
+    (afterstate : pool_v1.pair_terminal.validate_verified_afterstate r.verified_afterstate = ok (.Ok ()))
+    (validated : pool_v1.pair_forest_terminal.validate_result r = ok (.Ok ())) :
+    NFO_RawDecode.decode (encoded r) = ok (.Ok r) := by
+  unfold NFO_RawDecode.decode
+  simp only [show Slice.len (encoded r)=792#usize from by
+      unfold encoded; have := (NFO_ResultLayout.bytes r).property; scalar_tac,
+    bne_self_eq_false,Bool.false_eq_true,reduceIte,head,
+    bind_tc_ok,NFR_AfterstateForward.self_ne,
+    get4,get5,get6,get7,
+    pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+    pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,kind_roundtrip,
+    core.result.Result.Insts.CoreOpsTry.branch,master_range]
+  rw [AspisR1.JFt_ExactArray.cast _ _ r.master_account rfl,bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [selected_range,bind_tc_ok,AspisR1.JFt_ExactArray.cast _ _ r.selected_lane_account rfl,bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok,get7]
+  rw [digest_range,bind_tc_ok,AspisR1.JFt_DigestArray.shared _ (DigestBytes.bytes r.nullifier) rfl,bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [NFR_DigestForward.roundtrip _ canonical,bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  rw [afterstate_range,bind_tc_ok]
+  rw [NFR_AfterstateForward.roundtrip _ afterstate,bind_tc_ok]
+  simp only [core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,bind_tc_ok]
+  have rebuilt : ({transition_kind:=r.transition_kind,master_account:=r.master_account,selected_lane_account:=r.selected_lane_account,output_lane:=r.output_lane,nullifier:=r.nullifier,verified_afterstate:=r.verified_afterstate} : Output) = r := by cases r; rfl
+  rw [rebuilt,validated]
+  rfl
+#print axioms forward
+
+theorem emitted (s : NEU_EmitModel.Statement)
+    (valid : pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    NFO_PacketDecoder.run (ResultPayload.bytes s).val = ok (.Ok (ResultAdmission.value s)) := by
+  have raw := forward (ResultAdmission.value s) (nullifier_domain s valid)
+    (StatementAdmission.afterstate s valid) (ResultAdmission.validated s valid)
+  rw [NFO_PacketDecoder.on_packet _ (ResultPayload.bytes s).property]
+  simpa only [encoded,NFO_ResultLayout.emitted] using raw
+#print axioms emitted
+
+theorem decoder_association : NFO_PoolReturnData.DecoderAssociation NFO_PacketDecoder.run :=
+  emitted
+#print axioms decoder_association
+end NFR_ResultForward

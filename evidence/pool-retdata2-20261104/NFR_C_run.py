@@ -74,15 +74,20 @@ if mode in ['fixtures','final']:command=['NFO_native/NFO_Driver',mode]
 if mode=='final':command=['python3','NFO_audit_both.py']
 if mode=='scan-link':command=['/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0/bin/lake','env','leanc','-O3','-rdynamic','-o','NFO_native/NFO_Coherence','NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c']
 if mode=='scan':command=['NFO_native/NFO_Coherence']
-if mode=='extract':command=['python3','NFR_C_extract.py']
+if mode=='extract':command=['python3','NFR_C_process_extract.py' if target=='NFR_CProcessExtracted' else 'NFR_C_extract.py']
 cfg=dict(attempt=a,kind='lean' if mode=='lean' else mode,module=target,sources=['NFO_native/NFO_Coherence.c','NFO_native/NFO_MemoryLimit.c'] if mode=='scan-link' else ['NFO_native/NFO_Driver.c','NFO_native/NFO_WALKER.c','NFO_native/NFO_MemoryLimit.c'] if mode=='link' else ['NFR_C_generated/'+moduleRel+'.lean'],command=command,env=dict(LEAN_SYSROOT='/home/dombarker/.elan/toolchains/leanprover--lean4---v4.32.0',PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',LEAN_PATH=B+'/NFR_C_objects:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NFO_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEY_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEX_final_objects_20261104:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEQ_final_objects_20261103:/home/dombarker/project-offloads/codex-cx-pool-retdata2-cache-20261104/NEM_final_objects_20261102:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025:/home/dombarker/project-offloads/codex-cx-sound-int2-20261025/objects'),timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint=pins)
 (E/a).mkdir();(E/a/'NFR_C_SOURCE.lean.txt').write_text(source)
 files={'NFR_C_generated/'+moduleRel+'.lean':source,a+'.json':json.dumps(cfg)}
 if mode=='final':
  files['NFO_audit_both.py']=(E/'NFO_audit_both.py').read_text();cfg['sources'].append('NFO_audit_both.py');files[a+'.json']=json.dumps(cfg)
 if mode=='extract':
- files.update({'NFR_C_extract.py':(E/'NFR_C_extract.py').read_text(),'NFR_C_ref/Cargo.toml':(E/'NFR_C_reference_Cargo.toml').read_text(),'NFR_C_ref/src/lib.rs':(E/'NFR_C_reference.rs').read_text()})
- cfg['sources']=['NFR_C_extract.py','NFR_C_ref/Cargo.toml','NFR_C_ref/src/lib.rs'];files[a+'.json']=json.dumps(cfg)
+ if target=='NFR_CProcessExtracted':
+  files.update({'NFR_C_process_extract.py':(E/'NFR_C_process_extract.py').read_text(),'NFR_C_process_ref/Cargo.toml':(E/'NFR_C_process_reference_Cargo.toml').read_text(),'NFR_C_process_ref/src/lib.rs':(E/'NFR_C_process_reference.rs').read_text()})
+  cfg['sources']=['NFR_C_process_extract.py','NFR_C_process_ref/Cargo.toml','NFR_C_process_ref/src/lib.rs']
+ else:
+  files.update({'NFR_C_extract.py':(E/'NFR_C_extract.py').read_text(),'NFR_C_ref/Cargo.toml':(E/'NFR_C_reference_Cargo.toml').read_text(),'NFR_C_ref/src/lib.rs':(E/'NFR_C_reference.rs').read_text()})
+  cfg['sources']=['NFR_C_extract.py','NFR_C_ref/Cargo.toml','NFR_C_ref/src/lib.rs']
+ files[a+'.json']=json.dumps(cfg)
 code=f'''from pathlib import Path
 import json
 b=Path({B!r})
@@ -90,7 +95,7 @@ b=Path({B!r})
 (b/'NFO_native').mkdir(exist_ok=True)
 if {mode=='extract'!r}:
  import shutil
- (b/'NFR_C_ref').mkdir(exist_ok=True);shutil.copy2(b/'NFR_src/Cargo.lock',b/'NFR_C_ref/Cargo.lock')
+ ref=b/{('NFR_C_process_ref' if target=='NFR_CProcessExtracted' else 'NFR_C_ref')!r};ref.mkdir(exist_ok=True);shutil.copy2(b/'NFR_src/Cargo.lock',ref/'Cargo.lock')
 for n,s in json.loads({json.dumps(files)!r}).items():
  p=b/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
 '''

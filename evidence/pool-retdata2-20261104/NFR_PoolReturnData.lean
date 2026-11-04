@@ -1,4 +1,7 @@
 import NFR_RawInverse
+import NFR_ResultForward
+import NFR_CHelperBridge
+import NFR_CSettlement
 import NFR_ExtractedDecode
 set_option autoImplicit false
 noncomputable section
@@ -16,7 +19,7 @@ def RuntimeReturnData {Context Key State : Type}
 
 /-- Accepted-run composition: acceptance is the event being analysed, not a
 new runtime or codec premise. Decoder inversion is proved by raw_inverse. -/
-theorem association {Context Key RuntimeState Accounts Other : Type} [DecidableEq Key]
+theorem accepted_association {Context Key RuntimeState Accounts Other : Type} [DecidableEq Key]
     (runtime : Runtime Context Key RuntimeState) (law : RuntimeReturnData runtime)
     (context : Context) (selected : Key)
     (state : AspisR1.S2I.ReturnData.State Accounts Other) (s : NEU_EmitModel.Statement)
@@ -32,7 +35,11 @@ theorem association {Context Key RuntimeState Accounts Other : Type} [DecidableE
     value.value = AspisR1.S2K.ResultAdmission.value s ∧
     value.bytes = (AspisR1.S2K.ResultPayload.bytes s).val ∧
     (NFO_ResultLayout.bytes value.value).val = value.bytes ∧
-    events = [.clear,.invoke,.read,.decode] := by
+    events = [.clear,.invoke,.read,.decode] ∧
+    NEY_EmitComposed.encode value.value =
+      ok (.Ok (AspisR1.S2K.ResultPayload.bytes s)) ∧
+    NFR_CHelper.terminal_ref NEY_EmitComposed.encode value.value =
+      ok (.Ok (AspisR1.S2K.ResultPayload.bytes s)) := by
   have width := (AspisR1.S2K.ResultPayload.bytes s).property
   have read := law context selected (AspisR1.S2K.ResultPayload.bytes s).val
     (by rw [width]; decide) (by rw [width]; decide)
@@ -47,6 +54,39 @@ theorem association {Context Key RuntimeState Accounts Other : Type} [DecidableE
   have same : value.value = AspisR1.S2K.ResultAdmission.value s :=
     NFO_ResultInjective.injective _ _ (encodedArray.trans (NFO_ResultLayout.emitted s).symm)
   exact ⟨AspisR1.JHb_Emit.accepted _ (fun _ _ => rfl) state s valid,
-    same,saved.trans bytesEq.symm,encoded.trans saved.symm,trace⟩
+    same,saved.trans bytesEq.symm,encoded.trans saved.symm,trace,
+    NFR_CSettlement.reencode_same s value same valid,
+    NFR_CHelperBridge.same_emission s value same valid⟩
+#print axioms accepted_association
+/-- Forward association: the decoder's accepting return is derived for every
+valid emitted statement. There is no independent accepted-read premise. -/
+theorem association {Context Key RuntimeState Accounts Other : Type} [DecidableEq Key]
+    (runtime : Runtime Context Key RuntimeState) (law : RuntimeReturnData runtime)
+    (context : Context) (selected : Key)
+    (state : AspisR1.S2I.ReturnData.State Accounts Other) (s : NEU_EmitModel.Statement)
+    (valid : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :
+    AspisR1.JHb_Emit.source (fun st bytes => ok (AspisR1.S2I.ReturnData.set st bytes))
+      state s = ok (.Ok (AspisR1.S2I.ReturnData.set state
+        (AspisR1.S2K.ResultPayload.bytes s).val)) ∧
+    NFO_ReadModel.run selected (.Ok ())
+      (runtime.read context (runtime.write context selected
+        (AspisR1.S2K.ResultPayload.bytes s).val)) NFO_PacketDecoder.run =
+      ok (.Ok ⟨AspisR1.S2K.ResultAdmission.value s,
+          (AspisR1.S2K.ResultPayload.bytes s).val⟩,
+        [.clear,.invoke,.read,.decode]) ∧
+    NEY_EmitComposed.encode (AspisR1.S2K.ResultAdmission.value s) =
+      ok (.Ok (AspisR1.S2K.ResultPayload.bytes s)) ∧
+    NFR_CHelper.terminal_ref NEY_EmitComposed.encode
+      (AspisR1.S2K.ResultAdmission.value s) =
+      ok (.Ok (AspisR1.S2K.ResultPayload.bytes s)) := by
+  have width := (AspisR1.S2K.ResultPayload.bytes s).property
+  refine ⟨AspisR1.JHb_Emit.accepted _ (fun _ _ => rfl) state s valid,?_,?_,?_⟩
+  · rw [law context selected _ (by rw [width]; decide) (by rw [width]; decide)]
+    exact NFO_ReadModel.decoded selected _ NFO_PacketDecoder.run _ width
+      (NFR_ResultForward.emitted s valid)
+  · exact NFR_CSettlement.reencode_same s
+      ⟨AspisR1.S2K.ResultAdmission.value s,(AspisR1.S2K.ResultPayload.bytes s).val⟩ rfl valid
+  · exact NFR_CHelperBridge.same_emission s
+      ⟨AspisR1.S2K.ResultAdmission.value s,(AspisR1.S2K.ResultPayload.bytes s).val⟩ rfl valid
 #print axioms association
 end NFR_PoolReturnData
