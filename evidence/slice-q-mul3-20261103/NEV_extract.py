@@ -81,6 +81,10 @@ if cfg.get('isolate'):
  pins['isolated_source_sha256']=sha(mini/'src/lib.rs')
  pins['isolated_manifest_sha256']=sha(mini/'Cargo.toml')
  if cfg.get('pairing_constructors'):pins['pairing_prefix_sha256']=sha(mini/'src/NEV_pairing.rs')
+pins['frozen_revision']='4bb3b3f51e16b4525f1d10336e2b0bcbbd775387'
+pins['actual_core_sources']={n:sha(scratch/n) for n in frozen if n.startswith('crates/aspis-core/') and (scratch/n).is_file()}
+for n,h in pins['actual_core_sources'].items():assert h==hashlib.sha256(frozen[n].encode()).hexdigest(),('frozen core drift',n)
+pins['feature_projection']='Core r0 only, matching the deployed core body projection; isolated wrapper features do not alter the reached core bodies'
 (B/'NEV_EXTRACTION_PINS.json').write_text(json.dumps(pins,indent=2));print(json.dumps(pins),flush=True)
 r=subprocess.run(cmd,cwd=manifest.parent,env=env)
 pins['charon_exit']=r.returncode

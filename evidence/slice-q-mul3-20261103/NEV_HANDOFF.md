@@ -1,3 +1,15 @@
+## Active accumulation continuation, 2026-11-04
+
+Prefix stage committed `2ac3ce2af3`. Small outside-slice constructor is now
+CLOSED-CONDITIONAL AUXILIARY: native K030/K031, actual extraction E001,
+emitted Types/Funs L010/L011, trait totality/canonical callback L012, same
+basis-read domain L013, root wrapper L017, and strict auxiliary validator.
+It contributes no slice row by itself. L012 was admitted after recorded quiet
+window refusals and passed; no launch used allowed:false. Full carrier maps
+pass L018 after two excluded List identity proof failures (L015/L016).
+K032 basis ONE-iteration is currently running. Budget before its completion:
+31 Kani labels, 18 Lean launches, 1 extraction. No caps changed.
+
 # Current continuation checkpoint
 
 Stage1 complete and continuing. Two new composed rows: TX1:185/TX2:111 batch_prefix_products; component68 rows/117 edges. NEO unchanged baseline and NET parser-only commit96ac88e728 both replayed, including NET's18/18 metadata controls, from committed archives with provenance. These are not yet one unified ledger. All thirteen audited prefix statements and the additional complete Result/state/effects packet compile with standard axioms. No source/ELF/key changes, no push.

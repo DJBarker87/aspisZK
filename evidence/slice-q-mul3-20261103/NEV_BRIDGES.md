@@ -21,3 +21,12 @@ NEV_K001..K003 are own-input gate failures before Kani: missing frozen corpus, s
 NEV_K004 timed out on full fixed-offset initialization (103.142s including compile;6439052KiB;swap0). NEV_K005 timed out on length1..16 with a combined arbitrary observation/metadata goal (94.979s;6459280KiB;swap0). Both are excluded. Neither is rerun unchanged. NEV_K006 changes setup to exact initialized nondeterministic Vec allocation plus actual truncation, diagnostic capacity110 only. A capacity-specific pass alone cannot qualify caller coverage.
 
 The unchanged NEO validator passed locally after making its imported Python sources visible through sparse-checkout additions. NEV_NEO_BASELINE.log records the130-row/124-edge result; this is reused baseline evidence, not NEV closure.
+
+## Accumulation auxiliary constructor, 2026-11-04
+
+The documented small outside-Q `CodeField<WideExact>::from_m31` dependency
+has a CLOSED-CONDITIONAL auxiliary packet (`NEV_CODEFIELD_PACKET.json`),
+validated by `NEV_codefield_validate.py`. E001 / L010–L013 / L017 and native
+K030/K031 establish the actual emitted trait result and SAME production-basis
+read's canonical callback domain. See NEV_CODEFIELD_ASSOCIATION.md. No new
+slice row closes from this leaf alone. Accumulation remains OPEN.
