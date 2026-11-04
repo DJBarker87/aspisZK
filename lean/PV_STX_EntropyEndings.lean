@@ -9,11 +9,11 @@ variable [ExternalTypes] [ExternalFuns]
 
 /-- The actual lifted loop's exhaustion guard. It does not issue a seventeenth
 fill or execute a supplied failure continuation. Stack admission at the enclosing
-native call is separate and is not inferred from this two-transition suffix. -/
+native call is separate and is not inferred from this three-transition suffix. -/
 theorem exhausted_suffix {W E : Type} (handler : Handler Request W E)
     (nonce : Array U8 32#usize) (limit retry : Usize) (w : W)
     (stop : ¬retry < limit) :
-    run handler 2 (entropyLoop nonce limit retry) w =
+    run handler 3 (entropyLoop nonce limit retry) w =
       ⟨.returned (.ok (.Err .RepeatedZeroBlock)),w,[]⟩ := by
   simp only [entropyLoop,entropyBody,stop,if_false,Bind.bind,Pure.pure,
     run,advance,start,step,resumed,continueWith,List.nil_append]
