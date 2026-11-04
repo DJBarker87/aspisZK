@@ -115,6 +115,13 @@ for crate,p in paths:
   if not target and not symbolic:continue
   sites=[c for c in d['calls'] if source_target(c,d['function'])==target] if d and target else []
   if symbolic and d:sites=[c for c in d['calls'] if c['expression'].endswith('::from_m31')]
+  if d and d['function'].endswith('transcript.rs::Transcript<H>::queries') and target and target.endswith('WideExact::from_m31'):
+   following='\n'.join(raw.decode().splitlines()[i:i+6])
+   tag=re.search(r'value\(const 5_u16, const (\d+)_usize',following);assert tag
+   index=int(tag[1]);sites=[site for site in sites if site['line']==56+index];assert len(sites)==1
+   context=files[d['file']].splitlines()[55+index]
+   assert re.search(r'value\(5,'+str(index)+r',',context)
+   sites[0]={**sites[0],'source_context':context,'trace_index':index}
   records.append(dict(id=f'NGB_M{len(records)+1:04}',mir=p.name,mir_path=str(p.relative_to(R)),mir_line=i,caller_header=header,caller=d['function'] if d else None,callee=target or f'<{symbolic[1]} as CodeField>::from_m31',mir_text=l.strip(),source_file=d['file'] if d else None,source_sites=sites,source_check='AGREES' if sites else 'UNRESOLVED_NOT_ADMITTED',features=['pool-adapter','private-leaf-salts'],prover=False,feature_scope='program root feature selection; core MIR uses r0 per NFZ_CORE_MIR_REVIEW',generic_uninstantiated=bool(symbolic)))
  headers[crate]=heads
 out=dict(frozen_revision=F,inputs=pins,parser={'tree-sitter':'0.25.2','tree-sitter-rust':'0.24.2'},targets=sorted(TARGETS),source_authority='tree-sitter AST of NFZ frozen payload, every Rust file compared byte-for-byte with git frozen revision',edges=records,counts=dict(total=len(records),source_agrees=sum(x['source_check']=='AGREES' for x in records)))

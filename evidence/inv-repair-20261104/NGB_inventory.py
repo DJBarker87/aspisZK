@@ -98,7 +98,7 @@ for tx in ['TX1','TX2']:
   f=pending.popleft()
   if f in ix:continue
   d=decl[f];r=dict(row=f'{tx}:NGB{len(new_rows)+1:03}',transaction=tx,function=f,source_file=d['file'],source_line=d['start'],source_file_sha256=sha(subprocess.check_output(['git','show',base['frozen_revision']+':'+d['file']],cwd=R)),frozen_body_byte_range=d['body_range'],frozen_body_sha256=d['body_sha256'],frozen_body_verified=True,composed_status='OPEN',bridge_status='OPEN',canonical_callees=sorted(G[f]),selected_claims=[],active_support_receipts=[],NGB_new_occurrence=True,no_credit_reason='New inventory occurrence; no bridge or domain closure claimed')
-  ix[f]=r;rows.append(r);new_rows.append(r);pending.extend(G[f])
+  ix[f]=r;rows.append(r);new_rows.append(r);pending.extend(sorted(G[f]))
  # Attach canonical union edges only to occurrences present (NFZ semantics).
  for r in rows:
   if r['transaction']==tx:r['canonical_callees']=sorted(G[r['function']])
@@ -146,7 +146,7 @@ for name in ['accumulate','accumulate_with_node']:
  refs=[]
  for d in D:
   if d['file'].startswith('crates/aspis-r1-cost-probe/'):
-   refs += [dict(caller=d['function'],**c) for c in d['calls'] if c['expression']==name]
+   refs += [dict(caller=d['function'],**c) for c in d['calls'] if c['expression']==name or c['expression'].endswith('::'+name)]
  exc.append(dict(function=f,disposition='REACHABILITY-EXCLUDED',entry_path=None,program_MIR_references=0,source_references=refs,reason='Only incoming library source chain is audit-only eight_way -> accumulate -> accumulate_with_node; neither appears in deployed program MIR or producer entry closure. Body presence in library MIR is not entry reachability.'))
-put('NGB_EXCLUDED.json',dict(root=root,candidates=exc,removed_rows=[]))
+put('NGB_EXCLUDED.json',dict(root=root,candidates=exc,removed_rows=[],cfg_evidence=dict(path='crates/aspis-r1-cost-probe/src/verifier.rs',revision=base['frozen_revision'],lines=[524,525,526,527,528],text='#[cfg(feature=\"audit-eight-way\")] #[path=\"eight_way.rs\"] pub mod eight_way;'),program_MIR=pin(Z/'LEAD_B006/aspis_r1_cost_probe_program.mir.xz')))
 print(json.dumps(dict(admitted_edges=len(edges),new_rows=len(new_rows),total_rows=len(rows),new_functions=sorted(new_nodes),dispositions=collections.Counter(c['disposition'] for c in resolved))))
