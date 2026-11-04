@@ -9,3 +9,11 @@ Owned cache: /home/dombarker/project-offloads/codex-cx-transcript-queries-cache-
 Use NGK/NGP export copies first; predecessor caches read-only. One admitted scope
 at a time (within the job's maximum two); 6G/8G/swap0/tasks64, Lean -M7000.
 No row closes on inspection or model-only evidence. Retain all failed attempts.
+
+Stage 1: NGQ_QueryFactor.distribute / NGQ_QueryJoin.source compile against NGK.
+NGQ_TraceErase.finish_success and finish_rejected compile (L008), standard axioms.
+They preserve all 22 evaluated embeds and prove their erasure only under totality.
+No native whole-query or sampler closure is claimed. Seed: 89 files, 11752608 bytes,
+NGQ_CACHE_IMPORTS.json.xz records hashes. K004/K005 supply only QueryScan::finish
+native positive/control. K001–K003 failed before Kani on missing manifests;
+K006/K007 failed compilation on missing unchanged include files; inputs repaired.

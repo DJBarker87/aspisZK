@@ -1,0 +1,47 @@
+{"attempt": "NGQ_L001", "exit_status": 1, "wall_seconds": 4.15719880303368, "peak_rss_kib": "5888572", "swaps": "0", "print_axioms": []}
+@AspisR1.RPx_Deployed.deployed : ∀ {W A CoreError Tx : Type}
+  (L : AspisR1.S2Trust.Library W (ℕ → AspisR1.S2W_D189Entry.Record)),
+  AspisR1.S2Trust.S2TrustedSdkBorrow L →
+    ∀
+      (copy :
+        AspisR1.S2Trust.Heap (ℕ → AspisR1.S2W_D189Entry.Record) →
+          ℕ → AspisR1.S2Trust.Payload → AspisR1.S2W_TrustedStd.Outcome (ℕ → AspisR1.S2W_D189Entry.Record)),
+      AspisR1.S2W_TrustedStd.TrustedStd copy →
+        ∀ (allocator : AspisR1.S2W_D189Wrappers.Allocator A) (e1 e2 : AspisR1.S2W_D189Entry.Entry) (w1 w2 : W),
+          AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e1 w1 3 →
+            AspisR1.S2W_D189Consolidation.RuntimeEntrypointAdmission L e2 w2 7 →
+              ∀
+...
+eparation.QueriesModel.Boundaries.embed : AspisR1PublicPreparation.aspis_core.field.M31 →
+      Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact
+constructor:
+  AspisR1PublicPreparation.QueriesModel.Boundaries.mk
+    (decode :
+      Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 8#usize →
+        Aeneas.Std.Array (Aeneas.Std.Array Aeneas.Std.U8 32#usize) 8#usize →
+          Aeneas.Std.Result
+            (Aeneas.Std.core.result.Result
+              (Aeneas.Std.Array Aeneas.Std.U32 22#usize × Aeneas.Std.Array Aeneas.Std.U8 32#usize)
+              AspisR1PublicPreparation.aspis_core.transcript.QuerySampleError))
+    (embed :
+      AspisR1PublicPreparation.aspis_core.field.M31 →
+        Aeneas.Std.Result AspisR1PublicPreparation.aspis_core.field.WideExact) :
+    AspisR1PublicPreparation.QueriesModel.Boundaries
+def AspisR1PublicPreparation.transcript.Transcript.absorb : {H : Type} →
+  AspisR1PublicPreparation.aspis_core.Digest32 H →
+    AspisR1PublicPreparation.transcript.Transcript H →
+      Aeneas.Std.U8 →
+        Aeneas.Std.Slice Aeneas.Std.U8 → Aeneas.Std.Result (AspisR1PublicPreparation.transcript.Transcript H) :=
+fun {H} aspis_coreDigest32Inst self row payload => do
+  let s ← Aeneas.Std.lift self.state.to_slice
+  let i ← 160#u8 + row
+  let s1 ← Aeneas.Std.lift (Aeneas.Std.Array.make 2#usize [0#u8, i] ⋯).to_slice
+  have i1 : Aeneas.Std.Usize := payload.len
+  let i2 ← Aeneas.Std.lift (Aeneas.Std.UScalar.cast Aeneas.Std.UScalarTy.U32 i1)
+  let a ← Aeneas.Std.lift (Aeneas.Std.core.num.U32.to_le_bytes i2)
+  let s2 ← Aeneas.Std.lift a.to_slice
+  let s3 ← Aeneas.Std.lift (Aeneas.Std.Array.make 4#usize [s, s1, s2, payload] ⋯).to_slice
+  let a1 ← aspis_coreDigest32Inst.digest self.hash s3
+  Aeneas.Std.Result.ok { state := a1, hash := self.hash }
+
+Running as unit: run-rbbbfaa0779cc437cacfa010085f58614.scope; invocation ID: 56fad8c750eb407a939a05e66633b3c6
