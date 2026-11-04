@@ -1,0 +1,24 @@
+// Separate constructor and empty-root observations; no whole-buffer loop.
+use super::*;
+include!(concat!(env!("CARGO_MANIFEST_DIR"),"/../../KMX_stubs.rs"));
+#[kani::proof]
+fn NET_prefix_allocation(){
+ let n:usize=kani::any();kani::assume(n<=110);
+ let v:Vec<M31>=Vec::with_capacity(n);
+ #[cfg(NET_bad_reply)] let expected=n+1;
+ #[cfg(not(NET_bad_reply))] let expected=n;
+ assert_eq!(v.len(),0);assert_eq!(v.capacity(),expected);
+ assert_eq!(M31::ONE.0,1);assert_eq!(M31::ZERO.0,0);
+}
+fn NET_unreachable_product(_:M31,_:M31)->M31{panic!("Empty root reached field product")}
+#[kani::proof] #[kani::unwind(2)]
+#[kani::stub(aspis_core::field::M31::mul,NET_unreachable_product)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NET_prefix_empty(){
+ let out=batch_prefix_products(&[]);
+ assert_eq!(out.0.len(),0);assert_eq!(out.0.capacity(),0);
+ #[cfg(NET_bad_reply)] let one=0;
+ #[cfg(not(NET_bad_reply))] let one=1;
+ assert_eq!(out.1.0,one);
+}

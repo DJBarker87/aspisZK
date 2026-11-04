@@ -5,7 +5,7 @@ class Gates(unittest.TestCase):
  def reject(self,f):
   f(self.edges)
   with self.assertRaises(ValueError):v.validate(self.edges,self.certificates,replay=False)
- def test_positive(self):self.assertEqual(v.validate(replay=False)['q_functions_closed'],60)
+ def test_positive(self):self.assertEqual(v.validate(replay=False)['q_functions_closed'],61)
  def test_root_status(self):self.assertEqual(set(v.validate(replay=False)['roots'].values()),{'OPEN'})
  def test_missing_edge(self):self.reject(lambda x:x['edges'].pop())
  def test_duplicate_edge(self):self.reject(lambda x:x['edges'].__setitem__(1,copy.deepcopy(x['edges'][0])))
@@ -45,6 +45,17 @@ class Gates(unittest.TestCase):
  def test_field_unrestricted_slots(self):
   cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('weights.rs::field'))['domain']='every usize slot'
   with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_prefix_missing_capacity(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['packet']['native_pairs'].pop()
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_prefix_no_uninitialized_spare(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['parts'].remove('uninitialized_spare_capacity')
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_prefix_missing_induction(self):
+  cs=copy.deepcopy(self.certificates);next(c for c in cs if c['function'].endswith('::batch_prefix_products'))['packet']['proofs']=[]
+  with self.assertRaises(ValueError):v.validate(self.edges,cs,replay=False)
+ def test_prefix_parent_join_not_inferred(self):
+  self.reject(lambda x:next(e for e in x['edges'] if e['edge'].endswith(' -> crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products')).update(status='CLOSED'))
  def test_unknown_recipe(self):
   with self.assertRaises(ValueError):v.validate(self.edges,[{'root':'CM31::inv','status':'CLOSED'}],replay=False)
  def test_new_collection(self):self.reject(lambda x:x.update(unreviewed=[]))

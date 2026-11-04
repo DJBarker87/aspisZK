@@ -1,4 +1,4 @@
-# Prefix composition packet (pending until every gate is green)
+# Closed current prefix composition packet
 
 Frozen target: crates/aspis-r1-cost-probe/src/verifier.rs::batch_prefix_products,
 revision4bb3b3f51e16b4525f1d10336e2b0bcbbd775387. Current root domain is a valid
@@ -41,8 +41,12 @@ theorem using only propext, Classical.choice and Quot.sound. The failed L024
 import is excluded; nine unchanged missing dependency modules were rebuilt
 privately in L019..023/L025..028 with committed source provenance.
 
-Separate native constructor/empty-root packets must establish empty len,
-exact capacity, ONE and zero-size return before final promotion. Allocation
+K085/K086 establish the exact empty constructor length/capacity for all
+0<=n<=110 with a failing capacity control. K087/K088 establish the ACTUAL
+frozen empty-root return and ONE against a failing output control; its product
+stub panics if reached, so no field call is silently assumed. K101/K102
+validate the exact KMX copy configuration for that unchanged source packet.
+All these receipts are green before final promotion. Allocation
 failure, physical carrier interpretation and the approved standard allocator
 and semantic transport remain the existing root trust. There is no new
 runtime syscall or cryptographic trust item. QueryGeometry::for_range and

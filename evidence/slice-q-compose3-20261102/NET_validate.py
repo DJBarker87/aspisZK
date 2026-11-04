@@ -23,6 +23,9 @@ def continuation(edges,certificates):
  import NET_wide_certificates as wide
  wide_rows,wide_edges=wide.expected(neo.baseline())
  expected_rows+=wide_rows;new_edges.update(wide_edges)
+ import NET_prefix_certificates as prefix
+ prefix_rows,prefix_edges=prefix.expected(neo.baseline())
+ expected_rows+=prefix_rows;new_edges.update(prefix_edges)
  import NET_peer_certificates as peer
  peer_rows,peer_recipes,peer_edges=peer.expected(neo.baseline())
  new_edges.update(peer_edges)
@@ -36,7 +39,7 @@ def continuation(edges,certificates):
   require(edge==expected,'unregistered edge mutation or premature promotion: '+name)
  for k,v in old.items():
   if k!='edges':require(edges[k]==v,'changed inherited row certificate collection: '+k)
- return dict(schema='NET-additive-NEO-v1',baseline_revision='62ab0a9cc5',baseline_edges_sha256=sha(O/'NEO_EDGES.json'),newly_closed=sorted([c['row'] for c in expected_rows]+[r['row'] for r in peer_rows]),new_count=12,total_closed=142,q_occurrences_closed=120,q_functions_closed=60,edge_closed=160,edge_total=257,roots=dict(neo.obj(O/'NEO_LEDGER_DELTA.json')['roots']),trust='P6/D188 option A semantic transport retained; reclassification, never removal',security_target_established=False)
+ return dict(schema='NET-additive-NEO-v1',baseline_revision='62ab0a9cc5',baseline_edges_sha256=sha(O/'NEO_EDGES.json'),newly_closed=sorted([c['row'] for c in expected_rows]+[r['row'] for r in peer_rows]),new_count=14,total_closed=144,q_occurrences_closed=122,q_functions_closed=61,edge_closed=164,edge_total=257,roots=dict(neo.obj(O/'NEO_LEDGER_DELTA.json')['roots']),trust='P6/D188 option A semantic transport retained; reclassification, never removal',security_target_established=False)
 
 def validate(edges=None,certificates=None,replay=True):
  receipt=obj(O/'NEO_FINAL_REVIEW.json')

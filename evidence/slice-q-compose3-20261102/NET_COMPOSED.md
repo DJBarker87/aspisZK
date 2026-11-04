@@ -1,6 +1,6 @@
 # NET Slice Q composition
 
-Current verified result: **60/78 functions, 120 Slice-Q occurrence rows, 160/257 edges; both roots OPEN.** The detailed stages below distinguish composed credit from partial bridges. The requested 100-bit per-attempt result remains unestablished.
+Current verified result: **61/78 functions, 122 Slice-Q occurrence rows, 164/257 edges; both roots OPEN.** The detailed stages below distinguish composed credit from partial bridges. The requested 100-bit per-attempt result remains unestablished.
 
 Adopted z(2) permits only CM31::inv -> inv_with(M31::inv), with the same norm and seven ordered primitive calls. It does not close the M31::inv native association, the M31::neg boundary, or the QM chain. Rules 14 and 16 remain binding. Native contract semantic transport remains P6/D188 option A reclassification, never removal.
 
@@ -73,3 +73,38 @@ query_loop, QueryGeometry::for_range, the inverse chain, source-to-ELF
 correspondence or the security headline. P6/D188 semantic transport remains
 explicit trust reclassification. Prefix native capacity cases are in flight
 and receive no composed credit at this stage.
+
+## Current prefix-product root closed
+
+TX1:185 and TX2:111 (`batch_prefix_products`) are CLOSED under the current
+root domain: a valid shared M31 slice of length5*n,0<=n<=22, arbitrary raw
+words and successful standard allocation. Four outgoing edges are closed: the
+actual M31 multiplication and three statically unreachable carrier alternatives.
+The incoming QueryGeometry-to-prefix physical caller join remains OPEN.
+
+Exactly what is proved: for every admitted flat slice, the frozen function's
+returned prefix Vec and product, under the lossless raw-U32 carrier map, equal
+the installed S7Kani2PrefixLoop model on that same list, empty initial prefix
+and ONE. The same live prefix allocation evolves by ordered append/product
+steps; every old prefix word and every input word is framed. The new slot,
+length, capacity, pointer, exact product operands/reply and increment are checked
+at each arbitrary active prestate. Allocation/spare contents are not assumed
+initialized. K039..082 cover all22 capacities with matched failing controls;
+K083/K084 and K101/K102 check both exact KMX configurations. K085..088 cover
+the actual constructor and empty-root return/control. No whole loop is unwound.
+
+NET_L029 imports and audits NEI_PrefixProduct.actual, the peer's finite
+induction and primitive-window assembly, and NET_PrefixClosure's five
+theorems. `complete` has no inner callee or chosen-output premise;
+`observed_result` separately consumes the ordered primitive trace to identify
+the same whole emitted Result and model. All audits use only standard axioms.
+NET_PREFIX_ASSOCIATION.md and NET_prefix_certificates.py bind the exact
+frozen step, native receipts, physical data/frame and model/field meaning.
+This is an option-A P6/D188 hybrid semantic-transport certificate. The
+allocator/physical interpretation and approved transport remain explicit trust.
+
+The total is now144/587 global occurrence rows. Both authoritative Slice-Q
+roots remain OPEN. The combined nonempty gather K089 timed out and is
+excluded; its split successors receive no credit until their own gates close.
+No geometry root, inverse chain, source-to-ELF or 100-bit per-attempt security
+headline is established.
