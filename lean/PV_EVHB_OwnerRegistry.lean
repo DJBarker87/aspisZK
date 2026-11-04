@@ -28,6 +28,19 @@ def descriptor : Option Header → Descriptor
 def fromSource {S F : Type} (owner : Nat) (w : NativeWorld S F) : State (Heap S) :=
   ⟨w.allocator,owner,fun place => descriptor (lookup w place)⟩
 
+def project {S F : Type} (owner : Nat) (w : NativeWorld S F) : World (State (Heap S)) F :=
+  {allocator := fromSource owner w
+   allocCalls := w.allocCalls
+   reallocCalls := w.reallocCalls
+   deallocCalls := w.deallocCalls
+   successfulAlloc := w.successfulAlloc
+   successfulRealloc := w.successfulRealloc
+   drops := w.drops
+   history := w.history
+   memory := w.memory
+   live := w.live
+   frame := w.frame.rest}
+
 /-- This source association is obtained by lookup of the same place, not by
 looking for a vector with equal elements. It remains to bind those places to
 the ORIGINAL reached callers. -/
@@ -45,6 +58,16 @@ theorem source_install {S F : Type} (owner : Nat) (w : NativeWorld S F)
   change descriptor (lookup (install w owner h pointer cap) owner)=_
   rw [install_lookup]
   simp only [descriptor,PV_EVHB_RawVecSource.capacity,capacityStore,pointerStore,if_neg sized]
+
+theorem source_install_table {S F : Type} (owner : Nat) (w : NativeWorld S F)
+    (h : Header) (pointer cap : Nat) (sized : h.shape.width≠0) :
+    (fromSource owner (install w owner h pointer cap)).table=
+      fun place => if place=owner then ⟨pointer,cap⟩ else (fromSource owner w).table place := by
+  funext place
+  by_cases same : place=owner
+  · subst place
+    simpa only [ite_true] using source_install owner w h pointer cap sized
+  · simp only [fromSource,lookup,install,store,same,ite_false]
 
 def afterAnswer {S : Type} (r : Request) (answer : Option Nat) (backend : S)
     (before : State S) : State S :=
@@ -80,14 +103,12 @@ def runtime {S F : Type} (backendStep : Request → S → Option Nat × S)
    metadata := fun w {A} v => metadata (A := A) w v
    encode := encode}
 
-theorem source_metadata {A S F G : Type} (owner : Nat) (w : NativeWorld S F)
+theorem source_metadata {A S F : Type} (owner : Nat) (w : NativeWorld S F)
     (h : Header) (selected : lookup w owner=some h) (v : alloc.vec.Vec A)
-    (fits : v.val.length≤PV_EVHB_RawVecSource.capacity Usize.max h)
-    (projected : World (State (Heap S)) G)
-    (allocator : projected.allocator=fromSource owner w) :
-    (metadata projected v).address=h.pointer ∧
-    (metadata projected v).capacity=PV_EVHB_RawVecSource.capacity Usize.max h := by
-  simp only [metadata,allocator,fromSource,selected,descriptor,Nat.max_eq_left fits]
+    (fits : v.val.length≤PV_EVHB_RawVecSource.capacity Usize.max h) :
+    (metadata (project owner w) v).address=h.pointer ∧
+    (metadata (project owner w) v).capacity=PV_EVHB_RawVecSource.capacity Usize.max h := by
+  simp only [metadata,project,fromSource,selected,descriptor,Nat.max_eq_left fits]
   exact ⟨True.intro,True.intro⟩
 
 /-- Header delivery for the CONSTRUCTED returning projection, not an assumed
@@ -128,6 +149,7 @@ theorem registered_header_delivery {A S F : Type} (backendStep : Request → S �
 
 #print axioms source_lookup
 #print axioms source_install
+#print axioms source_install_table
 #print axioms source_metadata
 #print axioms finish_delivery
 #print axioms registered_header_delivery
