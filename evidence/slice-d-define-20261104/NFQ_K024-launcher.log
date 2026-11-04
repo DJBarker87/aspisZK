@@ -1,0 +1,55 @@
+{"attempt": "NFQ_K024", "exit_status": 1, "wall_seconds": 2.04349750909023, "peak_rss_kib": "500980", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling aspis-core v0.1.0 (/home/dombarker/project-offloads/codex-cx-slice-d-define-20261104/NFQ_src/crates/aspis-core)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, 
+...
+ed_canonical_for_depth_and_c2_leaf_bytes` is never used
+   --> crates/aspis-core/src/circle_merkle.rs:419:15
+    |
+419 | pub(crate) fn verify_circle_layer0_opening_from_proof_deferred_canonical_for_depth_and_c2_leaf_bytes<
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `verify_circle_openings_deferred_canonical` is never used
+    --> crates/aspis-core/src/circle_openings.rs:1006:15
+     |
+1006 | pub(crate) fn verify_circle_openings_deferred_canonical<'a>(
+     |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `verify_radix4_minimal_subtree_prevalidated_in_place` is never used
+   --> crates/aspis-core/src/merkle.rs:329:15
+    |
+329 | pub(crate) fn verify_radix4_minimal_subtree_prevalidated_in_place(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: module `NFQ_field` should have a snake case name
+    --> crates/aspis-core/src/field.rs:3279:5
+     |
+3279 | mod NFQ_field;
+     |     ^^^^^^^^^ help: convert the identifier to snake case: `nfq_field`
+     |
+     = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 1.02s
+Checking harness field::NFQ_field::cm_contract...
+
+VERIFICATION RESULT:
+ ** 1 of 67 failed
+Failed Checks: |r| ((r.a.0,r.b.0) == NFQ_field::cm_ref(a.0)) != cfg!(NFQ_invert)
+ File: "crates/aspis-core/src/field.rs", line 280, in field::CM31::from_m31::{closure#2}
+
+VERIFICATION:- FAILED
+Verification Time: 0.050049845s
+
+Manual Harness Summary:
+Verification failed for - field::NFQ_field::cm_contract
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r1109530f2cf14143bc0d782aea1ab2d0.scope; invocation ID: 8cd5fa74902a4a558c6b32399a703130

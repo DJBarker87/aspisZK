@@ -11,7 +11,8 @@ pins=json.loads((B/'NFQ_SOURCE_PINS.json').read_text())
 errors=[n for n,h in pins.items() if sha(S/n)!=h]
 (B/(a+'-source-check.json')).write_text(json.dumps(dict(files=len(pins),errors=errors),indent=2)+'\n')
 assert not errors,errors
-r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features','aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'],cwd=S,capture_output=True,text=True)
+features=x['metadata_features'] if 'metadata_features' in x else 'aspis-core/r0' if x.get('root_package')=='aspis-core' else 'aspis-r1-cost-probe-program/pool-adapter,aspis-r1-cost-probe-program/private-leaf-salts' if x.get('root_package')=='aspis-r1-cost-probe-program' else 'aspis-r1-cost-probe/optimized-terminal,aspis-r1-cost-probe/program-build'
+r=subprocess.run(['/home/dombarker/.cargo/bin/cargo','metadata','--locked','--offline','--format-version','1','--features',features],cwd=S,capture_output=True,text=True)
 (B/(a+'-graph.stderr')).write_text(r.stderr)
 assert r.returncode==0,r.stderr
 m=json.loads(next(l for l in r.stdout.splitlines() if l.startswith('{')))
@@ -33,7 +34,7 @@ def visit(i):
  if i in seen:return
  seen.add(i)
  for d in nodes[i]['dependencies']:visit(d)
-visit(next(p['id'] for p in m['packages'] if p['name']=='aspis-r1-cost-probe'))
+visit(next(p['id'] for p in m['packages'] if p['name']==x.get('root_package','aspis-r1-cost-probe')))
 out=dict(graph_matches_frozen=not added and not(missing-allowed_missing) and not edge_errors,frozen_packages=len(f),resolved_packages=len(actual),new_package_tuples=sorted(added,key=str),missing_package_tuples=sorted(missing,key=str),edge_errors=edge_errors,lock_sha256=frozen,graph_sha256=hashlib.sha256(r.stdout.encode()).hexdigest(),selected_closure=[dict(name=pkgs[i]['name'],version=pkgs[i]['version'],source=pkgs[i].get('source'),features=nodes[i]['features']) for i in sorted(seen)])
 (B/(a+'-graph-check.json')).write_text(json.dumps(out,indent=2)+'\n');assert out['graph_matches_frozen'],out
 assert sha(S/'Cargo.lock')==frozen,'STOP metadata changed lock'

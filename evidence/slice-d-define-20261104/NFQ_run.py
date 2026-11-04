@@ -38,7 +38,7 @@ paths=[B+'/NFQ_objects',C+'/NFN_exports_20261104',C+'/NFM_exports_20261104',C+'/
 paths+=json.loads((E/'NFQ_FIXTURE_PATHS.json').read_text()) if (E/'NFQ_FIXTURE_PATHS.json').exists() else []
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NFQ_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
-assert target.startswith('NFQ_') or kind in ['auditbin','kani','extract']
+assert target.startswith('NFQ_') or kind in ['auditbin','kani','extract','dependency']
 
 if kind=='kani':
  files['NFQ_gate.py']=(E/'NFQ_gate.py').read_text()
@@ -54,13 +54,23 @@ if kind=='kani':
  if os.environ.get('NFQ_INVERT'):env['RUSTFLAGS']+=' --cfg NFQ_invert'
 elif kind=='extract':
  files['NFQ_extract.py']=(E/'NFQ_extract.py').read_text();sources=['NFQ_extract.py','NFQ_src/crates/aspis-r1-cost-probe/src/NFQ_reference.rs'];command=['python3','NFQ_extract.py']
+ if target=='NFQ_ScanReference':
+  files={'NFQ_scan_extract.py':(E/'NFQ_scan_extract.py').read_text(),'NFQ_src/programs/r1-cost-probe/src/NFQ_scan_reference.rs':(E/'NFQ_scan_reference.rs.txt').read_text(),'NFQ_SOURCE_PINS.json':(E/'NFQ_SOURCE_PINS.json').read_text()};sources=['NFQ_scan_extract.py','NFQ_src/programs/r1-cost-probe/src/NFQ_scan_reference.rs'];command=['python3','NFQ_scan_extract.py']
+elif kind=='dependency':
+ assert target=='JHe_ZeroGate'
+ n='NFQ_dependencies/'+target+'.lean';files[n]=(E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
+ command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFQ_dependencies','-o','NFQ_objects/'+target+'.olean',n]
 elif kind=='lean':
  n='NFQ_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
  command=[T+'/bin/lake','env','lean','-j1','-M7000','-DElab.async=false','-R','NFQ_generated','-o','NFQ_objects/'+target+'.olean',n]
- if target in ['NFQ_Driver','NFQ_ProofDriver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFQ_native/'+target+'.c']
+ if target in ['NFQ_Driver','NFQ_ProofDriver','NFQ_Stage2Driver','NFA_WALKER','NFA_MemoryLimit']:command+=['-c','NFQ_native/'+target+'.c']
 elif kind=='linkaudit':
  sources=['NFQ_native/'+target+'.c','NFQ_native/NFA_WALKER.c','NFQ_native/NFA_MemoryLimit.c']
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFQ_native/'+target,*sources]
+elif kind=='auditbatch' and target=='NFQ_Stage2Driver':
+ files['NFQ_stage2_audit_batch.py']=(E/'NFQ_stage2_audit_batch.py').read_text()
+ sources=['NFQ_generated/NFQ_Stage2Driver.lean','NFQ_stage2_audit_batch.py','NFQ_native/NFQ_Stage2Driver.c','NFQ_native/NFA_WALKER.c','NFQ_native/NFA_MemoryLimit.c']
+ command=['python3','NFQ_stage2_audit_batch.py']
 elif kind=='auditbatch':
  files['NFQ_final_audit_batch.py']=(E/'NFQ_final_audit_batch.py').read_text()
  sources=['NFQ_generated/NFQ_ProofDriver.lean','NFQ_final_audit_batch.py','NFQ_native/NFQ_ProofDriver.c','NFQ_native/NFA_WALKER.c','NFQ_native/NFA_MemoryLimit.c']
@@ -73,6 +83,19 @@ if target in ['scan','queryscan']:
  files[name]=(E/name).read_text();sources+=[name]
 cfg=dict(attempt=a,kind=kind,module=target,sources=sources,command=command,env=env,timeout=180,source_revision=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),source_tree_dirty=True,deps_fingerprint={'selected_objects':{}},expected_time='Focused elaboration' if kind=='lean' else 'Optimized audit linker' if kind=='linkaudit' else 'Raw checked-kernel graph traversal')
 if kind=='kani':cfg['native_command']=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NFQ_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NFQ_target','--features','private-leaf-salts,optimized-terminal,program-build','--lib','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
+if kind=='kani' and os.environ.get('NFQ_PROGRAM'):
+ cfg['root_package']='aspis-r1-cost-probe-program'
+ i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NFQ_src/programs/r1-cost-probe/Cargo.toml'
+ i=cfg['native_command'].index('--features');cfg['native_command'][i+1]='pool-adapter,private-leaf-salts'
+if kind=='kani' and os.environ.get('NFQ_CORE'):
+ cfg['root_package']='aspis-core'
+ i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NFQ_src/crates/aspis-core/Cargo.toml'
+ i=cfg['native_command'].index('--features');cfg['native_command'][i+1]='r0'
+if kind=='kani' and os.environ.get('NFQ_STATEMENT'):
+ fs=[r['features'] for r in json.loads((E/'NFQ_K002-graph-check.json').read_text())['selected_closure'] if r['name']=='aspis-statement'][0]
+ fs=[f for f in fs if f!='spend-dynamic-rate512'];cfg['root_package']='aspis-statement';cfg['metadata_features']=','.join('aspis-statement/'+f for f in fs)
+ i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NFQ_src/crates/aspis-statement/Cargo.toml'
+ i=cfg['native_command'].index('--features');cfg['native_command'][i+1]=','.join(fs)
 cfg['expected_time']='optimized compilation then scalar contract; no field multiplication' if kind=='kani' else cfg['expected_time']
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
@@ -93,7 +116,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NFQ_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFQ_Driver','NFQ_ProofDriver','fixtures'] else [])+(['NFQ_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFQ_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
+for module in (['NFQ_STAGE2_IMPORT' if x['module']=='NFQ_Stage2Driver' else 'NFQ_COMBINED_IMPORT'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFQ_Driver','NFQ_ProofDriver','NFQ_Stage2Driver','fixtures'] else [])+(['NFQ_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFQ_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind'] not in ['linkaudit','kani','extract'] else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -106,12 +129,14 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r}=='kani' else []
-if {kind!r}=='extract':names+=['NFQ_EXTRACTION_PINS.json','NFQ_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFQ_extracted').rglob('*') if p.is_file()]
+if {kind!r}=='extract':
+ if {target!r}=='NFQ_ScanReference':names+=['NFQ_SCAN_EXTRACTION_PINS.json','NFQ_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFQ_scan_extracted').rglob('*') if p.is_file()]
+ else:names+=['NFQ_EXTRACTION_PINS.json','NFQ_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFQ_extracted').rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/'NFQ_final_audit').rglob('*') if p.is_file()]
+if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NFQ_stage2_audit' if {target!r}=='NFQ_Stage2Driver' else 'NFQ_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NFQ_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFQ_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
-for name in ['NFQ_Driver','NFQ_ProofDriver']:
+for name in ['NFQ_Driver','NFQ_ProofDriver','NFQ_Stage2Driver']:
  p=b/'NFQ_native'/name
  if p.is_file():out[a+'/'+name+'_BINARY_PIN.json']=json.dumps(dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),bytes=p.stat().st_size))
 print(json.dumps(out))
