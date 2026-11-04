@@ -1,0 +1,72 @@
+NGU_generated/NGU_WeightedStep.lean:47:1: error: unsolved goals
+case refine_2
+k parts : Seven
+iter : Range
+sum : NE
+hend : ↑iter.end = 7
+hlt : ↑iter.start < 7
+hk : canonical k
+hp : canonical parts
+hs : canonE sum
+iter' : core.ops.range.Range (UScalar UScalarTy.Usize)
+hi : ↑iter'.start = ↑iter.start + 1
+he : iter'.end = iter.end
+hn :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter')
+ik : ↑iter.start < (↑k).length
+ip : ↑iter.start < (↑parts).length
+term : FIo_Native.aspis_core.field.wide_exact.WideExact
+et : FIo_Native.aspis_core.field.wide_exact.WideExact.mul (↑k)[↑iter.start] (↑parts)[↑iter.start] = ok term
+ct : canonE term
+tt :
+  aspis_core.field.WideExact.mul (NGU_ClaimOps.claim (↑k)[↑iter.start]) (NGU_ClaimOps.claim (↑parts)[↑iter.start]) =
+    ok (NGU_ClaimOps.claim term)
+out : FIo_Native.aspis_core.field.wide_exact.WideExact
+eo : FIo_Native.aspis_core.field.wide_exact.WideExact.add sum term = ok out
+co : canonE out
+tout : aspis_core.field.WideExact.add (NGU_ClaimOps.claim sum) (NGU_ClaimOps.claim term) = ok (NGU_ClaimOps.claim out)
+kr : Array.index_usize k iter.start = ok (↑k)[↑iter.start]
+pr : Array.index_usize parts iter.start = ok (↑parts)[↑iter.start]
+km : (arr NGU_Powers.claim k).index_usize iter.start = ok (NGU_Powers.claim (↑k)[↑iter.start])
+pm : (arr NGU_Powers.claim parts).index_usize iter.start = ok (NGU_Powers.claim (↑parts)[↑iter.start])
+⊢ (let (o, iter1) := (some iter.start, iter')
+    match o with
+    | none => ok (done (NGU_Powers.claim sum))
+    | some i => do
+      let we ← (arr NGU_Powers.claim parts).index_usize i
+      let we1 ← (arr NGU_Powers.claim k).index_usize i
+      let we2 ← we1.mul we
+      let claim1 ← aspis_core.field.WideExact.add (NGU_Powers.claim sum) we2
+      ok (cont (iter1, claim1))) =
+    ok (cont (iter', NGU_Powers.claim out))
+NGU_generated/NGU_WeightedStep.lean:48:14: warning: This simp argument is unused:
+  pm
+
+Hint: Omit it from the simp argument list.
+  simp only [p̵m̵,̵km, ̲trace.value, ̲bind_tc_ok, ̲tt, ̲tout]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_WeightedStep.lean:48:17: warning: This simp argument is unused:
+  km
+
+Hint: Omit it from the simp argument list.
+  simp only [pm,k̵m̵,̵ ̲trace.value, ̲bind_tc_ok, ̲tt, ̲tout]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_WeightedStep.lean:48:43: warning: This simp argument is unused:
+  tt
+
+Hint: Omit it from the simp argument list.
+  simp only [pm, ̲km, ̲trace.value, ̲bind_tc_ok, ̲tt̵,̵t̵out]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NGU_generated/NGU_WeightedStep.lean:48:46: warning: This simp argument is unused:
+  tout
+
+Hint: Omit it from the simp argument list.
+  simp only [pm, ̲km, ̲trace.value, ̲bind_tc_ok, ̲tt,̵t̵o̵u̵t̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'AspisR1.NGU_WeightedStep.paired' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
