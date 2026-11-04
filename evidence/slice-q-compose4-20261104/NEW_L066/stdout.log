@@ -1,0 +1,526 @@
+NEW_GeometryContextGeneric.lean:38:100: error: unsolved goals
+CE : Type
+o : Port3_NativeGeometryBody.Ops CE
+sub : U32 → U32 → Result U32
+double : U32 → Result U32
+poly :
+  ∀ (T : Type) (x : U32) (k : U32 → Result T),
+    (do
+        let p ← o.op9 x x
+        let d ← double p
+        let one ← o.op7
+        let z ← sub d one
+        k z) =
+      do
+      let p ← o.op9 x x
+      let d ← o.op10 p
+      let one ← o.op7
+      let z ← o.op8 d one
+      k z
+start : Usize
+iter : core.slice.iter.Iter U32
+lines flat : alloc.vec.Vec U32
+⊢ (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+      match o with
+        | none => do
+          let b ← o.op4 Global flat
+          if b = true then
+              ok
+                (done
+                  (core.result.Result.Ok
+                    { start := start,
+                      inverses := alloc.vec.Vec.new (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+                      line_z := lines }))
+            else do
+              let (prefixes, product) ← o.op13 flat.deref
+              let suffix_inverse ← o.op11 product
+              let m ← o.op6
+              let flat_inverse1 ←
+                alloc.vec.Vec.resize core.clone.CloneU32
+                    (alloc.vec.Vec.with_capacity AspisR1Stage2.aspis_core.field.M31 flat.len) flat.len m
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.rev.trait_default
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                    { start := 0#usize, «end» := flat.len }
+              let flat_inverse2 ←
+                Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o iter2 flat prefixes
+                    suffix_inverse flat_inverse1
+              let m1 ←
+                o.op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      o)
+                    { start := 0#usize, «end» := lines.len } flat_inverse2
+              let inverses ←
+                core.iter.traits.iterator.Iterator.collect.default
+                    (o.mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                      (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                        o))
+                    (core.iter.traits.collect.FromIteratorVec (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)) m1
+              ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+        | some query => do
+          let u ← lift (UScalar.cast UScalarTy.Usize query)
+          let r ← o.op12 u
+          let r1 ←
+            o.op2
+                (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o, op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                    op2 := @Port3_NativeGeometryBody.Ops.op2 CE o, op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                    op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7, op8 := sub,
+                    op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13, op14 := o.op14,
+                    op15 := o.op15, mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let p ← o.op15 val
+              let i ← u / 4#usize
+              let i1 ← lift (Usize.wrapping_mul i 4#usize)
+              let r2 ← o.op12 i1
+              let r3 ←
+                o.op2
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o, op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                        op2 := @Port3_NativeGeometryBody.Ops.op2 CE o, op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                        op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7,
+                        op8 := sub, op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13,
+                        op14 := o.op14, op15 := o.op15, mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                    r2 ()
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let line_x ← o.op14 val1
+                  let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                  let i3 ← lift (i2.wrapping_add 3#usize)
+                  let r4 ← o.op12 i3
+                  let r5 ←
+                    o.op2
+                        (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o,
+                            op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                            op2 := @Port3_NativeGeometryBody.Ops.op2 CE o,
+                            op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                            op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7,
+                            op8 := sub, op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13,
+                            op14 := o.op14, op15 := o.op15,
+                            mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                        r4 ()
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let line_y ← o.op14 val2
+                      let m ← o.op9 line_x line_x
+                      let m1 ← double m
+                      let m2 ← o.op7
+                      let line_z ← sub m1 m2
+                      let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let i4 ← core.slice.Slice.iter s
+                      let (b, _) ←
+                        o.op3
+                            (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                              o)
+                            i4 ()
+                      if b = true then ok (done (core.result.Result.Err AspisR1Stage2.verifier.Error.Query))
+                        else do
+                          let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                          let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                          let line_z_values1 ← lines.push line_z
+                          ok (cont (iter1, line_z_values1, flat1))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r6 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                            residual
+                      ok (done r6)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                        residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+              ok (done r6)) =
+    do
+    let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+    match o with
+      | none => do
+        let b ← o.op4 Global flat
+        if b = true then
+            ok
+              (done
+                (core.result.Result.Ok
+                  { start := start,
+                    inverses := alloc.vec.Vec.new (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+                    line_z := lines }))
+          else do
+            let (prefixes, product) ← o.op13 flat.deref
+            let suffix_inverse ← o.op11 product
+            let m ← o.op6
+            let flat_inverse1 ←
+              alloc.vec.Vec.resize core.clone.CloneU32
+                  (alloc.vec.Vec.with_capacity AspisR1Stage2.aspis_core.field.M31 flat.len) flat.len m
+            let iter2 ←
+              core.iter.traits.iterator.Iterator.rev.trait_default
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                  { start := 0#usize, «end» := flat.len }
+            let flat_inverse2 ←
+              Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o iter2 flat prefixes suffix_inverse
+                  flat_inverse1
+            let m1 ←
+              o.op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                    o)
+                  { start := 0#usize, «end» := lines.len } flat_inverse2
+            let inverses ←
+              core.iter.traits.iterator.Iterator.collect.default
+                  (o.mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      o))
+                  (core.iter.traits.collect.FromIteratorVec (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)) m1
+            ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+      | some query => do
+        let u ← lift (UScalar.cast UScalarTy.Usize query)
+        let r ← o.op12 u
+        let r1 ←
+          o.op2
+              (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                o)
+              r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let p ← o.op15 val
+            let i ← u / 4#usize
+            let i1 ← lift (Usize.wrapping_mul i 4#usize)
+            let r2 ← o.op12 i1
+            let r3 ←
+              o.op2
+                  (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                    o)
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let line_x ← o.op14 val1
+                let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                let i3 ← lift (i2.wrapping_add 3#usize)
+                let r4 ← o.op12 i3
+                let r5 ←
+                  o.op2
+                      (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        o)
+                      r4 ()
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let line_y ← o.op14 val2
+                    let m ← o.op9 line_x line_x
+                    let m1 ← o.op10 m
+                    let m2 ← o.op7
+                    let line_z ← o.op8 m1 m2
+                    let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                    let i4 ← core.slice.Slice.iter s
+                    let (b, _) ←
+                      o.op3
+                          (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                            o)
+                          i4 ()
+                    if b = true then ok (done (core.result.Result.Err AspisR1Stage2.verifier.Error.Query))
+                      else do
+                        let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                        let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                        let line_z_values1 ← lines.push line_z
+                        ok (cont (iter1, line_z_values1, flat1))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                          residual
+                    ok (done r6)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                ok (done r6)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r6 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            ok (done r6)
+CE : Type
+o : Port3_NativeGeometryBody.Ops CE
+sub : U32 → U32 → Result U32
+double : U32 → Result U32
+poly :
+  ∀ (T : Type) (x : U32) (k : U32 → Result T),
+    (do
+        let p ← o.op9 x x
+        let d ← double p
+        let one ← o.op7
+        let z ← sub d one
+        k z) =
+      do
+      let p ← o.op9 x x
+      let d ← o.op10 p
+      let one ← o.op7
+      let z ← o.op8 d one
+      k z
+start : Usize
+iter : core.slice.iter.Iter U32
+lines flat : alloc.vec.Vec U32
+⊢ (do
+      let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+      match o with
+        | none => do
+          let b ← o.op4 Global flat
+          if b = true then
+              ok
+                (done
+                  (core.result.Result.Ok
+                    { start := start,
+                      inverses := alloc.vec.Vec.new (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+                      line_z := lines }))
+            else do
+              let (prefixes, product) ← o.op13 flat.deref
+              let suffix_inverse ← o.op11 product
+              let m ← o.op6
+              let flat_inverse1 ←
+                alloc.vec.Vec.resize core.clone.CloneU32
+                    (alloc.vec.Vec.with_capacity AspisR1Stage2.aspis_core.field.M31 flat.len) flat.len m
+              let iter2 ←
+                core.iter.traits.iterator.Iterator.rev.trait_default
+                    (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                    { start := 0#usize, «end» := flat.len }
+              let flat_inverse2 ←
+                Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o iter2 flat prefixes
+                    suffix_inverse flat_inverse1
+              let m1 ←
+                o.op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      o)
+                    { start := 0#usize, «end» := lines.len } flat_inverse2
+              let inverses ←
+                core.iter.traits.iterator.Iterator.collect.default
+                    (o.mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                      (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                        o))
+                    (core.iter.traits.collect.FromIteratorVec (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)) m1
+              ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+        | some query => do
+          let u ← lift (UScalar.cast UScalarTy.Usize query)
+          let r ← o.op12 u
+          let r1 ←
+            o.op2
+                (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                  { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o, op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                    op2 := @Port3_NativeGeometryBody.Ops.op2 CE o, op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                    op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7, op8 := sub,
+                    op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13, op14 := o.op14,
+                    op15 := o.op15, mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                r ()
+          let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+          match cf with
+            | core.ops.control_flow.ControlFlow.Continue val => do
+              let p ← o.op15 val
+              let i ← u / 4#usize
+              let i1 ← lift (Usize.wrapping_mul i 4#usize)
+              let r2 ← o.op12 i1
+              let r3 ←
+                o.op2
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                      { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o, op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                        op2 := @Port3_NativeGeometryBody.Ops.op2 CE o, op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                        op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7,
+                        op8 := sub, op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13,
+                        op14 := o.op14, op15 := o.op15, mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                    r2 ()
+              let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+              match cf1 with
+                | core.ops.control_flow.ControlFlow.Continue val1 => do
+                  let line_x ← o.op14 val1
+                  let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                  let i3 ← lift (i2.wrapping_add 3#usize)
+                  let r4 ← o.op12 i3
+                  let r5 ←
+                    o.op2
+                        (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                          { op0 := @Port3_NativeGeometryBody.Ops.op0 CE o,
+                            op1 := @Port3_NativeGeometryBody.Ops.op1 CE o,
+                            op2 := @Port3_NativeGeometryBody.Ops.op2 CE o,
+                            op3 := @Port3_NativeGeometryBody.Ops.op3 CE o,
+                            op4 := @Port3_NativeGeometryBody.Ops.op4 CE o, op5 := o.op5, op6 := o.op6, op7 := o.op7,
+                            op8 := sub, op9 := o.op9, op10 := double, op11 := o.op11, op12 := o.op12, op13 := o.op13,
+                            op14 := o.op14, op15 := o.op15,
+                            mapIterator := @Port3_NativeGeometryBody.Ops.mapIterator CE o })
+                        r4 ()
+                  let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                  match cf2 with
+                    | core.ops.control_flow.ControlFlow.Continue val2 => do
+                      let line_y ← o.op14 val2
+                      let m ← o.op9 line_x line_x
+                      let m1 ← double m
+                      let m2 ← o.op7
+                      let line_z ← sub m1 m2
+                      let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                      let i4 ← core.slice.Slice.iter s
+                      let (b, _) ←
+                        o.op3
+                            (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                              o)
+                            i4 ()
+                      if b = true then ok (done (core.result.Result.Err AspisR1Stage2.verifier.Error.Query))
+                        else do
+                          let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                          let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                          let line_z_values1 ← lines.push line_z
+                          ok (cont (iter1, line_z_values1, flat1))
+                    | core.ops.control_flow.ControlFlow.Break residual => do
+                      let r6 ←
+                        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                            AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                            residual
+                      ok (done r6)
+                | core.ops.control_flow.ControlFlow.Break residual => do
+                  let r6 ←
+                    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                        AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                        residual
+                  ok (done r6)
+            | core.ops.control_flow.ControlFlow.Break residual => do
+              let r6 ←
+                core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                    AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+              ok (done r6)) =
+    do
+    let (o, iter1) ← core.slice.iter.IteratorSliceIter.next iter
+    match o with
+      | none => do
+        let b ← o.op4 Global flat
+        if b = true then
+            ok
+              (done
+                (core.result.Result.Ok
+                  { start := start,
+                    inverses := alloc.vec.Vec.new (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize),
+                    line_z := lines }))
+          else do
+            let (prefixes, product) ← o.op13 flat.deref
+            let suffix_inverse ← o.op11 product
+            let m ← o.op6
+            let flat_inverse1 ←
+              alloc.vec.Vec.resize core.clone.CloneU32
+                  (alloc.vec.Vec.with_capacity AspisR1Stage2.aspis_core.field.M31 flat.len) flat.len m
+            let iter2 ←
+              core.iter.traits.iterator.Iterator.rev.trait_default
+                  (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (core.ops.range.Range.Insts.DoubleEndedIterator core.iter.range.StepUsize)
+                  { start := 0#usize, «end» := flat.len }
+            let flat_inverse2 ←
+              Port3_NativeGeometryBody.verifier.QueryGeometry.for_range_loop0_loop0 o iter2 flat prefixes suffix_inverse
+                  flat_inverse1
+            let m1 ←
+              o.op1 (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                  (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                    o)
+                  { start := 0#usize, «end» := lines.len } flat_inverse2
+            let inverses ←
+              core.iter.traits.iterator.Iterator.collect.default
+                  (o.mapIterator (core.iter.traits.iterator.IteratorRange core.iter.range.StepUsize)
+                    (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_4.Insts.CoreOpsFunctionFnMutTupleUsizeArrayM315
+                      o))
+                  (core.iter.traits.collect.FromIteratorVec (Std.Array AspisR1Stage2.aspis_core.field.M31 5#usize)) m1
+            ok (done (core.result.Result.Ok { start := start, inverses := inverses, line_z := lines }))
+      | some query => do
+        let u ← lift (UScalar.cast UScalarTy.Usize query)
+        let r ← o.op12 u
+        let r1 ←
+          o.op2
+              (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                o)
+              r ()
+        let cf ← core.result.Result.Insts.CoreOpsTry.branch r1
+        match cf with
+          | core.ops.control_flow.ControlFlow.Continue val => do
+            let p ← o.op15 val
+            let i ← u / 4#usize
+            let i1 ← lift (Usize.wrapping_mul i 4#usize)
+            let r2 ← o.op12 i1
+            let r3 ←
+              o.op2
+                  (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_1.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                    o)
+                  r2 ()
+            let cf1 ← core.result.Result.Insts.CoreOpsTry.branch r3
+            match cf1 with
+              | core.ops.control_flow.ControlFlow.Continue val1 => do
+                let line_x ← o.op14 val1
+                let i2 ← lift (Usize.wrapping_mul i 4#usize)
+                let i3 ← lift (i2.wrapping_add 3#usize)
+                let r4 ← o.op12 i3
+                let r5 ←
+                  o.op2
+                      (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_2.Insts.CoreOpsFunctionFnOnceTupleErrorError
+                        o)
+                      r4 ()
+                let cf2 ← core.result.Result.Insts.CoreOpsTry.branch r5
+                match cf2 with
+                  | core.ops.control_flow.ControlFlow.Continue val2 => do
+                    let line_y ← o.op14 val2
+                    let m ← o.op9 line_x line_x
+                    let m1 ← o.op10 m
+                    let m2 ← o.op7
+                    let line_z ← o.op8 m1 m2
+                    let s ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                    let i4 ← core.slice.Slice.iter s
+                    let (b, _) ←
+                      o.op3
+                          (Port3_NativeGeometryBody.verifier.QueryGeometry.for_range.closure_3.Insts.CoreOpsFunctionFnMutTupleSharedM31Bool
+                            o)
+                          i4 ()
+                    if b = true then ok (done (core.result.Result.Err AspisR1Stage2.verifier.Error.Query))
+                      else do
+                        let s1 ← lift (Array.make 5#usize [p.x, p.y, line_x, line_y, line_z] ⋯).to_slice
+                        let flat1 ← alloc.vec.Vec.extend_from_slice core.clone.CloneU32 flat s1
+                        let line_z_values1 ← lines.push line_z
+                        ok (cont (iter1, line_z_values1, flat1))
+                  | core.ops.control_flow.ControlFlow.Break residual => do
+                    let r6 ←
+                      core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                          AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error)
+                          residual
+                    ok (done r6)
+              | core.ops.control_flow.ControlFlow.Break residual => do
+                let r6 ←
+                  core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                      AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+                ok (done r6)
+          | core.ops.control_flow.ControlFlow.Break residual => do
+            let r6 ←
+              core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual
+                  AspisR1Stage2.verifier.QueryGeometry (core.convert.FromSame AspisR1Stage2.verifier.Error) residual
+            ok (done r6)
+NEW_GeometryContextGeneric.lean:41:21: warning: This simp argument is unused:
+  bind_assoc_eq
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵a̵c̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲p̲l̲a̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲t̲c̲_̲o̲k̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+NEW_GeometryContextGeneric.lean:41:35: warning: This simp argument is unused:
+  bind_tc_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [̵r̵e̵p̵l̵a̵c̵e̵,̵b̵i̵n̵d̵_̵a̵s̵s̵o̵c̵_̵e̵q̵,̵b̵i̵n̵d̵_̵t̵c̵_̵o̵k̵]̵[̲r̲e̲p̲l̲a̲c̲e̲,̲ ̲b̲i̲n̲d̲_̲a̲s̲s̲o̲c̲_̲e̲q̲]̲
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEW_GeometryContextGeneric.replace' depends on axioms: [propext]
+'NEW_GeometryContextGeneric.reverse' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryContextGeneric.zero_callback' depends on axioms: [propext]
+'NEW_GeometryContextGeneric.collect_callback' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NEW_GeometryContextGeneric.step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

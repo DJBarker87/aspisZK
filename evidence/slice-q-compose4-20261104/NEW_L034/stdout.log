@@ -1,0 +1,46 @@
+NEW_LoopMap.lean:26:6: error: Tactic `apply` failed: could not unify the conclusion of `@Lean.Order.admissible_pi_apply`
+  Lean.Order.admissible fun f => ∀ (x : ?α), ?P x (f x)
+with the goal
+  Lean.Order.admissible fun rec => ∀ (s : S), rec s = div ∨ resultMap f (rec s) = loop (bodyMap body f) s
+
+Note: The full type of `@Lean.Order.admissible_pi_apply` is
+  ∀ {α : Sort ?u.47} {β : α → Sort ?u.46} [inst : (x : α) → Lean.Order.CCPO (β x)] (P : (x : α) → β x → Prop),
+    (∀ (x : α), Lean.Order.admissible (P x)) → Lean.Order.admissible fun f => ∀ (x : α), P x (f x)
+
+case adm
+S A B : Type
+body : S → Result (ControlFlow S A)
+f : A → B
+s : S
+⊢ Lean.Order.admissible fun rec => ∀ (s : S), rec s = div ∨ resultMap f (rec s) = loop (bodyMap body f) s
+NEW_LoopMap.lean:33:63: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.96 = ?m.96
+but is expected to have type
+  True
+in the application
+  Or.inl rfl
+NEW_LoopMap.lean:34:67: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.113 = ?m.113
+but is expected to have type
+  True
+in the application
+  Or.inr rfl
+NEW_LoopMap.lean:37:75: error: Application type mismatch: The argument
+  rfl
+has type
+  ?m.155 = ?m.155
+but is expected to have type
+  True
+in the application
+  Or.inr rfl
+'NEW_LoopMap.map_ok' does not depend on any axioms
+'NEW_LoopMap.map_fail' does not depend on any axioms
+'NEW_LoopMap.map_div' does not depend on any axioms
+'NEW_LoopMap.defined_result' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEW_LoopMap.body_inverse' depends on axioms: [propext, Quot.sound]
+'NEW_LoopMap.map_inverse' depends on axioms: [propext]
+'NEW_LoopMap.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

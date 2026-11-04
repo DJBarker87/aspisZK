@@ -1,0 +1,70 @@
+{"attempt": "NEW_L039", "exit_status": 1, "wall_seconds": 2.191310064867139, "peak_rss_kib": "4957000", "swaps": "0", "print_axioms": ["'NEW_GeometryPoint.map_point_ok' does not depend on any axioms", "'NEW_GeometryPoint.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEW_GeometryPoint.lean:42:6: error: 'change' tactic failed, pattern
+  (do
+      let c ← { a := a0, b := a1 }.mul { a := b0, b := b1 }
+      ok { x := c.a, y := c.b }) =
+    do
+    let c ← { a := a0, b := a1 }.mul { a := b0, b := b1 }
+    ok { x := c.a, y := c.b }
+is not definitionally equal to target
+  (do
+      let a ←
+        let (i, i1) := (a0, a1)
+          ok { a := i, b := i1 }
+      let a_1 ←
+        let (i, i1) := (b0, b1)
+          ok { a := i, b := i1 }
+      let a ← a.mul a_1
+      ok { x := a.a, y := a.b }) =
+    do
+    let left ←
+      let (i, i1) := (a0, a1)
+        ok { a := i, b := i1 }
+    let right ←
+      let (i, i1) := (b0, b1)
+        ok { a := i, b := i1 }
+    let point
+...
+NEW_GeometryPoint.lean:42:6: error: 'change' tactic failed, pattern
+  (do
+      let c ← { a := a0, b := a1 }.mul { a := b0, b := b1 }
+      ok { x := c.a, y := c.b }) =
+    do
+    let c ← { a := a0, b := a1 }.mul { a := b0, b := b1 }
+    ok { x := c.a, y := c.b }
+is not definitionally equal to target
+  (do
+      let a ←
+        let (i, i1) := (a0, a1)
+          ok { a := i, b := i1 }
+      let a_1 ←
+        let (i, i1) := (b0, b1)
+          ok { a := i, b := i1 }
+      let a ← a.mul a_1
+      ok { x := a.a, y := a.b }) =
+    do
+    let left ←
+      let (i, i1) := (a0, a1)
+        ok { a := i, b := i1 }
+    let right ←
+      let (i, i1) := (b0, b1)
+        ok { a := i, b := i1 }
+    let point ←
+      do
+        let z ← { a := left.a, b := left.b }.mul { a := right.a, b := right.b }
+        ok { a := z.a, b := z.b }
+    ok { x := point.a, y := point.b }
+NEW_GeometryPoint.lean:41:71: warning: This simp argument is unused:
+  map_point_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.fast_domain.table_value,
+          NEW_GeometryActual.aspis_core.field.CM31.new,
+          AspisR1QueryGeometryActual.fast_domain.table_value, ̲NEA_FieldProduct.ops,
+          NEA_FieldProduct.toNative, ̲NEA_FieldProduct.ofNative, ̲bind_tc_ok,̵m̵a̵p̵_̵p̵o̵i̵n̵t̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEW_GeometryPoint.map_point_ok' does not depend on any axioms
+'NEW_GeometryPoint.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r3ded0ab558744389afe99f1e3426efed.scope; invocation ID: b2e334a2e8c34e7e8f5cb138e2b271ea

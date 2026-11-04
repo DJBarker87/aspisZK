@@ -1,0 +1,65 @@
+NEW_GeometryPoint.lean:42:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  FIo_Native.aspis_core.field.CM31.mul (NEW_GeometryArithmetic.toC { a := a0, b := a1 })
+    (NEW_GeometryArithmetic.toC { a := b0, b := b1 })
+in the target expression
+  (do
+      let a ←
+        let (i, i1) := (a0, a1)
+          ok { a := i, b := i1 }
+      let a_1 ←
+        let (i, i1) := (b0, b1)
+          ok { a := i, b := i1 }
+      let a ← a.mul a_1
+      ok { x := a.a, y := a.b }) =
+    do
+    let left ←
+      let (i, i1) := (a0, a1)
+        ok { a := i, b := i1 }
+    let right ←
+      let (i, i1) := (b0, b1)
+        ok { a := i, b := i1 }
+    let point ←
+      do
+        let z ← { a := left.a, b := left.b }.mul { a := right.a, b := right.b }
+        ok { a := z.a, b := z.b }
+    ok { x := point.a, y := point.b }
+
+case ok.ok
+u : Usize
+a0 a1 : U32
+ha : AspisR1QueryGeometryActual.fast_domain.TABLE_A.index_usize (u &&& 511#usize) = ok (a0, a1)
+b0 b1 : U32
+hb : AspisR1QueryGeometryActual.fast_domain.TABLE_B.index_usize (u.wrapping_shr 9#u32) = ok (b0, b1)
+⊢ (do
+      let a ←
+        let (i, i1) := (a0, a1)
+          ok { a := i, b := i1 }
+      let a_1 ←
+        let (i, i1) := (b0, b1)
+          ok { a := i, b := i1 }
+      let a ← a.mul a_1
+      ok { x := a.a, y := a.b }) =
+    do
+    let left ←
+      let (i, i1) := (a0, a1)
+        ok { a := i, b := i1 }
+    let right ←
+      let (i, i1) := (b0, b1)
+        ok { a := i, b := i1 }
+    let point ←
+      do
+        let z ← { a := left.a, b := left.b }.mul { a := right.a, b := right.b }
+        ok { a := z.a, b := z.b }
+    ok { x := point.a, y := point.b }
+NEW_GeometryPoint.lean:41:71: warning: This simp argument is unused:
+  map_point_ok
+
+Hint: Omit it from the simp argument list.
+  simp only [NEW_GeometryActual.fast_domain.table_value,
+          NEW_GeometryActual.aspis_core.field.CM31.new,
+          AspisR1QueryGeometryActual.fast_domain.table_value, ̲NEA_FieldProduct.ops,
+          NEA_FieldProduct.toNative, ̲NEA_FieldProduct.ofNative, ̲bind_tc_ok,̵m̵a̵p̵_̵p̵o̵i̵n̵t̵_̵o̵k̵]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'NEW_GeometryPoint.map_point_ok' does not depend on any axioms
+'NEW_GeometryPoint.complete' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
