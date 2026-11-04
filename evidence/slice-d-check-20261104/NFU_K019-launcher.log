@@ -1,0 +1,62 @@
+{"attempt": "NFU_K019", "exit_status": 1, "wall_seconds": 1.5044524550903589, "peak_rss_kib": "212208", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+^^^^^^^^^^^^^^^^^^^
+
+warning: function `require_distinct_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:224:4
+    |
+224 | fn require_distinct_accounts<const N: usize>(accounts: &[&AccountInfo<'_>; N]) -> ProgramResult {
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_invariant_release_registry` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:523:4
+    |
+523 | fn authenticate_invariant_release_registry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: module `NFU_owned` should have a snake case name
+   --> programs/r1-cost-probe/src/r1_pool_adapter_owned.rs:485:5
+    |
+485 | mod NFU_owned;
+    |     ^^^^^^^^^ help: convert the identifier to snake case: `nfu_owned`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+    Finished `dev` profile [optimized] target(s) in 0.45s
+Checking harness r1_pool_adapter::owned::NFU_owned::owner_identity...
+
+VERIFICATION RESULT:
+ ** 1 of 3 failed
+Failed Checks: assertion failed: (core::ptr::eq(a.owner(),&a.owner)) != cfg!(NFU_invert)
+ File: "programs/r1-cost-probe/src/NFU_owned.rs", line 8, in r1_pool_adapter::owned::NFU_owned::owner_identity
+
+VERIFICATION:- FAILED
+Verification Time: 0.06442668s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NFU_owned::owner_identity
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r7472ff10cc66458ab24856a69f52c4b5.scope; invocation ID: 1124c3153f6e43ab8a2ed38fdc794040

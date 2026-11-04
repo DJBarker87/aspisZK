@@ -53,9 +53,9 @@ if kind=='kani':
  import os
  if os.environ.get('NFU_INVERT'):env['RUSTFLAGS']+=' --cfg NFU_invert'
 elif kind=='extract':
- files['NFU_extract.py']=(E/'NFU_extract.py').read_text();sources=['NFU_extract.py','NFU_src/crates/aspis-r1-cost-probe/src/NFU_reference.rs'];command=['python3','NFU_extract.py']
- if target=='NFU_ScanReference':
-  files={'NFU_scan_extract.py':(E/'NFU_scan_extract.py').read_text(),'NFU_src/programs/r1-cost-probe/src/NFU_scan_reference.rs':(E/'NFU_scan_reference.rs.txt').read_text(),'NFU_SOURCE_PINS.json':(E/'NFU_SOURCE_PINS.json').read_text()};sources=['NFU_scan_extract.py','NFU_src/programs/r1-cost-probe/src/NFU_scan_reference.rs'];command=['python3','NFU_scan_extract.py']
+ files['NFU_extract.py']=(E/'NFU_extract.py').read_text()
+ files['NFU_references.rs']=(E/'NFU_references.rs.txt').read_text()
+ sources=['NFU_extract.py','NFU_references.rs'];command=['python3','NFU_extract.py',a+'.json']
 elif kind=='dependency':
  assert target=='JHe_ZeroGate'
  n='NFU_dependencies/'+target+'.lean';files[n]=(E.parent.parent/'lean'/ (target+'.lean')).read_text();sources=[n]
@@ -96,7 +96,7 @@ if kind=='kani' and os.environ.get('NFU_STATEMENT'):
  fs=[f for f in fs if f!='spend-dynamic-rate512'];cfg['root_package']='aspis-statement';cfg['metadata_features']=','.join('aspis-statement/'+f for f in fs)
  i=cfg['native_command'].index('--manifest-path');cfg['native_command'][i+1]=B+'/NFU_src/crates/aspis-statement/Cargo.toml'
  i=cfg['native_command'].index('--features');cfg['native_command'][i+1]=','.join(fs)
-cfg['expected_time']='optimized compilation then scalar contract; no field multiplication' if kind=='kani' else cfg['expected_time']
+cfg['expected_time']='optimized compilation then scalar contract; no field multiplication' if kind=='kani' else 'optimized Charon frontend, then Aeneas emission; no arithmetic gate' if kind=='extract' else cfg['expected_time']
 files[a+'.json']=json.dumps(cfg)
 r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
@@ -129,9 +129,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob(a+'-graph*')]+[str(p.relative_to(b)) for p in b.glob(a+'-source*')]+[str(p.relative_to(b)) for p in b.glob(a+'-lock*')] if {kind!r}=='kani' else []
-if {kind!r}=='extract':
- if {target!r}=='NFU_ScanReference':names+=['NFU_SCAN_EXTRACTION_PINS.json','NFU_scan_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFU_scan_extracted').rglob('*') if p.is_file()]
- else:names+=['NFU_EXTRACTION_PINS.json','NFU_reference.llbc']+[str(p.relative_to(b)) for p in (b/'NFU_extracted').rglob('*') if p.is_file()]
+if {kind!r}=='extract':names += [a+'-extraction-pins.json',a+'.llbc']+[str(p.relative_to(b)) for p in (b/'NFU_extracted'/{target!r}).rglob('*') if p.is_file()]
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
 if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/('NFU_stage2_audit' if {target!r}=='NFU_Stage2Driver' else 'NFU_final_audit')).rglob('*') if p.is_file()]
 if {target!r} in ['scan','queryscan']:names+=['NFU_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFU_LOADED_scan.jsonl']

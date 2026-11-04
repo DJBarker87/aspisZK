@@ -1,0 +1,74 @@
+{"attempt": "NFU_K023", "exit_status": 1, "wall_seconds": 27.25631411699578, "peak_rss_kib": "469684", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+   Compiling cfg-if v1.0.4
+   Compiling generic-array v0.14.7
+   Compiling typenum v1.20.1
+   Compiling serde_core v1.0.228
+   Compiling libc v0.2.186
+   Compiling serde v1.0.228
+   Compiling zerocopy v0.8.52
+   Compiling subtle v2.6.1
+   Compiling crypto-common v0.1.7
+   Compiling block-buffer v0.10.4
+   Compiling digest v0.10.7
+   Compiling borsh v1.5.7
+   Compiling cpufeatures v0.2.17
+   Compiling five8_core v0.1.2
+   Compiling num-traits v0.2.19
+   Compiling ahash v0.8.12
+   Compiling five8 v0.2.1
+   Compiling getrandom v0.2.17
+   Compiling once_cell v1.21.4
+   Compiling solana-sanitize v2.2.1
+   Compiling bytemuck v1.25.0
+   Compiling solana-atom
+...
+ `authenticate_invariant_release_registry` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:523:4
+    |
+523 | fn authenticate_invariant_release_registry(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `authenticate_asq8_accounts` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:672:4
+    |
+672 | fn authenticate_asq8_accounts(
+    |    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `validate_asq8` is never used
+   --> programs/r1-cost-probe/src/r1_pool_adapter.rs:886:4
+    |
+886 | fn validate_asq8(
+    |    ^^^^^^^^^^^^^
+
+warning: module `NFU_owned` should have a snake case name
+   --> programs/r1-cost-probe/src/r1_pool_adapter_owned.rs:485:5
+    |
+485 | mod NFU_owned;
+    |     ^^^^^^^^^ help: convert the identifier to snake case: `nfu_owned`
+    |
+    = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (1)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 25.99s
+Checking harness r1_pool_adapter::owned::NFU_owned::readonly_buffer...
+
+VERIFICATION RESULT:
+ ** 1 of 132 failed (2 unreachable)
+Failed Checks: assertion failed: exact != cfg!(NFU_invert)
+ File: "programs/r1-cost-probe/src/NFU_owned.rs", line 4, in r1_pool_adapter::owned::NFU_owned::readonly_buffer
+
+VERIFICATION:- FAILED
+Verification Time: 0.13799395s
+
+Manual Harness Summary:
+Verification failed for - r1_pool_adapter::owned::NFU_owned::readonly_buffer
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-r9f9fd4764ced41ce8510fb2ec1c699fb.scope; invocation ID: c0376addfb384117933264f3aecc8f37
