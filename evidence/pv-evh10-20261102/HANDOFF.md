@@ -1,3 +1,53 @@
+# D587 — requested full-family instantiation remains unimplemented
+
+Resume base `7356208133e924f6caabb8e2136a370ee6f02035`, same worktree and
+branch `codex/pv-evh-20261029`. Read BLOCKER-D587.md and
+actual-prefix-D587.json. FRAME-D585.md and the D585 handoff were read first.
+
+D587 checked the complete tracked Lean exact-name inventory and the concrete
+producer interfaces. ActualEntropyEntryPrefix still has no implemented
+declaration; Correspondence takes it as an external Type. Existing Prefix.P's
+World has no machine PC/rsp/process-memory/mapping carrier. EntryView supplies
+physical parameters externally. The existing interpreter already covers all
+Fin8/Fin16 shapes uniformly; enumerating shapes does not prove that every
+actual prefix has that view or binds the same source mask/state/live slots.
+
+No actual_correspondence constructor, actual_frame_entry, or concrete shared
+OWNER Prop was implemented. No substitute actual domain, opaque OWNER, new
+assumption, source-live exclusion field, successful-only filter, or trust item
+was introduced. In particular, separation of all physical SlotId pairs is not
+the quantifier over every old slot in State.frame.live. That source-to-physical
+lifetime/identity connection remains FRAME work; it cannot be moved into the
+Vec/RawVec allocator OWNER. D583's OWNER-only reduction remains withdrawn.
+
+BLOCKER-D587.md gives the exact four-binder construction target and the
+additional source-live exclusion statement. Next substantive deliverable:
+construct the full paired actual source/machine prefix producer at precisely
+opsNative(rawBase base) heap box ops, derive its selectors and all live-slot
+interpretation by induction over its reached history, then construct
+Correspondence and prove the branch-valued actual_frame_entry with only the
+exact allocator OWNER Prop. Retain pending/grant/exhaustion, actual post-world
+and ordered events under rdea-2'; no pre-answer VMA requirement is restored.
+Binary evidence stays binary-structural (adopted da36d6aa), plus V370.
+
+check_actual_prefix_d587.py --check PASS: pinned source inspection, not a
+formal theorem, semantic absence proof, or shipped-source counterexample.
+No Lean/native attempts or host scopes, no new axiom audit, no unchanged full
+regression/release replay. Historical D585 proofs/receipts reused unchanged;
+axioms remain SUMMARY-BASED. No pending work/process submitted. NEXT Lean90267,
+then91500..91596 with91597..91599 audits; native NEXTN91603. Inherited attempt
+and audit reserves unchanged. No build infrastructure changes or branch import.
+
+Stop follows the inherited actual-instance focus rule at the unimplemented
+paired producer; it is not waiting for evhB4 or claiming budget exhaustion.
+Requested full-family instantiation and OWNER-only theorem are incomplete.
+Rows removed NONE; target not yet established; T unchanged. Actual-domain
+non-emptiness, source/kernel/world association, full advancing entry, all five
+projections, NativeObstruction62/op132, D520/U/D524, V370/V400 and L1/L2/L3
+remain. No frozen implementation, soundness file, key/account/funds action.
+
+---
+
 # D585 — concrete FRAME interface checked; actual-family instantiation remains
 
 Resume base c1841dddedf6a01ccfdf314a7d06b751fa3cb676, same worktree/branch
