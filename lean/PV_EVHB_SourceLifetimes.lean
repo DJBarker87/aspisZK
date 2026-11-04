@@ -117,14 +117,13 @@ theorem move_receiver {S F : Type} (s : State S F) (source target : Place)
 theorem move_fresh {S F : Type} (s : State S F) (source target : Place)
     (fresh : Fresh s) : Fresh (move s source target) := by
   intro q id selected
-  by_cases toTarget : q=target
-  · simp only [move,toTarget,ite_true] at selected
-    exact fresh source id selected
-  · by_cases fromSource : q=source
-    · simp only [move,toTarget,ite_false,fromSource,ite_true] at selected
-      cases selected
-    · simp only [move,toTarget,ite_false,fromSource] at selected
-      exact fresh q id selected
+  change (if q=target then s.places source else
+    if q=source then none else s.places q) = some id at selected
+  split at selected
+  · exact fresh source id selected
+  · split at selected
+    · cases selected
+    · exact fresh q id selected
 
 /-- Selection is a computation on the borrowed receiver place. There is no
 caller-supplied owner number and no search through initialized values. -/
@@ -157,8 +156,9 @@ theorem constructor_call {S F A : Type} (s : State S F) (p : Place)
     (shape : Shape) (alignmentAddress : Nat)
     (operation : Nat → Header → PV_EVHB_RawVecSource.Q S F A) :
     callAt (newAt s p shape alignmentAddress) p operation =
-      some (let r := operation s.next (emptyHeader shape alignmentAddress)
-        (store s.world s.next (emptyHeader shape alignmentAddress));
+      some (
+        let r := operation s.next (emptyHeader shape alignmentAddress)
+          (store s.world s.next (emptyHeader shape alignmentAddress))
         {outcome := r.outcome
          state := {newAt s p shape alignmentAddress with world := r.world}
          events := r.events}) := by
