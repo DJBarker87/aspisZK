@@ -1,0 +1,68 @@
+NEV_generated/NEV_RowStep.lean:37:53: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (↑basis).length
+in the target expression
+  ↑iter.start < basis.length
+
+ops : Ops
+v : alloc.vec.Vec RawQ
+power : RawQ
+next : Usize
+basis : Std.Array U32 256#usize
+iter : Iter
+b : NEV_AccumulateRaw.BatchedWeights
+width : (↑v).length = 64
+finish : iter.end = 64#usize
+inside : ↑iter.start < 64
+global : ↑next < 22
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+⊢ ↑iter.start < basis.length
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (256 ≤ UScalar.cMax UScalarTy.Usize)) true
+  in the application
+    id (Eq.refl true)
+NEV_generated/NEV_RowStep.lean:39:25: error(lean.unknownIdentifier): Unknown identifier `NBF_BasisInstall.checked_mul`
+NEV_generated/NEV_RowStep.lean:29:77: error: unsolved goals
+ops : Ops
+v : alloc.vec.Vec RawQ
+power : RawQ
+next : Usize
+basis : Std.Array U32 256#usize
+iter : Iter
+b : NEV_AccumulateRaw.BatchedWeights
+width : (↑v).length = 64
+finish : iter.end = 64#usize
+inside : ↑iter.start < 64
+global : ↑next < 22
+iter1 : core.ops.range.Range (UScalar UScalarTy.Usize)
+hs : ↑iter1.start = ↑iter.start + 1
+he : iter1.end = iter.end
+run :
+  core.iter.range.IteratorRange.next
+      (core.iter.range.UScalarStep UScalarTy.Usize core.clone.CloneUsize core.cmp.PartialOrdUsize) iter =
+    ok (some iter.start, iter1)
+word : U32
+basisRead : basis.index_usize iter.start = ok word
+right✝ : word = (↑basis)[↑iter.start]
+q : NEV_AccumulateRaw.aspis_core.field.QM31
+read : NEV_AccumulateRaw.accumulated_weight_at v.deref iter.start = ok q
+mappedRead : (NBF_RowInstall.install ops).op12 (mapVec toQ v).deref iter.start = ok (toQ q)
+⊢ (do
+      let out ← NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power next 64#usize basis iter b
+      ok (mapFlow out)) =
+    verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next
+      64#usize basis iter (toWeights b)
+'NEV_RowStep.active' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'NEV_RowStep.stop' depends on axioms: [propext, Classical.choice, Quot.sound]

@@ -67,3 +67,61 @@ actual-inner credit now requires K038/K039 on the SAME harness name, after
 replacing only that getter call by the literal native indexing expression.
 This is a changed source-fidelity target, not an unchanged rerun, a rename,
 a timeout retry, or a Kani tool finding. Row context moves to K040/K041.
+
+Copy-control input repair: the own runner accepts an explicitly archived
+NEV_KANI_PAYLOAD under this evidence directory, and computes the archived
+patch from that selected payload rather than the mutable current patch.
+All frozen-erasure, lock/graph, deployed features, tool, static, scope and
+post-lock checks remain unchanged. This permits fresh KMX controls on BOTH
+native source configurations: group0 (outer/tail before literal-inner-read
+fix) and group1 (literal inner/row). The source maps are committed as
+NEV_COPY_GROUP0_PAYLOAD.json and NEV_COPY_GROUP1_PAYLOAD.json. These runs fill
+missing same-configuration control evidence; they do not rerun unchanged
+full regressions or repeat a timeout/memory failure.
+
+L040 producer association hit a deterministic 200,000-heartbeat timeout at
+broad `congr 1` on the concrete initialized six-level loop. No limit is raised
+and the shape is not repeated: its replacement first proves equality of the
+symbolic continuations from L033, then applies explicit congrArg to the one
+shared initialization bind. A separate missing namespace qualifier on the
+retained canonical-basis predicate is corrected. This is proof elaboration,
+not a basis-value reduction or a new recurrence proof.
+
+L050's older algebra-decode import reaches a missing RawTx1DigestLog object.
+Its replacement removes that unnecessary dependency: existing LPi native
+natural-word laws and ExtractedMaskQM31Mul/TowerAdd word laws have literally
+identical formulas. NEV_MaskCarriers compares raw words with UInt value
+injectivity, and NEV_MaskQM reuses those laws without rebuilding the unrelated
+digest chain or proving field multiplication again.
+
+Call-site review finding, before any accumulation ledger promotion: K040/K041
+cover immutable weights, basis/index, conversions, and scalar push arguments,
+but the local log omitted the mutable BW receiver. They remain valid partial
+context evidence. New K046/K047 on `accumulate_row_receiver` independently log
+the SAME receiver address, live Vec data/length/capacity/terms, old selected
+row, scalar inputs, and returned-row/disjoint-window effect. The CLOSED NEI
+push supplies the actual returned row; the context is universal over replies.
+Separate fission avoids extending the 80-second row shape with another full
+vector. Group2 KMX controls K048/K049 must match its exact source hashes.
+
+Packet-domain clarification before promotion: the full Result theorem L060
+also holds for raw immutable weight words because deployed tracing discards
+the normalization value. For the stronger per-call same-return certificate,
+NEV_AccumPacket.Domain now explicitly includes canonical immutable weights.
+NEV_WeightDomains.read derives the canonical NBF embedding domain from the
+SAME reached read. This is an input-only condition already required by TX2's
+inventory and supplied by the actual canonical initial/checkpoint weights;
+weights remain unchanged in deployed accumulation. It does not assume a
+returned value or lower the root security/adversary target. Before/after:
+L065's Domain had width/counters/value/rhs/power/rho/progress; its replacement
+adds the explicit immutable-weight input predicate solely for per-call
+callback equality. L060's stronger all-raw-weight Result statement is retained.
+
+L066 excluded: missing NBF_PowerStep import; L067 adds NEV_StageFields and passes. L068 recompiles the complete packet with immutable weights canonical, standard axioms. L069 excluded: mapped-vector length simplification and explicit projection equality; L070 replaces those with List.length_map and typed projection equalities, passing SAME-returned-vector phase transport. No resource/timeout change. New packet validator checks current WeightDomains/AccumPacket hashes, includes L070, and retains broader allraw complete Result L060.
+
+Union validator fixes: an unambiguous DIRECT_CALL may have selected_target=None;
+only literal False is a static target exclusion, matching unchanged NEB checks.
+The TX2 original inventory has a third external obligation weights.value at283,
+explicitly disabled release cfg(prover). Preserve it and prove inactivity from
+every native pair's root feature graph. Never silently drop it. Two earlier
+union attempts failed closed before writing row closure; no formal run repeated.

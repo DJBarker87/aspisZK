@@ -1,0 +1,66 @@
+NEV_generated/NEV_RowLoop.lean:23:70: error(lean.synthInstanceFailed): failed to synthesize instance of type class
+  OfNat (Type ?u.54) 64
+numerals are polymorphic in Lean, but the numeral `64` cannot be used in a context where the expected type is
+  Type ?u.54
+due to the absence of the instance above
+
+Hint: Type class instance resolution failures can be inspected with the `set_option trace.Meta.synthInstance true` command.
+NEV_generated/NEV_RowLoop.lean:23:74: error(lean.unknownIdentifier): Unknown identifier `ter.start.val`
+NEV_generated/NEV_RowLoop.lean:61:10: error: Application type mismatch: The argument
+  NEV_RowStep.mapFlow flow
+has type
+  NEV_RowStep.Flow
+of sort `Type` but is expected to have type
+  ↑iter.start < ↑iter.end
+of sort `Prop` in the application
+  Port3_NativeRowFrame.body_fields (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next 64#usize basis iter
+    (toWeights b) (NEV_RowStep.mapFlow flow)
+NEV_generated/NEV_RowLoop.lean:61:53: error: Type mismatch
+  inside
+has type
+  ↑iter.start < 64
+but is expected to have type
+  ↑64#usize ≤ (↑(toWeights b).raw).length
+NEV_generated/NEV_RowLoop.lean:62:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  iter.end
+in the target expression
+  ControlFlow (core.ops.range.Range Usize × verifier.BatchedWeights) verifier.BatchedWeights
+
+ops : Ops
+v : alloc.vec.Vec RawQ
+power : RawQ
+next : Usize
+basis : Std.Array U32 256#usize
+width : (↑v).length = 64
+global : ↑next < 22
+k : ℕ
+ih :
+  ∀ (iter : NEV_RowStep.Iter) (b : NEV_AccumulateRaw.BatchedWeights),
+    (↑b.raw).length = 64 →
+      iter.end = 64#usize →
+        ↑iter.start + k = 64 →
+          (do
+              let out ← NEV_AccumulateRaw.accumulate_batched_with_node_loop1 iter v power next b 64#usize basis
+              ok (toWeights out)) =
+            verifier.accumulate_batched_with_node_loop1 (NBF_RowInstall.install ops) iter (mapVec toQ v) (toQ power)
+              next (toWeights b) 64#usize basis
+iter : NEV_RowStep.Iter
+b : NEV_AccumulateRaw.BatchedWeights
+raw : (↑b.raw).length = 64
+finish : iter.end = 64#usize
+span : ↑iter.start + (k + 1) = 64
+inside : ↑iter.start < 64
+mapped :
+  (do
+      let out ← NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power next 64#usize basis iter b
+      ok (NEV_RowStep.mapFlow out)) =
+    verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next
+      64#usize basis iter (toWeights b)
+flow : ControlFlow (core.ops.range.Range Usize × NEV_AccumulateRaw.BatchedWeights) NEV_AccumulateRaw.BatchedWeights
+bodyRun : NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power next 64#usize basis iter b = ok flow
+modelRun :
+  verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next 64#usize
+      basis iter (toWeights b) =
+    ok (NEV_RowStep.mapFlow flow)
+⊢ ControlFlow (core.ops.range.Range Usize × verifier.BatchedWeights) verifier.BatchedWeights
+'NEV_RowLoop.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

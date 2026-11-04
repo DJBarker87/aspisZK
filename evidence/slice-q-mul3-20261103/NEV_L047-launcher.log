@@ -1,0 +1,72 @@
+{"attempt": "NEV_L047", "exit_status": 1, "wall_seconds": 2.1159692350775003, "peak_rss_kib": "4968916", "swaps": "0", "print_axioms": ["'NEV_RowLoop.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NEV_generated/NEV_RowLoop.lean:71:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  (iter1, after).1
+in the target expression
+  ↑iter1.start = ↑iter.start + 1
+
+case succ.ok.cont
+ops : Ops
+v : alloc.vec.Vec RawQ
+power : RawQ
+next : Usize
+basis : Std.Array U32 256#usize
+width : (↑v).length = 64
+global : ↑next < 22
+k : ℕ
+ih :
+  ∀ (iter : NEV_RowStep.Iter) (b : NEV_AccumulateRaw.BatchedWeights),
+    (↑b.raw).length = 64 →
+      iter.end = 64#usize →
+        ↑iter.start + k = 64 →
+          (do
+              let out ← NEV_AccumulateRaw.accumulate_batched_with_node_loop1 iter v power next b 64#usize basis
+              ok (toWeights out)) =
+            verifier.accumu
+...
+
+endpoint : iter1.end = iter.end
+length : (↑after.raw).length = (↑(toWeights b).raw).length
+terms : after.terms = (toWeights b).terms
+cursor : core.ops.range.Range Usize
+result : NEV_AccumulateRaw.BatchedWeights
+bodyRun :
+  NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power next 64#usize basis iter b =
+    ok (cont (cursor, result))
+modelRun :
+  verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next 64#usize
+      basis iter (toWeights b) =
+    ok (NEV_RowStep.mapFlow (cont (cursor, result)))
+shape : NEV_RowStep.mapFlow (cont (cursor, result)) = cont (iter1, after)
+same : (cursor, toWeights result) = (iter1, after)
+cursors : (cursor, toWeights result).1 = (iter1, after).1
+carriers : (cursor, toWeights result).2 = (iter1, after).2
+⊢ (do
+      let out ←
+        match ok (cont (cursor, result)) with
+          | ok r =>
+            match r with
+            | cont x =>
+              loop
+                (fun x => NEV_AccumulateRaw.accumulate_batched_with_node_loop1.body v power next 64#usize basis x.1 x.2)
+                x
+            | done x => ok x
+          | fail e => fail e
+          | div => div
+      ok (toWeights out)) =
+    match
+      verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power) next
+        64#usize basis iter (toWeights b) with
+    | ok r =>
+      match r with
+      | cont x =>
+        loop
+          (fun x =>
+            verifier.accumulate_batched_with_node_loop1.body (NBF_RowInstall.install ops) (mapVec toQ v) (toQ power)
+              next 64#usize basis x.1 x.2)
+          x
+      | done x => ok x
+    | fail e => fail e
+    | div => div
+'NEV_RowLoop.association' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-r7428636c693d4c7887218f5b362e0d9f.scope; invocation ID: 6d1212cc1ad643798e24bcd6ff33aae7

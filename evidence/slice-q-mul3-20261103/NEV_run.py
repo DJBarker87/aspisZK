@@ -1,6 +1,6 @@
 """Own serial validation runner; unchanged S2W scope runner supplies receipts."""
 from pathlib import Path
-import subprocess, json, sys, time, shlex, hashlib, os
+import subprocess, json, sys, time, shlex, hashlib, os, difflib
 E=Path(__file__).resolve().parent
 # Serial launch discipline is enforced by the worker: await each receipt before
 # another invocation. Do not wrap the host launcher in an additional flock.
@@ -58,13 +58,17 @@ if kind=='lean':
     if os.environ.get('NEV_HEADLINE')=='1':library.update({p['object_path']:p['object_sha256'] for p in json.loads((E/'NEV_HEADLINE_OBJECT_PINS.json').read_text())['entries'] if p['module']=='Aeneas' or p['module'].startswith('Aeneas.')})
     deps['selected_objects']={p:dict(path=p,sha256=h) for p,h in library.items()}
 elif kind=='kani':
-    payload=json.loads((E/'NEV_PAYLOAD.json').read_text())
+    payload_path=(E/os.environ.get('NEV_KANI_PAYLOAD','NEV_PAYLOAD.json')).resolve()
+    assert payload_path.parent==E and payload_path.name.startswith('NEV_')
+    payload=json.loads(payload_path.read_text())
     files={ 'NEV_src/'+n:t for n,t in payload.items() }
     files['NEV_FROZEN.json']=(E/'NEV_FROZEN.json').read_text()
     for n in ['gate','graph']: files['NEV_'+n+'.py']=(E/('NEV_'+n+'.py')).read_text()
     sources=list(files)+['NEV_src/Cargo.lock','NEV_SOURCE_PINS.json']
     (E/a).mkdir(exist_ok=True)
-    (E/a/'NEV_harness.patch').write_text((E/'NEV_native.patch').read_text())
+    frozen_payload=json.loads((E/'NEV_FROZEN.json').read_text())
+    archived_patch=''.join(''.join(difflib.unified_diff(frozen_payload.get(name,'').splitlines(True),text.splitlines(True),fromfile='a/'+name,tofile='b/'+name)) for name,text in payload.items())
+    (E/a/'NEV_harness.patch').write_text(archived_patch)
     native=['/home/dombarker/.cargo/bin/cargo-kani','kani','--manifest-path',B+'/NEV_src/crates/aspis-r1-cost-probe/Cargo.toml','--target-dir',B+'/NEV_target','--lib','--features','private-leaf-salts,optimized-terminal,program-build','-j','1','-Z','unstable-options','-Z','function-contracts','-Z','stubbing','--harness-timeout','90s','--exact','--harness',target,'--output-format','terse']
     if os.environ.get('NEV_ROOT')=='core':
         native[native.index('--manifest-path')+1]=B+'/NEV_src/crates/aspis-core/Cargo.toml'

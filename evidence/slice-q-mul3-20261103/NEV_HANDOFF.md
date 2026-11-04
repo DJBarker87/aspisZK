@@ -1,3 +1,9 @@
+## Accumulation composition checkpoint, 2026-11-04
+
+Prefix and accumulation now composed CLOSED at TX1:185/TX2:111 and TX1:182/TX2:108. Additive union142 rows/179 edges preserves134 NET/NEO rows, imports six fresh NEI/NEV rows and adds two accumulation rows. Both roots remain OPEN. NEV_union.py checks all inherited gates unchanged, exact callee selections and domains, new external/receiver obligations and standard-only receipt audits. NEV_union_tests.py exercises fail-closed metadata controls. NEV_ACCUM_ASSOCIATION.md records exact native/Lean association.
+
+Budget consumed:49/70 Kani labels,70/120 Lean launches,1/20 extraction. Excluded K004/K005 timeout shapes are never repeated. Current stage has no live formal scope. Next binding member:four_dots_one, thenfour_dots, then incoming edge certification. NEV_DOTS_PLAN.md records small outside-slice boundaries and planned method. Use NEV_SINT2_FIRST=1, same capped admission/runner; own cache retained. No shipped source changes, key changes, push or headline soundness claim. Older checkpoints below are stage history.
+
 ## Basis continuation checkpoint, 2026-11-04
 
 K038/K039 validate the literal native basis read/write iteration under the

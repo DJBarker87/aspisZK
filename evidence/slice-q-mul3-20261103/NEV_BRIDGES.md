@@ -1,3 +1,11 @@
+# Current composed checkpoint
+
+New composed Slice-Q rows: prefix TX1:185/TX2:111 and accumulation TX1:182/TX2:108. Unified component142 rows/179 edges; both slice roots OPEN. All134 NET/NEO checked rows are retained byte-identically, six fresh predecessor/prefix rows imported and two accumulation rows added. NEV_ACCUM_PACKET.json / NEV_ACCUM_ASSOCIATION.md / NEV_union.py carry exact qualification and proof/native associations. All new accepted top theorems print standard axioms only. P6/D188 option A remains reclassification, never removal. No headline per-attempt soundness, privacy or two-transaction conclusion is asserted.
+
+The accumulation packet uses independent global/local counters, SAME-vector phase progress, canonical immutable weights/value/rhs/power/rho and width64. Complete Result/state/ordered effects is proved for the actual emitted body; actual loop/log/receiver frames have matched controls, with fresh same-source KMX controls. Every reached push domain and intermediate product/add domain is derived. Outside-Q CodeField::from_m31 is separately closed as an auxiliary. TX2 disabled prover assignment is explicitly retained and feature-gated. Incoming parent obligations stay OPEN.
+
+Next ordered member:four_dots_one; small Q::raw/Dot::push/EbyKDot::push boundaries recorded in NEV_DOTS_PLAN.md. Old checkpoint prose below is retained history.
+
 # Current checked result
 
 batch_prefix_products is composed CLOSED at TX1:185 and TX2:111. Four outgoing field edges are certified (one actual M31 call, three impossible receiver alternatives). Component baseline66/113 becomes68 rows/117 edges; this component ledger has not yet been unified with the separately replayed NEO/NET result. Both slice roots stay OPEN. Native capacity-family controls, fresh constructor/copy pairs, complete emitted Result/state/effects and same-site field laws are checked. Standard axioms only; P6/D188 remains reclassification. No suspended credit restored.
