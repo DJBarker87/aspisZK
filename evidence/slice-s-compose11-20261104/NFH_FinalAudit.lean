@@ -1,0 +1,6 @@
+import NFH_ComparisonDomain
+#print axioms NFH_ComparisonBoundary.reply_eq_loop
+#print axioms NFH_ComparisonBoundary.zeroLaw_necessary
+#print axioms NFH_ComparisonBoundary.opaque_reply_insufficient
+#print axioms NFH_ComparisonDomain.complete688_on_domain
+#print axioms NFH_ComparisonDomain.complete688_association
