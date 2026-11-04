@@ -5,26 +5,45 @@ set_option autoImplicit false
 /-- An arithmetic observation keeps the actual scalar operand. A bounded input
 uses the source comparison as a test, rather than taking its truth as input. -/
 inductive Expr where
+  | literal (value : Nat)
   | bounded (value limit : Nat)
   | remainder (value divisor : Nat)
   | bitAnd (value mask : Nat)
   | quotient (input : Expr) (divisor : Nat)
+  | add (left right : Expr) (modulus : Nat)
+  | mul (left right : Expr) (modulus : Nat)
 
 def limit : Expr → Nat
+  | .literal value => value+1
   | .bounded _ bound => bound
   | .remainder _ divisor => divisor
   | .bitAnd _ mask => mask+1
   | .quotient input divisor => (limit input+divisor-1)/divisor
+  | .add left right _ => limit left + limit right - 1
+  | .mul left right _ => (limit left-1)*(limit right-1)+1
 
 def evaluate : Expr → Option Nat
+  | .literal value => some value
   | .bounded value bound => if value < bound then some value else none
   | .remainder value divisor => if 0 < divisor then some (value%divisor) else none
   | .bitAnd value mask => some (value &&& mask)
   | .quotient input divisor => if 0 < divisor then (evaluate input).map (·/divisor) else none
+  | .add left right modulus => do
+      let a ← evaluate left
+      let b ← evaluate right
+      some ((a+b)%modulus)
+  | .mul left right modulus => do
+      let a ← evaluate left
+      let b ← evaluate right
+      some ((a*b)%modulus)
 
 theorem evaluate_bound (expr : Expr) (value : Nat) (observed : evaluate expr = some value) :
     value < limit expr := by
   induction expr generalizing value with
+  | literal n =>
+    simp only [evaluate,Option.some.injEq] at observed
+    subst value
+    exact Nat.lt_succ_self n
   | bounded n bound =>
     simp only [evaluate] at observed
     split at observed
@@ -58,6 +77,36 @@ theorem evaluate_bound (expr : Expr) (value : Nat) (observed : evaluate expr = s
         rw [Nat.mul_comm]
         omega
     · cases observed
+
+  | add left right modulus ihLeft ihRight =>
+    cases hl : evaluate left with
+    | none => simp only [evaluate,hl,Option.bind_none] at observed; cases observed
+    | some a =>
+      cases hr : evaluate right with
+      | none => simp only [evaluate,hl,hr,Option.bind_some,Option.bind_none] at observed; cases observed
+      | some b =>
+        simp only [evaluate,hl,hr,Option.bind_some,Option.some.injEq] at observed
+        subst value
+        have al := ihLeft a hl
+        have bl := ihRight b hr
+        have reduced := Nat.mod_le (a+b) modulus
+        change (a+b)%modulus < limit left+limit right-1
+        omega
+  | mul left right modulus ihLeft ihRight =>
+    cases hl : evaluate left with
+    | none => simp only [evaluate,hl,Option.bind_none] at observed; cases observed
+    | some a =>
+      cases hr : evaluate right with
+      | none => simp only [evaluate,hl,hr,Option.bind_some,Option.bind_none] at observed; cases observed
+      | some b =>
+        simp only [evaluate,hl,hr,Option.bind_some,Option.some.injEq] at observed
+        subst value
+        have al := ihLeft a hl
+        have bl := ihRight b hr
+        have product := Nat.mul_le_mul (by omega : a ≤ limit left-1) (by omega : b ≤ limit right-1)
+        have reduced := Nat.mod_le (a*b) modulus
+        change (a*b)%modulus < (limit left-1)*(limit right-1)+1
+        omega
 
 def sourceEvent (expr : Expr) (slack : Nat) (effects : List (Result Unit)) :
     Result (Option IndexState) :=
