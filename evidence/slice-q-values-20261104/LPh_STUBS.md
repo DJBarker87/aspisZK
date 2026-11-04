@@ -1,16 +1,18 @@
 # NFP opaque call obligations
 
-No field multiplication is proved in Kani. `NFP_query::product` records the
-SAME two M31 operands and supplies a canonical arbitrary reply, to be
-instantiated by the emitted-definition natural product law in Lean under (y).
+No field multiplication is proved in Kani. Opaque calls use local records,
+not statics. Native semantic transport retains P6/D188 option-A trust.
 
-| Oracle | Required Lean theorem | Domain | Status |
-|---|---|---|---|
-| NFP_query::product | NFP_ProductLaw.emitted (reuses LPf_BaseMultiply.source on the adopted FIo emitted body) | SAME z twice; z<P, product reply<P | Candidate theorem pending compilation and full caller installation. OPEN until then. |
-| NFP_query::dots | NFM_ProductInstance.wrapper, via NFP_DotInstall.dot_result and the existing FIp_DotsAdapter | original q832, SAME canonical g29 | Model substitution compiled L006; native prefix K007/008/009/010. Full call-state/effect installation pending. |
-| circle / line / field / accumulate | Existing CLOSED callee packets in NFM_EDGES; typed SAME operands must be proved here | Exact callee domains, not independently successful producer packets | Native G suffix support only. OPEN. |
-| copy_nonoverlapping | KMX_CopyMeaning inherited laws | Exact KMX patch bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67 | Matched copy controls K006/K010; suffix control pending. |
+| Oracle / stub | Paired theorem | Domain and disposition |
+|---|---|---|
+| `NFP_node.rs.txt` product | `AspisR1.NFP_ProductLaw.emitted`, `AspisR1.NFP_NodeDictionary.product` | SAME two raw U32 operands, exact natural product residue; emitted FIo body via NFF_BaseMultiply.source. L017/L039 and final ax2 audit pass. K020/022 pass; K021 fails. Native reply canonical and operand log retained. Caller installation remains OPEN. |
+| `NFP_query.rs.txt` dots | `AspisR1.NFM_ProductInstance.wrapper` via `AspisR1.NFP_DotInstall.dot_result`, `.head`, `NFP_DotCaller.query` | SAME original q832 and canonical g29; NFM passes actual first608 bytes and slots0–3. K007/009, control K008, copy K010. Canonical input is a named upstream predicate, not a successful Prepared packet. Final physical caller-packet installation remains OPEN. |
+| suffix circle / line / field / accumulate | **OPEN** | Arbitrary local reply/effect logs only, not admitted semantic stubs. Closed standalone packets are intake references only; same operands, full domains and coherent dictionary installation must be supplied before closure. NEV accumulation fails joint import L038. |
+| loop child query_values | **OPEN** | One original native iteration with arbitrary owned prestate and all8 Error variants; NFG complete partial-Result induction retained in NFP_LoopTransport/Resume. The child itself is not CLOSED. |
+| copy_nonoverlapping | inherited KMX Lean value laws; NFP_FrameExt.raw supplies raw-vector extensionality | Exact KMX patch sha256 bcdf749b78eb6143789500d98d64ec3d407b8a17a6d1290c70c822473e8e9a67. Each admitted local native family has a matching FAILED copy control in NFP_RENAME_PAIRS.json. Full row frame/disjointness composition is not silently inferred. |
 
-Native semantic transport is explicit P6/D188 option-A trust reclassification.
-No verified function contract, writable static, function-pointer assertion,
-SHA unwind or fabricated Prepared/powers/prepare producer is admitted.
+Scalar node: NFP_ProductLaw.node and NFP_NodeDictionary.node connect actual
+M31 multiplication/double/sub to the selected probe dictionary. Canonical
+add/sub laws were retargeted without changing their proof bodies; provenance
+is in NFP_NATBASE_PROVENANCE.json. No incompatible LPf/LPi forest is imported.
+No stub_verified/proof_for_contract or function-pointer verdict is relied on.

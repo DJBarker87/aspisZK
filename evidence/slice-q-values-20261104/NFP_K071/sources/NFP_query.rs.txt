@@ -1,0 +1,40 @@
+use super::*;
+pub(super) struct Log { pub q:usize,pub len:usize,pub g:usize,pub calls:usize,pub slot:usize,pub limb:usize,pub reply:[E;4],pub seen:u32,pub index:usize,pub query:usize }
+impl Log {pub fn unused()->Self {Self{q:0,len:0,g:0,calls:0,slot:0,limb:0,reply:[E::ZERO;4],seen:0,index:0,query:0}}}
+pub(super) fn dots(q:&[u8],g:&[E;29],log:&mut Log)->[E;4]{
+ log.q=q.as_ptr() as usize;log.len=q.len();log.g=g.as_ptr() as usize;log.calls+=1;
+ log.reply
+}
+pub(super) fn consume(i:usize,u:usize,dots:[E;4],log:&mut Log){log.index=i;log.query=u;log.seen=dots[log.slot].to_limbs()[log.limb];}
+fn e()->E {let words:[u32;8]=kani::any(); for w in words {kani::assume(w<2147483647);} E::from_limbs(words).unwrap()}
+fn run(mode:u8){
+ let proof:[u8;57607]=kani::any();let i:usize=kani::any();kani::assume(i<22);
+ let g:[E;29]=core::array::from_fn(|_|e());
+ let mut p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:[E::ZERO;2],rho:K::ZERO,queries:[0;22],semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let query:u32=kani::any();p.queries[i]=query;
+ let a=Accumulator{weights:Vec::new(),rhs:E::ZERO,power:K::ZERO,next:i};
+ let pending=BatchedWeights{raw:Vec::new(),terms:0};
+ let geometry=QueryGeometry{start:0,inverses:Vec::new(),line_z:Vec::new()};
+ let slot:usize=kani::any();let limb:usize=kani::any();kani::assume(slot<4 && limb<8);
+ let replies:[E;4]=core::array::from_fn(|_|e());let v=replies[slot].to_limbs()[limb];
+ let mut log=Log{reply:replies,slot,limb,..Log::unused()};
+ let out=query_values(&proof,&p,a,&g,None,&geometry,pending,&mut log);
+ assert!(matches!(out,Err(Error::Query)));
+ assert_eq!(log.calls,1);
+ let at=compact::OFF_OPENINGS+i*OPENING;
+ if mode==1 {assert_eq!(log.q,proof.as_ptr() as usize+at+1);} else {assert_eq!(log.q,proof.as_ptr() as usize+at);}
+ assert_eq!(log.len,832);assert_eq!(log.g,g.as_ptr() as usize);
+ assert_eq!(log.index,i);assert_eq!(log.query,query as usize);assert_eq!(log.seen,v);
+}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn dot_prefix(){run(0)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn dot_prefix_control(){run(1)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn dot_prefix_renamed(){run(0)}
+#[kani::proof] #[kani::unwind(34)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

@@ -1,0 +1,68 @@
+use super::*;
+pub(super) struct Log;impl Log{pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+struct Context {coefficient:usize,lane:usize,query:usize,alpha:usize,local:usize,inverse:usize,seen:[usize;11]}
+fn child_ctx(proof:&[u8],p:&Prepared,_a:Accumulator,g:&[E;29],_:Observer,geometry:&QueryGeometry,_b:BatchedWeights,c:&mut Context)->Result<(Accumulator,BatchedWeights),Error>{
+ let rho=[p.rho.c0.a.0,p.rho.c0.b.0,p.rho.c1.a.0,p.rho.c1.b.0];
+ c.seen=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,g.as_ptr() as usize,geometry as *const _ as usize,p.queries[c.query] as usize,p.alpha[c.alpha].to_limbs()[c.lane] as usize,g[c.coefficient].to_limbs()[c.lane] as usize,geometry.inverses[c.local][c.inverse].0 as usize,geometry.line_z[c.local].0 as usize,rho[c.inverse%4] as usize];
+ Err(Error::Query)
+}
+fn NFP_forward(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],obs:Observer,geometry:&QueryGeometry,pending:BatchedWeights,c:&mut Context)->Result<(Accumulator,BatchedWeights),Error>{child_ctx(proof,p,a,g,obs,geometry,pending,c)}
+fn k()->K{let w:[u32;4]=kani::any();K{c0:aspis_core::field::CM31{a:M31(w[0]),b:M31(w[1])},c1:aspis_core::field::CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn e()->E{let w:[u32;8]=kani::any();for x in w{kani::assume(x<2147483647);}E::from_limbs(w).unwrap()}
+fn run(bad:usize){
+ let proof:[u8;57607]=kani::any();let g:[E;29]=core::array::from_fn(|_|e());
+ let p=Prepared{variant:Variant::S2,roots:kani::any(),gamma:e(),kappa:e(),alpha:[e(),e()],rho:k(),queries:kani::any(),semantic_alpha:core::array::from_fn(|_|k()),z:[SecureCirclePoint{x:k(),y:k()},SecureCirclePoint{x:k(),y:k()}],claim:e(),state:kani::any()};
+ let raw:[[u32;5];12]=kani::any();let zs:[u32;12]=kani::any();let geometry=QueryGeometry{start:10,inverses:Vec::from(raw.map(|r|r.map(M31))),line_z:Vec::from(zs.map(M31))};
+ let mut c=Context{coefficient:kani::any(),lane:kani::any(),query:kani::any(),alpha:kani::any(),local:kani::any(),inverse:kani::any(),seen:[0;11]};
+ kani::assume(c.coefficient<29 && c.lane<8 && c.query<22 && c.alpha<2 && c.local<12 && c.inverse<5);
+ let rho=[p.rho.c0.a.0,p.rho.c0.b.0,p.rho.c1.a.0,p.rho.c1.b.0];
+ let expected=[proof.as_ptr() as usize,proof.len(),&p as *const _ as usize,g.as_ptr() as usize,&geometry as *const _ as usize,p.queries[c.query] as usize,p.alpha[c.alpha].to_limbs()[c.lane] as usize,g[c.coefficient].to_limbs()[c.lane] as usize,raw[c.local][c.inverse] as usize,zs[c.local] as usize,rho[c.inverse%4] as usize];
+ let a=Accumulator{weights:Vec::new(),rhs:e(),power:k(),next:10};let b=BatchedWeights{raw:Vec::new(),terms:0};
+ let reply=NFP_forward(&proof,&p,a,&g,None,&geometry,b,&mut c);assert!(matches!(reply,Err(Error::Query)));
+ if bad>0 {c.seen[bad-1]^=1;}
+ let observed:usize=kani::any();kani::assume(observed<11);assert_eq!(c.seen[observed],expected[observed]);
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_values(){run(0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_1(){run(1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_2(){run(2)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_3(){run(3)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_4(){run(4)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_5(){run(5)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_6(){run(6)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_7(){run(7)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_8(){run(8)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_9(){run(9)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_10(){run(10)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_control_11(){run(11)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_values_renamed(){run(0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

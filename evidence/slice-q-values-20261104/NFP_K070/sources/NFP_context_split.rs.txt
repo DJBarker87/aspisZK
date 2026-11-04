@@ -1,0 +1,79 @@
+use super::*;
+pub(super) struct Log;impl Log{pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+struct Context{member:u8,coefficient:usize,lane:usize,query:usize,alpha:usize,local:usize,inverse:usize,seen:[usize;5]}
+fn child_ctx(proof:&[u8],p:&Prepared,_a:Accumulator,g:&[E;29],_:Observer,geometry:&QueryGeometry,_b:BatchedWeights,c:&mut Context)->Result<(Accumulator,BatchedWeights),Error>{
+ if c.member==0{c.seen=[proof.as_ptr() as usize,proof.len(),p as *const _ as usize,g.as_ptr() as usize,geometry as *const _ as usize];}
+ else{c.seen[0]=match c.member{5=>p.queries[c.query] as usize,6=>p.alpha[c.alpha].to_limbs()[c.lane] as usize,7=>g[c.coefficient].to_limbs()[c.lane] as usize,8=>geometry.inverses[c.local][c.inverse].0 as usize,9=>geometry.line_z[c.local].0 as usize,_=>{let rho=[p.rho.c0.a.0,p.rho.c0.b.0,p.rho.c1.a.0,p.rho.c1.b.0];rho[c.inverse%4] as usize}};}
+ Err(Error::Query)
+}
+fn NFP_forward(proof:&[u8],p:&Prepared,a:Accumulator,g:&[E;29],obs:Observer,geometry:&QueryGeometry,pending:BatchedWeights,c:&mut Context)->Result<(Accumulator,BatchedWeights),Error>{child_ctx(proof,p,a,g,obs,geometry,pending,c)}
+fn k()->K{let w:[u32;4]=kani::any();K{c0:aspis_core::field::CM31{a:M31(w[0]),b:M31(w[1])},c1:aspis_core::field::CM31{a:M31(w[2]),b:M31(w[3])}}}
+fn e()->E{let w:[u32;8]=kani::any();for x in w{kani::assume(x<2147483647);}E::from_limbs(w).unwrap()}
+fn run(member:u8,bad:bool){
+ // One observed projection. Unread fields are opaque to this residual;
+ // these fixtures are not a restriction of the whole caller's PacketDomain.
+ let proof:[u8;57607]=kani::any();let g:[E;29]=if member==7{core::array::from_fn(|_|e())}else{[E::ZERO;29]};
+ let p=Prepared{variant:Variant::S2,roots:[[0;32];2],gamma:E::ZERO,kappa:E::ZERO,alpha:if member==6{[e(),e()]}else{[E::ZERO;2]},rho:if member==10{k()}else{K::ZERO},queries:if member==5{kani::any()}else{[0;22]},semantic_alpha:[K::ZERO;10],z:[SecureCirclePoint{x:K::ZERO,y:K::ZERO};2],claim:E::ZERO,state:[0;32]};
+ let raw:[[u32;5];12]=kani::any();let zs:[u32;12]=kani::any();
+ let geometry=QueryGeometry{start:10,inverses:if member==8{Vec::from(raw.map(|r|r.map(M31)))}else{Vec::new()},line_z:if member==9{Vec::from(zs.map(M31))}else{Vec::new()}};
+ let mut c=Context{member,coefficient:kani::any(),lane:kani::any(),query:kani::any(),alpha:kani::any(),local:kani::any(),inverse:kani::any(),seen:[0;5]};
+ kani::assume(c.coefficient<29 && c.lane<8 && c.query<22 && c.alpha<2 && c.local<12 && c.inverse<5);
+ let expected=if member==0{[proof.as_ptr() as usize,proof.len(),&p as *const _ as usize,g.as_ptr() as usize,&geometry as *const _ as usize]}else{
+ let v=match member{5=>p.queries[c.query] as usize,6=>p.alpha[c.alpha].to_limbs()[c.lane] as usize,7=>g[c.coefficient].to_limbs()[c.lane] as usize,8=>raw[c.local][c.inverse] as usize,9=>zs[c.local] as usize,_=>{let rho=[p.rho.c0.a.0,p.rho.c0.b.0,p.rho.c1.a.0,p.rho.c1.b.0];rho[c.inverse%4] as usize}};[v,0,0,0,0]};
+ let a=Accumulator{weights:Vec::new(),rhs:E::ZERO,power:K::ZERO,next:10};let b=BatchedWeights{raw:Vec::new(),terms:0};
+ let reply=NFP_forward(&proof,&p,a,&g,None,&geometry,b,&mut c);assert!(matches!(reply,Err(Error::Query)));
+ let observed:usize=kani::any();kani::assume(observed<if member==0{5}else{1});if bad{c.seen[observed]^=1;}assert_eq!(c.seen[observed],expected[observed]);
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_meta(){run(0,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_meta_control(){run(0,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_query(){run(5,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_query_control(){run(5,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_alpha(){run(6,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_alpha_control(){run(6,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_g(){run(7,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_g_control(){run(7,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_inverse(){run(8,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_inverse_control(){run(8,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_z(){run(9,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_z_control(){run(9,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_rho(){run(10,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_rho_control(){run(10,true)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_meta_renamed(){run(0,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_g_renamed(){run(7,false)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn ctx_split_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

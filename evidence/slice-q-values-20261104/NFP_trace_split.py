@@ -1,5 +1,10 @@
 from pathlib import Path
+import sys
 E=Path(__file__).resolve().parent
+def emit(name,text):
+ p=E/name
+ if '--check' in sys.argv:assert p.read_text()==text,('generated source drift',name)
+ else:p.write_text(text)
 s=(E/'NFP_UnsplitTrace.lean.txt').read_text()
 a=s.index('def run ')
 types=s[:a].replace('namespace AspisR1.NFP_QueryTrace','namespace AspisR1.NFP_TraceTypes')
@@ -8,7 +13,7 @@ types+='''theorem pure_result {T : Type} (x : T) : ((pure x : M T)).result=ok x 
 end AspisR1.NFP_TraceTypes
 end
 '''
-(E/'NFP_TraceTypes.lean').write_text(types)
+emit('NFP_TraceTypes.lean',types)
 a=s.index('  let i ← eval');b=s.index('  let i1 ← eval',a);c=s.index('  if bad then',b);d=s.index('   let we6 ←',c);e=s.index('\n\n/-- Full',d)
 head=s[a:b]+'  pure (u,q,dots)\n'
 front=s[b:c]+'  pure (inverse,folded,values,bad)\n'
@@ -40,9 +45,9 @@ theorem erased (base : Ops) {args} :
 end AspisR1.NFP_Trace{name}
 end
 '''
- (E/f'NFP_Trace{name}.lean').write_text(source)
+ emit(f'NFP_Trace{name}.lean',source)
 # The final trace preserves all three native cuts and the rejected prefix.
-(E/'NFP_QueryTrace.lean').write_text('''import NFP_TraceHead
+emit('NFP_QueryTrace.lean','''import NFP_TraceHead
 import NFP_TraceFront
 import NFP_TraceBack
 set_option autoImplicit false

@@ -1,0 +1,51 @@
+use super::*;
+pub(super) struct Log;impl Log{pub fn unused()->Self{Self}}
+pub(super) fn dots(_:&[u8],_:&[E;29],_:&mut Log)->[E;4]{[E::ZERO;4]}
+pub(super) fn consume(_:usize,_:usize,_:[E;4],_:&mut Log){}
+fn inverse<const N:usize>(start:usize,mode:u8){
+ let raw:[[u32;5];N]=kani::any();let data=raw.map(|a|a.map(M31));
+ let geometry=QueryGeometry{start,inverses:Vec::from(data),line_z:Vec::new()};
+ let i:usize=kani::any();let lane:usize=kani::any();kani::assume(start<=i && i<start+N && lane<5);
+ let inverse=*geometry.for_query(i);let expected=raw[i-start][lane];
+ assert_eq!(inverse[lane].0,if mode==1{expected^1}else{expected});assert_eq!(geometry.inverses.len(),N);
+}
+fn line<const N:usize>(start:usize,mode:u8){
+ let raw:[u32;N]=kani::any();let data=raw.map(M31);
+ let geometry=QueryGeometry{start,inverses:Vec::new(),line_z:Vec::from(data)};
+ let i:usize=kani::any();kani::assume(start<=i && i<start+N);
+ let z=geometry.line_z[i-geometry.start];let expected=raw[i-start];
+ assert_eq!(z.0,if mode==1{expected^1}else{expected});assert_eq!(geometry.line_z.len(),N);
+}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_inverse_tx1(){inverse::<10>(0,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_inverse_tx1_control(){inverse::<10>(0,1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_inverse_tx2(){inverse::<12>(10,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_inverse_tx2_control(){inverse::<12>(10,1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_inverse_renamed(){inverse::<12>(10,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_line_tx1(){line::<10>(0,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_line_tx1_control(){line::<10>(0,1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_line_tx2(){line::<12>(10,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_line_tx2_control(){line::<12>(10,1)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_line_renamed(){line::<12>(10,0)}
+#[kani::proof] #[kani::unwind(70)]
+#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFP_copy::KMX_copy_nonoverlapping)]
+fn geometry_split_copy_control(){let mut src=[0u32;16];src[15]=512;let mut dst=[0u32;16];unsafe{core::ptr::copy_nonoverlapping(src.as_ptr(),dst.as_mut_ptr(),16)};assert_eq!(dst[15],0);}

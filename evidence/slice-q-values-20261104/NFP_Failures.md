@@ -36,3 +36,20 @@ The inherited NFM validator entrypoint was executed while checking intake;
 its derived outputs were byte-identical (git diff for the inherited directory
 is empty). Subsequent NFP validation imports validate() directly and does not
 invoke inherited main/output generation.
+
+- K059: combined all-field readonly context window timed out at90s,
+  wall95.50s,RSS1880032KiB,swap0. Excluded and never renamed/rerun unchanged.
+  K060--076 replace it with seven original readonly projections, one window
+  each. Every value/control pair completes; metadata/value rename pairs and
+  exact-KMX copy control complete. Unread fields are opaque to each residual;
+  these local scaffolds are not a root PacketDomain or successful producer.
+- Final local validation initially looked for a duplicated own KMX patch.
+  It now hashes the single canonical inherited patch directly, and verifies
+  every native receipt's uploaded patch hash. No validation was weakened.
+- The original K036/K041 error fixtures cover one Error each. Only the
+  expanded K046--058 groups cover all8 actual Error variants; historical
+  fixture successes are retained with their limited scope.
+
+Final exclusions: K001/K002 setup errors, K011/K024/K059 timeouts. Formal
+failed drafts are retained; only each module's successful source is accepted.
+The unsuccessful unsplit trace is retained as NFP_UnsplitTrace.lean.txt.

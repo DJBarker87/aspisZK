@@ -54,6 +54,19 @@ if sys.argv[2].startswith('loop_'):
  from NFP_source_checks import loop as check_loop
  built.update(check_loop(frozen['crates/aspis-r1-cost-probe/src/candidate.rs'],code))
  built.update(loop_cut='one actual frozen match-body, Done/Continue ghost terminal; local arbitrary reply/raw state',qualification='No whole-loop unwind; context descriptor/receiver windows composed separately')
+if sys.argv[2].startswith('ctx_'):
+ code=(B/'NFP_context.rs.txt').read_text();frozen=json.loads((B/'NFP_FROZEN.json').read_text())
+ assert 'state = query_values(proof, p, a, g, obs, geometry, pending);' in frozen['crates/aspis-r1-cost-probe/src/candidate.rs']
+ from NFP_source_checks import body,tok
+ assert tok(body(code,'NFP_forward'))==tok('child_ctx(proof,p,a,g,obs,geometry,pending,c)')
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(context_cut='exact original child argument tuple; arbitrary readonly contents, selected original field observations',qualification='Read-only context entry only; mutable receiver/drop/return covered separately by K016 and loop windows')
+if sys.argv[2].startswith('ctx_split_'):
+ code=(B/'NFP_context_split.rs.txt').read_text()
+ from NFP_source_checks import body,tok
+ assert tok(body(code,'NFP_forward'))==tok('child_ctx(proof,p,a,g,obs,geometry,pending,c)')
+ (S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').write_text(code)
+ built.update(context_split='one original readonly context projection with arbitrary field/coordinate; same typed forward tuple',qualification='Unobserved fields opaque; whole-row mutable state covered by the separate frame and loop groups')
 built['compiled_native_source_sha256']=hashlib.sha256((S/'crates/aspis-r1-cost-probe/src/NFP_query.rs').read_bytes()).hexdigest()
 (B/(a+'-fission-check.json')).write_text(json.dumps(built,indent=2))
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
