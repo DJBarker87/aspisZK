@@ -1,0 +1,9 @@
+{
+ "kind": "hints",
+ "mode": "positive",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(325)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\n#[kani::stub(alloc::alloc::realloc,crate::NFO_KMX::KMX_realloc)]\nfn association(){\nlet bytes:[u8;324]=kani::any();let len:usize=kani::any();kani::assume(len<=324);\n let result=split_pair_forest_terminal_bump_hints_v1(&bytes[..len]);\n if len<4{assert!(matches!(result,Err(ProgramError::InvalidInstructionData)));}\n else{let (body,h)=result.unwrap();assert!(body.len()==len-4);let j:usize=kani::any();kani::assume(j<len-4);assert!(body[j]==bytes[j]);\n let mut observed=h.encode(); assert!(observed==[bytes[len-4],bytes[len-3],bytes[len-2],bytes[len-1]]);}\n\n}\n",
+ "parent": "pair_forest",
+ "modifies": [],
+ "domain": "all metadata values; data/lamports unused by leaf (source-footprint lifting remains model obligation); hints length <=324; count list length <=3",
+ "status": "candidate; no composed credit"
+}
