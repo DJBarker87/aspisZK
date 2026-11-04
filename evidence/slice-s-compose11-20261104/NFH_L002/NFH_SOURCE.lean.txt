@@ -1,0 +1,40 @@
+import NEU_EqualityLoop
+set_option autoImplicit false
+namespace NFH_ComparisonBoundary
+open Aeneas Aeneas.Std
+
+/-- Proposed, NOT adopted: only the zero/nonzero observation is needed.
+No lexicographic sign or magnitude claim is required by the scanner. -/
+def ZeroLaw (left right : List U8) (reply : Int) : Prop :=
+  reply = 0 ↔ left = right
+
+/-- Sufficiency reuses the existing symbolic byte-loop proof. The runtime
+law remains a named hypothesis; this is SUPPORT, not native closure. -/
+theorem reply_eq_loop (left right : List U8) (reply : Int)
+    (runtimeZeroLaw : ZeroLaw left right reply) :
+    decide (reply = 0) = NEU_EqualityLoop.equalBytes left right := by
+  have loop := NEU_EqualityLoop.prefix_frame left right ()
+  have exactLoop := congrArg Prod.fst loop
+  rw [exactLoop]
+  exact propext runtimeZeroLaw ▸ rfl
+
+/-- Necessity prevents passing an unconstrained syscall reply as a proof of
+native equality. The same two list values occur on both sides. -/
+theorem zeroLaw_necessary (left right : List U8) (reply : Int)
+    (association : decide (reply = 0) = NEU_EqualityLoop.equalBytes left right) :
+    ZeroLaw left right reply := by
+  unfold ZeroLaw
+  have loop := NEU_EqualityLoop.prefix_exact left right
+  rw [← association] at loop
+  simpa only [decide_eq_true_eq] using loop
+
+/-- Even equal688-byte buffers do not constrain an opaque integer reply.
+No concrete recurrence or large numeral is evaluated. -/
+theorem opaque_reply_insufficient (left : List U8) :
+    ∃ reply : Int, ¬ ZeroLaw left left reply := by
+  exact ⟨1, by simp [ZeroLaw]⟩
+
+#print axioms reply_eq_loop
+#print axioms zeroLaw_necessary
+#print axioms opaque_reply_insufficient
+end NFH_ComparisonBoundary
