@@ -337,16 +337,18 @@ def markdown(d):
  lines=['# NFK authoritative ledger','','Target not yet established. Conditional source composition; no cold release or whole headline replay.','',
  'The exact NEZ 202/587 checkpoint is retained and extended using immutable successful receipts. NFJ inputs come from merged commit `eeaa04cfaf3`: HEAD `'+REV+'` removed that evidence directory. This refresh records the historical merge explicitly. No Lean, Kani or native build ran.','',
  '| Scope | Total | CLOSED | QUALIFIED | OPEN |','|---|---:|---:|---:|---:|']
- for key,val in d['NFK_coverage'].items():lines.append(f"| {key} | {val['total']} | {val['CLOSED']} | {val['QUALIFIED']} | {val['OPEN']} |")
+ for key in ['all_rows','TX1','TX2']:
+  val=d['NFK_coverage'][key];lines.append(f"| {key} | {val['total']} | {val['CLOSED']} | {val['QUALIFIED']} | {val['OPEN']} |")
  for key,val in d['NFK_slices'].items():
   lines.append(f"| slice {key} (overlapping membership) | {val['total']} | {val['CLOSED']} | {val['QUALIFIED']} | {val['OPEN']} |")
   for tx,v in val['per_tx'].items():lines.append(f"| {key} {tx} | {v['total']} | {v['CLOSED']} | {v['QUALIFIED']} | {v['OPEN']} |")
- lines+=['','Unique functions: '+str(d['NFK_unique_functions'])+'. Slice overlap is counted once globally. Per-function counts and rows follow below.','','## Roots','']
+ lines+=['','Unique functions: '+json.dumps(d['NFK_unique_functions'],sort_keys=True)+'. Slice overlap is counted once globally. Per-function counts and rows follow below.','','## Roots','']
  for lane,s in d['NFK_slices'].items():
   lines.append(f"Slice {lane}: {s['roots_CLOSED']}/{len(s['roots'])} roots CLOSED; {s['unique_functions']} fully CLOSED unique functions.")
   for r in s['roots']:lines.append('- `'+r['function']+'`: '+r['status']+' ('+', '.join(r['rows'])+').')
  lines+=['','## Added runtime trust (owner confirmation pending)','']
- for trust,v in d['NFK_trust_usage'].items():lines.append(f"- {trust}: {v['CLOSED']} CLOSED, {v['QUALIFIED']} QUALIFIED, {v['OPEN']} OPEN occurrences. Rows: {', '.join(v['rows'])}. {v['classification']}.")
+ for trust in sorted(d['NFK_trust_usage']):
+  v=d['NFK_trust_usage'][trust];lines.append(f"- {trust}: {v['CLOSED']} CLOSED, {v['QUALIFIED']} QUALIFIED, {v['OPEN']} OPEN occurrences. Rows: {', '.join(v['rows'])}. {v['classification']}.")
  lines+=['','These runtime rows are additions, not discharged cryptographic or native implementation obligations. Rejecting (ab) reopens emit_result; rejecting (ac) reopens scan_proof_buffer. Pool return-data association remains separately OPEN.','','## Rejected slice-reported CLOSED rows','']
  for r in d['NFK_rejected_slice_closures']:lines.append('- '+r['row']+' `'+r['function']+'`: '+r['status']+'; reported by '+', '.join(r['reported_by'])+'; '+'; '.join(r['reasons']))
  lines+=['','NFA withholds admission; NFC admits exactly the four inherited NEV rows after ax2. NEW/NFB and NFE/NFF cumulative reports overlap these rows; their totals are never added together. Historical NEZ slice rejections remain included.','','## Exact function coverage','','| Function | Occurrences | CLOSED | QUALIFIED | OPEN |','|---|---:|---:|---:|---:|']
