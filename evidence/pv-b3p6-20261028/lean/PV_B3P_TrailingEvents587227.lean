@@ -23,8 +23,7 @@ theorem event_guard (bits : BitVec 16) (effects : List (Result Unit))
     have bound := cttz16_nonzero_bound542 bits nonzero
     change (UScalar.cast .Usize (⟨cttz16_spec542 bits⟩ : U32)).val < 16
     rw [UScalar.cast_val_eq]
-    have reduced := Nat.mod_le (cttz16_spec542 bits).toNat (UScalar.size .Usize)
-    exact Nat.lt_of_le_of_lt reduced bound
+    exact Nat.lt_of_le_of_lt (Nat.mod_le _ _) bound
   · simp only [sourceEvent,if_neg nonzero] at ran
     cases ran
 
