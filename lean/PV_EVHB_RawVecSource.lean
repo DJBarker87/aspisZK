@@ -218,6 +218,32 @@ theorem exact_denied {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat
   simp only [growExact,if_neg sized,if_neg addBound,bind,finished,mappedAnswer,
     commit,List.append_nil]
 
+theorem exact_success_owned {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
+    (owner : Nat) (h : Header) (additional pointer : Nat) (w post : NativeWorld S F)
+    (events : List PV_RJ4IDB.NativeEvent) (sized : h.shape.width≠0)
+    (addBound : ¬ h.len+additional>wordMax)
+    (byteBound : ¬ (h.len+additional)*h.shape.width>byteMax)
+    (reply : allocationCall runtime h (h.len+additional) w=
+      ⟨.returned (.ok (.ok pointer)),post,events⟩)
+    (pending : Pending post h pointer (h.len+additional)) :
+    OwnedAt (growExact runtime wordMax byteMax owner h additional w).world owner := by
+  rw [exact_success runtime wordMax byteMax owner h additional pointer w post events
+    sized addBound byteBound reply]
+  exact pending_install post owner h pointer (h.len+additional) pending
+
+theorem exact_denied_owned {S F : Type} (runtime : Runtime S F) (wordMax byteMax : Nat)
+    (owner : Nat) (h : Header) (additional : Nat) (w : NativeWorld S F) (backend : S)
+    (events : List PV_RJ4IDB.NativeEvent) (sized : h.shape.width≠0)
+    (addBound : ¬ h.len+additional>wordMax)
+    (byteBound : ¬ (h.len+additional)*h.shape.width>byteMax)
+    (reply : allocationCall runtime h (h.len+additional) w=
+      ⟨.returned (.ok (.error ())),denied w h (h.len+additional) backend,events⟩)
+    (selected : lookup w owner=some h) (owned : Owned w h) :
+    OwnedAt (growExact runtime wordMax byteMax owner h additional w).world owner := by
+  rw [exact_denied runtime wordMax byteMax owner h additional w
+    (denied w h (h.len+additional) backend) events sized addBound byteBound reply]
+  exact ⟨h,selected,(denied_owned w h h (h.len+additional) backend).mpr owned⟩
+
 theorem handle_inner_error {S F : Type} (runtime : Runtime S F)
     (action : Q S F (Except Error Unit)) (w post : NativeWorld S F)
     (events : List PV_RJ4IDB.NativeEvent) (error : Error)
@@ -240,5 +266,7 @@ theorem handle_inner_error {S F : Type} (runtime : Runtime S F)
 #print axioms finish_return
 #print axioms exact_success
 #print axioms exact_denied
+#print axioms exact_success_owned
+#print axioms exact_denied_owned
 #print axioms handle_inner_error
 end PV_EVHB_RawVecSource
