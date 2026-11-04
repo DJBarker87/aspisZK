@@ -8,14 +8,21 @@ from flow_collect583 import collect as flow
 from arithmetic_collect583 import collect as arithmetic
 from initializer_source578 import find
 D=Path('evidence/pv-b3p6-20261028');R=D/'resume18';I=R/'imports-b3q/pv-b3q2-20261031';sha=lambda b:hashlib.sha256(b).hexdigest()
-def render(e):
+def render(e,inputs):
  op=e['op']
+ def variable(snapshot):
+  key=json.dumps(snapshot,sort_keys=True)
+  if key not in inputs:inputs.append(key)
+  return 'input'+str(inputs.index(key))
+ if op=='literal':return f"(.literal {e['value']})"
  if op=='bounded':
-  assert e['input'][0]=='snapshot','an iterator-derived bound needs its source next event, never a synthetic test'
-  return f"(.bounded input {e['limit']})"
- if op=='remainder':return f"(.remainder input {e['divisor']})"
- if op=='bitAnd':return f"(.bitAnd input {e['mask']})"
- assert op=='quotient';return f"(.quotient {render(e['input'])} {e['divisor']})"
+  assert e['input'][0]=='snapshot','iterator-derived arithmetic needs an explicit source next event'
+  return f"(.bounded {variable(e['input'])} {e['limit']})"
+ if op=='remainder':return f"(.remainder {variable(e['input'])} {e['divisor']})"
+ if op=='bitAnd':return f"(.bitAnd {variable(e['input'])} {e['mask']})"
+ if op in ['add','mul']:return f"(.{op} {render(e['left'],inputs)} {render(e['right'],inputs)} (UScalar.size .Usize))"
+ assert op=='quotient';return f"(.quotient {render(e['input'],inputs)} {e['divisor']})"
+
 def main():
  p=argparse.ArgumentParser();p.add_argument('--check',action='store_true');a=p.parse_args()
  raw=lzma.decompress((I/'PV_B3Q_DirectCone3.llbc.xz').read_bytes());ll=json.loads(raw)['translated'];fs={f['def_id']:f for f in ll['fun_decls']if f};g=json.loads((I/'direct3-instantiated-callcone.json').read_text());prior=json.loads((R/'SOURCE-COVERAGE-D580.json').read_text());remaining={(r['instance'],r['statement'])for v in prior['groups'].values()for r in v['remaining']};remaining-={(r['instance'],r['statement'])for r in json.loads((R/'NORMALIZED-INDICES-D583.json').read_text())['rows']};vs,_=constants(ll,fs);rows=[];sources=[]
@@ -50,7 +57,8 @@ def main():
  name='PV_B3P_ComputedIndices583227';s='import PV_B3P_ArithmeticEvents583227\nimport PV_B3P_RangeEvents578227\nnamespace '+name+'\nopen Aeneas Aeneas.Std PV_B3P_PanicPatterns571227\nset_option autoImplicit false\n'
  for j,r in enumerate(rows):
   r['lemma']=name+f'.certificate_{j}';route=r['route'];limit,slack=r['limit'],r['slack']
-  if route=='arithmetic':ns='PV_B3P_ArithmeticEvents583227';params='(input : Nat)';args=f"{render(r['expression'])} {slack} effects"
+  if route=='arithmetic':
+   ns='PV_B3P_ArithmeticEvents583227';inputs=[];expression=render(r['expression'],inputs);params='('+' '.join('input'+str(k)for k in range(len(inputs)))+' : Nat)';args=f"{expression} {slack} effects"
   elif route=='range':ns='PV_B3P_RangeEvents578227';params='(handler : Str → Result Never) (start : Usize)';args=f'handler ⟨start,{limit}#usize⟩ {slack} effects'
   else:ns='PV_B3P_DominatedEvents578227';params='(index : Nat)';args=f'{limit} {slack} index effects'
   s+=f'''/-- Instance {r['instance']}, scalar event {r['statement']}. -/

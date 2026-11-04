@@ -49,15 +49,26 @@ def collect(body,range_seeds=None,windows=False):
       elif operator=='Lt'and c[0]=='wrapadd'and c[2][0]=='literal':v=('windowLess',a,c[1],c[2][1],sid)
     if 'BinaryOp'in rhs and dest.get('ty')=={'Deduplicated':1112}:
      operator,left,right=rhs['BinaryOp'];a,c=op(left,sid),op(right,sid)
-     if a is not None and c is not None and c[0]=='literal':
-      divisor=c[1];expr=None;limit=None
-      if operator=={'Rem':'Panic'}and divisor>0:
+     if a is not None and c is not None:
+      divisor=c[1]if c[0]=='literal'else None;expr=None;limit=None
+      def bounded(value):
+       if value[0]=='literal':return(dict(op='literal',value=value[1]),value[1]+1)
+       if value[0]=='rangeItem'or value not in bounds:return None
+       lim,pred,branch=bounds[value]
+       return(bounds.get(('expr',value),dict(op='bounded',input=value,limit=lim,predicate=pred,branch=branch)),lim)
+      if operator=={'Rem':'Panic'}and divisor is not None and divisor>0:
        v=('arithmetic',sid);expr=dict(op='remainder',input=a,divisor=divisor);limit=divisor
-      elif operator=='BitAnd':
+      elif operator=='BitAnd'and divisor is not None:
        v=('arithmetic',sid);expr=dict(op='bitAnd',input=a,mask=divisor);limit=divisor+1
-      elif operator=={'Div':'Panic'}and divisor>0 and a in bounds:
+      elif operator=={'Div':'Panic'}and divisor is not None and divisor>0 and a in bounds:
        oldlimit,predicate,branch=bounds[a]
        v=('arithmetic',sid);expr=dict(op='quotient',input=bounds.get(('expr',a),dict(op='bounded',input=a,limit=oldlimit,predicate=predicate,branch=branch)),divisor=divisor);limit=(oldlimit+divisor-1)//divisor
+      if operator in [{'Add':'Wrap'},{'Mul':'Wrap'}]:
+       left_bound,right_bound=bounded(a),bounded(c)
+       if left_bound is not None and right_bound is not None:
+        le,llim=left_bound;re,rlim=right_bound;v=('arithmetic',sid)
+        expr=dict(op='add'if operator=={'Add':'Wrap'}else'mul',left=le,right=re)
+        limit=llim+rlim-1 if expr['op']=='add'else max(0,llim-1)*max(0,rlim-1)+1
       if expr is not None:
        bounds[v]=(limit,sid,sid);bounds[('expr',v)]=expr
     moves(rhs);values.pop(slot,None)
