@@ -2,6 +2,9 @@
 from pathlib import Path
 import subprocess,os,json,hashlib,tomllib,sys
 B=Path(__file__).resolve().parent;S=B/'NFZ_src';cargo='/home/dombarker/.cargo/bin/cargo'
+# NFZ_B004 own-runner repair: bound rustc/LLVM thread discovery within TasksMax=64.
+os.sched_setaffinity(0, sorted(os.sched_getaffinity(0))[:4])
+os.environ['RUSTFLAGS']='-Ccodegen-units=1 -Zthreads=1'
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 pins=json.loads((B/'NFZ_SOURCE_PINS.json').read_text());expected=pins['files']['Cargo.lock']
 assert all(sha(S/p)==h for p,h in pins['files'].items())
