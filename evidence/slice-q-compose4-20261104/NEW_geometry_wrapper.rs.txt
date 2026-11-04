@@ -1,0 +1,12 @@
+
+// Scratch-only named extraction root: original function and record are unchanged.
+pub fn NEW_geometry_root(queries:&[u32;22],start:usize,end:usize)->Result<QueryGeometry,Error>{
+ QueryGeometry::for_range(queries,start,end)
+}
+// Native fidelity observer reads every field directly, with no helper constructors.
+pub fn NEW_geometry_words(queries:&[u32;22],start:usize,end:usize)->Result<(usize,Vec<[u32;5]>,Vec<u32>),Error>{
+ let g=QueryGeometry::for_range(queries,start,end)?;
+ let rows=g.inverses.into_iter().map(|r|[r[0].0,r[1].0,r[2].0,r[3].0,r[4].0]).collect();
+ let lines=g.line_z.into_iter().map(|x|x.0).collect();
+ Ok((g.start,rows,lines))
+}

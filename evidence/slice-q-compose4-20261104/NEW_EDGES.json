@@ -3655,13 +3655,63 @@
    "caller": "crates/aspis-core/src/field.rs::M31::inv",
    "callee": "crates/aspis-core/src/field.rs::CM31::mul",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::inv->crates/aspis-core/src/field.rs::CM31::mul",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "CONSERVATIVE_ALTERNATIVE",
    "source_body_sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
    "static_resolution": "receiver field owners and frozen body",
    "selected_target": false,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEW-inverse-call:crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::CM31::mul",
+    "caller": "crates/aspis-core/src/field.rs::M31::inv",
+    "callee": "crates/aspis-core/src/field.rs::CM31::mul",
+    "selected_target": false,
+    "typed_reason": "STATIC_UNREACHABLE; literal extracted type M31 := U32 and complete root body targets scalar M31 only",
+    "parts": [
+     "packet_domain",
+     "same_arguments",
+     "complete_Result",
+     "ordered_calls",
+     "state_effects",
+     "actual_body_association"
+    ],
+    "lean_evidence": [
+     {
+      "attempt": "NEW_L006",
+      "source_hashes": {
+       "NEW_InverseAssociation.lean": "6c728081f5a59db6c5cf9aff1cba0280aece9c54ae6e60ae7bac2d2522bee093"
+      },
+      "print_axioms": [
+       "'NEW_InverseAssociation.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseActual.aspis_core.field.M31.inv' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     },
+     {
+      "attempt": "NEW_L007",
+      "source_hashes": {
+       "NEW_InverseComplete.lean": "be757a4a15a9932b2e3dfb5df15cf51c00ea5f8f6c12dc0f8e799374f0893d95"
+      },
+      "print_axioms": [
+       "'NEW_InverseComplete.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.nonzero_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     }
+    ],
+    "native_fidelity": [
+     "NEW_N001",
+     "NEW_N002"
+    ],
+    "arithmetic_method": "Existing emitted Lean arithmetic; never multiplication in Kani",
+    "residual_inner_hypotheses": []
+   },
    "required_named_hypotheses": [
     "NCS_R038.PacketDomain",
     "NCS_R038.PhysicalInterpretation"
@@ -3672,20 +3722,70 @@
     ]
    ],
    "actual_inventory_calls": [],
-   "obstacle": "NEB_InverseCalls proves every nonzero raw-input call in the actual17-call DAG and canonical intermediates; NBG_InverseBridge proves full model Result including zero. To close the all-raw selected packet, exact native zero panic/rejection/ordered-effect transport and whole DAG source-call binding must be justified. Do not silently narrow the packet to nonzero or assert empty panic effects. EXACT EDGE: crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::CM31::mul. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::M31::mul",
    "caller": "crates/aspis-core/src/field.rs::M31::inv",
    "callee": "crates/aspis-core/src/field.rs::M31::mul",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::inv->crates/aspis-core/src/field.rs::M31::mul",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "PURE_TYPED_CALL",
    "source_body_sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
    "static_resolution": "receiver field owners and frozen body",
    "selected_target": true,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEW-inverse-call:crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::M31::mul",
+    "caller": "crates/aspis-core/src/field.rs::M31::inv",
+    "callee": "crates/aspis-core/src/field.rs::M31::mul",
+    "selected_target": true,
+    "typed_reason": "Actual emitted scalar M31 call at the exact saved DAG operands; child domain all raw values/counts",
+    "parts": [
+     "packet_domain",
+     "same_arguments",
+     "complete_Result",
+     "ordered_calls",
+     "state_effects",
+     "actual_body_association"
+    ],
+    "lean_evidence": [
+     {
+      "attempt": "NEW_L006",
+      "source_hashes": {
+       "NEW_InverseAssociation.lean": "6c728081f5a59db6c5cf9aff1cba0280aece9c54ae6e60ae7bac2d2522bee093"
+      },
+      "print_axioms": [
+       "'NEW_InverseAssociation.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseActual.aspis_core.field.M31.inv' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     },
+     {
+      "attempt": "NEW_L007",
+      "source_hashes": {
+       "NEW_InverseComplete.lean": "be757a4a15a9932b2e3dfb5df15cf51c00ea5f8f6c12dc0f8e799374f0893d95"
+      },
+      "print_axioms": [
+       "'NEW_InverseComplete.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.nonzero_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     }
+    ],
+    "native_fidelity": [
+     "NEW_N001",
+     "NEW_N002"
+    ],
+    "arithmetic_method": "Existing emitted Lean arithmetic; never multiplication in Kani",
+    "residual_inner_hypotheses": []
+   },
    "required_named_hypotheses": [
     "NCS_R047.PacketDomain",
     "NCS_R047.PhysicalInterpretation"
@@ -3829,20 +3929,70 @@
      ]
     }
    ],
-   "obstacle": "NEB_InverseCalls proves every nonzero raw-input call in the actual17-call DAG and canonical intermediates; NBG_InverseBridge proves full model Result including zero. To close the all-raw selected packet, exact native zero panic/rejection/ordered-effect transport and whole DAG source-call binding must be justified. Do not silently narrow the packet to nonzero or assert empty panic effects. EXACT EDGE: crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::M31::mul. Must prove this same reached call establishes NCS_R047.PacketDomain, NCS_R047.PhysicalInterpretation, with the actual inputs, canonical carrier, state, Result and ordered effects."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::QM31::mul",
    "caller": "crates/aspis-core/src/field.rs::M31::inv",
    "callee": "crates/aspis-core/src/field.rs::QM31::mul",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::inv->crates/aspis-core/src/field.rs::QM31::mul",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "CONSERVATIVE_ALTERNATIVE",
    "source_body_sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
    "static_resolution": "receiver field owners and frozen body",
    "selected_target": false,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEW-inverse-call:crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::QM31::mul",
+    "caller": "crates/aspis-core/src/field.rs::M31::inv",
+    "callee": "crates/aspis-core/src/field.rs::QM31::mul",
+    "selected_target": false,
+    "typed_reason": "STATIC_UNREACHABLE; literal extracted type M31 := U32 and complete root body targets scalar M31 only",
+    "parts": [
+     "packet_domain",
+     "same_arguments",
+     "complete_Result",
+     "ordered_calls",
+     "state_effects",
+     "actual_body_association"
+    ],
+    "lean_evidence": [
+     {
+      "attempt": "NEW_L006",
+      "source_hashes": {
+       "NEW_InverseAssociation.lean": "6c728081f5a59db6c5cf9aff1cba0280aece9c54ae6e60ae7bac2d2522bee093"
+      },
+      "print_axioms": [
+       "'NEW_InverseAssociation.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseActual.aspis_core.field.M31.inv' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     },
+     {
+      "attempt": "NEW_L007",
+      "source_hashes": {
+       "NEW_InverseComplete.lean": "be757a4a15a9932b2e3dfb5df15cf51c00ea5f8f6c12dc0f8e799374f0893d95"
+      },
+      "print_axioms": [
+       "'NEW_InverseComplete.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.nonzero_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     }
+    ],
+    "native_fidelity": [
+     "NEW_N001",
+     "NEW_N002"
+    ],
+    "arithmetic_method": "Existing emitted Lean arithmetic; never multiplication in Kani",
+    "residual_inner_hypotheses": []
+   },
    "required_named_hypotheses": [
     "NCS_R054.PacketDomain",
     "NCS_R054.PhysicalInterpretation"
@@ -3853,20 +4003,70 @@
     ]
    ],
    "actual_inventory_calls": [],
-   "obstacle": "NEB_InverseCalls proves every nonzero raw-input call in the actual17-call DAG and canonical intermediates; NBG_InverseBridge proves full model Result including zero. To close the all-raw selected packet, exact native zero panic/rejection/ordered-effect transport and whole DAG source-call binding must be justified. Do not silently narrow the packet to nonzero or assert empty panic effects. EXACT EDGE: crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::QM31::mul. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::square_n",
    "caller": "crates/aspis-core/src/field.rs::M31::inv",
    "callee": "crates/aspis-core/src/field.rs::square_n",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::inv->crates/aspis-core/src/field.rs::square_n",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "PURE_TYPED_CALL",
    "source_body_sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
    "static_resolution": "receiver field owners and frozen body",
    "selected_target": true,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEW-inverse-call:crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::square_n",
+    "caller": "crates/aspis-core/src/field.rs::M31::inv",
+    "callee": "crates/aspis-core/src/field.rs::square_n",
+    "selected_target": true,
+    "typed_reason": "Actual emitted scalar M31 call at the exact saved DAG operands; child domain all raw values/counts",
+    "parts": [
+     "packet_domain",
+     "same_arguments",
+     "complete_Result",
+     "ordered_calls",
+     "state_effects",
+     "actual_body_association"
+    ],
+    "lean_evidence": [
+     {
+      "attempt": "NEW_L006",
+      "source_hashes": {
+       "NEW_InverseAssociation.lean": "6c728081f5a59db6c5cf9aff1cba0280aece9c54ae6e60ae7bac2d2522bee093"
+      },
+      "print_axioms": [
+       "'NEW_InverseAssociation.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseActual.aspis_core.field.M31.inv' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     },
+     {
+      "attempt": "NEW_L007",
+      "source_hashes": {
+       "NEW_InverseComplete.lean": "be757a4a15a9932b2e3dfb5df15cf51c00ea5f8f6c12dc0f8e799374f0893d95"
+      },
+      "print_axioms": [
+       "'NEW_InverseComplete.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.nonzero_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     }
+    ],
+    "native_fidelity": [
+     "NEW_N001",
+     "NEW_N002"
+    ],
+    "arithmetic_method": "Existing emitted Lean arithmetic; never multiplication in Kani",
+    "residual_inner_hypotheses": []
+   },
    "required_named_hypotheses": [
     "NCS_R061.PacketDomain",
     "NCS_R061.PhysicalInterpretation"
@@ -3933,20 +4133,70 @@
      ]
     }
    ],
-   "obstacle": "NEB_InverseCalls proves every nonzero raw-input call in the actual17-call DAG and canonical intermediates; NBG_InverseBridge proves full model Result including zero. To close the all-raw selected packet, exact native zero panic/rejection/ordered-effect transport and whole DAG source-call binding must be justified. Do not silently narrow the packet to nonzero or assert empty panic effects. EXACT EDGE: crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field.rs::square_n. Must prove this same reached call establishes NCS_R061.PacketDomain, NCS_R061.PhysicalInterpretation, with the actual inputs, canonical carrier, state, Result and ordered effects."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
    "caller": "crates/aspis-core/src/field.rs::M31::inv",
    "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
    "obligation_id": "call-domain:crates/aspis-core/src/field.rs::M31::inv->crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
-   "status": "OPEN",
+   "status": "CLOSED",
    "classification": "CONSERVATIVE_ALTERNATIVE",
    "source_body_sha256": "d58a157083d8bce112deaa5cdac1461b6454c47209725dd1b8bcacabf51bc318",
    "static_resolution": "receiver field owners and frozen body",
    "selected_target": false,
    "model_domain_theorems": [],
-   "certificate": null,
+   "certificate": {
+    "id": "NEW-inverse-call:crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
+    "caller": "crates/aspis-core/src/field.rs::M31::inv",
+    "callee": "crates/aspis-core/src/field/wide_exact.rs::WideExact::mul",
+    "selected_target": false,
+    "typed_reason": "STATIC_UNREACHABLE; literal extracted type M31 := U32 and complete root body targets scalar M31 only",
+    "parts": [
+     "packet_domain",
+     "same_arguments",
+     "complete_Result",
+     "ordered_calls",
+     "state_effects",
+     "actual_body_association"
+    ],
+    "lean_evidence": [
+     {
+      "attempt": "NEW_L006",
+      "source_hashes": {
+       "NEW_InverseAssociation.lean": "6c728081f5a59db6c5cf9aff1cba0280aece9c54ae6e60ae7bac2d2522bee093"
+      },
+      "print_axioms": [
+       "'NEW_InverseAssociation.reducer' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.multiply' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_body' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square_loop' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.square' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.cohort' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseAssociation.zero' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseActual.aspis_core.field.M31.inv' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     },
+     {
+      "attempt": "NEW_L007",
+      "source_hashes": {
+       "NEW_InverseComplete.lean": "be757a4a15a9932b2e3dfb5df15cf51c00ea5f8f6c12dc0f8e799374f0893d95"
+      },
+      "print_axioms": [
+       "'NEW_InverseComplete.reference' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.result_state_effects' depends on axioms: [propext, Classical.choice, Quot.sound]",
+       "'NEW_InverseComplete.nonzero_calls' depends on axioms: [propext, Classical.choice, Quot.sound]"
+      ]
+     }
+    ],
+    "native_fidelity": [
+     "NEW_N001",
+     "NEW_N002"
+    ],
+    "arithmetic_method": "Existing emitted Lean arithmetic; never multiplication in Kani",
+    "residual_inner_hypotheses": []
+   },
    "required_named_hypotheses": [
     "NCS_R068.PacketDomain",
     "NCS_R068.PhysicalInterpretation"
@@ -3957,7 +4207,7 @@
     ]
    ],
    "actual_inventory_calls": [],
-   "obstacle": "NEB_InverseCalls proves every nonzero raw-input call in the actual17-call DAG and canonical intermediates; NBG_InverseBridge proves full model Result including zero. To close the all-raw selected packet, exact native zero panic/rejection/ordered-effect transport and whole DAG source-call binding must be justified. Do not silently narrow the packet to nonzero or assert empty panic effects. EXACT EDGE: crates/aspis-core/src/field.rs::M31::inv -> crates/aspis-core/src/field/wide_exact.rs::WideExact::mul. Receiver alternative still needs a formal/native same-body pruning certificate; source inventory resolution alone gives no credit."
+   "obstacle": null
   },
   {
    "edge": "crates/aspis-core/src/field.rs::M31::mul -> crates/aspis-core/src/field.rs::reduce_u64",

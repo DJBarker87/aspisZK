@@ -157,3 +157,77 @@ fn NET_push_case<const N:usize,const M:usize>(){
  assert_eq!(dst[len].0,before_values[t]);if offset<len{assert_eq!(dst[offset].0,raw[offset]);}
  let selected:usize=kani::any();kani::assume(selected<5);assert_eq!(values[selected].0,before_values[selected]);
 }
+
+// One line-buffer write on the SAME arbitrary old line state and disjoint flat view.
+fn NEW_line_step(lines:&mut Vec<M31>,value:M31){lines.push(value);}
+fn NEW_line_case<const N:usize,const M:usize>(){
+ assert_eq!(M,5*N);assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let k:usize=kani::any();kani::assume(k<N);
+ let raw:[u32;N]=kani::any();let flat_raw:[u32;M]=kani::any();
+ let flat=unsafe{core::slice::from_raw_parts(flat_raw.as_ptr().cast::<M31>(),M)};
+ let p=Box::into_raw(Box::new([core::mem::MaybeUninit::<M31>::uninit();N])) as *mut M31;
+ let mut i=0;while i<k{unsafe{p.add(i).write(M31(raw[i]));}i+=1;}
+ let mut lines=unsafe{Vec::from_raw_parts(p,k,N)};
+ let j:usize=kani::any();kani::assume(j<N);let f:usize=kani::any();kani::assume(f<M);
+ let value=M31(kani::any());let old_value=value.0;
+ assert_eq!(flat[f].0,flat_raw[f]);if j<k{assert_eq!(lines[j].0,raw[j]);}
+ NEW_line_step(&mut lines,value);
+ #[cfg(NET_bad_reply)] {lines[k].0^=1;}
+ #[cfg(NET_bad_frame)] {if j<k{lines[j].0^=1;}}
+ assert_eq!(lines.len(),k+1);assert_eq!(lines.capacity(),N);assert_eq!(lines.as_ptr(),p);
+ assert_eq!(lines[k].0,old_value);if j<k{assert_eq!(lines[j].0,raw[j]);}
+ assert_eq!(flat[f].0,flat_raw[f]);assert_ne!(flat.as_ptr(),lines.as_ptr());
+}
+#[kani::proof] #[kani::unwind(62)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NEW_line_tx1(){NEW_line_case::<10,50>()}
+#[kani::proof] #[kani::unwind(62)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NEW_line_tx2(){NEW_line_case::<12,60>()}
+
+// One actual grouping callback lane, at arbitrary query/lane offsets.
+fn NEW_collect_lane(flat:&[M31],i:usize,j:usize)->M31{flat[5*i+j]}
+fn NEW_collect_case<const N:usize,const M:usize>(){
+ assert_eq!(M,5*N);assert_eq!(core::mem::size_of::<M31>(),core::mem::size_of::<u32>());
+ assert_eq!(core::mem::align_of::<M31>(),core::mem::align_of::<u32>());
+ let raw:[u32;M]=kani::any();let flat=unsafe{core::slice::from_raw_parts(raw.as_ptr().cast::<M31>(),M)};
+ let i:usize=kani::any();kani::assume(i<N);let j:usize=kani::any();kani::assume(j<5);
+ let mut result=NEW_collect_lane(flat,i,j);
+ #[cfg(NET_bad_reply)] {result.0^=1;}
+ assert_eq!(result.0,raw[5*i+j]);
+}
+#[kani::proof] #[kani::unwind(4)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_collect_tx1(){NEW_collect_case::<10,50>()}
+#[kani::proof] #[kani::unwind(4)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+fn NEW_collect_tx2(){NEW_collect_case::<12,60>()}
+
+// One actual outer collection push. Every prior row/lane and spare capacity is arbitrary.
+fn NEW_row_push_step(rows:&mut Vec<[M31;5]>,record:[M31;5]){rows.push(record);}
+fn NEW_row_push_case<const N:usize>(){
+ assert_eq!(core::mem::size_of::<[M31;5]>(),core::mem::size_of::<[u32;5]>());
+ assert_eq!(core::mem::align_of::<[M31;5]>(),core::mem::align_of::<[u32;5]>());
+ let k:usize=kani::any();kani::assume(k<N);let old:[[u32;5];N]=kani::any();
+ let p=Box::into_raw(Box::new([core::mem::MaybeUninit::<[M31;5]>::uninit();N])) as *mut [M31;5];
+ let mut i=0;while i<k{unsafe{p.add(i).write([M31(old[i][0]),M31(old[i][1]),M31(old[i][2]),M31(old[i][3]),M31(old[i][4])]);}i+=1;}
+ let mut rows=unsafe{Vec::from_raw_parts(p,k,N)};let record=row();let words=[record[0].0,record[1].0,record[2].0,record[3].0,record[4].0];
+ let j:usize=kani::any();kani::assume(j<5);let r:usize=kani::any();kani::assume(r<N);
+ if r<k{assert_eq!(rows[r][j].0,old[r][j]);}
+ NEW_row_push_step(&mut rows,record);
+ #[cfg(NET_bad_reply)] {rows[k][j].0^=1;}
+ #[cfg(NET_bad_frame)] {if r<k{rows[r][j].0^=1;}}
+ assert_eq!(rows.len(),k+1);assert_eq!(rows.capacity(),N);assert_eq!(rows.as_ptr(),p);
+ assert_eq!(rows[k][j].0,words[j]);if r<k{assert_eq!(rows[r][j].0,old[r][j]);}
+}
+#[kani::proof] #[kani::unwind(62)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NEW_row_push_tx1(){NEW_row_push_case::<10>()}
+#[kani::proof] #[kani::unwind(62)]
+#[kani::stub(core::ptr::copy_nonoverlapping,KMX_copy_nonoverlapping)]
+#[kani::stub(alloc::alloc::realloc,KMX_realloc)]
+fn NEW_row_push_tx2(){NEW_row_push_case::<12>()}

@@ -20,7 +20,7 @@ theorem write_from_windows (before after : List U32) (index : Nat) (value : U32)
   · rw [windows j h]
     by_cases same : j = index
     · subst j
-      simp only [if_pos rfl,List.getElem?_set_self active]
+      simp only [ite_true,List.getElem?_set_self active]
     · simp only [same,if_false,List.getElem?_set_ne (Ne.symm same)]
   · have ha : after.length ≤ j := by omega
     have hb : (before.set index value).length ≤ j := by simpa only [List.length_set] using (show before.length ≤ j by omega)
@@ -74,7 +74,23 @@ theorem call_count (flat prefixes : List U32) {n : Nat} {inverse final : List U3
     simp only [List.length_cons]
     omega
 
+/-- Deterministic ordered effects, including BOTH products before the next cell. -/
+def callLog (flat prefixes : List U32) : Nat → U32 → List (U32 × U32)
+ | 0,_ => []
+ | n+1,suffix => (suffix,cell prefixes n)::(suffix,cell flat n)::
+     callLog flat prefixes n (wordMul suffix (cell flat n))
+
+theorem ordered_calls (flat prefixes : List U32) {n : Nat} {inverse final : List U32}
+    {suffix finalSuffix : U32} {calls : List (U32 × U32)}
+    (trace : Trace flat prefixes n inverse suffix final finalSuffix calls) :
+    calls = callLog flat prefixes n suffix := by
+  induction trace with
+  | done => rfl
+  | step n inverse next final suffix finalSuffix calls active size windows tail ih =>
+    simp only [callLog,ih]
+
 #print axioms write_from_windows
 #print axioms state
 #print axioms call_count
+#print axioms ordered_calls
 end NEW_GeometryReverse
