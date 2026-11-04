@@ -1,0 +1,8 @@
+import JHb_Emit
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder
+#print axioms pool_v1.pair_forest_terminal.validate_result
+#print axioms pool_v1.pair_forest_terminal.transition_kind
+#print axioms pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1
+#print axioms pool_v1.pair_terminal.exact
+#print axioms atomic_statement.decode_digest_canonical
+#print pool_v1.pair_terminal.decode_pool_v1_pair_verified_afterstate_v1

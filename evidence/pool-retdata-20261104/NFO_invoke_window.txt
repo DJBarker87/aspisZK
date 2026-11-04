@@ -1,0 +1,112 @@
+   5f910: 7a 0a 08 f0 00 00 00 00      	stdw [r10 - 0xff8], 0x0
+   5f918: 7a 0a 00 f0 08 00 00 00      	stdw [r10 - 0x1000], 0x8
+   5f920: bf a5 00 00 00 00 00 00      	mov64 r5, r10
+   5f928: 85 10 00 00 01 00 00 00      	call 0x1
+   5f930: 95 00 00 00 00 00 00 00      	exit
+   5f938: 7b 4a f8 ff 00 00 00 00      	stxdw [r10 - 0x8], r4
+   5f940: 7b 3a f0 ff 00 00 00 00      	stxdw [r10 - 0x10], r3
+   5f948: 7b 1a e0 ff 00 00 00 00      	stxdw [r10 - 0x20], r1
+   5f950: 7b 2a e8 ff 00 00 00 00      	stxdw [r10 - 0x18], r2
+   5f958: 79 21 10 00 00 00 00 00      	ldxdw r1, [r2 + 0x10]
+   5f960: 79 52 08 f0 00 00 00 00      	ldxdw r2, [r5 - 0xff8]
+   5f968: 7b 2a d0 ff 00 00 00 00      	stxdw [r10 - 0x30], r2
+   5f970: 79 52 00 f0 00 00 00 00      	ldxdw r2, [r5 - 0x1000]
+   5f978: 7b 2a d8 ff 00 00 00 00      	stxdw [r10 - 0x28], r2
+   5f980: 15 01 3f 00 00 00 00 00      	jeq r1, 0x0, +0x3f <custom_panic+0x400>
+   5f988: 79 a2 f8 ff 00 00 00 00      	ldxdw r2, [r10 - 0x8]
+   5f990: 15 02 3d 00 00 00 00 00      	jeq r2, 0x0, +0x3d <custom_panic+0x400>
+   5f998: 79 a2 e8 ff 00 00 00 00      	ldxdw r2, [r10 - 0x18]
+   5f9a0: 79 27 08 00 00 00 00 00      	ldxdw r7, [r2 + 0x8]
+   5f9a8: 27 01 00 00 22 00 00 00      	mul64 r1, 0x22
+   5f9b0: bf 75 00 00 00 00 00 00      	mov64 r5, r7
+   5f9b8: 0f 15 00 00 00 00 00 00      	add64 r5, r1
+   5f9c0: 79 a4 f8 ff 00 00 00 00      	ldxdw r4, [r10 - 0x8]
+   5f9c8: 27 04 00 00 30 00 00 00      	mul64 r4, 0x30
+   5f9d0: 79 a3 f0 ff 00 00 00 00      	ldxdw r3, [r10 - 0x10]
+   5f9d8: 07 03 00 00 10 00 00 00      	add64 r3, 0x10
+   5f9e0: 05 00 01 00 00 00 00 00      	ja +0x1 <custom_panic+0x270>
+   5f9e8: 1d 57 32 00 00 00 00 00      	jeq r7, r5, +0x32 <custom_panic+0x400>
+   5f9f0: bf 76 00 00 00 00 00 00      	mov64 r6, r7
+   5f9f8: 07 07 00 00 22 00 00 00      	add64 r7, 0x22
+   5fa00: bf 48 00 00 00 00 00 00      	mov64 r8, r4
+   5fa08: bf 39 00 00 00 00 00 00      	mov64 r9, r3
+   5fa10: 79 61 00 00 00 00 00 00      	ldxdw r1, [r6 + 0x0]
+   5fa18: 79 90 f0 ff 00 00 00 00      	ldxdw r0, [r9 - 0x10]
+   5fa20: 79 02 00 00 00 00 00 00      	ldxdw r2, [r0 + 0x0]
+   5fa28: 5d 21 0a 00 00 00 00 00      	jne r1, r2, +0xa <custom_panic+0x300>
+   5fa30: 79 01 08 00 00 00 00 00      	ldxdw r1, [r0 + 0x8]
+   5fa38: 79 62 08 00 00 00 00 00      	ldxdw r2, [r6 + 0x8]
+   5fa40: 5d 12 07 00 00 00 00 00      	jne r2, r1, +0x7 <custom_panic+0x300>
+   5fa48: 79 01 10 00 00 00 00 00      	ldxdw r1, [r0 + 0x10]
+   5fa50: 79 62 10 00 00 00 00 00      	ldxdw r2, [r6 + 0x10]
+   5fa58: 5d 12 04 00 00 00 00 00      	jne r2, r1, +0x4 <custom_panic+0x300>
+   5fa60: b7 01 00 00 00 00 00 00      	mov64 r1, 0x0
+   5fa68: 79 02 18 00 00 00 00 00      	ldxdw r2, [r0 + 0x18]
+   5fa70: 79 60 18 00 00 00 00 00      	ldxdw r0, [r6 + 0x18]
+   5fa78: 1d 20 01 00 00 00 00 00      	jeq r0, r2, +0x1 <custom_panic+0x308>
+   5fa80: b7 01 00 00 01 00 00 00      	mov64 r1, 0x1
+   5fa88: 15 01 04 00 00 00 00 00      	jeq r1, 0x0, +0x4 <custom_panic+0x330>
+   5fa90: 07 09 00 00 30 00 00 00      	add64 r9, 0x30
+   5fa98: 07 08 00 00 d0 ff ff ff      	add64 r8, -0x30
+   5faa0: 55 08 ed ff 00 00 00 00      	jne r8, 0x0, -0x13 <custom_panic+0x290>
+   5faa8: 05 00 e7 ff 00 00 00 00      	ja -0x19 <custom_panic+0x268>
+   5fab0: 79 98 f8 ff 00 00 00 00      	ldxdw r8, [r9 - 0x8]
+   5fab8: 79 81 10 00 00 00 00 00      	ldxdw r1, [r8 + 0x10]
+   5fac0: bf 80 00 00 00 00 00 00      	mov64 r0, r8
+   5fac8: 07 00 00 00 10 00 00 00      	add64 r0, 0x10
+   5fad0: 71 62 21 00 00 00 00 00      	ldxb r2, [r6 + 0x21]
+   5fad8: 15 02 05 00 00 00 00 00      	jeq r2, 0x0, +0x5 <custom_panic+0x388>
+   5fae0: 55 01 1e 00 00 00 00 00      	jne r1, 0x0, +0x1e <custom_panic+0x458>
+   5fae8: 79 90 00 00 00 00 00 00      	ldxdw r0, [r9 + 0x0]
+   5faf0: 79 01 10 00 00 00 00 00      	ldxdw r1, [r0 + 0x10]
+   5faf8: 15 01 dd ff 00 00 00 00      	jeq r1, 0x0, -0x23 <custom_panic+0x268>
+   5fb00: 05 00 22 00 00 00 00 00      	ja +0x22 <custom_panic+0x498>
+   5fb08: 18 02 00 00 ff ff ff ff 00 00 00 00 ff ff ff 7f      	lddw r2, 0x7fffffffffffffff
+   5fb18: 3d 21 1a 00 00 00 00 00      	jge r1, r2, +0x1a <custom_panic+0x470>
+   5fb20: 79 96 00 00 00 00 00 00      	ldxdw r6, [r9 + 0x0]
+   5fb28: 79 61 10 00 00 00 00 00      	ldxdw r1, [r6 + 0x10]
+   5fb30: 3d 21 23 00 00 00 00 00      	jge r1, r2, +0x23 <custom_panic+0x4d0>
+   5fb38: bf 61 00 00 00 00 00 00      	mov64 r1, r6
+   5fb40: 07 01 00 00 10 00 00 00      	add64 r1, 0x10
+   5fb48: 7b 1a b8 ff 00 00 00 00      	stxdw [r10 - 0x48], r1
+   5fb50: 07 06 00 00 18 00 00 00      	add64 r6, 0x18
+   5fb58: 07 08 00 00 18 00 00 00      	add64 r8, 0x18
+   5fb60: 7b 8a c8 ff 00 00 00 00      	stxdw [r10 - 0x38], r8
+   5fb68: 7b 0a c0 ff 00 00 00 00      	stxdw [r10 - 0x40], r0
+   5fb70: 7b 6a b0 ff 00 00 00 00      	stxdw [r10 - 0x50], r6
+   5fb78: 05 00 cd ff 00 00 00 00      	ja -0x33 <custom_panic+0x268>
+   5fb80: 79 a1 d0 ff 00 00 00 00      	ldxdw r1, [r10 - 0x30]
+   5fb88: 7b 1a 08 f0 00 00 00 00      	stxdw [r10 - 0xff8], r1
+   5fb90: 79 a1 d8 ff 00 00 00 00      	ldxdw r1, [r10 - 0x28]
+   5fb98: 7b 1a 00 f0 00 00 00 00      	stxdw [r10 - 0x1000], r1
+   5fba0: bf a5 00 00 00 00 00 00      	mov64 r5, r10
+   5fba8: 79 a1 e0 ff 00 00 00 00      	ldxdw r1, [r10 - 0x20]
+   5fbb0: 79 a2 e8 ff 00 00 00 00      	ldxdw r2, [r10 - 0x18]
+   5fbb8: 79 a3 f0 ff 00 00 00 00      	ldxdw r3, [r10 - 0x10]
+   5fbc0: 79 a4 f8 ff 00 00 00 00      	ldxdw r4, [r10 - 0x8]
+   5fbc8: 85 10 00 00 03 02 00 00      	call 0x203
+   5fbd0: 95 00 00 00 00 00 00 00      	exit
+   5fbd8: 79 a2 e0 ff 00 00 00 00      	ldxdw r2, [r10 - 0x20]
+   5fbe0: 7b 02 10 00 00 00 00 00      	stxdw [r2 + 0x10], r0
+   5fbe8: 05 00 11 00 00 00 00 00      	ja +0x11 <custom_panic+0x4f8>
+   5fbf0: 79 a2 e0 ff 00 00 00 00      	ldxdw r2, [r10 - 0x20]
+   5fbf8: 79 a1 c0 ff 00 00 00 00      	ldxdw r1, [r10 - 0x40]
+   5fc00: 7b 12 10 00 00 00 00 00      	stxdw [r2 + 0x10], r1
+   5fc08: 79 a1 c8 ff 00 00 00 00      	ldxdw r1, [r10 - 0x38]
+   5fc10: 05 00 0b 00 00 00 00 00      	ja +0xb <custom_panic+0x4f0>
+   5fc18: 18 01 00 00 0b 00 00 00 00 00 00 00 00 00 00 80      	lddw r1, -0x7ffffffffffffff5
+   5fc28: 79 a2 e0 ff 00 00 00 00      	ldxdw r2, [r10 - 0x20]
+   5fc30: 7b 12 00 00 00 00 00 00      	stxdw [r2 + 0x0], r1
+   5fc38: 07 00 00 00 10 00 00 00      	add64 r0, 0x10
+   5fc40: 7b 02 10 00 00 00 00 00      	stxdw [r2 + 0x10], r0
+   5fc48: 05 00 f0 ff 00 00 00 00      	ja -0x10 <custom_panic+0x450>
+   5fc50: 79 a2 e0 ff 00 00 00 00      	ldxdw r2, [r10 - 0x20]
+   5fc58: 79 a1 b8 ff 00 00 00 00      	ldxdw r1, [r10 - 0x48]
+   5fc60: 7b 12 10 00 00 00 00 00      	stxdw [r2 + 0x10], r1
+   5fc68: 79 a1 b0 ff 00 00 00 00      	ldxdw r1, [r10 - 0x50]
+   5fc70: 7b 12 08 00 00 00 00 00      	stxdw [r2 + 0x8], r1
+   5fc78: 18 01 00 00 0b 00 00 00 00 00 00 00 00 00 00 80      	lddw r1, -0x7ffffffffffffff5
+   5fc88: 7b 12 00 00 00 00 00 00      	stxdw [r2 + 0x0], r1
+   5fc90: 05 00 e7 ff 00 00 00 00      	ja -0x19 <custom_panic+0x450>
+   5fc98: 85 10 00 00 6f 02 00 00      	call 0x26f
+   5fca0: 95 00 00 00 00 00 00 00      	exit

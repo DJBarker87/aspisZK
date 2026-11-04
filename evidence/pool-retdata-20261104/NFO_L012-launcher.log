@@ -1,0 +1,52 @@
+{"attempt": "NFO_L012", "exit_status": 1, "wall_seconds": 2.2848219859879464, "peak_rss_kib": "5282232", "swaps": "0", "print_axioms": ["'NFO_ResultLayout.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]", "'NFO_ResultLayout.stores_layout' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]"]}
+NFO_generated/NFO_ResultLayout.lean:37:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  ([65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ List.replicate 784 0#u8).setSlice!
+    (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ↑master
+in the target expression
+  (((([65#u8, 83#u8, 82#u8, 56#u8] ++ [1#u8, tag, 1#u8, lane] ++ List.replicate 784 0#u8).setSlice! 8 ↑master).setSlice!
+              40 ↑selected).setSlice!
+          72 ↑digest).setSlice!
+      104 ↑afterstate =
+    [65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ ↑master ++ ↑selected ++ ↑digest ++ ↑afterstate
+
+master selected digest : Std.Array U8 32#usize
+tag lane : U8
+afterstate : Std.Array U8 688#usize
+...
+             40 ↑selected).setSlice!
+          72 ↑digest).setSlice!
+      104 ↑afterstate =
+    [65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ ↑master ++ ↑selected ++ ↑digest ++ ↑afterstate
+
+master selected digest : Std.Array U8 32#usize
+tag lane : U8
+afterstate : Std.Array U8 688#usize
+hm : (↑master).length = 32
+hs : (↑selected).length = 32
+hd : (↑digest).length = 32
+ha : (↑afterstate).length = 688
+lead : List (UScalar UScalarTy.U8) := [65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane]
+h1 :
+  ([65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ List.replicate 784 0#u8).setSlice!
+      (0 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1) ↑master =
+    [65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ ↑master ++ List.replicate 752 0#u8
+⊢ (((([65#u8, 83#u8, 82#u8, 56#u8] ++ [1#u8, tag, 1#u8, lane] ++ List.replicate 784 0#u8).setSlice! 8 ↑master).setSlice!
+              40 ↑selected).setSlice!
+          72 ↑digest).setSlice!
+      104 ↑afterstate =
+    [65#u8, 83#u8, 82#u8, 56#u8, 1#u8, tag, 1#u8, lane] ++ ↑master ++ ↑selected ++ ↑digest ++ ↑afterstate
+
+Note: The target expression is not type-correct under the `instances` transparency level, which may have triggered the failure. This is usually caused by unfolding of semireducible definitions in prior tactic steps. Use `set_option linter.tacticCheckInstances true` to investigate the source of the issue.
+Full error:
+  Application type mismatch: The argument
+    Eq.refl true
+  has type
+    @Eq Bool true true
+  but is expected to have type
+    @Eq Bool (decide (65 ≤ UScalar.cMax UScalarTy.U8)) true
+  in the application
+    id (Eq.refl true)
+'NFO_ResultLayout.emitted' depends on axioms: [propext, Classical.choice, Quot.sound]
+'NFO_ResultLayout.stores_layout' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+
+Running as unit: run-rce067a73dd24471884e484f12fe36ff3.scope; invocation ID: ddf141ef257d40cab031322aca420118

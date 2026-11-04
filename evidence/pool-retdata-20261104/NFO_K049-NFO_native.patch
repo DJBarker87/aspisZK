@@ -1,0 +1,69 @@
+--- a/programs/aspis-pool/src/pair_forest_dispatch.rs
++++ b/programs/aspis-pool/src/pair_forest_dispatch.rs
+@@ -1180,3 +1180,7 @@
+ 
+     const _: () = assert!(POOL_V1_PAIR_TREE_DEPTH == 20);
+ }
++
++#[cfg(kani)]
++#[path="NFO_read.rs"]
++mod NFO_read;
+--- a/programs/aspis-pool/src/lib.rs
++++ b/programs/aspis-pool/src/lib.rs
+@@ -1,3 +1,4 @@
++#![cfg_attr(kani, feature(allocator_api))]
+ //! Pool V1 authenticated state-transition kernel.
+ //!
+ //! The native entrypoint exposes exact V1 initialization, vault-backed
+@@ -145,3 +146,9 @@
+     plan_authenticated_verifier_dispatch_v1, AuthenticatedVerifierDispatchV1,
+     PlannedVerifierDispatchV1, VerifierDispatchClaimV1,
+ };
++
++#[cfg(kani)]
++extern crate alloc;
++#[cfg(kani)]
++#[path="../../../KMX_stubs.rs"]
++pub mod NFO_KMX;
+--- /dev/null
++++ b/programs/aspis-pool/src/NFO_read.rs
+@@ -0,0 +1,39 @@
++use super::*;
++use aspis_statement::pool_v1::*;
++use aspis_core::field::M31;
++fn digest()->aspis_statement::Digest{core::array::from_fn(|_|M31(kani::any()))}
++fn result()->PoolV1PairForestTerminalResultV1{PoolV1PairForestTerminalResultV1{
++ transition_kind:if kani::any(){PoolV1TransitionKind::PrivateTransfer}else{PoolV1TransitionKind::Withdrawal},
++ master_account:kani::any(),selected_lane_account:kani::any(),output_lane:kani::any(),nullifier:digest(),
++ verified_afterstate:PoolV1PairVerifiedAfterstateV1{next_pair_index:kani::any(),next_root:digest(),next_frontier:[digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest(),digest()]}}}
++fn observe(r:&PoolV1PairForestTerminalResultV1,family:u8,row:usize,word:usize,index:usize)->u64{match family{
++ 0=>r.transition_kind as u64,1=>r.master_account[index] as u64,2=>r.selected_lane_account[index] as u64,
++ 3=>r.output_lane as u64,4=>r.nullifier[word].0 as u64,5=>r.verified_afterstate.next_pair_index,
++ 6=>r.verified_afterstate.next_root[word].0 as u64,_=>r.verified_afterstate.next_frontier[row][word].0 as u64}}
++fn NFO_any_PoolV1PaymentStatementFormatError()->aspis_statement::pool_v1::PoolV1PaymentStatementFormatError { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongLength,1=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongTransitionKind,4=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonZeroReserved,6=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::ZeroRequiredBinding,7=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidAnchorSequence,8=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalDigest,9=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::NonCanonicalAssetId,10=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidWithdrawalAmount,11=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidDestination,12=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::InvalidEnvelope,_=>aspis_statement::pool_v1::PoolV1PaymentStatementFormatError::EnvelopeMismatch} }
++fn NFO_any_PoolV1TreeError()->aspis_statement::pool_v1::PoolV1TreeError { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1TreeError::TreeFull,1=>aspis_statement::pool_v1::PoolV1TreeError::InsufficientCapacity,2=>aspis_statement::pool_v1::PoolV1TreeError::IndexOutOfRange,3=>aspis_statement::pool_v1::PoolV1TreeError::RootMismatch,4=>aspis_statement::pool_v1::PoolV1TreeError::NonCanonicalFrontier,5=>aspis_statement::pool_v1::PoolV1TreeError::WrongLength,6=>aspis_statement::pool_v1::PoolV1TreeError::WrongMagic,7=>aspis_statement::pool_v1::PoolV1TreeError::WrongVersion,8=>aspis_statement::pool_v1::PoolV1TreeError::WrongDepth,9=>aspis_statement::pool_v1::PoolV1TreeError::WrongTreeHash,10=>aspis_statement::pool_v1::PoolV1TreeError::WrongDigestEncoding,11=>aspis_statement::pool_v1::PoolV1TreeError::NonCanonicalDigest,_=>aspis_statement::pool_v1::PoolV1TreeError::NonZeroReserved} }
++fn NFO_any_PoolV1PairForestAccountErrorV1()->aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongLaneCount,4=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongDepth,6=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::WrongFormatBinding,7=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::NonZeroReserved,8=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::ZeroRequiredBinding,9=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidBoolean,10=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidMasterState,11=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::InvalidLane,12=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneMasterMismatch,13=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneOrderMismatch,14=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::LaneSequenceDecreased,15=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::DuplicateCheckpoint,16=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::CheckpointSequenceOverflow,17=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::NonCanonicalDigest,18=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Identity,19=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Policy,_=>aspis_statement::pool_v1::PoolV1PairForestAccountErrorV1::Tree(NFO_any_PoolV1TreeError())} }
++fn NFO_any_PoolV1PairLiveSnapshotErrorV1()->aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::WrongFormatBinding,4=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonZeroReserved,5=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::ZeroRequiredBinding,6=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::SequenceIndexMismatch,7=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::TreeFull,_=>aspis_statement::pool_v1::PoolV1PairLiveSnapshotErrorV1::NonCanonicalDigest} }
++fn NFO_any_PoolV1PairVerifierTransportErrorV1()->aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongStatementVersion,4=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongDigestEncoding,5=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidTransitionKind,6=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongSuccessCode,7=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::WrongPairFormat,8=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::ZeroRequiredBinding,9=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidProofBodyLength,10=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidStatementPayloadLength,11=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidLiveSnapshotPayloadLength,12=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalOutputPair,13=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::InvalidAfterstateIndex,_=>aspis_statement::pool_v1::PoolV1PairVerifierTransportErrorV1::NonCanonicalAfterstate} }
++fn NFO_any_PoolV1PairLatePublicStatementErrorV1()->aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1 { match kani::any::<u8>() {0=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongLength,1=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongMagic,2=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongVersion,3=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongItemCount,4=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongHeaderLength,5=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongSnapshotLength,6=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongAfterstateLength,7=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::WrongTotalLength,8=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::NonZeroReserved,9=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::Snapshot(NFO_any_PoolV1PairLiveSnapshotErrorV1()),10=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::Afterstate(NFO_any_PoolV1PairVerifierTransportErrorV1()),_=>aspis_statement::pool_v1::PoolV1PairLatePublicStatementErrorV1::AfterstateIndexMismatch} }
++fn any_error()->PoolV1PairForestTerminalFormatErrorV1{match kani::any::<u8>(){0=>PoolV1PairForestTerminalFormatErrorV1::WrongLength,1=>PoolV1PairForestTerminalFormatErrorV1::WrongMagic,2=>PoolV1PairForestTerminalFormatErrorV1::WrongVersion,3=>PoolV1PairForestTerminalFormatErrorV1::WrongDigestEncoding,4=>PoolV1PairForestTerminalFormatErrorV1::InvalidTransitionKind,5=>PoolV1PairForestTerminalFormatErrorV1::InvalidOutputLane,6=>PoolV1PairForestTerminalFormatErrorV1::NonZeroBinding,7=>PoolV1PairForestTerminalFormatErrorV1::NonCanonicalDigest,8=>PoolV1PairForestTerminalFormatErrorV1::OutputLaneMismatch,9=>PoolV1PairForestTerminalFormatErrorV1::MasterBindingMismatch,10=>PoolV1PairForestTerminalFormatErrorV1::DeploymentBindingMismatch,11=>PoolV1PairForestTerminalFormatErrorV1::HistoricalAnchorMismatch,12=>PoolV1PairForestTerminalFormatErrorV1::CheckpointBindingMismatch,13=>PoolV1PairForestTerminalFormatErrorV1::SelectedLaneBindingMismatch,14=>PoolV1PairForestTerminalFormatErrorV1::LiveSnapshotMismatch,15=>PoolV1PairForestTerminalFormatErrorV1::CandidateAfterstateMismatch,16=>PoolV1PairForestTerminalFormatErrorV1::ResultBindingMismatch,17=>PoolV1PairForestTerminalFormatErrorV1::WithdrawalDestinationMismatch,18=>PoolV1PairForestTerminalFormatErrorV1::Payment(NFO_any_PoolV1PaymentStatementFormatError()),19=>PoolV1PairForestTerminalFormatErrorV1::LaneTransition(NFO_any_PoolV1PairLatePublicStatementErrorV1()),20=>PoolV1PairForestTerminalFormatErrorV1::Afterstate(NFO_any_PoolV1PairVerifierTransportErrorV1()),_=>PoolV1PairForestTerminalFormatErrorV1::Account(NFO_any_PoolV1PairForestAccountErrorV1())}}
++
++fn step(ptr:*const u8,out:*mut u8,old_size:usize,new_size:usize,i:&mut usize){
++ if *i<core::cmp::min(old_size,new_size){
++  let value=unsafe{ptr.cast::<core::mem::MaybeUninit<u8>>().add(*i).read()};
++  unsafe{out.cast::<core::mem::MaybeUninit<u8>>().add(*i).write(core::mem::MaybeUninit::new(value.assume_init()^1))};*i+=1;
++ }
++}
++#[kani::proof]
++#[kani::unwind(34)]
++#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]
++#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]
++fn association(){
++ let src:[u8;792]=kani::any();let mut dst:[u8;792]=kani::any();let old_size:usize=kani::any();kani::assume(old_size>=792);
++ let mut i:usize=kani::any();let before_i=i;let j:usize=kani::any();kani::assume(j<792);let before=dst[j];let src_before=src[j];
++ let value=Box::new(result());let family:u8=kani::any();kani::assume(family<8);let row:usize=kani::any();kani::assume(row<20);let word:usize=kani::any();kani::assume(word<8);let index:usize=kani::any();kani::assume(index<32);let field=observe(&value,family,row,word,index);
++ step(src.as_ptr(),dst.as_mut_ptr(),old_size,792,&mut i);
++ assert!(i==if before_i<792{before_i+1}else{before_i});
++ assert!(dst[j]==if before_i<792&&j==before_i{src[j]}else{before});
++ assert!(src[j]==src_before&&observe(&value,family,row,word,index)==field);
++}

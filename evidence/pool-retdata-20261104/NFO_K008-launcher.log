@@ -1,0 +1,48 @@
+{"attempt": "NFO_K008", "exit_status": 1, "wall_seconds": 29.727860714076087, "peak_rss_kib": "1302376", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+is-pool/src/../../../KMX_stubs.rs:75:4
+   |
+75 | fn KMX_growth_wrong(){let mut src=[0u32;16];src[15]=512;let mut dst=Vec::with_capacity(1);dst.push(7u32);for x in src {dst.push(x);}...
+   |    ^^^^^^^^^^^^^^^^ help: convert the identifier to snake case: `kmx_growth_wrong`
+
+warning: Found the following unsupported constructs:
+             - caller_location (1)
+             - foreign function (2)
+         
+         Verification will fail if one or more of these constructs is reachable.
+         See https://model-checking.github.io/kani/rust-feature-support.html for more details.
+
+    Finished `dev` profile [optimized] target(s) in 1.52s
+Checking harness pair_forest_dispatch::NFO_read::association...
+
+VERIFICATION RESULT:
+ ** 3 of 745 failed (14 unreachable)
+Failed Checks: This is a placeholder message; Kani doesn't support message formatted at runtime
+ File: "/home/runner/.rustup/toolchains/nightly-2025-11-21-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/result.rs", line 1867, in core::result::unwrap_failed
+Failed Checks: assertion failed: runtime.calls == 3 && frame.calls == 0 &&
+    matches!(actual,Err(e) if
+        e==PoolV1ProgramError::InvalidVerifierReturnProgram.into())
+ File: "programs/aspis-pool/src/NFO_read.rs", line 69, in pair_forest_dispatch::NFO_read::association
+Failed Checks: assertion failed: runtime.calls == 3 && frame.calls == 1 &&
+    matches!(actual,Err(e) if
+        e==PoolV1ProgramError::InvalidVerifierReturnData.into())
+ File: "programs/aspis-pool/src/NFO_read.rs", line 71, in pair_forest_dispatch::NFO_read::association
+
+VERIFICATION:- FAILED
+Verification Time: 25.905018s
+
+Manual Harness Summary:
+Verification failed for - pair_forest_dispatch::NFO_read::association
+Complete - 0 successfully verified harnesses, 1 failures, 1 total.
+
+Running as unit: run-ra23481b85aad45c0862aa1223437790c.scope; invocation ID: aad721c07bc943fd8dcc2a6e9ac2a3b5

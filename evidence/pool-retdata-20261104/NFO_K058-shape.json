@@ -1,0 +1,5 @@
+{
+ "mode": "constructor-negative",
+ "source": "use super::*;\n#[kani::proof]\n#[kani::unwind(34)]\n#[kani::stub(core::ptr::copy_nonoverlapping,crate::NFO_KMX::KMX_copy_nonoverlapping)]\n#[kani::stub(<[u8]>::copy_from_slice,crate::NFO_KMX::KMX_copy_from_slice)]\nfn association(){let key=Pubkey::new_from_array(kani::any());let signer:bool=kani::any();let j:usize=kani::any();kani::assume(j<32);let byte=key.to_bytes()[j];let mut meta=AccountMeta::new_readonly(key,signer);let mut wrong=meta.pubkey.to_bytes();wrong[j]^=1;meta.pubkey=Pubkey::new_from_array(wrong);assert!(meta.pubkey.to_bytes()[j]==byte&&meta.is_signer==signer&&!meta.is_writable);}\n",
+ "classification": "partial independent constructor/request forwarding; NOT a repair or closure of K056 metadata association"
+}
