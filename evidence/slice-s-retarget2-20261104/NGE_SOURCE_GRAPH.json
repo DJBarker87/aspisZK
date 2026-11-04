@@ -1,0 +1,517 @@
+{
+ "NEE_CanonicalFrame": {
+  "module": "NEE_CanonicalFrame",
+  "path": "evidence/slice-s-compose2-20261029/NEE_CanonicalFrame.lean",
+  "sha256": "f5c71f1b5ece8d4f26edbefd7e6cb3600e04cf62de4d052c8d84f4f817c943c7",
+  "line_range": [
+   1,
+   76
+  ],
+  "imports": [
+   "NED_ScannerCohorts"
+  ],
+  "source": "import NED_ScannerCohorts\nset_option autoImplicit false\nnoncomputable section\nnamespace NEE_CanonicalFrame\nopen Aeneas Aeneas.Std Result WP AspisR1AdapterReconstruct\nattribute [local instance] Classical.propDecidable\n\n/-- The external state is threaded unchanged through the exact emitted\niteration. Native modifies verification independently checks this frame. -/\ndef body {State : Type} (d : Array U32 8#usize) (p : Usize \u00d7 State) :\n    Result (ControlFlow (Usize \u00d7 State) (Bool \u00d7 State)) := do\n  let r \u2190 aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d p.1\n  match r with\n  | .cont i => ok (.cont (i,p.2))\n  | .done b => ok (.done (b,p.2))\n\ndef run {State : Type} (d : Array U32 8#usize) (state : State) : Result (Bool \u00d7 State) :=\n  loop (body d) (0#usize,state)\n\n/-- Termination/bounds of one emitted step, reused independently of state. -/\ntheorem step_total (d : Array U32 8#usize) (i : Usize) (bound : i.val \u2264 8) :\n    \u2203 r, aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d i = ok r \u2227\n      (match r with\n       | .done _ => True\n       | .cont j => j.val \u2264 8 \u2227 8-j.val < 8-i.val) := by\n  have spec : aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d i\n      \u2983 r => match r with\n        | .done _ => True\n        | .cont j => j.val \u2264 8 \u2227 8-j.val < 8-i.val \u2984 := by\n    unfold aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body\n    step*\n    all_goals first | trivial | scalar_tac\n  exact WP.spec_imp_exists spec\n\n/-- Whole-loop frame by decreasing-index induction, without native unwinding.\nNo claim about a native state is supplied as a hypothesis. -/\ntheorem frame {State : Type} (d : Array U32 8#usize) (state : State) :\n    \u2203 b : Bool, run d state = ok (b,state) := by\n  have spec : run d state \u2983 r => r.2 = state \u2984 := by\n    unfold run\n    refine loop.spec_decr_nat (fun p : Usize \u00d7 State => 8-p.1.val)\n      (fun p : Usize \u00d7 State => p.1.val \u2264 8 \u2227 p.2 = state)\n      (fun r : Bool \u00d7 State => r.2 = state) (body d) (0#usize,state) ?_ ?_\n    \u00b7 intro p hp\n      rcases p with \u27e8i,\u03c3\u27e9\n      have bound := hp.1\n      have same := hp.2\n      obtain \u27e8r,call,safety\u27e9 := step_total d i bound\n      unfold body\n      rw [call]\n      simp only [bind_tc_ok]\n      cases r with\n      | done b =>\n        exact same\n      | cont j =>\n        exact \u27e8\u27e8safety.1,same\u27e9,safety.2\u27e9\n    \u00b7 exact \u27e8by scalar_tac,rfl\u27e9\n  obtain \u27e8p,call,same\u27e9 := WP.spec_imp_exists spec\n  rcases p with \u27e8b,\u03c3\u27e9\n  dsimp only at same\n  rw [same] at call\n  exact \u27e8b,call\u27e9\n\n/-- Both frozen scanner bodies share this state-frame step, including reject\nand exhaustion. Their independently checked value inductions are reused. -/\ntheorem tree_body {State : Type} (d : Array U32 8#usize) (p : Usize \u00d7 State) :\n    body d p = (do\n      let r \u2190 aspis_statement.pool_v1.pair_tree_profile.digest_is_canonical_loop.body d p.1\n      match r with\n      | .cont i => ok (.cont (i,p.2))\n      | .done b => ok (.done (b,p.2))) := by rfl\n\n#print axioms step_total\n#print axioms frame\n#print axioms tree_body\nend NEE_CanonicalFrame\n"
+ },
+ "NEJ_ConcreteFrame": {
+  "module": "NEJ_ConcreteFrame",
+  "path": "evidence/slice-s-compose3-20261101/NEJ_ConcreteFrame.lean",
+  "sha256": "a9cbd66a3283dc82c5f308608e054723dc382b476db48d6d590efcb2d3a5e3c7",
+  "line_range": [
+   1,
+   46
+  ],
+  "imports": [
+   "NEJ_ArrayFrame",
+   "NED_CommonEncodeCohort"
+  ],
+  "source": "import NEJ_ArrayFrame\nimport NED_CommonEncodeCohort\nset_option autoImplicit false\nnoncomputable section\nnamespace NEJ_ConcreteFrame\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n\n/-- Fixed-array child return widths discharge every copy-window length. -/\ntheorem array_copy_frame {N W : Usize} (dst : Array U8 N) (src : Array U8 W)\n    (start k : Nat) (fits : start + W.val \u2264 N.val)\n    (outside : k < start \u2228 start + W.val \u2264 k) :\n    (dst.setSlice! start src.val).val[k]? = dst.val[k]? := by\n  apply NEJ_ArrayFrame.array_frame\n  \u00b7 simpa only [src.property] using fits\n  \u00b7 simpa only [src.property] using outside\n\ntheorem scalar_frame {N : Usize} (dst : Array U8 N) (i : Usize) (v : U8) (k : Nat)\n    (different : k \u2260 i.val) : (dst.set i v).val[k]? = dst.val[k]? := by\n  change (dst.val.set i.val v)[k]? = dst.val[k]?\n  exact List.getElem?_set_ne different.symm\n\n/-- All emitted field writes preserve the original reserved byte/suffix.\nThis theorem quantifies over arbitrary common fields and arbitrary prestate. -/\ntheorem encoded_frame (out : Array U8 216#usize) (magic : Array U8 4#usize)\n    (kind : pool_v1.historical_anchor.PoolV1TransitionKind)\n    (c : pool_v1.payment_relation.CommonPublicV1) (k : Nat)\n    (outside : k = 7 \u2228 148 \u2264 k) :\n    (NBP_CommonBytes.encoded out magic kind c).val[k]? = out.val[k]? := by\n  simp only [NBP_CommonBytes.encoded, NBP_CommonTail0.expected,\n    NBP_CommonTail1.expected, NBP_CommonTail2.expected, NBP_CommonTail3.expected,\n    NBP_CommonTail4.expected, NBP_CommonTail5.expected, NBP_CommonTail6.expected]\n  rw [array_copy_frame _ _ 144 k (by decide) (by scalar_tac)]\n  rw [array_copy_frame _ _ 112 k (by decide) (by scalar_tac)]\n  rw [array_copy_frame _ _ 80 k (by decide) (by scalar_tac)]\n  rw [array_copy_frame _ _ 72 k (by decide) (by scalar_tac)]\n  rw [array_copy_frame _ _ 40 k (by decide) (by scalar_tac)]\n  rw [array_copy_frame _ _ 8 k (by decide) (by scalar_tac)]\n  rw [scalar_frame _ _ _ k (by scalar_tac)]\n  rw [scalar_frame _ _ _ k (by scalar_tac)]\n  rw [scalar_frame _ _ _ k (by scalar_tac)]\n  exact array_copy_frame out magic 0 k (by decide) (by scalar_tac)\n\n#print axioms array_copy_frame\n#print axioms scalar_frame\n#print axioms encoded_frame\nend NEJ_ConcreteFrame\n"
+ },
+ "NEJ_CommonSourceFrame": {
+  "module": "NEJ_CommonSourceFrame",
+  "path": "evidence/slice-s-compose3-20261101/NEJ_CommonSourceFrame.lean",
+  "sha256": "b47b4335e548cecaf4c53ec951a98ba5d70c8366fbe726f29e3529d104ec7c9b",
+  "line_range": [
+   1,
+   22
+  ],
+  "imports": [
+   "NEJ_ConcreteFrame"
+  ],
+  "source": "import NEJ_ConcreteFrame\nset_option autoImplicit false\nnoncomputable section\nnamespace NEJ_CommonSourceFrame\nopen Aeneas Aeneas.Std Result NED_PaymentCohorts NED_CommonEncodeCohort\n\n/-- Complete emitted/model value plus byte frame, on the SAME arbitrary prestate.\nNative source-window certificates are separate evidence; this statement does\nnot quantify over or rename a model as the frozen native implementation. -/\ntheorem result_and_frame (out : Array U8 216#usize) (magic : Array U8 4#usize)\n    (kind : TK) (c : C) :\n    \u2203 result : Array U8 216#usize,\n      AspisR1AdapterReconstruct.aspis_statement.pool_v1.payment_relation.encode_common\n        out magic (toRawKind kind) (toRawCommon c) = ok result \u2227\n      result = NBP_CommonBytes.encoded out magic kind c \u2227\n      \u2200 k : Nat, k = 7 \u2228 148 \u2264 k \u2192 result.val[k]? = out.val[k]? := by\n  refine \u27e8NBP_CommonBytes.encoded out magic kind c, result out magic kind c, rfl, ?_\u27e9\n  intro k hk\n  exact NEJ_ConcreteFrame.encoded_frame out magic kind c k hk\n\n#print axioms result_and_frame\nend NEJ_CommonSourceFrame\n"
+ },
+ "NEJ_ScannerFramed": {
+  "module": "NEJ_ScannerFramed",
+  "path": "evidence/slice-s-compose3-20261101/NEJ_ScannerFramed.lean",
+  "sha256": "a0f787cc3b3a5165b6adbe21b7faaa22218cbac4313d7fe76d7df2ee4353ff20",
+  "line_range": [
+   1,
+   63
+  ],
+  "imports": [
+   "NEE_CanonicalFrame"
+  ],
+  "source": "import NEE_CanonicalFrame\nset_option autoImplicit false\nnoncomputable section\nnamespace NEJ_ScannerFramed\nopen Aeneas Aeneas.Std Result WP AspisR1AdapterReconstruct\nopen NBD_DigestInduction\nattribute [local instance] Classical.propDecidable\n\n/-- A single loop execution has BOTH the canonicality result and the external\nframe. This strengthens the predecessor's existential frame, without assuming\nits existential Boolean equals the value of an unrelated execution. -/\ntheorem value_and_frame {State : Type} (d : Array U32 8#usize) (state : State) :\n    NEE_CanonicalFrame.run d state = ok (decide (Canonical d),state) := by\n  have spec : NEE_CanonicalFrame.run d state\n      \u2983 r => r = (decide (Canonical d),state) \u2984 := by\n    unfold NEE_CanonicalFrame.run\n    refine loop.spec_decr_nat (fun p : Usize \u00d7 State => 8-p.1.val)\n      (fun p : Usize \u00d7 State => p.1.val \u2264 8 \u2227\n        (Canonical d \u2194 Suffix d p.1.val) \u2227 p.2=state)\n      (fun r : Bool \u00d7 State => r=(decide (Canonical d),state))\n      (NEE_CanonicalFrame.body d) (0#usize,state) ?_ ?_\n    \u00b7 intro p hp\n      rcases p with \u27e8i,\u03c3\u27e9\n      rcases hp with \u27e8bound,eqv,same\u27e9\n      dsimp only at bound eqv same\n      have raw_spec : aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body d i\n          \u2983 r => match r with\n            | .done b => (b,\u03c3)=(decide (Canonical d),state)\n            | .cont j => (j.val \u2264 8 \u2227 (Canonical d \u2194 Suffix d j.val) \u2227 \u03c3=state) \u2227\n                8-j.val < 8-i.val \u2984 := by\n        unfold aspis_statement.pool_v1.pair_forest_accounts.digest_is_canonical_loop.body\n        step*\n        all_goals try unfold aspis_core.field.P at *\n        all_goals simp_all [Canonical, Suffix]\n        all_goals first | scalar_tac | skip\n        \u00b7 refine \u27e8\u27e8i.val, by scalar_tac\u27e9, Nat.le_refl _, ?_\u27e9\n          assumption\n        \u00b7 refine \u27e8by scalar_tac, ?_, by scalar_tac\u27e9\n          constructor\n          \u00b7 intro h j hj\n            exact h j (by omega)\n          \u00b7 intro h j hj\n            by_cases same : j.val=i.val\n            \u00b7 simpa only [same] using\n                (show (d.val[i.val]'(by have := d.property; scalar_tac)).val < 2147483647 from by assumption)\n            \u00b7 exact h j (by omega)\n      obtain \u27e8r,call,post\u27e9 := WP.spec_imp_exists raw_spec\n      unfold NEE_CanonicalFrame.body\n      dsimp only\n      rw [call]\n      simp only [bind_tc_ok]\n      cases r with\n      | done b => exact post\n      | cont j => exact post\n    \u00b7 constructor\n      \u00b7 scalar_tac\n      \u00b7 exact \u27e8by simp [Canonical,Suffix],rfl\u27e9\n  obtain \u27e8r,call,same\u27e9 := WP.spec_imp_exists spec\n  rw [same] at call\n  exact call\n\n#print axioms value_and_frame\nend NEJ_ScannerFramed\n"
+ },
+ "NEJ_ScannerWidth": {
+  "module": "NEJ_ScannerWidth",
+  "path": "evidence/slice-s-compose3-20261101/NEJ_ScannerWidth.lean",
+  "sha256": "43655295246a20a4194a0af7355be32a419aec1b4e8dcdc08646f3044d47cd45",
+  "line_range": [
+   1,
+   12
+  ],
+  "imports": [
+   "NEJ_ScannerFramed"
+  ],
+  "source": "import NEJ_ScannerFramed\nset_option autoImplicit false\nnamespace NEJ_ScannerWidth\nopen Aeneas Aeneas.Std\n\n/-- Digest::len is the length of a fixed eight-word carrier, not a callback.\nThe native step executes the actual len operation without stubbing it. -/\ntheorem width (digest : Array U32 8#usize) : digest.val.length = 8 := by\n  exact digest.property\n\n#print axioms width\nend NEJ_ScannerWidth\n"
+ },
+ "NEJ_WindowStep": {
+  "module": "NEJ_WindowStep",
+  "path": "evidence/slice-s-compose3-20261101/NEJ_WindowStep.lean",
+  "sha256": "4b36d9098273881a6b5a42b1c23a060d01eed77f0a2c792b8a89cdc2e2f85f16",
+  "line_range": [
+   1,
+   39
+  ],
+  "imports": [
+   "NEJ_CommonFrame"
+  ],
+  "source": "import NEJ_CommonFrame\nset_option autoImplicit false\nnamespace NEJ_WindowStep\nopen KMX_CopyMeaning\n\n/-- Value operation of exactly one KMX indexed iteration on a caller window. -/\ndef step {\u03b1 : Type} (dst src : Nat \u2192 \u03b1) (start offset : Nat) : Nat \u2192 \u03b1 :=\n  write dst (start+offset) (src offset)\n\n/-- Native step's local source index is the same global destination cell. -/\ntheorem association {\u03b1 : Type} (dst src : Nat \u2192 \u03b1) (start offset : Nat) :\n    step dst src start offset =\n      write dst (start+offset) ((fun k => src (k-start)) (start+offset)) := by\n  simp only [step, Nat.add_sub_cancel_left]\n\n/-- Induction covers an arbitrary suffix from the caller-established invariant,\nnot only an initially zero buffer or a concrete iteration count. -/\ntheorem iteration {\u03b1 : Type} (dst src : Nat \u2192 \u03b1) (start offset count k : Nat) :\n    loop (fun j => src (j-start)) dst (start+offset) count k =\n      if start+offset \u2264 k \u2227 k < start+offset+count then src (k-start) else dst k :=\n  loop_spec _ _ _ _ _\n\n/-- The remaining copy suffix cannot overwrite an already-written earlier cell. -/\ntheorem earlier_frame {\u03b1 : Type} (dst src : Nat \u2192 \u03b1) (start offset count k : Nat)\n    (before : k < start+offset) :\n    loop (fun j => src (j-start)) dst (start+offset) count k = dst k :=\n  copy_frame _ _ _ _ _ (Or.inl before)\n\n/-- A caller's fixed-array widths give the exact loop termination invariant. -/\ntheorem bounds (start width offset : Nat) (within : offset < width)\n    (fits : start+width \u2264 216) :\n    start+offset < 216 \u2227 offset+1 \u2264 width \u2227 width-(offset+1) < width-offset := by\n  omega\n\n#print axioms association\n#print axioms iteration\n#print axioms earlier_frame\n#print axioms bounds\nend NEJ_WindowStep\n"
+ },
+ "NEL_CommonOracle": {
+  "module": "NEL_CommonOracle",
+  "path": "evidence/slice-s-compose4-20261101/NEL_CommonOracle.lean",
+  "sha256": "199f8e0d369c897714c1615b6ec8f0d3c4510b124d579eb619e47cc55aa84df7",
+  "line_range": [
+   1,
+   42
+  ],
+  "imports": [
+   "NED_CommonValidation"
+  ],
+  "source": "import NED_CommonValidation\nset_option autoImplicit false\nnoncomputable section\nnamespace NEL_CommonOracle\nopen Aeneas Aeneas.Std Result NBG_PaymentChecks\n\ndef value (c : C) (anchor nullifier : Bool) : core.result.Result Unit E :=\n  if zero c.pool || zero c.deployment_domain then .Err .ZeroRequiredBinding\n  else if c.anchor_sequence.val > 1048576 then .Err .InvalidAnchorSequence\n  else if !anchor || !nullifier then .Err .NonCanonicalDigest\n  else if c.asset_id.val >= 2147483647 then .Err .NonCanonicalAssetId\n  else .Ok ()\n\ndef calls (c : C) (anchor : Bool) : List (Array U32 8#usize) :=\n  if zero c.pool || zero c.deployment_domain then []\n  else if c.anchor_sequence.val > 1048576 then []\n  else if !anchor then [c.anchor_root]\n  else [c.anchor_root,c.nullifier]\n\n/-- Ruling y part (3): substitute the already closed pure canonicality child.\nThe native caller's counter records exactly this ordered argument list. -/\ntheorem substitution (c : C) :\n    value c (canonical c.anchor_root) (canonical c.nullifier) = common c := by rfl\n\ntheorem reached_argument (c : C) (anchor : Bool) (d : _)\n    (reached : d \u2208 calls c anchor) : d = c.anchor_root \u2228 d = c.nullifier := by\n  unfold calls at reached\n  repeat' split at reached\n  all_goals simp_all\n\ntheorem call_count (c : C) (anchor : Bool) : (calls c anchor).length =\n    if zero c.pool || zero c.deployment_domain then 0\n    else if c.anchor_sequence.val > 1048576 then 0\n    else if !anchor then 1 else 2 := by\n  unfold calls\n  repeat' split\n  all_goals rfl\n\n#print axioms substitution\n#print axioms reached_argument\n#print axioms call_count\nend NEL_CommonOracle\n"
+ },
+ "NEL_DigestGeometry": {
+  "module": "NEL_DigestGeometry",
+  "path": "evidence/slice-s-compose4-20261101/NEL_DigestGeometry.lean",
+  "sha256": "93c9e83218e686b3397caaf579d1831a3573b869efaeff3a69096067c8352a86",
+  "line_range": [
+   1,
+   18
+  ],
+  "imports": [
+   "NEL_CopyArrayLaw",
+   "NBP_DigestEncode"
+  ],
+  "source": "import NEL_CopyArrayLaw\nimport NBP_DigestEncode\nset_option autoImplicit false\nnamespace NEL_DigestGeometry\n\ntheorem window_bound (index offset : Nat) (word : index < 8) (byte : offset < 4) :\n    4*index+offset < 32 \u2227 4*index+4 \u2264 32 \u2227 index+1 \u2264 8 := by omega\n\ntheorem distinct_words (i j : Nat) (different : i < j) : 4*i+4 \u2264 4*j := by omega\n\n/-- The physical byte cannot silently refer to another digest limb or offset. -/\ntheorem coordinate_unique (i j k l : Nat) (ki : k < 4) (lj : l < 4)\n    (same : 4*i+k = 4*j+l) : i = j \u2227 k = l := by omega\n\n#print axioms window_bound\n#print axioms distinct_words\n#print axioms coordinate_unique\nend NEL_DigestGeometry\n"
+ },
+ "NEL_DigestLoopFrame": {
+  "module": "NEL_DigestLoopFrame",
+  "path": "evidence/slice-s-compose4-20261101/NEL_DigestLoopFrame.lean",
+  "sha256": "bdfaa2c16a7045026be10122ab18d5cd53c9f54ae2fbfc547b4d2eff31e0a58c",
+  "line_range": [
+   1,
+   29
+  ],
+  "imports": [
+   "NEL_CopyArrayLaw",
+   "NEL_DigestGeometry",
+   "NBP_DigestEncode"
+  ],
+  "source": "import NEL_CopyArrayLaw\nimport NEL_DigestGeometry\nimport NBP_DigestEncode\nset_option autoImplicit false\nnoncomputable section\nnamespace NEL_DigestLoopFrame\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder AspisR1.S2K\n\n/-- Native byte-update observations are associated with the SAME emitted\nprotocol step, not an independently selected digest or output allocation. -/\ntheorem step_and_bytes (digest : Array U32 8#usize) (index : Usize)\n    (range : index.val < 8) (out : Array U8 32#usize) :\n    \u2203 next, \u2203 after : Array U8 32#usize,\n      atomic_statement.encode_digest_canonical_loop.body (DigestTotal.cursor digest index) out =\n        ok (.cont (next,after)) \u2227\n      \u2200 k : Nat, after.val[k]? =\n        KMX_CopyMeaning.loop\n          (fun j => (core.num.U32.to_le_bytes\n            (digest.val[index.val]'(by have := digest.property; change digest.val.length=8 at this; omega))).val[j-4*index.val]?)\n          (fun j => out.val[j]?) (4*index.val) 4 k := by\n  refine \u27e8_,_,NBP_DigestEncode.step digest index range out,?_\u27e9\n  intro k\n  exact (NEL_CopyArrayLaw.loop_binding out\n    (core.num.U32.to_le_bytes\n      (digest.val[index.val]'(by have := digest.property; change digest.val.length=8 at this; omega)))\n    (4*index.val) k (by change 4*index.val+4 \u2264 32; omega)).symm\n\n#print axioms step_and_bytes\nend NEL_DigestLoopFrame\n"
+ },
+ "NEL_PaymentFieldCarriers": {
+  "module": "NEL_PaymentFieldCarriers",
+  "path": "evidence/slice-s-compose4-20261101/NEL_PaymentFieldCarriers.lean",
+  "sha256": "a88374995679d45fd133432da0535fda5b50f71bf7eeab9d98c570922a703229",
+  "line_range": [
+   1,
+   19
+  ],
+  "imports": [
+   "NED_PaymentCohorts"
+  ],
+  "source": "import NED_PaymentCohorts\nset_option autoImplicit false\nnoncomputable section\nnamespace NEL_PaymentFieldCarriers\nopen NED_PaymentCohorts\n\ntheorem transfer_fields (p : T) :\n    (toRawTransfer p).recipient_commitment = p.recipient_commitment \u2227\n      (toRawTransfer p).change_commitment = p.change_commitment := by constructor <;> rfl\n\ntheorem withdrawal_fields (p : W) :\n    (toRawWithdrawal p).change_commitment = p.change_commitment \u2227\n      (toRawWithdrawal p).amount = p.amount \u2227\n      (toRawWithdrawal p).destination_token_account = p.destination_token_account := by\n  exact \u27e8rfl,rfl,rfl\u27e9\n\n#print axioms transfer_fields\n#print axioms withdrawal_fields\nend NEL_PaymentFieldCarriers\n"
+ },
+ "NEL_PaymentDomains": {
+  "module": "NEL_PaymentDomains",
+  "path": "evidence/slice-s-compose4-20261101/NEL_PaymentDomains.lean",
+  "sha256": "73e4f42c45537e18b7e1dd49751aac74c7e63bb81b03db4731ea17b33c24e83b",
+  "line_range": [
+   1,
+   43
+  ],
+  "imports": [
+   "NED_PaymentValidation"
+  ],
+  "source": "import NED_PaymentValidation\nset_option autoImplicit false\nnoncomputable section\nnamespace NEL_PaymentDomains\nopen Aeneas Aeneas.Std Result NBG_PaymentChecks NBG_PaymentValidators\n\ntheorem common_accepted (c : C) (accepted : common c = .Ok ()) :\n    zero c.pool = false \u2227 zero c.deployment_domain = false \u2227\n    c.anchor_sequence.val \u2264 1048576 \u2227 canonical c.anchor_root = true \u2227\n    canonical c.nullifier = true \u2227 c.asset_id.val < 2147483647 := by\n  unfold common at accepted\n  repeat' split at accepted\n  all_goals simp_all <;> omega\n\ntheorem transfer_accepted (p : T) (accepted : transfer p = .Ok ()) :\n    common (tc p) = .Ok () \u2227 canonical p.recipient_commitment = true \u2227\n      canonical p.change_commitment = true := by\n  unfold transfer at accepted\n  cases hc : common (tc p) with\n  | Err e => simp only [hc,reduceCtorEq] at accepted\n  | Ok u =>\n    cases u\n    simp only [hc] at accepted\n    split at accepted\n    \u00b7 contradiction\n    \u00b7 simp_all\n\ntheorem withdrawal_accepted (p : W) (accepted : withdrawal p = .Ok ()) :\n    common (wc p) = .Ok () \u2227 0 < p.amount.val \u2227 p.amount.val < 1073741824 \u2227\n      zero p.destination_token_account = false \u2227 canonical p.change_commitment = true := by\n  unfold withdrawal at accepted\n  cases hc : common (wc p) with\n  | Err e => simp only [hc,reduceCtorEq] at accepted\n  | Ok u =>\n    cases u\n    simp only [hc] at accepted\n    repeat' split at accepted\n    all_goals simp_all <;> omega\n\n#print axioms common_accepted\n#print axioms transfer_accepted\n#print axioms withdrawal_accepted\nend NEL_PaymentDomains\n"
+ },
+ "NEL_PaymentOracle": {
+  "module": "NEL_PaymentOracle",
+  "path": "evidence/slice-s-compose4-20261101/NEL_PaymentOracle.lean",
+  "sha256": "44d8285288214430ad6218daab5e79e4b42f29d07596be2786ce2e3c60a3a6de",
+  "line_range": [
+   1,
+   64
+  ],
+  "imports": [
+   "NEL_PaymentDomains"
+  ],
+  "source": "import NEL_PaymentDomains\nset_option autoImplicit false\nnoncomputable section\nnamespace NEL_PaymentOracle\nopen Aeneas Aeneas.Std Result NBG_PaymentChecks NBG_PaymentValidators\nabbrev Reply := core.result.Result Unit E\n\ndef transfer_value (reply : Reply) (recipient change : Bool) : Reply :=\n  match reply with\n  | .Err e => .Err e\n  | .Ok () => if !recipient || !change then .Err .NonCanonicalDigest else .Ok ()\n\ndef withdrawal_value (p : W) (reply : Reply) (change : Bool) : Reply :=\n  match reply with\n  | .Err e => .Err e\n  | .Ok () => if p.amount.val = 0 \u2228 p.amount.val >= 1073741824 then .Err .InvalidWithdrawalAmount\n      else if zero p.destination_token_account then .Err .InvalidDestination\n      else if !change then .Err .NonCanonicalDigest else .Ok ()\n\ntheorem transfer_substitution (p : T) :\n    transfer_value (common (tc p)) (canonical p.recipient_commitment)\n      (canonical p.change_commitment) = transfer p := by rfl\n\ntheorem withdrawal_substitution (p : W) :\n    withdrawal_value p (common (wc p)) (canonical p.change_commitment) = withdrawal p := by rfl\n\ndef transfer_calls (reply : Reply) (recipient : Bool) : List Nat :=\n  match reply with\n  | .Err _ => [0]\n  | .Ok () => if !recipient then [0,1] else [0,1,2]\n\ndef withdrawal_calls (p : W) (reply : Reply) : List Nat :=\n  match reply with\n  | .Err _ => [0]\n  | .Ok () => if p.amount.val = 0 \u2228 p.amount.val >= 1073741824 then [0]\n      else if zero p.destination_token_account then [0] else [0,1]\n\ntheorem transfer_call_count (reply : Reply) (recipient : Bool) :\n    (transfer_calls reply recipient).length =\n      match reply with | .Err _ => 1 | .Ok () => if !recipient then 2 else 3 := by\n  cases reply with\n  | Err e => rfl\n  | Ok u => cases u; cases recipient <;> rfl\n\ntheorem withdrawal_call_count (p : W) (reply : Reply) :\n    (withdrawal_calls p reply).length =\n      (match reply with\n       | .Err _ => 1\n       | .Ok () =>\n         if p.amount.val = 0 \u2228 p.amount.val >= 1073741824 then 1\n         else if zero p.destination_token_account then 1 else 2) := by\n  cases reply with\n  | Err e => rfl\n  | Ok u =>\n    cases u\n    by_cases bad : p.amount.val = 0 \u2228 p.amount.val >= 1073741824 <;>\n      by_cases dest : zero p.destination_token_account = true <;>\n        simp [withdrawal_calls,bad,dest]\n\n#print axioms transfer_substitution\n#print axioms withdrawal_substitution\n#print axioms transfer_call_count\n#print axioms withdrawal_call_count\nend NEL_PaymentOracle\n"
+ },
+ "NEM_ArraySnapshotView": {
+  "module": "NEM_ArraySnapshotView",
+  "path": "evidence/slice-s-compose5-20261102/NEM_ArraySnapshotView.lean",
+  "sha256": "5d79335e2995901146a4a5b596827665f98630eb04712b365b679c7dc2d1ee0b",
+  "line_range": [
+   1,
+   24
+  ],
+  "imports": [
+   "NEM_SnapshotBorrow"
+  ],
+  "source": "import NEM_SnapshotBorrow\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_ArraySnapshotView\nopen Aeneas Aeneas.Std Result\n\n/-- The fixed view covers EVERY possible original slice poststate, with no\nbyte restriction, fresh native object, or independent execution witness. -/\ntheorem cover (post : Slice U8) (size : post.length = 800) :\n    \u2203 array : Array U8 800#usize, array.to_slice = post := by\n  refine \u27e8\u27e8post.val,size\u27e9,?_\u27e9\n  apply Subtype.ext\n  rfl\n\ntheorem poststate (out : Slice U8) (size : out.length = 1520)\n    (post : Array U8 800#usize) (k : Nat) :\n    (out.setSlice! 32 post.val).val[k]? =\n      if 32 \u2264 k \u2227 k < 832 then post.val[k-32]? else out.val[k]? := by\n  have len : post.to_slice.length = 800 := post.property\n  simpa only [Array.to_slice] using NEM_SnapshotBorrow.poststate out post.to_slice size len k\n\n#print axioms cover\n#print axioms poststate\nend NEM_ArraySnapshotView\n"
+ },
+ "NEM_DigestInstance": {
+  "module": "NEM_DigestInstance",
+  "path": "evidence/slice-s-compose5-20261102/NEM_DigestInstance.lean",
+  "sha256": "eafeac190fab6dde7de40b6e6eb050a759308b77c755d072a15616b3164fad5d",
+  "line_range": [
+   1,
+   26
+  ],
+  "imports": [
+   "NEL_DigestLoopFrame",
+   "NED_DigestCohorts",
+   "S2K_DigestBytes"
+  ],
+  "source": "import NEL_DigestLoopFrame\nimport NED_DigestCohorts\nimport S2K_DigestBytes\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_DigestInstance\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder AspisR1.S2K\n\n/-- The count and returned word of the SAME cursor consumed by the emitted\nbyte-step theorem. No independently selected index or word is a premise. -/\ntheorem next_call (d : Array U32 8#usize) (i : Usize) (bound : i.val < 8) :\n    DigestTotal.next (DigestTotal.cursor d i) = ok\n      (some (i,d.val[i.val]'(by have := d.property; change d.val.length=8 at this; omega)),\n       DigestTotal.cursor d (Usize.ofNatCore (i.val+1) (by scalar_tac))) :=\n  DigestTotal.next_row d i bound\n\n/-- Instantiate the accepted decreasing-suffix induction and cohort identity\nat the same raw digest; arbitrary external state is preserved by this pure call. -/\ntheorem result_and_frame {State : Type} (d : Array U32 8#usize) (state : State) :\n    (AspisR1AdapterReconstruct.aspis_statement.atomic_statement.encode_digest_canonical d,\n       state) = (ok (DigestBytes.bytes d),state) := by\n  rw [NED_DigestCohorts.digest_encode, DigestBytes.exact]\n\n#print axioms next_call\n#print axioms result_and_frame\nend NEM_DigestInstance\n"
+ },
+ "NEL_FrontierGeometry": {
+  "module": "NEL_FrontierGeometry",
+  "path": "evidence/slice-s-compose4-20261101/NEL_FrontierGeometry.lean",
+  "sha256": "2837e5538d613f1434fe6f061cb13ac71c6669a1542143e41e2d8161b51329bd",
+  "line_range": [
+   1,
+   18
+  ],
+  "imports": [
+   "NEL_SliceCopyLaw"
+  ],
+  "source": "import NEL_SliceCopyLaw\nset_option autoImplicit false\nnamespace NEL_FrontierGeometry\n\ntheorem bounds (level offset : Nat) (word : level < 20) (byte : offset < 32) :\n    160+32*level+offset < 800 \u2227 48+32*level+offset < 688 \u2227\n    160+32*level+32 \u2264 800 \u2227 48+32*level+32 \u2264 688 \u2227 level+1 \u2264 20 := by omega\n\ntheorem coordinate_unique (base i j k l : Nat) (ki : k < 32) (lj : l < 32)\n    (same : base+32*i+k = base+32*j+l) : i = j \u2227 k = l := by omega\n\ntheorem header_disjoint (level k : Nat) (header : k < 24) :\n    k < 32 \u2227 k < 160+32*level \u2227 k < 48+32*level := by omega\n\n#print axioms bounds\n#print axioms coordinate_unique\n#print axioms header_disjoint\nend NEL_FrontierGeometry\n"
+ },
+ "NEM_EncoderFrame": {
+  "module": "NEM_EncoderFrame",
+  "path": "evidence/slice-s-compose5-20261102/NEM_EncoderFrame.lean",
+  "sha256": "8b386b9eaa025dd68843b6610661e54c7932524737ee668c211a890c097d391c",
+  "line_range": [
+   1,
+   75
+  ],
+  "imports": [
+   "NEL_SliceCopyLaw",
+   "NEL_FrontierGeometry",
+   "NED_SubtreeComposition",
+   "NBK_Fill"
+  ],
+  "source": "import NEL_SliceCopyLaw\nimport NEL_FrontierGeometry\nimport NED_SubtreeComposition\nimport NBK_Fill\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_EncoderFrame\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder AspisR1.S2K\n\ntheorem frontier_next (rows : Array (Array U32 8#usize) 20#usize)\n    (i : Usize) (bound : i.val < 20) :\n    LoopStep.next (Iterator.cursor rows i) = ok\n      (some (i,rows.val[i.val]'(by have := rows.property; change rows.val.length=20 at this; omega)),\n       Iterator.cursor rows (Usize.ofNatCore (i.val+1) (by scalar_tac))) :=\n  Iterator.next_row rows i bound\n\n/-- The same emitted native iteration, actual node, arbitrary original slice,\nand exact global byte frame. No independently selected child buffer occurs. -/\ntheorem live_step_and_bytes (rows : Array (Array U32 8#usize) 20#usize)\n    (i : Usize) (bound : i.val < 20) (out : Slice U8) (size : out.length = 800) :\n    \u2203 next, \u2203 after : Slice U8,\n      NBK_LiveStep.body (Iterator.cursor rows i) out = ok (.cont (next,after)) \u2227\n      \u2200 k : Nat, after.val[k]? = KMX_CopyMeaning.loop\n        (fun j => (DigestBytes.bytes\n          (rows.val[i.val]'(by have := rows.property; change rows.val.length=20 at this; omega))).val[j-(160+32*i.val)]?)\n        (fun j => out.val[j]?) (160+32*i.val) 32 k := by\n  let node := rows.val[i.val]'(by have := rows.property; change rows.val.length=20 at this; omega)\n  refine \u27e8_,_,NBK_LiveStep.body_write _ _ out i node (DigestBytes.bytes node)\n    (Iterator.next_row rows i bound) bound size (DigestBytes.exact node),?_\u27e9\n  intro k\n  have len : (DigestBytes.bytes node).to_slice.length = 32 := (DigestBytes.bytes node).property\n  have fits : 160+32*i.val+32 \u2264 out.length := by rw [size]; omega\n  have same := (NEL_SliceCopyLaw.loop_binding out (DigestBytes.bytes node).to_slice\n    (160+32*i.val) k (by rw [len]; exact fits)).symm\n  rw [len] at same\n  simpa only [Array.to_slice] using same\n\ntheorem after_step_and_bytes (rows : Array (Array U32 8#usize) 20#usize)\n    (i : Usize) (bound : i.val < 20) (out : Array U8 688#usize) :\n    \u2203 next, \u2203 after : Array U8 688#usize,\n      LoopStep.body (Iterator.cursor rows i) out = ok (.cont (next,after)) \u2227\n      \u2200 k : Nat, after.val[k]? = KMX_CopyMeaning.loop\n        (fun j => (DigestBytes.bytes\n          (rows.val[i.val]'(by have := rows.property; change rows.val.length=20 at this; omega))).val[j-(48+32*i.val)]?)\n        (fun j => out.val[j]?) (48+32*i.val) 32 k := by\n  let node := rows.val[i.val]'(by have := rows.property; change rows.val.length=20 at this; omega)\n  refine \u27e8_,_,LoopStep.body_write _ _ out i node (DigestBytes.bytes node)\n    (Iterator.next_row rows i bound) bound (DigestBytes.exact node),?_\u27e9\n  intro k\n  exact (NEL_CopyArrayLaw.loop_binding out (DigestBytes.bytes node)\n    (48+32*i.val) k (by change 48+32*i.val+32 \u2264 688; omega)).symm\n\n/-- Actual fill realization is a separately pinned native intrinsic check. -/\ntheorem fill_value (out : Slice U8) :\n    core.slice.Slice.fill core.clone.CloneU8 out 0#u8 = ok (NBK_Fill.value out 0#u8) :=\n  NBK_Fill.source out 0#u8\n\ntheorem live_value_and_frame {State : Type} (s : NBH_LiveValidator.Snapshot)\n    (out : Slice U8) (state : State) :\n    (pool_v1.pair_tree_profile.encode_pool_v1_pair_live_snapshot_v1 s out,state) =\n      (NBN_EncoderSummary.live atomic_statement.encode_digest_canonical s out,state) := by\n  rw [NED_SubtreeComposition.live_encode]\n\ntheorem after_value_and_frame {State : Type} (a : NBH_Validators.Afterstate) (state : State) :\n    (pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1 a,state) =\n      (NBN_EncoderSummary.after atomic_statement.encode_digest_canonical a,state) := by\n  rw [NED_SubtreeComposition.after_encode]\n\n#print axioms frontier_next\n#print axioms live_step_and_bytes\n#print axioms after_step_and_bytes\n#print axioms fill_value\n#print axioms live_value_and_frame\n#print axioms after_value_and_frame\nend NEM_EncoderFrame\n"
+ },
+ "NEM_KindInstance": {
+  "module": "NEM_KindInstance",
+  "path": "evidence/slice-s-compose5-20261102/NEM_KindInstance.lean",
+  "sha256": "4f5bfaa24352d0ae91125885738e43b1f9582a7f09542bd2e06325c3005214b6",
+  "line_range": [
+   1,
+   39
+  ],
+  "imports": [
+   "NBN_U05"
+  ],
+  "source": "import NBN_U05\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_KindInstance\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult\n\ndef write (before : Nat \u2192 U8) (value : U8) (j : Nat) : U8 :=\n  if j=5 then value else before j\n\n/-- Actual enclosing encoder's SAME variant tag, with the complete scalar-write frame. -/\ntheorem statement_window (s : Statement) (before : Nat \u2192 U8) (j : Nat) :\n    write before (NBN_EncoderBytes.tag s) j =\n      if j=5 then (match s with | .PrivateTransfer _ _ => 1#u8 | .Withdrawal _ _ => 2#u8)\n      else before j := by\n  rw [NBN_U05.encoder_kind]\n  rfl\n\n/-- A payment carrier keeps its SAME public value and variant when joined to any common carrier. -/\ndef join (c : NBD_TerminalProjection.Common)\n    (p : Sum NBN_ValidatorSummary.Transfer NBN_ValidatorSummary.Withdrawal) : Statement :=\n  match p with | .inl t => .PrivateTransfer c t | .inr w => .Withdrawal c w\n\ntheorem payment_window (c : NBD_TerminalProjection.Common)\n    (p : Sum NBN_ValidatorSummary.Transfer NBN_ValidatorSummary.Withdrawal)\n    (before : Nat \u2192 U8) (j : Nat) :\n    write before (NBN_EncoderBytes.tag (join c p)) j =\n      if j=5 then (match p with | .inl _ => 1#u8 | .inr _ => 2#u8) else before j := by\n  cases p <;> exact statement_window _ before j\n\n/-- The caller supplies this SAME header byte. Both valid and every invalid byte preserve state. -/\ntheorem parser_result_frame {State : Type} (header : Nat \u2192 U8) (state : State) :\n    (pool_v1.pair_forest_terminal.transition_kind (header 5),state) =\n      (ok (NBD_TerminalProjection.kind (header 5)),state) := by\n  rw [NBD_TerminalProjection.source_kind]\n\n#print axioms statement_window\n#print axioms payment_window\n#print axioms parser_result_frame\nend NEM_KindInstance\n"
+ },
+ "NEM_EncoderReceiver": {
+  "module": "NEM_EncoderReceiver",
+  "path": "evidence/slice-s-compose5-20261102/NEM_EncoderReceiver.lean",
+  "sha256": "9426a12b3a3ca2f6cfa26de2640fefc0bb1b7e67493aae898ec7c92009fba7a9",
+  "line_range": [
+   1,
+   11
+  ],
+  "imports": [
+   "NEM_KindInstance"
+  ],
+  "source": "import NEM_KindInstance\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_EncoderReceiver\nopen Aeneas Aeneas.Std\n/-- The terminal encoder's sequence carrier has exactly the primitive U64 width. -/\ntheorem sequence_width (c : NBD_TerminalProjection.Common) :\n    (core.num.U64.to_le_bytes c.checkpoint_sequence).val.length=8 :=\n  (core.num.U64.to_le_bytes c.checkpoint_sequence).property\n#print axioms sequence_width\nend NEM_EncoderReceiver\n"
+ },
+ "NEM_FrontierValidatorInstance": {
+  "module": "NEM_FrontierValidatorInstance",
+  "path": "evidence/slice-s-compose5-20261102/NEM_FrontierValidatorInstance.lean",
+  "sha256": "52bccecabc26841e0be64f81fb2ad60fe30795c4490612401b3e881a3b6bb8de",
+  "line_range": [
+   1,
+   32
+  ],
+  "imports": [
+   "NBH_FrontierTrace",
+   "NBH_LiveValidator"
+  ],
+  "source": "import NBH_FrontierTrace\nimport NBH_LiveValidator\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_FrontierValidatorInstance\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n\ntheorem after_step (a : NBH_Frontier.Frontier) (i : Usize) (bound : i.val \u2264 20) :\n    (do let out \u2190 pool_v1.pair_terminal.validate_verified_afterstate_loop.body a i\n        ok (NBH_NativeFrontier.observe i out)) = ok (NBH_NativeFrontier.step a i.val) :=\n  NBH_NativeFrontier.source a i bound\n\ntheorem live_step (a : NBH_Frontier.Frontier) (i : Usize) (bound : i.val \u2264 20) :\n    (do let out \u2190 pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1_loop.body a i\n        ok (NBH_NativeLiveFrontier.observe i out)) = ok (NBH_NativeLiveFrontier.step a i.val) :=\n  NBH_NativeLiveFrontier.source a i bound\n\ntheorem live_result_and_frame {State : Type} (s : NBH_LiveValidator.Snapshot) (state : State) :\n    (pool_v1.pair_tree_profile.validate_pool_v1_pair_live_snapshot_v1 s,state) =\n      (ok (NBH_LiveValidator.result s),state) := by\n  rw [NBH_LiveValidator.source]\n\ntheorem after_result_and_frame {State : Type} (a : NBH_Validators.Afterstate) (state : State) :\n    (pool_v1.pair_terminal.validate_verified_afterstate a,state) =\n      (ok (NBH_Validators.afterResult a),state) := by\n  rw [NBH_Validators.afterstate]\n\n#print axioms after_step\n#print axioms live_step\n#print axioms live_result_and_frame\n#print axioms after_result_and_frame\nend NEM_FrontierValidatorInstance\n"
+ },
+ "NEM_PaymentFrame": {
+  "module": "NEM_PaymentFrame",
+  "path": "evidence/slice-s-compose5-20261102/NEM_PaymentFrame.lean",
+  "sha256": "6d844a1f0cae4ee00151e356ef34ccea5c8ce8707465a6288805a8cf5ba00f03",
+  "line_range": [
+   1,
+   36
+  ],
+  "imports": [
+   "NEJ_ConcreteFrame",
+   "NEM_PaymentReached"
+  ],
+  "source": "import NEJ_ConcreteFrame\nimport NEM_PaymentReached\nset_option autoImplicit false\nnoncomputable section\nnamespace NEM_PaymentFrame\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n\n/-- The common child preserves the transfer's canonical fee word from the\nactual zero-initialized caller allocation, before either suffix write. -/\ntheorem common_reserved (magic : Array U8 4#usize)\n    (kind : pool_v1.historical_anchor.PoolV1TransitionKind)\n    (c : pool_v1.payment_relation.CommonPublicV1) (k : Nat)\n    (lower : 148 \u2264 k) (upper : k < 152) :\n    (NBP_CommonBytes.encoded (Array.repeat 216#usize 0#u8) magic kind c).val[k]? =\n      some 0#u8 := by\n  rw [NEJ_ConcreteFrame.encoded_frame _ magic kind c k (Or.inr lower)]\n  change (List.replicate 216 (0#u8))[k]? = some 0#u8\n  rw [List.getElem?_replicate]\n  exact if_pos (by omega)\n\n/-- The complete emitted transfer reply remains paired with the same arbitrary\nexternal state; no successful-validator premise excludes rejection paths. -/\ntheorem transfer_reply {State : Type} (p : NBN_ValidatorSummary.Transfer) (state : State) :\n    (pool_v1.payment_relation.encode_pool_v1_private_transfer_public_v1 p,state) =\n      (ok (NBP_PaymentModel.transfer_encoded p),state) := by\n  rw [\u2190 NED_CodecComposition.transfer_law p]\n\ntheorem withdrawal_reply {State : Type} (p : NBN_ValidatorSummary.Withdrawal) (state : State) :\n    (pool_v1.payment_relation.encode_pool_v1_withdrawal_public_v1 p,state) =\n      (ok (NBP_PaymentModel.withdrawal_encoded p),state) := by\n  rw [\u2190 NED_CodecComposition.withdrawal_law p]\n\n#print axioms common_reserved\n#print axioms transfer_reply\n#print axioms withdrawal_reply\nend NEM_PaymentFrame\n"
+ },
+ "NEQ_BorrowWidth": {
+  "module": "NEQ_BorrowWidth",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_BorrowWidth.lean",
+  "sha256": "5feeee3567392505f07fafdb440c25b22547d6af48a699030007d26c279a3baa",
+  "line_range": [
+   1,
+   34
+  ],
+  "imports": [
+   "NEQ_PaymentDecode"
+  ],
+  "source": "import NEQ_PaymentDecode\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_BorrowWidth\nopen Aeneas Aeneas.Std Result\n\ndef flag {T : Type} {N : Usize}\n    (r : core.result.Result (Array T N) core.array.TryFromSliceError) : Bool :=\n  match r with | .Ok _ => true | .Err _ => false\n\n/-- The emitted borrowed-width guard is independent of payload type and bytes. -/\ntheorem status {T : Type} (N : Usize) (s : Slice T) :\n    (do let r \u2190 core.array.TryFromSharedArraySlice.try_from N s; ok (flag r)) =\n      ok (decide (s.len=N)) := by\n  unfold core.array.TryFromSharedArraySlice.try_from\n  by_cases h : s.len=N\n  \u00b7 rw [dif_pos h]\n    simp only [bind_tc_ok,flag,h,decide_true]\n  \u00b7 rw [dif_neg h]\n    simp only [bind_tc_ok,flag,h,decide_false]\n\n/-- Every reached byte-buffer payment caller keeps the SAME complete value. -/\ntheorem fixed216 {T : Type} (b : Array T 216#usize) :\n    core.array.TryFromSharedArraySlice.try_from 216#usize b.to_slice = ok (.Ok b) := by\n  have h : b.to_slice.len=216#usize := by\n    simp only [Array.to_slice,Slice.len,Slice.length,b.property]\n    rfl\n  unfold core.array.TryFromSharedArraySlice.try_from\n  rw [dif_pos h]\n  rfl\n\n#print axioms status\n#print axioms fixed216\nend NEQ_BorrowWidth\n"
+ },
+ "NEQ_LateBorrow": {
+  "module": "NEQ_LateBorrow",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_LateBorrow.lean",
+  "sha256": "825eb450e231acb5e634515cdff12218139df06e854371f119ee3cf39e3fa630",
+  "line_range": [
+   1,
+   49
+  ],
+  "imports": [
+   "NEL_LateDomains"
+  ],
+  "source": "import NEL_LateDomains\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_LateBorrow\nopen Aeneas Aeneas.Std Result\n\n/-- The actual emitted borrow and its back function, on the same allocation.\nThe poststate is arbitrary: this is not a one-cell mutation restriction. -/\ntheorem rejoin (out : Slice U8) (size : out.length = 1880) :\n    \u2203 child back,\n      core.slice.index.Slice.index_mut (core.slice.index.SliceIndexRangeUsizeSlice U8)\n        out {start := 144#usize, \u00abend\u00bb := 1664#usize} = ok (child,back) \u2227\n      child.length = 1520 \u2227 \u2200 post : Slice U8, back post = out.setSlice! 144 post.val := by\n  have guard : (144#usize) \u2264 1664#usize \u2227 (1664#usize).val \u2264 out.length := by\n    constructor\n    \u00b7 decide\n    \u00b7 rw [size]; decide\n  simp only [core.slice.index.Slice.index_mut,\n    core.slice.index.SliceIndexRangeUsizeSlice.index_mut,if_pos guard]\n  refine \u27e8_,_,rfl,?_,?_\u27e9\n  \u00b7 have len : out.val.length = 1880 := size\n    simp only [Slice.length,List.slice,List.length_take,List.length_drop,len]\n    decide\n  \u00b7 intro post\n    rfl\n\n/-- All possible 1520-byte child poststates and every external allocation byte. -/\ntheorem poststate (out post : Slice U8) (size : out.length = 1880)\n    (post_size : post.length = 1520) (k : Nat) :\n    (out.setSlice! 144 post.val).val[k]? =\n      if 144 \u2264 k \u2227 k < 1664 then post.val[k-144]? else out.val[k]? := by\n  rw [\u2190 NEL_SliceCopyLaw.loop_binding out post 144 k (by rw [post_size,size]; decide)]\n  rw [KMX_CopyMeaning.loop_spec,post_size]\n\n/-- The later afterstate write preserves the exact child's whole poststate. -/\ntheorem after_preserves_child (out post : Slice U8) (size : out.length = 1880)\n    (after : Array U8 216#usize) (k : Nat) (earlier : k < 1664) :\n    ((out.setSlice! 144 post.val).setSlice! 1664 after.val).val[k]? =\n      (out.setSlice! 144 post.val).val[k]? := by\n  apply NEJ_ArrayFrame.list_frame\n  \u00b7 have len : out.val.length = 1880 := size\n    simp only [Slice.setSlice!,List.length_setSlice!,after.property,len]\n    decide\n  \u00b7 exact Or.inl earlier\n\n#print axioms rejoin\n#print axioms poststate\n#print axioms after_preserves_child\nend NEQ_LateBorrow\n"
+ },
+ "NEQ_RootFrame": {
+  "module": "NEQ_RootFrame",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_RootFrame.lean",
+  "sha256": "69f716ecd71b9b1800265860dc827c763ee229a48c0b94cfb8ab5338a39d46fb",
+  "line_range": [
+   1,
+   67
+  ],
+  "imports": [
+   "NEQ_LateBorrow",
+   "NEM_ArraySnapshotView"
+  ],
+  "source": "import NEQ_LateBorrow\nimport NEM_ArraySnapshotView\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_RootFrame\nopen Aeneas Aeneas.Std Result\n\ntheorem cover (post : Slice U8) (size : post.length = 1520) :\n    \u2203 array : Array U8 1520#usize, array.to_slice = post := by\n  refine \u27e8\u27e8post.val,size\u27e9,?_\u27e9\n  apply Subtype.ext\n  rfl\n\n/-- Every earlier header copy preserves the SAME child's initial window. -/\ntheorem header_frame (src before : Nat \u2192 Option U8) (start width j : Nat)\n    (ends : start+width \u2264 144) (later : 144 \u2264 j) :\n    KMX_CopyMeaning.loop src before start width j = before j := by\n  rw [KMX_CopyMeaning.loop_spec]\n  rw [if_neg (by omega)]\n\ntheorem scalar_frame (before : Nat \u2192 Option U8) (value : U8) (start j : Nat)\n    (earlier : start < 144) (later : 144 \u2264 j) :\n    (if j=start then some value else before j) = before j := by\n  rw [if_neg (by omega)]\n\n/-- The entire arbitrary late poststate precedes one disjoint payment window. -/\ntheorem finish (before : Nat \u2192 Option U8) (late : Array U8 1520#usize)\n    (pay : Array U8 216#usize) (j : Nat) :\n    KMX_CopyMeaning.loop (fun k => pay.val[k-1664]?)\n      (fun k => if 144 \u2264 k \u2227 k < 1664 then late.val[k-144]? else before k)\n      1664 216 j =\n      if 1664 \u2264 j \u2227 j < 1880 then pay.val[j-1664]?\n      else if 144 \u2264 j \u2227 j < 1664 then late.val[j-144]? else before j := by\n  rw [KMX_CopyMeaning.loop_spec]\n\n/-- Complete successful bytes are the same three contiguous source regions. -/\ntheorem assembled (headBytes : List U8) (plen : headBytes.length = 144)\n    (late : Array U8 1520#usize) (pay : Array U8 216#usize)\n    (j : Nat) (bound : j < 1880) :\n    KMX_CopyMeaning.loop (fun k => pay.val[k-1664]?)\n      (fun k => if 144 \u2264 k \u2227 k < 1664 then late.val[k-144]? else headBytes[k]?)\n      1664 216 j = ((headBytes ++ late.val) ++ pay.val)[j]? := by\n  rw [finish]\n  have llen : late.val.length = 1520 := late.property\n  have total : (headBytes ++ late.val).length = 1664 := by\n    rw [List.length_append,plen,llen]\n  by_cases first : j < 144\n  \u00b7 rw [if_neg (by omega),if_neg (by omega)]\n    rw [List.getElem?_append_left (by omega),List.getElem?_append_left (by omega)]\n  \u00b7 by_cases middle : j < 1664\n    \u00b7 rw [if_neg (by omega),if_pos (by omega)]\n      rw [List.getElem?_append_left (by omega),List.getElem?_append_right (by omega),plen]\n    \u00b7 rw [if_pos (by omega),List.getElem?_append_right (by omega),total]\n\n/-- Pointwise arbitrary-index observations identify the complete typed result. -/\ntheorem array_ext (a b : Array U8 1880#usize)\n    (same : \u2200 j : Nat, a.val[j]? = b.val[j]?) : a = b := by\n  apply Subtype.ext\n  exact List.ext_getElem? same\n\n#print axioms cover\n#print axioms header_frame\n#print axioms scalar_frame\n#print axioms finish\n#print axioms assembled\n#print axioms array_ext\nend NEQ_RootFrame\n"
+ },
+ "NEQ_EncoderDomains": {
+  "module": "NEQ_EncoderDomains",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_EncoderDomains.lean",
+  "sha256": "12a6987c186de93d814f1542822f8b348da5f2e3ff448698f8ffe88e034426b9",
+  "line_range": [
+   1,
+   43
+  ],
+  "imports": [
+   "NEQ_EncoderOracle",
+   "NEQ_RootFrame"
+  ],
+  "source": "import NEQ_EncoderOracle\nimport NEQ_RootFrame\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_EncoderDomains\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult\nopen NED_EncoderTrace (Call)\n\ntheorem reached_domains (s : Statement) :\n    let observed := NEQ_EncoderOracle.run\n      pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1\n      NEM_PaymentReached.pay NEM_LateOracle.late atomic_statement.encode_digest_canonical s\n    (\u2200 a, Call.validate a \u2208 observed.2 \u2192 a=s) \u2227\n    (\u2200 a, Call.payment a \u2208 observed.2 \u2192 a=s) \u2227\n    (\u2200 d, Call.digest d \u2208 observed.2 \u2192 d=(common s).historical_global_anchor) \u2227\n    (\u2200 a out, Call.late a out \u2208 observed.2 \u2192\n      a=(common s).lane_transition \u2227 out=NBN_LateResult.zero \u2227 out.length=1520) := by\n  dsimp only\n  rw [NEQ_EncoderOracle.substitution]\n  exact \u27e8NED_EncoderCallDomains.validation_same s,NED_EncoderCallDomains.payment_same s,\n    NED_EncoderCallDomains.digest_same s,NED_EncoderCallDomains.late_domain s\u27e9\n\ntheorem header_length (s : Statement) (anchor : Array U8 32#usize) :\n    (NBN_StatementEncoderSummary.prefixBytes s anchor).length = 144 := by\n  let c := AspisS6OuterCarrierBridge.fromPoolV1PairForestTerminalCommonV1 (common s)\n  have magic := AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.property\n  have m := c.master_account.property\n  have q := c.checkpoint_account.property\n  have l := c.selected_lane_account.property\n  have seq := (core.num.U64.to_le_bytes c.checkpoint_sequence).property\n  have a := anchor.property\n  change (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.val ++\n    [AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,\n     NBN_EncoderBytes.tag s,\n     AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,c.output_lane] ++\n    c.master_account.val ++ c.checkpoint_account.val ++ c.selected_lane_account.val ++\n    (core.num.U64.to_le_bytes c.checkpoint_sequence).val ++ anchor.val).length = 144\n  simp only [List.length_append,List.length_cons,List.length_nil,magic,m,q,l,seq,a]\n  rfl\n\n#print axioms reached_domains\n#print axioms header_length\nend NEQ_EncoderDomains\n"
+ },
+ "NEQ_NullifierDomains": {
+  "module": "NEQ_NullifierDomains",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_NullifierDomains.lean",
+  "sha256": "342985ce1f5a7c884c5e15690419e4078b6f3366e30a5b416631768cb6f90233",
+  "line_range": [
+   1,
+   34
+  ],
+  "imports": [
+   "NEM_KindInstance"
+  ],
+  "source": "import NEM_KindInstance\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_NullifierDomains\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult\nabbrev Payment := Sum NBN_ValidatorSummary.Transfer NBN_ValidatorSummary.Withdrawal\n\ndef paymentNullifier (p : Payment) : Array U32 8#usize :=\n  match p with | .inl t => t.nullifier | .inr w => w.nullifier\n\ntheorem statement_result_frame {State : Type} (s : Statement) (state : State) :\n    ((parts s).2.2.2.2.1,state,([] : List Unit)) =\n      ((match s with | .PrivateTransfer _ p => p.nullifier | .Withdrawal _ p => p.nullifier),\n       state,[]) := by\n  rw [NBN_U05.validator_nullifier]\n  rfl\n\ntheorem payment_result_frame {State : Type} (c : NBD_TerminalProjection.Common)\n    (p : Payment) (state : State) :\n    ((parts (NEM_KindInstance.join c p)).2.2.2.2.1,state,([] : List Unit)) =\n      (paymentNullifier p,state,[]) := by\n  cases p <;> exact statement_result_frame _ state\n\ntheorem common_independent (c c' : NBD_TerminalProjection.Common) (p : Payment) :\n    (parts (NEM_KindInstance.join c p)).2.2.2.2.1 =\n      (parts (NEM_KindInstance.join c' p)).2.2.2.2.1 := by\n  have left := congrArg (fun x => x.1) (payment_result_frame c p ())\n  have right := congrArg (fun x => x.1) (payment_result_frame c' p ())\n  exact left.trans right.symm\n\n#print axioms statement_result_frame\n#print axioms payment_result_frame\n#print axioms common_independent\nend NEQ_NullifierDomains\n"
+ },
+ "NEQ_ParserCanonical": {
+  "module": "NEQ_ParserCanonical",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_ParserCanonical.lean",
+  "sha256": "bc61957aa44b016a878f1ef7581414717e89eeb4ea7c6e17bfc41792f5790af4",
+  "line_range": [
+   1,
+   21
+  ],
+  "imports": [
+   "NEQ_DecodeScalar"
+  ],
+  "source": "import NEQ_DecodeScalar\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_ParserCanonical\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n\ntheorem some_canonical (bytes : Array U8 4#usize) (value : U32)\n    (returned : aspis_core.field.M31.from_le_bytes bytes = ok (some value)) :\n    value < 2147483647#u32 := by\n  rw [NBG_Atomic.m31_decode] at returned\n  dsimp only at returned\n  by_cases invalid : core.num.U32.from_le_bytes bytes >= 2147483647#u32\n  \u00b7 rw [if_pos invalid] at returned\n    cases returned\n  \u00b7 rw [if_neg invalid] at returned\n    have same : core.num.U32.from_le_bytes bytes = value := Option.some.inj (Result.ok.inj returned)\n    rw [\u2190 same]\n    exact lt_of_not_ge invalid\n\n#print axioms some_canonical\nend NEQ_ParserCanonical\n"
+ },
+ "NEQ_PaymentDomains": {
+  "module": "NEQ_PaymentDomains",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_PaymentDomains.lean",
+  "sha256": "fd01df40c04ad74592d748b5da7c48da2aebc22a6e714ec5e1490e798c0e9289",
+  "line_range": [
+   1,
+   22
+  ],
+  "imports": [
+   "NEQ_BorrowWidth"
+  ],
+  "source": "import NEQ_BorrowWidth\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_PaymentDomains\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\n\ntheorem fee_primitive_width :\n    (core.num.U32.to_le_bytes pool_v1.payment_relation.POOL_V1_CANONICAL_FEE).val.length=4 :=\n  (core.num.U32.to_le_bytes pool_v1.payment_relation.POOL_V1_CANONICAL_FEE).property\n\ntheorem fee_zero : pool_v1.payment_relation.POOL_V1_CANONICAL_FEE=0#u32 := by\n  simp only [pool_v1.payment_relation.POOL_V1_CANONICAL_FEE]\n\n/-- Geometry discharges every fixed conversion before common/public children. -/\ntheorem window_bounds :\n    8+32\u2264216 \u2227 40+32\u2264216 \u2227 72+8\u2264216 \u2227 80+32\u2264216 \u2227 112+32\u2264216 \u2227\n    144+4\u2264216 \u2227 148+4\u2264216 \u2227 152+32\u2264216 \u2227 184+32=216 := by decide\n\n#print axioms fee_primitive_width\n#print axioms fee_zero\n#print axioms window_bounds\nend NEQ_PaymentDomains\n"
+ },
+ "S2K_ResultBytes": {
+  "module": "S2K_ResultBytes",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_ResultBytes.lean",
+  "sha256": "cfcdfcbf653e949b10aeab7d5669dcf90eb1d984416660a2a63e1c992e97c9ce",
+  "line_range": [
+   1,
+   193
+  ],
+  "imports": [
+   "Aeneas"
+  ],
+  "source": "-- THIS FILE WAS AUTOMATICALLY GENERATED BY AENEAS\n-- [s2k_result_codec]: function definitions\nimport Aeneas\nopen Aeneas Aeneas.Std Result ControlFlow Error\nset_option linter.dupNamespace false\nset_option linter.hashCommand false\nset_option linter.unusedVariables false\n\n/- You can set the `maxHeartbeats` value with the `-max-heartbeats` CLI option -/\nset_option maxHeartbeats 1000000\n\n/- You can set the `maxRecDepth` value with the `-max-recdepth` CLI option -/\nset_option maxRecDepth 2048\n\nnamespace S2K_ResultBytes\n\n/-- [s2k_result_codec::POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC]\n    Source: 'lib.rs', lines 166:0-166:72\n    Visibility: public -/\n@[global_simps, irreducible]\ndef POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC : Array Std.U8 4#usize :=\n  Array.make 4#usize [ 65#u8, 83#u8, 82#u8, 56#u8 ]\n\n/-- [s2k_result_codec::POOL_V1_PAIR_FOREST_TERMINAL_VERSION]\n    Source: 'lib.rs', lines 167:0-167:55\n    Visibility: public -/\n@[global_simps, irreducible]\ndef POOL_V1_PAIR_FOREST_TERMINAL_VERSION : Std.U8 := 1#u8\n\n/-- [s2k_result_codec::RESULT_MASTER_OFFSET]\n    Source: 'lib.rs', lines 170:0-170:38 -/\n@[global_simps, irreducible] def RESULT_MASTER_OFFSET : Std.Usize := 8#usize\n\n/-- [s2k_result_codec::RESULT_SELECTED_LANE_OFFSET]\n    Source: 'lib.rs', lines 171:0-171:46 -/\n@[global_simps, irreducible]\ndef RESULT_SELECTED_LANE_OFFSET : Std.Usize := 40#usize\n\n/-- [s2k_result_codec::RESULT_NULLIFIER_OFFSET]\n    Source: 'lib.rs', lines 172:0-172:42 -/\n@[global_simps, irreducible]\ndef RESULT_NULLIFIER_OFFSET : Std.Usize := 72#usize\n\n/-- [s2k_result_codec::RESULT_AFTERSTATE_OFFSET]\n    Source: 'lib.rs', lines 173:0-173:44 -/\n@[global_simps, irreducible]\ndef RESULT_AFTERSTATE_OFFSET : Std.Usize := 104#usize\n\n/-- [s2k_result_codec::POOL_V1_DIGEST_ENCODING_VERSION]\n    Source: 'lib.rs', lines 175:0-175:46 -/\n@[global_simps, irreducible]\ndef POOL_V1_DIGEST_ENCODING_VERSION : Std.U8 := 1#u8\n\n/-- [s2k_result_codec::S2K_store_afterstate]:\n    Source: 'lib.rs', lines 194:0-197:1\n    Visibility: public -/\ndef S2K_store_afterstate\n  (output : Array Std.U8 792#usize) (afterstate : Array Std.U8 688#usize) :\n  Result (Array Std.U8 792#usize)\n  := do\n  let (s, index_mut_back) \u2190\n    core.array.Array.index_mut (core.ops.index.IndexMutSlice\n      (core.slice.index.SliceIndexRangeFromUsizeSlice Std.U8)) output\n      { start := RESULT_AFTERSTATE_OFFSET }\n  let s1 \u2190 lift (Array.to_slice afterstate)\n  let s2 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1\n  ok (index_mut_back s2)\n\n/-- [s2k_result_codec::S2K_store_magic]:\n    Source: 'lib.rs', lines 199:0-202:1\n    Visibility: public -/\ndef S2K_store_magic\n  (output : Array Std.U8 792#usize) : Result (Array Std.U8 792#usize) := do\n  let (s, index_mut_back) \u2190\n    core.array.Array.index_mut (core.ops.index.IndexMutSlice\n      (core.slice.index.SliceIndexRangeToUsizeSlice Std.U8)) output\n      { \u00abend\u00bb := 4#usize }\n  let s1 \u2190 lift (Array.to_slice POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC)\n  let s2 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1\n  ok (index_mut_back s2)\n\n/-- [s2k_result_codec::S2K_store_version]:\n    Source: 'lib.rs', lines 204:0-207:1\n    Visibility: public -/\ndef S2K_store_version\n  (output : Array Std.U8 792#usize) : Result (Array Std.U8 792#usize) := do\n  Array.update output 4#usize POOL_V1_PAIR_FOREST_TERMINAL_VERSION\n\n/-- [s2k_result_codec::S2K_store_kind]:\n    Source: 'lib.rs', lines 209:0-212:1\n    Visibility: public -/\ndef S2K_store_kind\n  (output : Array Std.U8 792#usize) (kind : Std.U8) :\n  Result (Array Std.U8 792#usize)\n  := do\n  Array.update output 5#usize kind\n\n/-- [s2k_result_codec::S2K_store_digest_version]:\n    Source: 'lib.rs', lines 214:0-217:1\n    Visibility: public -/\ndef S2K_store_digest_version\n  (output : Array Std.U8 792#usize) : Result (Array Std.U8 792#usize) := do\n  Array.update output 6#usize POOL_V1_DIGEST_ENCODING_VERSION\n\n/-- [s2k_result_codec::S2K_store_lane]:\n    Source: 'lib.rs', lines 219:0-222:1\n    Visibility: public -/\ndef S2K_store_lane\n  (output : Array Std.U8 792#usize) (lane : Std.U8) :\n  Result (Array Std.U8 792#usize)\n  := do\n  Array.update output 7#usize lane\n\n/-- [s2k_result_codec::S2K_store_master]:\n    Source: 'lib.rs', lines 224:0-228:1\n    Visibility: public -/\ndef S2K_store_master\n  (output : Array Std.U8 792#usize) (master : Array Std.U8 32#usize) :\n  Result (Array Std.U8 792#usize)\n  := do\n  let (s, index_mut_back) \u2190\n    core.array.Array.index_mut (core.ops.index.IndexMutSlice\n      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) output\n      { start := RESULT_MASTER_OFFSET, \u00abend\u00bb := RESULT_SELECTED_LANE_OFFSET }\n  let s1 \u2190 lift (Array.to_slice master)\n  let s2 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1\n  ok (index_mut_back s2)\n\n/-- [s2k_result_codec::S2K_store_selected]:\n    Source: 'lib.rs', lines 230:0-234:1\n    Visibility: public -/\ndef S2K_store_selected\n  (output : Array Std.U8 792#usize) (selected : Array Std.U8 32#usize) :\n  Result (Array Std.U8 792#usize)\n  := do\n  let (s, index_mut_back) \u2190\n    core.array.Array.index_mut (core.ops.index.IndexMutSlice\n      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) output\n      {\n        start := RESULT_SELECTED_LANE_OFFSET,\n        \u00abend\u00bb := RESULT_NULLIFIER_OFFSET\n      }\n  let s1 \u2190 lift (Array.to_slice selected)\n  let s2 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1\n  ok (index_mut_back s2)\n\n/-- [s2k_result_codec::S2K_store_nullifier_bytes]:\n    Source: 'lib.rs', lines 256:0-259:1\n    Visibility: public -/\ndef S2K_store_nullifier_bytes\n  (output : Array Std.U8 792#usize) (encoded : Array Std.U8 32#usize) :\n  Result (Array Std.U8 792#usize)\n  := do\n  let (s, index_mut_back) \u2190\n    core.array.Array.index_mut (core.ops.index.IndexMutSlice\n      (core.slice.index.SliceIndexRangeUsizeSlice Std.U8)) output\n      { start := RESULT_NULLIFIER_OFFSET, \u00abend\u00bb := RESULT_AFTERSTATE_OFFSET }\n  let s1 \u2190 lift (Array.to_slice encoded)\n  let s2 \u2190 core.slice.Slice.copy_from_slice core.marker.CopyU8 s s1\n  ok (index_mut_back s2)\n\n/-- [s2k_result_codec::S2K_reference_bytes]:\n    Source: 'lib.rs', lines 261:0-273:1\n    Visibility: public -/\ndef S2K_reference_bytes\n  (master : Array Std.U8 32#usize) (selected : Array Std.U8 32#usize)\n  (nullifier_bytes : Array Std.U8 32#usize) (kind : Std.U8) (lane : Std.U8)\n  (afterstate : Array Std.U8 688#usize) :\n  Result (Array Std.U8 792#usize)\n  := do\n  let output := Array.repeat 792#usize 0#u8\n  let output1 \u2190 S2K_store_magic output\n  let output2 \u2190 S2K_store_version output1\n  let output3 \u2190 S2K_store_kind output2 kind\n  let output4 \u2190 S2K_store_digest_version output3\n  let output5 \u2190 S2K_store_lane output4 lane\n  let output6 \u2190 S2K_store_master output5 master\n  let output7 \u2190 S2K_store_selected output6 selected\n  let output8 \u2190 S2K_store_nullifier_bytes output7 nullifier_bytes\n  S2K_store_afterstate output8 afterstate\n\nend S2K_ResultBytes\n\n#print axioms S2K_ResultBytes.S2K_store_magic\n#print axioms S2K_ResultBytes.S2K_store_version\n#print axioms S2K_ResultBytes.S2K_store_kind\n#print axioms S2K_ResultBytes.S2K_store_digest_version\n#print axioms S2K_ResultBytes.S2K_store_lane\n#print axioms S2K_ResultBytes.S2K_store_master\n#print axioms S2K_ResultBytes.S2K_store_selected\n#print axioms S2K_ResultBytes.S2K_store_nullifier_bytes\n#print axioms S2K_ResultBytes.S2K_store_afterstate\n#print axioms S2K_ResultBytes.S2K_reference_bytes\n"
+ },
+ "S2K_LateAdmission": {
+  "module": "S2K_LateAdmission",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_LateAdmission.lean",
+  "sha256": "4b3f0958b240718750e9f75069f9818f94f5df8526f10b10121fb2b18fbc1b9e",
+  "line_range": [
+   1,
+   63
+  ],
+  "imports": [
+   "S2K_AfterstateEncoding"
+  ],
+  "source": "import S2K_AfterstateEncoding\n\n/-! Success inversion through the actual late-public encoder, preserving the\nSAME candidate. Child encoders remain opaque; no call success is postulated. -/\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.LateAdmission\nopen AspisR1TerminalDecoder\nopen pool_v1.pair_tree_profile pool_v1.pair_terminal\n\nelab \"s2k_unpair\" : tactic =>\n  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do\n    for decl in \u2190 Lean.getLCtx do\n      let type \u2190 Lean.Meta.whnf decl.type\n      if type.isAppOfArity ``Prod 2 then\n        return (\u2190 goal.cases decl.fvarId).toList.map (\u00b7.mvarId)\n    throwError \"no product variable\"\n\nelab \"s2k_uncase\" : tactic =>\n  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do\n    for decl in \u2190 Lean.getLCtx do\n      let type \u2190 Lean.Meta.whnf decl.type\n      if type.isAppOfArity ``core.result.Result 2 ||\n          type.isAppOfArity ``core.ops.control_flow.ControlFlow 2 ||\n          type.isConstOf ``core.convert.Infallible then\n        return (\u2190 goal.cases decl.fvarId).toList.map (\u00b7.mvarId)\n    throwError \"no result/control-flow variable\"\n\ntheorem candidate (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)\n    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :\n    \u2203 bytes, encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate = ok (.Ok bytes) := by\n  unfold encode_pool_v1_pair_late_public_statement_v1 at h\n  simp only [Bind.bind, Aeneas.Std.bind, core.result.Result.map_err,\n    core.result.Result.Insts.CoreOpsTry.branch,\n    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,\n    core.convert.FromSame.from] at h\n  repeat' first\n    | (solve | exact \u27e8_,by assumption\u27e9)\n    | (solve | exact \u27e8_,rfl\u27e9)\n    | (solve | cases h)\n    | (dsimp only [Aeneas.Std.uncurry] at h)\n    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | (split at h)\n\ntheorem validated (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)\n    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :\n    validate_verified_afterstate s.candidate_afterstate = ok (.Ok ()) := by\n  obtain \u27e8bytes,run\u27e9 := candidate s before after h\n  have status := AfterstateStatus.status_exact s.candidate_afterstate\n  rw [run] at status\n  exact status.symm\n\ntheorem payload (s : PoolV1PairLatePublicStatementV1) (before after : Slice U8)\n    (h : encode_pool_v1_pair_late_public_statement_v1 s before = ok (.Ok (),after)) :\n    encode_pool_v1_pair_verified_afterstate_v1 s.candidate_afterstate =\n      ok (.Ok (AfterstateEncoding.bytes s.candidate_afterstate)) :=\n  AfterstateEncoding.encode_exact _ (validated s before after h)\n\n#print axioms candidate\n#print axioms validated\n#print axioms payload\nend AspisR1.S2K.LateAdmission\n"
+ },
+ "S2K_StatementAdmission": {
+  "module": "S2K_StatementAdmission",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_StatementAdmission.lean",
+  "sha256": "72c1603f86bf8bd7122aa30253d70235a6dc28df3aeea4d066eaa3108022a589",
+  "line_range": [
+   1,
+   61
+  ],
+  "imports": [
+   "S2K_LateAdmission"
+  ],
+  "source": "import S2K_LateAdmission\n\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.StatementAdmission\nopen AspisR1TerminalDecoder\nopen pool_v1.pair_forest_terminal pool_v1.pair_tree_profile pool_v1.pair_terminal\nabbrev Statement := PoolV1PairForestTerminalStatementV1\n\ndef common : Statement \u2192 PoolV1PairForestTerminalCommonV1\n  | .PrivateTransfer c _ => c\n  | .Withdrawal c _ => c\n\nelab \"s2k_unbool\" : tactic =>\n  Lean.Elab.Tactic.liftMetaTactic fun goal => goal.withContext do\n    for decl in \u2190 Lean.getLCtx do\n      let type \u2190 Lean.Meta.whnf decl.type\n      if type.isConstOf ``Bool then\n        return (\u2190 goal.cases decl.fvarId).toList.map (\u00b7.mvarId)\n    throwError \"no boolean variable\"\n\ntheorem late (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    \u2203 before after, encode_pool_v1_pair_late_public_statement_v1\n      (common s).lane_transition before = ok (.Ok (),after) := by\n  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h\n  all_goals simp only [common,PoolV1PairForestTerminalStatementV1.common,\n    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,\n    core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,\n    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,\n    core.convert.FromSame.from] at h \u22a2\n  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h\n  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h\n  all_goals repeat' first\n    | (solve | exact \u27e8_,_,by assumption\u27e9)\n    | (solve | exact \u27e8_,_,rfl\u27e9)\n    | (solve | cases h)\n    | (rw [if_pos (show true = true from rfl)] at h)\n    | (rw [if_neg (show \u00ac (false = true) by decide)] at h)\n    | (dsimp only [Aeneas.Std.uncurry] at h)\n    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | s2k_unbool\n    | (split at h)\n\ntheorem afterstate (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    validate_verified_afterstate (common s).lane_transition.candidate_afterstate = ok (.Ok ()) := by\n  obtain \u27e8before,after,run\u27e9 := late s h\n  exact LateAdmission.validated _ before after run\n\ntheorem payload (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    encode_pool_v1_pair_verified_afterstate_v1 (common s).lane_transition.candidate_afterstate =\n      ok (.Ok (AfterstateEncoding.bytes (common s).lane_transition.candidate_afterstate)) :=\n  AfterstateEncoding.encode_exact _ (afterstate s h)\n\n#print axioms late\n#print axioms afterstate\n#print axioms payload\nend AspisR1.S2K.StatementAdmission\n"
+ },
+ "S2K_ResultEncoding": {
+  "module": "S2K_ResultEncoding",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_ResultEncoding.lean",
+  "sha256": "2156716ab454b05584903b7895f83b25e9f1a246cf5493ca6c11587172cdb47e",
+  "line_range": [
+   1,
+   43
+  ],
+  "imports": [
+   "S2K_ResultBytes",
+   "S2K_StatementAdmission"
+  ],
+  "source": "import S2K_ResultBytes\nimport S2K_StatementAdmission\n\n/-! Exact source field-boundary reference. The nullifier and afterstate inputs\nare sub-encoder bytes, to be instantiated with their SAME source values. -/\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.ResultEncoding\n\ndef stores (out : Array U8 792#usize) (master selected nullifier : Array U8 32#usize)\n    (kind lane : U8) (afterstate : Array U8 688#usize) : Array U8 792#usize :=\n  \u27e8(((((((((out.val.setSlice! 0 [65#u8,83#u8,82#u8,56#u8]).set\n      4 1#u8).set 5 kind).set 6 1#u8).set 7 lane).setSlice! 8 master.val).setSlice!\n      40 selected.val).setSlice! 72 nullifier.val).setSlice! 104 afterstate.val), by\n        simp only [List.length_setSlice!,List.length_set,out.property]\u27e9\n\ntheorem source_value (master selected nullifier : Array U8 32#usize)\n    (kind lane : U8) (afterstate : Array U8 688#usize) :\n    S2K_ResultBytes.S2K_reference_bytes master selected nullifier kind lane afterstate =\n      ok (stores (Array.repeat 792#usize 0#u8) master selected nullifier kind lane afterstate) := by\n  unfold S2K_ResultBytes.S2K_reference_bytes\n  generalize Array.repeat 792#usize 0#u8 = output\n  simp [S2K_ResultBytes.S2K_store_magic,S2K_ResultBytes.S2K_store_version,\n    S2K_ResultBytes.S2K_store_kind,S2K_ResultBytes.S2K_store_digest_version,\n    S2K_ResultBytes.S2K_store_lane,S2K_ResultBytes.S2K_store_master,\n    S2K_ResultBytes.S2K_store_selected,S2K_ResultBytes.S2K_store_nullifier_bytes,\n    S2K_ResultBytes.S2K_store_afterstate,\n    S2K_ResultBytes.POOL_V1_PAIR_FOREST_TERMINAL_RESULT_MAGIC,\n    S2K_ResultBytes.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,\n    S2K_ResultBytes.POOL_V1_DIGEST_ENCODING_VERSION,\n    S2K_ResultBytes.RESULT_MASTER_OFFSET,S2K_ResultBytes.RESULT_SELECTED_LANE_OFFSET,\n    S2K_ResultBytes.RESULT_NULLIFIER_OFFSET,S2K_ResultBytes.RESULT_AFTERSTATE_OFFSET,\n    core.array.Array.index_mut,core.ops.index.IndexMutSlice,\n    core.slice.index.Slice.index_mut,core.slice.index.SliceIndexRangeToUsizeSlice,\n    core.slice.index.SliceIndexRangeToUsizeSlice.index_mut,\n    core.slice.index.SliceIndexRangeUsizeSlice,core.slice.index.SliceIndexRangeUsizeSlice.index_mut,\n    core.slice.index.SliceIndexRangeFromUsizeSlice,core.slice.index.SliceIndexRangeFromUsizeSlice.index_mut,\n    Array.to_slice,Array.from_slice,core.slice.Slice.copy_from_slice,\n    Slice.length,Slice.len,Array.update,output.property,List.slice,lift,stores]\n  rfl\n\n#print axioms source_value\nend AspisR1.S2K.ResultEncoding\n"
+ },
+ "S2K_StatementChecks": {
+  "module": "S2K_StatementChecks",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_StatementChecks.lean",
+  "sha256": "8972098af7c8992dc730567abbd3c1567af0b50b62627fb99769c61059c1b2d6",
+  "line_range": [
+   1,
+   66
+  ],
+  "imports": [
+   "S2K_StatementAdmission"
+  ],
+  "source": "import S2K_StatementAdmission\n\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.StatementChecks\nopen AspisR1TerminalDecoder StatementAdmission\nopen pool_v1.pair_forest_terminal pool_v1.pair_tree_profile pool_v1.pair_terminal\n\ntheorem zero_guards (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n      (common s).master_account (Array.repeat 32#usize 0#u8) = ok false \u2227\n    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n      (common s).selected_lane_account (Array.repeat 32#usize 0#u8) = ok false := by\n  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h\n  all_goals simp only [common,PoolV1PairForestTerminalStatementV1.common,\n    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,\n    core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,\n    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,\n    core.convert.FromSame.from] at h \u22a2\n  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h \u22a2\n  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h\n  all_goals repeat' first\n    | (solve | exact \u27e8by assumption,by assumption\u27e9)\n\n    | (solve | cases h)\n    | (rw [if_pos (show true = true from rfl)] at h)\n    | (rw [if_neg (show \u00ac (false = true) by decide)] at h)\n    | (dsimp only [Aeneas.Std.uncurry] at h)\n    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | s2k_unbool\n    | (split at h)\n\ndef nullifier : Statement \u2192 Array aspis_core.field.M31 8#usize\n  | .PrivateTransfer _ p => p.nullifier\n  | .Withdrawal _ p => p.nullifier\n\ntheorem raw_lane (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    \u2203 value, pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 (nullifier s) =\n      ok (.Ok value) \u2227 \u00ac (value != (common s).output_lane) = true := by\n  cases s <;> unfold validate_pool_v1_pair_forest_terminal_statement_v1 at h\n  all_goals simp only [nullifier,common,PoolV1PairForestTerminalStatementV1.common,\n    statement_public_common,bind_tc_ok,Bind.bind,Aeneas.Std.bind,\n    core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch,\n    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,\n    core.convert.FromSame.from] at h \u22a2\n  all_goals generalize Array.repeat 32#usize 0#u8 = zero_bindings at h\n  all_goals generalize Array.repeat 1520#usize 0#u8 = late_buffer at h\n  all_goals repeat' first\n    | (solve | exact \u27e8_,by assumption,by assumption\u27e9)\n    | (solve | cases h)\n    | (rw [if_pos (show true = true from rfl)] at h)\n    | (rw [if_neg (show \u00ac (false = true) by decide)] at h)\n    | (dsimp only [Aeneas.Std.uncurry] at h)\n    | (s2k_unpair <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | (s2k_uncase <;> simp_all only [Result.ok.injEq,Prod.mk.injEq])\n    | s2k_unbool\n    | (split at h)\n\n  all_goals exact \u27e8_,rfl,by assumption\u27e9\n\n#print axioms zero_guards\n#print axioms raw_lane\nend AspisR1.S2K.StatementChecks\n"
+ },
+ "S2K_StatementLane": {
+  "module": "S2K_StatementLane",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_StatementLane.lean",
+  "sha256": "2f3c82154124de671fe846a79644a7b35fda181c5f619f2696e8d267cf4e8a8c",
+  "line_range": [
+   1,
+   22
+  ],
+  "imports": [
+   "S2K_StatementChecks"
+  ],
+  "source": "import S2K_StatementChecks\n\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.StatementLane\nopen AspisR1TerminalDecoder StatementAdmission StatementChecks\nopen pool_v1.pair_forest_terminal\n\ntheorem eq_of_no_difference (a b : U8) (h : \u00ac (a != b) = true) : a = b := by\n  simpa only [bne_iff_ne,not_not] using h\n\ntheorem lane (s : Statement)\n    (h : validate_pool_v1_pair_forest_terminal_statement_v1 s = ok (.Ok ())) :\n    pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1 (nullifier s) =\n      ok (.Ok (common s).output_lane) := by\n  obtain \u27e8value,run,same\u27e9 := raw_lane s h\n  rw [eq_of_no_difference value _ same] at run\n  exact run\n\n#print axioms eq_of_no_difference\n#print axioms lane\nend AspisR1.S2K.StatementLane\n"
+ },
+ "S2K_ResultEvent": {
+  "module": "S2K_ResultEvent",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_ResultEvent.lean",
+  "sha256": "4148760fc07e48acd4ec88ea31528c2073fac6e1e696e4a0007eccb1cf9f36b1",
+  "line_range": [
+   1,
+   41
+  ],
+  "imports": [
+   "S2K_ResultEncoding",
+   "S2K_StatementLane",
+   "S2I_ReturnData"
+  ],
+  "source": "import S2K_ResultEncoding\nimport S2K_StatementLane\nimport S2I_ReturnData\n\n/-! Source field-boundary byte/effect composition. This is the returning\nsyscall suffix, not an installed whole-native-emitter child. Validation and\nnative caller reachability must still precede this cut. -/\nset_option autoImplicit false\nopen Aeneas Aeneas.Std Result\nnamespace AspisR1.S2K.ResultEvent\nopen S2I.ReturnData\n\ndef emitFields {A E : Type} (syscall : State A E \u2192 List U8 \u2192 Result (State A E))\n    (state : State A E) (master selected nullifier : Array U8 32#usize)\n    (kind lane : U8) (afterstate : Array U8 688#usize) := do\n  let out \u2190 S2K_ResultBytes.S2K_reference_bytes master selected nullifier kind lane afterstate\n  syscall state out.val\n\ntheorem source_event {A E : Type}\n    (syscall : State A E \u2192 List U8 \u2192 Result (State A E))\n    (runtime : RuntimePremise syscall) (state : State A E)\n    (master selected nullifier : Array U8 32#usize)\n    (kind lane : U8) (afterstate : Array U8 688#usize) :\n    let out := ResultEncoding.stores (Array.repeat 792#usize 0#u8)\n      master selected nullifier kind lane afterstate\n    emitFields syscall state master selected nullifier kind lane afterstate = ok (set state out.val) \u2227\n    out.val.length = 792 \u2227 out.val \u2260 [] \u2227\n    (set state out.val).accounts = state.accounts \u2227\n    (set state out.val).events = state.events ++ [.setReturnData out.val] := by\n  dsimp only\n  let out := ResultEncoding.stores (Array.repeat 792#usize 0#u8)\n    master selected nullifier kind lane afterstate\n  have width : out.val.length = 792 := out.property\n  have event := nonempty_event syscall runtime state out.val width\n  refine \u27e8?_,width,event.2.1,event.2.2.1,event.2.2.2\u27e9\n  unfold emitFields\n  rw [ResultEncoding.source_value]\n  exact event.1\n\n#print axioms source_event\nend AspisR1.S2K.ResultEvent\n"
+ },
+ "S2K_ResultNativeSource": {
+  "module": "S2K_ResultNativeSource",
+  "path": "docs/research/100bit-spend-path-20261013/lean/S2K_ResultNativeSource.lean",
+  "sha256": "9b62467a008310be05c9d94a9513c4c7069d9745b33fab3afe49d8e77ff52aef",
+  "line_range": [
+   1,
+   144
+  ],
+  "imports": [
+   "S2K_ResultEvent"
+  ],
+  "source": "import S2K_ResultEvent\n\n/-! Actual extracted result validator; only names/duplicate dependencies adapted.\nOpaque encoder declarations are replaced by the already-proved exact definitions\non identical carriers. No new opaque constant or successful-child premise. -/\nopen Aeneas Aeneas.Std Result ControlFlow Error\nset_option autoImplicit false\nnamespace AspisR1TerminalDecoder\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalResultV1]\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 169:0-176:1\n    Visibility: public -/\nstructure pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1 where\n  transition_kind : pool_v1.historical_anchor.PoolV1TransitionKind\n  master_account : Array Std.U8 32#usize\n  selected_lane_account : Array Std.U8 32#usize\n  output_lane : Std.U8\n  nullifier : Array aspis_core.field.M31 8#usize\n  verified_afterstate : pool_v1.pair_terminal.PoolV1PairVerifiedAfterstateV1\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1]\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/\n@[reducible]\ndef pool_v1.pair_forest_terminal.validate_result.closure_1 := Unit\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure]\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/\n@[reducible]\ndef pool_v1.pair_forest_terminal.validate_result.closure := Unit\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1}::call_once]:\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/\ndef\n  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once\n  (c : pool_v1.pair_forest_terminal.validate_result.closure_1)\n  (tupled_args : pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1) :\n  Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1\n  := do\n  ok\n    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Afterstate\n    tupled_args)\n\n/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_terminal::PoolV1PairVerifierTransportErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure#1}]\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 549:17-549:81 -/\n@[reducible]\ndef\n  pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1\n  : core.ops.function.FnOnce\n  pool_v1.pair_forest_terminal.validate_result.closure_1\n  pool_v1.pair_terminal.PoolV1PairVerifierTransportErrorV1\n  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 := {\n  call_once :=\n    pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once\n}\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure}::call_once]:\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/\ndef\n  pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once\n  (c : pool_v1.pair_forest_terminal.validate_result.closure)\n  (tupled_args : pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1) :\n  Result pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1\n  := do\n  ok\n    (pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.Account\n    tupled_args)\n\n/-- Trait implementation: [aspis_statement::pool_v1::pair_forest_terminal::validate_result::{impl core::ops::function::FnOnce<(aspis_statement::pool_v1::pair_forest_accounts::PoolV1PairForestAccountErrorV1,), aspis_statement::pool_v1::pair_forest_terminal::PoolV1PairForestTerminalFormatErrorV1> for aspis_statement::pool_v1::pair_forest_terminal::validate_result::closure}]\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 544:17-544:78 -/\n@[reducible]\ndef\n  pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1\n  : core.ops.function.FnOnce\n  pool_v1.pair_forest_terminal.validate_result.closure\n  pool_v1.pair_forest_accounts.PoolV1PairForestAccountErrorV1\n  pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1 := {\n  call_once :=\n    pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once\n}\n\n/-- [aspis_statement::pool_v1::pair_forest_terminal::validate_result]:\n    Source: 'crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs', lines 537:0-551:1 -/\ndef pool_v1.pair_forest_terminal.validate_result\n  (result : pool_v1.pair_forest_terminal.PoolV1PairForestTerminalResultV1) :\n  Result (core.result.Result Unit\n    pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)\n  := do\n  let a := Array.repeat 32#usize 0#u8\n  let b \u2190\n    core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n      result.master_account a\n  if b\n  then\n    ok (core.result.Result.Err\n      pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)\n  else\n    let a1 := Array.repeat 32#usize 0#u8\n    let b1 \u2190\n      core.array.equality.PartialEqArray.eq core.cmp.PartialEqU8\n        result.selected_lane_account a1\n    if b1\n    then\n      ok (core.result.Result.Err\n        pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.NonZeroBinding)\n    else\n      let r \u2190\n        pool_v1.pair_forest_accounts.pool_v1_pair_forest_output_lane_v1\n          result.nullifier\n      let r1 \u2190\n        core.result.Result.map_err\n          pool_v1.pair_forest_terminal.validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1\n          r ()\n      let cf \u2190 core.result.Result.Insts.CoreOpsTry.branch r1\n      match cf with\n      | core.ops.control_flow.ControlFlow.Continue val =>\n        if result.output_lane != val\n        then\n          ok (core.result.Result.Err\n            pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1.OutputLaneMismatch)\n        else\n          let r2 \u2190\n            pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1\n              result.verified_afterstate\n          let r3 \u2190\n            core.result.Result.map_err\n              pool_v1.pair_forest_terminal.validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1\n              r2 ()\n          let cf1 \u2190 core.result.Result.Insts.CoreOpsTry.branch r3\n          match cf1 with\n          | core.ops.control_flow.ControlFlow.Continue _ =>\n            ok (core.result.Result.Ok ())\n          | core.ops.control_flow.ControlFlow.Break residual =>\n            core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n              Unit (core.convert.FromSame\n              pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)\n              residual\n      | core.ops.control_flow.ControlFlow.Break residual =>\n        core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual\n          Unit (core.convert.FromSame\n          pool_v1.pair_forest_terminal.PoolV1PairForestTerminalFormatErrorV1)\n          residual\n\n#print axioms pool_v1.pair_forest_terminal.validate_result\nend AspisR1TerminalDecoder\n"
+ },
+ "NBN_ResultValidator": {
+  "module": "NBN_ResultValidator",
+  "path": "lean/NBN_ResultValidator.lean",
+  "sha256": "2ba5584e031437031aa049b65bae2f9691dcb9c1d2b6c9222f757989a77cd839",
+  "line_range": [
+   1,
+   38
+  ],
+  "imports": [
+   "S2K_ResultNativeSource",
+   "NBN_U05"
+  ],
+  "source": "import S2K_ResultNativeSource\nimport NBN_U05\nset_option autoImplicit false\nset_option linter.unusedSimpArgs false\nnoncomputable section\nnamespace NBN_ResultValidator\nopen Aeneas Aeneas.Std Result\nopen AspisR1TerminalDecoder NBN_StatementResult\nopen pool_v1.pair_forest_terminal\nattribute [local instance] Classical.propDecidable\nabbrev Record := PoolV1PairForestTerminalResultV1\n\ndef status (r : Record) : core.result.Result Unit NBN_StatementResult.Error :=\n  if r.master_account = zero \u2228 r.selected_lane_account = zero then .Err .NonZeroBinding\n  else match NBN_OutputLane.result r.nullifier with\n    | .Err e => .Err (.Account e)\n    | .Ok lane => if r.output_lane \u2260 lane then .Err .OutputLaneMismatch\n      else match NBH_Validators.afterResult r.verified_afterstate with\n        | .Err e => .Err (.Afterstate e)\n        | .Ok _ => .Ok ()\n\ntheorem source (r : Record) : validate_result r = ok (status r) := by\n  unfold validate_result\n  simp only [NBH_ArrayEq.source,bind_tc_ok,NBN_OutputLane.source,NBK_AfterstateResult.source]\n  unfold status\n  repeat' first\n    | rfl\n    | (split <;> try simp_all only [decide_eq_true_eq,bne_iff_ne,bind_tc_ok,\n        core.result.Result.map_err,core.result.Result.Insts.CoreOpsTry.branch])\n\n  all_goals simp_all [\n    validate_result.closure_1.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairVerifierTransportErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once,\n    validate_result.closure.Insts.CoreOpsFunctionFnOnceTuplePoolV1PairForestAccountErrorV1PoolV1PairForestTerminalFormatErrorV1.call_once,\n    core.result.Result.Insts.CoreOpsTryTraitFromResidualResultInfallible.from_residual,\n    core.convert.FromSame]\n\n#print axioms source\nend NBN_ResultValidator\n"
+ },
+ "NBN_ResultDependency": {
+  "module": "NBN_ResultDependency",
+  "path": "lean/NBN_ResultDependency.lean",
+  "sha256": "6480c562d4bdbc57a7f2ea028d628e7208cbe792ada3be25bada3a630c256e9e",
+  "line_range": [
+   1,
+   43
+  ],
+  "imports": [
+   "NBN_ResultValidator",
+   "NBN_U04"
+  ],
+  "source": "import NBN_ResultValidator\nimport NBN_U04\nset_option autoImplicit false\nnoncomputable section\nnamespace NBN_ResultDependency\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder\nopen NBN_StatementResult NBN_ResultValidator\nattribute [local instance] Classical.propDecidable\n\ndef run (enc : NBN_EncoderSummary.Encode) (r : Record) : Result (core.result.Result Unit NBN_StatementResult.Error) :=\n  if r.master_account = zero \u2228 r.selected_lane_account = zero then ok (.Err .NonZeroBinding)\n  else do\n    let lane \u2190 NBN_FirstByteDependency.lane enc r.nullifier\n    match lane with\n    | .Err e => ok (.Err (.Account e))\n    | .Ok l =>\n      if r.output_lane \u2260 l then ok (.Err .OutputLaneMismatch)\n      else do\n        let a \u2190 NBN_EncoderSummary.after enc r.verified_afterstate\n        match a with\n        | .Err e => ok (.Err (.Afterstate e))\n        | .Ok _ => ok (.Ok ())\n\ntheorem source (enc : NBN_EncoderSummary.Encode)\n    (NBN_Dep_DigestEncodeCanonical : NBN_DigestResultDependency.NBN_Dep_DigestEncodeCanonical enc) (r : Record) :\n    run enc r = pool_v1.pair_forest_terminal.validate_result r := by\n  rw [NBN_ResultValidator.source]\n  unfold run status\n  simp only [NBN_FirstByteDependency.lane_source enc NBN_Dep_DigestEncodeCanonical,NBN_OutputLane.source,\n    NBN_EncoderSummary.after_source enc NBN_Dep_DigestEncodeCanonical,NBK_AfterstateResult.source]\n  by_cases h : r.master_account = zero \u2228 r.selected_lane_account = zero\n  \u00b7 simp only [h,if_true]\n  \u00b7 simp only [h,if_false,bind_tc_ok]\n    cases NBN_OutputLane.result r.nullifier with\n    | Err e => rfl\n    | Ok lane =>\n      by_cases mismatch : r.output_lane = lane\n      \u00b7 simp only [mismatch,ne_eq,not_true_eq_false,if_false]\n        cases NBH_Validators.afterResult r.verified_afterstate <;> rfl\n      \u00b7 simp only [mismatch,ne_eq,not_false_eq_true,if_true]\n\n#print axioms source\nend NBN_ResultDependency\n"
+ },
+ "NEQ_ResultValidator": {
+  "module": "NEQ_ResultValidator",
+  "path": "evidence/slice-s-compose6-20261102/NEQ_ResultValidator.lean",
+  "sha256": "5e4c4901fb967baab573f7769975fc5cad3810e5c6c11b8c181c2a596cf1e8ba",
+  "line_range": [
+   1,
+   122
+  ],
+  "imports": [
+   "NBN_ResultDependency",
+   "NEM_LaneReached",
+   "NEM_EncoderFrame",
+   "NEM_LateOracle"
+  ],
+  "source": "import NBN_ResultDependency\nimport NEM_LaneReached\nimport NEM_EncoderFrame\nimport NEM_LateOracle\nset_option autoImplicit false\nnoncomputable section\nnamespace NEQ_ResultValidator\nopen Aeneas Aeneas.Std Result AspisR1TerminalDecoder NBN_StatementResult\nattribute [local instance] Classical.propDecidable\nabbrev Record := NBN_ResultValidator.Record\nabbrev Lane := NEE_ValidatorMutation.Lane\nabbrev After := NEM_LateOracle.After\ninductive Call where\n  | lane (d : Array U32 8#usize)\n  | after (a : NBH_Validators.Afterstate)\n\ndef afterStep (after : After) (r : Record) :\n    Result (core.result.Result Unit NBN_StatementResult.Error) \u00d7 List Call :=\n  let result := do\n    let a \u2190 after r.verified_afterstate\n    match a with\n    | .Err e => ok (.Err (.Afterstate e))\n    | .Ok _ => ok (.Ok ())\n  (result,[.after r.verified_afterstate])\n\ndef run (lane : Lane) (after : After) (r : Record) :\n    Result (core.result.Result Unit NBN_StatementResult.Error) \u00d7 List Call :=\n  if r.master_account = zero \u2228 r.selected_lane_account = zero then (ok (.Err .NonZeroBinding),[])\n  else match lane r.nullifier with\n    | .fail e => (.fail e,[.lane r.nullifier])\n    | .div => (.div,[.lane r.nullifier])\n    | .ok (.Err e) => (ok (.Err (.Account e)),[.lane r.nullifier])\n    | .ok (.Ok l) =>\n      if r.output_lane \u2260 l then (ok (.Err .OutputLaneMismatch),[.lane r.nullifier])\n      else ((afterStep after r).1,.lane r.nullifier :: (afterStep after r).2)\n\ndef nativeAfter : After := pool_v1.pair_terminal.encode_pool_v1_pair_verified_afterstate_v1\n\ntheorem result (r : Record) :\n    (run NEM_LaneReached.lane nativeAfter r).1 =\n      pool_v1.pair_forest_terminal.validate_result r := by\n  rw [NBN_ResultValidator.source]\n  unfold run afterStep NBN_ResultValidator.status nativeAfter NEM_LaneReached.lane\n  rw [NBN_OutputLane.source]\n  by_cases h : r.master_account = zero \u2228 r.selected_lane_account = zero\n  \u00b7 simp only [h,if_true]\n  \u00b7 simp only [h,if_false]\n    cases hl : NBN_OutputLane.result r.nullifier with\n    | Err e => rfl\n    | Ok l =>\n      dsimp only\n      by_cases mismatch : r.output_lane \u2260 l\n      \u00b7 simp only [if_pos mismatch]\n      \u00b7 simp only [if_neg mismatch]\n        rw [NBK_AfterstateResult.source]\n        cases ha : NBH_Validators.afterResult r.verified_afterstate <;> rfl\n\ntheorem call_shape (lane : Lane) (after : After) (r : Record) :\n    (run lane after r).2 = [] \u2228\n    (run lane after r).2 = [.lane r.nullifier] \u2228\n    (run lane after r).2 = [.lane r.nullifier,.after r.verified_afterstate] := by\n  unfold run\n  split\n  \u00b7 exact Or.inl rfl\n  \u00b7 cases h : lane r.nullifier with\n    | fail e => exact Or.inr (Or.inl rfl)\n    | div => exact Or.inr (Or.inl rfl)\n    | ok status => cases status with\n      | Err e => exact Or.inr (Or.inl rfl)\n      | Ok l =>\n        dsimp only\n        by_cases mismatch : r.output_lane \u2260 l\n        \u00b7 simp only [if_pos mismatch,or_true,true_or]\n        \u00b7 try simp only [if_neg mismatch]\n          exact Or.inr (Or.inr rfl)\n\ntheorem lane_domain (lane : Lane) (after : After) (r : Record) (d : Array U32 8#usize)\n    (reached : Call.lane d \u2208 (run lane after r).2) : d=r.nullifier := by\n  rcases call_shape lane after r with a | b | c <;>\n    simp_all only [List.mem_cons,List.not_mem_nil,reduceCtorEq,false_or,or_false,Call.lane.injEq]\n\ntheorem after_domain (lane : Lane) (after : After) (r : Record) (a : NBH_Validators.Afterstate)\n    (reached : Call.after a \u2208 (run lane after r).2) : a=r.verified_afterstate := by\n  rcases call_shape lane after r with x | y | z <;>\n    simp_all only [List.mem_cons,List.not_mem_nil,reduceCtorEq,false_or,or_false,Call.after.injEq]\n\ndef effects (r : Record) : List Call :=\n  if r.master_account = zero \u2228 r.selected_lane_account = zero then []\n  else match NBN_OutputLane.result r.nullifier with\n    | .Err _ => [.lane r.nullifier]\n    | .Ok l => if r.output_lane \u2260 l then [.lane r.nullifier]\n      else [.lane r.nullifier,.after r.verified_afterstate]\n\ntheorem ordered_effects (r : Record) :\n    (run NEM_LaneReached.lane nativeAfter r).2 = effects r := by\n  unfold run effects NEM_LaneReached.lane\n  rw [NBN_OutputLane.source]\n  by_cases h : r.master_account = zero \u2228 r.selected_lane_account = zero\n  \u00b7 simp only [h,if_true]\n  \u00b7 simp only [h,if_false]\n    cases NBN_OutputLane.result r.nullifier with\n    | Err e => rfl\n    | Ok l =>\n      dsimp only\n      by_cases mismatch : r.output_lane \u2260 l\n      \u00b7 simp only [if_pos mismatch]\n      \u00b7 simp only [if_neg mismatch];rfl\n\ntheorem result_state_effects {State : Type} (r : Record) (state : State) :\n    let observed := run NEM_LaneReached.lane nativeAfter r\n    (observed.1,state,observed.2) =\n      (pool_v1.pair_forest_terminal.validate_result r,state,effects r) := by\n  dsimp only\n  rw [result,ordered_effects]\n\n#print axioms result\n#print axioms call_shape\n#print axioms lane_domain\n#print axioms after_domain\n#print axioms ordered_effects\n#print axioms result_state_effects\nend NEQ_ResultValidator\n"
+ }
+}

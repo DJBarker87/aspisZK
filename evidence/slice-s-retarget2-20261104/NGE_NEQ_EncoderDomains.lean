@@ -1,0 +1,51 @@
+import Lean
+import NFY_Part053
+import NGE_NEQ_RootFrame
+
+set_option autoImplicit false
+noncomputable section
+namespace NGE_NEQ_EncoderDomains
+open Aeneas Aeneas.Std Result AspisR1TerminalDecoder NFY_NBN_StatementResult
+open NFY_NED_EncoderTrace (Call)
+
+theorem reached_domains (s : Statement) :
+    let observed := NFY_NEQ_EncoderOracle.run
+      pool_v1.pair_forest_terminal.validate_pool_v1_pair_forest_terminal_statement_v1
+      NFY_NEM_PaymentReached.pay NFY_NEM_LateOracle.late atomic_statement.encode_digest_canonical s
+    (∀ a, Call.validate a ∈ observed.2 → a=s) ∧
+    (∀ a, Call.payment a ∈ observed.2 → a=s) ∧
+    (∀ d, Call.digest d ∈ observed.2 → d=(common s).historical_global_anchor) ∧
+    (∀ a out, Call.late a out ∈ observed.2 →
+      a=(common s).lane_transition ∧ out=NFY_NBN_LateResult.zero ∧ out.length=1520) := by
+  dsimp only
+  rw [NFY_NEQ_EncoderOracle.substitution]
+  exact ⟨NFY_NED_EncoderCallDomains.validation_same s,NFY_NED_EncoderCallDomains.payment_same s,
+    NFY_NED_EncoderCallDomains.digest_same s,NFY_NED_EncoderCallDomains.late_domain s⟩
+
+theorem header_length (s : Statement) (anchor : Array U8 32#usize) :
+    (NFY_NBN_StatementEncoderSummary.prefixBytes s anchor).length = 144 := by
+  let c := AspisS6OuterCarrierBridge.fromPoolV1PairForestTerminalCommonV1 (common s)
+  have magic := AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.property
+  have m := c.master_account.property
+  have q := c.checkpoint_account.property
+  have l := c.selected_lane_account.property
+  have seq := (core.num.U64.to_le_bytes c.checkpoint_sequence).property
+  have a := anchor.property
+  change (AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_MAGIC.val ++
+    [AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.pair_forest_terminal.POOL_V1_PAIR_FOREST_TERMINAL_VERSION,
+     NFY_NBN_EncoderBytes.tag s,
+     AspisS6FullForestEncoderNamed.aspis_statement.pool_v1.format.POOL_V1_DIGEST_ENCODING_VERSION,c.output_lane] ++
+    c.master_account.val ++ c.checkpoint_account.val ++ c.selected_lane_account.val ++
+    (core.num.U64.to_le_bytes c.checkpoint_sequence).val ++ anchor.val).length = 144
+  simp only [List.length_append,List.length_cons,List.length_nil,magic,m,q,l,seq,a]
+  rfl
+
+#print axioms reached_domains
+#print axioms header_length
+end NGE_NEQ_EncoderDomains
+
+run_cmd do
+ let env ← Lean.getEnv
+ env.constants.toList.forM fun (n, ci) => do
+  if ci.isTheorem && (env.getModuleIdxFor? n).isNone then
+   Lean.Elab.Command.elabCommand (← `(command| #print axioms $(Lean.mkIdent n)))
