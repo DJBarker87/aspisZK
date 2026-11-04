@@ -15,15 +15,15 @@ theorem complex_shape (bytes : Slice U8) :
             | some b => ok (some (⟨a,b⟩ : C))) := by
   unfold ProverRwSuccessParserSource.aspis_core.field.CM31.from_le_bytes nativeComponent decodeArray
   simp only [bind_assoc_eq,bind_tc_ok]
-  apply bind_congr
+  apply PV_RDCD5_ParserComponent.bind_congr
   intro firstSlice
-  apply bind_congr
+  apply PV_RDCD5_ParserComponent.bind_congr
   intro firstArray
   cases firstArray with
   | Err e => rfl
   | Ok firstWord =>
     simp only [bind_assoc_eq]
-    apply bind_congr
+    apply PV_RDCD5_ParserComponent.bind_congr
     intro firstOption
     cases firstOption with
     | none => simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
@@ -31,15 +31,15 @@ theorem complex_shape (bytes : Slice U8) :
         ProverRwDictionaryOptionSource.optionDiscriminant]
     | some a =>
       simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,bind_tc_ok]
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro secondSlice
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro secondArray
       cases secondArray with
       | Err e => rfl
       | Ok secondWord =>
         simp only [bind_assoc_eq]
-        apply bind_congr
+        apply PV_RDCD5_ParserComponent.bind_congr
         intro secondOption
         cases secondOption <;> simp [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
           ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitFromResidualOptionInfallible.from_residual,massert,read_discriminant,
@@ -66,18 +66,18 @@ theorem quartic_shape (bytes : Slice U8) :
             | none => ok none
             | some c1 => ok (some (⟨c0,c1⟩ : Q))) := by
   unfold ProverRwSuccessParserSource.aspis_core.field.QM31.from_le_bytes
-  apply bind_congr
+  apply PV_RDCD5_ParserComponent.bind_congr
   intro firstSlice
-  apply bind_congr
+  apply PV_RDCD5_ParserComponent.bind_congr
   intro firstOption
   cases firstOption with
   | none => simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
       bind_tc_ok,residual_none]
   | some c0 =>
     simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,bind_tc_ok]
-    apply bind_congr
+    apply PV_RDCD5_ParserComponent.bind_congr
     intro secondSlice
-    apply bind_congr
+    apply PV_RDCD5_ParserComponent.bind_congr
     intro secondOption
     cases secondOption <;> simp only [ProverRwDictionaryOptionSource.core.option.Option.Insts.CoreOpsTry_traitTry.branch,
       bind_tc_ok,residual_none]
@@ -101,25 +101,25 @@ theorem quartic (bytes : Slice U8) :
               (core.slice.index.SliceIndexRangeUsizeSlice U8) bytes {start:=0#usize, «end»:=8#usize}
             tail part.val) := by
       rw [quartic_shape]
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro firstSlice
       dsimp only [tail]
       rw [complex firstSlice]
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro firstOption
       cases firstOption with
       | none => rfl
       | some c0 =>
-        apply bind_congr
+        apply PV_RDCD5_ParserComponent.bind_congr
         intro secondSlice
         rw [complex secondSlice]
     _ = (PV_RDCD5_ParserRange.index bytes.val 0 8 >>= tail) := first_bind bytes tail
     _ = qm bytes.val := by
       unfold qm
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro left
       dsimp only [tail]
-      apply bind_congr
+      apply PV_RDCD5_ParserComponent.bind_congr
       intro firstOption
       cases firstOption with
       | none => rfl
