@@ -157,7 +157,7 @@ theorem constructor_call {S F A : Type} (s : State S F) (p : Place)
     (operation : Nat → Header → PV_EVHB_RawVecSource.Q S F A) :
     callAt (newAt s p shape alignmentAddress) p operation =
       some (let r := operation s.next (emptyHeader shape alignmentAddress)
-        (store s.world s.next (emptyHeader shape alignmentAddress))
+        (store s.world s.next (emptyHeader shape alignmentAddress));
         {outcome := r.outcome
          state := {newAt s p shape alignmentAddress with world := r.world}
          events := r.events}) := by
