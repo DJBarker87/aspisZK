@@ -33,6 +33,18 @@ import NFP_TraceTypes
 import NFS_PacketRoot
 import NFS_QueryLoopRoot
 import NFS_LoopTrace
+import NFS_AccumDomain
+import NFS_AccumInstall
+import NFS_QueryOps
+import NFS_QueryBack
+import NFS_FoldInstall
+import NFS_TraceBack
+import NFS_DotTrace
+import NFS_QueryValuesPacket
+import NFS_ReadCanonical
+import NFS_QueryInvariant
+import NFS_CallerDomains
+import NFS_LoopTraceDefs
 #print axioms NFS_NEV_AccumPacket.raw_length
 #print axioms NFS_NEV_AccumPacket.result_state_effects
 #print axioms NFS_NEV_AccumPacket.no_base_dependency

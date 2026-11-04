@@ -38,7 +38,7 @@ paths=[B+'/NFS_objects',C+'/NFP_exports_20261104',C+'/NFN_exports_20261104',C+'/
 paths+=json.loads((E/'NFS_FIXTURE_PATHS.json').read_text()) if (E/'NFS_FIXTURE_PATHS.json').exists() else []
 env=dict(LEAN_SYSROOT=T,PATH='/home/dombarker/.cargo/bin:/usr/bin:/bin',TMPDIR=B+'/NFS_tmp',LEAN_PATH=':'.join(paths))
 files={};sources=[]
-assert target.startswith('NFS_') or kind=='auditbin'
+assert target.startswith('NFS_') or kind in ['auditbin','auditbatch']
 
 if kind=='lean':
  n='NFS_generated/'+target+'.lean';files[n]=(E/(target+'.lean')).read_text();sources=[n]
@@ -50,8 +50,10 @@ elif kind=='linkaudit':
  command=[T+'/bin/lake','env','leanc','-O3','-rdynamic','-o','NFS_native/'+target,*sources]
 elif kind=='auditbatch':
  files['NFS_final_audit_batch.py']=(E/'NFS_final_audit_batch.py').read_text()
- sources=['NFS_generated/NFS_ProofDriver.lean','NFS_final_audit_batch.py','NFS_native/NFS_ProofDriver.c','NFS_native/NFA_WALKER.c','NFS_native/NFA_MemoryLimit.c']
- command=['python3','NFS_final_audit_batch.py']
+ files['NFS_EXPECTED_IMPORTS.jsonl']=(E/'NFS_EXPECTED_IMPORTS.jsonl').read_text()
+ files['NFS_AUDIT_ROOTS.json']=(E/'NFS_AUDIT_ROOTS.json').read_text()
+ sources=['NFS_generated/NFS_ProofDriver.lean','NFS_generated/NFS_Driver.lean','NFS_final_audit_batch.py','NFS_native/NFS_ProofDriver.c','NFS_native/NFS_Driver.c','NFS_native/NFA_WALKER.c','NFS_native/NFA_MemoryLimit.c','NFS_EXPECTED_IMPORTS.jsonl','NFS_AUDIT_ROOTS.json']
+ command=['python3','NFS_final_audit_batch.py',a+'.json']
 elif kind=='auditbin':
  driver='NFS_ProofDriver' if target.startswith('proof') or target=='fixtures' else 'NFS_Driver'
  sources=['NFS_generated/'+driver+'.lean'];command=['NFS_native/'+driver,target]
@@ -77,7 +79,7 @@ for root in roots:
    if Path(root,stem+suf).is_file():rels.add(stem+suf)
 for rel in sorted(rels):
  p=next(Path(root)/rel for root in roots if (Path(root)/rel).is_file());pins[str(p)]={{'path':str(p),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}}
-for module in (['NFS_COMBINED_IMPORT','NFS_QueryModel'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFS_Driver','NFS_ProofDriver','fixtures'] else [])+(['NFS_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFS_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
+for module in (['NFS_COMBINED_IMPORT','NEP_Planted','NEP_Mutations'] if x['kind']=='auditbatch' else [])+(['NEP_Planted','NEP_Mutations'] if x['module'] in ['NFS_Driver','NFS_ProofDriver','fixtures'] else [])+(['NFS_QueryModel'] if x['kind']=='auditbin' and x['module'].startswith('query') else [])+(['NFS_COMBINED_IMPORT'] if x['kind']=='auditbin' and (x['module'].startswith('proof') or x['module']=='scan') else [])+[n for line in (b/x['sources'][0]).read_text().splitlines() if line.startswith('import ') for n in line[7:].split() if n!='all'] if x['kind']!='linkaudit' else []:
  rel=module.replace('.','/')+'.olean';p=next((Path(root)/rel for root in roots if (Path(root)/rel).is_file()),None)
  assert p is not None,module
  for z in [p,Path(str(p)+'.private'),Path(str(p)+'.server'),p.with_suffix('.ir')]:
@@ -90,7 +92,7 @@ r=ssh('python3',f'''from pathlib import Path
 import json,hashlib
 b=Path({B!r});a={a!r};names=[str(p.relative_to(b)) for p in (b/a).rglob('*') if p.is_file()]+[a+'.json']
 names += [str(p.relative_to(b)) for p in b.glob('NEP_*_REACHABLE.txt')] if {kind!r}=='auditbatch' else [str(p.relative_to(b)) for p in b.glob('NEP_'+{target!r}+'_*_REACHABLE.txt')] if {kind!r}=='auditbin' else []
-if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/'NFS_final_audit').rglob('*') if p.is_file()]
+if {kind!r}=='auditbatch':names += [str(p.relative_to(b)) for p in (b/'NFS_final_audit').rglob('*') if p.is_file()]+(['NFS_LOADED_scan.jsonl'] if (b/'NFS_LOADED_scan.jsonl').exists() else [])
 if {target!r} in ['scan','queryscan']:names+=['NFS_QUERY_LOADED_scan.jsonl' if {target!r}=='queryscan' else 'NFS_LOADED_scan.jsonl']
 out={{n:(b/n).read_text() for n in names}}
 for name in ['NFS_Driver','NFS_ProofDriver']:

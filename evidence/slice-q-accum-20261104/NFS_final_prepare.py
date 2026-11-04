@@ -6,6 +6,7 @@ exec((E/'NFS_prepare.py').read_text(),{'__file__':str(E/'NFS_prepare.py')})
 a=json.loads((E/'NFS_AUDIT_ROOTS.json').read_text());a['modules']+=['NFS_PacketRoot','NFS_QueryLoopRoot','NFS_LoopTrace']
 roots=a['roots'][:]
 newmods=['NFS_AccumDomain','NFS_AccumInstall','NFS_QueryOps','NFS_QueryBack','NFS_FoldInstall','NFS_TraceBack','NFS_DotTrace','NFS_QueryValuesPacket','NFS_ReadCanonical','NFS_QueryInvariant','NFS_CallerDomains','NFS_QueryLoopRoot','NFS_LoopTraceDefs','NFS_LoopTrace','NFS_PacketRoot']
+a['modules']=list(dict.fromkeys(a['modules']+newmods))
 for m in newmods:
  s=(E/(m+'.lean')).read_text();ns=re.search(r'^namespace (\S+)',s,re.M)[1]
  roots += [ns+'.'+n for n in re.findall(r'^theorem (\w+)',s,re.M)]
