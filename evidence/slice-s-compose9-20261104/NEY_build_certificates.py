@@ -29,7 +29,12 @@ def build(base):
     archive=a+'-inputs.json' if (E/(a+'-inputs.json.xz')).exists() else 'NEY_SOURCE_HISTORY.json'
     names += [archive+'.xz',archive+'.sha256']
     support += [ref(E/n) for n in names]
-  c=dict(id='NEY_'+family,field_alignment_table=ref(E/'NEY_FIELD_ALIGNMENT_TABLE.json'),subject=f,frozen_revision=base['frozen_revision'],native_certificate=dict(function=f,complete=True,pairs=pairs,controls=controls,inner_hypotheses_remaining=[]),domain_theorems=thms,physical_theorems=thms,support=support,required_obligations=[o['id'] for r in base['rows'] if r['function']==f for o in r['caller_domain_obligations']],edges=[edge for edge in b.SPEC['internal_edges'] if edge.startswith(f+' -> ')],hypotheses=[f+'.PacketDomain',f+'.PhysicalInterpretation','RuntimePersistence','CompositionTrustOptionA'],new_trust_rows=[],inner_hypotheses_remaining=[],trust_classification='P6/D188 option A reclassification')
+  if family=='terminal':
+   for a in ['NEX_K130','NEX_K131']:
+    names=[a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-shape.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-rule16-check.json',a+'-metadata-pin.json',a+'-NEX_native_contracts.patch',a+'-NEX_oracle.patch']
+    archive=a+'-inputs.json' if (OLD/(a+'-inputs.json.xz')).exists() else 'NEX_SOURCE_HISTORY.json'
+    names += [archive+'.xz',archive+'.sha256'];support += [ref(OLD/name) for name in names]
+  c=dict(id='NEY_'+family,field_alignment_table=ref(E/'NEY_FIELD_ALIGNMENT_TABLE.json'),subject=f,frozen_revision=base['frozen_revision'],native_certificate=dict(function=f,complete=True,pairs=pairs,controls=controls,length_partition=['NEX_K130','NEX_K131'] if family=='terminal' else [],inner_hypotheses_remaining=[]),domain_theorems=thms,physical_theorems=thms,support=support,required_obligations=[o['id'] for r in base['rows'] if r['function']==f for o in r['caller_domain_obligations']],edges=[edge for edge in b.SPEC['internal_edges'] if edge.startswith(f+' -> ')],hypotheses=[f+'.PacketDomain',f+'.PhysicalInterpretation','RuntimePersistence','CompositionTrustOptionA'],new_trust_rows=[],inner_hypotheses_remaining=[],trust_classification='P6/D188 option A reclassification')
   view=v.compose(base,packet)
   by={}
   for row in view['rows']:by.setdefault(row['function'],[]).append(row)

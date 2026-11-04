@@ -10,6 +10,7 @@ SPEC=json.loads((R/'docs/research/100bit-spend-path-20261013/design/VERTICAL-SLI
 EXPECTED=json.loads((E.parent/'slice-s-compose8-20261104/NEX_K133-shape.json').read_text())
 assert v.sha((E.parent/'slice-s-compose8-20261104/NEX_K133-shape.json').read_bytes())=='1553be2e5c13209142e4a3bc0279b8cb51b45b9a44c174993d6712c6e5d7c9d3'
 
+PUBLIC_SOURCE_SHA256='d65e600f14b62b4f14eebbc304414f28abaed3ba91b900aa2dc132be9324a3ce'
 TERMINAL_SOURCE_SHA256='e83ce3210af08c40390103d4ff53d4d6b2bbbb4519bff904d854ce166c4f407e'
 
 def undo(text,new,old):
@@ -51,6 +52,15 @@ def attempt(a,slot,mode,family):
   for expr in ['bytes.len()==1880','bytes.len()==216','f.bytes[1664..].as_ptr()','kind==f.bytes[5]','core::ptr::eq(&*common,f.common_place)','core::ptr::eq(s,f.statement_place)','f.calls==3','f.v','f.s.map','f.c.map','Ok(*statement)']:
    assert expr in source,expr
  else:
+  baseline=v.read(E/'NEY_K054-shape.json')['source'];assert v.sha(baseline.encode())==PUBLIC_SOURCE_SHA256
+  project='fn project(s:&PoolV1PairForestTerminalStatementV1,slot:usize,i:usize,j:usize,k:usize)->u64{'
+  baseline=baseline.replace(project+EXPECTED['fields'][0]+'}',project+EXPECTED['fields'][slot]+'}')
+  if mode=='value':
+   baseline=baseline.replace('project(&expected,slot,i,j,k))','project(&expected,slot,i,j,k)^1)')
+   if slot>=23:
+    variant='PrivateTransfer' if slot==23 else 'Withdrawal'
+    baseline=baseline.replace('let mut f=Frame',f'kani::assume(matches!(reply,Ok(PoolV1PairForestTerminalStatementV1::{variant}{{..}})));let mut f=Frame')
+  assert source==baseline
   text=undo(text,'decode','decode_pool_v1_pair_forest_terminal_statement_v1')
   text=text.replace('let out=Box::new(','Ok(Box::new(').replace('    );\n    f.allocated=&*out;\n    Ok(out)','    ))')
   if mode=='allocation':text=text.replace('Ok(Box::new(*out))','Ok(out)')
@@ -68,6 +78,25 @@ def check(c,base):
  n=c['native_certificate'];f=n['function'];assert f in [TERMINAL,PUBLIC]
  family='terminal' if f==TERMINAL else 'public'
  assert n['complete'] is True and n['inner_hypotheses_remaining']==[]
+ assert n['length_partition']==(['NEX_K130','NEX_K131'] if family=='terminal' else [])
+ inherited_support=set()
+ if family=='terminal':
+  for a,positive in [('NEX_K130',True),('NEX_K131',False)]:
+   snapshots=v.inherited.native(a,positive);folder=v.inherited.E;m=v.read(folder/(a+'-shape.json'))
+   assert m['mode']==('positive' if positive else 'negative')
+   assert m['frozen_prefix']==EXPECTED['frozen_body'][:EXPECTED['frozen_body'].index('    if bytes[..4]')]
+   width='1880' if positive else '1881'
+   expected='''use super::*;
+fn length_gate(length:usize)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{if length!=POOL_V1_PAIR_FOREST_TERMINAL_STATEMENT_BYTES{return Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength);}Ok(())}
+#[kani::proof]
+fn length_gate_all(){let length:usize=kani::any();assert!(length_gate(length)==if length=='''+width+'''{Ok(())}else{Err(PoolV1PairForestTerminalFormatErrorV1::WrongLength)});}
+'''
+   assert m['source']==expected
+   assert expected in ''.join(l[1:]+'\n' for l in snapshots['NEX_native_contracts.patch'].splitlines() if l.startswith('+') and not l.startswith('+++'))
+   cfg=v.read(folder/(a+'.json'));assert cfg['module']=='pool_v1::pair_forest_terminal::NEX_length::length_gate_all'
+   names=[a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-shape.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-rule16-check.json',a+'-metadata-pin.json',a+'-NEX_native_contracts.patch',a+'-NEX_oracle.patch']
+   archive=a+'-inputs.json' if (folder/(a+'-inputs.json.xz')).exists() else 'NEX_SOURCE_HISTORY.json';names += [archive+'.xz',archive+'.sha256']
+   inherited_support.update(str((folder/name).relative_to(R)) for name in names)
  assert n['controls']==(['NEY_K053'] if family=='terminal' else ['NEY_K106','NEY_K107'])
  for a in n['controls']:
   m=v.read(E/(a+'-shape.json'));snapshots=v.native(a,False)
@@ -100,7 +129,7 @@ def check(c,base):
   assert '| .PrivateTransfer c p => '+row['transfer'] in source
   assert '| .Withdrawal c p => '+row['withdrawal'] in source
 
- expected_support=set()
+ expected_support=set(inherited_support)
  for a in [a for pair in n['pairs'] for a in pair]+n['controls']:
   names=[a+'/receipt.json',a+'/stdout.log',a+'.json',a+'-shape.json',a+'-admission.json',a+'-graph-check.json',a+'-lock-check.json',a+'-source-check.json',a+'-frozen-identity.json',a+'-rule16-check.json',a+'-metadata-pin.json',a+'-NEY_native_contracts.patch',a+'-NEY_oracle.patch']
   archive=a+'-inputs.json' if (E/(a+'-inputs.json.xz')).exists() else 'NEY_SOURCE_HISTORY.json'
