@@ -7,10 +7,15 @@ def sourceCondition (observed : IndexState) : Bool :=
 theorem event_guard (column : Nat) (effects : List (Result Unit)) (observed : IndexState)
     (ran : PV_B3P_DominatedEvents578227.sourceEvent 4 0 column effects = .ok (some observed)) :
     sourceCondition observed = true := by
-  have bounded := PV_B3P_DominatedEvents578227.event_guard 4 0 column effects observed ran
-  change observed.index < 4+0 at bounded
-  apply decide_eq_true
-  omega
+  by_cases active : column < 4
+  · simp only [PV_B3P_DominatedEvents578227.sourceEvent,if_pos active] at ran
+    have frame := PV_B3P_InitializerEvents578227.through_value _ _ _ ran
+    cases frame
+    change decide (column = 0 ∨ column = 1 ∨ column = 2 ∨ column = 3) = true
+    apply decide_eq_true
+    omega
+  · simp only [PV_B3P_DominatedEvents578227.sourceEvent,if_neg active] at ran
+    cases ran
 
 theorem event_certificate {α : Type} (column : Nat) (effects : List (Result Unit))
     (observed : IndexState)
