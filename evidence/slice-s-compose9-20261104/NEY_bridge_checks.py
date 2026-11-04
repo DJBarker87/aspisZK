@@ -114,7 +114,7 @@ fn length_gate_all(){let length:usize=kani::any();assert!(length_gate(length)==i
   assert m['frozen_body']==EXPECTED['frozen_body'] if family=='terminal' else m['frozen_body']==v.read(E/'NEY_K054-shape.json')['frozen_body']
   if family=='terminal':
    expected=v.read(E/'NEY_K001-shape.json')['source'].replace('bytes[PAYMENT_STATEMENT_OFFSET..]','bytes[PAYMENT_STATEMENT_OFFSET+1..]')
-  elif a=='NEY_K106':expected=v.read(E/'NEY_K054-shape.json')['source'].replace('Ok(out)','Ok(Box::new(*out))')
+  elif a=='NEY_K106':expected=v.read(E/'NEY_K054-shape.json')['source'].replace('    f.allocated=&*out;\n    Ok(out)','    f.allocated=&*out;\n    Ok(Box::new(*out))')
   else:expected=v.read(E/'NEY_K056-shape.json')['source'].replace('f.calls=1;f.reply','f.calls=1;f.reply.map(|mut s|{match &mut s{PoolV1PairForestTerminalStatementV1::PrivateTransfer{common,..}|PoolV1PairForestTerminalStatementV1::Withdrawal{common,..}=>common.master_account[0]^=1};s})')
   assert m['source']==expected
 

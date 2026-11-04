@@ -47,6 +47,7 @@ def native(a,positive):
 def baseline():
  return inherited.compose(inherited.read(R/'evidence/native-ledger3-20261029/NDT_LEDGER.json'),inherited.read(inherited.E/'NEX_LEDGER_DELTA.json'),inherited.read(inherited.E/'NEX_REVIEWED_CERTIFICATES.json'))
 def certificate(c,subject,base):
+ if c is None:return False
  try:
   assert c['subject']==subject and c['frozen_revision']==base['frozen_revision']
   assert c['semantic_review_sha256']==sha(json.dumps({k:w for k,w in c.items() if k!='semantic_review_sha256'},sort_keys=True).encode())
@@ -57,9 +58,13 @@ def certificate(c,subject,base):
   for pin in c['support']:inherited.artifact(pin)
   for theorem in c['domain_theorems']+c['physical_theorems']:assert __import__("NED_validate").theorem(theorem)
   from NEY_bridge_checks import check
-  assert check(c,base)
+  from NEY_residual_checks import FUNCTIONS,check as residual_check
+  assert (residual_check if c['native_certificate']['function'] in FUNCTIONS else check)(c,base)
   return True
- except (AssertionError,KeyError,TypeError,ValueError,OSError,ImportError):return False
+ except (AssertionError,KeyError,TypeError,ValueError,OSError,ImportError):
+  import os,traceback
+  if os.environ.get('NEY_DEBUG'):traceback.print_exc()
+  return False
 def compose(base,packet):
  assert packet['inherits']=='evidence/slice-s-compose8-20261104/NEX_LEDGER_DELTA.json.xz'
  result=copy.deepcopy(base)
@@ -68,6 +73,8 @@ def compose(base,packet):
  if packet.get('NEY_certificates'):
   from NEY_bridge_checks import compose_additions
   result=compose_additions(base,result,packet,sys.modules[__name__])
+  from NEY_residual_checks import compose as residual_compose
+  result=residual_compose(base,result,packet,sys.modules[__name__])
  assert result['trust_rows']==base['trust_rows']
  return result
 def main():

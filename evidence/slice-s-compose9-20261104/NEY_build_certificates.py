@@ -50,6 +50,8 @@ def build(base):
   c['semantic_review_sha256']=sha(json.dumps(c,sort_keys=True).encode())
   assert v.certificate(c,f,view)
   packet['NEY_certificates'][f]=c
+ from NEY_build_residual import add
+ packet=add(packet,base,theorem,ref)
  raw=(json.dumps(packet,indent=1)+'\n').encode();(E/'NEY_LEDGER_DELTA.json').write_bytes(raw)
  return packet
 if __name__=='__main__':build(v.baseline())

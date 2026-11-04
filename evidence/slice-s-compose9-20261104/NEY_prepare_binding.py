@@ -7,11 +7,11 @@ subprocess.run([sys.executable,str(E/'NEY_prepare_window.py'),'1','positive'],ch
 p='crates/aspis-statement/src/pool_v1/pair_forest_terminal.rs';f=frozen(p)
 name='validate_pool_v1_pair_forest_terminal_result_against_statement_v1';a=f.index('pub fn '+name+'(');z=f.index('\n}',a)+2;original=f[a:z]
 native=original.replace('pub fn '+name+'(','fn native(').replace('    result: &PoolV1PairForestTerminalResultV1,','    result: &PoolV1PairForestTerminalResultV1,f:&mut Frame,')
-for old,new in [('validate_pool_v1_pair_forest_terminal_statement_v1','statement'),('validate_result','result')]:native=calls(native,old,new,'f')
+for old,new in [('validate_pool_v1_pair_forest_terminal_statement_v1','check_statement'),('validate_result','check_result')]:native=calls(native,old,new,'f')
 body=helpers().replace('aspis_statement::','crate::')+'''
 struct Frame<'a>{s:&'a PoolV1PairForestTerminalStatementV1,r:&'a PoolV1PairForestTerminalResultV1,first:Result<(),PoolV1PairForestTerminalFormatErrorV1>,second:Result<(),PoolV1PairForestTerminalFormatErrorV1>,calls:u8}
-fn statement(s:&PoolV1PairForestTerminalStatementV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==0&&core::ptr::eq(s,f.s));f.calls=1;f.first}
-fn result(r:&PoolV1PairForestTerminalResultV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==1&&core::ptr::eq(r,f.r));f.calls=2;f.second}
+fn check_statement(s:&PoolV1PairForestTerminalStatementV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==0&&core::ptr::eq(s,f.s));f.calls=1;f.first}
+fn check_result(r:&PoolV1PairForestTerminalResultV1,f:&mut Frame)->Result<(),PoolV1PairForestTerminalFormatErrorV1>{assert!(f.calls==1&&core::ptr::eq(r,f.r));f.calls=2;f.second}
 '''+native+'''
 #[kani::proof]
 #[kani::stub(core::ptr::copy_nonoverlapping,crate::KMX_stubs::KMX_copy_nonoverlapping)]

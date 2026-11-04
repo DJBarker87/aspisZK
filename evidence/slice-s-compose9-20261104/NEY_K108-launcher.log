@@ -1,0 +1,50 @@
+{"attempt": "NEY_K108", "exit_status": 1, "wall_seconds": 3.6333421859890223, "peak_rss_kib": "405296", "swaps": "0", "print_axioms": "N/A: kani"}
+Kani Rust Verifier 0.67.0 (cargo plugin)
+warning: unexpected `cfg` condition value: `solana`
+   --> crates/aspis-core/src/circle_prefix.rs:585:11
+    |
+585 | #[cfg(not(target_os = "solana"))]
+    |           ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: expected values for `target_os` are: `aix`, `amdhsa`, `android`, `cuda`, `cygwin`, `dragonfly`, `emscripten`, `espidf`, `freebsd`, `fuchsia`, `haiku`, `helenos`, `hermit`, `horizon`, `hurd`, `illumos`, `ios`, `l4re`, `linux`, `lynxos178`, `macos`, `managarm`, `motor`, `netbsd`, `none`, `nto`, `nuttx`, `openbsd`, `psp`, `psx`, `qurt`, `redox`, `rtems`, `solaris`, and `solid_asp3` and 14 more
+    = help: consider using a Cargo feature instead
+    = he
+...
+./../../tools/r1-builder-reference/records.rs:345:10
+    |
+345 |     let (w, p, v, q) = arbitrary_records();
+    |          ^ help: if this is intentional, prefix it with an underscore: `_w`
+
+warning: unused variable: `v`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:345:16
+    |
+345 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: unused variable: `w`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:358:10
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |          ^ help: if this is intentional, prefix it with an underscore: `_w`
+
+warning: unused variable: `v`
+   --> crates/aspis-statement/src/pool_v1/../../../../tools/r1-builder-reference/records.rs:358:16
+    |
+358 |     let (w, p, v, q) = arbitrary_records();
+    |                ^ help: if this is intentional, prefix it with an underscore: `_v`
+
+warning: variable does not need to be mutable
+  --> crates/aspis-statement/src/pool_v1/NEY_binding.rs:46:57
+   |
+46 | fn binding(){let s=NEE_statement();let c=s.common();let mut r=PoolV1PairForestTerminalResultV1{transition_kind:s.transition_kind(),m...
+   |                                                         ----^
+   |                                                         |
+   |                                                         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+For more information about this error, try `rustc --explain E0618`.
+error: could not compile `aspis-statement` (lib) due to 2 previous errors; 84 warnings emitted
+error: Failed to execute cargo (exit status: 101). Found 2 compilation errors.
+
+Running as unit: run-r84778ba79fff454ca91583258500c362.scope; invocation ID: 7e7ad822ecf84945a8980b7736851729

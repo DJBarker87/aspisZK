@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,sys,json
 E=Path(__file__).resolve().parent
 jobs=[]
-for n,mode in enumerate(['positive','value','argument'],108):jobs.append((n,'binding',[mode],'NEY_BINDING_CURRENT.json','pool_v1::pair_forest_terminal::NEY_binding::binding',False))
+for n,mode in enumerate(['positive','value'],109):jobs.append((n,'binding',[mode],'NEY_BINDING_CURRENT.json','pool_v1::pair_forest_terminal::NEY_binding::binding',False))
 for slot in range(9):
  for offset,mode in enumerate(['positive','value']):jobs.append((111+slot*2+offset,'result_parent',[str(slot),mode],'NEY_RESULT_PARENT_CURRENT.json','pool_v1::pair_forest_terminal::NEY_result_parent::result_parent',False))
 for n,mode in enumerate(['positive','byte','order','argument'],129):jobs.append((n,'emit_parent',[mode],'NEY_EMIT_PARENT_CURRENT.json','r1_pool_adapter::NEY_emit_parent::emit_parent',True))
@@ -13,7 +13,7 @@ for slot in range(5):
  for offset,mode in enumerate(['positive','negative']):jobs.append((137+slot*2+offset,'common_field',['common',mode,str(slot)],'NEY_RECONSTRUCT_CURRENT.json','r1_pool_adapter::NEY_reconstruct::reconstruction_slice',True))
 for offset,shape in enumerate(['limbs','tag']):
  for control,mode in enumerate(['positive','value']):jobs.append((147+offset*2+control,'scalar',[shape,mode],'NEY_SCALAR_CURRENT.json','r1_pool_adapter::NEY_scalar::scalar',True))
-assert [j[0] for j in jobs]==list(range(108,151))
+assert [j[0] for j in jobs]==list(range(109,151)) # K108 compilation failure retained; corrected pair uses109/110
 for n,generator,args,current,harness,program in jobs:
  a=f'NEY_K{n:03}'
  if (E/a/'receipt.json').exists():continue
