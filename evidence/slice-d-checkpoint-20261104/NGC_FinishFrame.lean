@@ -18,7 +18,7 @@ theorem result_frame (p : verifier.Prepared) (start finish : Nat)
  have raw : b.raw.val.length=64 := d.progress.2.1
  have lengths : a.weights.deref.val.length≤b.raw.val.length := by
   change a.weights.val.length≤b.raw.val.length
-  omega
+  rw [d.width,raw]
  let out := Port3_FlushInstall.fromSlice
   ⟨(S8JoinFinishExact.output b.raw (Port3_FlushInstall.toWeights a.weights.deref)).val.map
    S8Kani2FinishReferenceJoin.toFinish,

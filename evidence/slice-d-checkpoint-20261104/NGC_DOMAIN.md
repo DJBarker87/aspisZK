@@ -1,21 +1,32 @@
-# Incoming checkpoint domain review
+# NGC incoming checkpoint domain
 
-SOURCE REVIEW ONLY; no new theorem or native result. Input revisions and hashes are in NGC_INPUT_PINS.json. No NFW proof imported or credited. The inspected NFW branch tip has powers as its only newly CLOSED function, not Prepared::new/prepare. Its missing NFW_HANDOFF.md / NFW_REMAINING.md are recorded as unavailable, not inferred results.
+Stage-0/1 source review is retained in commits66bd59a5222 and5909a2e5e50. The following compiled model work supersedes their NOT-RUN status. No checkpoint callsite row is claimed before final combined replay/audit and source-producer instantiation.
 
-The existing KNE_Caller.WriterDomain p a requires exactly:
+## NGC-B1: SAME pending/weights finish
 
-- p.variant = S2;
-- a.weights.val.length = 64;
-- every index in the SAME p.queries array (all 22) is <262144;
-- CanonicalFields (fields p a size queriesBound);
-- a.next.val = 10.
+`NGC_QueryPoststate.tx1` derives `NFS_QueryInvariant.Domain p 0 10 after pending` and `after.next.val=10` from the SAME successful ten-step source-model query loop, its initial invariant and next=0. Successful finite evaluation can stop only at next>=10; the preserved upper bound gives equality. No independent final accumulator, pending vector, accepted checkpoint, or DriverEstablishedDomain premise is introduced.
 
-KNE_Caller.DriverEstablishedDomain additionally quantifies over reached calls and requires witnesses pm, am for SAME S1S7S8StateProvenance p a pm am. KNE_Caller.every_reached_call CONSUMES this premise. It does not discharge it. No accepted-run hypothesis is introduced here.
+`NGC_FinishFrame.result_frame` gives a total result for `Port3_FlushInstall.flush pending after.weights.deref` on that SAME pair: output length64, every one of its four written limbs below2147483647, and the record update leaves rhs/power/next unchanged. `NGC_ValueBridge.value` supplies the exact full-U64 natural residue law for the SAME raw row. `NGC_FinishContents.contents` makes the row-to-vector equation explicit (focused compile pending for its last deref normalization fix). Native K012/013 one-cursor value/frame, K014/015 canonicality, K016/017 fixed64 control and K018/019 copy controls are paired support for the source association. No field multiplication is proved in Kani.
 
-NFS_QueryLoopRoot.tx1 establishes equality of a ten-fuel loop and the cohort query_loop on its input Domain and a.next=0. It does not, in that theorem's conclusion, export WriterDomain for the returned accumulator. NFS_QueryInvariant.Domain contains weights length/canonicality, rhs canonicality, power/rho canonicality, pending Progress, offset and upper bound. Its step theorem preserves that invariant at successful child steps. To derive a.next=10, prove the loop's successful terminal is stopped, combine next>=10 with upper<=10, and propagate the invariant through that SAME run. Equality of loop functions alone is insufficient.
+`NGC_WriterDomain.after_finish` and `.from_query_loop` construct `NGC_KNE_Caller.WriterDomain (toPrepared p) (toAccumulator written)` from the preserved NFS invariant, next=10, the SAME finish output, and the exact prepared-field predicate below. The carrier maps are literal field/list maps from `CheckpointBytes3Namespaces`; no unrelated Prepared or Accumulator witness is selected. `NGC_KNE_Caller` is an import/name retarget of KNE's original domain, not a replacement domain. Its old `every_reached_call` theorem is unused by this derivation.
 
-NGC-B1: the actual checkpoint prestate is AFTER candidate.rs:287 pending.finish(&mut a.weights), not the accumulator returned at :286. Need the BatchedWeights::finish result/frame law on this SAME pending/weights pair: weights length stays64, every written K limb is <2147483647, rhs/power/next unchanged, and values correspond to the same pending residue rows. A native/model/domain bridge for this call is outside the job's enumerated function list (D SCC206); request/cite its CLOSED packet rather than silently treating query_loop's output as checkpoint's input. The exact model predicate needed is WriterDomain p { a_loop with weights := finish_weights pending a_loop.weights }, plus SAME provenance transport. No claim is made that the existing Progress definition cannot imply the mathematical bounds; the source-to-model bridge and explicit implication still need checking.
+## NGC-B2: named obligation addressed to NFW
 
-NGC-B2: NFS's invariant does not contain p.variant=S2, all22 query bounds, gamma/kappa/alpha[0..1]/semantic_alpha/z/claim canonicality or preparation provenance. NFS_PacketRoot.Domain contains alpha0/alpha1 but these remain caller inputs. Derive these facts from the SAME accepted prepare/Prepared::new outputs and their actual samplers/claims/semantic provenance. NFW_PreparedFields.source is an output projection theorem, not a proof that the supplied fields meet these predicates. Never pick independent canonical fields or a different prepared witness.
+`NGC_PreparationBoundary.Fields p` is the weakest prepared-field inventory this checkpoint composition uses:
 
-CM31 byte writer's native valid-buffer domain can be len(out)>=8 with arbitrary raw u32 limbs; QM31 can use len(out)>=16. Canonicality is needed for the eventual checkpoint semantic encoding, not for these raw stores. Both writers preserve the suffix beyond their written prefix. Native tests must also describe or explicitly exclude short-slice panic domains justified by every caller. KNE packet domains must be retargeted to canonical RPz7 owners before composition next to RPx; its legacy import graph has not been replayed here.
+- the SAME p maps to S2;
+- ALL22 indices of that SAME p.queries are below262144 (the first ten successful query accesses do not establish the remaining twelve);
+- gamma, kappa, both alpha values and claim have eight canonical limbs;
+- rho, all10 semantic-alpha values and all4 coordinates of the two stored points have four canonical limbs.
+
+The named, typed request is `NGC_PreparationBoundary.NFW_Obligation ops`. For the SAME D/public/proof/hash/scratch, after that SAME successful op3 parse and op4 scan, a successful op7 prepare return `(.Ok p,g)` must establish `Fields p` AND canonicality of that SAME returned29-element g for the NFS root. It contains no checkpoint result, output equality, independently selected p/g, or whole accepted-run assumption. It is a Prop obligation, NOT an axiom, NOT a proved instance, and NOT silently installed into the root.
+
+The committed NFW tip inspected on resume is889de8ab372ef3478e76d309a9a7753601344811. Its powers function remains the only newly CLOSED function. Its newer producer/domain modules are model work; native Prepared/prepare and native initializer binding remain explicitly OPEN in its handoff. `NGC_NFW_IMPORT.json` pins the copied initial-carrier theorem and the inspected handoffs. The copied `NGC_NFW_QueryEntry` is being revalidated locally; it earns no native producer credit. No sibling worktree was accessed or edited.
+
+The NFS root's initial invariant is still its own caller-domain obligation. The draft `NGC_InitialInvariant.initial` relates the SAME emitted constructor observations to NFW's committed concrete initial carrier; its pending-constructor source observation is explicit and is not a new CLOSED native pending-constructor packet. Actual prefix/producer installation remains upstream work.
+
+## Checkpoint body packet and inventory
+
+The old KNE schedule/program/native_result proofs are copied with prefix-only names and coherent imports in `NGC_CHECKPOINT_RETARGET.json`; focused compiles pass for all11 modules. The new `NGC_CheckpointBridge.derived_packet` applies the writer program and116-transition/no-growth laws directly to the derived prestate. Native K040/041 bind the frozen source control and the three chronological digest positions; K036/037 plus K038/039 and `NGC_AppendFrame` supply the permanent byte-window/frame composition after K030's excluded32-byte timeout. Full backing-buffer replay is not used.
+
+The frozen NFQ inventory has no separate TX1 occurrence for the two field writers: CM writer is TX2:008, QM writer TX2:024. NFT's CLOSED packets apply to checkpoint's SAME8/16-byte local windows; no invented TX1 row or duplicate writer credit is added. Runtime digest/error remain op43/op44 in the coherent cohort. Root physical/ABI/allocator/std/source-to-ELF and P6/D188 option-A transport, existing digest=H realization and accepted runtime rows are retained. No security metric, privacy/two-transaction design, shipped source, ELF pin or trust row changes.
